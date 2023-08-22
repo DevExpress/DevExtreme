@@ -1,0 +1,35 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-button-horizontal-padding: null !default;
+$fluent-button-vertical-padding: null !default;
+$fluent-button-icon-padding: null !default;
+$fluent-button-icon-text-padding: null !default;
+$fluent-button-min-width: null !default;
+
+$fluent-button-content-line-height: 0 !default;
+
+$fluent-button-text-line-height: normal !default;
+$fluent-button-text-transform: uppercase !default;
+$fluent-button-text-font-weight: 500 !default;
+$fluent-button-text-letter-spacing: 0.04em !default;
+
+$fluent-button-box-shadow-size: 0 1px 3px !default;
+$fluent-button-active-box-shadow-size: 0 4px 6px !default;
+
+@if $size == "default" {
+  $fluent-button-horizontal-padding: 16px !default;
+  $fluent-button-vertical-padding: 6px !default;
+  $fluent-button-icon-padding: 8px !default;
+  $fluent-button-icon-text-padding: 12px;
+  $fluent-button-min-width: 64px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-button-horizontal-padding: 12px !default;
+  $fluent-button-vertical-padding: 5px !default;
+  $fluent-button-icon-padding: 5px !default;
+  $fluent-button-icon-text-padding: 8px;
+  $fluent-button-min-width: 48px !default;
+}

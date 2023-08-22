@@ -1,0 +1,45 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+$calendar-color: $base-text-color !default;
+
+/**
+* $name 20. Navigator text color
+* $type color
+*/
+$calendar-navigator-text-color: $button-default-bg !default;
+
+/**
+* $name 30. Header text color
+* $type color
+*/
+$calendar-header-color: $calendar-color !default;
+
+/**
+* $name 40. Other month text color
+* $type color
+*/
+$calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+$calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+$calendar-bg: $base-bg !default;
+$calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
+$calendar-cell-hover-border-color: color.change($base-accent, $alpha: 0.6) !default;
+$calendar-cell-hover-color: $calendar-color !default;
+
+/**
+* $name 50. Selected cell background color
+* $type color
+*/
+$calendar-cell-selected-bg: $base-accent !default;
+$calendar-cell-selected-color: $base-inverted-text-color !default;
+$calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+$calendar-cell-contoured-border-radius: 50% !default;
+$calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
+$calendar-invalid-focused-border-color: $base-invalid-color !default;
+$calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$calendar-week-number-cell-color: color.change($calendar-color, $alpha: 0.56) !default;
+$calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.4) !default;

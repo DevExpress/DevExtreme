@@ -1,0 +1,6 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+$timeview-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.2) !default;

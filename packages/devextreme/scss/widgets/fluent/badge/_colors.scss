@@ -1,0 +1,18 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 130. Badge text color
+* $type color
+*/
+$badge-color: $base-inverted-text-color !default;
+
+/**
+* $name 140. Badge background color
+* $type color
+*/
+$badge-bg: $base-accent !default;

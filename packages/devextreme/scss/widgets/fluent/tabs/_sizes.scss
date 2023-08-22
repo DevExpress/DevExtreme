@@ -1,0 +1,47 @@
+@use "../sizes" as *;
+
+// adduse
+
+
+$fluent-tabs-item-padding: null !default;
+$fluent-tab-height: null !default;
+$fluent-tab-min-width: null !default;
+
+$fluent-tab-text-line-height: null !default;
+$fluent-base-icon-margin-right: null !default;
+$fluent-base-icon-margin-bottom: null !default;
+
+$fluent-tab-nav-button-icon-width: null !default;
+$fluent-tab-nav-button-icon-height: null !default;
+$fluent-tab-nav-button-icon-font-size: null !default;
+$fluent-tab-nav-button-content-padding: null !default;
+
+$fluent-tab-vertical-nav-button-content-padding: null !default;
+
+@if $size == "default" {
+  $fluent-tabs-item-padding: 12px 16px !default;
+  $fluent-tab-height: auto !default;
+  $fluent-tab-min-width: 90px !default;
+  $fluent-base-icon-margin-right: 8px !default;
+  $fluent-base-icon-margin-bottom: 4px !default;
+  $fluent-tab-text-line-height: 24px !default;
+  $fluent-tab-nav-button-icon-width: 24px !default;
+  $fluent-tab-nav-button-icon-height: 24px !default;
+  $fluent-tab-nav-button-icon-font-size: 24px !default;
+  $fluent-tab-nav-button-content-padding: 0 4px !default;
+  $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-tabs-item-padding: 6px 12px !default;
+  $fluent-tab-height: auto !default;
+  $fluent-tab-min-width: 82px !default;
+  $fluent-base-icon-margin-right: 8px !default;
+  $fluent-base-icon-margin-bottom: 4px !default;
+  $fluent-tab-text-line-height: 24px !default;
+  $fluent-tab-nav-button-icon-width: 24px !default;
+  $fluent-tab-nav-button-icon-height: 24px !default;
+  $fluent-tab-nav-button-icon-font-size: 24px !default;
+  $fluent-tab-nav-button-content-padding: 0 4px !default;
+  $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
+}
