@@ -93,6 +93,14 @@ class TabPanel<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
   ]),
   hint: PropTypes.string,
   hoverStateEnabled: PropTypes.bool,
+  iconPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "top",
+      "end",
+      "bottom",
+      "start"])
+  ]),
   itemHoldTimeout: PropTypes.number,
   items: PropTypes.array,
   loop: PropTypes.bool,
