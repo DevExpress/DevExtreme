@@ -897,6 +897,7 @@ class SchedulerAppointments extends CollectionWidget {
           width: buttonWidth - this.option('_collectorOffset'),
           height: buttonHeight,
           onAppointmentClick: this.option('onItemClick'),
+          onAppointmentContextMenu: this.option('onItemContextMenu'),
           allowDrag: this.option('allowDrag'),
           cellWidth: this.invoke('getCellWidth'),
           isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
