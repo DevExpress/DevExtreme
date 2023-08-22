@@ -78,6 +78,9 @@ const TS_COMPILER_CONFIG = {
     },
 };
 
+const CACHE_CIRCULAR_IMPORTS = new Set();
+const CACHE_CLEAR_MODULES = new Set();
+let SIDE_EFFECT_IMPORTS_OF_MODULE = new Set();
 
 const createModuleConfig = (name, dir, filePath, dist) => {
     const isIndex = name === 'index.js';
@@ -90,8 +93,14 @@ const createModuleConfig = (name, dir, filePath, dist) => {
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
 
+    const relativeEsmBase = normalize(esmFile).match(/^.*\/esm\//)[0];
+
+    const sideEffectFiles = getModuleSideEffectFiles(esmFilePath)
+        .map((importPath) => importPath.replace(/^.*\/esm\//, relativeEsmBase));
+
+
     const result = {
-        sideEffects: hasSideEffects(esmFilePath),
+        sideEffects: sideEffectFiles.length ? sideEffectFiles : false,
         main: normalize(cjsFile),
         module: normalize(esmFile),
     };
@@ -104,17 +113,69 @@ const createModuleConfig = (name, dir, filePath, dist) => {
 
     return JSON.stringify(result, null, 2);
 };
+function getModuleSideEffectFiles(moduleFilePath) {
 
-function hasSideEffects(jsFileModulePath) {
     try {
-        const code = fs.readFileSync(jsFileModulePath, 'utf8');
-        const hasImportsWithSideEffectRegExp = /^\s*import\s+['"]/ms;
-        const hasExportsRegExp = /^\s*export\s+/ms;
+        SIDE_EFFECT_IMPORTS_OF_MODULE = new Set();
+        const sideEffectFiles = findSideEffectsInModule(moduleFilePath);
 
-        return hasImportsWithSideEffectRegExp.test(code) || !hasExportsRegExp.test(code);
+        const relativPathOfSideEffectFiles = sideEffectFiles.map(
+            (importPath) => importPath.replace(/\\/g, '/')
+        )
+
+        return relativPathOfSideEffectFiles;
     } catch (e) {
         const message = (e instanceof Error) ? e.message : e;
-        throw('Exception while check side effects. Exception: ' + message);
+        throw(`Exception while check side effects. in ${moduleFilePath} \nException: ` + message + '\n');
+    }
+
+    function findSideEffectsInModule(moduleFilePath, deep = 0) {
+        const code = fs.readFileSync(moduleFilePath, 'utf8');
+
+        findSideEffectsInImports(moduleFilePath, code, deep);
+
+        CACHE_CIRCULAR_IMPORTS.clear();
+        return [...SIDE_EFFECT_IMPORTS_OF_MODULE];
+    }
+
+    function findSideEffectsInImports(modulePath, code, deep) {
+        const hasRelativePathRegExp = /['"]\.?\.\/.+/;
+        const relativePathRegExp = /['"]\.?\.\/.+['"]/;
+        const hasSideEffectImportRegExp = /^\s*import\s+['"]/ms;
+
+        const imports = code.match(/^\s*import[^;]+;/mg) || [];
+
+        imports
+            .filter((str) => hasRelativePathRegExp.test(str))
+            .forEach((str) => {
+                let pathFromImport = str.match(relativePathRegExp)[0].replace(/(^['"]|['"]$)/g, '');
+                pathFromImport = path.join(path.dirname(modulePath), pathFromImport) + '.js';
+
+                if (!fs.existsSync(pathFromImport)) {
+                    pathFromImport = pathFromImport.replace(/\.js$/, '/index.js')
+                }
+
+                if (hasSideEffectImportRegExp.test(str)) {
+                    SIDE_EFFECT_IMPORTS_OF_MODULE.add(pathFromImport);
+                }
+
+                if (CACHE_CLEAR_MODULES.has(pathFromImport)) {
+                    return;
+                }
+
+                let isDirty = !CACHE_CIRCULAR_IMPORTS.has(pathFromImport);
+
+                if (!isDirty)  {
+                    CACHE_CIRCULAR_IMPORTS.add(pathFromImport);
+                    isDirty = !!findSideEffectsInModule(pathFromImport, deep + 1);
+                }
+
+                CACHE_CIRCULAR_IMPORTS.delete(pathFromImport);
+
+                if (!isDirty) {
+                    CACHE_CLEAR_MODULES.add(pathFromImport);
+                }
+            });
     }
 }
 const transpileTs = (compiler, src) => {
