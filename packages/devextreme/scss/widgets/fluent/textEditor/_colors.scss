@@ -20,7 +20,7 @@ $texteditor-placeholder-color: null !default;
 * $name 30. Background color
 * $type color
 */
-$texteditor-bg: lighten($base-text-color, 81.96);
+$texteditor-bg: lighten($base-text-color, 81.96) !default;
 
 /**
 * $name 40. Focused background color

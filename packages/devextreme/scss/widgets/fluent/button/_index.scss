@@ -144,7 +144,7 @@
       $button-default-text-focused-bg,
       $button-default-text-active-bg,
       $button-default-text-selected-bg,
-      $button-default-selected-color,
+      $button-default-text-selected-color,
     );
   }
 
@@ -155,7 +155,7 @@
       $button-danger-text-focused-bg,
       $button-danger-text-active-bg,
       $button-danger-text-selected-bg,
-      $button-danger-selected-color,
+      $button-danger-text-selected-color,
     );
   }
 
@@ -166,7 +166,7 @@
       $button-success-text-focused-bg,
       $button-success-text-active-bg,
       $button-success-text-selected-bg,
-      $button-success-selected-color,
+      $button-success-text-selected-color,
     );
   }
 }
@@ -190,7 +190,7 @@
       $button-default-outlined-focused-bg,
       $button-default-outlined-active-bg,
       $button-default-outlined-selected-bg,
-      $button-default-selected-color,
+      $button-default-outlined-selected-color,
     );
   }
 
@@ -202,7 +202,7 @@
       $button-danger-outlined-focused-bg,
       $button-danger-outlined-active-bg,
       $button-danger-outlined-selected-bg,
-      $button-danger-selected-color,
+      $button-danger-outlined-selected-color,
     );
   }
 
@@ -214,7 +214,7 @@
       $button-success-outlined-focused-bg,
       $button-success-outlined-active-bg,
       $button-success-outlined-selected-bg,
-      $button-success-selected-color,
+      $button-success-outlined-selected-color,
     );
   }
 }
