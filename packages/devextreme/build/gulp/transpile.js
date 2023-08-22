@@ -114,16 +114,16 @@ const createModuleConfig = (name, dir, filePath, dist) => {
     return JSON.stringify(result, null, 2);
 };
 function getModuleSideEffectFiles(moduleFilePath) {
-
     try {
-        SIDE_EFFECT_IMPORTS_OF_MODULE = new Set();
-        const sideEffectFiles = findSideEffectsInModule(moduleFilePath);
+        SIDE_EFFECT_IMPORTS_OF_MODULE.clear();
+        CACHE_CIRCULAR_IMPORTS.clear();
+        CACHE_CLEAR_MODULES.clear();
 
-        const relativPathOfSideEffectFiles = sideEffectFiles.map(
+        findSideEffectsInModule(moduleFilePath);
+
+        return [...SIDE_EFFECT_IMPORTS_OF_MODULE].map(
             (importPath) => importPath.replace(/\\/g, '/')
-        )
-
-        return relativPathOfSideEffectFiles;
+        );
     } catch (e) {
         const message = (e instanceof Error) ? e.message : e;
         throw(`Exception while check side effects. in ${moduleFilePath} \nException: ` + message + '\n');
@@ -132,10 +132,10 @@ function getModuleSideEffectFiles(moduleFilePath) {
     function findSideEffectsInModule(moduleFilePath, deep = 0) {
         const code = fs.readFileSync(moduleFilePath, 'utf8');
 
-        findSideEffectsInImports(moduleFilePath, code, deep);
+        const hasSideEffectsInImports = !!findSideEffectsInImports(moduleFilePath, code, deep);
 
         CACHE_CIRCULAR_IMPORTS.clear();
-        return [...SIDE_EFFECT_IMPORTS_OF_MODULE];
+        return hasSideEffectsInImports;
     }
 
     function findSideEffectsInImports(modulePath, code, deep) {
@@ -143,15 +143,15 @@ function getModuleSideEffectFiles(moduleFilePath) {
         const relativePathRegExp = /['"]\.?\.\/.+['"]/;
         const hasSideEffectImportRegExp = /^\s*import\s+['"]/ms;
 
-        const imports = code.match(/^\s*import[^;]+;/mg) || [];
+        let imports = code.match(/^\s*import[^;]+;/mg) || [];
 
-        imports
-            .filter((str) => hasRelativePathRegExp.test(str))
+        let found = false;
+        imports.filter((str) => hasRelativePathRegExp.test(str) /*&& (/\s+from\s+/ms).test(str)*/)
             .forEach((str) => {
                 let pathFromImport = str.match(relativePathRegExp)[0].replace(/(^['"]|['"]$)/g, '');
-                pathFromImport = path.join(path.dirname(modulePath), pathFromImport) + '.js';
+                pathFromImport = path.join(path.dirname(modulePath), pathFromImport)+'.js';
 
-                if (!fs.existsSync(pathFromImport)) {
+                if(!fs.existsSync(pathFromImport)) {
                     pathFromImport = pathFromImport.replace(/\.js$/, '/index.js')
                 }
 
@@ -160,12 +160,13 @@ function getModuleSideEffectFiles(moduleFilePath) {
                 }
 
                 if (CACHE_CLEAR_MODULES.has(pathFromImport)) {
-                    return;
+                    return false;
                 }
 
-                let isDirty = !CACHE_CIRCULAR_IMPORTS.has(pathFromImport);
+                let alreadyChecked = CACHE_CIRCULAR_IMPORTS.has(pathFromImport);
+                let isDirty = false;
 
-                if (!isDirty)  {
+                if (!alreadyChecked)  {
                     CACHE_CIRCULAR_IMPORTS.add(pathFromImport);
                     isDirty = !!findSideEffectsInModule(pathFromImport, deep + 1);
                 }
@@ -175,7 +176,11 @@ function getModuleSideEffectFiles(moduleFilePath) {
                 if (!isDirty) {
                     CACHE_CLEAR_MODULES.add(pathFromImport);
                 }
+
+                found = found || isDirty;
             });
+
+        return found;
     }
 }
 const transpileTs = (compiler, src) => {
