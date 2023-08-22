@@ -4586,7 +4586,7 @@ QUnit.module('templates', baseModuleConfig, () => {
                                         '</tr>';
 
                                 (asyncMethod === 'deferUpdate' ? deferUpdate : setTimeout)(function() {
-                                    container.append(markup);
+                                    $(container).append(markup);
                                     onRendered();
                                 });
 
@@ -4634,7 +4634,7 @@ QUnit.module('templates', baseModuleConfig, () => {
                                     '</tr>';
 
                             deferUpdate(function() {
-                                container.append(markup);
+                                $(container).append(markup);
                                 onRendered();
                             });
                             return container;

@@ -2445,7 +2445,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                                 .css('height', `${rowHeight}px`);
 
                             commonUtils.deferUpdate(function() {
-                                container.append(markup);
+                                $(container).append(markup);
                                 onRendered();
                             });
 
