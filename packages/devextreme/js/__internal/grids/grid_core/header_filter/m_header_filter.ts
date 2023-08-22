@@ -327,7 +327,7 @@ const HeaderFilterController = modules.ViewController.inherit((function () {
         const groupInterval = filterUtils.getGroupInterval(column);
         const dataSource = that._dataController.dataSource();
         const remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
-        const { onHidden } = options;
+        const previousOnHidden = options.onHidden;
 
         extend(options, column, {
           type: groupInterval && groupInterval.length > 1 ? 'tree' : 'list',
@@ -347,7 +347,7 @@ const HeaderFilterController = modules.ViewController.inherit((function () {
             });
           },
           onHidden: () => {
-            onHidden?.();
+            previousOnHidden?.();
             restoreFocus(this);
           },
         });
