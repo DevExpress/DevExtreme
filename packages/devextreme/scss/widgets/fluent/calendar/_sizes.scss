@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-calendar-legacy-width: null !default;
+$fluent-calendar-legacy-height: null !default;
+
+$fluent-calendar-footer-button-height: null !default;
+$fluent-calendar-cell-font-size: null !default;
+
+$fluent-calendar-element-padding: 8px !default;
+
+@if $size == "default" {
+  $fluent-calendar-legacy-width: 272px !default;
+  $fluent-calendar-legacy-height: 264px !default;
+
+  $fluent-calendar-cell-font-size: 14px !default;
+
+  $fluent-calendar-footer-button-height: 36px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-calendar-legacy-width: 252px !default;
+  $fluent-calendar-legacy-height: 260px !default;
+
+  $fluent-calendar-cell-font-size: 12px !default;
+  $fluent-calendar-footer-button-height: 28px !default;
+}

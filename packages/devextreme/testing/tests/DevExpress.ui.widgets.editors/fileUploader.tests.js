@@ -118,14 +118,12 @@ const getUploadChunkArgumentsSummary = (file, chunksInfo) => {
 
 const triggerDragEvent = function($element, eventType, dataTransfer = { types: ['Files'] }) {
     $element = $($element);
-    const offset = eventType === 'dragenter' ? 1 : -1;
     $element.trigger($.Event(eventType, {
-        clientX: $element.offset().left + offset,
-        clientY: $element.offset().top + offset,
+        clientX: $element.offset().left,
+        clientY: $element.offset().top,
         originalEvent: $.Event(eventType, { dataTransfer })
     }));
 };
-
 
 const moduleConfig = {
     beforeEach: function() {
@@ -1033,7 +1031,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         simulateFileChoose($fileUploader, [fakeFile]);
         this.clock.tick(200);
 
-        $fileUploader.dxFileUploader('instance').reset();
+        $fileUploader.dxFileUploader('instance').clear();
         this.clock.tick(200);
 
         assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
@@ -2385,7 +2383,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         const fileUploader = $fileUploader.dxFileUploader('instance');
         const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
         $input.val('fakefile');
-        fileUploader.reset();
+        fileUploader.clear();
 
         assert.equal($input.val(), '', 'value was cleared in input');
     });
@@ -3657,6 +3655,47 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const $invalidFileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
         assert.equal(invalidFileName, secondFile.name, secondFile.name + ' is invalid file');
         assert.strictEqual($invalidFileStatus.text(), 'File type is not allowed', 'file status message is correct');
+    });
+
+    QUnit.test('dropZoneLeave should be fired on leave when native event occurs on the border (T1178898)', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+
+        try {
+            const onDropZoneLeaveSpy = sinon.spy();
+            $('#fileuploader').dxFileUploader({
+                uploadMode: 'useButtons',
+                dropZone: $('.drop'),
+                onDropZoneLeave: onDropZoneLeaveSpy
+            });
+
+            triggerDragEvent(customDropZone, 'dragenter');
+            triggerDragEvent(customDropZone, 'dragleave');
+
+            assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
+            assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+        } finally {
+            customDropZone.remove();
+        }
+    });
+
+    QUnit.test('dropZoneEnter should be fired on enter when native event occurs on the border', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+
+        try {
+            const onDropZoneEnterSpy = sinon.spy();
+            $('#fileuploader').dxFileUploader({
+                uploadMode: 'useButtons',
+                dropZone: $('.drop'),
+                onDropZoneEnter: onDropZoneEnterSpy
+            });
+
+            triggerDragEvent(customDropZone, 'dragenter');
+
+            assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
+            assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+        } finally {
+            customDropZone.remove();
+        }
     });
 
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in a custom drop zone', function(assert) {

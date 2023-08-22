@@ -44,6 +44,7 @@
 }
 
 .dx-tabs-wrapper {
+  position: relative;
   display: flex;
   width: 100%;
 }
@@ -108,7 +109,28 @@
 }
 
 .dx-rtl {
-  &.dx-tabs {
+  &.dx-tabs:not(.dx-tabs-vertical) {
     flex-direction: row-reverse;
+  }
+}
+
+.dx-tabs-vertical {
+  display: inline-flex;
+  flex-direction: column;
+  width: auto;
+
+  .dx-tabs-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .dx-tabs-nav-button {
+    .dx-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  .dx-tab {
+    justify-content: flex-start;
   }
 }

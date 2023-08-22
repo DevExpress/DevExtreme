@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { getGroupCount } from '../../resources/utils';
+import { getGroupCount } from '../../../../__internal/scheduler/resources/m_utils';
 import {
     getHeaderCellText,
     formatWeekdayAndDay,

@@ -777,7 +777,7 @@ const DateBox = DropDownEditor.inherit({
         }
     },
 
-    reset: function() {
+    clear: function() {
         const value = this.option('value');
 
         this.callBase();

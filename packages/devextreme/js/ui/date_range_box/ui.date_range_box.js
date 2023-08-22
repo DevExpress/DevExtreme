@@ -389,7 +389,7 @@ class DateRangeBox extends Editor {
         e.stopPropagation();
         this._saveValueChangeEvent(e);
 
-        this.reset();
+        this.clear();
 
         !this._isStartDateActiveElement() && this.focus();
         eventsEngine.trigger($(this.startDateField()), 'input');
@@ -1002,11 +1002,11 @@ class DateRangeBox extends Editor {
         this.getStartDateBox().focus();
     }
 
-    reset() {
-        super.reset();
+    clear() {
+        super.clear();
 
-        this.getEndDateBox().reset();
-        this.getStartDateBox().reset();
+        this.getEndDateBox().clear();
+        this.getStartDateBox().clear();
     }
 }
 

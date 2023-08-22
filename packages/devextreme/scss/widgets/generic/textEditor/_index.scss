@@ -309,15 +309,9 @@ $generic-texteditor-label-transition:
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
-    &.dx-lookup-empty,
-    &.dx-texteditor-empty.dx-state-readonly,
-    &.dx-lookup-empty.dx-state-readonly {
+    &.dx-texteditor-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
-      }
-
-      .dx-lookup-field {
-        font-size: 0;
       }
 
       .dx-texteditor-label {
@@ -349,10 +343,6 @@ $generic-texteditor-label-transition:
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
-      }
-
-      .dx-lookup-field {
-        font-size: $generic-base-font-size;
       }
 
       .dx-texteditor-label {
@@ -421,10 +411,6 @@ $generic-texteditor-label-transition:
       }
     }
 
-    .dx-lookup-field {
-      font-size: $generic-base-font-size;
-    }
-
     &.dx-rtl {
       .dx-texteditor-label {
         .dx-label-before {
@@ -488,10 +474,6 @@ $generic-texteditor-label-transition:
       }
     }
 
-    .dx-lookup-field {
-      font-size: 0;
-    }
-
     .dx-placeholder {
       display: none;
     }
@@ -542,8 +524,7 @@ $generic-texteditor-label-transition:
   }
 
   &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty,
-    &.dx-lookup-empty {
+    &.dx-texteditor-empty {
       @include dx-state-empty($texteditor-border-color, solid);
 
       &.dx-invalid {
@@ -563,6 +544,10 @@ $generic-texteditor-label-transition:
       }
 
       &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+
         @include dx-state($texteditor-border-color, solid);
       }
 
@@ -744,15 +729,9 @@ $generic-texteditor-label-transition:
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
-    &.dx-lookup-empty,
-    &.dx-texteditor-empty.dx-state-readonly,
-    &.dx-lookup-empty.dx-state-readonly {
+    &.dx-texteditor-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
-      }
-
-      .dx-lookup-field {
-        font-size: 0;
       }
 
       .dx-texteditor-label {
@@ -786,10 +765,6 @@ $generic-texteditor-label-transition:
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
-      }
-
-      .dx-lookup-field {
-        font-size: $generic-base-font-size;
       }
 
       .dx-texteditor-label {

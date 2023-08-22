@@ -13,56 +13,13 @@
 // adduse
 @use "../dropDownList";
 
-$generic-lookup-field-padding:
-  $generic-base-inline-borderedwidget-top-padding
-  $generic-base-inline-borderedwidget-inner-size
-  $generic-base-inline-borderedwidget-bottom-padding
-  $generic-base-inline-borderedwidget-horizontal-padding;
-$generic-lookup-field-padding-rtl:
-  $generic-base-inline-borderedwidget-top-padding
-  $generic-base-inline-borderedwidget-horizontal-padding
-  $generic-base-inline-borderedwidget-bottom-padding
-  $generic-base-inline-borderedwidget-inner-size;
-
-
-.dx-lookup {
-  height: $generic-lookup-height;
-  border: 1px solid $texteditor-border-color;
-  background: $texteditor-bg;
-
-  &.dx-editor-underlined {
-    background: $texteditor-underlined-bg;
-  }
-
-  &.dx-texteditor-with-floating-label,
-  &.dx-texteditor-with-label {
-    &.dx-editor-underlined {
-      .dx-texteditor-label {
-        .dx-label {
-          padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
-      }
-
-      .dx-rtl &,
-      &.dx-rtl {
-        .dx-texteditor-label {
-          .dx-label {
-            padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-            padding-left: 0;
-          }
-        }
-      }
-    }
-  }
-}
 
 .dx-lookup-field {
-  padding: $generic-lookup-field-padding;
+  padding-block-start: $generic-base-inline-borderedwidget-top-padding;
+  padding-block-end: $generic-base-inline-borderedwidget-bottom-padding;
+  padding-inline-end: $generic-base-inline-borderedwidget-inner-size;
+  padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
   font-size: 1em;
-
-  .dx-rtl & {
-    padding: $generic-lookup-field-padding-rtl;
-  }
 }
 
 .dx-lookup-arrow {
@@ -75,7 +32,7 @@ $generic-lookup-field-padding-rtl:
 }
 
 .dx-state-readonly .dx-lookup-field::before {
-  opacity: 0.5,;
+  opacity: 0.5;
 }
 
 .dx-lookup-popup-wrapper {
@@ -109,13 +66,7 @@ $generic-lookup-field-padding-rtl:
 }
 
 @mixin lookup-badge-offset() {
-  right: $generic-dropdowneditor-invalid-badge-offset;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    right: auto;
-    left: $generic-dropdowneditor-invalid-badge-offset;
-  }
+  inset-inline-end: $generic-dropdowneditor-invalid-badge-offset;
 }
 
 .dx-invalid.dx-lookup .dx-lookup-field::after {

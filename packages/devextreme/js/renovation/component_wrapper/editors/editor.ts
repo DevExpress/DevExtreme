@@ -157,9 +157,19 @@ export default class Editor extends Component {
     super._optionChanged(option);
   }
 
-  reset(): void {
+  clear(): void {
     const { value } = this._getDefaultOptions();
     this.option({ value });
+  }
+
+  reset(value: unknown = undefined): void {
+    if (arguments.length) {
+      this._initialValue = value;
+    }
+
+    this.option('value', this._initialValue);
+    this.option('isDirty', false);
+    this.option('isValid', true);
   }
 
   _dispose(): void {

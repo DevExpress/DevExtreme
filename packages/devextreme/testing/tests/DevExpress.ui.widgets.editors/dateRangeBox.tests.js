@@ -39,8 +39,7 @@ const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
-const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
-const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
@@ -1363,7 +1362,7 @@ QUnit.module('Events', moduleConfig, () => {
                 onValueChanged: this.onValueChangedHandler
             });
 
-            this.instance.reset();
+            this.instance.clear();
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 1);
             assert.deepEqual(this.instance.option('value'), [null, null], 'value is correct');
@@ -3802,7 +3801,7 @@ QUnit.module('Validation', {
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
 
-        QUnit.test('reset method call should raise external validation', function(assert) {
+        QUnit.test('clear method call should raise external validation', function(assert) {
             this.reinit({
                 value: [new Date('2023/4/4'), new Date('2023/4/8')]
             });
@@ -3814,7 +3813,7 @@ QUnit.module('Validation', {
                 }]
             });
 
-            this.instance.reset();
+            this.instance.clear();
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
@@ -4166,22 +4165,23 @@ if(devices.real().deviceType === 'desktop') {
             },
         }];
 
-        QUnit.test('pressing tab should set focus on today button in popup', function(assert) {
+        QUnit.test('pressing tab should set focus on previous month button in calendar', function(assert) {
             this.reinit({
                 opened: true,
                 applyValueMode: 'useButtons',
             });
+
             this.$endDateInput
                 .focus()
                 .trigger($.Event('keydown', {
                     key: 'Tab',
                 }));
 
-            const $todayButton = this.getPopupContent().parent().find(TODAY_BUTTON_SELECTOR);
-            assert.ok($todayButton.hasClass(STATE_FOCUSED_CLASS));
+            const $prevButton = this.getPopupContent().parent().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+            assert.ok($prevButton.hasClass(STATE_FOCUSED_CLASS));
         });
 
-        QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+        QUnit.test('pressing tab + shift should set focus on apply button in popup', function(assert) {
             this.reinit({
                 opened: true,
                 applyValueMode: 'useButtons',
@@ -4193,8 +4193,8 @@ if(devices.real().deviceType === 'desktop') {
                     shiftKey: true
                 }));
 
-            const $cancelButton = this.getPopupContent().parent().find(CANCEL_BUTTON_SELECTOR);
-            assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+            const $applyButton = this.getPopupContent().parent().find(APPLY_BUTTON_SELECTOR);
+            assert.ok($applyButton.hasClass(STATE_FOCUSED_CLASS));
         });
 
         QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {

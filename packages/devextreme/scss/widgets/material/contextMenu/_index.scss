@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../button/sizes" as *;
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 @use "../menu/sizes" as *;
@@ -20,17 +21,23 @@
     color: $base-text-color;
 
     .dx-menu-item-content {
+      display: flex;
+      align-items: center;
       padding: $material-menu-vertical-padding $material-context-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {
         right: $material-context-menu-horizontal-padding;
         width: $material-base-icon-size;
+        display: flex;
+        align-items: center;
 
         .dx-menu-item-popout {
+          display: flex;
+          align-items: center;
           color: $base-icon-color;
 
           @include dx-icon(spinright);
-          @include dx-icon-font-centered-sizing($material-base-icon-size);
+          @include dx-icon-sizing($material-button-icon-size);
         }
       }
     }
@@ -42,7 +49,7 @@
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $material-menu-horizontal-padding;
+          margin-inline-end: $material-menu-icon-to-text-offset;
         }
       }
     }
@@ -70,15 +77,6 @@
     .dx-menu-item {
       .dx-menu-item-popout-container {
         left: $material-context-menu-horizontal-padding;
-      }
-
-      &.dx-menu-item-has-text {
-        &.dx-menu-item-has-icon {
-          .dx-icon {
-            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-context-menu-horizontal-padding - $material-base-icon-size;
-            margin-right: 0;
-          }
-        }
       }
 
       &.dx-menu-item-has-submenu > .dx-menu-item-content {

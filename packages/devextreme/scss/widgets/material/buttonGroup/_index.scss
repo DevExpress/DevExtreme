@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../button/sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/buttonGroup";
 @use "../../base/buttonGroup/mixins" as *;
@@ -18,61 +19,21 @@
 @include dx-buttongroup-sizing(
   $button-border-radius,
   1px,
-  1px,
 );
-@include dx-buttongroup-item(
-  $button-normal-bg,
-  $button-group-default-bg,
-  $button-group-success-bg,
-  $button-group-danger-bg,
-  transparent,
-  $button-default-bg,
-  $button-default-outlined-hover-bg,
-  $button-default-outlined-focused-bg,
-  $button-default-text-hover-bg,
-  $button-default-text-focused-bg,
-  $button-success-text-hover-bg,
-  $button-success-text-focused-bg,
-  $button-danger-text-hover-bg,
-  $button-danger-text-focused-bg,
-  transparent,
-  $button-success-bg,
-  $button-success-outlined-hover-bg,
-  $button-success-outlined-focused-bg,
-  transparent,
-  $button-danger-bg,
-  $button-danger-outlined-hover-bg,
-  $button-danger-outlined-focused-bg,
-  $button-normal-hover-bg,
-  $button-normal-focused-bg,
-  $button-group-default-contained-hover-bg,
-  $button-group-default-contained-focused-bg,
-  $button-group-success-contained-hover-bg,
-  $button-group-success-contained-focused-bg,
-  $button-group-danger-contained-hover-bg,
-  $button-group-danger-contained-focused-bg,
-  $button-normal-outlined-hover-bg,
-  $button-normal-outlined-focused-bg,
-  $button-normal-text-hover-bg,
-  $button-normal-text-focused-bg,
-  $button-group-normal-contained-selected-bg,
-  $button-group-normal-contained-selected-bg-hover,
-  $button-group-normal-contained-selected-bg-focused,
-  $button-group-normal-selected-bg,
-  $button-group-normal-selected-bg-hover,
-  $button-group-normal-selected-bg-focused,
-  $button-group-normal-selected-color,
-  $button-group-success-selected-bg,
-  $button-group-success-selected-bg-hover,
-  $button-group-success-selected-bg-focused,
-  $button-group-success-selected-color,
-  $button-group-default-selected-bg,
-  $button-group-default-selected-bg-hover,
-  $button-group-default-selected-bg-focused,
-  $button-group-default-selected-color,
-  $button-group-danger-selected-bg,
-  $button-group-danger-selected-bg-hover,
-  $button-group-danger-selected-bg-focused,
-  $button-group-danger-selected-color,
-  $button-disabled-text-color,
-);
+
+.dx-buttongroup-mode-contained {
+  border-radius: $button-border-radius;
+  box-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
+
+  .dx-button-mode-contained {
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    border-inline-end-width: 1px;
+    border-inline-end-color: $button-group-separator-color;
+
+    &.dx-buttongroup-last-item {
+      border-inline-end-width: 0;
+    }
+  }
+}

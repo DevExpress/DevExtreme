@@ -1,0 +1,56 @@
+@use "sass:math";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/sizes" as *;
+@use "../../variables/colors" as *;
+@use "../../variables/borders" as *;
+
+// adduse
+
+
+.dx-tabs-nav-button {
+  width: $generic-tabs-nav-button-width;
+  background-color: $tabs-tab-bg;
+  color: $tabs-border-color;
+  border-radius: 0;
+  border-color: $tabs-border-color;
+
+  &.dx-tabs-nav-button-left {
+    border-right: none;
+  }
+
+  &.dx-tabs-nav-button-right {
+    border-left: none;
+  }
+
+  &.dx-state-active {
+    background-color: $tabs-tab-active-bg;
+
+    .dx-icon {
+      color: $tabs-tab-selected-color;
+    }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+
+    .dx-button-content {
+      opacity: $tabs-tab-button-disabled-opacity;
+    }
+  }
+
+  .dx-button-content {
+    padding: 0;
+  }
+
+  &.dx-state-hover {
+    background-color: $tabs-tab-hover-bg;
+
+    .dx-button-content {
+      border-radius: 0;
+    }
+  }
+}

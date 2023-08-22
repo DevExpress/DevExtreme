@@ -86,6 +86,89 @@ QUnit.module('isDirty', moduleConfig, () => {
     });
 });
 
+
+QUnit.module('reset', moduleConfig, () => {
+    ['1', undefined, null].forEach((initialValue) => {
+        QUnit.test(`should update value to initial if initial value was ${initialValue}`, function(assert) {
+            const editor = this.fixture.createEditor({ value: initialValue });
+
+            editor.option('value', '123');
+
+            editor.reset();
+
+            assert.strictEqual(editor.option('value'), initialValue);
+        });
+    });
+
+    QUnit.test('should not affect default isDirty', function(assert) {
+        const editor = this.fixture.createEditor();
+
+        editor.reset();
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+
+    QUnit.test('to same value should set isDirty to false', function(assert) {
+        const editor = this.fixture.createEditor();
+
+        editor.option('value', 'newValue');
+
+        assert.strictEqual(editor.option('isDirty'), true);
+
+        editor.reset('newValue');
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+
+    QUnit.test('with parameters should set correct value', function(assert) {
+        const initialValue = '1';
+        const editor = this.fixture.createEditor({ value: initialValue });
+
+        editor.reset('4');
+
+        assert.strictEqual(editor.option('value'), '4');
+    });
+
+    QUnit.test('should set isDirty to false', function(assert) {
+        const editor = this.fixture.createEditor();
+
+        editor.option('value', '123');
+        assert.strictEqual(editor.option('isDirty'), true);
+
+        editor.reset();
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+
+    QUnit.test('with parameters should set isDirty to false', function(assert) {
+        const editor = this.fixture.createEditor();
+
+        editor.option('value', '123');
+        assert.strictEqual(editor.option('isDirty'), true);
+
+        editor.reset('2');
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+
+    QUnit.test('should set value correctly when undefined used as value', function(assert) {
+        const editor = this.fixture.createEditor({ value: '1' });
+
+        editor.reset(undefined);
+
+        assert.strictEqual(editor.option('value'), undefined);
+    });
+
+    QUnit.test('should set isDirty correctly when undefined used as value', function(assert) {
+        const editor = this.fixture.createEditor({ value: '1' });
+
+        editor.reset(undefined);
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+});
+
+
 QUnit.module('base', moduleConfig, () => {
     QUnit.test('isEditor static method', function(assert) {
         const editor = this.fixture.createEditor();
@@ -155,10 +238,10 @@ QUnit.module('readOnly', moduleConfig, () => {
 });
 
 QUnit.module('methods', moduleConfig, () => {
-    QUnit.test('reset', function(assert) {
+    QUnit.test('clear', function(assert) {
         const editor = this.fixture.createEditor({ value: '123' });
 
-        editor.reset();
+        editor.clear();
 
         assert.strictEqual(editor.option('value'), null);
     });

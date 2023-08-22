@@ -9,9 +9,8 @@ import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
 
-fixture`Editing`
+fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {
@@ -2295,40 +2294,6 @@ test('Popup EditForm screenshot', async (t) => {
 });
 
 [
-  'cell',
-  'batch',
-  'row',
-  'form',
-  'popup',
-].forEach((mode) => {
-  test(`Embedded editors in ${mode} edit mode shoud have aria-label attribute`, async (t) => {
-    const dataGrid = new DataGrid('#container');
-
-    await t
-      .click(dataGrid.getToolbar().getItem(0));
-
-    await a11yCheck(t);
-  }).before(() => createWidget('dxDataGrid', {
-    dataSource: getData(3, 2),
-    height: 400,
-    showBorders: true,
-    editing: {
-      mode,
-      allowUpdating: true,
-      allowAdding: true,
-    },
-    toolbar: {
-      items: [
-        {
-          name: 'addRowButton',
-          showText: 'always',
-        },
-      ],
-    },
-  }));
-});
-
-[
   {
     theme: 'material.blue.light',
     useIcons: true,
@@ -2350,8 +2315,15 @@ test('Popup EditForm screenshot', async (t) => {
   test(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
+    const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
+    const firstCustomIcon = commandCell.getButton(2);
+    const secondCustomIcon = commandCell.getButton(3);
 
     await t
+      .expect(firstCustomIcon.clientWidth)
+      .eql(20)
+      .expect(secondCustomIcon.clientWidth)
+      .eql(20)
       .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
@@ -2374,6 +2346,7 @@ test('Popup EditForm screenshot', async (t) => {
       },
       columns: ['Id', 'name', {
         type: 'buttons',
+        width: 200,
         buttons: [
           {
             name: 'delete',

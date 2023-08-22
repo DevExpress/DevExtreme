@@ -212,7 +212,7 @@ QUnit.module('general', {}, () => {
         const $placeholder = $element.find('.' + PLACEHOLDER_CLASS);
 
         $placeholder.trigger('dxpointerup');
-        assert.ok($input.is(':focus'), 'input get focus on pointerup (needed for win8 native app)');
+        assert.ok($input.is(':focus'), 'input get focus on pointerup');
     });
 
     QUnit.testInActiveWindow('input is focused after click on the \'clear\' button', function(assert) {
@@ -1137,12 +1137,12 @@ QUnit.module('api', moduleConfig, () => {
         assert.equal(valueChangeCounter, 0, 'onValueChanged not fired');
     });
 
-    QUnit.test('reset()', function(assert) {
+    QUnit.test('clear()', function(assert) {
         const textBox = this.instance;
 
-        textBox.reset();
+        textBox.clear();
 
-        assert.strictEqual(textBox.option('value'), '', 'Value should be reset');
+        assert.strictEqual(textBox.option('value'), '', 'Value should be cleared');
     });
 
     QUnit.test('onFocusOut and other events fired after value was changed', function(assert) {

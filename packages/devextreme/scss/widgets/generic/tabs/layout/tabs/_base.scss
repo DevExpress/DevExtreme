@@ -1,0 +1,66 @@
+@use "sass:math";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/sizes" as *;
+@use "../../variables/colors" as *;
+@use "../../variables/borders" as *;
+@use "../../mixins" as *;
+
+// adduse
+
+
+.dx-tabs {
+  color: $tabs-border-color;
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+
+  &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
+    @include dx-tabs-after-mixin();
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+    );
+
+    .dx-scrollable-content {
+
+      // NOTE: Scrollable cuts border via transform-translate.
+      transform: none !important; // stylelint-disable-line declaration-no-important
+    }
+  }
+}
+
+.dx-tabs-scrollable {
+  height: 100%;
+}
+
+.dx-tabs-wrapper {
+  background-color: $tabs-tab-bg;
+  border-block-start: $generic-tabs-border-transparent;
+  border-block-end: $generic-tabs-border-transparent;
+  
+  @include dx-tabs-after-mixin(true);
+  @include dx-tabs-border-mixin(
+    $generic-tabs-border,
+    $generic-tabs-border,
+    $generic-tabs-border,
+    $generic-tabs-border,
+  );
+}
+
+.dx-tabs-nav-buttons {
+  .dx-tabs-wrapper {
+    border-block-start: $generic-tabs-border;
+    border-block-end: $generic-tabs-border;
+
+    &::after {
+      border: none;
+    }
+  }
+}

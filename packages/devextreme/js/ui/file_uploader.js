@@ -54,6 +54,7 @@ const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
 const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
+const DRAG_EVENT_DELTA = 1;
 
 let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 
@@ -975,7 +976,7 @@ class FileUploader extends Editor {
     }
 
     _shouldRaiseDragLeave(e, isCustomTarget) {
-        return this._activeDropZone !== null && !this.isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
+        return this._activeDropZone !== null && !this.isMouseOverElement(e, this._activeDropZone, !isCustomTarget, -DRAG_EVENT_DELTA);
     }
 
     _tryToggleDropZoneActive(active, isCustom, event) {
@@ -1222,7 +1223,7 @@ class FileUploader extends Editor {
         this._updateTotalProgress(this._getTotalFilesSize(), this._getTotalLoadedFilesSize());
     }
 
-    isMouseOverElement(mouseEvent, element, correctPseudoElements) {
+    isMouseOverElement(mouseEvent, element, correctPseudoElements, dragEventDelta = DRAG_EVENT_DELTA) {
         if(!element) return false;
 
         const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
@@ -1234,7 +1235,7 @@ class FileUploader extends Editor {
         const eventX = this._getEventX(mouseEvent);
         const eventY = this._getEventY(mouseEvent);
 
-        return eventX >= x && eventX < (x + w) && eventY >= y && eventY < (y + h);
+        return (eventX + dragEventDelta) >= x && (eventX - dragEventDelta) < (x + w) && (eventY + dragEventDelta) >= y && (eventY - dragEventDelta) < (y + h);
     }
     _getEventX(e) {
         return isTouchEvent(e) ? this._getTouchEventX(e) : e.clientX + this._getDocumentScrollLeft();
@@ -1318,7 +1319,7 @@ class FileUploader extends Editor {
             case 'multiple':
                 this._initFileInput();
                 if(!args.value) {
-                    this.reset();
+                    this.clear();
                 }
                 break;
             case 'readOnly':
@@ -1385,7 +1386,7 @@ class FileUploader extends Editor {
                 break;
             case 'allowCanceling':
             case 'uploadMode':
-                this.reset();
+                this.clear();
                 this._invalidate();
                 break;
             case 'onBeforeSend':
@@ -1441,7 +1442,7 @@ class FileUploader extends Editor {
         this._doPreventInputChange = false;
     }
 
-    reset() {
+    clear() {
         this.option('value', []);
     }
 }

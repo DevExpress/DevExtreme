@@ -1,4 +1,4 @@
-import { getWidth, getOuterWidth } from '../core/utils/size';
+import { getWidth, getHeight, getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -19,8 +19,9 @@ import { default as CollectionWidget } from './collection/ui.collection_widget.l
 import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
-import { isReachedLeft, isReachedRight } from '../renovation/ui/scroll_view/utils/get_boundary_props';
+import { isReachedLeft, isReachedRight, isReachedTop, isReachedBottom } from '../renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
+import { getWindow } from '../core/utils/window';
 
 // STYLE tabs
 
@@ -29,6 +30,8 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
+const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
+const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -56,6 +59,16 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 
 const TAB_OFFSET = 30;
 
+const ORIENTATION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
+
+const SCROLLABLE_DIRECTION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
+
 
 const Tabs = CollectionWidget.inherit({
 
@@ -68,6 +81,7 @@ const Tabs = CollectionWidget.inherit({
             scrollByContent: true,
             scrollingEnabled: true,
             selectionMode: 'single',
+            orientation: ORIENTATION.horizontal,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -125,12 +139,10 @@ const Tabs = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-
         this.setAria('role', 'tablist');
-
         this.$element().addClass(TABS_CLASS);
+        this._toggleOrientationClass(this.option('orientation'));
         this._renderWrapper();
-
         this._renderMultiple();
 
         this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
@@ -194,11 +206,11 @@ const Tabs = CollectionWidget.inherit({
         when.apply(this, this._deferredTemplates).done(() => this._renderScrolling());
     },
 
-    _renderScrolling: function() {
+    _renderScrolling() {
         const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
         this.$element().removeClass(removeClasses.join(' '));
 
-        if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
+        if(this.option('scrollingEnabled') && this._isItemsSizeExceeded()) {
             if(!this._scrollable) {
                 this._renderScrollable();
                 this._renderNavButtons();
@@ -216,7 +228,7 @@ const Tabs = CollectionWidget.inherit({
             this._scrollToItem(this.option('selectedItem'));
         }
 
-        if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
+        if(!(this.option('scrollingEnabled') && this._isItemsSizeExceeded())) {
             this._cleanScrolling();
 
             if(this._needStretchItems()) {
@@ -229,8 +241,26 @@ const Tabs = CollectionWidget.inherit({
         }
     },
 
-    _isItemsWidthExceeded: function() {
-        const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+    _isVertical() {
+        return this.option('orientation') === ORIENTATION.vertical;
+    },
+
+    _isServerSide() {
+        const window = getWindow();
+
+        return window.isWindowMock || !window;
+    },
+
+    _isItemsSizeExceeded() {
+        const isVertical = this._isVertical();
+        const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
+
+        return isItemsSizeExceeded;
+    },
+
+    _isItemsWidthExceeded() {
+        const $visibleItems = this._getVisibleItems();
+        const tabItemsWidth = this._getSummaryItemsSize('width', $visibleItems, true);
         const elementWidth = getWidth(this.$element());
 
         if([tabItemsWidth, elementWidth].includes(0)) {
@@ -242,7 +272,15 @@ const Tabs = CollectionWidget.inherit({
         return isItemsWidthExceeded;
     },
 
-    _needStretchItems: function() {
+    _isItemsHeightExceeded() {
+        const $visibleItems = this._getVisibleItems();
+        const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
+        const elementHeight = getHeight(this.$element());
+
+        return itemsHeight - 1 > elementHeight;
+    },
+
+    _needStretchItems() {
         const $visibleItems = this._getVisibleItems();
         const elementWidth = getWidth(this.$element());
         const itemsWidth = [];
@@ -319,11 +357,30 @@ const Tabs = CollectionWidget.inherit({
         return this._$wrapper;
     },
 
-    _renderScrollable: function() {
+    _getScrollableDirection() {
+        const isVertical = this._isVertical();
+        const scrollableDirection = isVertical ? SCROLLABLE_DIRECTION.vertical : SCROLLABLE_DIRECTION.horizontal;
+
+        return scrollableDirection;
+    },
+
+    _updateScrollableDirection() {
+        const scrollable = this.getScrollable();
+
+        if(scrollable) {
+            const scrollableDirection = this._getScrollableDirection();
+
+            scrollable.option('direction', scrollableDirection);
+        } else {
+            this._renderScrolling();
+        }
+    },
+
+    _renderScrollable() {
         const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
-            direction: 'horizontal',
+            direction: this._getScrollableDirection(),
             showScrollbar: 'never',
             useKeyboard: false,
             useNative: false,
@@ -362,11 +419,17 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
-    _updateNavButtonsVisibility: function() {
+    _updateNavButtonsVisibility() {
+        const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
 
-        this._leftButton && this._leftButton.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
-        this._rightButton && this._rightButton.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
+        if(isVertical) {
+            this._leftButton?.option('disabled', isReachedTop(scrollable.scrollTop(), 1));
+            this._rightButton?.option('disabled', isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1));
+        } else {
+            this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
+            this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
+        }
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -441,6 +504,21 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _toggleTabsVerticalClass(value) {
+        this.$element().toggleClass(TABS_VERTICAL_CLASS, value);
+    },
+
+    _toggleTabsHorizontalClass(value) {
+        this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
+    },
+
+    _toggleOrientationClass(orientation) {
+        const isVertical = orientation === ORIENTATION.vertical;
+
+        this._toggleTabsVerticalClass(isVertical);
+        this._toggleTabsHorizontalClass(!isVertical);
+    },
+
     _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
         this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
     },
@@ -451,6 +529,10 @@ const Tabs = CollectionWidget.inherit({
 
     _toggleFocusedDisabledClasses(value) {
         const { selectedIndex: currentIndex } = this.option();
+
+        this._itemElements()
+            .removeClass(FOCUSED_DISABLED_NEXT_TAB_CLASS)
+            .removeClass(FOCUSED_DISABLED_PREV_TAB_CLASS);
 
         const prevItemIndex = currentIndex - 1;
         const nextItemIndex = currentIndex + 1;
@@ -478,6 +560,7 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollable && this._scrollable.option(args.name, args.value);
                 break;
             case 'width':
+            case 'height':
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
@@ -492,6 +575,13 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleFocusedDisabledClasses(args.value);
                 this.callBase(args);
                 this._scrollToItem(args.value);
+                break;
+            }
+            case 'orientation': {
+                this._toggleOrientationClass(args.value);
+                if(!this._isServerSide()) {
+                    this._updateScrollableDirection();
+                }
                 break;
             }
             default:

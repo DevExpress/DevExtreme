@@ -232,7 +232,7 @@ QUnit.module('basic', () => {
         assert.equal($.trim($title.text()), 'testTitle', 'title text is correct');
     });
 
-    QUnit.test('done button is located after cancel button in non-win8 device', function(assert) {
+    QUnit.test('done button is located after cancel button in device', function(assert) {
         devices.current('androidPhone');
 
         const $popup = $('#popup').dxPopup({
@@ -266,7 +266,7 @@ QUnit.module('basic', () => {
         const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
         $popupBottom.dxToolbar('repaint');
-        assert.equal($popupBottom.text(), 'TodayOKCancel', 'buttons order is correct');
+        assert.equal($popupBottom.text(), 'TodayCancelOK', 'buttons order is correct');
         devices.current(devices.real());
     });
 

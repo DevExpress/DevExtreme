@@ -385,16 +385,30 @@ const Editor = Widget.inherit({
         }
     },
 
+    _resetToInitialValue: function() {
+        this.option('value', this._initialValue);
+    },
+
     blur: function() {
         if(this._hasActiveElement()) {
             resetActiveElement();
         }
     },
 
-    reset: function() {
+    clear: function() {
         const defaultOptions = this._getDefaultOptions();
         this.option('value', defaultOptions.value);
-    }
+    },
+
+    reset: function(value = undefined) {
+        if(arguments.length) {
+            this._initialValue = value;
+        }
+
+        this._resetToInitialValue();
+        this.option('isDirty', false);
+        this.option('isValid', true);
+    },
 });
 
 Editor.isEditor = (instance) => {

@@ -1,0 +1,10 @@
+{
+  "format": {
+    "breaks": {
+      "afterAtRule": 1
+    },
+    "breakWith": "\n"
+  },
+  "level": 2,
+  "semicolonAfterLastProperty": true
+}

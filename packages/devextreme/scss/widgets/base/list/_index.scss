@@ -259,10 +259,6 @@ $list-searchbox-margin-bottom: 5px;
   bottom: 0;
   left: 0;
   overflow: hidden;
-
-  .dx-device-ios & {
-    -webkit-mask-image: -webkit-radial-gradient(white, black); // stylelint-disable-line property-no-vendor-prefix, value-no-vendor-prefix
-  }
 }
 
 .dx-list-slide-menu-buttons {

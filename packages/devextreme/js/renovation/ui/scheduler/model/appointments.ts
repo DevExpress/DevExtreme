@@ -6,7 +6,7 @@ import {
 } from '../../../../ui/scheduler/workspaces/helpers/positionHelper';
 import { SchedulerProps } from '../props';
 import { CurrentViewConfigType } from '../workspaces/props';
-import { getGroupCount } from '../../../../ui/scheduler/resources/utils';
+import { getGroupCount } from '../../../../__internal/scheduler/resources/m_utils';
 import { isGroupingByDate } from '../workspaces/utils';
 import { CellsMetaData, Group, ViewDataProviderType } from '../workspaces/types';
 import dateUtils from '../../../../core/utils/date';

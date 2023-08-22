@@ -565,7 +565,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _clearValue: function() {
-        this.reset();
+        this.clear();
     },
 
     _renderEvents: function() {
@@ -885,7 +885,7 @@ const TextEditorBase = Editor.inherit({
         eventsEngine.trigger(this._input(), 'focus');
     },
 
-    reset: function() {
+    clear: function() {
         if(this._showValidMark) {
             this._showValidMark = false;
             this._renderValidationState();
@@ -897,6 +897,23 @@ const TextEditorBase = Editor.inherit({
             this._renderValue();
         } else {
             this.option('value', defaultOptions.value);
+        }
+    },
+
+    _resetToInitialValue() {
+        if(this.option('value') === this._initialValue) {
+            this._options.silent('text', this._initialValue);
+            this._renderValue();
+        } else {
+            this.callBase();
+        }
+    },
+
+    reset: function(value = undefined) {
+        if(arguments.length) {
+            this.callBase(value);
+        } else {
+            this.callBase();
         }
     },
 

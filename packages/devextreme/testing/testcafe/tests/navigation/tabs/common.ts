@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -62,56 +62,77 @@ test('Tabs in contrast theme', async (t) => {
   return createWidget('dxTabs', tabsOptions, '#tabs');
 });
 
-[true, false].forEach((selectOnFocus) => {
-  test('Tabs item states', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((rtlEnabled) => {
+  ['horizontal', 'vertical'].forEach((orientation) => {
+    [true, false].forEach((selectOnFocus) => {
+      test('Tabs item states', async (t) => {
+        const direction = rtlEnabled ? 'left' : 'right';
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+        await testScreenshot(t, takeScreenshot, `Tabs without focus,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
-    await testScreenshot(t, takeScreenshot, `Tabs without focus and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+        await t.pressKey('tab');
+        await testScreenshot(t, takeScreenshot, `Tabs avail focused,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
-    await t.pressKey('tab');
-    await testScreenshot(t, takeScreenshot, `Tabs when its available item has focus and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+        await t.pressKey(direction);
+        await testScreenshot(t, takeScreenshot, `Tabs disab focused,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
-    await t.pressKey('right');
-    await testScreenshot(t, takeScreenshot, `Tabs when its disabled item has focus and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+        const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
+        const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
 
-    const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
-    const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
+        await t
+          .pressKey(direction)
+          .dispatchEvent(thirdItem, 'mousedown');
 
-    await t
-      .pressKey('right')
-      .dispatchEvent(thirdItem, 'mousedown');
+        await testScreenshot(t, takeScreenshot, `Tabs 3item active,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
-    await testScreenshot(t, takeScreenshot, `Tabs when 3 item has active state and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+        await t
+          .dispatchEvent(thirdItem, 'mouseup')
+          .click(thirdItem)
+          .hover(fourthItem);
 
-    await t
-      .dispatchEvent(thirdItem, 'mouseup')
-      .click(thirdItem)
-      .hover(fourthItem);
+        await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
-    await testScreenshot(t, takeScreenshot, `Tabs when 3 item is selected, 4 item is hovered and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+        await t
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        await ClientFunction(() => {
+          (window as any).DevExpress.ui.dxTabs.defaultOptions({
+            options: {
+              useInkRipple: false,
+            },
+          });
+        })();
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await appendElementTo('#container', 'div', 'tabs');
-    await setAttribute('#container', 'style', 'width: 500px; height: 600px;');
+        await appendElementTo('#container', 'div', 'tabs');
+        await setAttribute('#container', 'style', 'width: 500px; height: 600px;');
 
-    const dataSource = [
-      { text: 'John Heart' },
-      { text: 'Marina Thomas', disabled: true },
-      { text: 'Robert Reagan' },
-      { text: 'Greta Sims' },
-      { text: 'Olivia Peyton' },
-    ] as Item[];
+        const dataSource = [
+          { text: 'John Heart' },
+          { text: 'Marina Thomas', disabled: true },
+          { text: 'Robert Reagan' },
+          { text: 'Greta Sims' },
+          { text: 'Olivia Peyton' },
+          { text: 'Ed Holmes' },
+          { text: 'Wally Hobbs' },
+          { text: 'Brad Jameson' },
+        ] as Item[];
 
-    const tabsOptions = {
-      dataSource,
-      selectOnFocus,
-      width: 450,
-      showNavButtons: true,
-    };
+        const tabsOptions = {
+          rtlEnabled,
+          orientation,
+          dataSource,
+          selectOnFocus,
+          showNavButtons: true,
+          width: orientation === 'horizontal' ? 450 : 'auto',
+          height: orientation === 'horizontal' ? 'auto' : 250,
+          // prevent firing dxinactive event for to avoid failing test
+          itemHoldTimeout: 5000,
+          useInkRipple: false,
+        };
 
-    return createWidget('dxTabs', tabsOptions, '#tabs');
+        return createWidget('dxTabs', tabsOptions, '#tabs');
+      });
+    });
   });
 });

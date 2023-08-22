@@ -39,7 +39,6 @@ const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
@@ -70,10 +69,6 @@ const SELECTION_STRATEGIES = {
     MultipleSelection: CalendarMultipleSelectionStrategy,
     RangeSelection: CalendarRangeSelectionStrategy
 };
-
-function elementHasFocus(element) {
-    return element.hasClass(FOCUSED_STATE_CLASS);
-}
 
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
@@ -114,6 +109,8 @@ const Calendar = Editor.inherit({
             minZoomLevel: ZOOM_LEVEL.CENTURY,
 
             selectionMode: 'single',
+
+            selectWeekOnClick: true,
 
             showTodayButton: false,
 
@@ -565,7 +562,7 @@ const Calendar = Editor.inherit({
     },
 
     _setViewContoured: function(date) {
-        if(this.option('skipFocusCheck') || elementHasFocus(this._focusTarget())) {
+        if(this.option('skipFocusCheck') || $(this._$viewsWrapper).is(':focus')) {
             this._view.option('contouredDate', null);
             this._additionalView?.option('contouredDate', null);
 
@@ -670,13 +667,15 @@ const Calendar = Editor.inherit({
     },
 
     _focusTarget: function() {
+        return this._$viewsWrapper;
+    },
+
+    _focusEventTarget() {
         return this.$element();
     },
 
     _initMarkup: function() {
         this._renderSubmitElement();
-
-        this.callBase();
 
         const $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
@@ -686,9 +685,12 @@ const Calendar = Editor.inherit({
         $element.append(this.$body);
 
         this._renderViews();
+        this._renderNavigator();
+
+        this.callBase();
+
         this._renderEvents();
 
-        this._renderNavigator();
         $element.prepend(this._navigator.$element());
 
         this._renderSwipeable();
@@ -696,6 +698,7 @@ const Calendar = Editor.inherit({
 
         this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
+        this._updateNavigatorLabels();
 
         this.setAria('role', 'application');
 
@@ -769,6 +772,7 @@ const Calendar = Editor.inherit({
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex(),
             showWeekNumbers: this.option('showWeekNumbers'),
+            selectWeekOnClick: this.option('selectWeekOnClick'),
             weekNumberRule: this.option('weekNumberRule'),
             zoomLevel: this.option('zoomLevel'),
             tabIndex: undefined,
@@ -905,13 +909,15 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorConfig: function() {
-        const { rtlEnabled } = this.option();
+        const { focusStateEnabled, rtlEnabled } = this.option();
 
         return {
             text: this._getViewsCaption(this._view, this._additionalView),
             onClick: this._navigatorClickHandler.bind(this),
             onCaptionClick: this._navigateUp.bind(this),
+            focusStateEnabled,
             rtlEnabled,
+            tabIndex: undefined,
         };
     },
 
@@ -1319,15 +1325,37 @@ const Calendar = Editor.inherit({
         this._translateViews();
     },
 
-    _focusInHandler: function() {
-        this.callBase.apply(this, arguments);
-        this._setViewContoured(this.option('currentDate'));
+    _shouldSkipFocusEvent(event) {
+        const { target, relatedTarget } = event;
+
+        return $(target).parents(`.${CALENDAR_CLASS}`).length && $(relatedTarget).parents(`.${CALENDAR_CLASS}`).length;
     },
 
-    _focusOutHandler: function() {
+    _focusInHandler: function(event) {
+        if($(event.target).is(this._$viewsWrapper)) {
+            this._setViewContoured(this.option('currentDate'));
+        }
+
+        if(this._shouldSkipFocusEvent(event)) {
+            return;
+        }
+
         this.callBase.apply(this, arguments);
-        this._view.option('contouredDate', null);
-        this._additionalView?.option('contouredDate', null);
+        this._toggleFocusClass(true, this.$element());
+    },
+
+    _focusOutHandler: function(event) {
+        if($(event.target).is(this._$viewsWrapper)) {
+            this._view.option('contouredDate', null);
+            this._additionalView?.option('contouredDate', null);
+        }
+
+        if(this._shouldSkipFocusEvent(event)) {
+            return;
+        }
+
+        this.callBase.apply(this, arguments);
+        this._toggleFocusClass(false, this.$element());
     },
 
     _updateViewsOption: function(optionName, newValue) {
@@ -1357,6 +1385,20 @@ const Calendar = Editor.inherit({
 
         this._updateViewsOption('min', this._getMinDate());
         this._updateViewsOption('max', this._getMaxDate());
+    },
+
+    _updateNavigatorLabels: function() {
+        let zoomLevel = this.option('zoomLevel');
+        zoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
+
+        const captionButtonText = this._navigator._caption.option('text');
+        const localizedPrevButtonLabel = messageLocalization.format(`dxCalendar-previous${zoomLevel}ButtonLabel`);
+        const localizedCaptionLabel = messageLocalization.format(`dxCalendar-caption${zoomLevel}Label`);
+        const localizedNextButtonLabel = messageLocalization.format(`dxCalendar-next${zoomLevel}ButtonLabel`);
+
+        this.setAria('label', localizedPrevButtonLabel, this._navigator._prevButton.$element());
+        this.setAria('label', `${captionButtonText}. ${localizedCaptionLabel}`, this._navigator._caption.$element());
+        this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
     },
 
     _updateAriaSelected: function(value, previousValue) {
@@ -1409,9 +1451,15 @@ const Calendar = Editor.inherit({
                 this._selectionStrategy.restoreValue();
                 this._initCurrentDate();
                 break;
+            case 'selectWeekOnClick':
+                this._refreshViews();
+                break;
             case 'firstDayOfWeek':
                 this._refreshViews();
                 this._updateButtonsVisibility();
+                break;
+            case 'focusStateEnabled':
+                this._invalidate();
                 break;
             case 'currentDate':
                 this.setAria('id', undefined, this._view._getCellByDate(previousValue));
@@ -1423,6 +1471,7 @@ const Calendar = Editor.inherit({
                 this._refreshViews();
                 this._renderNavigator();
                 this._updateAriaId();
+                this._updateNavigatorLabels();
                 break;
             case 'minZoomLevel':
             case 'maxZoomLevel':
