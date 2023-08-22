@@ -30,8 +30,10 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
-const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
-const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
+const TABS_ORIENTATION_CLASS = {
+    vertical: 'dx-tabs-vertical',
+    horizontal: 'dx-tabs-horizontal',
+};
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -69,6 +71,13 @@ const SCROLLABLE_DIRECTION = {
     vertical: 'vertical',
 };
 
+const ICON_POSITION = {
+    top: 'top',
+    end: 'end',
+    bottom: 'bottom',
+    start: 'start',
+};
+
 
 const Tabs = CollectionWidget.inherit({
 
@@ -82,6 +91,7 @@ const Tabs = CollectionWidget.inherit({
             scrollingEnabled: true,
             selectionMode: 'single',
             orientation: ORIENTATION.horizontal,
+            iconPosition: ICON_POSITION.start,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -505,11 +515,11 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _toggleTabsVerticalClass(value) {
-        this.$element().toggleClass(TABS_VERTICAL_CLASS, value);
+        this.$element().toggleClass(TABS_ORIENTATION_CLASS.vertical, value);
     },
 
     _toggleTabsHorizontalClass(value) {
-        this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
+        this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
     },
 
     _toggleOrientationClass(orientation) {
