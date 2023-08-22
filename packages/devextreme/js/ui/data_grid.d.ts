@@ -1035,9 +1035,22 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEv
 /** @public */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_ColumnButtonClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
+  /**
+   * @docid _ui_data_grid_ColumnButtonClickEvent.row
+   * @type dxDataGridRowObject
+   */
   row?: Row<TRowData, TKey>;
+  /**
+   * @docid _ui_data_grid_ColumnButtonClickEvent.column
+   * @type dxDataGridColumn
+   */
   column?: Column<TRowData, TKey>;
 };
 
