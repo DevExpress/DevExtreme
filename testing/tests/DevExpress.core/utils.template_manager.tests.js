@@ -3,7 +3,7 @@ import type from 'core/utils/type';
 import renderer from 'core/renderer';
 import {
     findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,
-    getNormalizedTemplateArgs, validateTemplateSource,
+    getNormalizedTemplateArgs, validateTemplateSource, addPublicElementNormalization,
     defaultCreateElement, acquireIntegrationTemplate, acquireTemplate,
 } from 'core/utils/template_manager';
 import { Template } from 'core/templates/template';
@@ -11,6 +11,8 @@ import { TemplateBase } from 'core/templates/template_base';
 import { EmptyTemplate } from 'core/templates/empty_template';
 import { ChildDefaultTemplate } from 'core/templates/child_default_template';
 import devices from 'core/devices';
+import { getPublicElement } from 'core/element';
+import $ from 'jquery';
 
 QUnit.module('TemplateManager utils', {
     beforeEach: function() {
@@ -112,6 +114,20 @@ QUnit.test('#addOneRenderedCall', function(assert) {
 
     nextTemplate.render('options');
     assert.ok(render.calledWith('options'), 'should call old `render` method');
+});
+
+QUnit.test('#addPublicElementNormalization', function(assert) {
+    const render = sinon.spy(({ container }) => {
+        const comparer = QUnit.urlParams['nojquery'] ? 'isEqualNode' : 'is';
+        const expectedPublicElement = getPublicElement(wrappedElement);
+        assert.ok(container[comparer](expectedPublicElement), 'container should be a public element');
+    });
+    const template = { render };
+    const nextTemplate = addPublicElementNormalization(template);
+
+    const wrappedElement = $('<div>');
+    const options = { container: wrappedElement };
+    nextTemplate.render(options);
 });
 
 QUnit.test('#getNormalizedTemplateArgs', function(assert) {
