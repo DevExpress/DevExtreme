@@ -25496,6 +25496,10 @@ declare namespace DevExpress.ui {
       itemElement: core.DxElement
     ) => string | core.UserDefinedElement);
     /**
+     * [descr:dxTabPanelOptions.iconPosition]
+     */
+    iconPosition?: DevExpress.common.PositionLogical;
+    /**
      * [descr:dxTabPanelOptions.items]
      */
     items?: TItem[];

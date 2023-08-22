@@ -18,6 +18,7 @@ import {
 
 import {
     Position,
+    PositionLogical,
 } from '../common';
 
 import CollectionWidget, {
@@ -179,6 +180,12 @@ export interface dxTabPanelOptions<
      * @public
      */
     itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default 'start'
+     * @public
+     */
+    iconPosition?: PositionLogical;
     /**
      * @docid
      * @type Array<string | dxTabPanelItem | any>
