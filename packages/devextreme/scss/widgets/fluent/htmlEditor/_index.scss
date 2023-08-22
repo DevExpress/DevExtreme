@@ -1,0 +1,355 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/sizes" as *;
+@use "../button/colors" as *;
+@use "../buttonGroup/colors" as *;
+@use "../textEditor/colors" as *;
+@use "../toolbar/sizes" as *;
+@use "../common/mixins" as *;
+@use "../fileUploader/sizes" as *;
+@use "../../base/htmlEditor";
+
+// adduse
+
+.dx-htmleditor {
+  border-color: transparent;
+  position: relative;
+
+  .dx-htmleditor-toolbar-wrapper {
+    padding: 0 $fluent-htmleditor-toolbar-padding;
+    position: relative;
+
+    &:first-child {
+      border-bottom: 1px solid $texteditor-border-color;
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: 1px;
+      bottom: 1px;
+      left: 1px;
+      right: 1px;
+      z-index: 2;
+      background-color: color.change($base-bg, $alpha: 0.4);
+      content: '';
+      pointer-events: none;
+    }
+
+    .dx-toolbar-button .dx-button.dx-state-disabled {
+      opacity: $base-disabled-opacity;
+    }
+  }
+
+  &.dx-invalid {
+    border: 1px solid $htmleditor-invalid-faded-border-color;
+
+    &.dx-state-focused {
+      border-color: $htmleditor-invalid-border-color;
+    }
+  }
+
+  &.dx-htmleditor-outlined {
+    box-shadow: inset 0 0 0 1px $texteditor-border-color;
+    border-color: transparent;
+    border-radius: $texteditor-input-border-radius;
+
+    .dx-htmleditor-content {
+      margin: 1px 1px 1px 0;
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-htmleditor-content {
+        margin-right: 0;
+        margin-left: 1px;
+      }
+    }
+
+    .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
+      margin-top: 0;
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+      box-shadow: inset 0 0 0 1px color.change($texteditor-color, $alpha: 0.5);
+    }
+
+    &.dx-state-hover {
+      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      box-shadow: inset 0 0 0 1px $texteditor-focused-border-color;
+      border-color: $texteditor-focused-border-color;
+    }
+
+    &.dx-invalid {
+      border-color: transparent;
+      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
+        border-color: $texteditor-invalid-focused-border-color;
+      }
+    }
+  }
+
+  &.dx-htmleditor-filled {
+    background: $texteditor-bg;
+    border-radius: $texteditor-input-border-radius;
+
+    &.dx-state-hover {
+      background-color: $texteditor-hover-bg;
+
+      &:not(.dx-invalid) {
+        border-bottom: 1px solid $texteditor-hover-border-color;
+      }
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+      background-color: color.change($texteditor-bg, $alpha: 0.12);
+    }
+  }
+
+  &.dx-htmleditor-underlined {
+    border-color: transparent;
+    border-bottom-color: $texteditor-border-color;
+
+    .dx-htmleditor-content {
+      padding-left: 0;
+    }
+
+    &.dx-rtl {
+      .dx-htmleditor-content {
+        padding-left: $fluent-html-editor-horizontal-padding;
+        padding-right: 0;
+      }
+    }
+
+    &.dx-state-hover:not(.dx-state-focused) {
+      border-bottom: 2px solid $texteditor-hover-border-color;
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+      border-bottom-style: dotted;
+      border-bottom-width: 1px;
+    }
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        border-color: transparent;
+        border-bottom-color: $texteditor-invalid-focused-border-color;
+      }
+
+      &.dx-state-hover:not(.dx-state-focused) {
+        border-bottom-color: $texteditor-invalid-faded-border-color;
+      }
+    }
+  }
+
+  &.dx-htmleditor-filled,
+  &.dx-htmleditor-underlined {
+    &::before {
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 0;
+      width: 100%;
+      content: '';
+      position: absolute;
+      z-index: 2;
+      transform: scale(0);
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      &::before {
+        border-bottom: 2px solid $texteditor-focused-border-color;
+        transform: scale(1);
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
+      }
+
+      &.dx-invalid {
+        &::before {
+          border-bottom-color: $texteditor-invalid-focused-border-color;
+        }
+      }
+    }
+  }
+}
+
+.dx-htmleditor-content {
+  &.ql-blank::before { // stylelint-disable-line selector-class-pattern
+    color: $texteditor-placeholder-color;
+  }
+
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
+    color: color.change($base-text-color, $alpha: 0.8);
+  }
+
+  blockquote {
+    color: color.change($base-text-color, $alpha: 0.8);
+    border-left-color: $htmleditor-toolbar-border-color;
+
+    .dx-rtl & {
+      border-right-color: $htmleditor-toolbar-border-color;
+    }
+  }
+
+  .dx-variable {
+    & > span {
+      background: $htmleditor-variable-bg;
+    }
+  }
+
+  td,
+  th {
+    border-color: $htmleditor-table-border-color;
+  }
+}
+
+@mixin dx-htmleditor-button-states($default-color, $hover-color, $focused-color) {
+  background-color: $default-color;
+
+  &.dx-state-hover {
+    background-color: $hover-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-color;
+  }
+}
+
+.dx-htmleditor-toolbar {
+  background-color: transparent;
+}
+
+.dx-htmleditor-toolbar-format {
+  &.dx-dropdowneditor.dx-editor-filled {
+    background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &.dx-color-format,
+  &.dx-background-format {
+    .dx-button-content {
+      padding-bottom: $fluent-button-vertical-padding - 3px;
+    }
+  }
+
+  &.dx-size-format {
+    width: $fluent-toolbar-size-editor-width;
+  }
+}
+
+.dx-htmleditor-toolbar-separator {
+  height: 50%;
+  border-left-color: $htmleditor-toolbar-border-color;
+
+  .dx-toolbar-multiline & {
+    height: math.div($fluent-toolbar-height, 2);
+  }
+}
+
+.dx-htmleditor-toolbar-menu-separator {
+  border-top-color: $htmleditor-toolbar-border-color;
+}
+
+.dx-resize-frame {
+  border-color: $htmleditor-resize-frame-border-color;
+
+  .dx-resizable-handle-corner-top-right,
+  .dx-resizable-handle-corner-top-left,
+  .dx-resizable-handle-corner-bottom-right,
+  .dx-resizable-handle-corner-bottom-left {
+    background-color: $htmleditor-resize-handle-bg;
+  }
+
+  .dx-resizable-handle-top,
+  .dx-resizable-handle-left,
+  .dx-resizable-handle-right,
+  .dx-resizable-handle-bottom {
+    &::after {
+      background-color: $htmleditor-resize-handle-bg;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-right: $fluent-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - $fluent-button-height - $fluent-html-editor-add-image-dialog-base-padding);
+    }
+
+    .dx-buttongroup {
+      margin-left: $fluent-html-editor-add-image-dialog-base-padding;
+      width: $fluent-button-height;
+      margin-top: math.div($fluent-base-inline-widget-height - $fluent-button-height, 2);
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: $fluent-html-editor-add-image-dialog-fileuploader-padding;
+    border: 3px dashed $base-border-color;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup {
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: $fluent-fileuploader-vertical-padding;
+      padding-bottom: $fluent-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: color.change($htmleditor-border-color, $alpha: 0.8);
+    }
+  }
+}
+
+.dx-mention {
+  background-color: $htmleditor-mention-bg;
+}
+
+.dx-suggestion-list-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: color.change($base-accent, $alpha: 0.5);
+  }
+}

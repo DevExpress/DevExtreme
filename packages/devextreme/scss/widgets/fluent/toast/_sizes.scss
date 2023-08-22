@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-toast-content-padding: null !default;
+$fluent-toast-height: null !default;
+$fluent-toast-shadow-color: null !default;
+
+@if $size == "default" {
+  $fluent-toast-content-padding: 0 16px !default;
+  $fluent-toast-height: 48px !default;
+  $fluent-toast-shadow-color: 0.25 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-toast-content-padding: 0 12px !default;
+  $fluent-toast-height: 36px !default;
+  $fluent-toast-shadow-color: 0.15 !default;
+}

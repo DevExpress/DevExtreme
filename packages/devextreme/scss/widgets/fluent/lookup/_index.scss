@@ -1,0 +1,152 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dropDownEditor" as *;
+@use "../common/mixins" as *;
+@use "../../base/lookup";
+
+// adduse
+@use "../dropDownList";
+
+.dx-lookup {
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-lookup-field {
+      padding: $fluent-filled-texteditor-input-padding;
+      padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
+      padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size;
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2;
+      }
+    }
+
+    .dx-lookup-arrow {
+      inset-inline-end: math.div($fluent-base-icon-size, 2);
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-lookup-field {
+      padding: $fluent-standard-texteditor-input-padding;
+      padding-inline-start: $fluent-base-standard-texteditor-input-horizontal-padding;
+      padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size;
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2;
+      }
+    }
+  }
+
+  &.dx-invalid {
+    border-bottom-color: $base-invalid-faded-border-color;
+
+    .dx-lookup-arrow::after {
+      @include dx-invalid-fluent-badge();
+
+      inset-inline-end: $fluent-base-icon-size;
+    }
+  }
+
+  &.dx-valid {
+    .dx-lookup-arrow::after {
+      @include dx-valid-fluent-badge();
+
+      inset-inline-end: $fluent-base-icon-size;
+    }
+  }
+
+  &.dx-validation-pending {
+    .dx-lookup-field-wrapper {
+      .dx-pending-indicator {
+        @include dx-pending-indicator-fluent();
+
+        inset-inline-end: $fluent-base-icon-size;
+      }
+    }
+  }
+}
+
+.dx-lookup-field {
+  font-size: $fluent-lookup-font-size;
+
+  &::before {
+    line-height: normal;
+  }
+
+  .dx-texteditor {
+    border: none;
+
+    &::before,
+    &::after {
+      content: none;
+    }
+
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active,
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    & {
+      background-color: transparent;
+    }
+  }
+}
+
+.dx-lookup-arrow {
+  @include dx-icon(spindown);
+
+  width: $fluent-base-icon-size;
+  color: $lookup-icon-color;
+
+  @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+}
+
+.dx-state-readonly .dx-lookup-field::before {
+  opacity: 0.5;
+}
+
+.dx-lookup-popup-wrapper {
+  .dx-list-item {
+    border-top: none;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .dx-popup-content {
+    top: 0;
+    padding: 0;
+  }
+
+  .dx-popup-title + .dx-popup-content {
+    top: $fluent-lookup-popup-content-top;
+  }
+}
+
+.dx-lookup-empty {
+  .dx-lookup-field {
+    color: $texteditor-placeholder-color;
+  }
+}
+
+.dx-lookup-popup-search .dx-list {
+  height: calc(100% - #{$fluent-lookup-list-top});
+}
+
+.dx-lookup-search-wrapper {
+  padding: $fluent-lookup-popup-content-padding;
+  padding-bottom: $fluent-lookup-popup-content-padding - 6px;
+}

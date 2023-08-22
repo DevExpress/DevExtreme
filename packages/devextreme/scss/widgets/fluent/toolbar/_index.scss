@@ -1,0 +1,180 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../list/sizes" as *;
+@use "../button/mixins" as *;
+@use "../button/colors" as *;
+@use "../button/sizes" as *;
+@use "../checkBox/sizes" as *;
+@use "mixins" as *;
+@use "../../base/toolbar";
+@use "../../base/icons" as *;
+
+// adduse
+@use "../dropDownMenu";
+
+.dx-toolbar {
+  background-color: $toolbar-bg;
+  color: $toolbar-color;
+
+  @include dx-toolbar-sizing(
+    $fluent-toolbar-height,
+    $fluent-toolbar-padding,
+    $fluent-toolbar-label-font-size,
+    $fluent-toolbar-item-spacing
+  );
+
+  &.dx-toolbar-multiline {
+    .dx-toolbar-item {
+      height: $fluent-toolbar-height;
+    }
+  }
+}
+
+.dx-toolbar-after {
+  .dx-toolbar-item {
+    @include dx-toolbar-item-padding($fluent-toolbar-item-spacing);
+  }
+}
+
+.dx-toolbar-background {
+  background-color: $toolbar-bg;
+}
+
+.dx-toolbar-menu-section {
+  border-bottom: 1px solid $base-border-color;
+
+  .dx-list-item-content,
+  .dx-toolbar-item-auto-hide {
+    padding: $fluent-list-item-vertical-padding $fluent-list-item-horizontal-padding $fluent-list-item-vertical-padding - 1px;
+  }
+
+  .dx-list-item-content {
+    font-size: $fluent-base-font-size;
+    vertical-align: middle;
+
+    .dx-list-item-icon-container {
+      height: $fluent-button-icon-size;
+      width: $fluent-button-icon-size;
+
+      @include dx-icon-margin(math.div($fluent-button-icon-size, 2));
+
+      .dx-icon {
+        font-size: $fluent-button-icon-size;
+
+        @include dx-icon-sizing($fluent-button-icon-size);
+      }
+    }
+  }
+
+  .dx-toolbar-hidden-button,
+  .dx-toolbar-hidden-button-group {
+    .dx-toolbar-item-auto-hide {
+      padding: 0;
+    }
+
+    .dx-button {
+      border: none;
+      border-radius: 0;
+      height: $fluent-list-item-height;
+      padding: 0;
+    }
+
+    .dx-button-text {
+      text-transform: none;
+      font-weight: 400;
+    }
+
+    .dx-button-content {
+      padding: 0 $fluent-list-item-horizontal-padding;
+    }
+  }
+
+  .dx-toolbar-hidden-button {
+    .dx-button-normal {
+      @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
+    }
+
+    .dx-button-default {
+      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+    }
+
+    .dx-button-danger {
+      @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
+    }
+
+    .dx-button-success {
+      @include dx-button-flat-color-styling($button-success-bg, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
+    }
+
+    .dx-button {
+      &.dx-button-has-icon:not(.dx-button-has-text) {
+        border-radius: 0;
+      }
+    }
+  }
+
+  .dx-toolbar-hidden-button-group {
+    margin-top: $fluent-toolbar-padding;
+    margin-bottom: $fluent-toolbar-padding;
+
+    &:first-of-type {
+      margin-top: $fluent-list-vertical-padding;
+    }
+
+    &:last-of-type {
+      margin-bottom: $fluent-list-vertical-padding;
+    }
+  }
+}
+
+.dx-toolbar-button {
+  &.dx-toolbar-text-auto-hide {
+    .dx-button {
+      @include dx-button-onlyicon-sizing();
+    }
+
+    .dx-button-has-icon.dx-button-has-text {
+      border-radius: 50%;
+    }
+  }
+
+  .dx-menu {
+    .dx-menu-item {
+      color: $toolbar-color;
+      font-size: $fluent-base-font-size;
+      font-weight: 500;
+      height: $fluent-button-height;
+
+      .dx-menu-item-content {
+        padding-top: $fluent-toolbar-menu-vertical-padding;
+        padding-bottom: $fluent-toolbar-menu-vertical-padding;
+        line-height: $fluent-toolbar-menu-item-line-height;
+      }
+
+      &.dx-menu-item-has-text.dx-menu-item-has-icon {
+        .dx-icon {
+          @include dx-icon-margin(6px);
+        }
+      }
+
+      &.dx-state-hover {
+        background-color: $button-normal-hover-bg;
+      }
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        background-color: $button-normal-focused-bg;
+      }
+    }
+  }
+}
+
+.dx-toolbar .dx-tab {
+  padding: 4px;
+}
+

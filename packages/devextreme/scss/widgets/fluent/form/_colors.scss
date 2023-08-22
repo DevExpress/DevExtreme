@@ -1,0 +1,19 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Label text color
+* $type color
+*/
+$form-field-item-color: color.change($base-label-color, $alpha: 0.6) !default;
+
+/**
+* $name 20. Group border color
+* $type color
+*/
+$form-group-border-color: $base-border-color !default;
+$form-field-required-color: $form-field-item-color !default;
+$form-field-mark-color: $form-field-item-color !default;

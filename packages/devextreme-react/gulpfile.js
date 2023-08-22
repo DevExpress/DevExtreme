@@ -74,7 +74,6 @@ gulp.task(NPM_README, gulp.series(
 gulp.task(NPM_BUILD, gulp.series(
   NPM_CLEAN,
   gulp.parallel(NPM_LICENSE, NPM_PACKAGE, NPM_README),
-  GENERATE,
   () => gulp.src([
     config.src,
     `!${config.testSrc}`

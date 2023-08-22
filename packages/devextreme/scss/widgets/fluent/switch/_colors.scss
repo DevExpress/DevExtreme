@@ -1,0 +1,47 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 20. Track 'OFF' background color
+* $type color
+*/
+$switch-bg: null !default;
+
+/**
+* $name 30. Handle 'OFF' background color
+* $type color
+*/
+$switch-handle-off-bg: null !default;
+
+/**
+* $name 40. Track 'ON' background color
+* $type color
+*/
+$switch-on-bg: color.change($base-accent, $alpha: 0.5) !default;
+
+/**
+* $name 50. Handle 'ON' background color
+* $type color
+*/
+$switch-handle-on-bg: $base-accent !default;
+$switch-handle-border-radius: 50% !default;
+$switch-hover-bg: transparent !default;
+$switch-handle-disabled-bg: null !default;
+$switch-invalid-handle-bg: $base-invalid-color !default;
+$switch-invalid-container-bg: color.change($base-invalid-color, $alpha: 0.5) !default;
+
+@if $mode == "light" {
+  $switch-bg: darken($base-element-bg, 38%) !default;
+  $switch-handle-off-bg: darken($base-element-bg, 2%) !default;
+  $switch-handle-disabled-bg: darken($base-element-bg, 26%) !default;
+}
+
+@if $mode == "dark" {
+  $switch-bg: lighten($base-element-bg, 38%) !default;
+  $switch-handle-off-bg: lighten($base-element-bg, 18.5%) !default;
+  $switch-handle-disabled-bg: lighten($base-element-bg, 26%) !default;
+}
+

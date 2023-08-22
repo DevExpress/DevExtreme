@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-tooltip-padding: null !default;
+
+@if $size == "default" {
+  $fluent-tooltip-padding: 6px 8px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-tooltip-padding: 4px 6px !default;
+}

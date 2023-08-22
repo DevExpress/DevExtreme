@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Filename text color
+* $type color
+*/
+$fileuploader-filename-color: $base-text-color !default;
+
+/**
+* $name 20. File status text color
+* $type color
+*/
+$fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
+
+/**
+* $name 30. Border color on dragover
+* $type color
+*/
+$fileuploader-border-color: $base-border-color !default;
