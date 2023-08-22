@@ -258,7 +258,7 @@ class SchedulerAgenda extends WorkSpace {
             groupTableClass: GROUP_TABLE_CLASS,
             groupRowClass: GROUP_ROW_CLASS,
             groupCellClass: this._getGroupHeaderClass(),
-            groupCellCustomContent(cell, cellText, index, data) {
+            groupCellCustomContent(cell, cellTextElement, index, data) {
                 const container = domAdapter.createElement('div');
                 container.className = getGroupHeaderContentClass;
 
@@ -268,7 +268,7 @@ class SchedulerAgenda extends WorkSpace {
                             data: data.data,
                             id: data.value,
                             color: data.color,
-                            text: cellText.textContent
+                            text: cellTextElement.textContent
                         },
                         container: getPublicElement($(container)),
                         index: index
@@ -276,7 +276,7 @@ class SchedulerAgenda extends WorkSpace {
 
                 } else {
                     const contentWrapper = domAdapter.createElement('div');
-                    contentWrapper.appendChild(cellText);
+                    contentWrapper.appendChild(cellTextElement);
                     container.appendChild(contentWrapper);
                 }
 
