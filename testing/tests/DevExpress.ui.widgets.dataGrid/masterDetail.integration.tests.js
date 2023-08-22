@@ -881,7 +881,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                                     '</tr>';
 
                             commonUtils.deferUpdate(function() {
-                                container.append(markup);
+                                $(container).append(markup);
                                 onRendered();
                             });
 
@@ -893,7 +893,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                             const markup = '<div class="my-detail">' + model.data.text + '<div>';
 
                             commonUtils.deferUpdate(function() {
-                                container.append(markup);
+                                $(container).append(markup);
                                 onRendered();
                             });
 
