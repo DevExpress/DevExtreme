@@ -4,6 +4,7 @@ import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { getWidth, getOuterWidth } from 'core/utils/size';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
@@ -72,6 +73,34 @@ QUnit.module('common', {}, () => {
         } finally {
             executeAsyncMock.teardown();
         }
+    });
+
+    QUnit.test('reset should clear invalid state even when reset value is invalid', function(assert) {
+        const editor = $('#textbox').dxTextBox({
+            mask: '+1 (000) 000-0000'
+        }).dxTextBox('instance');
+
+        editor.option('value', 'invalidValue');
+
+        assert.strictEqual(editor.option('isValid'), false, 'editor state is invalid before reset');
+
+        editor.reset('otherInvalidValue');
+
+        assert.strictEqual(editor.option('isValid'), true, 'editor state is valid after reset');
+    });
+
+    QUnit.test('reset should clear input value', function(assert) {
+        const instance = $('#textbox').dxTextBox().dxTextBox('instance');
+        const $input = $(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('123').press('enter');
+
+        assert.strictEqual($input.val(), '123', 'input value is pressent before reset');
+
+        instance.reset();
+
+        assert.strictEqual($input.val(), '', 'input value is absent after reset');
     });
 
     QUnit.test('T218573 - clearButton should be hidden if mode is \'search\' and the \'showClearButton\' option is false', function(assert) {

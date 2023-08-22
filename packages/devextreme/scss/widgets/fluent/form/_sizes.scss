@@ -1,0 +1,32 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-form-group-caption-bottom-margin: null !default;
+$fluent-form-group-caption-bottom-padding: null !default;
+$fluent-form-top-label-padding: null !default;
+$fluent-form-group-caption-font-size: null !default;
+$fluent-form-group-content-padding-bottom: null !default;
+$fluent-form-default-top-padding: null !default;
+
+$fluent-form-label-font-size: 12px !default;
+$fluent-form-label-icon-size: 14px !default;
+
+
+@if $size == "default" {
+  $fluent-form-group-caption-bottom-margin: 6px !default;
+  $fluent-form-group-caption-bottom-padding: 19px !default;
+  $fluent-form-top-label-padding: 16px 0 3px !default;
+  $fluent-form-group-caption-font-size: 20px !default;
+  $fluent-form-group-content-padding-bottom: 20px !default;
+  $fluent-form-default-top-padding: 26px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-form-group-caption-bottom-margin: 4px !default;
+  $fluent-form-group-caption-bottom-padding: 10px !default;
+  $fluent-form-top-label-padding: 4px 0 2px !default;
+  $fluent-form-group-caption-font-size: 16px !default;
+  $fluent-form-group-content-padding-bottom: 10px !default;
+  $fluent-form-default-top-padding: 20px !default;
+}

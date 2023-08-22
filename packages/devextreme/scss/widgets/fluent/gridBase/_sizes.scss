@@ -1,0 +1,86 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-grid-base-cell-height: null !default;
+$fluent-grid-base-header-height: null !default;
+$fluent-grid-base-cell-line-height: null !default;
+$fluent-grid-base-cell-font-size: null !default;
+$fluent-grid-base-checkbox-size: null !default;
+$fluent-grid-base-cell-horizontal-padding: null !default;
+$fluent-grid-base-filter-icon-size: null !default;
+$fluent-grid-base-texteditor-input-padding: null !default;
+$fluent-grid-base-menu-item-padding: null !default;
+$fluent-grid-base-column-chooser-horizontal-padding: null !default;
+$fluent-grid-base-column-chooser-paddings: null !default;
+$fluent-grid-base-grouppanel-item-margin: null !default;
+$fluent-grid-base-command-edit-column-width: null !default;
+$fluent-grid-base-command-edit-column-with-icons-width: null !default;
+$fluent-grid-base-adaptive-column-height: null !default;
+$fluent-grid-base-treeview-search-margin: null !default;
+$fluent-grid-base-nodata-font-size: null !default;
+$fluent-command-edit-icon-size: null !default;
+$fluent-filter-row-between-editor-padding: null !default;
+$fluent-command-column-additional-right-margin: null !default;
+
+$fluent-grid-base-header-line-height: 16px !default;
+$fluent-grid-base-header-icon-size: 15px !default;
+$fluent-grid-base-column-chooser-item-margin: 8px !default;
+$fluent-command-edit-icon-margin: 2px !default;
+
+@if $size == "default" {
+  $fluent-grid-base-cell-height: 48px !default;
+  $fluent-grid-base-header-height: 56px !default;
+  $fluent-grid-base-cell-line-height: 20px !default;
+  $fluent-grid-base-cell-font-size: 14px !default;
+
+  $fluent-grid-base-checkbox-size: 18px !default;
+  $fluent-grid-base-cell-horizontal-padding: 16px !default;
+  $fluent-grid-base-filter-icon-size: 22px !default;
+
+  $fluent-grid-base-texteditor-input-padding: 40px !default;
+  $fluent-grid-base-menu-item-padding: 11px 4px !default;
+  $fluent-grid-base-column-chooser-horizontal-padding: 24px !default;
+  $fluent-grid-base-column-chooser-paddings: 16px $fluent-grid-base-column-chooser-horizontal-padding 9px !default;
+  $fluent-grid-base-grouppanel-item-margin: 10px !default;
+
+  $fluent-grid-base-command-edit-column-width: 115px !default;
+  $fluent-grid-base-command-edit-column-with-icons-width: 93px !default;
+  $fluent-grid-base-adaptive-column-height: 40px !default;
+  $fluent-grid-base-treeview-search-margin: 10px !default;
+  $fluent-grid-base-nodata-font-size: 17px !default;
+  $fluent-command-edit-icon-size: 18px !default;
+
+  $fluent-filter-row-between-editor-padding: 12px !default;
+  $fluent-command-column-additional-right-margin: 0 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-grid-base-cell-height: 36px !default;
+  $fluent-grid-base-header-height: 40px !default;
+  $fluent-grid-base-cell-line-height: 16px !default;
+  $fluent-grid-base-cell-font-size: 13px !default;
+
+  $fluent-grid-base-checkbox-size: 16px !default;
+  $fluent-grid-base-cell-horizontal-padding: 11px !default;
+  $fluent-grid-base-filter-icon-size: 18px !default;
+
+  $fluent-grid-base-texteditor-input-padding: 36px !default;
+  $fluent-grid-base-menu-item-padding: 8px 4px !default;
+  $fluent-grid-base-column-chooser-horizontal-padding: 8px !default;
+  $fluent-grid-base-column-chooser-paddings: 8px $fluent-grid-base-column-chooser-horizontal-padding 8px !default;
+  $fluent-grid-base-grouppanel-item-margin: 8px !default;
+
+  $fluent-grid-base-command-edit-column-width: 105px !default;
+  $fluent-grid-base-command-edit-column-with-icons-width: 80px !default;
+  $fluent-grid-base-adaptive-column-height: 26px !default;
+  $fluent-grid-base-treeview-search-margin: 10px !default;
+  $fluent-grid-base-nodata-font-size: 14px !default;
+  $fluent-command-edit-icon-size: 16px !default;
+
+  $fluent-filter-row-between-editor-padding: 8px !default;
+  $fluent-command-column-additional-right-margin: 2px !default;
+}
+
+$fluent-grid-base-header-panel-padding: 0 $fluent-grid-base-cell-horizontal-padding !default;
+$fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;

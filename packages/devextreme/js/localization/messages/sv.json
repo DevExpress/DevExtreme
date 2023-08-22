@@ -172,6 +172,7 @@
         "dxDataGrid-ariaCollapse": "Kollapsa",
         "dxDataGrid-ariaModifiedCell": "Modified",
         "dxDataGrid-ariaDeletedCell": "Deleted",
+        "dxDataGrid-ariaEditableCell": "Editable",
         "dxDataGrid-ariaExpand": "Expandera",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -186,7 +187,7 @@
         "dxDataGrid-filterPanelClearFilter": "Rensa",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktivera filter",
 
-        "dxTreeList-ariaTreeList": "Trädlista",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Lägg till",
@@ -280,8 +281,19 @@
 
         "dxCalendar-todayButtonText": "I dag",
         "dxCalendar-ariaWidgetName": "Kalender",
-        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
-
+        "dxCalendar-previousMonthButtonLabel": "Previous month",
+        "dxCalendar-previousYearButtonLabel": "Previous year",
+        "dxCalendar-previousDecadeButtonLabel": "Previous decade",
+        "dxCalendar-previousCenturyButtonLabel": "Previous century",
+        "dxCalendar-nextMonthButtonLabel": "Next month",
+        "dxCalendar-nextYearButtonLabel": "Next year",
+        "dxCalendar-nextDecadeButtonLabel": "Next decade",
+        "dxCalendar-nextCenturyButtonLabel": "Next century",
+        "dxCalendar-captionMonthLabel": "Month selection",
+        "dxCalendar-captionYearLabel": "Year selection",
+        "dxCalendar-captionDecadeLabel": "Decade selection",
+        "dxCalendar-captionCenturyLabel": "Century selection",
+        
         "dxColorView-ariaRed": "Röd",
         "dxColorView-ariaGreen": "Grön",
         "dxColorView-ariaBlue": "Blå",

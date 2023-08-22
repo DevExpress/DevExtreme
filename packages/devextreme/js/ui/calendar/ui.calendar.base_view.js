@@ -84,10 +84,9 @@ const BaseView = Widget.inherit({
         this._$table = $('<table>');
 
         const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
-        const localizedHotKeysInfo = messageLocalization.format('dxCalendar-ariaHotKeysInfo');
 
         this.setAria({
-            label: `${localizedWidgetName}. ${localizedHotKeysInfo}`,
+            label: localizedWidgetName,
             role: 'grid'
         }, this._$table);
 

@@ -1,0 +1,16 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 20. Header background color
+* $type color
+*/
+$popup-title-bg: transparent !default;
+$popup-title-color: $base-text-color !default;
+$popup-title-border-color: $base-border-color !default;
+$popup-bottom-bg: $popup-title-bg !default;
+$popup-bottom-color: $base-text-color !default;
+$popup-border-radius: $base-border-radius !default;

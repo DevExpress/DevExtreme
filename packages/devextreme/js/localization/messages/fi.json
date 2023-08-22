@@ -172,6 +172,7 @@
         "dxDataGrid-ariaCollapse": "Tiivistä",
         "dxDataGrid-ariaModifiedCell": "Modified",
         "dxDataGrid-ariaDeletedCell": "Deleted",
+        "dxDataGrid-ariaEditableCell": "Editable",
         "dxDataGrid-ariaExpand": "Laajenna",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -186,7 +187,7 @@
         "dxDataGrid-filterPanelClearFilter": "Tyhjennä",
         "dxDataGrid-filterPanelFilterEnabledHint": "Ota suodatin käyttöön",
 
-        "dxTreeList-ariaTreeList": "Puu",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Lisää",
@@ -280,8 +281,19 @@
 
         "dxCalendar-todayButtonText": "Tänään",
         "dxCalendar-ariaWidgetName": "Kalenteri",
-        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
-
+        "dxCalendar-previousMonthButtonLabel": "Previous month",
+        "dxCalendar-previousYearButtonLabel": "Previous year",
+        "dxCalendar-previousDecadeButtonLabel": "Previous decade",
+        "dxCalendar-previousCenturyButtonLabel": "Previous century",
+        "dxCalendar-nextMonthButtonLabel": "Next month",
+        "dxCalendar-nextYearButtonLabel": "Next year",
+        "dxCalendar-nextDecadeButtonLabel": "Next decade",
+        "dxCalendar-nextCenturyButtonLabel": "Next century",
+        "dxCalendar-captionMonthLabel": "Month selection",
+        "dxCalendar-captionYearLabel": "Year selection",
+        "dxCalendar-captionDecadeLabel": "Decade selection",
+        "dxCalendar-captionCenturyLabel": "Century selection",
+        
         "dxColorView-ariaRed": "Punainen",
         "dxColorView-ariaGreen": "Vihreä",
         "dxColorView-ariaBlue": "Sininen",

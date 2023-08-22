@@ -40,11 +40,6 @@
 
   .dx-texteditor-input {
     text-overflow: ellipsis;
-
-    &::-ms-clear {
-      width: 0;
-      height: 0;
-    }
   }
 }
 

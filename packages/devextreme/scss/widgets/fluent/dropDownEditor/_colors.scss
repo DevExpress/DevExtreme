@@ -1,0 +1,15 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../textEditor/colors" as *;
+
+// adduse
+
+$dropdowneditor-icon-color: $base-spin-icon-color !default;
+
+/**
+* $name 90. Spin active icon color
+* $type color
+*/
+$dropdowneditor-icon-active-color: $base-spin-icon-color !default;

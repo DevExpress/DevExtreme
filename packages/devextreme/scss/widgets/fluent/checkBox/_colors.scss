@@ -1,0 +1,13 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$checkbox-border-color: color.change($base-text-color, $alpha: 0.54) !default;
+$checkbox-checked-color: $base-element-bg !default;
+$checkbox-indeterminate-bg: $base-accent !default;
+$checkbox-bg: $base-accent !default;
+$checkbox-hover-border-color: darken($base-accent, 12%) !default;
+$checkbox-invalid-focused-border-color: $base-invalid-color !default;
+$checkbox-icon-border-radius: $base-border-radius - 2 !default;

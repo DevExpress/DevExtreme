@@ -1,0 +1,74 @@
+@use "../sizes" as *;
+
+// adduse
+
+$diagram-toolbox-width: null !default;
+$diagram-toolbox-h-padding: null !default;
+$diagram-toolbox-accordion-v-padding: null !default;
+$diagram-toolbox-input-h-padding: null !default;
+$diagram-toolbox-input-v-padding: null !default;
+$diagram-toolbox-input-image-size: null !default;
+$diagram-toolbox-input-image-padding: null !default;
+$diagram-toolbox-mobile-padding: null !default;
+$diagram-properties-panel-padding: null !default;
+$diagram-properties-panel-spacing: null !default;
+$diagram-properties-layout-icon-size: null !default;
+$diagram-touchbar-item-padding: null !default;
+$diagram-floating-toolbar-items-height: null !default;
+$diagram-floating-toolbar-editor-padding: null !default;
+$diagram-floating-toolbar-editor-button-padding: null !default;
+$diagram-small-editor-width: null !default;
+$diagram-medium-editor-width: null !default;
+$diagram-large-editor-width: null !default;
+
+$diagram-toolbox-input-margin: 2px !default;
+
+@if $size == "default" {
+  $diagram-toolbox-width: 156px !default;
+  $diagram-toolbox-h-padding: 12px !default;
+  $diagram-toolbox-accordion-v-padding: 8px !default;
+  $diagram-toolbox-input-h-padding: 9px !default;
+  $diagram-toolbox-input-v-padding: 12px !default;
+  $diagram-toolbox-input-image-size: 18px !default;
+  $diagram-toolbox-input-image-padding: 6px 4px !default;
+  $diagram-toolbox-mobile-padding: 68px !default;
+
+  $diagram-properties-panel-padding: 0 !default;
+  $diagram-properties-panel-spacing: 16px !default;
+  $diagram-properties-layout-icon-size: 64px !default;
+
+  $diagram-touchbar-item-padding: 10px !default;
+
+  $diagram-floating-toolbar-items-height: 36px !default;
+  $diagram-floating-toolbar-editor-padding: 8px 6px !default;
+  $diagram-floating-toolbar-editor-button-padding: 4px !default;
+
+  $diagram-small-editor-width: 100px !default;
+  $diagram-medium-editor-width: 180px !default;
+  $diagram-large-editor-width: 280px !default;
+}
+
+@else if $size == "compact" {
+  $diagram-toolbox-width: 130px !default;
+  $diagram-toolbox-h-padding: 10px !default;
+  $diagram-toolbox-accordion-v-padding: 6px !default;
+  $diagram-toolbox-input-h-padding: 8px !default;
+  $diagram-toolbox-input-v-padding: 8px !default;
+  $diagram-toolbox-input-image-size: 14px !default;
+  $diagram-toolbox-input-image-padding: 3px 4px !default;
+  $diagram-toolbox-mobile-padding: 58px !default;
+
+  $diagram-properties-panel-padding: 6px !default;
+  $diagram-properties-panel-spacing: 8px !default;
+  $diagram-properties-layout-icon-size: 48px !default;
+
+  $diagram-touchbar-item-padding: 7px !default;
+
+  $diagram-floating-toolbar-items-height: 28px !default;
+  $diagram-floating-toolbar-editor-padding: 6px 4px !default;
+  $diagram-floating-toolbar-editor-button-padding: 2px !default;
+
+  $diagram-small-editor-width: 80px !default;
+  $diagram-medium-editor-width: 120px !default;
+  $diagram-large-editor-width: 220px !default;
+}

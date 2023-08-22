@@ -2,7 +2,6 @@
 
 // adduse
 
-$generic-lookup-height: null !default;
 $generic-lookup-popup-content-top: null !default;
 $generic-lookup-popup-content-padding: null !default;
 $generic-lookup-list-top: null !default;
@@ -16,7 +15,6 @@ $generic-lookup-invalid-message-padding-bottom: null !default;
 $generic-lookup-invalid-message-margin-bottom: null !default;
 
 @if $size == "default" {
-  $generic-lookup-height: 36px !default;
   $generic-lookup-popup-content-top: 49px !default;
   $generic-lookup-popup-content-padding: 20px !default;
   $generic-lookup-list-top: 70px !default;
@@ -33,7 +31,6 @@ $generic-lookup-invalid-message-margin-bottom: null !default;
 }
 
 @else if $size == "compact" {
-  $generic-lookup-height: 26px !default;
   $generic-lookup-popup-content-top: 36px !default;
   $generic-lookup-popup-content-padding: 10px !default;
   $generic-lookup-list-top: 40px !default;

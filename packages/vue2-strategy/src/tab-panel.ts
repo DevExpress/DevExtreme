@@ -42,6 +42,7 @@ type AccessibleOptions = Pick<Properties,
   "showNavButtons" |
   "swipeEnabled" |
   "tabIndex" |
+  "tabsPosition" |
   "visible" |
   "width"
 >;
@@ -89,6 +90,7 @@ const DxTabPanel = createComponent({
     showNavButtons: Boolean,
     swipeEnabled: Boolean,
     tabIndex: Number,
+    tabsPosition: String,
     visible: Boolean,
     width: [Function, Number, String]
   },
@@ -133,6 +135,7 @@ const DxTabPanel = createComponent({
     "update:showNavButtons": null,
     "update:swipeEnabled": null,
     "update:tabIndex": null,
+    "update:tabsPosition": null,
     "update:visible": null,
     "update:width": null,
   },

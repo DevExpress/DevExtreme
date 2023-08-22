@@ -1,0 +1,38 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-filled-lookup-height: null !default;
+$fluent-standard-lookup-height: null !default;
+$fluent-standard-lookup-with-label-height: null !default;
+$fluent-lookup-font-size: null !default;
+$fluent-lookup-popup-content-padding: null !default;
+$fluent-lookup-list-top: null !default;
+
+$fluent-lookup-popup-content-top: 49px !default;
+$fluent-lookup-arrow-margin: -6px !default;
+$fluent-lookup-arrow-right: 10px !default;
+$fluent-lookup-arrow-left: 16px !default;
+$fluent-lookup-invalid-message-font-size: 14px !default;
+$fluent-lookup-invalid-message-padding-horizontal: 20px !default;
+$fluent-lookup-invalid-message-padding-top: 13px !default;
+$fluent-lookup-invalid-message-padding-bottom: 12px !default;
+$fluent-lookup-invalid-message-margin-bottom: 20px !default;
+
+@if $size == "default" {
+  $fluent-filled-lookup-height: 48px !default;
+  $fluent-standard-lookup-height: 32px !default;
+  $fluent-standard-lookup-with-label-height: 42px !default;
+  $fluent-lookup-font-size: 16px !default;
+  $fluent-lookup-popup-content-padding: 20px !default;
+  $fluent-lookup-list-top: 66px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-filled-lookup-height: 32px !default;
+  $fluent-standard-lookup-height: 26px !default;
+  $fluent-standard-lookup-with-label-height: 30px !default;
+  $fluent-lookup-font-size: 13px !default;
+  $fluent-lookup-popup-content-padding: 8px !default;
+  $fluent-lookup-list-top: 36px !default;
+}

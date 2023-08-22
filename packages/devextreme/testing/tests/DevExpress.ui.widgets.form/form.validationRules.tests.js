@@ -238,7 +238,7 @@ QUnit.test('Validate with a custom validation group', function(assert) {
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'firstName') + ']').length, 1, 'invalid firstName editor');
 });
 
-QUnit.test('Reset validation summary items when using a custom validation group', function(assert) {
+QUnit.test('Clear validation summary items when using a custom validation group', function(assert) {
     const form = $('#form').dxForm({
         validationGroup: 'Custom validation group',
         showValidationSummary: true,
@@ -255,7 +255,7 @@ QUnit.test('Reset validation summary items when using a custom validation group'
     }).dxForm('instance');
 
     form.validate();
-    form.resetValues();
+    form.clear();
 
     const $invalidElements = form.$element().find('.' + INVALID_CLASS);
 
@@ -351,7 +351,7 @@ QUnit.test('Validate via validationRules when rules and \'isRequired\' item opti
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'lastName') + ']').length, 1, 'invalid lastName editor');
 });
 
-QUnit.test('validate -> resetValues old test', function(assert) {
+QUnit.test('validate -> clear old test', function(assert) {
     const form = $('#form').dxForm({
         formData: {
             name: '',
@@ -365,12 +365,12 @@ QUnit.test('validate -> resetValues old test', function(assert) {
     }).dxForm('instance');
 
     form.validate();
-    form.resetValues();
+    form.clear();
 
     assert.equal($('.' + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, 'validation summary items');
 });
 
-QUnit.test('validate -> the resetValues method is safely called for all item\'s types', function(assert) {
+QUnit.test('validate -> the clear method is safely called for all item\'s types', function(assert) {
     const form = createForm({
         formData: { name: 'TestName' },
         items: [{
@@ -390,12 +390,12 @@ QUnit.test('validate -> the resetValues method is safely called for all item\'s 
         }]
     });
 
-    form.resetValues();
+    form.clear();
 
     assert.equal(form.getEditor('name').option('value'), '', 'value of editor');
 });
 
-QUnit.test('validate -> resetValues when there are invalid validation rules', function(assert) {
+QUnit.test('validate -> clear when there are invalid validation rules', function(assert) {
     function findInvalidElements$(form) {
         return form.$element().find('.' + INVALID_CLASS);
     }
@@ -445,11 +445,11 @@ QUnit.test('validate -> resetValues when there are invalid validation rules', fu
     assert.equal(validationCallbackLog.length, formItems.length, 'validationCallbackLog on validate');
 
     validationCallbackLog = [];
-    form.resetValues();
+    form.clear();
     formItems.forEach(item => assert.strictEqual(form.getEditor(item.dataField).option('isValid'), true, 'form.getEditor.' + item.dataField));
     assert.equal(findInvalidElements$(form).length, 0, 'There are no invalid elements');
     assert.equal(findInvalidSummaryElements$(form).length, 0, 'There are no validation summary items');
-    assert.equal(validationCallbackLog.length, /* TODO: avoid all the calls */ 1, 'validationCallbackLog on resetValues: ' + JSON.stringify(validationCallbackLog));
+    assert.equal(validationCallbackLog.length, /* TODO: avoid all the calls */ 1, 'validationCallbackLog on clear: ' + JSON.stringify(validationCallbackLog));
 
     form.dispose();
 });

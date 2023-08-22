@@ -172,6 +172,7 @@
         "dxDataGrid-ariaCollapse": "折りたたむ",
         "dxDataGrid-ariaModifiedCell": "Modified",
         "dxDataGrid-ariaDeletedCell": "Deleted",
+        "dxDataGrid-ariaEditableCell": "Editable",
         "dxDataGrid-ariaExpand": "展開",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -186,7 +187,7 @@
         "dxDataGrid-filterPanelClearFilter": "クリア",
         "dxDataGrid-filterPanelFilterEnabledHint": "フィルターの有効化",
 
-        "dxTreeList-ariaTreeList": "ツリー リスト",
+        "dxTreeList-ariaTreeList": "{0} 行と {1} 列のツリー リスト",
         "dxTreeList-ariaSearchInGrid": "ツリー リスト内を検索する",
         "dxTreeList-ariaToolbar": "ツリー リストのツール バー",
         "dxTreeList-editingAddRowToNode": "追加",
@@ -280,8 +281,19 @@
 
         "dxCalendar-todayButtonText": "今日",
         "dxCalendar-ariaWidgetName": "カレンダー",
-        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
-
+        "dxCalendar-previousMonthButtonLabel": "Previous month",
+        "dxCalendar-previousYearButtonLabel": "Previous year",
+        "dxCalendar-previousDecadeButtonLabel": "Previous decade",
+        "dxCalendar-previousCenturyButtonLabel": "Previous century",
+        "dxCalendar-nextMonthButtonLabel": "Next month",
+        "dxCalendar-nextYearButtonLabel": "Next year",
+        "dxCalendar-nextDecadeButtonLabel": "Next decade",
+        "dxCalendar-nextCenturyButtonLabel": "Next century",
+        "dxCalendar-captionMonthLabel": "Month selection",
+        "dxCalendar-captionYearLabel": "Year selection",
+        "dxCalendar-captionDecadeLabel": "Decade selection",
+        "dxCalendar-captionCenturyLabel": "Century selection",
+        
         "dxColorView-ariaRed": "赤",
         "dxColorView-ariaGreen": "緑",
         "dxColorView-ariaBlue": "青",

@@ -162,6 +162,16 @@ export default class Editor extends Component {
     this.option({ value });
   }
 
+  reset(value: unknown = undefined): void {
+    if (arguments.length) {
+      this._initialValue = value;
+    }
+
+    this.option('value', this._initialValue);
+    this.option('isDirty', false);
+    this.option('isValid', true);
+  }
+
   _dispose(): void {
     super._dispose();
 

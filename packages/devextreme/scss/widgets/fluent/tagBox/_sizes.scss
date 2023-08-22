@@ -1,0 +1,41 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-tagbox-tag-content-padding-left: null !default;
+$fluent-tagbox-tag-content-padding: null !default;
+$fluent-tagbox-tag-margin: null !default;
+$fluent-tagbox-tag-container-padding: null !default;
+$fluent-tagbox-tag-height: null !default;
+
+$fluent-tagbox-tag-content-padding-right: 32px !default;
+$fluent-tagbox-remove-button-right: 4px !default;
+$fluent-tagbox-remove-button-width: 24px !default;
+$fluent-tagbox-select-all-padding-bottom: 12px !default;
+$fluent-tagbox-select-all-margin-bottom: 3px !default;
+$tagbox-tag-border-radius: 16px !default;
+$fluent-tagbox-outlined-with-label-top-padding: null !default;
+$fluent-tagbox-filled-with-label-top-padding: null !default;
+$fluent-tagbox-filled-with-label-bottom-padding: null !default;
+
+@if $size == "default" {
+  $fluent-tagbox-tag-content-padding-left: 12px !default;
+  $fluent-tagbox-tag-content-padding: 8px $fluent-tagbox-tag-content-padding-right 7px $fluent-tagbox-tag-content-padding-left !default;
+  $fluent-tagbox-tag-margin: 8px !default;
+  $fluent-tagbox-tag-container-padding: 0 12px 8px 16px !default;
+  $fluent-tagbox-tag-height: 32px !default;
+  $fluent-tagbox-outlined-with-label-top-padding: 0;
+  $fluent-tagbox-filled-with-label-top-padding: 12px !default;
+  $fluent-tagbox-filled-with-label-bottom-padding: 8px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-tagbox-tag-content-padding-left: 8px !default;
+  $fluent-tagbox-tag-content-padding: 4px $fluent-tagbox-tag-content-padding-right 4px $fluent-tagbox-tag-content-padding-left !default;
+  $fluent-tagbox-tag-margin: 4px !default;
+  $fluent-tagbox-tag-container-padding: 0 8px 3px 11px !default;
+  $fluent-tagbox-tag-height: 24px !default;
+  $fluent-tagbox-outlined-with-label-top-padding: 8px;
+  $fluent-tagbox-filled-with-label-top-padding: 14px !default;
+  $fluent-tagbox-filled-with-label-bottom-padding: 6px !default;
+}

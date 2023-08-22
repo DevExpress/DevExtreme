@@ -1,0 +1,26 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 10. Bar background color
+* $type color
+*/
+$progressbar-bg: color.change($base-accent, $alpha: 0.3) !default;
+
+/**
+* $name 20. Selected range background color
+* $type color
+*/
+$progressbar-range-bg: $base-accent !default;
+$progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
+$progressbar-range-indeterminate-color: $base-accent !default;
+
+/**
+* $name 30. Label color
+* $type color
+*/
+$progressbar-label-color: $base-accent !default;
