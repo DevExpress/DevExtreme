@@ -26,6 +26,7 @@ const transpileConfig = require('./transpile-config');
 const createTsCompiler = require('./typescript/compiler');
 
 require('./generator/gulpfile');
+const { SideEffectFinder } = require('./side-effects-finder');
 
 
 const src = [
@@ -78,10 +79,6 @@ const TS_COMPILER_CONFIG = {
     },
 };
 
-const CACHE_CIRCULAR_IMPORTS = new Set();
-const CACHE_CLEAR_MODULES = new Set();
-let SIDE_EFFECT_IMPORTS_OF_MODULE = new Set();
-
 const createModuleConfig = (name, dir, filePath, dist) => {
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(srcDir, ''), name);
@@ -92,12 +89,9 @@ const createModuleConfig = (name, dir, filePath, dist) => {
     const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
-
     const relativeEsmBase = normalize(esmFile).match(/^.*\/esm\//)[0];
-
-    const sideEffectFiles = getModuleSideEffectFiles(esmFilePath)
+    const sideEffectFiles = new SideEffectFinder().getModuleSideEffectFiles(esmFilePath)
         .map((importPath) => importPath.replace(/^.*\/esm\//, relativeEsmBase));
-
 
     const result = {
         sideEffects: sideEffectFiles.length ? sideEffectFiles : false,
@@ -113,76 +107,7 @@ const createModuleConfig = (name, dir, filePath, dist) => {
 
     return JSON.stringify(result, null, 2);
 };
-function getModuleSideEffectFiles(moduleFilePath) {
-    try {
-        SIDE_EFFECT_IMPORTS_OF_MODULE.clear();
-        CACHE_CIRCULAR_IMPORTS.clear();
-        CACHE_CLEAR_MODULES.clear();
 
-        findSideEffectsInModule(moduleFilePath);
-
-        return [...SIDE_EFFECT_IMPORTS_OF_MODULE].map(
-            (importPath) => importPath.replace(/\\/g, '/')
-        );
-    } catch (e) {
-        const message = (e instanceof Error) ? e.message : e;
-        throw(`Exception while check side effects. in ${moduleFilePath} \nException: ` + message + '\n');
-    }
-
-    function findSideEffectsInModule(moduleFilePath, deep = 0) {
-        const code = fs.readFileSync(moduleFilePath, 'utf8');
-
-        const hasSideEffectsInImports = !!findSideEffectsInImports(moduleFilePath, code, deep);
-
-        CACHE_CIRCULAR_IMPORTS.clear();
-        return hasSideEffectsInImports;
-    }
-
-    function findSideEffectsInImports(modulePath, code, deep) {
-        const hasRelativePathRegExp = /['"]\.?\.\/.+/;
-        const relativePathRegExp = /['"]\.?\.\/.+['"]/;
-        const hasSideEffectImportRegExp = /^\s*import\s+['"]/ms;
-
-        let imports = code.match(/^\s*import[^;]+;/mg) || [];
-
-        let found = false;
-        imports.filter((str) => hasRelativePathRegExp.test(str) /*&& (/\s+from\s+/ms).test(str)*/)
-            .forEach((str) => {
-                let pathFromImport = str.match(relativePathRegExp)[0].replace(/(^['"]|['"]$)/g, '');
-                pathFromImport = path.join(path.dirname(modulePath), pathFromImport)+'.js';
-
-                if(!fs.existsSync(pathFromImport)) {
-                    pathFromImport = pathFromImport.replace(/\.js$/, '/index.js')
-                }
-
-                if (hasSideEffectImportRegExp.test(str)) {
-                    SIDE_EFFECT_IMPORTS_OF_MODULE.add(pathFromImport);
-                }
-
-                if (CACHE_CLEAR_MODULES.has(pathFromImport)) {
-                    return false;
-                }
-
-                let alreadyChecked = CACHE_CIRCULAR_IMPORTS.has(pathFromImport);
-                let isDirty = false;
-
-                if (!alreadyChecked)  {
-                    CACHE_CIRCULAR_IMPORTS.add(pathFromImport);
-                    isDirty = !!findSideEffectsInModule(pathFromImport, deep + 1);
-                }
-
-                CACHE_CIRCULAR_IMPORTS.delete(pathFromImport);
-
-                if (!isDirty) {
-                    CACHE_CLEAR_MODULES.add(pathFromImport);
-                }
-
-                found = found || isDirty;
-            });
-
-        return found;
-    }
-}
 const transpileTs = (compiler, src) => {
     const task = () => compiler
         .compileTs(src)
