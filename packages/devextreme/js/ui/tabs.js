@@ -34,6 +34,12 @@ const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
     horizontal: 'dx-tabs-horizontal',
 };
+const TABS_ICON_POSITION_CLASS = {
+    top: 'dx-tabs-icon-position-top',
+    end: 'dx-tabs-icon-position-end',
+    bottom: 'dx-tabs-icon-position-bottom',
+    start: 'dx-tabs-icon-position-start',
+};
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -152,6 +158,7 @@ const Tabs = CollectionWidget.inherit({
         this.setAria('role', 'tablist');
         this.$element().addClass(TABS_CLASS);
         this._toggleOrientationClass(this.option('orientation'));
+        this._toggleIconPositionClass();
         this._renderWrapper();
         this._renderMultiple();
 
@@ -529,6 +536,32 @@ const Tabs = CollectionWidget.inherit({
         this._toggleTabsHorizontalClass(!isVertical);
     },
 
+    _getTabIconPositionClass() {
+        const position = this.option('iconPosition');
+
+        switch(position) {
+            case ICON_POSITION.top:
+                return TABS_ICON_POSITION_CLASS.top;
+            case ICON_POSITION.end:
+                return TABS_ICON_POSITION_CLASS.end;
+            case ICON_POSITION.bottom:
+                return TABS_ICON_POSITION_CLASS.bottom;
+            case ICON_POSITION.start:
+            default:
+                return TABS_ICON_POSITION_CLASS.start;
+        }
+    },
+
+    _toggleIconPositionClass() {
+        for(const key in TABS_ICON_POSITION_CLASS) {
+            this.$element().removeClass(TABS_ICON_POSITION_CLASS[key]);
+        }
+
+        const newClass = this._getTabIconPositionClass();
+
+        this.$element().addClass(newClass);
+    },
+
     _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
         this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
     },
@@ -592,6 +625,10 @@ const Tabs = CollectionWidget.inherit({
                 if(!this._isServerSide()) {
                     this._updateScrollableDirection();
                 }
+                break;
+            }
+            case 'iconPosition': {
+                this._toggleIconPositionClass();
                 break;
             }
             default:
