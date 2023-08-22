@@ -42,6 +42,12 @@ const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
     horizontal: 'dx-tabs-horizontal',
 };
+const TABS_ICON_POSITION_CLASS = {
+    top: 'dx-tabs-icon-position-top',
+    end: 'dx-tabs-icon-position-end',
+    bottom: 'dx-tabs-icon-position-bottom',
+    start: 'dx-tabs-icon-position-start',
+};
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
@@ -281,6 +287,31 @@ QUnit.module('General', () => {
         tabs.option('orientation', 'horizontal');
         assert.ok($element.hasClass(TABS_ORIENTATION_CLASS.horizontal));
         assert.notOk($element.hasClass(TABS_ORIENTATION_CLASS.vertical));
+    });
+
+    QUnit.test('the tabs element must have a start icon position class by default', function(assert) {
+        const $element = $('#tabs').dxTabs();
+
+        assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS.start));
+    });
+
+    ['top', 'end', 'bottom'].forEach((iconPosition) => {
+        QUnit.test('the tabs element must have a correct icon position class', function(assert) {
+            const $element = $('#tabs').dxTabs({ iconPosition });
+
+            assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS[iconPosition]));
+        });
+    });
+
+    QUnit.test('the tabs element must have a correct icon position class in runtime change', function(assert) {
+        const $element = $('#tabs').dxTabs();
+        const instance = $element.dxTabs('instance');
+
+        ['top', 'end', 'bottom'].forEach((iconPosition) => {
+            instance.option({ iconPosition });
+
+            assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS[iconPosition]));
+        });
     });
 });
 
