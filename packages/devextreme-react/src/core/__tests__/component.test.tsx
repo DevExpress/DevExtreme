@@ -313,7 +313,7 @@ describe('disposing', () => {
     events.on(element, 'dxremove', handleDxRemove);
 
     unmount();
-    expect(handleDxRemove).toHaveBeenCalledTimes(1);
+    expect(handleDxRemove).toHaveBeenCalledTimes(2);
   });
 
   it('remove option guards', () => {
