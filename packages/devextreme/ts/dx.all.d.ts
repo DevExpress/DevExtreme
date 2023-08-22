@@ -1657,6 +1657,7 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+  export type PositionLogical = 'top' | 'end' | 'bottom' | 'start';
   /**
    * [descr:RangeRule]
    */
@@ -25714,6 +25715,10 @@ declare module DevExpress.ui {
      * [descr:dxTabsOptions.hoverStateEnabled]
      */
     hoverStateEnabled?: boolean;
+    /**
+     * [descr:dxTabsOptions.iconPosition]
+     */
+    iconPosition?: DevExpress.common.PositionLogical;
     /**
      * [descr:dxTabsOptions.items]
      */

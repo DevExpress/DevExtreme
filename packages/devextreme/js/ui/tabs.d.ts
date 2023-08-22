@@ -15,8 +15,9 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    SingleOrMultiple,
     Orientation,
+    PositionLogical,
+    SingleOrMultiple,
 } from '../common';
 
 export type ItemLike = string | Item | any;
@@ -138,6 +139,12 @@ export interface dxTabsBaseOptions<
      * @public
      */
     hoverStateEnabled?: boolean;
+    /**
+     * @docid dxTabsOptions.iconPosition
+     * @default 'start'
+     * @public
+     */
+    iconPosition?: PositionLogical;
     /**
      * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>
