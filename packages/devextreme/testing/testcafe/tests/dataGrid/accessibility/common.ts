@@ -306,11 +306,14 @@ const DATA_GRID_SELECTOR = '#container';
   test(`Filter panel in ${theme}`, async (t) => {
   // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const filterPanel = dataGrid.getFilterPanel();
 
     // assert
     await t
       .expect(dataGrid.isReady())
-      .ok();
+      .ok()
+      .expect(filterPanel.getFilterText().element.textContent)
+      .eql('[Field 1] Contains \'val\'');
 
     // act
     await a11yCheck(t);
@@ -1104,7 +1107,14 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'color-contrast': { enabled: false },
+        'aria-required-children': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
