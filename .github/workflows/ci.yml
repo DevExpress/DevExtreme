@@ -1,0 +1,21 @@
+name: CI Available
+
+on: 
+  pull_request:
+  push:
+    branches: [23_2]
+
+jobs:
+  build:
+
+    runs-on: devextreme-shr2
+    
+    steps:
+    - uses: actions/checkout@v1
+
+    : # 
+    - name: CI unavailable now
+      run: exit 1
+    : # 
+    - name: CI available
+      run: echo If you see blinking test please let DevOps know
