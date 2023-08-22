@@ -1,0 +1,170 @@
+@use "sass:math";
+@use "sass:color";
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../colors" as *;
+@use "../../base/icons" as *;
+@use "../../base/button/mixins" as *;
+
+$fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizontal-padding;
+$fluent-normal-button-shadow: $fluent-button-box-shadow-size $button-shadow-color;
+$fluent-normal-button-active-state-shadow: $fluent-button-active-box-shadow-size $button-active-shadow-color;
+$fluent-normal-button-hovered-state-shadow: $fluent-button-box-shadow-size $button-hover-shadow-color;
+$fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $button-focused-shadow-color;
+
+@mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
+  min-width: $fluent-button-height;
+
+  $button-content-padding: math.div($fluent-button-height - $icon-size - $fluent-base-border-width * 2, 2);
+
+  @include dx-button-sizing(
+    $button-content-padding,
+    $button-content-padding,
+    $button-content-padding,
+    $icon-size,
+    0
+  );
+}
+
+@mixin dx-button-withtext-sizing() {
+  @include dx-button-sizing(
+    $fluent-button-vertical-padding,
+    $fluent-button-horizontal-padding,
+    $fluent-button-horizontal-padding,
+    $fluent-button-icon-size,
+    math.div($fluent-button-icon-size, 2)
+  );
+}
+
+@mixin dx-button-text-and-icon-sizing() {
+  @include dx-button-sizing(
+    $fluent-button-vertical-padding, 
+    $fluent-button-icon-text-padding,
+    $fluent-button-horizontal-padding,
+    $fluent-button-icon-size,
+    $fluent-button-icon-margin,
+  );
+}
+
+
+@mixin dx-button-styling-variant(
+  $background-color,
+  $text-color,
+  $hover-background-color,
+  $focused-background-color,
+  $active-background-color,
+  $disabled-background-color,
+  $icon-color,
+  $selected-background-color: $active-background-color,
+  $selected-color: $text-color,
+) {
+  background-color: $background-color;
+  color: $text-color;
+
+  .dx-icon {
+    color: $icon-color;
+  }
+
+  &.dx-state-selected {
+    background-color: $selected-background-color;
+
+    &,
+    .dx-icon {
+      color: $selected-color;
+    }
+  }
+
+  &.dx-state-hover {
+    background-color: $hover-background-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-background-color;
+  }
+
+  &.dx-state-active {
+    background-color: $active-background-color;
+  }
+
+  .dx-inkripple-wave {
+    background-color: color.change($text-color, $alpha: 0.2);
+  }
+}
+
+@mixin dx-button-styling(
+  $button-bg,
+  $button-color,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
+  $button-icon-color,
+  $button-selected-bg,
+  $button-selected-color,
+) {
+  border-radius: $button-border-radius;
+
+  @include dx-button-styling-variant(
+    $button-bg,
+    $button-color,
+    $button-hover-bg,
+    $button-focused-bg,
+    $button-active-bg,
+    $button-disabled-background,
+    $button-icon-color,
+    $button-selected-bg,
+    $button-selected-color,
+  );
+
+  &.dx-state-disabled {
+    opacity: 1;
+    box-shadow: none;
+
+    .dx-icon {
+      color: $button-disabled-text-color;
+    }
+
+    .dx-button-text {
+      color: $button-disabled-text-color;
+    }
+
+    &.dx-button-mode-contained {
+      background-color: $button-disabled-background;
+    }
+
+    &.dx-button-mode-outlined {
+      border-color: $button-disabled-background;
+    }
+  }
+}
+
+@mixin dx-button-flat-color-styling($button-color, $hover-bg, $focused-bg, $active-bg, $selected-bg: $active-bg, $selected-color: $button-color) {
+  @include dx-button-styling-variant(
+    transparent,
+    $button-color,
+    $hover-bg,
+    $focused-bg,
+    $active-bg,
+    transparent,
+    $button-color,
+    $selected-bg,
+    $selected-color,
+  );
+}
+
+@mixin dx-button-outlined-color-styling($button-color, $border-color, $hover-bg, $focused-bg, $active-bg, $selected-bg, $selected-color) {
+  border-width: 1px;
+  border-style: solid;
+  border-color: $border-color;
+  
+  @include dx-button-styling-variant(
+    transparent,
+    $button-color,
+    $hover-bg,
+    $focused-bg,
+    $active-bg,
+    transparent,
+    $button-color,
+    $selected-bg,
+  );
+}

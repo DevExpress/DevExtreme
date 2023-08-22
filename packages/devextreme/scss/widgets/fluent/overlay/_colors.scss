@@ -1,0 +1,28 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$overlay-border-color: $base-border-color !default;
+
+/**
+* $name 10. Content background color
+* $type color
+*/
+$overlay-content-bg: $base-bg !default;
+
+/**
+* $name 20. Shader background color
+* $type color
+*/
+$overlay-shader-bg: null !default;
+
+@if $mode == "light" {
+  $overlay-shader-bg: color.change($base-shadow-color, $alpha: 0.32) !default;
+}
+
+@if $mode == "dark" {
+  $overlay-shader-bg: color.change($base-shadow-color, $alpha: 0.61) !default;
+}
+

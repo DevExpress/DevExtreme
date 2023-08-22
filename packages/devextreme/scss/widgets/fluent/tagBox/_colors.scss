@@ -1,0 +1,51 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 10. Tag text color
+* $type color
+*/
+$tagbox-tag-color: color.change($base-text-color, $alpha: 0.6) !default;
+
+/**
+* $name 20. Tag background color
+* $type color
+*/
+$tagbox-tag-bg: null !default;
+$tagbox-tag-hover-bg: null !default;
+
+/**
+* $name 30. Tag active text color
+* $type color
+*/
+$tagbox-tag-active-color: $base-text-color !default;
+
+/**
+* $name 40. Tag close button color
+* $type color
+*/
+$tagbox-tag-button-remove-bg: rgba(0, 0, 0, 0.36) !default;
+$tagbox-tag-button-remove-color: null !default;
+$tagbox-tag-focused-bg: null !default;
+$tagbox-select-all-border-color: $base-border-color !default;
+
+@if $mode == "light" {
+  $tagbox-tag-bg: darken($base-bg, 12%) !default;
+  $tagbox-tag-hover-bg: darken($base-bg, 15%) !default;
+  $tagbox-tag-button-remove-color: $tagbox-tag-bg !default;
+  $tagbox-tag-focused-bg: darken($base-bg, 32%) !default;
+}
+
+@if $mode == "dark" {
+  $tagbox-tag-bg: lighten($base-bg, 12%) !default;
+  $tagbox-tag-hover-bg: lighten($base-bg, 15%) !default;
+  $tagbox-tag-button-remove-color: lighten($base-bg, 22%) !default;
+  $tagbox-tag-focused-bg: lighten($base-bg, 32%) !default;
+}
+
+$tagbox-tag-disabled-bg: $tagbox-tag-focused-bg !default;
+

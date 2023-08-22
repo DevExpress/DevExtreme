@@ -1,0 +1,35 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$filemanager-border-color: $base-border-color !default;
+$filemanager-file-toolbar-bg: darken($base-bg, 3%) !default;
+$filemanager-editor-active-bg: color.change($base-text-color, $alpha: 0.1) !default;
+$filemanager-dirs-tree-item-focus-color: $base-text-color !default;
+$filemanager-breadcrumbs-item-focus-bg: $base-border-color !default;
+$filemanager-breadcrumbs-item-focus-color: $base-text-color !default;
+$filemanager-custom-thumbnail-color: $base-border-color !default;
+$filemanager-file-item-select-color: $base-bg !default;
+$filemanager-file-item-select-bg: color.change($base-accent, $alpha: 0.8) !default;
+$filemanager-file-item-select-focus-color: $base-bg !default;
+$filemanager-file-item-select-focus-bg: color.change($base-accent, $alpha: 0.7) !default;
+$filemanager-file-item-hover-bg: $base-hover-bg !default;
+$filemanager-file-item-focused-bg: $base-accent !default;
+$filemanager-file-item-focused-border: $base-accent !default;
+$filemanager-item-focused-color: $base-inverted-text-color !default;
+$filemanager-dirs-tree-item-focus-bg: null !default;
+$filemanager-progressbox-shadow-color: null !default;
+
+
+@if $mode == "light" {
+  $filemanager-dirs-tree-item-focus-bg: darken($base-bg, 8%) !default;
+  $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
+}
+
+@if $mode == "dark" {
+  $filemanager-dirs-tree-item-focus-bg: lighten($base-bg, 8%) !default;
+  $filemanager-progressbox-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.3) !default;
+}
+
