@@ -1,3 +1,4 @@
+import { extendFromObject } from '@js/core/utils/extend';
 import { touch } from '@js/core/utils/support';
 import Tooltip from '@js/ui/tooltip';
 
@@ -54,5 +55,19 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
   _onListRender(e) {
     return this._extraOptions.dragBehavior && this._extraOptions.dragBehavior(e);
+  }
+
+  _onListItemContextMenu(e) {
+    const config = {
+      itemData: e.itemData.appointment,
+      itemElement: e.itemElement,
+      targetedAppointment: e.itemData.targetedAppointment,
+    };
+
+    const createContextMenuEvent = extendFromObject(this._options.fire('mapAppointmentFields', config), e, false);
+    delete createContextMenuEvent.itemData;
+    delete createContextMenuEvent.itemIndex;
+    delete createContextMenuEvent.itemElement;
+    this._options.onItemContextMenu(createContextMenuEvent);
   }
 }

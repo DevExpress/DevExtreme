@@ -610,6 +610,7 @@ class Scheduler extends Widget {
                 break;
             case 'onAppointmentContextMenu':
                 this._appointments.option('onItemContextMenu', this._createActionByOption(name));
+                this._appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
                 break;
             case 'noDataText':
             case 'allowMultipleCellSelection':
@@ -1352,7 +1353,9 @@ class Scheduler extends Widget {
                 appointment,
                 this._dataAccessors,
                 this.timeZoneCalculator
-            ).disabled
+            ).disabled,
+            onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
+            fire: that.fire.bind(that),
         };
     }
 
