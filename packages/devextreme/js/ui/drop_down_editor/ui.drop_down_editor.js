@@ -628,7 +628,9 @@ const DropDownEditor = TextBox.inherit({
 
         return (e) => {
             this._popupInitializedHandler(e);
-            onPopupInitialized && this._popupInitializedAction({ popup: e.component });
+            if(onPopupInitialized) {
+                this._popupInitializedAction({ popup: e.component });
+            }
         };
     },
 
