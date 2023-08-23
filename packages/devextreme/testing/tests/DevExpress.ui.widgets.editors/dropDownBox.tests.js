@@ -893,7 +893,7 @@ QUnit.module('validation', moduleConfig, () => {
         assert.strictEqual($('.dx-overlay-wrapper.dx-invalid-message').css('visibility'), 'visible', 'validation message is shown after popup opening');
     });
 
-    QUnit.test('Input should has focus when overlay closed by escape', function(assert) {
+    QUnit.testInActiveWindow('Input should has focus when overlay closed by escape', function(assert) {
         const escapeKeyDown = $.Event('keydown', { key: 'Escape' });
         const instance = this.$element.dxDropDownBox({}).dxValidator({
             validationRules: [{
@@ -906,7 +906,7 @@ QUnit.module('validation', moduleConfig, () => {
         instance.option('value', 1);
         instance.open();
 
-        const $popupContent = $('.' + OVERLAY_CONTENT_CLASS)[1];
+        const $popupContent = $(`.${OVERLAY_CONTENT_CLASS}`)[1];
 
         $($popupContent).trigger(escapeKeyDown);
 
