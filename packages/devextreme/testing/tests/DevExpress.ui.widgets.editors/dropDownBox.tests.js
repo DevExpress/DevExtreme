@@ -906,7 +906,7 @@ QUnit.module('validation', moduleConfig, () => {
         instance.option('value', 1);
         instance.open();
 
-        const $popupContent = $(`.${OVERLAY_CONTENT_CLASS}`)[1];
+        const $popupContent = $(`.${OVERLAY_CONTENT_CLASS}`).last();
 
         $($popupContent).trigger(escapeKeyDown);
 
