@@ -37,12 +37,12 @@ fixture.disablePageReloads`Layout:Templates:CellTemplate`
   });
 });
 
-test('resourceCellTemplate layout should be rendered right in the agenda view', async (t) => {
+test(`resourceCellTemplate layout should be rendered right in the agenda view`, async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('resource-cell-template-currentView=agenda.png', scheduler.workSpace))
+    .expect(await takeScreenshot(`resource-cell-template-currentView=agenda.png`, scheduler.workSpace))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -65,8 +65,8 @@ test('resourceCellTemplate layout should be rendered right in the agenda view', 
     resources: [{
       fieldExpr: 'resource',
       dataSource: [{
-        text: 'Resource text',
-        id: 1,
+          text: 'Resource text',
+          id: 1,
       }],
       label: 'Resource',
     }],
