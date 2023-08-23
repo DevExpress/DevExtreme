@@ -54,6 +54,7 @@ const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
+const DX_ITEM_URL_CLASS = 'dx-item-url';
 
 const CLICKTIMEOUT = 51;
 const ANIMATION_TIMEOUT = 100;
@@ -2497,7 +2498,7 @@ QUnit.module('adaptivity: behavior', {
             {
                 text: 'item2',
                 items: [
-                    { text: 'item2-1' },
+                    { text: 'item2-1', url: 'http://some_url_item_2-1', linkAttr: { target: '_blank' } },
                     { text: 'item2-2' }
                 ]
             }];
@@ -2508,6 +2509,22 @@ QUnit.module('adaptivity: behavior', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('item attributes should be set correctly (T1181342)', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const $item = this.$element.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        $($item).trigger('dxclick');
+
+        const itemWithAttributes = $(`.${DX_ITEM_URL_CLASS}`)[0];
+
+        assert.strictEqual(itemWithAttributes.getAttribute('href'), 'http://some_url_item_2-1');
+        assert.strictEqual(itemWithAttributes.getAttribute('target'), '_blank');
+    });
+
     QUnit.test('Adaptive menu should be shown when hamburger button clicked', function(assert) {
         new Menu(this.$element, {
             items: this.items,

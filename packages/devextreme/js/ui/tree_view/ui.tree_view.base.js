@@ -769,6 +769,22 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return deferred.promise();
     },
 
+    _getItemExtraPropNames() {
+        return ['url', 'linkAttr'];
+    },
+
+    _addContent: function($container, itemData) {
+        const { html, url } = itemData;
+
+        if(url) {
+            $container.html(html);
+            const link = this._getLinkContainer(this._getIconContainer(itemData), this._getTextContainer(itemData), itemData);
+            $container.append(link);
+        } else {
+            this.callBase($container, itemData);
+        }
+    },
+
     _renderSublevel: function($node, node, childNodes) {
         const $nestedNodeContainer = this._renderNodeContainer($node, node);
 
