@@ -17,6 +17,8 @@ import numberLocalization from '../localization/number';
 import messageLocalization from '../localization/message';
 import { fromPromise, Deferred } from '../core/utils/deferred';
 
+const EMAIL_VALIDATION_REGEX = /^[\d\w.+_-]+@[\d\w._-]+\.[\w]+$/i;
+
 // STYLE validation
 
 const STATUS = {
@@ -290,7 +292,7 @@ class EmailRuleValidator extends BaseRuleValidator {
             extend({},
                 rule,
                 {
-                    pattern: /^[\d\w._-]+@[\d\w._-]+\.[\w]+$/i
+                    pattern: EMAIL_VALIDATION_REGEX
                 }));
     }
 }
