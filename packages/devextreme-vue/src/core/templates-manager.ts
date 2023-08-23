@@ -25,7 +25,7 @@ class TemplatesManager {
 
   public discover() {
     this._slots = {
-      ...discoverSlots(this._component)
+      ...discoverSlots(this._component),
     };
 
     if (!allKeysAreEqual(this._templates, this._slots)) {
