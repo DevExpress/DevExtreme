@@ -5,7 +5,7 @@ import BigInteger from './jsbn';
 type Bytes = Uint8Array | number[];
 
 // see https://datatracker.ietf.org/doc/html/rfc8017#page-47
-const DIGEST_INFO_SHA1 = '3021300906052b0e03021a05000414';
+const ASN1_SHA1 = '3021300906052b0e03021a05000414';
 const PUBLIC_KEY = {
   e: 65537,
   n: [
@@ -36,7 +36,7 @@ function bytesAreEqual(a: Bytes, b: Bytes): boolean {
   }
 
   for (let k = 0; k < a.length; k += 1) {
-    if (((a[k] ^ b[k]) & 0xFF) !== 0) { // eslint-disable-line no-bitwise
+    if (((a[k] ^ b[k]) & 0xff) !== 0) { // eslint-disable-line no-bitwise
       return false;
     }
   }
@@ -44,16 +44,21 @@ function bytesAreEqual(a: Bytes, b: Bytes): boolean {
   return true;
 }
 // PKCS #1 v1.5
+// 0x00 0x01 P 0x00 A H
+// P - padding string (0xff...0xff)
+// A - ASN.1 encoding of the hash algorithm used
+// H - hash value
 function pad(hash: Uint8Array): Uint8Array {
   const dataLength = (PUBLIC_KEY.n.length * 8 + 6) / 8;
-  const data = concat(fromHexString(DIGEST_INFO_SHA1), hash);
+  const data = concat(fromHexString(ASN1_SHA1), hash);
   if (data.length + 10 > dataLength) {
     throw Error('Key is too short for SHA1 signing algorithm');
   }
 
-  const padding = new Uint8Array(dataLength - data.length - 1);
+  const padding = new Uint8Array(dataLength - data.length);
   padding.fill(0xff, 0, padding.length - 1);
-  padding[0] = 1;
+  padding[0] = 0;
+  padding[1] = 1;
   padding[padding.length - 1] = 0;
 
   return concat(padding, data);
@@ -63,6 +68,10 @@ function fromBase64String(base64: string): number[] {
   return atob(base64).split('').map((s) => s.charCodeAt(0));
 }
 
+function normalizeBigIntegerBytes(bytes: number[]): number[] {
+  return [0, ...bytes]; // add zero to make it positive-signed
+}
+
 // verifies RSASSA-PKCS1-v1.5 signature
 export function verify({ text, signature: encodedSignature }: {
   text: string;
@@ -70,12 +79,10 @@ export function verify({ text, signature: encodedSignature }: {
 }): boolean {
   const actual = pad(new Uint8Array(sha1(text, { asBytes: true })));
 
-  // add zero to make it positive-signed
-  const signature = new BigInteger([0, ...fromBase64String(encodedSignature)]);
+  const signature = new BigInteger(normalizeBigIntegerBytes(fromBase64String(encodedSignature)));
   const exponent = PUBLIC_KEY.e;
-  // add zero to make it positive-signed
-  const modulus = new BigInteger([0, ...PUBLIC_KEY.n]);
+  const modulus = new BigInteger(normalizeBigIntegerBytes(PUBLIC_KEY.n));
   const expected = signature.modPowInt(exponent, modulus);
 
-  return bytesAreEqual(expected.toByteArray(), actual);
+  return bytesAreEqual(normalizeBigIntegerBytes(expected.toByteArray()), actual);
 }
