@@ -4401,7 +4401,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.searchPanel.width]
      */
-    width?: number;
+    width?: string | number;
   };
   export type SelectedFilterOperation =
     | '<'
