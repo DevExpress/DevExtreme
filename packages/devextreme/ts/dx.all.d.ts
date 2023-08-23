@@ -1657,7 +1657,7 @@ declare namespace DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
-  export type PositionLogical = 'top' | 'end' | 'bottom' | 'start';
+  export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
   /**
    * [descr:RangeRule]
    */
