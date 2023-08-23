@@ -158,6 +158,16 @@
   }
 }
 
+<<<<<<< HEAD
+=======
+.dx-tabs-icon-position-start,
+.dx-tabs-icon-position-end {
+  .dx-tab .dx-icon {
+    margin-block-end: 2px;
+  }
+}
+
+>>>>>>> fe999e24fd (feat(tabs): Add icon position)
 .dx-tabs-icon-position-start .dx-tab .dx-icon {
   @include dx-icon-margin($material-base-icon-margin, start);
 }
