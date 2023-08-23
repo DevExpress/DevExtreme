@@ -93,10 +93,6 @@
       "node_modules"
     ]
   },
-  "pre-commit": [
-    "lint-staged",
-    "pre-commit"
-  ],
   "browserslist": [
     "last 2 versions",
     "ios > 9",
