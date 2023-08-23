@@ -5,16 +5,13 @@ const path = require('path');
 
 class SideEffectFinder {
     #checkingPathsStack = new Set();
-    #checkedPaths = new Set();
+    #dirtyImportsPaths = new Map();
     #cleanImportsPaths = new Set();
-    #ignore = Symbol();
     getModuleSideEffectFiles(moduleFilePath) {
         try {
             this.#checkingPathsStack.clear();
-            this.#checkedPaths.clear();
 
             const moduleSideEffectFiles = [ ...this.#findSideEffectsInModule(moduleFilePath)]
-                .filter((importPath) => importPath !== this.#ignore )
                 .map((importPath) => importPath.replace(/\\/g, '/'));
 
             return moduleSideEffectFiles;
@@ -24,13 +21,13 @@ class SideEffectFinder {
         }
     }
     #findSideEffectsInModule(moduleFilePath) {
-        let foundPaths = new Set();
-
         if (this.#cleanImportsPaths.has(moduleFilePath)) {
-             return foundPaths;
+            return new Set();
         }
 
-        if (!this.#checkedPaths.has(moduleFilePath)) {
+        let foundPaths = this.#dirtyImportsPaths.get(moduleFilePath) || new Set();
+
+        if (foundPaths.size === 0) {
             const code = fs.readFileSync(moduleFilePath, 'utf8');
 
             foundPaths = this.#findSideEffectsInImports(moduleFilePath, code);
@@ -38,9 +35,7 @@ class SideEffectFinder {
                 this.#cleanImportsPaths.add(moduleFilePath);
             }
 
-            this.#checkedPaths.add(moduleFilePath);
-        } else {
-            return new Set([this.#ignore])
+            this.#dirtyImportsPaths.set(moduleFilePath, foundPaths);
         }
 
         return foundPaths;
