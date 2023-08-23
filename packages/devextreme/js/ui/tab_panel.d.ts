@@ -18,8 +18,12 @@ import {
 
 import {
     Position,
+<<<<<<< HEAD
     TabsIconPosition,
     TabsStylingMode,
+=======
+    PositionRelative,
+>>>>>>> cd1731168b (fix(tabPanel): Update TS)
 } from '../common';
 
 import CollectionWidget, {
