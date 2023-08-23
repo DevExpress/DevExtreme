@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
@@ -34,5 +34,37 @@ fixture.disablePageReloads`Layout:Templates:CellTemplate`
       })),
       height: 600,
     });
+  });
+});
+
+test('resourceCellTemplate layout should be rendered right in the agenda view', async (t) => {
+  const groupHeader = Selector('.dx-scheduler-group-header-content');
+
+  await t.expect(groupHeader.textContent).eql('Custom resource text');
+}).before(async () => {
+  const currentDate = new Date(2017, 4, 25);
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'appointment',
+      startDate: currentDate,
+      endDate: currentDate,
+      resource: 1,
+    }],
+    views: ['agenda'],
+    currentView: 'agenda',
+    currentDate,
+    resourceCellTemplate() {
+      return 'Custom resource text';
+    },
+    groups: ['resource'],
+    resources: [{
+      fieldExpr: 'resource',
+      dataSource: [{
+        text: 'Resource text',
+        id: 1,
+      }],
+      label: 'Resource',
+    }],
+    height: 600,
   });
 });
