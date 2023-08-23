@@ -18,7 +18,7 @@ $material-tab-nav-button-content-padding: null !default;
 $material-tab-vertical-nav-button-content-padding: null !default;
 
 @if $size == "default" {
-  $material-tabs-item-padding: 12px 16px !default;
+  $material-tabs-item-padding: 10px 16px !default;
   $material-tab-height: auto !default;
   $material-tab-min-width: 90px !default;
   $material-base-icon-margin: 8px !default;
@@ -31,7 +31,7 @@ $material-tab-vertical-nav-button-content-padding: null !default;
 }
 
 @else if $size == "compact" {
-  $material-tabs-item-padding: 6px 12px !default;
+  $material-tabs-item-padding: 4px 12px !default;
   $material-tab-height: auto !default;
   $material-tab-min-width: 82px !default;
   $material-base-icon-margin: 8px !default;
