@@ -1,9 +1,9 @@
 import { verify } from './rsa_pkcs1_sha1';
 
 export interface License {
+  readonly [k: string]: unknown;
   readonly customerId: string;
   readonly maxVersionAllowed: number;
-  readonly [k: string]: unknown;
 }
 
 interface Payload extends Partial<License> {
@@ -18,7 +18,7 @@ export type Token = {
   readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
 };
 
-const SPLITIER = '.';
+const SPLITTER = '.';
 const FORMAT = 1;
 
 const GENERAL_ERROR: Token = { kind: 'corrupted', error: 'general' };
@@ -33,7 +33,7 @@ export function parseToken(encodedToken: string | undefined): Token {
     return GENERAL_ERROR;
   }
 
-  const parts = encodedToken.split(SPLITIER);
+  const parts = encodedToken.split(SPLITTER);
 
   if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
     return GENERAL_ERROR;
