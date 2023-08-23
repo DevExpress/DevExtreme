@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
@@ -425,13 +425,7 @@ test('TabPanel borders without scrolling', async (t) => {
     test('TabPanel icon position', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      if (!isMaterial()) {
-<<<<<<< HEAD
-        await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#container' });
-=======
-        await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#tabs' });
->>>>>>> dd11b96657 (feat(tabPanel): Add tests for iconPosition)
-      }
+      await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#container' });
 
       await t
         .expect(compareResults.isValid())
