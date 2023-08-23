@@ -79,10 +79,10 @@ export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get width(): number {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: number) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
