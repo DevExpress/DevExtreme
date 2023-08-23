@@ -13,9 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    : # Uncomment next lines to let developers know that CI failed
-    : # - name: CI unavailable now
-    : #   run: exit 1
-    : # 
-    - name: CI available
-      run: echo If you see blinking test please let DevOps know
+    - name: Fail CI if some works is being made
+    - if: ${{ vars.CI_UNSTABLE }}
+    - run: exit 1
