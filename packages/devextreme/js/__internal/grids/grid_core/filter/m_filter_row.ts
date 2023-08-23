@@ -552,13 +552,15 @@ const ColumnHeadersViewFilterRowExtender = (function () {
         cssClass: `${that.getWidgetContainerClass()} ${CELL_FOCUS_DISABLED_CLASS} ${FILTER_MENU}`,
         showFirstSubmenuMode: 'onHover',
         hideSubmenuOnMouseLeave: true,
-        elementAttr: { 'aria-label': ARIA_SEARCH_BOX },
         items: [{
           disabled: !(column.filterOperations && column.filterOperations.length),
           icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
           selectable: false,
           items: that._getFilterOperationMenuItems(column),
         }],
+        onItemRendered({ itemElement }) {
+          $(itemElement).attr('aria-label', ARIA_SEARCH_BOX);
+        },
         onItemClick(properties) {
           const selectedFilterOperation = properties.itemData.name;
           const columnSelectedFilterOperation = getColumnSelectedFilterOperation(that, column);
