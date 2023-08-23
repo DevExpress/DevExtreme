@@ -28,7 +28,7 @@ const createTsCompiler = require('./typescript/compiler');
 require('./generator/gulpfile');
 const { SideEffectFinder } = require('./side-effects-finder');
 
-
+const sideEffectFinder = new SideEffectFinder();
 const src = [
     'js/**/*.*',
     '!js/**/*.d.ts',
@@ -90,7 +90,7 @@ const createModuleConfig = (name, dir, filePath, dist) => {
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
     const relativeEsmBase = normalize(esmFile).match(/^.*\/esm\//)[0];
-    const sideEffectFiles = new SideEffectFinder().getModuleSideEffectFiles(esmFilePath)
+    const sideEffectFiles = sideEffectFinder.getModuleSideEffectFiles(esmFilePath)
         .map((importPath) => importPath.replace(/^.*\/esm\//, relativeEsmBase));
 
     const result = {

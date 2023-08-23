@@ -4,20 +4,18 @@ const fs = require('fs');
 const path = require('path');
 
 class SideEffectFinder {
-    #sideEffectFiles = new Set();
     #checkingPathsStack = new Set();
     #checkedPaths = new Set();
+    #cleanImportsPaths = new Set();
+    #ignore = Symbol();
     getModuleSideEffectFiles(moduleFilePath) {
         try {
-            this.#sideEffectFiles.clear();
             this.#checkingPathsStack.clear();
             this.#checkedPaths.clear();
 
-            this.#findSideEffectsInModule(moduleFilePath);
-
-            const moduleSideEffectFiles = [...this.#sideEffectFiles].map(
-                (importPath) => importPath.replace(/\\/g, '/')
-            )
+            const moduleSideEffectFiles = [ ...this.#findSideEffectsInModule(moduleFilePath)]
+                .filter((importPath) => importPath !== this.#ignore )
+                .map((importPath) => importPath.replace(/\\/g, '/'));
 
             return moduleSideEffectFiles;
         } catch (e) {
@@ -26,12 +24,26 @@ class SideEffectFinder {
         }
     }
     #findSideEffectsInModule(moduleFilePath) {
-        const code = fs.readFileSync(moduleFilePath, 'utf8');
+        let foundPaths = new Set();
+
+        if (this.#cleanImportsPaths.has(moduleFilePath)) {
+             return foundPaths;
+        }
 
         if (!this.#checkedPaths.has(moduleFilePath)) {
-            this.#findSideEffectsInImports(moduleFilePath, code);
+            const code = fs.readFileSync(moduleFilePath, 'utf8');
+
+            foundPaths = this.#findSideEffectsInImports(moduleFilePath, code);
+            if (foundPaths.size === 0) {
+                this.#cleanImportsPaths.add(moduleFilePath);
+            }
+
             this.#checkedPaths.add(moduleFilePath);
+        } else {
+            return new Set([this.#ignore])
         }
+
+        return foundPaths;
     }
 
     #findSideEffectsInImports(modulePath, code) {
@@ -40,6 +52,7 @@ class SideEffectFinder {
         const isSideEffectImportRegExp = /^\s*import\s+['"]/ms;
 
         const imports = code.match(/^\s*import[^;]+;/mg) || [];
+        let foundPaths = new Set();
 
         imports.filter((str) => hasRelativePathRegExp.test(str))
             .forEach((str) => {
@@ -52,7 +65,7 @@ class SideEffectFinder {
                 }
 
                 if (isSideEffectImportRegExp.test(str)) {
-                    this.#sideEffectFiles.add(importPath);
+                    foundPaths.add(importPath);
                 }
 
                 const isInLoop = this.#checkingPathsStack.has(importPath);
@@ -60,11 +73,13 @@ class SideEffectFinder {
                 if (!isInLoop) {
                     this.#checkingPathsStack.add(importPath);
 
-                    this.#findSideEffectsInModule(importPath);
+                    foundPaths = new Set([...foundPaths, ...this.#findSideEffectsInModule(importPath)]);
 
                     this.#checkingPathsStack.delete(importPath);
                 }
             });
+
+        return foundPaths ;
     }
 }
 
