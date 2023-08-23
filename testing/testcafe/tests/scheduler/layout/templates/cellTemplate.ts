@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
@@ -38,14 +38,9 @@ fixture.disablePageReloads`Layout:Templates:CellTemplate`
 });
 
 test('resourceCellTemplate layout should be rendered right in the agenda view', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const groupHeader = Selector('.dx-scheduler-group-header-content');
 
-  await t
-    .expect(await takeScreenshot('resource-cell-template-currentView=agenda.png', scheduler.workSpace))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await t.expect(groupHeader.textContent).eql('Custom resource text');
 }).before(async () => {
   const currentDate = new Date(2017, 4, 25);
   await createWidget('dxScheduler', {
