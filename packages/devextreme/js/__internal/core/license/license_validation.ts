@@ -3,6 +3,7 @@ import { verify } from './rsa_pkcs1_sha1';
 export interface License {
   readonly customerId: string;
   readonly maxVersionAllowed: number;
+  readonly [k: string]: unknown;
 }
 
 interface Payload extends Partial<License> {
@@ -56,7 +57,9 @@ export function parseToken(encodedToken: string | undefined): Token {
     return DESERIALIZATION_ERROR;
   }
 
-  const { customerId, maxVersionAllowed, format } = payload;
+  const {
+    customerId, maxVersionAllowed, format, ...rest
+  } = payload;
 
   if (customerId === undefined || maxVersionAllowed === undefined || format === undefined) {
     return PAYLOAD_ERROR;
@@ -71,6 +74,7 @@ export function parseToken(encodedToken: string | undefined): Token {
     payload: {
       customerId,
       maxVersionAllowed,
+      ...rest,
     },
   };
 }
