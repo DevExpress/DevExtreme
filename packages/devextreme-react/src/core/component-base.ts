@@ -223,6 +223,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   protected renderPortal(): React.ReactNode {
+    // @ts-expect-error TS2322
     return this.portalContainer && createPortal(
       this.renderChildren(),
       this.portalContainer,

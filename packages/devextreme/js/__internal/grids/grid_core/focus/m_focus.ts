@@ -4,6 +4,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 
+import { isNewRowTempKey } from '../editing/m_editing_utils';
 import core from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
@@ -635,7 +636,7 @@ export const focusModule = {
           const deferred = new Deferred();
           const dataSource = that._dataSource;
 
-          if (Array.isArray(key)) {
+          if (Array.isArray(key) || isNewRowTempKey(key)) {
             return deferred.resolve(-1).promise();
           }
 
