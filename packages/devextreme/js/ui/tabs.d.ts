@@ -16,7 +16,7 @@ import CollectionWidget, {
 
 import {
     Orientation,
-    PositionLogical,
+    PositionRelative,
     SingleOrMultiple,
 } from '../common';
 
@@ -144,7 +144,7 @@ export interface dxTabsBaseOptions<
      * @default 'start'
      * @public
      */
-    iconPosition?: PositionLogical;
+    iconPosition?: PositionRelative;
     /**
      * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>

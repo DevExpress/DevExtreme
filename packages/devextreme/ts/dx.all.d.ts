@@ -1657,7 +1657,7 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
-  export type PositionLogical = 'top' | 'end' | 'bottom' | 'start';
+  export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
   /**
    * [descr:RangeRule]
    */
@@ -25718,7 +25718,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.iconPosition]
      */
-    iconPosition?: DevExpress.common.PositionLogical;
+    iconPosition?: DevExpress.common.PositionRelative;
     /**
      * [descr:dxTabsOptions.items]
      */
