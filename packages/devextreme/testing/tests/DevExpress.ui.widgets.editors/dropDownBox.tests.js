@@ -892,6 +892,27 @@ QUnit.module('validation', moduleConfig, () => {
         instance.open();
         assert.strictEqual($('.dx-overlay-wrapper.dx-invalid-message').css('visibility'), 'visible', 'validation message is shown after popup opening');
     });
+
+    QUnit.test('Input should has focus when overlay closed by escape', function(assert) {
+        const escapeKeyDown = $.Event('keydown', { key: 'Escape' });
+        const instance = this.$element.dxDropDownBox({}).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback: () => false,
+                message: 'error'
+            }],
+        }).dxDropDownBox('instance');
+
+        instance.option('value', 1);
+        instance.open();
+
+        const $popupContent = $('.' + OVERLAY_CONTENT_CLASS)[1];
+
+        $($popupContent).trigger(escapeKeyDown);
+
+        assert.ok(this.$element.hasClass(DX_STATE_FOCUSED_CLASS), 'input has focus');
+        assert.strictEqual($('.dx-overlay-wrapper.dx-invalid-message').is(':visible'), true, 'validation message is shown');
+    });
 });
 
 QUnit.module('valueChanged handler should receive correct event', {
