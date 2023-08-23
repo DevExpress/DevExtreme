@@ -499,7 +499,7 @@ export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | '
  * @public
  * @namespace DevExpress.common
  */
-export type PositionLogical = 'top' | 'end' | 'bottom' | 'start';
+export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
 
 /**
  * @docid
