@@ -2509,7 +2509,7 @@ QUnit.module('adaptivity: behavior', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('item attributes should be set correctly (T1181342)', function(assert) {
+    QUnit.test('link attributes should be set correctly (T1181342)', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
