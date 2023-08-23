@@ -25538,7 +25538,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabPanelOptions.iconPosition]
      */
-    iconPosition?: DevExpress.common.PositionLogical;
+    iconPosition?: DevExpress.common.PositionRelative;
     /**
      * [descr:dxTabPanelOptions.items]
      */
