@@ -12,20 +12,20 @@
     >
       <DxResource
         :data-source="assignees"
-        :use-color-as-default="radioGroupValue === 'Assignee'"
+        :use-color-as-default="currentResource === 'Assignee'"
         field-expr="assigneeId"
         label="Assignee"
         :allow-multiple="true"
       />
       <DxResource
         :data-source="rooms"
-        :use-color-as-default="radioGroupValue === 'Room'"
+        :use-color-as-default="currentResource === 'Room'"
         field-expr="roomId"
         label="Room"
       />
       <DxResource
         :data-source="priorities"
-        :use-color-as-default="radioGroupValue === 'Priority'"
+        :use-color-as-default="currentResource === 'Priority'"
         field-expr="priorityId"
         label="Priority"
       />
@@ -35,7 +35,7 @@
       <div class="option">
         <DxRadioGroup
           :items="resources"
-          :value="radioGroupValue"
+          :value="currentResource"
           :on-value-changed="onRadioGroupValueChanged"
           layout="horizontal"
         />
@@ -63,7 +63,7 @@ export default {
     return {
       views: ['workWeek'],
       currentDate: new Date(2021, 3, 27),
-      radioGroupValue: 'Assignee',
+      currentResource: 'Assignee',
       dataSource: data,
       resources: resourcesList,
       assignees,

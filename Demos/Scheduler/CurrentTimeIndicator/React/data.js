@@ -52,5 +52,3 @@ export const moviesData = [{
   text: 'It\'s a Wonderful Life',
   image: '../../../../images/movies/ItsAWonderfulLife.jpg',
 }];
-
-export const positionLabel = { 'aria-label': 'Position' };

@@ -1,7 +1,7 @@
 import React from 'react';
 import Utils from './utils.js';
 
-export default function DateCell(props) {
+const DateCell = (props) => {
   const { currentView, date, text } = props.itemData;
   const isDisabled = currentView === 'month'
     ? Utils.isWeekend(date)
@@ -12,4 +12,6 @@ export default function DateCell(props) {
       <div>{text}</div>
     </div>
   );
-}
+};
+
+export default DateCell;

@@ -18,28 +18,21 @@ const views = [{
   maxAppointmentsPerCell: 2,
 }];
 
-class App extends React.Component {
-  render() {
-    return (
-      <Scheduler
-        timeZone="America/Los_Angeles"
-        dataSource={data}
-        views={views}
-        defaultCurrentView="Auto Mode"
-        defaultCurrentDate={currentDate}
-        height={650}
-        appointmentTooltipRender={this.getAppointmentTemplate}
-        onContentReady={this.onContentReady}
-        onAppointmentDeleted={this.hideSchedulerTooltip}
-      >
-        <Resource
-          dataSource={resourcesData}
-          fieldExpr="roomId"
-          label="Room"
-        />
-      </Scheduler>
-    );
-  }
-}
+const App = () => (
+  <Scheduler
+    timeZone="America/Los_Angeles"
+    dataSource={data}
+    views={views}
+    defaultCurrentView="Auto Mode"
+    defaultCurrentDate={currentDate}
+    height={650}
+  >
+    <Resource
+      dataSource={resourcesData}
+      fieldExpr="roomId"
+      label="Room"
+    />
+  </Scheduler>
+);
 
 export default App;

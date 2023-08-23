@@ -5,6 +5,7 @@
       :current-date="currentDate"
       :views="views"
       :show-current-time-indicator="showCurrentTimeIndicator"
+      :indicator-update-interval="updateInterval * 1000"
       :shade-until-current-time="shadeUntilCurrentTime"
       @content-ready="onContentReady"
       @appointment-click="onAppointmentClick"

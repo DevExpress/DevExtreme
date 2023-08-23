@@ -4,6 +4,7 @@ $(() => {
     views: ['week', 'timelineWeek'],
     currentView: 'week',
     showCurrentTimeIndicator: true,
+    indicatorUpdateInterval: 10000,
     showAllDayPanel: false,
     shadeUntilCurrentTime: true,
     currentDate: new Date(),

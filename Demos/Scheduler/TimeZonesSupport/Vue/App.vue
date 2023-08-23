@@ -3,9 +3,9 @@
     <div class="option">
       <span>Office Time Zone</span>
       <DxSelectBox
-        :items="locationsData"
-        v-model:value="timezone"
-        :input-attr="{ 'aria-label': 'Location' }"
+        :items="timeZones"
+        v-model:value="currentTimeZone"
+        :input-attr="{ 'aria-label': 'Time zone' }"
         :width="240"
         display-expr="title"
         value-expr="id"
@@ -17,7 +17,7 @@
       :views="views"
       :height="600"
       :start-day-hour="8"
-      :time-zone="timezone"
+      :time-zone="currentTimeZone"
       current-view="workWeek"
       :on-appointment-form-opening="onAppointmentFormOpening"
       :on-option-changed="onOptionChanged"
@@ -36,13 +36,13 @@ import timeZoneUtils from 'devextreme/time_zone_utils';
 
 import { data, locations } from './data.js';
 
-const getLocations = function(date) {
+const getTimeZones = function(date) {
   const timeZones = timeZoneUtils.getTimeZones(date);
   return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
 };
 
 const currentDate = new Date(2021, 3, 27);
-const demoLocations = getLocations(currentDate);
+const timeZones = getTimeZones(currentDate);
 
 export default {
   components: {
@@ -54,9 +54,9 @@ export default {
     return {
       views: ['workWeek'],
       currentDate,
-      timezone: demoLocations[0].id,
+      currentTimeZone: timeZones[0].id,
       dataSource: data,
-      locationsData: demoLocations,
+      timeZones,
     };
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
     },
     onOptionChanged(args) {
       if (args.name === 'currentDate') {
-        this.locationsData = getLocations(args.value);
+        this.timeZones = getTimeZones(args.value);
       }
     },
   },

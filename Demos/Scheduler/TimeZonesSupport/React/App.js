@@ -3,93 +3,81 @@ import Scheduler, { Editing } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 
 import timeZoneUtils from 'devextreme/time_zone_utils';
-import { data, locations, timeZoneLabel } from './data.js';
+import { data, locations } from './data.js';
+
+const timeZoneLabel = { 'aria-label': 'Time zone' };
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
 
-function getLocations(date) {
+const getTimeZones = (date) => {
   const timeZones = timeZoneUtils.getTimeZones(date);
+
   return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
-}
+};
 
-const demoLocations = getLocations(currentDate);
+const defaultTimeZones = getTimeZones(currentDate);
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      timeZone: demoLocations[0].id,
-      demoLocations,
-    };
-    this.onValueChanged = this.onValueChanged.bind(this);
-    this.onAppointmentFormOpening = this.onAppointmentFormOpening.bind(this);
-    this.onOptionChanged = this.onOptionChanged.bind(this);
-  }
+const onAppointmentFormOpening = (e) => {
+  const { form } = e;
 
-  onValueChanged(e) {
-    this.setState({
-      timeZone: e.value,
-    });
-  }
+  const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+  const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+  const startDateDataSource = startDateTimezoneEditor.option('dataSource');
+  const endDateDataSource = endDateTimezoneEditor.option('dataSource');
 
-  onAppointmentFormOpening(e) {
-    const { form } = e;
+  startDateDataSource.filter(['id', 'contains', 'Europe']);
+  endDateDataSource.filter(['id', 'contains', 'Europe']);
 
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-    const startDateDataSource = startDateTimezoneEditor.option('dataSource');
-    const endDateDataSource = endDateTimezoneEditor.option('dataSource');
+  startDateDataSource.load();
+  endDateDataSource.load();
+};
 
-    startDateDataSource.filter(['id', 'contains', 'Europe']);
-    endDateDataSource.filter(['id', 'contains', 'Europe']);
+const App = () => {
+  const [currentTimeZone, setCurrentTimeZone] = React.useState(defaultTimeZones[0].id);
+  const [timeZones, setTimeZones] = React.useState(defaultTimeZones);
 
-    startDateDataSource.load();
-    endDateDataSource.load();
-  }
+  const onValueChanged = React.useCallback((e) => {
+    setCurrentTimeZone(e.value);
+  }, []);
 
-  onOptionChanged(e) {
+  const onOptionChanged = React.useCallback((e) => {
     if (e.name === 'currentDate') {
-      this.setState({
-        demoLocations: getLocations(e.value),
-      });
+      setTimeZones(getTimeZones(e.value));
     }
-  }
+  }, []);
 
-  render() {
-    const { timeZone } = this.state;
-    return (
-      <React.Fragment>
-        <div className="option">
-          <span>Office Time Zone</span>
-          <SelectBox
-            items={this.state.demoLocations}
-            displayExpr="title"
-            valueExpr="id"
-            inputAttr={timeZoneLabel}
-            width={240}
-            value={timeZone}
-            onValueChanged={this.onValueChanged}
-          />
-        </div>
-        <Scheduler
-          dataSource={data}
-          views={views}
-          defaultCurrentView="workWeek"
-          startDayHour={8}
-          defaultCurrentDate={currentDate}
-          timeZone={timeZone}
-          height={600}
-          onAppointmentFormOpening={this.onAppointmentFormOpening}
-          onOptionChanged={this.onOptionChanged}
-        >
-          <Editing
-            allowTimeZoneEditing={true}
-          />
-        </Scheduler>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <div className="option">
+        <span>Office Time Zone</span>
+        <SelectBox
+          items={timeZones}
+          displayExpr="title"
+          valueExpr="id"
+          inputAttr={timeZoneLabel}
+          width={240}
+          value={currentTimeZone}
+          onValueChanged={onValueChanged}
+        />
+      </div>
+      <Scheduler
+        dataSource={data}
+        views={views}
+        defaultCurrentView="workWeek"
+        startDayHour={8}
+        defaultCurrentDate={currentDate}
+        timeZone={currentTimeZone}
+        height={600}
+        onAppointmentFormOpening={onAppointmentFormOpening}
+        onOptionChanged={onOptionChanged}
+      >
+        <Editing
+          allowTimeZoneEditing={true}
+        />
+      </Scheduler>
+    </React.Fragment>
+  );
+};
 
 export default App;

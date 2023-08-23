@@ -48,4 +48,3 @@ export const data = [
 ];
 
 export const locations = ['Europe/London', 'Europe/Berlin', 'Europe/Helsinki'];
-export const timeZoneLabel = { 'aria-label': 'Time Zone' };

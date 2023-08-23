@@ -30,7 +30,7 @@ export class AppComponent {
 
   currentDate: Date = new Date(2021, 3, 27);
 
-  selectedResource: string = this.resourcesList[0];
+  currentResource: string = this.resourcesList[0];
 
   constructor(service: Service) {
     this.appointmentsData = service.getAppointments();

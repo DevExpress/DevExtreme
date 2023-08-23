@@ -12,14 +12,14 @@
     fieldExpr="roomId"
     label="Room"
     [dataSource]="rooms"
-    [useColorAsDefault]="selectedResource === 'Room'"
+    [useColorAsDefault]="currentResource === 'Room'"
   >
   </dxi-resource>
   <dxi-resource
     fieldExpr="priorityId"
     label="Priority"
     [dataSource]="priorities"
-    [useColorAsDefault]="selectedResource === 'Priority'"
+    [useColorAsDefault]="currentResource === 'Priority'"
   >
   </dxi-resource>
   <dxi-resource
@@ -27,7 +27,7 @@
     label="Assignee"
     [allowMultiple]="true"
     [dataSource]="assignees"
-    [useColorAsDefault]="selectedResource === 'Assignee'"
+    [useColorAsDefault]="currentResource === 'Assignee'"
   >
   </dxi-resource>
 </dx-scheduler>
@@ -37,7 +37,7 @@
   <div class="option">
     <dx-radio-group
       [items]="resourcesList"
-      [(value)]="selectedResource"
+      [(value)]="currentResource"
       layout="horizontal"
     >
     </dx-radio-group>

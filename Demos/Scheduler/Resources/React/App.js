@@ -11,68 +11,58 @@ import {
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      radioGroupValue: resourcesList[0],
-    };
-    this.onRadioGroupValueChanged = this.onRadioGroupValueChanged.bind(this);
-  }
+const App = () => {
+  const [currentResource, setCurrentResource] = React.useState(resourcesList[0]);
 
-  render() {
-    return (
-      <React.Fragment>
-        <Scheduler
-          timeZone="America/Los_Angeles"
-          dataSource={data}
-          views={views}
-          defaultCurrentView="workWeek"
-          defaultCurrentDate={currentDate}
-          startDayHour={9}
-          endDayHour={19}
-          height={600}
-        >
-          <Resource
-            dataSource={rooms}
-            fieldExpr="roomId"
-            label="Room"
-            useColorAsDefault={this.state.radioGroupValue === 'Room'}
+  const onRadioGroupValueChanged = React.useCallback((e) => {
+    setCurrentResource(e.value);
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Scheduler
+        timeZone="America/Los_Angeles"
+        dataSource={data}
+        views={views}
+        defaultCurrentView="workWeek"
+        defaultCurrentDate={currentDate}
+        startDayHour={9}
+        endDayHour={19}
+        height={600}
+      >
+        <Resource
+          dataSource={rooms}
+          fieldExpr="roomId"
+          label="Room"
+          useColorAsDefault={currentResource === 'Room'}
+        />
+        <Resource
+          dataSource={priorities}
+          fieldExpr="priorityId"
+          label="Priority"
+          useColorAsDefault={currentResource === 'Priority'}
+        />
+        <Resource
+          dataSource={assignees}
+          allowMultiple={true}
+          fieldExpr="assigneeId"
+          label="Assignee"
+          useColorAsDefault={currentResource === 'Assignee'}
+        />
+      </Scheduler>
+      <div className="options">
+        <div className="caption">Use colors of:</div>
+        <div className="option">
+          <RadioGroup
+            items={resourcesList}
+            value={currentResource}
+            layout="horizontal"
+            onValueChanged={onRadioGroupValueChanged}
           />
-          <Resource
-            dataSource={priorities}
-            fieldExpr="priorityId"
-            label="Priority"
-            useColorAsDefault={this.state.radioGroupValue === 'Priority'}
-          />
-          <Resource
-            dataSource={assignees}
-            allowMultiple={true}
-            fieldExpr="assigneeId"
-            label="Assignee"
-            useColorAsDefault={this.state.radioGroupValue === 'Assignee'}
-          />
-        </Scheduler>
-        <div className="options">
-          <div className="caption">Use colors of:</div>
-          <div className="option">
-            <RadioGroup
-              items={resourcesList}
-              value={this.state.radioGroupValue}
-              layout="horizontal"
-              onValueChanged={this.onRadioGroupValueChanged}
-            />
-          </div>
         </div>
-      </React.Fragment>
-    );
-  }
-
-  onRadioGroupValueChanged(args) {
-    this.setState({
-      radioGroupValue: args.value,
-    });
-  }
-}
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default App;

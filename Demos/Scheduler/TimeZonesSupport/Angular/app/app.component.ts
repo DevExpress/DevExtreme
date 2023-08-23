@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
-import { getTimeZones, dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
+import timeZoneUtils, { dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
 import { Service, Data } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,31 +19,31 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   currentDate: Date = new Date(2021, 3, 27);
 
-  timezone: string;
+  currentTimeZone: string;
 
   locations: string[];
 
   dataSource: Data[];
 
-  demoLocations: dxSchedulerTimeZone[];
+  timeZones: dxSchedulerTimeZone[];
 
   service: Service;
 
   constructor(service: Service) {
     this.service = service;
-    this.demoLocations = this.getLocations(this.currentDate);
+    this.timeZones = this.getTimeZones(this.currentDate);
     this.dataSource = service.getData();
-    this.timezone = this.demoLocations[0].id;
+    this.currentTimeZone = this.timeZones[0].id;
     this.currentDate = this.currentDate;
   }
 
-  getLocations(date: Date) {
-    const timeZones = getTimeZones(date);
+  getTimeZones(date: Date) {
+    const timeZones = timeZoneUtils.getTimeZones(date);
     return timeZones.filter((timeZone) => this.service.getLocations().indexOf(timeZone.id) !== -1);
   }
 
   onValueChanged(e: any) {
-    this.timezone = e.value;
+    this.currentTimeZone = e.value;
   }
 
   onAppointmentFormOpening(e: any) {
@@ -63,7 +63,7 @@ export class AppComponent {
 
   onOptionChanged(e) {
     if (e.name === 'currentDate') {
-      this.demoLocations = this.getLocations(e.value);
+      this.timeZones = this.getTimeZones(e.value);
     }
   }
 }

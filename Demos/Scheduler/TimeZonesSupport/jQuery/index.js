@@ -1,17 +1,17 @@
 $(() => {
   const currentDate = new Date(2021, 3, 27);
 
-  const getLocations = function (date) {
+  const getTimeZones = function (date) {
     const timeZones = DevExpress.utils.getTimeZones(date);
     return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
   };
 
-  const demoLocations = getLocations(currentDate);
+  const timeZones = getTimeZones(currentDate);
 
   const scheduler = $('#scheduler').dxScheduler({
     dataSource: data,
     views: ['workWeek'],
-    timeZone: demoLocations[0].id,
+    timeZone: timeZones[0].id,
     currentView: 'workWeek',
     currentDate,
     startDayHour: 8,
@@ -21,7 +21,7 @@ $(() => {
     },
     onOptionChanged(e) {
       if (e.name === 'currentDate') {
-        locationSwitcher.option('items', getLocations(e.value));
+        locationSwitcher.option('items', getTimeZones(e.value));
       }
     },
     onAppointmentFormOpening(e) {
@@ -41,12 +41,12 @@ $(() => {
   }).dxScheduler('instance');
 
   const locationSwitcher = $('#location-switcher').dxSelectBox({
-    items: demoLocations,
+    items: timeZones,
     displayExpr: 'title',
-    inputAttr: { 'aria-label': 'Location' },
+    inputAttr: { 'aria-label': 'Time zone' },
     valueExpr: 'id',
     width: 240,
-    value: demoLocations[0].id,
+    value: timeZones[0].id,
     onValueChanged(data) {
       scheduler.option('timeZone', data.value);
     },

@@ -1,18 +1,18 @@
 <div class="option">
   <span>Office Time Zone</span>
   <dx-select-box
-    [items]="demoLocations"
+    [items]="timeZones"
     [width]="240"
     [inputAttr]="{ 'aria-label': 'Location' }"
     displayExpr="title"
     valueExpr="id"
-    [(value)]="timezone"
+    [(value)]="currentTimeZone"
   >
   </dx-select-box>
 </div>
 <dx-scheduler
   [dataSource]="dataSource"
-  [timeZone]="timezone"
+  [timeZone]="currentTimeZone"
   [views]="['workWeek']"
   currentView="workWeek"
   [currentDate]="currentDate"

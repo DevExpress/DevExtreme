@@ -13,48 +13,41 @@ const views = [{
 }, 'week'];
 const allDayPanelItems = ['all', 'allDay', 'hidden'];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [allDayPanelMode, setAllDayPanelMode] = React.useState('allDay');
 
-    this.state = { allDayPanelMode: 'allDay' };
+  const onChangeAllDayPanelMode = React.useCallback((e) => {
+    setAllDayPanelMode(e.value);
+  }, []);
 
-    this.onChangeAllDayPanelMode = this.onChangeAllDayPanelMode.bind(this);
-  }
+  return (
+    <React.Fragment>
+      <Scheduler
+        timeZone="America/Los_Angeles"
+        dataSource={data}
+        views={views}
+        defaultCurrentView="day"
+        defaultCurrentDate={currentDate}
+        allDayPanelMode={allDayPanelMode}
+        startDayHour={9}
+        height={600}
+      />
 
-  onChangeAllDayPanelMode(e) {
-    this.setState({ allDayPanelMode: e.value });
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <Scheduler
-          timeZone="America/Los_Angeles"
-          dataSource={data}
-          views={views}
-          defaultCurrentView="day"
-          defaultCurrentDate={currentDate}
-          allDayPanelMode={this.state.allDayPanelMode}
-          startDayHour={9}
-          height={600} />
-
-        <div className="options">
-          <div className="option">
-            <div className="label">All day panel mode</div>
-            <div className="value">
-              <RadioGroup
-                items={allDayPanelItems}
-                value={this.state.allDayPanelMode}
-                layout="horizontal"
-                onValueChanged={this.onChangeAllDayPanelMode}
-              />
-            </div>
+      <div className="options">
+        <div className="option">
+          <div className="label">All day panel mode</div>
+          <div className="value">
+            <RadioGroup
+              items={allDayPanelItems}
+              value={allDayPanelMode}
+              layout="horizontal"
+              onValueChanged={onChangeAllDayPanelMode}
+            />
           </div>
         </div>
-      </React.Fragment>
-    );
-  }
-}
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default App;

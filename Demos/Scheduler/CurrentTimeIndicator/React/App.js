@@ -3,122 +3,114 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import { Switch } from 'devextreme-react/switch';
 import { NumberBox } from 'devextreme-react/number-box';
 
-import { data, moviesData, positionLabel } from './data.js';
+import { data, moviesData } from './data.js';
 import AppointmentTemplate from './AppointmentTemplate.js';
 
 const currentDate = new Date();
 const views = ['week', 'timelineWeek'];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showCurrentTimeIndicator: true,
-      shadeUntilCurrentTime: true,
-      updateInterval: 10,
-    };
-    this.onShowCurrentTimeIndicatorChanged = this.onShowCurrentTimeIndicatorChanged.bind(this);
-    this.onShadeUntilCurrentTimeChanged = this.onShadeUntilCurrentTimeChanged.bind(this);
-    this.onUpdateIntervalChanged = this.onUpdateIntervalChanged.bind(this);
-    this.onContentReady = this.onContentReady.bind(this);
-  }
+const intervalLabel = { 'aria-label': 'Interval' };
 
-  render() {
-    return (
-      <React.Fragment>
-        <Scheduler
-          dataSource={data}
-          views={views}
-          defaultCurrentView="week"
-          showCurrentTimeIndicator={this.state.showCurrentTimeIndicator}
-          showAllDayPanel={false}
-          shadeUntilCurrentTime={this.state.shadeUntilCurrentTime}
-          defaultCurrentDate={currentDate}
-          editing={false}
-          height={600}
-          appointmentRender={AppointmentTemplate}
-          onContentReady={this.onContentReady}
-          onAppointmentClick={this.onAppointmentClick}
-          onAppointmentDblClick={this.onAppointmentDblClick}
-        >
-          <Resource
-            dataSource={moviesData}
-            fieldExpr="movieId"
-          />
-        </Scheduler>
-        <div className="options">
-          <div className="column">
-            <div className="option">
-              <div className="label">Current time indicator </div>
-              {' '}
-              <div className="value">
-                <Switch
-                  id="show-indicator"
-                  value={this.state.showCurrentTimeIndicator}
-                  onValueChanged={this.onShowCurrentTimeIndicatorChanged}
-                />
-              </div>
-            </div>
-            <div className="option">
-              <div className="label">Shading until current time </div>
-              {' '}
-              <div className="value">
-                <Switch
-                  id="allow-shading"
-                  value={this.state.shadeUntilCurrentTime}
-                  onValueChanged={this.onShadeUntilCurrentTimeChanged}
-                />
-              </div>
+const onContentReady = (e) => {
+  e.component.scrollTo(new Date());
+};
+
+const onAppointmentClick = (e) => {
+  e.cancel = true;
+};
+
+const onAppointmentDblClick = (e) => {
+  e.cancel = true;
+};
+
+const App = () => {
+  const [showCurrentTimeIndicator, setShowCurrentTimeIndicator] = React.useState(true);
+  const [shadeUntilCurrentTime, setShadeUntilCurrentTime] = React.useState(true);
+  const [updateInterval, setUpdateInterval] = React.useState(10);
+
+  const onShowCurrentTimeIndicatorChanged = React.useCallback((e) => {
+    setShowCurrentTimeIndicator(e.value);
+  }, []);
+
+  const onShadeUntilCurrentTimeChanged = React.useCallback((e) => {
+    setShadeUntilCurrentTime(e.value);
+  }, []);
+
+  const onUpdateIntervalChanged = React.useCallback((e) => {
+    setUpdateInterval(e.value);
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Scheduler
+        dataSource={data}
+        views={views}
+        defaultCurrentView="week"
+        showCurrentTimeIndicator={showCurrentTimeIndicator}
+        indicatorUpdateInterval={updateInterval * 1000}
+        showAllDayPanel={false}
+        shadeUntilCurrentTime={shadeUntilCurrentTime}
+        defaultCurrentDate={currentDate}
+        editing={false}
+        height={600}
+        appointmentComponent={AppointmentTemplate}
+        onContentReady={onContentReady}
+        onAppointmentClick={onAppointmentClick}
+        onAppointmentDblClick={onAppointmentDblClick}
+      >
+        <Resource
+          dataSource={moviesData}
+          fieldExpr="movieId"
+        />
+      </Scheduler>
+      <div className="options">
+        <div className="column">
+          <div className="option">
+            <div className="label">Current time indicator </div>
+            {' '}
+            <div className="value">
+              <Switch
+                id="show-indicator"
+                value={showCurrentTimeIndicator}
+                onValueChanged={onShowCurrentTimeIndicatorChanged}
+              />
             </div>
           </div>
-          {' '}
-          <div className="column">
-            <div className="option">
-              <div className="label">Update position in </div>
-              {' '}
-              <div className="value">
-                <NumberBox
-                  min={1}
-                  max={1200}
-                  value={this.state.updateInterval}
-                  step={10}
-                  showSpinButtons={true}
-                  width={100}
-                  format="#0 s"
-                  inputAttr={positionLabel}
-                  onValueChanged={this.onUpdateIntervalChanged}
-                />
-              </div>
+          <div className="option">
+            <div className="label">Shading until current time </div>
+            {' '}
+            <div className="value">
+              <Switch
+                id="allow-shading"
+                value={shadeUntilCurrentTime}
+                onValueChanged={onShadeUntilCurrentTimeChanged}
+              />
             </div>
           </div>
         </div>
-      </React.Fragment>
-    );
-  }
-
-  onContentReady(e) {
-    e.component.scrollTo(new Date());
-  }
-
-  onAppointmentClick(e) {
-    e.cancel = true;
-  }
-
-  onAppointmentDblClick(e) {
-    e.cancel = true;
-  }
-
-  onShowCurrentTimeIndicatorChanged(e) {
-    this.setState({ showCurrentTimeIndicator: e.value });
-  }
-
-  onShadeUntilCurrentTimeChanged(e) {
-    this.setState({ shadeUntilCurrentTime: e.value });
-  }
-
-  onUpdateIntervalChanged(args) {
-    this.setState({ updateInterval: args.value });
-  }
-}
+        {' '}
+        <div className="column">
+          <div className="option">
+            <div className="label">Update position in </div>
+            {' '}
+            <div className="value">
+              <NumberBox
+                min={1}
+                max={1200}
+                value={updateInterval}
+                step={10}
+                showSpinButtons={true}
+                width={100}
+                format="#0 s"
+                inputAttr={intervalLabel}
+                onValueChanged={onUpdateIntervalChanged}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default App;

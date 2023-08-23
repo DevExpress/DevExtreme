@@ -3,14 +3,13 @@ import Query from 'devextreme/data/query';
 import localization from 'devextreme/localization';
 import { moviesData } from './data.js';
 
-function getMovieById(id) {
-  return Query(moviesData).filter(['id', id]).toArray()[0];
-}
+const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];
 
-export default function Appointment(model) {
-  const { targetedAppointmentData } = model.data;
+const Appointment = (props) => {
+  const { targetedAppointmentData } = props.data;
+  const { movieId } = targetedAppointmentData;
 
-  const movieData = getMovieById(targetedAppointmentData.movieId) || {};
+  const movieData = React.useMemo(() => getMovieById(movieId), [movieId]);
 
   return (
     <div className="showtime-preview">
@@ -25,4 +24,6 @@ export default function Appointment(model) {
       </div>
     </div>
   );
-}
+};
+
+export default Appointment;
