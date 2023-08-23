@@ -5,38 +5,32 @@ const path = require('path');
 
 class SideEffectFinder {
     #checkingPathsStack = new Set();
-    #dirtyImportsPaths = new Map();
-    #cleanImportsPaths = new Set();
+    #checkedPaths = new Map();
+
     getModuleSideEffectFiles(moduleFilePath) {
         try {
-            this.#checkingPathsStack.clear();
-
-            const moduleSideEffectFiles = [ ...this.#findSideEffectsInModule(moduleFilePath)]
+            const moduleSideEffectFiles = [...this.#findSideEffectsInModule(moduleFilePath)]
                 .map((importPath) => importPath.replace(/\\/g, '/'));
 
             return moduleSideEffectFiles;
         } catch (e) {
             const message = (e instanceof Error) ? e.message : e;
-            throw(`Exception while check side effects. in ${moduleFilePath} \nException: ` + message + '\n');
+            throw (`Exception while check side effects. in ${moduleFilePath} \nException: ` + message + '\n');
         }
     }
+
     #findSideEffectsInModule(moduleFilePath) {
-        if (this.#cleanImportsPaths.has(moduleFilePath)) {
-            return new Set();
-        }
+        let foundPaths = this.#checkedPaths.get(moduleFilePath);
 
-        let foundPaths = this.#dirtyImportsPaths.get(moduleFilePath) || new Set();
-
-        if (foundPaths.size === 0) {
+        if (!foundPaths) {
             const code = fs.readFileSync(moduleFilePath, 'utf8');
 
             foundPaths = this.#findSideEffectsInImports(moduleFilePath, code);
-            if (foundPaths.size === 0) {
-                this.#cleanImportsPaths.add(moduleFilePath);
-            }
-
-            this.#dirtyImportsPaths.set(moduleFilePath, foundPaths);
         }
+
+        foundPaths = foundPaths || new Set();
+
+        this.#checkedPaths.set(moduleFilePath, foundPaths);
 
         return foundPaths;
     }
