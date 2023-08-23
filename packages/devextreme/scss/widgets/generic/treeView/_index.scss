@@ -143,7 +143,7 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
       background-color: $treeview-focused-bg;
       color: $treeview-focus-color;
 
-      //TODO: make treeview link styles consistent with menu items styles and refactor styles
+      // TODO: make treeview link styles consistent with menu items styles and refactor styles
       > .dx-item-content {
         > .dx-item-url {
           color: unset;
@@ -155,12 +155,12 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
 
 .dx-treeview-item {
   > .dx-item-content {
-
     > .dx-item-url {
       display: flex;
       align-items: center;
     }
   }
+
   padding: $generic-treeview-item-padding;
   min-height: $generic-treeview-min-item-height;
 
