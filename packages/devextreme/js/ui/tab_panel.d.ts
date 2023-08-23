@@ -18,7 +18,7 @@ import {
 
 import {
     Position,
-    PositionLogical,
+    PositionRelative,
 } from '../common';
 
 import CollectionWidget, {
@@ -185,7 +185,7 @@ export interface dxTabPanelOptions<
      * @default 'start'
      * @public
      */
-    iconPosition?: PositionLogical;
+    iconPosition?: PositionRelative;
     /**
      * @docid
      * @type Array<string | dxTabPanelItem | any>
