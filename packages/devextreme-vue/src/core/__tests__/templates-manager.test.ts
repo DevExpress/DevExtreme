@@ -110,5 +110,17 @@ describe('TemplatesManager', () => {
 
       expect(Object.keys(templatesManager.templates)).toEqual(['template1', 'template2']);
     });
+
+    it('clear templates when we do not have slots', () => {
+      (discover as any).mockImplementationOnce(discoverMock3);
+
+      const templatesManager = new TemplatesManager(VueWrapper as any);
+
+      expect(Object.keys(templatesManager.templates)).toEqual(['template1', 'template2']);
+
+      (discover as any).mockImplementationOnce(discoverMock1);
+      templatesManager.discover();
+      expect(Object.keys(templatesManager.templates)).toEqual([]);
+    });
   });
 });

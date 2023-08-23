@@ -24,13 +24,11 @@ class TemplatesManager {
   }
 
   public discover() {
-    const slots = discoverSlots(this._component);
     this._slots = {
-      ...this._slots,
-      ...slots,
+      ...discoverSlots(this._component)
     };
 
-    if (!allKeysAreEqual(this._templates, slots)) {
+    if (!allKeysAreEqual(this._templates, this._slots)) {
       this._prepareTemplates();
     }
   }
