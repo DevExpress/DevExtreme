@@ -426,7 +426,11 @@ test('TabPanel borders without scrolling', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       if (!isMaterial()) {
+<<<<<<< HEAD
         await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#container' });
+=======
+        await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+>>>>>>> dd11b96657 (feat(tabPanel): Add tests for iconPosition)
       }
 
       await t
