@@ -1657,6 +1657,10 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+<<<<<<< HEAD
+=======
+  export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
+>>>>>>> feaa76ca7c (fix(d.ts): Rename type)
   /**
    * [descr:RangeRule]
    */
