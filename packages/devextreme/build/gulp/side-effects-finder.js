@@ -2,15 +2,16 @@
 
 const fs = require('fs');
 const path = require('path');
- class SideEffectFinder {
+
+class SideEffectFinder {
     #sideEffectFiles = new Set();
-    #checkedImportsCache = new Set();
-    #noSideEffectsFilesCache = new Set();
+    #checkingPathsStack = new Set();
+    #checkedPaths = new Set();
     getModuleSideEffectFiles(moduleFilePath) {
         try {
             this.#sideEffectFiles.clear();
-            this.#checkedImportsCache.clear();
-            this.#noSideEffectsFilesCache.clear();
+            this.#checkingPathsStack.clear();
+            this.#checkedPaths.clear();
 
             this.#findSideEffectsInModule(moduleFilePath);
 
@@ -24,59 +25,46 @@ const path = require('path');
             throw(`Exception while check side effects. in ${moduleFilePath} \nException: ` + message + '\n');
         }
     }
-
-    #findSideEffectsInModule(moduleFilePath, deep = 0) {
+    #findSideEffectsInModule(moduleFilePath) {
         const code = fs.readFileSync(moduleFilePath, 'utf8');
 
-        const hasSideEffectsInImports = this.#findSideEffectsInImports(moduleFilePath, code, deep);
-
-        this.#checkedImportsCache.clear();
-        return hasSideEffectsInImports;
+        if (!this.#checkedPaths.has(moduleFilePath)) {
+            this.#findSideEffectsInImports(moduleFilePath, code);
+            this.#checkedPaths.add(moduleFilePath);
+        }
     }
 
-    #findSideEffectsInImports(modulePath, code, deep) {
+    #findSideEffectsInImports(modulePath, code) {
         const hasRelativePathRegExp = /['"]\.?\.\/.+/;
         const relativePathRegExp = /['"]\.?\.\/.+['"]/;
-        const hasSideEffectImportRegExp = /^\s*import\s+['"]/ms;
+        const isSideEffectImportRegExp = /^\s*import\s+['"]/ms;
 
-        let imports = code.match(/^\s*import[^;]+;/mg) || [];
-        let found = false;
+        const imports = code.match(/^\s*import[^;]+;/mg) || [];
 
-        imports.filter((str) => hasRelativePathRegExp.test(str) /*&& (/\s+from\s+/ms).test(str)*/)
+        imports.filter((str) => hasRelativePathRegExp.test(str))
             .forEach((str) => {
-                let pathFromImport = str.match(relativePathRegExp)[0].replace(/(^['"]|['"]$)/g, '');
-                pathFromImport = path.join(path.dirname(modulePath), pathFromImport)+'.js';
+                let importPath = str.match(relativePathRegExp)[0].replace(/(^['"]|['"]$)/g, '');
 
-                if(!fs.existsSync(pathFromImport)) {
-                    pathFromImport = pathFromImport.replace(/\.js$/, '/index.js')
+                importPath = path.join(path.dirname(modulePath), importPath)+'.js';
+
+                if(!fs.existsSync(importPath)) {
+                    importPath = importPath.replace(/\.js$/, '/index.js')
                 }
 
-                if (hasSideEffectImportRegExp.test(str)) {
-                    this.#sideEffectFiles.add(pathFromImport);
+                if (isSideEffectImportRegExp.test(str)) {
+                    this.#sideEffectFiles.add(importPath);
                 }
 
-                if (this.#noSideEffectsFilesCache.has(pathFromImport)) {
-                    return false;
+                const isInLoop = this.#checkingPathsStack.has(importPath);
+
+                if (!isInLoop) {
+                    this.#checkingPathsStack.add(importPath);
+
+                    this.#findSideEffectsInModule(importPath);
+
+                    this.#checkingPathsStack.delete(importPath);
                 }
-
-                const alreadyChecked = this.#checkedImportsCache.has(pathFromImport);
-                let isDirty = false;
-
-                if (!alreadyChecked) {
-                    this.#checkedImportsCache.add(pathFromImport);
-                    isDirty = !!this.#findSideEffectsInModule(pathFromImport, deep + 1);
-                }
-
-                this.#checkedImportsCache.delete(pathFromImport);
-
-                if (!isDirty) {
-                    this.#noSideEffectsFilesCache.add(pathFromImport);
-                }
-
-                found = found || isDirty;
             });
-
-        return found;
     }
 }
 
