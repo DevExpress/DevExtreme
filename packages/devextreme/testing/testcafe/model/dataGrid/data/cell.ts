@@ -16,6 +16,7 @@ const CLASS = {
   overlay: 'dx-overlay',
   checkbox: 'dx-checkbox',
   linkEdit: 'dx-link-edit',
+  linkSave: 'dx-link-save',
 };
 
 export default class DataCell extends FocusableElement {
@@ -58,6 +59,10 @@ export default class DataCell extends FocusableElement {
 
   getLinkEdit(): Selector {
     return this.element.find(`.${CLASS.linkEdit}`);
+  }
+
+  getLinkSave(): Selector {
+    return this.element.find(`.${CLASS.linkSave}`);
   }
 
   getIconByTitle(title: string): Selector {
