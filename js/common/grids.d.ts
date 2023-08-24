@@ -2991,7 +2991,7 @@ export type SearchPanel = {
    * @docid GridBaseOptions.searchPanel.width
    * @default 160
    */
-  width?: number;
+  width?: string | number;
 };
 
 /**
