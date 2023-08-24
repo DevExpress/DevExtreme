@@ -2081,7 +2081,7 @@ type ISearchPanelProps = React.PropsWithChildren<{
   searchVisibleColumnsOnly?: boolean;
   text?: string;
   visible?: boolean;
-  width?: number;
+  width?: number | string;
   defaultText?: string;
   onTextChange?: (value: string) => void;
 }>
