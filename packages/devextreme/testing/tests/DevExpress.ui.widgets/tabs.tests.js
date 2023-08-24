@@ -306,9 +306,14 @@ QUnit.module('General', () => {
     QUnit.test('the tabs element must have a correct icon position class in runtime change', function(assert) {
         const $element = $('#tabs').dxTabs();
         const instance = $element.dxTabs('instance');
+        const iconPositions = ['top', 'end', 'bottom'];
 
-        ['top', 'end', 'bottom'].forEach((iconPosition) => {
+        iconPositions.forEach((iconPosition, index) => {
             instance.option({ iconPosition });
+
+            if(index !== 0) {
+                assert.notOk($element.hasClass(TABS_ICON_POSITION_CLASS[iconPositions[index - 1]]));
+            }
 
             assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS[iconPosition]));
         });
