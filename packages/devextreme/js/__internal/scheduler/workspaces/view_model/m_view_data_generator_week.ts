@@ -2,19 +2,19 @@ import { calculateStartViewDate, getIntervalDuration } from '../../../../renovat
 import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
-    get daysInInterval() { return 7; }
+  readonly daysInInterval = 7;
 
-    _getIntervalDuration(intervalCount) {
-        return getIntervalDuration(intervalCount);
-    }
+  _getIntervalDuration(intervalCount) {
+    return getIntervalDuration(intervalCount);
+  }
 
-    _calculateStartViewDate(options) {
-        return calculateStartViewDate(
-            options.currentDate,
-            options.startDayHour,
-            options.startDate,
-            this._getIntervalDuration(options.intervalCount),
-            this.getFirstDayOfWeek(options.firstDayOfWeek),
-        );
-    }
+  _calculateStartViewDate(options) {
+    return calculateStartViewDate(
+      options.currentDate,
+      options.startDayHour,
+      options.startDate,
+      this._getIntervalDuration(options.intervalCount),
+      this.getFirstDayOfWeek(options.firstDayOfWeek),
+    );
+  }
 }
