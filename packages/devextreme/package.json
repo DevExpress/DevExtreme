@@ -183,6 +183,7 @@
     "yargs": "7.1.2"
   },
   "scripts": {
+    "preinstall": "node build/preinstall.js",
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",
     "lint-js": "eslint --quiet --ext .js .",
@@ -207,7 +208,7 @@
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
     "build:community-localization": "gulp generate-community-locales",
     "build:systemjs": "gulp transpile-systemjs",
-    "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
+    "compile:r": "tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
