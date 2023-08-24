@@ -140,13 +140,19 @@ gulp.task('build.components', gulp.series('generate.facades',
 
 //------------npm------------
 
-gulp.task('npm.content', gulp.series('build.components', function() {
-    var npmConfig = buildConfig.npm,
-        cmpConfig = buildConfig.components;
+gulp.task('npm.content', gulp.series(
+    'build.copy-sources',
+    'build.license-headers',
+    'build.ngc',
+    'build.remove-unusable-variable',
+    function() {
+        var npmConfig = buildConfig.npm,
+            cmpConfig = buildConfig.components;
 
-    return gulp.src([cmpConfig.outputPath + '/**/collection.json', ...npmConfig.content])
-        .pipe(gulp.dest(npmConfig.distPath));
-}));
+        return gulp.src([cmpConfig.outputPath + '/**/collection.json', ...npmConfig.content])
+            .pipe(gulp.dest(npmConfig.distPath));
+    })
+);
 
 gulp.task('npm.pack', gulp.series(
     'npm.content',

@@ -64,6 +64,10 @@ jobs:
       working-directory: ./packages/devextreme-angular
       run: npm run test:dev
 
+    - name: Check packing
+      working-directory: ./packages/devextreme-angular
+      run: npm run pack
+
     - name: Archive internal-tools artifacts
       uses: actions/upload-artifact@v3
       with:
