@@ -44,12 +44,7 @@
 
 <script setup lang="ts">
 import {
-  DxDataGrid,
-  DxColumn,
-  DxPaging,
-  DxSummary,
-  DxTotalItem,
-  DxValueFormat,
+  DxDataGrid, DxColumn, DxPaging, DxSummary, DxTotalItem, DxValueFormat,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import { computed } from 'vue';

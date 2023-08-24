@@ -103,7 +103,9 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { orders } from './data.js';
+import { Column } from 'devextreme/ui/data_grid';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { orders, Order } from './data.ts';
 
 const applyFilterTypes = [
   {
@@ -153,24 +155,29 @@ const saleAmountHeaderFilter = [
 
 const clearFilter = () => dataGridRef.value?.instance?.clearFilter();
 
-const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
+const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 
-function calculateFilterExpression(value, selectedFilterOperations, target) {
+function calculateFilterExpression(
+  this: Column, value: any, selectedFilterOperations: string | null, target: string,
+) {
   const column = this;
 
   if (target === 'headerFilter' && value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
 
-  return column.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
+  return column.defaultCalculateFilterExpression!(value, selectedFilterOperations, target);
 }
 
-const orderDateHeaderFilter = (data) => {
-  data.dataSource.postProcess = (results) => {
+const orderDateHeaderFilter = (options: { dataSource: DataSourceOptions }) => {
+  const { dataSource } = options;
+
+  dataSource.postProcess = (results) => {
     results.push({
       text: 'Weekends',
       value: 'weekends',
     });
+
     return results;
   };
 };

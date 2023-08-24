@@ -96,19 +96,11 @@ $(() => {
 
 function getTaskDataItem(row) {
   const rowData = row && row.data;
-  const taskItem = {
-    subject: '',
-    description: '',
-    status: '',
-    progress: '',
+
+  return {
+    subject: rowData.Task_Subject,
+    description: rowData.Task_Description,
+    status: rowData.Task_Status,
+    progress: rowData.Task_Completion ? `${rowData.Task_Completion}%` : '',
   };
-  if (rowData) {
-    taskItem.subject = rowData.Task_Subject;
-    taskItem.description = rowData.Task_Description;
-    taskItem.status = rowData.Task_Status;
-    if (rowData.Task_Completion) {
-      taskItem.progress = `${rowData.Task_Completion}%`;
-    }
-  }
-  return taskItem;
 }

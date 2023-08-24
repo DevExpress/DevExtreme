@@ -1,16 +1,12 @@
 import React from 'react';
 import DataGrid, {
-  Column,
-  Editing,
-  Paging,
-  RequiredRule,
-  PatternRule,
-  EmailRule,
-  AsyncRule,
+  Column, Editing, Paging, RequiredRule, PatternRule, EmailRule, AsyncRule,
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
+const emailValidationUrl = 'https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress';
+
 const dataSource = createStore({
   key: 'ID',
   loadUrl: url,
@@ -22,16 +18,22 @@ const dataSource = createStore({
   },
 });
 
-const asyncValidation = (params) => fetch('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json;',
-  },
-  body: JSON.stringify({
-    id: params.data.ID,
-    email: params.value,
-  }),
-}).then((response) => response.json());
+const asyncValidation = async(params) => {
+  const response = await fetch(emailValidationUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;',
+    },
+    body: JSON.stringify({
+      id: params.data.ID,
+      email: params.value,
+    }),
+  });
+
+  const result = await response.json();
+
+  return result;
+};
 
 const App = () => (
   <DataGrid

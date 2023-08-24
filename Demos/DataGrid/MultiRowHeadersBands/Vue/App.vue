@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import DxDataGrid, { DxColumn, DxColumnChooser } from 'devextreme-vue/data-grid';
-import { countries } from './data.js';
+import { countries } from './data.ts';
 
 const gdpFormat = {
   type: 'percent',

@@ -130,43 +130,38 @@ const shippersData = new CustomStore({
 
 const refreshModes = ['full', 'reshape', 'repaint'];
 
-const requests = ref<any[]>([]);
+const requests = ref<string[]>([]);
 const refreshMode = ref('reshape');
 
-const sendRequest = async(url, method = 'GET', data = {}) => {
+const sendRequest = async(url: string, method = 'GET', data: Record<string, string> = {}) => {
   logRequest(method, url, data);
 
-  const params = Object.keys(data).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
+  const request: any = {
+    method, credentials: 'include',
+  };
 
-  if (method === 'GET') {
-    return fetch(url, {
-      method,
-      credentials: 'include',
-    }).then((result) => result.json().then((json) => {
-      if (result.ok) return json.data;
-      throw json.Message;
-    }));
+  if (['DELETE', 'POST', 'PUT'].includes(method)) {
+    const params = Object.keys(data)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+      .join('&');
+
+    request.body = params;
+    request.headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
   }
 
-  return fetch(url, {
-    method,
-    body: params,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    },
-    credentials: 'include',
-  }).then((result) => {
-    if (result.ok) {
-      return result.text().then((text) => text && JSON.parse(text));
-    }
+  const response = await fetch(url, request);
 
-    return result.json().then((json) => {
-      throw json.Message;
-    });
-  });
+  const isJson = response.headers.get('content-type')?.includes('application/json');
+  const result = isJson ? await response.json() : {};
+
+  if (!response.ok) {
+    throw result.Message;
+  }
+
+  return method === 'GET' ? result.data : {};
 };
 
-const logRequest = (method, url, data) => {
+const logRequest = (method: string, url: string, data: Record<string, string>) => {
   const args = Object.keys(data || {}).map((key) => `${key}=${data[key]}`).join(' ');
 
   const time = formatDate(new Date(), 'HH:mm:ss');

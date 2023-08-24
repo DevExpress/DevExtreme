@@ -75,9 +75,11 @@ import { Workbook } from 'exceljs';
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
-import { companies } from './data.js';
+import { ExportingEvent } from 'devextreme/ui/data_grid';
 
-const onExporting = (e) => {
+import { companies } from './data.ts';
+
+const onExporting = (e: ExportingEvent) => {
   const workbook = new Workbook();
   const worksheet = workbook.addWorksheet('Companies');
 
@@ -117,8 +119,8 @@ const onExporting = (e) => {
   e.cancel = true;
 };
 
-const phoneNumberFormat = (value) => {
-  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+const phoneNumberFormat = (value: string) => {
+  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/)!;
 
   return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
 };

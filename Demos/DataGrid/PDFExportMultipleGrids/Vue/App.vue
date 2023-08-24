@@ -83,14 +83,17 @@ import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { exportDataGrid, DataGridCell, Cell } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import 'devextreme/data/odata/store';
+import DataGrid from 'devextreme/ui/data_grid';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);
 
-const priceDataSource = {
+const priceDataSource: DataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
@@ -100,7 +103,7 @@ const priceDataSource = {
   filter: ['Product_ID', '<', 10],
 };
 
-const ratingDataSource = {
+const ratingDataSource: DataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
@@ -111,8 +114,8 @@ const ratingDataSource = {
 };
 
 const exportGrids = () => {
-  const priceGrid = priceGridRef.value?.instance;
-  const ratingGrid = ratingGridRef.value?.instance;
+  const priceGrid = priceGridRef.value?.instance!;
+  const ratingGrid = ratingGridRef.value?.instance!;
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
@@ -122,7 +125,7 @@ const exportGrids = () => {
     topLeft: { x: 7, y: 5 },
     columnWidths: [20, 50, 50, 50],
     customizeCell: ({ gridCell, pdfCell }) => {
-      setAlternatingRowsBackground(priceGrid, gridCell, pdfCell);
+      setAlternatingRowsBackground(priceGrid, gridCell!, pdfCell!);
     },
   }).then(() => {
     doc.addPage();
@@ -132,7 +135,7 @@ const exportGrids = () => {
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(ratingGrid, gridCell, pdfCell);
+        setAlternatingRowsBackground(ratingGrid, gridCell!, pdfCell!);
       },
     }).then(() => {
       doc.save('MultipleGrids.pdf');
@@ -140,7 +143,9 @@ const exportGrids = () => {
   });
 };
 
-const setAlternatingRowsBackground = (dataGrid, gridCell, pdfCell) => {
+const setAlternatingRowsBackground = (
+  dataGrid: DataGrid, gridCell: DataGridCell, pdfCell: Cell,
+) => {
   if (gridCell.rowType === 'data') {
     const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
     if (rowIndex % 2 === 0) {

@@ -74,7 +74,9 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { employees } from './data.js';
+import { ValueChangedEvent } from 'devextreme/ui/select_box';
+import { SelectionChangedEvent } from 'devextreme/ui/data_grid';
+import { employees, Employee } from './data.ts';
 
 const dataGridRef = ref<DxDataGrid | null>(null);
 
@@ -82,9 +84,9 @@ const selectedPrefix = ref<string | null>(null);
 const prefixOptions = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 
 let selectionChangedBySelectBox = false;
-const selectedRowsData = ref<any[]>([]);
+const selectedRowsData = ref<Employee[]>([]);
 
-const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
+const getEmployeeName = (row: Employee) => `${row.FirstName} ${row.LastName}`;
 
 const selectedRowKeys = computed(() => selectedRowsData.value.map((employee) => employee.ID));
 const selectedEmployeeNames = computed(() => (
@@ -97,7 +99,7 @@ const clearSelection = () => {
   dataGrid.clearSelection();
 };
 
-const filterSelection = (e) => {
+const filterSelection = (e: ValueChangedEvent) => {
   if (!e.value) {
     return;
   }
@@ -111,7 +113,7 @@ const filterSelection = (e) => {
     : employees.filter((employee) => employee.Prefix === e.value);
 };
 
-const onSelectionChanged = (e) => {
+const onSelectionChanged = (e: SelectionChangedEvent<Employee>) => {
   if (!selectionChangedBySelectBox) {
     selectedPrefix.value = null;
   }

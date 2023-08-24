@@ -71,13 +71,15 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 
-import DataGrid from 'devextreme/ui/data_grid';
+import DataGrid, { InitializedEvent } from 'devextreme/ui/data_grid';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+
 import query from 'devextreme/data/query';
 import 'devextreme/data/odata/store';
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
-const dataSource = {
+const dataSource: DataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
@@ -118,8 +120,8 @@ const calculateStatistics = async() => {
   avgDuration.value = Math.round(averageDurationInDays) || 0;
 };
 
-const onInitialized = (e) => {
-  dataGrid = e.component;
+const onInitialized = (e: InitializedEvent) => {
+  dataGrid = e.component!;
 
   calculateStatistics();
 };

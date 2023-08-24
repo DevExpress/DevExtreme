@@ -23,11 +23,17 @@
 
 <script setup lang="ts">
 import { DxTabPanel, DxItem } from 'devextreme-vue/tab-panel';
+
 import OrdersTab from './OrdersTab.vue';
 import AddressTab from './AddressTab.vue';
 
+import { Supplier } from './data.ts';
+
 defineProps<{
-  masterDetailData: any
+  masterDetailData: {
+    key: number,
+    data: Supplier
+  }
 }>();
 
 </script>

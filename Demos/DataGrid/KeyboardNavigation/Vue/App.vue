@@ -48,5 +48,6 @@ import {
   DxColumn,
   DxLookup,
 } from 'devextreme-vue/data-grid';
-import { employees, states } from './data.js';
+import { employees, states } from './data.ts';
+
 </script>

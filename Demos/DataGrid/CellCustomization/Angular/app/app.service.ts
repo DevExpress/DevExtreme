@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Value {
+export class DiffValue {
   value: number;
 
   diff: number;
@@ -15,13 +15,13 @@ export class DayClose {
 export class WeekData {
   date: Date;
 
-  open: Value;
+  open: DiffValue;
 
-  high: Value;
+  high: DiffValue;
 
-  low: Value;
+  low: DiffValue;
 
-  close: Value;
+  close: DiffValue;
 
   volume: number;
 
@@ -29,6 +29,8 @@ export class WeekData {
 
   dayClose: DayClose[];
 }
+
+export type DiffValueProperties = 'open' | 'high' | 'low' | 'close';
 
 const weekData: WeekData[] = [{
   date: new Date('2013/12/23'),

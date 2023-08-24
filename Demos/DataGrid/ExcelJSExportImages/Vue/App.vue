@@ -40,14 +40,17 @@
 </template>
 <script setup lang="ts">
 import { DxDataGrid, DxColumn, DxExport } from 'devextreme-vue/data-grid';
+
 import { Anchor, Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
-import { employees } from './data.js';
+import { ExportingEvent } from 'devextreme/ui/data_grid';
 
-const onExporting = (e) => {
+import { employees } from './data.ts';
+
+const onExporting = (e: ExportingEvent) => {
   const workbook = new Workbook();
   const worksheet = workbook.addWorksheet('Main sheet');
 

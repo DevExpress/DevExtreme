@@ -49,28 +49,35 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 import { DxDataGrid, DxColumn, DxEditing } from 'devextreme-vue/data-grid';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-import { useStore } from 'vuex';
+
+import { SavingEvent, DataChange } from 'devextreme/ui/data_grid';
+
+import { State } from './store.ts';
 
 const loadPanelPosition = { of: '#gridContainer' };
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
-const store = useStore();
+const store = useStore<State>();
 
-const [loadOrders, setEditRowKey, setChanges, saveChange] = ['loadOrders', 'setEditRowKey', 'setChanges', 'saveChange'].map(
-  (action) => (value?) => store.dispatch(action, value),
-);
-const orders = computed(() => store.getters.orders);
-const isLoading = computed(() => store.getters.isLoading);
+const loadOrders = () => store.dispatch('loadOrders');
+const setEditRowKey = (value: number | null) => store.dispatch('setEditRowKey', value);
+const setChanges = (value: DataChange[]) => store.dispatch('setChanges', value);
+const saveChange = (change: DataChange) => store.dispatch('saveChange', change);
+const orders = computed(() => store.state.orders);
+const isLoading = computed(() => store.state.isLoading);
 
 const changes = computed({
-  get() {
-    return store.state.changes;
-  },
-  set(value) {
-    setChanges(value);
-  },
+  get: () => (store.state.changes),
+  set: (value) => { setChanges(value); },
+});
+
+const editRowKey = computed({
+  get: () => store.state.editRowKey,
+  set: (value) => { setEditRowKey(value); },
 });
 
 const changesText = computed(() => JSON.stringify(changes.value.map((change) => ({
@@ -79,16 +86,7 @@ const changesText = computed(() => JSON.stringify(changes.value.map((change) => 
   data: change.data,
 })), null, ' '));
 
-const editRowKey = computed({
-  get() {
-    return store.state.editRowKey;
-  },
-  set(value) {
-    setEditRowKey(value);
-  },
-});
-
-const onSaving = (e) => {
+const onSaving = (e: SavingEvent) => {
   e.cancel = true;
   e.promise = saveChange(e.changes[0]);
 };

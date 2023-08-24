@@ -10,31 +10,31 @@ function isNotEmpty(value) {
 
 const store = new CustomStore({
   key: 'OrderNumber',
-  load(loadOptions) {
-    let params = '?';
-    [
-      'skip',
-      'take',
-      'requireTotalCount',
-      'requireGroupCount',
-      'sort',
-      'filter',
-      'totalSummary',
-      'group',
-      'groupSummary',
-    ].forEach((i) => {
-      if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
-    });
-    params = params.slice(0, -1);
-    return fetch(`https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders${params}`)
-      .then((response) => response.json())
-      .then((data) => ({
-        data: data.data,
-        totalCount: data.totalCount,
-        summary: data.summary,
-        groupCount: data.groupCount,
-      }))
-      .catch(() => { throw new Error('Data Loading Error'); });
+  async load(loadOptions) {
+    const paramNames = [
+      'skip', 'take', 'requireTotalCount', 'requireGroupCount',
+      'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
+    ];
+
+    const queryString = paramNames
+      .filter((paramName) => isNotEmpty(loadOptions[paramName]))
+      .map((paramName) => `${paramName}=${JSON.stringify(loadOptions[paramName])}`)
+      .join('&');
+
+    try {
+      const response = await fetch(`https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders?${queryString}`);
+
+      const result = await response.json();
+
+      return {
+        data: result.data,
+        totalCount: result.totalCount,
+        summary: result.summary,
+        groupCount: result.groupCount,
+      };
+    } catch (err) {
+      throw new Error('Data Loading Error');
+    }
   },
 });
 

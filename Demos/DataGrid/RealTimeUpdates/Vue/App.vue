@@ -148,8 +148,8 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxSlider, DxTooltip } from 'devextreme-vue/slider';
 import {
-  productsStore, ordersStore, getOrderCount, addOrder,
-} from './data.js';
+  productsStore, ordersStore, getOrderCount, addOrder, Order, Product,
+} from './data.ts';
 
 const updatesPerSecond = ref(100);
 
@@ -176,13 +176,13 @@ onUnmounted(() => {
   clearInterval(interval);
 });
 
-const getDetailGridDataSource = (product) => ({
+const getDetailGridDataSource = (product: Product) => ({
   store: ordersStore,
   reshapeOnPush: true,
   filter: ['ProductID', '=', product.ProductID],
 });
 
-const getAmount = (order) => order.UnitPrice * order.Quantity;
+const getAmount = (order: Order) => order.UnitPrice * order.Quantity;
 </script>
 <style scoped>
 .options {

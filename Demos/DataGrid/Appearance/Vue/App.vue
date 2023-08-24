@@ -71,7 +71,7 @@
 import { ref } from 'vue';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const showColumnLines = ref(false);
 const showRowLines = ref(true);

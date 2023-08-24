@@ -81,7 +81,7 @@ import {
   DxGroupItem,
   DxSortByGroupSummaryInfo,
 } from 'devextreme-vue/data-grid';
-import { orders } from './data.js';
+import { orders } from './data.ts';
 
 </script>
 <style scoped>

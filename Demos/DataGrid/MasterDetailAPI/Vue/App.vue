@@ -48,15 +48,16 @@ import DxDataGrid, {
   DxMasterDetail,
   DxSelection,
 } from 'devextreme-vue/data-grid';
-import { employees } from './data.js';
+import { ContentReadyEvent, SelectionChangedEvent } from 'devextreme/ui/data_grid';
+import { employees } from './data.ts';
 
-const onContentReady = (e) => {
+const onContentReady = (e: ContentReadyEvent) => {
   if (!e.component.getSelectedRowKeys().length) {
     e.component.selectRowsByIndexes(0);
   }
 };
 
-const onSelectionChanged = (e) => {
+const onSelectionChanged = (e: SelectionChangedEvent) => {
   e.component.collapseAll(-1);
   e.component.expandRow(e.currentSelectedRowKeys[0]);
 };

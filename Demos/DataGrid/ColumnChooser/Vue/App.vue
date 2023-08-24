@@ -123,7 +123,10 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { employees } from './data.js';
+
+import { Properties as TextBoxProperties } from 'devextreme/ui/text_box';
+
+import { employees } from './data.ts';
 
 const columnChooserModes = [{
   key: 'dragAndDrop',
@@ -138,7 +141,7 @@ const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);
 const recursive = ref(true);
-const editorOptions = { placeholder: 'Search column' };
+const editorOptions: TextBoxProperties = { placeholder: 'Search column' };
 
 </script>
 <style scoped>

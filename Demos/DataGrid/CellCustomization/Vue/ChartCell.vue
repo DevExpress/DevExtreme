@@ -1,7 +1,7 @@
 <template>
   <div class="chart-cell">
     <DxSparkline
-      :data-source="cellData"
+      :data-source="dayClose"
       :show-min-max="true"
       :point-size="6"
       argument-field="date"
@@ -25,9 +25,9 @@ import {
   DxTooltip,
 } from 'devextreme-vue/sparkline';
 
-withDefaults(defineProps<{
-  cellData?: any[]
-}>(), {
-  cellData: () => [],
-});
+import { DayClose } from './data.ts';
+
+defineProps<{
+  dayClose: DayClose[]
+}>();
 </script>

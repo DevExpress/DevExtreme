@@ -67,14 +67,18 @@ export class AppComponent {
     if (target === 'search' && typeof (filterValue) === 'string') {
       return [(this as any).dataField, 'contains', filterValue];
     }
-    return function (data) {
-      return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
+    return function (rowData) {
+      return (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
     };
   }
 
   cellTemplate(container, options) {
     const noBreakSpace = '\u00A0';
-    const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
+
+    const assignees = (options.value || []).map(
+      (assigneeId: number) => options.column!.lookup!.calculateCellValue!(assigneeId),
+    );
+    const text = assignees.join(', ');
 
     container.textContent = text || noBreakSpace;
     container.title = text;

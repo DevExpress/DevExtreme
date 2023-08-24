@@ -23,6 +23,6 @@ const getMasterDetailGridDataSource = (id: number, url: string) => ({
     },
   }),
 });
-const dataSource = getMasterDetailGridDataSource(props.id, props.url);
 
+const dataSource = getMasterDetailGridDataSource(props.id, props.url);
 </script>

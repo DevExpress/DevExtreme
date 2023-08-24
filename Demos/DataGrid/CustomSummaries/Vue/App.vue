@@ -57,11 +57,12 @@ import {
   DxSummary,
   DxTotalItem,
 } from 'devextreme-vue/data-grid';
-import { orders } from './data.js';
+import { CustomSummaryInfo, SelectionChangedEvent } from 'devextreme/ui/data_grid';
+import { orders } from './data.ts';
 
 const selectedRowKeys = [1, 4, 7];
 
-const calculateSelectedRow = (options) => {
+const calculateSelectedRow = (options: CustomSummaryInfo) => {
   if (options.name === 'SelectedRowsSummary') {
     if (options.summaryProcess === 'start') {
       options.totalValue = 0;
@@ -75,7 +76,7 @@ const calculateSelectedRow = (options) => {
   }
 };
 
-const onSelectionChanged = (e) => {
+const onSelectionChanged = (e: SelectionChangedEvent) => {
   e.component.refresh(true);
 };
 </script>

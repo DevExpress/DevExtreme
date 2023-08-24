@@ -42,18 +42,14 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid,
-  DxColumn,
-  DxPaging,
-  DxEditing,
-  DxRequiredRule,
-  DxEmailRule,
-  DxPatternRule,
-  DxAsyncRule,
+  DxDataGrid, DxColumn, DxPaging, DxEditing, DxRequiredRule,
+  DxEmailRule, DxPatternRule, DxAsyncRule,
 } from 'devextreme-vue/data-grid';
+import { ValidationCallbackData } from 'devextreme-vue/common';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
+const emailValidationUrl = 'https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress';
 
 const dataSource = createStore({
   key: 'ID',
@@ -68,14 +64,20 @@ const dataSource = createStore({
 
 const pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
-const asyncValidation = async(params) => fetch('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json;',
-  },
-  body: JSON.stringify({
-    id: params.data.ID,
-    email: params.value,
-  }),
-}).then((response) => response.json());
+const asyncValidation = async(params: ValidationCallbackData) => {
+  const response = await fetch(emailValidationUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;',
+    },
+    body: JSON.stringify({
+      id: params.data.ID,
+      email: params.value,
+    }),
+  });
+
+  const result = await response.json();
+
+  return result;
+};
 </script>

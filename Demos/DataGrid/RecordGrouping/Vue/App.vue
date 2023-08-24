@@ -46,7 +46,7 @@ import {
   DxSearchPanel,
   DxPaging,
 } from 'devextreme-vue/data-grid';
-import { customers } from './data.js';
+import { customers } from './data.ts';
 
 const autoExpandAll = ref(true);
 </script>

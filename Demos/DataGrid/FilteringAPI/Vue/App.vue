@@ -58,8 +58,9 @@ import {
 import DxSelectBox from 'devextreme-vue/select-box';
 import 'devextreme/data/odata/store';
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
-const dataSource = {
+const dataSource: DataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
@@ -78,7 +79,7 @@ const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Defer
 const dataGridRef = ref<DxDataGrid | null>(null);
 
 const onValueChanged = ({ value }: ValueChangedEvent) => {
-  const dataGrid = dataGridRef.value?.instance!;
+  const dataGrid = dataGridRef.value!.instance!;
 
   if (value === 'All') {
     dataGrid.clearFilter();

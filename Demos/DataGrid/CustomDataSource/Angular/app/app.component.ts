@@ -16,37 +16,43 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
+  url: string;
+
   dataSource: any = {};
 
   constructor(httpClient: HttpClient) {
-    function isNotEmpty(value: any): boolean {
-      return value !== undefined && value !== null && value !== '';
-    }
+    const isNotEmpty = (value: any) => (value !== undefined && value !== null && value !== '');
+
     this.dataSource = new CustomStore({
       key: 'OrderNumber',
-      load(loadOptions: any) {
-        let params: HttpParams = new HttpParams();
-        [
-          'skip',
-          'take',
-          'requireTotalCount',
-          'requireGroupCount',
-          'sort',
-          'filter',
-          'totalSummary',
-          'group',
-          'groupSummary',
-        ].forEach((i) => {
-          if (i in loadOptions && isNotEmpty(loadOptions[i])) { params = params.set(i, JSON.stringify(loadOptions[i])); }
-        });
-        return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders', { params }))
-          .then((data: any) => ({
-            data: data.data,
-            totalCount: data.totalCount,
-            summary: data.summary,
-            groupCount: data.groupCount,
-          }))
-          .catch((error) => { throw 'Data Loading Error'; });
+      async load(loadOptions: any) {
+        const url = 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders';
+
+        const paramNames = [
+          'skip', 'take', 'requireTotalCount', 'requireGroupCount',
+          'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
+        ];
+
+        let params = new HttpParams();
+
+        paramNames
+          .filter((paramName) => isNotEmpty(loadOptions[paramName]))
+          .forEach((paramName) => {
+            params = params.set(paramName, JSON.stringify(loadOptions[paramName]));
+          });
+
+        try {
+          const result: any = await lastValueFrom(httpClient.get(url, { params }));
+
+          return {
+            data: result.data,
+            totalCount: result.totalCount,
+            summary: result.summary,
+            groupCount: result.groupCount,
+          };
+        } catch (err) {
+          throw new Error('Data Loading Error');
+        }
       },
     });
   }

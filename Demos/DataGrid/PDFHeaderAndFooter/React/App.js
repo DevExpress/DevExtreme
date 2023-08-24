@@ -30,16 +30,20 @@ const onExporting = (e) => {
       }
     },
   }).then(() => {
+    // header
     const header = 'Country Area, Population, and GDP Structure';
     const pageWidth = doc.internal.pageSize.getWidth();
-    doc.setFontSize(15);
     const headerWidth = doc.getTextDimensions(header).w;
+
+    doc.setFontSize(15);
     doc.text(header, (pageWidth - headerWidth) / 2, 20);
 
+    // footer
     const footer = 'www.wikipedia.org';
+    const footerWidth = doc.getTextDimensions(footer).w;
+
     doc.setFontSize(9);
     doc.setTextColor('#cccccc');
-    const footerWidth = doc.getTextDimensions(footer).w;
     doc.text(footer, lastPoint.x - footerWidth, lastPoint.y + 5);
 
     doc.save('Companies.pdf');

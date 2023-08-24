@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Employees {
+export class Employee {
   ID: number;
 
   FirstName: string;
@@ -16,7 +16,7 @@ export class Employees {
   HireDate: string;
 }
 
-const employees: Employees[] = [{
+const employees: Employee[] = [{
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',

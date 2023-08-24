@@ -39,6 +39,7 @@ const App = () => {
     loadMode: 'raw',
     load: () => sendRequest(`${URL}/ShippersLookup`),
   }));
+
   const [requests, setRequests] = React.useState([]);
   const [refreshMode, setRefreshMode] = React.useState('reshape');
 
@@ -59,36 +60,33 @@ const App = () => {
     setRequests((prevRequests) => [request].concat(prevRequests));
   }, []);
 
-  const sendRequest = React.useCallback((url, method = 'GET', data = {}) => {
+  // eslint-disable-next-line consistent-return
+  const sendRequest = React.useCallback(async(url, method = 'GET', data = {}) => {
     logRequest(method, url, data);
 
-    if (method === 'GET') {
-      return fetch(url, {
-        method,
-        credentials: 'include',
-      }).then((result) => result.json().then((json) => {
-        if (result.ok) return json.data;
-        throw json.Message;
-      }));
+    const request = {
+      method, credentials: 'include',
+    };
+
+    if (['DELETE', 'POST', 'PUT'].includes(method)) {
+      const params = Object.keys(data)
+        .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+        .join('&');
+
+      request.body = params;
+      request.headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
     }
 
-    const params = Object.keys(data).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
+    const response = await fetch(url, request);
 
-    return fetch(url, {
-      method,
-      body: params,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
-      credentials: 'include',
-    }).then((result) => {
-      if (result.ok) {
-        return result.text().then((text) => text && JSON.parse(text));
-      }
-      return result.json().then((json) => {
-        throw json.Message;
-      });
-    });
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const result = isJson ? await response.json() : {};
+
+    if (!response.ok) {
+      throw result.Message;
+    }
+
+    return method === 'GET' ? result.data : {};
   }, [logRequest]);
 
   return (

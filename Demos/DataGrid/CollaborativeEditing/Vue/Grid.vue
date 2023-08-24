@@ -57,8 +57,10 @@
 import {
   DxDataGrid, DxColumn, DxPaging, DxEditing, DxRequiredRule, DxRangeRule,
 } from 'devextreme-vue/data-grid';
+
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
+import { ColumnLookup } from 'devextreme/ui/data_grid';
 
 defineProps<{
   dataSource: CustomStore
@@ -71,7 +73,7 @@ const statesStore = AspNetData.createStore({
 
 const maxDate = new Date(3000, 0);
 
-const lookup = {
+const lookup: ColumnLookup = {
   dataSource: statesStore,
   displayExpr: 'Name',
   valueExpr: 'ID',

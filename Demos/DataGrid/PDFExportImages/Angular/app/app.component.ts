@@ -6,7 +6,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-import { Service, Employees } from './app.service';
+import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employees: Employees[];
+  employees: Employee[];
 
   constructor(private service: Service) {
     this.employees = service.getEmployess();

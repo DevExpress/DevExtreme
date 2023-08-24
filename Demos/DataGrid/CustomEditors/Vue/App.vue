@@ -99,10 +99,14 @@ import {
   DxLookup,
   DxRequiredRule,
 } from 'devextreme-vue/data-grid';
+
 import { createStore } from 'devextreme-aspnet-data-nojquery';
-import { statuses } from './data.js';
+import { ColumnCellTemplateData, RowInsertedEvent, Column } from 'devextreme/ui/data_grid';
+
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.vue';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.vue';
+
+import { statuses, Task } from './data.ts';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
 
@@ -124,24 +128,30 @@ const tasks = createStore({
   },
 });
 
-const cellTemplate = (container, options) => {
+const cellTemplate = (container: HTMLElement, options: ColumnCellTemplateData) => {
   const noBreakSpace = '\u00A0';
-  const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
+
+  const assignees = (options.value || []).map(
+    (assigneeId: number) => options.column!.lookup!.calculateCellValue!(assigneeId),
+  );
+  const text = assignees.join(', ');
 
   container.textContent = text || noBreakSpace;
   container.title = text;
 };
 
-const onRowInserted = (e) => {
+const onRowInserted = (e: RowInsertedEvent) => {
   e.component.navigateToRow(e.key);
 };
 
-function calculateFilterExpression(filterValue, selectedFilterOperation, target) {
-  if (target === 'search' && typeof (filterValue) === 'string') {
+function calculateFilterExpression(
+  this: Column, filterValue: any, selectedFilterOperations: string | null, target: string,
+) {
+  if (target === 'search' && typeof filterValue === 'string') {
     return [this.dataField, 'contains', filterValue];
   }
 
-  return (data) => (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
+  return (rowData: Task) => (rowData.AssignedEmployee || []).includes(filterValue);
 }
 </script>
 <style>

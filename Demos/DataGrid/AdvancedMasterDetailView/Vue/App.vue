@@ -29,6 +29,7 @@ import {
   DxPaging,
   DxMasterDetail,
 } from 'devextreme-vue/data-grid';
+
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetail from './MasterDetail.vue';
 

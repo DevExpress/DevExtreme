@@ -58,11 +58,12 @@ const App = () => {
   }, []);
 
   const onFocusedRowChanged = React.useCallback((e) => {
-    const dataRow = e.row && e.row.data;
-    const progress = dataRow && dataRow.Task_Completion ? `${dataRow.Task_Completion}%` : '';
-    setTaskSubject(dataRow && dataRow.Task_Subject);
-    setTaskDetails(dataRow && dataRow.Task_Description);
-    setTaskStatus(dataRow && dataRow.Task_Status);
+    const data = e.row.data;
+    const progress = data.Task_Completion ? `${data.Task_Completion}%` : '';
+
+    setTaskSubject(data.Task_Subject);
+    setTaskDetails(data.Task_Description);
+    setTaskStatus(data.Task_Status);
     setTaskProgress(progress);
     setFocusedRowKey(e.component.option('focusedRowKey'));
   }, []);

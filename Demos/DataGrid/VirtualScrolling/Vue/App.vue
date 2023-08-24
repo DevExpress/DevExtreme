@@ -17,7 +17,7 @@ import {
   DxDataGrid, DxScrolling, DxSorting, DxLoadPanel,
 } from 'devextreme-vue/data-grid';
 import { Column, ContentReadyEvent } from 'devextreme/ui/data_grid';
-import { generateData } from './data.js';
+import { generateData } from './data.ts';
 
 const dataSource = generateData(100000);
 

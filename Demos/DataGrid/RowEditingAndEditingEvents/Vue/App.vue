@@ -82,11 +82,11 @@ import DxButton from 'devextreme-vue/button';
 import {
   DxDataGrid, DxColumn, DxEditing, DxPaging, DxLookup,
 } from 'devextreme-vue/data-grid';
-import { employees, states } from './data.js';
+import { employees, states } from './data.ts';
 
 const events = ref<string[]>([]);
 
-const logEvent = (eventName) => {
+const logEvent = (eventName: string) => {
   events.value.unshift(eventName);
 };
 

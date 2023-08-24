@@ -57,16 +57,19 @@
 
 <script setup lang="ts">
 import DxDataGrid, { DxColumn, DxExport } from 'devextreme-vue/data-grid';
+
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-import { countries } from './data.js';
+import { ExportingEvent } from 'devextreme/ui/data_grid';
+
+import { countries } from './data.ts';
 
 const gdpFormat = {
   type: 'percent',
   precision: 1,
 };
 
-const onExporting = (e) => {
+const onExporting = (e: ExportingEvent) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   const lastPoint = { x: 0, y: 0 };
@@ -85,16 +88,20 @@ const onExporting = (e) => {
       }
     },
   }).then(() => {
+    // header
     const header = 'Country Area, Population, and GDP Structure';
     const pageWidth = doc.internal.pageSize.getWidth();
-    doc.setFontSize(15);
     const headerWidth = doc.getTextDimensions(header).w;
+
+    doc.setFontSize(15);
     doc.text(header, (pageWidth - headerWidth) / 2, 20);
 
+    // footer
     const footer = 'www.wikipedia.org';
+    const footerWidth = doc.getTextDimensions(footer).w;
+
     doc.setFontSize(9);
     doc.setTextColor('#cccccc');
-    const footerWidth = doc.getTextDimensions(footer).w;
     doc.text(footer, (lastPoint.x - footerWidth), lastPoint.y + 5);
 
     doc.save('Companies.pdf');

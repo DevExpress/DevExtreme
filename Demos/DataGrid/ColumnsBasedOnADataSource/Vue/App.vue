@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import DxDataGrid from 'devextreme-vue/data-grid';
-import { orders } from './data.js';
+import { orders } from './data.ts';
 
 </script>
 <style>

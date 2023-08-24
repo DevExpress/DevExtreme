@@ -10,7 +10,9 @@ $(() => {
     },
     onEditorPreparing(e) {
       if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-        e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number');
+        const isStateNotSet = e.row.data.StateID === undefined;
+
+        e.editorOptions.disabled = isStateNotSet;
       }
     },
     columns: ['FirstName', 'LastName', 'Position',

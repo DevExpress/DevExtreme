@@ -73,33 +73,35 @@ export class AppComponent {
     });
   }
 
-  sendRequest(url: string, method = 'GET', data: any = {}): any {
+  async sendRequest(url: string, method = 'GET', data: any = {}) {
     this.logRequest(method, url, data);
 
     const httpParams = new HttpParams({ fromObject: data });
     const httpOptions = { withCredentials: true, body: httpParams };
-    let result;
+    let request;
 
     switch (method) {
       case 'GET':
-        result = this.http.get(url, httpOptions);
+        request = this.http.get(url, httpOptions);
         break;
       case 'PUT':
-        result = this.http.put(url, httpParams, httpOptions);
+        request = this.http.put(url, httpParams, httpOptions);
         break;
       case 'POST':
-        result = this.http.post(url, httpParams, httpOptions);
+        request = this.http.post(url, httpParams, httpOptions);
         break;
       case 'DELETE':
-        result = this.http.delete(url, httpOptions);
+        request = this.http.delete(url, httpOptions);
         break;
     }
 
-    return lastValueFrom(result)
-      .then((data: any) => (method === 'GET' ? data.data : data))
-      .catch((e) => {
-        throw e && e.error && e.error.Message;
-      });
+    try {
+      const result = await lastValueFrom<any>(request);
+
+      return method === 'GET' ? result.data : {};
+    } catch (e) {
+      throw e.error.Message;
+    }
   }
 
   logRequest(method: string, url: string, data: object): void {

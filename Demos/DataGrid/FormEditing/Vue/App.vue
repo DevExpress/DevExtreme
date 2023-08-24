@@ -65,7 +65,7 @@ import {
   DxLookup,
 } from 'devextreme-vue/data-grid';
 import 'devextreme-vue/text-area';
-import { employees, states } from './data.js';
+import { employees, states } from './data.ts';
 
 </script>
 <style>

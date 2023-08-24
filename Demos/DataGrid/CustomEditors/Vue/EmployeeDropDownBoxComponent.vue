@@ -42,8 +42,11 @@ import {
   DxScrolling,
   DxColumn,
 } from 'devextreme-vue/data-grid';
+
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import CustomStore from 'devextreme/data/custom_store';
+import { SelectionChangedEvent } from 'devextreme/ui/data_grid';
+import { Properties as DropDownOptions } from 'devextreme/ui/popup';
 
 const props = defineProps<{
   value: number,
@@ -54,14 +57,14 @@ const props = defineProps<{
 
 const currentValue = ref(props.value);
 const dropDownBoxRef = ref<DxDropDownBox | null>(null);
-const dropDownOptions = { width: 500 };
+const dropDownOptions: DropDownOptions = { width: 500 };
 
-const onSelectionChanged = (selectionChangedArgs) => {
-  currentValue.value = selectionChangedArgs.selectedRowKeys[0];
+const onSelectionChanged = (e: SelectionChangedEvent) => {
+  currentValue.value = e.selectedRowKeys[0];
 
   props.onValueChanged(currentValue.value);
 
-  if (selectionChangedArgs.selectedRowKeys.length > 0) {
+  if (e.selectedRowKeys.length > 0) {
     dropDownBoxRef.value!.instance!.close();
   }
 };

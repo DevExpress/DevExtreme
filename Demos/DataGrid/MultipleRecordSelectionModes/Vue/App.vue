@@ -70,7 +70,7 @@ import {
   DxFilterRow,
 } from 'devextreme-vue/data-grid';
 import themes from 'devextreme/ui/themes';
-import { sales } from './data.js';
+import { sales } from './data.ts';
 
 const selectAllModes = ['allPages', 'page'];
 const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];

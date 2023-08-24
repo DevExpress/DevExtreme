@@ -37,7 +37,11 @@ const tasks = createStore({
 
 const cellTemplate = (container, options) => {
   const noBreakSpace = '\u00A0';
-  const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
+
+  const assignees = (options.value || []).map(
+    (assigneeId) => options.column.lookup.calculateCellValue(assigneeId),
+  );
+  const text = assignees.join(', ');
 
   container.textContent = text || noBreakSpace;
   container.title = text;
@@ -48,7 +52,7 @@ const calculateFilterExpression = (that, filterValue, selectedFilterOperation, t
     return [that.dataField, 'contains', filterValue];
   }
 
-  return (data) => (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
+  return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
 };
 
 const onRowInserted = (e) => e.component.navigateToRow(e.key);

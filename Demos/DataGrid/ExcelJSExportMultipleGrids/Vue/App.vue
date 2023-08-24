@@ -83,17 +83,19 @@ import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+
 import { Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme/excel_exporter';
+import { DataGridCell, exportDataGrid } from 'devextreme/excel_exporter';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);
 
-const priceDataSource = {
+const priceDataSource: DataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
@@ -102,7 +104,7 @@ const priceDataSource = {
   select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
   filter: ['Product_ID', '<', 10],
 };
-const ratingDataSource = {
+const ratingDataSource: DataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
@@ -144,7 +146,7 @@ const exportGrids = () => {
   });
 };
 
-const setAlternatingRowsBackground = (gridCell, excelCell) => {
+const setAlternatingRowsBackground = (gridCell: DataGridCell, excelCell: any) => {
   if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
     if (excelCell.fullAddress.row % 2 === 0) {
       excelCell.fill = {

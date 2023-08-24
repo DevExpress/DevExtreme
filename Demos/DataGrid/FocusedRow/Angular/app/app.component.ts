@@ -110,14 +110,12 @@ export class AppComponent {
   }
 
   onFocusedRowChanged(e) {
-    const rowData = e.row && e.row.data;
+    const data = e.row.data;
 
-    if (rowData) {
-      this.taskSubject = rowData.Task_Subject;
-      this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(rowData.Task_Description);
-      this.taskStatus = rowData.Task_Status;
-      this.taskProgress = rowData.Task_Completion ? `${rowData.Task_Completion}` + '%' : '';
-    }
+    this.taskSubject = data.Task_Subject;
+    this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data.Task_Description);
+    this.taskStatus = data.Task_Status;
+    this.taskProgress = data.Task_Completion ? `${data.Task_Completion}` + '%' : '';
   }
 }
 

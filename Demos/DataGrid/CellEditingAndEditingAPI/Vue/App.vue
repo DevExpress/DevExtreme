@@ -36,7 +36,7 @@
         caption="State"
       >
         <DxLookup
-          :data-source="statesRef"
+          :data-source="states"
           value-expr="ID"
           display-expr="Name"
         />
@@ -77,22 +77,24 @@ import {
   DxItem,
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
+
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-import { employees, states } from './data.js';
+import { SelectionChangedEvent } from 'devextreme/ui/data_grid';
 
-const dataSource = new DataSource({
+import { Employee, employees, states } from './data.ts';
+
+const dataSource = new DataSource<Employee, number>({
   store: new ArrayStore({
     data: employees,
     key: 'ID',
   }),
 });
 
-const selectedItemKeys = ref([]);
-const statesRef = ref(states);
+const selectedItemKeys = ref<number[]>([]);
 
-const onSelectionChanged = (data) => {
-  selectedItemKeys.value = data.selectedRowKeys;
+const onSelectionChanged = (e: SelectionChangedEvent<Employee, number>) => {
+  selectedItemKeys.value = e.selectedRowKeys;
 };
 
 const deleteRecords = () => {

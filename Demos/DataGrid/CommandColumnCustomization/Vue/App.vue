@@ -70,29 +70,34 @@ import {
   DxPaging,
   DxLookup,
 } from 'devextreme-vue/data-grid';
-import { employees as defaultEmployees, states, getMaxID } from './data.js';
+import {
+  Row, ColumnButtonClickEvent, RowValidatingEvent, EditorPreparingEvent,
+} from 'devextreme/ui/data_grid';
+import {
+  employees as defaultEmployees, states, getMaxID, Employee,
+} from './data.ts';
 
 const employees = ref(defaultEmployees);
 
-const isChief = (position) => position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
+const isChief = (position: string) => position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
 
-const isCloneIconVisible = (e) => !e.row.isEditing;
+const isCloneIconVisible = (e: { row: Row }) => !e.row.isEditing;
 
-const isCloneIconDisabled = (e) => isChief(e.row.data.Position);
+const isCloneIconDisabled = (e: { row: Row }) => isChief(e.row.data.Position);
 
-const isDeleteIconVisible = (e) => !isChief(e.row.data.Position);
+const isDeleteIconVisible = (e: { row: Row }) => !isChief(e.row.data.Position);
 
-const onCloneIconClick = (e) => {
+const onCloneIconClick = (e: ColumnButtonClickEvent<Employee>) => {
   const updatedEmployees = [...employees.value];
-  const clonedItem = { ...e.row.data, ID: getMaxID() };
+  const clonedItem = { ...e.row!.data, ID: getMaxID() };
 
-  updatedEmployees.splice(e.row.rowIndex, 0, clonedItem);
+  updatedEmployees.splice(e.row!.rowIndex, 0, clonedItem);
   employees.value = updatedEmployees;
-  e.event.preventDefault();
+  e.event!.preventDefault();
 };
 
-const onRowValidating = (e) => {
-  const position = e.newData.Position;
+const onRowValidating = (e: RowValidatingEvent<Employee>) => {
+  const position = e.newData.Position!;
 
   if (isChief(position)) {
     e.errorText = `The company can have only one ${position.toUpperCase()}. Please choose another position.`;
@@ -100,7 +105,7 @@ const onRowValidating = (e) => {
   }
 };
 
-const onEditorPreparing = (e) => {
+const onEditorPreparing = (e: EditorPreparingEvent) => {
   if (e.parentType === 'dataRow' && e.dataField === 'Position') {
     e.editorOptions.readOnly = isChief(e.value);
   }

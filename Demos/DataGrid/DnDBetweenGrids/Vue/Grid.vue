@@ -39,6 +39,7 @@
 import {
   DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup,
 } from 'devextreme-vue/data-grid';
+import { RowDraggingAddEvent } from 'devextreme/ui/data_grid';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 
@@ -64,7 +65,7 @@ const dataSource = new DataSource({
 
 const filterExpr = ['Status', '=', props.status];
 
-const onAdd = (e) => {
+const onAdd = (e: RowDraggingAddEvent) => {
   const key = e.itemData.ID;
   const values = { Status: e.toData };
 

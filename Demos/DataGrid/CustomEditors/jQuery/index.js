@@ -53,7 +53,11 @@ $(() => {
       validationRules: [{ type: 'required' }],
       cellTemplate(container, options) {
         const noBreakSpace = '\u00A0';
-        const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
+
+        const assignees = (options.value || []).map(
+          (assigneeId) => options.column.lookup.calculateCellValue(assigneeId),
+        );
+        const text = assignees.join(', ');
 
         container.text(text || noBreakSpace).attr('title', text);
       },
@@ -61,8 +65,8 @@ $(() => {
         if (target === 'search' && typeof (filterValue) === 'string') {
           return [this.dataField, 'contains', filterValue];
         }
-        return function (data) {
-          return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
+        return function (rowData) {
+          return (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
         };
       },
     }, {

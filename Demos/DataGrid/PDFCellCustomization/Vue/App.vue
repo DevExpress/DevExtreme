@@ -71,11 +71,14 @@ import {
   DxSortByGroupSummaryInfo,
   DxTotalItem,
 } from 'devextreme-vue/data-grid';
+
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-import { companies } from './data.js';
+import { ExportingEvent } from 'devextreme/ui/data_grid';
 
-const onExporting = (e) => {
+import { companies } from './data.ts';
+
+const onExporting = (e: ExportingEvent) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
@@ -111,8 +114,8 @@ const onExporting = (e) => {
   });
 };
 
-const phoneNumberFormat = (value) => {
-  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+const phoneNumberFormat = (value: string) => {
+  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/)!;
 
   return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
 };

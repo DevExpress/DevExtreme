@@ -43,11 +43,16 @@
 import {
   DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting,
 } from 'devextreme-vue/data-grid';
+
+import { RowDraggingReorderEvent } from 'devextreme/ui/data_grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import CustomStore from 'devextreme/data/custom_store';
+
+import { Task, Employee } from './data.ts';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
 
-const tasksStore = createStore({
+const tasksStore: CustomStore<Task, number> = createStore({
   key: 'ID',
   loadUrl: `${url}/Tasks`,
   updateUrl: `${url}/UpdateTask`,
@@ -56,7 +61,7 @@ const tasksStore = createStore({
   },
 });
 
-const employeesStore = createStore({
+const employeesStore: CustomStore<Employee, number> = createStore({
   key: 'ID',
   loadUrl: `${url}/Employees`,
   onBeforeSend: (method, ajaxOptions) => {
@@ -64,15 +69,15 @@ const employeesStore = createStore({
   },
 });
 
-const onReorder = (e) => {
+const onReorder = (e: RowDraggingReorderEvent<Task>) => {
   e.promise = processReorder(e);
 };
 
-const processReorder = async(e) => {
+const processReorder = async(e: RowDraggingReorderEvent<Task>) => {
   const visibleRows = e.component.getVisibleRows();
   const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 
-  await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
+  await tasksStore.update(e.itemData!.ID, { OrderIndex: newOrderIndex });
   await e.component.refresh();
 };
 

@@ -36,11 +36,14 @@ import {
   DxSelection,
   DxPaging,
 } from 'devextreme-vue/data-grid';
+
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-import { customers } from './data.js';
+import { ExportingEvent } from 'devextreme/ui/data_grid';
 
-const onExporting = (e) => {
+import { customers } from './data.ts';
+
+const onExporting = (e: ExportingEvent) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 

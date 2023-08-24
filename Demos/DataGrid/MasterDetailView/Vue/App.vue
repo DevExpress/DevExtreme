@@ -42,7 +42,7 @@ import {
   DxMasterDetail,
 } from 'devextreme-vue/data-grid';
 import DetailTemplate from './DetailTemplate.vue';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 </script>
 <style>

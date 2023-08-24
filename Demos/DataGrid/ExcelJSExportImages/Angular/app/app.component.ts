@@ -6,7 +6,7 @@ import { Anchor, Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
-import { Service, Employees } from './app.service';
+import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employees: Employees[];
+  employees: Employee[];
 
   constructor(private service: Service) {
     this.employees = service.getEmployess();

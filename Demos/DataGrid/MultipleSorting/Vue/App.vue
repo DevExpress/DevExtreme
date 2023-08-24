@@ -53,7 +53,7 @@ import {
   DxSorting,
 } from 'devextreme-vue/data-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const positionDisableSorting = ref(false);
 const dataGridRef = ref<DxDataGrid | null>(null);

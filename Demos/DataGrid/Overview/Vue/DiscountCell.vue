@@ -33,13 +33,14 @@ import {
   DxSize,
   DxTooltip,
 } from 'devextreme-vue/bullet';
+
 import { ColumnCellTemplateData } from 'devextreme/ui/data_grid';
 
 defineProps<{
   cellData: ColumnCellTemplateData
 }>();
 
-const customizeTooltip = (data: any) => ({
+const customizeTooltip = (data: { value: string }) => ({
   text: `${parseInt(data.value, 10)}%`,
 });
 </script>

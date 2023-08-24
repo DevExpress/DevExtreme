@@ -29,10 +29,11 @@ import { reactive } from 'vue';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
-import { tasks } from './data.js';
+import { MasterDetailTemplateData } from 'devextreme/ui/data_grid';
+import { tasks, Task } from './data.ts';
 
 const props = defineProps<{
-  templateData?: any
+  templateData: MasterDetailTemplateData
 }>();
 
 const dataSource = getTasks(props.templateData.key);
@@ -40,9 +41,9 @@ const dataSource = getTasks(props.templateData.key);
 const itemData = reactive(props.templateData.data);
 const detailInfo = `${itemData.FirstName} ${itemData.LastName}'s Tasks:`;
 
-const completedValue = (rowData) => rowData.Status === 'Completed';
+const completedValue = (rowData: Task) => rowData.Status === 'Completed';
 
-function getTasks(key) {
+function getTasks(key: number) {
   return new DataSource({
     store: new ArrayStore({
       data: tasks,

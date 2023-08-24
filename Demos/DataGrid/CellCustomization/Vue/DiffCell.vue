@@ -1,31 +1,29 @@
 <template>
-  <div :class="className(cellData)">
-    <div class="current-value">{{ formatCurrency(cellData) }}</div>
-    <div class="diff">{{ fixed(abs(cellData), 2) }}</div>
+  <div :class="className">
+    <div class="current-value">{{ currencyFormat }}</div>
+    <div class="diff">{{ difference }}</div>
   </div>
 </template>
 <script setup lang="ts">
 import { formatNumber } from 'devextreme/localization';
+import { Column } from 'devextreme/ui/data_grid';
 
-withDefaults(defineProps<{
-  cellData?: object
-}>(), {
-  cellData: () => {},
-});
+import { WeekData, DiffValueProperties } from './data.ts';
 
-function className(value) {
-  return gridCellData(value).diff > 0 ? 'inc' : 'dec';
-}
-function formatCurrency(value) {
-  return formatNumber(gridCellData(value).value, { type: 'currency', currency: 'USD', precision: 2 });
-}
-function abs(value) {
-  return Math.abs(gridCellData(value).diff);
-}
-function fixed(value, precision) {
-  return value.toFixed(precision);
-}
-const gridCellData = function(value) {
-  return value.data[value.column.caption.toLowerCase()];
+const props = defineProps<{
+  column: Column,
+  rowData: WeekData,
+}>();
+
+const getCellData = () => {
+  const property = props.column.caption!.toLowerCase() as DiffValueProperties;
+
+  return props.rowData![property];
 };
+
+const cellData = getCellData();
+
+const className = cellData.diff > 0 ? 'inc' : 'dec';
+const currencyFormat = formatNumber(cellData.value, { type: 'currency', currency: 'USD', precision: 2 });
+const difference = Math.abs(cellData.diff).toFixed(2);
 </script>

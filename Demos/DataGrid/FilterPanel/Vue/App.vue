@@ -59,16 +59,18 @@ import {
   DxFilterBuilderPopup,
   DxScrolling,
 } from 'devextreme-vue/data-grid';
-import { orders } from './data.js';
+import { PositionConfig } from 'devextreme/animation/position';
+import { Properties as FilterBuilderProperties } from 'devextreme/ui/filter_builder';
+import { orders, Order } from './data.ts';
 
-const filterBuilderPopupPosition = {
+const filterBuilderPopupPosition: PositionConfig = {
   of: window,
   at: 'top',
   my: 'top',
   offset: { y: 10 },
 };
 
-const filterBuilder = {
+const filterBuilder: FilterBuilderProperties = {
   customOperations: [{
     name: 'weekends',
     caption: 'Weekends',
@@ -101,7 +103,7 @@ const saleAmountHeaderFilters = [
   },
 ];
 
-const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
+const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 </script>
 <style scoped>
 .demo-container {

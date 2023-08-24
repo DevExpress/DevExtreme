@@ -53,9 +53,9 @@ import {
   DxColumnChooser,
   DxColumnFixing,
 } from 'devextreme-vue/data-grid';
-import { employees } from './data.js';
+import { employees, Employee } from './data.ts';
 
-function calculateCellValue(data) {
+function calculateCellValue(data: Employee) {
   return [data.Title, data.FirstName, data.LastName].join(' ');
 }
 </script>

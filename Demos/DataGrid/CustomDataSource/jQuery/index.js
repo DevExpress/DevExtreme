@@ -6,23 +6,18 @@ $(() => {
     key: 'OrderNumber',
     load(loadOptions) {
       const deferred = $.Deferred();
+
+      const paramNames = [
+        'skip', 'take', 'requireTotalCount', 'requireGroupCount',
+        'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
+      ];
+
       const args = {};
 
-      [
-        'skip',
-        'take',
-        'requireTotalCount',
-        'requireGroupCount',
-        'sort',
-        'filter',
-        'totalSummary',
-        'group',
-        'groupSummary',
-      ].forEach((i) => {
-        if (i in loadOptions && isNotEmpty(loadOptions[i])) {
-          args[i] = JSON.stringify(loadOptions[i]);
-        }
-      });
+      paramNames
+        .filter((paramName) => isNotEmpty(loadOptions[paramName]))
+        .forEach((paramName) => { args[paramName] = JSON.stringify(loadOptions[paramName]); });
+
       $.ajax({
         url: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders',
         dataType: 'json',

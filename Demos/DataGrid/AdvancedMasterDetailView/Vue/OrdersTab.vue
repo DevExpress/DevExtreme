@@ -16,7 +16,7 @@
     <DxItem template="order-history">
       <DxLabel text="Order History"/>
     </DxItem>
-    <template #order-history="{ data }">
+    <template #order-history>
       <OrderHistory
         :product-id="chosenProductId"
       />

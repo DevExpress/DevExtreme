@@ -31,7 +31,7 @@ import {
   DxDataGrid,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { orders } from './data.js';
+import { orders } from './data.ts';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 const resizingModes = ['nextColumn', 'widget'];

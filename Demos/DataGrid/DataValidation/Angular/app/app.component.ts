@@ -35,13 +35,17 @@ export class AppComponent {
     this.asyncValidation = this.asyncValidation.bind(this);
   }
 
-  asyncValidation(params) {
-    return lastValueFrom(this.httpClient.post('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
+  async asyncValidation(params) {
+    const emailValidationUrl = 'https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress';
+
+    const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
       id: params.data.ID,
       email: params.value,
     }, {
       responseType: 'json',
     }));
+
+    return result;
   }
 }
 

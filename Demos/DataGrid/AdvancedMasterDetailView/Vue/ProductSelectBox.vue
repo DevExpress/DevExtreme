@@ -13,7 +13,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
+
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+
+import { Product } from './data.ts';
 
 defineEmits(['product-changed']);
 
@@ -32,7 +35,7 @@ const dataSource = createStore({
 
 const productId = ref(null);
 
-function setDefaultValue(items) {
+function setDefaultValue(items: Product[]) {
   const firstItem = items[0];
 
   if (firstItem && productId.value === null) {

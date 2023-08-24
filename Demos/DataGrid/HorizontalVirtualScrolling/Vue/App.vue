@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { DxDataGrid, DxScrolling, DxPaging } from 'devextreme-vue/data-grid';
-import { generateData } from './data.js';
+import { generateData } from './data.ts';
 
 const dataSource = generateData(50, 500);
 </script>
