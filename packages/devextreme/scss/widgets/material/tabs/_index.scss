@@ -158,13 +158,6 @@
   }
 }
 
-.dx-tabs-icon-position-start,
-.dx-tabs-icon-position-end {
-  .dx-tab .dx-icon {
-    margin-block-end: 2px;
-  }
-}
-
 .dx-tabs-icon-position-start .dx-tab .dx-icon {
   @include dx-icon-margin($material-base-icon-margin, start);
 }
