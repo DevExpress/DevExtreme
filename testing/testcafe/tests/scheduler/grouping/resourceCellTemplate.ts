@@ -1,12 +1,13 @@
-import { Selector } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`ResourceCellTemplate`
   .page(url(__dirname, '../../container.html'));
 
 test('resourceCellTemplate layout should be rendered right in the agenda view', async (t) => {
-  const groupHeader = Selector('.dx-scheduler-group-header-content');
+  const scheduler = new Scheduler('#container');
+  const groupHeader = scheduler.headerPanel.groupCells;
 
   await t.expect(groupHeader.textContent).eql('Custom resource text');
 }).before(async () => {
