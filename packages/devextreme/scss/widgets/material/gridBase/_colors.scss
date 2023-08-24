@@ -93,7 +93,7 @@ $datagrid-cell-removed-text-color: null !default;
 * $type color
 */
 $datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
-$datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
+$datagrid-nodata-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
 
 /**
 * $name 90. Group row text color
