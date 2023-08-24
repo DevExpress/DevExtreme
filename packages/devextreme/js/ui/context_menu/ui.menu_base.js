@@ -30,7 +30,7 @@ const SINGLE_SELECTION_MODE = 'single';
 const DEFAULT_DELAY = { 'show': 50, 'hide': 300 };
 const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
-const DX_ITEM_URL_CLASS = 'dx-item-url';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 
 class MenuBase extends HierarchicalCollectionWidget {
@@ -553,7 +553,7 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _itemClick(actionArgs) {
         const args = actionArgs.args[0];
-        const link = args.event.target.getElementsByClassName(DX_ITEM_URL_CLASS)[0];
+        const link = args.event.target.getElementsByClassName(ITEM_URL_CLASS)[0];
         if(args.itemData.url && link) {
             link.click();
         }

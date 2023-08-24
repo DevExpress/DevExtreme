@@ -54,7 +54,7 @@ const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
-const DX_ITEM_URL_CLASS = 'dx-item-url';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 const CLICKTIMEOUT = 51;
 const ANIMATION_TIMEOUT = 100;
@@ -2519,7 +2519,7 @@ QUnit.module('adaptivity: behavior', {
 
         $($item).trigger('dxclick');
 
-        const itemWithAttributes = $(`.${DX_ITEM_URL_CLASS}`)[0];
+        const itemWithAttributes = $(`.${ITEM_URL_CLASS}`)[0];
 
         assert.strictEqual(itemWithAttributes.getAttribute('href'), 'http://some_url_item_2-1');
         assert.strictEqual(itemWithAttributes.getAttribute('target'), '_blank');

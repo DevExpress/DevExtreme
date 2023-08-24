@@ -73,3 +73,69 @@ test('Items should have links if item.url is set', async (t) => {
     }],
   }, '#menu');
 });
+
+test('Items in adaptive mode should have links if item.url is set', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const menu = new Menu(true);
+
+  await t.click(menu.getHamburgerButton())
+    .click(menu.items(0));
+
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode should have links if item.url is set.png', { element: '#container' });
+
+  await t.pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode without link should have correct focus style.png', { element: '#container' });
+
+  await t
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link should have correct focus style.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'menu');
+
+  await setAttribute('#container', 'style', 'width: 200px;');
+
+  return createWidget('dxMenu', {
+    displayExpr: 'name',
+    adaptivityEnabled: true,
+    items: [{
+      id: '1',
+      name: 'Items',
+      items: [{
+        id: '1-1',
+        name: 'Item 1',
+      }, {
+        id: '1-2',
+        icon: 'more',
+      }, {
+        id: '1-3',
+        name: 'Item 2',
+        icon: 'unlock',
+      }, {
+        id: '1-4',
+        name: 'Item 3',
+        url: 'https://js.devexpress.com/',
+      }],
+    },
+    {
+      id: '2',
+      name: 'Items',
+    },
+    {
+      id: '3',
+      name: 'Items',
+    },
+    {
+      id: '4',
+      name: 'Items',
+    },
+    ],
+  }, '#menu');
+});

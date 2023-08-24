@@ -11,7 +11,7 @@ import { isFunction, isObject } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const DX_ITEM_URL_CLASS = 'dx-item-url';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 const HierarchicalCollectionWidget = CollectionWidget.inherit({
 
@@ -98,7 +98,7 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getLinkContainer: function(iconContainer, textContainer, { linkAttr, url }) {
         const linkAttributes = isObject(linkAttr) ? linkAttr : {};
         return $('<a>')
-            .addClass(DX_ITEM_URL_CLASS)
+            .addClass(ITEM_URL_CLASS)
             .attr({ ...linkAttributes, href: url })
             .append(iconContainer)
             .append(textContainer);
