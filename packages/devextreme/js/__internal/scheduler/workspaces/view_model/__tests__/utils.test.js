@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { alignToFirstDayOfWeek, alignToLastDayOfWeek, calculateDaysBetweenDates, calculateAlignedWeeksBetweenDates } from '../utils';
+import { alignToFirstDayOfWeek, alignToLastDayOfWeek, calculateDaysBetweenDates, calculateAlignedWeeksBetweenDates } from '../m_utils';
 import each from 'jest-each';
 
 /*

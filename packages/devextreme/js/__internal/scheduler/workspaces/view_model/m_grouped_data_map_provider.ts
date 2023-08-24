@@ -1,7 +1,13 @@
-import dateUtils from '../../../../core/utils/date';
-import { isDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import dateUtils from '@js/core/utils/date';
+import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 export class GroupedDataMapProvider {
+  groupedDataMap: any;
+
+  completeViewDataMap: any;
+
+  _viewOptions: any;
+
   constructor(viewDataGenerator, viewDataMap, completeViewDataMap, viewOptions) {
     this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(viewDataMap);
     this.completeViewDataMap = completeViewDataMap;
@@ -208,6 +214,7 @@ export class GroupedDataMapProvider {
   getLastGroupCellPosition(groupIndex) {
     const groupRow = this.getLastGroupRow(groupIndex);
 
+    // eslint-disable-next-line no-unsafe-optional-chaining
     return groupRow?.[groupRow?.length - 1].position;
   }
 

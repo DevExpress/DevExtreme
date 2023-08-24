@@ -1,7 +1,9 @@
-import { calculateStartViewDate, getIntervalDuration } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
-import { ViewDataGenerator } from './view_data_generator';
+import { calculateStartViewDate, getIntervalDuration } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/week';
+
+import { ViewDataGenerator } from './m_view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
+  // @ts-expect-error
   readonly daysInInterval = 7;
 
   _getIntervalDuration(intervalCount) {

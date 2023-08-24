@@ -1,8 +1,9 @@
-import domAdapter from '../../../core/dom_adapter';
-import { isDefined } from '../../../core/utils/type';
-import { getWindow } from '../../../core/utils/window';
-import eventsEngine from '../../../events/core/events_engine';
-import { addNamespace } from '../../../events/utils/index';
+/* eslint-disable max-classes-per-file */
+import domAdapter from '@js/core/dom_adapter';
+import { isDefined } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
 
 const DEFAULT_CELL_HEIGHT = 50;
 const MIN_CELL_WIDTH = 1;
@@ -19,6 +20,18 @@ const scrollingOrientations = {
 const DefaultScrollingOrientation = scrollingOrientations.both;
 
 export class VirtualScrollingDispatcher {
+  options: any;
+
+  _rowHeight: any;
+
+  _cellWidth: any;
+
+  _verticalVirtualScrolling: any;
+
+  _horizontalVirtualScrolling: any;
+
+  _onScrollHandler: any;
+
   constructor(options) {
     this.options = options;
     if (options) {
@@ -330,6 +343,18 @@ export class VirtualScrollingDispatcher {
 }
 
 class VirtualScrollingBase {
+  options: any;
+
+  _state: any;
+
+  viewportSize: any;
+
+  _itemSize: any;
+
+  _position: any;
+
+  _itemSizeChanged: any;
+
   constructor(options) {
     this.options = options;
     this._state = this.defaultState;
@@ -386,7 +411,7 @@ class VirtualScrollingBase {
   }
 
   get maxScrollPosition() {
-    return this.getTotalItemCount() * this.itemSize - this.viewportSize;
+    return (this.getTotalItemCount() as any) * this.itemSize - this.viewportSize;
   }
 
   get position() { return this._position; }
@@ -439,7 +464,7 @@ class VirtualScrollingBase {
       : -1;
   }
 
-  updateState(position, isForce) {
+  updateState(position, isForce?) {
     position = this._correctPosition(position);
 
     if (!this.needUpdateState(position) && !isForce) {
@@ -507,16 +532,18 @@ class VirtualScrollingBase {
       outlineCountBefore,
     } = itemInfoBefore;
 
-    const totalItemCount = this.getTotalItemCount();
+    const totalItemCount = this.getTotalItemCount() as any;
 
     return totalItemCount - virtualItemCountBefore - outlineCountBefore;
   }
 
   getTotalItemCount() {
+    // eslint-disable-next-line
     throw 'getTotalItemCount method should be implemented';
   }
 
   getRenderState() {
+    // eslint-disable-next-line
     throw 'getRenderState method should be implemented';
   }
 
@@ -654,6 +681,10 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
 
 // We do not need this class in renovation
 export class VirtualScrollingRenderer {
+  _workspace: any;
+
+  _renderAppointmentTimeoutID: any;
+
   constructor(workspace) {
     this._workspace = workspace;
     this._renderAppointmentTimeoutID = null;

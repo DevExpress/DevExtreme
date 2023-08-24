@@ -1,21 +1,29 @@
-import dateUtils from '../../../../core/utils/date';
-import dateLocalization from '../../../../localization/date';
-import { getToday, setOptionHour } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import dateUtils from '@js/core/utils/date';
+import dateLocalization from '@js/localization/date';
+import { getToday, setOptionHour } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import {
   calculateCellIndex,
   calculateStartViewDate,
   getCellText,
   getViewStartByOptions,
   isFirstCellInMonthWithIntervalCount,
-} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import { calculateAlignedWeeksBetweenDates } from './utils';
-import { ViewDataGenerator } from './view_data_generator';
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
+
+// eslint-disable-next-line import/no-cycle
+import { calculateAlignedWeeksBetweenDates } from './m_utils';
+import { ViewDataGenerator } from './m_view_data_generator';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 const DAYS_IN_WEEK = 7;
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
+  // @ts-expect-error
   get tableAllDay() { return undefined; }
 
+  _minVisibleDate: any;
+
+  _maxVisibleDate: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getCellData(rowIndex, columnIndex, options, allDay) {
     const data = super.getCellData(rowIndex, columnIndex, options, false);
 
@@ -72,6 +80,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     } = options;
 
     const firstMonthDate = dateUtils.getFirstMonthDate(startDate);
+    // @ts-expect-error
     const viewStart = getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
 
     this._minVisibleDate = new Date(viewStart.setDate(1));

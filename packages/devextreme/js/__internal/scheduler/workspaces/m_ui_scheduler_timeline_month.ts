@@ -1,14 +1,17 @@
-import registerComponent from '../../../core/component_registrator';
-import dateUtils from '../../../core/utils/date';
-import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getViewStartByOptions } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { VIEWS } from '../constants';
-import SchedulerTimeline from './ui.scheduler.timeline';
+import registerComponent from '@js/core/component_registrator';
+import dateUtils from '@js/core/utils/date';
+import { formatWeekdayAndDay } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getViewStartByOptions } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
+// @ts-expect-error
+import dxrDateHeader from '@js/renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
+import { VIEWS } from '@js/ui/scheduler/constants';
+
+import SchedulerTimeline from './m_ui_scheduler_timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
+  // @ts-expect-error
   get type() { return VIEWS.TIMELINE_MONTH; }
 
   readonly viewDirection = 'horizontal';
@@ -37,6 +40,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return true;
   }
 
+  // @ts-expect-error
   _getFormat() {
     return formatWeekdayAndDay;
   }
@@ -45,19 +49,20 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
-    return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
+    return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
   _getViewStartByOptions() {
     return getViewStartByOptions(
-      this.option('startDate'),
-      this.option('currentDate'),
-      this.option('intervalCount'),
-      dateUtils.getFirstMonthDate(this.option('startDate')),
+      this.option('startDate') as any,
+      this.option('currentDate') as any,
+      this.option('intervalCount') as any,
+      dateUtils.getFirstMonthDate(this.option('startDate')) as any,
     );
   }
 
   generateRenderOptions() {
+    // @ts-expect-error
     const options = super.generateRenderOptions(true);
     return {
       ...options,
@@ -66,6 +71,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);
 
 export default SchedulerTimelineMonth;

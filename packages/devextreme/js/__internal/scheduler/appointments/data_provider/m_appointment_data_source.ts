@@ -1,4 +1,4 @@
-import { Deferred } from '../../../../core/utils/deferred';
+import { Deferred } from '@js/core/utils/deferred';
 
 const STORE_EVENTS = {
   updating: 'updating',

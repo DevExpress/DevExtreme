@@ -1,9 +1,10 @@
-import registerComponent from '../../../core/component_registrator';
+import registerComponent from '@js/core/component_registrator';
 import {
   getWeekendsCount,
-} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
-import { VIEWS } from '../constants';
-import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
+import { VIEWS } from '@js/ui/scheduler/constants';
+
+import SchedulerTimelineWeek from './m_ui_scheduler_timeline_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;
@@ -11,7 +12,10 @@ const LAST_DAY_WEEK_INDEX = 5;
 class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
   get type() { return VIEWS.TIMELINE_WORK_WEEK; }
 
+  _getWeekendsCount: any;
+
   constructor(...args) {
+    // @ts-expect-error
     super(...args);
 
     this._getWeekendsCount = getWeekendsCount;
@@ -30,6 +34,7 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
   }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerTimelineWorkWeek', SchedulerTimelineWorkWeek);
 
 export default SchedulerTimelineWorkWeek;

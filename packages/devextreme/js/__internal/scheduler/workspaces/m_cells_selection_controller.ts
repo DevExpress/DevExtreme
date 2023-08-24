@@ -12,6 +12,7 @@ export class CellsSelectionController {
 
     let nextCellIndices;
 
+    // eslint-disable-next-line default-case
     switch (key) {
       case 'down':
         nextCellIndices = this.getCellFromNextRowPosition(focusedCellPosition, 'next', edgeIndices);
@@ -165,6 +166,7 @@ export class CellsSelectionController {
     const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
 
     const nextFocusedCellData = isValidMultiSelection
+      // @ts-expect-error
       ? this._getNextCellData(currentCellData, focusedCellData)
       : currentCellData;
 

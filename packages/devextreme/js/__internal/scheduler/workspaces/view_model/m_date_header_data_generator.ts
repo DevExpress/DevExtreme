@@ -1,14 +1,16 @@
-import dateUtils from '../../../../core/utils/date';
+import dateUtils from '@js/core/utils/date';
 import {
   formatWeekdayAndDay,
   getDisplayedCellCount,
   getHeaderCellText,
   getHorizontalGroupCount,
   getTotalCellCountByCompleteData,
-} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getGroupCount } from '../../resources/m_utils';
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getGroupCount } from '@ts/scheduler/resources/m_utils';
 
 export class DateHeaderDataGenerator {
+  _viewDataGenerator: any;
+
   constructor(viewDataGenerator) {
     this._viewDataGenerator = viewDataGenerator;
   }
@@ -18,7 +20,7 @@ export class DateHeaderDataGenerator {
       isGenerateWeekDaysHeaderData,
     } = options;
 
-    const result = [];
+    const result: any[] = [];
 
     if (isGenerateWeekDaysHeaderData) {
       const weekDaysRow = this._generateWeekDaysHeaderRowMap(options, completeViewDataMap);
@@ -57,7 +59,7 @@ export class DateHeaderDataGenerator {
     const daysInGroup = this._viewDataGenerator.daysInInterval * intervalCount;
     const daysInView = daysInGroup * datesRepeatCount;
 
-    const weekDaysRow = [];
+    const weekDaysRow: any[] = [];
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
       const cell = completeViewDataMap[index][dayIndex * colSpan];
@@ -153,8 +155,8 @@ export class DateHeaderDataGenerator {
       isMonthDateHeader,
     } = options;
 
-    const dataMap = [];
-    let weekDayRowConfig = {};
+    const dataMap: any[] = [];
+    let weekDayRowConfig: any = {};
     const validCellWidth = cellWidth || 0;
 
     if (isGenerateWeekDaysHeaderData) {

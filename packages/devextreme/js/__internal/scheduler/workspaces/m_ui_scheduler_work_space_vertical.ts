@@ -1,5 +1,6 @@
-import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
+import { formatWeekdayAndDay } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+
+import SchedulerWorkSpaceIndicator from './m_ui_scheduler_work_space_indicator';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
   _getFormat() {

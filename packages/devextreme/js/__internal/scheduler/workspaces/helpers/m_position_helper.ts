@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 const getCellSize = (DOMMetaData) => {
   const { dateTableCellsMeta } = DOMMetaData;
   const length = dateTableCellsMeta?.length;
@@ -115,6 +116,10 @@ export class PositionHelper {
 
   get DOMMetaData() { return this.options.getDOMMetaDataCallback(); }
 
+  options: any;
+
+  groupStrategy: any;
+
   constructor(options) {
     this.options = options;
     this.groupStrategy = this.options.isVerticalGrouping
@@ -165,6 +170,8 @@ export class PositionHelper {
 }
 
 class GroupStrategyBase {
+  options: any;
+
   constructor(options) {
     this.options = options;
   }
@@ -224,7 +231,7 @@ class GroupStrategyBase {
       isGroupedAllDayPanel,
       isVerticalGrouping: true,
       DOMMetaData: this.DOMMetaData,
-    });
+    } as any);
 
     return maxVerticalPosition - getCellHeight(this.DOMMetaData) * rowCount;
   }
@@ -257,6 +264,7 @@ class GroupStrategyBase {
 }
 
 class GroupStrategyHorizontal extends GroupStrategyBase {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getOffsetByAllDayPanel(options) {
     return 0;
   }
@@ -277,7 +285,9 @@ class GroupStrategyHorizontal extends GroupStrategyBase {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getGroupTop(options) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return 0;
   }
 

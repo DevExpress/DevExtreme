@@ -1,11 +1,13 @@
-import registerComponent from '../../../core/component_registrator';
-import { getBoundingRect } from '../../../core/utils/position';
-import { VIEWS } from '../constants';
-import SchedulerTimeline from './ui.scheduler.timeline';
+import registerComponent from '@js/core/component_registrator';
+import { getBoundingRect } from '@js/core/utils/position';
+import { VIEWS } from '@js/ui/scheduler/constants';
+
+import SchedulerTimeline from './m_ui_scheduler_timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 
 export default class SchedulerTimelineWeek extends SchedulerTimeline {
+  // @ts-expect-error
   get type() { return VIEWS.TIMELINE_WEEK; }
 
   _getElementClass() {
@@ -25,4 +27,5 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
   }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerTimelineWeek', SchedulerTimelineWeek);

@@ -1,14 +1,37 @@
-import dateUtils from '../../../../core/utils/date';
-import { getGroupPanelData } from '../../../../renovation/ui/scheduler/view_model/group_panel/utils';
-import { calculateIsGroupedAllDayPanel } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
-import timeZoneUtils from '../../utils.timeZone';
-import { DateHeaderDataGenerator } from './date_header_data_generator';
-import { GroupedDataMapProvider } from './grouped_data_map_provider';
-import { TimePanelDataGenerator } from './time_panel_data_generator';
-import { getViewDataGeneratorByViewType } from './utils';
+import dateUtils from '@js/core/utils/date';
+import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
+import { calculateIsGroupedAllDayPanel } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
+import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+
+import { DateHeaderDataGenerator } from './m_date_header_data_generator';
+import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
+import { TimePanelDataGenerator } from './m_time_panel_data_generator';
+import { getViewDataGeneratorByViewType } from './m_utils';
 
 export default class ViewDataProvider {
+  viewDataGenerator: any;
+
+  viewData: any;
+
+  completeViewDataMap: any;
+
+  completeDateHeaderMap: any;
+
+  viewDataMap: any;
+
+  _groupedDataMapProvider: any;
+
+  _options: any;
+
+  completeTimePanelMap: any;
+
+  dateHeaderData: any;
+
+  timePanelData: any;
+
+  viewDataMapWithSelection: any;
+
   constructor(viewType) {
     this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
     this.viewData = {};

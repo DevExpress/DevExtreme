@@ -1,8 +1,10 @@
-import { getDisplayedRowCount } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getTimePanelCellText } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
-import { getIsGroupedAllDayPanel, getKeyByGroup } from '../../../../renovation/ui/scheduler/workspaces/utils';
+import { getDisplayedRowCount } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getTimePanelCellText } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/week';
+import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
 
 export class TimePanelDataGenerator {
+  _viewDataGenerator: any;
+
   constructor(viewDataGenerator) {
     this._viewDataGenerator = viewDataGenerator;
   }
@@ -89,7 +91,7 @@ export class TimePanelDataGenerator {
     const timePanelMap = completeTimePanelMap
       .slice(correctedStartRowIndex, correctedStartRowIndex + displayedRowCount);
 
-    const timePanelData = {
+    const timePanelData: any = {
       topVirtualRowHeight,
       bottomVirtualRowHeight,
       isGroupedAllDayPanel,

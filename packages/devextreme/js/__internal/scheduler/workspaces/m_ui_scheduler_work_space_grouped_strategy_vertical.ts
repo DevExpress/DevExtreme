@@ -1,11 +1,20 @@
-import { getBoundingRect } from '../../../core/utils/position';
-import { calculateDayDuration, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
-import { Cache } from './cache';
+import { getBoundingRect } from '@js/core/utils/position';
+import { calculateDayDuration, getVerticalGroupCountClass } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '@js/ui/scheduler/classes';
+
+import { Cache } from './m_cache';
 
 const WORK_SPACE_BORDER = 1;
 
 class VerticalGroupedStrategy {
+  _workSpace: any;
+
+  cache: any;
+
+  _groupBoundsOffset: any;
+
+  _$container: any;
+
   constructor(workSpace) {
     this._workSpace = workSpace;
     this.cache = new Cache();
@@ -76,6 +85,7 @@ class VerticalGroupedStrategy {
   }
 
   getGroupBoundsOffset(groupIndex, [$firstCell, $lastCell]) {
+    // eslint-disable-next-line
     return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
       const startDayHour = this._workSpace.option('startDayHour');
       const endDayHour = this._workSpace.option('endDayHour');
@@ -95,12 +105,16 @@ class VerticalGroupedStrategy {
 
       const { left } = $firstCell.getBoundingClientRect();
       const { right } = $lastCell.getBoundingClientRect();
-      return this._groupBoundsOffset = {
+
+      this._groupBoundsOffset = {
         left,
         right,
         top: topOffset,
         bottom: bottomOffset,
       };
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return this._groupBoundsOffset;
     });
   }
 
@@ -123,6 +137,7 @@ class VerticalGroupedStrategy {
     return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getShaderTopOffset(i) {
     return 0;
   }
@@ -159,6 +174,7 @@ class VerticalGroupedStrategy {
   // We do not need these methods in renovation
   // ------------
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addAdditionalGroupCellClasses(cellClass, index, i, j) {
     cellClass = this._addLastGroupCellClass(cellClass, i + 1);
 

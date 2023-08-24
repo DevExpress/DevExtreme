@@ -1,26 +1,27 @@
-import registerComponent from '../../../core/component_registrator';
-import domAdapter from '../../../core/dom_adapter';
-import { getPublicElement } from '../../../core/element';
-import $ from '../../../core/renderer';
-import { noop } from '../../../core/utils/common';
-import dateUtils from '../../../core/utils/date';
-import { extend } from '../../../core/utils/extend';
-import { each } from '../../../core/utils/iterator';
-import { setHeight, setOuterHeight } from '../../../core/utils/size';
-import dateLocalization from '../../../localization/date';
-import { calculateStartViewDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
-import { formatWeekday, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import registerComponent from '@js/core/component_registrator';
+import domAdapter from '@js/core/dom_adapter';
+import { getPublicElement } from '@js/core/element';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import dateUtils from '@js/core/utils/date';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { setHeight, setOuterHeight } from '@js/core/utils/size';
+import dateLocalization from '@js/localization/date';
+import { calculateStartViewDate } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
+import { formatWeekday, getVerticalGroupCountClass } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import {
   DATE_TABLE_CLASS,
   DATE_TABLE_ROW_CLASS,
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
-} from '../classes';
-import { VIEWS } from '../constants';
+} from '@js/ui/scheduler/classes';
+import { VIEWS } from '@js/ui/scheduler/constants';
+import tableCreatorModule from '@js/ui/scheduler/table_creator';
+
 import { createReducedResourcesTree, getDataAccessors, getPathToLeaf } from '../resources/m_utils';
-import tableCreatorModule from '../table_creator';
-import WorkSpace from './ui.scheduler.work_space';
+import WorkSpace from './m_ui_scheduler_work_space';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -38,11 +39,39 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends WorkSpace {
+  // @ts-expect-error
   get type() { return VIEWS.AGENDA; }
 
-  get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
+  get renderingStrategy() {
+    // @ts-expect-error
+    return this.invoke('getLayoutManager').getRenderingStrategyInstance();
+  }
 
-  get appointmentDataProvider() { return this.option('getAppointmentDataProvider')(); }
+  get appointmentDataProvider() {
+    return (this.option('getAppointmentDataProvider') as any)();
+  }
+
+  _startViewDate: any;
+
+  _activeStateUnit: any;
+
+  _rows: any;
+
+  _$groupTable: any;
+
+  _dateTableScrollable: any;
+
+  _$timePanel: any;
+
+  _$dateTable: any;
+
+  _$dateTableScrollableContent: any;
+
+  _$dateTableContainer: any;
+
+  _$noDataContainer: any;
+
+  _$rows: any;
 
   getStartViewDate() {
     return this._startViewDate;
@@ -110,7 +139,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _calculateStartViewDate() {
-    return calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
+    return calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
   }
 
   _getRowCount() {
@@ -167,6 +196,7 @@ class SchedulerAgenda extends WorkSpace {
 
     this._renderTimePanel();
     this._renderDateTable();
+    // @ts-expect-error
     this.invoke('onAgendaReady', rows);
     this._applyCellTemplates(cellTemplates);
     this._dateTableScrollable.update();
@@ -174,7 +204,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _renderNoData() {
     this._$noDataContainer = $('<div>').addClass(NODATA_CONTAINER_CLASS)
-      .html(this.option('noDataText'));
+      .html(this.option('noDataText') as any);
 
     this._dateTableScrollable.$content().append(this._$noDataContainer);
   }
@@ -183,6 +213,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _toggleHorizontalScrollClass() { return noop(); }
 
+  // @ts-expect-error
   _createCrossScrollingConfig() { return noop(); }
 
   _setGroupHeaderCellsHeight() {
@@ -217,12 +248,12 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _attachGroupCountClass() {
-    const className = getVerticalGroupCountClass(this.option('groups'));
-    this.$element().addClass(className);
+    const className = getVerticalGroupCountClass(this.option('groups') as any);
+    (this.$element() as any).addClass(className);
   }
 
   _removeEmptyRows(rows) {
-    const result = [];
+    const result: any[] = [];
     const isEmpty = function (data) {
       return !data.some((value) => value > 0);
     };
@@ -240,21 +271,23 @@ class SchedulerAgenda extends WorkSpace {
     return this._$groupTable;
   }
 
+  // @ts-expect-error
   _makeGroupRows() {
     const tree = createReducedResourcesTree(
       this.option('loadedResources'),
-      (field, action) => getDataAccessors(this.option('getResourceDataAccessors')(), field, action),
-      this.option('getFilteredItems')(),
+      (field, action) => getDataAccessors((this.option('getResourceDataAccessors') as any)(), field, action),
+      (this.option('getFilteredItems') as any)(),
     );
 
-    const cellTemplate = this.option('resourceCellTemplate');
+    const cellTemplate: any = this.option('resourceCellTemplate');
     const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
-    const cellTemplates = [];
+    const cellTemplates: any[] = [];
 
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, tree, {
       cellTag: 'th',
       groupTableClass: GROUP_TABLE_CLASS,
       groupRowClass: GROUP_ROW_CLASS,
+      // @ts-expect-error
       groupCellClass: this._getGroupHeaderClass(),
       groupCellCustomContent(cell, cellTextElement, index, data) {
         const container = domAdapter.createElement('div');
@@ -283,7 +316,7 @@ class SchedulerAgenda extends WorkSpace {
     });
 
     return {
-      elements: $(table).find(`.${GROUP_ROW_CLASS}`),
+      elements: $(table as any).find(`.${GROUP_ROW_CLASS}`),
       cellTemplates,
     };
   }
@@ -324,6 +357,7 @@ class SchedulerAgenda extends WorkSpace {
     this._renderTableBody({
       container: getPublicElement(this._$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
+      // @ts-expect-error
       cellClass: this._getDateTableCellClass(),
     });
   }
@@ -339,7 +373,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _prepareCellTemplateOptions(text, date, rowIndex, $cell) {
-    const groupsOpt = this.option('groups');
+    const groupsOpt: any = this.option('groups');
     const groups = {};
     const isGroupedView = !!groupsOpt.length;
     const path = isGroupedView && getPathToLeaf(rowIndex, groupsOpt) || [];
@@ -365,7 +399,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _renderTableBody(options) {
-    const cellTemplates = [];
+    const cellTemplates: any[] = [];
     const cellTemplateOpt = options.cellTemplate;
 
     this._$rows = [];
@@ -437,14 +471,14 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _getTimePanelStartDate(rowIndex) {
-    const current = new Date(this.option('currentDate'));
+    const current = new Date(this.option('currentDate') as any);
     const cellDate = new Date(current.setDate(current.getDate() + rowIndex));
 
     return cellDate;
   }
 
   _getRowHeight(rowSize) {
-    const baseHeight = this.option('rowHeight');
+    const baseHeight: any = this.option('rowHeight');
     const innerOffset = (rowSize - 1) * INNER_CELL_MARGIN;
 
     return rowSize ? (baseHeight * rowSize) + innerOffset + OUTER_CELL_MARGIN : 0;
@@ -473,6 +507,7 @@ class SchedulerAgenda extends WorkSpace {
     );
   }
 
+  // @ts-expect-error
   onDataSourceChanged(appointments) {
     super.onDataSourceChanged();
 
@@ -487,10 +522,10 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   getEndViewDate() {
-    const currentDate = new Date(this.option('currentDate'));
-    const agendaDuration = this.option('agendaDuration');
+    const currentDate = new Date(this.option('currentDate') as any);
+    const agendaDuration = this.option('agendaDuration') as any;
 
-    currentDate.setHours(this.option('endDayHour'));
+    currentDate.setHours(this.option('endDayHour') as any);
 
     const result = currentDate.setDate(currentDate.getDate() + agendaDuration - 1) - 60000;
 
@@ -520,7 +555,9 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  needUpdateScrollPosition(hours, minutes, bounds) {
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  needUpdateScrollPosition(hours, minutes, bounds, newDate) {
     let isUpdateNeeded = false;
 
     if (hours < bounds.top.hours || hours > bounds.bottom.hours) {
@@ -543,7 +580,7 @@ class SchedulerAgenda extends WorkSpace {
   _setSelectedCellsByCellData() {}
 
   _getIntervalDuration() {
-    return dateUtils.dateToMilliseconds('day') * this.option('intervalCount');
+    return dateUtils.dateToMilliseconds('day') * (this.option('intervalCount') as any);
   }
 
   getDOMElementsMetaData() {
@@ -554,6 +591,6 @@ class SchedulerAgenda extends WorkSpace {
   }
 }
 
-registerComponent('dxSchedulerAgenda', SchedulerAgenda);
+registerComponent('dxSchedulerAgenda', SchedulerAgenda as any);
 
 export default SchedulerAgenda;

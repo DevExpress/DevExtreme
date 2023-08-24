@@ -1,17 +1,19 @@
-import registerComponent from '../../../core/component_registrator';
-import { noop } from '../../../core/utils/common';
-import dateUtils from '../../../core/utils/date';
-import { getBoundingRect } from '../../../core/utils/position';
-import { hasWindow } from '../../../core/utils/window';
-import { formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import registerComponent from '@js/core/component_registrator';
+import { noop } from '@js/core/utils/common';
+import dateUtils from '@js/core/utils/date';
+import { getBoundingRect } from '@js/core/utils/position';
+import { hasWindow } from '@js/core/utils/window';
+import { formatWeekday } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import {
   getCellText,
   getViewStartByOptions,
-} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
-import { VIEWS } from '../constants';
-import { utils } from '../utils';
-import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
+// @ts-expect-error
+import dxrMonthDateTableLayout from '@js/renovation/ui/scheduler/workspaces/month/date_table/layout.j';
+import { VIEWS } from '@js/ui/scheduler/constants';
+import { utils } from '@js/ui/scheduler/utils';
+
+import SchedulerWorkSpace from './m_ui_scheduler_work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -23,6 +25,7 @@ const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
+  // @ts-expect-error
   get type() { return VIEWS.MONTH; }
 
   _getElementClass() {
@@ -37,7 +40,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
-    return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
+    return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
   _getDateGenerationOptions() {
@@ -78,15 +81,15 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   _needCreateCrossScrolling() {
-    return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
+    return this.option('crossScrollingEnabled') ?? this._isVerticalGroupedWorkSpace();
   }
 
   _getViewStartByOptions() {
     return getViewStartByOptions(
-      this.option('startDate'),
-      this.option('currentDate'),
-      this.option('intervalCount'),
-      dateUtils.getFirstMonthDate(this.option('startDate')),
+      this.option('startDate') as any,
+      this.option('currentDate') as any,
+      this.option('intervalCount') as any,
+      dateUtils.getFirstMonthDate(this.option('startDate')) as any,
     );
   }
 
@@ -179,15 +182,16 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     options.getCellText = (rowIndex, columnIndex) => {
       const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
 
-      return getCellText(date, this.option('intervalCount'));
+      return getCellText(date, this.option('intervalCount') as any);
     };
     options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-    options.setAdditionalClasses = this._setMonthClassesToCell.bind(this),
+    options.setAdditionalClasses = this._setMonthClassesToCell.bind(this);
 
     super._renderTableBody(options);
   }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
 
 export default SchedulerWorkSpaceMonth;

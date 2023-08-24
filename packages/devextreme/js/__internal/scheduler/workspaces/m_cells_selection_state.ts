@@ -1,6 +1,20 @@
-import { getSelectedCells } from '../../../renovation/ui/scheduler/workspaces/base/utils';
+import { getSelectedCells } from '@js/renovation/ui/scheduler/workspaces/base/utils';
 
 export default class CellsSelectionState {
+  _viewDataProvider: any;
+
+  _focusedCell: any;
+
+  _selectedCells: any;
+
+  _firstSelectedCell: any;
+
+  _prevFocusedCell: any;
+
+  _prevSelectedCells: any;
+
+  _prevFirstSelectedCell: any;
+
   constructor(viewDataProvider) {
     this._viewDataProvider = viewDataProvider;
 
@@ -38,7 +52,7 @@ export default class CellsSelectionState {
     }
   }
 
-  setSelectedCells(lastCellCoordinates, firstCellCoordinates = undefined) {
+  setSelectedCells(lastCellCoordinates, firstCellCoordinates: any = undefined) {
     const viewDataProvider = this._viewDataProvider;
     const {
       rowIndex: lastRowIndex, columnIndex: lastColumnIndex, allDay: isLastCellAllDay,

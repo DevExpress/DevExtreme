@@ -1,6 +1,8 @@
 import { isDefined } from '../../../core/utils/type';
 
 export class Cache {
+  _cache: any;
+
   constructor() {
     this._cache = new Map();
   }

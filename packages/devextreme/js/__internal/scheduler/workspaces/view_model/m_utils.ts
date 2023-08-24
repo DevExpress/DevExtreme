@@ -1,11 +1,13 @@
-import dateUtils from '../../../../core/utils/date';
-import { VIEWS } from '../../constants';
-import { ViewDataGenerator } from './view_data_generator';
-import { ViewDataGeneratorDay } from './view_data_generator_day';
-import { ViewDataGeneratorMonth } from './view_data_generator_month';
-import { ViewDataGeneratorTimelineMonth } from './view_data_generator_timeline_month';
-import { ViewDataGeneratorWeek } from './view_data_generator_week';
-import { ViewDataGeneratorWorkWeek } from './view_data_generator_work_week';
+import dateUtils from '@js/core/utils/date';
+import { VIEWS } from '@js/ui/scheduler/constants';
+
+import { ViewDataGenerator } from './m_view_data_generator';
+import { ViewDataGeneratorDay } from './m_view_data_generator_day';
+// eslint-disable-next-line import/no-cycle
+import { ViewDataGeneratorMonth } from './m_view_data_generator_month';
+import { ViewDataGeneratorTimelineMonth } from './m_view_data_generator_timeline_month';
+import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
+import { ViewDataGeneratorWorkWeek } from './m_view_data_generator_work_week';
 
 const DAYS_IN_WEEK = 7;
 const MS_IN_DAY = 24 * 60 * 60 * 1000;

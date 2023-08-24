@@ -1,11 +1,14 @@
-import { getBoundingRect } from '../../../core/utils/position';
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
+import { getBoundingRect } from '@js/core/utils/position';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '@js/ui/scheduler/classes';
 
 class HorizontalGroupedStrategy {
+  _workSpace: any;
+
   constructor(workSpace) {
     this._workSpace = workSpace;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   prepareCellIndexes(cellCoordinates, groupIndex, inAllDay) {
     const groupByDay = this._workSpace.isGroupedByDate();
 
@@ -61,6 +64,7 @@ class HorizontalGroupedStrategy {
     return this._workSpace.getAllDayHeight();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getGroupCountClass(groups) {
     return undefined;
   }

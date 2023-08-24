@@ -1,23 +1,25 @@
-import registerComponent from '../../../core/component_registrator';
-import $ from '../../../core/renderer';
-import { noop } from '../../../core/utils/common';
-import dateUtils from '../../../core/utils/date';
-import { extend } from '../../../core/utils/extend';
-import { getBoundingRect } from '../../../core/utils/position';
-import { getOuterHeight, getOuterWidth, setHeight } from '../../../core/utils/size';
-import { hasWindow } from '../../../core/utils/window';
-import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getDateForHeaderText } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/timeline_week';
-import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
+import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import dateUtils from '@js/core/utils/date';
+import { extend } from '@js/core/utils/extend';
+import { getBoundingRect } from '@js/core/utils/position';
+import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
+import { hasWindow } from '@js/core/utils/window';
+import { formatWeekdayAndDay } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getDateForHeaderText } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/timeline_week';
+// @ts-expect-error
+import dxrTimelineDateHeader from '@js/renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
   HEADER_CURRENT_TIME_CELL_CLASS,
-} from '../classes';
-import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
-import tableCreatorModule from '../table_creator';
-import timezoneUtils from '../utils.timeZone';
-import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+} from '@js/ui/scheduler/classes';
+import HorizontalShader from '@js/ui/scheduler/shaders/ui.scheduler.current_time_shader.horizontal';
+import tableCreatorModule from '@js/ui/scheduler/table_creator';
+import timezoneUtils from '@js/ui/scheduler/utils.timeZone';
+
+import SchedulerWorkSpace from './m_ui_scheduler_work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -38,6 +40,7 @@ const toMs = dateUtils.dateToMilliseconds;
 class SchedulerTimeline extends SchedulerWorkSpace {
   get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
 
+  // @ts-expect-error
   readonly viewDirection = 'horizontal';
 
   get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
@@ -63,7 +66,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       return getBoundingRect(this._$dateTable.get(0)).height;
     }
 
-    return getBoundingRect(this.$element().get(0)).height;
+    return getBoundingRect((this.$element() as any).get(0)).height;
   }
 
   _dateTableScrollableConfig() {
@@ -132,9 +135,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   _calculateDurationInCells(timeDiff) {
     const today = this._getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
-    let duration = (timeDiff - differenceInDays * toMs('day') - this.option('startDayHour') * toMs('hour')) / this.getCellDuration();
+    let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
-    if (today.getHours() > this.option('endDayHour')) {
+    if (today.getHours() > (this.option('endDayHour') as any)) {
       duration = this._getCellCountInDay();
     }
 
@@ -211,8 +214,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   _getIntervalBetween(currentDate, allDay) {
-    const startDayHour = this.option('startDayHour');
-    const endDayHour = this.option('endDayHour');
+    const startDayHour = this.option('startDayHour') as any;
+    const endDayHour = this.option('endDayHour') as any;
     const firstViewDate = this.getStartViewDate();
     const firstViewDateTime = firstViewDate.getTime();
     const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');
@@ -224,7 +227,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let tailDelta = 0;
     const cellCount = this._getCellCountInDay() * (fullDays - this._getWeekendsCount(fullDays));
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
-    let result = cellCount * this.option('hoursInterval') * toMs('hour');
+    let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
     if (!allDay) {
       if (currentDate.getHours() < startDayHour) {
@@ -243,7 +246,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return result;
   }
 
-  _getWeekendsCount() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getWeekendsCount(fullDays) {
     return 0;
   }
 
@@ -255,6 +259,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return 0;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getIntervalDuration(allDay) {
     return this.getCellDuration();
   }
@@ -304,7 +309,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   _init() {
     super._init();
 
-    this.$element().addClass(TIMELINE_CLASS);
+    (this.$element() as any).addClass(TIMELINE_CLASS);
     this._$sidebarTable = $('<div>')
       .addClass(GROUP_TABLE_CLASS);
   }
@@ -314,7 +319,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   _toggleGroupingDirectionClass() {
-    this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
   }
 
   _getDefaultOptions() {
@@ -372,13 +377,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   _cleanCurrentTimeCells() {
-    this.$element()
+    (this.$element() as any)
       .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
       .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
   }
 
   _getTimePanelCells() {
-    return this.$element()
+    return (this.$element() as any)
       .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
   }
 
@@ -410,24 +415,25 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   _createAllDayPanelElements() { return noop(); }
 
+  // @ts-expect-error
   _renderDateHeader() {
     const $headerRow = super._renderDateHeader();
     if (this._needRenderWeekHeader()) {
       const firstViewDate = new Date(this.getStartViewDate());
       let currentDate = new Date(firstViewDate);
 
-      const $cells = [];
+      const $cells: any = [];
       const groupCount = this._getGroupCount();
       const cellCountInDay = this._getCellCountInDay();
       const colSpan = this.isGroupedByDate()
         ? cellCountInDay * groupCount
         : cellCountInDay;
-      const cellTemplate = this.option('dateCellTemplate');
+      const cellTemplate = this.option('dateCellTemplate') as any;
 
       const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
         ? groupCount
         : 1;
-      const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * this.option('intervalCount');
+      const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * (this.option('intervalCount') as any);
 
       const cellsCount = cellsInGroup * horizontalGroupCount;
 
@@ -509,5 +515,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);
 export default SchedulerTimeline;

@@ -1,14 +1,15 @@
-import registerComponent from '../../../core/component_registrator';
-import $ from '../../../core/renderer';
-import dateUtils from '../../../core/utils/date';
-import { extend } from '../../../core/utils/extend';
-import { getBoundingRect } from '../../../core/utils/position';
-import { setWidth } from '../../../core/utils/size';
-import { hasWindow } from '../../../core/utils/window';
-import { getToday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
-import timezoneUtils from '../utils.timeZone';
-import SchedulerWorkSpace from './ui.scheduler.work_space';
+import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
+import dateUtils from '@js/core/utils/date';
+import { extend } from '@js/core/utils/extend';
+import { getBoundingRect } from '@js/core/utils/position';
+import { setWidth } from '@js/core/utils/size';
+import { hasWindow } from '@js/core/utils/window';
+import { getToday } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '@js/ui/scheduler/classes';
+import timezoneUtils from '@js/ui/scheduler/utils.timeZone';
+
+import SchedulerWorkSpace from './m_ui_scheduler_work_space';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -16,8 +17,10 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
+  _indicatorInterval: any;
+
   _getToday() {
-    return getToday(this.option('indicatorTime'), this.timeZoneCalculator);
+    return getToday(this.option('indicatorTime') as any, this.timeZoneCalculator);
   }
 
   isIndicationOnView() {
@@ -165,6 +168,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
   _dispose() {
     this._clearIndicatorUpdateInterval();
+    // @ts-expect-error
     super._dispose.apply(this, arguments);
   }
 
@@ -220,11 +224,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   _cleanDateTimeIndicator() {
-    this.$element().find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
+    (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
 
   _cleanCurrentTimeCells() {
-    this.$element()
+    (this.$element() as any)
       .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
       .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
   }
@@ -305,5 +309,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerWorkSpace', SchedulerWorkSpaceIndicator);
 export default SchedulerWorkSpaceIndicator;
