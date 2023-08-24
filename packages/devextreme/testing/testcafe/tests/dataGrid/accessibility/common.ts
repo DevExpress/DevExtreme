@@ -228,7 +228,7 @@ const DATA_GRID_SELECTOR = '#container';
       ...a11yCheckConfig,
       runOnly: '',
       rules: {
-        'aria-command-name': { enabled: false },
+        'aria-command-name': { enabled: true },
       },
     });
   }).before(async () => {
