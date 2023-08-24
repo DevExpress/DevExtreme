@@ -79,6 +79,6 @@ module.exports = {
     },
     npm: {
         distPath: "npm/dist",
-        content: [ "../../LICENSE", "../../README.md" ]
+        content: [ "./LICENSE", "./README.md" ]
     }
 };
