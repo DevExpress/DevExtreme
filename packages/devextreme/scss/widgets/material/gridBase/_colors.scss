@@ -173,7 +173,7 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
-  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
+  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -188,7 +188,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $mode == "dark" {
-  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
+  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.72) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
