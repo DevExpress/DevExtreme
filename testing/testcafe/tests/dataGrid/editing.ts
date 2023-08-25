@@ -2372,3 +2372,140 @@ test('Popup EditForm screenshot', async (t) => {
     await changeTheme('generic.light');
   });
 });
+
+test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set in data source (T1181477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getAddRowButton())
+    .click(dataGrid.getDataCell(0, 2).getLinkSave())
+
+    .expect(dataGrid.getDataCell(3, 1).element.innerText)
+    .notContains('Name 3')
+
+    .expect(Selector('#otherContainer').innerText)
+    .eql('');
+}).before(async () => {
+  await createWidget('dxDataGrid', ClientFunction(() => {
+    const dataSourceCore = [
+      { ID: 1, Name: 'Name 1' },
+      { ID: 2, Name: 'Name 2' },
+      { ID: 3, Name: 'Name 3' },
+    ];
+
+    const sampleAPI = {
+      load() {
+        const data = dataSourceCore;
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(data);
+          }, 100);
+        });
+      },
+      totalCount() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(dataSourceCore.length);
+          }, 100);
+        });
+      },
+      insert(values) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const newID = dataSourceCore.length + 1;
+            values.ID = newID;
+            dataSourceCore.push(values);
+            resolve(newID);
+          }, 100);
+        });
+      },
+    };
+
+    const store = new (window as any).DevExpress.data.CustomStore({
+      key: 'ID',
+      load(o) {
+        if (o.filter) {
+          $('#otherContainer').append('Fail');
+        }
+
+        return Promise.all([sampleAPI.load(), sampleAPI.totalCount()]).then((res) => ({
+          data: res[0],
+          totalCount: res[1],
+        }));
+      },
+      insert(values) {
+        return sampleAPI.insert(values);
+      },
+    });
+
+    return {
+      dataSource: store,
+      showBorders: true,
+      focusedRowEnabled: true,
+      autoNavigateToFocusedRow: true,
+      editing: {
+        allowAdding: true,
+      },
+      remoteOperations: true,
+    };
+  }));
+});
+
+test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set on event (T1181477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getAddRowButton())
+    .click(dataGrid.getDataCell(0, 2).getLinkSave())
+
+    .expect(dataGrid.getDataCell(3, 1).element.innerText)
+    .notContains('Name 3')
+
+    .expect(Selector('#otherContainer').innerText)
+    .eql('');
+}).before(async () => {
+  await createWidget('dxDataGrid', ClientFunction(() => {
+    const dataSourceCore = [
+      { ID: 1, Name: 'Name 1' },
+      { ID: 2, Name: 'Name 2' },
+      { ID: 3, Name: 'Name 3' },
+    ];
+
+    const sampleAPI = new (window as any).DevExpress.data.ArrayStore(dataSourceCore);
+
+    const store = new (window as any).DevExpress.data.CustomStore({
+      key: 'ID',
+      load(o) {
+        if (o.filter) {
+          $('#otherContainer').append('Fail');
+        }
+
+        return Promise.all([sampleAPI.load(), sampleAPI.totalCount()]).then((res) => ({
+          data: res[0],
+          totalCount: res[1],
+        }));
+      },
+      insert(values) {
+        return sampleAPI.insert(values);
+      },
+    });
+
+    return {
+      dataSource: store,
+      showBorders: true,
+      focusedRowEnabled: true,
+      autoNavigateToFocusedRow: true,
+      editing: {
+        allowAdding: true,
+      },
+      onInitNewRow(e) {
+        e.promise = new Promise((resolve) => {
+          const newId = dataSourceCore.length + 1;
+          e.data.ID = newId;
+          resolve(undefined);
+        });
+      },
+      remoteOperations: true,
+    };
+  }));
+});
