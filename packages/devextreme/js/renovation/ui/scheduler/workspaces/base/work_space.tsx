@@ -39,8 +39,8 @@ import {
   WorkSpaceGenerationOptions,
 } from '../types';
 import { OrdinaryLayout } from './ordinary_layout';
-import { VirtualScrollingDispatcher } from '../../../../../ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
-import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
+import { VirtualScrollingDispatcher } from '../../../../../__internal/scheduler/workspaces/m_ui_scheduler_virtual_scrolling';
+import ViewDataProvider from '../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import {
   createCellElementMetaData,
   createVirtualScrollingOptions,
@@ -55,11 +55,11 @@ import { getViewRenderConfigByType } from './work_space_config';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { GroupOrientation } from '../../types';
-import { getViewDataGeneratorByViewType } from '../../../../../ui/scheduler/workspaces/view_model/utils';
+import { getViewDataGeneratorByViewType } from '../../../../../__internal/scheduler/workspaces/view_model/m_utils';
 import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
-import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
-import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
-import { CellsSelectionController } from '../../../../../ui/scheduler/workspaces/cells_selection_controller';
+import { DateHeaderDataGenerator } from '../../../../../__internal/scheduler/workspaces/view_model/m_date_header_data_generator';
+import { TimePanelDataGenerator } from '../../../../../__internal/scheduler/workspaces/view_model/m_time_panel_data_generator';
+import { CellsSelectionController } from '../../../../../__internal/scheduler/workspaces/m_cells_selection_controller';
 import { getGroupPanelData } from '../../view_model/group_panel/utils';
 import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';

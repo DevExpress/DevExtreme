@@ -25,7 +25,7 @@ import {
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
-import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
+import { getViewDataGeneratorByViewType } from '../../../__internal/scheduler/workspaces/view_model/m_utils';
 import type { AppointmentDataItem, DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, isViewDataProviderConfigValid,

@@ -3,9 +3,9 @@ import { mount, shallow } from 'enzyme';
 import {
   clear, emit, EVENT,
 } from '../../../../../test_utils/events_mock';
-import { ViewDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/view_data_generator';
-import { DateHeaderDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
-import { TimePanelDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
+import { ViewDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_generator';
+import { DateHeaderDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_date_header_data_generator';
+import { TimePanelDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_time_panel_data_generator';
 import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
@@ -50,7 +50,7 @@ const mockViewDataProvider = {
   getCellData: mockGetCellData,
   getCellsByGroupIndexAndAllDay: mockGetCellsByGroupIndexAndAllDay,
 };
-jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
+jest.mock('../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
 const getViewRenderConfigByType = jest.spyOn(ConfigUtils, 'getViewRenderConfigByType');
 

@@ -4,9 +4,9 @@ import { isRenderer } from 'core/utils/type';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
+import '__internal/scheduler/workspaces/m_ui_scheduler_work_space_day';
+import '__internal/scheduler/workspaces/m_ui_scheduler_work_space_month';
+import '__internal/scheduler/workspaces/m_ui_scheduler_work_space_work_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';

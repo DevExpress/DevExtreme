@@ -1,7 +1,7 @@
 import { equalByValue } from '../../core/utils/common';
 import { AppointmentViewModelGenerator } from '../../__internal/scheduler/appointments/m_view_model_generator';
 import { getGroupCount } from '../../__internal/scheduler/resources/m_utils';
-import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
+import { getCellWidth, getCellHeight, getAllDayHeight } from '../../__internal/scheduler/workspaces/helpers/m_position_helper';
 import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getAppointmentRenderingStrategyName } from '../../renovation/ui/scheduler/model/appointments';
 

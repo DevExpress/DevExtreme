@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
-import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
-import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
+import SchedulerWorkSpace from '__internal/scheduler/workspaces/m_ui_scheduler_work_space';
+import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/m_ui_scheduler_work_space_grouped_strategy_horizontal';
+import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_ui_scheduler_work_space_grouped_strategy_vertical';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';

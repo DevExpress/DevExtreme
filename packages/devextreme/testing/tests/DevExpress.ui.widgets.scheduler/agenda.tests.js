@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
+import SchedulerAgenda from '__internal/scheduler/workspaces/m_ui_scheduler_agenda';
 import dateLocalization from 'localization/date';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 

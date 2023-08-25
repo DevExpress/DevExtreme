@@ -3,8 +3,8 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
-import { getGroupWidth } from 'ui/scheduler/workspaces/helpers/positionHelper';
+import '__internal/scheduler/workspaces/m_ui_scheduler_work_space_month';
+import { getGroupWidth } from '__internal/scheduler/workspaces/helpers/m_position_helper';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 

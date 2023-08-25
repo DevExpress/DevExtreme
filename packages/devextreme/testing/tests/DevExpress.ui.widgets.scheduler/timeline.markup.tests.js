@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import SchedulerTimeline from 'ui/scheduler/workspaces/ui.scheduler.timeline';
-import SchedulerTimelineDay from 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
-import SchedulerTimelineWeek from 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
-import SchedulerTimelineWorkWeek from 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
-import SchedulerTimelineMonth from 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import SchedulerTimeline from '__internal/scheduler/workspaces/m_ui_scheduler_timeline';
+import SchedulerTimelineDay from '__internal/scheduler/workspaces/m_ui_scheduler_timeline_day';
+import SchedulerTimelineWeek from '__internal/scheduler/workspaces/m_ui_scheduler_timeline_week';
+import SchedulerTimelineWorkWeek from '__internal/scheduler/workspaces/m_ui_scheduler_timeline_work_week';
+import SchedulerTimelineMonth from '__internal/scheduler/workspaces/m_ui_scheduler_timeline_month';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
-import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
+import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_ui_scheduler_work_space_grouped_strategy_vertical';
+import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/m_ui_scheduler_work_space_grouped_strategy_horizontal';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {

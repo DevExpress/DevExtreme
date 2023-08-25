@@ -5,7 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
+import '__internal/scheduler/workspaces/m_ui_scheduler_work_space_week';
 import VerticalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
