@@ -1,4 +1,3 @@
-import { extendFromObject } from '@js/core/utils/extend';
 import { touch } from '@js/core/utils/support';
 import Tooltip from '@js/ui/tooltip';
 

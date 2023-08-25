@@ -4,7 +4,6 @@ import { move, locate } from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
-import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
