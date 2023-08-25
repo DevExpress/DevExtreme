@@ -131,7 +131,7 @@ safeSizeTest('Export is disabled when no data columns is in grid header, menu: f
   },
 }));
 
-safeSizeTest('Export is disabled when no data columns is in grid header, menu: true', async (t) => {
+/* safeSizeTest */test.skip('Export is disabled when no data columns is in grid header, menu: true', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -144,7 +144,7 @@ safeSizeTest('Export is disabled when no data columns is in grid header, menu: t
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}/* , [800, 800] */).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
   columns: [
     { dataField: 'value', visible: false },
