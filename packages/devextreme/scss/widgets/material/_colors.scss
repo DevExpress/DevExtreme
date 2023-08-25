@@ -170,7 +170,7 @@ $typography-link-color: $base-link-color !default;
 
 @if $mode == "dark" {
   $material-color-theme-modificator: "dark" !default;
-  $base-text-color: #fff !default;
+  $base-text-color: rgba(255, 255, 255, 0.87) !default;
   $base-label-color: $base-text-color !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;

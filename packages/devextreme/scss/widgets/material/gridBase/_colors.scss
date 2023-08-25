@@ -63,13 +63,13 @@ $datagrid-row-selected-color: $datagrid-base-color !default;
 * $name 65. Focused row text color
 * $type color
 */
-$datagrid-row-focused-color: $base-inverted-text-color !default;
+$datagrid-row-focused-color: $base-text-color !default;
 
 /**
 * $name 70. Focused row background color
 * $type color
 */
-$datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+$datagrid-row-focused-bg: color.change($base-accent, $alpha: 0.2) !default;
 $datagrid-hover-bg: $base-hover-bg !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
 
