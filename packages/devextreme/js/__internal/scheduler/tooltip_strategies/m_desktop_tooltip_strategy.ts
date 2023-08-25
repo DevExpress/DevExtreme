@@ -58,16 +58,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   }
 
   _onListItemContextMenu(e) {
-    const config = {
-      itemData: e.itemData.appointment,
-      itemElement: e.itemElement,
-      targetedAppointment: e.itemData.targetedAppointment,
-    };
-
-    const createContextMenuEvent = extendFromObject(this._options.fire('mapAppointmentFields', config), e, false);
-    delete createContextMenuEvent.itemData;
-    delete createContextMenuEvent.itemIndex;
-    delete createContextMenuEvent.itemElement;
-    this._options.onItemContextMenu(createContextMenuEvent);
+    const contextMenuEventArgs = this._options.createEventArgs(e);
+    this._options.onItemContextMenu(contextMenuEventArgs);
   }
 }

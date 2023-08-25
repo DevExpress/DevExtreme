@@ -1355,8 +1355,22 @@ class Scheduler extends Widget {
                 this.timeZoneCalculator
             ).disabled,
             onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
-            fire: that.fire.bind(that),
+            createEventArgs: that._createEventArgs.bind(that),
         };
+    }
+
+    _createEventArgs(e) {
+        const config = {
+            itemData: e.itemData.appointment,
+            itemElement: e.itemElement,
+            targetedAppointment: e.itemData.targetedAppointment,
+        };
+        return extend({}, this.fire('mapAppointmentFields', config), {
+            component: e.component,
+            element: e.element,
+            event: e.event,
+            model: e.model,
+        });
     }
 
     checkAndDeleteAppointment(appointment, targetedAppointment) {
