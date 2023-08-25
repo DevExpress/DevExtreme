@@ -1107,14 +1107,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, {
-      ...a11yCheckConfig,
-      runOnly: '',
-      rules: {
-        'color-contrast': { enabled: false },
-        'aria-required-children': { enabled: false },
-      },
-    });
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 

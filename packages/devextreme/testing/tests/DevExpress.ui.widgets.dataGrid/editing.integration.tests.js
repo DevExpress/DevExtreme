@@ -6432,6 +6432,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // assert
         assert.ok($revertButton.length, 'revert button is rendered');
         assert.ok($validationMessage.length, 'validation message is rendered');
+        // fixes an accessibility issue (aria-required-children)
+        assert.strictEqual($(dataGrid.element()).find('.dx-overlay-wrapper.dx-datagrid-revert-tooltip').parent('.dx-scrollable-content').length, 1, 'revert tooltip is rendered in scroll content');
 
         // act
         const revertButtonDiff = {
