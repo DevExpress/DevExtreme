@@ -1233,6 +1233,39 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.deepEqual(rowIndex, 1, 'rowDblClick row index');
         });
     });
+
+    QUnit.test('SearchPanel width property should accept string values', function(assert) {
+        const dataGrid = createDataGrid({
+            searchPanel: {
+                visible: true,
+                width: '50%',
+            },
+        });
+
+        assert.equal(dataGrid.$element().find('.dx-datagrid-search-panel').get(0).style.width, '50%');
+    });
+    QUnit.test('Column minWidth property should not accept string values', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field: 'test1' }
+            ],
+            keyExpr: 'id',
+            columns: [
+                {
+                    dataField: 'id',
+                    minWidth: '700'
+                }, {
+                    dataField: 'field',
+                    minWidth: '50%'
+                }
+            ]
+        });
+        this.clock.tick(10);
+        const $cols = dataGrid.$element().find('.dx-datagrid-headers colgroup > col');
+
+        assert.equal($cols.get(0).style.width, '700px');
+        assert.equal($cols.get(1).style.width, '');
+    });
 });
 
 
