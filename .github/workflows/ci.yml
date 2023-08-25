@@ -1,4 +1,4 @@
-name: _CI Available
+name: CI Available
 
 on: 
   pull_request:
