@@ -33,8 +33,10 @@
   }
 
   .dx-treeview-item {
-    .dx-treeview-item-content > .dx-icon {
-      margin-left: 5px;
+    .dx-treeview-item-content {
+      .dx-icon {
+        margin-left: 5px;
+      }
     }
   }
 

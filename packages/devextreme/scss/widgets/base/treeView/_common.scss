@@ -78,13 +78,15 @@ $tree-view-icon-size: 24px;
   display: block;
   cursor: pointer;
 
-  .dx-treeview-item-content > .dx-icon {
-    display: inline-block;
-    width: $tree-view-icon-size;
-    height: $tree-view-icon-size;
-    vertical-align: middle;
-    margin-right: 5px;
-    background-size: $tree-view-icon-size $tree-view-icon-size;
+  .dx-treeview-item-content {
+     .dx-icon {
+      display: inline-block;
+      width: $tree-view-icon-size;
+      height: $tree-view-icon-size;
+      vertical-align: middle;
+      margin-right: 5px;
+      background-size: $tree-view-icon-size $tree-view-icon-size;
+     }
   }
 
   .dx-treeview-item-content {
@@ -127,8 +129,10 @@ $tree-view-icon-size: 24px;
       }
 
       .dx-treeview-item {
-        .dx-treeview-item-content > .dx-icon {
-          margin-right: 0;
+        .dx-treeview-item-content {
+          .dx-icon {
+            margin-right: 0;
+          }
         }
       }
     }
