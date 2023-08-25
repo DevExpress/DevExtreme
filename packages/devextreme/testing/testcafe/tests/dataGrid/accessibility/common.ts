@@ -32,7 +32,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t);
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -164,7 +164,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t);
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
