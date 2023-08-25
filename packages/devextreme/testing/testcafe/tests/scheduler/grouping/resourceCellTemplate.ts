@@ -7,7 +7,7 @@ fixture.disablePageReloads`ResourceCellTemplate`
 
 test('resourceCellTemplate layout should be rendered right in the agenda view', async (t) => {
   const scheduler = new Scheduler('#container');
-  const groupHeader = scheduler.headerPanel.groupCells;
+  const groupHeader = scheduler.getGroupCell();
 
   await t.expect(groupHeader.textContent).eql('Custom resource text');
 }).before(async () => {
