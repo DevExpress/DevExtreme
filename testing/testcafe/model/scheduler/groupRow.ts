@@ -1,5 +1,5 @@
 const CLASS = {
-  groupRow: 'dx-scheduler-header-row',
+  groupRow: 'dx-scheduler-group-row',
   groupCell: 'dx-scheduler-group-header-content',
 };
 
