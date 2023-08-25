@@ -38,6 +38,7 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
     "rrule": "^2.7.1",
+    "sha1": "1.1.1",
     "turndown": "~7.1.0"
   },
   "devDependencies": {
