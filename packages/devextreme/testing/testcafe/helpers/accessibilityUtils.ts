@@ -5,7 +5,6 @@ import { ElementContext, RunOptions } from 'axe-core';
 const defaultOptions = {
   rules: {
     'color-contrast': { enabled: false },
-    'th-has-data-cells': { enabled: false },
   },
 };
 

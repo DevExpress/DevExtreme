@@ -122,6 +122,10 @@ export const RowsView = rowsModule.views.rowsView.inherit((function () {
       return $rowElement;
     },
 
+    _getGridRoleName() {
+      return 'treegrid';
+    },
+
     isExpandIcon($targetElement) {
       return !!$targetElement.closest(`.${TREELIST_EXPANDED_CLASS}, .${TREELIST_COLLAPSED_CLASS}`).length;
     },
@@ -129,10 +133,6 @@ export const RowsView = rowsModule.views.rowsView.inherit((function () {
     setAriaExpandedAttribute($row, row) {
       const isRowExpanded = row.isExpanded;
       this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
-    },
-
-    setTableRole($tableElement) {
-      this.setAria('role', 'treegrid', $tableElement);
     },
   };
 })());

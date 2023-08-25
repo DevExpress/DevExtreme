@@ -633,6 +633,14 @@ const resizingControllerMembers = {
       });
     } else { this._setScrollerSpacingCore(); }
   },
+
+  _setAriaOwns() {
+    const headerTable = this._columnHeadersView?.getTableElement();
+    const footerTable = this._footerView?.getTableElement();
+
+    this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
+  },
+
   _updateDimensionsCore() {
     const that = this;
 
@@ -657,6 +665,8 @@ const resizingControllerMembers = {
     deferRender(() => {
       const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
       rowsView.hasHeight(hasHeight);
+
+      this._setAriaOwns();
 
       // IE11
       if (maxHeightHappened && !isMaxHeightApplied) {

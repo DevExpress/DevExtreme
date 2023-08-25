@@ -206,8 +206,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 5] ID is valid (ShowWhenGrouped)');
         assert.equal(rowsViewWrapper.getCellElement(1, 5).attr('aria-describedby'), headerId, 'Cell[1, 5] aria-describedby is valid');
 
-        assert.equal(headersWrapper.getTable().attr('role'), undefined, 'Headers table role');
-        assert.equal(rowsViewWrapper.getTable().attr('role'), undefined, 'RowsView table role');
+        assert.equal(headersWrapper.getTable().attr('role'), 'presentation', 'Headers table role');
+        assert.ok(headersWrapper.getTable().attr('id'), 'Headers table has an id attribute');
+        assert.equal(rowsViewWrapper.getTable().attr('role'), 'presentation', 'RowsView table role');
+        assert.ok(rowsViewWrapper.getTable().attr('id'), 'RowsView table has an id attribute');
 
         const $freeSpaceRow = rowsViewWrapper.getFreeSpaceRow().getElement();
         assert.equal($freeSpaceRow.attr('role'), 'presentation');
