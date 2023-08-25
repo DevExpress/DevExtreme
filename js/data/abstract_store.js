@@ -171,10 +171,11 @@ const Store = Class.inherit({
             waitFor: []
         };
 
-        this._eventsStrategy.fireEvent('beforePush', [beforePushArgs]);
+        this._eventsStrategy.fireEvent('beforePushAggregation', [beforePushArgs]);
 
         when(...beforePushArgs.waitFor).done(() => {
             this._pushImpl(changes);
+            this._eventsStrategy.fireEvent('beforePush', [{ changes }]);
             this._eventsStrategy.fireEvent('push', [changes]);
         });
     },
