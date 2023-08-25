@@ -511,7 +511,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(1).isFocusedRow)
       .ok();
 
-    await a11yCheck(t);
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
