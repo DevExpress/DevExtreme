@@ -11,8 +11,6 @@ jobs:
     runs-on: devextreme-shr2
     
     steps:
-    - uses: actions/checkout@v1
-
     - name: Fail CI if some works is being made
       if: ${{ vars.CI_UNSTABLE }}
       run: exit 1
