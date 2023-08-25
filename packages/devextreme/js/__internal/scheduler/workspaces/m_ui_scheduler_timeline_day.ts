@@ -6,6 +6,7 @@ import SchedulerTimeline from './m_ui_scheduler_timeline';
 const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 
 class SchedulerTimelineDay extends SchedulerTimeline {
+  // @ts-expect-error
   get type() { return VIEWS.TIMELINE_DAY; }
 
   _getElementClass() {

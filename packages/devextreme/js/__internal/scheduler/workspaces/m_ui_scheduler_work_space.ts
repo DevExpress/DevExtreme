@@ -427,7 +427,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   _moveToCell($cell, isMultiSelection) {
     if (!isDefined($cell) || !$cell.length) {
-      return undefined;
+      return;
     }
 
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');

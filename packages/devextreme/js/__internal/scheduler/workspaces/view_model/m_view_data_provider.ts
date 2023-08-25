@@ -261,6 +261,7 @@ export default class ViewDataProvider {
     return startDate < groupEndDate && endDate > groupStartDate;
   }
 
+  // @ts-expect-error
   findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
     const { completeViewDataMap } = this;
 
