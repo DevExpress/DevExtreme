@@ -143,8 +143,8 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
       background-color: $treeview-focused-bg;
       color: $treeview-focus-color;
 
-      > .dx-item-content {
-        > .dx-item-url {
+      .dx-item-content {
+        .dx-item-url {
           color: unset;
         }
       }
@@ -153,8 +153,8 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
 }
 
 .dx-treeview-item {
-  > .dx-item-content {
-    > .dx-item-url {
+  .dx-item-content {
+    .dx-item-url {
       display: flex;
       align-items: center;
     }

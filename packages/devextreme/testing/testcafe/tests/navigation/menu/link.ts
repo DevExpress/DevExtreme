@@ -89,8 +89,11 @@ test('Items in adaptive mode should have links if item.url is set (T1181342)', a
 
   await t
     .pressKey('down')
-    .pressKey('down')
     .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link and icon should have correct focus style.png', { element: '#container' });
+
+  await t.pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link should have correct focus style.png', { element: '#container' });
 
@@ -118,6 +121,7 @@ test('Items in adaptive mode should have links if item.url is set (T1181342)', a
         id: '1-3',
         name: 'Item 2',
         icon: 'unlock',
+        url: 'https://js.devexpress.com/',
       }, {
         id: '1-4',
         name: 'Item 3',
