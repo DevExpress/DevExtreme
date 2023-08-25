@@ -20,10 +20,10 @@ type IResizableOptionsNarrowedEvents = {
 }
 
 type IResizableOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IResizableOptionsNarrowedEvents> & IHtmlOptions & {
-  defaultHeight?: (() => number) | number | string;
-  defaultWidth?: (() => number) | number | string;
-  onHeightChange?: (value: (() => number) | number | string) => void;
-  onWidthChange?: (value: (() => number) | number | string) => void;
+  defaultHeight?: (() => number | string) | number | string;
+  defaultWidth?: (() => number | string) | number | string;
+  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  onWidthChange?: (value: (() => number | string) | number | string) => void;
 }>
 
 class Resizable extends BaseComponent<React.PropsWithChildren<IResizableOptions>> {

@@ -138,7 +138,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
