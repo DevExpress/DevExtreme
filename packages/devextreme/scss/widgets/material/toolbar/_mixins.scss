@@ -6,21 +6,11 @@
   overflow: visible;
 
   .dx-toolbar-before {
-    padding-right: $material-toolbar-section-padding;
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding-right: 0;
-      padding-left: $material-toolbar-section-padding;
-    }
+    padding-inline-end: $material-toolbar-section-padding;
   }
 
   .dx-toolbar-after {
-    padding-left: $material-toolbar-section-padding;
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding-left: 0;
-      padding-right: $material-toolbar-section-padding;
-    }
+    padding-inline-start: $material-toolbar-section-padding;
   }
 
   .dx-toolbar-before:empty,
@@ -68,19 +58,14 @@
 }
 
 @mixin dx-toolbar-item-padding($padding) {
-  padding: 0 0 0 $padding;
+  padding: 0;
+  padding-inline-start: $padding;
 
   &:last-child {
-    padding: 0 0 0 $padding;
+    padding-inline-start: $padding;
   }
 
   &:first-child {
     padding: 0;
-  }
-
-  .dx-rtl & {
-    &:first-child {
-      padding-left: $padding;
-    }
   }
 }

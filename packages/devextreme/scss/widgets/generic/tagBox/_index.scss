@@ -71,6 +71,7 @@
 }
 
 .dx-tag-content {
+  display: inline-block;
   margin-top: $generic-tagbox-tag-content-margin-top;
   margin-inline-start: $generic-tagbox-tag-content-margin-left;
   padding: $generic-tagbox-tag-content-padding;

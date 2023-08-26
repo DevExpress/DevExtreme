@@ -103,52 +103,25 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-left: $material-editor-custom-button-margin;
-        margin-right: $material-editor-custom-button-margin;
+        margin-inline-start: $material-editor-custom-button-margin;
+        margin-inline-end: $material-editor-custom-button-margin;
 
         &:first-child {
-          margin-left: 0;
+          margin-inline-start: 0;
         }
 
         &:last-child {
-          margin-right: $material-editor-custom-button-margin * 2;
+          margin-inline-end: $material-editor-custom-button-margin * 2;
         }
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
+        margin-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
       }
 
       > .dx-clear-button-area:last-child,
       > .dx-clear-button-area + div:empty:last-child {
-        margin-right: $material-filled-texteditor-input-button-horizontal-padding;
-      }
-    }
-
-    &.dx-rtl {
-      > .dx-texteditor-buttons-container {
-        > .dx-button,
-        > .dx-clear-button-area {
-          &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: 0;
-          }
-
-          &:last-child {
-            margin-left: $material-editor-custom-button-margin * 2;
-            margin-right: $material-editor-custom-button-margin;
-          }
-        }
-
-        > .dx-dropdowneditor-button:last-child {
-          margin-left: $material-filled-texteditor-spin-button-horizontal-padding;
-          margin-right: 0;
-        }
-
-        > .dx-clear-button-area:last-child {
-          margin-left: $material-filled-texteditor-input-button-horizontal-padding;
-          margin-right: 0;
-        }
+        margin-inline-end: $material-filled-texteditor-input-button-horizontal-padding;
       }
     }
   }

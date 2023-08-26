@@ -66,19 +66,13 @@
 }
 
 @mixin dx-toolbar-item-padding($padding) {
-  padding: 0 0 0 $padding;
+  padding-inline-start: $padding;
 
   &:last-child {
-    padding: 0 0 0 $padding;
+    padding-inline-start: $padding;
   }
 
   &:first-child {
     padding: 0;
-  }
-
-  @at-root #{selector-append(".dx-rtl", &)} {
-    &:first-child {
-      padding-left: $padding;
-    }
   }
 }
