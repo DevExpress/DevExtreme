@@ -49,12 +49,7 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
 
     .dx-closebutton {
       position: relative;
-      left: $generic-popup-closebutton-offset;
-
-      .dx-rtl & {
-        left: 0;
-        right: $generic-popup-closebutton-offset;
-      }
+      inset-inline-start: $generic-popup-closebutton-offset;
     }
   }
 }

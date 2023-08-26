@@ -128,12 +128,7 @@
 }
 
 @mixin tagbox-editor-container-offset() {
-  right: $material-invalid-badge-horizontal-padding;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    left: $material-invalid-badge-horizontal-padding;
-  }
+  inset-inline-end: $material-invalid-badge-horizontal-padding;
 }
 
 .dx-tagbox.dx-invalid,
