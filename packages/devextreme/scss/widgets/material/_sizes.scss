@@ -5,7 +5,6 @@ $size: null !default;
 $material-size-postfix: null !default;
 $material-base-font-size: null !default;
 $material-base-inline-widget-height: null !default;
-$material-base-inline-block-height: null !default;
 $material-base-icon-size: null !default;
 $material-base-icon-margin: 8px !default;
 $material-base-inline-horizontal-padding: null !default;
@@ -45,7 +44,6 @@ $material-button-icon-margin: null !default;
 
   // Base sizes
   $material-base-inline-widget-height: 48px !default;
-  $material-base-inline-block-height: 18px !default;
   $material-base-icon-size: 24px !default;
   $material-base-inline-horizontal-padding: 10px !default;
   $material-base-border-radius: 4px !default;
@@ -64,7 +62,6 @@ $material-button-icon-margin: null !default;
 
   // Base sizes
   $material-base-inline-widget-height: 32px !default;
-  $material-base-inline-block-height: 15px !default;
   $material-base-icon-size: 18px !default;
   $material-base-inline-horizontal-padding: 8px !default;
   $material-base-border-radius: 2px !default;

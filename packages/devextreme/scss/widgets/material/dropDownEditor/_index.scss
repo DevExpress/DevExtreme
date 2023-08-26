@@ -91,12 +91,7 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
   &.dx-dropdowneditor-button-visible {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-right: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
-      }
-
-      &.dx-rtl .dx-texteditor-input {
-        padding-right: $material-base-standard-texteditor-input-horizontal-padding;
-        padding-left: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
+        padding-inline-end: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
 

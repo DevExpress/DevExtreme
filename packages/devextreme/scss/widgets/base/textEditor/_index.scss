@@ -13,7 +13,7 @@
 .dx-placeholder {
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   max-width: 100%;
   width: auto;
   height: 100%;
@@ -120,7 +120,5 @@
 .dx-rtl.dx-texteditor {
   .dx-placeholder {
     text-align: right;
-    left: auto;
-    right: 0;
   }
 }
