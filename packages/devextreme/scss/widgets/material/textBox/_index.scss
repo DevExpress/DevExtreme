@@ -51,13 +51,7 @@ $textbox-filled-search-icon-size:
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-left: $textbox-standard-search-icon-size;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        padding-left: $material-base-standard-texteditor-input-horizontal-padding;
-        padding-right: $textbox-standard-search-icon-size;
-      }
+      padding-inline-start: $textbox-standard-search-icon-size;
     }
   }
 
@@ -69,13 +63,7 @@ $textbox-filled-search-icon-size:
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-left: $textbox-filled-search-icon-size;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        padding-left: $material-filled-texteditor-input-horizontal-padding;
-        padding-right: $textbox-filled-search-icon-size;
-      }
+      padding-inline-start: $textbox-filled-search-icon-size;
     }
   }
 }

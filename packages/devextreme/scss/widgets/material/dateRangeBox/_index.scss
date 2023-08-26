@@ -93,7 +93,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
-      padding-right: $material-filled-texteditor-input-horizontal-padding;
+      padding-inline-end: $material-filled-texteditor-input-horizontal-padding;
     }
   }
 
@@ -145,22 +145,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
           .dx-texteditor-input {
             padding-inline-end: $material-texteditor-invalid-badge-size;
           }
-
-          &.dx-rtl {
-            .dx-texteditor-input {
-              padding-right: $material-filled-texteditor-input-horizontal-padding;
-            }
-          }
-        }
-      }
-
-      &.dx-editor-underlined {
-        &.dx-invalid {
-          &.dx-rtl {
-            .dx-texteditor-input {
-              padding-right: 0;
-            }
-          }
         }
       }
     }
@@ -168,7 +152,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 }
 
 .dx-daterangebox-separator {
-  padding-left: $material-filled-texteditor-input-horizontal-padding;
+  padding-inline-start: $material-filled-texteditor-input-horizontal-padding;
   color: $texteditor-label-color;
 
   .dx-icon {

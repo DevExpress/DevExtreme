@@ -45,23 +45,12 @@ $generic-texteditor-label-transition:
 
 @mixin texteditor-input-padding() {
   .dx-texteditor-input {
-    padding-right: $generic-texteditor-invalid-badge-size;
-  }
-
-  &.dx-rtl .dx-texteditor-input {
-    padding-left: $generic-texteditor-invalid-badge-size;
-    padding-right: 0;
+    padding-inline-end: $generic-texteditor-invalid-badge-size;
   }
 }
 
 @mixin texteditor-validation-icon-offset() {
-  right: $generic-invalid-badge-halfhorizontal-padding;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    left: $generic-invalid-badge-halfhorizontal-padding;
-    right: auto;
-  }
+  padding-inline-end: $generic-invalid-badge-halfhorizontal-padding;
 }
 
 @mixin validation-icon-position() {
