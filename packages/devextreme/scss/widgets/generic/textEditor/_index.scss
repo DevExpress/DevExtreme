@@ -190,14 +190,6 @@ $generic-texteditor-label-transition:
 
   &::before {
     padding: $generic-texteditor-input-padding;
-
-    .dx-editor-underlined & {
-      padding-left: 0;
-
-      .dx-rtl & {
-        padding-right: 0;
-      }
-    }
   }
 }
 
@@ -209,12 +201,6 @@ $generic-texteditor-label-transition:
   font-size: 1em;
   border-radius: $texteditor-input-border-radius;
   min-height: $generic-texteditor-input-height;
-
-  .dx-editor-underlined & {
-    background: $texteditor-underlined-bg;
-    padding-left: 0;
-    padding-right: 0;
-  }
 
   .dx-editor-filled & {
     background: transparent;
@@ -689,6 +675,16 @@ $generic-texteditor-label-transition:
   $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
   $label-transform: translate(0, 0);
 
+  .dx-texteditor-input {
+    background: $texteditor-underlined-bg;
+  }
+
+  .dx-texteditor-input,
+  .dx-placeholder::before {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     position: relative;
@@ -719,10 +715,6 @@ $generic-texteditor-label-transition:
       .dx-placeholder::before,
       .dx-texteditor-input {
         padding-top: 0;
-      }
-
-      .dx-texteditor-label {
-        top: 0;
       }
     }
   }
@@ -787,38 +779,17 @@ $generic-texteditor-label-transition:
   &.dx-texteditor-with-before-buttons {
     .dx-texteditor-input-container {
       .dx-texteditor-input {
-        padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
-
-        @at-root #{selector-append(".dx-rtl", &)} {
-          padding-left: 0;
-          padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
+        padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
       }
 
       .dx-placeholder {
-        left: $generic-base-inline-borderedwidget-horizontal-padding;
-      }
-
-      @at-root #{selector-append(".dx-rtl", &)} {
-        .dx-placeholder {
-          left: 0;
-          right: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
+        inset-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
       }
     }
 
     .dx-texteditor-label {
       .dx-label {
-        padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
-      }
-    }
-
-    &.dx-rtl {
-      .dx-texteditor-label {
-        .dx-label {
-          padding-left: 0;
-          padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
+        padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
       }
     }
   }
@@ -871,18 +842,6 @@ $generic-texteditor-label-transition:
       .dx-pending-indicator {
         @include dx-pending-indicator-generic();
       }
-    }
-  }
-}
-
-.dx-rtl {
-  .dx-placeholder,
-  .dx-placeholder::before {
-    right: 0;
-    left: auto;
-
-    @at-root #{selector-append(".dx-editor-underlined", &)} {
-      padding-right: 0;
     }
   }
 }

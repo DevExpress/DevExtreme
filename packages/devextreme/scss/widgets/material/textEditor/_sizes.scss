@@ -4,6 +4,7 @@
 
 $material-texteditor-font-size: null !default;
 $material-texteditor-clear-icon-size: null !default;
+$material-texteditor-label-top-offset: null !default;
 $material-filled-texteditor-input-horizontal-padding: null !default;
 $material-filled-texteditor-input-top-padding: null !default;
 $material-filled-texteditor-input-bottom-padding: null !default;
@@ -18,27 +19,29 @@ $material-standard-texteditor-with-label-input-bottom-padding: null !default;
   $material-texteditor-font-size: 16px !default;
   $material-texteditor-label-font-size: 12px !default;
   $material-texteditor-clear-icon-size: 12px !default;
+  $material-texteditor-label-top-offset: 4px !default;
   $material-filled-texteditor-input-horizontal-padding: 16px !default;
-  $material-filled-texteditor-input-top-padding: 15px;
-  $material-filled-texteditor-input-bottom-padding: 14px;
-  $material-standard-texteditor-input-top-padding: 7px !default;
-  $material-standard-texteditor-input-bottom-padding: 6px !default;
-  $material-standard-texteditor-with-label-input-top-padding: 16px !default;
-  $material-standard-texteditor-with-label-input-bottom-padding: 7px !default;
+  $material-filled-texteditor-input-top-padding: 15px !default;
+  $material-filled-texteditor-input-bottom-padding: 14px !default;
+  $material-standard-texteditor-input-top-padding: 15px !default;
+  $material-standard-texteditor-input-bottom-padding: 14px !default;
+  $material-standard-texteditor-with-label-input-top-padding: 21px !default;
+  $material-standard-texteditor-with-label-input-bottom-padding: 8px !default;
   $material-underlined-editor-button-height: 28px !default;
 }
 
 @else if $size == "compact" {
-  $material-texteditor-font-size: 13px !default;
-  $material-texteditor-label-font-size: 11px !default;
+  $material-texteditor-font-size: 12px !default;
+  $material-texteditor-label-font-size: 10px !default;
   $material-texteditor-clear-icon-size: 10px !default;
-  $material-filled-texteditor-input-horizontal-padding: 11px !default;
+  $material-texteditor-label-top-offset: 0 !default;
+  $material-filled-texteditor-input-horizontal-padding: 12px !default;
   $material-filled-texteditor-input-top-padding: 9px;
-  $material-filled-texteditor-input-bottom-padding: 8px;
-  $material-standard-texteditor-input-top-padding: 6px !default;
-  $material-standard-texteditor-input-bottom-padding: 5px !default;
-  $material-standard-texteditor-with-label-input-top-padding: 10px !default;
-  $material-standard-texteditor-with-label-input-bottom-padding: $material-standard-texteditor-input-bottom-padding !default;
+  $material-filled-texteditor-input-bottom-padding: 9px;
+  $material-standard-texteditor-input-top-padding: 9px !default;
+  $material-standard-texteditor-input-bottom-padding: 9px !default;
+  $material-standard-texteditor-with-label-input-top-padding: 14px !default;
+  $material-standard-texteditor-with-label-input-bottom-padding: 4px !default;
   $material-underlined-editor-button-height: 22px !default;
 }
 

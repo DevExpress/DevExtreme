@@ -59,11 +59,6 @@ $colorbox-input-left-padding: 40px;
   border: 1px solid;
 }
 
-.dx-colorbox-input-container .dx-colorbox-input.dx-texteditor-input {
-  -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
-  padding-left: $colorbox-input-left-padding;
-}
-
 .dx-colorbox-overlay {
   padding: 20px;
 
@@ -88,17 +83,7 @@ $colorbox-input-left-padding: 40px;
 .dx-rtl {
   .dx-colorbox,
   &.dx-colorbox {
-    .dx-placeholder {
-      right: 32px;
-    }
-
     &.dx-dropdowneditor {
-      .dx-colorbox-input.dx-texteditor-input {
-        direction: ltr;
-        text-align: end;
-        padding-right: $colorbox-input-left-padding;
-      }
-
       .dx-colorbox-color-result-preview {
         left: auto;
         right: 13px;
