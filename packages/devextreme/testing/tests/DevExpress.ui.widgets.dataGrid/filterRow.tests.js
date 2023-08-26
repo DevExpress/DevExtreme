@@ -1305,8 +1305,7 @@ QUnit.module('Filter Row', {
 
     // T904124
     [true, false].forEach(rtlEnabled => {
-        const textAlign = rtlEnabled ? 'right' : 'start';
-        QUnit.test(`input's textAlign should be ${textAlign} if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
+        QUnit.test(`input's textAlign should be 'start' if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
             // arrange
             const $testElement = $('#container');
 
@@ -1317,7 +1316,7 @@ QUnit.module('Filter Row', {
             this.columnHeadersView.render($testElement);
 
             // assert
-            assert.equal($testElement.find(TEXTEDITOR_INPUT_SELECTOR).css('textAlign'), textAlign, 'text align');
+            assert.equal($testElement.find(TEXTEDITOR_INPUT_SELECTOR).css('textAlign'), 'start', 'text align');
         });
     });
 });

@@ -12,9 +12,11 @@
 
 
 .dx-colorbox {
-  .dx-colorbox-input,
-  .dx-placeholder::before {
-    padding-inline-start: 40px;
+  .dx-colorbox-input-container {
+    .dx-colorbox-input,
+    .dx-placeholder::before {
+      padding-inline-start: 40px;
+    }
   }
 }
 
