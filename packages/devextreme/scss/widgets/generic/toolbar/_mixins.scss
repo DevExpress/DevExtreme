@@ -46,6 +46,7 @@
 }
 
 @mixin dx-toolbar-item-padding($padding) {
+  padding: 0;
   padding-inline-start: $padding;
 
   &:last-child {
