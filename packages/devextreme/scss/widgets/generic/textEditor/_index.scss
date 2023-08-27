@@ -50,7 +50,7 @@ $generic-texteditor-label-transition:
 }
 
 @mixin texteditor-validation-icon-offset() {
-  padding-inline-end: $generic-invalid-badge-halfhorizontal-padding;
+  inset-inline-end: $generic-invalid-badge-halfhorizontal-padding;
 }
 
 @mixin validation-icon-position() {

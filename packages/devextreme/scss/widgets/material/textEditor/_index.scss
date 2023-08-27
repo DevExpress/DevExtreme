@@ -491,10 +491,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         border-inline-start-width: 0;
       }
     }
-
-    .dx-placeholder {
-      display: none;
-    }
   }
 
   .dx-texteditor-label {
@@ -595,17 +591,24 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         }
       }
 
-      &.dx-state-focused {
+      .dx-placeholder {
+        display: none;
+      }
+
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
         .dx-placeholder {
           display: block;
         }
       }
 
-      &.dx-dropdowneditor-active {
+      &.dx-state-readonly {
         .dx-placeholder {
-          display: block;
+          display: none;
         }
+      }
 
+      &.dx-dropdowneditor-active {
         @include dx-state($texteditor-border-color, 1);
       }
     }
