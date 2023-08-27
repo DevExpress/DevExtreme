@@ -97,9 +97,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
     }
   }
 
-  &.dx-editor-outlined,
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
+  &.dx-texteditor {
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
@@ -128,9 +126,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
   .dx-datebox {
     &.dx-start-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-filled,
-      &.dx-editor-underlined {
+      &.dx-texteditor {
         .dx-texteditor-input {
           padding-inline-end: $material-filled-texteditor-input-horizontal-padding;
         }
@@ -138,9 +134,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
     }
 
     &.dx-end-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-underlined,
-      &.dx-editor-filled {
+      &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
             padding-inline-end: $material-texteditor-invalid-badge-size;

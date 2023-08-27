@@ -37,13 +37,9 @@ $colorbox-input-left-padding: 40px;
     }
   }
 
-  &.dx-editor-outlined,
-  &.dx-editor-underlined,
-  &.dx-editor-filled {
-    .dx-texteditor-label {
-      .dx-label-before {
-        min-width: $colorbox-input-left-padding;
-      }
+  .dx-texteditor-label {
+    .dx-label-before {
+      min-width: $colorbox-input-left-padding;
     }
   }
 }

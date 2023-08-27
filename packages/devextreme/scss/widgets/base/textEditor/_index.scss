@@ -115,3 +115,10 @@
     opacity: 1;
   }
 }
+
+.dx-rtl .dx-texteditor,
+.dx-rtl.dx-texteditor {
+  .dx-placeholder {
+    text-align: right;
+  }
+}
