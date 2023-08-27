@@ -46,6 +46,12 @@
   }
 }
 
+.dx-rtl {
+  .dx-texteditor-input {
+    text-align: right;
+  }
+}
+
 .dx-datebox-button-cell {
   .dx-button {
     min-width: 90px;
