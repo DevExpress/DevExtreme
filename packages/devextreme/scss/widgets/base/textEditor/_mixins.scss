@@ -129,9 +129,7 @@
   $material-filled-texteditor-spin-button-horizontal-padding,
   $material-button-vertical-padding,
 ) {
-  .dx-editor-outlined,
-  .dx-editor-filled,
-  .dx-editor-underlined {
+  .dx-texteditor {
     .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {

@@ -151,9 +151,7 @@
   min-height: $material-datebox-input-min-height;
 }
 
-.dx-editor-outlined,
-.dx-editor-filled,
-.dx-editor-underlined {
+.dx-texteditor {
   &.dx-datebox-native {
     .dx-texteditor-input {
       padding-right: $material-filled-texteditor-spin-button-horizontal-padding;

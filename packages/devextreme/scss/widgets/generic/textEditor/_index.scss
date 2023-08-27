@@ -208,7 +208,7 @@ $generic-texteditor-label-transition:
   display: flex;
   flex-direction: row;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
 
   .dx-label {
     display: flex;
@@ -224,11 +224,6 @@ $generic-texteditor-label-transition:
 
   .dx-invalid & {
     color: $base-invalid-color;
-  }
-
-  .dx-rtl & {
-    left: auto;
-    right: 0;
   }
 }
 
