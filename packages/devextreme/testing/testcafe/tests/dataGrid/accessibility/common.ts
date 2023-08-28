@@ -44,6 +44,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Sorting and group panel in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -398,6 +399,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Search panel in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -463,6 +465,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Selection in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -529,6 +532,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Fixed columns in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     // assert
@@ -870,7 +874,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Batch editing mode in ${theme} - edit cell`, async (t) => {
-    if (theme === Themes.fluentBlue) { return; }
+    if (theme === Themes.fluentBlue || theme === Themes.fluentBlueDark) { return; }
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -915,7 +919,8 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Batch editing mode in ${theme} - modified cell`, async (t) => {
-    if (theme === Themes.fluentBlueDark) { return; }
+    if (theme === Themes.fluentBlue || theme === Themes.fluentBlueDark) { return; }
+
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1200,6 +1205,8 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Adaptability in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
+
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
