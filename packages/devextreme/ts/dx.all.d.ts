@@ -1657,7 +1657,6 @@ declare namespace DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
-  export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
   /**
    * [descr:RangeRule]
    */
@@ -11466,7 +11465,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.buttons]
      */
-    buttons?: ( | dxDataGrid.DataGridPredefinedColumnButton
+    buttons?: (| dxDataGrid.DataGridPredefinedColumnButton
     | dxDataGrid.ColumnButton<TRowData, TKey>)[];
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
@@ -14516,7 +14515,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
-    buttons?: ( | dxDropDownEditor.DropDownPredefinedButton
+    buttons?: (| dxDropDownEditor.DropDownPredefinedButton
     | common.TextEditorButton)[];
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
@@ -15109,7 +15108,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxFileManagerContextMenu.items]
      */
-    items?: ( | dxFileManager.ContextMenuItem
+    items?: (| dxFileManager.ContextMenuItem
     | dxFileManager.FileManagerPredefinedContextMenuItem)[];
   }
   /**
@@ -15449,12 +15448,12 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxFileManagerToolbar.fileSelectionItems]
      */
-    fileSelectionItems?: ( | dxFileManager.ToolbarItem
+    fileSelectionItems?: (| dxFileManager.ToolbarItem
     | dxFileManager.FileManagerPredefinedToolbarItem)[];
     /**
      * [descr:dxFileManagerToolbar.items]
      */
-    items?: ( | dxFileManager.ToolbarItem
+    items?: (| dxFileManager.ToolbarItem
     | dxFileManager.FileManagerPredefinedToolbarItem)[];
   }
   /**
@@ -16834,7 +16833,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.validationRules]
      */
-    validationRules?: ( | common.RequiredRule
+    validationRules?: (| common.RequiredRule
     | common.NumericRule
     | common.RangeRule
     | common.StringLengthRule
@@ -17952,7 +17951,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxGanttContextMenu.items]
      */
-    items?: ( | dxGantt.ContextMenuItem
+    items?: (| dxGantt.ContextMenuItem
     | dxGantt.GanttPredefinedContextMenuItem)[];
   }
   /**
@@ -18603,7 +18602,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxGanttToolbar.items]
      */
-    items?: ( | dxGantt.ToolbarItem
+    items?: (| dxGantt.ToolbarItem
     | dxGantt.GanttPredefinedToolbarItem)[];
   }
   /**
@@ -18908,7 +18907,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.tabs]
      */
-    tabs?: ( | dxHtmlEditor.ImageUploadTab
+    tabs?: (| dxHtmlEditor.ImageUploadTab
     | dxHtmlEditor.HtmlEditorImageUploadTab)[];
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
@@ -19075,7 +19074,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenu.items]
      */
-    items?: ( | dxHtmlEditor.ContextMenuItem
+    items?: (| dxHtmlEditor.ContextMenuItem
     | dxHtmlEditor.HtmlEditorPredefinedContextMenuItem)[];
   }
   /**
@@ -19091,7 +19090,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.items]
      */
-    items?: ( | dxHtmlEditor.ContextMenuItem
+    items?: (| dxHtmlEditor.ContextMenuItem
     | dxHtmlEditor.HtmlEditorPredefinedContextMenuItem)[];
   }
   /**
@@ -19124,7 +19123,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxHtmlEditorToolbar.items]
      */
-    items?: ( | dxHtmlEditor.ToolbarItem
+    items?: (| dxHtmlEditor.ToolbarItem
     | dxHtmlEditor.HtmlEditorPredefinedToolbarItem)[];
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
@@ -21087,7 +21086,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.buttons]
      */
-    buttons?: ( | dxNumberBox.NumberBoxPredefinedButton
+    buttons?: (| dxNumberBox.NumberBoxPredefinedButton
     | common.TextEditorButton)[];
     /**
      * [descr:dxNumberBoxOptions.format]
@@ -24002,7 +24001,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.views]
      */
-    views?: ( | 'day'
+    views?: (| 'day'
     | 'week'
     | 'workWeek'
     | 'month'
@@ -26259,7 +26258,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.buttons]
      */
-    buttons?: ( | string
+    buttons?: (| string
     | common.TextBoxPredefinedButton
     | common.TextEditorButton)[];
     /**
@@ -28328,7 +28327,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxTreeListColumn.buttons]
      */
-    buttons?: ( | dxTreeList.TreeListPredefinedColumnButton
+    buttons?: (| dxTreeList.TreeListPredefinedColumnButton
     | dxTreeList.ColumnButton<TRowData, TKey>)[];
     /**
      * [descr:dxTreeListColumn.cellTemplate]
@@ -29183,7 +29182,7 @@ declare namespace DevExpress.ui {
     /**
      * [descr:dxValidationGroupResult.brokenRules]
      */
-    brokenRules?: ( | common.RequiredRule
+    brokenRules?: (| common.RequiredRule
     | common.NumericRule
     | common.RangeRule
     | common.StringLengthRule
