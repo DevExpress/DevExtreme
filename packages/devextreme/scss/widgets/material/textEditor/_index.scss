@@ -440,7 +440,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       border-color: $borderColor;
       border-top-width: 0;
       border-bottom-width: #{$shadowOffset}px;
-      padding: 0 4px;
+      padding: 0 $material-texteditor-label-active-horizontal-padding;
 
       span {
         transform: translate(0, -$label-offset-y);
@@ -527,7 +527,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   }
 
   .dx-label {
-    padding: 0 4px;
+    padding: 0 $material-texteditor-label-active-horizontal-padding;
     border-top-width: 0;
     border-bottom-width: 1px;
     border-inline-width: 0;
@@ -592,7 +592,13 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       &.dx-state-readonly,
       &.dx-state-disabled {
         @include dx-state-empty(color.change($texteditor-color, $alpha: 0.5), 1);
+      }
 
+      &.dx-state-readonly {
+        .dx-placeholder {
+          display: none;
+        }
+        
         &.dx-state-focused {
           @include dx-state-empty($texteditor-focused-border-color, 2);
 
@@ -629,12 +635,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         }
       }
 
-      &.dx-state-readonly {
-        .dx-placeholder {
-          display: none;
-        }
-      }
-
       &.dx-dropdowneditor-active {
         @include dx-state($texteditor-border-color, 1);
       }
@@ -658,7 +658,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           position: absolute;
           height: 3px;
           top: -0.5px;
-          margin-inline-start: -4px;
+          margin-inline-start: -$material-texteditor-label-active-horizontal-padding;
         }
       }
     }
@@ -691,7 +691,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
 
     &.dx-dropdowneditor-active.dx-state-focused,
-    &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
     &.dx-state-focused.dx-state-hover {
       @include dx-state($texteditor-focused-border-color, 2);
