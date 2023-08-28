@@ -17,12 +17,12 @@
   width: auto;
 
   .dx-texteditor {
-    .dx-texteditor-container {
-      .dx-texteditor-input {
-        padding-inline-end: 0;
-        padding-inline-start: 12px;
-      }
+    .dx-texteditor-input {
+      padding-inline-end: 0;
+      padding-inline-start: 12px;
+    }
 
+    .dx-texteditor-container {
       .dx-texteditor-buttons-container .dx-dropdowneditor-button {
         margin-inline-end: 0;
       }
