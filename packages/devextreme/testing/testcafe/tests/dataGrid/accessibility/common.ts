@@ -18,6 +18,8 @@ const DATA_GRID_SELECTOR = '#container';
   Themes.genericDark,
   Themes.materialBlue,
   Themes.materialBlueDark,
+  Themes.fluentBlue,
+  Themes.fluentBlueDark,
 ].forEach((theme) => {
   const a11yCheckConfig = theme === Themes.genericLight ? {} : {
     runOnly: 'color-contrast',
