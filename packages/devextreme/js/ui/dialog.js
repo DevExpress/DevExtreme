@@ -58,15 +58,11 @@ export const custom = function(options) {
     }
 
     const messageHtml = String(isMessageHtmlDefined ? options.messageHtml : options.message);
-
-    const $message = $('<div>').addClass(DX_DIALOG_MESSAGE_CLASSNAME)
-        .html(messageHtml);
-
     const messageId = options.title ? null : new Guid();
-
-    if(messageId) {
-        $message.attr('id', messageId);
-    }
+    const $message = $('<div>')
+        .addClass(DX_DIALOG_MESSAGE_CLASSNAME)
+        .html(messageHtml)
+        .attr('id', messageId);
 
     const popupToolbarItems = [];
 
@@ -104,7 +100,9 @@ export const custom = function(options) {
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
                 .append($message);
 
-            args.component.$overlayContent().attr('aria-labelledby', messageId);
+            if(messageId) {
+                args.component.$overlayContent().attr('aria-labelledby', messageId);
+            }
         },
         onShowing: function(e) {
             e.component

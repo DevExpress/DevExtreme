@@ -391,10 +391,10 @@ const Popup = Overlay.inherit({
             this._$title.detach();
         }
 
-        this._addAriaLabel();
+        this._setAriaLabel();
     },
 
-    _addAriaLabel() {
+    _setAriaLabel() {
         const { title, showTitle } = this.option();
 
         if(showTitle && !!title) {
