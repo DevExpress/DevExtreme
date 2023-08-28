@@ -10,12 +10,13 @@ on:
     branches: [23_2]
 
 env:
+  MAX_LENGTH: 150
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
 
 jobs:
-  Checks:
+  checks:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 5
     steps:
     - name: Get sources
       uses: actions/checkout@v3
@@ -26,17 +27,16 @@ jobs:
 
     - name: Check all changed files
       run: |
-        MAX_LENGTH=150
         RESULT=''
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-          if (( ${#file} > MAX_LENGTH )); then RESULT+="$file\n"; fi;
+          if (( ${#file} > $MAX_LENGTH )); then RESULT+="$file\n"; fi;
         done
-        if (( ${#RESULT} )); then printf "The following filenames are longer than ${MAX_LENGTH} characters:\n${RESULT}" && exit 1; fi;
+        if (( ${#RESULT} )); then printf "The following filenames are longer than $MAX_LENGTH characters:\n${RESULT}" && exit 1; fi;
 
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [Checks]
+    needs: [checks]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
