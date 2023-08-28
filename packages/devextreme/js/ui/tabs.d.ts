@@ -16,7 +16,6 @@ import CollectionWidget, {
 
 import {
     Orientation,
-    PositionRelative,
     SingleOrMultiple,
 } from '../common';
 
@@ -26,6 +25,12 @@ export {
     SingleOrMultiple,
     Orientation,
 };
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxTabs
+ */
+export type IconPosition = 'top' | 'end' | 'bottom' | 'start';
 
 /**
  * @docid _ui_tabs_ContentReadyEvent
@@ -144,7 +149,7 @@ export interface dxTabsBaseOptions<
      * @default 'start'
      * @public
      */
-    iconPosition?: PositionRelative;
+    iconPosition?: IconPosition;
     /**
      * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>
