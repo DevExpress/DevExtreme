@@ -1657,7 +1657,6 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
-  export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
   /**
    * [descr:RangeRule]
    */
