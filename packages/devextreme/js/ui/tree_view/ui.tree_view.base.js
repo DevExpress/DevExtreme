@@ -54,6 +54,7 @@ const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const SELECTED_ITEM_CLASS = 'dx-state-selected';
 const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';
 const DATA_ITEM_ID = 'data-item-id';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
@@ -1431,11 +1432,22 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
+    _itemClick: function(actionArgs) {
+        const args = actionArgs.args[0];
+        const link = args.event.target.getElementsByClassName(ITEM_URL_CLASS)[0];
+        if(args.itemData.url && link) {
+            link.click();
+        }
+    },
+
     _itemClickHandler: function(e, $item) {
         const itemData = this._getItemData($item);
         const node = this._getNodeByElement($item);
-
-        this._itemDXEventHandler(e, 'onItemClick', { node: this._dataAdapter.getPublicNode(node) });
+        this._itemDXEventHandler(e, 'onItemClick', {
+            node: this._dataAdapter.getPublicNode(node),
+        }, {
+            beforeExecute: this._itemClick,
+        });
 
         if(this.option('selectByClick') && !e.isDefaultPrevented()) {
             this._updateItemSelection(!node.internalFields.selected, itemData, e);
