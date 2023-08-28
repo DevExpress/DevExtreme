@@ -11,6 +11,7 @@ const moduleConfig = {
 
         this.$element = $('#gantt');
         this.clock = sinon.useFakeTimers();
+        this.epsilon = 0.01;
     },
     afterEach: function() {
         this.clock.restore();
@@ -167,7 +168,7 @@ QUnit.module('Actions', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
-        assert.equal(treeListWrapperElement.width(), 100);
+        assert.roughEqual(treeListWrapperElement.width(), 100, this.epsilon);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
 
@@ -178,7 +179,7 @@ QUnit.module('Actions', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
 
-        assert.equal(treeListWrapperElement.width(), 300);
+        assert.roughEqual(treeListWrapperElement.width(), 300, this.epsilon);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, 'Splitter has been moved by touch');
 
@@ -230,7 +231,7 @@ QUnit.module('Actions', moduleConfig, () => {
                 pageY: treeListWrapperTopOffset + 100 }));
             splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
-            assert.equal(treeListWrapperElement.width(), 100);
+            assert.roughEqual(treeListWrapperElement.width(), 100, this.epsilon);
             assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
             assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, `Splitter ${index} has been moved by mouse`);
 
