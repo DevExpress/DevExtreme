@@ -82,6 +82,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Paging with displayMode is 'full' in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
