@@ -74,28 +74,28 @@ test('Items should have links if item.url is set', async (t) => {
   }, '#menu');
 });
 
-test('Items in adaptive mode should have links if item.url is set (T1181342)', async (t) => {
+test('Items in adaptive mode should have links if item.url is set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu(true);
 
   await t.click(menu.getHamburgerButton())
     .click(menu.items(0));
 
-  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode should have links if item.url is set.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with links.png', { element: '#container' });
 
   await t.pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode without link should have correct focus style.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode without links.png', { element: '#container' });
 
   await t
     .pressKey('down')
     .pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link and icon should have correct focus style.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link and icon focus.png', { element: '#container' });
 
   await t.pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link should have correct focus style.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Items in adaptive mode with link focus.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
