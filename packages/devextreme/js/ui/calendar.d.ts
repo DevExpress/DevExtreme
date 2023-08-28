@@ -211,6 +211,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid
      * @default []
+     * @fires dxCalendarOptions.onOptionChanged
      * @public
      */
     values?: Array<Date | number | string>;
