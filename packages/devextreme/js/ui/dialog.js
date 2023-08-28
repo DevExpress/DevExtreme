@@ -3,6 +3,7 @@ import $ from '../core/renderer';
 import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';
+import Guid from '../core/guid';
 
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
@@ -60,6 +61,13 @@ export const custom = function(options) {
 
     const $message = $('<div>').addClass(DX_DIALOG_MESSAGE_CLASSNAME)
         .html(messageHtml);
+
+    // let messageId = null;
+
+    // if(!options.title) {
+    //     messageId = new Guid();
+    //     $message.attr('id', messageId);
+    // }
 
     const popupToolbarItems = [];
 
@@ -142,7 +150,8 @@ export const custom = function(options) {
         rtlEnabled: config().rtlEnabled,
         position: {
             boundaryOffset: { h: 10, v: 0 }
-        }
+        },
+        // wrapperAttr: messageId ? { 'aria-labelledby': messageId } : {},
     }, options.popupOptions));
 
     popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);

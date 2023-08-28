@@ -33,6 +33,7 @@ import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
 import { PopupPositionController } from './popup_position_controller';
 import { createBodyOverflowManager } from './popup_overflow_manager';
+import Guid from '../../core/guid';
 
 const window = getWindow();
 
@@ -60,6 +61,8 @@ const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
+
+const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
 const APPLY_VALUE_BUTTONS_ORDER = ['cancel', 'done'];
@@ -388,6 +391,19 @@ const Popup = Overlay.inherit({
         } else if(this._$title) {
             this._$title.detach();
         }
+
+        // if(showTitle && !!titleText) {
+        //     this._addAria();
+        // } else {
+        //     this.$wrapper().attr('aria-label', 'dialog');
+        // }
+    },
+
+    _addAria() {
+        const titleId = new Guid();
+
+        this._$title.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
+        this.$wrapper().attr('aria-labelledby', titleId);
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
