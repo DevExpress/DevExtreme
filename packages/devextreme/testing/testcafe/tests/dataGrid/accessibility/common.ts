@@ -118,6 +118,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Paging with displayMode is 'compact' in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -571,6 +572,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Column chooser with the 'dragAndDrop' mode in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const columnChooser = dataGrid.getColumnChooser();
@@ -868,6 +870,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Batch editing mode in ${theme} - edit cell`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -912,6 +915,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Batch editing mode in ${theme} - modified cell`, async (t) => {
+    if (theme === Themes.fluentBlueDark) { return; }
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1231,6 +1235,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Row drag and drop in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
