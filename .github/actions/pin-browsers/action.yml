@@ -1,10 +1,14 @@
 name: "Pin Browsers"
 description: "Install and setup Chrome and Firefox"
 
+# List of browser versions
+# Chrome:  https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
+# Firefox: https://www.ubuntuupdates.org/package/ubuntu_mozilla_security/focal/main/base/firefox
+
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "116.0.5845.110-2"
+    default: "116.0.5845.110-1"
   firefox-version:
     description: "Firefox version to install"
     default: "latest"
