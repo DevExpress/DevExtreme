@@ -1,7 +1,7 @@
 name: DevExtreme Angular Tests
 
 on:
-  pull_request:
+#  pull_request:
   push:
     branches: [23_2]
 
