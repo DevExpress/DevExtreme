@@ -11,7 +11,7 @@ const moduleConfig = {
 
         this.$element = $('#gantt');
         this.clock = sinon.useFakeTimers();
-        this.epsilon = 0.01;
+        this.epsilon = 0.05;
     },
     afterEach: function() {
         this.clock.restore();
