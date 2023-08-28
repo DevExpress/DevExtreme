@@ -422,138 +422,134 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   $label-default-transform: translate(0, 0);
 
   @mixin dx-state($borderColor, $shadowOffset) {
-    outline: none;
-    box-shadow: none;
+    .dx-label {
+      border-color: $borderColor;
+      border-top-width: 0;
+      border-bottom-width: #{$shadowOffset}px;
+      padding: 0 4px;
 
-    .dx-texteditor-label {
-      .dx-label {
-        border-color: $borderColor;
-        border-top-width: 0;
-        border-bottom-width: #{$shadowOffset}px;
-        padding: 0 4px;
-
-        span {
-          transform: translate(0, -$label-offset-y);
-          font-size: $material-texteditor-label-font-size;
-          margin-top: 0;
-          top: 0;
-          height: $material-texteditor-label-font-size + 1px;
-          line-height: $material-texteditor-label-font-size;
-        }
+      span {
+        transform: translate(0, -$label-offset-y);
+        font-size: $material-texteditor-label-font-size;
+        margin-top: 0;
+        top: 0;
+        height: $material-texteditor-label-font-size + 1px;
+        line-height: $material-texteditor-label-font-size;
       }
 
-      .dx-label-before {
-        border-color: $borderColor;
-        border-width: #{$shadowOffset}px;
-        border-inline-end-width: 0;
+      &::before {
+        background-color: $base-bg;
       }
+    }
 
-      .dx-label-after {
-        border-color: $borderColor;
-        border-width: #{$shadowOffset}px;
-        border-inline-start-width: 0;
-      }
+    .dx-label-before {
+      border-color: $borderColor;
+      border-width: #{$shadowOffset}px;
+      border-inline-end-width: 0;
+    }
+
+    .dx-label-after {
+      border-color: $borderColor;
+      border-width: #{$shadowOffset}px;
+      border-inline-start-width: 0;
     }
   }
 
   @mixin dx-state-empty($borderColor, $shadowOffset) {
-    outline: none;
-    box-shadow: none;
+    .dx-label {
+      padding: 0 2px;
+      border-color: $borderColor;
+      border-top-width: #{$shadowOffset}px;
+      border-bottom-width: #{$shadowOffset}px;
 
-    .dx-texteditor-label {
-      .dx-label {
-        padding: 0 2px;
-        border-color: $borderColor;
-        border-top-width: #{$shadowOffset}px;
-        border-bottom-width: #{$shadowOffset}px;
-
-        span {
-          transition: $material-editor-label-transition;
-          transform: $label-default-transform;
-          font-size: $material-texteditor-font-size;
-          top: 50%;
-          margin-top: math.div(-$material-texteditor-font-size, 2);
-          height: $material-texteditor-font-size;
-          line-height: $material-texteditor-font-size;
-        }
+      span {
+        transition: $material-editor-label-transition;
+        transform: $label-default-transform;
+        font-size: $material-texteditor-font-size;
+        top: 50%;
+        margin-top: math.div(-$material-texteditor-font-size, 2);
+        height: $material-texteditor-font-size;
+        line-height: $material-texteditor-font-size;
       }
 
-      .dx-label-before {
-        border-color: $borderColor;
-        border-width: #{$shadowOffset}px;
-        border-inline-end-width: 0;
+      &::before {
+        background-color: transparent;
       }
+    }
 
-      .dx-label-after {
-        border-color: $borderColor;
-        border-width: #{$shadowOffset}px;
-        border-inline-start-width: 0;
-      }
+    .dx-label-before {
+      border-color: $borderColor;
+      border-width: #{$shadowOffset}px;
+      border-inline-end-width: 0;
+    }
+
+    .dx-label-after {
+      border-color: $borderColor;
+      border-width: #{$shadowOffset}px;
+      border-inline-start-width: 0;
     }
   }
 
   .dx-texteditor-label {
     inset: 0;
+  }
 
-    .dx-label {
-      padding: 0 4px;
-      border-top-width: 0;
-      border-bottom-width: 1px;
-      border-inline-width: 0;
-      border-style: solid;
-      border-color: $texteditor-border-color;
-      margin-left: -2px;
-      margin-right: -2px;
-      border-radius: 1px;
-      clip-path: inset(-$material-texteditor-label-font-size 1px -1px 1px);
+  .dx-label {
+    padding: 0 4px;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-inline-width: 0;
+    border-style: solid;
+    border-color: $texteditor-border-color;
+    margin-left: -2px;
+    margin-right: -2px;
+    border-radius: 1px;
+    clip-path: inset(-$material-texteditor-label-font-size 1px -1px 1px);
 
-      span {
-        position: relative;
-        transform: translate(0, -$label-offset-y);
-        font-size: $material-texteditor-label-font-size;
-        top: 0;
-        margin-top: 0;
-        height: $material-texteditor-label-font-size + 1px;
-        line-height: $material-texteditor-label-font-size;
-      }
+    span {
+      position: relative;
+      transform: translate(0, -$label-offset-y);
+      font-size: $material-texteditor-label-font-size;
+      top: 0;
+      margin-top: 0;
+      height: $material-texteditor-label-font-size + 1px;
+      line-height: $material-texteditor-label-font-size;
     }
+  }
 
-    .dx-label-before {
-      border-block-width: 1px;
-      border-inline-start-width: 1px;
-      border-inline-end-width: 0;
-      border-style: solid;
-      border-color: $texteditor-border-color;
-      border-start-start-radius: $texteditor-input-border-radius;
-      border-end-start-radius: $texteditor-input-border-radius;
-      min-width: $material-filled-texteditor-input-horizontal-padding;
-      clip-path: inset(-1px 1px -1px -1px);
-    }
+  .dx-label-before {
+    border-block-width: 1px;
+    border-inline-start-width: 1px;
+    border-inline-end-width: 0;
+    border-style: solid;
+    border-color: $texteditor-border-color;
+    border-start-start-radius: $texteditor-input-border-radius;
+    border-end-start-radius: $texteditor-input-border-radius;
+    min-width: $material-filled-texteditor-input-horizontal-padding;
+    clip-path: inset(-1px 1px -1px -1px);
+  }
 
-    .dx-label-after {
-      border-block-width: 1px;
-      border-inline-end-width: 1px;
-      border-inline-start-width: 0;
-      border-style: solid;
-      border-color: $texteditor-border-color;
-      flex-grow: 1;
-      min-width: $material-filled-texteditor-input-horizontal-padding;
-      border-start-end-radius: $texteditor-input-border-radius;
-      border-end-end-radius: $texteditor-input-border-radius;
-      clip-path: inset(-1px -1px -1px 1px);
-    }
+  .dx-label-after {
+    border-block-width: 1px;
+    border-inline-end-width: 1px;
+    border-inline-start-width: 0;
+    border-style: solid;
+    border-color: $texteditor-border-color;
+    flex-grow: 1;
+    min-width: $material-filled-texteditor-input-horizontal-padding;
+    border-start-end-radius: $texteditor-input-border-radius;
+    border-end-end-radius: $texteditor-input-border-radius;
+    clip-path: inset(-1px -1px -1px 1px);
   }
 
   &.dx-rtl,
   .dx-rtl & {
-    .dx-texteditor-label {
-      .dx-label-before {
-        clip-path: inset(-1px -1px -1px 1px);
-      }
+    .dx-label-before {
+      clip-path: inset(-1px -1px -1px 1px);
+    }
 
-      .dx-label-after {
-        clip-path: inset(-1px 1px -1px -1px);
-      }
+    .dx-label-after {
+      clip-path: inset(-1px 1px -1px -1px);
     }
   }
 
@@ -616,10 +612,34 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     border: none;
-    box-shadow: none;
     outline: none;
     position: relative;
     margin-top: $label-offset-y;
+
+    &.dx-daterangebox {
+      .dx-label {
+        position: relative;
+
+        &::before {
+          content: '';
+          width: 100%;
+          position: absolute;
+          height: 3px;
+          top: -0.5px;
+          margin-inline-start: -4px;
+        }
+      }
+    }
+
+    .dx-label {
+      &::before {
+        background-color: $base-bg;
+      }
+    }
+
+    &:not(.dx-daterangebox) {
+      box-shadow: none;
+    }
 
     &.dx-state-readonly,
     &.dx-state-disabled {

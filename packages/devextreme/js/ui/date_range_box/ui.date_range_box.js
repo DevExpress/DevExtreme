@@ -20,8 +20,8 @@ import { addNamespace } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
-const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-daterangebox-with-label';
-const DATERANGEBOX_WITH_FLOATING_LABEL_CLASS = 'dx-daterangebox-with-floating-label';
+const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const DATERANGEBOX_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
