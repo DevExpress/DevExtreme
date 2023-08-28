@@ -79,17 +79,15 @@ $tree-view-icon-size: 24px;
   cursor: pointer;
 
   .dx-treeview-item-content {
-     .dx-icon {
+    .dx-icon {
       display: inline-block;
       width: $tree-view-icon-size;
       height: $tree-view-icon-size;
       vertical-align: middle;
       margin-right: 5px;
       background-size: $tree-view-icon-size $tree-view-icon-size;
-     }
-  }
+    }
 
-  .dx-treeview-item-content {
     span {
       vertical-align: middle;
     }
