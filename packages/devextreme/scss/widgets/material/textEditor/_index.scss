@@ -352,7 +352,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 }
 
 .dx-editor-filled {
-  $input-vertical-diff: 6px;
   $label-position-top: $material-texteditor-label-top-offset;
 
   .dx-texteditor-label {
@@ -371,8 +370,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     .dx-texteditor-input,
     .dx-placeholder::before,
     .dx-lookup-field {
-      padding-top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
-      padding-bottom: $material-filled-texteditor-input-bottom-padding - $input-vertical-diff;
+      padding-top: $material-filled-texteditor-input-with-label-top-padding;
+      padding-bottom: $material-filled-texteditor-input-with-label-bottom-padding;
     }
 
     .dx-texteditor-label {
