@@ -2525,6 +2525,28 @@ QUnit.module('adaptivity: behavior', {
         assert.strictEqual(itemWithAttributes.getAttribute('target'), '_blank');
     });
 
+    QUnit.test('link should be cliked if item.url is set', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const clickSpy = sinon.spy();
+
+        const $rootTreeviewItem = this.$element.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        $rootTreeviewItem.trigger('dxclick');
+
+        const treeviewItem = this.$element.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+        const urlItem = $(`.${ITEM_URL_CLASS}`)[0];
+
+        urlItem.click = clickSpy;
+
+        treeviewItem.trigger('dxclick');
+
+        assert.ok(clickSpy.calledOnce);
+    });
+
     QUnit.test('Adaptive menu should be shown when hamburger button clicked', function(assert) {
         new Menu(this.$element, {
             items: this.items,
