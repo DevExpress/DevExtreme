@@ -695,6 +695,8 @@
         "dxGantt-showResources": "Отображать Ресурсы",
         "dxGantt-showDependencies": "Отображать Зависимости",
         "dxGantt-dialogStartDateValidation": "Начальная дата должна быть позднее {0}",
-        "dxGantt-dialogEndDateValidation": "Конечная дата должна быть позднее {0}"
+        "dxGantt-dialogEndDateValidation": "Конечная дата должна быть позднее {0}",
+
+        "dxPopup-defaultTitle": "Dialog"
     }
 }

@@ -371,13 +371,12 @@ const Popup = Overlay.inherit({
 
     _renderTitle: function() {
         const items = this._getToolbarItems('top');
-        const titleText = this.option('title');
-        const showTitle = this.option('showTitle');
+        const { title, showTitle } = this.option();
 
-        if(showTitle && !!titleText) {
+        if(showTitle && !!title) {
             items.unshift({
                 location: devices.current().ios ? 'center' : 'before',
-                text: titleText
+                text: title,
             });
         }
 
@@ -392,18 +391,20 @@ const Popup = Overlay.inherit({
             this._$title.detach();
         }
 
-        // if(showTitle && !!titleText) {
-        //     this._addAria();
-        // } else {
-        //     this.$wrapper().attr('aria-label', 'dialog');
-        // }
+        this._addAriaLabel();
     },
 
-    _addAria() {
-        const titleId = new Guid();
+    _addAriaLabel() {
+        const { title, showTitle } = this.option();
 
-        this._$title.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-        this.$wrapper().attr('aria-labelledby', titleId);
+        if(showTitle && !!title) {
+            const titleId = new Guid();
+
+            this._$title.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
+            this.$content().attr('aria-labelledby', titleId);
+        } else {
+            this.$content().attr('aria-label', messageLocalization.format('dxPopup-defaultTitle'));
+        }
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
