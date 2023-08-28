@@ -401,9 +401,9 @@ const Popup = Overlay.inherit({
             const titleId = new Guid();
 
             this._$title.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-            this.$content().attr('aria-labelledby', titleId);
+            this.$overlayContent().attr('aria-labelledby', titleId);
         } else {
-            this.$content().attr('aria-label', messageLocalization.format('dxPopup-defaultTitle'));
+            this.$overlayContent().attr('aria-label', messageLocalization.format('dxPopup-defaultTitle'));
         }
     },
 

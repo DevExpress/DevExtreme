@@ -102,8 +102,9 @@ export const custom = function(options) {
         onContentReady: function(args) {
             args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
-                .append($message)
-                .attr('aria-labelledby', messageId);
+                .append($message);
+
+            args.component.$overlayContent().attr('aria-labelledby', messageId);
         },
         onShowing: function(e) {
             e.component
