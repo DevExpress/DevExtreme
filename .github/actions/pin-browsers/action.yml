@@ -8,7 +8,7 @@ description: "Install and setup Chrome and Firefox"
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "116.0.5845.110-1"
+    default: "latest"
   firefox-version:
     description: "Firefox version to install"
     default: "latest"
@@ -16,8 +16,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: "Setup Chrome"
+    - name: "Setup latest Chrome"
+      if: ${{ inputs.chrome-version == "latest" }}
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: ${{ inputs.chrome-version }}
+    - name: "Setup Chrome with specific version"
       shell: bash
+      if: ${{ inputs.chrome-version != "latest" }}
       env:
         CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
@@ -29,16 +35,8 @@ runs:
         else
           echo "Skip Chrome upgrade"
         fi
-    - shell: bash
-      run: |
-        echo Installed chromium version: ${{ inputs.chrome-version }}
-        google-chrome-stable --version
     - name: "Setup Firefox"
       id: setup-firefox
       uses: browser-actions/setup-firefox@v1
       with:
         firefox-version: ${{ inputs.firefox-version }}
-    - shell: bash
-      run: |
-        echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
-        firefox --version
