@@ -190,7 +190,7 @@ QUnit.module('basic', () => {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
-    QUnit.test('aria-labelledby is equal title id in runtime', function(assert) {
+    QUnit.test('aria-labelledby is correct in runtime change', function(assert) {
         const instance = $('#popup').dxPopup({
             title: 'title',
             visible: true,
@@ -206,6 +206,12 @@ QUnit.module('basic', () => {
 
         assert.strictEqual($overlayContent.attr('aria-labelledby'), titleIdSecond);
         assert.notStrictEqual($overlayContent.attr('aria-labelledby'), titleIdFirst);
+
+        instance.option('title', '');
+        const $title = $overlayContent.find(`.${TOOLBAR_LABEL_CLASS}`).get(0);
+
+        assert.strictEqual($title, undefined);
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
     QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {

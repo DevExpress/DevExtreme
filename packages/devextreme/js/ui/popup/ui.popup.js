@@ -396,13 +396,11 @@ const Popup = Overlay.inherit({
 
     _setAriaLabel() {
         const { title, showTitle } = this.option();
+        const shouldSetAria = showTitle && !!title;
+        const titleId = new Guid();
 
-        if(showTitle && !!title) {
-            const titleId = new Guid();
-
-            this._$title.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-            this.$overlayContent().attr('aria-labelledby', titleId);
-        }
+        this._$title.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', shouldSetAria ? titleId : null);
+        this.$overlayContent().attr('aria-labelledby', shouldSetAria ? titleId : null);
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
