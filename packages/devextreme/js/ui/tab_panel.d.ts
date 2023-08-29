@@ -18,7 +18,6 @@ import {
 
 import {
     Position,
-    PositionRelative,
 } from '../common';
 
 import CollectionWidget, {
@@ -29,6 +28,8 @@ import {
     Item as dxMultiViewItem,
     dxMultiViewBaseOptions,
 } from './multi_view';
+
+import { IconPosition } from './tabs';
 
 type ItemLike = string | Item | any;
 
@@ -185,7 +186,7 @@ export interface dxTabPanelOptions<
      * @default 'start'
      * @public
      */
-    iconPosition?: PositionRelative;
+    iconPosition?: IconPosition;
     /**
      * @docid
      * @type Array<string | dxTabPanelItem | any>
