@@ -120,7 +120,7 @@ module('Renovated Views', () => {
 
             const cellHeightAfterCurrentDateChange = scheduler.workSpace.getCellHeight();
 
-            assert.equal(cellHeightAfterCurrentDateChange, cellHeight, 'Correct cell hieght');
+            assert.equal(cellHeightAfterCurrentDateChange, cellHeight, 'Correct cell height');
         });
     });
 
