@@ -293,7 +293,7 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-
+        
         "dxColorView-ariaRed": "Sarkans",
         "dxColorView-ariaGreen": "Zaļš",
         "dxColorView-ariaBlue": "Zils",
@@ -695,8 +695,6 @@
         "dxGantt-showResources": "Rādīt Resursus",
         "dxGantt-showDependencies": "Rādīt Sasaistes",
         "dxGantt-dialogStartDateValidation": "Sākuma datumam jābūt vēlākam par {0}",
-        "dxGantt-dialogEndDateValidation": "Beigu datumam jābūt vēlākam par {0}",
-
-        "dxPopup-defaultTitle": "Dialog"
+        "dxGantt-dialogEndDateValidation": "Beigu datumam jābūt vēlākam par {0}"
     }
 }

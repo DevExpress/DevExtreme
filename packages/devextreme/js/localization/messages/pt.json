@@ -293,7 +293,7 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-
+        
         "dxColorView-ariaRed": "Vermelho",
         "dxColorView-ariaGreen": "Verde",
         "dxColorView-ariaBlue": "Azul",
@@ -695,8 +695,6 @@
         "dxGantt-showResources": "Mostrar recursos",
         "dxGantt-showDependencies": "Mostrar dependências",
         "dxGantt-dialogStartDateValidation": "A data de início deve ser após {0}",
-        "dxGantt-dialogEndDateValidation": "A data de término deve ser posterior a {0}",
-
-        "dxPopup-defaultTitle": "Dialog"
+        "dxGantt-dialogEndDateValidation": "A data de término deve ser posterior a {0}"
     }
 }

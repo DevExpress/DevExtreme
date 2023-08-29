@@ -695,8 +695,6 @@
         "dxGantt-showResources": "Afficher les ressources",
         "dxGantt-showDependencies": "Afficher les dépendances",
         "dxGantt-dialogStartDateValidation": "La date de début doit être postérieure au {0}",
-        "dxGantt-dialogEndDateValidation": "La date de fin doit être postérieure au {0}",
-
-        "dxPopup-defaultTitle": "Dialog"
+        "dxGantt-dialogEndDateValidation": "La date de fin doit être postérieure au {0}"
     }
 }

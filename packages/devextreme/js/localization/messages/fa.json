@@ -695,8 +695,6 @@
         "dxGantt-showResources": "Show Resources",
         "dxGantt-showDependencies": "Show Dependencies",
         "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
-        "dxGantt-dialogEndDateValidation": "End date must be after {0}",
-
-        "dxPopup-defaultTitle": "Dialog"
+        "dxGantt-dialogEndDateValidation": "End date must be after {0}"
     }
 }
