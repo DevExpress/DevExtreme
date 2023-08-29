@@ -53,5 +53,5 @@ safeSizeTest('Appointment should not re-rendered on window resize when width and
 
   await setStyleAttribute(element, 'background-color: red;');
   await t.resizeWindow(300, 300);
-  await t.expect(await getStyleAttribute(element)).eql('transform: translate(0px, 26px); width: 200px; height: 74px; background-color: red;');
+  await t.expect(await getStyleAttribute(element)).eql('transform: translate(0px, 26px); width: 200px; height: 72px; background-color: red;');
 }).before(async () => createScheduler('#container', { width: 600, height: 400 }));

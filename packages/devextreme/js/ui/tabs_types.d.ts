@@ -1,6 +1,7 @@
 export {
   SingleOrMultiple,
   Orientation,
+  IconPosition,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

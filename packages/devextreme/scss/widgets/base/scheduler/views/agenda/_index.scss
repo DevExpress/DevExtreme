@@ -1,4 +1,3 @@
-$scheduler-header-panel-top-gap: null !default;
 $scheduler-group-header-table-cell-width: null !default;
 $scheduler-small-size-factor: null !default;
 $scheduler-small-font-size: null !default;
@@ -10,7 +9,7 @@ $scheduler-group-header-agenda-font-size: 18px;
 
 .dx-scheduler-agenda {
   .dx-scheduler-date-table-scrollable {
-    padding-top: $scheduler-header-panel-top-gap;
+    padding-top: 10px;
   }
 
   .dx-scheduler-time-panel-cell {

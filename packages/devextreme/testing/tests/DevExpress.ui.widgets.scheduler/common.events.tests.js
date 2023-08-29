@@ -718,4 +718,43 @@ QUnit.module('Events', {
 
         assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');
     });
+
+    QUnit.test('onAppointmentContextMenu should be triggered when items in the appointment tooltip and appointment collector tooltip is right-clicked (T1181442)', function(assert) {
+        let $eventAppointmentElement = null;
+        const onAppointmentContextMenu = sinon.spy(({ appointmentElement }) => {
+            $eventAppointmentElement = $(appointmentElement);
+        });
+
+        const scheduler = createWrapper({
+            height: 600,
+            dataSource: [{
+                text: 'appointment 1',
+                startDate: new Date(2023, 7, 18),
+                endDate: new Date(2023, 7, 18, 4),
+            }, {
+                text: 'appointment 2',
+                startDate: new Date(2023, 7, 18),
+                endDate: new Date(2023, 7, 18, 4),
+            }],
+            maxAppointmentsPerCell: 1,
+            currentDate: new Date(2023, 7, 18),
+            onAppointmentContextMenu,
+        });
+
+        scheduler.appointments.click();
+
+        let $appointmentItem = scheduler.tooltip.getItemElement();
+        $appointmentItem.trigger('dxcontextmenu'); // first call
+
+        assert.ok($eventAppointmentElement.is($appointmentItem), 'same element');
+
+        scheduler.appointments.compact.click();
+
+        $eventAppointmentElement = null;
+        $appointmentItem = scheduler.appointments.compact.getAppointment();
+        $appointmentItem.trigger('dxcontextmenu'); // second call
+
+        assert.ok($eventAppointmentElement.is($appointmentItem), 'same element');
+        assert.equal(onAppointmentContextMenu.callCount, 2, 'onAppointmentContextMenu is called twice');
+    });
 });

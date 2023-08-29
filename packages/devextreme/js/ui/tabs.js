@@ -30,8 +30,16 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
-const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
-const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
+const TABS_ORIENTATION_CLASS = {
+    vertical: 'dx-tabs-vertical',
+    horizontal: 'dx-tabs-horizontal',
+};
+const TABS_ICON_POSITION_CLASS = {
+    top: 'dx-tabs-icon-position-top',
+    end: 'dx-tabs-icon-position-end',
+    bottom: 'dx-tabs-icon-position-bottom',
+    start: 'dx-tabs-icon-position-start',
+};
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -69,6 +77,13 @@ const SCROLLABLE_DIRECTION = {
     vertical: 'vertical',
 };
 
+const ICON_POSITION = {
+    top: 'top',
+    end: 'end',
+    bottom: 'bottom',
+    start: 'start',
+};
+
 
 const Tabs = CollectionWidget.inherit({
 
@@ -82,6 +97,7 @@ const Tabs = CollectionWidget.inherit({
             scrollingEnabled: true,
             selectionMode: 'single',
             orientation: ORIENTATION.horizontal,
+            iconPosition: ICON_POSITION.start,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -142,6 +158,7 @@ const Tabs = CollectionWidget.inherit({
         this.setAria('role', 'tablist');
         this.$element().addClass(TABS_CLASS);
         this._toggleOrientationClass(this.option('orientation'));
+        this._toggleIconPositionClass();
         this._renderWrapper();
         this._renderMultiple();
 
@@ -505,11 +522,11 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _toggleTabsVerticalClass(value) {
-        this.$element().toggleClass(TABS_VERTICAL_CLASS, value);
+        this.$element().toggleClass(TABS_ORIENTATION_CLASS.vertical, value);
     },
 
     _toggleTabsHorizontalClass(value) {
-        this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
+        this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
     },
 
     _toggleOrientationClass(orientation) {
@@ -517,6 +534,32 @@ const Tabs = CollectionWidget.inherit({
 
         this._toggleTabsVerticalClass(isVertical);
         this._toggleTabsHorizontalClass(!isVertical);
+    },
+
+    _getTabIconPositionClass() {
+        const position = this.option('iconPosition');
+
+        switch(position) {
+            case ICON_POSITION.top:
+                return TABS_ICON_POSITION_CLASS.top;
+            case ICON_POSITION.end:
+                return TABS_ICON_POSITION_CLASS.end;
+            case ICON_POSITION.bottom:
+                return TABS_ICON_POSITION_CLASS.bottom;
+            case ICON_POSITION.start:
+            default:
+                return TABS_ICON_POSITION_CLASS.start;
+        }
+    },
+
+    _toggleIconPositionClass() {
+        for(const key in TABS_ICON_POSITION_CLASS) {
+            this.$element().removeClass(TABS_ICON_POSITION_CLASS[key]);
+        }
+
+        const newClass = this._getTabIconPositionClass();
+
+        this.$element().addClass(newClass);
     },
 
     _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
@@ -582,6 +625,10 @@ const Tabs = CollectionWidget.inherit({
                 if(!this._isServerSide()) {
                     this._updateScrollableDirection();
                 }
+                break;
+            }
+            case 'iconPosition': {
+                this._toggleIconPositionClass();
                 break;
             }
             default:
