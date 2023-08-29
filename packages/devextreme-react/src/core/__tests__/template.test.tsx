@@ -294,6 +294,31 @@ function testTemplateOption(testedOption: string) {
     expect(onRendered).toBeCalled();
   });
 
+  it('does not call onRendered when a component was re-mounted without re-render', () => {
+    const ref = React.createRef<HTMLDivElement>();
+
+    const elementOptions: Record<string, any> = {};
+    elementOptions[testedOption] = prepareTemplate((data: any) => (
+      <TestComponent>
+        Template
+        {data.text}
+      </TestComponent>
+    ));
+    render(
+      <React.StrictMode>
+        <ComponentWithTemplates {...elementOptions}>
+          <div ref={ref} />
+        </ComponentWithTemplates>
+      </React.StrictMode>,
+    );
+    const onRendered: () => void = jest.fn();
+
+    act(() => { renderItemTemplate({ text: 'with data' }, undefined, undefined, onRendered); });
+
+    jest.runAllTimers();
+    expect(onRendered).toBeCalledTimes(1);
+  });
+
   it('renders empty template without errors', () => {
     const ref = React.createRef<HTMLDivElement>();
 
