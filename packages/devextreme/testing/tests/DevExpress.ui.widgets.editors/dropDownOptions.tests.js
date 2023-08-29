@@ -166,8 +166,12 @@ dropDownEditorsNames.forEach(widgetName => {
                         return;
                     }
 
-                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), defaultDropDownOptions[option], `dropDownOptions.${option} is equal to ${defaultDropDownOptions[option]}`);
-                    assert.deepEqual(getPopupInstance(editor).option(option), defaultDropDownOptions[option], `popup ${option} is equal to ${defaultDropDownOptions[option]}`);
+                    if(widgetName !== 'dxDropDownButton' && option === 'onInitialized') {
+                        assert.strictEqual(typeof editor.option(`dropDownOptions.${option}`), 'function', `dropDownOptions.${option} is equal to function`);
+                    } else {
+                        assert.deepEqual(editor.option(`dropDownOptions.${option}`), defaultDropDownOptions[option], `dropDownOptions.${option} is equal to ${defaultDropDownOptions[option]}`);
+                        assert.deepEqual(getPopupInstance(editor).option(option), defaultDropDownOptions[option], `popup ${option} is equal to ${defaultDropDownOptions[option]}`);
+                    }
                 });
             });
         });

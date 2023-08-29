@@ -85,12 +85,18 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   public componentDidMount(): void {
+    const { style } = this.props;
+
     if (this._childNodes?.length) {
       this._element.append(...this._childNodes);
     } else if (this._element.childNodes.length) {
       this._childNodes = Array.from(this._element.childNodes);
     }
     this._updateCssClasses(null, this.props);
+
+    if (style) {
+      this._setInlineStyles(style);
+    }
   }
 
   public componentDidUpdate(prevProps: P): void {
@@ -162,6 +168,14 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       }
     });
     return elementProps;
+  }
+
+  private _setInlineStyles(styles) {
+    Object.entries(styles).forEach(
+      ([name, value]) => {
+        this._element.style[name] = value;
+      },
+    );
   }
 
   private _updateCssClasses(prevProps: P | null, newProps: P) {

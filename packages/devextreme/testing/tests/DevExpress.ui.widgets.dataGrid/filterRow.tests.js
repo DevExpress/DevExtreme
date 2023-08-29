@@ -2804,7 +2804,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // assert
-        assert.equal(this.columnHeadersView.element().find('.dx-menu').first().attr('aria-label'), 'Search box');
+        assert.equal(this.columnHeadersView.element().find('.dx-menu-item').first().attr('aria-label'), 'Search box');
     });
 
     if(device.deviceType === 'desktop') {

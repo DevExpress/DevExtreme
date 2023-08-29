@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Component } from '../component';
-
+import DOMComponent from 'devextreme/core/dom_component';
 const eventHandlers: { [index: string]: ((e?: any) => void)[] } = {};
 
 const Widget = {
@@ -8,6 +8,7 @@ const Widget = {
   resetOption: jest.fn(),
   beginUpdate: jest.fn(),
   endUpdate: jest.fn(),
+  element: (undefined as unknown as Element),
   on: (event: string, handler: (e: any) => void): void => {
     if (eventHandlers[event]) {
       eventHandlers[event].push(handler);
@@ -19,7 +20,12 @@ const Widget = {
     eventHandlers[event] = eventHandlers[event].filter((e) => e !== handler);
   },
   clearExtensions: jest.fn(),
-  dispose: jest.fn(),
+  dispose: jest.fn(() => {
+    if (Widget.element) {
+      const dxDomComponent = new DOMComponent(Widget.element);
+      dxDomComponent.dispose();
+    }
+  }),
   skipOptionsRollBack: false,
 };
 
@@ -35,6 +41,7 @@ class TestComponent<P = any> extends Component<P> {
     Widget.option.mockImplementation((name: string) => name === 'integrationOptions.useDeferUpdateForTemplates');
 
     super._createWidget(element);
+    Widget.element = this._element;
     Widget.option.mockReset();
   }
 

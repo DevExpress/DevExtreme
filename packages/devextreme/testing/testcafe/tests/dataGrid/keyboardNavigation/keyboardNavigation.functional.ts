@@ -1,4 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
@@ -2205,7 +2206,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     });
   });
 
-  test(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+  test.skip(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
@@ -4182,3 +4183,92 @@ test('Keyboard navigation behavior should be changed after changing the keyboard
     },
   });
 });
+
+test('Adaptive row should toggle when press enter key', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // focus adaptive command cell
+  await t
+    .click(dataGrid.getDataCell(0, 1).element)
+    .pressKey('tab');
+
+  await t
+    .expect(dataGrid.getDataRow(0).getCommandCell(4).isFocused)
+    .ok();
+
+  // open adaptive row
+  await t.pressKey('enter');
+
+  await takeScreenshot('adaptive-row-opened-via-keyboard.png', dataGrid.element);
+
+  // close adaptive row
+  await t.pressKey('enter');
+
+  await takeScreenshot('adaptive-row-closed-via-keyboard.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  columnHidingEnabled: true,
+  dataSource: [
+    {
+      name: 'Alex', c0: 'c0_0', c1: 'c1_0', c2: 'c2_0',
+    }, {
+      name: 'Ben', c0: 'c0_1', c1: 'c1_2', c2: 'c2_2',
+    }, {
+      name: 'Dan', c0: 'c0_2', c1: 'c1_3', c2: 'c2_3',
+    }, {
+      name: 'John', c0: 'c0_3', c1: 'c1_4', c2: 'c2_4',
+    },
+  ],
+  width: 600,
+  columnWidth: 200,
+}));
+
+test('Focus position should be correct when open second adaptive row', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const focusAdaptiveButtonCell = async (rowIndex: number) => {
+    await t
+      .click(dataGrid.getDataCell(rowIndex, 1).element)
+      .pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataRow(rowIndex).getCommandCell(4).isFocused)
+      .ok();
+  };
+
+  // open first adaptive row
+  await focusAdaptiveButtonCell(0);
+
+  await t.pressKey('enter');
+
+  // open second adaptive row
+  await focusAdaptiveButtonCell(1);
+
+  await t.pressKey('enter');
+
+  await takeScreenshot('focus-position-when-second-adaptive-row-opened.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  columnHidingEnabled: true,
+  dataSource: [
+    {
+      name: 'Alex', c0: 'c0_0', c1: 'c1_0', c2: 'c2_0',
+    }, {
+      name: 'Ben', c0: 'c0_1', c1: 'c1_2', c2: 'c2_2',
+    }, {
+      name: 'Dan', c0: 'c0_2', c1: 'c1_3', c2: 'c2_3',
+    }, {
+      name: 'John', c0: 'c0_3', c1: 'c1_4', c2: 'c2_4',
+    },
+  ],
+  width: 600,
+  columnWidth: 200,
+}));

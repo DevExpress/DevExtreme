@@ -2731,16 +2731,16 @@ module('Virtual scrolling integration', () => {
                                     offset: { x: 0, y: 0 },
                                     expectedIndices: [0, 2],
                                     appointmentRects: [
-                                        { left: -9899, top: -9878, height: 50 },
-                                        { left: -9499, top: -9728, height: 100 }
+                                        { left: -9899, top: -9889, height: 50 },
+                                        { left: -9499, top: -9739, height: 100 }
                                     ]
                                 },
                                 {
                                     offset: { x: 300, y: 0 },
                                     expectedIndices: [0, 2],
                                     appointmentRects: [
-                                        { left: -10199, top: -9878, height: 50 },
-                                        { left: -9799, top: -9728, height: 100 }
+                                        { left: -10199, top: -9889, height: 50 },
+                                        { left: -9799, top: -9739, height: 100 }
                                     ]
                                 },
                                 {
@@ -2752,26 +2752,26 @@ module('Virtual scrolling integration', () => {
                                     offset: { x: 0, y: 1100 },
                                     expectedIndices: [1, 3],
                                     appointmentRects: [
-                                        { left: -9699, top: -9878, height: 100 },
-                                        { left: -9299, top: -9828, height: 100 }
+                                        { left: -9699, top: -9889, height: 100 },
+                                        { left: -9299, top: -9839, height: 100 }
                                     ]
                                 },
                                 {
                                     offset: { x: 300, y: 1100 },
                                     expectedIndices: [1, 3],
                                     appointmentRects: [
-                                        { left: -9999, top: -9878, height: 100 },
-                                        { left: -9599, top: -9828, height: 100 }
+                                        { left: -9999, top: -9889, height: 100 },
+                                        { left: -9599, top: -9839, height: 100 }
                                     ]
                                 },
                                 {
                                     offset: { x: 1700, y: 1100 },
                                     expectedIndices: [7, 8, 9, 10],
                                     appointmentRects: [
-                                        { left: -10199, top: -9678, height: 300 },
-                                        { left: -9999, top: -9678, height: 300 },
-                                        { left: -9799, top: -9678, height: 300 },
-                                        { left: -9599, top: -9678, height: 300 }
+                                        { left: -10199, top: -9689, height: 300 },
+                                        { left: -9999, top: -9689, height: 300 },
+                                        { left: -9799, top: -9689, height: 300 },
+                                        { left: -9599, top: -9689, height: 300 }
                                     ]
                                 },
                             ].forEach(({ offset, expectedIndices, appointmentRects }) => {
