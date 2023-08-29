@@ -18,7 +18,8 @@
     "vue:regenerate": "nx regenerate devextreme-vue",
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build-npm-packages": "node ./build-npm-packages.js"
   },
   "nx": {},
   "private": true,
