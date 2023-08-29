@@ -8,6 +8,7 @@ import Toolbar from './toolbar';
 import Collectors from './collectors';
 import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
 import { WidgetName } from '../../helpers/createWidget';
+import { GroupRow } from './groupRow';
 import { HeaderPanel } from './headerPanel';
 
 export const CLASS = {
@@ -60,6 +61,8 @@ export default class Scheduler extends Widget {
 
   readonly headerPanel: HeaderPanel;
 
+  readonly groupRow: GroupRow;
+
   readonly headerSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
   readonly workspaceScrollable: Selector;
@@ -98,6 +101,7 @@ export default class Scheduler extends Widget {
     this.headerPanel = new HeaderPanel(this.element);
     this.toolbar = new Toolbar(this.element);
     this.collectors = new Collectors(this.element);
+    this.groupRow = new GroupRow(this.element);
 
     this.headerSpaceScroll = {
       left: headerSpaceScroll.scrollLeft,
@@ -135,6 +139,10 @@ export default class Scheduler extends Widget {
 
   getAllDayTableCell(cellIndex = 0): Selector {
     return this.allDayTableCells.nth(cellIndex);
+  }
+
+  getGroupCell(cellIndex = 0): Selector {
+    return this.groupRow.groupCells.nth(cellIndex);
   }
 
   getFocusedCell(isAllDay = false): Selector {

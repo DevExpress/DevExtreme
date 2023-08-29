@@ -38,8 +38,16 @@ QUnit.testStart(function() {
 const TABS_ITEM_CLASS = 'dx-tab';
 const TAB_SELECTED_CLASS = 'dx-tab-selected';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
-const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
-const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
+const TABS_ORIENTATION_CLASS = {
+    vertical: 'dx-tabs-vertical',
+    horizontal: 'dx-tabs-horizontal',
+};
+const TABS_ICON_POSITION_CLASS = {
+    top: 'dx-tabs-icon-position-top',
+    end: 'dx-tabs-icon-position-end',
+    bottom: 'dx-tabs-icon-position-bottom',
+    start: 'dx-tabs-icon-position-start',
+};
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
@@ -252,7 +260,7 @@ QUnit.module('General', () => {
             items: [1, 2, 3],
         });
 
-        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+        assert.ok($element.hasClass(TABS_ORIENTATION_CLASS.horizontal));
     });
 
     QUnit.test('the tabs element must have a vertical class if orientation is vertical', function(assert) {
@@ -261,7 +269,7 @@ QUnit.module('General', () => {
             orientation: 'vertical',
         });
 
-        assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
+        assert.ok($element.hasClass(TABS_ORIENTATION_CLASS.vertical));
     });
 
     QUnit.test('the tabs element must have a correct orientation class in runtime change', function(assert) {
@@ -270,15 +278,45 @@ QUnit.module('General', () => {
         });
         const tabs = $element.dxTabs('instance');
 
-        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+        assert.ok($element.hasClass(TABS_ORIENTATION_CLASS.horizontal));
 
         tabs.option('orientation', 'vertical');
-        assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
-        assert.notOk($element.hasClass(TABS_HORIZONTAL_CLASS));
+        assert.ok($element.hasClass(TABS_ORIENTATION_CLASS.vertical));
+        assert.notOk($element.hasClass(TABS_ORIENTATION_CLASS.horizontal));
 
         tabs.option('orientation', 'horizontal');
-        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
-        assert.notOk($element.hasClass(TABS_VERTICAL_CLASS));
+        assert.ok($element.hasClass(TABS_ORIENTATION_CLASS.horizontal));
+        assert.notOk($element.hasClass(TABS_ORIENTATION_CLASS.vertical));
+    });
+
+    QUnit.test('the tabs element must have a start icon position class by default', function(assert) {
+        const $element = $('#tabs').dxTabs();
+
+        assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS.start));
+    });
+
+    ['top', 'end', 'bottom'].forEach((iconPosition) => {
+        QUnit.test('the tabs element must have a correct icon position class', function(assert) {
+            const $element = $('#tabs').dxTabs({ iconPosition });
+
+            assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS[iconPosition]));
+        });
+    });
+
+    QUnit.test('the tabs element must have a correct icon position class in runtime change', function(assert) {
+        const $element = $('#tabs').dxTabs();
+        const instance = $element.dxTabs('instance');
+        const iconPositions = ['top', 'end', 'bottom'];
+
+        iconPositions.forEach((iconPosition, index) => {
+            instance.option({ iconPosition });
+
+            if(index !== 0) {
+                assert.notOk($element.hasClass(TABS_ICON_POSITION_CLASS[iconPositions[index - 1]]));
+            }
+
+            assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS[iconPosition]));
+        });
     });
 });
 

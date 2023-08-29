@@ -40,6 +40,7 @@ import {
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
+  ADAPTIVE_COLUMN_NAME_CLASS,
   CELL_FOCUS_DISABLED_CLASS,
   COLUMN_HEADERS_VIEW,
   COMMAND_CELL_SELECTOR,
@@ -131,6 +132,8 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _focusController!: Controllers['focus'];
 
+  _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+
   // #region Initialization
   init() {
     this._dataController = this.getController('data');
@@ -141,6 +144,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._columnsController = this.getController('columns');
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
 
     this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
@@ -976,22 +980,28 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _enterKeyHandler(eventArgs, isEditing) {
-    const $cell = this._getFocusedCell();
     const rowIndex = this.getVisibleRowIndex();
-    const $row = this._focusedView && this._focusedView.getRow(rowIndex);
+    const key = this._dataController.getKeyByRowIndex(rowIndex);
 
-    if (
-      (this.option('grouping.allowCollapsing') && isGroupRow($row))
-      || (this.option('masterDetail.enabled')
-        && $cell
-        && $cell.hasClass(COMMAND_EXPAND_CLASS))
-    ) {
-      const key = this._dataController.getKeyByRowIndex(rowIndex);
+    const $row = this._focusedView?.getRow(rowIndex);
+    const $cell = this._getFocusedCell();
+
+    const needExpandGroupRow = this.option('grouping.allowCollapsing') && isGroupRow($row);
+    const needExpandMasterDetailRow = this.option('masterDetail.enabled') && $cell?.hasClass(COMMAND_EXPAND_CLASS);
+    const needExpandAdaptiveRow = $cell?.hasClass(ADAPTIVE_COLUMN_NAME_CLASS);
+
+    if (needExpandGroupRow || needExpandMasterDetailRow) {
       const item = this._dataController.items()[rowIndex];
 
-      if (key !== undefined && item && item.data && !item.data.isContinuation) {
+      const isNotContinuation = item?.data && !item.data.isContinuation;
+
+      if (isDefined(key) && isNotContinuation) {
         (this._dataController as any).changeRowExpand(key);
       }
+    } else if (needExpandAdaptiveRow) {
+      this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
+
+      this._updateFocusedCellPosition($cell);
     } else {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }

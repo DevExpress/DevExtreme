@@ -101,6 +101,7 @@ export class TooltipStrategyBase {
       dataSource: dataList,
       onContentReady: this._onListRender.bind(this),
       onItemClick: (e) => this._onListItemClick(e),
+      onItemContextMenu: this._onListItemContextMenu.bind(this),
       itemTemplate: (item, index) => this._renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
@@ -162,6 +163,9 @@ export class TooltipStrategyBase {
     this._extraOptions.clickEvent && this._extraOptions.clickEvent(e);
     this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _onListItemContextMenu(e) {}
 
   _createItemListContent(appointment, targetedAppointment, color) {
     const { editing } = this._extraOptions;

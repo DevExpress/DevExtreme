@@ -2229,7 +2229,7 @@ const DxSearchPanel = createConfigurationComponent({
     searchVisibleColumnsOnly: Boolean,
     text: String,
     visible: Boolean,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxSearchPanel as any).$_optionName = "searchPanel";

@@ -1668,7 +1668,7 @@ module('Resource Cell Template', () => {
                             if(!cellIndex) {
                                 const $cell = $(cellElement);
                                 assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
-                                assert.roughEqual(getOuterHeight($cell), 274, 1.001, 'Resource cell height is OK');
+                                assert.roughEqual(getOuterHeight($cell), 271, 1.001, 'Resource cell height is OK');
                             }
                             done();
                         });
