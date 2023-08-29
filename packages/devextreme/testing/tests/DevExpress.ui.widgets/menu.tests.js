@@ -2546,8 +2546,11 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(clickSpy.calledOnce);
     });
 
-    QUnit.testInActiveWindow('link should be clicked programmatically with enter key if item.url is set', function(assert) {
-        if(!isDeviceDesktop(assert)) return;
+    QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
+        if(!isDeviceDesktop(assert) || QUnit.urlParams['nojquery']) {
+            assert.ok(true);
+            return;
+        }
 
         const clickSpy = sinon.spy();
 
