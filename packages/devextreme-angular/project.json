@@ -1,0 +1,16 @@
+{
+  "name": "devextreme-angular",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/devextreme-react",
+  "projectType": "library",
+  "targets": {
+    "regenerate": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "generate"
+      },
+      "dependsOn": ["devextreme-monorepo:\"angular:discover-metadata\"", "devextreme-monorepo:\"angular:build-generator\""]
+    }
+  },
+  "tags": []
+}

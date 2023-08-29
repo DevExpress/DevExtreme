@@ -45,7 +45,7 @@ jobs:
       working-directory: ./packages/devextreme
       run: npm run build
 
-    - name: Generate wrappers
+    - name: Generate wrapper
       run: npm run angular:generate
 
     - name: Check generated code
@@ -56,7 +56,7 @@ jobs:
         if [ -n "$changes" ]; then
           echo "Generated code is outdated. The following files have uncommitted changes:"
           echo "$changes";
-          echo "To update generated code, use "npm run angular:generate" and commit changes."
+          echo "To update generated code, use "npm run generate" and commit changes."
           exit 1
         fi
 

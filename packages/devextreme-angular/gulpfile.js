@@ -170,6 +170,10 @@ var buildTask = gulp.series(
 
 gulp.task('build', buildTask);
 gulp.task('default', buildTask);
+gulp.task('generate', gulp.series(
+    'generate.facades',
+    'generate.common-reexports'
+));
 
 
 //------------Testing------------

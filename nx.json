@@ -33,6 +33,15 @@
       "dependsOn": [
         "^build"
       ]
+    },
+    "angular:discover-metadata": {
+      "dependsOn": ["tools:discover-declarations"]
+    },
+    "react:discover-metadata": {
+      "dependsOn": ["tools:discover-declarations"]
+    },
+    "vue:discover-metadata": {
+      "dependsOn": ["tools:discover-declarations"]
     }
   },
   "workspaceLayout": {
