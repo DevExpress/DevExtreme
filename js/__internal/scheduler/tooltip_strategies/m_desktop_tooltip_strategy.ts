@@ -55,4 +55,9 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   _onListRender(e) {
     return this._extraOptions.dragBehavior && this._extraOptions.dragBehavior(e);
   }
+
+  _onListItemContextMenu(e) {
+    const contextMenuEventArgs = this._options.createEventArgs(e);
+    this._options.onItemContextMenu(contextMenuEventArgs);
+  }
 }
