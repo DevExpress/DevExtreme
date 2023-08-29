@@ -3,14 +3,14 @@ name: CI Available
 on: 
   pull_request:
   push:
-    branches: [23_2]
+    branches: [23_2, 23_1, 22_2]
 
 jobs:
-  build:
+  check:
 
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     
     steps:
-    - name: Fail CI if some works is being made
-      if: ${{ vars.CI_UNSTABLE }}
+    - name: Fail CI if maintenance is in progress
+      if: ${{ vars.CI_UNSTABLE == 'true' }}
       run: exit 1
