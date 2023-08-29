@@ -17,24 +17,14 @@
   width: auto;
 
   .dx-texteditor {
+    .dx-texteditor-input {
+      padding-inline-end: 0;
+      padding-inline-start: 12px;
+    }
+
     .dx-texteditor-container {
-      .dx-texteditor-input {
-        padding-right: 0;
-        padding-left: 12px;
-
-        .dx-rtl & {
-          padding-left: 0;
-          padding-right: 12px;
-        }
-      }
-
       .dx-texteditor-buttons-container .dx-dropdowneditor-button {
-        margin-right: 0;
-
-        &.dx-rtl,
-        .dx-rtl & {
-          margin-left: 0;
-        }
+        margin-inline-end: 0;
       }
     }
   }
@@ -46,14 +36,7 @@
 
 .dx-timeview-format12 {
   width: $material-timeview-format12-width;
-  margin-left: $material-timeview-time-separator-margin;
-  margin-right: auto;
-
-  &.dx-rtl,
-  .dx-rtl & {
-    margin-left: auto;
-    margin-right: $material-timeview-time-separator-margin;
-  }
+  margin-inline-start: $material-timeview-time-separator-margin;
 }
 
 .dx-timeview-time-separator {

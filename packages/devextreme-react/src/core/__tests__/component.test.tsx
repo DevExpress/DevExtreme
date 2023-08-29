@@ -212,6 +212,18 @@ describe('element attrs management', () => {
     expect(element.style.background).toEqual('red');
   });
 
+  it('element inline styles management in strict mode (T1180862)', () => {
+    const { container } = testingLib.render(
+        <React.StrictMode>
+          <TestComponent style={{ color: 'red' }} />
+        </React.StrictMode>,
+    );
+
+    const element: HTMLElement = container?.firstChild as HTMLElement;
+
+    expect(element.style.color).toEqual('red');
+  });
+
   it('updates id, className and style', () => {
     const { container, rerender } = testingLib.render(
       <TestComponent id="id1" className="class1" style={{ background: 'red' }} />,
@@ -301,7 +313,7 @@ describe('disposing', () => {
     events.on(element, 'dxremove', handleDxRemove);
 
     unmount();
-    expect(handleDxRemove).toHaveBeenCalledTimes(1);
+    expect(handleDxRemove).toHaveBeenCalledTimes(2);
   });
 
   it('remove option guards', () => {

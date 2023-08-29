@@ -2,6 +2,7 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
+import Guid from '@js/core/guid';
 import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
@@ -176,8 +177,6 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   _dataController!: DataController;
 
-  protected setTableRole($tableElement: dxElementWrapper): void {}
-
   _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
@@ -270,13 +269,17 @@ export class ColumnsView extends viewWithColumnStateMixin {
       .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
 
     if (columns && !isAppend) {
-      $table.append(this._createColGroup(columns));
+      $table
+        .attr('id', `dx-${new Guid()}`)
+        .append(this._createColGroup(columns));
+
       if (browser.safari) {
         // T198380, T809552
         // @ts-expect-error
         $table.append($('<thead>').append('<tr>'));
       }
-      this.setTableRole($table);
+
+      this.setAria('role', 'presentation', $table);
     } else {
       this.setAria('hidden', true, $table);
     }

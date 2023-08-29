@@ -228,7 +228,7 @@ const DATA_GRID_SELECTOR = '#container';
       ...a11yCheckConfig,
       runOnly: '',
       rules: {
-        'aria-command-name': { enabled: false },
+        'aria-command-name': { enabled: true },
       },
     });
   }).before(async () => {
@@ -306,11 +306,14 @@ const DATA_GRID_SELECTOR = '#container';
   test(`Filter panel in ${theme}`, async (t) => {
   // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const filterPanel = dataGrid.getFilterPanel();
 
     // assert
     await t
       .expect(dataGrid.isReady())
-      .ok();
+      .ok()
+      .expect(filterPanel.getFilterText().element.textContent)
+      .eql('[Field 1] Contains \'val\'');
 
     // act
     await a11yCheck(t);

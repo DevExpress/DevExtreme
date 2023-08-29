@@ -38,6 +38,7 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
     "rrule": "^2.7.1",
+    "sha1": "1.1.1",
     "turndown": "~7.1.0"
   },
   "scripts": {
@@ -49,8 +50,7 @@
     "lint-renovation": "eslint --quiet --ext .tsx,.ts ./js/renovation",
     "lint-dts": "eslint js --ext .d.ts --ignore-pattern /js/renovation/",
     "lint-staged": "lint-staged",
-    "lint-texts": "node build/pre-commit/validate-cyrillic-symbols.js",
-    "pre-commit": "node build/pre-commit/index.js",
+    "lint-texts": "node build/linters/validate-cyrillic-symbols.js",
     "build": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build:dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",
     "build:testcafe": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true BUILD_TESTCAFE=TRUE gulp default",
@@ -65,7 +65,7 @@
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
     "build:community-localization": "gulp generate-community-locales",
     "build:systemjs": "gulp transpile-systemjs",
-    "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
+    "compile:r": "tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
@@ -93,10 +93,6 @@
       "node_modules"
     ]
   },
-  "pre-commit": [
-    "lint-staged",
-    "pre-commit"
-  ],
   "browserslist": [
     "last 2 versions",
     "ios > 9",

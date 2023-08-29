@@ -848,6 +848,20 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     return deferred;
   },
 
+  setAriaOwns(headerTableId, footerTableId, isFixed) {
+    if (isFixed) {
+      const contentFixedClass = this.addWidgetPrefix(CONTENT_FIXED_CLASS);
+      const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
+      const $fixedTableElement = this.getFixedTableElement();
+
+      if ($contentFixedElement.length && $fixedTableElement?.length) {
+        this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
+      }
+    } else {
+      this.callBase.apply(this, arguments);
+    }
+  },
+
   setRowsOpacity(columnIndex, value) {
     this.callBase(columnIndex, value);
 
@@ -1095,6 +1109,16 @@ export const columnFixingModule = {
             }
 
             return this.callBase(pointsByColumns, currentX, deltaX);
+          },
+        },
+
+        resizing: {
+          _setAriaOwns() {
+            this.callBase.apply(this, arguments);
+
+            const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
+            const footerFixedTable = this._footerView?.getFixedTableElement();
+            this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
           },
         },
       };

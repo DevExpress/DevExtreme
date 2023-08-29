@@ -3,6 +3,9 @@
   "version": "23.2.0",
   "license": "MIT",
   "scripts": {
+    "angular:build-generator": "cd node_modules/devextreme-angular-generator && npm i --no-audit --no-fund && npm run build:local",
+    "angular:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-angular/metadata/integration-data.json",
+    "angular:generate": "npm run angular:discover-metadata && npm run angular:build-generator && cd packages/devextreme-angular && npm run generate",
     "react:build-generator": "cd node_modules/devextreme-react-generator && npm i --no-audit --no-fund && npm run build:local",
     "react:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-react/metadata/integration-data.json",
     "react:generate": "npm run react:discover-metadata && npm run react:build-generator && cd packages/devextreme-react && npm run generate",
@@ -10,19 +13,22 @@
     "tools:generate-imd": "dx-tools integration-data-generator --artifacts ./artifacts/internal-tools",
     "vue:build-generator": "cd node_modules/devextreme-vue-generator && npm i --no-audit --no-fund && npm run build:local",
     "vue:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-vue/metadata/integration-data.json",
-    "vue:generate": "npm run vue:discover-metadata && npm run vue:build-generator && cd packages/devextreme-vue && npm run generate"
+    "vue:generate": "npm run vue:discover-metadata && npm run vue:build-generator && cd packages/devextreme-vue && npm run generate",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install"
   },
   "private": true,
   "devDependencies": {
+    "@types/node": "^18.15.3",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
     "devextreme-internal-tools": "10.0.0-beta.17",
-    "eslint": "8.35.0",
+    "eslint": "8.47.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "17.0.0",
     "eslint-config-devextreme": "1.1.3",
     "eslint-plugin-i18n": "2.1.0",
-    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-import": "2.28.1",
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-jest-formatting": "3.1.0",
     "eslint-plugin-jsx-a11y": "6.7.1",
@@ -34,10 +40,18 @@
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-spellcheck": "0.0.20",
     "eslint-plugin-testcafe": "0.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "14.0.1",
     "nx": "16.5.5",
     "nx-cloud": "^16.0.5",
-    "postcss": "^8.4.24"
+    "postcss": "^8.4.24",
+    "source-map": "0.7.4",
+    "typescript": "~4.2.4"
   },
+  "pre-commit": [
+    "lint-staged",
+    "pre-commit"
+  ],
   "workspaces": [
     "packages/*",
     "packages/devextreme/artifacts/npm/*",

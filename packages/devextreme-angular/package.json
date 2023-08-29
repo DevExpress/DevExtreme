@@ -1,0 +1,88 @@
+{
+  "name": "devextreme-angular",
+  "version": "23.2.0",
+  "description": "Angular UI and visualization components based on DevExtreme widgets",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/devextreme-angular.git"
+  },
+  "scripts": {
+    "gulp": "npx --node-options='--max_old_space_size=8192' gulp",
+    "build": "npm run gulp -- build",
+    "generate": "npm run update-integration-meta && npm run build",
+    "lint": "eslint src",
+    "test": "npm run gulp -- test",
+    "test:dev": "npm run gulp -- run.tests",
+    "pack": "npm run gulp -- npm.pack",
+    "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm/dist --artifacts ../../artifacts/internal-tools",
+    "update-integration-meta": "dx-tools generate-ng-smd --artifacts ../../artifacts/internal-tools --output-path ./metadata/NGMetaData.json"
+  },
+  "author": "Developer Express Inc.",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": ">12.0.0",
+    "@angular/core": ">12.0.0",
+    "@angular/forms": ">12.0.0",
+    "devextreme": "~23.2.0"
+  },
+  "devDependencies": {
+    "@angular/animations": "~12.2.17",
+    "@angular/common": "~12.2.17",
+    "@angular/compiler": "~12.2.17",
+    "@angular/compiler-cli": "~12.2.17",
+    "@angular/core": "~12.2.17",
+    "@angular/forms": "~12.2.17",
+    "@angular/platform-browser": "~12.2.17",
+    "@angular/platform-browser-dynamic": "~12.2.17",
+    "@angular/platform-server": "~12.2.17",
+    "@types/jasmine": "2.8.19",
+    "@types/node": "~8.10.66",
+    "codelyzer": "6.0.2",
+    "core-js": "^2.6.12",
+    "del": "^2.2.2",
+    "devextreme": "~23.2.0",
+    "devextreme-angular-generator": "https://gitpkg.now.sh/DevExpress/devextreme-angular/packages/devextreme-angular-generator?master",
+    "devextreme-internal-tools": "10.0.0-beta.18",
+    "gulp": "^4.0.2",
+    "gulp-header": "^1.8.12",
+    "gulp-replace": "^0.6.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^3.2.4",
+    "jasmine": "2.99.0",
+    "karma": "^6.4.2",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-jasmine": "^5.1.0",
+    "karma-junit-reporter": "^2.0.1",
+    "karma-webpack": "^5.0.0",
+    "ng-packagr": "12.2.7",
+    "puppeteer": "^19.11.1",
+    "rxjs": "^6.6.7",
+    "stream-browserify": "^3.0.0",
+    "typescript": "~4.2.3",
+    "webpack": "^5.88.2",
+    "yargs": "^6.6.0",
+    "zone.js": "^0.11.8"
+  },
+  "main": "./src/index.ts",
+  "keywords": [
+    "angular",
+    "devextreme",
+    "devexpress"
+  ],
+  "dependencies": {
+    "@angular-devkit/schematics": "^12.2.18",
+    "devextreme-schematics": "latest",
+    "inferno-server": "7.4.11"
+  },
+  "schematics": "./schematics/collection.json",
+  "ngPackage": {
+    "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+    "lib": {
+      "entryFile": "index.ts"
+    },
+    "dest": "../npm/dist",
+    "whitelistedNonPeerDependencies": [
+      "."
+    ]
+  }
+}
