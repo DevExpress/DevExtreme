@@ -1434,11 +1434,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _itemClick: function(actionArgs) {
         const args = actionArgs.args[0];
-        const target = args.event.target;
-        const isElementWrapper = 'jquery' in target || !target.getElementsByClassName;
-
-        const link = isElementWrapper ? target[0].getElementsByClassName(ITEM_URL_CLASS)[0]
-            : target.getElementsByClassName(ITEM_URL_CLASS)[0];
+        const target = args.event.target[0] || args.event.target;
+        const link = target.getElementsByClassName(ITEM_URL_CLASS)[0];
 
         if(args.itemData.url && link) {
             link.click();
