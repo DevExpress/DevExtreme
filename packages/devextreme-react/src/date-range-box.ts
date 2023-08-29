@@ -310,6 +310,8 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   zoomLevel?: "century" | "decade" | "month" | "year";
   defaultValue?: any | number | string;
   onValueChange?: (value: any | number | string) => void;
+  defaultValues?: Array<any | number | string>;
+  onValuesChange?: (value: Array<any | number | string>) => void;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
   cellRender?: (...params: any) => React.ReactNode;
@@ -320,6 +322,7 @@ class CalendarOptions extends NestedOption<ICalendarOptionsProps> {
   public static OptionName = "calendarOptions";
   public static DefaultsProps = {
     defaultValue: "value",
+    defaultValues: "values",
     defaultZoomLevel: "zoomLevel"
   };
   public static TemplateProps = [{

@@ -22,8 +22,10 @@ type ICalendarOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IC
   cellComponent?: React.ComponentType<any>;
   cellKeyFn?: (data: any) => string;
   defaultValue?: any | number | string;
+  defaultValues?: Array<any | number | string>;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
   onValueChange?: (value: any | number | string) => void;
+  onValuesChange?: (value: Array<any | number | string>) => void;
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
 }>
 
@@ -35,12 +37,13 @@ class Calendar extends BaseComponent<React.PropsWithChildren<ICalendarOptions>> 
 
   protected _WidgetClass = dxCalendar;
 
-  protected subscribableOptions = ["value","zoomLevel"];
+  protected subscribableOptions = ["value","values","zoomLevel"];
 
   protected independentEvents = ["onDisposing","onInitialized","onValueChanged"];
 
   protected _defaults = {
     defaultValue: "value",
+    defaultValues: "values",
     defaultZoomLevel: "zoomLevel"
   };
 
