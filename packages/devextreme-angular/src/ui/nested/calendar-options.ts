@@ -86,6 +86,13 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() valuesChange: EventEmitter<Array<Date | number | string>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() zoomLevelChange: EventEmitter<string>;
     protected get _optionPath() {
         return 'calendarOptions';
@@ -98,6 +105,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
 
         this._createEventEmitters([
             { emit: 'valueChange' },
+            { emit: 'valuesChange' },
             { emit: 'zoomLevelChange' }
         ]);
 
