@@ -5,54 +5,15 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/textArea";
+@use "../../base/textArea/mixins" as *;
 @use "../textEditor/sizes" as *;
 
 // adduse
 
-.dx-textarea {
-  height: auto;
-
-  .dx-texteditor-input-container {
-    margin: 2px;
-  }
-
-  .dx-texteditor-input {
-    line-height: $textarea-content-line-height;
-  }
-
-  .dx-placeholder::before {
-    line-height: $textarea-content-line-height;
-  }
-
-  &.dx-texteditor-with-label,
-  &.dx-texteditor-with-floating-label {
-    .dx-placeholder::before,
-    .dx-texteditor-input {
-      padding-top: 0;
-    }
-
-    &.dx-editor-outlined {
-      .dx-texteditor-container {
-        padding-top: $material-filled-texteditor-input-top-padding;
-      }
-    }
-
-    &.dx-editor-filled {
-      .dx-texteditor-container {
-        padding-top: $material-filled-texteditor-input-with-label-top-padding;
-      }
-    }
-    
-  
-    &.dx-editor-underlined {
-      .dx-texteditor-container {
-        padding-top: $material-standard-texteditor-with-label-input-top-padding;
-      }
-    }
-  }
-
-  .dx-icon-clear {
-    top: 0;
-    margin-top: 0;
-  }
-}
+@include dx-textarea(
+  2px,
+  $textarea-content-line-height,
+  $material-filled-texteditor-input-top-padding,
+  $material-filled-texteditor-input-with-label-top-padding,
+  $material-standard-texteditor-with-label-input-top-padding,
+);

@@ -17,16 +17,6 @@ $material-editor-custom-button-margin: 5px;
 $material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
 $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 8px;
 
-@include dx-outlined-mixin(
-  $base-bg,
-  4px,
-  $material-texteditor-label-font-size,
-  math.div($material-texteditor-label-font-size, 2),
-  $material-texteditor-label-font-size + 1px,
-  $material-texteditor-label-font-size,
-  2.5px,
-  0,
-);
 @include dx-underlined-mixin(
   $material-texteditor-label-font-size,
   $material-texteditor-label-font-size,

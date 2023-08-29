@@ -1,8 +1,298 @@
+@use "sass:math";
+@use "sass:color";
+
 @mixin dx-editor-content-wrapper() {
   display: flex;
   flex-grow: 1;
   position: relative;
   align-items: baseline;
+}
+
+@mixin dx-state($borderWidth, $label-font-size, $label-offset-y, $base-bg) {
+  .dx-label {
+    border-top-width: 0;
+
+    span {
+      transform: translate(0, -$label-offset-y);
+      font-size: $label-font-size;
+      margin-top: 0;
+      top: 0;
+      height: $label-font-size + 1px; // // generic $generic-base-line-height;
+      line-height: $label-font-size;  // generic $generic-base-inline-block-height;
+    }
+
+    &::before {
+      background-color: $base-bg;
+    }
+  }
+
+  &.dx-textarea  {
+    .dx-label {
+      span {
+        top: 0;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@mixin dx-state-empty($borderWidth, $texteditor-label-transition, $texteditor-font-size, $texteditor-input-top-padding) {
+  .dx-label {
+    padding: 0 2px;
+    border-top-width: $borderWidth;
+
+    span {
+      transition: $texteditor-label-transition;
+      transform: translate(0, 0);
+      font-size: $texteditor-font-size;
+      top: 50%;
+      margin-top: math.div(-$texteditor-font-size, 2); // math.div(- $generic-base-inline-block-height, 2);
+      height: $texteditor-font-size; // $generic-base-inline-block-height;
+      line-height: $texteditor-font-size; // $generic-base-line-height;
+    }
+
+    &::before {
+      background-color: transparent;
+    }
+  }
+
+  &.dx-textarea  {
+    .dx-label {
+      span {
+        top: $texteditor-input-top-padding;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@mixin dx-state-border-width($borderWidth) {
+  .dx-label {
+    border-top-width: 0;
+    border-bottom-width: $borderWidth;
+  }
+
+  .dx-label-before {
+    border-width: $borderWidth;
+    border-inline-end-width: 0;
+  }
+
+  .dx-label-after {
+    border-width: $borderWidth;
+    border-inline-start-width: 0;
+  }
+}
+
+@mixin dx-state-border-color($borderColor) {
+  .dx-label {
+    border-color: $borderColor;
+  }
+
+  .dx-label-before {
+    border-color: $borderColor;
+  }
+
+  .dx-label-after {
+    border-color: $borderColor;
+  }
+}
+
+@mixin dx-state-border-style($borderStyle) {
+  .dx-label {
+    border-style: $borderStyle;
+  }
+
+  .dx-label-before {
+    border-style: $borderStyle;
+  }
+
+  .dx-label-after {
+    border-style: $borderStyle;
+  }
+}
+
+@mixin dx-editor-outlined(
+  $texteditor-border-color,
+  $texteditor-input-border-radius,
+  $texteditor-label-font-size,
+  $label-border-width,
+  $label-active-border-width,
+  $label-readonly-border-style,
+  $label-offset-y,
+  $label-backdrop-offset-y,
+  $label-before-min-width,
+  $label-after-min-width,
+  $base-bg,
+  $texteditor-color,
+  $texteditor-hover-border-color,
+  $texteditor-focused-border-color,
+  $texteditor-invalid-faded-border-color,
+  $texteditor-invalid-focused-border-color,
+  $texteditor-label-transition,
+  $texteditor-font-size,
+  $texteditor-input-top-padding
+) {
+  .dx-editor-outlined {
+    .dx-texteditor-label {
+      inset: 0;
+    }
+
+    .dx-label {
+      padding: 0 2px;
+      border-top-width: 0;
+      border-bottom-width: $label-border-width;
+      border-inline-width: 0;
+      border-style: solid;
+      border-color: $texteditor-border-color;
+      margin-left: -2px;
+      margin-right: -2px;
+      border-radius: 1px;
+      clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);
+  
+      span {
+        position: relative;
+        font-size: $texteditor-label-font-size;
+        top: 0;
+        margin-top: 0;
+
+        // may be remove // missed in generic
+        transform: translate(0, -$label-offset-y);
+        height: $texteditor-label-font-size + 1px;
+        line-height: $texteditor-label-font-size;
+      }
+    }
+
+    .dx-label-before {
+      border-block-width: $label-border-width;
+      border-inline-start-width: $label-border-width;
+      border-inline-end-width: 0;
+      border-style: solid;
+      border-color: $texteditor-border-color;
+      border-start-start-radius: $texteditor-input-border-radius;
+      border-end-start-radius: $texteditor-input-border-radius;
+      min-width: $label-before-min-width;
+      clip-path: inset(-1px 1px -1px -1px);
+    }
+  
+    .dx-label-after {
+      flex-grow: 1;
+      min-width: $label-after-min-width;
+      border-block-width: $label-border-width;
+      border-inline-end-width: $label-border-width;
+      border-inline-start-width: 0;
+      border-style: solid;
+      border-color: $texteditor-border-color;
+      border-start-end-radius: $texteditor-input-border-radius;
+      border-end-end-radius: $texteditor-input-border-radius;
+      clip-path: inset(-1px -1px -1px 1px);
+    }
+  
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-label-before {
+        clip-path: inset(-1px -1px -1px 1px);
+      }
+  
+      .dx-label-after {
+        clip-path: inset(-1px 1px -1px -1px);
+      }
+    }
+
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      outline: none;
+      position: relative;
+      margin-top: $label-offset-y;
+
+      &.dx-daterangebox {
+        .dx-label {
+          position: relative;
+  
+          &::before {
+            content: '';
+            width: 100%;
+            position: absolute;
+            height: 3px;
+            top: -$label-backdrop-offset-y;
+            margin-inline-start: -2px;
+          }
+        }
+      }
+  
+      .dx-label {
+        &::before {
+          background-color: $base-bg;
+        }
+      }
+  
+      &.dx-texteditor:not(.dx-daterangebox) {
+        border: none;
+        box-shadow: none;
+      }
+
+      &.dx-state-readonly {
+        @include dx-state-border-style($label-readonly-border-style);
+        @include dx-state-border-color(color.change($texteditor-color, $alpha: 0.5));
+      }
+  
+      &.dx-state-disabled {
+        @include dx-state-border-color(color.change($texteditor-color, $alpha: 0.5));
+      }
+  
+      &.dx-invalid {
+        @include dx-state-border-color($texteditor-invalid-faded-border-color);
+      }
+  
+      &.dx-state-hover {
+        @include dx-state-border-color($texteditor-hover-border-color);
+  
+        &.dx-invalid {
+          @include dx-state-border-color($texteditor-invalid-focused-border-color);
+        }
+      }
+  
+      &.dx-state-focused {
+        @include dx-state-border-color($texteditor-focused-border-color);
+        @include dx-state-border-width($label-active-border-width);
+  
+        &.dx-invalid {
+          @include dx-state-border-color($texteditor-invalid-focused-border-color);
+        }
+      }
+    }
+
+    &.dx-texteditor-with-floating-label {
+      .dx-placeholder {
+        display: none;
+      }
+
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+      }
+
+      &.dx-texteditor-empty {
+        @include dx-state-empty($label-border-width, $texteditor-label-transition, $texteditor-font-size, $texteditor-input-top-padding);
+  
+        &.dx-state-focused,
+        &.dx-dropdowneditor-active {
+          @include dx-state($label-active-border-width, $texteditor-label-font-size, $label-offset-y, $base-bg);
+        }
+  
+        &.dx-state-readonly {
+          .dx-placeholder {
+            display: none;
+          }
+  
+          &.dx-state-focused {
+            @include dx-state-empty($label-active-border-width, $texteditor-label-transition, $texteditor-font-size, $texteditor-input-top-padding);
+          }
+        }
+      }
+    }
+  }
 }
 
 @mixin dx-editor-buttons-container(

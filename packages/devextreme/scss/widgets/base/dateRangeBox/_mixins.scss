@@ -1,20 +1,5 @@
 @use "sass:math";
 
-@mixin dx-outlined-mixin(
-  $base-bg,
-  $horizontal-padding,
-  $texteditor-label-font-size,
-  $label-offset-y,
-  $label-height,
-  $label-line-height,
-  $label-background-height,
-  $label-background-top,
-) {
-  .dx-mistic {
-    color: blue;
-  }
-}
-
 @mixin dx-underlined-mixin($texteditor-label-font-size, $label-height, $line-height) {
   $label-offset-y: math.div($texteditor-label-font-size, 2);
   $label-transform: translate(0, 0);
