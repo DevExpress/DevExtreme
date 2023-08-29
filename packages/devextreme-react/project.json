@@ -7,7 +7,7 @@
     "regenerate": {
       "executor": "nx:run-script",
       "options": {
-        "script": "generate"
+        "script": "regenerate"
       },
       "dependsOn": ["devextreme-monorepo:\"react:copy-metadata\"", "devextreme-monorepo:\"react:build-generator\""]
     }
