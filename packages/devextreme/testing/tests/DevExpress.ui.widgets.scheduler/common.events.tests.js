@@ -725,7 +725,7 @@ QUnit.module('Events', {
             $eventAppointmentElement = $(appointmentElement);
         });
 
-        createWrapper({
+        const scheduler = createWrapper({
             height: 600,
             dataSource: [{
                 text: 'appointment 1',
@@ -741,23 +741,17 @@ QUnit.module('Events', {
             onAppointmentContextMenu,
         });
 
-        const $appointment = $('.dx-scheduler-appointment');
-        $appointment.trigger('dxclick');
+        scheduler.appointments.click();
 
-        this.clock.tick(300);
-
-        let $appointmentItem = $('.dx-list-item');
+        let $appointmentItem = scheduler.tooltip.getItemElement();
         $appointmentItem.trigger('dxcontextmenu'); // first call
 
         assert.ok($eventAppointmentElement.is($appointmentItem), 'same element');
 
-        const $appointmentCollector = $('.dx-scheduler-appointment-collector');
-        $appointmentCollector.trigger('dxclick');
-
-        this.clock.tick(300);
+        scheduler.appointments.compact.click();
 
         $eventAppointmentElement = null;
-        $appointmentItem = $('.dx-list-item');
+        $appointmentItem = scheduler.appointments.compact.getAppointment();
         $appointmentItem.trigger('dxcontextmenu'); // second call
 
         assert.ok($eventAppointmentElement.is($appointmentItem), 'same element');
