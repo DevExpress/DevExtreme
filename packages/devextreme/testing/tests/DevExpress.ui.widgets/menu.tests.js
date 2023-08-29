@@ -2525,24 +2525,55 @@ QUnit.module('adaptivity: behavior', {
         assert.strictEqual(itemWithAttributes.getAttribute('target'), '_blank');
     });
 
-    QUnit.test('link should be cliked if item.url is set', function(assert) {
+    QUnit.test('link should be clicked programmatically if item.url is set', function(assert) {
+        const clickSpy = sinon.spy();
+
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
         });
 
-        const clickSpy = sinon.spy();
+        const parentTreeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
 
-        const $rootTreeviewItem = this.$element.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+        parentTreeviewItem.trigger('dxclick');
 
-        $rootTreeviewItem.trigger('dxclick');
-
-        const treeviewItem = this.$element.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+        const treeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
         const urlItem = $(`.${ITEM_URL_CLASS}`)[0];
-
         urlItem.click = clickSpy;
 
         treeviewItem.trigger('dxclick');
+
+        assert.ok(clickSpy.calledOnce);
+    });
+
+    QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
+        const clickSpy = sinon.spy();
+
+        new Menu(this.$element, {
+            items: [
+                { text: 'item1' },
+                {
+                    text: 'item2', url: 'http://url2',
+                    items: [
+                        { text: 'item2-1' },
+                        { text: 'item2-2' }
+                    ]
+                }],
+            adaptivityEnabled: true
+        });
+
+        const $hamburgerButton = $(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`);
+        const $treeview = $(`.${ DX_TREEVIEW_CLASS}`);
+        const keyboard = keyboardMock($treeview);
+
+        $hamburgerButton.trigger('dxclick');
+        $treeview.trigger('focusin');
+
+        const urlItem = $(`.${ITEM_URL_CLASS}`)[1];
+        urlItem.click = clickSpy;
+
+        keyboard.press('down')
+            .press('enter');
 
         assert.ok(clickSpy.calledOnce);
     });
