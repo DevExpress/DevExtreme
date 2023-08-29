@@ -1,6 +1,7 @@
 import { Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
+import { FilterBuilderPopup } from './builder';
 
 const CLASS = {
   filterPanelIcon: 'dx-icon-filter',
@@ -30,5 +31,11 @@ export default class FilterPanel extends FocusableElement {
 
   getFilterText(): FocusableElement {
     return new FocusableElement(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.filterPanelText)}`));
+  }
+
+  async openFilterBuilderPopup(t: TestController): Promise<FilterBuilderPopup> {
+    await t.click(this.getIconFilter().element);
+
+    return new FilterBuilderPopup();
   }
 }
