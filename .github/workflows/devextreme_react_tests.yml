@@ -36,7 +36,7 @@ jobs:
       working-directory: ./packages/devextreme-react
       run: npm run lint
 
-    - name: Generate wrapper
+    - name: Generate wrappers
       run: npm run react:generate
 
     - name: Check generated code

@@ -43,9 +43,9 @@ jobs:
 
     - name: Build devextreme package
       run: |
-        npx nx build devextreme-main  
+        npx nx build devextreme-main
 
-    - name: Generate wrapper
+    - name: Generate wrappers
       run: npm run vue:generate
 
     - name: Check generated code

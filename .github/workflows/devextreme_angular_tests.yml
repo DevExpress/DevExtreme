@@ -45,7 +45,7 @@ jobs:
       working-directory: ./packages/devextreme
       run: npm run build
 
-    - name: Generate wrapper
+    - name: Generate wrappers
       run: npm run angular:generate
 
     - name: Check generated code
@@ -59,6 +59,10 @@ jobs:
           echo "To update generated code, use "npm run generate" and commit changes."
           exit 1
         fi
+
+    - name: Build wrappers
+      working-directory: ./packages/devextreme-angular
+      run: npm run build
 
     - name: Run tests
       working-directory: ./packages/devextreme-angular

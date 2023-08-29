@@ -34,14 +34,14 @@
         "^build"
       ]
     },
-    "angular:discover-metadata": {
-      "dependsOn": ["tools:discover-declarations"]
+    "angular:copy-metadata": {
+      "dependsOn": ["tools:discover-metadata"]
     },
-    "react:discover-metadata": {
-      "dependsOn": ["tools:discover-declarations"]
+    "react:copy-metadata": {
+      "dependsOn": ["tools:discover-metadata"]
     },
-    "vue:discover-metadata": {
-      "dependsOn": ["tools:discover-declarations"]
+    "vue:copy-metadata": {
+      "dependsOn": ["tools:discover-metadata"]
     }
   },
   "workspaceLayout": {

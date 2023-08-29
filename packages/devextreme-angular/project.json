@@ -9,7 +9,7 @@
       "options": {
         "script": "generate"
       },
-      "dependsOn": ["devextreme-monorepo:\"angular:discover-metadata\"", "devextreme-monorepo:\"angular:build-generator\""]
+      "dependsOn": ["devextreme-monorepo:\"angular:copy-metadata\"", "devextreme-monorepo:\"angular:build-generator\""]
     }
   },
   "tags": []
