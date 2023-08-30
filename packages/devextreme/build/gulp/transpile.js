@@ -320,7 +320,7 @@ gulp.task('transpile-watch', gulp.parallel(watchJsTask, watchTsTask));
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>
     gulp
-        .src(['testing/**/*.js', '!testing/renovation-npm/**/*.js'])
+        .src(['testing/**/*.js'])
         .pipe(babel(testsConfig))
         .pipe(gulp.dest('testing'))
 ));
