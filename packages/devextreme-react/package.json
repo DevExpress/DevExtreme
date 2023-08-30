@@ -7,8 +7,9 @@
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "types": "./esm/index.d.ts",
   "scripts": {
     "clean": "gulp clean",
     "generate": "npm run clean && gulp generate",

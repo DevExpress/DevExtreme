@@ -15,6 +15,9 @@ const NPM_LICENSE = 'npm.license';
 const NPM_BUILD_WITH_HEADERS = 'npm.license-headers';
 const NPM_README = 'npm.readme';
 const NPM_BUILD = 'npm.build';
+const NPM_BUILD_ESM = 'npm.build-esm';
+const NPM_BUILD_CJS = 'npm.build-cjs';
+const NPM_PACKAGE_MODULES = 'npm.package-modules';
 const NPM_PACK = 'npm.pack';
 
 gulp.task(CLEAN, (c) =>
@@ -65,15 +68,61 @@ gulp.task(NPM_README, gulp.series(
     () => gulp.src(config.npm.readme).pipe(gulp.dest(config.npm.dist))
 ));
 
-gulp.task(NPM_BUILD, gulp.series(
-    NPM_CLEAN,
-    gulp.parallel(NPM_LICENSE, NPM_PACKAGE, NPM_README),
+gulp.task(NPM_BUILD_ESM, gulp.series(
+    () => gulp.src([
+        config.src,
+        `!${config.testSrc}`
+    ])
+        .pipe(ts('tsconfig.esm.json'))
+        .pipe(gulp.dest(config.npm.dist + '/esm'))
+));
+
+gulp.task(NPM_BUILD_CJS, gulp.series(
     () => gulp.src([
         config.src,
         `!${config.testSrc}`
     ])
         .pipe(ts('tsconfig.json'))
-        .pipe(gulp.dest(config.npm.dist))
+        .pipe(gulp.dest(config.npm.dist + '/cjs'))
+));
+
+gulp.task(NPM_PACKAGE_MODULES, (done) => {
+    const path = require('path');
+    const modulesIndex = fs.readFileSync(config.npm.dist + '/esm/index.js', 'utf8');
+
+    [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
+        const moduleName = modulePath.match(/[^/]+$/)[0];
+        const distFolder = path.join(__dirname, config.npm.dist)
+
+        try {
+            fs.mkdirSync(path.join(distFolder + `/${moduleName}`));
+
+            fs.writeFileSync(path.join(distFolder , moduleName, 'package.json'), JSON.stringify({
+                sideEffects: false,
+                main: `../cjs/${modulePath}.js`,
+                module: `../esm/${modulePath}.js`,
+                typings: `../esm/${modulePath}.d.ts`,
+            },null, 2));
+
+        } catch (error) {
+            error.message = `Exception while ${NPM_PACKAGE_MODULES}.\n ${error.message}`;
+            throw(error);
+        }
+    })
+
+    done();
+});
+
+gulp.task(NPM_BUILD, gulp.series(
+    NPM_CLEAN,
+    gulp.parallel(
+        NPM_LICENSE,
+        NPM_PACKAGE,
+        NPM_README,
+        NPM_BUILD_ESM,
+        NPM_BUILD_CJS
+    ),
+    NPM_PACKAGE_MODULES,
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
