@@ -7,10 +7,11 @@ import { getImageContainer } from '../../core/utils/icon';
 import HierarchicalDataAdapter from './ui.data_adapter';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { BindableTemplate } from '../../core/templates/bindable_template';
-import { isFunction } from '../../core/utils/type';
+import { isFunction, isObject } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 const HierarchicalCollectionWidget = CollectionWidget.inherit({
 
@@ -92,6 +93,15 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
             .html(itemData.html)
             .append(this._getIconContainer(itemData))
             .append(this._getTextContainer(itemData));
+    },
+
+    _getLinkContainer: function(iconContainer, textContainer, { linkAttr, url }) {
+        const linkAttributes = isObject(linkAttr) ? linkAttr : {};
+        return $('<a>')
+            .addClass(ITEM_URL_CLASS)
+            .attr({ ...linkAttributes, href: url })
+            .append(iconContainer)
+            .append(textContainer);
     },
 
     _getIconContainer: function(itemData) {

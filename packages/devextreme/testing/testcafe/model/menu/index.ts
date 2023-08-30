@@ -6,16 +6,19 @@ import ContextMenu from '../contextMenu';
 const CLASS = {
   menu: 'dx-menu',
   item: 'dx-menu-item',
+  adaptiveItem: 'dx-treeview-item',
   contextMenu: 'dx-context-menu',
+  hamburgerButton: 'dx-menu-hamburger-button',
 };
 
 export default class Menu extends Widget {
   items: Selector;
 
-  constructor() {
+  constructor(adaptivityEnabled = false) {
     super(`.${CLASS.menu}`);
 
-    this.items = Selector(`.${CLASS.item}`).filterVisible();
+    const itemClass = adaptivityEnabled ? `.${CLASS.adaptiveItem}` : `.${CLASS.item}`;
+    this.items = Selector(itemClass).filterVisible();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -23,6 +26,10 @@ export default class Menu extends Widget {
 
   getItem(index: number): Selector {
     return this.items.nth(index);
+  }
+
+  getHamburgerButton(): Selector {
+    return this.element.find(`.${CLASS.hamburgerButton}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
