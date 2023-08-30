@@ -983,7 +983,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
