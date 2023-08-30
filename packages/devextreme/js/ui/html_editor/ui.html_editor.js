@@ -318,6 +318,7 @@ const HtmlEditor = Editor.inherit({
             theme: 'basic'
         });
 
+        this._renderValidationState();
         this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
         this._quillInstance.on('text-change', this._textChangeHandlerWithContext);
