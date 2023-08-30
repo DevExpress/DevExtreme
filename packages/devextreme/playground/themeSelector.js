@@ -1,5 +1,5 @@
 /* global window */
-/* global $ */
+/* global document */
 
 const themeKey = 'currentThemeId';
 
@@ -59,16 +59,24 @@ const themeList = [
     'material.teal.light'
 ];
 
-$(() => {
-    const onValueChanged = (e) => {
-        window.localStorage.setItem(themeKey, e.value);
-        window.location.reload();
-    };
+const initThemes = (dropDownList) => {
+    themeList.forEach(theme => {
+        const item = document.createElement('option');
+        item.value = theme;
+        item.text = theme;
 
-    $('#theme-selector').dxSelectBox({
-        width: 300,
-        items: themeList,
-        value: window.localStorage.getItem(themeKey) || themeList[0].id,
-        onValueChanged
+        dropDownList.add(item);
     });
+};
+
+window.addEventListener('load', () => {
+    const dropDownList = document.querySelector('#theme-selector');
+
+    dropDownList.addEventListener('change', () => {
+        window.localStorage.setItem(themeKey, dropDownList.value);
+        window.location.reload();
+    });
+
+    initThemes(dropDownList);
+    dropDownList.value = window.localStorage.getItem(themeKey) || themeList[0];
 });
