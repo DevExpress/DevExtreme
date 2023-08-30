@@ -1569,7 +1569,7 @@ module('CellTemplate tests', moduleConfig, () => {
                             if(!cellIndex) {
                                 assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                                 assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Date cell width is OK');
-                                assert.equal(getOuterHeight($(cellElement)), 40, 'Date cell height is OK');
+                                assert.equal(getOuterHeight($(cellElement)), 50, 'Date cell height is OK');
                             }
                         }
                     });

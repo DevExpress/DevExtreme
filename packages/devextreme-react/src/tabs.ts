@@ -85,6 +85,14 @@ class Tabs<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildre
   ]),
   hint: PropTypes.string,
   hoverStateEnabled: PropTypes.bool,
+  iconPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "top",
+      "end",
+      "bottom",
+      "start"])
+  ]),
   itemHoldTimeout: PropTypes.number,
   items: PropTypes.array,
   keyExpr: PropTypes.oneOfType([

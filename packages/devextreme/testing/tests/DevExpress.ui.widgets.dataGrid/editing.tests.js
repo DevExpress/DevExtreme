@@ -12776,7 +12776,9 @@ QUnit.module('Editing with validation', {
         assert.equal($('.dx-datagrid-revert-tooltip').length, 2, 'tooltip with revert button');
         assert.equal($('.dx-revert-button').length, 1, 'revert button');
         // T494489
-        assert.equal($('.dx-revert-button').closest(this.gridContainer).length, 1, 'revert button is rendered in DataGrid container');
+        assert.equal($('.dx-revert-button').parent(this.gridContainer).length, 1, 'revert button is rendered in DataGrid container');
+        // fixes an accessibility issue (aria-required-children)
+        assert.equal($('.dx-overlay-wrapper.dx-datagrid-revert-tooltip').parent('.dx-datagrid-rowsview').length, 1, 'revert tooltip is rendered in rows view container');
     });
 
     // T297742

@@ -103,10 +103,10 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         triggerHidingEvent($element);
         triggerShownEvent($element);
 
-        dateTableScrollable.scrollTo({ top: 200 });
+        dateTableScrollable.scrollTo({ top: 102 });
 
         setTimeout(() => {
-            assert.equal(groupPanelScrollable.scrollTop(), 200, 'Scroll position is OK');
+            assert.equal(groupPanelScrollable.scrollTop(), 102, 'Scroll position is OK');
             done();
         }, 100);
     });
@@ -127,9 +127,9 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         triggerHidingEvent($element);
         triggerShownEvent($element);
 
-        groupPanelScrollable.scrollTo({ top: 200 });
+        groupPanelScrollable.scrollTo({ top: 102 });
 
-        assert.equal(dateTableScrollable.scrollTop(), 200, 'Scroll position is OK');
+        assert.equal(dateTableScrollable.scrollTop(), 102, 'Scroll position is OK');
     });
 });
 

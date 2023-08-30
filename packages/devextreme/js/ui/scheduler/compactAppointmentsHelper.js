@@ -4,7 +4,6 @@ import { move, locate } from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
-import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
@@ -86,17 +85,8 @@ export class CompactAppointmentsHelper {
 
     _clickEvent(onAppointmentClick) {
         return (e) => {
-            const config = {
-                itemData: e.itemData.appointment,
-                itemElement: e.itemElement,
-                targetedAppointment: e.itemData.targetedAppointment,
-            };
-
-            const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
-            delete createClickEvent.itemData;
-            delete createClickEvent.itemIndex;
-            delete createClickEvent.itemElement;
-            onAppointmentClick(createClickEvent);
+            const clickEventArgs = this.instance._createEventArgs(e);
+            onAppointmentClick(clickEventArgs);
         };
     }
 

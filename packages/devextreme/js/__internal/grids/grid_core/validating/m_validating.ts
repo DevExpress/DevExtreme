@@ -1070,7 +1070,7 @@ export const validatingModule = {
               return;
             }
 
-            const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+            const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).parent();
             const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
 
             $tooltipElement?.remove();
