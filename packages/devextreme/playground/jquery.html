@@ -5,7 +5,16 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <script type="text/javascript">
+        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+
+        const link = document.createElement("link");
+        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.type = "text/css";
+        link.rel = "stylesheet";
+
+        document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -36,9 +45,11 @@
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
+        <div id="theme-selector"></div>
+        <br />
         <div id="button"></div>
         <script>
-           $(function() {
+            $(function() {
                 $("#button").dxButton({
                     text: 'Click me!',
                     onClick: function() { alert("clicked"); }
