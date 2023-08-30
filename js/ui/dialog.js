@@ -3,6 +3,7 @@ import $ from '../core/renderer';
 import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';
+import Guid from '../core/guid';
 
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
@@ -58,8 +59,11 @@ export const custom = function(options) {
 
     const messageHtml = String(isMessageHtmlDefined ? options.messageHtml : options.message);
 
-    const $message = $('<div>').addClass(DX_DIALOG_MESSAGE_CLASSNAME)
-        .html(messageHtml);
+    const messageId = options.title ? null : new Guid();
+    const $message = $('<div>')
+        .addClass(DX_DIALOG_MESSAGE_CLASSNAME)
+        .html(messageHtml)
+        .attr('id', messageId);
 
     const popupToolbarItems = [];
 
@@ -96,6 +100,10 @@ export const custom = function(options) {
             args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
                 .append($message);
+
+            if(messageId) {
+                args.component.$overlayContent().attr('aria-labelledby', messageId);
+            }
         },
         onShowing: function(e) {
             e.component
