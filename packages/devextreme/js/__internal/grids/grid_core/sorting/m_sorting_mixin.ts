@@ -1,6 +1,6 @@
 import $ from '@js/core/renderer';
-import { format } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 
 const SORT_CLASS = 'dx-sort';
 const SORT_NONE_CLASS = 'dx-sort-none';
@@ -57,21 +57,22 @@ export default {
     const descriptionList: string[] = [];
 
     if (rootElement.attr('role') === 'columnheader') {
-      descriptionList.push(this.localize('dxDataGrid-ariaColumnHeader'));
+      descriptionList.push(messageLocalization.format('dxDataGrid-ariaColumnHeader'));
     }
 
     if (column.isGrouped) {
-      let sortOrderDescription = this.localize('dxDataGrid-ariaNotSortedColumn');
+      let sortOrderDescription = messageLocalization.format('dxDataGrid-ariaNotSortedColumn');
       if (isDefined(column.sortOrder)) {
         sortOrderDescription = column.sortOrder === 'asc'
-          ? this.localize('dxDataGrid-ariaSortedAscendingColumn')
-          : this.localize('dxDataGrid-ariaSortedDescendingColumn');
+          ? messageLocalization.format('dxDataGrid-ariaSortedAscendingColumn')
+          : messageLocalization.format('dxDataGrid-ariaSortedDescendingColumn');
       }
       descriptionList.push(sortOrderDescription);
     } else if (!isDefined(column.sortOrder)) {
       this.setAria('sort', 'none', rootElement);
     } else {
-      const sortIndexDescription = format(this.localize('dxDataGrid-ariaSortIndex'), column.sortIndex);
+      // @ts-expect-error
+      const sortIndexDescription = messageLocalization.format('dxDataGrid-ariaSortIndex', column.sortIndex);
       descriptionList.push(sortIndexDescription);
       this.setAria('sort', ariaSortState, rootElement);
     }
