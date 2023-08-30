@@ -99,7 +99,7 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/bin`)),
 
     gulp
-        .src('package.json')
+        .src(`${dist}/package.json`)
         .pipe(replace(version, ctx.version.package))
         .pipe(gulp.dest(dist)),
 
