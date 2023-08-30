@@ -17,6 +17,9 @@ const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
 const DIALOG_CLASS = 'dx-dialog';
 const POPUP_CLASS = 'dx-popup';
 const DIALOG_BUTTON_CLASS = 'dx-dialog-button';
+const DIALOG_MESSAGE_CLASS = 'dx-dialog-message';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 module('dialog', {
     beforeEach: function() {
@@ -331,6 +334,24 @@ module('dialog', {
         assert.ok($('.dx-overlay-content').hasClass('dx-rtl'), '\'dx-rlt\' class is present');
 
         config({ rtlEnabled: false });
+    });
+
+    test('dialog aria-labelledby is equal to message id if title is null', function(assert) {
+        confirm({ message: 'message' });
+
+        const overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const messageId = overlayContent.find(`.${DIALOG_MESSAGE_CLASS}`).attr('id');
+
+        assert.strictEqual(overlayContent.attr('aria-labelledby'), messageId);
+    });
+
+    test('dialog aria-labelledby is equal to title id', function(assert) {
+        confirm({ message: 'message', title: 'title' });
+
+        const overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const titleId = overlayContent.find(`.${TOOLBAR_LABEL_CLASS}`).attr('id');
+
+        assert.strictEqual(overlayContent.attr('aria-labelledby'), titleId);
     });
 
     test('should show \'W1013\' warning if deprecated \'message\' option is used', function(assert) {
