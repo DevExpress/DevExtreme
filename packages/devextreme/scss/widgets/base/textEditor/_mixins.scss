@@ -8,7 +8,13 @@
   align-items: baseline;
 }
 
-@mixin dx-state($borderWidth, $label-font-size, $label-offset-y, $base-bg) {
+@mixin dx-state(
+  $label-font-size,
+  $label-offset-y,
+  $label-height,
+  $label-line-height,
+  $base-bg
+) {
   .dx-label {
     border-top-width: 0;
 
@@ -17,8 +23,8 @@
       font-size: $label-font-size;
       margin-top: 0;
       top: 0;
-      height: $label-font-size + 1px; // // generic $generic-base-line-height;
-      line-height: $label-font-size;  // generic $generic-base-inline-block-height;
+      height: $label-height;
+      line-height: $label-line-height;
     }
 
     &::before {
@@ -36,7 +42,14 @@
   }
 }
 
-@mixin dx-state-empty($borderWidth, $texteditor-label-transition, $texteditor-font-size, $texteditor-input-top-padding) {
+@mixin dx-state-empty(
+  $borderWidth,
+  $texteditor-label-transition,
+  $label-font-size,
+  $label-height,
+  $label-line-height,
+  $texteditor-input-top-padding
+) {
   .dx-label {
     padding: 0 2px;
     border-top-width: $borderWidth;
@@ -44,11 +57,11 @@
     span {
       transition: $texteditor-label-transition;
       transform: translate(0, 0);
-      font-size: $texteditor-font-size;
+      font-size: $label-font-size;
       top: 50%;
-      margin-top: math.div(-$texteditor-font-size, 2); // math.div(- $generic-base-inline-block-height, 2);
-      height: $texteditor-font-size; // $generic-base-inline-block-height;
-      line-height: $texteditor-font-size; // $generic-base-line-height;
+      margin-top: math.div(-$label-height, 2);
+      height: $label-height;
+      line-height: $label-line-height;
     }
 
     &::before {
@@ -118,6 +131,8 @@
   $label-border-width,
   $label-active-border-width,
   $label-readonly-border-style,
+  $label-active-height,
+  $label-active-line-height,
   $label-offset-y,
   $label-backdrop-offset-y,
   $label-before-min-width,
@@ -154,11 +169,9 @@
         font-size: $texteditor-label-font-size;
         top: 0;
         margin-top: 0;
-
-        // may be remove // missed in generic
         transform: translate(0, -$label-offset-y);
-        height: $texteditor-label-font-size + 1px;
-        line-height: $texteditor-label-font-size;
+        height: $label-active-height;
+        line-height: $label-active-line-height;
       }
     }
 
@@ -274,11 +287,23 @@
       }
 
       &.dx-texteditor-empty {
-        @include dx-state-empty($label-border-width, $texteditor-label-transition, $texteditor-font-size, $texteditor-input-top-padding);
+        @include dx-state-empty(
+          $label-border-width,
+          $texteditor-label-transition,
+          $texteditor-font-size,
+          $label-active-height,
+          $label-active-line-height,
+          $texteditor-input-top-padding);
   
         &.dx-state-focused,
         &.dx-dropdowneditor-active {
-          @include dx-state($label-active-border-width, $texteditor-label-font-size, $label-offset-y, $base-bg);
+          @include dx-state(
+            $texteditor-label-font-size,
+            $label-offset-y,
+            $label-active-height,
+            $label-active-line-height,
+            $base-bg
+          );
         }
   
         &.dx-state-readonly {
@@ -287,7 +312,14 @@
           }
   
           &.dx-state-focused {
-            @include dx-state-empty($label-active-border-width, $texteditor-label-transition, $texteditor-font-size, $texteditor-input-top-padding);
+            @include dx-state-empty(
+              $label-active-border-width,
+              $texteditor-label-transition,
+              $texteditor-font-size,
+              $label-active-height,
+              $label-active-line-height,
+              $texteditor-input-top-padding
+            );
           }
         }
       }
