@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import { format } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 
 const SORT_CLASS = 'dx-sort';
@@ -53,19 +54,29 @@ export default {
   },
 
   _setAriaSortAttribute(column, ariaSortState, rootElement) {
+    const descriptionList: string[] = [];
+
+    if (rootElement.attr('role') === 'columnheader') {
+      descriptionList.push(this.localize('dxDataGrid-ariaColumnHeader'));
+    }
+
     if (column.isGrouped) {
-      let description = this.localize('dxDataGrid-ariaNotSortedColumn');
+      let sortOrderDescription = this.localize('dxDataGrid-ariaNotSortedColumn');
       if (isDefined(column.sortOrder)) {
-        description = column.sortOrder === 'asc'
+        sortOrderDescription = column.sortOrder === 'asc'
           ? this.localize('dxDataGrid-ariaSortedAscendingColumn')
           : this.localize('dxDataGrid-ariaSortedDescendingColumn');
       }
-      this.setAria('roledescription', description, rootElement);
+      descriptionList.push(sortOrderDescription);
     } else if (!isDefined(column.sortOrder)) {
       this.setAria('sort', 'none', rootElement);
     } else {
+      const sortIndexDescription = format(this.localize('dxDataGrid-ariaSortIndex'), column.sortIndex);
+      descriptionList.push(sortIndexDescription);
       this.setAria('sort', ariaSortState, rootElement);
     }
+
+    this.setAria('roledescription', descriptionList.join(', '), rootElement);
   },
 
   _getIndicatorClassName(name) {

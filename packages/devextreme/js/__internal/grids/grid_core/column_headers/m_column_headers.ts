@@ -213,6 +213,7 @@ export const columnHeadersModule = {
           if (cellOptions.rowType === 'header') {
             if (!cellOptions.column.type) {
               this.setAria('role', 'columnheader', $cell);
+              this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaColumnHeader'), $cell);
             }
             if (cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand) {
               $cell.attr('id', cellOptions.column.headerId);
