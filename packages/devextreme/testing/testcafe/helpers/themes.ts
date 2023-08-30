@@ -35,4 +35,6 @@ export const Themes = {
   materialPurpleDarkCompact: 'material.purple.dark.compact',
   materialTealCompact: 'material.teal.light.compact',
   materialTealDarkCompact: 'material.teal.dark.compact',
+  fluentBlue: 'fluent.blue.light',
+  fluentBlueDark: 'fluent.blue.dark',
 };
