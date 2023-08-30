@@ -558,7 +558,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
           selectable: false,
           items: that._getFilterOperationMenuItems(column),
         }],
-        onItemRendered({ itemElement }) {
+        onItemRendered: ({ itemElement }) => {
           this.setAria('label', ARIA_SEARCH_BOX, $(itemElement));
         },
         onItemClick(properties) {
