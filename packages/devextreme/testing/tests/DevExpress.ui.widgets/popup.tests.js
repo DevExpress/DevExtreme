@@ -182,7 +182,7 @@ QUnit.module('basic', () => {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), titleId);
     });
 
-    QUnit.test('aria-labelledby is not setted when title is null', function(assert) {
+    QUnit.test('aria-labelledby is not set when title is null', function(assert) {
         const instance = $('#popup').dxPopup({ visible: true }).dxPopup('instance');
 
         const $overlayContent = instance.$content().parent();
