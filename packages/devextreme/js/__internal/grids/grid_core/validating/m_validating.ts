@@ -23,6 +23,7 @@ import Validator from '@js/ui/validator';
 import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
 
+import { FOCUSABLE_ELEMENT_SELECTOR } from '../editing/const';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
@@ -1093,6 +1094,10 @@ export const validatingModule = {
                 const buttonOptions = {
                   icon: 'revert',
                   hint: this.option('editing.texts.validationCancelChanges'),
+                  elementAttr: {
+                    id: 'revert_button',
+                    'aria-label': 'Press Escape to revert value',
+                  },
                   onClick: () => {
                     this._editingController.cancelEditData();
                   },
@@ -1193,7 +1198,10 @@ export const validatingModule = {
               animation: false,
               propagateOutsideClick: true,
               hideOnOutsideClick: false,
-              wrapperAttr: { class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}` },
+              wrapperAttr: {
+                id: 'invalid_message',
+                class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}`,
+              },
               position: {
                 collision: 'flip',
                 boundary: this._rowsView.element(),
@@ -1305,10 +1313,12 @@ export const validatingModule = {
             const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
             const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
             const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
+            const validationDescriptionValues: string[] = [];
 
             if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
               if ((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
                 this._showRevertButton($focus);
+                validationDescriptionValues.push('revert_button');
               } else {
                 this._revertTooltip && this._revertTooltip.$element().remove();
               }
@@ -1326,10 +1336,39 @@ export const validatingModule = {
 
               if (errorMessages.length) {
                 this._showValidationMessage($focus, errorMessages, column.alignment || 'left');
+                validationDescriptionValues.push('invalid_message');
               }
             }
 
+            this._updateEditorInputState($cell, validationDescriptionValues);
             !isHideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
+          },
+
+          _updateEditorInputState($cell, inputDescriptionValues) {
+            if (inputDescriptionValues.length === 0) { return; }
+
+            const editMode = this._editingController.getEditMode();
+            const shouldSetValidationAriaAttributes = [
+              EDIT_MODE_CELL,
+              EDIT_MODE_BATCH,
+              EDIT_MODE_ROW].includes(editMode);
+
+            if (!shouldSetValidationAriaAttributes) { return; }
+
+            // const $focusElement = this._getFocusElement($cell);
+            const $focusElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
+            $cell.attr('aria-labelledby', inputDescriptionValues.join(' '));
+            $cell.attr('aria-invalid', true);
+            $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
+            $focusElement.attr('aria-invalid', true);
+          },
+
+          _getFocusElement($cell): any {
+            let $focusElement = $cell;
+            if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
+              $focusElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
+            }
+            return $focusElement;
           },
 
           focus($element, isHideBorder) {

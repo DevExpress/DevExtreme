@@ -46,7 +46,6 @@ const ErrorHandlingController = modules.ViewController.inherit({
         // @ts-expect-errors
         .attr({
           colSpan: that.getController('columns').getVisibleColumns().length,
-          role: 'presentation',
         })
         .prepend($closeButton)
         .append($errorMessage)
@@ -60,7 +59,11 @@ const ErrorHandlingController = modules.ViewController.inherit({
 
   _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
-    const $message = $('<div>').addClass(ERROR_MESSAGE_CLASS).text(message);
+    const $message = $('<div>')
+      .attr('role', 'alert')
+      .attr('aria-roledescription', 'Error')
+      .addClass(ERROR_MESSAGE_CLASS)
+      .text(message);
 
     if (error.url) {
       $('<a>').attr('href', error.url).text(error.url).appendTo($message);
