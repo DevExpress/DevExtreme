@@ -190,7 +190,7 @@ QUnit.module('basic', () => {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
-    QUnit.test('aria-labelledby is correct in runtime change', function(assert) {
+    QUnit.test('aria-labelledby should be correct after runtime change', function(assert) {
         const instance = $('#popup').dxPopup({
             title: 'title',
             visible: true,
