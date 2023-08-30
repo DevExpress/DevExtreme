@@ -25537,10 +25537,6 @@ declare module DevExpress.ui {
      */
     iconPosition?: DevExpress.common.TabsIconPosition;
     /**
-     * [descr:dxTabPanelOptions.iconPosition]
-     */
-    iconPosition?: DevExpress.ui.dxTabs.IconPosition;
-    /**
      * [descr:dxTabPanelOptions.items]
      */
     items?: Array<TItem>;
