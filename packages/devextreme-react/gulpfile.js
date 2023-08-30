@@ -5,6 +5,7 @@ const shell = require('gulp-shell');
 const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const config = require('./build.config');
+const path = require('path');
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -18,6 +19,7 @@ const NPM_BUILD = 'npm.build';
 const NPM_BUILD_ESM = 'npm.build-esm';
 const NPM_BUILD_CJS = 'npm.build-cjs';
 const NPM_PACKAGE_MODULES = 'npm.package-modules';
+const NPM_MOVE_DECLARATIONS = 'npm.move-declarations';
 const NPM_PACK = 'npm.pack';
 
 gulp.task(CLEAN, (c) =>
@@ -87,21 +89,22 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PACKAGE_MODULES, (done) => {
-    const path = require('path');
-    const modulesIndex = fs.readFileSync(config.npm.dist + '/esm/index.js', 'utf8');
+    const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
+    const distFolder = path.join(__dirname, config.npm.dist);
 
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
-        const distFolder = path.join(__dirname, config.npm.dist)
 
         try {
-            fs.mkdirSync(path.join(distFolder + `/${moduleName}`));
+            // moveDeclarations();
+
+            fs.mkdirSync(path.join(distFolder, moduleName));
 
             fs.writeFileSync(path.join(distFolder , moduleName, 'package.json'), JSON.stringify({
                 sideEffects: false,
                 main: `../cjs/${modulePath}.js`,
                 module: `../esm/${modulePath}.js`,
-                typings: `../esm/${modulePath}.d.ts`,
+                typings: `../declarations/${modulePath}.d.ts`,
             },null, 2));
 
         } catch (error) {
@@ -110,6 +113,33 @@ gulp.task(NPM_PACKAGE_MODULES, (done) => {
         }
     })
 
+    done();
+});
+
+gulp.task(NPM_MOVE_DECLARATIONS, (done) => {
+    const distFolder = path.join(__dirname, config.npm.dist);
+    const declarations = findDeclarationFiles(path.join(distFolder, 'cjs'));
+
+    fs.mkdirSync(path.join(distFolder + `/declarations`));
+
+    declarations.forEach((filePath) => {
+        const relativePath = path.relative(path.join(distFolder, 'cjs'), filePath);
+        const destPath = path.join(distFolder, 'declarations', relativePath);
+
+
+        if (!fs.existsSync(path.dirname(destPath))) {
+            fs.mkdirSync(path.dirname(destPath), { recursive: true });
+        }
+
+        fs.rename(
+            filePath,
+            path.join(distFolder, 'declarations', relativePath),
+            (err) => {
+                if (err) {
+                    throw(err);
+                }
+            });
+    })
     done();
 });
 
@@ -123,6 +153,7 @@ gulp.task(NPM_BUILD, gulp.series(
         NPM_BUILD_CJS
     ),
     NPM_PACKAGE_MODULES,
+    NPM_MOVE_DECLARATIONS,
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
@@ -162,3 +193,23 @@ gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD_WITH_HEADERS,
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
+
+function findDeclarationFiles(dir) {
+    let results = [];
+
+    const files = fs.readdirSync(dir);
+
+    for (const file of files) {
+        const filePath = path.join(dir, file);
+
+        const stat = fs.statSync(filePath);
+
+        if (stat.isDirectory()) {
+            results = results.concat(findDeclarationFiles(filePath));
+        } else if (file.includes('.d.ts')) {
+            results.push(filePath);
+        }
+    }
+
+    return results;
+}
