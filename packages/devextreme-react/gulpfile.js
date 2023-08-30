@@ -96,8 +96,6 @@ gulp.task(NPM_PACKAGE_MODULES, (done) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
 
         try {
-            // moveDeclarations();
-
             fs.mkdirSync(path.join(distFolder, moduleName));
 
             fs.writeFileSync(path.join(distFolder , moduleName, 'package.json'), JSON.stringify({
@@ -139,7 +137,8 @@ gulp.task(NPM_MOVE_DECLARATIONS, (done) => {
                     throw(err);
                 }
             });
-    })
+    });
+
     done();
 });
 
