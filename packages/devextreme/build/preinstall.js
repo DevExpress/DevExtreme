@@ -22,7 +22,7 @@ const generateProdPackageFile = (sourcePkg) => {
     };
 
     delete sourcePkg.devDependencies;
-    delete sourcePkg.scripts.preinstall;
+    delete sourcePkg.scripts;
 
     fs.writeFileSync(packagePath, Buffer.from(JSON.stringify(sourcePkg, null, 2)));
 };
