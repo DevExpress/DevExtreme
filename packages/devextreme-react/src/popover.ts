@@ -34,14 +34,14 @@ type IPopoverOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPo
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
   titleKeyFn?: (data: any) => string;
-  defaultHeight?: (() => number) | number | string;
+  defaultHeight?: (() => number | string) | number | string;
   defaultPosition?: PositionConfig | "bottom" | "left" | "right" | "top";
   defaultVisible?: boolean;
-  defaultWidth?: (() => number) | number | string;
-  onHeightChange?: (value: (() => number) | number | string) => void;
+  defaultWidth?: (() => number | string) | number | string;
+  onHeightChange?: (value: (() => number | string) | number | string) => void;
   onPositionChange?: (value: PositionConfig | "bottom" | "left" | "right" | "top") => void;
   onVisibleChange?: (value: boolean) => void;
-  onWidthChange?: (value: (() => number) | number | string) => void;
+  onWidthChange?: (value: (() => number | string) | number | string) => void;
 }>
 
 class Popover extends BaseComponent<React.PropsWithChildren<IPopoverOptions>> {
@@ -363,10 +363,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: "always" | "inMenu";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;

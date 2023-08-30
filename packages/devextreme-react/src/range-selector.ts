@@ -140,7 +140,7 @@ class RangeSelector extends BaseComponent<React.PropsWithChildren<IRangeSelector
 // owners:
 // CommonSeriesSettings
 type IAggregationProps = React.PropsWithChildren<{
-  calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any>);
+  calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>);
   enabled?: boolean;
   method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
 }>
@@ -170,7 +170,7 @@ class AggregationInterval extends NestedOption<IAggregationIntervalProps> {
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -324,7 +324,7 @@ class Color extends NestedOption<IColorProps> {
 // Chart
 type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   aggregation?: Record<string, any> | {
-    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any>);
+    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>);
     enabled?: boolean;
     method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
   };
@@ -692,7 +692,7 @@ class Font extends NestedOption<IFontProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1299,7 +1299,7 @@ class SelectionStyle extends NestedOption<ISelectionStyleProps> {
 // Chart
 type ISeriesProps = React.PropsWithChildren<{
   aggregation?: Record<string, any> | {
-    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any>);
+    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>);
     enabled?: boolean;
     method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
   };

@@ -113,7 +113,7 @@ class MultiView<TItem = any, TKey = any> extends BaseComponent<React.PropsWithCh
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;

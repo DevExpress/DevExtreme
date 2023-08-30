@@ -271,7 +271,7 @@ type IItemProps = React.PropsWithChildren<{
   linkAttr?: Record<string, any>;
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   url?: string;
   visible?: boolean;

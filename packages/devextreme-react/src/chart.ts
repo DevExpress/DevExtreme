@@ -258,7 +258,7 @@ class AdaptiveLayout extends NestedOption<IAdaptiveLayoutProps> {
 // owners:
 // CommonSeriesSettings
 type IAggregationProps = React.PropsWithChildren<{
-  calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any>);
+  calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>);
   enabled?: boolean;
   method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
 }>
@@ -336,11 +336,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxChartAnnotationConfig | any, element: any) => string) | template;
+  template?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxChartAnnotationConfig | any, element: any) => string) | template;
+  tooltipTemplate?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
   value?: any | number | string;
   width?: number;
@@ -492,7 +492,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     position?: "inside" | "outside" | "bottom" | "left" | "right" | "top";
     rotationAngle?: number;
     staggeringSpacing?: number;
-    template?: ((data: { value: any | number | string, valueText: string }, element: any) => string) | template;
+    template?: ((data: { value: any | number | string, valueText: string }, element: any) => string | any) | template;
     textOverflow?: "ellipsis" | "hide" | "none";
     visible?: boolean;
     wordWrap?: "normal" | "breakWord" | "none";
@@ -643,7 +643,7 @@ class ArgumentAxis extends NestedOption<IArgumentAxisProps> {
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -702,7 +702,7 @@ type IAxisLabelProps = React.PropsWithChildren<{
   position?: "inside" | "outside" | "bottom" | "left" | "right" | "top";
   rotationAngle?: number;
   staggeringSpacing?: number;
-  template?: ((data: { value: any | number | string, valueText: string }, element: any) => string) | template;
+  template?: ((data: { value: any | number | string, valueText: string }, element: any) => string | any) | template;
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
@@ -901,11 +901,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxChartAnnotationConfig | any, element: any) => string) | template;
+  template?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxChartAnnotationConfig | any, element: any) => string) | template;
+  tooltipTemplate?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
   value?: any | number | string;
   width?: number;
@@ -975,7 +975,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
     position?: "inside" | "outside" | "bottom" | "left" | "right" | "top";
     rotationAngle?: number;
     staggeringSpacing?: number;
-    template?: ((data: { value: any | number | string, valueText: string }, element: any) => string) | template;
+    template?: ((data: { value: any | number | string, valueText: string }, element: any) => string | any) | template;
     textOverflow?: "ellipsis" | "hide" | "none";
     visible?: boolean;
     wordWrap?: "normal" | "breakWord" | "none";
@@ -1082,7 +1082,7 @@ type ICommonAxisSettingsLabelProps = React.PropsWithChildren<{
   position?: "inside" | "outside" | "bottom" | "left" | "right" | "top";
   rotationAngle?: number;
   staggeringSpacing?: number;
-  template?: ((data: { value: any | number | string, valueText: string }, element: any) => string) | template;
+  template?: ((data: { value: any | number | string, valueText: string }, element: any) => string | any) | template;
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
@@ -1142,7 +1142,7 @@ class CommonPaneSettings extends NestedOption<ICommonPaneSettingsProps> {
 // Chart
 type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   aggregation?: Record<string, any> | {
-    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any>);
+    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>);
     enabled?: boolean;
     method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
   };
@@ -1650,7 +1650,7 @@ class Font extends NestedOption<IFontProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1812,7 +1812,7 @@ type ILabelProps = React.PropsWithChildren<{
   overlappingBehavior?: "rotate" | "stagger" | "none" | "hide";
   rotationAngle?: number;
   staggeringSpacing?: number;
-  template?: ((data: { value: any | number | string, valueText: string }, element: any) => string) | template;
+  template?: ((data: { value: any | number | string, valueText: string }, element: any) => string | any) | template;
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
   argumentFormat?: LocalizationTypes.Format;
@@ -1875,7 +1875,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: BaseChartLegendItem, element: any) => string) | template;
+  markerTemplate?: ((legendItem: BaseChartLegendItem, element: any) => string | any) | template;
   orientation?: "horizontal" | "vertical";
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -2317,7 +2317,7 @@ class SelectionStyle extends NestedOption<ISelectionStyleProps> {
 // Chart
 type ISeriesProps = React.PropsWithChildren<{
   aggregation?: Record<string, any> | {
-    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any>);
+    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>);
     enabled?: boolean;
     method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
   };
@@ -2693,7 +2693,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((pointInfo: any, element: any) => string) | template;
+  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
@@ -2830,7 +2830,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     position?: "inside" | "outside" | "bottom" | "left" | "right" | "top";
     rotationAngle?: number;
     staggeringSpacing?: number;
-    template?: ((data: { value: any | number | string, valueText: string }, element: any) => string) | template;
+    template?: ((data: { value: any | number | string, valueText: string }, element: any) => string | any) | template;
     textOverflow?: "ellipsis" | "hide" | "none";
     visible?: boolean;
     wordWrap?: "normal" | "breakWord" | "none";
