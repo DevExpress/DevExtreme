@@ -2547,7 +2547,7 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
-        if(!isDeviceDesktop(assert) || QUnit.urlParams['nojquery']) {
+        if(!isDeviceDesktop(assert)) {
             assert.ok(true);
             return;
         }
@@ -2574,7 +2574,7 @@ QUnit.module('adaptivity: behavior', {
         $hamburgerButton.trigger('dxclick');
         $treeview.trigger('focusin');
 
-        const urlItem = $(`.${ITEM_URL_CLASS}`)[1];
+        const urlItem = $treeview.find(`.${ITEM_URL_CLASS}`)[0];
         urlItem.click = clickSpy;
 
         keyboard.press('down')
