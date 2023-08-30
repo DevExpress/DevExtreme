@@ -336,7 +336,7 @@ module('dialog', {
         config({ rtlEnabled: false });
     });
 
-    test('dialog aria-labelledby is equal message id if title is null', function(assert) {
+    test('dialog aria-labelledby is equal to message id if title is null', function(assert) {
         confirm({ message: 'message' });
 
         const overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
@@ -345,7 +345,7 @@ module('dialog', {
         assert.strictEqual(overlayContent.attr('aria-labelledby'), messageId);
     });
 
-    test('dialog aria-labelledby is equal title id', function(assert) {
+    test('dialog aria-labelledby is equal to title id', function(assert) {
         confirm({ message: 'message', title: 'title' });
 
         const overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);

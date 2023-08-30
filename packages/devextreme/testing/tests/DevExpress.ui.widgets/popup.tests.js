@@ -170,7 +170,7 @@ QUnit.module('basic', () => {
         assert.strictEqual($overlayContent.attr('role'), 'dialog');
     });
 
-    QUnit.test('aria-labelledby is equal title id', function(assert) {
+    QUnit.test('aria-labelledby is equal to title id', function(assert) {
         const instance = $('#popup').dxPopup({
             title: 'title',
             visible: true,
