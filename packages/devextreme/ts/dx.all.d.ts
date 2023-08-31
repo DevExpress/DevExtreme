@@ -1657,13 +1657,6 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  export type PositionRelative = 'top' | 'end' | 'bottom' | 'start';
->>>>>>> feaa76ca7c (fix(d.ts): Rename type)
-=======
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   /**
    * [descr:RangeRule]
    */
@@ -11473,15 +11466,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.buttons]
      */
-<<<<<<< HEAD
     buttons?: Array<
       | DevExpress.ui.dxDataGrid.DataGridPredefinedColumnButton
       | DevExpress.ui.dxDataGrid.ColumnButton<TRowData, TKey>
     >;
-=======
-    buttons?: (| dxDataGrid.DataGridPredefinedColumnButton
-    | dxDataGrid.ColumnButton<TRowData, TKey>)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
      */
@@ -14532,15 +14520,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
-<<<<<<< HEAD
     buttons?: Array<
       | DevExpress.ui.dxDropDownEditor.DropDownPredefinedButton
       | DevExpress.common.TextEditorButton
     >;
-=======
-    buttons?: (| dxDropDownEditor.DropDownPredefinedButton
-    | common.TextEditorButton)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
      */
@@ -15132,15 +15115,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerContextMenu.items]
      */
-<<<<<<< HEAD
     items?: Array<
       | DevExpress.ui.dxFileManager.ContextMenuItem
       | DevExpress.ui.dxFileManager.FileManagerPredefinedContextMenuItem
     >;
-=======
-    items?: (| dxFileManager.ContextMenuItem
-    | dxFileManager.FileManagerPredefinedContextMenuItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   }
   /**
    * @deprecated Use DevExpress.ui.dxFileManager.ContextMenuItem instead
@@ -15479,7 +15457,6 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerToolbar.fileSelectionItems]
      */
-<<<<<<< HEAD
     fileSelectionItems?: Array<
       | DevExpress.ui.dxFileManager.ToolbarItem
       | DevExpress.ui.dxFileManager.FileManagerPredefinedToolbarItem
@@ -15491,15 +15468,6 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxFileManager.ToolbarItem
       | DevExpress.ui.dxFileManager.FileManagerPredefinedToolbarItem
     >;
-=======
-    fileSelectionItems?: (| dxFileManager.ToolbarItem
-    | dxFileManager.FileManagerPredefinedToolbarItem)[];
-    /**
-     * [descr:dxFileManagerToolbar.items]
-     */
-    items?: (| dxFileManager.ToolbarItem
-    | dxFileManager.FileManagerPredefinedToolbarItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   }
   /**
    * @deprecated Use ToolbarItem instead
@@ -16880,7 +16848,6 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.validationRules]
      */
-<<<<<<< HEAD
     validationRules?: Array<
       | DevExpress.common.RequiredRule
       | DevExpress.common.NumericRule
@@ -16892,17 +16859,6 @@ declare module DevExpress.ui {
       | DevExpress.common.EmailRule
       | DevExpress.common.AsyncRule
     >;
-=======
-    validationRules?: (| common.RequiredRule
-    | common.NumericRule
-    | common.RangeRule
-    | common.StringLengthRule
-    | common.CustomRule
-    | common.CompareRule
-    | common.PatternRule
-    | common.EmailRule
-    | common.AsyncRule)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxFormSimpleItem.visible]
      */
@@ -18012,15 +17968,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttContextMenu.items]
      */
-<<<<<<< HEAD
     items?: Array<
       | DevExpress.ui.dxGantt.ContextMenuItem
       | DevExpress.ui.dxGantt.GanttPredefinedContextMenuItem
     >;
-=======
-    items?: (| dxGantt.ContextMenuItem
-    | dxGantt.GanttPredefinedContextMenuItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   }
   /**
    * @deprecated Use ContextMenuItem instead
@@ -18670,15 +18621,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttToolbar.items]
      */
-<<<<<<< HEAD
     items?: Array<
       | DevExpress.ui.dxGantt.ToolbarItem
       | DevExpress.ui.dxGantt.GanttPredefinedToolbarItem
     >;
-=======
-    items?: (| dxGantt.ToolbarItem
-    | dxGantt.GanttPredefinedToolbarItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   }
   /**
    * @deprecated Use ToolbarItem instead
@@ -18982,15 +18928,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.tabs]
      */
-<<<<<<< HEAD
     tabs?: Array<
       | DevExpress.ui.dxHtmlEditor.ImageUploadTab
       | DevExpress.ui.dxHtmlEditor.HtmlEditorImageUploadTab
     >;
-=======
-    tabs?: (| dxHtmlEditor.ImageUploadTab
-    | dxHtmlEditor.HtmlEditorImageUploadTab)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
      */
@@ -19156,15 +19097,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenu.items]
      */
-<<<<<<< HEAD
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ContextMenuItem
       | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem
     >;
-=======
-    items?: (| dxHtmlEditor.ContextMenuItem
-    | dxHtmlEditor.HtmlEditorPredefinedContextMenuItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   }
   /**
    * @deprecated Use DevExpress.ui.dxHtmlEditor.ContextMenuItem instead
@@ -19179,15 +19115,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.items]
      */
-<<<<<<< HEAD
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ContextMenuItem
       | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem
     >;
-=======
-    items?: (| dxHtmlEditor.ContextMenuItem
-    | dxHtmlEditor.HtmlEditorPredefinedContextMenuItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
   }
   /**
    * [descr:dxHtmlEditorTableResizing]
@@ -19219,15 +19150,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorToolbar.items]
      */
-<<<<<<< HEAD
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ToolbarItem
       | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem
     >;
-=======
-    items?: (| dxHtmlEditor.ToolbarItem
-    | dxHtmlEditor.HtmlEditorPredefinedToolbarItem)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
      */
@@ -21190,15 +21116,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.buttons]
      */
-<<<<<<< HEAD
     buttons?: Array<
       | DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton
       | DevExpress.common.TextEditorButton
     >;
-=======
-    buttons?: (| dxNumberBox.NumberBoxPredefinedButton
-    | common.TextEditorButton)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxNumberBoxOptions.format]
      */
@@ -24113,7 +24034,6 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.views]
      */
-<<<<<<< HEAD
     views?: Array<
       | 'day'
       | 'week'
@@ -24126,19 +24046,6 @@ declare module DevExpress.ui {
       | 'agenda'
       | {
           /**
-=======
-    views?: (| 'day'
-    | 'week'
-    | 'workWeek'
-    | 'month'
-    | 'timelineDay'
-    | 'timelineWeek'
-    | 'timelineWorkWeek'
-    | 'timelineMonth'
-    | 'agenda'
-    | {
-      /**
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
            * [descr:dxSchedulerOptions.views.agendaDuration]
            */
           agendaDuration?: number;
@@ -25846,11 +25753,7 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
     /**
-<<<<<<< HEAD
      * [descr:dxTabsOptions.stylingMode]
-=======
-     * [descr:dxTabsOptions.iconPosition]
->>>>>>> 78d2e71d65 (feat(d.ts): Update d.ts)
      */
     stylingMode?: DevExpress.common.TabsStyle;
   }
@@ -26409,17 +26312,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.buttons]
      */
-<<<<<<< HEAD
     buttons?: Array<
       | string
       | DevExpress.common.TextBoxPredefinedButton
       | DevExpress.common.TextEditorButton
     >;
-=======
-    buttons?: (| string
-    | common.TextBoxPredefinedButton
-    | common.TextEditorButton)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -28487,15 +28384,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumn.buttons]
      */
-<<<<<<< HEAD
     buttons?: Array<
       | DevExpress.ui.dxTreeList.TreeListPredefinedColumnButton
       | DevExpress.ui.dxTreeList.ColumnButton<TRowData, TKey>
     >;
-=======
-    buttons?: (| dxTreeList.TreeListPredefinedColumnButton
-    | dxTreeList.ColumnButton<TRowData, TKey>)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxTreeListColumn.cellTemplate]
      */
@@ -29349,7 +29241,6 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidationGroupResult.brokenRules]
      */
-<<<<<<< HEAD
     brokenRules?: Array<
       | DevExpress.common.RequiredRule
       | DevExpress.common.NumericRule
@@ -29361,17 +29252,6 @@ declare module DevExpress.ui {
       | DevExpress.common.EmailRule
       | DevExpress.common.AsyncRule
     >;
-=======
-    brokenRules?: (| common.RequiredRule
-    | common.NumericRule
-    | common.RangeRule
-    | common.StringLengthRule
-    | common.CustomRule
-    | common.CompareRule
-    | common.PatternRule
-    | common.EmailRule
-    | common.AsyncRule)[];
->>>>>>> ee3722421a (fix(d.ts): Update d.ts)
     /**
      * [descr:dxValidationGroupResult.complete]
      */
