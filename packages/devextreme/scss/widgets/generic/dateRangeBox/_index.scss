@@ -119,13 +119,12 @@
       &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
-            padding-right: $generic-texteditor-invalid-badge-size;
+            padding-inline-end: $generic-texteditor-invalid-badge-size;
           }
 
           &.dx-rtl {
             .dx-texteditor-input {
               padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-              padding-left: $generic-texteditor-invalid-badge-size;
             }
           }
         }

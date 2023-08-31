@@ -26,7 +26,7 @@
       padding: $fluent-menu-vertical-padding $fluent-context-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {
-        right: $fluent-context-menu-horizontal-padding;
+        inset-inline-end: $fluent-context-menu-horizontal-padding;
         width: $fluent-base-icon-size;
         display: flex;
         align-items: center;
@@ -43,7 +43,7 @@
     }
 
     &.dx-menu-item-has-submenu > .dx-menu-item-content {
-      padding-right: $fluent-menu-item-with-icon-horizontal-padding;
+      padding-inline-end: $fluent-menu-item-with-icon-horizontal-padding;
     }
 
     &.dx-menu-item-has-text {
@@ -71,18 +71,5 @@
 
   .dx-menu-separator {
     background-color: $menu-separator-bg;
-  }
-
-  &.dx-rtl {
-    .dx-menu-item {
-      .dx-menu-item-popout-container {
-        left: $fluent-context-menu-horizontal-padding;
-      }
-
-      &.dx-menu-item-has-submenu > .dx-menu-item-content {
-        padding-left: $fluent-menu-item-with-icon-horizontal-padding;
-        padding-right: $fluent-context-menu-horizontal-padding;
-      }
-    }
   }
 }

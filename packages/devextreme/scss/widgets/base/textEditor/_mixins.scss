@@ -336,6 +336,8 @@
   $material-texteditor-label-line-height,
   $material-texteditor-label-top-offset,
   $material-texteditor-font-size,
+  $material-texteditor-label-empty-height,
+  $material-texteditor-label-empty-line-height,
   $material-filled-texteditor-input-horizontal-padding,
   $material-filled-texteditor-input-with-label-top-padding,
   $material-filled-texteditor-input-with-label-bottom-padding,
@@ -378,8 +380,8 @@
         .dx-texteditor-label {
           transition: $texteditor-label-transition;
           font-size: $material-texteditor-font-size;
-          height: $material-texteditor-label-height;
-          line-height: $material-texteditor-label-line-height;
+          height: $material-texteditor-label-empty-height;
+          line-height: $material-texteditor-label-empty-line-height;
           top: 50%;
           margin-top: math.div(-$material-texteditor-font-size, 2);
         }

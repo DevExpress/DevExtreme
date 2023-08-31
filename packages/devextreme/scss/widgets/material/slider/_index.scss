@@ -45,7 +45,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-slider-handle {
   margin-top: math.div($material-slider-bar-height, 2) - math.div($material-slider-handle-size, 2);
-  margin-right: math.div(-$material-slider-handle-size, 2);
+  margin-inline-end: math.div(-$material-slider-handle-size, 2);
   width: $material-slider-handle-size;
   height: $material-slider-handle-size;
   border-radius: $material-slider-radius;
@@ -205,10 +205,6 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 }
 
 .dx-rtl {
-  .dx-slider-handle {
-    margin-left: math.div(-$material-slider-handle-size, 2);
-  }
-
   &.dx-state-disabled {
     .dx-slider-handle {
       margin-left: -5px;

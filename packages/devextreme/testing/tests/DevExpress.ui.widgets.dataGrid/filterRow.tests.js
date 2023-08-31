@@ -1305,18 +1305,18 @@ QUnit.module('Filter Row', {
 
     // T904124
     [true, false].forEach(rtlEnabled => {
-        QUnit.test(`input's textAlign should be 'right' if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
+        const textAlign = rtlEnabled ? 'right' : 'start';
+        QUnit.test(`input's textAlign should be ${textAlign} if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
             // arrange
             const $testElement = $('#container');
 
             $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, alignment: 'center' }]);
             this.options.rtlEnabled = rtlEnabled;
-
             // act
             this.columnHeadersView.render($testElement);
 
             // assert
-            assert.equal($testElement.find(TEXTEDITOR_INPUT_SELECTOR).css('textAlign'), 'right', 'text align');
+            assert.equal($testElement.find(TEXTEDITOR_INPUT_SELECTOR).css('textAlign'), textAlign, 'text align');
         });
     });
 });

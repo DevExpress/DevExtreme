@@ -24,15 +24,13 @@
   }
 
   .dx-toolbar-menu-container {
-    padding: 0 0 0 $item-spacing;
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding: 0 $item-spacing 0 0;
-    }
+    padding: 0;
+    padding-inline-start: $item-spacing;
   }
 
   .dx-toolbar-item {
-    padding: 0 $item-spacing 0 0;
+    padding: 0;
+    padding-inline-end: $item-spacing;
 
     &.dx-toolbar-first-in-group {
       padding-left: $material-toolbar-item-spacing * 4;
@@ -40,14 +38,6 @@
 
     &:last-child {
       padding: 0;
-    }
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding: 0 0 0 $item-spacing;
-
-      &:last-child {
-        padding: 0;
-      }
     }
   }
 

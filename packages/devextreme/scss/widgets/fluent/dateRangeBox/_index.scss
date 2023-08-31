@@ -75,67 +75,36 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
     }
   }
 
-  &.dx-editor-outlined,
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
+  &.dx-texteditor {
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-left: $fluent-editor-custom-button-margin;
-        margin-right: $fluent-editor-custom-button-margin;
+        margin-inline-start: $fluent-editor-custom-button-margin;
+        margin-inline-end: $fluent-editor-custom-button-margin;
 
         &:first-child {
-          margin-left: 0;
+          margin-inline-start: 0;
         }
 
         &:last-child {
-          margin-right: $fluent-editor-custom-button-margin * 2;
+          margin-inline-end: $fluent-editor-custom-button-margin * 2;
         }
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-right: $fluent-filled-texteditor-spin-button-horizontal-padding;
+        margin-inline-end: $fluent-filled-texteditor-spin-button-horizontal-padding;
       }
 
       > .dx-clear-button-area:last-child,
       > .dx-clear-button-area + div:empty:last-child {
-        margin-right: $fluent-filled-texteditor-input-button-horizontal-padding;
-      }
-    }
-
-    &.dx-rtl {
-      > .dx-texteditor-buttons-container {
-        > .dx-button,
-        > .dx-clear-button-area {
-          &:first-child {
-            margin-left: $fluent-editor-custom-button-margin;
-            margin-right: 0;
-          }
-
-          &:last-child {
-            margin-left: $fluent-editor-custom-button-margin * 2;
-            margin-right: $fluent-editor-custom-button-margin;
-          }
-        }
-
-        > .dx-dropdowneditor-button:last-child {
-          margin-left: $fluent-filled-texteditor-spin-button-horizontal-padding;
-          margin-right: 0;
-        }
-
-        > .dx-clear-button-area:last-child {
-          margin-left: $fluent-filled-texteditor-input-button-horizontal-padding;
-          margin-right: 0;
-        }
+        margin-inline-end: $fluent-filled-texteditor-input-button-horizontal-padding;
       }
     }
   }
 
   .dx-datebox {
     &.dx-start-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-filled,
-      &.dx-editor-underlined {
+      &.dx-texteditor {
         .dx-texteditor-input {
           padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding;
         }
@@ -143,28 +112,10 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
     }
 
     &.dx-end-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-underlined,
-      &.dx-editor-filled {
+      &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
             padding-inline-end: $fluent-texteditor-invalid-badge-size;
-          }
-
-          &.dx-rtl {
-            .dx-texteditor-input {
-              padding-right: $fluent-filled-texteditor-input-horizontal-padding;
-            }
-          }
-        }
-      }
-
-      &.dx-editor-underlined {
-        &.dx-invalid {
-          &.dx-rtl {
-            .dx-texteditor-input {
-              padding-right: 0;
-            }
           }
         }
       }
