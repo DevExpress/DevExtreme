@@ -13,32 +13,75 @@
 @use "../badge";
 
 
-@mixin dx-tabs-border-mixin($position, $color) {
+@mixin dx-tabs-border-mixin($position, $color, $expanded: false) {
   &::after {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
     background-color: $color;
 
     @if $position == bottom {
-      top: unset;
-      height: 2px;
-      width: auto;
+      left: 0;
+      width: 100%;
+
+      @if $expanded {
+        bottom: -$material-tabs-item-padding-horizontal;
+        height: 3px;
+
+        // TODO: Move to variable
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+      } @else {
+        bottom: 0;
+        height: 2px;
+      }
     } @else if $position == top {
-      bottom: unset;
-      height: 2px;
-      width: auto;
+      left: 0;
+      right: 0;
+      width: 100%;
+
+      @if $expanded {
+        top: -$material-tabs-item-padding-horizontal;
+        height: 3px;
+
+        // TODO: Move to variable
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+      } @else {
+        top: 0;
+        height: 2px;
+      }
     } @else if $position == left {
-      right: unset;
-      width: 2px;
-      height: auto;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+
+      @if $expanded {
+        left: -$material-tabs-item-padding-vertical;
+        width: 3px;
+
+        // TODO: Move to variable
+        border-top-right-radius: 8px !important;
+        border-bottom-right-radius: 8px !important;
+      } @else {
+        left: 0;
+        width: 2px;
+      }
     } @else if $position == right {
-      left: unset;
-      width: 2px;
-      height: auto;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+
+      @if $expanded {
+        right: -$material-tabs-item-padding-vertical;
+        width: 3px;
+
+        // TODO: Move to variable
+        border-top-left-radius: 8px !important;
+        border-bottom-left-radius: 8px !important;
+      } @else {
+        right: 0;
+        width: 2px;
+      }
     }
   }
 }
@@ -55,12 +98,6 @@
 
   &.dx-tab-selected {
     color: $tabs-tab-selected-color;
-
-    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color);
-
-    &.dx-state-disabled {
-      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color);
-    }
 
     .dx-icon {
       color: $tabs-tab-icon-selected-color;
@@ -177,15 +214,77 @@
 }
 
 .dx-tabs-vertical {
-  .dx-tab-selected {
-    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color);
+  .dx-tabs-nav-button {
+    padding: $material-tab-vertical-nav-button-content-padding;
+  }
+}
+
+.dx-tabs-styling-mode-primary {
+  .dx-tab.dx-tab-selected {
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color);
 
     &.dx-state-disabled {
-      @include dx-tabs-border-mixin(left, $tabs-disabled-tab-border-color);
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color);
     }
   }
 
-  .dx-tabs-nav-button {
-    padding: $material-tab-vertical-nav-button-content-padding;
+  &.dx-tabs-vertical {
+    .dx-tab-selected {
+      @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color);
+  
+      &.dx-state-disabled {
+        @include dx-tabs-border-mixin(left, $tabs-disabled-tab-border-color);
+      }
+    }
+  }
+}
+
+.dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+  .dx-tab-content {
+    position: relative;
+  }
+
+  .dx-tab.dx-tab-selected .dx-tab-content {
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color, true);
+
+    &.dx-state-disabled .dx-tab-content {
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color, true);
+    }
+  }
+}
+
+.dx-tabs-styling-mode-secondary {
+  .dx-tab .dx-tab-text {
+    text-transform: none;
+  }
+
+  &.dx-tabs-vertical:not(.dx-rtl) {
+    .dx-tab-selected .dx-tab-content {
+      @include dx-tabs-border-mixin(right, $tabs-selected-tab-border-color, true);
+
+      &::after {
+        border-top-left-radius: unset;
+        top: $material-tabs-item-padding-horizontal;
+        height: calc(100% - 2 * $material-tabs-item-padding-horizontal);
+        right: 0;
+      }
+    }
+
+    .dx-tab-selected.dx-state-disabled .dx-tab-content {
+      @include dx-tabs-border-mixin(right, $tabs-disabled-tab-border-color, true);
+    }
+  }
+}
+
+.dx-rtl.dx-tabs-styling-mode-secondary.dx-tabs-vertical {
+  .dx-tab-selected .dx-tab-content {
+    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color, true);
+
+    &::after {
+      border-top-left-radius: unset;
+      top: $material-tabs-item-padding-horizontal;
+      height: calc(100% - 2 * $material-tabs-item-padding-horizontal);
+      left: 0;
+    }
   }
 }

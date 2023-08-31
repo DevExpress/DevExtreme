@@ -21,16 +21,16 @@ const starLicense = require('../header-pipes').starLicense;
 const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
-    'light',
-    'light.compact',
-    'dark',
-    'contrast',
+    // 'light',
+    // 'light.compact',
+    // 'dark',
+    // 'contrast',
     'material.blue.light',
-    'material.blue.light.compact',
-    'material.blue.dark',
-    'fluent.blue.light',
-    'fluent.blue.light.compact',
-    'fluent.blue.dark',
+    // 'material.blue.light.compact',
+    // 'material.blue.dark',
+    // 'fluent.blue.light',
+    // 'fluent.blue.light.compact',
+    // 'fluent.blue.dark',
 ];
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;

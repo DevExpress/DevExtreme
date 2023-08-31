@@ -84,8 +84,6 @@
   align-items: center;
   justify-content: center;
   max-width: 100%;
-
-  // line-height: 0; TODO: For future feature
 }
 
 .dx-tab-text {
@@ -128,10 +126,6 @@
     .dx-icon {
       transform: rotate(90deg);
     }
-  }
-
-  .dx-tab {
-    justify-content: flex-start;
   }
 }
 
