@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { dxButtonOptions } from 'devextreme/ui/button';
+import { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 
 @Component({
     template: ''
@@ -60,10 +61,10 @@ export abstract class DxiTextEditorButton extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get onClick(): Function {
+    get onClick(): ((e: ColumnButtonClickEvent) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: Function) {
+    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
         this._setOption('onClick', value);
     }
 
