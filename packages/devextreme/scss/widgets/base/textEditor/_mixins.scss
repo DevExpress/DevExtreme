@@ -46,6 +46,7 @@
   $texteditor-label-transition,
   $label-font-size,
   $label-height,
+  $label-margin-top,
   $texteditor-input-top-padding
 ) {
   .dx-label {
@@ -57,7 +58,7 @@
       transform: translate(0, 0);
       font-size: $label-font-size;
       top: 50%;
-      margin-top: math.div(-$label-height, 2);
+      margin-top: $label-margin-top;
       height: $label-height;
       line-height: normal;
     }
@@ -143,7 +144,8 @@
   $texteditor-invalid-focused-border-color,
   $texteditor-label-transition,
   $texteditor-font-size,
-  $texteditor-input-top-padding
+  $texteditor-input-top-padding,
+  $label-margin-top-diff,
 ) {
   .dx-editor-outlined {
     .dx-texteditor-label {
@@ -284,12 +286,15 @@
         }
       }
 
+      $label-empty-margin-top: math.div(-$label-empty-height, 2) + $label-margin-top-diff;
+
       &.dx-texteditor-empty {
         @include dx-state-empty(
           $label-border-width,
           $texteditor-label-transition,
           $texteditor-font-size,
           $label-empty-height,
+          $label-empty-margin-top,
           $texteditor-input-top-padding
         );
   
@@ -313,7 +318,8 @@
               $label-active-border-width,
               $texteditor-label-transition,
               $texteditor-font-size,
-              $label-active-height,
+              $label-empty-height,
+              $label-empty-margin-top,
               $texteditor-input-top-padding
             );
           }

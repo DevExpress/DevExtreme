@@ -369,7 +369,8 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
   $texteditor-invalid-focused-border-color,
   $texteditor-label-transition,
   $material-texteditor-font-size,
-  $material-filled-texteditor-input-top-padding
+  $material-filled-texteditor-input-top-padding,
+  0,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,
