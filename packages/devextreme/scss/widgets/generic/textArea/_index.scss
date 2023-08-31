@@ -12,7 +12,7 @@
 @include dx-textarea(
   0,
   $generic-base-line-height,
-  $material-texteditor-outlined-input-with-label-top-padding,
-  $material-texteditor-filled-input-with-label-top-padding,
-  $material-texteditor-underlined-input-with-label-top-padding,
+  $generic-texteditor-outlined-input-with-label-top-padding,
+  $generic-texteditor-filled-input-with-label-top-padding,
+  $generic-texteditor-underlined-input-with-label-top-padding,
 );

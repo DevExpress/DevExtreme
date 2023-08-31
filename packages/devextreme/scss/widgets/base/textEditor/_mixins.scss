@@ -323,6 +323,94 @@
   }
 }
 
+@mixin dx-editor-filled(
+  $texteditor-label-transition,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-height,
+  $material-texteditor-label-line-height,
+  $material-texteditor-label-top-offset,
+  $material-texteditor-font-size,
+  $material-filled-texteditor-input-horizontal-padding,
+  $material-filled-texteditor-input-with-label-top-padding,
+  $material-filled-texteditor-input-with-label-bottom-padding,
+) {
+  .dx-editor-filled {
+    .dx-texteditor-label {
+      .dx-label-after,
+      .dx-label-before {
+        min-width: $material-filled-texteditor-input-horizontal-padding;
+      }
+    }
+
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      position: relative;
+
+      .dx-texteditor-input,
+      .dx-placeholder::before,
+      .dx-lookup-field {
+        padding-top: $material-filled-texteditor-input-with-label-top-padding;
+        padding-bottom: $material-filled-texteditor-input-with-label-bottom-padding;
+      }
+
+      .dx-texteditor-label {
+        font-size: $material-texteditor-label-font-size;
+        height: $material-texteditor-label-height;
+        line-height: $material-texteditor-label-line-height;
+        top: $material-texteditor-label-top-offset;
+        margin-top: 0;
+      }
+    }
+
+    &.dx-texteditor-with-floating-label {
+      &.dx-texteditor-empty,
+      &.dx-texteditor-empty.dx-state-readonly {
+        .dx-placeholder {
+          display: none;
+        }
+
+        .dx-texteditor-label {
+          transition: $texteditor-label-transition;
+          font-size: $material-texteditor-font-size;
+          height: $material-texteditor-font-size;
+          line-height: $material-texteditor-font-size;
+          top: 50%;
+          margin-top: math.div(-$material-texteditor-font-size, 2);
+        }
+
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $material-filled-texteditor-input-with-label-top-padding;
+            margin-top: 0;
+          }
+        }
+      }
+
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+
+        .dx-texteditor-label {
+          height: $material-texteditor-label-height;
+          line-height: $material-texteditor-label-line-height;
+          font-size: $material-texteditor-label-font-size;
+          top: $material-texteditor-label-top-offset;
+          margin-top: 0;
+        }
+
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $material-texteditor-label-top-offset;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 @mixin dx-editor-buttons-container(
   $generic-texteditor-button-top-padding,
   $generic-texteditor-button-bottom-padding,

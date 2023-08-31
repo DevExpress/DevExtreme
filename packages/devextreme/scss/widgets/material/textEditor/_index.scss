@@ -348,86 +348,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
   }
 }
 
-.dx-editor-filled {
-  $label-position-top: $material-texteditor-label-top-offset;
-
-  .dx-texteditor-label {
-    .dx-label-after,
-    .dx-label-before {
-      display: block;
-      box-sizing: border-box;
-      min-width: $material-filled-texteditor-input-horizontal-padding;
-    }
-  }
-
-  &.dx-texteditor-with-label,
-  &.dx-texteditor-with-floating-label {
-    position: relative;
-
-    .dx-texteditor-input,
-    .dx-placeholder::before,
-    .dx-lookup-field {
-      padding-top: $material-filled-texteditor-input-with-label-top-padding;
-      padding-bottom: $material-filled-texteditor-input-with-label-bottom-padding;
-    }
-
-    .dx-texteditor-label {
-      font-size: $material-texteditor-label-font-size;
-      height: $material-texteditor-label-font-size;
-      line-height: $material-texteditor-label-font-size;
-      top: $label-position-top;
-      margin-top: 0;
-    }
-  }
-
-  &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty,
-    &.dx-texteditor-empty.dx-state-readonly {
-      .dx-placeholder {
-        display: none;
-      }
-
-      .dx-texteditor-label {
-        transition: $texteditor-label-transition;
-        font-size: $material-texteditor-font-size;
-        top: 50%;
-        margin-top: math.div(-$material-texteditor-font-size, 2);
-        height: $material-texteditor-font-size;
-        line-height: $material-texteditor-font-size;
-      }
-
-      &.dx-textarea {
-        .dx-texteditor-label {
-          top: $material-filled-texteditor-input-with-label-top-padding;
-          margin-top: 0;
-        }
-      }
-    }
-
-    &.dx-state-focused,
-    &.dx-dropdowneditor-active {
-      .dx-placeholder {
-        display: block;
-      }
-
-      .dx-texteditor-label {
-        font-size: $material-texteditor-label-font-size;
-        height: $material-texteditor-label-font-size;
-        line-height: $material-texteditor-label-font-size;
-        top: $label-position-top;
-        margin-top: 0;
-      }
-
-      &.dx-textarea {
-        .dx-texteditor-label {
-          top: $label-position-top;
-          margin-top: 0;
-        }
-      }
-    }
-  }
-}
-
 @include dx-editor-outlined(
   $texteditor-border-color,
   $texteditor-input-border-radius,
@@ -451,6 +371,17 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
   $material-texteditor-font-size,
   $material-filled-texteditor-input-top-padding
 );
+@include dx-editor-filled(
+  $texteditor-label-transition,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-top-offset,
+  $material-texteditor-font-size,
+  $material-filled-texteditor-input-horizontal-padding,
+  $material-filled-texteditor-input-with-label-top-padding,
+  $material-filled-texteditor-input-with-label-bottom-padding,
+); 
 
 .dx-editor-underlined {
   &.dx-texteditor-with-label,

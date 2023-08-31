@@ -231,75 +231,6 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 }
 
-.dx-editor-filled {
-  $input-vertical-diff: $generic-base-inline-borderedwidget-top-padding - 1;
-
-  .dx-texteditor-label {
-    .dx-label-after,
-    .dx-label-before {
-      display: block;
-      box-sizing: border-box;
-      min-width: $generic-base-inline-borderedwidget-horizontal-padding;
-    }
-  }
-
-  &.dx-texteditor-with-label,
-  &.dx-texteditor-with-floating-label {
-    position: relative;
-
-    .dx-texteditor-input,
-    &.dx-lookup .dx-lookup-field {
-      padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
-      padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
-    }
-
-    .dx-texteditor-label {
-      font-size: $generic-texteditor-label-size;
-      height: $generic-base-inline-block-height;
-      line-height: $generic-base-line-height;
-      top: 0;
-      margin-top: 0;
-    }
-
-    .dx-placeholder::before {
-      padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
-    }
-  }
-
-  &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty,
-    &.dx-texteditor-empty.dx-state-readonly {
-      .dx-placeholder {
-        display: none;
-      }
-
-      .dx-texteditor-label {
-        transition: $texteditor-label-transition;
-        font-size: $generic-base-font-size;
-        height: $generic-base-inline-block-height;
-        line-height: $generic-base-line-height;
-        top: 50%;
-        margin-top: math.div(-$generic-base-inline-block-height, 2);
-      }
-    }
-
-    &.dx-state-focused,
-    &.dx-dropdowneditor-active {
-      .dx-placeholder {
-        display: block;
-      }
-
-      .dx-texteditor-label {
-        font-size: $generic-texteditor-label-size;
-        top: 0;
-        margin-top: 0;
-        height: $generic-base-inline-block-height;
-        line-height: $generic-base-line-height;
-      }
-    }
-  }
-}
-
 @include dx-editor-outlined(
   $texteditor-border-color,
   $texteditor-input-border-radius,
@@ -323,15 +254,22 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-font-size,
   $generic-base-inline-borderedwidget-top-padding,
 );
+@include dx-editor-filled(
+  $texteditor-label-transition,
+  $generic-texteditor-label-size,
+  $generic-base-inline-block-height,
+  $generic-base-line-height,
+  0,
+  $generic-base-font-size,
+  $generic-base-inline-borderedwidget-horizontal-padding,
+  $generic-texteditor-filled-input-with-label-top-padding,
+  $generic-texteditor-filled-input-with-label-bottom-padding,
+); 
 
 .dx-editor-underlined {
   $input-vertical-diff: 4px;
   $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
   $label-transform: translate(0, 0);
-
-  .dx-texteditor-input {
-    background: $texteditor-underlined-bg;
-  }
 
   .dx-texteditor-input,
   .dx-placeholder::before {
@@ -351,12 +289,9 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
       line-height: $generic-base-line-height;
     }
 
-    .dx-placeholder::before {
-      padding-top: $input-top-padding;
-    }
-
     .dx-texteditor-input,
-    &.dx-lookup .dx-lookup-field {
+    .dx-lookup-field,
+    .dx-placeholder::before {
       padding-top: $input-top-padding;
       padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
     }
