@@ -1,6 +1,6 @@
 export function createComponent() {
   throw new Error(
-    'Since v23.2, devextreme-vue no longer supports Vue 2. See: https://supportcenter.devexpress.com/internal/ticket/details/T1186771'
+    'Since v23.2, devextreme-vue no longer supports Vue 2. See: https://supportcenter.devexpress.com/internal/ticket/details/T1186771',
   );
 }
 
