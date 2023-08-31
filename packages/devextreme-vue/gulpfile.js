@@ -113,7 +113,7 @@ gulp.task(COPY_STRATEGY, function () {
 });
 
 gulp.task(NPM_PACK, gulp.series(
-    CLEAN,
+    NPM_CLEAN,
     NPM_BUILD,
     COPY_STRATEGY,
     ADD_HEADERS,
