@@ -714,6 +714,12 @@ export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
  * @public
  * @namespace DevExpress.common
  */
+export type TabsStylingMode = 'primary' | 'secondary';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**
