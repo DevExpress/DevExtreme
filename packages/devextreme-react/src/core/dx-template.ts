@@ -81,13 +81,11 @@ function createDxTemplate(
             onRemoved,
             onDidMount: () => {
               _unsubscribeOnContainerRemoval();
-
-              if (renderedTemplates.get(key) !== templateId) {
-                return;
-              }
-
               templatesStore.setDeferredRemove(templateId, false);
-              data.onRendered?.();
+
+              if (renderedTemplates.get(key) === templateId) {
+                data.onRendered?.();
+              }
             },
             key: templateId,
           },
