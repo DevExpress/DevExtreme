@@ -26,7 +26,9 @@ const ErrorHandlingController = modules.ViewController.inherit({
     const $errorMessage = this._renderErrorMessage(error);
 
     if ($tableElements) {
-      $errorRow = $('<tr>').addClass(ERROR_ROW_CLASS);
+      $errorRow = $('<tr>')
+        .attr('role', 'row')
+        .addClass(ERROR_ROW_CLASS);
       $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
       eventsEngine.on($closeButton, clickEventName, that.createAction((args) => {
@@ -47,6 +49,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
         // @ts-expect-errors
         .attr({
           colSpan: that.getController('columns').getVisibleColumns().length,
+          role: 'gridcell',
         })
         .prepend($closeButton)
         .append($errorMessage)

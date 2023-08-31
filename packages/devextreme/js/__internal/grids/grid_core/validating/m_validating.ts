@@ -1340,11 +1340,11 @@ export const validatingModule = {
               }
             }
 
-            this._updateAriaValidationAttributes($cell, validationDescriptionValues);
+            this._updateAriaValidationAttributes($focus, validationDescriptionValues);
             !isHideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
           },
 
-          _updateAriaValidationAttributes($cell, inputDescriptionValues) {
+          _updateAriaValidationAttributes($focus, inputDescriptionValues) {
             if (inputDescriptionValues.length === 0) { return; }
 
             const editMode = this._editingController.getEditMode();
@@ -1353,17 +1353,17 @@ export const validatingModule = {
               EDIT_MODE_BATCH,
               EDIT_MODE_ROW].includes(editMode);
 
-            if (!shouldSetValidationAriaAttributes) { return; }
-
-            const $focusElement = this._getCurrentFocusElement($cell);
-            $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
-            $focusElement.attr('aria-invalid', true);
+            if (shouldSetValidationAriaAttributes) {
+              const $focusElement = this._getCurrentFocusElement($focus);
+              $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
+              $focusElement.attr('aria-invalid', true);
+            }
           },
 
-          _getCurrentFocusElement($cell) {
-            let $focusElement = $cell;
+          _getCurrentFocusElement($focus) {
+            let $focusElement = $focus;
             if (this._editingController.isEditing()) {
-              $focusElement = $cell.find(EDITORS_INPUT_SELECTOR).first();
+              $focusElement = $focus.find(EDITORS_INPUT_SELECTOR).first();
             }
             return $focusElement;
           },
