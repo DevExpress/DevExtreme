@@ -70,6 +70,7 @@ import { DxiItemComponent } from './item-dxi';
         'selectedIndex',
         'selectedItem',
         'showNavButtons',
+        'stylingMode',
         'swipeEnabled',
         'tabIndex',
         'tabsPosition',
