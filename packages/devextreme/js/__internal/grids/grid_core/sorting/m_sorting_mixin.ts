@@ -25,6 +25,7 @@ export default {
       !$indicatorsContainer.children().length && $indicatorsContainer.remove();
 
       const isSortingAllowed = sortingMode !== 'none' && column.allowSorting;
+      const hasSeveralSortIndexes = that.getController && !!that.getController('columns').columnOption('sortIndex:1');
 
       if (!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
         ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
@@ -32,7 +33,6 @@ export default {
           .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')
           .toggleClass(SORTDOWN_CLASS, column.sortOrder === 'desc');
 
-        const hasSeveralSortIndexes = that.getController && !!that.getController('columns').columnOption('sortIndex:1');
         if (hasSeveralSortIndexes && that.option('sorting.showSortIndexes') && column.sortIndex >= 0) {
           $('<span>')
             .addClass(SORT_INDEX_ICON_CLASS)
@@ -46,38 +46,40 @@ export default {
         }
       }
 
-      this._setAriaSortAttribute(column, ariaSortState, rootElement);
+      this._setAriaSortAttribute(column, ariaSortState, rootElement, hasSeveralSortIndexes);
 
       return $sortIndicator;
     }
     return that.callBase(options);
   },
 
-  _setAriaSortAttribute(column, ariaSortState, rootElement) {
-    const descriptionList: string[] = [];
-
-    if (rootElement.attr('role') === 'columnheader') {
-      descriptionList.push(messageLocalization.format('dxDataGrid-ariaColumnHeader'));
-    }
+  _setAriaSortAttribute(column, ariaSortState, $rootElement, hasSeveralSortIndexes) {
+    $rootElement.removeAttr('aria-roledescription');
 
     if (column.isGrouped) {
-      let sortOrderDescription = messageLocalization.format('dxDataGrid-ariaNotSortedColumn');
+      let description = this.localize('dxDataGrid-ariaNotSortedColumn');
       if (isDefined(column.sortOrder)) {
-        sortOrderDescription = column.sortOrder === 'asc'
-          ? messageLocalization.format('dxDataGrid-ariaSortedAscendingColumn')
-          : messageLocalization.format('dxDataGrid-ariaSortedDescendingColumn');
+        description = column.sortOrder === 'asc'
+          ? this.localize('dxDataGrid-ariaSortedAscendingColumn')
+          : this.localize('dxDataGrid-ariaSortedDescendingColumn');
       }
-      descriptionList.push(sortOrderDescription);
+      this.setAria('roledescription', description, $rootElement);
     } else if (!isDefined(column.sortOrder)) {
-      this.setAria('sort', 'none', rootElement);
+      this.setAria('sort', 'none', $rootElement);
     } else {
-      // @ts-expect-error
-      const sortIndexDescription = messageLocalization.format('dxDataGrid-ariaSortIndex', column.sortIndex);
-      descriptionList.push(sortIndexDescription);
-      this.setAria('sort', ariaSortState, rootElement);
-    }
+      this.setAria('sort', ariaSortState, $rootElement);
 
-    this.setAria('roledescription', descriptionList.join(', '), rootElement);
+      if (hasSeveralSortIndexes && column.sortIndex >= 0) {
+        const ariaColumnHeader = messageLocalization.format('dxDataGrid-ariaColumnHeader');
+        const ariaSortIndex = messageLocalization.format(
+          'dxDataGrid-ariaSortIndex',
+          // @ts-expect-error
+          column.sortIndex + 1,
+        );
+        const description = `${ariaColumnHeader}, ${ariaSortIndex}`;
+        this.setAria('roledescription', description, $rootElement);
+      }
+    }
   },
 
   _getIndicatorClassName(name) {
