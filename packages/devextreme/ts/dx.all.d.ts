@@ -1724,6 +1724,7 @@ declare module DevExpress.common {
   export type ScrollMode = 'standard' | 'virtual';
   export type SearchMode = 'contains' | 'startswith' | 'equals';
   export type SelectAllMode = 'allPages' | 'page';
+  export type SelectedDateType = Date | string | number | null;
   export type SimplifiedSearchMode = 'contains' | 'startswith';
   export type SingleMultipleAllOrNone = 'single' | 'multiple' | 'all' | 'none';
   export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
@@ -7882,11 +7883,11 @@ declare module DevExpress.ui {
     /**
      * [descr:DateBoxBaseOptions.max]
      */
-    max?: Date | number | string;
+    max?: DevExpress.common.SelectedDateType;
     /**
      * [descr:DateBoxBaseOptions.min]
      */
-    min?: Date | number | string;
+    min?: DevExpress.common.SelectedDateType;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -9038,7 +9039,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.max]
      */
-    max?: Date | number | string;
+    max?: DevExpress.common.SelectedDateType;
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
      */
@@ -9046,7 +9047,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.min]
      */
-    min?: Date | number | string;
+    min?: DevExpress.common.SelectedDateType;
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
      */
@@ -9078,11 +9079,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?: Date | number | string;
-    /**
-     * [descr:dxCalendarOptions.values]
-     */
-    values?: Array<Date | number | string>;
+    value?:
+      | DevExpress.common.SelectedDateType
+      | Array<DevExpress.common.SelectedDateType>;
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
@@ -12006,7 +12005,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.value]
      */
-    value?: Date | number | string;
+    value?: DevExpress.common.SelectedDateType;
   }
   /**
    * [descr:dxDateRangeBox]
@@ -12136,7 +12135,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
-      endDate?: Date | number | string;
+      endDate?: DevExpress.common.SelectedDateType;
       /**
        * [descr:dxDateRangeBoxOptions.endDateInputAttr]
        */
@@ -12180,7 +12179,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
-      startDate?: Date | number | string;
+      startDate?: DevExpress.common.SelectedDateType;
       /**
        * [descr:dxDateRangeBoxOptions.startDateInputAttr]
        */
@@ -12208,7 +12207,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */
-      value?: Array<Date | number | string>;
+      value?: Array<DevExpress.common.SelectedDateType>;
     };
     /**
      * [descr:_ui_date_range_box_ValueChangedEvent]

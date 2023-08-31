@@ -39,6 +39,7 @@ export {
     ScrollMode,
     SearchMode,
     SelectAllMode,
+    SelectedDateType,
     SimplifiedSearchMode,
     SingleMultipleAllOrNone,
     SingleMultipleOrNone,

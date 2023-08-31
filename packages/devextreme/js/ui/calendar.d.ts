@@ -21,6 +21,7 @@ import Editor, {
 
 import {
     FirstDayOfWeek,
+    SelectedDateType,
 } from '../common';
 
 export {
@@ -147,7 +148,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default new Date(3000, 0)
      * @public
      */
-    max?: Date | number | string;
+    max?: SelectedDateType;
     /**
      * @docid
      * @default 'month'
@@ -159,7 +160,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default new Date(1000, 0)
      * @public
      */
-    min?: Date | number | string;
+    min?: SelectedDateType;
     /**
      * @docid
      * @default 'century'
@@ -205,15 +206,11 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid
      * @default null
+     * @default [] &for(multiple selection mode)
+     * @default [null,null] &for(range selection mode)
      * @public
      */
-    value?: Date | number | string;
-    /**
-     * @docid
-     * @default []
-     * @public
-     */
-    values?: Array<Date | number | string>;
+    value?: SelectedDateType | Array<SelectedDateType>;
     /**
      * @docid
      * @default 'month'
