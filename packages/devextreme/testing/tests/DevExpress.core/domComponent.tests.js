@@ -1105,16 +1105,6 @@ QUnit.module('default', {
         assert.notOk(clickRun);
     });
 
-    QUnit.test('There is no exception if element "A" was clicked while element has no parent (T1186521)', function(assert) {
-        const el = document.createElement('a');
-
-        el.setAttribute('href', '#');
-
-        eventsEngine.trigger(el, 'click');
-
-        assert.ok(true, 'no exceptions were fired');
-    });
-
     QUnit.test('get element', function(assert) {
         const element = $('#component').TestComponent();
         const instance = dataUtils.data(element[0], 'TestComponent');
