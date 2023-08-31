@@ -824,22 +824,9 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEv
 /** @public */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
-/**
- * @docid _ui_tree_list_ColumnButtonClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
- */
+/** @public */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
-    /**
-     * @docid _ui_tree_list_ColumnButtonClickEvent.row
-     * @type dxTreeListRowObject
-     */
     row?: Row<TRowData, TKey>;
-    /**
-     * @docid _ui_tree_list_ColumnButtonClickEvent.column
-     * @type dxTreeListColumn
-     */
     column?: Column<TRowData, TKey>;
 };
 
