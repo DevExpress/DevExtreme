@@ -266,89 +266,22 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-texteditor-filled-input-with-label-top-padding,
   $generic-texteditor-filled-input-with-label-bottom-padding,
 ); 
+@include dx-editor-underlined(
+  $texteditor-label-transition,
+  $generic-texteditor-label-size,
+  $generic-base-inline-block-height,
+  $generic-base-line-height,
+  0,
+  $generic-base-font-size,
+  $generic-texteditor-underlined-input-with-label-top-padding,
+  $generic-texteditor-underlined-input-with-label-bottom-padding,
+);
 
 .dx-editor-underlined {
-  $input-vertical-diff: 4px;
-  $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
-  $label-transform: translate(0, 0);
-
   .dx-texteditor-input,
   .dx-placeholder::before {
     padding-left: 0;
     padding-right: 0;
-  }
-
-  &.dx-texteditor-with-label,
-  &.dx-texteditor-with-floating-label {
-    position: relative;
-
-    .dx-texteditor-label {
-      transform: $label-transform;
-      top: 0;
-      margin-top: 0;
-      height: $generic-base-inline-block-height;
-      line-height: $generic-base-line-height;
-    }
-
-    .dx-texteditor-input,
-    .dx-lookup-field,
-    .dx-placeholder::before {
-      padding-top: $input-top-padding;
-      padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
-    }
-  }
-
-  &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty,
-    &.dx-texteditor-empty.dx-state-readonly {
-      .dx-placeholder {
-        display: none;
-      }
-
-      .dx-texteditor-label {
-        transition: $texteditor-label-transition;
-        transform: translate(0, 0);
-        font-size: $generic-base-font-size;
-        top: 50%;
-        height: $generic-base-inline-block-height;
-        margin-top: math.div(-$generic-base-inline-block-height, 2);
-        line-height: $generic-base-line-height;
-      }
-    }
-
-    &.dx-state-focused,
-    &.dx-dropdowneditor-active {
-      .dx-placeholder {
-        display: block;
-      }
-
-      .dx-texteditor-label {
-        transform: $label-transform;
-        font-size: $generic-texteditor-label-size;
-        top: 0;
-        margin-top: 0;
-        height: $generic-base-inline-block-height;
-        line-height: $generic-base-line-height;
-      }
-    }
-  }
-
-  &.dx-texteditor-with-before-buttons {
-    .dx-texteditor-input-container {
-      .dx-texteditor-input {
-        padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
-      }
-
-      .dx-placeholder {
-        inset-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
-      }
-    }
-
-    .dx-texteditor-label {
-      .dx-label {
-        padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
-      }
-    }
   }
 }
 

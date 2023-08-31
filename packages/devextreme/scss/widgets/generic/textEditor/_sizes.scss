@@ -16,6 +16,7 @@ $generic-texteditor-outlined-input-with-label-top-padding: $generic-base-inline-
 $generic-texteditor-filled-input-with-label-top-padding: $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-top-padding - 1 !default;
 $generic-texteditor-filled-input-with-label-bottom-padding: $generic-base-inline-borderedwidget-bottom-padding - $generic-base-inline-borderedwidget-top-padding - 1 !default;
 $generic-texteditor-underlined-input-with-label-top-padding: $generic-base-inline-borderedwidget-top-padding + 4px !default;
+$generic-texteditor-underlined-input-with-label-bottom-padding: $generic-base-inline-borderedwidget-bottom-padding - 4px !default;
 
 @if $size == "default" {
   $generic-texteditor-clear-icon-oversize: 2px !default;

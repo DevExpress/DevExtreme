@@ -378,8 +378,8 @@
         .dx-texteditor-label {
           transition: $texteditor-label-transition;
           font-size: $material-texteditor-font-size;
-          height: $material-texteditor-font-size;
-          line-height: $material-texteditor-font-size;
+          height: $material-texteditor-label-height;
+          line-height: $material-texteditor-label-line-height;
           top: 50%;
           margin-top: math.div(-$material-texteditor-font-size, 2);
         }
@@ -406,6 +406,86 @@
           margin-top: 0;
         }
 
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $material-texteditor-label-top-offset;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-editor-underlined(
+  $texteditor-label-transition,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-height,
+  $material-texteditor-label-line-height,
+  $material-texteditor-label-top-offset,
+  $material-texteditor-font-size,
+  $material-standard-texteditor-with-label-input-top-padding,
+  $material-standard-texteditor-with-label-input-bottom-padding,
+) {
+  .dx-editor-underlined {
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      .dx-texteditor-label {
+        transform: translate(0, 0);
+        height: $material-texteditor-label-height;
+        line-height: $material-texteditor-label-line-height;
+        top: $material-texteditor-label-top-offset;
+        margin-top: 0;
+      }
+  
+      .dx-texteditor-input,
+      .dx-lookup-field,
+      .dx-placeholder::before {
+        padding-top: $material-standard-texteditor-with-label-input-top-padding;
+        padding-bottom: $material-standard-texteditor-with-label-input-bottom-padding;
+      }
+    }
+  
+    &.dx-texteditor-with-floating-label {
+      &.dx-texteditor-empty,
+      &.dx-texteditor-empty.dx-state-readonly {
+        .dx-placeholder {
+          display: none;
+        }
+  
+        .dx-texteditor-label {
+          transition: $texteditor-label-transition;
+          transform: translate(0, 0);
+          font-size: $material-texteditor-font-size;
+          height: $material-texteditor-label-height;
+          line-height: $material-texteditor-label-line-height;
+          top: 50%;
+          margin-top: math.div(-$material-texteditor-font-size, 2);
+        }
+  
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $material-standard-texteditor-with-label-input-top-padding;
+            margin-top: 0;
+          }
+        }
+      }
+  
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+  
+        .dx-texteditor-label {
+          transform: translate(0, 0);
+          font-size: $material-texteditor-label-font-size;
+          height: $material-texteditor-label-height;
+          line-height: $material-texteditor-label-line-height;
+          top: $material-texteditor-label-top-offset;
+          margin-top: 0;
+        }
+  
         &.dx-textarea {
           .dx-texteditor-label {
             top: $material-texteditor-label-top-offset;
