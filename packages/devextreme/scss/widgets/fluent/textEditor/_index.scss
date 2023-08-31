@@ -29,12 +29,6 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
   @include dx-icon-sizing($fluent-texteditor-icon-container-size);
 }
 
-@mixin texteditor-input-padding-underlined() {
-  .dx-texteditor-input {
-    padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-base-standard-texteditor-input-horizontal-padding;
-  }
-}
-
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
     padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-filled-texteditor-input-horizontal-padding;
@@ -53,7 +47,9 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
   &.dx-invalid,
   &.dx-valid {
     &.dx-editor-underlined {
-      @include texteditor-input-padding-underlined();
+      .dx-texteditor-input {
+        padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-base-standard-texteditor-input-horizontal-padding;
+      }
     }
 
     &.dx-editor-filled,
@@ -78,7 +74,9 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
 @mixin pending-indicator-position() {
   &.dx-validation-pending {
     &.dx-editor-underlined {
-      @include texteditor-input-padding-underlined();
+      .dx-texteditor-input {
+        padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-base-standard-texteditor-input-horizontal-padding;
+      }
     }
 
     &.dx-editor-filled,

@@ -38,12 +38,6 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   @include dx-icon-sizing($generic-texteditor-icon-size, $generic-texteditor-icon-container-size);
 }
 
-@mixin texteditor-input-padding() {
-  .dx-texteditor-input {
-    padding-inline-end: $generic-texteditor-invalid-badge-size;
-  }
-}
-
 @mixin texteditor-validation-icon-offset() {
   inset-inline-end: $generic-invalid-badge-halfhorizontal-padding;
 }
@@ -51,22 +45,12 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 @mixin validation-icon-position() {
   &.dx-invalid,
   &.dx-valid {
-    @include texteditor-input-padding();
+    .dx-texteditor-input {
+      padding-inline-end: $generic-texteditor-invalid-badge-size;
+    }
 
     .dx-texteditor-input-container {
       &::after {
-        @include texteditor-validation-icon-offset();
-      }
-    }
-  }
-}
-
-@mixin pending-indicator-position() {
-  &.dx-validation-pending {
-    @include texteditor-input-padding();
-
-    .dx-texteditor-input-container {
-      .dx-pending-indicator {
         @include texteditor-validation-icon-offset();
       }
     }
@@ -159,7 +143,18 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 
   @include validation-icon-position();
-  @include pending-indicator-position();
+  
+  &.dx-validation-pending {
+    .dx-texteditor-input {
+      padding-inline-end: $generic-texteditor-invalid-badge-size;
+    }
+
+    .dx-texteditor-input-container {
+      .dx-pending-indicator {
+        @include texteditor-validation-icon-offset();
+      }
+    }
+  }
 }
 
 .dx-show-clear-button {
@@ -284,6 +279,21 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   .dx-placeholder::before {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  &.dx-texteditor-with-before-buttons {
+    .dx-texteditor-input-container {
+      .dx-texteditor-input,
+      .dx-placeholder {
+        padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
+      }
+    }
+
+    .dx-texteditor-label {
+      .dx-label {
+        padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
+      }
+    }
   }
 }
 
