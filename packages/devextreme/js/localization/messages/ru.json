@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Столбец",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Значение",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
         "dxDataGrid-ariaFilterCell": "Фильтр",
         "dxDataGrid-ariaCollapse": "Свернуть",
         "dxDataGrid-ariaModifiedCell": "Modified",

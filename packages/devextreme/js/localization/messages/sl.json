@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Stolpec",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Vrednost",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
         "dxDataGrid-ariaFilterCell": "Filtriraj po celici",
         "dxDataGrid-ariaCollapse": "Skrči",
         "dxDataGrid-ariaModifiedCell": "Modified",

@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Oszlop",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Érték",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
         "dxDataGrid-ariaFilterCell": "Szűrő cella",
         "dxDataGrid-ariaCollapse": "Összecsukás",
         "dxDataGrid-ariaModifiedCell": "Modified",

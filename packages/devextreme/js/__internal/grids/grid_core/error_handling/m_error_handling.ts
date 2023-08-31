@@ -2,6 +2,7 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
+import messageLocalization from '@js/localization/message';
 
 import modules from '../m_modules';
 
@@ -61,7 +62,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
     const $message = $('<div>')
       .attr('role', 'alert')
-      .attr('aria-roledescription', 'Error')
+      .attr('aria-roledescription', messageLocalization.format('dxDataGrid-ariaError'))
       .addClass(ERROR_MESSAGE_CLASS)
       .text(message);
 

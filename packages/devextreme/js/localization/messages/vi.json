@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Cột",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Giá trị",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
         "dxDataGrid-ariaFilterCell": "Lọc ô",
         "dxDataGrid-ariaCollapse": "Thu lại",
         "dxDataGrid-ariaModifiedCell": "Modified",

@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Colonne",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Valeur",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
         "dxDataGrid-ariaFilterCell": "Filtre de cellule",
         "dxDataGrid-ariaCollapse": "Réduire",
         "dxDataGrid-ariaModifiedCell": "Modified",

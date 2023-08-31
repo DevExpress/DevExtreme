@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Coloană",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Valoare",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
         "dxDataGrid-ariaFilterCell": "Celulă de filtrare",
         "dxDataGrid-ariaCollapse": "Restrângere",
         "dxDataGrid-ariaModifiedCell": "Modified",

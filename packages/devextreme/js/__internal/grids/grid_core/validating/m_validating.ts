@@ -1096,7 +1096,7 @@ export const validatingModule = {
                   hint: this.option('editing.texts.validationCancelChanges'),
                   elementAttr: {
                     id: 'revert_button',
-                    'aria-label': 'Press Escape to revert value',
+                    'aria-label': messageLocalization.format('dxDataGrid-ariaRevertButton'),
                   },
                   onClick: () => {
                     this._editingController.cancelEditData();
