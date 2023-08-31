@@ -30,9 +30,11 @@ import gridCoreUtils from '../m_utils';
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
+const INVALID_MESSAGE_ID = 'invalid_message';
 const WIDGET_INVALID_MESSAGE_CLASS = 'invalid-message';
 const INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always';
 const REVERT_BUTTON_CLASS = 'dx-revert-button';
+const REVERT_BUTTON_ID = 'revert_button';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
@@ -1095,7 +1097,7 @@ export const validatingModule = {
                   icon: 'revert',
                   hint: this.option('editing.texts.validationCancelChanges'),
                   elementAttr: {
-                    id: 'revert_button',
+                    id: REVERT_BUTTON_ID,
                     'aria-label': messageLocalization.format('dxDataGrid-ariaRevertButton'),
                   },
                   onClick: () => {
@@ -1199,7 +1201,7 @@ export const validatingModule = {
               propagateOutsideClick: true,
               hideOnOutsideClick: false,
               wrapperAttr: {
-                id: 'invalid_message',
+                id: INVALID_MESSAGE_ID,
                 class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}`,
               },
               position: {
@@ -1318,7 +1320,7 @@ export const validatingModule = {
             if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
               if ((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
                 this._showRevertButton($focus);
-                validationDescriptionValues.push('revert_button');
+                validationDescriptionValues.push(REVERT_BUTTON_ID);
               } else {
                 this._revertTooltip && this._revertTooltip.$element().remove();
               }
@@ -1336,7 +1338,7 @@ export const validatingModule = {
 
               if (errorMessages.length) {
                 this._showValidationMessage($focus, errorMessages, column.alignment || 'left');
-                validationDescriptionValues.push('invalid_message');
+                validationDescriptionValues.push(INVALID_MESSAGE_ID);
               }
             }
 
