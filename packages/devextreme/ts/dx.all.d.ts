@@ -25757,11 +25757,7 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
     /**
-<<<<<<< HEAD
      * [descr:dxTabsOptions.stylingMode]
-=======
-     * [descr:dxTabsOptions.iconPosition]
->>>>>>> 78d2e71d65 (feat(d.ts): Update d.ts)
      */
     stylingMode?: DevExpress.common.TabsStylingMode;
   }
