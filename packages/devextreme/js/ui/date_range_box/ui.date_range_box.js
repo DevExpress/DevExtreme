@@ -20,8 +20,8 @@ import { addNamespace } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
-const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
-const DATERANGEBOX_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
+const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
@@ -295,14 +295,14 @@ class DateRangeBox extends Editor {
         const isLabelVisible = (!!startDateLabel || !!endDateLabel) && labelMode !== 'hidden';
 
         this.$element()
-            .removeClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS)
-            .removeClass(DATERANGEBOX_WITH_LABEL_CLASS);
+            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
 
         if(isLabelVisible) {
             this.$element()
                 .addClass(labelMode === 'floating'
-                    ? DATERANGEBOX_WITH_FLOATING_LABEL_CLASS
-                    : DATERANGEBOX_WITH_LABEL_CLASS);
+                    ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS
+                    : TEXTEDITOR_WITH_LABEL_CLASS);
         }
     }
 

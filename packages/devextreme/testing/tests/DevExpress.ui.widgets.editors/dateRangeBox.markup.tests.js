@@ -13,8 +13,8 @@ QUnit.testStart(function() {
 import 'generic_light.css!';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
-const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-daterangebox-with-label';
-const DATERANGEBOX_WITH_FLOATING_LABEL_CLASS = 'dx-daterangebox-with-floating-label';
+const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
@@ -167,7 +167,7 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
     ['', 'startDateLabelText'].forEach((startDateLabel) => {
         ['', 'endDateLabelText'].forEach((endDateLabel) => {
             ['hidden', 'floating', 'static'].forEach((labelMode) => {
-                QUnit.test(`DateRangeBox with ${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS}, ${DATERANGEBOX_WITH_LABEL_CLASS} classes`, function(assert) {
+                QUnit.test(`DateRangeBox with ${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS}, ${TEXTEDITOR_WITH_LABEL_CLASS} classes`, function(assert) {
                     this.reinit({
                         startDateLabel,
                         endDateLabel,
@@ -177,11 +177,11 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
                     const isLabelsVisible = (!!startDateLabel || !!endDateLabel) && labelMode !== 'hidden';
 
                     if(!isLabelsVisible) {
-                        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), false, `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class`);
-                        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_LABEL_CLASS), false, `${DATERANGEBOX_WITH_LABEL_CLASS} class`);
+                        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), false, `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class`);
+                        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), false, `${TEXTEDITOR_WITH_LABEL_CLASS} class`);
                     } else {
-                        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), labelMode === 'floating', `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class`);
-                        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_LABEL_CLASS), labelMode !== 'floating', `${DATERANGEBOX_WITH_LABEL_CLASS} class`);
+                        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), labelMode === 'floating', `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class`);
+                        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), labelMode !== 'floating', `${TEXTEDITOR_WITH_LABEL_CLASS} class`);
                     }
                 });
             });
@@ -190,7 +190,7 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
 
     ['hidden', 'floating', 'static'].forEach((labelMode) => {
         ['hidden', 'floating', 'static'].forEach((newLabelMode) => {
-            QUnit.test(`DateRangeBox should update ${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS}, ${DATERANGEBOX_WITH_LABEL_CLASS} classes after change labelMode option value in runtime`, function(assert) {
+            QUnit.test(`DateRangeBox should update ${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS}, ${TEXTEDITOR_WITH_LABEL_CLASS} classes after change labelMode option value in runtime`, function(assert) {
                 this.reinit({
                     labelMode,
                 });
@@ -200,31 +200,31 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
                 const isLabelsVisible = newLabelMode !== 'hidden';
 
                 if(isLabelsVisible) {
-                    assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), newLabelMode === 'floating', `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class`);
-                    assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_LABEL_CLASS), newLabelMode !== 'floating', `${DATERANGEBOX_WITH_LABEL_CLASS} class`);
+                    assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), newLabelMode === 'floating', `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class`);
+                    assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), newLabelMode !== 'floating', `${TEXTEDITOR_WITH_LABEL_CLASS} class`);
                 } else {
-                    assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), false, `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class`);
-                    assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_LABEL_CLASS), false, `${DATERANGEBOX_WITH_LABEL_CLASS} class`);
+                    assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), false, `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class`);
+                    assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), false, `${TEXTEDITOR_WITH_LABEL_CLASS} class`);
                 }
             });
         });
     });
 
-    QUnit.test(`DateRangeBox should update ${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} classes after change label option value in runtime`, function(assert) {
+    QUnit.test(`DateRangeBox should update ${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} classes after change label option value in runtime`, function(assert) {
         this.reinit({
             labelMode: 'floating',
             endDateLabel: '',
         });
 
-        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), true, `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class was added`);
+        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), true, `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class was added`);
 
         this.instance.option('startDateLabel', '');
 
-        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), false, `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class was removed`);
+        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), false, `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class was removed`);
 
         this.instance.option('endDateLabel', 'EndDateLabelText');
 
-        assert.strictEqual(this.$element.hasClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS), true, `${DATERANGEBOX_WITH_FLOATING_LABEL_CLASS} class was added`);
+        assert.strictEqual(this.$element.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), true, `${TEXTEDITOR_WITH_FLOATING_LABEL_CLASS} class was added`);
     });
 
     QUnit.test('StartDateBox has expected class', function(assert) {
