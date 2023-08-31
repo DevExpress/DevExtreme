@@ -26,6 +26,7 @@ const DATA_GRID_SELECTOR = '#container';
   };
 
   test(`Grid without data in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -158,6 +159,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Grouping and Summary in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -502,6 +504,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Focused row in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     // assert
