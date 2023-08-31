@@ -23,7 +23,7 @@ import Validator from '@js/ui/validator';
 import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
 
-import { FOCUSABLE_ELEMENT_SELECTOR } from '../editing/const';
+import { EDITORS_INPUT_SELECTOR } from '../editing/const';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
@@ -1340,11 +1340,11 @@ export const validatingModule = {
               }
             }
 
-            this._updateEditorInputState($cell, validationDescriptionValues);
+            this._updateAriaValidationAttributes($cell, validationDescriptionValues);
             !isHideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
           },
 
-          _updateEditorInputState($cell, inputDescriptionValues) {
+          _updateAriaValidationAttributes($cell, inputDescriptionValues) {
             if (inputDescriptionValues.length === 0) { return; }
 
             const editMode = this._editingController.getEditMode();
@@ -1355,18 +1355,15 @@ export const validatingModule = {
 
             if (!shouldSetValidationAriaAttributes) { return; }
 
-            // const $focusElement = this._getFocusElement($cell);
-            const $focusElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
-            $cell.attr('aria-labelledby', inputDescriptionValues.join(' '));
-            $cell.attr('aria-invalid', true);
+            const $focusElement = this._getCurrentFocusElement($cell);
             $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
             $focusElement.attr('aria-invalid', true);
           },
 
-          _getFocusElement($cell): any {
+          _getCurrentFocusElement($cell) {
             let $focusElement = $cell;
-            if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
-              $focusElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
+            if (this._editingController.isEditing()) {
+              $focusElement = $cell.find(EDITORS_INPUT_SELECTOR).first();
             }
             return $focusElement;
           },
