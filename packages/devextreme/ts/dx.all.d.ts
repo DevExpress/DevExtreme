@@ -25579,6 +25579,10 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
     /**
+     * [descr:dxTabPanelOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.TabsStylingMode;
+    /**
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;

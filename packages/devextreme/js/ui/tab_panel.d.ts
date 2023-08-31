@@ -19,6 +19,7 @@ import {
 import {
     Position,
     TabsIconPosition,
+    TabsStylingMode,
 } from '../common';
 
 import CollectionWidget, {
@@ -247,6 +248,12 @@ export interface dxTabPanelOptions<
      * @public
      */
     showNavButtons?: boolean;
+    /**
+     * @docid
+     * @default 'primary'
+     * @public
+     */
+    stylingMode?: TabsStylingMode;
     /**
      * @docid
      * @default false &for(non-touch_devices)
