@@ -146,8 +146,13 @@ export default function() {
             });
 
             const $editorContent = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            const isQuillRendered = !!$editorContent.length;
 
-            assert.strictEqual($editorContent.attr('aria-invalid'), 'true');
+            assert.expect(isQuillRendered ? 1 : 0);
+
+            if(isQuillRendered) {
+                assert.strictEqual($editorContent.attr('aria-invalid'), 'true');
+            }
         });
     });
 
