@@ -3,6 +3,5 @@ export function createComponent() {
 }
 
 export function createConfigurationComponent() {}
-  
+
 export function createExtensionComponent() {}
-  
