@@ -194,8 +194,8 @@ export interface dxTabsBaseOptions<
      */
     showNavButtons?: boolean;
     /**
-     * @docid dxTabsOptions.iconPosition
-     * @default 'start'
+     * @docid dxTabsOptions.stylingMode
+     * @default 'primary'
      * @public
      */
     stylingMode?: TabsStylingMode;
