@@ -19,9 +19,6 @@
       ],
       "devextreme-vue/*": [
         "devextreme-vue/src/*"
-      ],
-      "devextreme-vue2-strategy": [
-        "vue2-strategy/src/core"
       ]
     },
     "esModuleInterop": true,
