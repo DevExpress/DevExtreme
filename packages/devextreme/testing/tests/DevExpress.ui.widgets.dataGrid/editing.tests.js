@@ -12781,7 +12781,7 @@ QUnit.module('Editing with validation', {
         assert.equal($('.dx-overlay-wrapper.dx-datagrid-revert-tooltip').parent('.dx-datagrid-rowsview').length, 1, 'revert tooltip is rendered in rows view container');
         // fixes an accessibility validation issue
         const $input = $(this.getCellElement(0, 1)).find('.dx-texteditor-input');
-        assert.equal($input.attr('aria-labelledby'), 'revert_button invalid_message', 'input has aria validation attributes');
+        assert.equal($input.attr('aria-labelledby'), 'dxRevertButton dxInvalidMessage', 'input has aria validation attributes');
     });
 
     // T297742
