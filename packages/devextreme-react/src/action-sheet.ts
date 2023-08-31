@@ -109,7 +109,7 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   onClick?: ((e: NativeEventInfo<any>) => void);
   stylingMode?: "text" | "outlined" | "contained";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   type?: "danger" | "default" | "normal" | "success";
   render?: (...params: any) => React.ReactNode;

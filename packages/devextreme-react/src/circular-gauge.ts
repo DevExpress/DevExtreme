@@ -220,7 +220,7 @@ class Font extends NestedOption<IFontProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -539,7 +539,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((scaleValue: { value: number, valueText: string }, element: any) => string) | template;
+  contentTemplate?: ((scaleValue: { value: number, valueText: string }, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;

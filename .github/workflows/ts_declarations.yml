@@ -38,7 +38,7 @@ jobs:
         target=./ts/dx.all.d.ts
         cp $target $target.current
 
-        npm run update-ts
+        npm run regenerate
 
         if ! diff $target.current $target -U 5 > $target.diff; then
             echo "FAIL: $target is outdated:"

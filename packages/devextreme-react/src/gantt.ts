@@ -234,7 +234,7 @@ type IColumnProps = React.PropsWithChildren<{
   allowSorting?: boolean;
   calculateCellValue?: ((rowData: any) => any);
   calculateDisplayValue?: ((rowData: any) => any) | string;
-  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string);
+  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>);
   calculateSortValue?: ((rowData: any) => any) | string;
   caption?: string;
   cellTemplate?: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, displayValue: any, oldValue: any, row: dxTreeListRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template;
@@ -378,7 +378,7 @@ type IContextMenuItemProps = React.PropsWithChildren<{
   name?: "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager";
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -450,7 +450,7 @@ class FilterRow extends NestedOption<IFilterRowProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -524,14 +524,14 @@ type IItemProps = React.PropsWithChildren<{
   name?: "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager" | "separator" | "fullScreen" | "showResources" | "showDependencies";
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   cssClass?: string;
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: "always" | "inMenu";
   widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
@@ -642,8 +642,8 @@ class Sorting extends NestedOption<ISortingProps> {
 // Gantt
 type IStripLineProps = React.PropsWithChildren<{
   cssClass?: string;
-  end?: any | (() => any) | number | string;
-  start?: any | (() => any) | number | string;
+  end?: any | (() => any | number | string) | number | string;
+  start?: any | (() => any | number | string) | number | string;
   title?: string;
 }>
 class StripLine extends NestedOption<IStripLineProps> {
@@ -699,11 +699,11 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   name?: "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies";
   options?: any;
   showText?: "always" | "inMenu";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";

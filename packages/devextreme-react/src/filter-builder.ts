@@ -102,11 +102,11 @@ class FilterBuilder extends BaseComponent<React.PropsWithChildren<IFilterBuilder
 // owners:
 // FilterBuilder
 type ICustomOperationProps = React.PropsWithChildren<{
-  calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string);
+  calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
   customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | any, valueText: string }) => string);
   dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -128,13 +128,13 @@ class CustomOperation extends NestedOption<ICustomOperationProps> {
 // owners:
 // FilterBuilder
 type IFieldProps = React.PropsWithChildren<{
-  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string);
+  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string;
   customizeText?: ((fieldInfo: { value: string | number | any, valueText: string }) => string);
   dataField?: string;
   dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
   format?: LocalizationTypes.Format;
@@ -142,7 +142,7 @@ type IFieldProps = React.PropsWithChildren<{
     allowClearing?: boolean;
     dataSource?: Array<any> | DataSourceOptions | Store;
     displayExpr?: ((data: any) => string) | string;
-    valueExpr?: ((data: any) => string) | string;
+    valueExpr?: ((data: any) => string | number | boolean) | string;
   };
   name?: string;
   trueText?: string;
@@ -191,7 +191,7 @@ class FilterOperationDescriptions extends NestedOption<IFilterOperationDescripti
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -218,7 +218,7 @@ type ILookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
   dataSource?: Array<any> | DataSourceOptions | Store;
   displayExpr?: ((data: any) => string) | string;
-  valueExpr?: ((data: any) => string) | string;
+  valueExpr?: ((data: any) => string | number | boolean) | string;
 }>
 class Lookup extends NestedOption<ILookupProps> {
   public static OptionName = "lookup";

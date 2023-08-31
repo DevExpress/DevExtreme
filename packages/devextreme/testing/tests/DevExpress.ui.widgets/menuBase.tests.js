@@ -47,7 +47,7 @@ const DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text';
 const DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon';
 const DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
 
-const DX_ITEM_URL_CLASS = 'dx-item-url';
+const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_TEXT_URL_CLASS = `${DX_MENU_ITEM_TEXT_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = `${DX_ICON_CLASS}-with-url`;
 
@@ -375,7 +375,7 @@ QUnit.module('Menu rendering', () => {
         });
         const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children();
 
-        assert.ok(content.hasClass(DX_ITEM_URL_CLASS));
+        assert.ok(content.hasClass(ITEM_URL_CLASS));
         assert.ok(content.children().hasClass(DX_MENU_ITEM_TEXT_URL_CLASS));
     });
 
@@ -384,7 +384,7 @@ QUnit.module('Menu rendering', () => {
             items: [{ icon: 'save', url: '/some_url' }]
         });
 
-        const icon = menuBase.element.find(`.${DX_ITEM_URL_CLASS}`).children();
+        const icon = menuBase.element.find(`.${ITEM_URL_CLASS}`).children();
 
         assert.ok(icon.hasClass(DX_ICON_WITH_URL_CLASS));
     });
@@ -491,7 +491,7 @@ QUnit.module('Menu rendering', () => {
         });
 
         const $menuItemLink = menuBase.element
-            .find(`.${DX_ITEM_URL_CLASS}`)
+            .find(`.${ITEM_URL_CLASS}`)
             .get(0);
 
         $menuItemLink.click = clickSpy;
@@ -512,7 +512,7 @@ QUnit.module('Menu rendering', () => {
         });
 
         const $menuItemLink = menuBase.element
-            .find(`.${DX_ITEM_URL_CLASS}`)
+            .find(`.${ITEM_URL_CLASS}`)
             .get(0);
 
         $menuItemLink.click = clickSpy;
@@ -1127,7 +1127,7 @@ QUnit.module('Keyboard navigation', () => {
         });
 
         const menuItem = menuBase.element
-            .find(`.${DX_ITEM_URL_CLASS}`)
+            .find(`.${ITEM_URL_CLASS}`)
             .get(0);
 
         menuItem.click = clickSpy;

@@ -156,7 +156,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   dropZone?: any | string;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -207,7 +207,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   validationStatus?: "valid" | "invalid" | "pending";
   value?: Array<any>;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>
@@ -248,7 +248,7 @@ type IItemProps = React.PropsWithChildren<{
   name?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties" | "size" | "header" | "separator";
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   acceptedValues?: Array<boolean | number | string>;
@@ -258,7 +258,7 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: "always" | "inMenu";
   widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
@@ -300,12 +300,12 @@ class MediaResizing extends NestedOption<IMediaResizingProps> {
 type IMentionProps = React.PropsWithChildren<{
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
   displayExpr?: ((item: any) => string) | string;
-  itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string) | template;
+  itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   marker?: string;
   minSearchLength?: number;
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   searchTimeout?: number;
-  template?: ((mentionData: { id: string | number, marker: string, value: any }, contentElement: any) => string) | template;
+  template?: ((mentionData: { id: string | number, marker: string, value: any }, contentElement: any) => string | any) | template;
   valueExpr?: (() => void) | string;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
@@ -366,7 +366,7 @@ type ITableContextMenuItemProps = React.PropsWithChildren<{
   name?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties";
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -421,11 +421,11 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   name?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable";
   options?: any;
   showText?: "always" | "inMenu";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";

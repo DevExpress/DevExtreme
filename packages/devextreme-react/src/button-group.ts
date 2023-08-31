@@ -117,7 +117,7 @@ type IItemProps = React.PropsWithChildren<{
   elementAttr?: Record<string, any>;
   hint?: string;
   icon?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   type?: "danger" | "default" | "normal" | "success";
   visible?: boolean;

@@ -6,12 +6,14 @@ const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const merge = require('merge-stream');
+const replace = require('gulp-replace');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
+const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 
@@ -95,6 +97,11 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src('webpack.config.js')
         .pipe(gulp.dest(`${dist}/bin`)),
+
+    gulp
+        .src(`${dist}/package.json`)
+        .pipe(replace(version, ctx.version.package))
+        .pipe(gulp.dest(dist)),
 
     gulp
         .src(distGlob)
