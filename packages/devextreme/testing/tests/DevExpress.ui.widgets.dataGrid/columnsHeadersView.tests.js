@@ -101,31 +101,6 @@ QUnit.module('Headers', {
     }
 }, () => {
 
-    QUnit.test('Column headers should have correct aria-roledescription', function(assert) {
-        // arrange
-        const $testElement = $('#container');
-
-        $.extend(this.columns, [
-            { caption: 'field1', sortOrder: 'asc', sortIndex: 0 },
-            { caption: 'field2', sortOrder: 'asc', sortIndex: 1 },
-            { caption: 'field3' }
-        ]);
-
-        // act
-        this.columnHeadersView.render($testElement);
-
-        // assert
-        const $headerCells = $testElement.find('.dx-header-row td');
-        const defaultRoleDescription = messageLocalization.format('dxDataGrid-ariaColumnHeader');
-        const sortedRoleDescription = (index = 0) => {
-            return `${defaultRoleDescription}, ${messageLocalization.format('dxDataGrid-ariaSortIndex', index)}`;
-        };
-
-        assert.equal($headerCells.eq(0).attr('aria-roledescription'), sortedRoleDescription(0), 'First column has correct aria-roledescription');
-        assert.equal($headerCells.eq(1).attr('aria-roledescription'), sortedRoleDescription(1), 'Second column has correct aria-roledescription');
-        assert.equal($headerCells.eq(2).attr('aria-roledescription'), defaultRoleDescription, 'Third column has correct aria-roledescription');
-    });
-
     QUnit.test('Bounding rect is null when no columns', function(assert) {
         // arrange
         const testElement = $('#container');
@@ -3144,6 +3119,50 @@ QUnit.module('Multiple sorting', {
             assert.strictEqual(cols[1].sortOrder, undefined, 'second column has not sort order');
             assert.strictEqual(cols[2].sortOrder, 'asc', 'third column has sort order');
         });
+    });
+
+    QUnit.test('Column headers should have correct aria-roledescription', function(assert) {
+        // arrange
+        const $testElement = this.$element().addClass('dx-widget');
+        const options = {
+            sorting: {
+                mode: 'multiple'
+            }
+        };
+
+        this.setupDataGrid(options);
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        // assert
+        const $headerCells = $testElement.find('.dx-header-row td');
+        const ariaColumnHeader = messageLocalization.format('dxDataGrid-ariaColumnHeader');
+        const getAriaSortIndex = (index = 0) => {
+            return `${ariaColumnHeader}, ${messageLocalization.format('dxDataGrid-ariaSortIndex', index + 1)}`;
+        };
+
+        assert.equal($headerCells.eq(0).attr('aria-roledescription'), undefined, 'First column has correct aria-roledescription');
+        assert.equal($headerCells.eq(1).attr('aria-roledescription'), getAriaSortIndex(1), 'Second column has correct aria-roledescription');
+        assert.equal($headerCells.eq(2).attr('aria-roledescription'), getAriaSortIndex(0), 'Third column has correct aria-roledescription');
+
+        // act
+        $headerCells.eq(0).trigger($.Event('dxclick', { shiftKey: true }));
+        this.clock.tick(10);
+
+        // assert
+        assert.equal($headerCells.eq(0).attr('aria-roledescription'), getAriaSortIndex(2), 'First column has correct aria-roledescription');
+        assert.equal($headerCells.eq(1).attr('aria-roledescription'), getAriaSortIndex(1), 'Second column has correct aria-roledescription');
+        assert.equal($headerCells.eq(2).attr('aria-roledescription'), getAriaSortIndex(0), 'Third column has correct aria-roledescription');
+
+        // act
+        $headerCells.eq(0).trigger('dxclick');
+        this.clock.tick(10);
+
+        // assert
+        assert.equal($headerCells.eq(0).attr('aria-roledescription'), undefined, 'First column has correct aria-roledescription');
+        assert.equal($headerCells.eq(1).attr('aria-roledescription'), undefined, 'Second column has correct aria-roledescription');
+        assert.equal($headerCells.eq(2).attr('aria-roledescription'), undefined, 'Third column has correct aria-roledescription');
     });
 });
 
