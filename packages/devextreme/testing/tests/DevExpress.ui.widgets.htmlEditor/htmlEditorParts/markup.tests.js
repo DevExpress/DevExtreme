@@ -139,6 +139,16 @@ export default function() {
                 assert.strictEqual($editorContent.attr('aria-label'), 'Editor content');
             }
         });
+
+        test('Content of editor should have aria-invalid attribute when validationStatus is invalid', function(assert) {
+            const $htmlEditor = $('#htmlEditor').dxHtmlEditor({
+                validationStatus: 'invalid',
+            });
+
+            const $editorContent = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+
+            assert.strictEqual($editorContent.attr('aria-invalid'), 'true');
+        });
     });
 
     QUnit.module('Props from global config', {
