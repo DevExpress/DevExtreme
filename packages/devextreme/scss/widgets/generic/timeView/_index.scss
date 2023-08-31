@@ -22,14 +22,7 @@
 
 .dx-timeview-format12 {
   width: $generic-timeview-format12-width;
-  margin-left: $generic-timeview-time-separator-margin;
-  margin-right: auto;
-
-  &.dx-rtl,
-  .dx-rtl & {
-    margin-left: auto;
-    margin-right: $generic-timeview-time-separator-margin;
-  }
+  margin-inline-start: $generic-timeview-time-separator-margin;
 }
 
 .dx-timeview-time-separator {

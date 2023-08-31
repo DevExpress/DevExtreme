@@ -142,6 +142,12 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
     > .dx-treeview-item {
       background-color: $treeview-focused-bg;
       color: $treeview-focus-color;
+
+      .dx-item-content {
+        .dx-item-url {
+          color: unset;
+        }
+      }
     }
   }
 }
@@ -150,8 +156,10 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
   padding: $generic-treeview-item-padding;
   min-height: $generic-treeview-min-item-height;
 
-  .dx-treeview-item-content > .dx-icon {
-    @include dx-icon-sizing($generic-base-icon-size);
+  .dx-treeview-item-content  {
+    .dx-icon {
+      @include dx-icon-sizing($generic-base-icon-size);
+    }
   }
 
   &.dx-state-hover {

@@ -1,0 +1,83 @@
+{
+    "extends": [
+        "devextreme/typescript",
+        "devextreme/spell-check"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "jest": true
+    },
+    "ignorePatterns": ["src/*.ts", "src/common", "src/ui", "node_modules", "dist"],
+    "parserOptions": {
+        "project": ["./tsconfig.json"]
+    },
+    "rules": {
+        "import/no-cycle": "warn",
+        "no-param-reassign": "warn",
+        "no-underscore-dangle": "warn",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "spellcheck/spell-checker": [1, {
+            "lang": "en_US",
+            "comments": false,
+            "strings": false,
+            "identifiers": true,
+            "templates": false,
+            "skipIfMatch": [ "^\\$?..$" ],
+            "skipWords": [
+               "unschedule",
+               "subscribable",
+               "renderer",
+               "rerender",
+               "dx",
+               "descr",
+               "params",
+               "typings",
+               "wildcard",
+               "metadata",
+               "namespace",
+               "namespaces"
+            ]
+        }
+    ]
+    },
+    "overrides": [
+        {
+            "files": [ "*.ts" ],
+            "rules": {
+                "import/extensions": "warn",
+                "max-len": ["error", { "code": 150 }],
+
+                // temporary rules - remove it asap!
+                "import/no-extraneous-dependencies": "warn",
+                "@typescript-eslint/no-extraneous-class": "warn",
+                "@typescript-eslint/explicit-module-boundary-types": "warn",
+                "@typescript-eslint/prefer-for-of": "warn",
+                "no-plusplus": "warn",
+                "@typescript-eslint/explicit-function-return-type": "warn",
+                "no-restricted-syntax": "warn",
+                "@typescript-eslint/ban-types": "warn",
+                "class-methods-use-this": "warn",
+                "@typescript-eslint/no-unsafe-return": "warn",
+                "@typescript-eslint/restrict-plus-operands": "warn",
+                "prefer-spread": "warn",
+                "guard-for-in": "warn",
+                "consistent-return": "warn",
+                "@typescript-eslint/no-this-alias": "warn",
+                "@typescript-eslint/prefer-optional-chain": "warn",
+                "no-empty-pattern": "warn",
+                "@typescript-eslint/init-declarations": "warn",
+                "max-classes-per-file": "warn",
+                "@typescript-eslint/prefer-nullish-coalescing": "warn",
+                "@typescript-eslint/no-use-before-define": "warn",
+                "@typescript-eslint/member-ordering": "warn",
+                "@typescript-eslint/no-dynamic-delete": "warn",
+                "no-empty": "warn",
+                "@typescript-eslint/naming-convention": "warn",
+                "@typescript-eslint/no-invalid-this": "warn",
+                "no-prototype-builtins": "warn",
+            }
+        }
+    ]
+}
+

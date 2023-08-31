@@ -33,6 +33,15 @@
       "dependsOn": [
         "^build"
       ]
+    },
+    "angular:copy-metadata": {
+      "dependsOn": ["tools:discover-metadata"]
+    },
+    "react:copy-metadata": {
+      "dependsOn": ["tools:discover-metadata"]
+    },
+    "vue:copy-metadata": {
+      "dependsOn": ["tools:discover-metadata"]
     }
   },
   "workspaceLayout": {

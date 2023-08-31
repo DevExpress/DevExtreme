@@ -1,0 +1,4 @@
+{
+    "**/*.{css,scss}": "stylelint",
+    "packages/devextreme/**/*.{js,ts,tsx}": "eslint"
+}

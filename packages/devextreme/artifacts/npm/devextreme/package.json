@@ -38,69 +38,22 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
     "rrule": "^2.7.1",
+    "sha1": "1.1.1",
     "turndown": "~7.1.0"
-  },
-  "scripts": {
-    "clean": "gulp clean",
-    "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",
-    "lint-js": "eslint --quiet --ext .js .",
-    "lint-ts": "eslint --quiet --ext .tsx,.ts --ignore-pattern /js/renovation/ --ignore-pattern /testing/renovation/ --ignore-pattern *.d.ts .",
-    "lint-css": "stylelint scss",
-    "lint-renovation": "eslint --quiet --ext .tsx,.ts ./js/renovation",
-    "lint-dts": "eslint js --ext .d.ts --ignore-pattern /js/renovation/",
-    "lint-staged": "lint-staged",
-    "lint-texts": "node build/pre-commit/validate-cyrillic-symbols.js",
-    "pre-commit": "node build/pre-commit/index.js",
-    "build": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
-    "build:dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",
-    "build:testcafe": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true BUILD_TESTCAFE=TRUE gulp default",
-    "build-npm-devextreme": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
-    "build-dist": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default --uglify",
-    "build-themes": "gulp style-compiler-themes",
-    "build:react": "gulp generate-react",
-    "build:react:watch": "gulp generate-react-watch",
-    "build:react:typescript": "gulp generate-react-typescript",
-    "build:modular": "cd ./playground/modular && webpack",
-    "build:modular:watch": "cd ./playground/modular && webpack --watch",
-    "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
-    "build:community-localization": "gulp generate-community-locales",
-    "build:systemjs": "gulp transpile-systemjs",
-    "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
-    "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
-    "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
-    "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
-    "transpile-tests": "gulp transpile-tests",
-    "discover-declarations": "dx-tools discover --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
-    "update-ts-reexports": "dx-tools generate-reexports --js-scripts ./js --exclude \"((dialog|export|list_light|notify|overlay|pager|palette|set_template_engine|splitter|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
-    "update-ts-bundle": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
-    "update-ts": "npm run update-ts-bundle && npm run update-ts-reexports",
-    "validate-ts": "gulp validate-ts",
-    "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\"",
-    "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
-    "test-testcafe": "node ./testing/testcafe/runner",
-    "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
-    "test-jest": "jest --coverage --runInBand",
-    "test-jest:watch": "jest --watch",
-    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
-    "qunit-in-docker": "gulp qunit-in-docker --constel",
-    "test-typescript": "gulp test-ts",
-    "tcd-update": "tcd-update",
-    "discover-ci": "npm run internal-tool -- discover-ts-declarations --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" && npm run internal-tool -- discover --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\""
   },
   "jest": {
     "modulePathIgnorePatterns": [
       "node_modules"
     ]
   },
-  "pre-commit": [
-    "lint-staged",
-    "pre-commit"
-  ],
   "browserslist": [
     "last 2 versions",
     "ios > 9",
     "> 1%",
     "not dead"
-  ]
+  ],
+  "bin": {
+    "devextreme-bundler-init": "bin/bundler-init.js",
+    "devextreme-bundler": "bin/bundler.js"
+  }
 }

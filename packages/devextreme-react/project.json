@@ -1,0 +1,16 @@
+{
+  "name": "devextreme-react",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/devextreme-react",
+  "projectType": "library",
+  "targets": {
+    "regenerate": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "regenerate"
+      },
+      "dependsOn": ["devextreme-monorepo:\"react:copy-metadata\"", "devextreme-monorepo:\"react:build-generator\""]
+    }
+  },
+  "tags": []
+}

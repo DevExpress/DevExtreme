@@ -4401,7 +4401,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.searchPanel.width]
      */
-    width?: number;
+    width?: string | number;
   };
   export type SelectedFilterOperation =
     | '<'
@@ -25724,6 +25724,10 @@ declare module DevExpress.ui {
      */
     hoverStateEnabled?: boolean;
     /**
+     * [descr:dxTabsOptions.iconPosition]
+     */
+    iconPosition?: DevExpress.ui.dxTabs.IconPosition;
+    /**
      * [descr:dxTabsOptions.items]
      */
     items?: Array<TItem>;
@@ -30039,6 +30043,7 @@ declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;
 }
 declare module DevExpress.ui.dxTabs {
+  export type IconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type Item = dxTabsItem;
 }
 declare module DevExpress.ui.dxTileView {

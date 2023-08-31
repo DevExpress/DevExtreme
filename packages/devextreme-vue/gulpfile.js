@@ -1,13 +1,9 @@
 const fs = require('fs');
 const del = require('del');
-
 const gulp = require('gulp');
 const shell = require('gulp-shell');
 const header = require('gulp-header');
 const ts = require('gulp-typescript');
-
-const generateSync = require('devextreme-vue-generator').default;
-
 const config = require('./build.config');
 
 const GENERATE = 'generate';
@@ -39,6 +35,7 @@ gulp.task(GENERATE_STRATEGY, shell.task(['npm run generate -w devextreme-vue2-st
 gulp.task(GENERATE, gulp.parallel(
     GENERATE_STRATEGY,
     (done) => {
+        const generateSync = require('devextreme-vue-generator').default;
         generateSync(
             JSON.parse(fs.readFileSync(config.metadataPath).toString()),
             config.baseComponent,
@@ -80,7 +77,7 @@ gulp.task(NPM_BUILD, gulp.series(
     }
 ));
 
-gulp.task(ADD_HEADERS, function() {
+gulp.task(ADD_HEADERS, function () {
     const pkg = require('./package.json');
     const now = new Date();
     const data = {
@@ -110,7 +107,7 @@ gulp.task(ADD_HEADERS, function() {
         .pipe(gulp.dest(config.npm.dist));
 });
 
-gulp.task(COPY_STRATEGY, function() {
+gulp.task(COPY_STRATEGY, function () {
     return gulp.src(`${config.npm.strategySrc}`)
         .pipe(gulp.dest(config.npm.strategyDist));
 });
@@ -120,5 +117,5 @@ gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD,
     COPY_STRATEGY,
     ADD_HEADERS,
-    shell.task(['npm pack'], { cwd: config.npm.dist })
+    shell.task(['npm pack'], {cwd: config.npm.dist})
 ));

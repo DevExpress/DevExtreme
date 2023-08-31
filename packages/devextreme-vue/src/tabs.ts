@@ -12,6 +12,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "iconPosition" |
   "itemHoldTimeout" |
   "items" |
   "itemTemplate" |
@@ -55,6 +56,7 @@ const DxTabs = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    iconPosition: String,
     itemHoldTimeout: Number,
     items: Array,
     itemTemplate: {},
@@ -95,6 +97,7 @@ const DxTabs = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:iconPosition": null,
     "update:itemHoldTimeout": null,
     "update:items": null,
     "update:itemTemplate": null,

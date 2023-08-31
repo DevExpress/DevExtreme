@@ -714,6 +714,14 @@ QUnit.module('Common types ', () => {
         assert.ok(result, 'Result is defined');
         assert.ok(!result.isValid, 'Value is invalid');
     });
+
+    QUnit.test('Address with symbol "+" should be valid', function(assert) {
+        const result = ValidationEngine.validate('one+two@domain.com', [{
+            type: 'email'
+        }]);
+
+        assert.ok(result.isValid, 'address is valid');
+    });
 });
 
 QUnit.module('Custom rule with user\'s callback', () => {

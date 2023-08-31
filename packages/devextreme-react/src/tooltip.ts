@@ -28,14 +28,14 @@ type ITooltipOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITo
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   contentKeyFn?: (data: any) => string;
-  defaultHeight?: (() => number) | number | string;
+  defaultHeight?: (() => number | string) | number | string;
   defaultPosition?: PositionConfig | "bottom" | "left" | "right" | "top";
   defaultVisible?: boolean;
-  defaultWidth?: (() => number) | number | string;
-  onHeightChange?: (value: (() => number) | number | string) => void;
+  defaultWidth?: (() => number | string) | number | string;
+  onHeightChange?: (value: (() => number | string) | number | string) => void;
   onPositionChange?: (value: PositionConfig | "bottom" | "left" | "right" | "top") => void;
   onVisibleChange?: (value: boolean) => void;
-  onWidthChange?: (value: (() => number) | number | string) => void;
+  onWidthChange?: (value: (() => number | string) | number | string) => void;
 }>
 
 class Tooltip extends BaseComponent<React.PropsWithChildren<ITooltipOptions>> {
