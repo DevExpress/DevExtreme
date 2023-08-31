@@ -15,8 +15,8 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    SingleOrMultiple,
     Orientation,
+    SingleOrMultiple,
 } from '../common';
 
 export type ItemLike = string | Item | any;
@@ -25,6 +25,12 @@ export {
     SingleOrMultiple,
     Orientation,
 };
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxTabs
+ */
+export type IconPosition = 'top' | 'end' | 'bottom' | 'start';
 
 /**
  * @docid _ui_tabs_ContentReadyEvent
@@ -138,6 +144,12 @@ export interface dxTabsBaseOptions<
      * @public
      */
     hoverStateEnabled?: boolean;
+    /**
+     * @docid dxTabsOptions.iconPosition
+     * @default 'start'
+     * @public
+     */
+    iconPosition?: IconPosition;
     /**
      * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>

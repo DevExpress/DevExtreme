@@ -38,6 +38,7 @@ const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
+const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 themes.setDefaultTimeout(0);
 
@@ -167,6 +168,50 @@ QUnit.module('basic', () => {
         const $overlayContent = instance.$content().parent();
 
         assert.strictEqual($overlayContent.attr('role'), 'dialog');
+    });
+
+    QUnit.test('aria-labelledby is equal to title id', function(assert) {
+        const instance = $('#popup').dxPopup({
+            title: 'title',
+            visible: true,
+        }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+        const titleId = $overlayContent.find(`.${TOOLBAR_LABEL_CLASS}`).attr('id');
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), titleId);
+    });
+
+    QUnit.test('aria-labelledby is not set when title is null', function(assert) {
+        const instance = $('#popup').dxPopup({ visible: true }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
+    });
+
+    QUnit.test('aria-labelledby should be correct after runtime change', function(assert) {
+        const instance = $('#popup').dxPopup({
+            title: 'title',
+            visible: true,
+        }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+        const titleIdFirst = $overlayContent.find(`.${TOOLBAR_LABEL_CLASS}`).attr('id');
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), titleIdFirst);
+
+        instance.option('title', 'title 2');
+        const titleIdSecond = $overlayContent.find(`.${TOOLBAR_LABEL_CLASS}`).attr('id');
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), titleIdSecond);
+        assert.notStrictEqual($overlayContent.attr('aria-labelledby'), titleIdFirst);
+
+        instance.option('title', '');
+        const $title = $overlayContent.find(`.${TOOLBAR_LABEL_CLASS}`).get(0);
+
+        assert.strictEqual($title, undefined);
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
     QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {

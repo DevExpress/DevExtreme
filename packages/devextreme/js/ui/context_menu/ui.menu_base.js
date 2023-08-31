@@ -30,7 +30,7 @@ const SINGLE_SELECTION_MODE = 'single';
 const DEFAULT_DELAY = { 'show': 50, 'hide': 300 };
 const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
-const DX_ITEM_URL_CLASS = 'dx-item-url';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 
 class MenuBase extends HierarchicalCollectionWidget {
@@ -183,29 +183,21 @@ class MenuBase extends HierarchicalCollectionWidget {
     _getLinkContainer(iconContainer, textContainer, { linkAttr, url }) {
         iconContainer?.addClass(DX_ICON_WITH_URL_CLASS);
         textContainer?.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
-        const linkAttributes = isObject(linkAttr) ? linkAttr : {};
-        return $('<a>')
-            .addClass(DX_ITEM_URL_CLASS)
-            .attr({ ...linkAttributes, href: url })
-            .append(iconContainer)
-            .append(textContainer);
+
+        return super._getLinkContainer(iconContainer, textContainer, { linkAttr, url });
     }
 
     _addContent($container, itemData) {
         const { html, url } = itemData;
 
-        const iconContainer = this._getIconContainer(itemData);
-        const textContainer = this._getTextContainer(itemData);
-
-        $container.html(html);
         if(url) {
-            const link = this._getLinkContainer(iconContainer, textContainer, itemData);
+            $container.html(html);
+            const link = this._getLinkContainer(this._getIconContainer(itemData), this._getTextContainer(itemData), itemData);
             $container.append(link);
         } else {
-            $container
-                .append(iconContainer)
-                .append(textContainer);
+            super._addContent($container, itemData);
         }
+
         $container.append(this._getPopoutContainer(itemData));
         this._addContentClasses(itemData, $container.parent());
     }
@@ -561,7 +553,7 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _itemClick(actionArgs) {
         const args = actionArgs.args[0];
-        const link = args.event.target.getElementsByClassName(DX_ITEM_URL_CLASS)[0];
+        const link = args.event.target.getElementsByClassName(ITEM_URL_CLASS)[0];
         if(args.itemData.url && link) {
             link.click();
         }

@@ -324,13 +324,13 @@ class Scrolling extends NestedOption<IScrollingProps> {
 type IViewProps = React.PropsWithChildren<{
   agendaDuration?: number;
   allDayPanelMode?: "all" | "allDay" | "hidden";
-  appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string) | template;
-  appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string) | template;
-  appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string) | template;
+  appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template;
+  appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
+  appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
   cellDuration?: number;
-  dataCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string) | template;
-  dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string) | template;
-  dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string) | template;
+  dataCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
   endDayHour?: number;
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   groupByDate?: boolean;
@@ -339,11 +339,11 @@ type IViewProps = React.PropsWithChildren<{
   intervalCount?: number;
   maxAppointmentsPerCell?: number | "auto" | "unlimited";
   name?: string;
-  resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string) | template;
+  resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   scrolling?: dxSchedulerScrolling;
   startDate?: any | number | string;
   startDayHour?: number;
-  timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string) | template;
+  timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
