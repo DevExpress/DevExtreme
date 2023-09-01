@@ -125,7 +125,7 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
 
 .dx-daterangebox-separator {
   padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  color: $texteditor-label-color;
+  color: $texteditor-disabled-color;
 
   .dx-icon {
     @include dx-icon-sizing($fluent-base-icon-size);

@@ -137,7 +137,7 @@
   $label-before-min-width,
   $label-after-min-width,
   $base-bg,
-  $texteditor-color,
+  $texteditor-disabled-color,
   $texteditor-hover-border-color,
   $texteditor-focused-border-color,
   $texteditor-invalid-faded-border-color,
@@ -244,11 +244,11 @@
 
       &.dx-state-readonly {
         @include dx-state-border-style($label-readonly-border-style);
-        @include dx-state-border-color(color.change($texteditor-color, $alpha: 0.5));
+        @include dx-state-border-color($texteditor-disabled-color);
       }
   
       &.dx-state-disabled {
-        @include dx-state-border-color(color.change($texteditor-color, $alpha: 0.5));
+        @include dx-state-border-color($texteditor-disabled-color);
       }
   
       &.dx-invalid {

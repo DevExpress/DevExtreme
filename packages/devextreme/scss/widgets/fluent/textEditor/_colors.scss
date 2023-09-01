@@ -33,7 +33,7 @@ $texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
 * $name 50. Border color
 * $type color
 */
-$texteditor-border-color: color.change($texteditor-color, $alpha: 0.42) !default;
+$texteditor-border-color: $base-border-color !default;
 
 /**
 * $name 60. Hovered border color
@@ -56,6 +56,7 @@ $texteditor-button-clear-icon-color: null !default;
 $texteditor-button-clear-icon-color-bg: null !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$texteditor-disabled-color: $base-disabled-color !default;
 $texteditor-input-border-radius: $base-border-radius !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,

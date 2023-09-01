@@ -240,7 +240,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-base-inline-borderedwidget-horizontal-padding,
   $base-bg,
-  $texteditor-color,
+  color.change($texteditor-color, $alpha: 0.5),
   $texteditor-hover-border-color,
   $texteditor-focused-border-color,
   $texteditor-invalid-faded-border-color,
