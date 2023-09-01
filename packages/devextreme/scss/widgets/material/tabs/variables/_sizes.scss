@@ -28,7 +28,9 @@ $material-indicator-length-secondary: 100% !default;
 $material-indicator-border-radius-secondary: 8px !default;
 
 @if $size == "default" {
-  $material-tabs-item-padding: 10px 16px !default;
+  $material-tabs-item-padding-horizontal: 12px !default;
+  $material-tabs-item-padding-vertical: 16px !default;
+  $material-tabs-item-padding: $material-tabs-item-padding-horizontal $material-tabs-item-padding-vertical !default;
   $material-tab-height: auto !default;
   $material-tab-min-width: 90px !default;
   $material-base-icon-margin: 8px !default;
@@ -41,7 +43,9 @@ $material-indicator-border-radius-secondary: 8px !default;
 }
 
 @else if $size == "compact" {
-  $material-tabs-item-padding: 4px 12px !default;
+  $material-tabs-item-padding-horizontal: 6px !default;
+  $material-tabs-item-padding-vertical: 12px !default;
+  $material-tabs-item-padding: $material-tabs-item-padding-horizontal $material-tabs-item-padding-vertical !default;
   $material-tab-height: auto !default;
   $material-tab-min-width: 82px !default;
   $material-base-icon-margin: 8px !default;
