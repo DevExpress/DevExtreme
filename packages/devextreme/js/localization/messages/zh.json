@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "列",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "值",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "过滤单元",
         "dxDataGrid-ariaCollapse": "折叠",
         "dxDataGrid-ariaModifiedCell": "Modified",

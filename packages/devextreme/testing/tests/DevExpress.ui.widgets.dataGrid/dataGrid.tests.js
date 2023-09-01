@@ -845,7 +845,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $errorRow = $($(dataGrid.$element()).find('.dx-error-row'));
         assert.equal($errorRow.length, 1, 'error row is shown');
         assert.equal($errorRow.children().attr('colspan'), '2', 'error row colspan');
-        assert.equal($errorRow.find('.dx-error-message').text(), 'Test Error', 'error row text');
+
+        const $errorMessage = $errorRow.find('.dx-error-message');
+        assert.equal($errorMessage.text(), 'Test Error', 'error row text');
+
+        assert.equal($errorMessage.attr('role'), 'alert', 'error message role');
+        assert.equal($errorMessage.attr('aria-roledescription'), 'Error', 'error message role description');
     });
 
     QUnit.test('Raise error if key field is missed', function(assert) {

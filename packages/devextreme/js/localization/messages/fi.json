@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Sarake",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Arvo",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "Suodatinsolu",
         "dxDataGrid-ariaCollapse": "Tiivistä",
         "dxDataGrid-ariaModifiedCell": "Modified",

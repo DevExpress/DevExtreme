@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Στήλη",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Τιμή",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "Φιλτράρισμα κελιού",
         "dxDataGrid-ariaCollapse": "Συρρίκνωση",
         "dxDataGrid-ariaModifiedCell": "Modified",
