@@ -233,7 +233,7 @@ export class AzureGateway {
       {
         url: uploadUrl,
         method: 'PUT',
-        data: blockBlob,
+        body: blockBlob,
         processData: false,
         contentType: false,
       },
@@ -250,7 +250,7 @@ export class AzureGateway {
       {
         url: uploadUrl,
         method: 'PUT',
-        data: content,
+        body: content,
       },
       params,
     );
@@ -344,7 +344,7 @@ export class AzureGateway {
         return x;
       })
       .then(async (x) => {
-        if (x.status === 200) {
+        if (x.status === 200 || x.status === 201) {
           var text = await x.text();
           try {
             return { success: true, ...JSON.parse(text) };
