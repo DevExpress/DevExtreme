@@ -1,0 +1,65 @@
+@use "sass:color";
+@use "../../../../colors" as *;
+@use "../../../../sizes" as *;
+@use "../../../../button/colors" as *;
+@use "../../../../button/mixins" as *;
+@use "../../../../../base/icons" as *;
+@use "../../../../../base/tabs";
+@use "../../../variables/colors" as *;
+@use "../../../variables/sizes" as *;
+@use "../../../mixins" as *;
+
+// adduse
+@use "../../../../scrollable";
+@use "../../../../badge";
+
+
+.dx-tabs-styling-mode-secondary {
+  .dx-tab .dx-tab-text {
+    text-transform: none;
+  }
+
+  &.dx-tabs-vertical:not(.dx-rtl) {
+    .dx-tab-selected .dx-tab-content {
+      @include dx-tabs-border-mixin(right, $tabs-selected-tab-border-color, true);
+
+      &::after {
+        border-top-left-radius: unset;
+        top: $material-tabs-item-padding-horizontal;
+        height: calc(100% - 2 * $material-tabs-item-padding-horizontal);
+        right: 0;
+      }
+    }
+
+    .dx-tab-selected.dx-state-disabled .dx-tab-content {
+      @include dx-tabs-border-mixin(right, $tabs-disabled-tab-border-color, true);
+    }
+  }
+}
+
+.dx-rtl.dx-tabs-styling-mode-secondary.dx-tabs-vertical {
+  .dx-tab-selected .dx-tab-content {
+    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color, true);
+
+    &::after {
+      border-top-left-radius: unset;
+      top: $material-tabs-item-padding-horizontal;
+      height: calc(100% - 2 * $material-tabs-item-padding-horizontal);
+      left: 0;
+    }
+  }
+}
+
+.dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+  .dx-tab-content {
+    position: relative;
+  }
+
+  .dx-tab.dx-tab-selected .dx-tab-content {
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color, true);
+
+    &.dx-state-disabled .dx-tab-content {
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color, true);
+    }
+  }
+}
