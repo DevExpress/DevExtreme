@@ -3,7 +3,7 @@ import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
 import 'whatwg-fetch';
 
 const dataSource = {
-  load(loadOptions) {
+  async load(loadOptions) {
     const parentIdsParam = loadOptions.parentIds;
     const url = new URL('https://js.devexpress.com/Demos/Mvc/api/treeListData');
     if (parentIdsParam) {
@@ -12,39 +12,38 @@ const dataSource = {
       });
     }
 
-    return fetch(url)
-      .then((response) => response.json())
-      .catch(() => { throw new Error('Data Loading Error'); });
+    const result = await fetch(url);
+
+    if (result.status === 200) {
+      return result.json();
+    }
+
+    throw new Error('Data Loading Error');
   },
 };
 
-class App extends React.Component {
-  render() {
-    return (
-      <TreeList
-        id="treelist"
-        dataSource={dataSource}
-        showBorders={true}
-        keyExpr="id"
-        parentIdExpr="parentId"
-        hasItemsExpr="hasItems"
-        rootValue=""
-      >
-        <RemoteOperations filtering={true} />
-        <Column dataField="name" />
-        <Column width={100} customizeText={this.customizeText} dataField="size" />
-        <Column width={150} dataField="createdDate" dataType="date" />
-        <Column width={150} dataField="modifiedDate" dataType="date" />
-      </TreeList>
-    );
+const customizeText = (e) => {
+  if (e.value !== null) {
+    return `${Math.ceil(e.value / 1024)} KB`;
   }
-
-  customizeText(e) {
-    if (e.value !== null) {
-      return `${Math.ceil(e.value / 1024)} KB`;
-    }
-    return null;
-  }
-}
+  return null;
+};
+const App = () => (
+  <TreeList
+    id="treelist"
+    dataSource={dataSource}
+    showBorders={true}
+    keyExpr="id"
+    parentIdExpr="parentId"
+    hasItemsExpr="hasItems"
+    rootValue=""
+  >
+    <RemoteOperations filtering={true} />
+    <Column dataField="name" />
+    <Column width={100} customizeText={customizeText} dataField="size" />
+    <Column width={150} dataField="createdDate" dataType="date" />
+    <Column width={150} dataField="modifiedDate" dataType="date" />
+  </TreeList>
+);
 
 export default App;

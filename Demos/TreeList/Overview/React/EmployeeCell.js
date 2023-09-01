@@ -1,7 +1,8 @@
 import React from 'react';
 
-export default function EmployeeCell(options) {
-  const employee = options.data.Task_Assigned_Employee;
+const EmployeeCell = (props) => {
+  const employee = props.data.data.Task_Assigned_Employee;
+
   if (!employee) {
     return <span className="name">not assigned</span>;
   }
@@ -13,4 +14,6 @@ export default function EmployeeCell(options) {
       <span className="name">{employee.Name}</span>
     </React.Fragment>
   );
-}
+};
+
+export default EmployeeCell;

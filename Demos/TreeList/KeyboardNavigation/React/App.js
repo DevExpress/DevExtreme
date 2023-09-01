@@ -14,54 +14,50 @@ import { employees } from './data.js';
 const allowedPageSizes = [5, 10];
 const expandedRowKeys = [1, 2, 3, 5];
 
-class App extends React.Component {
-  render() {
-    return (
-      <TreeList
-        dataSource={employees}
-        keyExpr="ID"
-        parentIdExpr="Head_ID"
-        showBorders={true}
-        focusedRowEnabled={true}
-        defaultExpandedRowKeys={expandedRowKeys}
-      >
-        <Editing
-          allowUpdating={true}
-          allowDeleting={true}
-          selectTextOnEditStart={true}
-          useIcons={true}
-        />
-        <HeaderFilter
-          visible={true}
-        />
-        <FilterPanel
-          visible={true}
-        />
-        <FilterRow
-          visible={true}
-        />
-        <Scrolling
-          mode="standard"
-        />
-        <Column dataField="Full_Name" />
-        <Column
-          dataField="Title"
-          caption="Position"
-        />
-        <Column dataField="City" />
-        <Column dataField= "State" />
-        <Pager
-          allowedPageSizes={allowedPageSizes}
-          showPageSizeSelector={true}
-          showNavigationButtons={true}
-        />
-        <Paging
-          enabled={true}
-          defaultPageSize={10}
-        />
-      </TreeList>
-    );
-  }
-}
+const App = () => (
+  <TreeList
+    dataSource={employees}
+    keyExpr="ID"
+    parentIdExpr="Head_ID"
+    showBorders={true}
+    focusedRowEnabled={true}
+    defaultExpandedRowKeys={expandedRowKeys}
+  >
+    <Editing
+      allowUpdating={true}
+      allowDeleting={true}
+      selectTextOnEditStart={true}
+      useIcons={true}
+    />
+    <HeaderFilter
+      visible={true}
+    />
+    <FilterPanel
+      visible={true}
+    />
+    <FilterRow
+      visible={true}
+    />
+    <Scrolling
+      mode="standard"
+    />
+    <Column dataField="Full_Name" />
+    <Column
+      dataField="Title"
+      caption="Position"
+    />
+    <Column dataField="City" />
+    <Column dataField= "State" />
+    <Pager
+      allowedPageSizes={allowedPageSizes}
+      showPageSizeSelector={true}
+      showNavigationButtons={true}
+    />
+    <Paging
+      enabled={true}
+      defaultPageSize={10}
+    />
+  </TreeList>
+);
 
 export default App;
