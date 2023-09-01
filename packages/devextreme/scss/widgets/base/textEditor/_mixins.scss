@@ -217,7 +217,9 @@
       margin-top: $label-offset-y;
 
       &.dx-daterangebox {
-        .dx-label {  
+        .dx-label {
+          position: relative;
+
           &::before {
             content: '';
             width: 100%;
@@ -333,7 +335,7 @@
   $texteditor-label-line-height,
   $texteditor-label-top-offset,
   $texteditor-font-size,
-  $texteditor-label-empty-height,
+  $texteditor-empty-label-height,
   $texteditor-empty-label-line-height,
   $texteditor-filled-input-horizontal-padding,
   $texteditor-filled-input-with-label-top-padding,
@@ -375,7 +377,7 @@
         .dx-texteditor-label {
           transition: $texteditor-label-transition;
           font-size: $texteditor-font-size;
-          height: $texteditor-label-empty-height;
+          height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
           margin-top: math.div(-$texteditor-label-height, 2);
@@ -421,6 +423,8 @@
   $texteditor-label-line-height,
   $texteditor-label-top-offset,
   $texteditor-font-size,
+  $texteditor-empty-label-height,
+  $texteditor-empty-label-line-height,
   $texteditor-with-label-input-top-padding,
   $texteditor-with-label-input-bottom-padding,
 ) {
@@ -454,8 +458,8 @@
           transition: $texteditor-label-transition;
           transform: translate(0, 0);
           font-size: $texteditor-font-size;
-          height: $texteditor-label-height;
-          line-height: $texteditor-label-line-height;
+          height: $texteditor-empty-label-height;
+          line-height: $texteditor-empty-label-line-height;
           top: 50%;
           margin-top: math.div(-$texteditor-label-height, 2);
         }
