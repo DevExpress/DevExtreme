@@ -10,8 +10,6 @@ const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymont
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
-const MS_IN_HOUR = 1000 * 60 * 60;
-const MS_IN_DAY = MS_IN_HOUR * 24;
 
 let recurrence = null;
 
@@ -43,12 +41,17 @@ class RecurrenceProcessor {
             rruleIntervalParams.startIntervalDate,
             rule.until);
 
+        const t = this.rRuleSet.between(
+            rruleIntervalParams.minViewDate,
+            rruleIntervalParams.maxViewDate,
+            true
+        );
+
         return this.rRuleSet.between(
             rruleIntervalParams.minViewDate,
             rruleIntervalParams.maxViewDate,
             true
-        )
-            .filter((date) => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime)
+        ).filter((date) => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime)
             .map((date) => this._convertRruleResult(rruleIntervalParams, options, date));
     }
 
@@ -85,14 +88,9 @@ class RecurrenceProcessor {
 
     _convertRruleResult(rruleIntervalParams, options, rruleDate) {
         const localTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
-        // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
-        // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
-        const additionalWorkaroundOffsetForRrule =
-            localTimezoneOffset / MS_IN_HOUR <= -13 ? -MS_IN_DAY : 0;
         const convertedBackDate = timeZoneUtils.setOffsetsToDate(
             rruleDate, [
                 localTimezoneOffset,
-                additionalWorkaroundOffsetForRrule,
                 -options.appointmentTimezoneOffset,
                 rruleIntervalParams.startIntervalDateDSTShift,
             ]);
