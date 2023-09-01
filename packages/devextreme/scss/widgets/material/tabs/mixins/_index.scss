@@ -3,75 +3,79 @@
 // adduse
 
 
-@mixin dx-tabs-border-mixin($position, $color, $expanded: false) {
+@mixin dx-tabs-indicator-primary-mixin($position, $color) {
   &::after {
     content: "";
     position: absolute;
     background-color: $color;
 
-    @if $position == bottom {
-      left: 0;
-      width: 100%;
-
-      @if $expanded {
-        bottom: -$material-tabs-item-padding-horizontal;
-        height: 3px;
-
-        // TODO: Move to variable
-        border-top-right-radius: 8px;
-        border-top-left-radius: 8px;
-      } @else {
-        bottom: 0;
-        height: 2px;
-      }
-    } @else if $position == top {
-      left: 0;
+    @if $position == top {
+      top: 0;
       right: 0;
-      width: 100%;
-
-      @if $expanded {
-        top: -$material-tabs-item-padding-horizontal;
-        height: 3px;
-
-        // TODO: Move to variable
-        border-top-right-radius: 8px;
-        border-top-left-radius: 8px;
-      } @else {
-        top: 0;
-        height: 2px;
-      }
+      left: 0;
+      width: $material-indicator-length-primary;
+      height: $material-indicator-thickness-primary;
+    } @else if $position == right {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      height: $material-indicator-length-primary;
+      width: $material-indicator-thickness-primary;
+    } @else if $position == bottom {
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: $material-indicator-length-primary;
+      height: $material-indicator-thickness-primary;
     } @else if $position == left {
       top: 0;
       bottom: 0;
-      height: 100%;
+      left: 0;
+      height: $material-indicator-length-primary;
+      width: $material-indicator-thickness-primary;
+    }
+  }
+}
 
-      @if $expanded {
-        left: -$material-tabs-item-padding-vertical;
-        width: 3px;
+@mixin dx-tabs-indicator-secondary-base-mixin($position, $color) {
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: $material-indicator-length-secondary;
+    height: $material-indicator-thickness-secondary;
+    background-color: $color;
 
-        // TODO: Move to variable
-        border-top-right-radius: 8px !important;
-        border-bottom-right-radius: 8px !important;
-      } @else {
-        left: 0;
-        width: 2px;
-      }
-    } @else if $position == right {
-      top: 0;
-      bottom: 0;
-      height: 100%;
+    @if $position == top {
+      top: -$material-tabs-item-padding-horizontal;
+      border-bottom-right-radius: $material-indicator-border-radius-secondary;
+      border-bottom-left-radius: $material-indicator-border-radius-secondary;
+    } @else if $position == bottom {
+      bottom: -$material-tabs-item-padding-horizontal;
+      border-top-right-radius: $material-indicator-border-radius-secondary;
+      border-top-left-radius: $material-indicator-border-radius-secondary;
+    }
+  }
+}
 
-      @if $expanded {
-        right: -$material-tabs-item-padding-vertical;
-        width: 3px;
+@mixin dx-tabs-indicator-secondary-vertical-mixin($position, $color) {
+  &::after {
+    content: "";
+    position: absolute;
+    top: $material-tabs-item-padding-horizontal;
+    width: $material-indicator-thickness-secondary;
+    height: calc($material-indicator-length-secondary - 2 * $material-tabs-item-padding-horizontal);
+    background-color: $color;
 
-        // TODO: Move to variable
-        border-top-left-radius: 8px !important;
-        border-bottom-left-radius: 8px !important;
-      } @else {
-        right: 0;
-        width: 2px;
-      }
+    @if $position == right {
+      right: 0;
+      border-top-left-radius: $material-indicator-border-radius-secondary;
+      border-bottom-left-radius: $material-indicator-border-radius-secondary;
+    } @else if $position == left {
+      left: 0;
+      border-top-right-radius: $material-indicator-border-radius-secondary;
+      border-bottom-right-radius: $material-indicator-border-radius-secondary;
     }
   }
 }
