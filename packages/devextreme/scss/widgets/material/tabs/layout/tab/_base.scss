@@ -1,74 +1,91 @@
 @use "sass:color";
-@use "../../../colors" as *;
-@use "../../../sizes" as *;
-@use "../../../button/colors" as *;
-@use "../../../button/mixins" as *;
-@use "../../../../base/icons" as *;
-@use "../../../../base/tabs";
-@use "../../variables/colors" as *;
-@use "../../variables/sizes" as *;
-@use "../../mixins" as *;
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../tabs/variables/colors" as *;
+@use "../tabs/mixins" as *;
+@use "../../base/tabPanel";
 
 // adduse
-@use "../../../scrollable";
-@use "../../../badge";
-@import "styling-mode/primary";
-@import "styling-mode/secondary";
 
-
-.dx-tab {
-  padding: $material-tabs-item-padding;
-  min-width: $material-tab-min-width;
-  background-color: $tabs-tab-background;
-  color: $tabs-tab-color;
-
-  &.dx-state-hover {
-    background-color: $tabs-hovered-tab-bg-color;
+.dx-tabpanel {
+  .dx-tabpanel-tab {
+    min-width: 72px;
+    flex-grow: 0;
   }
 
-  &.dx-tab-selected {
-    color: $tabs-tab-selected-color;
-
-    .dx-icon {
-      color: $tabs-tab-icon-selected-color;
-    }
-  }
-
-  &.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
-  }
-
-
-  &.dx-state-disabled {
-    color: $tabs-tab-disabled-color;
-
-    .dx-icon {
-      color: $tabs-tab-icon-disabled-color;
-    }
-  }
-
-  &.dx-state-active,
-  &.dx-state-active .dx-inkripple-wave {
-    background-color: $tabs-active-tab-bg-color;
-  }
-
-  .dx-tab-text {
-    text-transform: uppercase;
-    line-height: $material-tab-text-line-height;
-    font-weight: 500;
-  }
-
-  .dx-icon {
-    color: $tabs-tab-icon-color;
-
-    @include dx-icon-sizing($material-base-icon-size);
+  .dx-tabs-nav-button {
+    height: auto;
   }
 }
 
-.dx-tabs-icon-position-start .dx-tab .dx-icon {
-  @include dx-icon-margin($material-base-icon-margin, start);
+.dx-tabpanel-tabs-position-top {
+  .dx-tabs {
+    border-bottom: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-bottom: none;
+    }
+  }
 }
 
-.dx-tabs-icon-position-end .dx-tab .dx-icon {
-  @include dx-icon-margin($material-base-icon-margin, end);
+.dx-tabpanel-tabs-position-bottom {
+  .dx-tabs {
+    border-top: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-top: none;
+    }
+  }
+
+  .dx-tabpanel-tab.dx-tab-selected::after {
+    top: 0;
+    bottom: unset;
+  }
+
+  .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+    .dx-tab-selected .dx-tab-content {
+      @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-selected-tab-border-color);
+
+      &.dx-state-disabled .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-disabled-tab-border-color);
+      }
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-left {
+  .dx-tabs {
+    border-right: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-right: none;
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-right {
+  .dx-tabs {
+    border-left: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-left: none;
+    }
+  }
+
+  .dx-tabpanel-tab.dx-tab-selected::after {
+    left: 0;
+    right: unset;
+  }
+
+  .dx-tabs-styling-mode-secondary {
+    .dx-tab-selected {
+      @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-selected-tab-border-color);
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-disabled-tab-border-color);
+      }
+    }
+  }
 }
