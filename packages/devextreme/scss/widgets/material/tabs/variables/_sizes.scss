@@ -19,6 +19,14 @@ $material-tab-nav-button-content-padding: null !default;
 
 $material-tab-vertical-nav-button-content-padding: null !default;
 
+$material-indicator-thickness-primary: 2px !default;
+$material-indicator-thickness-secondary: 3px !default;
+
+$material-indicator-length-primary: 100% !default;
+$material-indicator-length-secondary: 100% !default;
+
+$material-indicator-border-radius-secondary: 8px !default;
+
 @if $size == "default" {
   $material-tabs-item-padding: 12px 16px !default;
   $material-tab-height: auto !default;
