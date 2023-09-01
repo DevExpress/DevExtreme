@@ -171,7 +171,7 @@
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Vrednost",
         "dxDataGrid-ariaError": "Error",
-        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "Filtriraj po celici",
         "dxDataGrid-ariaCollapse": "Skrči",
         "dxDataGrid-ariaModifiedCell": "Modified",

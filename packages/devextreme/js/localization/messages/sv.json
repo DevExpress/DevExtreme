@@ -171,7 +171,7 @@
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Värde",
         "dxDataGrid-ariaError": "Error",
-        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "Filtrera cell",
         "dxDataGrid-ariaCollapse": "Kollapsa",
         "dxDataGrid-ariaModifiedCell": "Modified",

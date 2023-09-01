@@ -171,7 +171,7 @@
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "القيمة",
         "dxDataGrid-ariaError": "Error",
-        "dxDataGrid-ariaRevertButton": "Press Escape to revert value",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "تصفية الخلية",
         "dxDataGrid-ariaCollapse": "طي",
         "dxDataGrid-ariaModifiedCell": "Modified",
