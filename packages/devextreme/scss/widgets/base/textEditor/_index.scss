@@ -7,6 +7,11 @@
 
 .dx-texteditor {
   display: block;
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    position: relative;
+  }
 }
 
 /* B231111 */
