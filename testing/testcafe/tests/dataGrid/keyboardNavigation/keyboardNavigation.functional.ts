@@ -4182,3 +4182,105 @@ test('Keyboard navigation behavior should be changed after changing the keyboard
     },
   });
 });
+
+// T1185341
+test('Focus first cell with dropDownButton (via tab key) -> open dropDownButton list (via up key)-> close dropDownButton list (via esc key) -> navigation to the right when focusedRowEnabled is true', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const dropDownButton = dataGrid.getDataCell(0, 0).getDropDownButton();
+
+  await t
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok('First header is focused')
+
+    .pressKey('ctrl+down')
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok('First row is focused')
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok('First cell is focused')
+
+    .pressKey('up');
+
+  let isDropDownButtonOpened = await dropDownButton.isOpened();
+
+  await t
+    .expect(isDropDownButtonOpened)
+    .ok('dropDownButton is opened');
+
+  await t.pressKey('esc');
+
+  isDropDownButtonOpened = await dropDownButton.isOpened();
+
+  await t
+    .expect(isDropDownButtonOpened)
+    .notOk('dropDownButton is closed')
+
+    .pressKey('right')
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok('Second cell is focused');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+    },
+    {
+      id: 0, field1: 'test4', field2: 'test5', field3: 'test6',
+    },
+  ],
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  columns: [{
+    dataField: 'field1',
+    cellTemplate() {
+      return ($('<div />') as any).dxDropDownButton({
+        text: 'Action',
+      });
+    },
+  }, 'field2', 'field3'],
+}, undefined, { disableFxAnimation: true }));
+
+// T1185341
+test('Focus second cell (via click) -> tab navigation when focusedRowEnabled is true', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await t
+    .click(dataGrid.getDataCell(0, 1).element)
+
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok('First row is focused')
+
+    .pressKey('tab')
+
+    .expect(dataGrid.getDataCell(0, 2).isFocused)
+    .ok('Second cell is focused');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+    },
+    {
+      id: 0, field1: 'test4', field2: 'test5', field3: 'test6',
+    },
+  ],
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  columns: [{
+    dataField: 'field1',
+    cellTemplate() {
+      return ($('<div />') as any).dxDropDownButton({
+        text: 'Action',
+      });
+    },
+  }, 'field2', 'field3'],
+}, undefined, { disableFxAnimation: true }));
