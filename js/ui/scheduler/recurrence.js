@@ -41,12 +41,6 @@ class RecurrenceProcessor {
             rruleIntervalParams.startIntervalDate,
             rule.until);
 
-        const t = this.rRuleSet.between(
-            rruleIntervalParams.minViewDate,
-            rruleIntervalParams.maxViewDate,
-            true
-        );
-
         return this.rRuleSet.between(
             rruleIntervalParams.minViewDate,
             rruleIntervalParams.maxViewDate,
