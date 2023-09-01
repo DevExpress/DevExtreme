@@ -1363,11 +1363,10 @@ export const validatingModule = {
           },
 
           _getCurrentFocusElement($focus) {
-            let $focusElement = $focus;
             if (this._editingController.isEditing()) {
-              $focusElement = $focus.find(EDITORS_INPUT_SELECTOR).first();
+              return $focus.find(EDITORS_INPUT_SELECTOR).first();
             }
-            return $focusElement;
+            return $focus;
           },
 
           focus($element, isHideBorder) {
