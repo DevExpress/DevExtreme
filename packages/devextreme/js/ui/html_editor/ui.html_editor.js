@@ -137,14 +137,14 @@ const HtmlEditor = Editor.inherit({
         });
 
         this._renderSubmitElement();
-        this._markupInitialization = true;
         this.callBase();
-        this._markupInitialization = false;
         this._updateContainerMarkup();
     },
 
     _renderValidationState() {
-        if(!this._markupInitialization) {
+        const $content = this._getContent();
+
+        if($content.length === 1) {
             this.callBase();
         }
     },
