@@ -884,17 +884,17 @@ export class KeyboardNavigationController extends modules.ViewController {
   _targetCellTabHandler(eventArgs, direction) {
     const $event = eventArgs.originalEvent;
     let eventTarget = $event.target;
+    let elementType = this._getElementType(eventTarget);
     let $cell = this._getCellElementFromTarget(eventTarget);
-    const $lastInteractiveElement = this._getInteractiveElement(
+    const $lastInteractiveElement = elementType === 'cell' && this._getInteractiveElement(
       $cell,
       !eventArgs.shift,
     );
     let isOriginalHandlerRequired = false;
-    let elementType;
 
     if (
       !isEditorCell(this, $cell)
-      && $lastInteractiveElement.length
+      && $lastInteractiveElement?.length
       && eventTarget !== $lastInteractiveElement.get(0)
     ) {
       isOriginalHandlerRequired = true;
