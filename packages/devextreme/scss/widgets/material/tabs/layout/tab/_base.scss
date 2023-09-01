@@ -1,0 +1,143 @@
+@use "sass:color";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../button/mixins" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+
+// adduse
+@use "../../../scrollable";
+@use "../../../badge";
+
+
+.dx-tab {
+  padding: $material-tabs-item-padding;
+  min-width: $material-tab-min-width;
+  background-color: $tabs-tab-background;
+  color: $tabs-tab-color;
+
+  &.dx-state-hover {
+    background-color: $tabs-hovered-tab-bg-color;
+  }
+
+  &.dx-tab-selected {
+    color: $tabs-tab-selected-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
+  }
+
+
+  &.dx-state-disabled {
+    color: $tabs-tab-disabled-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-disabled-color;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-active .dx-inkripple-wave {
+    background-color: $tabs-active-tab-bg-color;
+  }
+
+  .dx-tab-text {
+    text-transform: uppercase;
+    line-height: $material-tab-text-line-height;
+    font-weight: 500;
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+
+    @include dx-icon-sizing($material-base-icon-size);
+  }
+}
+
+.dx-tabs-icon-position-start .dx-tab .dx-icon {
+  @include dx-icon-margin($material-base-icon-margin, start);
+}
+
+.dx-tabs-icon-position-end .dx-tab .dx-icon {
+  @include dx-icon-margin($material-base-icon-margin, end);
+}
+
+
+.dx-tabs-styling-mode-primary {
+  .dx-tab.dx-tab-selected {
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color);
+    }
+  }
+
+  &.dx-tabs-vertical {
+    .dx-tab-selected {
+      @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color);
+  
+      &.dx-state-disabled {
+        @include dx-tabs-border-mixin(left, $tabs-disabled-tab-border-color);
+      }
+    }
+  }
+}
+
+.dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+  .dx-tab-content {
+    position: relative;
+  }
+
+  .dx-tab.dx-tab-selected .dx-tab-content {
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color, true);
+
+    &.dx-state-disabled .dx-tab-content {
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color, true);
+    }
+  }
+}
+
+.dx-tabs-styling-mode-secondary {
+  .dx-tab .dx-tab-text {
+    text-transform: none;
+  }
+
+  &.dx-tabs-vertical:not(.dx-rtl) {
+    .dx-tab-selected .dx-tab-content {
+      @include dx-tabs-border-mixin(right, $tabs-selected-tab-border-color, true);
+
+      &::after {
+        border-top-left-radius: unset;
+        top: $material-tabs-item-padding-horizontal;
+        height: calc(100% - 2 * $material-tabs-item-padding-horizontal);
+        right: 0;
+      }
+    }
+
+    .dx-tab-selected.dx-state-disabled .dx-tab-content {
+      @include dx-tabs-border-mixin(right, $tabs-disabled-tab-border-color, true);
+    }
+  }
+}
+
+.dx-rtl.dx-tabs-styling-mode-secondary.dx-tabs-vertical {
+  .dx-tab-selected .dx-tab-content {
+    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color, true);
+
+    &::after {
+      border-top-left-radius: unset;
+      top: $material-tabs-item-padding-horizontal;
+      height: calc(100% - 2 * $material-tabs-item-padding-horizontal);
+      left: 0;
+    }
+  }
+}

@@ -1,0 +1,77 @@
+@use "../variables/sizes" as *;
+
+// adduse
+
+
+@mixin dx-tabs-border-mixin($position, $color, $expanded: false) {
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: $color;
+
+    @if $position == bottom {
+      left: 0;
+      width: 100%;
+
+      @if $expanded {
+        bottom: -$material-tabs-item-padding-horizontal;
+        height: 3px;
+
+        // TODO: Move to variable
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+      } @else {
+        bottom: 0;
+        height: 2px;
+      }
+    } @else if $position == top {
+      left: 0;
+      right: 0;
+      width: 100%;
+
+      @if $expanded {
+        top: -$material-tabs-item-padding-horizontal;
+        height: 3px;
+
+        // TODO: Move to variable
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+      } @else {
+        top: 0;
+        height: 2px;
+      }
+    } @else if $position == left {
+      top: 0;
+      bottom: 0;
+      height: 100%;
+
+      @if $expanded {
+        left: -$material-tabs-item-padding-vertical;
+        width: 3px;
+
+        // TODO: Move to variable
+        border-top-right-radius: 8px !important;
+        border-bottom-right-radius: 8px !important;
+      } @else {
+        left: 0;
+        width: 2px;
+      }
+    } @else if $position == right {
+      top: 0;
+      bottom: 0;
+      height: 100%;
+
+      @if $expanded {
+        right: -$material-tabs-item-padding-vertical;
+        width: 3px;
+
+        // TODO: Move to variable
+        border-top-left-radius: 8px !important;
+        border-bottom-left-radius: 8px !important;
+      } @else {
+        right: 0;
+        width: 2px;
+      }
+    }
+  }
+}
