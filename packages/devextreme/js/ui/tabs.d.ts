@@ -18,7 +18,10 @@ import {
     Orientation,
     SingleOrMultiple,
     TabsIconPosition,
+<<<<<<< HEAD
     TabsStylingMode,
+=======
+>>>>>>> ae2bf295b1 (Rename IconPosition to TabsIconPosition, Move to common.d.ts)
 } from '../common';
 
 export type ItemLike = string | Item | any;
@@ -27,7 +30,10 @@ export {
     SingleOrMultiple,
     Orientation,
     TabsIconPosition,
+<<<<<<< HEAD
     TabsStylingMode,
+=======
+>>>>>>> ae2bf295b1 (Rename IconPosition to TabsIconPosition, Move to common.d.ts)
 };
 
 /**
