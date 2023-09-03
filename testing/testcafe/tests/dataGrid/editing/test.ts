@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
@@ -10,17 +11,17 @@ fixture`Test name`
 [{
   name: 't1',
   expected: true,
-  onRowUpdating(e: { cancel: Promise<unknown> }) {
+  onRowUpdating: ClientFunction((e) => {
     e.cancel = new Promise((resolve) => {
-      setTimeout(() => resolve(true), 0);
+      resolve(true);
     });
-  },
+  }),
 }, {
   name: 't2',
   expected: true,
-  onRowUpdating(e: { cancel: boolean }) {
+  onRowUpdating: ClientFunction((e) => {
     e.cancel = true;
-  },
+  }),
 }].forEach(({ name, expected, onRowUpdating }) => {
   test(`test5 ${name}`, async (t) => {
     const dataGrid = new DataGrid('#container');
