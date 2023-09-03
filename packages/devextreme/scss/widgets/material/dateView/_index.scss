@@ -64,7 +64,7 @@ $material-dateview-roller-padding: math.div($material-dateview-roller-height - $
     content: ":";
     font-size: 2.2em;
     position: absolute;
-    right: -9%;
+    inset-inline-end: -9%;
     font-weight: bold;
     top: 37%;
     color: $dateview-color;
@@ -92,15 +92,6 @@ $material-dateview-roller-padding: math.div($material-dateview-roller-height - $
 .dx-dateview-item-selected {
   font-size: 1.8em;
   color: $base-accent;
-}
-
-.dx-rtl {
-  &.dx-dateviewroller-hours {
-    &::after {
-      left: -9%;
-      right: auto;
-    }
-  }
 }
 
 .dx-dateview-item-selected-frame {

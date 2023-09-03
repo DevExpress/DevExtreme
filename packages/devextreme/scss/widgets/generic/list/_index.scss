@@ -123,7 +123,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     .dx-empty-message {
-      text-align: left;
+      text-align: start;
     }
 
     &.dx-list-select-decorator-enabled {
@@ -254,7 +254,10 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     .dx-icon-toggle-delete {
-      margin: math.div($generic-list-item-vertical-padding, 2) math.div($item-horizontal-padding, 2) math.div($generic-list-item-vertical-padding, 2) $item-horizontal-padding;
+      margin-top: math.div($generic-list-item-vertical-padding, 2);
+      margin-bottom: math.div($generic-list-item-vertical-padding, 2);
+      margin-inline-start: $item-horizontal-padding;
+      margin-inline-end: math.div($item-horizontal-padding, 2);
       width: 9px + $generic-list-item-vertical-padding;
       height: 9px + $generic-list-item-vertical-padding;
     }
@@ -263,7 +266,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     .dx-list-select-radiobutton {
       margin-top: $generic-list-select-all-margin-top;
       margin-bottom: -3px;
-      margin-left: $item-horizontal-padding;
+      margin-inline-start: $item-horizontal-padding;
     }
   }
 
@@ -274,7 +277,10 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-select-all-checkbox {
     float: left;
-    margin: -1px $generic-list-select-all-margin-right -3px $item-horizontal-padding;
+    margin-top: -1px;
+    margin-bottom: -3px;
+    margin-inline-end: $generic-list-select-all-margin-right;
+    margin-inline-start: $item-horizontal-padding;
   }
 
   .dx-list-select-all-label {
@@ -316,7 +322,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-switchable-delete-button,
   .dx-list-static-delete-button {
-    margin-right: $item-horizontal-padding;
+    margin-inline-end: $item-horizontal-padding;
     padding: 0;
 
     .dx-button-content {
@@ -336,36 +342,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     .dx-list-item {
       background-color: transparent;
       opacity: 0.6;
-    }
-  }
-
-  .dx-rtl .dx-list,
-  .dx-rtl.dx-list {
-    .dx-empty-message {
-      text-align: right;
-    }
-
-    .dx-list-item-before-bag {
-      .dx-icon-toggle-delete {
-        margin: math.div($generic-list-item-vertical-padding, 2) $item-horizontal-padding math.div($generic-list-item-vertical-padding, 2) math.div($item-horizontal-padding, 2);
-      }
-
-      .dx-list-select-checkbox,
-      .dx-list-select-radiobutton {
-        margin-right: $item-horizontal-padding;
-        margin-left: 1px;
-      }
-    }
-
-    .dx-list-select-all-checkbox {
-      float: right;
-      margin-right: $item-horizontal-padding;
-      margin-left: 1px;
-    }
-
-    .dx-list-switchable-delete-button {
-      margin-left: $item-horizontal-padding;
-      margin-right: 0;
     }
   }
 }

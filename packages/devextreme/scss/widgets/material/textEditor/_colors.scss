@@ -14,7 +14,8 @@ $texteditor-color: $base-text-color !default;
 * $name 20. Placeholder text color
 * $type color
 */
-$texteditor-placeholder-color: null !default;
+$texteditor-placeholder-color: $base-label-color !default;
+$texteditor-label-color: $texteditor-placeholder-color;
 
 /**
 * $name 30. Background color
@@ -55,19 +56,20 @@ $texteditor-button-clear-icon-color: null !default;
 $texteditor-button-clear-icon-color-bg: null !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$texteditor-disabled-color: $base-disabled-color !default;
 $texteditor-input-border-radius: $base-border-radius !default;
+$texteditor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
-  $texteditor-placeholder-color: lighten($texteditor-color, 58%) !default;
   $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
   $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
 }
 
 @if $mode == "dark" {
-  $texteditor-placeholder-color: darken($texteditor-color, 50%) !default;
   $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
   $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
 }
-
-$texteditor-label-color: $texteditor-placeholder-color;
 

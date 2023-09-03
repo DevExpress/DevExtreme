@@ -12,24 +12,45 @@
 // adduse
 
 .dx-tagbox {
-  .dx-texteditor-input-container {
+  .dx-tag-container {
     height: 100%;
+    padding-top: $fluent-tagbox-tag-container-vertical-padding;
+    padding-bottom: $fluent-tagbox-tag-container-vertical-padding;
+    gap: 4px;
+
+    .dx-texteditor-input {
+      padding: 0;
+    }
   }
 
   .dx-texteditor-input {
     height: $fluent-tagbox-tag-height;
   }
 
-  &.dx-editor-filled,
-  &.dx-editor-outlined {
-    .dx-texteditor-input {
-      padding: 0;
-      margin-top: $fluent-tagbox-tag-margin;
-    }
-
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
     .dx-tag-container {
-      padding: $fluent-tagbox-tag-container-padding;
-      min-height: $fluent-base-inline-widget-height;
+      padding-inline-start: $fluent-tagbox-tag-container-padding-left;
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      .dx-tag {
+        margin: 0;
+      }
+
+      .dx-texteditor-input {
+        padding: 0;
+      }
+
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $fluent-tagbox-filled-with-label-top-padding;
+        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
+      }
     }
   }
 
@@ -42,73 +63,6 @@
       }
     }
   }
-
-  &.dx-texteditor-with-label,
-  &.dx-texteditor-with-floating-label {
-    &.dx-editor-outlined {
-      .dx-tag-container.dx-texteditor-input-container {
-        padding-top: $fluent-tagbox-outlined-with-label-top-padding;
-      }
-    }
-
-    &.dx-editor-filled {
-      .dx-tag-container.dx-texteditor-input-container {
-        padding-top: $fluent-tagbox-filled-with-label-top-padding;
-        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
-      }
-    }
-
-    &.dx-editor-underlined {
-      .dx-tag-container.dx-texteditor-input-container {
-        padding-top: $fluent-tagbox-filled-with-label-top-padding;
-        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
-      }
-
-      &.dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
-        .dx-tag-container {
-          margin-top: 0;
-        }
-      }
-    }
-  }
-}
-
-.dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
-  .dx-tag-container {
-    margin-top: -$fluent-tagbox-tag-margin;
-
-    &::after {
-      margin-top: math.div(-$fluent-texteditor-icon-container-size, 2) + math.div($fluent-tagbox-tag-margin, 2);
-    }
-  }
-
-  .dx-texteditor-input {
-    padding-left: 0;
-    margin-top: $fluent-tagbox-tag-margin;
-
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      padding-right: 0;
-      padding-left: 0;
-      margin-right: 0;
-      margin-left: 0;
-    }
-  }
-
-  &.dx-state-focused,
-  &.dx-state-active {
-    &::before {
-      border-top: 0;
-      border-bottom: 0;
-    }
-  }
-
-  &.dx-state-hover,
-  & {
-    &::after {
-      border-bottom: 0;
-    }
-  }
 }
 
 .dx-tagbox-single-line {
@@ -118,8 +72,15 @@
 }
 
 .dx-tag-content {
+  display: inline-flex;
+  align-items: center;
+  font-size: $fluent-tagbox-tag-content-font-size;
+  line-height: normal;
   margin: 0;
-  padding: $fluent-tagbox-tag-content-padding;
+  padding-top: $fluent-tagbox-tag-content-vertical-padding;
+  padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
+  padding-inline-start: $fluent-tagbox-tag-content-padding-left;
+  padding-inline-end: $fluent-tagbox-tag-content-padding-right;
   min-width: 40px;
   background-color: $tagbox-tag-bg;
   color: $tagbox-tag-color;
@@ -127,24 +88,22 @@
 }
 
 .dx-tag-remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $fluent-tagbox-remove-button-width;
   height: 100%;
-  right: $fluent-tagbox-remove-button-right;
 
   @include dx-icon(clear);
 
-  font-size: 10px;
+  font-size: $fluent-tagbox-tag-content-font-size - 4px;
 
   &::before {
-    display: block;
-    position: absolute;
-    top: 51%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin-left: -8px;
-    margin-top: -8px;
-    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $fluent-tagbox-remove-button-icon-size;
+    height: $fluent-tagbox-remove-button-icon-size;
     color: $tagbox-tag-button-remove-color;
     background-color: $tagbox-tag-button-remove-bg;
     border-radius: 50%;
@@ -153,8 +112,6 @@
 }
 
 .dx-tag {
-  margin: $fluent-tagbox-tag-margin $fluent-tagbox-tag-margin 0 0;
-
   &:hover {
     .dx-tag-content {
       background-color: $tagbox-tag-hover-bg;
@@ -171,12 +128,7 @@
 }
 
 @mixin tagbox-editor-container-offset() {
-  right: $fluent-invalid-badge-horizontal-padding;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    left: $fluent-invalid-badge-horizontal-padding;
-  }
+  inset-inline-end: $fluent-invalid-badge-horizontal-padding;
 }
 
 .dx-tagbox.dx-invalid,
@@ -205,16 +157,5 @@
     &::after {
       background-color: transparent;
     }
-  }
-}
-
-.dx-rtl {
-  .dx-tag-content {
-    padding-right: $fluent-tagbox-tag-content-padding-left;
-    padding-left: $fluent-tagbox-tag-content-padding-right;
-  }
-
-  .dx-tag-remove-button {
-    left: 4px !important; // stylelint-disable-line declaration-no-important
   }
 }

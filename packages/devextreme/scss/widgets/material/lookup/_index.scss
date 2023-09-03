@@ -79,6 +79,7 @@
 
 .dx-lookup-field {
   font-size: $material-lookup-font-size;
+  line-height: normal;
 
   &::before {
     line-height: normal;
