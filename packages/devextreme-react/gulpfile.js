@@ -18,8 +18,8 @@ const NPM_README = 'npm.readme';
 const NPM_BUILD = 'npm.build';
 const NPM_BUILD_ESM = 'npm.build-esm';
 const NPM_BUILD_CJS = 'npm.build-cjs';
-const NPM_PACKAGE_FOLDERS = 'npm.package-folders';
-const NPM_PACKAGE_MODULES = 'npm.package-modules';
+const NPM_PACK_FOLDERS = 'npm.package-folders';
+const NPM_PACK_MODULES = 'npm.package-modules';
 const NPM_PACK = 'npm.pack';
 
 gulp.task(CLEAN, (c) =>
@@ -88,7 +88,7 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
         .pipe(gulp.dest(config.npm.dist + '/cjs'))
 ));
 
-gulp.task(NPM_PACKAGE_FOLDERS, (done) => {
+gulp.task(NPM_PACK_FOLDERS, (done) => {
     packFolder('common');
 
     packFolder('core', ['template']);
@@ -98,7 +98,7 @@ gulp.task(NPM_PACKAGE_FOLDERS, (done) => {
     done();
 });
 
-gulp.task(NPM_PACKAGE_MODULES, (done) => {
+gulp.task(NPM_PACK_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
     const distFolder = path.join(__dirname, config.npm.dist);
 
@@ -112,11 +112,11 @@ gulp.task(NPM_PACKAGE_MODULES, (done) => {
                 sideEffects: false,
                 main: `../cjs/${modulePath}.js`,
                 module: `../esm/${modulePath}.js`,
-                typings: `../esm/${modulePath}.d.ts`,
+                typings: `../cjs/${modulePath}.d.ts`,
             },null, 2));
 
         } catch (error) {
-            error.message = `Exception while ${NPM_PACKAGE_MODULES}.\n ${error.message}`;
+            error.message = `Exception while ${NPM_PACK_MODULES}.\n ${error.message}`;
             throw(error);
         }
     })
@@ -133,8 +133,10 @@ gulp.task(NPM_BUILD, gulp.series(
         NPM_BUILD_ESM,
         NPM_BUILD_CJS
     ),
-    NPM_PACKAGE_MODULES,
-    NPM_PACKAGE_FOLDERS,
+    gulp.parallel(
+        NPM_PACK_MODULES,
+        NPM_PACK_FOLDERS,
+    ),
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
@@ -174,7 +176,8 @@ gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD_WITH_HEADERS,
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
-function findJsModuleFileNamesInFolder(dir) {
+
+function findFilesByMask(dir, mask) {
     let results = [];
 
     const files = fs.readdirSync(dir);
@@ -182,13 +185,24 @@ function findJsModuleFileNamesInFolder(dir) {
     for (const file of files) {
         const filePath = path.join(dir, file);
 
-        if (file.includes('.js') && !file.includes('index.js')) {
+        const stat = fs.statSync(filePath);
+
+        if (stat.isDirectory()) {
+            results = results.concat(findFilesByMask(filePath, mask));
+        } else if (file.includes(mask)) {
             results.push(filePath);
         }
     }
 
+    return results;
+}
+
+function findJsModuleFileNamesInFolder(dir) {
+    let results = findFilesByMask(dir, '.js').filter((file) => !file.includes('index.js'));
+
     return results.map((filePath) => path.parse(filePath).name);
 }
+
 function packFolder(targetName, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
     const targetFolder = path.join(distFolder, targetName);

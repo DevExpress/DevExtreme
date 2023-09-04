@@ -9,7 +9,7 @@
   },
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
-  "types": "./declarations/index.d.ts",
+  "types": "./cjs/index.d.ts",
   "scripts": {
     "clean": "gulp clean",
     "generate": "npm run clean && gulp generate",
