@@ -71,7 +71,6 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
       background-color: transparent;
       box-shadow: none;
 
-
       &.dx-texteditor-with-floating-label,
       &.dx-texteditor-with-label {
         .dx-texteditor-label {
@@ -91,24 +90,14 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
   &.dx-dropdowneditor-button-visible {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-right: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
-      }
-
-      &.dx-rtl .dx-texteditor-input {
-        padding-right: $material-base-standard-texteditor-input-horizontal-padding;
-        padding-left: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
+        padding-inline-end: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
 
     &.dx-editor-filled,
     &.dx-editor-outlined {
       .dx-texteditor-input {
-        padding-right: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
-      }
-
-      &.dx-rtl .dx-texteditor-input {
-        padding-right: $material-filled-texteditor-input-horizontal-padding;
-        padding-left: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
+        padding-inline-end: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
       }
     }
   }
@@ -135,26 +124,14 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
 .dx-valid.dx-dropdowneditor {
   .dx-texteditor-buttons-container {
     &::after {
-      right: $material-dropdowneditor-invalid-badge-offset;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        right: auto;
-        left: $material-dropdowneditor-invalid-badge-offset;
-      }
+      inset-inline-end: $material-dropdowneditor-invalid-badge-offset;
     }
   }
 
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-buttons-container {
       &::after {
-        right: $material-dropdowneditor-invalid-badge-with-clear-offset;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          right: auto;
-          left: $material-dropdowneditor-invalid-badge-with-clear-offset;
-        }
+        inset-inline-end: $material-dropdowneditor-invalid-badge-with-clear-offset;
       }
     }
   }

@@ -4699,4 +4699,25 @@ QUnit.module('reset', () => {
 
         assert.strictEqual(validationItemsAfterReset.length, 0, 'form does not have validation summary items after reset');
     });
+
+    QUnit.test('validation summary should appear after validating reset form', function(assert) {
+        const form = $('#form').dxForm({
+            formData: { field1: '' },
+            showValidationSummary: true,
+            items: [ {
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }, {
+                dataField: 'field2',
+                validationRules: [{ type: 'required' }]
+            } ]
+        }).dxForm('instance');
+
+        form.reset();
+        form.validate();
+
+        const summaryItemsAfterValidate = $(`.${FORM_VALIDATION_SUMMARY}`).children();
+
+        assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
+    });
 });

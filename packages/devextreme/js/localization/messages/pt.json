@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Coluna",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Valor",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "Filtro de célula",
         "dxDataGrid-ariaCollapse": "Contrair",
         "dxDataGrid-ariaModifiedCell": "Modified",
@@ -295,7 +297,7 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-
+        
         "dxColorView-ariaRed": "Vermelho",
         "dxColorView-ariaGreen": "Verde",
         "dxColorView-ariaBlue": "Azul",

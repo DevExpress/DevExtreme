@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "Kolonna",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "Vērtība",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "Filtrēt šūnu",
         "dxDataGrid-ariaCollapse": "Savērst",
         "dxDataGrid-ariaModifiedCell": "Modified",
@@ -295,7 +297,7 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-
+        
         "dxColorView-ariaRed": "Sarkans",
         "dxColorView-ariaGreen": "Zaļš",
         "dxColorView-ariaBlue": "Zils",

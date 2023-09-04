@@ -7,13 +7,18 @@
 
 .dx-texteditor {
   display: block;
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    position: relative;
+  }
 }
 
 /* B231111 */
 .dx-placeholder {
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   max-width: 100%;
   width: auto;
   height: 100%;
@@ -113,14 +118,5 @@
 
   .dx-texteditor-input {
     opacity: 1;
-  }
-}
-
-.dx-rtl .dx-texteditor,
-.dx-rtl.dx-texteditor {
-  .dx-placeholder {
-    text-align: right;
-    left: auto;
-    right: 0;
   }
 }

@@ -1312,7 +1312,6 @@ QUnit.module('Filter Row', {
 
             $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, alignment: 'center' }]);
             this.options.rtlEnabled = rtlEnabled;
-
             // act
             this.columnHeadersView.render($testElement);
 
