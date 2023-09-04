@@ -51,7 +51,7 @@ test('Total summary should be focusable', async (t) => {
     .pressKey('tab');
 
   await t
-    .expect(await takeScreenshot('group-summary-focused.png', dataGrid.element)).ok()
+    .expect(await takeScreenshot('total-summary-focused.png', dataGrid.element)).ok()
     .expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
