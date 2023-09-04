@@ -51,10 +51,14 @@
       top: -$material-tabs-item-padding-horizontal;
       border-bottom-right-radius: $material-indicator-border-radius-secondary;
       border-bottom-left-radius: $material-indicator-border-radius-secondary;
+      border-top-right-radius: unset;
+      border-top-left-radius: unset;
     } @else if $position == bottom {
       bottom: -$material-tabs-item-padding-horizontal;
       border-top-right-radius: $material-indicator-border-radius-secondary;
       border-top-left-radius: $material-indicator-border-radius-secondary;
+      border-bottom-right-radius: unset;
+      border-bottom-left-radius: unset;
     }
   }
 }
@@ -72,10 +76,14 @@
       right: 0;
       border-top-left-radius: $material-indicator-border-radius-secondary;
       border-bottom-left-radius: $material-indicator-border-radius-secondary;
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
     } @else if $position == left {
       left: 0;
       border-top-right-radius: $material-indicator-border-radius-secondary;
       border-bottom-right-radius: $material-indicator-border-radius-secondary;
+      border-top-left-radius: unset;
+      border-bottom-left-radius: unset;
     }
   }
 }
