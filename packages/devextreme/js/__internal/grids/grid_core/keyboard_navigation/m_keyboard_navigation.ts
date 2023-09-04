@@ -1733,17 +1733,22 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this._isCellValid($cell);
   }
 
-  _isLastRow(rowIndex) {
-    const dataController = this._dataController as any;
-    const visibleItems = dataController
-      .items()
-      .filter((item) => item.visible !== false);
+  private _isLastRow(rowIndex: number) {
+    const dataController = this._dataController;
 
     if (this._isVirtualRowRender()) {
-      return rowIndex >= dataController.getMaxRowIndex();
+      return rowIndex >= (dataController as any).getMaxRowIndex();
     }
 
-    return rowIndex === visibleItems.length - 1;
+    const lastVisibleIndex = dataController.items().reduce<number>(
+      (maxIndex, item, i) => Math.max(
+        maxIndex,
+        item.visible !== false ? i : -1,
+      ),
+      -1,
+    );
+
+    return rowIndex === lastVisibleIndex;
   }
 
   _isFirstValidCell(cellPosition) {
