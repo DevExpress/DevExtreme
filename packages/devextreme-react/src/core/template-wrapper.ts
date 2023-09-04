@@ -3,12 +3,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { DX_REMOVE_EVENT } from './component-base';
+import { getClosestElement } from './helpers';
 
 interface ITemplateWrapperProps {
   content: any;
   container: Element;
   onRemoved: () => void;
-  onDidMount?: () => void;
+  onDidMount?: (isElementInDOM: boolean) => void;
   key: string;
 }
 
@@ -28,9 +29,9 @@ enum TableNodeNames {
 class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITemplateWrapperState> {
   private readonly _removalListenerRef = React.createRef<HTMLElement>();
 
-  private element: HTMLElement | undefined | null;
+  private element: Node | undefined | null;
 
-  private hiddenElement: HTMLElement | undefined | null;
+  private hiddenElement: Node | undefined | null;
 
   constructor(props: ITemplateWrapperProps) {
     super(props);
@@ -43,7 +44,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
 
   public componentDidMount(): void {
     this._subscribeOnRemove();
-    this.props.onDidMount?.();
+    this.props.onDidMount?.(this.isElementInDOM());
   }
 
   public componentDidUpdate(): void {
@@ -67,13 +68,19 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
     }
   }
 
+  private isElementInDOM(): boolean {
+    const htmlElement = getClosestElement(this.element);
+
+    return !!htmlElement && htmlElement.closest('body') !== null;
+  }
+
   private get _listenerElement(): HTMLElement {
     return this._removalListenerRef.current as HTMLElement;
   }
 
   private getPreviousSiblingNode(node: HTMLDivElement | null) {
     this.hiddenElement = node;
-    this.element = node?.previousSibling as HTMLElement;
+    this.element = node?.previousSibling;
   }
 
   private _subscribeOnRemove() {

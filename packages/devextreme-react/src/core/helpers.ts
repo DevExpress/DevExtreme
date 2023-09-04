@@ -39,3 +39,15 @@ export function capitalizeFirstLetter(text: string): string {
   }
   return '';
 }
+
+export function getClosestElement(node: Node | null | undefined): HTMLElement | null | undefined {
+  if (!node) {
+    return node;
+  }
+
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    return node as HTMLElement;
+  }
+
+  return node.parentElement;
+}
