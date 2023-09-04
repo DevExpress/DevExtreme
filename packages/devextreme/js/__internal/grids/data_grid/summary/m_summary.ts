@@ -39,17 +39,21 @@ export const renderSummaryCell = function (cell, options) {
   if (!column.command && summaryItems) {
     for (let i = 0; i < summaryItems.length; i++) {
       const summaryItem = summaryItems[i];
+      const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
+
       $summaryItems.push($('<div>')
         .css('textAlign', summaryItem.alignment || column.alignment)
         .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
         .addClass(DATAGRID_TEXT_CONTENT_CLASS)
         .addClass(summaryItem.cssClass)
         .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
-        .text(gridCore.getSummaryText(summaryItem, options.summaryTexts)));
+        .text(text)
+        .attr('aria-label', `${column.caption} ${text}`));
     }
     $cell.append($summaryItems);
   }
 };
+
 const getSummaryCellOptions = function (that, options) {
   const summaryTexts = that.option('summary.texts') || {};
 
