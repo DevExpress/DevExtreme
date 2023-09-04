@@ -15,20 +15,22 @@
 
 
 .dx-tabs-styling-mode-primary {
-  .dx-tab.dx-tab-selected {
-    @include dx-tabs-indicator-primary-mixin(bottom, $tabs-selected-tab-border-color);
-
-    &.dx-state-disabled {
-      @include dx-tabs-indicator-primary-mixin(bottom, $tabs-disabled-tab-border-color);
+  &:not(.dx-tabs-vertical) {
+    .dx-tab-selected {
+      @include dx-tabs-indicator-primary-mixin(bottom, $tabs-selected-tab-border-color);
+  
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-primary-mixin(bottom, $tabs-disabled-tab-border-color);
+      }
     }
   }
 
   &.dx-tabs-vertical {
     .dx-tab-selected {
-      @include dx-tabs-indicator-primary-mixin(left, $tabs-selected-tab-border-color);
+      @include dx-tabs-indicator-primary-mixin(right, $tabs-selected-tab-border-color);
   
       &.dx-state-disabled {
-        @include dx-tabs-indicator-primary-mixin(left, $tabs-disabled-tab-border-color);
+        @include dx-tabs-indicator-primary-mixin(right, $tabs-disabled-tab-border-color);
       }
     }
   }
