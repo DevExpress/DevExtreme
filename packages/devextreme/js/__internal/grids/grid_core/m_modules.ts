@@ -19,6 +19,12 @@ import type {
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
+const BORDERED_TOP_VIEW_CLASS = 'dx-bordered-top-view';
+const BORDERED_BOTTOM_VIEW_CLASS = 'dx-bordered-bottom-view';
+
+const BORDERED_TOP_VIEW_NAMES = ['columnHeadersView', 'rowsView'];
+const BORDERED_BOTTOM_VIEW_NAMES = ['filterPanelView', 'footerView', 'rowsView'];
+
 const ModuleItem = Class.inherit({
   _endUpdateCore() { },
 
@@ -256,6 +262,10 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     return this.component._getTemplate(name);
   },
 
+  getView(name) {
+    return this.component._views[name];
+  },
+
   render($parent, options) {
     let $element = this._$element;
     const isVisible = this.isVisible();
@@ -270,6 +280,20 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     }
 
     $element.toggleClass('dx-hidden', !isVisible);
+
+    const firstVisibleTopViewName = BORDERED_TOP_VIEW_NAMES.find((name) => this.getView(name).isVisible());
+    const lastVisibleBottomViewName = BORDERED_BOTTOM_VIEW_NAMES.find((name) => this.getView(name).isVisible());
+
+    each(BORDERED_TOP_VIEW_NAMES, (index, viewName) => {
+      const view = this.getView(viewName);
+      view.element()?.toggleClass(BORDERED_TOP_VIEW_CLASS, viewName === firstVisibleTopViewName);
+    });
+
+    each(BORDERED_BOTTOM_VIEW_NAMES, (index, viewName) => {
+      const view = this.getView(viewName);
+      view.element()?.toggleClass(BORDERED_BOTTOM_VIEW_CLASS, viewName === lastVisibleBottomViewName);
+    });
+
     if (isVisible) {
       this.component._optionCache = {};
       const deferred = this._renderCore(options);

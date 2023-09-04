@@ -42,6 +42,16 @@ $grid-masterdetail-padding: 16px;
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
+    .dx-bordered-top-view {
+      border-top-left-radius: $fluent-base-border-radius;
+      border-top-right-radius: $fluent-base-border-radius;
+    }
+
+    .dx-bordered-bottom-view {
+      border-bottom-left-radius: $fluent-base-border-radius;
+      border-bottom-right-radius: $fluent-base-border-radius;
+    }
+
     .dx-menu {
       background-color: transparent;
       height: 100%;
