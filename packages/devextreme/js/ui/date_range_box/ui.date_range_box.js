@@ -1002,6 +1002,18 @@ class DateRangeBox extends Editor {
         this.getStartDateBox().focus();
     }
 
+    reset() {
+        super.reset();
+
+        const startDateBox = this.getStartDateBox();
+        const endDateBox = this.getEndDateBox();
+
+        startDateBox.reset();
+        endDateBox.reset();
+        startDateBox._updateInternalValidationState(true);
+        endDateBox._updateInternalValidationState(true);
+    }
+
     clear() {
         super.clear();
 
