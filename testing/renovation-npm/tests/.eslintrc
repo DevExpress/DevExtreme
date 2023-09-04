@@ -1,9 +1,0 @@
-{
-  "env": {
-        "node": true
-  },
-  "plugins": [
-    "testcafe"
-  ],
-  "extends": "plugin:testcafe/recommended"
-}
