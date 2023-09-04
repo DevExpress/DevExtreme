@@ -330,6 +330,7 @@ export type GlobalConfig = {
      * @default false
      */
     shading?: boolean;
+    license?: string;
   };
   /**
    * @docid
