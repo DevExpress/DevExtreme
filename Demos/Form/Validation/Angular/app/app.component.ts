@@ -53,8 +53,8 @@ export class AppComponent {
         name: 'password',
         location: 'after',
         options: {
-          icon: '../../../../images/icons/eye.png',
-          type: 'default',
+          stylingMode: 'text',
+          icon: 'eyeopen',
           onClick: () => this.changePasswordMode('Password'),
         },
       },
@@ -66,14 +66,23 @@ export class AppComponent {
     buttons: [
       {
         name: 'password',
+        stylingMode: 'text',
+        icon: 'eyeopen',
         location: 'after',
         options: {
-          icon: '../../../../images/icons/eye.png',
-          type: 'default',
+          stylingMode: 'text',
+          icon: 'eyeopen',
           onClick: () => this.changePasswordMode('ConfirmPassword'),
         },
       },
     ],
+  };
+
+  colCountByScreen = {
+    xs: 2,
+    sm: 2,
+    md: 2,
+    lg: 2,
   };
 
   customer: Customer;
@@ -94,10 +103,21 @@ export class AppComponent {
     X: /[02-9]/,
   };
 
-  buttonOptions: any = {
+  registerButtonOptions = {
     text: 'Register',
-    type: 'success',
+    type: 'default',
+    width: '120px',
     useSubmitBehavior: true,
+  };
+
+  resetButtonOptions = {
+    text: 'Reset',
+    width: '120px',
+    disabled: true,
+    icon: 'refresh',
+    onClick: () => {
+      this.form.instance.reset();
+    },
   };
 
   passwordComparison = () => this.form.instance.option('formData').Password;
@@ -135,6 +155,13 @@ export class AppComponent {
     }, 'success', 3000);
 
     e.preventDefault();
+  };
+
+  onOptionChanged = function (e) {
+    if (e.name === 'isDirty') {
+      const resetButton = this.form.instance.getButton('Reset');
+      resetButton.option('disabled', !e.value);
+    }
   };
 }
 

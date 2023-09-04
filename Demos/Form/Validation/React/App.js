@@ -15,15 +15,10 @@ import Form, {
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import 'devextreme-react/autocomplete';
+import 'devextreme-react/date-range-box';
 import service from './data.js';
 
 const customer = service.getCustomer();
-
-const buttonOptions = {
-  text: 'Register',
-  type: 'success',
-  useSubmitBehavior: true,
-};
 
 const checkBoxOptions = {
   text: 'I agree to the Terms and Conditions',
@@ -47,11 +42,25 @@ const phoneEditorOptions = {
   maskInvalidMessage: 'The phone must have a correct USA phone format',
 };
 
+const colCountByScreen = {
+  xs: 2,
+  sm: 2,
+  md: 2,
+  lg: 2,
+};
+
 const maxDate = new Date().setFullYear(new Date().getFullYear() - 21);
 
 const dateBoxOptions = {
+  placeholder: 'Birth Date',
   invalidDateMessage:
     'The date must have the following format: MM/dd/yyyy',
+};
+
+const dateRangeBoxOptions = {
+  startDatePlaceholder: 'Start Date',
+  endDatePlaceholder: 'End Date',
+  invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
 };
 
 function sendRequest(value) {
@@ -69,8 +78,25 @@ const checkComparison = () => true;
 
 const asyncValidation = (params) => sendRequest(params.value);
 
+const registerButtonOptions = {
+  text: 'Register',
+  type: 'default',
+  useSubmitBehavior: true,
+  width: '120px',
+};
+
 function App() {
   const formInstance = React.useRef(null);
+
+  const [resetButtonOptions, setResetButtonOptions] = React.useState({
+    disabled: true,
+    icon: 'refresh',
+    text: 'Reset',
+    width: '120px',
+    onClick: () => {
+      formInstance.current.reset();
+    },
+  });
 
   const getPasswordOptions = React.useCallback(() => ({
     mode: 'password',
@@ -86,8 +112,8 @@ function App() {
         name: 'password',
         location: 'after',
         options: {
-          icon: '../../../../images/icons/eye.png',
-          type: 'default',
+          stylingMode: 'text',
+          icon: 'eyeopen',
           onClick: () => changePasswordMode('Password'),
         },
       },
@@ -101,8 +127,8 @@ function App() {
         name: 'password',
         location: 'after',
         options: {
-          icon: '../../../../images/icons/eye.png',
-          type: 'default',
+          stylingMode: 'text',
+          icon: 'eyeopen',
           onClick: () => changePasswordMode('ConfirmPassword'),
         },
       },
@@ -129,6 +155,12 @@ function App() {
     formInstance.current = e.component;
   }, []);
 
+  const onOptionChanged = React.useCallback((e) => {
+    if (e.name === 'isDirty') {
+      setResetButtonOptions({ ...resetButtonOptions, disabled: !e.value });
+    }
+  }, [resetButtonOptions, setResetButtonOptions]);
+
   return (
     <React.Fragment>
       <form action="your-action" onSubmit={handleSubmit}>
@@ -136,6 +168,7 @@ function App() {
           formData={customer}
           readOnly={false}
           onInitialized={onInitialized}
+          onOptionChanged={onOptionChanged}
           showColonAfterLabel={true}
           showValidationSummary={true}
           validationGroup="customerData"
@@ -173,6 +206,14 @@ function App() {
               <RequiredRule message="Date of birth is required" />
               <RangeRule max={maxDate} message="You must be at least 21 years old" />
             </SimpleItem>
+
+            <SimpleItem dataField="VacationDates"
+              editorType="dxDateRangeBox"
+              editorOptions={dateRangeBoxOptions}
+            >
+              <Label text="Vacation Dates" />
+            </SimpleItem>
+
           </GroupItem>
           <GroupItem caption="Billing address">
             <SimpleItem dataField="Country" editorType="dxSelectBox" editorOptions={countryEditorOptions}>
@@ -195,6 +236,9 @@ function App() {
                 pattern={/^[02-9]\d{9}$/}
               />
             </SimpleItem>
+          </GroupItem>
+
+          <GroupItem cssClass="last-group" colCountByScreen={colCountByScreen}>
             <SimpleItem dataField="Accepted"
               editorType="dxCheckBox"
               editorOptions={checkBoxOptions}>
@@ -203,10 +247,11 @@ function App() {
                 comparisonTarget={checkComparison}
               />
             </SimpleItem>
+            <GroupItem cssClass="buttons-group" colCountByScreen={colCountByScreen}>
+              <ButtonItem buttonOptions={resetButtonOptions} name="Reset" />
+              <ButtonItem buttonOptions={registerButtonOptions} />
+            </GroupItem>
           </GroupItem>
-          <ButtonItem horizontalAlignment="left"
-            buttonOptions={buttonOptions}
-          />
         </Form>
       </form>
     </React.Fragment>

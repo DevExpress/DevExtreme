@@ -1,6 +1,7 @@
 <form action="your-action" (submit)="onFormSubmit($event)">
   <dx-form
     id="form"
+    (onOptionChanged)="onOptionChanged($event)"
     [formData]="customer"
     [readOnly]="false"
     [showColonAfterLabel]="true"
@@ -58,6 +59,7 @@
         dataField="Date"
         editorType="dxDateBox"
         [editorOptions]="{
+          placeholder: 'Birth Date',
           invalidDateMessage:
             'The date must have the following format: MM/dd/yyyy'
         }"
@@ -74,6 +76,18 @@
           message="You must be at least 21 years old"
         >
         </dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        dataField="VacationDates"
+        editorType="dxDateRangeBox"
+        [editorOptions]="{
+          startDatePlaceholder: 'Start Date',
+          endDatePlaceholder: 'End Date',
+          invalidDateMessage:
+            'The date must have the following format: MM/dd/yyyy'
+        }"
+      >
+        <dxo-label text="Vacation Dates"> </dxo-label>
       </dxi-item>
     </dxi-item>
     <dxi-item itemType="group" caption="Billing address">
@@ -125,6 +139,13 @@
         >
         </dxi-validation-rule>
       </dxi-item>
+    </dxi-item>
+
+    <dxi-item
+      itemType="group"
+      cssClass="last-group"
+      [colCountByScreen]="colCountByScreen"
+    >
       <dxi-item
         itemType="simple"
         dataField="Accepted"
@@ -142,12 +163,21 @@
         >
         </dxi-validation-rule>
       </dxi-item>
-    </dxi-item>
-    <dxi-item
-      itemType="button"
-      horizontalAlignment="left"
-      [buttonOptions]="buttonOptions"
-    >
+
+      <dxi-item
+        itemType="group"
+        cssClass="buttons-group"
+        [colCountByScreen]="colCountByScreen"
+      >
+        <dxi-item
+          name="Reset"
+          itemType="button"
+          [buttonOptions]="resetButtonOptions"
+        >
+        </dxi-item>
+        <dxi-item itemType="button" [buttonOptions]="registerButtonOptions">
+        </dxi-item>
+      </dxi-item>
     </dxi-item>
   </dx-form>
 </form>

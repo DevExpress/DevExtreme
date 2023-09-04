@@ -9,6 +9,8 @@ export class Customer {
 
   Date: Date;
 
+  VacationDates: [Date, Date];
+
   Country: string;
 
   City: string;
@@ -25,8 +27,9 @@ const customer : Customer = {
   Password: '',
   Name: 'Peter',
   Date: null,
+  VacationDates: [null, null],
   Country: '',
-  City: '',
+  City: null,
   Address: '',
   Phone: '',
   Accepted: false,
