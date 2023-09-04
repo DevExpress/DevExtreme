@@ -148,6 +148,7 @@ export const FooterView = ColumnsView.inherit((function () {
 
       if (row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
         $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
+        $row.attr('tabindex', 0);
       }
 
       return $row;
