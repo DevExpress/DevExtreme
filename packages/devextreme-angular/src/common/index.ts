@@ -31,7 +31,6 @@ export {
     PatternRule,
     Position,
     PositionAlignment,
-    PositionLogical,
     RangeRule,
     RequiredRule,
     Scrollable,
