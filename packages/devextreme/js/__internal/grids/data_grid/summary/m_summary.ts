@@ -26,6 +26,7 @@ const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
 const DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content';
 const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
 const DATAGRID_FOOTER_ROW_CLASS = 'dx-footer-row';
+const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
 
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
@@ -152,6 +153,7 @@ export const FooterView = ColumnsView.inherit((function () {
 
       if (row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
         $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
+        $row.addClass(DATAGRID_CELL_DISABLED);
         $row.attr('tabindex', 0);
       }
 
