@@ -18,8 +18,8 @@ const NPM_README = 'npm.readme';
 const NPM_BUILD = 'npm.build';
 const NPM_BUILD_ESM = 'npm.build-esm';
 const NPM_BUILD_CJS = 'npm.build-cjs';
+const NPM_PACKAGE_FOLDERS = 'npm.package-folders';
 const NPM_PACKAGE_MODULES = 'npm.package-modules';
-const NPM_MOVE_DECLARATIONS = 'npm.move-declarations';
 const NPM_PACK = 'npm.pack';
 
 gulp.task(CLEAN, (c) =>
@@ -88,9 +88,30 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
         .pipe(gulp.dest(config.npm.dist + '/cjs'))
 ));
 
+gulp.task(NPM_PACKAGE_FOLDERS, (done) => {
+    packFolder('common');
+
+    packFolder('core', ['template']);
+
+    packFolder('common/data');
+
+    done();
+});
+
 gulp.task(NPM_PACKAGE_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
     const distFolder = path.join(__dirname, config.npm.dist);
+
+    const fsExtra = require('fs-extra');
+    const files = fs.readdirSync(config.npm.dist + '/esm/');
+    const directories = files.filter(file => {
+        return fs.statSync(path.join(config.npm.dist + '/esm/', file)).isDirectory();
+    });
+
+    directories.forEach((dir) => {
+        console.log('----DIRS---===--->', dir);
+        //fsExtra.copySync(dir, )
+    });
 
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
@@ -102,42 +123,16 @@ gulp.task(NPM_PACKAGE_MODULES, (done) => {
                 sideEffects: false,
                 main: `../cjs/${modulePath}.js`,
                 module: `../esm/${modulePath}.js`,
-                typings: `../declarations/${modulePath}.d.ts`,
+                typings: `../esm/${modulePath}.d.ts`,
             },null, 2));
+
+
 
         } catch (error) {
             error.message = `Exception while ${NPM_PACKAGE_MODULES}.\n ${error.message}`;
             throw(error);
         }
     })
-
-    done();
-});
-
-gulp.task(NPM_MOVE_DECLARATIONS, (done) => {
-    const distFolder = path.join(__dirname, config.npm.dist);
-    const declarations = findDeclarationFiles(path.join(distFolder, 'cjs'));
-
-    fs.mkdirSync(path.join(distFolder + `/declarations`));
-
-    declarations.forEach((filePath) => {
-        const relativePath = path.relative(path.join(distFolder, 'cjs'), filePath);
-        const destPath = path.join(distFolder, 'declarations', relativePath);
-
-
-        if (!fs.existsSync(path.dirname(destPath))) {
-            fs.mkdirSync(path.dirname(destPath), { recursive: true });
-        }
-
-        fs.rename(
-            filePath,
-            path.join(distFolder, 'declarations', relativePath),
-            (err) => {
-                if (err) {
-                    throw(err);
-                }
-            });
-    });
 
     done();
 });
@@ -152,7 +147,7 @@ gulp.task(NPM_BUILD, gulp.series(
         NPM_BUILD_CJS
     ),
     NPM_PACKAGE_MODULES,
-    NPM_MOVE_DECLARATIONS,
+    NPM_PACKAGE_FOLDERS,
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
@@ -192,8 +187,7 @@ gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD_WITH_HEADERS,
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
-
-function findDeclarationFiles(dir) {
+function findJsModuleFileNamesInFolder(dir) {
     let results = [];
 
     const files = fs.readdirSync(dir);
@@ -201,14 +195,46 @@ function findDeclarationFiles(dir) {
     for (const file of files) {
         const filePath = path.join(dir, file);
 
-        const stat = fs.statSync(filePath);
-
-        if (stat.isDirectory()) {
-            results = results.concat(findDeclarationFiles(filePath));
-        } else if (file.includes('.d.ts')) {
+        if (file.includes('.js') && !file.includes('index.js')) {
             results.push(filePath);
         }
     }
 
-    return results;
+    return results.map((filePath) => path.parse(filePath).name);
+}
+function packFolder(targetName, moduleFileNames) {
+    const distFolder = path.join(__dirname, config.npm.dist);
+    const targetFolder = path.join(distFolder, targetName);
+    const baseDir = '../'.repeat(targetName.split('/').length);
+
+    moduleFileNames = moduleFileNames || findJsModuleFileNamesInFolder(path.join(distFolder, 'esm', targetName));
+
+    fs.mkdirSync(targetFolder);
+
+    if (fs.existsSync(path.join(distFolder, 'esm', targetName, 'index.js'))) {
+        fs.writeFileSync(path.join(targetFolder , 'package.json'), JSON.stringify({
+            sideEffects: false,
+            main: `${baseDir}cjs/${targetName}/index.js`,
+            module: `${baseDir}esm/${targetName}/index.js`,
+            typings: `${baseDir}esm/${targetName}/index.d.ts`,
+        },null, 2));
+    }
+
+    moduleFileNames.forEach((moduleName) => {
+        const moduleFolder = path.join(distFolder, targetName, moduleName);
+        try {
+            fs.mkdirSync(moduleFolder);
+
+            fs.writeFileSync(path.join(moduleFolder , 'package.json'), JSON.stringify({
+                sideEffects: false,
+                main:  `${baseDir}../cjs/${targetName}/${moduleName}.js`,
+                module: `${baseDir}../esm/${targetName}/${moduleName}.js`,
+                typings: `${baseDir}../esm/${targetName}/${moduleName}.d.ts`,
+            },null, 2));
+
+        } catch (error) {
+            error.message = `Exception while packFolder(${targetName}).\n ${error.message}`;
+            throw(error);
+        }
+    })
 }
