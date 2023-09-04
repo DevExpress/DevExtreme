@@ -2748,7 +2748,7 @@ export type RowInsertingInfo<TRowData = any> = {
    * @docid
    * @type Promise<void>
    */
-  cancel: boolean | PromiseLike<void>;
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /**
@@ -2795,7 +2795,7 @@ export interface RowRemovingInfo<TRowData = any, TKey = any> {
    * @docid
    * @type boolean|Promise<void>
    */
-  cancel: boolean | PromiseLike<void>;
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 }
 
 /**
@@ -2837,7 +2837,7 @@ export interface RowUpdatingInfo<TRowData = any, TKey = any> {
    * @docid
    * @type boolean|Promise<void>
    */
-  cancel: boolean | PromiseLike<void>;
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 }
 
 /**
