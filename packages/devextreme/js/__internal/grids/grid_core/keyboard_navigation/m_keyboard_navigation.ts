@@ -1802,7 +1802,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       return false;
     }
 
-    if (row && row.rowType === 'group' && cellPosition.columnIndex > 0) {
+    if ((row?.rowType === 'group' || row?.rowType === 'groupFooter') && cellPosition.columnIndex > 0) {
       return true;
     }
 
