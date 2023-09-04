@@ -102,17 +102,6 @@ gulp.task(NPM_PACKAGE_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
     const distFolder = path.join(__dirname, config.npm.dist);
 
-    const fsExtra = require('fs-extra');
-    const files = fs.readdirSync(config.npm.dist + '/esm/');
-    const directories = files.filter(file => {
-        return fs.statSync(path.join(config.npm.dist + '/esm/', file)).isDirectory();
-    });
-
-    directories.forEach((dir) => {
-        console.log('----DIRS---===--->', dir);
-        //fsExtra.copySync(dir, )
-    });
-
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
 
@@ -125,8 +114,6 @@ gulp.task(NPM_PACKAGE_MODULES, (done) => {
                 module: `../esm/${modulePath}.js`,
                 typings: `../esm/${modulePath}.d.ts`,
             },null, 2));
-
-
 
         } catch (error) {
             error.message = `Exception while ${NPM_PACKAGE_MODULES}.\n ${error.message}`;
@@ -216,7 +203,7 @@ function packFolder(targetName, moduleFileNames) {
             sideEffects: false,
             main: `${baseDir}cjs/${targetName}/index.js`,
             module: `${baseDir}esm/${targetName}/index.js`,
-            typings: `${baseDir}esm/${targetName}/index.d.ts`,
+            typings: `${baseDir}cjs/${targetName}/index.d.ts`,
         },null, 2));
     }
 
@@ -229,7 +216,7 @@ function packFolder(targetName, moduleFileNames) {
                 sideEffects: false,
                 main:  `${baseDir}../cjs/${targetName}/${moduleName}.js`,
                 module: `${baseDir}../esm/${targetName}/${moduleName}.js`,
-                typings: `${baseDir}../esm/${targetName}/${moduleName}.d.ts`,
+                typings: `${baseDir}../cjs/${targetName}/${moduleName}.d.ts`,
             },null, 2));
 
         } catch (error) {
