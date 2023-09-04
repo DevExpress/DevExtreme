@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -46,7 +46,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -87,7 +87,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -117,7 +117,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -142,7 +142,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -167,7 +167,7 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js 14
       uses: actions/setup-node@v3
@@ -189,7 +189,7 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -208,7 +208,7 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -239,7 +239,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
