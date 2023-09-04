@@ -138,8 +138,15 @@ const HtmlEditor = Editor.inherit({
 
         this._renderSubmitElement();
         this.callBase();
-
         this._updateContainerMarkup();
+    },
+
+    _renderValidationState() {
+        const $content = this._getContent();
+
+        if($content.length === 1) {
+            this.callBase();
+        }
     },
 
     _renderSubmitElement: function() {
@@ -318,6 +325,7 @@ const HtmlEditor = Editor.inherit({
             theme: 'basic'
         });
 
+        this._renderValidationState();
         this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
         this._quillInstance.on('text-change', this._textChangeHandlerWithContext);
