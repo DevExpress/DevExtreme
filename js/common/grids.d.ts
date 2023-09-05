@@ -2550,7 +2550,7 @@ export type RowInsertedInfo<TRowData = any, TKey = any> = {
  */
 export type RowInsertingInfo<TRowData = any> = {
   data: TRowData;
-  cancel: boolean | PromiseLike<void>;
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /**
@@ -2575,7 +2575,7 @@ export interface RowRemovedInfo<TRowData = any, TKey = any> {
 export interface RowRemovingInfo<TRowData = any, TKey = any> {
   readonly data: TRowData;
   readonly key: TKey;
-  cancel: boolean | PromiseLike<void>;
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 }
 
 /**
@@ -2594,7 +2594,7 @@ export interface RowUpdatingInfo<TRowData = any, TKey = any> {
   readonly oldData: TRowData;
   newData: DeepPartial<TRowData>;
   readonly key: TKey;
-  cancel: boolean | PromiseLike<void>;
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 }
 
 /**
