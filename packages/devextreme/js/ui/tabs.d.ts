@@ -17,6 +17,7 @@ import CollectionWidget, {
 import {
     Orientation,
     SingleOrMultiple,
+    TabsIconPosition,
 } from '../common';
 
 export type ItemLike = string | Item | any;
@@ -24,13 +25,8 @@ export type ItemLike = string | Item | any;
 export {
     SingleOrMultiple,
     Orientation,
+    TabsIconPosition,
 };
-
-/**
- * @public
- * @namespace DevExpress.ui.dxTabs
- */
-export type IconPosition = 'top' | 'end' | 'bottom' | 'start';
 
 /**
  * @docid _ui_tabs_ContentReadyEvent
@@ -149,7 +145,7 @@ export interface dxTabsBaseOptions<
      * @default 'start'
      * @public
      */
-    iconPosition?: IconPosition;
+    iconPosition?: TabsIconPosition;
     /**
      * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>

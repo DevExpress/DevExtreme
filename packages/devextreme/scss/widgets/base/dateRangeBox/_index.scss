@@ -10,24 +10,19 @@
 
   &.dx-editor-outlined {
     .dx-datebox {
-      &.dx-start-datebox,
-      &.dx-end-datebox {
-        &.dx-editor-outlined {
-          border: 0;
-          box-shadow: none;
+      &.dx-editor-outlined {
+        border: 0;
+        box-shadow: none;
 
-          &.dx-texteditor-with-label,
-          &.dx-texteditor-with-floating-label {
-            .dx-texteditor-label {
-              .dx-label,
-              .dx-label-before,
-              .dx-label-after {
-                margin: 0;
-                border: 0;
-                clip-path: none;
-                box-shadow: none;
-              }
-            }
+        &.dx-texteditor-with-label,
+        &.dx-texteditor-with-floating-label {
+          .dx-label,
+          .dx-label-before,
+          .dx-label-after {
+            margin: 0;
+            border: 0;
+            clip-path: none;
+            box-shadow: none;
           }
         }
       }
