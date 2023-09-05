@@ -2594,6 +2594,44 @@ QUnit.module('Validation', {
         assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
     });
 
+    QUnit.test('reset should clear validation', function(assert) {
+        this.reinit({ value: [null, null] });
+
+        this.$element.dxValidator({
+            validationRules: [{
+                type: 'required',
+                message: 'Both dates are required'
+            }]
+        });
+
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const keyboard = keyboardMock($(startDateBox.field()));
+
+        this.failInternalValidation(keyboard);
+
+        this.instance.reset();
+
+        assert.strictEqual(this.instance.option('isValid'), true);
+    });
+
+    QUnit.test('reset should clear input value when editor`s value hasn`t been changed', function(assert) {
+        const initialValue = [null, null];
+        this.reinit({ value: initialValue });
+
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const $startDateBoxInput = $(startDateBox.field());
+
+        const keyboard = keyboardMock($startDateBoxInput);
+        keyboard.type('123').press('enter');
+
+        assert.strictEqual($startDateBoxInput.val(), '123');
+        assert.deepEqual(this.instance.option('value'), initialValue);
+
+        this.instance.reset();
+
+        assert.strictEqual($startDateBoxInput.val(), '');
+    });
+
     QUnit.test('dateRangeBox should not be re-validated after readOnly option change', function(assert) {
         this.$element.dxValidator({
             validationRules: [{

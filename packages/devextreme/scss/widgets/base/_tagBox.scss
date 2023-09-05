@@ -43,14 +43,12 @@
 
 .dx-tag {
   max-width: calc(100% - 1px);
-  display: inline-block;
+  display: inline-flex;
   align-self: flex-start;
 }
 
 .dx-tag-container {
   &.dx-texteditor-input-container {
-    padding: 0;
-    padding-right: 4px;
     outline: none;
 
     .dx-tagbox-single-line & {
@@ -66,41 +64,11 @@
 
 .dx-tag-content {
   position: relative;
-  display: inline-block;
-  margin: 4px 0 0 4px;
-  min-width: 30px;
   text-align: center;
   cursor: pointer;
 }
 
 .dx-tag-remove-button {
   position: absolute;
-  top: 0;
-  right: 0;
-
-  &::before,
-  &::after {
-    position: absolute;
-    top: 50%;
-    content: "";
-    transform: rotate(45deg);
-  }
-}
-
-.dx-rtl .dx-tagbox,
-.dx-tagbox.dx-rtl {
-  .dx-tag-content {
-    margin-left: 0;
-    margin-right: 4px;
-  }
-
-  .dx-tag-remove-button {
-    right: auto;
-    left: 0;
-  }
-
-  .dx-tag-container {
-    padding-left: 4px;
-    padding-right: 0;
-  }
+  inset-inline-end: 0;
 }

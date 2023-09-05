@@ -94,36 +94,13 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
 
 .dx-dropdowneditor-button-visible {
   .dx-texteditor-input {
-    padding-right: 0;
-  }
-}
-
-.dx-rtl {
-  .dx-dropdowneditor-button-visible,
-  &.dx-dropdowneditor-button-visible {
-    .dx-texteditor-input {
-      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-      padding-left: 0;
-    }
-
-    &.dx-editor-underlined {
-      .dx-texteditor-input {
-        padding-right: 0;
-      }
-    }
+    padding-inline-end: 0;
   }
 }
 
 @mixin invalid-dropdowneditor-input-padding() {
   .dx-texteditor-input {
-    padding-right: $generic-dropdowneditor-invalid-badge-size;
-  }
-
-  &.dx-rtl {
-    .dx-texteditor-input {
-      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-      padding-left: $generic-dropdowneditor-invalid-badge-size;
-    }
+    padding-inline-end: $generic-dropdowneditor-invalid-badge-size;
   }
 }
 
@@ -165,26 +142,14 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
 @mixin texteditor-container-offset() {
   .dx-texteditor-container {
     &::after {
-      right: $generic-dropdowneditor-invalid-badge-offset;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        right: auto;
-        left: $generic-dropdowneditor-invalid-badge-offset;
-      }
+      inset-inline-end: $generic-dropdowneditor-invalid-badge-offset;
     }
   }
 
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-container {
       &::after {
-        right: $generic-dropdowneditor-invalid-badge-with-clear-offset;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          right: auto;
-          left: $generic-dropdowneditor-invalid-badge-with-clear-offset;
-        }
+        inset-inline-end: $generic-dropdowneditor-invalid-badge-with-clear-offset;
       }
     }
   }

@@ -10,7 +10,7 @@ on:
     branches: [23_2]
 
 env:
-  MAX_LENGTH: 150
+  MAX_LENGTH: 170
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Get changed files
       id: changed-files
@@ -42,7 +42,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}

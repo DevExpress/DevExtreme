@@ -12779,6 +12779,10 @@ QUnit.module('Editing with validation', {
         assert.equal($('.dx-revert-button').parent(this.gridContainer).length, 1, 'revert button is rendered in DataGrid container');
         // fixes an accessibility issue (aria-required-children)
         assert.equal($('.dx-overlay-wrapper.dx-datagrid-revert-tooltip').parent('.dx-datagrid-rowsview').length, 1, 'revert tooltip is rendered in rows view container');
+        // fixes an accessibility validation issues
+        assert.equal($('.dx-revert-button').attr('aria-label'), 'Press Escape to discard the changes', 'revert button label');
+        const $input = $(this.getCellElement(0, 1)).find('.dx-texteditor-input');
+        assert.equal($input.attr('aria-labelledby'), 'dxRevertButton dxInvalidMessage', 'input has aria validation attributes');
     });
 
     // T297742

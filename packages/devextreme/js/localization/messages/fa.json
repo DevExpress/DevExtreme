@@ -170,6 +170,8 @@
         "dxDataGrid-ariaColumn": "ستون",
         "dxDataGrid-ariaColumnHeader": "Column header",
         "dxDataGrid-ariaValue": "مقدار",
+        "dxDataGrid-ariaError": "Error",
+        "dxDataGrid-ariaRevertButton": "Press Escape to discard the changes",
         "dxDataGrid-ariaFilterCell": "فیلتر سلول",
         "dxDataGrid-ariaCollapse": "عدم نمایش",
         "dxDataGrid-ariaModifiedCell": "Modified",

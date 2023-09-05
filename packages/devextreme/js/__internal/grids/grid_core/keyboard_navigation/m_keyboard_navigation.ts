@@ -884,17 +884,17 @@ export class KeyboardNavigationController extends modules.ViewController {
   _targetCellTabHandler(eventArgs, direction) {
     const $event = eventArgs.originalEvent;
     let eventTarget = $event.target;
+    let elementType = this._getElementType(eventTarget);
     let $cell = this._getCellElementFromTarget(eventTarget);
-    const $lastInteractiveElement = this._getInteractiveElement(
+    const $lastInteractiveElement = elementType === 'cell' && this._getInteractiveElement(
       $cell,
       !eventArgs.shift,
     );
     let isOriginalHandlerRequired = false;
-    let elementType;
 
     if (
       !isEditorCell(this, $cell)
-      && $lastInteractiveElement.length
+      && $lastInteractiveElement?.length
       && eventTarget !== $lastInteractiveElement.get(0)
     ) {
       isOriginalHandlerRequired = true;
@@ -1802,7 +1802,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       return false;
     }
 
-    if (row && row.rowType === 'group' && cellPosition.columnIndex > 0) {
+    const isFullRowFocus = row?.rowType === 'group' || row?.rowType === 'groupFooter';
+    if (isFullRowFocus && cellPosition.columnIndex > 0) {
       return true;
     }
 
