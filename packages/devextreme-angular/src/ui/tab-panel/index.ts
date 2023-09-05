@@ -209,6 +209,19 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
+     * [descr:dxTabPanelOptions.iconPosition]
+    
+     */
+    @Input()
+    get iconPosition(): string {
+        return this._getOption('iconPosition');
+    }
+    set iconPosition(value: string) {
+        this._setOption('iconPosition', value);
+    }
+
+
+    /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
     
      */
@@ -619,6 +632,13 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() iconPositionChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
@@ -787,6 +807,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
+            { emit: 'iconPositionChange' },
             { emit: 'itemHoldTimeoutChange' },
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
