@@ -1410,35 +1410,35 @@ QUnit.module('Calendar footer', {
     });
 
     ['multiple', 'range'].forEach((selectionMode) => {
-        QUnit.test(`today button click adds today date to values when selectionMode is ${selectionMode}`, function(assert) {
+        QUnit.test(`today button click adds today date to value when selectionMode is ${selectionMode}`, function(assert) {
             this.reinit({
                 selectionMode,
-                values: [new Date('2022/02/22')],
+                value: [new Date('2022/02/22')],
                 showTodayButton: true
             });
 
-            assert.strictEqual(this.calendar.option('values').length, 1);
+            assert.strictEqual(this.calendar.option('value').length, 1);
 
             const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
             $todayButton.trigger('dxclick');
 
-            assert.strictEqual(this.calendar.option('values').length, 2);
+            assert.strictEqual(this.calendar.option('value').length, 2);
         });
     });
 
     QUnit.test('today button click should deselect date if it is already selected and selectionMode is multiple', function(assert) {
         this.reinit({
             selectionMode: 'multiple',
-            values: [new Date()],
+            value: [new Date()],
             showTodayButton: true
         });
 
-        assert.strictEqual(this.calendar.option('values').length, 1);
+        assert.strictEqual(this.calendar.option('value').length, 1);
 
         const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
         $todayButton.trigger('dxclick');
 
-        assert.strictEqual(this.calendar.option('values').length, 0);
+        assert.strictEqual(this.calendar.option('value').length, 0);
     });
 
     QUnit.test('today view are current after today button click', function(assert) {
@@ -1988,8 +1988,7 @@ QUnit.module('Options', {
     QUnit.module('SelectionMode', {
         beforeEach: function() {
             this.options = {
-                values: [new Date('01/15/2023'), new Date('02/01/2023'), new Date('02/05/2023')],
-                value: new Date('01/07/2023'),
+                value: [new Date('01/15/2023'), new Date('02/01/2023'), new Date('02/05/2023')],
             };
         }
     }, () => {
@@ -2006,22 +2005,22 @@ QUnit.module('Options', {
 
             [
                 {
-                    values: [new Date('01/05/2023'), new Date('02/01/2023')],
+                    value: [new Date('01/05/2023'), new Date('02/01/2023')],
                     type: 'dates'
                 },
                 {
-                    values: ['01/05/2023', '02/01/2023'],
+                    value: ['01/05/2023', '02/01/2023'],
                     type: 'strings'
                 },
                 {
-                    values: [1672916400000, 1675249200000],
+                    value: [1672916400000, 1675249200000],
                     type: 'numbers'
                 }
-            ].forEach(({ values, type }) => {
-                QUnit.test(`Two dates are selected when selectionMode = ${selectionMode} and values are defined as ${type}`, function(assert) {
+            ].forEach(({ value, type }) => {
+                QUnit.test(`Two dates are selected when selectionMode = ${selectionMode} and value are defined as ${type}`, function(assert) {
                     this.reinit({
                         selectionMode,
-                        values
+                        value
                     });
                     const $cells = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
 
@@ -2031,22 +2030,22 @@ QUnit.module('Options', {
             });
 
             QUnit.module('CurrentDate', {}, () => {
-                QUnit.test(`Should be equal to the lowest defined date in values on init (selectionMode=${selectionMode}`, function(assert) {
+                QUnit.test(`Should be equal to the lowest defined date in value on init (selectionMode=${selectionMode}`, function(assert) {
                     this.reinit({
-                        values: [null, new Date('01/15/2023'), new Date('02/01/2023')],
+                        value: [null, new Date('01/15/2023'), new Date('02/01/2023')],
                         selectionMode
                     });
-                    const { currentDate, values } = this.calendar.option();
+                    const { currentDate, value } = this.calendar.option();
 
-                    assert.deepEqual(currentDate, new Date(Math.min(...values.filter(value => value))));
+                    assert.deepEqual(currentDate, new Date(Math.min(...value.filter(value => value))));
                 });
 
-                QUnit.test(`Should be equal to the lowest date in values on runtime values change (selectionMode=${selectionMode}`, function(assert) {
+                QUnit.test(`Should be equal to the lowest date in value on runtime value change (selectionMode=${selectionMode}`, function(assert) {
                     this.reinit({ selectionMode });
-                    this.calendar.option('values', [new Date(), new Date('2020/02/02')]);
-                    const { currentDate, values } = this.calendar.option();
+                    this.calendar.option('value', [new Date(), new Date('2020/02/02')]);
+                    const { currentDate, value } = this.calendar.option();
 
-                    assert.deepEqual(currentDate, values[1]);
+                    assert.deepEqual(currentDate, value[1]);
                 });
 
                 QUnit.test(`Should be equal to new selected cell date when selectionMode = ${selectionMode}`, function(assert) {
@@ -2092,7 +2091,7 @@ QUnit.module('Options', {
 
                 $cell.trigger('dxclick');
 
-                assert.strictEqual(this.calendar.option('values').length, 4);
+                assert.strictEqual(this.calendar.option('value').length, 4);
                 assert.ok($cell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
             });
 
@@ -2101,7 +2100,7 @@ QUnit.module('Options', {
 
                 $cell.trigger('dxclick');
 
-                assert.strictEqual(this.calendar.option('values').length, 2);
+                assert.strictEqual(this.calendar.option('value').length, 2);
                 assert.notOk($cell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
             });
         });
@@ -2109,12 +2108,12 @@ QUnit.module('Options', {
         QUnit.module('Range', {
             beforeEach: function() {
                 this.reinit({
-                    values: ['2023/01/13', '2023/01/17', '2023/01/20'],
+                    value: ['2023/01/13', '2023/01/17', '2023/01/20'],
                     selectionMode: 'range'
                 });
             }
         }, () => {
-            QUnit.test('Only first two dates from values option should be selected', function(assert) {
+            QUnit.test('Only first two dates from value option should be selected', function(assert) {
                 const $cell1 = this.$element.find('*[data-value="2023/01/13"]');
                 const $cell2 = this.$element.find('*[data-value="2023/01/17"]');
                 const $cell3 = this.$element.find('*[data-value="2023/01/20"]');
@@ -2142,51 +2141,51 @@ QUnit.module('Options', {
                 assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
 
-            QUnit.test('Should reselect startDate and clear endDate on click when both values are defined', function(assert) {
-                const expectedValues = [new Date('2023/01/11'), null];
+            QUnit.test('Should reselect startDate and clear endDate on click when both value are defined', function(assert) {
+                const expectedValue = [new Date('2023/01/11'), null];
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/11"]'));
 
                 $cell.trigger('dxclick');
 
-                assert.deepEqual(this.calendar.option('values'), expectedValues);
+                assert.deepEqual(this.calendar.option('value'), expectedValue);
             });
 
             QUnit.test('Should select endDate on cell click when startDate is alredy defined and endDate not', function(assert) {
                 this.reinit({
-                    values: ['2023/01/13', null],
+                    value: ['2023/01/13', null],
                     selectionMode: 'range'
                 });
-                const expectedValues = [new Date('2023/01/13'), new Date('2023/01/15')];
+                const expectedValue = [new Date('2023/01/13'), new Date('2023/01/15')];
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/15"]'));
 
                 $cell.trigger('dxclick');
 
-                assert.deepEqual(this.calendar.option('values'), expectedValues);
+                assert.deepEqual(this.calendar.option('value'), expectedValue);
             });
 
             QUnit.test('Should swap startDate and endDate on cell when clicked endDate is less then startDate', function(assert) {
                 this.reinit({
-                    values: ['2023/01/13', null],
+                    value: ['2023/01/13', null],
                     selectionMode: 'range'
                 });
-                const expectedValues = [new Date('2023/01/07'), new Date('2023/01/13')];
+                const expectedValue = [new Date('2023/01/07'), new Date('2023/01/13')];
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/07"]'));
 
                 $cell.trigger('dxclick');
 
-                assert.deepEqual(this.calendar.option('values'), expectedValues);
+                assert.deepEqual(this.calendar.option('value'), expectedValue);
             });
 
             [
                 {
-                    values: [null, null],
+                    value: [null, null],
                     scenario: 'when both values are not defined'
                 },
                 {
-                    values: ['2023/01/13', '2023/01/17'],
+                    value: ['2023/01/13', '2023/01/17'],
                     scenario: 'when both values are defined'
                 }
-            ].forEach(({ values, scenario }) => {
+            ].forEach(({ value, scenario }) => {
                 QUnit.test(`Cells should not have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover ${scenario}`, function(assert) {
                     if(devices.real().deviceType !== 'desktop') {
                         assert.ok(true, 'test does not actual for mobile devices');
@@ -2194,7 +2193,7 @@ QUnit.module('Options', {
                     }
 
                     this.reinit({
-                        values,
+                        value,
                         selectionMode: 'range'
                     });
                     const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/25"]'));
@@ -2212,7 +2211,7 @@ QUnit.module('Options', {
                 }
 
                 this.reinit({
-                    values: ['2023/01/13', null],
+                    value: ['2023/01/13', null],
                     selectionMode: 'range'
                 });
 
@@ -2246,7 +2245,7 @@ QUnit.module('Options', {
                 }
 
                 this.reinit({
-                    values: ['2023/01/13', null],
+                    value: ['2023/01/13', null],
                     selectionMode: 'range'
                 });
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/15"]'));
@@ -2264,7 +2263,7 @@ QUnit.module('Options', {
 
             QUnit.test('Selected range should be reduced when difference between startDate and endDate is bigger than four mounths', function(assert) {
                 this.reinit({
-                    values: ['1996/01/05', '2121/03/07'],
+                    value: ['1996/01/05', '2121/03/07'],
                     selectionMode: 'range',
                 });
 
@@ -2276,7 +2275,7 @@ QUnit.module('Options', {
             [1, 2].forEach((viewsCount) => {
                 QUnit.test(`Big range should start from first date of before view and end on last date of after view (viewsCount=${viewsCount})`, function(assert) {
                     this.reinit({
-                        values: ['1996/01/05', '2345/03/07'],
+                        value: ['1996/01/05', '2345/03/07'],
                         selectionMode: 'range',
                         viewsCount,
                     });
@@ -2295,7 +2294,7 @@ QUnit.module('Options', {
 
                 QUnit.test(`Big range should start from start date if start date is date in before view (viewsCount=${viewsCount})`, function(assert) {
                     this.reinit({
-                        values: ['1996/01/05', '2345/03/07'],
+                        value: ['1996/01/05', '2345/03/07'],
                         selectionMode: 'range',
                         viewsCount,
                     });
@@ -2315,7 +2314,7 @@ QUnit.module('Options', {
 
                 QUnit.test(`Big range should end on end date if end date is date from views (viewsCount=${viewsCount})`, function(assert) {
                     this.reinit({
-                        values: ['1996/01/05', '2345/03/07'],
+                        value: ['1996/01/05', '2345/03/07'],
                         selectionMode: 'range',
                         viewsCount,
                     });
@@ -2338,10 +2337,10 @@ QUnit.module('Options', {
                 [new Date(2021, 9, 17), null],
                 [null, new Date(2021, 10, 25)],
                 [new Date(2021, 9, 10), new Date(2021, 9, 17)]
-            ].forEach((values) => {
-                QUnit.test(`Click by cell should change startDate value if _allowChangeSelectionOrder is true and _currentSelection is startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+            ].forEach((value) => {
+                QUnit.test(`Click by cell should change startDate value if _allowChangeSelectionOrder is true and _currentSelection is startDate, initial value: ${JSON.stringify(value)}`, function(assert) {
                     this.reinit({
-                        values,
+                        value,
                         selectionMode: 'range',
                         _allowChangeSelectionOrder: true,
                         _currentSelection: 'startDate',
@@ -2351,18 +2350,18 @@ QUnit.module('Options', {
                     let startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $startDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+                    assert.deepEqual(this.calendar.option('value'), [startCellDate, value[1]]);
 
                     $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(15);
                     startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $startDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+                    assert.deepEqual(this.calendar.option('value'), [startCellDate, value[1]]);
                 });
 
-                QUnit.test(`Click by cell should change startDate value and reselect endDate if _allowChangeSelectionOrder is true and _currentSelection is startDate, startDate > endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                QUnit.test(`Click by cell should change startDate value and reselect endDate if _allowChangeSelectionOrder is true and _currentSelection is startDate, startDate > endDate, initial value: ${JSON.stringify(value)}`, function(assert) {
                     this.reinit({
-                        values,
+                        value,
                         selectionMode: 'range',
                         _allowChangeSelectionOrder: true,
                         _currentSelection: 'startDate',
@@ -2372,12 +2371,12 @@ QUnit.module('Options', {
                     const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $startDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [startCellDate, null]);
+                    assert.deepEqual(this.calendar.option('value'), [startCellDate, null]);
                 });
 
-                QUnit.test(`Click by cell should change endDate value and reselect startDate if _allowChangeSelectionOrder is true and _currentSelection is endDate, endDate < startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                QUnit.test(`Click by cell should change endDate value and reselect startDate if _allowChangeSelectionOrder is true and _currentSelection is endDate, endDate < startDate, initial value: ${JSON.stringify(value)}`, function(assert) {
                     this.reinit({
-                        values,
+                        value,
                         selectionMode: 'range',
                         _allowChangeSelectionOrder: true,
                         _currentSelection: 'endDate',
@@ -2387,12 +2386,12 @@ QUnit.module('Options', {
                     const endCellDate = dataUtils.data($endCellDate.get(0), CALENDAR_DATE_VALUE_KEY);
                     $endCellDate.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), endCellDate < values[0] ? [endCellDate, null] : [null, endCellDate]);
+                    assert.deepEqual(this.calendar.option('value'), endCellDate < value[0] ? [endCellDate, null] : [null, endCellDate]);
                 });
 
-                QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(value)}`, function(assert) {
                     this.reinit({
-                        values,
+                        value,
                         selectionMode: 'range',
                         _allowChangeSelectionOrder: true,
                         _currentSelection: 'endDate',
@@ -2402,18 +2401,18 @@ QUnit.module('Options', {
                     let endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $endDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+                    assert.deepEqual(this.calendar.option('value'), [value[0], endCellDate]);
 
                     $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
                     endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $endDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+                    assert.deepEqual(this.calendar.option('value'), [value[0], endCellDate]);
                 });
 
-                QUnit.test(`Click by cell should change endDate then startDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate then startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                QUnit.test(`Click by cell should change endDate then startDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate then startDate, initial value: ${JSON.stringify(value)}`, function(assert) {
                     this.reinit({
-                        values,
+                        value,
                         selectionMode: 'range',
                         _allowChangeSelectionOrder: true,
                         _currentSelection: 'endDate',
@@ -2423,7 +2422,7 @@ QUnit.module('Options', {
                     const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $endDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+                    assert.deepEqual(this.calendar.option('value'), [value[0], endCellDate]);
 
                     this.calendar.option('_currentSelection', 'startDate');
 
@@ -2431,13 +2430,13 @@ QUnit.module('Options', {
                     const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $startDateCell.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [startCellDate, endCellDate]);
+                    assert.deepEqual(this.calendar.option('value'), [startCellDate, endCellDate]);
                 });
             });
 
             QUnit.test('Range should not be displayed on cell hover if only startDate is defined and _allowChangeSelectionOrder is true and _currentSelection is startDate', function(assert) {
                 this.reinit({
-                    values: ['2023/04/01', null],
+                    value: ['2023/04/01', null],
                     selectionMode: 'range',
                     _allowChangeSelectionOrder: true,
                     _currentSelection: 'startDate',
@@ -2461,19 +2460,20 @@ QUnit.module('Options', {
             {
                 initialSelectionMode: 'single',
                 newSelectionMode: 'range',
-                optionName: 'values',
+                optionName: 'value',
                 expectedValue: [null, null],
             },
             {
                 initialSelectionMode: 'range',
                 newSelectionMode: 'multiple',
-                optionName: 'values',
+                optionName: 'value',
                 expectedValue: [],
             },
         ].forEach(({ initialSelectionMode, newSelectionMode, optionName, expectedValue }) => {
             QUnit.test(`Value should be restored after switching from ${initialSelectionMode} to ${newSelectionMode} selectionMode`, function(assert) {
+                const value = initialSelectionMode === 'single' ? new Date() : this.options.value;
                 this.reinit({
-                    ...this.options,
+                    value,
                     selectionMode: initialSelectionMode,
                 });
 
@@ -2483,8 +2483,9 @@ QUnit.module('Options', {
             });
 
             QUnit.test(`No cells should be selected after switching from ${initialSelectionMode} to ${newSelectionMode} selectionMode`, function(assert) {
+                const value = initialSelectionMode === 'single' ? new Date() : this.options.value;
                 this.reinit({
-                    ...this.options,
+                    value,
                     selectionMode: initialSelectionMode,
                 });
 
@@ -2505,7 +2506,7 @@ QUnit.module('Options', {
                 ['init', 'runtime'].forEach((scenario) => {
                     QUnit.test(`Click on week number should select week (selectionMode=${selectionMode};selectWeekOnClick=true on ${scenario})`, function(assert) {
                         this.reinit({
-                            values: this.initialValue,
+                            value: this.initialValue,
                             selectionMode,
                             selectWeekOnClick: scenario === 'init',
                             showWeekNumbers: true,
@@ -2522,17 +2523,17 @@ QUnit.module('Options', {
 
                         $weekNumberCell.trigger('dxclick');
 
-                        const values = this.calendar.option('values');
-                        const expectedValuesLength = selectionMode === 'multiple' ? 7 : 2;
+                        const value = this.calendar.option('value');
+                        const expectedValueLength = selectionMode === 'multiple' ? 7 : 2;
 
-                        assert.strictEqual(values.length, expectedValuesLength, `${values.length} days are selected`);
-                        assert.deepEqual(values[0], firstDateInRow, 'fisrt selected date is first date in row');
-                        assert.deepEqual(values[values.length - 1], lastDateInRow, 'last selected date is last date in row');
+                        assert.strictEqual(value.length, expectedValueLength, `${value.length} days are selected`);
+                        assert.deepEqual(value[0], firstDateInRow, 'fisrt selected date is first date in row');
+                        assert.deepEqual(value[value.length - 1], lastDateInRow, 'last selected date is last date in row');
                     });
 
                     QUnit.test(`Click on week number should not select week (selectionMode=${selectionMode};selectWeekOnClick=false on ${scenario})`, function(assert) {
                         this.reinit({
-                            values: this.initialValue,
+                            value: this.initialValue,
                             selectionMode,
                             selectWeekOnClick: scenario !== 'init',
                             showWeekNumbers: true,
@@ -2547,9 +2548,9 @@ QUnit.module('Options', {
 
                         $weekNumberCell.trigger('dxclick');
 
-                        const values = this.calendar.option('values');
+                        const value = this.calendar.option('value');
 
-                        assert.deepEqual(values, this.initialValue, 'values are not changed');
+                        assert.deepEqual(value, this.initialValue, 'values are not changed');
                     });
                 });
 
@@ -2565,10 +2566,10 @@ QUnit.module('Options', {
 
                     $weekNumberCell.trigger('dxclick');
 
-                    const values = this.calendar.option('values');
-                    const expectedValues = selectionMode === 'range' ? [null, null] : [];
+                    const value = this.calendar.option('value');
+                    const expectedValue = selectionMode === 'range' ? [null, null] : [];
 
-                    assert.deepEqual(values, expectedValues, 'no dates are selected');
+                    assert.deepEqual(value, expectedValue, 'no dates are selected');
                 });
             });
 
@@ -2584,9 +2585,9 @@ QUnit.module('Options', {
 
                 $weekNumberCell.trigger('dxclick');
 
-                const values = this.calendar.option('values');
+                const value = this.calendar.option('value');
 
-                assert.strictEqual(values.length, 1, 'only one day is selected');
+                assert.strictEqual(value.length, 1, 'only one day is selected');
             });
 
             QUnit.test('Click on week number should select range from first available date to last available date', function(assert) {
@@ -2609,10 +2610,10 @@ QUnit.module('Options', {
 
                 $weekNumberCell.trigger('dxclick');
 
-                const values = this.calendar.option('values');
+                const value = this.calendar.option('value');
 
-                assert.notDeepEqual(values, [firstDateInRow, lastDateInRow], 'disabled dates are not selected as range start/end');
-                assert.deepEqual(values, [firstAvailableDateInRow, lastAvailableDateInRow], 'first/last available dates are range start/end');
+                assert.notDeepEqual(value, [firstDateInRow, lastDateInRow], 'disabled dates are not selected as range start/end');
+                assert.deepEqual(value, [firstAvailableDateInRow, lastAvailableDateInRow], 'first/last available dates are range start/end');
             });
 
             [
@@ -2665,7 +2666,7 @@ QUnit.module('Options', {
         beforeEach: function() {
             this.options = {
                 focusStateEnabled: true,
-                values: [new Date('01/15/2023'), new Date('02/05/2023')],
+                value: [new Date('01/15/2023'), new Date('02/05/2023')],
                 selectionMode: 'range',
                 viewsCount: 2,
             };
@@ -4710,7 +4711,7 @@ QUnit.module('Aria accessibility', {
     ['multiple', 'range'].forEach((selectionMode) => {
         QUnit.test(`aria-selected on selected date cell, selectionMode=${selectionMode}`, function(assert) {
             const calendar = this.$element.dxCalendar({
-                values: [new Date(2015, 5, 1)],
+                value: [new Date(2015, 5, 1)],
                 selectionMode,
                 focusStateEnabled: true
             }).dxCalendar('instance');
@@ -4733,8 +4734,7 @@ QUnit.module('Aria accessibility', {
         QUnit.test('aria-selected should be added to selected date cell afrer view change, selectionMode=${selectionMode}', function(assert) {
             const calendar = this.$element.dxCalendar({
                 selectionMode,
-                value: new Date(2023, 1, 1),
-                values: [new Date(2023, 1, 1)],
+                value: selectionMode === 'single' ? new Date(2023, 1, 1) : [new Date(2023, 1, 1)],
                 focusStateEnabled: true
             }).dxCalendar('instance');
 
@@ -5165,7 +5165,7 @@ QUnit.module('dxCalendar number and string value support', {
                 if(selectionMode === 'single') {
                     this.instance.option('value', new Date(1993, 2, 19));
                 } else {
-                    this.instance.option('values', [new Date(1993, 2, 19), new Date(1993, 2, 22)]);
+                    this.instance.option('value', [new Date(1993, 2, 19), new Date(1993, 2, 22)]);
                 }
 
                 const callCount = this.valueChangedHandler.callCount;

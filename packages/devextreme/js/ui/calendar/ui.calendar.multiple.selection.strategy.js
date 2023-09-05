@@ -8,7 +8,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
 
     getViewOptions() {
         return {
-            value: this.dateOption('values'),
+            value: this.dateOption('value'),
             range: [],
             selectionMode: 'multi',
             onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
@@ -16,35 +16,35 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     }
 
     selectValue(selectedValue, e) {
-        const values = [...this.dateOption('values')];
-        const alreadySelectedIndex = values.findIndex(date => date?.toDateString() === selectedValue.toDateString());
+        const value = [...this.dateOption('value')];
+        const alreadySelectedIndex = value.findIndex(date => date?.toDateString() === selectedValue.toDateString());
 
         if(alreadySelectedIndex > -1) {
-            values.splice(alreadySelectedIndex, 1);
+            value.splice(alreadySelectedIndex, 1);
         } else {
-            values.push(selectedValue);
+            value.push(selectedValue);
         }
 
         this.skipNavigate();
         this._updateCurrentDate(selectedValue);
         this._currentDateChanged = true;
-        this.dateValue(values, e);
+        this.dateValue(value, e);
     }
 
     updateAriaSelected(value, previousValue) {
-        value ??= this.dateOption('values');
+        value ??= this.dateOption('value');
         previousValue ??= [];
 
         super.updateAriaSelected(value, previousValue);
     }
 
     getDefaultCurrentDate() {
-        const dates = this.dateOption('values').filter(value => value);
+        const dates = this.dateOption('value').filter(value => value);
         return this._getLowestDateInArray(dates);
     }
 
     restoreValue() {
-        this.calendar.option('values', []);
+        this.calendar.option('value', []);
     }
 
     _weekNumberClickHandler({ rowDates, event }) {
