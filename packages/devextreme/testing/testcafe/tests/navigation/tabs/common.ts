@@ -11,26 +11,32 @@ const TAB_CLASS = 'dx-tab';
 fixture.disablePageReloads`Tabs_common`
   .page(url(__dirname, '../../container.html'));
 
-test('Tabs icon alignment', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((rtlEnabled) => {
+  ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
+    test('Tabs icon position', async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs items alignment.png', { element: '#tabs', shouldTestInCompact: true });
+      if (!isMaterial()) {
+        await testScreenshot(t, takeScreenshot, `Tabs iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#tabs', shouldTestInCompact: true });
+      }
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await appendElementTo('#container', 'div', 'tabs');
+      await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
 
-  const dataSource = [
-    { text: 'user' },
-    { text: 'comment', icon: 'comment' },
-    { icon: 'user' },
-    { icon: 'money' },
-  ] as Item[];
+      const dataSource = [
+        { text: 'user' },
+        { text: 'comment', icon: 'comment' },
+        { icon: 'user' },
+        { icon: 'money' },
+      ] as Item[];
 
-  return createWidget('dxTabs', { dataSource }, '#tabs');
+      return createWidget('dxTabs', { dataSource, iconPosition, rtlEnabled }, '#tabs');
+    });
+  });
 });
 
 test('Tabs in contrast theme', async (t) => {
