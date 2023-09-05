@@ -331,3 +331,15 @@ $datagrid-text-stub-background-image-path: null !default;
     background-color: color.change($datagrid-base-color, $alpha: 0.08);
   }
 }
+
+.dx-datagrid-total-footer {
+  tr {
+    outline: none;
+  }
+  
+  &:focus-within {
+    outline: 2px solid $datagrid-focused-border-color;
+    outline-offset: -2px;
+  }
+}
+
