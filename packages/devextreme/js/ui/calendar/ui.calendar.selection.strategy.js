@@ -48,8 +48,8 @@ class CalendarSelectionStrategy {
     _isDateDisabled(date) {
         const min = this.calendar._dateOption('min');
         const max = this.calendar._dateOption('max');
-        const isLessThanMin = date < min && !dateUtils.sameDate(min, date);
-        const isBiggerThanMax = date > max && !dateUtils.sameDate(max, date);
+        const isLessThanMin = isDefined(min) && date < min && !dateUtils.sameDate(min, date);
+        const isBiggerThanMax = isDefined(max) && date > max && !dateUtils.sameDate(max, date);
 
         return this.calendar._view.isDateDisabled(date) || isLessThanMin || isBiggerThanMax;
     }

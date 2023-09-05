@@ -2611,6 +2611,24 @@ QUnit.module('Options', {
                 assert.strictEqual(value.length, 1, 'only one day is selected');
             });
 
+            QUnit.test('Click on week number should select dates correctly when min/max=null (selectionMode=multiple)', function(assert) {
+                this.reinit({
+                    selectionMode: 'multiple',
+                    showWeekNumbers: true,
+                    min: null,
+                    max: null,
+                });
+
+                const $row = this.$element.find('tr').eq(2);
+                const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+
+                $weekNumberCell.trigger('dxclick');
+
+                const valueLength = this.calendar.option('value').length;
+
+                assert.deepEqual(valueLength, 7, 'week is selected');
+            });
+
             QUnit.test('Click on week number should select range from first available date to last available date', function(assert) {
                 this.reinit({
                     selectionMode: 'range',
