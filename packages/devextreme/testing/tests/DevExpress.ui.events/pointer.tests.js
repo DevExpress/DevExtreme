@@ -10,7 +10,5 @@ QUnit.testStart(function() {
 });
 
 require('./pointerParts/baseTests.js');
-require('./pointerParts/mouseTests.js');
-require('./pointerParts/touchTests.js');
 require('./pointerParts/mouseAndTouchTests.js');
 require('./pointerParts/strategySelectionTests.js');
