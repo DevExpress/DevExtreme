@@ -89,11 +89,11 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PREPARE_FOLDERS, (done) => {
-    makeModuleFolder('common');
+    makeFolder('common');
 
-    makeModuleFolder('core', ['template']);
+    makeFolder('core', ['template']);
 
-    makeModuleFolder('common/data');
+    makeFolder('common/data');
 
     done();
 });
@@ -171,11 +171,9 @@ function findFilesByMask(dir, mask) {
     for (const file of files) {
         const filePath = path.join(dir, file);
 
-        const stat = fs.statSync(filePath);
-
-        if (stat.isDirectory()) {
-            results = results.concat(findFilesByMask(filePath, mask));
-        } else if (file.includes(mask)) {
+        if (!fs.statSync(filePath).isDirectory()
+            && file.includes(mask)
+        ) {
             results.push(filePath);
         }
     }
@@ -189,45 +187,53 @@ function findJsModuleFileNamesInFolder(dir) {
         .map((filePath) => path.parse(filePath).name);
 }
 
-function makeModuleFolder(targetName, moduleFileNames) {
+function makeFolder(folderPath, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
-    const targetFolder = path.join(distFolder, targetName);
-    const baseDir = '../'.repeat(targetName.split('/').length);
 
-    moduleFileNames = moduleFileNames || findJsModuleFileNamesInFolder(path.join(distFolder, 'esm', targetName));
+    moduleFileNames = moduleFileNames || findJsModuleFileNamesInFolder(path.join(distFolder, 'esm', folderPath));
 
-    fs.mkdirSync(targetFolder);
+    try {
+        fs.mkdirSync(path.join(distFolder, folderPath));
 
-    if (fs.existsSync(path.join(distFolder, 'esm', targetName, 'index.js'))) {
-        fs.writeFileSync(path.join(targetFolder , 'package.json'), JSON.stringify({
-            sideEffects: false,
-            main: `${baseDir}cjs/${targetName}/index.js`,
-            module: `${baseDir}esm/${targetName}/index.js`,
-            typings: `${baseDir}cjs/${targetName}/index.d.ts`,
-        },null, 2));
+        if (fs.existsSync(path.join(distFolder, 'esm', folderPath, 'index.js'))) {
+            createPackageJsonFile(folderPath);
+        }
+    } catch (error) {
+        error.message = `Exception while makeFolder(${folderPath}).\n ${error.message}`;
+        throw(error);
     }
 
     moduleFileNames.forEach((moduleName) => {
-        createModuleFolder(moduleName, targetName, baseDir);
+        createModuleFolder(moduleName, folderPath);
     })
 }
 
-function createModuleFolder(moduleName, targetName = null, baseDir = '') {
-    const moduleFolder = path.join(__dirname, config.npm.dist, targetName || '', moduleName);
-    const modulePath = (targetName ? targetName + '/' : '') + moduleName;
-
+function createModuleFolder(moduleName, folder = null) {
     try {
-        fs.mkdirSync(moduleFolder);
+        fs.mkdirSync(path.join(__dirname, config.npm.dist, folder || '', moduleName));
 
-        fs.writeFileSync(path.join(moduleFolder , 'package.json'), JSON.stringify({
-            sideEffects: false,
-            main:  `${baseDir}../cjs/${modulePath}.js`,
-            module: `${baseDir}../esm/${modulePath}.js`,
-            typings: `${baseDir}../cjs/${modulePath}.d.ts`,
-        },null, 2));
-
+        createPackageJsonFile(folder, moduleName);
     } catch (error) {
-        error.message = `Exception while createModuleFolder(${targetName}).\n ${error.message}`;
+        error.message = `Exception while createModuleFolder(${folder}).\n ${error.message}`;
         throw(error);
     }
+}
+
+function createPackageJsonFile(folder, moduleName) {
+    moduleName = moduleName || '';
+    const absoluteModulePath = path.join(__dirname, config.npm.dist, folder || '', moduleName);
+    const moduleFilePath = (folder ? folder + '/' : '') + (moduleName || 'index');
+    const relativePath = path.relative(
+        absoluteModulePath,
+        path.join(__dirname, config.npm.dist, 'esm', moduleFilePath + '.js')
+    );
+
+    const relativeBase = '../'.repeat(relativePath.split('..').length - 1);
+
+    fs.writeFileSync(path.join(absoluteModulePath , 'package.json'), JSON.stringify({
+        sideEffects: false,
+        main:  `${relativeBase}cjs/${moduleFilePath}.js`,
+        module: `${relativeBase}esm/${moduleFilePath}.js`,
+        typings: `${relativeBase}cjs/${moduleFilePath}.d.ts`,
+    },null, 2))
 }
