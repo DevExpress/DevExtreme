@@ -30,6 +30,11 @@ import {
     dxMultiViewBaseOptions,
 } from './multi_view';
 
+export {
+    Position,
+    TabsIconPosition,
+};
+
 type ItemLike = string | Item | any;
 
 /**
