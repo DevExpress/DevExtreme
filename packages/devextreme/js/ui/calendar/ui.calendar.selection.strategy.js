@@ -24,6 +24,12 @@ class CalendarSelectionStrategy {
     }
 
     processValueChanged(value, previousValue) {
+        if(value && !Array.isArray(value)) {
+            value = [value];
+        }
+        if(previousValue && !Array.isArray(previousValue)) {
+            previousValue = [previousValue];
+        }
         value = value?.map((item) => this._convertToDate(item)) || [];
         previousValue = previousValue?.map((item) => this._convertToDate(item)) || [];
 
