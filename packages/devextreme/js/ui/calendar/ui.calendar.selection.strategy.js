@@ -1,3 +1,5 @@
+import { isDefined } from '../../core/utils/type';
+
 class CalendarSelectionStrategy {
     constructor(component) {
         this.calendar = component;
@@ -24,10 +26,10 @@ class CalendarSelectionStrategy {
     }
 
     processValueChanged(value, previousValue) {
-        if(value && !Array.isArray(value)) {
+        if(isDefined(value) && !Array.isArray(value)) {
             value = [value];
         }
-        if(previousValue && !Array.isArray(previousValue)) {
+        if(isDefined(previousValue) && !Array.isArray(previousValue)) {
             previousValue = [previousValue];
         }
         value = value?.map((item) => this._convertToDate(item)) || [];
