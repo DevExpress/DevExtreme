@@ -37,5 +37,5 @@ sh.popd()
 // Build and pack wrappers
 sh.exec('npm run pack --ws --if-present');
 ['devextreme-angular', 'devextreme-react', 'devextreme-vue'].forEach((pkg) => {
-    sh.cp(path.join(MONOREPO_ROOT, 'packages', pkg, 'npm', '*.tgz'), OUTPUT_DIR);
+    sh.cp(path.join(MONOREPO_ROOT, 'packages', pkg, 'npm', '**', '*.tgz'), OUTPUT_DIR);
 });

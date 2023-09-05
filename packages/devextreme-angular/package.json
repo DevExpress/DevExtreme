@@ -14,7 +14,7 @@
     "test": "npm run gulp -- test",
     "test:dev": "npm run gulp -- run.tests",
     "pack": "npm run gulp -- npm.pack",
-    "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm --artifacts ../../artifacts/internal-tools"
+    "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm/dist --artifacts ../../artifacts/internal-tools"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",

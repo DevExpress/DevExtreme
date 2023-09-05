@@ -78,7 +78,7 @@ module.exports = {
         tsConfigPath: "tsconfig.tests.json"
     },
     npm: {
-        distPath: "npm",
+        distPath: "npm/dist",
         content: [ "./LICENSE", "./README.md" ]
     }
 };
