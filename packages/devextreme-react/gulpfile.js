@@ -89,11 +89,11 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PREPARE_FOLDERS, (done) => {
-    createModuleForFolder('common');
+    makeModuleForFolder('common');
 
-    createModuleForFolder('core', ['template']);
+    makeModuleForFolder('core', ['template']);
 
-    createModuleForFolder('common/data');
+    makeModuleForFolder('common/data');
 
     done();
 });
@@ -104,7 +104,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
 
-        createModuleForFile(moduleName);
+        makeModuleForFile(moduleName);
     })
 
     done();
@@ -163,7 +163,7 @@ gulp.task(NPM_PACK, gulp.series(
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
 
-function createModuleForFolder(folderPath, moduleFileNames) {
+function makeModuleForFolder(folderPath, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
 
     moduleFileNames = moduleFileNames || findJsModuleFileNamesInFolder(path.join(distFolder, 'esm', folderPath));
@@ -172,25 +172,25 @@ function createModuleForFolder(folderPath, moduleFileNames) {
         fs.mkdirSync(path.join(distFolder, folderPath));
 
         if (fs.existsSync(path.join(distFolder, 'esm', folderPath, 'index.js'))) {
-            createPackageJsonFile(folderPath);
+            generatePackageJsonFile(folderPath);
         }
 
         moduleFileNames.forEach((moduleName) => {
-            createModuleForFile(moduleName, folderPath);
+            makeModuleForFile(moduleName, folderPath);
         })
     } catch (error) {
-        error.message = `Exception while createModuleForFolder(${folderPath}).\n ${error.message}`;
+        error.message = `Exception while makeModuleForFolder(${folderPath}).\n ${error.message}`;
         throw(error);
     }
 }
 
-function createModuleForFile(moduleName, folder = null) {
+function makeModuleForFile(moduleName, folder = null) {
     fs.mkdirSync(path.join(__dirname, config.npm.dist, folder || '', moduleName));
 
-    createPackageJsonFile(folder, moduleName);
+    generatePackageJsonFile(folder, moduleName);
 }
 
-function createPackageJsonFile(folder, moduleName) {
+function generatePackageJsonFile(folder, moduleName) {
     moduleName = moduleName || '';
     const absoluteModulePath = path.join(__dirname, config.npm.dist, folder || '', moduleName);
     const moduleFilePath = (folder ? folder + '/' : '') + (moduleName || 'index');
