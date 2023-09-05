@@ -434,6 +434,10 @@ export function resetLicenseCheckSkipCondition() {
     licenseVerified = false;
 }
 
+export function setLicenseCheckSkipCondition() {
+    licenseVerified = true;
+}
+
 export function getLicenseCheckSkipCondition() {
     return licenseVerified;
 }

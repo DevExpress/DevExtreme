@@ -217,6 +217,32 @@ const transpileIntl = async() => {
     writeFileSync(path.join(root, 'artifacts/js-systemjs/intl/index.js'), intlIndex);
 };
 
+const transpileSha1 = async() => {
+    const listFiles = [
+        {
+            filePath: require.resolve('sha1'),
+            destPath: path.join(root, 'artifacts/js-systemjs/sha1/sha1.js'),
+        },
+        {
+            filePath: require.resolve('crypt'),
+            destPath: path.join(root, 'artifacts/js-systemjs/crypt/crypt.js'),
+        },
+        {
+            filePath: require.resolve('charenc'),
+            destPath: path.join(root, 'artifacts/js-systemjs/charenc/charenc.js'),
+        },
+    ];
+
+    await Promise.all(listFiles.map(({ filePath, destPath }) => {
+        const code = fs.readFileSync(filePath).toString();
+
+        writeFileSync(
+            destPath,
+            buildAmdModule(code)
+        );
+    }));
+};
+
 const transpileJsVendors = async() => {
     const pluginsList = [
         {
@@ -253,6 +279,7 @@ const transpileJsVendors = async() => {
     );
 
     await transpileIntl();
+    await transpileSha1();
 
     await transpileFile(
         require.resolve('knockout/build/output/knockout-latest.debug.js'),

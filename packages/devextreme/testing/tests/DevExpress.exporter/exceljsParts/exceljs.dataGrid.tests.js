@@ -8,6 +8,7 @@ import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { isDefined } from 'core/utils/type';
+import { setLicenseCheckSkipCondition } from 'core/component';
 
 import 'ui/data_grid';
 
@@ -40,6 +41,7 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
+        setLicenseCheckSkipCondition();
         this.stub = sinon.stub(errors, 'log').callsFake(() => {
             QUnit.assert.strictEqual(true, false, 'error.log should not be called');
         });
