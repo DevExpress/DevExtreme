@@ -281,17 +281,17 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
     $element.toggleClass('dx-hidden', !isVisible);
 
-    const firstVisibleTopViewName = BORDERED_TOP_VIEW_NAMES.find((name) => this.getView(name).isVisible());
-    const lastVisibleBottomViewName = BORDERED_BOTTOM_VIEW_NAMES.find((name) => this.getView(name).isVisible());
+    const firstVisibleTopViewName = BORDERED_TOP_VIEW_NAMES.find((name) => this.getView(name)?.isVisible());
+    const lastVisibleBottomViewName = BORDERED_BOTTOM_VIEW_NAMES.find((name) => this.getView(name)?.isVisible());
 
     each(BORDERED_TOP_VIEW_NAMES, (index, viewName) => {
       const view = this.getView(viewName);
-      view.element()?.toggleClass(BORDERED_TOP_VIEW_CLASS, viewName === firstVisibleTopViewName);
+      view?.element()?.toggleClass(BORDERED_TOP_VIEW_CLASS, viewName === firstVisibleTopViewName);
     });
 
     each(BORDERED_BOTTOM_VIEW_NAMES, (index, viewName) => {
       const view = this.getView(viewName);
-      view.element()?.toggleClass(BORDERED_BOTTOM_VIEW_CLASS, viewName === lastVisibleBottomViewName);
+      view?.element()?.toggleClass(BORDERED_BOTTOM_VIEW_CLASS, viewName === lastVisibleBottomViewName);
     });
 
     if (isVisible) {
