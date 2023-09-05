@@ -2571,6 +2571,27 @@ QUnit.module('Options', {
 
                     assert.deepEqual(value, expectedValue, 'no dates are selected');
                 });
+
+                QUnit.test(`Click on week number should not select dates that are less than min/bigger than max (selectionMode=${selectionMode})`, function(assert) {
+                    const date = new Date('2023/09/05');
+                    this.reinit({
+                        selectionMode,
+                        showWeekNumbers: true,
+                        currentDate: date,
+                        min: date,
+                        max: date,
+                    });
+
+                    const $row = this.$element.find('tr').eq(2);
+                    const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+
+                    $weekNumberCell.trigger('dxclick');
+
+                    const value = this.calendar.option('value');
+                    const expectedValue = selectionMode === 'multiple' ? [date] : [date, date];
+
+                    assert.deepEqual(value, expectedValue);
+                });
             });
 
             QUnit.test('Click on week number should not select disabled dates in multiple selectionMode', function(assert) {
