@@ -89,11 +89,11 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PREPARE_FOLDERS, (done) => {
-    makeFolder('common');
+    createModuleForFolder('common');
 
-    makeFolder('core', ['template']);
+    createModuleForFolder('core', ['template']);
 
-    makeFolder('common/data');
+    createModuleForFolder('common/data');
 
     done();
 });
@@ -104,7 +104,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
 
-        createModuleFolder(moduleName);
+        createModuleForFile(moduleName);
     })
 
     done();
@@ -163,31 +163,7 @@ gulp.task(NPM_PACK, gulp.series(
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
 
-function findFilesByMask(dir, mask) {
-    let results = [];
-
-    const files = fs.readdirSync(dir);
-
-    for (const file of files) {
-        const filePath = path.join(dir, file);
-
-        if (!fs.statSync(filePath).isDirectory()
-            && file.includes(mask)
-        ) {
-            results.push(filePath);
-        }
-    }
-
-    return results;
-}
-
-function findJsModuleFileNamesInFolder(dir) {
-    return findFilesByMask(dir, '.js')
-        .filter((file) => !file.includes('index.js'))
-        .map((filePath) => path.parse(filePath).name);
-}
-
-function makeFolder(folderPath, moduleFileNames) {
+function createModuleForFolder(folderPath, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
 
     moduleFileNames = moduleFileNames || findJsModuleFileNamesInFolder(path.join(distFolder, 'esm', folderPath));
@@ -200,15 +176,15 @@ function makeFolder(folderPath, moduleFileNames) {
         }
 
         moduleFileNames.forEach((moduleName) => {
-            createModuleFolder(moduleName, folderPath);
+            createModuleForFile(moduleName, folderPath);
         })
     } catch (error) {
-        error.message = `Exception while makeFolder(${folderPath}).\n ${error.message}`;
+        error.message = `Exception while createModuleForFolder(${folderPath}).\n ${error.message}`;
         throw(error);
     }
 }
 
-function createModuleFolder(moduleName, folder = null) {
+function createModuleForFile(moduleName, folder = null) {
     fs.mkdirSync(path.join(__dirname, config.npm.dist, folder || '', moduleName));
 
     createPackageJsonFile(folder, moduleName);
@@ -231,4 +207,22 @@ function createPackageJsonFile(folder, moduleName) {
         module: `${relativeBase}esm/${moduleFilePath}.js`,
         typings: `${relativeBase}cjs/${moduleFilePath}.d.ts`,
     },null, 2))
+}
+
+function findJsModuleFileNamesInFolder(dir) {
+    let results = [];
+    const files = fs.readdirSync(dir);
+
+    for (const file of files) {
+        const filePath = path.join(dir, file);
+
+        if (!fs.statSync(filePath).isDirectory()
+            && file.includes('.js')
+            && !file.includes('index.js')
+        ) {
+            results.push(filePath);
+        }
+    }
+
+    return results.map((filePath) => path.parse(filePath).name);
 }
