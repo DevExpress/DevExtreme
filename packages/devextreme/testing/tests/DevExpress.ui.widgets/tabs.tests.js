@@ -364,6 +364,7 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('regression: B251795', function(assert) {
+        const asyncDone = assert.async();
         assert.expect(2);
 
         let itemClickFired = 0;
@@ -391,6 +392,8 @@ QUnit.module('Tab select action', () => {
 
         assert.equal(itemClickFired, 0);
         assert.equal(itemSelectFired, 0);
+
+        setTimeout(asyncDone, 100);
     });
 
     QUnit.test('Tabs in multiple mode', function(assert) {
