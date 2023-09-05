@@ -333,11 +333,13 @@ QUnit.module('General', () => {
 
         assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.primary);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), true);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), false);
 
         instance.option({ stylingMode: 'secondary' });
 
         assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.secondary);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), true);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), false);
     });
 });
 
