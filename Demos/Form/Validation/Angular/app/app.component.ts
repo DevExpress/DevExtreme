@@ -103,6 +103,13 @@ export class AppComponent {
     X: /[02-9]/,
   };
 
+  dateRangeBoxOptions = {
+    startDatePlaceholder: 'Start Date',
+    endDatePlaceholder: 'End Date',
+    invalidDateMessage:
+      'The date must have the following format: MM/dd/yyyy',
+  };
+
   registerButtonOptions = {
     text: 'Register',
     type: 'default',

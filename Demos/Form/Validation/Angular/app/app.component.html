@@ -80,12 +80,7 @@
       <dxi-item
         dataField="VacationDates"
         editorType="dxDateRangeBox"
-        [editorOptions]="{
-          startDatePlaceholder: 'Start Date',
-          endDatePlaceholder: 'End Date',
-          invalidDateMessage:
-            'The date must have the following format: MM/dd/yyyy'
-        }"
+        [editorOptions]="dateRangeBoxOptions"
       >
         <dxo-label text="Vacation Dates"> </dxo-label>
       </dxi-item>
