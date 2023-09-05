@@ -34,6 +34,7 @@ import {
 export {
     Position,
     TabsIconPosition,
+    TabsStylingMode,
 };
 
 type ItemLike = string | Item | any;
