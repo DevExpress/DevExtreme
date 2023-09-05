@@ -1237,4 +1237,12 @@ $grid-masterdetail-padding: 16px;
       padding-bottom: 0;
     }
   }
+
+  .dx-#{$widget-name}-dragview {
+    border-radius: $fluent-base-border-radius;
+
+    .dx-#{$widget-name}-borders {
+      border-radius: $fluent-base-border-radius;
+    }
+  }
 }
