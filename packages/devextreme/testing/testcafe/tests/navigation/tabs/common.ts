@@ -16,9 +16,7 @@ fixture.disablePageReloads`Tabs_common`
     test('Tabs icon position', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      if (!isMaterial()) {
-        await testScreenshot(t, takeScreenshot, `Tabs iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#tabs', shouldTestInCompact: true });
-      }
+      await testScreenshot(t, takeScreenshot, `Tabs iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#tabs', shouldTestInCompact: true });
 
       await t
         .expect(compareResults.isValid())

@@ -148,7 +148,8 @@ const Tabs = CollectionWidget.inherit({
                 },
                 options: {
                     useInkRipple: true,
-                    selectOnFocus: false
+                    selectOnFocus: false,
+                    iconPosition: ICON_POSITION.top,
                 }
             }
         ]);
