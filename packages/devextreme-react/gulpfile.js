@@ -18,8 +18,8 @@ const NPM_README = 'npm.readme';
 const NPM_BUILD = 'npm.build';
 const NPM_BUILD_ESM = 'npm.build-esm';
 const NPM_BUILD_CJS = 'npm.build-cjs';
-const NPM_PACK_FOLDERS = 'npm.package-folders';
-const NPM_PACK_MODULES = 'npm.package-modules';
+const NPM_PREPARE_FOLDERS = 'npm.prepare-folders';
+const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 
 gulp.task(CLEAN, (c) =>
@@ -88,17 +88,17 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
         .pipe(gulp.dest(config.npm.dist + '/cjs'))
 ));
 
-gulp.task(NPM_PACK_FOLDERS, (done) => {
-    packModuleFolder('common');
+gulp.task(NPM_PREPARE_FOLDERS, (done) => {
+    makeModuleFolder('common');
 
-    packModuleFolder('core', ['template']);
+    makeModuleFolder('core', ['template']);
 
-    packModuleFolder('common/data');
+    makeModuleFolder('common/data');
 
     done();
 });
 
-gulp.task(NPM_PACK_MODULES, (done) => {
+gulp.task(NPM_PREPARE_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
 
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
@@ -118,11 +118,7 @@ gulp.task(NPM_BUILD, gulp.series(
         NPM_README,
         NPM_BUILD_ESM,
         NPM_BUILD_CJS
-    ),
-    gulp.parallel(
-        NPM_PACK_MODULES,
-        NPM_PACK_FOLDERS,
-    ),
+    )
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
@@ -160,6 +156,10 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
 
 gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD_WITH_HEADERS,
+    gulp.parallel(
+        NPM_PREPARE_MODULES,
+        NPM_PREPARE_FOLDERS,
+    ),
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
 
@@ -189,7 +189,7 @@ function findJsModuleFileNamesInFolder(dir) {
         .map((filePath) => path.parse(filePath).name);
 }
 
-function packModuleFolder(targetName, moduleFileNames) {
+function makeModuleFolder(targetName, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
     const targetFolder = path.join(distFolder, targetName);
     const baseDir = '../'.repeat(targetName.split('/').length);
