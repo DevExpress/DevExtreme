@@ -89,36 +89,22 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PACK_FOLDERS, (done) => {
-    packFolder('common');
+    packModuleFolder('common');
 
-    packFolder('core', ['template']);
+    packModuleFolder('core', ['template']);
 
-    packFolder('common/data');
+    packModuleFolder('common/data');
 
     done();
 });
 
 gulp.task(NPM_PACK_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
-    const distFolder = path.join(__dirname, config.npm.dist);
 
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
         const moduleName = modulePath.match(/[^/]+$/)[0];
 
-        try {
-            fs.mkdirSync(path.join(distFolder, moduleName));
-
-            fs.writeFileSync(path.join(distFolder , moduleName, 'package.json'), JSON.stringify({
-                sideEffects: false,
-                main: `../cjs/${modulePath}.js`,
-                module: `../esm/${modulePath}.js`,
-                typings: `../cjs/${modulePath}.d.ts`,
-            },null, 2));
-
-        } catch (error) {
-            error.message = `Exception while ${NPM_PACK_MODULES}.\n ${error.message}`;
-            throw(error);
-        }
+        createModuleFolder(moduleName);
     })
 
     done();
@@ -198,12 +184,12 @@ function findFilesByMask(dir, mask) {
 }
 
 function findJsModuleFileNamesInFolder(dir) {
-    let results = findFilesByMask(dir, '.js').filter((file) => !file.includes('index.js'));
-
-    return results.map((filePath) => path.parse(filePath).name);
+    return findFilesByMask(dir, '.js')
+        .filter((file) => !file.includes('index.js'))
+        .map((filePath) => path.parse(filePath).name);
 }
 
-function packFolder(targetName, moduleFileNames) {
+function packModuleFolder(targetName, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
     const targetFolder = path.join(distFolder, targetName);
     const baseDir = '../'.repeat(targetName.split('/').length);
@@ -222,20 +208,26 @@ function packFolder(targetName, moduleFileNames) {
     }
 
     moduleFileNames.forEach((moduleName) => {
-        const moduleFolder = path.join(distFolder, targetName, moduleName);
-        try {
-            fs.mkdirSync(moduleFolder);
-
-            fs.writeFileSync(path.join(moduleFolder , 'package.json'), JSON.stringify({
-                sideEffects: false,
-                main:  `${baseDir}../cjs/${targetName}/${moduleName}.js`,
-                module: `${baseDir}../esm/${targetName}/${moduleName}.js`,
-                typings: `${baseDir}../cjs/${targetName}/${moduleName}.d.ts`,
-            },null, 2));
-
-        } catch (error) {
-            error.message = `Exception while packFolder(${targetName}).\n ${error.message}`;
-            throw(error);
-        }
+        createModuleFolder(moduleName, targetName, baseDir);
     })
+}
+
+function createModuleFolder(moduleName, targetName = null, baseDir = '') {
+    const moduleFolder = path.join(__dirname, config.npm.dist, targetName || '', moduleName);
+    const modulePath = (targetName ? targetName + '/' : '') + moduleName;
+
+    try {
+        fs.mkdirSync(moduleFolder);
+
+        fs.writeFileSync(path.join(moduleFolder , 'package.json'), JSON.stringify({
+            sideEffects: false,
+            main:  `${baseDir}../cjs/${modulePath}.js`,
+            module: `${baseDir}../esm/${modulePath}.js`,
+            typings: `${baseDir}../cjs/${modulePath}.d.ts`,
+        },null, 2));
+
+    } catch (error) {
+        error.message = `Exception while createModuleFolder(${targetName}).\n ${error.message}`;
+        throw(error);
+    }
 }
