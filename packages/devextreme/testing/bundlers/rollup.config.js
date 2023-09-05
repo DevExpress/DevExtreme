@@ -31,7 +31,8 @@ export default {
             ],
             dynamicRequireTargets: [
                 './node_modules/jszip/lib/utils.js'
-            ]
+            ],
+            requireReturnsDefault: 'auto'
         })
     ]
 };
