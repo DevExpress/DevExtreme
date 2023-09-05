@@ -286,12 +286,12 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
     each(BORDERED_TOP_VIEW_NAMES, (index, viewName) => {
       const view = this.getView(viewName);
-      view?.element()?.toggleClass(BORDERED_TOP_VIEW_CLASS, viewName === firstVisibleTopViewName);
+      view?.element?.()?.toggleClass(BORDERED_TOP_VIEW_CLASS, viewName === firstVisibleTopViewName);
     });
 
     each(BORDERED_BOTTOM_VIEW_NAMES, (index, viewName) => {
       const view = this.getView(viewName);
-      view?.element()?.toggleClass(BORDERED_BOTTOM_VIEW_CLASS, viewName === lastVisibleBottomViewName);
+      view?.element?.()?.toggleClass(BORDERED_BOTTOM_VIEW_CLASS, viewName === lastVisibleBottomViewName);
     });
 
     if (isVisible) {
