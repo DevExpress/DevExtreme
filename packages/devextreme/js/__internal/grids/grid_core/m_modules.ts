@@ -263,7 +263,7 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
   },
 
   getView(name) {
-    return this.component._views[name];
+    return this.component._views?.[name];
   },
 
   render($parent, options) {
