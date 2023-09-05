@@ -198,25 +198,20 @@ function makeFolder(folderPath, moduleFileNames) {
         if (fs.existsSync(path.join(distFolder, 'esm', folderPath, 'index.js'))) {
             createPackageJsonFile(folderPath);
         }
+
+        moduleFileNames.forEach((moduleName) => {
+            createModuleFolder(moduleName, folderPath);
+        })
     } catch (error) {
         error.message = `Exception while makeFolder(${folderPath}).\n ${error.message}`;
         throw(error);
     }
-
-    moduleFileNames.forEach((moduleName) => {
-        createModuleFolder(moduleName, folderPath);
-    })
 }
 
 function createModuleFolder(moduleName, folder = null) {
-    try {
-        fs.mkdirSync(path.join(__dirname, config.npm.dist, folder || '', moduleName));
+    fs.mkdirSync(path.join(__dirname, config.npm.dist, folder || '', moduleName));
 
-        createPackageJsonFile(folder, moduleName);
-    } catch (error) {
-        error.message = `Exception while createModuleFolder(${folder}).\n ${error.message}`;
-        throw(error);
-    }
+    createPackageJsonFile(folder, moduleName);
 }
 
 function createPackageJsonFile(folder, moduleName) {
