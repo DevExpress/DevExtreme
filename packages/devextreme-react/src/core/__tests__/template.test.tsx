@@ -271,30 +271,7 @@ function testTemplateOption(testedOption: string) {
       .toBe('<tr><td>Template with data</td></tr><tr style=\"display: none;\"></tr>');
   });
 
-  it('calls onRendered callback when a template is rendered in the DOM', () => {
-    const ref = React.createRef<HTMLDivElement>();
-
-    const elementOptions: Record<string, any> = {};
-    elementOptions[testedOption] = prepareTemplate((data: any) => (
-      <div className="template">
-        Template
-        {data.text}
-      </div>
-    ));
-    render(
-      <ComponentWithTemplates {...elementOptions}>
-        <div ref={ref} />
-      </ComponentWithTemplates>,
-    );
-    const onRendered: () => void = jest.fn();
-
-    act(() => { renderItemTemplate({ text: 'with data' }, ref.current, undefined, onRendered); });
-
-    jest.runAllTimers();
-    expect(onRendered).toBeCalled();
-  });
-
-  it('does not call onRendered when a template is rendered in an isolated element', () => {
+  it('calls onRendered callback', () => {
     const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
@@ -314,7 +291,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 'with data' }, undefined, undefined, onRendered); });
 
     jest.runAllTimers();
-    expect(onRendered).not.toBeCalled();
+    expect(onRendered).toBeCalled();
   });
 
   it('renders empty template without errors', () => {

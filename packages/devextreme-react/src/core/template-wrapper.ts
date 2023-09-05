@@ -3,13 +3,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { DX_REMOVE_EVENT } from './component-base';
-import { getClosestElement } from './helpers';
 
 interface ITemplateWrapperProps {
   content: any;
   container: Element;
   onRemoved: () => void;
-  onDidMount?: (isElementInDOM: boolean) => void;
+  onDidMount?: () => void;
   key: string;
 }
 
@@ -44,7 +43,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
 
   public componentDidMount(): void {
     this._subscribeOnRemove();
-    this.props.onDidMount?.(this.isElementInDOM());
+    this.props.onDidMount?.();
   }
 
   public componentDidUpdate(): void {
@@ -66,12 +65,6 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
     if (this._listenerElement) {
       container.appendChild(this._listenerElement);
     }
-  }
-
-  private isElementInDOM(): boolean {
-    const htmlElement = getClosestElement(this.element);
-
-    return !!htmlElement && htmlElement.closest('body') !== null;
   }
 
   private get _listenerElement(): HTMLElement {

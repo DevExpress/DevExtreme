@@ -79,13 +79,10 @@ function createDxTemplate(
             content: contentProvider(props),
             container,
             onRemoved,
-            onDidMount: (isElementInDOM) => {
+            onDidMount: () => {
               _unsubscribeOnContainerRemoval();
               templatesStore.setDeferredRemove(templateId, false);
-
-              if (isElementInDOM) {
-                data.onRendered?.();
-              }
+              data.onRendered?.();
             },
             key: templateId,
           },
