@@ -1,4 +1,5 @@
 import { isDefined } from '../../core/utils/type';
+import dateUtils from '../../core/utils/date';
 
 class CalendarSelectionStrategy {
     constructor(component) {
@@ -45,7 +46,12 @@ class CalendarSelectionStrategy {
     }
 
     _isDateDisabled(date) {
-        return this.calendar._view.isDateDisabled(date);
+        const min = this.calendar._dateOption('min');
+        const max = this.calendar._dateOption('max');
+        const isLessThanMin = isDefined(min) && date < min && !dateUtils.sameDate(min, date);
+        const isBiggerThanMax = isDefined(max) && date > max && !dateUtils.sameDate(max, date);
+
+        return this.calendar._view.isDateDisabled(date) || isLessThanMin || isBiggerThanMax;
     }
 
     _getLowestDateInArray(dates) {
