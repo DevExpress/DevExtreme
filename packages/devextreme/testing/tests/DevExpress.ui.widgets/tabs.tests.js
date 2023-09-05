@@ -10,6 +10,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 import { getScrollLeftMax } from 'renovation/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import '../../helpers/ignoreMouseAndTouchTimers.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -364,7 +365,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('regression: B251795', function(assert) {
-        const asyncDone = assert.async();
         assert.expect(2);
 
         let itemClickFired = 0;
@@ -392,8 +392,6 @@ QUnit.module('Tab select action', () => {
 
         assert.equal(itemClickFired, 0);
         assert.equal(itemSelectFired, 0);
-
-        setTimeout(asyncDone, 100);
     });
 
     QUnit.test('Tabs in multiple mode', function(assert) {
