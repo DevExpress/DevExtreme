@@ -13,8 +13,6 @@
 // adduse
 
 $material-editor-custom-button-margin: 5px;
-$material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
-$material-filled-texteditor-spin-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 8px;
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);

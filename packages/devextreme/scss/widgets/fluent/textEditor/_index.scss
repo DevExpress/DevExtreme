@@ -18,8 +18,6 @@ $fluent-base-standard-texteditor-input-horizontal-padding: 0;
 $fluent-texteditor-icon-container-size: $fluent-base-icon-size - 2px;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
 $fluent-editor-custom-button-margin: 5px;
-$fluent-filled-texteditor-input-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 4px;
-$fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 8px;
 
 @mixin dx-texteditor-icon() {
   position: absolute;
@@ -181,7 +179,7 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
       background-color: color.change($texteditor-bg, $alpha: 0.12);
 
       .dx-texteditor-input {
-        color: color.change($texteditor-color, $alpha: 0.5);
+        color: $texteditor-disabled-color;
       }
     }
   }
