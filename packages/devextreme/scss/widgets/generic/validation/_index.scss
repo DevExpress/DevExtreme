@@ -7,12 +7,4 @@
 
 // adduse
 @use "../overlay";
-@include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color);
-
-.dx-invalid-message > .dx-overlay-content {
-  border-radius: $validation-overlay-border-radius;
-
-  .dx-editor-underlined & {
-    border-radius: 0;
-  }
-}
+@include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color, $validation-overlay-border-radius);
