@@ -28,9 +28,9 @@ enum TableNodeNames {
 class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITemplateWrapperState> {
   private readonly _removalListenerRef = React.createRef<HTMLElement>();
 
-  private element: Node | undefined | null;
+  private element: HTMLElement | undefined | null;
 
-  private hiddenElement: Node | undefined | null;
+  private hiddenElement: HTMLElement | undefined | null;
 
   constructor(props: ITemplateWrapperProps) {
     super(props);
@@ -73,7 +73,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
 
   private getPreviousSiblingNode(node: HTMLDivElement | null) {
     this.hiddenElement = node;
-    this.element = node?.previousSibling;
+    this.element = node?.previousSibling as HTMLElement;
   }
 
   private _subscribeOnRemove() {

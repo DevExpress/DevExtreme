@@ -946,6 +946,41 @@ QUnit.module('Templates', () => {
         }
     });
 
+    QUnit.test('should not raise error if onRendered is received for a removed template (T1178295)', function(assert) {
+        const clock = sinon.useFakeTimers();
+
+        $('#dropDownEditorLazy').dxDropDownEditor({
+            fieldTemplate: 'field',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    field: {
+                        render: function({ container, onRendered }) {
+                            const $input = $('<div>').appendTo(container);
+
+                            setTimeout(() => {
+                                $input.dxTextBox();
+                                onRendered();
+                                container.remove();
+                                onRendered();
+                            });
+                        }
+                    }
+                }
+            },
+        });
+
+        try {
+            clock.tick(10);
+        } catch(e) {
+            assert.ok(false, `error is raised: ${e.message}`);
+        } finally {
+            clock.tick(10);
+            clock.restore();
+            assert.ok(true);
+        }
+    });
+
     QUnit.test('onValueChanged should be fired for each change by keyboard when fieldTemplate is used', function(assert) {
         const valueChangedSpy = sinon.spy();
 

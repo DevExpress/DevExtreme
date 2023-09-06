@@ -165,8 +165,10 @@ const TextEditorBase = Editor.inherit({
         return this.option('showClearButton') && !this.option('readOnly');
     },
 
-    _input: function() {
-        return this.$element().find(TEXTEDITOR_INPUT_SELECTOR).first();
+    _input: function(parentElement) {
+        parentElement = parentElement ?? this.$element();
+
+        return parentElement.find(TEXTEDITOR_INPUT_SELECTOR).first();
     },
 
     _isFocused: function() {
