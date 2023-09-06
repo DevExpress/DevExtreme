@@ -793,8 +793,8 @@ $grid-masterdetail-padding: 20px;
         &:not(.dx-row-lines) {
           & > td,
           & > tr:first-child > td {
-            border-top: 1px solid $datagrid-focused-border-color;
-            border-bottom: 1px solid $datagrid-focused-border-color;
+            border-top: 1px solid $datagrid-row-focused-bg;
+            border-bottom: 1px solid $datagrid-row-focused-bg;
           }
         }
       }
