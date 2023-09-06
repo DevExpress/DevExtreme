@@ -205,8 +205,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid
      * @default null
-     * @default [] &for(multiple selection mode)
-     * @default [null,null] &for(range selection mode)
      * @public
      */
     value?: Date | number | string | Array<Date | number | string>;
