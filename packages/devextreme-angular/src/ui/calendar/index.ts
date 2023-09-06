@@ -478,24 +478,11 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get value(): Date | number | string {
+    get value(): Date | number | string | Array<Date | number | string> {
         return this._getOption('value');
     }
-    set value(value: Date | number | string) {
+    set value(value: Date | number | string | Array<Date | number | string>) {
         this._setOption('value', value);
-    }
-
-
-    /**
-     * [descr:dxCalendarOptions.values]
-    
-     */
-    @Input()
-    get values(): Array<Date | number | string> {
-        return this._getOption('values');
-    }
-    set values(value: Array<Date | number | string>) {
-        this._setOption('values', value);
     }
 
 
@@ -804,14 +791,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Date | number | string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() valuesChange: EventEmitter<Array<Date | number | string>>;
+    @Output() valueChange: EventEmitter<Date | number | string | Array<Date | number | string>>;
 
     /**
     
@@ -903,7 +883,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'validationMessagePositionChange' },
             { emit: 'validationStatusChange' },
             { emit: 'valueChange' },
-            { emit: 'valuesChange' },
             { emit: 'visibleChange' },
             { emit: 'weekNumberRuleChange' },
             { emit: 'widthChange' },
@@ -949,7 +928,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         super.ngOnChanges(changes);
         this.setupChanges('disabledDates', changes);
         this.setupChanges('validationErrors', changes);
-        this.setupChanges('values', changes);
+        this.setupChanges('value', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -961,7 +940,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     ngDoCheck() {
         this._idh.doCheck('disabledDates');
         this._idh.doCheck('validationErrors');
-        this._idh.doCheck('values');
+        this._idh.doCheck('value');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();

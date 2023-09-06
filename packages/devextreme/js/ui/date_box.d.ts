@@ -28,10 +28,6 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
-import {
-    SelectedDateType,
- } from '../common';
-
 /** @public */
 export type DateType = 'date' | 'datetime' | 'time';
 /** @public */
@@ -281,7 +277,7 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
      * @default null
      * @public
      */
-    value?: SelectedDateType;
+    value?: Date | number | string;
 }
 
 /**
@@ -325,13 +321,13 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @default undefined
      * @public
      */
-    max?: SelectedDateType;
+    max?: Date | number | string;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    min?: SelectedDateType;
+    min?: Date | number | string;
     /**
      * @docid
      * @default "Today"

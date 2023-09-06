@@ -20,10 +20,6 @@ import {
   ValueChangedInfo,
 } from './editor/editor';
 
-import {
-  SelectedDateType,
-} from '../common';
-
 /**
  * @docid _ui_date_range_box_ChangeEvent
  * @public
@@ -184,7 +180,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
      */
-    endDate?: SelectedDateType;
+    endDate?: Date | number | string;
     /**
      * @docid dxDateRangeBoxOptions.endDateInputAttr
      * @default {}
@@ -253,7 +249,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
      */
-    startDate?: SelectedDateType;
+    startDate?: Date | number | string;
     /**
      * @docid dxDateRangeBoxOptions.startDateInputAttr
      * @default {}
@@ -295,7 +291,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @default [null,null]
      * @public
      */
-    value?: Array<SelectedDateType>;
+    value?: Array<Date | number | string>;
 };
 
 /**

@@ -6,7 +6,6 @@ import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { SelectedDateType } from "devextreme/common";
 import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/date_range_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
 import type { DisposingEvent as CalendarDisposingEvent, InitializedEvent as CalendarInitializedEvent, ValueChangedEvent as CalendarValueChangedEvent, DisabledDate, OptionChangedEvent } from "devextreme/ui/calendar";
@@ -49,14 +48,14 @@ type IDateRangeBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
   dropDownButtonKeyFn?: (data: any) => string;
-  defaultEndDate?: SelectedDateType;
+  defaultEndDate?: any | number | string;
   defaultOpened?: boolean;
-  defaultStartDate?: SelectedDateType;
-  defaultValue?: Array<SelectedDateType>;
-  onEndDateChange?: (value: SelectedDateType) => void;
+  defaultStartDate?: any | number | string;
+  defaultValue?: Array<any | number | string>;
+  onEndDateChange?: (value: any | number | string) => void;
   onOpenedChange?: (value: boolean) => void;
-  onStartDateChange?: (value: SelectedDateType) => void;
-  onValueChange?: (value: Array<SelectedDateType>) => void;
+  onStartDateChange?: (value: any | number | string) => void;
+  onValueChange?: (value: Array<any | number | string>) => void;
 }>
 
 class DateRangeBox extends BaseComponent<React.PropsWithChildren<IDateRangeBoxOptions>> {
@@ -282,9 +281,9 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
   isValid?: boolean;
-  max?: SelectedDateType;
+  max?: any | number | string;
   maxZoomLevel?: "century" | "decade" | "month" | "year";
-  min?: SelectedDateType;
+  min?: any | number | string;
   minZoomLevel?: "century" | "decade" | "month" | "year";
   name?: string;
   onDisposing?: ((e: CalendarDisposingEvent) => void);
@@ -303,13 +302,13 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   validationMessageMode?: "always" | "auto";
   validationMessagePosition?: "bottom" | "left" | "right" | "top";
   validationStatus?: "valid" | "invalid" | "pending";
-  value?: Array<SelectedDateType> | SelectedDateType;
+  value?: any | Array<any | number | string> | number | string;
   visible?: boolean;
   weekNumberRule?: "auto" | "firstDay" | "fullWeek" | "firstFourDays";
   width?: (() => number | string) | number | string;
   zoomLevel?: "century" | "decade" | "month" | "year";
-  defaultValue?: Array<SelectedDateType> | SelectedDateType;
-  onValueChange?: (value: Array<SelectedDateType> | SelectedDateType) => void;
+  defaultValue?: any | Array<any | number | string> | number | string;
+  onValueChange?: (value: any | Array<any | number | string> | number | string) => void;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
   cellRender?: (...params: any) => React.ReactNode;

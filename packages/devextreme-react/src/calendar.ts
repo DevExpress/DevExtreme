@@ -5,7 +5,6 @@ import dxCalendar, {
 import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 
-import type { SelectedDateType } from "devextreme/common";
 import type { DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/calendar";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -22,9 +21,9 @@ type ICalendarOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IC
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
   cellKeyFn?: (data: any) => string;
-  defaultValue?: Array<SelectedDateType> | SelectedDateType;
+  defaultValue?: any | Array<any | number | string> | number | string;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
-  onValueChange?: (value: Array<SelectedDateType> | SelectedDateType) => void;
+  onValueChange?: (value: any | Array<any | number | string> | number | string) => void;
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
 }>
 

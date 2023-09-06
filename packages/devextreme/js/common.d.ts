@@ -602,13 +602,6 @@ export type SearchMode = 'contains' | 'startswith' | 'equals';
 export type SelectAllMode = 'allPages' | 'page';
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common
- */
-export type SelectedDateType = Date | string | number | null;
-
-/**
  * @public
  * @namespace DevExpress.common
  */
