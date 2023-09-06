@@ -33,22 +33,6 @@
         padding-right: $filled-texteditor-input-horizontal-padding;
       }
     }
-  
-    .dx-invalid-message-top & {
-      padding: 0 0 $validation-message-padding 0;
-    }
-  
-    .dx-invalid-message-right & {
-      padding: 0 0 0 $validation-message-padding;
-    }
-  
-    .dx-invalid-message-bottom & {
-      padding: $validation-message-padding 0 0 0;
-    }
-  
-    .dx-invalid-message-left & {
-      padding: 0 $validation-message-padding 0 0;
-    }
   }
   
   .dx-validationsummary > .dx-validationsummary-item:not(:last-child) {
