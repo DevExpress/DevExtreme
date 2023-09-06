@@ -385,7 +385,7 @@ QUnit.module('behavior', {
         assert.equal($loopItems.length, 2);
     });
 
-    QUnit.test('duplicate items should have role="presentation"', function(assert) {
+    QUnit.test('duplicate items should have role="presentation" and do not have "aria-selected" attr', function(assert) {
         const $gallery = this.$element.dxGallery({
             items: [0, 1, 2, 3],
             loop: true
@@ -394,6 +394,7 @@ QUnit.module('behavior', {
         const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
         $loopItems.each((index, item) => {
             assert.strictEqual($(item).attr('role'), 'presentation');
+            assert.strictEqual($(item).attr('aria-selected'), undefined);
         });
     });
 

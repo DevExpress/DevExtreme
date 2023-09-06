@@ -395,6 +395,7 @@ const Gallery = CollectionWidget.inherit({
                 .css('margin', 0)
                 .appendTo($container);
 
+            $clonedItem.removeAttr('aria-selected');
             this.setAria({ role: 'presentation' }, $clonedItem);
         }
     },
