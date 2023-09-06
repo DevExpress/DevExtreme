@@ -89,11 +89,13 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PREPARE_FOLDERS, (done) => {
-    makeModuleForFolder('common');
-
-    makeModuleForFolder('core', ['template']);
-
-    makeModuleForFolder('common/data');
+    [
+        ['common'],
+        ['core', ['template']],
+        ['common/data']
+    ].forEach(
+        ([folder, moduleFileName]) => makeModuleForFolder(folder, moduleFileName)
+    )
 
     done();
 });
@@ -102,9 +104,9 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
 
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
-        const moduleName = modulePath.match(/[^/]+$/)[0];
+        const moduleFileName = modulePath.match(/[^/]+$/)[0];
 
-        makeModuleForFile(moduleName);
+        makeModuleForFile(moduleFileName);
     })
 
     done();
@@ -165,18 +167,18 @@ gulp.task(NPM_PACK, gulp.series(
 
 function makeModuleForFolder(folderPath, moduleFileNames) {
     const distFolder = path.join(__dirname, config.npm.dist);
-
-    moduleFileNames = moduleFileNames || findJsModuleFileNamesInFolder(path.join(distFolder, 'esm', folderPath));
+    const distEsmFolder = path.join(distFolder, 'esm', folderPath);
+    const moduleNames = moduleFileNames || findJsModuleFileNamesInFolder(distEsmFolder);
 
     try {
         fs.mkdirSync(path.join(distFolder, folderPath));
 
-        if (fs.existsSync(path.join(distFolder, 'esm', folderPath, 'index.js'))) {
+        if (fs.existsSync(path.join(distEsmFolder, 'index.js'))) {
             generatePackageJsonFile(folderPath);
         }
 
-        moduleFileNames.forEach((moduleName) => {
-            makeModuleForFile(moduleName, folderPath);
+        moduleNames.forEach((moduleFileName) => {
+            makeModuleForFile(moduleFileName, folderPath);
         })
     } catch (error) {
         error.message = `Exception while makeModuleForFolder(${folderPath}).\n ${error.message}`;
@@ -184,15 +186,15 @@ function makeModuleForFolder(folderPath, moduleFileNames) {
     }
 }
 
-function makeModuleForFile(moduleName, folder = null) {
-    fs.mkdirSync(path.join(__dirname, config.npm.dist, folder || '', moduleName));
+function makeModuleForFile(moduleFileName, folder = '') {
+    fs.mkdirSync(path.join(__dirname, config.npm.dist, folder, moduleFileName));
 
-    generatePackageJsonFile(folder, moduleName);
+    generatePackageJsonFile(folder, moduleFileName);
 }
 
-function generatePackageJsonFile(folder, moduleName) {
-    moduleName = moduleName || '';
-    const absoluteModulePath = path.join(__dirname, config.npm.dist, folder || '', moduleName);
+function generatePackageJsonFile(folder, moduleFileName) {
+    const moduleName = moduleFileName || '';
+    const absoluteModulePath = path.join(__dirname, config.npm.dist, folder, moduleName);
     const moduleFilePath = (folder ? folder + '/' : '') + (moduleName || 'index');
     const relativePath = path.relative(
         absoluteModulePath,
@@ -206,23 +208,16 @@ function generatePackageJsonFile(folder, moduleName) {
         main:  `${relativeBase}cjs/${moduleFilePath}.js`,
         module: `${relativeBase}esm/${moduleFilePath}.js`,
         typings: `${relativeBase}cjs/${moduleFilePath}.d.ts`,
-    },null, 2))
+    }, null, 2));
 }
 
 function findJsModuleFileNamesInFolder(dir) {
-    let results = [];
-    const files = fs.readdirSync(dir);
+    return fs.readdirSync(dir).filter((file) => {
+            const filePath = path.join(dir, file);
 
-    for (const file of files) {
-        const filePath = path.join(dir, file);
-
-        if (!fs.statSync(filePath).isDirectory()
-            && file.includes('.js')
-            && !file.includes('index.js')
-        ) {
-            results.push(filePath);
+            return !fs.statSync(filePath).isDirectory()
+                && file.includes('.js')
+                && !file.includes('index.js')
         }
-    }
-
-    return results.map((filePath) => path.parse(filePath).name);
+    ).map((filePath) => path.parse(filePath).name);
 }
