@@ -134,3 +134,15 @@
     justify-content: flex-start;
   }
 }
+
+.dx-tabs-icon-position-end .dx-tab-text {
+  flex-direction: row-reverse;
+}
+
+.dx-tabs-icon-position-top .dx-tab-text {
+  flex-direction: column;
+}
+
+.dx-tabs-icon-position-bottom .dx-tab-text {
+  flex-direction: column-reverse;
+}

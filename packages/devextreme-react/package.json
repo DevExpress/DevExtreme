@@ -12,9 +12,9 @@
   "types": "./cjs/index.d.ts",
   "scripts": {
     "clean": "gulp clean",
-    "generate": "npm run clean && gulp generate",
+    "regenerate": "npm run clean && gulp generate",
     "lint": "eslint --ignore-pattern __tests__ src/core",
-    "pack": "npm run clean && gulp npm.pack",
+    "pack": "gulp npm.pack",
     "test": "jest"
   },
   "keywords": [

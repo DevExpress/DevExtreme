@@ -44,6 +44,7 @@ import { DxiItemComponent } from './item-dxi';
         'height',
         'hint',
         'hoverStateEnabled',
+        'iconPosition',
         'itemHoldTimeout',
         'items',
         'itemTemplate',

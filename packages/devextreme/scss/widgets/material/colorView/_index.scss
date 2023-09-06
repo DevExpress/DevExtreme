@@ -29,7 +29,8 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height;
     }
 
     &.dx-colorview-alpha-channel-label {
-      margin: 0 0 0 $material-colorview-container-alpha-label-margin;
+      margin: 0;
+      margin-inline-start: $material-colorview-container-alpha-label-margin;
       width: $material-colorview-container-alpha-label-width;
     }
 
@@ -41,7 +42,7 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height;
 }
 
 .dx-colorview-hue-scale-cell {
-  margin-left: $material-colorview-hue-scale-margin;
+  margin-inline-start: $material-colorview-hue-scale-margin;
 }
 
 .dx-colorview-palette {
@@ -79,7 +80,7 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height;
 
 .dx-colorview-controls-container {
   width: $material-colorview-controls-container-width;
-  margin-left: $material-colorview-controls-container-margin;
+  margin-inline-start: $material-colorview-controls-container-margin;
 }
 
 .dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
@@ -99,25 +100,4 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height;
 
 .dx-colorview-color-preview-container {
   margin-bottom: $material-colorview-preview-container-margin;
-}
-
-.dx-rtl {
-  .dx-colorview-controls-container {
-    margin-left: 0;
-    margin-right: $material-colorview-controls-container-margin;
-  }
-
-  .dx-colorview-hue-scale-cell {
-    margin-left: 0;
-    margin-right: $material-colorview-hue-scale-margin;
-  }
-
-  .dx-colorview-container {
-    label {
-      &.dx-colorview-alpha-channel-label {
-        margin-left: 0;
-        margin-right: $material-colorview-container-alpha-label-margin;
-      }
-    }
-  }
 }

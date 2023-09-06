@@ -93,6 +93,14 @@ class TabPanel<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
   ]),
   hint: PropTypes.string,
   hoverStateEnabled: PropTypes.bool,
+  iconPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "top",
+      "end",
+      "bottom",
+      "start"])
+  ]),
   itemHoldTimeout: PropTypes.number,
   items: PropTypes.array,
   loop: PropTypes.bool,
@@ -141,8 +149,8 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  tabTemplate?: (() => string) | template;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  tabTemplate?: (() => string | any) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   title?: string;
   tabRender?: (...params: any) => React.ReactNode;

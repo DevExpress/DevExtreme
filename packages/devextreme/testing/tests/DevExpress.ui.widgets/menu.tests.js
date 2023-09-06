@@ -54,6 +54,7 @@ const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
+const ITEM_URL_CLASS = 'dx-item-url';
 
 const CLICKTIMEOUT = 51;
 const ANIMATION_TIMEOUT = 100;
@@ -2497,7 +2498,7 @@ QUnit.module('adaptivity: behavior', {
             {
                 text: 'item2',
                 items: [
-                    { text: 'item2-1' },
+                    { text: 'item2-1', url: 'http://some_url_item_2-1', linkAttr: { target: '_blank' } },
                     { text: 'item2-2' }
                 ]
             }];
@@ -2508,6 +2509,80 @@ QUnit.module('adaptivity: behavior', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('link attributes should be set correctly (T1181342)', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const $item = this.$element.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        $($item).trigger('dxclick');
+
+        const itemWithAttributes = $(`.${ITEM_URL_CLASS}`)[0];
+
+        assert.strictEqual(itemWithAttributes.getAttribute('href'), 'http://some_url_item_2-1');
+        assert.strictEqual(itemWithAttributes.getAttribute('target'), '_blank');
+    });
+
+    QUnit.test('link should be clicked programmatically if item.url is set', function(assert) {
+        const clickSpy = sinon.spy();
+
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const parentTreeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        parentTreeviewItem.trigger('dxclick');
+
+        const treeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+        const urlItem = $(`.${ITEM_URL_CLASS}`)[0];
+        urlItem.click = clickSpy;
+
+        treeviewItem.trigger('dxclick');
+
+        assert.ok(clickSpy.calledOnce);
+    });
+
+    QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            assert.ok(true);
+            return;
+        }
+
+        const clickSpy = sinon.spy();
+
+        new Menu(this.$element, {
+            items: [
+                { text: 'item1' },
+                {
+                    text: 'item2', url: 'http://url2',
+                    items: [
+                        { text: 'item2-1' },
+                        { text: 'item2-2' }
+                    ]
+                }],
+            adaptivityEnabled: true
+        });
+
+        const $hamburgerButton = $(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`);
+        const $treeview = $(`.${ DX_TREEVIEW_CLASS}`);
+        const keyboard = keyboardMock($treeview);
+
+        $hamburgerButton.trigger('dxclick');
+        $treeview.trigger('focusin');
+
+        const urlItem = $treeview.find(`.${ITEM_URL_CLASS}`)[0];
+        urlItem.click = clickSpy;
+
+        keyboard.press('down')
+            .press('enter');
+
+        assert.ok(clickSpy.calledOnce);
+    });
+
     QUnit.test('Adaptive menu should be shown when hamburger button clicked', function(assert) {
         new Menu(this.$element, {
             items: this.items,

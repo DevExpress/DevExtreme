@@ -37,10 +37,6 @@ module.exports = {
           options: {
             enforce: "pre",
             filterSourceMappingUrl: (url, resourcePath) => {
-              if (/vue2-strategy.*/i.test(url)) {
-                return false;
-              }
-
               return true;
             },
           }

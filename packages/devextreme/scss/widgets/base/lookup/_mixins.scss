@@ -1,0 +1,24 @@
+@use "../icons" as *;
+
+@mixin dx-lookup-arrow(
+  $arrow-icon,
+  $arrow-icon-glyph-rtl,
+  $arrow-width,
+  $arrow-color,
+  $arrow-icon-size,
+) {
+  .dx-lookup-arrow {
+    @include dx-icon($arrow-icon);
+  
+    .dx-rtl & {
+      &::before {
+        content: $arrow-icon-glyph-rtl;
+      }
+    }
+  
+    width: $arrow-width;
+    color: $arrow-color;
+  
+    @include dx-icon-font-centered-sizing($arrow-icon-size);
+  }
+}

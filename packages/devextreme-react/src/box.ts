@@ -122,7 +122,7 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   ratio?: number;
   shrink?: number;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;

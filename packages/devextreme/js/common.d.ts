@@ -708,6 +708,12 @@ export type SubmenuShowMode = 'onClick' | 'onHover';
  * @public
  * @namespace DevExpress.common
  */
+export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**

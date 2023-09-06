@@ -119,7 +119,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   heightRatio?: number;
   html?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   widthRatio?: number;

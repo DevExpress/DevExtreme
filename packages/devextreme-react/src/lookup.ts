@@ -283,13 +283,13 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: ((contentElement: any) => string) | template;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
   elementAttr?: any;
   enableBodyScroll?: boolean;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hideEvent?: Record<string, any> | string | {
     delay?: number;
     name?: string;
@@ -298,10 +298,10 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   hideOnParentScroll?: boolean;
   hint?: string;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number) | number | string;
-  maxWidth?: (() => number) | number | string;
-  minHeight?: (() => number) | number | string;
-  minWidth?: (() => number) | number | string;
+  maxHeight?: (() => number | string) | number | string;
+  maxWidth?: (() => number | string) | number | string;
+  minHeight?: (() => number | string) | number | string;
+  minWidth?: (() => number | string) | number | string;
   onContentReady?: ((e: PopoverContentReadyEvent) => void);
   onDisposing?: ((e: PopoverDisposingEvent) => void);
   onHidden?: ((e: HiddenEvent) => void);
@@ -323,19 +323,19 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   showTitle?: boolean;
   target?: any | string;
   title?: string;
-  titleTemplate?: ((titleElement: any) => string) | template;
+  titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number) | number | string;
-  onHeightChange?: (value: (() => number) | number | string) => void;
+  defaultHeight?: (() => number | string) | number | string;
+  onHeightChange?: (value: (() => number | string) | number | string) => void;
   defaultPosition?: PositionConfig | "bottom" | "left" | "right" | "top";
   onPositionChange?: (value: PositionConfig | "bottom" | "left" | "right" | "top") => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number) | number | string;
-  onWidthChange?: (value: (() => number) | number | string) => void;
+  defaultWidth?: (() => number | string) | number | string;
+  onWidthChange?: (value: (() => number | string) | number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   contentKeyFn?: (data: any) => string;
@@ -424,7 +424,7 @@ class HideEvent extends NestedOption<IHideEventProps> {
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -542,10 +542,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: "always" | "inMenu";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;

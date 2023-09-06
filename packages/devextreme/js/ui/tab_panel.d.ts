@@ -18,6 +18,7 @@ import {
 
 import {
     Position,
+    TabsIconPosition,
 } from '../common';
 
 import CollectionWidget, {
@@ -28,6 +29,11 @@ import {
     Item as dxMultiViewItem,
     dxMultiViewBaseOptions,
 } from './multi_view';
+
+export {
+    Position,
+    TabsIconPosition,
+};
 
 type ItemLike = string | Item | any;
 
@@ -179,6 +185,12 @@ export interface dxTabPanelOptions<
      * @public
      */
     itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default 'start'
+     * @public
+     */
+    iconPosition?: TabsIconPosition;
     /**
      * @docid
      * @type Array<string | dxTabPanelItem | any>

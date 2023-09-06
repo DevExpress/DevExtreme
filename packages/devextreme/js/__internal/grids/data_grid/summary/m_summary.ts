@@ -26,6 +26,7 @@ const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
 const DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content';
 const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
 const DATAGRID_FOOTER_ROW_CLASS = 'dx-footer-row';
+const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
 
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
@@ -39,17 +40,21 @@ export const renderSummaryCell = function (cell, options) {
   if (!column.command && summaryItems) {
     for (let i = 0; i < summaryItems.length; i++) {
       const summaryItem = summaryItems[i];
+      const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
+
       $summaryItems.push($('<div>')
         .css('textAlign', summaryItem.alignment || column.alignment)
         .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
         .addClass(DATAGRID_TEXT_CONTENT_CLASS)
         .addClass(summaryItem.cssClass)
         .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
-        .text(gridCore.getSummaryText(summaryItem, options.summaryTexts)));
+        .text(text)
+        .attr('aria-label', `${column.caption} ${text}`));
     }
     $cell.append($summaryItems);
   }
 };
+
 const getSummaryCellOptions = function (that, options) {
   const summaryTexts = that.option('summary.texts') || {};
 
@@ -148,6 +153,8 @@ export const FooterView = ColumnsView.inherit((function () {
 
       if (row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
         $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
+        $row.addClass(DATAGRID_CELL_DISABLED);
+        $row.attr('tabindex', 0);
       }
 
       return $row;
