@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "./mixins" as *;
 
 // adduse
@@ -24,7 +25,6 @@
     }
   }
 }
-
 
 .dx-switch-inner {
   display: flex;
