@@ -669,7 +669,7 @@ test('Value in calendar should be updated by click on clear button if popup is o
     .click(dateRangeBox.clearButton)
     .expect(dateRangeBox.option('value'))
     .eql([null, null])
-    .expect(dateRangeBox.getCalendar().option('values'))
+    .expect(dateRangeBox.getCalendar().option('value'))
     .eql([null, null])
     .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
     .eql(1);
@@ -709,7 +709,7 @@ test('Value in calendar should be updated after change start date value by keybo
   await t
     .expect(dateRangeBox.option('value'))
     .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
-    .expect(dateRangeBox.getCalendar().option('values'))
+    .expect(dateRangeBox.getCalendar().option('value'))
     .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
     .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
     .eql(0);
@@ -722,7 +722,7 @@ test('Value in calendar should be updated after change start date value by keybo
     .eql(true)
     .expect(dateRangeBox.option('value'))
     .eql([new Date(2020, 9, 17), new Date(2021, 9, 24)])
-    .expect(dateRangeBox.getCalendar().option('values'))
+    .expect(dateRangeBox.getCalendar().option('value'))
     .eql([new Date(2020, 9, 17), new Date(2021, 9, 24)])
     .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
     .eql(1);
@@ -763,7 +763,7 @@ test('Value in calendar should be updated after change start date value by keybo
   await t
     .expect(dateRangeBox.option('value'))
     .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
-    .expect(dateRangeBox.getCalendar().option('values'))
+    .expect(dateRangeBox.getCalendar().option('value'))
     .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
     .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
     .eql(0);
@@ -776,7 +776,7 @@ test('Value in calendar should be updated after change start date value by keybo
     .eql(true)
     .expect(dateRangeBox.option('value'))
     .eql([new Date(2019, 9, 17), new Date(2021, 9, 24)])
-    .expect(dateRangeBox.getCalendar().option('values'))
+    .expect(dateRangeBox.getCalendar().option('value'))
     .eql([new Date(2019, 9, 17), new Date(2021, 9, 24)])
     .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
     .eql(1);
@@ -790,7 +790,7 @@ test('Value in calendar should be updated after change start date value by keybo
     .eql(true)
     .expect(dateRangeBox.option('value'))
     .eql([new Date(2019, 9, 17), new Date(2023, 9, 24)])
-    .expect(dateRangeBox.getCalendar().option('values'))
+    .expect(dateRangeBox.getCalendar().option('value'))
     .eql([new Date(2019, 9, 17), new Date(2023, 9, 24)])
     .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
     .eql(2);

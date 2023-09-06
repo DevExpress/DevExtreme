@@ -4,6 +4,7 @@
 
 $fluent-texteditor-font-size: null !default;
 $fluent-texteditor-clear-icon-size: null !default;
+$fluent-texteditor-label-top-offset: null !default;
 $fluent-filled-texteditor-input-horizontal-padding: null !default;
 $fluent-filled-texteditor-input-top-padding: null !default;
 $fluent-filled-texteditor-input-bottom-padding: null !default;
@@ -13,32 +14,40 @@ $fluent-texteditor-label-font-size: null !default;
 $fluent-standard-texteditor-input-bottom-padding: null !default;
 $fluent-standard-texteditor-with-label-input-top-padding: null !default;
 $fluent-standard-texteditor-with-label-input-bottom-padding: null !default;
+$fluent-filled-texteditor-input-with-label-top-padding: null !default;
+$fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
 
 @if $size == "default" {
   $fluent-texteditor-font-size: 16px !default;
-  $fluent-texteditor-label-font-size: 12px !default;
-  $fluent-texteditor-clear-icon-size: 12px !default;
-  $fluent-filled-texteditor-input-horizontal-padding: 16px !default;
-  $fluent-filled-texteditor-input-top-padding: 15px;
-  $fluent-filled-texteditor-input-bottom-padding: 14px;
-  $fluent-standard-texteditor-input-top-padding: 7px !default;
-  $fluent-standard-texteditor-input-bottom-padding: 6px !default;
-  $fluent-standard-texteditor-with-label-input-top-padding: 16px !default;
-  $fluent-standard-texteditor-with-label-input-bottom-padding: 7px !default;
-  $fluent-underlined-editor-button-height: 28px !default;
+  $fluent-texteditor-label-font-size: 12px !default; // 12px !default;
+  $fluent-texteditor-clear-icon-size: 12px !default; // 12px !default;
+  $fluent-texteditor-label-top-offset: 0 !default; // 4px !default;
+  $fluent-filled-texteditor-input-horizontal-padding: 16px !default; // 16px !default;
+  $fluent-filled-texteditor-input-top-padding: 7px; // 15px !default;
+  $fluent-filled-texteditor-input-with-label-top-padding: 10px !default; // 21px;
+  $fluent-filled-texteditor-input-bottom-padding: 6px; // 14px !default;
+  $fluent-filled-texteditor-input-with-label-bottom-padding: 3px; // 8px;
+  $fluent-standard-texteditor-input-top-padding: 7px !default; // 15px !default;
+  $fluent-standard-texteditor-input-bottom-padding: 6px !default; // 14px !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: 9px !default; // 21px !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: 4px !default; // 8px !default;
+  $fluent-underlined-editor-button-height: 22px !default; // 28px !default;
 }
 
 @else if $size == "compact" {
-  $fluent-texteditor-font-size: 13px !default;
-  $fluent-texteditor-label-font-size: 11px !default;
+  $fluent-texteditor-font-size: 12px !default;
+  $fluent-texteditor-label-font-size: 10px !default;
   $fluent-texteditor-clear-icon-size: 10px !default;
-  $fluent-filled-texteditor-input-horizontal-padding: 11px !default;
+  $fluent-texteditor-label-top-offset: 0 !default;
+  $fluent-filled-texteditor-input-horizontal-padding: 12px !default;
   $fluent-filled-texteditor-input-top-padding: 9px;
-  $fluent-filled-texteditor-input-bottom-padding: 8px;
-  $fluent-standard-texteditor-input-top-padding: 6px !default;
-  $fluent-standard-texteditor-input-bottom-padding: 5px !default;
-  $fluent-standard-texteditor-with-label-input-top-padding: 10px !default;
-  $fluent-standard-texteditor-with-label-input-bottom-padding: $fluent-standard-texteditor-input-bottom-padding !default;
+  $fluent-filled-texteditor-input-with-label-top-padding: 15px;
+  $fluent-filled-texteditor-input-bottom-padding: 9px;
+  $fluent-filled-texteditor-input-with-label-bottom-padding: 3px;
+  $fluent-standard-texteditor-input-top-padding: 9px !default;
+  $fluent-standard-texteditor-input-bottom-padding: 9px !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: 14px !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: 4px !default;
   $fluent-underlined-editor-button-height: 22px !default;
 }
 
@@ -51,3 +60,6 @@ $fluent-standard-texteditor-input-padding:
   $fluent-standard-texteditor-input-top-padding
   $fluent-base-standard-texteditor-input-horizontal-padding
   $fluent-standard-texteditor-input-bottom-padding !default;
+
+$fluent-filled-texteditor-input-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 4px;
+$fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 8px;

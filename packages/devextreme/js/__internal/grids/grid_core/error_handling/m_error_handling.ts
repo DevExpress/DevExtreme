@@ -2,6 +2,7 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
+import messageLocalization from '@js/localization/message';
 
 import modules from '../m_modules';
 
@@ -25,7 +26,9 @@ const ErrorHandlingController = modules.ViewController.inherit({
     const $errorMessage = this._renderErrorMessage(error);
 
     if ($tableElements) {
-      $errorRow = $('<tr>').addClass(ERROR_ROW_CLASS);
+      $errorRow = $('<tr>')
+        .attr('role', 'row')
+        .addClass(ERROR_ROW_CLASS);
       $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
       eventsEngine.on($closeButton, clickEventName, that.createAction((args) => {
@@ -46,7 +49,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
         // @ts-expect-errors
         .attr({
           colSpan: that.getController('columns').getVisibleColumns().length,
-          role: 'presentation',
+          role: 'gridcell',
         })
         .prepend($closeButton)
         .append($errorMessage)
@@ -60,7 +63,11 @@ const ErrorHandlingController = modules.ViewController.inherit({
 
   _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
-    const $message = $('<div>').addClass(ERROR_MESSAGE_CLASS).text(message);
+    const $message = $('<div>')
+      .attr('role', 'alert')
+      .attr('aria-roledescription', messageLocalization.format('dxDataGrid-ariaError'))
+      .addClass(ERROR_MESSAGE_CLASS)
+      .text(message);
 
     if (error.url) {
       $('<a>').attr('href', error.url).text(error.url).appendTo($message);

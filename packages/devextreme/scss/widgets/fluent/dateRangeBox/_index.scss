@@ -6,7 +6,6 @@
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../colors" as *;
-@use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
@@ -14,29 +13,6 @@
 // adduse
 
 $fluent-editor-custom-button-margin: 5px;
-$fluent-filled-texteditor-input-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 4px;
-$fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 8px;
-
-@include dx-outlined-mixin(
-  $base-bg,
-  4px,
-  $fluent-texteditor-label-font-size,
-  math.div($fluent-texteditor-label-font-size, 2),
-  $fluent-texteditor-label-font-size + 1px,
-  $fluent-texteditor-label-font-size,
-  2.5px,
-  0,
-);
-@include dx-underlined-mixin(
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size);
-@include dx-filled-mixin(
-  floor(math.div($fluent-filled-texteditor-input-top-padding, 2)),
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-);
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
@@ -97,67 +73,36 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
     }
   }
 
-  &.dx-editor-outlined,
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
+  &.dx-texteditor {
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-left: $fluent-editor-custom-button-margin;
-        margin-right: $fluent-editor-custom-button-margin;
+        margin-inline-start: $fluent-editor-custom-button-margin;
+        margin-inline-end: $fluent-editor-custom-button-margin;
 
         &:first-child {
-          margin-left: 0;
+          margin-inline-start: 0;
         }
 
         &:last-child {
-          margin-right: $fluent-editor-custom-button-margin * 2;
+          margin-inline-end: $fluent-editor-custom-button-margin * 2;
         }
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-right: $fluent-filled-texteditor-spin-button-horizontal-padding;
+        margin-inline-end: $fluent-filled-texteditor-spin-button-horizontal-padding;
       }
 
       > .dx-clear-button-area:last-child,
       > .dx-clear-button-area + div:empty:last-child {
-        margin-right: $fluent-filled-texteditor-input-button-horizontal-padding;
-      }
-    }
-
-    &.dx-rtl {
-      > .dx-texteditor-buttons-container {
-        > .dx-button,
-        > .dx-clear-button-area {
-          &:first-child {
-            margin-left: $fluent-editor-custom-button-margin;
-            margin-right: 0;
-          }
-
-          &:last-child {
-            margin-left: $fluent-editor-custom-button-margin * 2;
-            margin-right: $fluent-editor-custom-button-margin;
-          }
-        }
-
-        > .dx-dropdowneditor-button:last-child {
-          margin-left: $fluent-filled-texteditor-spin-button-horizontal-padding;
-          margin-right: 0;
-        }
-
-        > .dx-clear-button-area:last-child {
-          margin-left: $fluent-filled-texteditor-input-button-horizontal-padding;
-          margin-right: 0;
-        }
+        margin-inline-end: $fluent-filled-texteditor-input-button-horizontal-padding;
       }
     }
   }
 
   .dx-datebox {
     &.dx-start-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-filled,
-      &.dx-editor-underlined {
+      &.dx-texteditor {
         .dx-texteditor-input {
           padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding;
         }
@@ -165,28 +110,10 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
     }
 
     &.dx-end-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-underlined,
-      &.dx-editor-filled {
+      &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
             padding-inline-end: $fluent-texteditor-invalid-badge-size;
-          }
-
-          &.dx-rtl {
-            .dx-texteditor-input {
-              padding-right: $fluent-filled-texteditor-input-horizontal-padding;
-            }
-          }
-        }
-      }
-
-      &.dx-editor-underlined {
-        &.dx-invalid {
-          &.dx-rtl {
-            .dx-texteditor-input {
-              padding-right: 0;
-            }
           }
         }
       }
@@ -196,7 +123,7 @@ $fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-textedi
 
 .dx-daterangebox-separator {
   padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  color: $texteditor-label-color;
+  color: $texteditor-disabled-color;
 
   .dx-icon {
     @include dx-icon-sizing($fluent-base-icon-size);

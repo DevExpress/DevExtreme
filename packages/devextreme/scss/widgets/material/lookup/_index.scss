@@ -10,11 +10,16 @@
 @use "../dropDownEditor" as *;
 @use "../common/mixins" as *;
 @use "../../base/lookup";
+@use "../../base/lookup/mixins" as *;
 
 // adduse
 @use "../dropDownList";
 
 .dx-lookup {
+  .dx-lookup-arrow {
+    inset-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
+  }
+
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-lookup-field {
@@ -27,10 +32,6 @@
       .dx-lookup-field {
         padding-inline-end: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
       }
-    }
-
-    .dx-lookup-arrow {
-      inset-inline-end: math.div($material-base-icon-size, 2);
     }
   }
 
@@ -79,6 +80,7 @@
 
 .dx-lookup-field {
   font-size: $material-lookup-font-size;
+  line-height: normal;
 
   &::before {
     line-height: normal;
@@ -104,14 +106,13 @@
   }
 }
 
-.dx-lookup-arrow {
-  @include dx-icon(spindown);
-
-  width: $material-base-icon-size;
-  color: $lookup-icon-color;
-
-  @include dx-icon-font-centered-sizing($material-base-icon-size);
-}
+@include dx-lookup-arrow(
+  spindown,
+  "\f001",
+  $material-base-icon-size,
+  $lookup-icon-color,
+  $material-base-icon-size,
+);
 
 .dx-state-readonly .dx-lookup-field::before {
   opacity: 0.5;

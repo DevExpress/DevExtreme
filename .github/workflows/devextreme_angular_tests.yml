@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js 18
       uses: actions/setup-node@v3

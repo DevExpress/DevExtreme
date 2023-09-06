@@ -681,6 +681,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
+  iconPosition?: "top" | "end" | "bottom" | "start";
   itemHoldTimeout?: number;
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;

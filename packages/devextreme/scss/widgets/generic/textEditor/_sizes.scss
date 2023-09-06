@@ -12,6 +12,12 @@ $generic-texteditor-button-top-padding: $generic-base-inline-widget-top-padding 
 $generic-texteditor-button-bottom-padding: $generic-base-inline-widget-bottom-padding - $generic-button-border-weight - 2px !default;
 $generic-texteditor-button-icononly-top-padding: $generic-texteditor-button-top-padding + 1px !default;
 
+$generic-texteditor-outlined-input-with-label-top-padding: $generic-base-inline-borderedwidget-top-padding !default;
+$generic-texteditor-filled-input-with-label-top-padding: $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-top-padding - 1px !default;
+$generic-texteditor-filled-input-with-label-bottom-padding: $generic-base-inline-borderedwidget-bottom-padding - $generic-base-inline-borderedwidget-top-padding + 1px !default;
+$generic-texteditor-underlined-input-with-label-top-padding: $generic-base-inline-borderedwidget-top-padding + 4px !default;
+$generic-texteditor-underlined-input-with-label-bottom-padding: $generic-base-inline-borderedwidget-bottom-padding - 4px !default;
+
 @if $size == "default" {
   $generic-texteditor-clear-icon-oversize: 2px !default;
   $generic-texteditor-label-size: 12px !default;

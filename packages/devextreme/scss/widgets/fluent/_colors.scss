@@ -17,7 +17,7 @@ $fluent-color-theme-modificator: null !default;
 * $name 10. Font family
 * $type text
 */
-$base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif !default;
+$base-font-family: Bahnschrift, 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
 * $name 20. Text color
@@ -104,6 +104,7 @@ $typography-bg: null !default;
 $typography-color: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
+$base-disabled-color: null !default;
 $base-dropdown-shadow-color: null !default;
 $base-invalid-color: $base-danger !default;
 $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -125,7 +126,8 @@ $typography-link-color: $base-link-color !default;
 @if $mode == "light" {
   $fluent-color-theme-modificator: "light" !default;
   $base-text-color: rgba(36, 36, 36, 1) !default;
-  $base-label-color: $base-text-color !default;
+  $base-label-color: rgba(0, 0, 0, 0.6) !default;
+  $base-disabled-color: rgba(0, 0, 0, $base-disabled-opacity) !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #fff !default;
@@ -149,7 +151,8 @@ $typography-link-color: $base-link-color !default;
 @if $mode == "dark" {
   $fluent-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
-  $base-label-color: $base-text-color !default;
+  $base-label-color: rgba(255, 255, 255, 0.6) !default;
+  $base-disabled-color: rgba(255, 255, 255, $base-disabled-opacity) !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #363640 !default;

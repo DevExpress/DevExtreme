@@ -10,11 +10,16 @@
 @use "../dropDownEditor" as *;
 @use "../common/mixins" as *;
 @use "../../base/lookup";
+@use "../../base/lookup/mixins" as *;
 
 // adduse
 @use "../dropDownList";
 
 .dx-lookup {
+  .dx-lookup-arrow {
+    inset-inline-end: $fluent-filled-texteditor-spin-button-horizontal-padding;
+  }
+
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-lookup-field {
@@ -28,15 +33,12 @@
         padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2;
       }
     }
-
-    .dx-lookup-arrow {
-      inset-inline-end: math.div($fluent-base-icon-size, 2);
-    }
   }
 
   &.dx-editor-underlined {
     .dx-lookup-field {
-      padding: $fluent-standard-texteditor-input-padding;
+      padding-top: $fluent-standard-texteditor-input-top-padding;
+      padding-bottom: $fluent-standard-texteditor-input-top-padding;
       padding-inline-start: $fluent-base-standard-texteditor-input-horizontal-padding;
       padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size;
     }
@@ -79,6 +81,7 @@
 
 .dx-lookup-field {
   font-size: $fluent-lookup-font-size;
+  line-height: normal;
 
   &::before {
     line-height: normal;
@@ -104,14 +107,13 @@
   }
 }
 
-.dx-lookup-arrow {
-  @include dx-icon(spindown);
-
-  width: $fluent-base-icon-size;
-  color: $lookup-icon-color;
-
-  @include dx-icon-font-centered-sizing($fluent-base-icon-size);
-}
+@include dx-lookup-arrow(
+  spindown,
+  "\f001",
+  $fluent-base-icon-size,
+  $lookup-icon-color,
+  $fluent-base-icon-size,
+);
 
 .dx-state-readonly .dx-lookup-field::before {
   opacity: 0.5;
