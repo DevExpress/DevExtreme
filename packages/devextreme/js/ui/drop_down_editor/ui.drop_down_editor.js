@@ -347,19 +347,18 @@ const DropDownEditor = TextBox.inherit({
         $container.empty();
 
         const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
-        const $templateContainer = getPublicElement($templateWrapper);
 
         fieldTemplate.render({
             model: data,
-            container: $templateContainer,
+            container: getPublicElement($templateWrapper),
             onRendered: () => {
-                const $input = this._input($templateContainer);
+                const $input = this._input($templateWrapper);
 
                 if(!$input.length) {
                     throw errors.Error('E1010');
                 }
 
-                const renderedInRoot = !!this.$element().find($templateContainer).length;
+                const renderedInRoot = !!this.$element().find($templateWrapper).length;
 
                 if(!renderedInRoot) {
                     return;
