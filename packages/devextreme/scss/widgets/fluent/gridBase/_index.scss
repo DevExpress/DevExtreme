@@ -43,13 +43,13 @@ $grid-masterdetail-padding: 16px;
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
     .dx-bordered-top-view {
-      border-top-left-radius: $fluent-base-border-radius;
-      border-top-right-radius: $fluent-base-border-radius;
+      border-top-left-radius: $fluent-grid-base-border-radius;
+      border-top-right-radius: $fluent-grid-base-border-radius;
     }
 
     .dx-bordered-bottom-view {
-      border-bottom-left-radius: $fluent-base-border-radius;
-      border-bottom-right-radius: $fluent-base-border-radius;
+      border-bottom-left-radius: $fluent-grid-base-border-radius;
+      border-bottom-right-radius: $fluent-grid-base-border-radius;
     }
 
     .dx-menu {
@@ -261,11 +261,11 @@ $grid-masterdetail-padding: 16px;
       padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
 
       &:first-child {
-        border-top-left-radius: $fluent-base-border-radius;
+        border-top-left-radius: $fluent-grid-base-border-radius;
       }
 
       &:last-child {
-        border-top-right-radius: $fluent-base-border-radius;
+        border-top-right-radius: $fluent-grid-base-border-radius;
       }
     }
 
@@ -1239,10 +1239,10 @@ $grid-masterdetail-padding: 16px;
   }
 
   .dx-#{$widget-name}-dragview {
-    border-radius: $fluent-base-border-radius;
+    border-radius: $fluent-grid-base-border-radius;
 
     .dx-#{$widget-name}-borders {
-      border-radius: $fluent-base-border-radius;
+      border-radius: $fluent-grid-base-border-radius;
     }
   }
 }
