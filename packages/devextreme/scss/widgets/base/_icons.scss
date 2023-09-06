@@ -170,14 +170,15 @@
   }
 }
 
-@mixin dx-icon-margin($size) {
-  margin-right: $size;
-  margin-left: 0;
+@mixin dx-icon-margin($size, $position: start) {
+  @if $position == start {
+    margin-inline-end: $size;
+    margin-inline-start: 0;
+  }
 
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-left: $size;
-    margin-right: 0;
+  @if $position == end {
+    margin-inline-start: $size;
+    margin-inline-end: 0;
   }
 }
 

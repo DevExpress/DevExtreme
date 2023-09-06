@@ -154,7 +154,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxCalendar', {
-    values: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
+    value: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
     selectionMode,
   }));
 
@@ -172,7 +172,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxCalendar', {
-    values: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
+    value: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
     selectionMode,
     showWeekNumbers: true,
     firstDayOfWeek: 1,
@@ -192,7 +192,7 @@ test('Calendar with multiview rendered correct', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxCalendar', {
-  values: [new Date(2023, 0, 5), new Date(2023, 1, 14)],
+  value: [new Date(2023, 0, 5), new Date(2023, 1, 14)],
   selectionMode: 'range',
   viewsCount: 2,
 }));

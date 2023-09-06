@@ -1763,6 +1763,7 @@ declare module DevExpress.common {
     type: 'stringLength';
   };
   export type SubmenuShowMode = 'onClick' | 'onHover';
+  export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type TextBoxPredefinedButton = 'clear';
 
   /**
@@ -25531,6 +25532,10 @@ declare module DevExpress.ui {
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
+     * [descr:dxTabPanelOptions.iconPosition]
+     */
+    iconPosition?: DevExpress.common.TabsIconPosition;
+    /**
      * [descr:dxTabPanelOptions.items]
      */
     items?: Array<TItem>;
@@ -25713,7 +25718,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.iconPosition]
      */
-    iconPosition?: DevExpress.ui.dxTabs.IconPosition;
+    iconPosition?: DevExpress.common.TabsIconPosition;
     /**
      * [descr:dxTabsOptions.items]
      */
@@ -30021,7 +30026,6 @@ declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;
 }
 declare module DevExpress.ui.dxTabs {
-  export type IconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type Item = dxTabsItem;
 }
 declare module DevExpress.ui.dxTileView {

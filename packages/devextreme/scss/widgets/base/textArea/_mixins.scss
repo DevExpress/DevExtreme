@@ -1,0 +1,51 @@
+@use "../icons" as *;
+
+@mixin dx-textarea(
+  $input-container-margin,
+  $content-line-height,
+  $outlined-top-padding,
+  $filled-top-padding,
+  $underlined-top-padding,
+) {
+  .dx-textarea {
+    .dx-texteditor-input-container {
+      margin: $input-container-margin;
+    }
+  
+    .dx-texteditor-input,
+    .dx-placeholder::before {
+      line-height: $content-line-height;
+    }
+  
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: 0;
+      }
+  
+      &.dx-editor-outlined {
+        .dx-texteditor-container {
+          padding-top: $outlined-top-padding;
+        }
+      }
+  
+      &.dx-editor-filled {
+        .dx-texteditor-container {
+          padding-top: $filled-top-padding;
+        }
+      }
+      
+      &.dx-editor-underlined {
+        .dx-texteditor-container {
+          padding-top: $underlined-top-padding;
+        }
+      }
+    }
+  
+    .dx-icon-clear {
+      top: 0;
+      margin-top: 0;
+    }
+  }
+}
