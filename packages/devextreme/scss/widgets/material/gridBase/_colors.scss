@@ -63,13 +63,13 @@ $datagrid-row-selected-color: $datagrid-base-color !default;
 * $name 65. Focused row text color
 * $type color
 */
-$datagrid-row-focused-color: $base-inverted-text-color !default;
+$datagrid-row-focused-color: $base-text-color !default;
 
 /**
 * $name 70. Focused row background color
 * $type color
 */
-$datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+$datagrid-row-focused-bg: color.change($base-accent, $alpha: 0.2) !default;
 $datagrid-hover-bg: $base-hover-bg !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
 
@@ -93,7 +93,7 @@ $datagrid-cell-removed-text-color: null !default;
 * $type color
 */
 $datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
-$datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
+$datagrid-nodata-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
 
 /**
 * $name 90. Group row text color
@@ -173,7 +173,7 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
-  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
+  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -188,7 +188,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $mode == "dark" {
-  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
+  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.72) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
