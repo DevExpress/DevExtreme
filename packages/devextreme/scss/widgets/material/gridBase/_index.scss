@@ -968,11 +968,6 @@ $grid-masterdetail-padding: 16px;
           color: $datagrid-link-color;
         }
 
-        & > td,
-        & > tr:last-child > td {
-          border-bottom: 2px solid $datagrid-focused-border-color;
-        }
-
         &:not(.dx-row-lines) {
           & > td,
           & > tr:first-child > td {
