@@ -107,11 +107,7 @@ export const Component = Class.inherit({
                 const license = parseToken(licenseToken);
 
                 if(license.kind === 'corrupted') {
-                    if(license.error === 'version') {
-                        errors.log(invalidVersionLicenseMessage);
-                    } else {
-                        errors.log(invalidFormatLicenseMessage);
-                    }
+                    errors.log(invalidFormatLicenseMessage);
                 } else {
                     const [majorStr, minorStr] = version.split('.');
                     const major = parseInt(majorStr, 10);
