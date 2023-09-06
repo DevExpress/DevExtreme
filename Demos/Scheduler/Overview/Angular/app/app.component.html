@@ -38,9 +38,9 @@
   <div
     *dxTemplate="let cellData of 'dataCellTemplate'"
     class="employee-weekend"
-    [ngClass]="markWeekEnd(cellData)"
+    [ngClass]="markWeekEnd | apply : cellData"
   >
-    <div class="day-cell" [ngClass]="markTraining(cellData)">{{
+    <div class="day-cell" [ngClass]="markTraining | apply : cellData">{{
       cellData.text
     }}</div>
   </div>

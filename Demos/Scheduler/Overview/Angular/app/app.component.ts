@@ -1,9 +1,16 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, enableProdMode, Pipe, PipeTransform,
+} from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { Service, Employee } from './app.service';
+
+@Pipe({ name: 'apply' })
+export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
+  transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
+}
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -30,7 +37,7 @@ export class AppComponent {
     this.resourcesDataSource = service.getEmployees();
   }
 
-  markWeekEnd(cellData) {
+  markWeekEnd = (cellData) => {
     function isWeekEnd(date) {
       const day = date.getDay();
       return day === 0 || day === 6;
@@ -39,16 +46,16 @@ export class AppComponent {
     classObject[`employee-${cellData.groups.employeeID}`] = true;
     classObject[`employee-weekend-${cellData.groups.employeeID}`] = isWeekEnd(cellData.startDate);
     return classObject;
-  }
+  };
 
-  markTraining(cellData) {
+  markTraining = (cellData) => {
     const classObject = {
       'day-cell': true,
     };
 
     classObject[AppComponent.getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)] = true;
     return classObject;
-  }
+  };
 
   static getCurrentTraining(date, employeeID) {
     const result = (date + employeeID) % 3;
@@ -65,7 +72,7 @@ export class AppComponent {
     DxSchedulerModule,
     DxTemplateModule,
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

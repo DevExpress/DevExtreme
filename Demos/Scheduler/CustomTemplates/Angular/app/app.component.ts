@@ -1,5 +1,5 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  NgModule, Component, ViewChild, enableProdMode, Pipe, PipeTransform,
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -8,6 +8,11 @@ import Query from 'devextreme/data/query';
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
+
+@Pipe({ name: 'apply' })
+export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
+  transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
+}
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -36,7 +41,7 @@ export class AppComponent {
     this.theatreData = service.getTheatreData();
   }
 
-  onAppointmentFormOpening(data) {
+  onAppointmentFormOpening = (data) => {
     const that = this;
     const form = data.form;
     let movieInfo = that.getMovieById(data.appointmentData.movieId) || {};
@@ -99,18 +104,16 @@ export class AppComponent {
         },
       },
     }]);
-  }
+  };
 
-  getDataObj(objData) {
+  getDataObj = (objData) => {
     for (let i = 0; i < this.data.length; i++) {
       if (this.data[i].startDate.getTime() === objData.startDate.getTime() && this.data[i].theatreId === objData.theatreId) { return this.data[i]; }
     }
     return null;
-  }
+  };
 
-  getMovieById(id) {
-    return Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
-  }
+  getMovieById = (id) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 }
 
 @NgModule({
@@ -120,7 +123,7 @@ export class AppComponent {
     DxSchedulerModule,
     DxTemplateModule,
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import {
-  NgModule, ViewChild, Component, enableProdMode,
+  NgModule, ViewChild, Component, enableProdMode, Pipe, PipeTransform,
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -13,6 +13,11 @@ import {
 } from 'devextreme-angular';
 import Query from 'devextreme/data/query';
 import { Appointment, Service, MovieData } from './app.service';
+
+@Pipe({ name: 'apply' })
+export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
+  transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
+}
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -47,25 +52,23 @@ export class AppComponent {
     this.moviesData = service.getMoviesData();
   }
 
-  onContentReady(e) {
+  onContentReady = (e) => {
     e.component.scrollTo(new Date());
-  }
+  };
 
-  onAppointmentClick(e) {
+  onAppointmentClick = (e) => {
     e.cancel = true;
-  }
+  };
 
-  onAppointmentDblClick(e) {
+  onAppointmentDblClick = (e) => {
     e.cancel = true;
-  }
+  };
 
-  changeIndicatorUpdateInterval(e) {
+  changeIndicatorUpdateInterval = (e) => {
     this.indicatorUpdateInterval = e.value * 1000;
-  }
+  };
 
-  getMovieById(id) {
-    return Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
-  }
+  getMovieById = (id) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 }
 
 @NgModule({
@@ -77,7 +80,7 @@ export class AppComponent {
     DxNumberBoxModule,
     DxTemplateModule,
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

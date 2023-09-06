@@ -34,7 +34,9 @@
 
   <div *dxTemplate="let model of 'appointment-template'">
     <div class="showtime-preview">
-      <div>{{ getMovieById(model.targetedAppointmentData.movieId).text }}</div>
+      <div>{{
+        (getMovieById | apply : model.appointmentData.movieId : this).text
+      }}</div>
       <div
         >Ticket Price:
         <strong>{{ "$" + model.targetedAppointmentData.price }}</strong>
@@ -51,30 +53,23 @@
   </div>
 
   <div *dxTemplate="let model of 'tooltip-template'">
-    <div class="movie-tooltip">
-      <img [src]="getMovieById(model.appointmentData.movieId).image" />
-      <div class="movie-info">
-        <div class="movie-title">
-          {{
-            getMovieById(model.appointmentData.movieId).text +
-              " (" +
-              getMovieById(model.appointmentData.movieId).year +
-              ")"
-          }}
-        </div>
-        <div>
-          {{
-            "Director: " + getMovieById(model.appointmentData.movieId).director
-          }}
-        </div>
-        <div>
-          {{
-            "Duration: " +
-              getMovieById(model.appointmentData.movieId).duration +
-              " minutes"
-          }}
+    <ng-container
+      *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
+    >
+      <div class="movie-tooltip">
+        <img [src]="movie.image" />
+        <div class="movie-info">
+          <div class="movie-title">
+            {{ movie.text + " (" + movie.year + ")" }}
+          </div>
+          <div>
+            {{ "Director: " + movie.director }}
+          </div>
+          <div>
+            {{ "Duration: " + movie.duration + " minutes" }}
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </dx-scheduler>

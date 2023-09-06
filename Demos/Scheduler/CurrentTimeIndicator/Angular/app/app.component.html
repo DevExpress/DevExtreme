@@ -17,12 +17,14 @@
   <dxi-resource fieldExpr="movieId" [dataSource]="moviesData"> </dxi-resource>
 
   <div *dxTemplate="let model of 'appointment-template'">
-    <div class="movie">
-      <img [src]="getMovieById(model.appointmentData.movieId).image" />
-      <div class="movie-text">{{
-        getMovieById(model.appointmentData.movieId).text
-      }}</div>
-    </div>
+    <ng-container
+      *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
+    >
+      <div class="movie">
+        <img [src]="movie.image" />
+        <div class="movie-text">{{ movie.text }}</div>
+      </div>
+    </ng-container>
   </div>
 </dx-scheduler>
 
