@@ -1,3 +1,0 @@
-dist
-platforms/**/src/declaration
-platforms/vue/src/*-app.js
