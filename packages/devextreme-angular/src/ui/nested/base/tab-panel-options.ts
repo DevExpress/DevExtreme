@@ -91,6 +91,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
+    get iconPosition(): string {
+        return this._getOption('iconPosition');
+    }
+    set iconPosition(value: string) {
+        this._setOption('iconPosition', value);
+    }
+
     get itemHoldTimeout(): number {
         return this._getOption('itemHoldTimeout');
     }
