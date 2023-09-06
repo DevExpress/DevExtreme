@@ -961,7 +961,7 @@ QUnit.module('Templates', () => {
                             setTimeout(() => {
                                 $input.dxTextBox();
                                 onRendered();
-                                container.remove();
+                                container.detach();
                                 onRendered();
                             });
                         }
