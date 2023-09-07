@@ -262,8 +262,7 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
   getFirstVisibleView() {
     const columnHeaderView = this.getView('columnHeadersView');
-
-    if (columnHeaderView?.isVisible()) {
+    if (columnHeaderView?.isVisible?.()) {
       return columnHeaderView;
     }
 
@@ -272,12 +271,12 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
   getLastVisibleView() {
     const filterPanelView = this.getView('filterPanelView');
-    if (filterPanelView?.isVisible()) {
+    if (filterPanelView?.isVisible?.()) {
       return filterPanelView;
     }
 
     const footerView = this.getView('footerView');
-    if (footerView?.isVisible()) {
+    if (footerView?.isVisible?.()) {
       return footerView;
     }
 
@@ -285,17 +284,17 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
   },
 
   getViewWithClass(className) {
-    return Object.values(this.component._views).find((view: any) => view?.element?.()?.hasClass(className));
+    return Object.values(this.component._views).find((view: any) => view?._$element?.hasClass(className));
   },
 
   updateBorderedViews() {
     const BORDERED_TOP_VIEW_CLASS = 'dx-bordered-top-view';
     const BORDERED_BOTTOM_VIEW_CLASS = 'dx-bordered-bottom-view';
 
-    const oldFirstBorderedElement = this.getViewWithClass(BORDERED_TOP_VIEW_CLASS)?.element();
-    const oldLastBorderedElement = this.getViewWithClass(BORDERED_BOTTOM_VIEW_CLASS)?.element();
-    const newFirstBorderedElement = this.getFirstVisibleView()?.element();
-    const newLastBorderedElement = this.getLastVisibleView()?.element();
+    const oldFirstBorderedElement = this.getViewWithClass(BORDERED_TOP_VIEW_CLASS)?._$element;
+    const oldLastBorderedElement = this.getViewWithClass(BORDERED_BOTTOM_VIEW_CLASS)?._$element;
+    const newFirstBorderedElement = this.getFirstVisibleView()?._$element;
+    const newLastBorderedElement = this.getLastVisibleView()?._$element;
 
     oldFirstBorderedElement?.removeClass(BORDERED_TOP_VIEW_CLASS);
     oldLastBorderedElement?.removeClass(BORDERED_BOTTOM_VIEW_CLASS);
