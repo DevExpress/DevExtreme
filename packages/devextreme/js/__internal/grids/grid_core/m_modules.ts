@@ -296,11 +296,11 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     const newFirstBorderedElement = this.getFirstVisibleView()?._$element;
     const newLastBorderedElement = this.getLastVisibleView()?._$element;
 
-    if (oldFirstBorderedElement?.hasClass(BORDERED_TOP_VIEW_CLASS)) {
+    if (!oldFirstBorderedElement?.is(newFirstBorderedElement)) {
       oldFirstBorderedElement?.removeClass(BORDERED_TOP_VIEW_CLASS);
     }
 
-    if (oldLastBorderedElement?.hasClass(BORDERED_BOTTOM_VIEW_CLASS)) {
+    if (!oldLastBorderedElement?.is(newLastBorderedElement)) {
       oldLastBorderedElement?.removeClass(BORDERED_BOTTOM_VIEW_CLASS);
     }
 
