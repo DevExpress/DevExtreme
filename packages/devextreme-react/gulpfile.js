@@ -100,9 +100,9 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
 
     [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)]
         .forEach(([,modulePath]) => {
-            const moduleFileName = modulePath.match(/[^/]+$/)[0];
+            const [,, moduleFilePath, moduleFileName] = modulePath.match(/((.*)\/)?([^/]+$)/);
 
-            makeModuleForFile(moduleFileName);
+            makeModuleForFile(moduleFileName, '', moduleFilePath);
         })
 
     done();
@@ -179,16 +179,16 @@ function makeModuleForFolder(folderPath, moduleFileNames) {
     }
 }
 
-function makeModuleForFile(moduleFileName, folder = '') {
+function makeModuleForFile(moduleFileName, folder = '', filePath ) {
     fs.mkdirSync(path.join(__dirname, config.npm.dist, folder, moduleFileName));
 
-    generatePackageJsonFile(folder, moduleFileName);
+    generatePackageJsonFile(folder, moduleFileName, filePath);
 }
 
-function generatePackageJsonFile(folder, moduleFileName) {
+function generatePackageJsonFile(folder, moduleFileName, filePath = folder) {
     const moduleName = moduleFileName || '';
     const absoluteModulePath = path.join(__dirname, config.npm.dist, folder, moduleName);
-    const moduleFilePath = (folder ? folder + '/' : '') + (moduleName || 'index');
+    const moduleFilePath = (filePath ? filePath + '/' : '') + (moduleName || 'index');
     const relativePath = path.relative(
         absoluteModulePath,
         path.join(__dirname, config.npm.dist, 'esm', moduleFilePath + '.js')
