@@ -3,25 +3,34 @@
 // adduse
 
 $fluent-switch-width: null !default;
-$fluent-switch-handle-width: null !default;
-$fluent-switch-container-margin: null !default;
+$switch-handle-margin: null !default;
+$switch-padding: 8px !default;
+$switch-container-vertical-margin: null !default;
+$switch-container-horizontal-padding: null !default;
 $fluent-switch-height: null !default;
+$switch-handle-height: null !default;
+$switch-container-height: null !default;
 
-$fluent-switch-handle-offset: 2px !default;
-$fluent-switch-handle-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2) !default;
+$fluent-switch-shadow-blur-radius: 0 !default;
+$fluent-switch-handle-shadow: none !default; // 0 1px 4px 0 rgba(0, 0, 0, 0.2) !default;
 $fluent-switch-container-adjustment: 6px !default;
-$fluent-switch-on-off-adding-padding: 2px !default;
 
 @if $size == "default" {
-  $fluent-switch-width: 36px !default;
-  $fluent-switch-handle-width: 14px !default;
-  $fluent-switch-container-margin: 3px !default;
+  $fluent-switch-width: 40px !default; // 36px !default;
+  $switch-handle-height: 14px !default;
+  $switch-handle-margin: 3px !default;
+  $switch-container-vertical-margin: 0 !default;
+  $switch-container-horizontal-padding: $switch-handle-margin !default;
   $fluent-switch-height: 20px !default;
+  $switch-container-height: $fluent-switch-height !default;
 }
 
 @else if $size == "compact" {
   $fluent-switch-width: 32px !default;
-  $fluent-switch-handle-width: 12px !default;
-  $fluent-switch-container-margin: 2px !default;
-  $fluent-switch-height: 18px !default;
+  $switch-handle-height: 12px !default;
+  $switch-handle-margin: 2px !default;
+  $switch-container-vertical-margin: 0 !default;
+  $switch-container-horizontal-padding: $switch-handle-margin !default;
+  $fluent-switch-height: 16px !default;
+  $switch-container-height: $fluent-switch-height !default;
 }
