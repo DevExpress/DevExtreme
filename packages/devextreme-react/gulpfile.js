@@ -18,7 +18,6 @@ const NPM_README = 'npm.readme';
 const NPM_BUILD = 'npm.build';
 const NPM_BUILD_ESM = 'npm.build-esm';
 const NPM_BUILD_CJS = 'npm.build-cjs';
-const NPM_PREPARE_FOLDERS = 'npm.prepare-folders';
 const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 
@@ -88,7 +87,7 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
         .pipe(gulp.dest(config.npm.dist + '/cjs'))
 ));
 
-gulp.task(NPM_PREPARE_FOLDERS, (done) => {
+gulp.task(NPM_PREPARE_MODULES, (done) => {
     [
         ['common'],
         ['core', ['template']],
@@ -97,17 +96,14 @@ gulp.task(NPM_PREPARE_FOLDERS, (done) => {
         ([folder, moduleFileName]) => makeModuleForFolder(folder, moduleFileName)
     )
 
-    done();
-});
-
-gulp.task(NPM_PREPARE_MODULES, (done) => {
     const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
 
-    [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)].forEach(([,modulePath]) => {
-        const moduleFileName = modulePath.match(/[^/]+$/)[0];
+    [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)]
+        .forEach(([,modulePath]) => {
+            const moduleFileName = modulePath.match(/[^/]+$/)[0];
 
-        makeModuleForFile(moduleFileName);
-    })
+            makeModuleForFile(moduleFileName);
+        })
 
     done();
 });
@@ -158,10 +154,7 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
 
 gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD_WITH_HEADERS,
-    gulp.parallel(
-        NPM_PREPARE_MODULES,
-        NPM_PREPARE_FOLDERS,
-    ),
+    NPM_PREPARE_MODULES,
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
 
