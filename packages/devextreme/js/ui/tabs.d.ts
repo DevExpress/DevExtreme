@@ -18,7 +18,7 @@ import {
     Orientation,
     SingleOrMultiple,
     TabsIconPosition,
-    TabsStylingMode,
+    TabsStyle,
 } from '../common';
 
 export type ItemLike = string | Item | any;
@@ -27,7 +27,7 @@ export {
     SingleOrMultiple,
     Orientation,
     TabsIconPosition,
-    TabsStylingMode,
+    TabsStyle,
 };
 
 /**
@@ -198,7 +198,7 @@ export interface dxTabsBaseOptions<
      * @default 'primary'
      * @public
      */
-    stylingMode?: TabsStylingMode;
+    stylingMode?: TabsStyle;
 }
 
 /**

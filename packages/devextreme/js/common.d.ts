@@ -714,7 +714,7 @@ export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
  * @public
  * @namespace DevExpress.common
  */
-export type TabsStylingMode = 'primary' | 'secondary';
+export type TabsStyle = 'primary' | 'secondary';
 
 /**
  * @public

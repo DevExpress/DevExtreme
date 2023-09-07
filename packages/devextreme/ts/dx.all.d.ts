@@ -1764,7 +1764,7 @@ declare module DevExpress.common {
   };
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
-  export type TabsStylingMode = 'primary' | 'secondary';
+  export type TabsStyle = 'primary' | 'secondary';
   export type TextBoxPredefinedButton = 'clear';
 
   /**
@@ -25751,7 +25751,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.stylingMode]
      */
-    stylingMode?: DevExpress.common.TabsStylingMode;
+    stylingMode?: DevExpress.common.TabsStyle;
   }
   /**
    * @deprecated Use Item instead

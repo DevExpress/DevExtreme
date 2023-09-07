@@ -51,7 +51,7 @@ export {
     StringLengthRule,
     SubmenuShowMode,
     TabsIconPosition,
-    TabsStylingMode,
+    TabsStyle,
     TextBoxPredefinedButton,
     TextEditorButton,
     TextEditorButtonLocation,
