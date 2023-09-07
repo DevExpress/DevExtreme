@@ -358,7 +358,7 @@ const DropDownEditor = TextBox.inherit({
                     return;
                 }
 
-                const $input = this._input($templateWrapper);
+                const $input = this._input();
 
                 if(!$input.length) {
                     throw errors.Error('E1010');
