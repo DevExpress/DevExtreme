@@ -80,7 +80,7 @@
 }
 
 .dx-lookup-field {
-  font-size: $fluent-lookup-font-size;
+  min-height: $lookup-field-height;
   line-height: normal;
 
   &::before {

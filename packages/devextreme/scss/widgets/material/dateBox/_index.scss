@@ -6,6 +6,7 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../dropDownEditor" as *;
+@use "../../base/dropDownEditor/mixins" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
@@ -73,16 +74,6 @@
       background: $texteditor-hover-bg;
     }
   }
-
-  &.dx-rtl {
-    &.dx-dropdowneditor-active {
-      .dx-dropdowneditor-button {
-        .dx-dropdowneditor-icon {
-          opacity: 1;
-        }
-      }
-    }
-  }
 }
 
 .dx-datebox-wrapper-calendar {
@@ -143,7 +134,11 @@
   &,
   &:not(.dx-texteditor-empty) {
     &.dx-auto-width {
-      @include invalid-dropdowneditor-input-padding();
+      @include invalid-dropdowneditor-input-padding(
+        $material-dropdowneditor-invalid-badge-size,
+        $material-base-standard-texteditor-input-horizontal-padding,
+        $material-filled-texteditor-input-horizontal-padding
+      );
     }
   }
 }

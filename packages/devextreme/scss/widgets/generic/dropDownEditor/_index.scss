@@ -49,12 +49,6 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
     background: transparent;
   }
 
-  .dx-state-disabled & {
-    .dx-dropdowneditor-icon {
-      opacity: 1;
-    }
-  }
-
   .dx-state-readonly & {
     .dx-dropdowneditor-icon {
       opacity: 1;

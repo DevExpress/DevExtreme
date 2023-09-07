@@ -1,8 +1,8 @@
+@use "../mixins" as *;
 @use "./mixins" as *;
-@use "./textEditor/mixins" as *;
+@use "../textEditor/mixins" as *;
 
 // adduse
-
 
 .dx-dropdowneditor {
   position: relative;
@@ -92,9 +92,5 @@
 
   .dx-dropdowneditor-button {
     cursor: inherit;
-  }
-
-  .dx-dropdowneditor-icon {
-    opacity: 0.2;
   }
 }

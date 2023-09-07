@@ -1,0 +1,34 @@
+@use "../icons" as *;
+
+@mixin invalid-dropdowneditor-input-padding(
+  $invalid-badge-size,
+  $texteditor-underlined-input-horizontal-padding,
+  $texteditor-filled-input-horizontal-padding,
+) {
+  &.dx-dropdowneditor-button-visible {
+    &.dx-editor-underlined {
+      .dx-texteditor-input {
+        padding-inline-end: $invalid-badge-size + $texteditor-underlined-input-horizontal-padding;
+      }
+
+      .dx-start-datebox {
+        .dx-texteditor-input {
+          padding-inline-end: $texteditor-underlined-input-horizontal-padding;
+        }
+      }
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
+      .dx-texteditor-input {
+        padding-inline-end: $invalid-badge-size + $texteditor-filled-input-horizontal-padding;
+      }
+      
+      .dx-start-datebox {
+        .dx-texteditor-input {
+          padding-inline-end: $texteditor-filled-input-horizontal-padding;
+        }
+      }
+    }
+  }
+}

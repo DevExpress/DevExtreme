@@ -17,19 +17,22 @@ $fluent-editor-custom-button-margin: 5px;
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
 
-  .dx-editor-outlined {
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
     &::before {
-      display: block;
-      bottom: 1px;
+      content: none;
     }
   }
 
   .dx-editor-outlined,
   .dx-editor-filled {
-    &::before {
-      width: calc(100% - 2 * $fluent-daterangebox-active-bar-horizontal-margin);
-      margin: 0 $fluent-daterangebox-active-bar-horizontal-margin;
-    }
+    &.dx-datebox {
+      &::before {
+        border-radius: 0;
+        width: calc(100% - 2 * $fluent-daterangebox-active-bar-horizontal-margin);
+        margin: 0 $fluent-daterangebox-active-bar-horizontal-margin;
+      }
+    } 
   }
 
   &.dx-editor-underlined,
@@ -52,17 +55,6 @@ $fluent-editor-custom-button-margin: 5px;
           border-bottom-width: 1px;
           transition: none;
         }
-      }
-    }
-
-    .dx-datebox {
-      &::before {
-        bottom: 1px;
-      }
-
-      &::after {
-        border-color: transparent;
-        bottom: 1px;
       }
     }
   }
@@ -101,14 +93,6 @@ $fluent-editor-custom-button-margin: 5px;
   }
 
   .dx-datebox {
-    &.dx-start-datebox {
-      &.dx-texteditor {
-        .dx-texteditor-input {
-          padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding;
-        }
-      }
-    }
-
     &.dx-end-datebox {
       &.dx-texteditor {
         &.dx-invalid {
@@ -123,7 +107,7 @@ $fluent-editor-custom-button-margin: 5px;
 
 .dx-daterangebox-separator {
   padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  color: $texteditor-disabled-color;
+  color: $texteditor-disabled-text-color;
 
   .dx-icon {
     @include dx-icon-sizing($fluent-base-icon-size);
