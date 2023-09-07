@@ -23,19 +23,6 @@ const isInnerOption = (optionName) => {
     return optionName.indexOf('_', 0) === 0;
 };
 
-export const emptyLicenseMessage = 'DevExtreme: Valid license key not found.\n\n' +
-    'If you are using a trial version, you must uninstall all copies of DevExtreme once your 30 days trial period expires. For licensing-related information, please refer to the DevExtreme End User License Agreement: https://js.devexpress.com/EULAs/DevExtremeComplete/.\n\n' +
-    'To continue using DevExtreme in a project, you must purchase a license. For pricing/licensing options, please visit: https://js.devexpress.com/Buy/.\n\n' +
-    'If you have licensing-related questions or need help with a purchase, please email clientservices@devexpress.com. We will be happy to follow-up.';
-export const invalidVersionLicenseMessage = 'DevExtreme: The license key is expired.\n\n' +
-    'A mismatch exists between license key/DevExtreme version.\n\n' +
-    'To proceed, you can:\n' +
-    ' ● use a version of DevExtreme linked to your license key https://www.devexpress.com/ClientCenter/DownloadManager/\n' +
-    ' ● renew your DevExpress Subscription (once you renew your subscription, you will be entitled to product updates and support service https://www.devexpress.com/buy/renew/)\n\n' +
-    'If you have licensing-related questions or need help with a renewal, please email clientservices@devexpress.com. We will be happy to follow-up.';
-export const invalidFormatLicenseMessage = 'DevExtreme: License key verification failed.\n\n' +
-    'Make certain to specify a correct key in the GlobalConfig. If you continue to encounter an error, please visit https://www.devexpress.com/ClientCenter/DownloadManager/ to obtain a valid key.\n\n' +
-    'If you have a valid license and this problem persists, please submit a support ticket via the DevExpress Support Center. We will be happy to follow-up: https://supportcenter.devexpress.com/ticket/create';
 let licenseVerified = false;
 
 export const Component = Class.inherit({
@@ -102,23 +89,9 @@ export const Component = Class.inherit({
 
         if(!licenseVerified) {
             licenseVerified = true;
-            const licenseToken = Config().license;
-            if(licenseToken) {
-                const license = parseToken(licenseToken);
-
-                if(license.kind === 'corrupted') {
-                    errors.log(invalidFormatLicenseMessage);
-                } else {
-                    const [majorStr, minorStr] = version.split('.');
-                    const major = parseInt(majorStr, 10);
-                    const minor = parseInt(minorStr, 10);
-
-                    if(major * 10 + minor > license.payload.maxVersionAllowed) {
-                        errors.log(invalidVersionLicenseMessage);
-                    }
-                }
-            } else {
-                errors.log(emptyLicenseMessage);
+            const licenseError = verifyLicense(Config().license, version);
+            if(licenseError) {
+                errors.log(licenseError);
             }
         }
     },
@@ -424,6 +397,26 @@ export const Component = Class.inherit({
         this.endUpdate();
     }
 });
+
+export function verifyLicense(licenseToken, ver = version) {
+    if(licenseToken) {
+        const license = parseToken(licenseToken);
+
+        if(license.kind === 'corrupted') {
+            return 'W0021';
+        } else {
+            const [majorStr, minorStr] = ver.split('.');
+            const major = parseInt(majorStr, 10);
+            const minor = parseInt(minorStr, 10);
+
+            if(major * 10 + minor > license.payload.maxVersionAllowed) {
+                return 'W0020';
+            }
+        }
+    } else {
+        return 'W0019';
+    }
+}
 
 ///#DEBUG
 export function resetLicenseCheckSkipCondition() {

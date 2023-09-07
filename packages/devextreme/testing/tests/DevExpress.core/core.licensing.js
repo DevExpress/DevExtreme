@@ -1,6 +1,6 @@
 import config from 'core/config';
 import errors from 'core/errors';
-import { Component, emptyLicenseMessage, invalidVersionLicenseMessage, invalidFormatLicenseMessage, resetLicenseCheckSkipCondition } from 'core/component';
+import { Component, resetLicenseCheckSkipCondition } from 'core/component';
 const { test, module } = QUnit;
 
 const validToken_23_2 = 'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogIjYxMjFmMDIyLTFjMTItNDNjZC04YWE0LTkwNzJkNDU4YjYxNCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMyCn0=.RENyZ3Ga5rCB7/XNKYbk2Ffv1n9bUexYNhyOlqcAD02YVnPw6XyQcN+ZORScKDU9gOInJ4o7vPxkgh10KvMZNn+FuBK8UcUR7kchk7z0CHGuOcIn2jD5X2hG6SYJ0UCBG/JDG35AL09T7Uv/pGj4PolRsANxtuMpoqmvX2D2vkU=';
@@ -33,7 +33,7 @@ module('License check', {
         const instance = new TestComponent();
 
         assert.equal(log.length, 1);
-        assert.strictEqual(log[0][0], emptyLicenseMessage);
+        assert.strictEqual(log[0][0], 'W0019');
     });
 
     test('token should be verified', function(assert) {
@@ -50,7 +50,7 @@ module('License check', {
         const instance = new TestComponent();
 
         assert.equal(log.length, 1);
-        assert.strictEqual(log[0][0], invalidVersionLicenseMessage);
+        assert.strictEqual(log[0][0], 'W0020');
     });
 
     test('token check should be failed - wrong format', function(assert) {
@@ -59,6 +59,6 @@ module('License check', {
         const instance = new TestComponent();
 
         assert.equal(log.length, 1);
-        assert.strictEqual(log[0][0], invalidFormatLicenseMessage);
+        assert.strictEqual(log[0][0], 'W0021');
     });
 });
