@@ -4374,3 +4374,42 @@ test('Focus second cell (via click) -> tab navigation when focusedRowEnabled is 
     },
   }, 'field2', 'field3'],
 }, undefined, { disableFxAnimation: true }));
+
+// T1187124
+test('Keyboard navigation should work after opening-closing master-detal', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataRow(0).getCommandCell(0).element); // open master detail
+  await t.click(dataGrid.getDataRow(0).getCommandCell(0).element); // close master detail
+
+  await t.debug();
+
+  await t
+    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element)
+    .pressKey('tab')
+    .pressKey('tab')
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok();
+
+  await t
+    .pressKey('down')
+    .expect(dataGrid.getDataCell(1, 1).isFocused).ok();
+
+  await t
+    .pressKey('down')
+    .expect(dataGrid.getDataCell(2, 1).isFocused).ok();
+  await t
+    .pressKey('down')
+    .expect(dataGrid.getDataCell(3, 1).isFocused).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+  ],
+  keyExpr: 'id',
+  masterDetail: {
+    enabled: true,
+  },
+}, undefined, { disableFxAnimation: true }));
