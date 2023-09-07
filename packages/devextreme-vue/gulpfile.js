@@ -5,6 +5,7 @@ const shell = require('gulp-shell');
 const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const config = require('./build.config');
+const generateVueComponents = require('devextreme-internal-tools').generateVueComponents;
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -30,8 +31,7 @@ gulp.task(CLEAN, gulp.parallel(OUTPUTDIR_CLEAN, NPM_CLEAN));
 
 gulp.task(GENERATE,
     (done) => {
-        const generateSync = require('devextreme-vue-generator').default;
-        generateSync(
+        generateVueComponents(
             JSON.parse(fs.readFileSync(config.metadataPath).toString()),
             config.baseComponent,
             config.configComponent,
