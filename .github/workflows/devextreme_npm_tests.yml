@@ -23,7 +23,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '18'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -73,7 +73,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '18'
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -137,7 +137,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '18'
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
