@@ -947,7 +947,7 @@ QUnit.module('Templates', () => {
         }
     });
 
-    QUnit.test('should not raise error if onRendered is received for a removed template (T1178295)', function(assert) {
+    QUnit.test('should not raise error if onRendered is received for a removed template (T1178295, T1059261)', function(assert) {
         const clock = sinon.useFakeTimers();
 
         $('#dropDownEditorLazy').dxDropDownEditor({
@@ -963,6 +963,7 @@ QUnit.module('Templates', () => {
                                 $input.dxTextBox();
                                 onRendered();
                                 domAdapter.removeElement(container);
+                                domAdapter.removeElement($input);
                                 onRendered();
                             });
                         }

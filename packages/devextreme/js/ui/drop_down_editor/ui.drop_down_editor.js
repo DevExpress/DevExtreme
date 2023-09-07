@@ -352,16 +352,16 @@ const DropDownEditor = TextBox.inherit({
             model: data,
             container: getPublicElement($templateWrapper),
             onRendered: () => {
-                const $input = this._input($templateWrapper);
-
-                if(!$input.length) {
-                    throw errors.Error('E1010');
-                }
-
                 const renderedInRoot = !!this.$element().find($templateWrapper).length;
 
                 if(!renderedInRoot) {
                     return;
+                }
+
+                const $input = this._input($templateWrapper);
+
+                if(!$input.length) {
+                    throw errors.Error('E1010');
                 }
 
                 this._integrateInput();
