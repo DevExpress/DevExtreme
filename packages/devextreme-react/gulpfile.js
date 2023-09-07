@@ -88,22 +88,27 @@ gulp.task(NPM_BUILD_CJS, gulp.series(
 ));
 
 gulp.task(NPM_PREPARE_MODULES, (done) => {
-    [
+    const packParamsForFolders = [
         ['common'],
         ['core', ['template']],
         ['common/data']
-    ].forEach(
-        ([folder, moduleFileName]) => makeModuleForFolder(folder, moduleFileName)
-    )
-
-    const modulesIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
-
-    [...modulesIndex.matchAll(/from "\.\/([^;]+)";/g)]
-        .forEach(([,modulePath]) => {
+    ];
+    const modulesImportsFromIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
+    const modulesPaths = modulesImportsFromIndex.matchAll(/from "\.\/([^;]+)";/g);
+    const packParamsForModules = [...modulesPaths].map(
+        ([, modulePath]) => {
             const [,, moduleFilePath, moduleFileName] = modulePath.match(/((.*)\/)?([^/]+$)/);
 
-            makeModuleForFile(moduleFileName, '', moduleFilePath);
-        })
+            return ['', [moduleFileName], moduleFilePath];
+        }
+    );
+
+    [
+        ...packParamsForFolders,
+        ...packParamsForModules,
+    ].forEach(
+        ([folder, moduleFileNames, moduleFilePath]) => makeModule(folder, moduleFileNames, moduleFilePath)
+    )
 
     done();
 });
@@ -158,31 +163,30 @@ gulp.task(NPM_PACK, gulp.series(
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));
 
-function makeModuleForFolder(folderPath, moduleFileNames) {
+function makeModule(folder, moduleFileNames, moduleFilePath) {
     const distFolder = path.join(__dirname, config.npm.dist);
-    const distEsmFolder = path.join(distFolder, 'esm', folderPath);
+    const distModuleFolder = path.join(distFolder, folder);
+    const distEsmFolder = path.join(distFolder, 'esm', folder);
     const moduleNames = moduleFileNames || findJsModuleFileNamesInFolder(distEsmFolder);
 
     try {
-        fs.mkdirSync(path.join(distFolder, folderPath));
+        if (!fs.existsSync(distModuleFolder)) {
+            fs.mkdirSync(distModuleFolder);
+        }
 
-        if (fs.existsSync(path.join(distEsmFolder, 'index.js'))) {
-            generatePackageJsonFile(folderPath);
+        if (folder && fs.existsSync(path.join(distEsmFolder, 'index.js'))) {
+            generatePackageJsonFile(folder);
         }
 
         moduleNames.forEach((moduleFileName) => {
-            makeModuleForFile(moduleFileName, folderPath);
+            fs.mkdirSync(path.join(distModuleFolder, moduleFileName));
+
+            generatePackageJsonFile(folder, moduleFileName, moduleFilePath);
         })
     } catch (error) {
-        error.message = `Exception while makeModuleForFolder(${folderPath}).\n ${error.message}`;
+        error.message = `Exception while makeModule(${folder}).\n ${error.message}`;
         throw(error);
     }
-}
-
-function makeModuleForFile(moduleFileName, folder = '', filePath ) {
-    fs.mkdirSync(path.join(__dirname, config.npm.dist, folder, moduleFileName));
-
-    generatePackageJsonFile(folder, moduleFileName, filePath);
 }
 
 function generatePackageJsonFile(folder, moduleFileName, filePath = folder) {
