@@ -55,6 +55,7 @@ test('Cell should not highlighted after editing another cell when startEditActio
     allowUpdating: true,
     startEditAction: 'dblClick',
   },
+  // @ts-expect-error private option
   loadingTimeout: null,
 }));
 
@@ -1144,7 +1145,7 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
     { id: 5, c0: 'c0_5', c1: 'c1_5' },
     { id: 6, c0: 'c0_6', c1: 'c1_6' },
   ],
-  tabIndex: '111',
+  tabIndex: 111,
 }));
 
 test('Previous navigation elements should not have "tabindex" if navigation action is "tab" (T870120)', async (t) => {
@@ -1169,7 +1170,7 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
     { id: 5, c0: 'c0_5', c1: 'c1_5' },
     { id: 6, c0: 'c0_6', c1: 'c1_6' },
   ],
-  tabIndex: '111',
+  tabIndex: 111,
 }));
 
 test('The first group row should be expanded when the Enter key is pressed (T869799)', async (t) => {
@@ -1345,7 +1346,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [],
     editing: {
-      mode: editMode.toLowerCase(),
+      mode: editMode.toLowerCase() as any,
       allowAdding: true,
     },
     columns: ['a', 'b'],
@@ -1389,7 +1390,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [],
     editing: {
-      mode: editMode.toLowerCase(),
+      mode: editMode.toLowerCase() as any,
       allowAdding: true,
     },
     columns: ['a', 'b'],
@@ -1431,7 +1432,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [{ a: '1', b: '2' }],
     editing: {
-      mode: editMode.toLowerCase(),
+      mode: editMode.toLowerCase() as any,
       allowUpdating: true,
     },
     columns: ['a', 'b'],
@@ -1473,7 +1474,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [{ a: '1', b: '2' }],
     editing: {
-      mode: editMode.toLowerCase(),
+      mode: editMode.toLowerCase() as any,
       allowUpdating: true,
     },
     columns: ['a', 'b'],
@@ -1641,7 +1642,7 @@ test.skip('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowR
         useNative: false,
       },
       editing: {
-        mode: editMode,
+        mode: editMode as any,
         allowUpdating: true,
       },
       paging: {
@@ -1869,7 +1870,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
         focusedRowKey: 1,
         focusedRowEnabled,
         editing: {
-          mode: editMode.toLowerCase(),
+          mode: editMode.toLowerCase() as any,
           allowUpdating: true,
         },
       });
@@ -2513,6 +2514,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     height: 300,
     scrolling: {
       mode: 'virtual',
+      // @ts-expect-error private option
       legacyMode: false,
     },
     columns: ['Name', 'Description'],
@@ -2552,7 +2554,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
       keyExpr: 'ID',
       repaintChangesOnly,
       editing: {
-        mode: editMode.toLowerCase(),
+        mode: editMode.toLowerCase() as any,
         allowUpdating: true,
         allowAdding: true,
       },
@@ -2946,10 +2948,13 @@ test('Lookup editor should update cell value on down or up key when cell is focu
     },
     onContentReady(e) {
       if (e.component.getCombinedFilter()) {
+        // @ts-expect-error flag for test
         if (e.component.myAllExpand) {
+          // @ts-expect-error flag for test
           e.component.myAllExpand = false;
           return;
         }
+        // @ts-expect-error flag for test
         e.component.myAllExpand = true;
         e.component.expandAll(0);
       }
