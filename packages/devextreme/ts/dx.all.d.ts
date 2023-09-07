@@ -4190,7 +4190,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowInsertingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   };
   /**
    * [descr:RowKeyInfo]
@@ -4236,7 +4236,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowRemovingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * [descr:RowUpdatedInfo]
@@ -4276,7 +4276,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowUpdatingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * [descr:RowValidatingInfo]
