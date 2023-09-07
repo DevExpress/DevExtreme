@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build-npm-devextreme"
+        "script": "build"
       },
       "inputs": [
         "{projectRoot}/build/**/*",
@@ -23,8 +23,8 @@
         "{projectRoot}/*.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/internal-tools",
-        "{projectRoot}/artifacts/npm"
+        "{workspaceRoot}/artifacts/internal-tools",
+        "{projectRoot}/dist"
       ]
     }
   },

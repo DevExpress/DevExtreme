@@ -40,8 +40,8 @@ const esmSrcGlobs = srcGlobsPattern(
 
 const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
+    'dist/**/*.*',
     '!artifacts/transpiled**/**/*',
-    '!artifacts/npm/**/*.*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',

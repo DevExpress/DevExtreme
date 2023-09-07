@@ -39,17 +39,17 @@ jobs:
       run: npx nx build devextreme
 
     - name: Pack devextreme package
-      working-directory: ./packages/devextreme/artifacts/npm/devextreme
+      working-directory: ./packages/devextreme
       run: npm pack
 
     - name: Pack devextreme-dist package
-      working-directory: ./packages/devextreme/artifacts/npm/devextreme-dist
+      working-directory: ./packages/devextreme-dist
       run: npm pack
 
     - name: Copy packages
       run: |
-        cp ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
-        cp ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+        cp ./packages/devextreme/*.tgz ./devextreme-installer.tgz
+        cp ./packages/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v3
