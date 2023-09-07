@@ -3957,7 +3957,7 @@ declare module DevExpress.common.grids {
    */
   export type RowInsertingInfo<TRowData = any> = {
     data: TRowData;
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -3979,7 +3979,7 @@ declare module DevExpress.common.grids {
   export interface RowRemovingInfo<TRowData = any, TKey = any> {
     readonly data: TRowData;
     readonly key: TKey;
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -3996,7 +3996,7 @@ declare module DevExpress.common.grids {
     readonly oldData: TRowData;
     newData: DevExpress.core.DeepPartial<TRowData>;
     readonly key: TKey;
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
