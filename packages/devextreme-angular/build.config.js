@@ -1,7 +1,6 @@
 module.exports = {
     tools: {
         metadataGenerator: {
-            importFrom: 'devextreme-angular-generator/dist/metadata-generator',
             sourceMetadataFilePath: './metadata/NGMetaData.json',
             deprecatedMetadataFilePath: './metadata/DeprecatedComponentsMetadata.json',
             outputFolderPath: './metadata/generated',
@@ -12,14 +11,12 @@ module.exports = {
             generateReexports: true,
         },
         componentGenerator: {
-            importFrom: 'devextreme-angular-generator/dist/dot-generator',
             metadataFolderPath: './metadata/generated/',
             outputFolderPath: './src/ui/',
             nestedPathPart: 'nested',
             basePathPart: 'base'
         },
         facadeGenerator: {
-            importFrom: 'devextreme-angular-generator/dist/facade-generator',
             facades: {
                 './src/index.ts': {
                     sourceDirectories: [
@@ -34,7 +31,6 @@ module.exports = {
             ]
         },
         moduleFacadeGenerator: {
-            importFrom: 'devextreme-angular-generator/dist/module.facade-generator',
             moduleFacades: {
                 './src/ui/all.ts': {
                     sourceComponentDirectories: [
@@ -47,7 +43,6 @@ module.exports = {
             }
         },
         componentNamesGenerator: {
-            importFrom: 'devextreme-angular-generator/dist/component-names-generator',
             componentFilesPath: './src/ui/',
             excludedFileNames: [
                 'nested',
@@ -60,7 +55,6 @@ module.exports = {
             outputFileName: 'tests/src/server/component-names.ts'
         },
         commonReexportsGenerator: {
-            importFrom: 'devextreme-angular-generator/dist/common-reexports-generator',
             metadataPath: './metadata/NGMetaData.json',
             outputPath: './src/'
         },
