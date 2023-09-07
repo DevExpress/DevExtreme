@@ -9,7 +9,7 @@
       "options": {
         "script": "regenerate"
       },
-      "dependsOn": ["devextreme-monorepo:\"react:copy-metadata\"", "devextreme-monorepo:\"react:build-generator\""]
+      "dependsOn": ["devextreme-monorepo:\"react:copy-metadata\""]
     }
   },
   "tags": []
