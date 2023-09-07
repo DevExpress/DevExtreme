@@ -9079,11 +9079,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?: Date | number | string;
-    /**
-     * [descr:dxCalendarOptions.values]
-     */
-    values?: Array<Date | number | string>;
+    value?: Date | number | string | Array<Date | number | string>;
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
