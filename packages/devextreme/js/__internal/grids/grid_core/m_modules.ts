@@ -260,30 +260,47 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     return this.component._views?.[name];
   },
 
-  getFirstVisibleView(viewNames, checkLastFirst = false) {
-    checkLastFirst && viewNames.reverse();
-    return viewNames.find((name) => this.getView(name)?.isVisible?.());
+  getFirstVisibleView() {
+    const columnHeaderView = this.getView('columnHeadersView');
+
+    if (columnHeaderView?.isVisible()) {
+      return columnHeaderView;
+    }
+
+    return this.getView('rowsView');
+  },
+
+  getLastVisibleView() {
+    const filterPanelView = this.getView('filterPanelView');
+    if (filterPanelView?.isVisible()) {
+      return filterPanelView;
+    }
+
+    const footerView = this.getView('footerView');
+    if (footerView?.isVisible()) {
+      return footerView;
+    }
+
+    return this.getView('rowsView');
+  },
+
+  getViewWithClass(className) {
+    return Object.values(this.component._views).find((view: any) => view.element()?.hasClass(className));
   },
 
   updateBorderedViews() {
     const BORDERED_TOP_VIEW_CLASS = 'dx-bordered-top-view';
     const BORDERED_BOTTOM_VIEW_CLASS = 'dx-bordered-bottom-view';
 
-    const BORDERED_TOP_VIEW_NAMES = ['columnHeadersView', 'rowsView'];
-    const BORDERED_BOTTOM_VIEW_NAMES = ['rowsView', 'footerView', 'filterPanelView'];
+    const oldFirstBorderedElement = this.getViewWithClass(BORDERED_TOP_VIEW_CLASS)?.element();
+    const oldLastBorderedElement = this.getViewWithClass(BORDERED_BOTTOM_VIEW_CLASS)?.element();
+    const newFirstBorderedElement = this.getFirstVisibleView()?.element();
+    const newLastBorderedElement = this.getLastVisibleView()?.element();
 
-    const firstVisibleTopViewName = this.getFirstVisibleView(BORDERED_TOP_VIEW_NAMES);
-    const lastVisibleBottomViewName = this.getFirstVisibleView(BORDERED_BOTTOM_VIEW_NAMES, true);
-
-    each(BORDERED_TOP_VIEW_NAMES, (index, viewName) => {
-      const view = this.getView(viewName);
-      view?.element?.()?.toggleClass(BORDERED_TOP_VIEW_CLASS, viewName === firstVisibleTopViewName);
-    });
-
-    each(BORDERED_BOTTOM_VIEW_NAMES, (index, viewName) => {
-      const view = this.getView(viewName);
-      view?.element?.()?.toggleClass(BORDERED_BOTTOM_VIEW_CLASS, viewName === lastVisibleBottomViewName);
-    });
+    oldFirstBorderedElement?.removeClass(BORDERED_TOP_VIEW_CLASS);
+    oldLastBorderedElement?.removeClass(BORDERED_BOTTOM_VIEW_CLASS);
+    newFirstBorderedElement?.addClass(BORDERED_TOP_VIEW_CLASS);
+    newLastBorderedElement?.addClass(BORDERED_BOTTOM_VIEW_CLASS);
   },
 
   render($parent, options) {
@@ -301,7 +318,9 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
     $element.toggleClass('dx-hidden', !isVisible);
 
-    this.updateBorderedViews();
+    if (this.component._views) {
+      this.updateBorderedViews();
+    }
 
     if (isVisible) {
       this.component._optionCache = {};
