@@ -285,7 +285,7 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
   },
 
   getViewWithClass(className) {
-    return Object.values(this.component._views).find((view: any) => view.element()?.hasClass(className));
+    return Object.values(this.component._views).find((view: any) => view?.element?.()?.hasClass(className));
   },
 
   updateBorderedViews() {
