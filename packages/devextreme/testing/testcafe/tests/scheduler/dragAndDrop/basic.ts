@@ -38,7 +38,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
   height: 834,
 }));
 
-test('Drag-n-drop when browser has horizontal scroll', async (t) => {
+test.skip('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 

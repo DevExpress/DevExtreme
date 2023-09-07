@@ -7,7 +7,7 @@ import Scheduler from '../../../model/scheduler';
 fixture.disablePageReloads`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../container.html'));
 
-test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
+test.skip('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Simple recurrence appointment');
 

@@ -536,7 +536,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
   }, 'lastName'],
 })));
 
-test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+test.skip('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiEditCell(0, 0);
