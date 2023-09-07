@@ -124,7 +124,7 @@ gulp.task('ts-copy-modules', function() {
         .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
         .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
         .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
-        
+
         .pipe(compressionPipes.removeDebug())
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(packagePath));
@@ -136,7 +136,7 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
     let content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
-        const modulePath = `'./npm/${packageDir}/${moduleMeta.name}'`;
+        const modulePath = `'../${packageDir}/${moduleMeta.name}'`;
         if(!moduleMeta.exports) {
             return `import ${modulePath};`;
         }

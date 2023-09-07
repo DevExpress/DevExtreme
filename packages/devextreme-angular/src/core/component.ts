@@ -20,7 +20,7 @@ import { isPlatformServer } from '@angular/common';
 import { TransferState, makeStateKey } from '@angular/platform-browser';
 
 import domAdapter from 'devextreme/core/dom_adapter';
-import { triggerHandler } from 'devextreme/events';
+import { triggerHandler } from 'devextreme/events/index.js';
 import { DxTemplateDirective } from './template';
 import { IDxTemplateHost, DxTemplateHost } from './template-host';
 import { EmitterHelper, NgEventsStrategy } from './events-strategy';

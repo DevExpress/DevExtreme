@@ -1,9 +1,9 @@
 {
-  "name": "devextreme",
-  "sourceRoot": "packages/devextreme/artifacts/npm/devextreme",
+  "name": "devextreme-dist",
+  "sourceRoot": "packages/devextreme-dist",
   "projectType": "library",
   "implicitDependencies": [
-    "devextreme-main"
+    "devextreme"
   ],
   "targets": {
     "build": {

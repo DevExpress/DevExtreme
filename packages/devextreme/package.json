@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-main",
+  "name": "devextreme",
   "version": "23.2.0",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
@@ -25,7 +25,12 @@
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
   },
-  "types": "./bundles/dx.all.d.ts",
+  "types": "./dist/bundles/dx.all.d.ts",
+  "exports": {
+    "./*": {
+      "default": "./dist/*"
+    }
+  },
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
@@ -169,7 +174,7 @@
     "through2": "2.0.5",
     "ts-jest": "26.5.6",
     "tsc-alias": "1.8.7",
-    "typescript": "4.2.4",
+    "typescript": "4.7.4",
     "typescript-min": "npm:typescript@4.2.4",
     "uuid": "9.0.0",
     "vinyl": "2.2.1",
@@ -180,7 +185,6 @@
     "yargs": "7.1.2"
   },
   "scripts": {
-    "preinstall": "node build/preinstall.js",
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",
     "lint-js": "eslint --quiet --ext .js .",

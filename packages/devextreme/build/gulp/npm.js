@@ -98,10 +98,10 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src('webpack.config.js')
         .pipe(gulp.dest(`${dist}/bin`)),
 
-    gulp
-        .src(`${dist}/package.json`)
-        .pipe(replace(version, ctx.version.package))
-        .pipe(gulp.dest(dist)),
+    // gulp
+    //     .src(`${dist}/package.json`)
+    //     .pipe(replace(version, ctx.version.package))
+    //     .pipe(gulp.dest(dist)),
 
     gulp
         .src(distGlob)

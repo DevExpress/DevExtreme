@@ -7,8 +7,8 @@ const env = require('./env-variables');
 gulp.task('skippedTask', done => done());
 
 const isEsmPackage = env.BUILD_ESM_PACKAGE;
-const packageDir = 'devextreme';
-const packageDistDir = 'devextreme-dist';
+const packageDir = 'dist';
+const packageDistDir = '../devextreme-dist';
 
 const runTaskByCondition = (condition, task) => {
     if(condition) {
