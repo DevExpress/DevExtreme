@@ -1,6 +1,6 @@
 {
     "extends": [
-        "devextreme/typescript",
+        "devextreme/typescript", // TODO: not working
         "devextreme/spell-check"
     ],
     "env": {
