@@ -228,12 +228,12 @@ $fluent-editor-custom-button-margin: 5px;
     background-color: transparent;
 
     &::after {
-      border-bottom: 1px solid rgba(97, 97, 97, 1);
+      border-bottom: 1px solid $base-border-color-accessible;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom: 1px solid rgba(87, 87, 87, 1);
+        border-bottom: 1px solid $base-border-color-accessible-hover;
       }
     }
 
@@ -274,7 +274,7 @@ $fluent-editor-custom-button-margin: 5px;
     background-color: transparent;
     border-radius: $texteditor-input-border-radius;
     border: 1px solid $texteditor-border-color;
-    border-bottom: 1px solid rgba(97, 97, 97, 1);
+    border-bottom: 1px solid $base-border-color-accessible;
 
     &::before {
       box-sizing: border-box;
@@ -337,17 +337,17 @@ $fluent-editor-custom-button-margin: 5px;
     }
 
     &.dx-state-hover {
-      border-left-color: rgba(199, 199, 199, 1);
-      border-right-color: rgb(199, 199, 199, 1);
-      border-top-color: rgb(199, 199, 199, 1);
-      border-bottom-color: rgba(87, 87, 87, 1);
+      border-left-color: $texteditor-border-color-hover;
+      border-right-color: $texteditor-border-color-hover;
+      border-top-color: $texteditor-border-color-hover;
+      border-bottom-color: $base-border-color-accessible-hover;
     }
 
     &.dx-state-focused {
-      border-left-color: rgba(189, 189, 189, 1); // #bdbdbd
-      border-right-color: rgba(189, 189, 189, 1);
-      border-top-color: rgba(189, 189, 189, 1);
-      border-bottom-color: rgba(77, 77, 77, 1);
+      border-left-color: $texteditor-border-color-focused;
+      border-right-color: $texteditor-border-color-focused;
+      border-top-color: $texteditor-border-color-focused;
+      border-bottom-color: $base-border-color-accessible-focused;
 
       &::before {        
         transform: scaleX(1);
@@ -465,12 +465,12 @@ $fluent-editor-custom-button-margin: 5px;
   $base-bg,
   1px solid transparent,
   $texteditor-border-color,
-  rgba(97, 97, 97, 1),
+  $base-border-color-accessible,
   $texteditor-disabled-color,
-  rgba(199, 199, 199, 1), // $texteditor-hover-border-color,
-  rgba(87, 87, 87, 1),
-  rgba(189, 189, 189, 1), // #bdbdbd // $texteditor-focused-border-color,
-  rgba(77, 77, 77, 1),
+  $texteditor-border-color-hover,
+  $base-border-color-accessible-hover,
+  $texteditor-border-color-focused,
+  $base-border-color-accessible-focused,
   $texteditor-invalid-faded-border-color,
   $texteditor-invalid-focused-border-color,
   $texteditor-label-transition,

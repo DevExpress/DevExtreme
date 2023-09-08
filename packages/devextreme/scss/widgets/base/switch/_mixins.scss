@@ -172,8 +172,8 @@
 }
 
 @mixin dx-switch-states-fluent(
+  $switch-on-disabled-bg,
   $switch-handle-disabled-bg,
-  $switch-disabled-bg,
   $switch-shadow,
   $switch-bg,
   $switch-on-bg,
@@ -315,11 +315,8 @@
     &.dx-state-disabled,
     &.dx-state-readonly {
       .dx-switch-container::before {
-        background-color: $base-disabled-border-color;
-      }
-
-      .dx-switch-handle::before {
-        background-color: $switch-handle-disabled-bg;
+        border-color: $switch-on-disabled-bg;
+        background-color: $switch-on-disabled-bg;
       }
     }
   }

@@ -21,7 +21,8 @@ $texteditor-label-color: $texteditor-placeholder-color;
 * $name 30. Background color
 * $type color
 */
-$texteditor-bg: null !default; // color.change($base-text-color, $alpha: 0.04) !default;
+$texteditor-bg: $base-neutral-background !default; // color.change($base-text-color, $alpha: 0.04) !default;
+$texteditor-bg-hover: $base-neutral-background-hover !default;
 
 /**
 * $name 40. Focused background color
@@ -34,6 +35,8 @@ $texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
 * $type color
 */
 $texteditor-border-color: $base-border-color !default;
+$texteditor-border-color-hover: $base-border-color-hover !default;
+$texteditor-border-color-focused: $base-border-color-focused !default;
 
 /**
 * $name 60. Hovered border color
@@ -57,7 +60,7 @@ $texteditor-button-clear-icon-color-bg: null !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $texteditor-disabled-color: $base-disabled-color !default;
-$texteditor-disabled-text-color: null !default;
+$texteditor-disabled-text-color: $base-foreground-disabled !default;
 $texteditor-input-border-radius: $base-border-radius !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
@@ -65,17 +68,11 @@ $texteditor-label-transition:
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
-  $texteditor-bg: rgba(245, 245, 245, 1) !default; // F5F5F5
-  $texteditor-hover-bg: rgba(235, 235, 235, 1) !default; // EBEBEB
-  $texteditor-disabled-text-color: rgba(189, 189, 189, 1) !default; // #bdbdbd
   $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
   $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
 }
 
 @if $mode == "dark" {
-  $texteditor-bg: rgba(20, 20, 20, 1) !default; // 141414
-  $texteditor-hover-bg: rgb(41, 41, 41, 1) !default; // 292929
-  $texteditor-disabled-text-color: rgba(112, 112, 112, 1) !default; // #707070
   $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
   $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
 }
