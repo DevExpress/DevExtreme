@@ -4,6 +4,7 @@
     "module": "es6",
     "target": "es6",
     "baseUrl": "../",
+    "skipLibCheck": true,
     "allowJs": true,
     "noEmitOnError": true,
     "resolveJsonModule": false,
