@@ -44,6 +44,9 @@ const esmTranspileSrc = src.concat([
 ]);
 
 const srcTsPattern = 'js/__internal/**/*.ts';
+const srcTsIgnorePatterns = [
+    '**/__tests__/**/*'
+];
 
 const srcDir = path.join(process.cwd(), './js');
 const generatedTs = [
@@ -106,7 +109,7 @@ const createModuleConfig = (name, dir, filePath) => {
 
 const transpileTs = (compiler, src) => {
     const task = () => compiler
-        .compileTs(src)
+        .compileTs(src, srcTsIgnorePatterns)
         .pipe(gulp.dest(TS_OUTPUT_BASE_DIR));
 
     task.displayName = 'transpile TS';
