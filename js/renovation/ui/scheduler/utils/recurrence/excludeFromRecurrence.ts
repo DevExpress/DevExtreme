@@ -1,5 +1,5 @@
 import type { Appointment } from '../../../../../ui/scheduler';
-import AppointmentAdapter, { createAppointmentAdapter } from '../../../../../ui/scheduler/appointmentAdapter';
+import AppointmentAdapter, { createAppointmentAdapter } from '../../../../../__internal/scheduler/m_appointment_adapter';
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 import { DataAccessorType } from '../../types';
 import dateSerialization from '../../../../../core/utils/date_serialization';
