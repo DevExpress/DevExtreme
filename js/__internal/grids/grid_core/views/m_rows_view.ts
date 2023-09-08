@@ -1086,7 +1086,7 @@ class RowsView extends ColumnsView {
       if (loadPanel.option('visible') && !isLoading) {
         that._hideLoadingTimeoutID = setTimeout(() => {
           loadPanel.option(visibilityOptions);
-        }, LOADPANEL_HIDE_TIMEOUT) as unknown as number;
+        }, LOADPANEL_HIDE_TIMEOUT);
       } else {
         loadPanel.option(visibilityOptions);
       }
