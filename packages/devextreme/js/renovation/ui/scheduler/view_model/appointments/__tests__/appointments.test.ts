@@ -1,4 +1,4 @@
-import ViewDataProvider from '../../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
+import ViewDataProvider from '../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import { SchedulerProps, ViewProps } from '../../../props';
 import { DataAccessorType, ViewType } from '../../../types';
 import { prepareGenerationOptions } from '../../../workspaces/base/work_space';
@@ -13,8 +13,8 @@ import { AppointmentsConfigType } from '../../../model/types';
 import { TimeZoneCalculator } from '../../../timeZoneCalculator/utils';
 import { getCurrentViewConfig } from '../../../model/views';
 
-jest.mock('../../../../../../ui/scheduler/workspaces/helpers/positionHelper', () => ({
-  ...jest.requireActual('../../../../../../ui/scheduler/workspaces/helpers/positionHelper'),
+jest.mock('../../../../../../__internal/scheduler/workspaces/helpers/m_position_helper', () => ({
+  ...jest.requireActual('../../../../../../__internal/scheduler/workspaces/helpers/m_position_helper'),
   PositionHelper: jest.fn(() => ({
     getHorizontalMax: (): number => 100,
     getResizableStep: (): number => 110,
