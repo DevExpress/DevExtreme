@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -41,7 +42,158 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #tabpanel-demo {
+            display: flex;
+            min-height: 450px;
+            background-color: rgba(191, 191, 191, 0.15);
+        }
+
+        .widget-container {
+            display: inline;
+            flex-grow: 1;
+            min-width: 200px;
+            padding: 16px 32px;
+        }
+
+        .dx-tabpanel {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dx-tabs-vertical {
+            min-width: 120px;
+        }
+
+        .dx-multiview-item-content {
+            padding: 24px;
+        }
+
+        .options {
+            display: inline-flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            padding: 20px;
+            width: 260px;
+        }
+
+        .tabpanel-item .task-item:not(:last-child) {
+            margin-bottom: 12px;
+        }
+
+        .caption {
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .option {
+            margin-top: 20px;
+        }
+
+        .option-label {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .dx-color-scheme-blue-light .dx-tabpanel-container {
+            background-color: #fff;
+        }
+
+        .task-item {
+            position: relative;
+            display: flex;
+            width: 100%;
+            height: 48px;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 6px;
+            bottom: 8px;
+            width: 3px;
+            border-radius: 4px;
+        }
+
+        .task-item-priority-hight::before {
+            background-color: #e1bee7;
+        }
+
+        .task-item-priority-normal::before {
+            background-color: #ffe0b2;
+        }
+
+        .task-item-priority-low::before {
+            background-color: #c8e6c9;
+        }
+
+        .task-item-text,
+        .task-item-info {
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 16px;
+            margin: 0;
+            flex-basis: 50%;
+            flex-shrink: 0;
+        }
+
+        .task-item-info {
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.38);
+        }
+
+        .task-item-pseudo-button-wrapper {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 18px;
+            width: 18px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .task-item-pseudo-button {
+            position: relative;
+        }
+
+        .task-item-pseudo-button,
+        .task-item-pseudo-button::before,
+        .task-item-pseudo-button::after {
+            background-color: rgba(0, 0, 0, 0.6);
+            height: 3px;
+            width: 3px;
+            border-radius: 50%;
+        }
+
+        .task-item-pseudo-button::before,
+        .task-item-pseudo-button::after {
+            content: '';
+            position: absolute;
+        }
+
+        .task-item-pseudo-button::before {
+            top: -150%;
+        }
+
+        .task-item-pseudo-button::after {
+            bottom: -150%;
+        }
+    </style>
 </head>
+
 <body>
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +201,330 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div id='tabpanel-demo'>
+            <div class='widget-container'>
+                <div id="button"></div>
+            </div>
+
+            <div class='options'>
+                <div class='caption'>Options</div>
+        
+                <div class='option'>
+                    <div class='option-label'>Tabs position</div>
+            
+                    <div id="selectbox"></div>
+                </div>
+              </div>
+        </div>
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(function () {
+                const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tabs positions' };
+
+                const tabsPositions = [
+                    'left',
+                    'top',
+                    'right',
+                    'bottom',
+                ];
+
+                const stylingModesSelectBoxLabel = { 'aria-label': 'Tabs positions' };
+
+                const stylingModes = [
+                    'secondary',
+                    'primary',
+                ];
+
+                const iconPositionsSelectBoxLabel = { 'aria-label': 'Icon positions' };
+
+                const iconPositions = [
+                    'top',
+                    'start',
+                    'end',
+                    'bottom',
+                ];
+
+                const tasks = [
+                    {
+                        status: 'Not Started',
+                        priority: 'hight',
+                        text: 'Revenue Projections',
+                        date: '2023-09-16',
+                        assignedBy: 'John Heart',
+                    },
+                    {
+                        status: 'Not Started',
+                        priority: 'hight',
+                        text: 'New Brochures',
+                        date: '2023-09-16',
+                        assignedBy: 'Samantha Bright',
+                    },
+                    {
+                        status: 'Not Started',
+                        priority: 'normal',
+                        text: 'Training',
+                        date: '2023-09-16',
+                        assignedBy: 'Arthur Miller',
+                    },
+                    {
+                        status: 'Not Started',
+                        priority: 'normal',
+                        text: 'NDA',
+                        date: '2023-09-16',
+                        assignedBy: 'Robert Reagan',
+                    },
+                    {
+                        status: 'Not Started',
+                        priority: 'low',
+                        text: 'Health Insurance',
+                        date: '2023-09-16',
+                        assignedBy: 'Greta Sims',
+                    },
+
+                    {
+                        status: 'Help Needed',
+                        priority: 'low',
+                        text: 'TV Recall',
+                        date: '2023-09-16',
+                        assignedBy: 'Brett Wade',
+                    },
+                    {
+                        status: 'Help Needed',
+                        priority: 'low',
+                        text: 'Recall and Refund Forms',
+                        date: '2023-09-16',
+                        assignedBy: 'Sandra Johnson',
+                    },
+                    {
+                        status: 'Help Needed',
+                        priority: 'hight',
+                        text: 'Shippers',
+                        date: '2023-09-16',
+                        assignedBy: 'Ed Holmes',
+                    },
+                    {
+                        status: 'Help Needed',
+                        priority: 'normal',
+                        text: 'Hardware Upgrade',
+                        date: '2023-09-16',
+                        assignedBy: 'Barb Banks',
+                    },
+                    {
+                        status: 'Help Needed',
+                        priority: 'normal',
+                        text: 'Touch-Enabled Apps',
+                        date: '2023-09-16',
+                        assignedBy: 'Kevin Carter',
+                    },
+
+                    {
+                        status: 'In Progress',
+                        priority: 'normal',
+                        text: 'Online Sales',
+                        date: '2023-09-16',
+                        assignedBy: 'Cindy Stanwick',
+                    },
+                    {
+                        status: 'In Progress',
+                        priority: 'normal',
+                        text: 'New Website Design',
+                        date: '2023-09-16',
+                        assignedBy: 'Sammy Hill',
+                    },
+                    {
+                        status: 'In Progress',
+                        priority: 'low',
+                        text: 'Bandwidth Increase',
+                        date: '2023-09-16',
+                        assignedBy: 'Davey Jones',
+                    },
+                    {
+                        status: 'In Progress',
+                        priority: 'normal',
+                        text: 'Support',
+                        date: '2023-09-16',
+                        assignedBy: 'Victor Norris',
+                    },
+                    {
+                        status: 'In Progress',
+                        priority: 'low',
+                        text: 'Training Material',
+                        date: '2023-09-16',
+                        assignedBy: 'John Heart',
+                    },
+
+                    {
+                        status: 'Deferred',
+                        priority: 'normal',
+                        text: 'New Database',
+                        date: '2023-09-16',
+                        assignedBy: 'Samantha Bright',
+                    },
+                    {
+                        status: 'Deferred',
+                        priority: 'hight',
+                        text: 'Automation Server',
+                        date: '2023-09-16',
+                        assignedBy: 'Arthur Miller',
+                    },
+                    {
+                        status: 'Deferred',
+                        priority: 'normal',
+                        text: 'Retail Sales',
+                        date: '2023-09-16',
+                        assignedBy: 'Robert Reagan',
+                    },
+                    {
+                        status: 'Deferred',
+                        priority: 'normal',
+                        text: 'Shipping Labels',
+                        date: '2023-09-16',
+                        assignedBy: 'Greta Sims',
+                    },
+                    {
+                        status: 'Deferred',
+                        priority: 'low',
+                        text: 'Customer Follow Up Plan',
+                        date: '2023-09-16',
+                        assignedBy: 'Brett Wade',
+                    },
+
+                    {
+                        status: 'Rejected',
+                        priority: 'hight',
+                        text: 'Schedule Meeting with Sales Team',
+                        date: '2023-09-16',
+                        assignedBy: 'Sandra Johnson',
+                    },
+                    {
+                        status: 'Rejected',
+                        priority: 'normal',
+                        text: 'Confirm Availability for Sales Meeting',
+                        date: '2023-09-16',
+                        assignedBy: 'Ed Holmes',
+                    },
+                    {
+                        status: 'Rejected',
+                        priority: 'normal',
+                        text: 'Reschedule Sales Team Meeting',
+                        date: '2023-09-16',
+                        assignedBy: 'Barb Banks',
+                    },
+                    {
+                        status: 'Rejected',
+                        priority: 'hight',
+                        text: 'Update Database with New Leads',
+                        date: '2023-09-16',
+                        assignedBy: 'Kevin Carter',
+                    },
+                    {
+                        status: 'Rejected',
+                        priority: 'low',
+                        text: 'Send Territory Sales Breakdown',
+                        date: '2023-09-16',
+                        assignedBy: 'Cindy Stanwick',
+                    },
+
+                    {
+                        status: 'Completed',
+                        priority: 'normal',
+                        text: 'Territory Sales Breakdown Report',
+                        date: '2023-09-16',
+                        assignedBy: 'Sammy Hill',
+                    },
+                    {
+                        status: 'Completed',
+                        priority: 'low',
+                        text: 'Return Merchandise Report',
+                        date: '2023-09-16',
+                        assignedBy: 'Davey Jones',
+                    },
+                    {
+                        status: 'Completed',
+                        priority: 'hight',
+                        text: 'Staff Productivity Report',
+                        date: '2023-09-16',
+                        assignedBy: 'Victor Norris',
+                    },
+                    {
+                        status: 'Completed',
+                        priority: 'normal',
+                        text: 'Review HR Budget Company Wide',
+                        date: '2023-09-16',
+                        assignedBy: 'Mary Stern',
+                    },
+                    {
+                        status: 'Completed',
+                        priority: 'low',
+                        text: 'Support Dept Budget Report',
+                        date: '2023-09-16',
+                        assignedBy: 'Robin Cosworth',
+                    },
+                ];
+
+                const dataSource = [
+                    {
+                        icon: 'description',
+                        title: 'Not Started',
+                        tasks: tasks.filter((item) => item.status === 'Not Started'),
+                    },
+                    {
+                        icon: 'task-helpneeded',
+                        title: 'Help Needed',
+                        tasks: tasks.filter((item) => item.status === 'Help Needed'),
+                    },
+                    {
+                        icon: 'task-inprogress',
+                        title: 'In Progress',
+                        tasks: tasks.filter((item) => item.status === 'In Progress'),
+                    },
+                    {
+                        icon: 'task-stop',
+                        title: 'Deferred',
+                        tasks: tasks.filter((item) => item.status === 'Deferred'),
+                    },
+                    {
+                        icon: 'task-rejected',
+                        title: 'Rejected',
+                        tasks: tasks.filter((item) => item.status === 'Rejected'),
+                    },
+                    {
+                        icon: 'task-complete',
+                        title: 'Completed',
+                        tasks: tasks.filter((item) => item.status === 'Completed'),
+                    },
+                ];
+
+                const tabPanelHeight = 418;
+                const tabPanelWidth = '100%';
+
+                const onIconPositionChanged = (args) => {
+                    tabPanel.option({ iconPosition: args.value })
+                };
+
+                const tabPanel = $("#button").dxTabPanel({
+                    animationEnabled: true,
+                    swipeEnabled: true,
+                    width: tabPanelWidth,
+                    height: tabPanelHeight,
+                    dataSource: dataSource,
+                    selectedIndex: 0,
+                    tabsPosition: tabsPositions[0],
+                    // stylingMode: stylingModes[0],
+                    iconPosition: iconPositions[0],
+                    showNavButtons: true,
+                }).dxTabPanel('instance');
+
+
+                const selectBox = $("#selectbox").dxSelectBox({
+                    items: iconPositions,
+                    value: iconPositions[0],
+                    onValueChanged: onIconPositionChanged,
+                }).dxSelectBox('instance');
             });
         </script>
     </div>
 </body>
+
 </html>
