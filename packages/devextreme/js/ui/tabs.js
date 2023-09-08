@@ -653,6 +653,7 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'iconPosition': {
                 this._toggleIconPositionClass();
+                this._dimensionChanged();
                 break;
             }
             case 'stylingMode': {
