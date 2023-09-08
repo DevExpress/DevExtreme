@@ -224,8 +224,25 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 
   &.dx-scheduler-header-panel-current-time-cell {
+    color: $scheduler-panel-text-color;
+
     &::before {
       content: none;
+    }
+
+    > div:last-child {
+      span {
+        color: $scheduler-appointment-text-color;
+        background-color: $scheduler-current-time-cell-color;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        margin-top: 3px;
+        margin-bottom: 4px;
+      }
     }
   }
 
@@ -244,7 +261,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     &:last-child {
       font-size: $fluent-scheduler-header-panel-day-font-size;
-      line-height: $fluent-scheduler-header-panel-day-font-size + 5;
+      line-height: $fluent-scheduler-header-panel-day-font-size + 19;
     }
   }
 }

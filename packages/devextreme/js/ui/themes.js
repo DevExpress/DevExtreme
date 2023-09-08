@@ -318,6 +318,10 @@ function isTheme(themeRegExp, themeName) {
     return new RegExp(themeRegExp).test(themeName);
 }
 
+export function isFluent(themeName) {
+    return isTheme('fluent', themeName);
+}
+
 export function isMaterial(themeName) {
     return isTheme('material', themeName);
 }
@@ -449,6 +453,7 @@ export default {
     isDark,
     isGeneric,
     isMaterial,
+    isFluent,
     detachCssClasses,
     attachCssClasses,
     current,
