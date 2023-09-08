@@ -4382,8 +4382,6 @@ test('Keyboard navigation should work after opening-closing master-detal', async
   await t.click(dataGrid.getDataRow(0).getCommandCell(0).element); // open master detail
   await t.click(dataGrid.getDataRow(0).getCommandCell(0).element); // close master detail
 
-  await t.debug();
-
   await t
     .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element)
     .pressKey('tab')
