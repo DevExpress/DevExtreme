@@ -55,7 +55,7 @@ export default class MetadataGenerator {
     return metaItems;
   }
 
-  static getOverridenVariables(metaItems: MetaItem[]): string {
+  static getOverriddenVariables(metaItems: MetaItem[]): string {
     const result = metaItems.map((item) => `${item.Key}: getCustomVar(("${item.Key}")) !default;`).join('\n');
     return result;
   }
@@ -108,9 +108,9 @@ export default class MetadataGenerator {
       this.fillMetaData(item, filePath);
     });
 
-    const overridenVariables = MetadataGenerator.getOverridenVariables(metaItems);
+    const overriddenVariables = MetadataGenerator.getOverriddenVariables(metaItems);
     const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
-    modifiedContent = overridenVariables + '\n\n' + modifiedContent + collector;
+    modifiedContent = overriddenVariables + '\n\n' + modifiedContent + collector;
 
     return modifiedContent;
   }
