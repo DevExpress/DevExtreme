@@ -1,0 +1,74 @@
+@use "sass:color";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../button/mixins" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+
+// adduse
+@use "../../../scrollable";
+@use "../../../badge";
+@import "styling-mode/primary";
+@import "styling-mode/secondary";
+
+
+.dx-tab {
+  padding: $fluent-tabs-item-padding;
+  min-width: $fluent-tab-min-width;
+  background-color: $tabs-tab-background;
+  color: $tabs-tab-color;
+
+  &.dx-state-hover {
+    background-color: $tabs-hovered-tab-bg-color;
+  }
+
+  &.dx-tab-selected {
+    color: $tabs-tab-selected-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
+  }
+
+
+  &.dx-state-disabled {
+    color: $tabs-tab-disabled-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-disabled-color;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-active .dx-inkripple-wave {
+    background-color: $tabs-active-tab-bg-color;
+  }
+
+  .dx-tab-text {
+    text-transform: uppercase;
+    line-height: $fluent-tab-text-line-height;
+    font-weight: 500;
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+
+    @include dx-icon-sizing($fluent-base-icon-size);
+  }
+}
+
+.dx-tabs-icon-position-start .dx-tab .dx-icon {
+  @include dx-icon-margin($fluent-base-icon-margin, start);
+}
+
+.dx-tabs-icon-position-end .dx-tab .dx-icon {
+  @include dx-icon-margin($fluent-base-icon-margin, end);
+}
