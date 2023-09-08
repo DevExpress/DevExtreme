@@ -1,25 +1,27 @@
-import registerComponent from '../../../core/component_registrator';
+import registerComponent from '@js/core/component_registrator';
 import {
-    getWeekendsCount,
-} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
-import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
-import { VIEWS } from '../constants';
+  getWeekendsCount,
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
+
+import { VIEWS } from '../m_constants';
+import SchedulerWorkSpaceWeek from './m_work_space_week';
 
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
-    get type() { return VIEWS.WORK_WEEK; }
+  get type() { return VIEWS.WORK_WEEK; }
 
-    constructor(...args) {
-        super(...args);
+  constructor(...args: any[]) {
+    // @ts-expect-error
+    super(...args);
 
-        this._getWeekendsCount = getWeekendsCount;
-    }
+    this._getWeekendsCount = getWeekendsCount;
+  }
 
-    _getElementClass() {
-        return WORK_WEEK_CLASS;
-    }
+  _getElementClass() {
+    return WORK_WEEK_CLASS;
+  }
 }
 
-registerComponent('dxSchedulerWorkSpaceWorkWeek', SchedulerWorkSpaceWorkWeek);
+registerComponent('dxSchedulerWorkSpaceWorkWeek', SchedulerWorkSpaceWorkWeek as any);
 
 export default SchedulerWorkSpaceWorkWeek;
