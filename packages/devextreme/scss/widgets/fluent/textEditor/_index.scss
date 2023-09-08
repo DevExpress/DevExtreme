@@ -19,14 +19,6 @@ $fluent-texteditor-icon-container-size: $fluent-base-icon-size - 2px;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
 $fluent-editor-custom-button-margin: 5px;
 
-@mixin dx-texteditor-icon() {
-  position: absolute;
-  top: 50%;
-  margin-top: math.div(-$fluent-texteditor-icon-container-size, 2);
-
-  @include dx-icon-sizing($fluent-texteditor-icon-container-size);
-}
-
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
     padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-filled-texteditor-input-horizontal-padding;
@@ -364,15 +356,22 @@ $fluent-editor-custom-button-margin: 5px;
     width: $fluent-texteditor-icon-container-size;
     min-width: $fluent-texteditor-icon-container-size;
     right: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  &.dx-texteditor-empty {
+    .dx-clear-button-area {
+      display: none;
+    }
   }
 
   .dx-icon-clear {
-    color: $texteditor-button-clear-icon-color;
-    background-color: $texteditor-button-clear-icon-color-bg;
-    border-radius: 50%;
+    &::before {
+      content: '\f15f';
+    }
 
-    @include dx-texteditor-icon();
-    @include dx-icon-font-centered-sizing($fluent-texteditor-clear-icon-size);
+    color: $texteditor-button-clear-icon-color;
   }
 
   &:not(.dx-texteditor-empty) {
@@ -380,7 +379,6 @@ $fluent-editor-custom-button-margin: 5px;
     @include pending-indicator-position();
   }
 }
-
 
 /* B231111 */
 .dx-placeholder {

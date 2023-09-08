@@ -55,8 +55,7 @@ $texteditor-focused-border-color: $base-accent !default;
 * $type color
 */
 $texteditor-hover-bg: null !default; // color.change($base-text-color, $alpha: 0.07) !default;
-$texteditor-button-clear-icon-color: null !default;
-$texteditor-button-clear-icon-color-bg: null !default;
+$texteditor-button-clear-icon-color: $base-foreground-disabled !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $texteditor-disabled-color: $base-disabled-color !default;
@@ -66,14 +65,4 @@ $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
-
-@if $mode == "light" {
-  $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
-  $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
-}
-
-@if $mode == "dark" {
-  $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
-  $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
-}
 
