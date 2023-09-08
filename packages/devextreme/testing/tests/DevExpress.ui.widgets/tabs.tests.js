@@ -311,15 +311,15 @@ QUnit.module('General', () => {
             height: 300,
         });
 
-        assert.equal($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
-        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
+        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
+        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
 
         const instance = $element.dxTabs('instance');
 
         instance.option('iconPosition', 'start');
 
-        assert.equal($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was removed');
-        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrollable was removed');
+        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was removed');
+        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrollable was removed');
     });
 
     QUnit.test('the tabs element must have a start icon position class by default', function(assert) {
