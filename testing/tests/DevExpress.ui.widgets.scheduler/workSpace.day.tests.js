@@ -5,7 +5,7 @@ import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dateLocalization from 'localization/date';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import '__internal/scheduler/workspaces/m_work_space_day';
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 

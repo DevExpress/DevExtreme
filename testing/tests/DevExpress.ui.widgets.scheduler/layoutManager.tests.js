@@ -7,7 +7,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'animation/translator';
 
-import AppointmentLayoutManager from 'ui/scheduler/appointments.layout_manager';
+import AppointmentLayoutManager from '__internal/scheduler/m_appointments_layout_manager';
 import BaseAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_base';
 import VerticalAppointmentStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
 import HorizontalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal';
