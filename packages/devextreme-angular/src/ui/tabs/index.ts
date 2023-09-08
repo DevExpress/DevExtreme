@@ -391,6 +391,19 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxTabsOptions.stylingMode]
+    
+     */
+    @Input()
+    get stylingMode(): string {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: string) {
+        this._setOption('stylingMode', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -680,6 +693,13 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() stylingModeChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -754,6 +774,7 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'selectedItemsChange' },
             { emit: 'selectionModeChange' },
             { emit: 'showNavButtonsChange' },
+            { emit: 'stylingModeChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }

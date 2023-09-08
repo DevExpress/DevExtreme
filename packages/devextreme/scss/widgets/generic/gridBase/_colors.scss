@@ -303,14 +303,14 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-selection-bg: #444 !default;
   $datagrid-row-selected-border-color: $datagrid-border-color !default;
   $datagrid-row-selected-color: $datagrid-base-color !default;
-  $datagrid-row-focused-color: $base-inverted-text-color !default;
-  $datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+  $datagrid-row-focused-color: $base-text-color !default;
+  $datagrid-row-focused-bg: color.change($base-accent, $alpha: 0.2) !default;
   $datagrid-hover-bg: $base-hover-bg !default;
   $datagrid-row-hovered-color: $base-hover-color !default;
   $datagrid-menu-icon-color: darken($base-icon-color, 33.7%) !default;
   $datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.5) !default;
-  $datagrid-nodata-color: darken($datagrid-base-color, 40%) !default;
-  $datagrid-group-row-color: darken($datagrid-base-color, 38.5%) !default;
+  $datagrid-nodata-color: $datagrid-base-color !default;
+  $datagrid-group-row-color: lighten($datagrid-base-color, 6.7%) !default;
   $datagrid-group-row-bg: lighten($datagrid-base-background-color, 3%) !default;
   $datagrid-master-detail-cell-bg: lighten($datagrid-base-background-color, 2%) !default;
   $datagrid-spin-icon-color: darken($base-icon-color, 38.5%) !default;
@@ -330,8 +330,8 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/dark/grid/text-stub.png') !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
-  $datagrid-row-removed-bg: $datagrid-border-color !default;
-  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-row-removed-bg: darken($datagrid-border-color, 6.67) !default;
+  $datagrid-cell-removed-text-color: color.change($base-text-color, $alpha: 0.7) !default;
 }
 
 @if $color == "darkmoon" {
@@ -475,14 +475,14 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-selection-bg: #e6e6e6 !default;
   $datagrid-row-selected-border-color: $datagrid-border-color !default;
   $datagrid-row-selected-color: $datagrid-base-color !default;
-  $datagrid-row-focused-color: $base-inverted-text-color !default;
-  $datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+  $datagrid-row-focused-color: $base-text-color !default;
+  $datagrid-row-focused-bg: color.change($base-accent, $alpha: 0.2) !default;
   $datagrid-hover-bg: $base-hover-bg !default;
   $datagrid-row-hovered-color: $base-hover-color !default;
   $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
   $datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.5) !default;
-  $datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
-  $datagrid-group-row-color: lighten($datagrid-base-color, 38.5%) !default;
+  $datagrid-nodata-color: $datagrid-base-color !default;
+  $datagrid-group-row-color: darken($datagrid-base-color, 6.7%) !default;
   $datagrid-group-row-bg: darken($datagrid-base-background-color, 3%) !default;
   $datagrid-master-detail-cell-bg: darken($datagrid-base-background-color, 2%) !default;
   $datagrid-spin-icon-color: lighten($base-icon-color, 38.5%) !default;
@@ -502,8 +502,8 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/light/grid/text-stub.png') !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
-  $datagrid-row-removed-bg: $datagrid-border-color !default;
-  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-row-removed-bg: lighten($datagrid-border-color, 6.67) !default;
+  $datagrid-cell-removed-text-color: color.change($base-text-color, $alpha: 0.7) !default;
 }
 
 @if $color == "softblue" {

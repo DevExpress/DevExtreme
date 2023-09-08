@@ -302,14 +302,13 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   validationMessageMode?: "always" | "auto";
   validationMessagePosition?: "bottom" | "left" | "right" | "top";
   validationStatus?: "valid" | "invalid" | "pending";
-  value?: any | number | string;
-  values?: Array<any | number | string>;
+  value?: any | Array<any | number | string> | number | string;
   visible?: boolean;
   weekNumberRule?: "auto" | "firstDay" | "fullWeek" | "firstFourDays";
   width?: (() => number | string) | number | string;
   zoomLevel?: "century" | "decade" | "month" | "year";
-  defaultValue?: any | number | string;
-  onValueChange?: (value: any | number | string) => void;
+  defaultValue?: any | Array<any | number | string> | number | string;
+  onValueChange?: (value: any | Array<any | number | string> | number | string) => void;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
   cellRender?: (...params: any) => React.ReactNode;
