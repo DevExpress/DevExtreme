@@ -4,7 +4,7 @@ import fs from 'fs';
 import { metadata } from '../data/metadata';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
 
-import Compiler, { ImportType } from '../../src/modules/compiler';
+import Compiler from '../../src/modules/compiler';
 
 jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   __esModule: true,
@@ -104,19 +104,12 @@ describe('compile', () => {
 });
 
 describe('compile with widgets', () => {
-  test('getImportType', () => {
-    expect(Compiler.getImportType('tb_generic')).toBe(ImportType.Color);
-    expect(Compiler.getImportType('../widgets/generic/tb_index')).toBe(ImportType.Index);
-    expect(Compiler.getImportType('colors')).toBe(ImportType.Unknown);
-  });
-
   test('setter return indexFileContent for index file', () => {
     const compiler = new Compiler();
     const contentOfIndexFile = 'some content';
-    const indexFileUrl = new URL('db:../widgets/generic/tb_index');
     compiler.indexFileContent = contentOfIndexFile;
 
-    expect(compiler.load(indexFileUrl)).toEqual({
+    expect(compiler.load()).toEqual({
       contents: contentOfIndexFile,
       syntax: 'scss',
     });
