@@ -308,6 +308,7 @@ QUnit.module('General', () => {
             visible: true,
             orientation: 'vertical',
             iconPosition: 'top',
+            showNavButtons: true,
             height: 300,
         });
 
