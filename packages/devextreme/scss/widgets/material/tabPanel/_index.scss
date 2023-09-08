@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/colors" as *;
+@use "../tabs/variables/colors" as *;
+@use "../tabs/mixins" as *;
 @use "../../base/tabPanel";
 
 // adduse
@@ -21,20 +22,20 @@
 
 .dx-tabpanel-tabs-position-top {
   .dx-tabs {
-    border-block-end: 1px solid $base-border-color;
+    border-bottom: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-block-end: none;
+      border-bottom: none;
     }
   }
 }
 
 .dx-tabpanel-tabs-position-bottom {
   .dx-tabs {
-    border-block-start: 1px solid $base-border-color;
+    border-top: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-block-start: none;
+      border-top: none;
     }
   }
 
@@ -42,29 +43,49 @@
     top: 0;
     bottom: unset;
   }
+
+  .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+    .dx-tab-selected .dx-tab-content {
+      @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-selected-tab-border-color);
+
+      &.dx-state-disabled .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-disabled-tab-border-color);
+      }
+    }
+  }
 }
 
 .dx-tabpanel-tabs-position-left {
   .dx-tabs {
-    border-inline-end: 1px solid $base-border-color;
+    border-right: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-inline-end: none;
+      border-right: none;
     }
   }
 }
 
 .dx-tabpanel-tabs-position-right {
   .dx-tabs {
-    border-inline-start: 1px solid $base-border-color;
+    border-left: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-inline-start: none;
+      border-left: none;
     }
   }
 
   .dx-tabpanel-tab.dx-tab-selected::after {
-    right: 0;
-    left: unset;
+    left: 0;
+    right: unset;
+  }
+
+  .dx-tabs-styling-mode-secondary {
+    .dx-tab-selected {
+      @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-selected-tab-border-color);
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-disabled-tab-border-color);
+      }
+    }
   }
 }
