@@ -1740,12 +1740,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       return rowIndex >= (dataController as any).getMaxRowIndex();
     }
 
-    let lastVisibleIndex = -1;
-    dataController.items().forEach((item, i) => {
-      if (item.visible !== false) {
-        lastVisibleIndex = i;
-      }
-    });
+    const lastVisibleIndex = Math.max(
+      ...dataController.items()
+        .map((item, index) => (item.visible ? index : -1)),
+    );
 
     return rowIndex === lastVisibleIndex;
   }
