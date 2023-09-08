@@ -4543,6 +4543,7 @@
             "Equivalents": "Submit",
             "Name": "Validation",
             "Widget": "Form",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Views/Form/SuccessValidation.cshtml",
               "/ViewModels/EditorsViewModel.cs",
