@@ -13,8 +13,7 @@
     "lint": "eslint src",
     "test": "npm run gulp -- test",
     "test:dev": "npm run gulp -- run.tests",
-    "pack": "npm run gulp -- npm.pack",
-    "inject-descriptions": "dx-tools inject-descriptions --sources ./npm/dist --artifacts ../../artifacts/internal-tools"
+    "pack": "npm run gulp -- npm.pack"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",

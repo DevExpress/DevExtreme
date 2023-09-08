@@ -156,7 +156,7 @@ gulp.task('npm.content', gulp.series(
 gulp.task('npm.pack', gulp.series(
     'npm.content',
     (cb) => {
-        argv.withDescriptions ? exec('npm run inject-descriptions', (err) => cb(err)) : cb();
+        argv.withDescriptions ? exec('npm --prefix ../../ run angular:inject-descriptions', (err) => cb(err)) : cb();
     },
     (cb) => { exec('npm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)) }
 ));
