@@ -1,21 +1,22 @@
-import registerComponent from '../../../core/component_registrator';
-import { VIEWS } from '../constants';
-import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
-import { calculateViewStartDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
+import registerComponent from '@js/core/component_registrator';
+import { calculateViewStartDate } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/week';
+
+import { VIEWS } from '../m_constants';
+import SchedulerWorkSpaceVertical from './m_work_space_vertical';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
-    get type() { return VIEWS.WEEK; }
+  get type() { return VIEWS.WEEK; }
 
-    _getElementClass() {
-        return WEEK_CLASS;
-    }
+  _getElementClass() {
+    return WEEK_CLASS;
+  }
 
-    _calculateViewStartDate() {
-        return calculateViewStartDate(this.option('startDate'), this._firstDayOfWeek());
-    }
+  _calculateViewStartDate() {
+    return calculateViewStartDate(this.option('startDate') as any, this._firstDayOfWeek());
+  }
 }
 
-registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);
+registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek as any);
 
 export default SchedulerWorkSpaceWeek;
