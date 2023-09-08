@@ -1,4 +1,6 @@
-import { tableCreator } from 'ui/scheduler/table_creator';
+import tableCreatorModule from '__internal/scheduler/m_table_creator';
+
+const { tableCreator } = tableCreatorModule;
 
 const FIXTURE_DATA = [{
     title: 'o1',

@@ -1,4 +1,4 @@
-import CellsSelectionState from 'ui/scheduler/workspaces/cells_selection_state';
+import CellsSelectionState from '__internal/scheduler/workspaces/m_cells_selection_state';
 
 const { test, module } = QUnit;
 
