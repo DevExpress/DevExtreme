@@ -462,7 +462,6 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'iconPosition':
                 this._updateTabsIconPosition(value);
-                this._tabs._dimensionChanged();
                 break;
             case 'stylingMode':
                 this._updateTabsStylingMode(value);
