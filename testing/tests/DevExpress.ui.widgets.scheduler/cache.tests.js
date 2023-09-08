@@ -1,4 +1,4 @@
-import { Cache } from 'ui/scheduler/workspaces/cache';
+import { Cache } from '__internal/scheduler/workspaces/m_cache';
 
 const {
     test,

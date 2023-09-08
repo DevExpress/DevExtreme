@@ -3,8 +3,8 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
+import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/m_work_space_work_week';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 

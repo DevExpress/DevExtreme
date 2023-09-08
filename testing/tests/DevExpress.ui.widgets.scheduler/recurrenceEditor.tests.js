@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
-import RecurrenceEditor from 'ui/scheduler/recurrence_editor';
+import RecurrenceEditor from '__internal/scheduler/m_recurrence_editor';
 import SelectBox from 'ui/select_box';
 import NumberBox from 'ui/number_box';
 import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
-import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
+import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
 import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import dateLocalization from 'localization/date';
 
