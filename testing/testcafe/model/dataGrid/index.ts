@@ -104,6 +104,10 @@ export default class DataGrid extends Widget {
     return Widget.addClassPrefix(this.getName(), className);
   }
 
+  getContainer(): Selector {
+    return this.element.find(`.${CLASS.dataGrid}`);
+  }
+
   getHeaders(): Headers {
     return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
