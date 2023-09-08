@@ -9,9 +9,9 @@ import {
   isPopupFullScreenNeeded,
 } from '@js/renovation/ui/scheduler/appointment_edit_form/popup_config';
 import Popup from '@js/ui/popup/ui.popup';
-import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
-import { hide as hideLoading, show as showLoading } from '@js/ui/scheduler/loading';
 
+import { createAppointmentAdapter } from '../m_appointment_adapter';
+import { hide as hideLoading, show as showLoading } from '../m_loading';
 import { getNormalizedResources } from '../resources/m_utils';
 
 const toMs = dateUtils.dateToMilliseconds;

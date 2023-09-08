@@ -1,57 +1,58 @@
-import dateUtils from '../../core/utils/date';
+import dateUtils from '@js/core/utils/date';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 class DateAdapterCore {
-    constructor(source) {
-        this._source = new Date(source.getTime ? source.getTime() : source);
-    }
+  _source: Date;
 
-    get source() { // TODO
-        return this._source;
-    }
+  constructor(source) {
+    this._source = new Date(source.getTime ? source.getTime() : source);
+  }
 
-    result() {
-        return this._source;
-    }
+  get source() { // TODO
+    return this._source;
+  }
 
-    getTimezoneOffset(format = undefined) {
-        const value = this._source.getTimezoneOffset();
-        if(format === 'minute') {
-            return value * toMs('minute');
-        }
-        return value;
-    }
+  result() {
+    return this._source;
+  }
 
-    getTime() {
-        return this._source.getTime();
+  getTimezoneOffset(format: any = undefined) {
+    const value = this._source.getTimezoneOffset();
+    if (format === 'minute') {
+      return value * toMs('minute');
     }
+    return value;
+  }
 
-    setTime(value) {
-        this._source.setTime(value);
-        return this;
-    }
+  getTime() {
+    return this._source.getTime();
+  }
 
-    addTime(value) {
-        this._source.setTime(this._source.getTime() + value);
-        return this;
-    }
+  setTime(value) {
+    this._source.setTime(value);
+    return this;
+  }
 
+  addTime(value) {
+    this._source.setTime(this._source.getTime() + value);
+    return this;
+  }
 
-    setMinutes(value) {
-        this._source.setMinutes(value);
-        return this;
-    }
+  setMinutes(value) {
+    this._source.setMinutes(value);
+    return this;
+  }
 
-    addMinutes(value) {
-        this._source.setMinutes(this._source.getMinutes() + value);
-        return this;
-    }
+  addMinutes(value) {
+    this._source.setMinutes(this._source.getMinutes() + value);
+    return this;
+  }
 
-    subtractMinutes(value) {
-        this._source.setMinutes(this._source.getMinutes() - value);
-        return this;
-    }
+  subtractMinutes(value) {
+    this._source.setMinutes(this._source.getMinutes() - value);
+    return this;
+  }
 }
 
 const DateAdapter = (date) => new DateAdapterCore(date);
