@@ -108,9 +108,9 @@ export default class MetadataGenerator {
       this.fillMetaData(item, filePath);
     });
 
-    const overeideVariables = MetadataGenerator.getOverrideVariables(metaItems);
+    const overrideVariables = MetadataGenerator.getOverrideVariables(metaItems);
     const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
-    modifiedContent = overeideVariables + '\n\n' + modifiedContent + collector;
+    modifiedContent = overrideVariables + '\n\n' + modifiedContent + collector;
 
     return modifiedContent;
   }
