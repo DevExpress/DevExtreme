@@ -1733,7 +1733,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this._isCellValid($cell);
   }
 
-  private _isLastRow(rowIndex: number) {
+  private _isLastRow(rowIndex: number): boolean {
     const dataController = this._dataController;
 
     if (this._isVirtualRowRender()) {
@@ -1742,7 +1742,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     let lastVisibleIndex = -1;
     dataController.items().forEach((item, i) => {
-      if (item.visible) {
+      if (item.visible !== false) {
         lastVisibleIndex = i;
       }
     });
