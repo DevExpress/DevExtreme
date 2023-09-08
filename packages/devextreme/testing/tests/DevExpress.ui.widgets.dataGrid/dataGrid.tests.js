@@ -206,8 +206,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 5] ID is valid (ShowWhenGrouped)');
         assert.equal(rowsViewWrapper.getCellElement(1, 5).attr('aria-describedby'), headerId, 'Cell[1, 5] aria-describedby is valid');
 
-        assert.equal(headersWrapper.getTable().attr('role'), undefined, 'Headers table role');
-        assert.equal(rowsViewWrapper.getTable().attr('role'), undefined, 'RowsView table role');
+        assert.equal(headersWrapper.getTable().attr('role'), 'presentation', 'Headers table role');
+        assert.ok(headersWrapper.getTable().attr('id'), 'Headers table has an id attribute');
+        assert.equal(rowsViewWrapper.getTable().attr('role'), 'presentation', 'RowsView table role');
+        assert.ok(rowsViewWrapper.getTable().attr('id'), 'RowsView table has an id attribute');
 
         const $freeSpaceRow = rowsViewWrapper.getFreeSpaceRow().getElement();
         assert.equal($freeSpaceRow.attr('role'), 'presentation');
@@ -843,7 +845,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $errorRow = $($(dataGrid.$element()).find('.dx-error-row'));
         assert.equal($errorRow.length, 1, 'error row is shown');
         assert.equal($errorRow.children().attr('colspan'), '2', 'error row colspan');
-        assert.equal($errorRow.find('.dx-error-message').text(), 'Test Error', 'error row text');
+
+        const $errorMessage = $errorRow.find('.dx-error-message');
+        assert.equal($errorMessage.text(), 'Test Error', 'error row text');
+
+        assert.equal($errorMessage.attr('role'), 'alert', 'error message role');
+        assert.equal($errorMessage.attr('aria-roledescription'), 'Error', 'error message role description');
     });
 
     QUnit.test('Raise error if key field is missed', function(assert) {
@@ -1232,6 +1239,39 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             // assert
             assert.deepEqual(rowIndex, 1, 'rowDblClick row index');
         });
+    });
+
+    QUnit.test('SearchPanel width property should accept string values', function(assert) {
+        const dataGrid = createDataGrid({
+            searchPanel: {
+                visible: true,
+                width: '50%',
+            },
+        });
+
+        assert.equal(dataGrid.$element().find('.dx-datagrid-search-panel').get(0).style.width, '50%');
+    });
+    QUnit.test('Column minWidth property should not accept string values', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field: 'test1' }
+            ],
+            keyExpr: 'id',
+            columns: [
+                {
+                    dataField: 'id',
+                    minWidth: '700'
+                }, {
+                    dataField: 'field',
+                    minWidth: '50%'
+                }
+            ]
+        });
+        this.clock.tick(10);
+        const $cols = dataGrid.$element().find('.dx-datagrid-headers colgroup > col');
+
+        assert.equal($cols.get(0).style.width, '700px');
+        assert.equal($cols.get(1).style.width, '');
     });
 });
 
@@ -4563,7 +4603,7 @@ QUnit.module('templates', baseModuleConfig, () => {
                                         '</tr>';
 
                                 (asyncMethod === 'deferUpdate' ? deferUpdate : setTimeout)(function() {
-                                    container.append(markup);
+                                    $(container).append(markup);
                                     onRendered();
                                 });
 
@@ -4611,7 +4651,7 @@ QUnit.module('templates', baseModuleConfig, () => {
                                     '</tr>';
 
                             deferUpdate(function() {
-                                container.append(markup);
+                                $(container).append(markup);
                                 onRendered();
                             });
                             return container;
@@ -4635,6 +4675,46 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         const $firstRow = $(dataGrid.getRowElement(0));
         assert.equal($firstRow.find('.my-cell').text(), 'updated', 'cell is updated');
+    });
+
+    QUnit.test('Push api should work when parallel loading started', function(assert) {
+        // arrange
+        const pushAggregationTimeout = 100;
+        const deferred = $.Deferred();
+
+
+        const dataSource = new DataSource({
+            load: () => deferred,
+            pushAggregationTimeout,
+            reshapeOnPush: true,
+            key: 'id',
+        });
+
+        const dataGrid = createDataGrid({
+            dataSource,
+            columns: ['id']
+        });
+
+        this.clock.tick(10);
+
+        // act
+
+        dataGrid.getDataSource().store().push([{
+            type: 'insert',
+            data: { id: 2 },
+        }]);
+
+        deferred.resolve([{ id: 1 }]);
+
+        this.clock.tick(pushAggregationTimeout);
+        this.clock.tick(10);
+
+        // assert
+
+        const rows = dataGrid.getVisibleRows();
+        assert.strictEqual(rows.length, 2);
+        assert.deepEqual(rows[0].data, { id: 1 });
+        assert.deepEqual(rows[1].data, { id: 2 });
     });
 
     // T120698

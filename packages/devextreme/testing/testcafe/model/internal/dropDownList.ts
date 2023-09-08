@@ -14,7 +14,7 @@ const CLASS = {
 export default abstract class DropDownList extends TextBox {
   dropDownButton: Selector;
 
-  constructor(id: string) {
+  constructor(id: string | Selector) {
     super(id);
     this.dropDownButton = this.element.find(`.${CLASS.dropDownButton}`);
   }

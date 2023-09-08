@@ -383,6 +383,7 @@ class RowsView extends ColumnsView {
           default:
             this.setTableElement(newTableElement, isFixedTableRendering);
             contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
+            this._setGridRole(contentElement);
             this._renderContent(contentElement, newTableElement, isFixedTableRendering);
             break;
         }
@@ -390,6 +391,19 @@ class RowsView extends ColumnsView {
     }).fail(() => {
       this._contentChanges = [];
     });
+  }
+
+  _getGridRoleName(): string {
+    return 'grid';
+  }
+
+  _setGridRole($element: dxElementWrapper): void {
+    const hasData = !this._dataController?.isEmpty();
+    const gridRoleName = this._getGridRoleName();
+
+    if ($element?.length && hasData) {
+      this.setAria('role', gridRoleName, $element);
+    }
   }
 
   _createEmptyRow(className, isFixed?, height?) {
@@ -1223,6 +1237,15 @@ class RowsView extends ColumnsView {
         that.renderNoDataText();
         args.handled = true;
         break;
+    }
+  }
+
+  setAriaOwns(headerTableId: string, footerTableId: string): void {
+    const $contentElement = this._findContentElement();
+    const $tableElement = this.getTableElement();
+
+    if ($tableElement?.length) {
+      this.setAria('owns', `${headerTableId ?? ''} ${$tableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentElement);
     }
   }
 

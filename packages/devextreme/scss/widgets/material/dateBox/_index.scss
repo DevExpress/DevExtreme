@@ -7,6 +7,7 @@
 @use "../../base/icons" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
+@use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../calendar/sizes" as *;
 @use "../../base/dateBox";
@@ -151,9 +152,7 @@
   min-height: $material-datebox-input-min-height;
 }
 
-.dx-editor-outlined,
-.dx-editor-filled,
-.dx-editor-underlined {
+.dx-texteditor {
   &.dx-datebox-native {
     .dx-texteditor-input {
       padding-right: $material-filled-texteditor-spin-button-horizontal-padding;

@@ -1,0 +1,89 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+/**
+* $name 10. Group header text color
+* $type color
+*/
+$list-group-color: null !default;
+
+/**
+* $name 20. Group border color
+* $type color
+*/
+$list-border-color: $base-border-color !default;
+
+/**
+* $name 20. Group header background color
+* $type color
+*/
+$list-group-header-bg: color.change($base-bg, $alpha: 0) !default;
+
+/**
+* $name 10. Item text color
+* $type color
+*/
+$list-normal-color: $base-text-color !default;
+
+/**
+* $name 25. Expanded group header text color
+* $type color
+*/
+$list-expanded-group-color: $base-accent !default;
+
+/**
+* $name 30. Hovered item background color
+* $type color
+*/
+$list-item-hover-bg: $base-hover-bg !default;
+
+/**
+* $name 30. Selected item state background color
+* $type color
+*/
+$list-item-selected-bg: null !default;
+$list-item-selected-hover-bg: null !default;
+$list-item-focused-selected-bg: null !default;
+$list-item-hover-color: $base-hover-color !default;
+$list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
+$list-header-indicator-color: $base-icon-color !default;
+
+/**
+* $name 40. Active state item background color
+* $type color
+*/
+$list-item-active-bg: null !default;
+$list-holdmenu-bg: $base-bg !default;
+$list-holdmenu-border-color: $list-border-color !default;
+$list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
+$list-menu-button-default-color: $button-default-color !default;
+$list-menu-button-default-bg: $button-default-bg !default;
+$list-menu-button-delete-bg: $base-danger !default;
+$list-button-delete-shadow-color: color.change($base-shadow-color, $alpha: 0.24) !default;
+$list-item-ghost-bg: $base-bg !default;
+$list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+$list-item-ghost-border-color: $base-accent !default;
+$list-item-ghost-shadow-color: $base-shadow-color !default;
+$list-icon-color: $base-icon-color !default;
+$list-item-chevron-icon-color: $base-spin-icon-color !default;
+
+@if $mode == "light" {
+  $list-group-color: $base-text-color !default;
+  $list-item-selected-bg: color.change(#000, $alpha: 0.12) !default;
+  $list-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
+  $list-item-focused-selected-bg: color.change(#000, $alpha: 0.18) !default;
+  $list-item-active-bg: darken($base-bg, 20%) !default;
+}
+
+@if $mode == "dark" {
+  $list-group-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $list-item-selected-bg: color.change(#6e6e80, $alpha: 0.5) !default;
+  $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
+  $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;
+  $list-item-active-bg: lighten($base-bg, 20%) !default;
+}
+

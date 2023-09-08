@@ -261,7 +261,7 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   key?: string;
   showChevron?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -294,13 +294,13 @@ type IItemDraggingProps = React.PropsWithChildren<{
   };
   data?: any;
   dragDirection?: "both" | "horizontal" | "vertical";
-  dragTemplate?: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string) | template;
+  dragTemplate?: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
   dropFeedbackMode?: "push" | "indicate";
   elementAttr?: Record<string, any>;
   filter?: string;
   group?: string;
   handle?: string;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   itemOrientation?: "horizontal" | "vertical";
   moveItemOnDrop?: boolean;
   onAdd?: ((e: AddEvent) => void);
@@ -316,7 +316,7 @@ type IItemDraggingProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   dragRender?: (...params: any) => React.ReactNode;
   dragComponent?: React.ComponentType<any>;
   dragKeyFn?: (data: any) => string;
@@ -354,7 +354,7 @@ type IOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
   icon?: string;
@@ -366,13 +366,13 @@ type IOptionsProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   stylingMode?: "text" | "outlined" | "contained";
   tabIndex?: number;
-  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string) | template;
+  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
   type?: "danger" | "default" | "normal" | "success";
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   keyFn?: (data: any) => string;
@@ -397,7 +397,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -445,7 +445,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>

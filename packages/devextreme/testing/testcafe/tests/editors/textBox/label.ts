@@ -47,13 +47,13 @@ stylingModes.forEach((stylingMode) => {
   test(`Textbox render with stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`);
+    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; vertical-align: middle; width: 60px; margin: 5px; }`);
 
     await testScreenshot(t, takeScreenshot, `Textbox render with limited width stylingMode=${stylingMode}.png`, { element: '#container' });
 
     await removeStylesheetRulesFromPage();
 
-    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 260px; margin: 5px; }`);
+    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; vertical-align: middle; width: 260px; margin: 5px; }`);
 
     await testScreenshot(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`);
 

@@ -10,6 +10,7 @@ import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
+import ContextMenu from '../contextMenu';
 
 import { WidgetName } from '../../helpers/createWidget';
 import { Overlay } from './overlay';
@@ -40,6 +41,7 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
@@ -59,6 +61,7 @@ export const CLASS = {
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
+  dialogWrapper: 'dx-dialog-wrapper',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -99,8 +102,12 @@ export default class DataGrid extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxDataGrid'; }
 
-  addWidgetPrefix(className: string): string {
+  addWidgetPrefix(className = ''): string {
     return Widget.addClassPrefix(this.getName(), className);
+  }
+
+  getContainer(): Selector {
+    return this.element.find(`.${CLASS.dataGrid}`);
   }
 
   getHeaders(): Headers {
@@ -155,6 +162,10 @@ export default class DataGrid extends Widget {
     return this.dataRows.filter(`.${CLASS.focusedRow}`);
   }
 
+  getErrorRow(): Selector {
+    return this.element.find(`.${CLASS.errorRow}`);
+  }
+
   getFilterPanel(): FilterPanel {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
   }
@@ -190,6 +201,10 @@ export default class DataGrid extends Widget {
     return this.body.find('[aria-label=\'Yes\']');
   }
 
+  getDialog(): Selector {
+    return this.body.find(`.${CLASS.dialogWrapper}`);
+  }
+
   getCancelDeletionButton(): Selector {
     return this.body.find('[aria-label=\'No\']');
   }
@@ -220,6 +235,10 @@ export default class DataGrid extends Widget {
 
   getGroupPanel(): GroupPanel {
     return new GroupPanel(this.body.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
+  }
+
+  getContextMenu(): ContextMenu {
+    return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
   }
 
   async scrollTo(
@@ -369,6 +388,15 @@ export default class DataGrid extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).editRow(rowIndex),
+      { dependencies: { getInstance, rowIndex } },
+    )();
+  }
+
+  apiDeleteRow(rowIndex: number): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).deleteRow(rowIndex),
       { dependencies: { getInstance, rowIndex } },
     )();
   }

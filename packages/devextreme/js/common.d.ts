@@ -82,7 +82,7 @@ export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
 export type CompareRule = {
   /**
   * @docid
-  * @type_function_return object
+  * @type_function_return any
   * @public
   */
   comparisonTarget?: (() => any);
@@ -703,6 +703,18 @@ export type StringLengthRule = {
  * @namespace DevExpress.common
  */
 export type SubmenuShowMode = 'onClick' | 'onHover';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type TabsStyle = 'primary' | 'secondary';
 
 /**
  * @public

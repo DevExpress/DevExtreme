@@ -107,6 +107,26 @@ describe('option update', () => {
     expect(Widget.option.mock.calls[0][1]?.text).toEqual('1');
   });
 
+  it('component use ref as target element', () => {
+    const ref = React.createRef<HTMLDivElement>();
+    const { rerender } = render(
+      <div>
+        <div ref={ref}></div>
+        <TestComponent/>
+      </div>,
+    );
+
+    rerender(
+    <div>
+      <div ref={ref}></div>
+      <TestComponent dropZone={ref} dialogTrigger={ref} />
+    </div>,);
+
+    expect(Widget.option.mock.calls.length).toBe(2);
+    expect(Widget.option.mock.calls[0][1]).toEqual(ref.current);
+    expect(Widget.option.mock.calls[1][1]).toEqual(ref.current);
+  });
+
   it('updates nested collection item', () => {
     const TestContainer = (props: any) => {
       const { value } = props;

@@ -109,8 +109,15 @@
     color: $tabs-tab-icon-color;
 
     @include dx-icon-sizing($generic-base-icon-size);
-    @include dx-icon-margin($generic-tabs-icon-margin);
   }
+}
+
+.dx-tabs-icon-position-start .dx-tab .dx-icon {
+  @include dx-icon-margin($generic-tabs-icon-margin, start);
+}
+
+.dx-tabs-icon-position-end .dx-tab .dx-icon {
+  @include dx-icon-margin($generic-tabs-icon-margin, end);
 }
 
 .dx-tabs.dx-state-focused {

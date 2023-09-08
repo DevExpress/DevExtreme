@@ -277,11 +277,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string) | template;
+  template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string) | template;
+  tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
   value?: any | number | string;
   width?: number;
@@ -506,7 +506,7 @@ class ArgumentAxisTick extends NestedOption<IArgumentAxisTickProps> {
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -610,11 +610,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string) | template;
+  template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string) | template;
+  tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
   value?: any | number | string;
   width?: number;
@@ -1137,7 +1137,7 @@ class Font extends NestedOption<IFontProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1280,7 +1280,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: BaseChartLegendItem, element: any) => string) | template;
+  markerTemplate?: ((legendItem: BaseChartLegendItem, element: any) => string | any) | template;
   orientation?: "horizontal" | "vertical";
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -2002,7 +2002,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((pointInfo: any, element: any) => string) | template;
+  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;

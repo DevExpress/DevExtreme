@@ -40,6 +40,7 @@ import {
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
+  ADAPTIVE_COLUMN_NAME_CLASS,
   CELL_FOCUS_DISABLED_CLASS,
   COLUMN_HEADERS_VIEW,
   COMMAND_CELL_SELECTOR,
@@ -131,6 +132,8 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _focusController!: Controllers['focus'];
 
+  _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+
   // #region Initialization
   init() {
     this._dataController = this.getController('data');
@@ -141,6 +144,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._columnsController = this.getController('columns');
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
 
     this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
@@ -880,17 +884,17 @@ export class KeyboardNavigationController extends modules.ViewController {
   _targetCellTabHandler(eventArgs, direction) {
     const $event = eventArgs.originalEvent;
     let eventTarget = $event.target;
+    let elementType = this._getElementType(eventTarget);
     let $cell = this._getCellElementFromTarget(eventTarget);
-    const $lastInteractiveElement = this._getInteractiveElement(
+    const $lastInteractiveElement = elementType === 'cell' && this._getInteractiveElement(
       $cell,
       !eventArgs.shift,
     );
     let isOriginalHandlerRequired = false;
-    let elementType;
 
     if (
       !isEditorCell(this, $cell)
-      && $lastInteractiveElement.length
+      && $lastInteractiveElement?.length
       && eventTarget !== $lastInteractiveElement.get(0)
     ) {
       isOriginalHandlerRequired = true;
@@ -976,22 +980,28 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _enterKeyHandler(eventArgs, isEditing) {
-    const $cell = this._getFocusedCell();
     const rowIndex = this.getVisibleRowIndex();
-    const $row = this._focusedView && this._focusedView.getRow(rowIndex);
+    const key = this._dataController.getKeyByRowIndex(rowIndex);
 
-    if (
-      (this.option('grouping.allowCollapsing') && isGroupRow($row))
-      || (this.option('masterDetail.enabled')
-        && $cell
-        && $cell.hasClass(COMMAND_EXPAND_CLASS))
-    ) {
-      const key = this._dataController.getKeyByRowIndex(rowIndex);
+    const $row = this._focusedView?.getRow(rowIndex);
+    const $cell = this._getFocusedCell();
+
+    const needExpandGroupRow = this.option('grouping.allowCollapsing') && isGroupRow($row);
+    const needExpandMasterDetailRow = this.option('masterDetail.enabled') && $cell?.hasClass(COMMAND_EXPAND_CLASS);
+    const needExpandAdaptiveRow = $cell?.hasClass(ADAPTIVE_COLUMN_NAME_CLASS);
+
+    if (needExpandGroupRow || needExpandMasterDetailRow) {
       const item = this._dataController.items()[rowIndex];
 
-      if (key !== undefined && item && item.data && !item.data.isContinuation) {
+      const isNotContinuation = item?.data && !item.data.isContinuation;
+
+      if (isDefined(key) && isNotContinuation) {
         (this._dataController as any).changeRowExpand(key);
       }
+    } else if (needExpandAdaptiveRow) {
+      this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
+
+      this._updateFocusedCellPosition($cell);
     } else {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
@@ -1792,7 +1802,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       return false;
     }
 
-    if (row && row.rowType === 'group' && cellPosition.columnIndex > 0) {
+    const isFullRowFocus = row?.rowType === 'group' || row?.rowType === 'groupFooter';
+    if (isFullRowFocus && cellPosition.columnIndex > 0) {
       return true;
     }
 

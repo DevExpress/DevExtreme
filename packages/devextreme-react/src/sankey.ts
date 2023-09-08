@@ -222,7 +222,7 @@ class Font extends NestedOption<IFontProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -513,8 +513,8 @@ type ITooltipProps = React.PropsWithChildren<{
   enabled?: boolean;
   font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
-  linkTooltipTemplate?: ((info: { source: string, target: string, weight: number }, element: any) => string) | template;
-  nodeTooltipTemplate?: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string) | template;
+  linkTooltipTemplate?: ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template;
+  nodeTooltipTemplate?: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template;
   opacity?: number;
   paddingLeftRight?: number;
   paddingTopBottom?: number;

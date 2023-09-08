@@ -129,6 +129,13 @@ const DropDownBox = DropDownEditor.inherit({
         return this.option('valueExpr') === 'this' && isObject(value);
     },
 
+    _popupInitializedHandler(e) {
+        e.component.registerKeyHandler('escape', () => {
+            this.close();
+            this.focus();
+        });
+    },
+
     _renderInputValue: function() {
         this._rejectValueLoading();
         const values = [];

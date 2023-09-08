@@ -52,7 +52,7 @@ $generic-scheduler-appointment-empty-transparent-border: 1px solid transparent;
 
 $generic-scheduler-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 1.5;
 $generic-scheduler-collapsed-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 0.5;
-$generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height - $generic-scheduler-header-panel-top-gap;
+$generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height;
 
 $generic-scheduler-current-time-cell-border-size: 2px;
 
@@ -104,16 +104,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
-.dx-scheduler-header-panel {
-  margin-top: $generic-scheduler-header-panel-top-gap;
-}
-
-.dx-scheduler-work-space-vertical-grouped {
-  .dx-scheduler-header-panel {
-    margin-top: $generic-scheduler-header-panel-top-gap + 1px;
-  }
-}
-
 .dx-scheduler-header-panel-cell {
   height: $generic-scheduler-header-panel-table-cell-height;
 
@@ -132,12 +122,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-work-space-day {
-  &.dx-scheduler-work-space-count:not(.dx-scheduler-work-space-vertical-grouped) {
-    .dx-scheduler-header-panel {
-      margin-top: $generic-scheduler-header-panel-top-gap;
-    }
-  }
-
   .dx-scheduler-header-panel {
     .dx-scheduler-group-row {
       &:not(:first-child) {

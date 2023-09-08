@@ -15,8 +15,10 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    SingleOrMultiple,
     Orientation,
+    SingleOrMultiple,
+    TabsIconPosition,
+    TabsStyle,
 } from '../common';
 
 export type ItemLike = string | Item | any;
@@ -24,6 +26,8 @@ export type ItemLike = string | Item | any;
 export {
     SingleOrMultiple,
     Orientation,
+    TabsIconPosition,
+    TabsStyle,
 };
 
 /**
@@ -139,6 +143,12 @@ export interface dxTabsBaseOptions<
      */
     hoverStateEnabled?: boolean;
     /**
+     * @docid dxTabsOptions.iconPosition
+     * @default 'start'
+     * @public
+     */
+    iconPosition?: TabsIconPosition;
+    /**
      * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
@@ -183,6 +193,12 @@ export interface dxTabsBaseOptions<
      * @public
      */
     showNavButtons?: boolean;
+    /**
+     * @docid dxTabsOptions.stylingMode
+     * @default 'primary'
+     * @public
+     */
+    stylingMode?: TabsStyle;
 }
 
 /**

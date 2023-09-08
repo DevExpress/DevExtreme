@@ -1,0 +1,161 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor" as *;
+@use "../common/sizes" as *;
+@use "../../base/tagBox";
+
+// adduse
+
+.dx-tagbox {
+  .dx-tag-container {
+    height: 100%;
+    padding-top: $fluent-tagbox-tag-container-vertical-padding;
+    padding-bottom: $fluent-tagbox-tag-container-vertical-padding;
+    gap: 4px;
+
+    .dx-texteditor-input {
+      padding: 0;
+    }
+  }
+
+  .dx-texteditor-input {
+    height: $fluent-tagbox-tag-height;
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
+    .dx-tag-container {
+      padding-inline-start: $fluent-tagbox-tag-container-padding-left;
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      .dx-tag {
+        margin: 0;
+      }
+
+      .dx-texteditor-input {
+        padding: 0;
+      }
+
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $fluent-tagbox-filled-with-label-top-padding;
+        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
+      }
+    }
+  }
+
+  &.dx-state-disabled {
+    .dx-tag-content {
+      background-color: $tagbox-tag-disabled-bg;
+
+      .dx-tag-remove-button::before {
+        color: $tagbox-tag-disabled-bg;
+      }
+    }
+  }
+}
+
+.dx-tagbox-single-line {
+  .dx-tag-container {
+    padding-right: 0;
+  }
+}
+
+.dx-tag-content {
+  display: inline-flex;
+  align-items: center;
+  font-size: $fluent-tagbox-tag-content-font-size;
+  line-height: normal;
+  margin: 0;
+  padding-top: $fluent-tagbox-tag-content-vertical-padding;
+  padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
+  padding-inline-start: $fluent-tagbox-tag-content-padding-left;
+  padding-inline-end: $fluent-tagbox-tag-content-padding-right;
+  min-width: 40px;
+  background-color: $tagbox-tag-bg;
+  color: $tagbox-tag-color;
+  border-radius: $tagbox-tag-border-radius;
+}
+
+.dx-tag-remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $fluent-tagbox-remove-button-width;
+  height: 100%;
+
+  @include dx-icon(clear);
+
+  font-size: $fluent-tagbox-tag-content-font-size - 4px;
+
+  &::before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $fluent-tagbox-remove-button-icon-size;
+    height: $fluent-tagbox-remove-button-icon-size;
+    color: $tagbox-tag-button-remove-color;
+    background-color: $tagbox-tag-button-remove-bg;
+    border-radius: 50%;
+    transform: none;
+  }
+}
+
+.dx-tag {
+  &:hover {
+    .dx-tag-content {
+      background-color: $tagbox-tag-hover-bg;
+      color: $tagbox-tag-active-color;
+    }
+  }
+}
+
+.dx-tag.dx-state-focused {
+  .dx-tag-content {
+    background-color: $tagbox-tag-focused-bg;
+    color: $tagbox-tag-active-color;
+  }
+}
+
+@mixin tagbox-editor-container-offset() {
+  inset-inline-end: $fluent-invalid-badge-horizontal-padding;
+}
+
+.dx-tagbox.dx-invalid,
+.dx-tagbox.dx-valid {
+  .dx-texteditor-container {
+    &::after {
+      @include tagbox-editor-container-offset();
+    }
+  }
+}
+
+.dx-tagbox.dx-validation-pending {
+  .dx-texteditor-container {
+    .dx-pending-indicator {
+      @include tagbox-editor-container-offset();
+    }
+  }
+}
+
+.dx-tagbox-popup-wrapper {
+  .dx-list-select-all {
+    border-bottom: 1px solid $tagbox-select-all-border-color;
+    padding-bottom: $fluent-tagbox-select-all-padding-bottom;
+    margin-bottom: $fluent-tagbox-select-all-margin-bottom;
+
+    &::after {
+      background-color: transparent;
+    }
+  }
+}

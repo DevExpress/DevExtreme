@@ -1,0 +1,89 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../scrollable/colors" as *;
+
+// adduse
+@use "../scrollable";
+@use "../../base/scrollView";
+
+$scrollview-loading-indicator-size: 42px;
+
+.dx-scrollview-scrollbottom-text,
+.dx-scrollview-pull-down-text {
+  margin-left: 10px;
+  top: math.div(50px - $fluent-base-font-size, 2);
+  display: inline-block;
+
+  .dx-rtl & {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
+
+.dx-scrollview-pull-down-image {
+  display: none;
+}
+
+.dx-scrollview-pull-down {
+  text-align: center;
+}
+
+.dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
+  background-color: $scrollable-bg;
+  box-shadow: 0 1px 4px 0 $scrollview-shadow-color;
+}
+
+.dx-scrollview-scrollbottom-loading {
+  .dx-scrollview-scrollbottom-image {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.dx-scrollview-scrollbottom-indicator,
+.dx-scrollview-pull-down-indicator {
+  margin-right: 0;
+  height: $scrollview-loading-indicator-size;
+  width: $scrollview-loading-indicator-size;
+  border-radius: math.div($scrollview-loading-indicator-size, 2);
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 1px 3px 1px $scrollview-shadow-color;
+  opacity: 1;
+
+
+  > .dx-loadindicator {
+    height: 24px;
+    width: 24px;
+
+    > .dx-loadindicator-wrapper {
+      font-size: 24px;
+    }
+  }
+}
+
+.dx-scrollview-pull-down-indicator {
+  position: relative;
+  margin-left: 0;
+  margin-top: math.div(-$scrollview-loading-indicator-size, 2);
+}
+
+.dx-scrollview-pull-down-text {
+  div {
+    position: relative;
+  }
+
+  > div {
+    display: none;
+
+    &.dx-scrollview-pull-down-text-visible {
+      display: block;
+    }
+  }
+}

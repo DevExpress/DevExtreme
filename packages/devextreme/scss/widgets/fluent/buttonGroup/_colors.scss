@@ -1,0 +1,8 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+$button-group-separator-color: rgba(0,0,0,.24) !default;

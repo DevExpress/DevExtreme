@@ -1,8 +1,501 @@
+@use "sass:math";
+@use "sass:color";
+
 @mixin dx-editor-content-wrapper() {
   display: flex;
   flex-grow: 1;
   position: relative;
   align-items: baseline;
+}
+
+@mixin dx-state(
+  $label-font-size,
+  $label-offset-y,
+  $label-height,
+  $base-bg
+) {
+  .dx-label {
+    border-top-width: 0;
+
+    span {
+      transform: translate(0, -$label-offset-y);
+      font-size: $label-font-size;
+      margin-top: 0;
+      top: 0;
+      height: $label-height;
+      line-height: normal;
+    }
+
+    &::before {
+      background-color: $base-bg;
+    }
+  }
+
+  &.dx-textarea  {
+    .dx-label {
+      span {
+        top: 0;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@mixin dx-state-empty(
+  $borderWidth,
+  $texteditor-label-transition,
+  $label-font-size,
+  $label-height,
+  $label-margin-top,
+  $texteditor-input-top-padding
+) {
+  .dx-label {
+    padding: 0 2px;
+    border-top-width: $borderWidth;
+
+    span {
+      transition: $texteditor-label-transition;
+      transform: translate(0, 0);
+      font-size: $label-font-size;
+      top: 50%;
+      margin-top: $label-margin-top;
+      height: $label-height;
+      line-height: normal;
+    }
+
+    &::before {
+      background-color: transparent;
+    }
+  }
+
+  &.dx-textarea  {
+    .dx-label {
+      span {
+        top: $texteditor-input-top-padding;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@mixin dx-state-border-width($borderWidth) {
+  .dx-label {
+    border-top-width: 0;
+    border-bottom-width: $borderWidth;
+  }
+
+  .dx-label-before {
+    border-width: $borderWidth;
+    border-inline-end-width: 0;
+  }
+
+  .dx-label-after {
+    border-width: $borderWidth;
+    border-inline-start-width: 0;
+  }
+}
+
+@mixin dx-state-border-color($borderColor) {
+  .dx-label {
+    border-color: $borderColor;
+  }
+
+  .dx-label-before {
+    border-color: $borderColor;
+  }
+
+  .dx-label-after {
+    border-color: $borderColor;
+  }
+}
+
+@mixin dx-state-border-style($borderStyle) {
+  .dx-label {
+    border-style: $borderStyle;
+  }
+
+  .dx-label-before {
+    border-style: $borderStyle;
+  }
+
+  .dx-label-after {
+    border-style: $borderStyle;
+  }
+}
+
+@mixin dx-editor-outlined(
+  $texteditor-border-color,
+  $texteditor-input-border-radius,
+  $texteditor-label-font-size,
+  $label-border-width,
+  $label-active-border-width,
+  $label-readonly-border-style,
+  $label-active-height,
+  $label-empty-height,
+  $label-offset-y,
+  $label-backdrop-offset-y,
+  $label-before-min-width,
+  $label-after-min-width,
+  $base-bg,
+  $texteditor-disabled-color,
+  $texteditor-hover-border-color,
+  $texteditor-focused-border-color,
+  $texteditor-invalid-faded-border-color,
+  $texteditor-invalid-focused-border-color,
+  $texteditor-label-transition,
+  $texteditor-font-size,
+  $texteditor-input-top-padding,
+  $label-margin-top-diff,
+) {
+  .dx-editor-outlined {
+    .dx-texteditor-label {
+      inset: 0;
+    }
+
+    .dx-label {
+      padding: 0 2px;
+      border-top-width: 0;
+      border-bottom-width: $label-border-width;
+      border-inline-width: 0;
+      border-style: solid;
+      border-color: $texteditor-border-color;
+      margin-left: -2px;
+      margin-right: -2px;
+      border-radius: 1px;
+      clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);
+  
+      span {
+        position: relative;
+        font-size: $texteditor-label-font-size;
+        top: 0;
+        margin-top: 0;
+        transform: translate(0, -$label-offset-y);
+        height: $label-active-height;
+        line-height: normal;
+      }
+    }
+
+    .dx-label-before {
+      border-block-width: $label-border-width;
+      border-inline-start-width: $label-border-width;
+      border-inline-end-width: 0;
+      border-style: solid;
+      border-color: $texteditor-border-color;
+      border-start-start-radius: $texteditor-input-border-radius;
+      border-end-start-radius: $texteditor-input-border-radius;
+      min-width: $label-before-min-width;
+      clip-path: inset(-1px 1px -1px -1px);
+    }
+  
+    .dx-label-after {
+      flex-grow: 1;
+      min-width: $label-after-min-width;
+      border-block-width: $label-border-width;
+      border-inline-end-width: $label-border-width;
+      border-inline-start-width: 0;
+      border-style: solid;
+      border-color: $texteditor-border-color;
+      border-start-end-radius: $texteditor-input-border-radius;
+      border-end-end-radius: $texteditor-input-border-radius;
+      clip-path: inset(-1px -1px -1px 1px);
+    }
+  
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-label-before {
+        clip-path: inset(-1px -1px -1px 1px);
+      }
+  
+      .dx-label-after {
+        clip-path: inset(-1px 1px -1px -1px);
+      }
+    }
+
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      outline: none;
+      margin-top: $label-offset-y;
+
+      &.dx-daterangebox {
+        .dx-label {
+          position: relative;
+
+          &::before {
+            content: '';
+            width: 100%;
+            position: absolute;
+            height: 3px;
+            top: -$label-backdrop-offset-y;
+            margin-inline-start: -2px;
+          }
+        }
+      }
+  
+      .dx-label {
+        &::before {
+          background-color: $base-bg;
+        }
+      }
+  
+      &.dx-texteditor:not(.dx-daterangebox) {
+        border: none;
+        box-shadow: none;
+      }
+
+      &.dx-state-readonly {
+        @include dx-state-border-style($label-readonly-border-style);
+        @include dx-state-border-color($texteditor-disabled-color);
+      }
+  
+      &.dx-state-disabled {
+        @include dx-state-border-color($texteditor-disabled-color);
+      }
+  
+      &.dx-invalid {
+        @include dx-state-border-color($texteditor-invalid-faded-border-color);
+      }
+  
+      &.dx-state-hover {
+        @include dx-state-border-color($texteditor-hover-border-color);
+  
+        &.dx-invalid {
+          @include dx-state-border-color($texteditor-invalid-focused-border-color);
+        }
+      }
+  
+      &.dx-state-focused {
+        @include dx-state-border-color($texteditor-focused-border-color);
+        @include dx-state-border-width($label-active-border-width);
+  
+        &.dx-invalid {
+          @include dx-state-border-color($texteditor-invalid-focused-border-color);
+        }
+      }
+    }
+
+    &.dx-texteditor-with-floating-label {
+      .dx-placeholder {
+        display: none;
+      }
+
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+      }
+
+      $label-empty-margin-top: math.div(-$label-empty-height, 2) + $label-margin-top-diff;
+
+      &.dx-texteditor-empty {
+        @include dx-state-empty(
+          $label-border-width,
+          $texteditor-label-transition,
+          $texteditor-font-size,
+          $label-empty-height,
+          $label-empty-margin-top,
+          $texteditor-input-top-padding
+        );
+  
+        &.dx-state-focused,
+        &.dx-dropdowneditor-active {
+          @include dx-state(
+            $texteditor-label-font-size,
+            $label-offset-y,
+            $label-active-height,
+            $base-bg
+          );
+        }
+  
+        &.dx-state-readonly {
+          .dx-placeholder {
+            display: none;
+          }
+  
+          &.dx-state-focused {
+            @include dx-state-empty(
+              $label-active-border-width,
+              $texteditor-label-transition,
+              $texteditor-font-size,
+              $label-empty-height,
+              $label-empty-margin-top,
+              $texteditor-input-top-padding
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-editor-filled(
+  $texteditor-label-transition,
+  $texteditor-label-font-size,
+  $texteditor-label-height,
+  $texteditor-label-line-height,
+  $texteditor-label-top-offset,
+  $texteditor-font-size,
+  $texteditor-empty-label-height,
+  $texteditor-empty-label-line-height,
+  $texteditor-filled-input-horizontal-padding,
+  $texteditor-filled-input-with-label-top-padding,
+  $texteditor-filled-input-with-label-bottom-padding,
+) {
+  .dx-editor-filled {
+    .dx-texteditor-label {
+      .dx-label-after,
+      .dx-label-before {
+        min-width: $texteditor-filled-input-horizontal-padding;
+      }
+    }
+
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      .dx-texteditor-input,
+      .dx-placeholder::before,
+      .dx-lookup-field {
+        padding-top: $texteditor-filled-input-with-label-top-padding;
+        padding-bottom: $texteditor-filled-input-with-label-bottom-padding;
+      }
+
+      .dx-texteditor-label {
+        font-size: $texteditor-label-font-size;
+        height: $texteditor-label-height;
+        line-height: $texteditor-label-line-height;
+        top: $texteditor-label-top-offset;
+        margin-top: 0;
+      }
+    }
+
+    &.dx-texteditor-with-floating-label {
+      &.dx-texteditor-empty,
+      &.dx-texteditor-empty.dx-state-readonly {
+        .dx-placeholder {
+          display: none;
+        }
+
+        .dx-texteditor-label {
+          transition: $texteditor-label-transition;
+          font-size: $texteditor-font-size;
+          height: $texteditor-empty-label-height;
+          line-height: $texteditor-empty-label-line-height;
+          top: 50%;
+          margin-top: math.div(-$texteditor-label-height, 2);
+        }
+
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $texteditor-filled-input-with-label-top-padding;
+            margin-top: 0;
+          }
+        }
+      }
+
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+
+        .dx-texteditor-label {
+          height: $texteditor-label-height;
+          line-height: $texteditor-label-line-height;
+          font-size: $texteditor-label-font-size;
+          top: $texteditor-label-top-offset;
+          margin-top: 0;
+        }
+
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $texteditor-label-top-offset;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-editor-underlined(
+  $texteditor-label-transition,
+  $texteditor-label-font-size,
+  $texteditor-label-height,
+  $texteditor-label-line-height,
+  $texteditor-label-top-offset,
+  $texteditor-font-size,
+  $texteditor-empty-label-height,
+  $texteditor-empty-label-line-height,
+  $texteditor-with-label-input-top-padding,
+  $texteditor-with-label-input-bottom-padding,
+) {
+  .dx-editor-underlined {
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      .dx-texteditor-label {
+        transform: translate(0, 0);
+        height: $texteditor-label-height;
+        line-height: $texteditor-label-line-height;
+        top: $texteditor-label-top-offset;
+        margin-top: 0;
+      }
+  
+      .dx-texteditor-input,
+      .dx-lookup-field,
+      .dx-placeholder::before {
+        padding-top: $texteditor-with-label-input-top-padding;
+        padding-bottom: $texteditor-with-label-input-bottom-padding;
+      }
+    }
+  
+    &.dx-texteditor-with-floating-label {
+      &.dx-texteditor-empty,
+      &.dx-texteditor-empty.dx-state-readonly {
+        .dx-placeholder {
+          display: none;
+        }
+  
+        .dx-texteditor-label {
+          transition: $texteditor-label-transition;
+          transform: translate(0, 0);
+          font-size: $texteditor-font-size;
+          height: $texteditor-empty-label-height;
+          line-height: $texteditor-empty-label-line-height;
+          top: 50%;
+          margin-top: math.div(-$texteditor-label-height, 2);
+        }
+  
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $texteditor-with-label-input-top-padding;
+            margin-top: 0;
+          }
+        }
+      }
+  
+      &.dx-state-focused,
+      &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+  
+        .dx-texteditor-label {
+          transform: translate(0, 0);
+          font-size: $texteditor-label-font-size;
+          height: $texteditor-label-height;
+          line-height: $texteditor-label-line-height;
+          top: $texteditor-label-top-offset;
+          margin-top: 0;
+        }
+  
+        &.dx-textarea {
+          .dx-texteditor-label {
+            top: $texteditor-label-top-offset;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 @mixin dx-editor-buttons-container(
@@ -15,7 +508,10 @@
 ) {
   .dx-texteditor-buttons-container {
     > .dx-button {
-      margin: 1px $generic-texteditor-custom-button-margin;
+      margin-top: 1px;
+      margin-bottom: 1px;
+      margin-inline-start: $generic-texteditor-custom-button-margin;
+      margin-inline-end: $generic-texteditor-custom-button-margin;
   
       > .dx-button-content {
         padding-top: $generic-texteditor-button-top-padding;
@@ -36,7 +532,7 @@
       &:first-child {
         > .dx-button {
           &:last-child {
-            margin-right: 0;
+            margin-inline-end: 0;
           }
         }
       }
@@ -44,42 +540,7 @@
       &:last-child {
         > .dx-button {
           &:first-child {
-            margin-left: 0;
-          }
-        }
-      }
-
-      @at-root #{selector-append(".dx-rtl", &)} {
-        &:first-child {
-          > .dx-button {
-            &:first-child {
-              margin-left: $generic-texteditor-custom-button-margin;
-              margin-right: $generic-texteditor-custom-button-margin;
-            }
-
-            &:last-child {
-              margin-left: 0;
-              margin-right: $generic-texteditor-custom-button-margin;
-            }
-
-            &:first-child:last-child {
-              margin-left: 0;
-              margin-right: $generic-texteditor-custom-button-margin;
-            }
-          }
-        }
-
-        &:last-child {
-          > .dx-button {
-            &:first-child {
-              margin-left: $generic-texteditor-custom-button-margin;
-              margin-right: 0;
-            }
-
-            &:last-child {
-              margin-left: $generic-texteditor-custom-button-margin;
-              margin-right: $generic-texteditor-custom-button-margin;
-            }
+            margin-inline-start: 0;
           }
         }
       }
@@ -98,25 +559,6 @@
             margin-right: 0;
           }
         }
-  
-        @at-root #{selector-append(".dx-rtl", &)} {
-          > .dx-button {
-            &:first-child {
-              margin-left: $generic-texteditor-custom-button-margin;
-              margin-right: 0;
-            }
-  
-            &:last-child {
-              margin-left: 0;
-              margin-right: $generic-texteditor-custom-button-margin;
-            }
-  
-            &:first-child:last-child {
-              margin-left: 0;
-              margin-right: 0;
-            }
-          }
-        }
       }
     }
   }
@@ -129,25 +571,23 @@
   $material-filled-texteditor-spin-button-horizontal-padding,
   $material-button-vertical-padding,
 ) {
-  .dx-editor-outlined,
-  .dx-editor-filled,
-  .dx-editor-underlined {
+  .dx-texteditor {
     .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-left: $material-editor-custom-button-margin;
-        margin-right: $material-editor-custom-button-margin;
+        margin-inline-start: $material-editor-custom-button-margin;
+        margin-inline-end: $material-editor-custom-button-margin;
       }
 
       &:first-child {
         > .dx-button,
         > .dx-clear-button-area {
           &:first-child {
-            margin-left: $material-editor-custom-button-margin * 2;
+            margin-inline-start: $material-editor-custom-button-margin * 2;
           }
 
           &:last-child {
-            margin-right: 0;
+            margin-inline-end: 0;
           }
         }
       }
@@ -156,71 +596,22 @@
         > .dx-button,
         > .dx-clear-button-area {
           &:first-child {
-            margin-left: 0;
+            margin-inline-start: 0;
           }
 
           &:last-child {
-            margin-right: $material-editor-custom-button-margin * 2;
+            margin-inline-end: $material-editor-custom-button-margin * 2;
           }
         }
 
         > .dx-dropdowneditor-button:last-child,
         > .dx-numberbox-spin-container:last-child {
-          margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
+          margin-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
         }
 
         > .dx-clear-button-area:last-child,
         > .dx-clear-button-area + div:empty:last-child {
-          margin-right: $material-filled-texteditor-input-button-horizontal-padding;
-        }
-      }
-
-      @at-root #{selector-append(".dx-rtl", &)} {
-        &:first-child {
-          > .dx-button,
-          > .dx-clear-button-area {
-            &:first-child {
-              margin-left: $material-editor-custom-button-margin;
-              margin-right: $material-editor-custom-button-margin * 2;
-            }
-
-            &:last-child {
-              margin-left: 0;
-              margin-right: $material-editor-custom-button-margin;
-            }
-
-            &:first-child:last-child {
-              margin-left: 0;
-              margin-right: $material-editor-custom-button-margin * 2;
-            }
-          }
-        }
-
-        &:last-child {
-          > .dx-button,
-          > .dx-clear-button-area {
-            &:first-child {
-              margin-left: $material-editor-custom-button-margin;
-              margin-right: 0;
-            }
-
-            &:last-child {
-              margin-left: $material-editor-custom-button-margin * 2;
-              margin-right: $material-editor-custom-button-margin;
-            }
-          }
-
-          > .dx-dropdowneditor-button:last-child,
-          > .dx-numberbox-spin-container:last-child {
-            margin-left: $material-filled-texteditor-spin-button-horizontal-padding;
-            margin-right: 0;
-          }
-
-          > .dx-clear-button-area:last-child,
-          > .dx-clear-button-area + div:empty:last-child {
-            margin-left: $material-filled-texteditor-input-button-horizontal-padding;
-            margin-right: 0;
-          }
+          margin-inline-end: $material-filled-texteditor-input-button-horizontal-padding;
         }
       }
     }
@@ -233,7 +624,10 @@
         .dx-texteditor-buttons-container {
           > .dx-button.dx-button-mode-text {
             height: $material-underlined-editor-button-height;
-            margin: 1px $material-editor-custom-button-margin 3px;
+            margin-top: 1px;
+            margin-bottom: 3px;
+            margin-inline-end: $material-editor-custom-button-margin;
+            margin-inline-start: $material-editor-custom-button-margin;
   
             .dx-button-content {
               display: flex;
@@ -264,7 +658,7 @@
           &:first-child {
             > .dx-button {
               &:first-child {
-                margin-left: 0;
+                margin-inline-start: 0;
               }
             }
           }
@@ -272,32 +666,7 @@
           &:last-child {
             > .dx-button {
               &:last-child {
-                margin-right: 0;
-              }
-            }
-          }
-  
-          @at-root #{selector-append(".dx-rtl", &)} {
-            &:first-child {
-              > .dx-button {
-                &:first-child {
-                  margin-left: $material-editor-custom-button-margin;
-                  margin-right: 0;
-                }
-              }
-            }
-  
-            &:last-child {
-              > .dx-button {
-                &:first-child {
-                  margin-left: $material-editor-custom-button-margin;
-                  margin-right: $material-editor-custom-button-margin;
-                }
-  
-                &:last-child {
-                  margin-left: 0;
-                  margin-right: $material-editor-custom-button-margin;
-                }
+                margin-inline-end: 0;
               }
             }
           }
@@ -309,7 +678,10 @@
       .dx-texteditor-buttons-container {
         > .dx-button.dx-button-mode-text {
           height: $material-underlined-editor-button-height;
-          margin: 1px $material-editor-custom-button-margin 3px;
+          margin-top: 1px;
+          margin-bottom: 3px;
+          margin-inline-end: $material-editor-custom-button-margin;
+          margin-inline-start: $material-editor-custom-button-margin;
   
           .dx-button-content {
             display: flex;
@@ -340,7 +712,7 @@
         &:first-child {
           > .dx-button {
             &:first-child {
-              margin-left: 0;
+              margin-inline-start: 0;
             }
           }
         }
@@ -348,32 +720,7 @@
         &:last-child {
           > .dx-button {
             &:last-child {
-              margin-right: 0;
-            }
-          }
-        }
-  
-        @at-root #{selector-append(".dx-rtl", &)} {
-          &:first-child {
-            > .dx-button {
-              &:first-child {
-                margin-left: $material-editor-custom-button-margin;
-                margin-right: 0;
-              }
-            }
-          }
-  
-          &:last-child {
-            > .dx-button {
-              &:first-child {
-                margin-left: $material-editor-custom-button-margin;
-                margin-right: $material-editor-custom-button-margin;
-              }
-  
-              &:last-child {
-                margin-left: 0;
-                margin-right: $material-editor-custom-button-margin;
-              }
+              margin-inline-end: 0;
             }
           }
         }

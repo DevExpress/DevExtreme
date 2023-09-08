@@ -28,8 +28,6 @@ $scheduler-first-month-cell-background-color: null !default;
 
 $scheduler-panel-text-color: null !default;
 
-$scheduler-header-panel-top-gap: 10px;
-
 $scheduler-timepanel-cell-offset: 20px;
 $scheduler-workspace-info-font-size: 20px;
 $scheduler-small-font-size: 14px;
@@ -73,7 +71,6 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-accent-border-color: $scheduler-accent-border-color,
 );
 @use "./agenda" with (
-  $scheduler-header-panel-top-gap: $scheduler-header-panel-top-gap,
   $scheduler-group-header-table-cell-width: $scheduler-group-header-table-cell-width,
   $scheduler-small-size-factor: $scheduler-small-size-factor,
   $scheduler-small-font-size: $scheduler-small-font-size,
@@ -231,7 +228,6 @@ $scheduler-month-date-text-padding: 6px;
   width: 0;
   border-bottom: 1px solid $scheduler-base-border-color;
   border-right: 1px solid $scheduler-base-border-color;
-  margin-top: $scheduler-header-panel-top-gap;
 }
 
 .dx-scheduler-header-tables-container {
@@ -440,7 +436,6 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-header-panel {
   border-spacing: 0;
   table-layout: fixed;
-  margin-top: $scheduler-header-panel-top-gap;
   width: 100%;
   font-size: $scheduler-workspace-info-font-size;
 }

@@ -85,6 +85,14 @@ class Tabs<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildre
   ]),
   hint: PropTypes.string,
   hoverStateEnabled: PropTypes.bool,
+  iconPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "top",
+      "end",
+      "bottom",
+      "start"])
+  ]),
   itemHoldTimeout: PropTypes.number,
   items: PropTypes.array,
   keyExpr: PropTypes.oneOfType([
@@ -121,6 +129,12 @@ class Tabs<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildre
       "multiple"])
   ]),
   showNavButtons: PropTypes.bool,
+  stylingMode: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "primary",
+      "secondary"])
+  ]),
   tabIndex: PropTypes.number,
   visible: PropTypes.bool,
   width: PropTypes.oneOfType([
@@ -138,7 +152,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;

@@ -90,8 +90,6 @@ const Calendar = Editor.inherit({
 
             value: null,
 
-            values: [],
-
             dateSerializationFormat: undefined,
 
             min: new Date(1000, 0),
@@ -269,7 +267,6 @@ const Calendar = Editor.inherit({
     },
 
     _dateValue: function(value, event) {
-        const optionName = Array.isArray(value) ? 'values' : 'value';
         if(event) {
             if(event.type === 'keydown') {
                 const cellElement = this._view._getContouredCell().get(0);
@@ -277,23 +274,30 @@ const Calendar = Editor.inherit({
             }
             this._saveValueChangeEvent(event);
         }
-        this._dateOption(optionName, value);
+        this._dateOption('value', value);
     },
 
     _dateOption: function(optionName, optionValue) {
+        const isArray = optionName === 'value' && !this._isSingleMode();
+        const value = this.option('value');
+
         if(arguments.length === 1) {
-            const values = this.option('values') ?? [];
-            return optionName === 'values'
-                ? values.map((value) => this._convertToDate(value))
+
+            return isArray
+                ? (value ?? []).map((value) => this._convertToDate(value))
                 : this._convertToDate(this.option(optionName));
         }
 
         const serializationFormat = this._getSerializationFormat(optionName);
-        const serializedValue = optionName === 'values'
+        const serializedValue = isArray
             ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat)) || []
             : dateSerialization.serializeDate(optionValue, serializationFormat);
 
         this.option(optionName, serializedValue);
+    },
+
+    _isSingleMode: function() {
+        return this.option('selectionMode') === 'single';
     },
 
     _shiftDate: function(zoomLevel, date, offset, reverse) {
@@ -442,6 +446,7 @@ const Calendar = Editor.inherit({
 
     _refreshSelectionStrategy: function() {
         this._initSelectionStrategy();
+        this._selectionStrategy.restoreValue();
         this._refresh();
     },
 
@@ -698,6 +703,7 @@ const Calendar = Editor.inherit({
 
         this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
+        this._updateNavigatorLabels();
 
         this.setAria('role', 'application');
 
@@ -851,7 +857,7 @@ const Calendar = Editor.inherit({
         const result = new Date(date);
         const currentValue = this._dateOption('value');
 
-        if(currentValue) {
+        if(currentValue && this._isSingleMode()) {
             result.setHours(currentValue.getHours());
             result.setMinutes(currentValue.getMinutes());
             result.setSeconds(currentValue.getSeconds());
@@ -1386,6 +1392,20 @@ const Calendar = Editor.inherit({
         this._updateViewsOption('max', this._getMaxDate());
     },
 
+    _updateNavigatorLabels: function() {
+        let zoomLevel = this.option('zoomLevel');
+        zoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
+
+        const captionButtonText = this._navigator._caption.option('text');
+        const localizedPrevButtonLabel = messageLocalization.format(`dxCalendar-previous${zoomLevel}ButtonLabel`);
+        const localizedCaptionLabel = messageLocalization.format(`dxCalendar-caption${zoomLevel}Label`);
+        const localizedNextButtonLabel = messageLocalization.format(`dxCalendar-next${zoomLevel}ButtonLabel`);
+
+        this.setAria('label', localizedPrevButtonLabel, this._navigator._prevButton.$element());
+        this.setAria('label', `${captionButtonText}. ${localizedCaptionLabel}`, this._navigator._caption.$element());
+        this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
+    },
+
     _updateAriaSelected: function(value, previousValue) {
         previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
         value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
@@ -1433,7 +1453,6 @@ const Calendar = Editor.inherit({
                 break;
             case 'selectionMode':
                 this._refreshSelectionStrategy();
-                this._selectionStrategy.restoreValue();
                 this._initCurrentDate();
                 break;
             case 'selectWeekOnClick':
@@ -1456,6 +1475,7 @@ const Calendar = Editor.inherit({
                 this._refreshViews();
                 this._renderNavigator();
                 this._updateAriaId();
+                this._updateNavigatorLabels();
                 break;
             case 'minZoomLevel':
             case 'maxZoomLevel':
@@ -1463,18 +1483,9 @@ const Calendar = Editor.inherit({
                 this._updateButtonsVisibility();
                 break;
             case 'value':
-                if(this.option('selectionMode') === 'single') {
-                    this._selectionStrategy.processValueChanged([value], [previousValue]);
-                }
+                this._selectionStrategy.processValueChanged(value, previousValue);
                 this._setSubmitValue(value);
                 this.callBase(args);
-                break;
-            case 'values':
-                if(this.option('selectionMode') !== 'single') {
-                    this._selectionStrategy.processValueChanged(value, previousValue);
-                }
-                this._raiseValueChangeAction(value, previousValue);
-                this._saveValueChangeEvent(undefined);
                 break;
             case 'viewsCount':
                 this._refreshViews();

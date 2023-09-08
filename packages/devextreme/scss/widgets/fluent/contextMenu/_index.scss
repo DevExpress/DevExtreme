@@ -1,0 +1,75 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../button/sizes" as *;
+@use "../menuBase/sizes" as *;
+@use "../menu/colors" as *;
+@use "../menu/sizes" as *;
+@use "../../base/contextMenu";
+
+// adduse
+@use "../overlay";
+@use "../menuBase" as *;
+
+
+.dx-context-menu {
+  .dx-menu-item {
+    font-size: $fluent-context-menu-font-size;
+    color: $base-text-color;
+
+    .dx-menu-item-content {
+      display: flex;
+      align-items: center;
+      padding: $fluent-menu-vertical-padding $fluent-context-menu-horizontal-padding;
+
+      .dx-menu-item-popout-container {
+        inset-inline-end: $fluent-context-menu-horizontal-padding;
+        width: $fluent-base-icon-size;
+        display: flex;
+        align-items: center;
+
+        .dx-menu-item-popout {
+          display: flex;
+          align-items: center;
+          color: $base-icon-color;
+
+          @include dx-icon(spinright);
+          @include dx-icon-sizing($fluent-button-icon-size);
+        }
+      }
+    }
+
+    &.dx-menu-item-has-submenu > .dx-menu-item-content {
+      padding-inline-end: $fluent-menu-item-with-icon-horizontal-padding;
+    }
+
+    &.dx-menu-item-has-text {
+      &.dx-menu-item-has-icon {
+        .dx-icon {
+          margin-inline-end: $fluent-menu-icon-to-text-offset;
+        }
+      }
+    }
+  }
+
+  .dx-menu-items-container {
+    padding: $fluent-context-menu-container-vertical-padding 0;
+  }
+
+  &.dx-overlay-content.dx-state-focused {
+    box-shadow: none;
+  }
+
+  .dx-submenu {
+    background-color: $menu-popup-bg;
+    border-radius: $base-border-radius;
+    box-shadow: 0 2px 7px $menu-container-shadow-color;
+  }
+
+  .dx-menu-separator {
+    background-color: $menu-separator-bg;
+  }
+}

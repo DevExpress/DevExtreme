@@ -1,0 +1,10 @@
+@use "../sizes" as *;
+@use "../../base/dropDownMenu";
+
+// adduse
+
+.dx-dropdownmenu-popup-wrapper {
+  .dx-overlay-content {
+    box-shadow: $fluent-base-dropdown-widgets-shadow;
+  }
+}

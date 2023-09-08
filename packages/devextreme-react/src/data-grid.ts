@@ -404,7 +404,7 @@ type IButtonProps = React.PropsWithChildren<{
   icon?: string;
   name?: "cancel" | "delete" | "edit" | "save" | "undelete";
   onClick?: ((e: { column: dxDataGridColumn, component: dxDataGrid, element: any, event: event, model: Record<string, any>, row: dxDataGridRowObject }) => void);
-  template?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string) | template;
+  template?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any) | template;
   text?: string;
   visible?: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   render?: (...params: any) => React.ReactNode;
@@ -477,7 +477,7 @@ type IColumnProps = React.PropsWithChildren<{
   buttons?: Array<dxDataGridColumnButton | "cancel" | "delete" | "edit" | "save" | "undelete">;
   calculateCellValue?: ((rowData: any) => any);
   calculateDisplayValue?: ((rowData: any) => any) | string;
-  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string);
+  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>);
   calculateGroupValue?: ((rowData: any) => any) | string;
   calculateSortValue?: ((rowData: any) => any) | string;
   caption?: string;
@@ -517,7 +517,7 @@ type IColumnProps = React.PropsWithChildren<{
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
     calculateCellValue?: ((rowData: any) => any);
-    dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any>) | null | Store;
+    dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store;
     displayExpr?: ((data: any) => string) | string;
     valueExpr?: string;
   };
@@ -742,7 +742,7 @@ class ColumnHeaderFilterSearch extends NestedOption<IColumnHeaderFilterSearchPro
 type IColumnLookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
   calculateCellValue?: ((rowData: any) => any);
-  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any>) | null | Store;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store;
   displayExpr?: ((data: any) => string) | string;
   valueExpr?: string;
 }>
@@ -754,7 +754,7 @@ class ColumnLookup extends NestedOption<IColumnLookupProps> {
 // FormItem
 // Column
 type ICompareRuleProps = React.PropsWithChildren<{
-  comparisonTarget?: (() => Record<string, any>);
+  comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -781,11 +781,11 @@ class CursorOffset extends NestedOption<ICursorOffsetProps> {
 // owners:
 // FilterBuilder
 type ICustomOperationProps = React.PropsWithChildren<{
-  calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string);
+  calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
   customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | any, valueText: string }) => string);
   dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -1007,13 +1007,13 @@ class ExportTexts extends NestedOption<IExportTextsProps> {
 // owners:
 // FilterBuilder
 type IFieldProps = React.PropsWithChildren<{
-  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string);
+  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string;
   customizeText?: ((fieldInfo: { value: string | number | any, valueText: string }) => string);
   dataField?: string;
   dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
   format?: LocalizationTypes.Format;
@@ -1021,7 +1021,7 @@ type IFieldProps = React.PropsWithChildren<{
     allowClearing?: boolean;
     dataSource?: Array<any> | DataSourceOptions | Store;
     displayExpr?: ((data: any) => string) | string;
-    valueExpr?: ((data: any) => string) | string;
+    valueExpr?: ((data: any) => string | number | boolean) | string;
   };
   name?: string;
   trueText?: string;
@@ -1051,7 +1051,7 @@ type IFieldLookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
   dataSource?: Array<any> | DataSourceOptions | Store;
   displayExpr?: ((data: any) => string) | string;
-  valueExpr?: ((data: any) => string) | string;
+  valueExpr?: ((data: any) => string | number | boolean) | string;
 }>
 class FieldLookup extends NestedOption<IFieldLookupProps> {
   public static OptionName = "lookup";
@@ -1091,7 +1091,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
     or?: string;
   };
   groupOperations?: Array<"and" | "or" | "notAnd" | "notOr">;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
   maxGroupLevel?: number;
@@ -1106,7 +1106,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   defaultValue?: Array<any> | (() => any) | string;
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -1134,7 +1134,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: ((contentElement: any) => string) | template;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
@@ -1145,15 +1145,15 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number) | number | string;
-  maxWidth?: (() => number) | number | string;
-  minHeight?: (() => number) | number | string;
-  minWidth?: (() => number) | number | string;
+  maxHeight?: (() => number | string) | number | string;
+  maxWidth?: (() => number | string) | number | string;
+  minHeight?: (() => number | string) | number | string;
+  minWidth?: (() => number | string) | number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -1176,19 +1176,19 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   showTitle?: boolean;
   tabIndex?: number;
   title?: string;
-  titleTemplate?: ((titleElement: any) => string) | template;
+  titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number) | number | string;
-  onHeightChange?: (value: (() => number) | number | string) => void;
+  defaultHeight?: (() => number | string) | number | string;
+  onHeightChange?: (value: (() => number | string) | number | string) => void;
   defaultPosition?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
   onPositionChange?: (value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number) | number | string;
-  onWidthChange?: (value: (() => number) | number | string) => void;
+  defaultWidth?: (() => number | string) | number | string;
+  onWidthChange?: (value: (() => number | string) | number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   contentKeyFn?: (data: any) => string;
@@ -1326,7 +1326,7 @@ type IFormProps = React.PropsWithChildren<{
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
   formData?: any;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
@@ -1354,7 +1354,7 @@ type IFormProps = React.PropsWithChildren<{
   tabIndex?: number;
   validationGroup?: string;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   defaultFormData?: any;
   onFormDataChange?: (value: any) => void;
 }>
@@ -1374,7 +1374,7 @@ class Form extends NestedOption<IFormProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1398,12 +1398,12 @@ type IFormItemProps = React.PropsWithChildren<{
     alignment?: "center" | "left" | "right";
     location?: "left" | "right" | "top";
     showColon?: boolean;
-    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string) | template;
+    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
     text?: string;
     visible?: boolean;
   };
   name?: string;
-  template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string) | template;
+  template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
   visibleIndex?: number;
@@ -1590,11 +1590,11 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   name?: "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel";
   options?: any;
   showText?: "always" | "inMenu";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
@@ -1639,7 +1639,7 @@ type ILabelProps = React.PropsWithChildren<{
   alignment?: "center" | "left" | "right";
   location?: "left" | "right" | "top";
   showColon?: boolean;
-  template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string) | template;
+  template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -1679,9 +1679,9 @@ class LoadPanel extends NestedOption<ILoadPanelProps> {
 type ILookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
   calculateCellValue?: ((rowData: any) => any);
-  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any>) | null | Store;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store;
   displayExpr?: ((data: any) => string) | string;
-  valueExpr?: string | ((data: any) => string);
+  valueExpr?: string | ((data: any) => string | number | boolean);
 }>
 class Lookup extends NestedOption<ILookupProps> {
   public static OptionName = "lookup";
@@ -1825,7 +1825,7 @@ type IPopupProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: ((contentElement: any) => string) | template;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
@@ -1836,15 +1836,15 @@ type IPopupProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number) | number | string;
+  height?: (() => number | string) | number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number) | number | string;
-  maxWidth?: (() => number) | number | string;
-  minHeight?: (() => number) | number | string;
-  minWidth?: (() => number) | number | string;
+  maxHeight?: (() => number | string) | number | string;
+  maxWidth?: (() => number | string) | number | string;
+  minHeight?: (() => number | string) | number | string;
+  minWidth?: (() => number | string) | number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -1867,19 +1867,19 @@ type IPopupProps = React.PropsWithChildren<{
   showTitle?: boolean;
   tabIndex?: number;
   title?: string;
-  titleTemplate?: ((titleElement: any) => string) | template;
+  titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number) | number | string;
+  width?: (() => number | string) | number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number) | number | string;
-  onHeightChange?: (value: (() => number) | number | string) => void;
+  defaultHeight?: (() => number | string) | number | string;
+  onHeightChange?: (value: (() => number | string) | number | string) => void;
   defaultPosition?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
   onPositionChange?: (value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number) | number | string;
-  onWidthChange?: (value: (() => number) | number | string) => void;
+  defaultWidth?: (() => number | string) | number | string;
+  onWidthChange?: (value: (() => number | string) | number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   contentKeyFn?: (data: any) => string;
@@ -2008,7 +2008,7 @@ type IRowDraggingProps = React.PropsWithChildren<{
   };
   data?: any;
   dragDirection?: "both" | "horizontal" | "vertical";
-  dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string) | template;
+  dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
   dropFeedbackMode?: "push" | "indicate";
   filter?: string;
   group?: string;
@@ -2081,7 +2081,7 @@ type ISearchPanelProps = React.PropsWithChildren<{
   searchVisibleColumnsOnly?: boolean;
   text?: string;
   visible?: boolean;
-  width?: number;
+  width?: number | string;
   defaultText?: string;
   onTextChange?: (value: string) => void;
 }>
@@ -2340,10 +2340,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: "always" | "auto" | "never";
   location?: "after" | "before" | "center";
-  menuItemTemplate?: (() => string) | template;
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: "always" | "inMenu";
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;
@@ -2405,7 +2405,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   min?: any | number;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
-  comparisonTarget?: (() => Record<string, any>);
+  comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
   pattern?: any | string;
 }>
@@ -2423,7 +2423,7 @@ class ValidationRule extends NestedOption<IValidationRuleProps> {
 type IValueFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;

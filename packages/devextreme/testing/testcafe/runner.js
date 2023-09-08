@@ -5,7 +5,6 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
-const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
@@ -144,7 +143,7 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
-            reporter: [process.env.CI === 'true' ? 'list' : 'minimal', dashboardReporter],
+            reporter: [process.env.CI === 'true' ? 'list' : 'minimal'],
             componentFolder: '',
             file: '*',
             cache: true,

@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-colorbox-overlay-padding: null !default;
+$fluent-colorbox-preview-left: null !default;
+
+@if $size == "default" {
+  $fluent-colorbox-overlay-padding: 20px !default;
+  $fluent-colorbox-preview-left: 13px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-colorbox-overlay-padding: 16px !default;
+  $fluent-colorbox-preview-left: 8px !default;
+}

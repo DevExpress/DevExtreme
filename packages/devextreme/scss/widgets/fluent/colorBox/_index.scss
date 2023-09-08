@@ -1,0 +1,57 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../colorView/colors" as *;
+@use "../../base/colorBox";
+
+// adduse
+@use "../colorView";
+@use "../dropDownEditor";
+
+
+.dx-colorbox {
+  .dx-colorbox-input-container {
+    .dx-placeholder::before,
+    .dx-colorbox-input {
+      padding-inline-start: $fluent-colorbox-preview-left + 27px;
+    }
+
+    &.dx-colorbox-color-is-not-defined {
+      .dx-colorbox-color-result-preview {
+        background: $colorbox-preview-empty-bg no-repeat 0 0;
+      }
+    }
+
+    &::after {
+      left: $fluent-colorbox-preview-left + 1;
+    }
+  }
+
+  &.dx-texteditor {
+    .dx-texteditor-label {
+      .dx-label-before {
+        min-width: $fluent-colorbox-preview-left + 27px;
+      }
+    }
+  }
+}
+
+
+.dx-colorbox-color-result-preview {
+  border-color: $colorview-border-color;
+  left: $fluent-colorbox-preview-left;
+}
+
+.dx-colorbox-overlay {
+  &.dx-overlay-content {
+    background-color: $colorbox-overlay-bg;
+  }
+
+  .dx-popup-content {
+    padding: $fluent-colorbox-overlay-padding;
+  }
+
+  padding: 0;
+}

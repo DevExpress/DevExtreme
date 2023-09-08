@@ -101,11 +101,13 @@ $button-default-outlined-hover-bg: color.change($button-default-bg, $alpha: 0.08
 $button-default-outlined-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
 $button-default-outlined-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
 $button-default-outlined-selected-bg: color.change($button-default-bg, $alpha: 0.36) !default;
+$button-default-outlined-selected-color: $button-default-bg !default;
 
 $button-default-text-hover-bg: color.change($button-default-bg, $alpha: 0.08) !default;
 $button-default-text-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
 $button-default-text-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
 $button-default-text-selected-bg: color.change($button-default-bg, $alpha: 0.36) !default;
+$button-default-text-selected-color: $button-default-bg !default;
 
 /**
 * $name 10. Text color
@@ -153,11 +155,13 @@ $button-danger-outlined-hover-bg: color.change($button-danger-bg, $alpha: 0.08) 
 $button-danger-outlined-focused-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
 $button-danger-outlined-active-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
 $button-danger-outlined-selected-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
+$button-danger-outlined-selected-color: $button-danger-bg !default;
 
 $button-danger-text-hover-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
 $button-danger-text-focused-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
 $button-danger-text-active-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
 $button-danger-text-selected-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
+$button-danger-text-selected-color: $button-danger-bg !default;
 
 /**
 * $name 10. Text color
@@ -205,11 +209,13 @@ $button-success-outlined-hover-bg: color.change($button-success-bg, $alpha: 0.08
 $button-success-outlined-focused-bg: color.change($button-success-bg, $alpha: 0.08) !default;
 $button-success-outlined-active-bg: color.change($button-success-bg, $alpha: 0.36) !default;
 $button-success-outlined-selected-bg: color.change($button-success-bg, $alpha: 0.36) !default;
+$button-success-outlined-selected-color: $button-success-bg !default;
 
 $button-success-text-hover-bg: color.change($button-success-bg, $alpha: 0.08) !default;
 $button-success-text-focused-bg: color.change($button-success-bg, $alpha: 0.08) !default;
 $button-success-text-active-bg: color.change($button-success-bg, $alpha: 0.36) !default;
 $button-success-text-selected-bg: color.change($button-success-bg, $alpha: 0.36) !default;
+$button-success-text-selected-color: $button-success-bg !default;
 
 @if $mode == "light" {
   $button-disabled-background: rgba(0, 0, 0, 0.1) !default;

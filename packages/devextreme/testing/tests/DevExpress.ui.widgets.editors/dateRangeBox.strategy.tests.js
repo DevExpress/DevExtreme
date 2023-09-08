@@ -74,12 +74,12 @@ QUnit.module('Strategy', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Calendar should have "values" option equals to dateRangeBox "value"', function(assert) {
+    QUnit.test('Calendar should have "value" option equals to dateRangeBox "value"', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
 
         startDateBox.open();
 
-        assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
+        assert.deepEqual(startDateBox._strategy.widgetOption('value'), this.instance.option('value'));
     });
 
     QUnit.module('disableOutOfRangeSelection option', {
@@ -355,7 +355,7 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             keyboard.caret(100).press('backspace').press('enter');
 
-            assert.deepEqual(new Date(this.getCalendar().option('values')[0]), new Date('2023/05/01'), 'value from start date input aplied');
+            assert.deepEqual(new Date(this.getCalendar().option('value')[0]), new Date('2023/05/01'), 'value from start date input aplied');
 
             const $endDateInput = $(this.instance.endDateField());
             keyboard = keyboardMock($endDateInput);
@@ -364,7 +364,7 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             keyboard.caret(100).press('backspace').press('enter');
 
-            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/02'), 'value from end date input aplied');
+            assert.deepEqual(new Date(this.getCalendar().option('value')[1]), new Date('2023/05/02'), 'value from end date input aplied');
         });
 
         QUnit.test(`Enter key should apply value from calendar when input value was not changed (applyValueMode = ${applyValueMode})`, function(assert) {
@@ -382,7 +382,7 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             keyboard.caret(100).press('arrowleft').press('enter');
 
-            assert.deepEqual(new Date(this.getCalendar().option('values')[0]), new Date('2023/05/10'), 'value from start date input aplied');
+            assert.deepEqual(new Date(this.getCalendar().option('value')[0]), new Date('2023/05/10'), 'value from start date input aplied');
 
             const $endDateInput = $(this.instance.endDateField());
             keyboard = keyboardMock($endDateInput);
@@ -391,7 +391,7 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             keyboard.caret(100).press('arrowright').press('enter');
 
-            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/24'), 'value from end date input aplied');
+            assert.deepEqual(new Date(this.getCalendar().option('value')[1]), new Date('2023/05/24'), 'value from end date input aplied');
         });
 
         [
@@ -427,7 +427,7 @@ QUnit.module('Strategy', moduleConfig, () => {
                 $firstDate.trigger('dxclick');
 
                 assert.strictEqual(this.instance.option('opened'), true, 'Popup is opened');
-                assert.deepEqual(this.getCalendar().option('values')[firstSelect === 'startDate' ? 0 : 1], firstCellDate, `${firstSelect} is selected correctly`);
+                assert.deepEqual(this.getCalendar().option('value')[firstSelect === 'startDate' ? 0 : 1], firstCellDate, `${firstSelect} is selected correctly`);
 
                 $(this.instance.field()[secondSelect === 'startDate' ? 0 : 1]).focusin();
 
@@ -436,7 +436,7 @@ QUnit.module('Strategy', moduleConfig, () => {
                 $secondDate.trigger('dxclick');
 
                 assert.strictEqual(this.instance.option('opened'), applyValueMode === 'useButtons', `Popup is ${applyValueMode === 'useButtons' ? 'opened' : 'closed'}`);
-                assert.deepEqual(this.getCalendar().option('values')[secondSelect === 'startDate' ? 0 : 1], secondCellDate, `${secondSelect} is selected correctly`);
+                assert.deepEqual(this.getCalendar().option('value')[secondSelect === 'startDate' ? 0 : 1], secondCellDate, `${secondSelect} is selected correctly`);
             });
         });
     });
@@ -661,7 +661,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
 
         const startDateBox = getStartDateBoxInstance(this.instance);
 
-        assert.deepEqual(startDateBox._strategy.widgetOption('values'), [null, null]);
+        assert.deepEqual(startDateBox._strategy.widgetOption('value'), [null, null]);
     });
 
     [
@@ -682,7 +682,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), initialValue, 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), initialValue, 'calendar value is correct');
 
             const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -691,7 +691,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [startCellDate, initialValue[1]], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, initialValue[1]], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, initialValue[1]], 'calendar value is correct');
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -700,7 +700,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, endCellDate], 'calendar value is correct');
         });
 
         QUnit.test(`onValueChanged should be called once with correct event argument on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
@@ -748,7 +748,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [startCellDate, initialValue[1]], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, initialValue[1]], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, initialValue[1]], 'calendar value is correct');
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -757,7 +757,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, endCellDate], 'calendar value is correct');
 
             assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
         });
@@ -782,7 +782,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [initialValue[0], endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [initialValue[0], endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [initialValue[0], endCellDate], 'calendar value is correct');
 
             assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is not closed');
         });
@@ -817,7 +817,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [null, null], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), null, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [null, null], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [null, null], 'calendar value is correct');
 
             const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -830,7 +830,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, endCellDate], 'calendar value is correct');
         });
     });
 
@@ -1002,7 +1002,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), initialValue, 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), initialValue, 'calendar value is correct');
 
             const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -1011,7 +1011,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is not changed');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is not changed');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is not changed');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, initialValue[1]], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, initialValue[1]], 'calendar value is correct');
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -1020,7 +1020,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is not changed');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is not changed');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is not changed');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, endCellDate], 'calendar value is correct');
 
             const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${POPUP_DONE_BUTTON}`);
             $okButton.trigger('dxclick');
@@ -1028,7 +1028,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, endCellDate], 'calendar value is correct');
         });
 
         QUnit.test(`StartDateBox & EndDateBox should not change value after select start date and end date in calendar and click cancel button, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
@@ -1043,7 +1043,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), initialValue, 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), initialValue, 'calendar value is correct');
 
             const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
@@ -1053,7 +1053,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
             $endDateCell.trigger('dxclick');
 
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+            assert.deepEqual(this.getCalendar().option('value'), [startCellDate, endCellDate], 'calendar value is correct');
 
             const $cancelButton = $(this.instance.getStartDateBox().content()).parent().find(`.${POPUP_CANCEL_BUTTON}`);
             $cancelButton.trigger('dxclick');
@@ -1061,7 +1061,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is not changed');
             assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is not changed');
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is not changed');
-            assert.deepEqual(this.getCalendar().option('values'), initialValue, 'calendar is not changed');
+            assert.deepEqual(this.getCalendar().option('value'), initialValue, 'calendar is not changed');
         });
 
         QUnit.test(`onValueChanged should not be called on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
@@ -1144,7 +1144,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
         assert.deepEqual(this.instance.option('value'), [null, null], 'dateRangeBox value is not changed');
         assert.deepEqual(this.startDateBox.option('value'), null, 'startDateBox value is not changed');
         assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is not changed');
-        assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
+        assert.deepEqual(this.getCalendar().option('value'), [startCellDate, null], 'calendar value is correct');
 
         const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${POPUP_DONE_BUTTON}`);
         $okButton.trigger('dxclick');
@@ -1152,7 +1152,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
         assert.deepEqual(this.instance.option('value'), [startCellDate, null], 'dateRangeBox value is correct');
         assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
         assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is not changed');
-        assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
+        assert.deepEqual(this.getCalendar().option('value'), [startCellDate, null], 'calendar value is correct');
     });
 
     ['ok', 'cancel'].forEach((button) => {

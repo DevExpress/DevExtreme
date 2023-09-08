@@ -1,0 +1,30 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+
+// adduse
+@use "../dropDownList";
+
+@mixin autocomplete-editor-container-offset() {
+  inset-inline-end: $fluent-invalid-badge-horizontal-padding;
+}
+
+.dx-autocomplete.dx-invalid,
+.dx-autocomplete.dx-valid {
+  .dx-texteditor-buttons-container {
+    &::after {
+      @include autocomplete-editor-container-offset();
+    }
+  }
+}
+
+.dx-autocomplete.dx-validation-pending {
+  .dx-texteditor-buttons-container {
+    .dx-pending-indicator {
+      @include autocomplete-editor-container-offset();
+    }
+  }
+}

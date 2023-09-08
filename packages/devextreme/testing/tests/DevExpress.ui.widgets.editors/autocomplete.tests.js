@@ -98,6 +98,44 @@ QUnit.module('dxAutocomplete', {
         assert.equal(instance._dataSource.items()[0], 'qwerty', 'autocomplete-s dataSource initialization');
     });
 
+    QUnit.test('reset should set value to initial', function(assert) {
+        const element = $('#autocomplete2').dxAutocomplete({
+            value: 'initValue',
+        });
+
+        const instance = element.dxAutocomplete('instance');
+        instance.option('value', 'newValue');
+
+        instance.reset();
+
+        assert.strictEqual(instance.option('value'), 'initValue');
+    });
+
+    QUnit.test('reset with parameter should set value correctly', function(assert) {
+        const element = $('#autocomplete2').dxAutocomplete({
+            value: 'initValue',
+        });
+
+        const instance = element.dxAutocomplete('instance');
+
+        instance.reset('newValue');
+
+        assert.strictEqual(instance.option('value'), 'newValue');
+    });
+
+    QUnit.test('reset should set isDirty to false', function(assert) {
+        const element = $('#autocomplete2').dxAutocomplete({
+            value: 'initValue',
+        });
+
+        const instance = element.dxAutocomplete('instance');
+        instance.option('value', 'newValue');
+
+        instance.reset('newValue');
+
+        assert.strictEqual(instance.option('isDirty'), false);
+    });
+
     QUnit.test('maxItemCount should override datasource pageSize on init', function(assert) {
         const element = $('#autocomplete2').dxAutocomplete({
             dataSource: ['1', '2', '3'],
@@ -1216,6 +1254,15 @@ QUnit.module('Overlay integration', {
 
         this.keyboard.type('i');
         this.instance.clear();
+
+        assert.notOk(this.instance.option('opened'), 'popup is hidden');
+    });
+
+    QUnit.test('popup should be hidden after reset', function(assert) {
+        this.instance.option('value', '');
+
+        this.keyboard.type('i');
+        this.instance.reset();
 
         assert.notOk(this.instance.option('opened'), 'popup is hidden');
     });

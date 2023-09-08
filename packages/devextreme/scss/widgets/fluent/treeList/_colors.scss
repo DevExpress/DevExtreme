@@ -1,0 +1,10 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../gridBase/colors" as *;
+
+// adduse
+
+$treelist-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
+$treelist-selection-chevron-icon-color: $treelist-chevron-icon-color !default;
+$treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;

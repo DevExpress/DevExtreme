@@ -31,6 +31,15 @@ export default class Overlay extends Widget {
     return Selector(`.${CLASS.content}`);
   }
 
+  isVisible(): Promise<boolean> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).option('visible'),
+      { dependencies: { getInstance } },
+    )();
+  }
+
   show(): Promise<{ top: number; left: number }> {
     const { getInstance } = this;
 

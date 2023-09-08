@@ -4,8 +4,6 @@ module.exports = {
   ignoredGlobs: ['!./src/**/*.test.ts', '!./src/**/__mocks__/*'],
   npm: {
     dist: './npm/',
-    strategySrc: '../vue2-strategy/npm/*',
-    strategyDist: './npm/core/strategy/vue2',
     package: 'package.json',
     license: './LICENSE',
     readme: './README.md'

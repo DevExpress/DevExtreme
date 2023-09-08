@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../button/mixins" as *;
+@use "../button/sizes" as *;
+@use "../button/colors" as *;
+@use "../common/mixins" as *;
+@use "../../base/dropDownButton";
+@use "../../base/dropDownButton/mixins" as *;
+
+// adduse
+
+@include dx-dropdownbutton(
+  $fluent-dropdownbutton-icon-spindown-size,
+  $fluent-dropdownbutton-action-horizontal-padding,
+);
+
+.dx-dropdownbutton-popup-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}

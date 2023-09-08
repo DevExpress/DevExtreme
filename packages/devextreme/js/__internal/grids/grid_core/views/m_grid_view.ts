@@ -119,10 +119,11 @@ const resizingControllerMembers = {
   },
 
   _setAriaLabel() {
+    const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
     this.component.setAria('label', messageLocalization.format(
       this._getWidgetAriaLabel(),
       // @ts-expect-error
-      this._dataController.totalItemsCount(),
+      totalItemsCount,
       this.component.columnCount(),
     ), this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
   },
@@ -633,6 +634,14 @@ const resizingControllerMembers = {
       });
     } else { this._setScrollerSpacingCore(); }
   },
+
+  _setAriaOwns() {
+    const headerTable = this._columnHeadersView?.getTableElement();
+    const footerTable = this._footerView?.getTableElement();
+
+    this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
+  },
+
   _updateDimensionsCore() {
     const that = this;
 
@@ -657,6 +666,8 @@ const resizingControllerMembers = {
     deferRender(() => {
       const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
       rowsView.hasHeight(hasHeight);
+
+      this._setAriaOwns();
 
       // IE11
       if (maxHeightHappened && !isMaxHeightApplied) {

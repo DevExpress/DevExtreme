@@ -26,8 +26,9 @@ const transpileConfig = require('./transpile-config');
 const createTsCompiler = require('./typescript/compiler');
 
 require('./generator/gulpfile');
+const { SideEffectFinder } = require('./side-effects-finder');
 
-
+const sideEffectFinder = new SideEffectFinder();
 const src = [
     'js/**/*.*',
     '!js/**/*.d.ts',
@@ -78,21 +79,24 @@ const TS_COMPILER_CONFIG = {
     },
 };
 
-
-const createModuleConfig = (name, dir, filePath) => {
+const createModuleConfig = (name, dir, filePath, dist) => {
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(srcDir, ''), name);
     const currentPath = isIndex ? path.join(relative, '../') : relative;
     const esmFile = path.relative(currentPath, path.join('./esm', relative));
+    const esmFilePath = path.join(dist, './esm',dir.replace(srcDir, ''), name);
     const cjsFile = path.relative(currentPath, path.join('./cjs', relative));
     const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
+    const relativeEsmBase = normalize(esmFile).match(/^.*\/esm\//)[0];
+    const sideEffectFiles = sideEffectFinder.getModuleSideEffectFiles(esmFilePath)
+        .map((importPath) => importPath.replace(/^.*\/esm\//, relativeEsmBase));
 
     const result = {
-        sideEffects: false,
+        sideEffects: sideEffectFiles.length ? sideEffectFiles : false,
         main: normalize(cjsFile),
-        module: normalize(esmFile)
+        module: normalize(esmFile),
     };
 
     if(hasDTS) {
@@ -206,7 +210,7 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
             if(file.extname === '.utils') return stream;
 
             return stream
-                .pipe(replace(/[\s\S]*/, createModuleConfig(fileName, fileDir, filePath)))
+                .pipe(replace(/[\s\S]*/, createModuleConfig(fileName, fileDir, filePath, dist)))
                 .pipe(rename(fPath => {
                     const isIndexFile = parsedPath.base === 'index.js';
                     const shouldBePlacedInSeparateDir = !isIndexFile;
@@ -320,7 +324,7 @@ gulp.task('transpile-watch', gulp.parallel(watchJsTask, watchTsTask));
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>
     gulp
-        .src(['testing/**/*.js', '!testing/renovation-npm/**/*.js'])
+        .src(['testing/**/*.js'])
         .pipe(babel(testsConfig))
         .pipe(gulp.dest('testing'))
 ));

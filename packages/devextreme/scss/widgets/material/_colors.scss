@@ -104,13 +104,11 @@ $typography-bg: null !default;
 $typography-color: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
+$base-disabled-color: null !default;
 $base-dropdown-shadow-color: null !default;
 $base-invalid-color: $base-danger !default;
 $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 $scrollview-pulldown-path: null !default;
-$loadindicator-image-path: null !default;
-$loadindicator-image-small-path: null !default;
-$loadindicator-image-large-path: null !default;
 
 
 @if $color == "blue" {
@@ -150,7 +148,8 @@ $typography-link-color: $base-link-color !default;
 @if $mode == "light" {
   $material-color-theme-modificator: "light" !default;
   $base-text-color: rgba(0, 0, 0, 0.87) !default;
-  $base-label-color: $base-text-color !default;
+  $base-label-color: rgba(0, 0, 0, 0.6) !default;
+  $base-disabled-color: rgba(0, 0, 0, $base-disabled-opacity) !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #fff !default;
@@ -169,15 +168,13 @@ $typography-link-color: $base-link-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/light/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/material/color-schemes/light/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/material/color-schemes/light/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/material/color-schemes/light/loader64.gif') !default;
 }
 
 @if $mode == "dark" {
   $material-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
-  $base-label-color: $base-text-color !default;
+  $base-label-color: rgba(255, 255, 255, 0.6) !default;
+  $base-disabled-color: rgba(255, 255, 255, $base-disabled-opacity) !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #363640 !default;
@@ -196,8 +193,5 @@ $typography-link-color: $base-link-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/material/color-schemes/dark/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/material/color-schemes/dark/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/material/color-schemes/dark/loader64.gif') !default;
 }
 

@@ -9,9 +9,8 @@ import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
 
-fixture`Editing`
+fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {
@@ -2295,40 +2294,6 @@ test('Popup EditForm screenshot', async (t) => {
 });
 
 [
-  'cell',
-  'batch',
-  'row',
-  'form',
-  'popup',
-].forEach((mode) => {
-  test(`Embedded editors in ${mode} edit mode shoud have aria-label attribute`, async (t) => {
-    const dataGrid = new DataGrid('#container');
-
-    await t
-      .click(dataGrid.getToolbar().getItem(0));
-
-    await a11yCheck(t);
-  }).before(() => createWidget('dxDataGrid', {
-    dataSource: getData(3, 2),
-    height: 400,
-    showBorders: true,
-    editing: {
-      mode,
-      allowUpdating: true,
-      allowAdding: true,
-    },
-    toolbar: {
-      items: [
-        {
-          name: 'addRowButton',
-          showText: 'always',
-        },
-      ],
-    },
-  }));
-});
-
-[
   {
     theme: 'material.blue.light',
     useIcons: true,
@@ -2405,4 +2370,141 @@ test('Popup EditForm screenshot', async (t) => {
   }).after(async () => {
     await changeTheme('generic.light');
   });
+});
+
+test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set in data source (T1181477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getAddRowButton())
+    .click(dataGrid.getDataCell(0, 2).getLinkSave())
+
+    .expect(dataGrid.getDataCell(3, 1).element.innerText)
+    .notContains('Name 3')
+
+    .expect(Selector('#otherContainer').innerText)
+    .eql('');
+}).before(async () => {
+  await createWidget('dxDataGrid', ClientFunction(() => {
+    const dataSourceCore = [
+      { ID: 1, Name: 'Name 1' },
+      { ID: 2, Name: 'Name 2' },
+      { ID: 3, Name: 'Name 3' },
+    ];
+
+    const sampleAPI = {
+      load() {
+        const data = dataSourceCore;
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(data);
+          }, 100);
+        });
+      },
+      totalCount() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(dataSourceCore.length);
+          }, 100);
+        });
+      },
+      insert(values) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const newID = dataSourceCore.length + 1;
+            values.ID = newID;
+            dataSourceCore.push(values);
+            resolve(newID);
+          }, 100);
+        });
+      },
+    };
+
+    const store = new (window as any).DevExpress.data.CustomStore({
+      key: 'ID',
+      load(o) {
+        if (o.filter) {
+          $('#otherContainer').append('Fail');
+        }
+
+        return Promise.all([sampleAPI.load(), sampleAPI.totalCount()]).then((res) => ({
+          data: res[0],
+          totalCount: res[1],
+        }));
+      },
+      insert(values) {
+        return sampleAPI.insert(values);
+      },
+    });
+
+    return {
+      dataSource: store,
+      showBorders: true,
+      focusedRowEnabled: true,
+      autoNavigateToFocusedRow: true,
+      editing: {
+        allowAdding: true,
+      },
+      remoteOperations: true,
+    };
+  }));
+});
+
+test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set on event (T1181477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getAddRowButton())
+    .click(dataGrid.getDataCell(0, 2).getLinkSave())
+
+    .expect(dataGrid.getDataCell(3, 1).element.innerText)
+    .notContains('Name 3')
+
+    .expect(Selector('#otherContainer').innerText)
+    .eql('');
+}).before(async () => {
+  await createWidget('dxDataGrid', ClientFunction(() => {
+    const dataSourceCore = [
+      { ID: 1, Name: 'Name 1' },
+      { ID: 2, Name: 'Name 2' },
+      { ID: 3, Name: 'Name 3' },
+    ];
+
+    const sampleAPI = new (window as any).DevExpress.data.ArrayStore(dataSourceCore);
+
+    const store = new (window as any).DevExpress.data.CustomStore({
+      key: 'ID',
+      load(o) {
+        if (o.filter) {
+          $('#otherContainer').append('Fail');
+        }
+
+        return Promise.all([sampleAPI.load(), sampleAPI.totalCount()]).then((res) => ({
+          data: res[0],
+          totalCount: res[1],
+        }));
+      },
+      insert(values) {
+        return sampleAPI.insert(values);
+      },
+    });
+
+    return {
+      dataSource: store,
+      showBorders: true,
+      focusedRowEnabled: true,
+      autoNavigateToFocusedRow: true,
+      editing: {
+        allowAdding: true,
+      },
+      onInitNewRow(e) {
+        e.promise = new Promise((resolve) => {
+          const newId = dataSourceCore.length + 1;
+          e.data.ID = newId;
+          resolve(undefined);
+        });
+      },
+      remoteOperations: true,
+    };
+  }));
 });

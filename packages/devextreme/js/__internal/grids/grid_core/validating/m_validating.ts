@@ -23,15 +23,18 @@ import Validator from '@js/ui/validator';
 import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
 
+import { EDITORS_INPUT_SELECTOR } from '../editing/const';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
+const INVALID_MESSAGE_ID = 'dxInvalidMessage';
 const WIDGET_INVALID_MESSAGE_CLASS = 'invalid-message';
 const INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always';
 const REVERT_BUTTON_CLASS = 'dx-revert-button';
+const REVERT_BUTTON_ID = 'dxRevertButton';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
@@ -1070,7 +1073,7 @@ export const validatingModule = {
               return;
             }
 
-            const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+            const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).parent();
             const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
 
             $tooltipElement?.remove();
@@ -1093,6 +1096,10 @@ export const validatingModule = {
                 const buttonOptions = {
                   icon: 'revert',
                   hint: this.option('editing.texts.validationCancelChanges'),
+                  elementAttr: {
+                    id: REVERT_BUTTON_ID,
+                    'aria-label': messageLocalization.format('dxDataGrid-ariaRevertButton'),
+                  },
                   onClick: () => {
                     this._editingController.cancelEditData();
                   },
@@ -1193,7 +1200,10 @@ export const validatingModule = {
               animation: false,
               propagateOutsideClick: true,
               hideOnOutsideClick: false,
-              wrapperAttr: { class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}` },
+              wrapperAttr: {
+                id: INVALID_MESSAGE_ID,
+                class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}`,
+              },
               position: {
                 collision: 'flip',
                 boundary: this._rowsView.element(),
@@ -1305,10 +1315,12 @@ export const validatingModule = {
             const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
             const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
             const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
+            const validationDescriptionValues: string[] = [];
 
             if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
               if ((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
                 this._showRevertButton($focus);
+                validationDescriptionValues.push(REVERT_BUTTON_ID);
               } else {
                 this._revertTooltip && this._revertTooltip.$element().remove();
               }
@@ -1326,10 +1338,35 @@ export const validatingModule = {
 
               if (errorMessages.length) {
                 this._showValidationMessage($focus, errorMessages, column.alignment || 'left');
+                validationDescriptionValues.push(INVALID_MESSAGE_ID);
               }
             }
 
+            this._updateAriaValidationAttributes($focus, validationDescriptionValues);
             !isHideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
+          },
+
+          _updateAriaValidationAttributes($focus, inputDescriptionValues) {
+            if (inputDescriptionValues.length === 0) { return; }
+
+            const editMode = this._editingController.getEditMode();
+            const shouldSetValidationAriaAttributes = [
+              EDIT_MODE_CELL,
+              EDIT_MODE_BATCH,
+              EDIT_MODE_ROW].includes(editMode);
+
+            if (shouldSetValidationAriaAttributes) {
+              const $focusElement = this._getCurrentFocusElement($focus);
+              $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
+              $focusElement.attr('aria-invalid', true);
+            }
+          },
+
+          _getCurrentFocusElement($focus) {
+            if (this._editingController.isEditing()) {
+              return $focus.find(EDITORS_INPUT_SELECTOR).first();
+            }
+            return $focus;
           },
 
           focus($element, isHideBorder) {
