@@ -123,6 +123,12 @@ class TabPanel<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
   scrollingEnabled: PropTypes.bool,
   selectedIndex: PropTypes.number,
   showNavButtons: PropTypes.bool,
+  stylingMode: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "primary",
+      "secondary"])
+  ]),
   swipeEnabled: PropTypes.bool,
   tabIndex: PropTypes.number,
   tabsPosition: PropTypes.oneOfType([

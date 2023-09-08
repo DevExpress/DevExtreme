@@ -273,6 +273,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('showNavButtons', value);
     }
 
+    get stylingMode(): string {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: string) {
+        this._setOption('stylingMode', value);
+    }
+
     get swipeEnabled(): boolean {
         return this._getOption('swipeEnabled');
     }
