@@ -41,7 +41,6 @@
     "del": "^2.2.2",
     "devextreme": "~23.2.0",
     "devextreme-angular-generator": "https://gitpkg.now.sh/DevExpress/devextreme-angular/packages/devextreme-angular-generator?master",
-    "devextreme-internal-tools": "10.0.0-beta.18",
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
     "gulp-replace": "^0.6.1",
