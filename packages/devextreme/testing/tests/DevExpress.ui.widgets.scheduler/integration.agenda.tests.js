@@ -9,7 +9,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 const {
     module,
