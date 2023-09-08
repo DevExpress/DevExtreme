@@ -4334,7 +4334,7 @@ test('Focus first cell with dropDownButton (via tab key) -> open dropDownButton 
       });
     },
   }, 'field2', 'field3'],
-}, undefined, { disableFxAnimation: true }));
+}));
 
 // T1185341
 test('Focus second cell (via click) -> tab navigation when focusedRowEnabled is true', async (t) => {
@@ -4373,7 +4373,7 @@ test('Focus second cell (via click) -> tab navigation when focusedRowEnabled is 
       });
     },
   }, 'field2', 'field3'],
-}, undefined, { disableFxAnimation: true }));
+}));
 
 // T1187124
 test('Keyboard navigation should work after opening-closing master-detal', async (t) => {
@@ -4410,4 +4410,4 @@ test('Keyboard navigation should work after opening-closing master-detal', async
   masterDetail: {
     enabled: true,
   },
-}, undefined, { disableFxAnimation: true }));
+}));
