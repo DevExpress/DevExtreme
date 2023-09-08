@@ -3,12 +3,12 @@ import translator from 'animation/translator';
 import fx from 'animation/fx';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
-import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
+import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
-import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
+import AppointmentAdapter from '__internal/scheduler/m_appointment_adapter';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';

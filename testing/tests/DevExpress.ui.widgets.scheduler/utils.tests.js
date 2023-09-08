@@ -1,6 +1,6 @@
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
-import { utils } from 'ui/scheduler/utils';
+import { utils } from '__internal/scheduler/m_utils';
 import { replaceWrongEndDate } from '__internal/scheduler/appointments/data_provider/m_utils';
 
 const { test, module } = QUnit;
