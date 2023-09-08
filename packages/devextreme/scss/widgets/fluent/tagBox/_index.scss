@@ -113,23 +113,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $fluent-tagbox-remove-button-width;
+  width: $fluent-tagbox-tag-height;
   height: 100%;
 
   @include dx-icon(clear);
 
-  font-size: $fluent-tagbox-tag-content-font-size - 4px;
+  font-size: $fluent-tagbox-tag-content-font-size + 2px;
 
   &::before {
+    content: "\f15f";
     display: flex;
     align-items: center;
     justify-content: center;
-    width: $fluent-tagbox-remove-button-icon-size;
-    height: $fluent-tagbox-remove-button-icon-size;
-    color: $tagbox-tag-button-remove-color;
-    background-color: $tagbox-tag-button-remove-bg;
-    border-radius: 50%;
-    transform: none;
+    color: $tagbox-tag-button-remove-bg;
   }
 }
 
