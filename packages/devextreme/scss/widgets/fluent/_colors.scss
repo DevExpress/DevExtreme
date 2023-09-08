@@ -10,14 +10,16 @@ $fluent-color-accent-modificator: null !default;
   * $name 10. Accent color
   * $type color
   */
-$base-accent: #0f6cbd !default;
+$base-accent: null !default;
+$base-accent-hover: null !default;
+$base-accent-active: null !default;
 $fluent-color-theme-modificator: null !default;
 
 /**
 * $name 10. Font family
 * $type text
 */
-$base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif !default;
+$base-font-family: Bahnschrift, 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
 * $name 20. Text color
@@ -54,6 +56,8 @@ $base-bg: null !default;
 * $type color
 */
 $base-border-color: null !default;
+$base-border-hover-color: null !default;
+$base-border-active-color: null !default;
 $base-inverted-bg: null !default;
 $base-element-bg: null !default;
 $base-shadow-color: null !default;
@@ -105,6 +109,7 @@ $typography-color: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
 $base-disabled-color: null !default;
+$base-disabled-border-color: null !default;
 $base-dropdown-shadow-color: null !default;
 $base-invalid-color: $base-danger !default;
 $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -115,23 +120,21 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-accent-modificator: "blue" !default;
 }
 
-/**
-* $name 30. Link color
-* $type color
-*/
-$base-link-color: $base-accent !default;
-
-$typography-link-color: $base-link-color !default;
-
 @if $mode == "light" {
+  $base-accent: #0f6cbd !default;
+  $base-accent-hover: #115ea3 !default;
+  $base-accent-active: #0f548c !default;
   $fluent-color-theme-modificator: "light" !default;
   $base-text-color: rgba(36, 36, 36, 1) !default;
   $base-label-color: rgba(0, 0, 0, 0.6) !default;
   $base-disabled-color: rgba(0, 0, 0, $base-disabled-opacity) !default;
+  $base-disabled-border-color: rgba(240, 240, 240, 1) !default; // F0F0F0
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #fff !default;
-  $base-border-color: rgba(209, 209, 209, 1) !default;
+  $base-border-color: rgba(209, 209, 209, 1) !default; // d1d1d1
+  $base-border-hover-color: darken($base-border-color, 3.92) !default; // c7c7c7
+  $base-border-active-color: darken($base-border-color, 11.76) !default; // b3b3b3
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
@@ -149,14 +152,20 @@ $typography-link-color: $base-link-color !default;
 }
 
 @if $mode == "dark" {
+  $base-accent: #479ef5 !default;
+  $base-accent-hover: #2886de !default;
+  $base-accent-active: #479ef5 !default;
   $fluent-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
   $base-label-color: rgba(255, 255, 255, 0.6) !default;
   $base-disabled-color: rgba(255, 255, 255, $base-disabled-opacity) !default;
+  $base-disabled-border-color: rgba(61, 61, 61, 1) !default; // 3d3d3d
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #363640 !default;
-  $base-border-color: #515159 !default;
+  $base-border-color: rgba(102, 102, 102, 1) !default; // #666666
+  $base-border-hover-color: lighten( $base-border-color, 5.88) !default; // #757575
+  $base-border-active-color: lighten( $base-border-color, 1.96) !default; // #6b6b6b
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
@@ -173,3 +182,9 @@ $typography-link-color: $base-link-color !default;
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
 }
 
+/**
+* $name 30. Link color
+* $type color
+*/
+$base-link-color: $base-accent !default;
+$typography-link-color: $base-link-color !default;

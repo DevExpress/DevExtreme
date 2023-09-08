@@ -6,7 +6,7 @@ import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
-import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
+import ViewDataProvider from '../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../__internal/scheduler/resources/m_utils';

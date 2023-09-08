@@ -1,7 +1,8 @@
 export {
   SingleOrMultiple,
   Orientation,
-  IconPosition,
+  TabsIconPosition,
+  TabsStyle,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

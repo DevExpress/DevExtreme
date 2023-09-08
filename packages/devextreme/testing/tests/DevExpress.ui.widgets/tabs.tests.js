@@ -48,6 +48,14 @@ const TABS_ICON_POSITION_CLASS = {
     bottom: 'dx-tabs-icon-position-bottom',
     start: 'dx-tabs-icon-position-start',
 };
+const TABS_STYLING_MODE_CLASS = {
+    primary: 'dx-tabs-styling-mode-primary',
+    secondary: 'dx-tabs-styling-mode-secondary',
+};
+const STYLING_MODE = {
+    primary: 'primary',
+    secondary: 'secondary',
+};
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
@@ -317,6 +325,21 @@ QUnit.module('General', () => {
 
             assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS[iconPosition]));
         });
+    });
+
+    QUnit.test('the tabs element must have a correct styling mode class', function(assert) {
+        const $element = $('#tabs').dxTabs({ items: [1, 2, 3] });
+        const instance = $element.dxTabs('instance');
+
+        assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.primary);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), true);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), false);
+
+        instance.option({ stylingMode: 'secondary' });
+
+        assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.secondary);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), true);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), false);
     });
 });
 

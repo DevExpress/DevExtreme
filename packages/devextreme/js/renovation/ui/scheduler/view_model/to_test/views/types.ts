@@ -14,10 +14,11 @@ export type GetDateForHeaderText = (
 export type CalculateCellIndex = (
   rowIndex: number, columnIndex: number, rowCount: number, columnCount: number,
 ) => number;
+
 export type CalculateStartViewDate = (
   currentDate: Date,
   startDayHour: number,
   startDate: Date,
   intervalCount: number,
-  firstDayOfWeekOption: number,
+  firstDayOfWeekOption?: number,
 ) => Date;

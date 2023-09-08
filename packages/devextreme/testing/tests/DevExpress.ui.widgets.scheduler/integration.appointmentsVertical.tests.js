@@ -6,7 +6,7 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import dataUtils from 'core/element_data';
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';

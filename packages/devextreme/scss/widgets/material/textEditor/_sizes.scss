@@ -60,3 +60,6 @@ $material-standard-texteditor-input-padding:
   $material-standard-texteditor-input-top-padding
   $material-base-standard-texteditor-input-horizontal-padding
   $material-standard-texteditor-input-bottom-padding !default;
+
+$material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
+$material-filled-texteditor-spin-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 8px;

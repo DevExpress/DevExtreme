@@ -45,6 +45,9 @@ const esmTranspileSrc = src.concat([
 ]);
 
 const srcTsPattern = 'js/__internal/**/*.ts';
+const srcTsIgnorePatterns = [
+    '**/__tests__/**/*'
+];
 
 const srcDir = path.join(process.cwd(), './js');
 const generatedTs = [
@@ -84,7 +87,7 @@ const createModuleConfig = (name, dir, filePath, dist) => {
     const relative = path.join('./', dir.replace(srcDir, ''), name);
     const currentPath = isIndex ? path.join(relative, '../') : relative;
     const esmFile = path.relative(currentPath, path.join('./esm', relative));
-    const esmFilePath = path.join(dist, './esm',dir.replace(srcDir, ''), name);
+    const esmFilePath = path.join(dist, './esm', dir.replace(srcDir, ''), name);
     const cjsFile = path.relative(currentPath, path.join('./cjs', relative));
     const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
@@ -110,7 +113,7 @@ const createModuleConfig = (name, dir, filePath, dist) => {
 
 const transpileTs = (compiler, src) => {
     const task = () => compiler
-        .compileTs(src)
+        .compileTs(src, srcTsIgnorePatterns)
         .pipe(gulp.dest(TS_OUTPUT_BASE_DIR));
 
     task.displayName = 'transpile TS';

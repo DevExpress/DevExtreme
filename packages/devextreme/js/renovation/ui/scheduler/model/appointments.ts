@@ -3,7 +3,7 @@ import {
   getCellHeight,
   getAllDayHeight,
   PositionHelper,
-} from '../../../../ui/scheduler/workspaces/helpers/positionHelper';
+} from '../../../../__internal/scheduler/workspaces/helpers/m_position_helper';
 import { SchedulerProps } from '../props';
 import { CurrentViewConfigType } from '../workspaces/props';
 import { getGroupCount } from '../../../../__internal/scheduler/resources/m_utils';
@@ -13,48 +13,13 @@ import dateUtils from '../../../../core/utils/date';
 
 import { AppointmentsConfigType, AppointmentsModelType } from './types';
 
-import { DataAccessorType, ViewType } from '../types';
+import { DataAccessorType } from '../types';
 import { calculateIsGroupedAllDayPanel, getCellDuration } from '../view_model/to_test/views/utils/base';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
+import { getAppointmentRenderingStrategyName } from './utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const toMs = (name: string): number => dateUtils.dateToMilliseconds(name);
-
-export const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
-  const appointmentRenderingStrategyMap: Record<ViewType, { renderingStrategy: string }> = {
-    day: {
-      renderingStrategy: 'vertical',
-    },
-    week: {
-      renderingStrategy: 'week',
-    },
-    workWeek: {
-      renderingStrategy: 'week',
-    },
-    month: {
-      renderingStrategy: 'horizontalMonth',
-    },
-    timelineDay: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineWeek: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineWorkWeek: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineMonth: {
-      renderingStrategy: 'horizontalMonthLine',
-    },
-    agenda: {
-      renderingStrategy: 'agenda',
-    },
-  };
-
-  const { renderingStrategy } = appointmentRenderingStrategyMap[viewType];
-
-  return renderingStrategy;
-};
 
 export const getAppointmentsConfig = (
   schedulerConfig: Pick<

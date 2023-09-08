@@ -50,6 +50,8 @@ export {
     StoreType,
     StringLengthRule,
     SubmenuShowMode,
+    TabsIconPosition,
+    TabsStyle,
     TextBoxPredefinedButton,
     TextEditorButton,
     TextEditorButtonLocation,

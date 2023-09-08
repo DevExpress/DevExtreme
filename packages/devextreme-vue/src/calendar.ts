@@ -38,7 +38,6 @@ type AccessibleOptions = Pick<Properties,
   "validationMessagePosition" |
   "validationStatus" |
   "value" |
-  "values" |
   "visible" |
   "weekNumberRule" |
   "width" |
@@ -97,7 +96,6 @@ const DxCalendar = createComponent({
     validationMessagePosition: String,
     validationStatus: String,
     value: {},
-    values: Array,
     visible: Boolean,
     weekNumberRule: String,
     width: [Function, Number, String],
@@ -142,7 +140,6 @@ const DxCalendar = createComponent({
     "update:validationMessagePosition": null,
     "update:validationStatus": null,
     "update:value": null,
-    "update:values": null,
     "update:visible": null,
     "update:weekNumberRule": null,
     "update:width": null,

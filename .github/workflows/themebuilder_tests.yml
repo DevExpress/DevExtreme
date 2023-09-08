@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -55,7 +55,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}

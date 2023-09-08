@@ -11,9 +11,9 @@ import {
   isDateAndTimeView as calculateIsDateAndTimeView,
   isTimelineView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
-import { getRecurrenceProcessor } from '@js/ui/scheduler/recurrence';
 
+import { createAppointmentAdapter } from '../../m_appointment_adapter';
+import { getRecurrenceProcessor } from '../../m_recurrence';
 import {
   getResourcesDataByGroups,
 } from '../../resources/m_utils';

@@ -9,8 +9,6 @@ const config = require('./build.config');
 const GENERATE = 'generate';
 const CLEAN = 'clean';
 const OUTPUTDIR_CLEAN = 'output-dir.clean';
-const GENERATE_STRATEGY = 'generate.strategy';
-const COPY_STRATEGY = 'copy.strategy';
 const NPM_CLEAN = 'npm.clean';
 const NPM_PACKAGE = 'npm.package';
 const NPM_LICENSE = 'npm.license';
@@ -30,10 +28,7 @@ gulp.task(NPM_CLEAN, (c) =>
 
 gulp.task(CLEAN, gulp.parallel(OUTPUTDIR_CLEAN, NPM_CLEAN));
 
-gulp.task(GENERATE_STRATEGY, shell.task(['npm run generate -w devextreme-vue2-strategy']));
-
-gulp.task(GENERATE, gulp.parallel(
-    GENERATE_STRATEGY,
+gulp.task(GENERATE,
     (done) => {
         const generateSync = require('devextreme-vue-generator').default;
         generateSync(
@@ -51,7 +46,7 @@ gulp.task(GENERATE, gulp.parallel(
 
         done();
     }
-));
+);
 
 gulp.task(NPM_PACKAGE,
     () => gulp.src(config.npm.package).pipe(gulp.dest(config.npm.dist))
@@ -107,15 +102,9 @@ gulp.task(ADD_HEADERS, function () {
         .pipe(gulp.dest(config.npm.dist));
 });
 
-gulp.task(COPY_STRATEGY, function () {
-    return gulp.src(`${config.npm.strategySrc}`)
-        .pipe(gulp.dest(config.npm.strategyDist));
-});
-
 gulp.task(NPM_PACK, gulp.series(
     NPM_CLEAN,
     NPM_BUILD,
-    COPY_STRATEGY,
     ADD_HEADERS,
     shell.task(['npm pack'], {cwd: config.npm.dist})
 ));

@@ -1802,7 +1802,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       return false;
     }
 
-    if (row && row.rowType === 'group' && cellPosition.columnIndex > 0) {
+    const isFullRowFocus = row?.rowType === 'group' || row?.rowType === 'groupFooter';
+    if (isFullRowFocus && cellPosition.columnIndex > 0) {
       return true;
     }
 

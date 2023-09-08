@@ -57,7 +57,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
 
                     if(dateBoxValueChanged) {
-                        this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                        this.dateRangeBox.getStartDateBox()._strategy._widget.option('value', this.dateRangeBox.option('value'));
                     } else {
                         this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
                     }
@@ -117,7 +117,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         return extend(super._getWidgetOptions(), {
             disabledDates,
-            values: value,
+            value,
             selectionMode: 'range',
             viewsCount: multiView ? 2 : 1,
             _allowChangeSelectionOrder: true,
@@ -140,7 +140,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     getValue() {
-        return this._widget.option('values');
+        return this._widget.option('value');
     }
 
     _updateValue() {
@@ -151,7 +151,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         }
 
         this._shouldPreventFocusChange = true;
-        this._widget.option('values', value);
+        this._widget.option('value', value);
     }
 
     _isInstantlyMode() {

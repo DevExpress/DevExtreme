@@ -21,9 +21,9 @@ type ICalendarOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IC
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
   cellKeyFn?: (data: any) => string;
-  defaultValue?: any | number | string;
+  defaultValue?: any | Array<any | number | string> | number | string;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
-  onValueChange?: (value: any | number | string) => void;
+  onValueChange?: (value: any | Array<any | number | string> | number | string) => void;
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
 }>
 
@@ -138,7 +138,6 @@ class Calendar extends BaseComponent<React.PropsWithChildren<ICalendarOptions>> 
       "invalid",
       "pending"])
   ]),
-  values: PropTypes.array,
   visible: PropTypes.bool,
   weekNumberRule: PropTypes.oneOfType([
     PropTypes.string,

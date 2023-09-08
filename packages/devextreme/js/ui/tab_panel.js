@@ -40,6 +40,13 @@ const TABS_ORIENTATION = {
     vertical: 'vertical',
 };
 
+const ICON_POSITION = {
+    top: 'top',
+    end: 'end',
+    bottom: 'bottom',
+    start: 'start',
+};
+
 const TabPanel = MultiView.inherit({
 
     _getDefaultOptions: function() {
@@ -57,6 +64,8 @@ const TabPanel = MultiView.inherit({
             scrollingEnabled: true,
 
             tabsPosition: TABS_POSITION.top,
+
+            iconPosition: ICON_POSITION.start,
 
             onTitleClick: null,
 
@@ -237,6 +246,7 @@ const TabPanel = MultiView.inherit({
                 }
             }).bind(this),
             orientation: this._getTabsOrientation(),
+            iconPosition: this.option('iconPosition'),
             _itemAttributes: {
                 class: TABPANEL_TABS_ITEM_CLASS,
             },
@@ -287,6 +297,10 @@ const TabPanel = MultiView.inherit({
         const orientation = this._getTabsOrientation();
 
         this._tabs.option('orientation', orientation);
+    },
+
+    _updateTabsIconPosition(iconPosition) {
+        this._tabs.option({ iconPosition });
     },
 
     _toggleWrapperFocusedClass(isFocused) {
@@ -433,6 +447,9 @@ const TabPanel = MultiView.inherit({
             case 'tabsPosition':
                 this._toggleTabPanelTabsPositionClass();
                 this._updateTabsOrientation();
+                break;
+            case 'iconPosition':
+                this._updateTabsIconPosition(value);
                 break;
             default:
                 this.callBase(args);

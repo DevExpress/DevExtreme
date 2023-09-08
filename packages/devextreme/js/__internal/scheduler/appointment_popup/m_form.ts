@@ -1,4 +1,4 @@
-import '@js/ui/scheduler/recurrence_editor';
+import '../m_recurrence_editor';
 import '@js/ui/text_area';
 import '@js/ui/tag_box';
 import '@js/ui/switch';
@@ -13,8 +13,8 @@ import DataSource from '@js/data/data_source';
 import messageLocalization from '@js/localization/message';
 import { Semaphore } from '@js/renovation/ui/scheduler/utils/semaphore/semaphore';
 import Form from '@js/ui/form';
-import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
 
+import { createAppointmentAdapter } from '../m_appointment_adapter';
 import timeZoneDataUtils from '../timezones/m_utils_timezones_data';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;

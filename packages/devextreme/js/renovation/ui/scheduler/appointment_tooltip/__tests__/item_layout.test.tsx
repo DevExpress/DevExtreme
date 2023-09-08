@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
-import { dxSchedulerAppointment } from '../../../../../ui/scheduler';
+import type { dxSchedulerAppointment } from '../../../../../ui/scheduler';
 import {
   TooltipItemLayout,
   viewFunction as TooltipItemLayoutView,

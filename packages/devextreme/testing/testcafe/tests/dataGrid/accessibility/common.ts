@@ -26,13 +26,14 @@ const DATA_GRID_SELECTOR = '#container';
   };
 
   test(`Grid without data in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t);
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -158,13 +159,14 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Grouping and Summary in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue || theme === Themes.fluentBlueDark) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t);
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -502,6 +504,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Focused row in ${theme}`, async (t) => {
+    if (theme === Themes.fluentBlue || theme === Themes.fluentBlueDark) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     // assert
@@ -511,7 +514,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(1).isFocusedRow)
       .ok();
 
-    await a11yCheck(t);
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 

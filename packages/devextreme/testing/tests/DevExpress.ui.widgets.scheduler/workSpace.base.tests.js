@@ -4,12 +4,12 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import '__internal/scheduler/workspaces/m_work_space_day';
+import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/m_work_space_month';
+import '__internal/scheduler/workspaces/m_timeline_day';
+import '__internal/scheduler/workspaces/m_timeline_week';
+import '__internal/scheduler/workspaces/m_timeline_month';
 
 const {
     test,

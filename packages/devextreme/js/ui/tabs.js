@@ -30,17 +30,6 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
-const TABS_ORIENTATION_CLASS = {
-    vertical: 'dx-tabs-vertical',
-    horizontal: 'dx-tabs-horizontal',
-};
-const TABS_ICON_POSITION_CLASS = {
-    top: 'dx-tabs-icon-position-top',
-    end: 'dx-tabs-icon-position-end',
-    bottom: 'dx-tabs-icon-position-bottom',
-    start: 'dx-tabs-icon-position-start',
-};
-
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
 const TABS_ITEM_CLASS = 'dx-tab';
@@ -55,6 +44,23 @@ const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+
+const TABS_ORIENTATION_CLASS = {
+    vertical: 'dx-tabs-vertical',
+    horizontal: 'dx-tabs-horizontal',
+};
+
+const TABS_ICON_POSITION_CLASS = {
+    top: 'dx-tabs-icon-position-top',
+    end: 'dx-tabs-icon-position-end',
+    bottom: 'dx-tabs-icon-position-bottom',
+    start: 'dx-tabs-icon-position-start',
+};
+
+const TABS_STYLING_MODE_CLASS = {
+    primary: 'dx-tabs-styling-mode-primary',
+    secondary: 'dx-tabs-styling-mode-secondary',
+};
 
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
@@ -84,6 +90,11 @@ const ICON_POSITION = {
     start: 'start',
 };
 
+const STYLING_MODE = {
+    primary: 'primary',
+    secondary: 'secondary',
+};
+
 
 const Tabs = CollectionWidget.inherit({
 
@@ -98,6 +109,7 @@ const Tabs = CollectionWidget.inherit({
             selectionMode: 'single',
             orientation: ORIENTATION.horizontal,
             iconPosition: ICON_POSITION.start,
+            stylingMode: STYLING_MODE.primary,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -147,18 +159,22 @@ const Tabs = CollectionWidget.inherit({
                 },
                 options: {
                     useInkRipple: true,
-                    selectOnFocus: false
+                    selectOnFocus: false,
+                    iconPosition: ICON_POSITION.top,
                 }
             }
         ]);
     },
 
-    _init: function() {
+    _init() {
+        const { orientation, stylingMode } = this.option();
+
         this.callBase();
         this.setAria('role', 'tablist');
         this.$element().addClass(TABS_CLASS);
-        this._toggleOrientationClass(this.option('orientation'));
+        this._toggleOrientationClass(orientation);
         this._toggleIconPositionClass();
+        this._toggleStylingModeClass(stylingMode);
         this._renderWrapper();
         this._renderMultiple();
 
@@ -536,7 +552,7 @@ const Tabs = CollectionWidget.inherit({
         this._toggleTabsHorizontalClass(!isVertical);
     },
 
-    _getTabIconPositionClass() {
+    _getTabsIconPositionClass() {
         const position = this.option('iconPosition');
 
         switch(position) {
@@ -557,7 +573,7 @@ const Tabs = CollectionWidget.inherit({
             this.$element().removeClass(TABS_ICON_POSITION_CLASS[key]);
         }
 
-        const newClass = this._getTabIconPositionClass();
+        const newClass = this._getTabsIconPositionClass();
 
         this.$element().addClass(newClass);
     },
@@ -590,6 +606,14 @@ const Tabs = CollectionWidget.inherit({
 
         this._toggleFocusedDisabledNextClass(currentIndex, shouldNextClassBeSetted);
         this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
+    },
+
+    _toggleStylingModeClass(value) {
+        for(const key in TABS_STYLING_MODE_CLASS) {
+            this.$element().removeClass(TABS_STYLING_MODE_CLASS[key]);
+        }
+
+        this.$element().addClass(TABS_STYLING_MODE_CLASS[value] ?? TABS_STYLING_MODE_CLASS.primary);
     },
 
     _optionChanged: function(args) {
@@ -629,6 +653,10 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'iconPosition': {
                 this._toggleIconPositionClass();
+                break;
+            }
+            case 'stylingMode': {
+                this._toggleStylingModeClass(args.value);
                 break;
             }
             default:

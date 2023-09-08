@@ -9,6 +9,7 @@
 @use "../dropDownEditor" as *;
 @use "../common/mixins" as *;
 @use "../../base/lookup";
+@use "../../base/lookup/mixins" as *;
 
 // adduse
 @use "../dropDownList";
@@ -22,14 +23,13 @@
   font-size: 1em;
 }
 
-.dx-lookup-arrow {
-  @include dx-icon(spinnext);
-
-  width: $generic-base-inline-borderedwidget-inner-size;
-  color: $lookup-icon-color;
-
-  @include dx-icon-font-centered-sizing($generic-base-icon-size);
-}
+@include dx-lookup-arrow(
+  spinnext,
+  "\f04f",
+  $generic-base-inline-borderedwidget-inner-size,
+  $lookup-icon-color,
+  $generic-base-icon-size,
+);
 
 .dx-state-readonly .dx-lookup-field::before {
   opacity: 0.5;
