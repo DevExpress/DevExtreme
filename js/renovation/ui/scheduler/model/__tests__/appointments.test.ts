@@ -1,4 +1,4 @@
-import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
+import ViewDataProvider from '../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import { SchedulerProps, ViewProps } from '../../props';
 import { ViewType } from '../../types';
 import { prepareGenerationOptions } from '../../workspaces/base/work_space';
