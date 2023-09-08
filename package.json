@@ -3,6 +3,9 @@
   "version": "23.2.0",
   "license": "MIT",
   "scripts": {
+    "devextreme:inject-descriptions-to-bundle": "dx-tools inject-descriptions --target-path ./packages/devextreme/ts/dx.all.d.ts --artifacts ./artifacts/internal-tools",
+    "devextreme:inject-descriptions-to-modules": "dx-tools inject-descriptions --collapse-tags --sources ./packages/devextreme/js --artifacts ./artifacts/internal-tools",
+    "devextreme:inject-descriptions": "npm run devextreme:inject-descriptions-to-bundle && npm run devextreme:inject-descriptions-to-modules",
     "angular:build-generator": "cd node_modules/devextreme-angular-generator && npm i --no-audit --no-fund && npm run build:local",
     "angular:copy-metadata": "shx mkdir -p ./packages/devextreme-angular/metadata/ && shx cp ./artifacts/internal-tools/NGMetaData.json ./packages/devextreme-angular/metadata/",
     "angular:regenerate": "nx regenerate devextreme-angular",
