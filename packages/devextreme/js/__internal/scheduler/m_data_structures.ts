@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 export class AppointmentTooltipInfo {
-    constructor(appointment, targetedAppointment = undefined, color = [], settings = []) { // TODO
-        this.appointment = appointment;
-        this.targetedAppointment = targetedAppointment;
-        this.color = color;
-        this.settings = settings;
-    }
+  constructor(
+    public appointment: any,
+    public targetedAppointment: any = undefined,
+    public color: any[] = [],
+    public settings: any[] = [],
+  ) { // TODO
+  }
 }

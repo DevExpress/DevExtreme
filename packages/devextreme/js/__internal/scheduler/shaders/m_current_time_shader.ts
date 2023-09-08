@@ -1,39 +1,43 @@
-
-import $ from '../../../core/renderer';
+import $ from '@js/core/renderer';
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 class CurrentTimeShader {
-    constructor(workSpace) {
-        this._workSpace = workSpace;
-        this._$container = this._workSpace._dateTableScrollable.$content();
-    }
+  _$container = this._workSpace._dateTableScrollable.$content();
 
-    render() {
-        this.initShaderElements();
+  // @ts-expect-error
+  _shader: any[];
 
-        this.renderShader();
+  _$shader: any;
 
-        this._shader.forEach((shader, index) => {
-            this._$container.append(shader);
-        });
-    }
+  constructor(public _workSpace: any) {
+  }
 
-    initShaderElements() {
-        this._$shader = this.createShader();
-        this._shader = [];
-        this._shader.push(this._$shader);
-    }
+  render() {
+    this.initShaderElements();
 
-    renderShader() {}
+    this.renderShader();
 
-    createShader() {
-        return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
-    }
+    this._shader.forEach((shader) => {
+      this._$container.append(shader);
+    });
+  }
 
-    clean() {
-        this._$container && this._$container.find('.' + DATE_TIME_SHADER_CLASS).remove();
-    }
+  initShaderElements() {
+    this._$shader = this.createShader();
+    this._shader = [];
+    this._shader.push(this._$shader);
+  }
+
+  renderShader() {}
+
+  createShader() {
+    return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
+  }
+
+  clean() {
+    this._$container && this._$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
+  }
 }
 
 export default CurrentTimeShader;
