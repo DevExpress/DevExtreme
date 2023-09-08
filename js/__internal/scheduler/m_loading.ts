@@ -1,38 +1,42 @@
-import $ from '../../core/renderer';
-import { value as viewPort } from '../../core/utils/view_port';
-import LoadPanel from '../load_panel';
-import { Deferred } from '../../core/utils/deferred';
+import $ from '@js/core/renderer';
+import { Deferred } from '@js/core/utils/deferred';
+import { value as viewPort } from '@js/core/utils/view_port';
+import LoadPanel from '@js/ui/load_panel';
 
-let loading = null;
+let loading: any = null;
 
-const createLoadPanel = function(options) {
-    return new LoadPanel($('<div>')
-        .appendTo(options && options.container || viewPort()),
-    options);
+const createLoadPanel = function (options) {
+  return new LoadPanel(
+    ($('<div>') as any)
+      .appendTo(options && options.container || viewPort()),
+    options,
+  );
 };
 
-const removeLoadPanel = function() {
-    if(!loading) {
-        return;
-    }
-    loading.$element().remove();
-    loading = null;
+const removeLoadPanel = function () {
+  if (!loading) {
+    return;
+  }
+
+  loading.$element().remove();
+  loading = null;
 };
 
 export function show(options) {
-    removeLoadPanel();
-    loading = createLoadPanel(options);
-    return loading.show();
+  removeLoadPanel();
+  loading = createLoadPanel(options);
+  return loading.show();
 }
 
 export function hide() {
-    // todo: hot fix for case without viewport
+  // todo: hot fix for case without viewport
 
-    if(!loading) {
-        return new Deferred().resolve();
-    }
-    return loading
-        .hide()
-        .done(removeLoadPanel)
-        .promise();
+  if (!loading) {
+    // @ts-expect-error
+    return new Deferred().resolve();
+  }
+  return loading
+    .hide()
+    .done(removeLoadPanel)
+    .promise();
 }

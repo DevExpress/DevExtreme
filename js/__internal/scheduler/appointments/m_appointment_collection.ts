@@ -19,13 +19,13 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import { addNamespace, isFakeClickEvent } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
-import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
-import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '@js/ui/scheduler/classes';
-import { APPOINTMENT_SETTINGS_KEY } from '@js/ui/scheduler/constants';
-import { ExpressionUtils } from '@js/ui/scheduler/expressionUtils';
-import { getRecurrenceProcessor } from '@js/ui/scheduler/recurrence';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
+import { createAppointmentAdapter } from '../m_appointment_adapter';
+import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
+import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
+import { ExpressionUtils } from '../m_expression_utils';
+import { getRecurrenceProcessor } from '../m_recurrence';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { AgendaAppointment, Appointment } from './m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';

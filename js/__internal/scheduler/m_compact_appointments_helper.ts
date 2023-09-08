@@ -1,208 +1,205 @@
-import $ from '../../core/renderer';
-import Button from '../button';
-import { move, locate } from '../../animation/translator';
-import messageLocalization from '../../localization/message';
-import { FunctionTemplate } from '../../core/templates/function_template';
-import { when } from '../../core/utils/deferred';
-import { getBoundingRect } from '../../core/utils/position';
-import { AppointmentTooltipInfo } from './dataStructures';
-import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
-import { createAppointmentAdapter } from './appointmentAdapter';
-import { getOverflowIndicatorColor } from '../../renovation/ui/scheduler/appointment/overflow_indicator/utils';
+import { locate, move } from '@js/animation/translator';
+import $ from '@js/core/renderer';
+import { FunctionTemplate } from '@js/core/templates/function_template';
+import { when } from '@js/core/utils/deferred';
+import { getBoundingRect } from '@js/core/utils/position';
+import messageLocalization from '@js/localization/message';
+import { getOverflowIndicatorColor } from '@js/renovation/ui/scheduler/appointment/overflow_indicator/utils';
+import Button from '@js/ui/button';
+
+import { createAppointmentAdapter } from './m_appointment_adapter';
+import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
+import { AppointmentTooltipInfo } from './m_data_structures';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
-const COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact';
-const APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-content';
+const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
+const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
 
 const WEEK_VIEW_COLLECTOR_OFFSET = 5;
 const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 
 export class CompactAppointmentsHelper {
-    constructor(instance) {
-        this.instance = instance;
-        this.elements = [];
-    }
+  elements: any[] = [];
 
-    render(options) {
-        const { isCompact, items, buttonColor } = options;
+  constructor(public instance) {
+  }
 
-        const template = this._createTemplate(items.data.length, isCompact);
-        const button = this._createCompactButton(template, options);
-        const $button = button.$element();
+  render(options) {
+    const { isCompact, items, buttonColor } = options;
 
-        this._makeBackgroundColor($button, items.colors, buttonColor);
-        this._makeBackgroundDarker($button);
+    const template = this._createTemplate(items.data.length, isCompact);
+    const button = this._createCompactButton(template, options);
+    const $button = button.$element();
 
-        this.elements.push($button);
-        $button.data('items', this._createTooltipInfos(items));
+    this._makeBackgroundColor($button, items.colors, buttonColor);
+    this._makeBackgroundDarker($button);
 
-        return $button;
-    }
+    this.elements.push($button);
+    $button.data('items', this._createTooltipInfos(items));
 
-    clear() {
-        this.elements.forEach(button => {
-            button.detach();
-            button.remove();
-        });
-        this.elements = [];
-    }
+    return $button;
+  }
 
-    _createTooltipInfos(items) {
-        return items.data.map((appointment, index) => {
-            const targetedAdapter = createAppointmentAdapter(
-                appointment,
-                this.instance._dataAccessors,
-                this.instance.timeZoneCalculator,
-            ).clone();
+  clear() {
+    this.elements.forEach((button) => {
+      button.detach();
+      button.remove();
+    });
+    this.elements = [];
+  }
 
-            if(items.settings?.length > 0) {
-                const { info } = items.settings[index];
-                targetedAdapter.startDate = info.sourceAppointment.startDate;
-                targetedAdapter.endDate = info.sourceAppointment.endDate;
-            }
+  _createTooltipInfos(items) {
+    return items.data.map((appointment, index) => {
+      const targetedAdapter = createAppointmentAdapter(
+        appointment,
+        this.instance._dataAccessors,
+        this.instance.timeZoneCalculator,
+      ).clone();
 
-            return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]);
-        });
-    }
+      if (items.settings?.length > 0) {
+        const { info } = items.settings[index];
+        targetedAdapter.startDate = info.sourceAppointment.startDate;
+        targetedAdapter.endDate = info.sourceAppointment.endDate;
+      }
 
-    _onButtonClick(e, options) {
-        const $button = $(e.element);
-        this.instance.showAppointmentTooltipCore(
-            $button,
-            $button.data('items'),
-            this._getExtraOptionsForTooltip(options, $button)
-        );
-    }
+      return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]);
+    });
+  }
 
-    _getExtraOptionsForTooltip(options, $appointmentCollector) {
-        return {
-            clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
-            dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
-            dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
-            isButtonClick: true
-        };
-    }
+  _onButtonClick(e, options) {
+    const $button = $(e.element);
+    this.instance.showAppointmentTooltipCore(
+      $button,
+      $button.data('items'),
+      this._getExtraOptionsForTooltip(options, $button),
+    );
+  }
 
-    _clickEvent(onAppointmentClick) {
-        return (e) => {
-            const clickEventArgs = this.instance._createEventArgs(e);
-            onAppointmentClick(clickEventArgs);
-        };
-    }
+  _getExtraOptionsForTooltip(options, $appointmentCollector) {
+    return {
+      clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
+      dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
+      dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
+      isButtonClick: true,
+    };
+  }
 
-    _createTooltipDragBehavior($appointmentCollector) {
-        return (e) => {
-            const $element = $(e.element);
-            const $schedulerElement = $(this.instance.element());
-            const workSpace = this.instance.getWorkSpace();
+  _clickEvent(onAppointmentClick) {
+    return (e) => {
+      const clickEventArgs = this.instance._createEventArgs(e);
+      onAppointmentClick(clickEventArgs);
+    };
+  }
 
-            const getItemData = (itemElement) => $(itemElement).data(LIST_ITEM_DATA_KEY)?.appointment;
-            const getItemSettings = (_, event) => {
-                return event.itemSettings;
-            };
-            const initialPosition = locate($appointmentCollector);
+  _createTooltipDragBehavior($appointmentCollector) {
+    return (e) => {
+      const $element = $(e.element);
+      const $schedulerElement = $(this.instance.element());
+      const workSpace = this.instance.getWorkSpace();
 
-            const options = {
-                filter: `.${LIST_ITEM_CLASS}`,
-                isSetCursorOffset: true,
-                initialPosition,
-                getItemData,
-                getItemSettings,
-            };
+      const getItemData = (itemElement) => ($(itemElement) as any).data(LIST_ITEM_DATA_KEY)?.appointment;
+      const getItemSettings = (_, event) => event.itemSettings;
+      const initialPosition = locate($appointmentCollector);
 
-            workSpace._createDragBehaviorBase($element, $schedulerElement, options);
-        };
-    }
+      const options = {
+        filter: `.${LIST_ITEM_CLASS}`,
+        isSetCursorOffset: true,
+        initialPosition,
+        getItemData,
+        getItemSettings,
+      };
 
-    _getCollectorOffset(width, cellWidth) {
-        return cellWidth - width - this._getCollectorRightOffset();
-    }
+      workSpace._createDragBehaviorBase($element, $schedulerElement, options);
+    };
+  }
 
-    _getCollectorRightOffset() {
-        return this.instance.getRenderingStrategyInstance()._isCompactTheme()
-            ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
-            : WEEK_VIEW_COLLECTOR_OFFSET;
-    }
+  _getCollectorOffset(width, cellWidth) {
+    return cellWidth - width - this._getCollectorRightOffset();
+  }
 
-    _makeBackgroundDarker(button) {
-        button.css('boxShadow', `inset ${getBoundingRect(button.get(0)).width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
-    }
+  _getCollectorRightOffset() {
+    return this.instance.getRenderingStrategyInstance()._isCompactTheme()
+      ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
+      : WEEK_VIEW_COLLECTOR_OFFSET;
+  }
 
-    _makeBackgroundColor($button, colors, color) {
-        when.apply(null, colors).done(function() {
-            this._makeBackgroundColorCore($button, color, [...arguments]);
-        }.bind(this));
-    }
+  _makeBackgroundDarker(button) {
+    button.css('boxShadow', `inset ${getBoundingRect(button.get(0)).width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
+  }
 
-    _makeBackgroundColorCore($button, color, itemColors) {
-        color && color.done((color) => {
-            const backgroundColor = getOverflowIndicatorColor(color, itemColors);
-            if(backgroundColor) {
-                $button.css('backgroundColor', backgroundColor);
-            }
-        });
-    }
+  _makeBackgroundColor($button, colors, color) {
+    when.apply(null, colors).done(function () {
+      this._makeBackgroundColorCore($button, color, [...arguments]);
+    }.bind(this));
+  }
 
-    _setPosition(element, position) {
-        move(element, {
-            top: position.top,
-            left: position.left
-        });
-    }
+  _makeBackgroundColorCore($button, color, itemColors) {
+    color && color.done((color) => {
+      const backgroundColor = getOverflowIndicatorColor(color, itemColors);
+      if (backgroundColor) {
+        $button.css('backgroundColor', backgroundColor);
+      }
+    });
+  }
 
-    _createCompactButton(template, options) {
-        const $button = this._createCompactButtonElement(options);
+  _setPosition(element, position) {
+    move(element, {
+      top: position.top,
+      left: position.left,
+    });
+  }
 
-        return this.instance._createComponent($button, Button, {
-            type: 'default',
-            width: options.width,
-            height: options.height,
-            onClick: (e) => this._onButtonClick(e, options),
-            template: this._renderTemplate(template, options.items, options.isCompact)
-        });
-    }
+  _createCompactButton(template, options) {
+    const $button = this._createCompactButtonElement(options);
 
-    _createCompactButtonElement({ isCompact, $container, coordinates }) {
-        const result = $('<div>')
-            .addClass(APPOINTMENT_COLLECTOR_CLASS)
-            .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
-            .appendTo($container);
+    return this.instance._createComponent($button, Button, {
+      type: 'default',
+      width: options.width,
+      height: options.height,
+      onClick: (e) => this._onButtonClick(e, options),
+      template: this._renderTemplate(template, options.items, options.isCompact),
+    });
+  }
 
-        this._setPosition(result, coordinates);
+  _createCompactButtonElement({ isCompact, $container, coordinates }) {
+    const result = $('<div>')
+      .addClass(APPOINTMENT_COLLECTOR_CLASS)
+      .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
+      .appendTo($container);
 
-        return result;
-    }
+    this._setPosition(result, coordinates);
 
-    _renderTemplate(template, items, isCompact) {
-        return new FunctionTemplate(options => {
-            return template.render({
-                model: {
-                    appointmentCount: items.data.length,
-                    isCompact: isCompact
-                },
-                container: options.container
-            });
-        });
-    }
+    return result;
+  }
 
-    _createTemplate(count, isCompact) {
-        this._initButtonTemplate(count, isCompact);
-        return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
-    }
+  _renderTemplate(template, items, isCompact) {
+    return new (FunctionTemplate as any)((options) => template.render({
+      model: {
+        appointmentCount: items.data.length,
+        isCompact,
+      },
+      container: options.container,
+    }));
+  }
 
-    _initButtonTemplate(count, isCompact) {
-        this.instance._templateManager.addDefaultTemplates({
-            appointmentCollector: new FunctionTemplate(options =>
-                this._createButtonTemplate(count, $(options.container), isCompact)
-            )
-        });
-    }
+  _createTemplate(count, isCompact) {
+    this._initButtonTemplate(count, isCompact);
+    return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
+  }
 
-    _createButtonTemplate(appointmentCount, element, isCompact) {
-        const text = isCompact ? appointmentCount : messageLocalization.getFormatter('dxScheduler-moreAppointments')(appointmentCount);
+  _initButtonTemplate(count, isCompact) {
+    this.instance._templateManager.addDefaultTemplates({
+      appointmentCollector: new (FunctionTemplate as any)((options) => this._createButtonTemplate(count, $(options.container), isCompact)),
+    });
+  }
 
-        return element
-            .append($('<span>').text(text))
-            .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
-    }
+  _createButtonTemplate(appointmentCount, element, isCompact) {
+    const text = isCompact
+      ? appointmentCount
+      : (messageLocalization.getFormatter('dxScheduler-moreAppointments') as any)(appointmentCount);
+
+    return element
+      .append($('<span>').text(text))
+      .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
+  }
 }

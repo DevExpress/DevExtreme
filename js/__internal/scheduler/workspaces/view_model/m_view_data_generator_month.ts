@@ -1,109 +1,116 @@
-import { getToday, setOptionHour } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { ViewDataGenerator } from './view_data_generator';
-import dateUtils from '../../../../core/utils/date';
+import dateUtils from '@js/core/utils/date';
+import dateLocalization from '@js/localization/date';
+import { getToday, setOptionHour } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import {
-    calculateCellIndex,
-    calculateStartViewDate,
-    getCellText,
-    isFirstCellInMonthWithIntervalCount,
-    getViewStartByOptions,
-} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import { calculateAlignedWeeksBetweenDates } from './utils';
-import dateLocalization from '../../../../localization/date';
+  calculateCellIndex,
+  calculateStartViewDate,
+  getCellText,
+  getViewStartByOptions,
+  isFirstCellInMonthWithIntervalCount,
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
+
+// eslint-disable-next-line import/no-cycle
+import { calculateAlignedWeeksBetweenDates } from './m_utils';
+import { ViewDataGenerator } from './m_view_data_generator';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 const DAYS_IN_WEEK = 7;
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
-    get tableAllDay() { return undefined; }
+  _minVisibleDate: any;
 
-    getCellData(rowIndex, columnIndex, options, allDay) {
-        const data = super.getCellData(rowIndex, columnIndex, options, false);
+  _maxVisibleDate: any;
 
-        const startDate = data.startDate;
-        const {
-            indicatorTime,
-            timeZoneCalculator,
-            intervalCount,
-        } = options;
+  tableAllDay: any = undefined;
 
-        data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
-        data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
-        data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
-        data.text = getCellText(startDate, intervalCount);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getCellData(rowIndex, columnIndex, options, allDay) {
+    const data = super.getCellData(rowIndex, columnIndex, options, false);
 
-        return data;
-    }
+    const { startDate } = data;
+    const {
+      indicatorTime,
+      timeZoneCalculator,
+      intervalCount,
+    } = options;
 
-    isCurrentDate(date, indicatorTime, timeZoneCalculator) {
-        return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
-    }
+    data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
+    data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
+    data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
+    data.text = getCellText(startDate, intervalCount);
 
-    isOtherMonth(cellDate, minDate, maxDate) {
-        return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
-    }
+    return data;
+  }
 
-    _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
-        return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
-    }
+  isCurrentDate(date, indicatorTime, timeZoneCalculator) {
+    return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
+  }
 
-    calculateEndDate(startDate, interval, endDayHour) {
-        return setOptionHour(startDate, endDayHour);
-    }
+  isOtherMonth(cellDate, minDate, maxDate) {
+    return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
+  }
 
-    getInterval() {
-        return DAY_IN_MILLISECONDS;
-    }
+  _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+    return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+  }
 
-    _calculateStartViewDate(options) {
-        return calculateStartViewDate(
-            options.currentDate,
-            options.startDayHour,
-            options.startDate,
-            options.intervalCount,
-            this.getFirstDayOfWeek(options.firstDayOfWeek),
-        );
-    }
+  calculateEndDate(startDate, interval, endDayHour) {
+    return setOptionHour(startDate, endDayHour);
+  }
 
-    _setVisibilityDates(options) {
-        const {
-            intervalCount,
-            startDate,
-            currentDate,
-        } = options;
+  getInterval() {
+    return DAY_IN_MILLISECONDS;
+  }
 
-        const firstMonthDate = dateUtils.getFirstMonthDate(startDate);
-        const viewStart = getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
+  _calculateStartViewDate(options) {
+    return calculateStartViewDate(
+      options.currentDate,
+      options.startDayHour,
+      options.startDate,
+      options.intervalCount,
+      this.getFirstDayOfWeek(options.firstDayOfWeek),
+    );
+  }
 
-        this._minVisibleDate = new Date(viewStart.setDate(1));
+  _setVisibilityDates(options) {
+    const {
+      intervalCount,
+      startDate,
+      currentDate,
+    } = options;
 
-        const nextMonthDate = new Date(viewStart.setMonth(viewStart.getMonth() + intervalCount));
-        this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
-    }
+    const firstMonthDate: any = dateUtils.getFirstMonthDate(startDate);
+    const viewStart = getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
 
-    getCellCount() {
-        return DAYS_IN_WEEK;
-    }
+    this._minVisibleDate = new Date(viewStart.setDate(1));
 
-    getRowCount(options) {
-        const startDate = new Date(options.currentDate);
-        startDate.setDate(1);
+    const nextMonthDate = new Date(viewStart.setMonth(viewStart.getMonth() + intervalCount));
+    this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
+  }
 
-        const endDate = new Date(startDate);
-        endDate.setMonth(endDate.getMonth() + options.intervalCount);
-        endDate.setDate(0);
+  getCellCount() {
+    return DAYS_IN_WEEK;
+  }
 
-        return calculateAlignedWeeksBetweenDates(
-            startDate,
-            endDate,
-            options.firstDayOfWeek ?? dateLocalization.firstDayOfWeekIndex(),
-        );
-    }
+  getRowCount(options) {
+    const startDate = new Date(options.currentDate);
+    startDate.setDate(1);
 
-    getCellCountInDay() {
-        return 1;
-    }
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + options.intervalCount);
+    endDate.setDate(0);
 
-    setHiddenInterval() {
-        this.hiddenInterval = 0;
-    }
+    return calculateAlignedWeeksBetweenDates(
+      startDate,
+      endDate,
+      options.firstDayOfWeek ?? dateLocalization.firstDayOfWeekIndex(),
+    );
+  }
+
+  getCellCountInDay() {
+    return 1;
+  }
+
+  setHiddenInterval() {
+    this.hiddenInterval = 0;
+  }
 }
