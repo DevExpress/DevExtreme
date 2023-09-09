@@ -374,6 +374,12 @@ $fluent-editor-custom-button-margin: 5px;
     color: $texteditor-button-clear-icon-color;
   }
 
+  &.dx-state-disabled {
+    .dx-icon-clear {
+      color: $base-foreground-disabled;
+    }
+  }
+
   &:not(.dx-texteditor-empty) {
     @include validation-icon-position();
     @include pending-indicator-position();
@@ -392,7 +398,7 @@ $fluent-editor-custom-button-margin: 5px;
   background-color: transparent;
   color: $texteditor-color;
   font-size: $fluent-texteditor-font-size;
-  line-height: 1.4238;
+  line-height: $fluent-texteditor-line-height;
 }
 
 .dx-invalid.dx-texteditor {

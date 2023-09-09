@@ -2,6 +2,7 @@
 
 // adduse
 
+$fluent-texteditor-line-height: null !default;
 $fluent-texteditor-font-size: null !default;
 $fluent-texteditor-input-height: null !default;
 $fluent-texteditor-clear-icon-size: $fluent-base-icon-size !default;
@@ -19,6 +20,7 @@ $fluent-filled-texteditor-input-with-label-top-padding: null !default;
 $fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
 
 @if $size == "default" {
+  $fluent-texteditor-line-height: 1.428571 !default;
   $fluent-texteditor-font-size: 14px !default; // 16px
   $fluent-texteditor-input-height: 32px !default;
   $fluent-texteditor-label-font-size: 12px !default; // 12px !default;
@@ -36,6 +38,7 @@ $fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
 }
 
 @else if $size == "compact" {
+  $fluent-texteditor-line-height: 1.3333 !default;
   $fluent-texteditor-font-size: 12px !default;
   $fluent-texteditor-input-height: 24px !default; // 32px !default;
   $fluent-texteditor-label-font-size: 10px !default;
