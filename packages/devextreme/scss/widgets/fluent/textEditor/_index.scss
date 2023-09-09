@@ -147,12 +147,20 @@ $fluent-editor-custom-button-margin: 5px;
 
     .dx-texteditor-label,
     .dx-placeholder::before,
-    .dx-texteditor-input {
+    .dx-texteditor-input,
+    .dx-lookup-field {
       color: $texteditor-disabled-text-color;
     }
 
+    .dx-lookup-arrow,
     .dx-dropdowneditor-icon {
       color: $texteditor-disabled-text-color;
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-lookup-arrow {
+      display: none;
     }
   }
 
