@@ -1,31 +1,14 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/rangeSlider";
+@use "../slider/sizes" as *;
 
 // adduse
 
-
-$fluent-slider-handle-margin: -14px;
-
 .dx-rangeslider-start-handle {
-  margin-left: $fluent-slider-handle-margin;
-}
-
-.dx-state-disabled {
-  .dx-rangeslider-start-handle {
-    margin-left: -5px;
-  }
-}
-
-.dx-rtl {
-  .dx-rangeslider-start-handle {
-    margin-right: $fluent-slider-handle-margin;
-  }
-
-  &.dx-state-disabled .dx-rangeslider-start-handle {
-    margin-right: -5px;
-  }
+  margin-inline-start: math.div(-$fluent-slider-handle-size, 2);
 }
