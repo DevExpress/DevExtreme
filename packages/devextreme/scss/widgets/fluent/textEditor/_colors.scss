@@ -21,7 +21,8 @@ $texteditor-label-color: $texteditor-placeholder-color;
 * $name 30. Background color
 * $type color
 */
-$texteditor-bg: color.change($base-text-color, $alpha: 0.04) !default;
+$texteditor-bg: $base-neutral-background !default; // color.change($base-text-color, $alpha: 0.04) !default;
+$texteditor-bg-hover: $base-neutral-background-hover !default;
 
 /**
 * $name 40. Focused background color
@@ -34,6 +35,8 @@ $texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
 * $type color
 */
 $texteditor-border-color: $base-border-color !default;
+$texteditor-border-color-hover: $base-border-color-hover !default;
+$texteditor-border-color-focused: $base-border-color-focused !default;
 
 /**
 * $name 60. Hovered border color
@@ -51,25 +54,15 @@ $texteditor-focused-border-color: $base-accent !default;
 * $name 40. Hovered background color
 * $type color
 */
-$texteditor-hover-bg: color.change($base-text-color, $alpha: 0.07) !default;
-$texteditor-button-clear-icon-color: null !default;
-$texteditor-button-clear-icon-color-bg: null !default;
+$texteditor-hover-bg: null !default; // color.change($base-text-color, $alpha: 0.07) !default;
+$texteditor-button-clear-icon-color: $base-neutral-foreground !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $texteditor-disabled-color: $base-disabled-color !default;
+$texteditor-disabled-text-color: $base-foreground-disabled !default;
 $texteditor-input-border-radius: $base-border-radius !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
-
-@if $mode == "light" {
-  $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
-  $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
-}
-
-@if $mode == "dark" {
-  $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
-  $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
-}
 

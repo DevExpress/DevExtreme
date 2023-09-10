@@ -19,14 +19,6 @@ $fluent-texteditor-icon-container-size: $fluent-base-icon-size - 2px;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
 $fluent-editor-custom-button-margin: 5px;
 
-@mixin dx-texteditor-icon() {
-  position: absolute;
-  top: 50%;
-  margin-top: math.div(-$fluent-texteditor-icon-container-size, 2);
-
-  @include dx-icon-sizing($fluent-texteditor-icon-container-size);
-}
-
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
     padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-filled-texteditor-input-horizontal-padding;
@@ -143,8 +135,37 @@ $fluent-editor-custom-button-margin: 5px;
     &::before {
       border-bottom: 2px solid $texteditor-focused-border-color;
       transform: scale(1);
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
+      transition-property: transform;
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
     }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+    background-color: transparent;
+
+    .dx-texteditor-label,
+    .dx-placeholder::before,
+    .dx-texteditor-input,
+    .dx-lookup-field {
+      color: $texteditor-disabled-text-color;
+    }
+
+    .dx-lookup-arrow,
+    .dx-dropdowneditor-icon {
+      color: $texteditor-disabled-text-color;
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-lookup-arrow {
+      display: none;
+    }
+  }
+
+  .dx-texteditor-input {
+    min-height: $fluent-texteditor-input-height - 2px;
   }
 
   @include validation-icon-position();
@@ -160,26 +181,45 @@ $fluent-editor-custom-button-margin: 5px;
 
   &.dx-editor-filled {
     background-color: $texteditor-bg;
+    border-bottom-left-radius: $base-border-radius;
+    border-bottom-right-radius: $base-border-radius;
+    border: 1px solid transparent;
 
-    &::after {
-      border-bottom: 1px solid $texteditor-border-color;
+    .dx-placeholder::before,
+    .dx-texteditor-input {
+      padding-top: $fluent-filled-texteditor-input-top-padding;
+      padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
     }
 
-    &.dx-state-hover {
-      background-color: $texteditor-hover-bg;
+    &::before {
+      left: -1px;
+      bottom: -1px;
+      right: -1px;
+      height: $texteditor-input-border-radius;
+      width: calc(100% + 2px);
+      border-bottom-left-radius: $texteditor-input-border-radius;
+      border-bottom-right-radius: $texteditor-input-border-radius;
+      border-bottom: 2px solid $texteditor-focused-border-color;
+      clip-path: inset(calc(100% - 2px) 0 0);
+    }
 
-      &::after {
-        border-bottom-color: $texteditor-hover-border-color;
-      }
+    &.dx-state-hover,
+    &.dx-state-active {
+      background-color: $texteditor-hover-bg;
     }
 
     &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
-      background-color: color.change($texteditor-bg, $alpha: 0.12);
+    &.dx-state-readonly {
+      background-color: transparent;
+      border-color: $texteditor-disabled-color;
+    }
 
-      .dx-texteditor-input {
-        color: $texteditor-disabled-color;
+    &.dx-invalid {
+      border-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-hover,
+      &.dx-state-focused {
+        border-color: $texteditor-invalid-focused-border-color;
       }
     }
   }
@@ -188,26 +228,32 @@ $fluent-editor-custom-button-margin: 5px;
     background-color: transparent;
 
     &::after {
-      border-bottom: 1px solid $texteditor-border-color;
+      border-bottom: 1px solid $base-border-color-accessible;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom: 2px solid $texteditor-hover-border-color;
+        border-bottom: 1px solid $base-border-color-accessible-hover;
       }
     }
 
     .dx-texteditor-input,
+    .dx-lookup-field {
+      min-height: $fluent-texteditor-input-height;
+    }
+
+    .dx-texteditor-input,
     .dx-placeholder::before {
-      padding: $fluent-standard-texteditor-input-padding;
+      padding-top: $fluent-standard-texteditor-input-top-padding;
+      padding-bottom: $fluent-standard-texteditor-input-bottom-padding;
+      padding-left: $fluent-base-standard-texteditor-input-horizontal-padding;
+      padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
     }
 
     &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
+    &.dx-state-readonly {
       &::after {
-        border-bottom-style: dotted;
-        border-bottom-width: 1px;
+        border-bottom-color: $texteditor-disabled-color;
       }
     }
 
@@ -215,41 +261,100 @@ $fluent-editor-custom-button-margin: 5px;
       &::after {
         border-bottom-color: $texteditor-invalid-faded-border-color;
       }
+
+      &.dx-state-hover {
+        &::after {
+          border-bottom-color: $texteditor-invalid-focused-border-color;
+        }
+      }
     }
   }
 
   &.dx-editor-outlined {
     background-color: transparent;
     border-radius: $texteditor-input-border-radius;
-    box-shadow: inset 0 0 0 1px $texteditor-border-color;
+    border: 1px solid $texteditor-border-color;
+    border-bottom: 1px solid $base-border-color-accessible;
 
     &::before {
-      display: none;
+      box-sizing: border-box;
+      content: "";
+      position: absolute;
+      left: -1px;
+      bottom: -1px;
+      right: -1px;
+      height: $texteditor-input-border-radius;
+      width: calc(100% + 2px);
+      border-bottom-left-radius: $texteditor-input-border-radius;
+      border-bottom-right-radius: $texteditor-input-border-radius;
+      border-bottom: 2px solid $texteditor-focused-border-color;
+      clip-path: inset(calc(100% - 2px) 0 0);
+      transform: scaleX(0);
+      transition-property: transform;
+      transition-duration: 50ms;
+      transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
     }
 
-    &.dx-state-hover {
-      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
+    &.dx-texteditor-with-label,
+    &.dx-texteditor-with-floating-label {
+      &::before {
+        width: 100%;
+        left: 0;
+        right: 0;
+      }
+
+      .dx-texteditor-label {
+        inset-block: -1px;
+      }
+
+      .dx-datebox {
+        border: none;
+      }
+
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: $fluent-filled-texteditor-input-top-padding;
+        padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
+      }
     }
 
     &.dx-state-disabled,
     &.dx-state-readonly {
-      box-shadow: inset 0 0 0 1px $texteditor-disabled-color;
+      border-color: $texteditor-disabled-color;
+    }
+   
+    &.dx-invalid {
+      border-color: $texteditor-invalid-faded-border-color;
 
-      .dx-texteditor-input {
-        color: $texteditor-disabled-color;
+      &.dx-state-hover,
+      &.dx-state-focused {
+        border-color: $texteditor-invalid-focused-border-color;
       }
+
+      &::before {        
+        border-color: $texteditor-invalid-faded-border-color;
+      }
+    }
+
+    &.dx-state-hover {
+      border-left-color: $texteditor-border-color-hover;
+      border-right-color: $texteditor-border-color-hover;
+      border-top-color: $texteditor-border-color-hover;
+      border-bottom-color: $base-border-color-accessible-hover;
     }
 
     &.dx-state-focused {
-      box-shadow: inset 0 0 0 2px $texteditor-focused-border-color;
+      border-left-color: $texteditor-border-color-focused;
+      border-right-color: $texteditor-border-color-focused;
+      border-top-color: $texteditor-border-color-focused;
+      border-bottom-color: $base-border-color-accessible-focused;
 
-      &.dx-invalid {
-        box-shadow: inset 0 0 0 2px $texteditor-invalid-focused-border-color;
+      &::before {        
+        transform: scaleX(1);
+        transition-property: transform;
+        transition-duration: 200ms;
+        transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
       }
-    }
-
-    &.dx-invalid {
-      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
     }
   }
 }
@@ -259,15 +364,28 @@ $fluent-editor-custom-button-margin: 5px;
     width: $fluent-texteditor-icon-container-size;
     min-width: $fluent-texteditor-icon-container-size;
     right: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  &.dx-texteditor-empty {
+    .dx-clear-button-area {
+      display: none;
+    }
   }
 
   .dx-icon-clear {
-    color: $texteditor-button-clear-icon-color;
-    background-color: $texteditor-button-clear-icon-color-bg;
-    border-radius: 50%;
+    &::before {
+      content: '\f15f';
+    }
 
-    @include dx-texteditor-icon();
-    @include dx-icon-font-centered-sizing($fluent-texteditor-clear-icon-size);
+    color: $texteditor-button-clear-icon-color;
+  }
+
+  &.dx-state-disabled {
+    .dx-icon-clear {
+      color: $base-foreground-disabled;
+    }
   }
 
   &:not(.dx-texteditor-empty) {
@@ -275,7 +393,6 @@ $fluent-editor-custom-button-margin: 5px;
     @include pending-indicator-position();
   }
 }
-
 
 /* B231111 */
 .dx-placeholder {
@@ -289,6 +406,7 @@ $fluent-editor-custom-button-margin: 5px;
   background-color: transparent;
   color: $texteditor-color;
   font-size: $fluent-texteditor-font-size;
+  line-height: $fluent-texteditor-line-height;
 }
 
 .dx-invalid.dx-texteditor {
@@ -345,28 +463,32 @@ $fluent-editor-custom-button-margin: 5px;
 }
 
 @include dx-editor-outlined(
-  $texteditor-border-color,
   $texteditor-input-border-radius,
   $fluent-texteditor-label-font-size,
   1px,
-  2px,
+  1px,
   solid,
-  $fluent-texteditor-label-font-size + 2,
   $fluent-base-inline-block-height,
-  math.div(1px + $fluent-texteditor-label-font-size, 2),
-  0.5px,
+  $fluent-base-inline-block-height,
+  math.div(1px + $fluent-texteditor-font-size, 2),
+  1.5px,
   $fluent-filled-texteditor-input-horizontal-padding,
   $fluent-filled-texteditor-input-horizontal-padding,
   $base-bg,
+  1px solid transparent,
+  $texteditor-border-color,
+  $base-border-color-accessible,
   $texteditor-disabled-color,
-  $texteditor-hover-border-color,
-  $texteditor-focused-border-color,
+  $texteditor-border-color-hover,
+  $base-border-color-accessible-hover,
+  $texteditor-border-color-focused,
+  $base-border-color-accessible-focused,
   $texteditor-invalid-faded-border-color,
   $texteditor-invalid-focused-border-color,
   $texteditor-label-transition,
   $fluent-texteditor-font-size,
   $fluent-filled-texteditor-input-top-padding,
-  0,
+  1px,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

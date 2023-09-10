@@ -227,10 +227,6 @@ $material-editor-custom-button-margin: 5px;
       display: none;
     }
 
-    &.dx-state-hover {
-      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
-    }
-
     &.dx-state-disabled,
     &.dx-state-readonly {
       box-shadow: inset 0 0 0 1px $texteditor-disabled-color;
@@ -238,6 +234,10 @@ $material-editor-custom-button-margin: 5px;
       .dx-texteditor-input {
         color: $texteditor-disabled-color;
       }
+    }
+
+    &.dx-state-hover {
+      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
     }
 
     &.dx-state-focused {
@@ -345,7 +345,6 @@ $material-editor-custom-button-margin: 5px;
 }
 
 @include dx-editor-outlined(
-  $texteditor-border-color,
   $texteditor-input-border-radius,
   $material-texteditor-label-font-size,
   1px,
@@ -358,8 +357,13 @@ $material-editor-custom-button-margin: 5px;
   $material-filled-texteditor-input-horizontal-padding,
   $material-filled-texteditor-input-horizontal-padding,
   $base-bg,
+  none,
+  $texteditor-border-color,
+  $texteditor-border-color,
   $texteditor-disabled-color,
   $texteditor-hover-border-color,
+  $texteditor-hover-border-color,
+  $texteditor-focused-border-color,
   $texteditor-focused-border-color,
   $texteditor-invalid-faded-border-color,
   $texteditor-invalid-focused-border-color,
@@ -376,7 +380,7 @@ $material-editor-custom-button-margin: 5px;
   $material-texteditor-label-top-offset,
   $material-texteditor-font-size,
   $material-texteditor-font-size,
-  $material-texteditor-font-size,
+  $material-texteditor-font-size + 1px,
   $material-filled-texteditor-input-horizontal-padding,
   $material-filled-texteditor-input-with-label-top-padding,
   $material-filled-texteditor-input-with-label-bottom-padding,
@@ -389,7 +393,7 @@ $material-editor-custom-button-margin: 5px;
   $material-texteditor-label-top-offset,
   $material-texteditor-font-size,
   $material-texteditor-font-size,
-  $material-texteditor-font-size,
+  $material-texteditor-font-size + 1px,
   $material-standard-texteditor-with-label-input-top-padding,
   $material-standard-texteditor-with-label-input-bottom-padding,
 );

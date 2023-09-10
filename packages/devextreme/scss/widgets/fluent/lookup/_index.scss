@@ -80,8 +80,8 @@
 }
 
 .dx-lookup-field {
-  font-size: $fluent-lookup-font-size;
-  line-height: normal;
+  min-height: $lookup-field-height;
+  line-height: $fluent-texteditor-line-height;
 
   &::before {
     line-height: normal;

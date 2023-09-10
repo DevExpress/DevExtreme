@@ -44,22 +44,7 @@
 }
 
 .dx-numberbox-spin.dx-numberbox-box {
-  &.dx-editor-underlined {
-    .dx-texteditor-input {
-      padding-right: $material-base-standard-texteditor-input-horizontal-padding;
-    }
-
-    @include validation-icon-position();
-  }
-
-  &.dx-editor-filled,
-  &.dx-editor-outlined {
-    .dx-texteditor-input {
-      padding-right: $material-filled-texteditor-input-horizontal-padding;
-    }
-
-    @include validation-icon-position();
-  }
+  @include validation-icon-position();
 }
 
 .dx-numberbox-spin-touch-friendly {
@@ -67,59 +52,12 @@
 
   .dx-numberbox-spin-container {
     width: $material-numberbox-touch-friendly-spin-container-width;
-    border-left: none;
+    border-inline-start: none;
   }
 
   .dx-numberbox-spin-up-icon,
   .dx-numberbox-spin-down-icon {
     background-position: center;
   }
-
-  &.dx-editor-underlined {
-    &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $material-base-standard-texteditor-input-horizontal-padding;
-    }
-  }
-
-  &.dx-editor-filled,
-  &.dx-editor-outlined {
-    &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $material-filled-texteditor-input-horizontal-padding;
-    }
-  }
 }
 
-
-.dx-rtl .dx-numberbox,
-.dx-numberbox.dx-rtl {
-  &.dx-numberbox-spin-touch-friendly {
-    .dx-numberbox-spin-container {
-      border-right: none;
-    }
-
-    &.dx-show-clear-button .dx-texteditor-input {
-      padding-left: $material-numberbox-spin-container-width;
-    }
-  }
-
-  &.dx-numberbox-spin {
-    &.dx-show-clear-button {
-      .dx-texteditor-input {
-        padding-left: $material-numberbox-spin-container-width;
-      }
-    }
-
-    &.dx-editor-underlined {
-      .dx-texteditor-input {
-        padding-left: $material-base-standard-texteditor-input-horizontal-padding;
-      }
-    }
-
-    &.dx-editor-filled,
-    &.dx-editor-outlined {
-      .dx-texteditor-input {
-        padding-left: $material-filled-texteditor-input-horizontal-padding;
-      }
-    }
-  }
-}

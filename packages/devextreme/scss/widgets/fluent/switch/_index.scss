@@ -27,7 +27,7 @@ $fluent-invalid-switch-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.cha
   $fluent-switch-transition,
 );
 @include dx-switch-states-fluent(
-  rgba(189, 189, 189, 1),
+  $switch-on-disabled-bg,
   $switch-handle-disabled-bg,
   $fluent-switch-shadow,
   $switch-bg,

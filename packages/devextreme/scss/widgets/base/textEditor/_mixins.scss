@@ -95,17 +95,20 @@
   }
 }
 
-@mixin dx-state-border-color($borderColor) {
+@mixin dx-state-border-color($borderColor, $border-bottom-color) {
   .dx-label {
     border-color: $borderColor;
+    border-bottom-color: $border-bottom-color;
   }
 
   .dx-label-before {
     border-color: $borderColor;
+    border-bottom-color: $border-bottom-color;
   }
 
   .dx-label-after {
     border-color: $borderColor;
+    border-bottom-color: $border-bottom-color;
   }
 }
 
@@ -124,7 +127,6 @@
 }
 
 @mixin dx-editor-outlined(
-  $texteditor-border-color,
   $texteditor-input-border-radius,
   $texteditor-label-font-size,
   $label-border-width,
@@ -137,9 +139,14 @@
   $label-before-min-width,
   $label-after-min-width,
   $base-bg,
+  $texteditor-border,
+  $texteditor-border-color,
+  $texteditor-border-bottom-color,
   $texteditor-disabled-color,
   $texteditor-hover-border-color,
+  $texteditor-hover-border-bottom-color,
   $texteditor-focused-border-color,
+  $texteditor-focused-border-bottom-color,
   $texteditor-invalid-faded-border-color,
   $texteditor-invalid-focused-border-color,
   $texteditor-label-transition,
@@ -158,7 +165,8 @@
       border-bottom-width: $label-border-width;
       border-inline-width: 0;
       border-style: solid;
-      border-color: $texteditor-border-color;
+      border-top-color: $texteditor-border-color;
+      border-bottom-color: $texteditor-border-bottom-color;
       margin-left: -2px;
       margin-right: -2px;
       border-radius: 1px;
@@ -180,7 +188,9 @@
       border-inline-start-width: $label-border-width;
       border-inline-end-width: 0;
       border-style: solid;
-      border-color: $texteditor-border-color;
+      border-top-color: $texteditor-border-color;
+      border-bottom-color: $texteditor-border-bottom-color;
+      border-inline-start-color: $texteditor-border-color;
       border-start-start-radius: $texteditor-input-border-radius;
       border-end-start-radius: $texteditor-input-border-radius;
       min-width: $label-before-min-width;
@@ -194,7 +204,9 @@
       border-inline-end-width: $label-border-width;
       border-inline-start-width: 0;
       border-style: solid;
-      border-color: $texteditor-border-color;
+      border-top-color: $texteditor-border-color;
+      border-bottom-color: $texteditor-border-bottom-color;
+      border-inline-end-color: $texteditor-border-color;
       border-start-end-radius: $texteditor-input-border-radius;
       border-end-end-radius: $texteditor-input-border-radius;
       clip-path: inset(-1px -1px -1px 1px);
@@ -238,38 +250,35 @@
       }
   
       &.dx-texteditor:not(.dx-daterangebox) {
-        border: none;
+        border: $texteditor-border;
         box-shadow: none;
       }
 
       &.dx-state-readonly {
         @include dx-state-border-style($label-readonly-border-style);
-        @include dx-state-border-color($texteditor-disabled-color);
+        @include dx-state-border-color($texteditor-disabled-color, $texteditor-disabled-color);
       }
   
       &.dx-state-disabled {
-        @include dx-state-border-color($texteditor-disabled-color);
+        @include dx-state-border-color($texteditor-disabled-color, $texteditor-disabled-color);
       }
   
       &.dx-invalid {
-        @include dx-state-border-color($texteditor-invalid-faded-border-color);
+        @include dx-state-border-color($texteditor-invalid-faded-border-color, $texteditor-invalid-faded-border-color);
+
+        &.dx-state-hover,
+        &.dx-state-focused {
+          @include dx-state-border-color($texteditor-invalid-focused-border-color, $texteditor-invalid-focused-border-color);
+        }
       }
   
       &.dx-state-hover {
-        @include dx-state-border-color($texteditor-hover-border-color);
-  
-        &.dx-invalid {
-          @include dx-state-border-color($texteditor-invalid-focused-border-color);
-        }
+        @include dx-state-border-color($texteditor-hover-border-color, $texteditor-hover-border-bottom-color);
       }
   
       &.dx-state-focused {
-        @include dx-state-border-color($texteditor-focused-border-color);
+        @include dx-state-border-color($texteditor-focused-border-color, $texteditor-focused-border-bottom-color);
         @include dx-state-border-width($label-active-border-width);
-  
-        &.dx-invalid {
-          @include dx-state-border-color($texteditor-invalid-focused-border-color);
-        }
       }
     }
 
@@ -380,7 +389,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: math.div(-$texteditor-label-height, 2);
+          margin-top: math.div(-$texteditor-empty-label-height, 2);
         }
 
         &.dx-textarea {
@@ -461,7 +470,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: math.div(-$texteditor-label-height, 2);
+          margin-top: math.div(-$texteditor-empty-label-height, 2);
         }
   
         &.dx-textarea {
@@ -605,13 +614,13 @@
         }
 
         > .dx-dropdowneditor-button:last-child,
-        > .dx-numberbox-spin-container:last-child {
+        > .dx-numberbox-spin-container:last-child,
+        > .dx-clear-button-area {
           margin-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
         }
 
-        > .dx-clear-button-area:last-child,
-        > .dx-clear-button-area + div:empty:last-child {
-          margin-inline-end: $material-filled-texteditor-input-button-horizontal-padding;
+        > div:empty:last-child {
+          display: none;
         }
       }
     }
