@@ -2,12 +2,14 @@
 
 // adduse
 
-$fluent-progressbar-status-padding: null !default;
+$fluent-bar-height: null !default;
+$progressbar-border-radius: $base-border-radius !default;
+$fluent-progressbar-status-margin: 2px !default;
 
 @if $size == "default" {
-  $fluent-progressbar-status-padding: 8px !default;
+  $fluent-bar-height: 4px !default;
 }
 
 @else if $size == "compact" {
-  $fluent-progressbar-status-padding: 4px !default;
+  $fluent-bar-height: 2px !default;
 }

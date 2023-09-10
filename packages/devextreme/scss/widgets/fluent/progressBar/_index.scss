@@ -9,19 +9,21 @@
 
 // adduse
 
-$fluent-bar-height: 4px;
 $fluent-background-width: 90%;
 $fluent-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
+$fluent-progressbar-disabled-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-disabled-bg, transparent 95%;
+$fluent-progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-invalid-color, transparent 95%;
 
 .dx-progressbar-container {
   height: $fluent-bar-height;
   background-color: $progressbar-bg;
+  border-radius: $progressbar-border-radius;
 }
 
 .dx-progressbar-range {
   position: relative;
   background-color: $progressbar-range-bg;
-  margin-top: -1px;
+  border-radius: $progressbar-border-radius;
   box-sizing: content-box;
 }
 
@@ -30,26 +32,51 @@ $fluent-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $pr
   background-color: $progressbar-bg;
   background-size: $fluent-background-width 5px;
   animation: dx-loader 2s linear infinite;
+  border-radius: $progressbar-border-radius;
 
   @include gradient-linear($fluent-progressbar-interdeterminate-state-gradient);
 
   background-repeat: repeat;
 }
 
+.dx-invalid {
+  .dx-progressbar-range {
+    background-color: $progressbar-range-invalid-color;
+  }
+
+  .dx-progressbar-animating-container {
+    @include gradient-linear($fluent-progressbar-invalid-interdeterminate-state-gradient);
+
+    background-repeat: repeat;
+  }
+}
+
 .dx-state-disabled {
+  &.dx-progressbar {
+    opacity: 1;
+  }
+
+  .dx-progressbar-container {
+    background-color: $progressbar-container-disabled-bg;
+  }
+
   .dx-progressbar-range {
     background-color: $progressbar-range-disabled-bg;
   }
 
   .dx-progressbar-animating-container {
     animation: none;
+
+    @include gradient-linear($fluent-progressbar-disabled-interdeterminate-state-gradient);
+
     background-position-x: math.div($fluent-background-width, 2);
   }
 }
 
 .dx-progressbar-status {
-  padding-top: $fluent-progressbar-status-padding;
+  margin-top: $fluent-progressbar-status-margin;
   color: $progressbar-label-color;
+  height: 16px;
 
   .dx-progressbar .dx-position-right & {
     padding-top: 0;
@@ -65,6 +92,16 @@ $fluent-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $pr
       @include gradient-linear($fluent-progressbar-interdeterminate-state-gradient);
 
       background-repeat: repeat;
+    }
+
+    &.dx-state-disabled {
+      .dx-progressbar-animating-container {
+        animation: none;
+
+        @include gradient-linear($fluent-progressbar-disabled-interdeterminate-state-gradient);
+
+        background-position-x: math.div($fluent-background-width, 2);
+      }
     }
   }
 }
