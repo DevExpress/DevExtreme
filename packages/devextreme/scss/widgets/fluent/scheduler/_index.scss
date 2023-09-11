@@ -241,6 +241,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
           border-radius: 50%;
           width: 28px;
           height: 28px;
+          line-height: $fluent-scheduler-header-panel-day-font-size + 16;
         }
       }
     }
@@ -262,10 +263,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     &:last-child {
       font-size: $fluent-scheduler-header-panel-day-font-size;
       line-height: $fluent-scheduler-header-panel-day-font-size + 19;
-
-      .dx-scheduler-header-panel-current-time-cell & {
-        line-height: $fluent-scheduler-header-panel-day-font-size + 16;
-      }
     }
   }
 }
