@@ -1,6 +1,6 @@
 import getThemeType from '../getThemeType';
 import {
-  isFluent, isMaterial, isCompact, current,
+  isMaterialBased, isFluent, isMaterial, isCompact, current,
 } from '../../../ui/themes';
 
 jest.mock('../../../ui/themes', () => ({
@@ -17,7 +17,11 @@ describe('getThemeType', () => {
         isCompact: 'test_isCompact',
         isMaterial: 'test_isMaterial',
         isFluent: 'test_isFluent',
+        isMaterialBased: 'test_isMaterialBased',
       });
+
+    expect(isMaterialBased)
+      .toBeCalledWith('test_current');
 
     expect(isFluent)
       .toBeCalledWith('test_current');
