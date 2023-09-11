@@ -35,9 +35,11 @@ export default class themes {
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
     static isFluent(theme: string): boolean;
+    static isMaterialBased(theme: string): boolean;
 }
 
 export function current(): string;
+export function isMaterialBased(theme: string): boolean;
 export function isFluent(theme: string): boolean;
 export function isMaterial(theme: string): boolean;
 export function isCompact(theme: string): boolean;
