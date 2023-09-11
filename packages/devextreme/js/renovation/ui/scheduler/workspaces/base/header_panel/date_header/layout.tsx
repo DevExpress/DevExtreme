@@ -18,7 +18,7 @@ import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from './cell';
 import getThemeType from '../../../../../../utils/getThemeType';
 
-const { isMaterial, isFluent } = getThemeType();
+const { isMaterialBased } = getThemeType();
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -73,7 +73,7 @@ export const viewFunction = ({
               dateCellTemplate={dateCellTemplate}
               key={key}
               colSpan={colSpan}
-              splitText={isMaterial || isFluent}
+              splitText={isMaterialBased}
             />
           ))}
         </Row>
