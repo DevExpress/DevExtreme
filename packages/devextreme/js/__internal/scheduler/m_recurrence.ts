@@ -17,6 +17,16 @@ const loggedWarnings: any = [];
 const MS_IN_HOUR = 1000 * 60 * 60;
 const MS_IN_DAY = MS_IN_HOUR * 24;
 
+const RRULE_BROKEN_TIMEZONES = [
+  'Etc/GMT-13',
+  'MIT',
+  'Pacific/Apia',
+  'Pacific/Enderbury',
+  'Pacific/Tongatapu',
+  'Etc/GMT-14',
+  'Pacific/Kiritimati',
+];
+
 let recurrence: RecurrenceProcessor | null = null;
 
 export function getRecurrenceProcessor() {
@@ -92,13 +102,8 @@ class RecurrenceProcessor {
   }
 
   _convertRruleResult(rruleIntervalParams, options, rruleDate) {
-    const localTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
-    // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
-    // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
-    const additionalWorkaroundOffsetForRrule = localTimezoneOffset / MS_IN_HOUR <= -13 ? -MS_IN_DAY : 0;
     const convertedBackDate = timeZoneUtils.setOffsetsToDate(rruleDate, [
-      localTimezoneOffset,
-      additionalWorkaroundOffsetForRrule,
+      ...this._getLocalMachineOffset(rruleDate),
       -options.appointmentTimezoneOffset,
       rruleIntervalParams.startIntervalDateDSTShift,
     ]);
@@ -112,6 +117,28 @@ class RecurrenceProcessor {
     }
 
     return resultDate;
+  }
+
+  _getLocalMachineOffset(rruleDate) {
+    const machineTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
+    const machineTimezoneName = dateUtils.getMachineTimezoneName();
+    const result = [machineTimezoneOffset];
+
+    // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
+    // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
+    // UPD: 05.09.2023 - The issue still hasn't been fixed in the Rule package.
+    // RRule returns results that are one day greater than expected.
+    // Therefore, for broken from RRule point of view timezones, we subtract one day from the result.
+    const brokenTimezonesOffset = -13;
+    const isTimezoneOffsetInBrokenRange = machineTimezoneOffset / MS_IN_HOUR <= brokenTimezonesOffset;
+    const isTimezoneNameInBrokenNames = !machineTimezoneName
+      || RRULE_BROKEN_TIMEZONES.some((timezone) => machineTimezoneName.includes(timezone));
+
+    if (isTimezoneOffsetInBrokenRange && isTimezoneNameInBrokenNames) {
+      result.push(-MS_IN_DAY);
+    }
+
+    return result;
   }
 
   hasRecurrence(options) {
