@@ -5,6 +5,7 @@ import {
 
 jest.mock('../../../ui/themes', () => ({
   current: jest.fn(() => 'test_current'),
+  isMaterialBased: jest.fn(() => 'test_isMaterialBased'),
   isFluent: jest.fn(() => 'test_isFluent'),
   isMaterial: jest.fn(() => 'test_isMaterial'),
   isCompact: jest.fn(() => 'test_isCompact'),
