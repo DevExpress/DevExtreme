@@ -12,7 +12,7 @@ import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 jest.mock('../../../../../../../utils/getThemeType', () => ({
   __esModule: true,
   ...jest.requireActual('../../../../../../../utils/getThemeType'),
-  default: jest.fn(() => ({ isMaterial: true })),
+  default: jest.fn(() => ({ isMaterialBased: true })),
 }));
 
 const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
