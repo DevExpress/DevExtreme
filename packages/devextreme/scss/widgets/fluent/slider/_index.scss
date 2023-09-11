@@ -8,12 +8,6 @@
 
 // adduse
 
-$fluent-slider-radius: 50%;
-$fluent-slider-bar-height: 2px;
-$fluent-slider-handle-active-border-width: 2px;
-$fluent-slider-handle-inner-size: 12px;
-$fluent-slider-handle-inner-border-width: 1px;
-$fluent-slider-handle-inner-disabled-size: 2px;
 
 $fluent-slider-tooltip-popup-content-horizontal-padding: 3px;
 $fluent-slider-tooltip-width-without-paddings: $fluent-slider-tooltip-width - 2 * $fluent-slider-tooltip-popup-content-horizontal-padding;
@@ -23,20 +17,18 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
   height: $fluent-slider-wrapper-height;
 }
 
-.dx-slider-bar,
-.dx-slider-range {
-  margin-top: math.div($fluent-slider-wrapper-height - $fluent-slider-bar-height, 2);
-  height: $fluent-slider-bar-height;
-}
-
 .dx-slider-bar {
-  margin-right: math.div($fluent-slider-handle-size, 2) + $fluent-slider-handle-active-border-width;
-  margin-left: math.div($fluent-slider-handle-size, 2) + $fluent-slider-handle-active-border-width;
+  margin-top: math.div($fluent-slider-wrapper-height - $fluent-slider-track-height, 2);
+  margin-right: math.div($fluent-slider-handle-size, 2);
+  margin-left: math.div($fluent-slider-handle-size, 2);
   background: $fluent-slider-bar-bg;
+  height: $fluent-slider-track-height;
+  border-radius: $fluent-slider-track-border-radius;
 }
 
 .dx-slider-range {
-  top: math.div($fluent-slider-bar-height, 2) - math.div($fluent-slider-handle-size, 2);
+  height: $fluent-slider-track-height;
+  border-radius: $fluent-slider-track-border-radius;
 
   &.dx-slider-range-visible {
     background: $fluent-slider-bg;
@@ -44,24 +36,41 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 }
 
 .dx-slider-handle {
-  margin-top: math.div($fluent-slider-bar-height, 2) - math.div($fluent-slider-handle-size, 2);
-  margin-right: math.div(-$fluent-slider-handle-size, 2);
+  margin-top: math.div($fluent-slider-track-height, 2) - math.div($fluent-slider-handle-size, 2);
+  margin-inline-end: math.div(-$fluent-slider-handle-size, 2);
   width: $fluent-slider-handle-size;
   height: $fluent-slider-handle-size;
   border-radius: $fluent-slider-radius;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base-border-color;
+  background-color: $base-bg;
 
   &::after {
     position: absolute;
-    top: 50%;
-    left: 50%;
     display: block;
-    margin-top: math.div(-$fluent-slider-handle-inner-size, 2);
-    margin-left: math.div(-$fluent-slider-handle-inner-size, 2);
-    width: $fluent-slider-handle-inner-size;
-    height: $fluent-slider-handle-inner-size;
+    inset: 0;
     background: $fluent-slider-bg;
     content: "";
     border-radius: $fluent-slider-radius;
+    border-width: 3px;
+    border-style: solid;
+    border-color: $base-bg;
+  }
+
+  &.dx-state-hover {
+    &::after {
+      background: $fluent-slider-bg-hover;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    border-color: $fluent-slider-bg-focused;
+
+    &::after {
+      background: $fluent-slider-bg-focused;
+    }
   }
 
   .dx-tooltip-wrapper {
@@ -123,10 +132,6 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
       }
     }
   }
-
-  .dx-inkripple-wave {
-    background-color: $fluent-slider-active;
-  }
 }
 
 .dx-slider-tooltip-position-top {
@@ -149,49 +154,15 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
   }
 }
 
-.dx-state-disabled {
-  &.dx-slider,
-  .dx-slider {
-    opacity: 1;
-
-    .dx-slider-handle {
-      opacity: 1;
-    }
-  }
-
-  .dx-slider-bar {
-    background: $fluent-slider-bar-disabled-bg;
-  }
-
-  .dx-slider-range.dx-slider-range-visible {
-    background: $fluent-slider-disabled-bg;
-  }
-
+.dx-invalid {
   .dx-slider-handle {
-    width: 12px;
-    height: 12px;
-    margin-top: -5px;
-    margin-right: -5px;
-    border-radius: 50%;
-    border: 2px solid $base-bg;
+    &.dx-state-focused {
+      border-color: $base-invalid-color;
+    }
 
     &::after {
-      margin-top: math.div(-$fluent-slider-handle-inner-disabled-size, 2) - $fluent-slider-handle-inner-border-width - 2px;
-      margin-left: math.div(-$fluent-slider-handle-inner-disabled-size, 2) - $fluent-slider-handle-inner-border-width - 2px;
-      width: 8px;
-      height: 8px;
-      background: grey;
+      background-color: $base-invalid-color;
     }
-
-    .dx-overlay-content {
-      margin-top: -12px;
-    }
-  }
-}
-
-.dx-invalid {
-  .dx-slider-handle::after {
-    background-color: $base-invalid-color;
   }
 
   .dx-slider-range-visible {
@@ -204,17 +175,35 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
   }
 }
 
-.dx-rtl {
-  .dx-slider-handle {
-    margin-left: math.div(-$fluent-slider-handle-size, 2);
+.dx-state-disabled {
+  &.dx-slider,
+  .dx-slider {
+    opacity: 1;
+
+    .dx-slider-handle {
+      opacity: 1;
+    }
   }
 
-  &.dx-state-disabled {
-    .dx-slider-handle {
-      margin-left: -5px;
-      margin-right: 0;
-    }
+  &.dx-slider-handle {
+    border-color: $fluent-slider-disabled-bg;
 
+    &::after {
+      background: $fluent-slider-disabled-bg;
+    }
+  }
+
+  .dx-slider-bar {
+    background: $fluent-slider-bar-disabled-bg;
+  }
+
+  .dx-slider-range.dx-slider-range-visible {
+    background: $fluent-slider-disabled-bg;
+  }
+}
+
+.dx-rtl {
+  &.dx-state-disabled {
     .dx-overlay-content {
       margin-left: -13px;
     }

@@ -9,15 +9,21 @@
 * $name 10. Bar background color
 * $type color
 */
-$progressbar-bg: color.change($base-accent, $alpha: 0.3) !default;
+$progressbar-bg: $base-neutral-background6 !default;
 
 /**
 * $name 20. Selected range background color
 * $type color
 */
 $progressbar-range-bg: $base-accent !default;
-$progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
+$progressbar-container-disabled-bg: $base-neutral-background-disabled !default;
+$progressbar-range-disabled-bg: $base-foreground-disabled !default;
 $progressbar-range-indeterminate-color: $base-accent !default;
+$progressbar-range-invalid-color: $base-invalid-color !default;
+
+$progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
+$progressbar-disabled-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-disabled-bg, transparent 95%;
+$progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-invalid-color, transparent 95%;
 
 /**
 * $name 30. Label color
