@@ -950,7 +950,7 @@ QUnit.module('Templates', () => {
     QUnit.test('should not raise error if onRendered is received for a removed template (T1178295, T1059261)', function(assert) {
         const clock = sinon.useFakeTimers();
 
-        $('#dropDownEditorLazy').dxDropDownEditor({
+        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             fieldTemplate: 'field',
             templatesRenderAsynchronously: true,
             integrationOptions: {
@@ -964,20 +964,20 @@ QUnit.module('Templates', () => {
                                 onRendered();
                                 domAdapter.removeElement(container);
                                 domAdapter.removeElement($input);
+                                dropDownEditor.repaint();
                                 onRendered();
-                            });
+                            }, 100);
                         }
                     }
                 }
             },
-        });
+        }).dxDropDownEditor('instance');
 
         try {
-            clock.tick(10);
+            clock.tick(110);
         } catch(e) {
             assert.ok(false, `error is raised: ${e.message}`);
         } finally {
-            clock.tick(10);
             clock.restore();
             assert.ok(true);
         }
