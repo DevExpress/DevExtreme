@@ -5,7 +5,7 @@ import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
-import { isFunction } from '@js/core/utils/type';
+import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
@@ -18,6 +18,8 @@ import type {
 } from './m_types';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
+
+const BORDERED_VIEWS = ['columnHeadersView', 'rowsView', 'footerView', 'filterPanelView'];
 
 const ModuleItem = Class.inherit({
   _endUpdateCore() { },
@@ -257,60 +259,77 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
   },
 
   getView(name) {
-    return this.component._views?.[name];
+    return this.component._views[name];
   },
 
-  getFirstVisibleView() {
+  getFirstVisibleViewElement() {
     const columnHeaderView = this.getView('columnHeadersView');
-    if (columnHeaderView?.isVisible?.()) {
-      return columnHeaderView;
+    if (columnHeaderView && columnHeaderView.isVisible()) {
+      return columnHeaderView.element();
     }
-
-    return this.getView('rowsView');
+    const rowsView = this.getView('rowsView');
+    return rowsView.element();
   },
 
-  getLastVisibleView() {
+  getLastVisibleViewElement() {
     const filterPanelView = this.getView('filterPanelView');
-    if (filterPanelView?.isVisible?.()) {
-      return filterPanelView;
+    if (filterPanelView && filterPanelView.isVisible()) {
+      return filterPanelView.element();
     }
 
     const footerView = this.getView('footerView');
-    if (footerView?.isVisible?.()) {
-      return footerView;
+    if (footerView && footerView.isVisible()) {
+      return footerView.element();
     }
 
-    return this.getView('rowsView');
+    return this.getView('rowsView').element();
   },
 
-  getViewWithClass(className) {
-    return Object.values(this.component._views).find((view: any) => view?._$element?.hasClass(className));
+  getViewElementWithClass(className) {
+    const borderedView = BORDERED_VIEWS.map((viewName) => this.getView(viewName))
+      .filter((view) => view && view.element())
+      .find((view) => view.element().hasClass(className));
+
+    return borderedView && borderedView.element();
   },
 
   updateBorderedViews() {
     const BORDERED_TOP_VIEW_CLASS = 'dx-bordered-top-view';
     const BORDERED_BOTTOM_VIEW_CLASS = 'dx-bordered-bottom-view';
 
-    const oldFirstBorderedElement = this.getViewWithClass(BORDERED_TOP_VIEW_CLASS)?._$element;
-    const oldLastBorderedElement = this.getViewWithClass(BORDERED_BOTTOM_VIEW_CLASS)?._$element;
-    const newFirstBorderedElement = this.getFirstVisibleView()?._$element;
-    const newLastBorderedElement = this.getLastVisibleView()?._$element;
+    const oldFirstBorderedElement = this.getViewElementWithClass(BORDERED_TOP_VIEW_CLASS);
+    const oldLastBorderedElement = this.getViewElementWithClass(BORDERED_BOTTOM_VIEW_CLASS);
+    const newFirstBorderedElement = this.getFirstVisibleViewElement();
+    const newLastBorderedElement = this.getLastVisibleViewElement();
 
-    if (!oldFirstBorderedElement?.is(newFirstBorderedElement)) {
-      oldFirstBorderedElement?.removeClass(BORDERED_TOP_VIEW_CLASS);
+    if (oldFirstBorderedElement && !oldFirstBorderedElement.is(newFirstBorderedElement)) {
+      oldFirstBorderedElement.removeClass(BORDERED_TOP_VIEW_CLASS);
     }
 
-    if (!oldLastBorderedElement?.is(newLastBorderedElement)) {
-      oldLastBorderedElement?.removeClass(BORDERED_BOTTOM_VIEW_CLASS);
+    if (oldLastBorderedElement && !oldLastBorderedElement.is(newLastBorderedElement)) {
+      oldLastBorderedElement.removeClass(BORDERED_BOTTOM_VIEW_CLASS);
     }
 
-    if (!newFirstBorderedElement?.hasClass(BORDERED_TOP_VIEW_CLASS)) {
-      newFirstBorderedElement?.addClass(BORDERED_TOP_VIEW_CLASS);
+    if (!newFirstBorderedElement.hasClass(BORDERED_TOP_VIEW_CLASS)) {
+      newFirstBorderedElement.addClass(BORDERED_TOP_VIEW_CLASS);
     }
 
-    if (!newLastBorderedElement?.hasClass(BORDERED_BOTTOM_VIEW_CLASS)) {
-      newLastBorderedElement?.addClass(BORDERED_BOTTOM_VIEW_CLASS);
+    if (!newLastBorderedElement.hasClass(BORDERED_BOTTOM_VIEW_CLASS)) {
+      newLastBorderedElement.addClass(BORDERED_BOTTOM_VIEW_CLASS);
     }
+  },
+
+  isViewsStateValid() {
+    if (this.component._views) {
+      const visibleViews = BORDERED_VIEWS.map((viewName) => this.getView(viewName))
+        .filter((view) => view && view.isVisible());
+
+      const isVisibleViewsRendered = visibleViews.length > 0 && visibleViews.every((view) => isDefined(view.element()));
+
+      return isVisibleViewsRendered;
+    }
+
+    return false;
   },
 
   render($parent, options) {
@@ -328,7 +347,7 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
     $element.toggleClass('dx-hidden', !isVisible);
 
-    if (this.component._views) {
+    if (this.isViewsStateValid()) {
       this.updateBorderedViews();
     }
 

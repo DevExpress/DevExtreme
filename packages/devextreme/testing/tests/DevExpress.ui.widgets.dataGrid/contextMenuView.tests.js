@@ -45,6 +45,9 @@ QUnit.module('Context menu', {
                     },
                     getContextMenuItems: function($targetElement) {
                         return that.contextMenuItems1;
+                    },
+                    isVisible: function() {
+                        return true;
                     }
                 },
                 rowsView: {
@@ -62,6 +65,9 @@ QUnit.module('Context menu', {
                     },
                     getContextMenuItems: function($targetElement) {
                         return that.contextMenuItems2;
+                    },
+                    isVisible: function() {
+                        return true;
                     }
                 }
             }
