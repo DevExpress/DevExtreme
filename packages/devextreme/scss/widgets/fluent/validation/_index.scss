@@ -8,42 +8,18 @@
 
 // adduse
 @use "../overlay";
-@include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color);
-
-.dx-invalid-message > .dx-overlay-content {
-  background-color: transparent;
-  color: $validation-message-background-color;
-
-  .dx-invalid-message-top &,
-  .dx-invalid-message-bottom & {
-    .dx-editor-filled &,
-    .dx-editor-outlined {
-      padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
-    }
-  }
-
-  .dx-invalid-message-top & {
-    padding: 0 0 $fluent-validation-message-padding 0;
-  }
-
-  .dx-invalid-message-right & {
-    padding: 0 0 0 $fluent-validation-message-padding;
-  }
-
-  .dx-invalid-message-bottom & {
-    padding: $fluent-validation-message-padding 0 0 0;
-  }
-
-  .dx-invalid-message-left & {
-    padding: 0 $fluent-validation-message-padding 0 0;
-  }
-}
-
-.dx-validationsummary > .dx-validationsummary-item:not(:last-child) {
-  margin-bottom: $fluent-validationsummary-item-margin;
-}
-
-.dx-form-validation-summary {
-  margin-top: 20px;
-}
+@include dx-base-validation(
+  $validation-summary-color, 
+  $validation-message-color, 
+  $validation-message-background-color, 
+  $fluent-validation-overlay-border-radius
+);
+@include dx-modern-styles-validation(
+  $fluent-validation-message-font-size, 
+  $fluent-validation-message-line-height,
+  $fluent-filled-texteditor-input-horizontal-padding,
+  $fluent-validation-message-padding,
+  $fluent-validationsummary-item-margin,
+  $fluent-validation-message-vertical-padding, 
+  $fluent-validation-message-horizontal-padding,
+);
