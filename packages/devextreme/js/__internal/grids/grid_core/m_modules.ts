@@ -267,8 +267,8 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     if (columnHeaderView && columnHeaderView.isVisible()) {
       return columnHeaderView.element();
     }
-    const rowsView = this.getView('rowsView');
-    return rowsView.element();
+
+    return this.getView('rowsView').element();
   },
 
   getLastVisibleViewElement() {
@@ -321,12 +321,21 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
 
   isViewsStateValid() {
     if (this.component._views) {
-      const visibleViews = BORDERED_VIEWS.map((viewName) => this.getView(viewName))
-        .filter((view) => view && view.isVisible());
+      if (!BORDERED_VIEWS.includes(this.name)) {
+        return false;
+      }
 
-      const isVisibleViewsRendered = visibleViews.length > 0 && visibleViews.every((view) => isDefined(view.element()));
+      const rowsView = this.getView('rowsView');
+      if (!(rowsView && isDefined(rowsView.element?.()))) {
+        return false;
+      }
 
-      return isVisibleViewsRendered;
+      const optionalViews = ['columnHeadersView', 'footerView', 'filterPanelView']
+        .map((viewName) => this.getView(viewName))
+        .filter((view) => view && view.isVisible?.());
+      const isOptionalViewsRendered = optionalViews.every((view) => view && isDefined(view.element()));
+
+      return isOptionalViewsRendered;
     }
 
     return false;
