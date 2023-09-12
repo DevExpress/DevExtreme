@@ -152,6 +152,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     height: 2px;
   }
+
+  .dx-scheduler-date-table-row:nth-child(even) .dx-scheduler-date-table-cell {
+    border-top-style: dotted;
+  }
 }
 
 .dx-scheduler-header-panel {
