@@ -364,5 +364,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1025
      */
-    W1025: '\'scrolling.mode\' is set to \'virtual\' or \'infinite\'. Specify height for the component',
+    W1025: '\'scrolling.mode\' is set to \'virtual\' or \'infinite\'. Specify the height of the component.',
 });
