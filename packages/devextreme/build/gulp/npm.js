@@ -11,7 +11,7 @@ const replace = require('gulp-replace');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
@@ -109,21 +109,25 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src('README.md')
         .pipe(gulp.dest(dist)),
-
-    stringSrc('.npmignore', 'dist/js\ndist/ts\n!dist/css\nproject.json')
-        .pipe(gulp.dest(`${dist}/`))
 ));
 
 const packagePath = `${resultPath}/${packageDir}`;
 
 gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath, distGlobs)));
 
-gulp.task('npm-dist', () => gulp
-    .src([
-        `${packagePath}/dist/**/*`
-    ])
-    .pipe(gulp.dest(`${resultPath}/${packageDistDir}`))
-);
+const distPath = `${resultPath}/${packageDistDir}`;
+
+gulp.task('npm-dist', gulp.parallel(
+    () => gulp
+        .src([
+            `${packagePath}/dist/**/*`
+        ])
+        .pipe(gulp.dest(distPath)),
+    () => gulp
+        .src(`${distPath}/package.json`)
+        .pipe(replace(version, ctx.version.package))
+        .pipe(gulp.dest(distPath)),
+));
 
 const scssDir = `${resultPath}/${packageDir}/scss`;
 

@@ -25,7 +25,7 @@
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
   },
-  "types": "./dist/bundles/dx.all.d.ts",
+  "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
