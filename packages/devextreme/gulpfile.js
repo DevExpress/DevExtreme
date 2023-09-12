@@ -9,8 +9,37 @@ const shell = require('gulp-shell');
 
 gulp.task('clean', function(callback) {
     require('del').sync([
+        '__internal/**',
+        'animation/**',
         'artifacts/**',
+        'aspnet/**',
+        'bundles/**',
+        'cjs/**',
+        'color/**',
+        'common/**',
+        'core/**',
+        'data/**',
+        'data_helper/**',
         'dist/**',
+        'esm/**',
+        'events/**',
+        'excel_exporter/**',
+        'exporter/**',
+        'file_management/**',
+        'format_helper/**',
+        'integration/**',
+        'localization/**',
+        'mobile/**',
+        'pdf_exporter/**',
+        'renovation/**',
+        'scss/bundles/**',
+        'scss/widgets/base/icons/**',
+        'scss/widgets/material/typography/fonts/**',
+        'time_zone_utils/**',
+        'ui/**',
+        'utils/**',
+        'viz/**',
+        '*.d.ts',
     ]);
     cache.clearAll();
     callback();

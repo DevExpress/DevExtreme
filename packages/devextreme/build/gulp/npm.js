@@ -10,7 +10,6 @@ const replace = require('gulp-replace');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
-const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
 const { version } = require('../../package.json');
@@ -98,10 +97,10 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src('webpack.config.js')
         .pipe(gulp.dest(`${dist}/bin`)),
 
-    // gulp
-    //     .src(`${dist}/package.json`)
-    //     .pipe(replace(version, ctx.version.package))
-    //     .pipe(gulp.dest(dist)),
+    gulp
+        .src('package.json')
+        .pipe(replace(version, ctx.version.package))
+        .pipe(gulp.dest('.')),
 
     gulp
         .src(distGlob)
@@ -121,8 +120,7 @@ gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath
 
 gulp.task('npm-dist', () => gulp
     .src([
-        `${packagePath}/dist/**/*`,
-        'build/package.json'
+        `${packagePath}/dist/**/*`
     ])
     .pipe(gulp.dest(`${resultPath}/${packageDistDir}`))
 );
@@ -132,11 +130,6 @@ const scssDir = `${resultPath}/${packageDir}/scss`;
 gulp.task('npm-sass', gulp.series(
     'create-scss-bundles',
     gulp.parallel(
-        () => gulp
-            .src('scss/**/*')
-            .pipe(dataUri())
-            .pipe(gulp.dest(scssDir)),
-
         () => gulp
             .src('fonts/**/*', { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),

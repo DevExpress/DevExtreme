@@ -1,0 +1,4 @@
+dist/js
+dist/ts
+!dist/css
+project.json

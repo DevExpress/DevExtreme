@@ -8,7 +8,7 @@ module.exports = {
   name: packageName,
   displayName: packageName,
   moduleNameMapper: {
-    "^vue$": "vue/dist/vue.cjs",
-    "^@/(.*)$": "<rootDir>/src/$1"
+    '^vue$': 'vue/dist/vue.cjs',
+    '^@/(.*)$': '<rootDir>/src/$1'
   }
 };
