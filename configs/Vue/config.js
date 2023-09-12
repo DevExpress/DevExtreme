@@ -1,3 +1,4 @@
+window.exports = window.exports || {};
 window.config = {
   transpiler: 'plugin-babel',
   meta: {

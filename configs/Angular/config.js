@@ -1,7 +1,7 @@
 // In real applications, you should not transpile code in the browser.
 // You can see how to create your own application with Angular and DevExtreme here:
 // https://js.devexpress.com/Documentation/Guide/Angular_Components/Getting_Started/Create_a_DevExtreme_Application/
-
+window.exports = window.exports || {};
 window.config = {
   transpiler: 'ts',
   typescriptOptions: {
