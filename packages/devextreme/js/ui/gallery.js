@@ -146,7 +146,10 @@ const Gallery = CollectionWidget.inherit({
             */
 
 
-            _itemAttributes: { role: 'option' },
+            _itemAttributes: {
+                role: 'option',
+                'aria-label': 'item'
+            },
             loopItemFocus: false,
             selectOnFocus: true,
             selectionMode: 'single',
@@ -395,8 +398,7 @@ const Gallery = CollectionWidget.inherit({
                 .css('margin', 0)
                 .appendTo($container);
 
-            $clonedItem.removeAttr('aria-selected');
-            this.setAria({ role: 'presentation' }, $clonedItem);
+            this.setAria({ hidden: true }, $clonedItem);
         }
     },
 
@@ -947,7 +949,7 @@ const Gallery = CollectionWidget.inherit({
     _setFocusOnSelect: function() {
         this._userInteraction = true;
 
-        const selectedItem = this.itemElements().filter('.' + GALLERY_ITEM_SELECTED_CLASS);
+        const selectedItem = this._getRealItems().filter('.' + GALLERY_ITEM_SELECTED_CLASS);
         this.option('focusedElement', getPublicElement(selectedItem));
         this._userInteraction = false;
     },

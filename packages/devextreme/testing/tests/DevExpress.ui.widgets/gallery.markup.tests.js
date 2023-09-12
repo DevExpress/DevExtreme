@@ -78,6 +78,32 @@ QUnit.module('aria accessibility', () => {
         assert.equal($element.attr('aria-label'), 'gallery', 'widget should have aria-label to have difference from text list');
     });
 
+    QUnit.test('aria label for items', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({ items: [1] });
+
+        const $item = $gallery.find('.dx-gallery-item');
+
+        assert.equal($item.attr('aria-label'), 'item', 'item should have "aria-label"');
+    });
+
+    QUnit.test('aria-activedescendant should have link to one element only', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            height: 100,
+            width: '100%',
+            showIndicator: false,
+            items: [1, 2],
+            loop: true
+        });
+
+        const $items = $gallery.find('.dx-gallery-item');
+
+        const itemsWithId = Array.from($items).filter(item => {
+            return Boolean($(item).attr('id'));
+        });
+
+        assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
+    });
+
     QUnit.test('aria role for items', function(assert) {
         const $element = $('#gallerySimple').dxGallery({ items: [1] });
         const $item = $element.find('.' + GALLERY_ITEM_CLASS);
