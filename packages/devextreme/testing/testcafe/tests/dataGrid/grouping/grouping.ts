@@ -4,6 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import { makeColumnHeadersViewTemplatesAsync } from '../helpers/asyncTemplates';
+import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Grouping Panel`
   .page(url(__dirname, '../../container.html'));
@@ -259,3 +260,48 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
     },
   });
 });
+
+test('T1186613 - DataGrid - Toolbar items are vertically misaligned', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(await takeScreenshot('header-panel-items-align', dataGrid.getToolbar().element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(3, 2),
+  keyExpr: 'field_0',
+  groupPanel: {
+    visible: true,
+  },
+  showBorders: true,
+  searchPanel: {
+    visible: true,
+  },
+  editing: {
+    allowAdding: true,
+  },
+  toolbar: {
+    items: [
+      'groupPanel',
+      {
+        showText: 'always',
+        location: 'before',
+        name: 'addRowButton',
+        options: {
+          icon: null,
+          text: 'add a new row',
+        },
+      }, {
+        location: 'before',
+        widget: 'dxTextBox',
+        options: {
+          width: 140,
+          text: 'TestTest',
+        },
+      },
+    ],
+  },
+}));
