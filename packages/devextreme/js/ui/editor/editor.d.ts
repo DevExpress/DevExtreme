@@ -110,7 +110,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @default false
      * @public
      */
-     readonly isDirty?: boolean;
+    readonly isDirty?: boolean;
 }
 /**
  * @docid

