@@ -148,7 +148,7 @@ const Gallery = CollectionWidget.inherit({
 
             _itemAttributes: {
                 role: 'option',
-                'aria-label': 'item'
+                'aria-label': 'gallery item'
             },
             loopItemFocus: false,
             selectOnFocus: true,

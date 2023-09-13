@@ -83,7 +83,7 @@ QUnit.module('aria accessibility', () => {
 
         const $item = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
-        assert.equal($item.attr('aria-label'), 'item', 'item should have "aria-label"');
+        assert.equal($item.attr('aria-label'), 'gallery item', 'item should have "aria-label"');
     });
 
     QUnit.test('aria-activedescendant should have link to one element only', function(assert) {
