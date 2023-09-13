@@ -13,8 +13,7 @@
     "lint": "eslint src",
     "test": "npm run gulp -- test",
     "test:dev": "npm run gulp -- run.tests",
-    "pack": "npm run gulp -- npm.pack",
-    "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm/dist --artifacts ../../artifacts/internal-tools"
+    "pack": "npm run gulp -- npm.pack"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
@@ -41,7 +40,6 @@
     "del": "^2.2.2",
     "devextreme": "~23.2.0",
     "devextreme-angular-generator": "https://gitpkg.now.sh/DevExpress/devextreme-angular/packages/devextreme-angular-generator?master",
-    "devextreme-internal-tools": "10.0.0-beta.18",
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
     "gulp-replace": "^0.6.1",
