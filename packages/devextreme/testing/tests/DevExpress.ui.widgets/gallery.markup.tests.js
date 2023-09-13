@@ -108,6 +108,27 @@ QUnit.module('aria accessibility', () => {
         }
     });
 
+    QUnit.test('aria-activedescendant should have link to one element only when width was not set', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            height: 100,
+            showIndicator: false,
+            items: [1, 2],
+            loop: true
+        });
+
+        const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
+
+        const itemsWithId = Array.from($items).filter(item => {
+            return Boolean($(item).attr('id'));
+        });
+
+        if(windowUtils.hasWindow()) {
+            assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
+        } else {
+            assert.strictEqual(itemsWithId.length, 0, 'no rendered elements');
+        }
+    });
+
     QUnit.test('aria role for items', function(assert) {
         const $element = $('#gallerySimple').dxGallery({ items: [1] });
         const $item = $element.find('.' + GALLERY_ITEM_CLASS);
