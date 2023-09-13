@@ -81,7 +81,7 @@ QUnit.module('aria accessibility', () => {
     QUnit.test('aria label for items', function(assert) {
         const $gallery = $('#gallerySimple').dxGallery({ items: [1] });
 
-        const $item = $gallery.find('.dx-gallery-item');
+        const $item = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
         assert.equal($item.attr('aria-label'), 'item', 'item should have "aria-label"');
     });
@@ -95,13 +95,17 @@ QUnit.module('aria accessibility', () => {
             loop: true
         });
 
-        const $items = $gallery.find('.dx-gallery-item');
+        const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
         const itemsWithId = Array.from($items).filter(item => {
             return Boolean($(item).attr('id'));
         });
 
-        assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
+        if(windowUtils.hasWindow()) {
+            assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
+        } else {
+            assert.strictEqual(itemsWithId.length, 0, 'no rendered elements');
+        }
     });
 
     QUnit.test('aria role for items', function(assert) {
