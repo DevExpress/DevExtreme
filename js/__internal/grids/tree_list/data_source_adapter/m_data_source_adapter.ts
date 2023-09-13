@@ -35,6 +35,13 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function () {
     return childKeys;
   };
 
+  const applySorting = (data: any[], sort: any): any => queryByOptions(
+    query(data),
+    {
+      sort,
+    },
+  ).toArray();
+
   return {
     _createKeyGetter() {
       const keyExpr = this.getKeyExpr();
@@ -338,22 +345,29 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function () {
     },
 
     _loadParentsOrChildren(data, options, needChildren) {
-      const that = this;
       let filter;
       let needLocalFiltering;
-      const { keys, keyMap } = that._generateInfoToLoad(data, needChildren);
+      const { keys, keyMap } = this._generateInfoToLoad(data, needChildren);
       // @ts-expect-error
       const d = new Deferred();
       const isRemoteFiltering = options.remoteOperations.filtering;
-      const maxFilterLengthInRequest = that.option('maxFilterLengthInRequest');
+      const maxFilterLengthInRequest = this.option('maxFilterLengthInRequest');
+      const sort = options.storeLoadOptions?.sort ?? options.loadOptions?.sort;
       let loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
 
-      function concatLoadedData(loadedData) {
+      const concatLoadedData = (loadedData): any => {
         if (isRemoteFiltering) {
-          that._cachedStoreData = that._cachedStoreData.concat(loadedData);
+          this._cachedStoreData = applySorting(
+            this._cachedStoreData.concat(loadedData),
+            sort,
+          );
         }
-        return data.concat(loadedData);
-      }
+
+        return applySorting(
+          data.concat(loadedData),
+          sort,
+        );
+      };
 
       if (!keys.length) {
         return d.resolve(data);
@@ -367,18 +381,16 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function () {
         }
 
         if (cachedNodes.length) {
-          return that._loadParentsOrChildren(concatLoadedData(cachedNodes.map((node) => node.data)), options, needChildren);
+          return this._loadParentsOrChildren(concatLoadedData(cachedNodes.map((node) => node.data)), options, needChildren);
         }
       }
 
-      const keyExpr = needChildren ? that.option('parentIdExpr') : that.getKeyExpr();
-      filter = that._createIdFilter(keyExpr, keys);
+      const keyExpr = needChildren ? this.option('parentIdExpr') : this.getKeyExpr();
+      filter = this._createIdFilter(keyExpr, keys);
       const filterLength = encodeURI(JSON.stringify(filter)).length;
 
       if (filterLength > maxFilterLengthInRequest) {
-        filter = function (itemData) {
-          return keyMap[needChildren ? that._parentIdGetter(itemData) : that._keyGetter(itemData)];
-        };
+        filter = (itemData) => keyMap[needChildren ? this._parentIdGetter(itemData) : this._keyGetter(itemData)];
 
         needLocalFiltering = isRemoteFiltering;
       }
@@ -387,14 +399,14 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function () {
         filter: !needLocalFiltering ? filter : null,
       });
 
-      const store = options.fullData ? new ArrayStore(options.fullData) : that._dataSource.store();
+      const store = options.fullData ? new ArrayStore(options.fullData) : this._dataSource.store();
 
-      that.loadFromStore(loadOptions, store).done((loadedData) => {
+      this.loadFromStore(loadOptions, store).done((loadedData) => {
         if (loadedData.length) {
           if (needLocalFiltering) {
             loadedData = query(loadedData).filter(filter).toArray();
           }
-          that._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
+          this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
         } else {
           d.resolve(data);
         }
