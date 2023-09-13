@@ -42,6 +42,16 @@ $grid-masterdetail-padding: 16px;
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
+    .dx-bordered-top-view {
+      border-top-left-radius: $fluent-grid-base-border-radius;
+      border-top-right-radius: $fluent-grid-base-border-radius;
+    }
+
+    .dx-bordered-bottom-view {
+      border-bottom-left-radius: $fluent-grid-base-border-radius;
+      border-bottom-right-radius: $fluent-grid-base-border-radius;
+    }
+
     .dx-menu {
       background-color: transparent;
       height: 100%;
@@ -249,6 +259,14 @@ $grid-masterdetail-padding: 16px;
     .dx-#{$widget-name}-table .dx-header-row  > td {
       padding-top: $fluent-grid-base-header-cell-vertical-padding;
       padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
+
+      &:first-child {
+        border-top-left-radius: $fluent-grid-base-border-radius;
+      }
+
+      &:last-child {
+        border-top-right-radius: $fluent-grid-base-border-radius;
+      }
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
@@ -1217,6 +1235,14 @@ $grid-masterdetail-padding: 16px;
     &.dx-#{$widget-name}-invalid {
       padding-top: 0;
       padding-bottom: 0;
+    }
+  }
+
+  .dx-#{$widget-name}-dragview {
+    border-radius: $fluent-grid-base-border-radius;
+
+    .dx-#{$widget-name}-borders {
+      border-radius: $fluent-grid-base-border-radius;
     }
   }
 }

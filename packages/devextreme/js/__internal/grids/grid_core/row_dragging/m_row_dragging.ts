@@ -210,6 +210,8 @@ const RowDraggingExtender = {
         .children(`:not(.${this.addWidgetPrefix(CLASSES.rowsView)})`)
         .hide();
 
+      $dataGridContainer.addClass(this.addWidgetPrefix(CLASSES.dragView));
+
       return $dataGridContainer;
     };
   },
