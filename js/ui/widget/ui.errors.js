@@ -355,4 +355,9 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1023
      */
     W1023: 'Appointments require unique keys. Otherwise, the agenda view may not work correctly.',
+
+    /**
+     * @name ErrorsUIWidgets.W1025
+     */
+    W1025: '\'scrolling.mode\' is set to \'virtual\' or \'infinite\'. Specify the height of the component.',
 });
