@@ -18,6 +18,7 @@ import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
 import { triggerResizeEvent } from '../events/visibility_change';
+import messageLocalization from '../localization/message';
 
 // STYLE gallery
 
@@ -148,7 +149,7 @@ const Gallery = CollectionWidget.inherit({
 
             _itemAttributes: {
                 role: 'option',
-                'aria-label': 'gallery item'
+                'aria-label': messageLocalization.format('dxGalley-galleryItemName')
             },
             loopItemFocus: false,
             selectOnFocus: true,

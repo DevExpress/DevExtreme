@@ -699,6 +699,8 @@
         "dxGantt-showResources": "Mostrar recursos",
         "dxGantt-showDependencies": "Mostrar dependências",
         "dxGantt-dialogStartDateValidation": "A data de início deve ser após {0}",
-        "dxGantt-dialogEndDateValidation": "A data de término deve ser posterior a {0}"
+        "dxGantt-dialogEndDateValidation": "A data de término deve ser posterior a {0}",
+
+        "dxGalley-galleryItemName": "Gallery item"
     }
 }

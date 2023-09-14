@@ -699,6 +699,8 @@
         "dxGantt-showResources": "Rodyti resursus",
         "dxGantt-showDependencies": "Rodyti priklausomybes",
         "dxGantt-dialogStartDateValidation": "Pradžios data turi būti po {0}",
-        "dxGantt-dialogEndDateValidation": "Pabaigos data turi būti po {0}"
+        "dxGantt-dialogEndDateValidation": "Pabaigos data turi būti po {0}",
+
+        "dxGalley-galleryItemName": "Gallery item"
     }
 }

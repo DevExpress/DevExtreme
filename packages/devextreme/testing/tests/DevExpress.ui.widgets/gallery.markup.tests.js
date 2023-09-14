@@ -89,7 +89,7 @@ QUnit.module('aria accessibility', () => {
 
         const $item = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
-        assert.strictEqual($item.attr('aria-label'), 'gallery item', 'item should have "aria-label"');
+        assert.strictEqual($item.attr('aria-label'), 'Gallery item', 'item should have "aria-label"');
     });
 
     QUnit.test('aria role for items', function(assert) {
