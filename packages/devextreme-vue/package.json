@@ -31,7 +31,6 @@
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/test-utils": "2.0.0-beta.7",
     "del": "^3.0.0",
-    "devextreme-vue-generator": "https://gitpkg.now.sh/DevExpress/devextreme-vue/packages/devextreme-vue-generator?master",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
     "gulp-shell": "^0.6.5",

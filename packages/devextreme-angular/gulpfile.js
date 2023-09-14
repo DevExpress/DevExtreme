@@ -11,6 +11,13 @@ var header = require('gulp-header');
 var ngPackagr = require('ng-packagr');
 var exec = require('child_process').exec;
 
+var AngularMetadataGenerator = require('devextreme-internal-tools').AngularMetadataGenerator;
+var AngularDotGenerator = require('devextreme-internal-tools').AngularDotGenerator;
+var AngularFacadeGenerator = require('devextreme-internal-tools').AngularFacadeGenerator;
+var AngularModuleFacadeGenerator = require('devextreme-internal-tools').AngularModuleFacadeGenerator;
+var AngularCommonReexportsGenerator = require('devextreme-internal-tools').AngularCommonReexportsGenerator;
+var AngularComponentNamesGenerator = require('devextreme-internal-tools').AngularComponentNamesGenerator;
+
 const argv = require('yargs')
     .default('with-descriptions', false)
     .argv;
@@ -24,8 +31,7 @@ gulp.task('clean.metadata', gulp.series(function() {
 }));
 
 gulp.task('generate.metadata', gulp.series('clean.metadata', function(done) {
-    var MetadataGenerator = require(buildConfig.tools.metadataGenerator.importFrom).default,
-        generator = new MetadataGenerator();
+    var generator = new AngularMetadataGenerator();
 
     generator.generate(buildConfig.tools.metadataGenerator);
     done();
@@ -38,32 +44,28 @@ gulp.task('clean.generatedComponents', function(done) {
 });
 
 gulp.task('generate.components', gulp.series('generate.metadata', 'clean.generatedComponents', function(done) {
-    var DoTGenerator = require(buildConfig.tools.componentGenerator.importFrom).default,
-        generator = new DoTGenerator();
+    var generator = new AngularDotGenerator();
 
     generator.generate(buildConfig.tools.componentGenerator);
     done();
 }));
 
 gulp.task('generate.moduleFacades', gulp.series('generate.components', function(done) {
-    var ModuleFacadeGenerator = require(buildConfig.tools.moduleFacadeGenerator.importFrom).default,
-        moduleFacadeGenerator = new ModuleFacadeGenerator();
+    var moduleFacadeGenerator = new AngularModuleFacadeGenerator();
 
     moduleFacadeGenerator.generate(buildConfig.tools.moduleFacadeGenerator);
     done();
 }));
 
 gulp.task('generate.facades', gulp.series('generate.moduleFacades', function(done) {
-    var FacadeGenerator = require(buildConfig.tools.facadeGenerator.importFrom).default,
-        facadeGenerator = new FacadeGenerator();
+    var facadeGenerator = new AngularFacadeGenerator();
 
     facadeGenerator.generate(buildConfig.tools.facadeGenerator);
     done();
 }));
 
 gulp.task('generate.common-reexports', function(done) {
-    var CommonReexportsGenerator = require(buildConfig.tools.commonReexportsGenerator.importFrom).default,
-        commonReexportsGenerator = new CommonReexportsGenerator();
+    var commonReexportsGenerator = new AngularCommonReexportsGenerator();
 
     commonReexportsGenerator.generate(buildConfig.tools.commonReexportsGenerator);
     done();
@@ -184,8 +186,7 @@ gulp.task('clean.tests', function() {
 });
 
 gulp.task('generate-component-names', function(done) {
-    var ComponentNamesGenerator = require(buildConfig.tools.componentNamesGenerator.importFrom).default;
-    var generator = new ComponentNamesGenerator(buildConfig.tools.componentNamesGenerator);
+    var generator = new AngularComponentNamesGenerator(buildConfig.tools.componentNamesGenerator);
 
     generator.generate();
 

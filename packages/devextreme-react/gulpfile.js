@@ -5,6 +5,7 @@ const shell = require('gulp-shell');
 const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const config = require('./build.config');
+const generateReactComponents = require('devextreme-internal-tools').generateReactComponents;
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -22,8 +23,7 @@ gulp.task(CLEAN, (c) =>
 );
 
 gulp.task(GEN_RUN, (done) => {
-    const generateSync = require('devextreme-react-generator').default;
-    generateSync({
+    generateReactComponents({
         metaData: JSON.parse(fs.readFileSync(config.metadataPath).toString()),
         components: {
             baseComponent: config.baseComponent,
