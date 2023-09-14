@@ -2,13 +2,7 @@
 /dist/js
 /dist/ts
 !/dist/css
-/fonts
-/icons
-/images
-/js
-/playground
-/testing
-/ts
+/src
 
 /*.*
 !/*.d.ts

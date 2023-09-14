@@ -11,15 +11,9 @@
       },
       "inputs": [
         "{projectRoot}/build/**/*",
-        "{projectRoot}/fonts/**/*",
-        "{projectRoot}/icons/**/*",
-        "{projectRoot}/images/**/*",
-        "{projectRoot}/js/**/*",
-        "{projectRoot}/scss/widgets/**/*",
-        "{projectRoot}/testing/**/*",
-        "!{projectRoot}/testing/*.txt",
-        "!{projectRoot}/testing/*.xml",
-        "{projectRoot}/ts/**/*",
+        "{projectRoot}/src/**/*",
+        "!{projectRoot}/src/testing/*.txt",
+        "!{projectRoot}/src/testing/*.xml",
         "{projectRoot}/*.js"
       ],
       "outputs": [

@@ -71,7 +71,7 @@ const distGlobsPattern = (jsFolder, exclude) => [
 const srcGlobs = esmSrcGlobs;
 const distGlobs = distGlobsPattern(ctx.RESULT_JS_PATH);
 
-const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
+const jsonGlobs = ['src/js/**/*.json', '!src/js/viz/vector_map.utils/*.*'];
 
 const sources = (src, dist, distGlob) => (() => merge(
     gulp

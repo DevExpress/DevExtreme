@@ -20,7 +20,7 @@ const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
 const { ifEsmPackage } = require('./utils');
-const testsConfig = require('../../testing/tests.babelrc.json');
+const testsConfig = require('../../src/testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
 const createTsCompiler = require('./typescript/compiler');
@@ -30,23 +30,23 @@ const { SideEffectFinder } = require('./side-effects-finder');
 
 const sideEffectFinder = new SideEffectFinder();
 const src = [
-    'js/**/*.*',
-    '!js/**/*.d.ts',
-    '!js/**/*.{tsx,ts}',
-    '!js/renovation/code_coverage/**/*.*',
-    '!js/__internal/**/*.*',
+    'src/js/**/*.*',
+    '!src/js/**/*.d.ts',
+    '!src/js/**/*.{tsx,ts}',
+    '!src/js/renovation/code_coverage/**/*.*',
+    '!src/js/__internal/**/*.*',
 ];
 
 const esmTranspileSrc = src.concat([
-    '!js/bundles/**/*',
-    '!js/viz/docs/**/*',
-    '!js/renovation/**/*',
-    '!**/*.json'
+    '!src/js/bundles/**/*',
+    '!src/js/viz/docs/**/*',
+    '!src/js/renovation/**/*',
+    '!src/**/*.json'
 ]);
 
-const srcTsPattern = 'js/__internal/**/*.ts';
+const srcTsPattern = 'src/js/__internal/**/*.ts';
 
-const srcDir = path.join(process.cwd(), './js');
+const srcDir = path.join(process.cwd(), './src/js');
 const generatedTs = [
     'events/click.d.ts',
     'events/contextmenu.d.ts',
@@ -60,12 +60,12 @@ const generatedTs = [
     'integration/jquery.d.ts'
 ];
 
-const bundlesSrc = ['js/bundles/**/*.js'];
+const bundlesSrc = ['src/js/bundles/**/*.js'];
 
 const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
 const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.js`];
 const TS_COMPILER_CONFIG = {
-    baseAbsPath: path.resolve(__dirname, '../..'),
+    baseAbsPath: path.resolve(__dirname, '../../src'),
     relativePath: {
         tsconfig: 'js/__internal/tsconfig.json',
         alias: 'js',
@@ -84,7 +84,7 @@ const createModuleConfig = (name, dir, filePath, dist) => {
     const relative = path.join('./', dir.replace(srcDir, ''), name);
     const currentPath = isIndex ? path.join(relative, '../') : relative;
     const esmFile = path.relative(currentPath, path.join('./esm', relative));
-    const esmFilePath = path.join(dist, './esm',dir.replace(srcDir, ''), name);
+    const esmFilePath = path.join(dist, './esm', dir.replace(srcDir, ''), name);
     const cjsFile = path.relative(currentPath, path.join('./cjs', relative));
     const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;

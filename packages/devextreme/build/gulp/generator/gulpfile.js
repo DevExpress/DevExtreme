@@ -22,22 +22,22 @@ const {
 
 const generator = new InfernoGenerator();
 
-const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
+const jQueryComponentsGlob = 'src/js/renovation/**/*.j.tsx';
 
 const esmPackage = env.BUILD_ESM_PACKAGE;
 
 const SRC = [
-    'js/renovation/**/*.{tsx,ts}',
+    'src/js/renovation/**/*.{tsx,ts}',
     `!${jQueryComponentsGlob}`,
-    '!js/renovation/**/*.d.ts',
-    '!js/renovation/**/__tests__/**/*',
-    '!js/renovation/test_utils/**/*'
+    '!src/js/renovation/**/*.d.ts',
+    '!src/js/renovation/**/__tests__/**/*',
+    '!src/js/renovation/test_utils/**/*'
 ];
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
 const knownErrors = [
-    'js/renovation/component_wrapper/',
+    'src/js/renovation/component_wrapper/',
     'js\\renovation\\component_wrapper\\',
     'Cannot find module \'../../inferno/src\'',
     // #region TODO remove it after fix https://trello.com/c/2LOaxO9F/2704-renovation-some-types-is-missing-on-new-type-defining
@@ -68,7 +68,7 @@ function generateJQueryComponents(isWatch) {
     return pipe
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
-        .pipe(gulp.dest('js/renovation/'));
+        .pipe(gulp.dest('src/js/renovation/'));
 }
 
 const context = require('../context.js');
@@ -91,7 +91,7 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
         const isNotDTS = (file) => !file.path.endsWith('.d.ts');
         const isDefault = distPath === './';
 
-        return gulp.src(SRC, { base: 'js' })
+        return gulp.src(SRC, { base: 'src/js' })
             .pipe(gulpIf(dev, cached('generate-inferno-component')))
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))

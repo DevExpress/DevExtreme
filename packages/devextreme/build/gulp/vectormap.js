@@ -14,7 +14,7 @@ const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
 
-const VECTORMAP_UTILS_PATH = 'js/viz/vector_map.utils';
+const VECTORMAP_UTILS_PATH = 'src/js/viz/vector_map.utils';
 const VECTORMAP_UTILS_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-utils');
 const VECTORMAP_DATA_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-data');
 

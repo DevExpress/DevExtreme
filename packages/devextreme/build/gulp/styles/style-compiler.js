@@ -97,7 +97,7 @@ function generateScssBundles(bundlesFolder, getBundleContent) {
 }
 
 function createBundles(callback) {
-    const bundlesFolder = join(process.cwd(), 'scss', 'bundles');
+    const bundlesFolder = join(process.cwd(), 'src', 'scss', 'bundles');
     const readTemplate = (theme) => readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
     const getBundleContent = (theme, size, color, mode) => {
         const bundleTemplate = readTemplate(theme);

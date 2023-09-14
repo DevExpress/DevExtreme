@@ -39,11 +39,11 @@
     "artifacts",
     "node_modules",
     "**/dist",
-    "playground"
+    "src/playground"
   ],
   "include": [
-    "js/renovation",
+    "src/js/renovation",
     "../devextreme-themebuilder",
-    "testing/testcafe"
+    "src/testing/testcafe"
   ]
 }

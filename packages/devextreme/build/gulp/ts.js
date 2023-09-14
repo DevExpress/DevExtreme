@@ -17,8 +17,9 @@ const { packageDir } = require('./utils');
 const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
-const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-const src = ['./js/**/*.d.ts', '!./js/renovation/**/*'];
+const TS_BUNDLE_FILE_SOURCE = './src/ts/dx.all.d.ts';
+const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE_SOURCE, './src/ts/aliases.d.ts'];
+const src = ['./src/js/**/*.d.ts', '!./src/js/renovation/**/*'];
 
 const TS_TESTS_PATH = './testing/typescript';
 
@@ -40,7 +41,7 @@ const packageBundlesPath = path.join(packagePath, 'bundles');
 
 
 gulp.task('ts-copy-vendor', function() {
-    return gulp.src('./ts/vendor/*')
+    return gulp.src('./src/ts/vendor/*')
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
 });
 
