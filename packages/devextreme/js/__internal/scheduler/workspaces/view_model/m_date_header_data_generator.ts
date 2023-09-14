@@ -6,6 +6,8 @@ import {
   getHorizontalGroupCount,
   getTotalCellCountByCompleteData,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { VIEWS } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/const';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { getGroupCount } from '../../resources/m_utils';
 
@@ -42,6 +44,7 @@ export class DateHeaderDataGenerator {
       hoursInterval,
       isHorizontalGrouping,
       intervalCount,
+      viewOffset,
     } = options;
 
     const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -61,11 +64,13 @@ export class DateHeaderDataGenerator {
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
       const cell = completeViewDataMap[index][dayIndex * colSpan];
+      const normalizedStartDate = dateUtilsTs
+        .addOffsets(cell.startDate, [-viewOffset]);
 
       weekDaysRow.push({
         ...cell,
         colSpan,
-        text: formatWeekdayAndDay(cell.startDate),
+        text: formatWeekdayAndDay(normalizedStartDate),
         isFirstGroupCell: false,
         isLastGroupCell: false,
       });
@@ -90,12 +95,17 @@ export class DateHeaderDataGenerator {
       intervalCount,
       currentDate,
       viewType,
+      viewOffset,
     } = options;
 
     const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
     const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
     const isVerticalGrouping = groupOrientation === 'vertical';
+    const shouldRollbackOffset = viewType !== VIEWS.TIMELINE_DAY
+      && viewType !== VIEWS.TIMELINE_WEEK
+      && viewType !== VIEWS.TIMELINE_WORK_WEEK;
+
     const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
       intervalCount,
       currentDate,
@@ -117,9 +127,13 @@ export class DateHeaderDataGenerator {
       isLastGroupCell,
       ...restProps
     }, index) => {
+      const normalizedStartDate = shouldRollbackOffset
+        ? dateUtilsTs.addOffsets(startDate, [-viewOffset])
+        : startDate;
+
       const text = getHeaderCellText(
         index % cellCountInGroupRow,
-        startDate,
+        normalizedStartDate,
         headerCellTextFormat,
         getDateForHeaderText,
         {

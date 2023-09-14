@@ -10,6 +10,7 @@ import {
   isHorizontalView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
 import { getAllGroups, getGroupCount } from '../../resources/m_utils';
@@ -358,9 +359,16 @@ export class ViewDataGenerator {
   }
 
   getCellData(rowIndex, columnIndex, options, allDay) {
-    return allDay
+    const { viewOffset } = options;
+    const cellData = allDay
       ? this.prepareAllDayCellData(options, rowIndex, columnIndex)
       : this.prepareCellData(options, rowIndex, columnIndex);
+
+    return {
+      ...cellData,
+      startDate: dateUtilsTs.addOffsets(cellData.startDate, [viewOffset]),
+      endDate: dateUtilsTs.addOffsets(cellData.endDate, [viewOffset]),
+    };
   }
 
   prepareCellData(options, rowIndex, columnIndex) {
@@ -370,6 +378,7 @@ export class ViewDataGenerator {
       endDayHour,
       interval,
       hoursInterval,
+      // viewOffset,
     } = options;
 
     const groupsList = getAllGroups(groups);
@@ -383,6 +392,8 @@ export class ViewDataGenerator {
     const endDate = this.calculateEndDate(startDate, interval, endDayHour);
 
     const data: any = {
+      // startDate: dateUtilsTs.addOffsets(startDate, [viewOffset]),
+      // endDate: dateUtilsTs.addOffsets(endDate, [viewOffset]),
       startDate,
       endDate,
       allDay: this.tableAllDay,
@@ -398,7 +409,10 @@ export class ViewDataGenerator {
   }
 
   prepareAllDayCellData(options, rowIndex, columnIndex) {
+    // const { viewOffset } = options;
     const data = this.prepareCellData(options, rowIndex, columnIndex);
+    // const startDateWithoutOffset = dateUtilsTs.addOffsets(data.startDate, [-viewOffset]);
+    // const startDate = new Date(dateUtils.trimTime(startDateWithoutOffset).getTime() + viewOffset);
     const startDate = dateUtils.trimTime(data.startDate);
 
     return {

@@ -8,6 +8,7 @@ import {
   getViewStartByOptions,
   isFirstCellInMonthWithIntervalCount,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 // eslint-disable-next-line import/no-cycle
 import { calculateAlignedWeeksBetweenDates } from './m_utils';
@@ -24,19 +25,21 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getCellData(rowIndex, columnIndex, options, allDay) {
-    const data = super.getCellData(rowIndex, columnIndex, options, false);
-
-    const { startDate } = data;
     const {
       indicatorTime,
       timeZoneCalculator,
       intervalCount,
+      viewOffset,
     } = options;
+
+    const data = super.getCellData(rowIndex, columnIndex, options, false);
+    const { startDate } = data;
+    const normalizedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
 
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
     data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
     data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
-    data.text = getCellText(startDate, intervalCount);
+    data.text = getCellText(normalizedStartDate, intervalCount);
 
     return data;
   }

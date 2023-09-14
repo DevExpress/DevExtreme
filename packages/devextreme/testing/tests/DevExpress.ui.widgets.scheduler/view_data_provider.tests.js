@@ -180,6 +180,7 @@ const verticalGroupingRenderOptions = {
         name: 'groupId',
         items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     }],
+    viewOffset: 0,
 };
 const horizontalGroupingRenderOptions = {
     startRowIndex: 0,
@@ -193,6 +194,7 @@ const horizontalGroupingRenderOptions = {
     isGenerateTimePanelData: true,
     viewType: 'day',
     groups: [],
+    viewOffset: 0,
 };
 
 const createViewDataProvider = ({

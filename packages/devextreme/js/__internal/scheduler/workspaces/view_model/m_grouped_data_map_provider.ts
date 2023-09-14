@@ -95,21 +95,29 @@ export class GroupedDataMapProvider {
   }
 
   findCellPositionInMap(cellInfo) {
+    const { viewOffset } = this._viewOptions;
     const {
       groupIndex, startDate, isAllDay, index,
     } = cellInfo;
 
     const startTime = isAllDay
-      ? dateUtils.trimTime(startDate).getTime()
+      ? dateUtils.trimTime(new Date(startDate.getTime() - viewOffset)).getTime()
       : startDate.getTime();
 
     const isStartDateInCell = (cellData) => {
       if (!isDateAndTimeView(this._viewOptions.viewType)) {
-        return dateUtils.sameDate(startDate, cellData.startDate);
+        return dateUtils.sameDate(
+          new Date(startDate.getTime() - viewOffset),
+          new Date(cellData.startDate.getTime() - viewOffset),
+        );
       }
 
-      const cellStartTime = cellData.startDate.getTime();
-      const cellEndTime = cellData.endDate.getTime();
+      const cellStartTime = isAllDay
+        ? cellData.startDate.getTime() - viewOffset
+        : cellData.startDate.getTime();
+      const cellEndTime = isAllDay
+        ? cellData.endDate.getTime() - viewOffset
+        : cellData.endDate.getTime();
 
       return isAllDay
         ? cellData.allDay && startTime >= cellStartTime && startTime <= cellEndTime

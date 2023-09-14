@@ -79,6 +79,7 @@ export default class ViewDataProvider {
       {
         isVerticalGrouping: renderOptions.isVerticalGrouping,
         viewType: renderOptions.viewType,
+        viewOffset: options.viewOffset,
       },
     );
 

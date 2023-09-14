@@ -183,6 +183,7 @@ const getExtremeDates = () => {
   return [startDate, endDate];
 };
 
+// TODO: Change to date utils.
 const setOffsetsToDate = (targetDate, offsetsArray) => {
   const newDateMs = offsetsArray.reduce((result, offset) => result + offset, targetDate.getTime());
   return new Date(newDateMs);

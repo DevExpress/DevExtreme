@@ -11,6 +11,7 @@ import {
   isDateAndTimeView as calculateIsDateAndTimeView,
   isTimelineView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
@@ -86,21 +87,19 @@ export class AppointmentFilterBaseStrategy {
   }
 
   filter(preparedItems) {
-    const { dateRange } = this;
-
-    let allDay;
-
-    if (!this.showAllDayPanel && this.supportAllDayRow) {
-      allDay = false;
-    }
+    const { dateRange: [minDate, maxDate] } = this;
+    const { viewOffset } = this.options;
+    const allDay = !this.showAllDayPanel && this.supportAllDayRow
+      ? false
+      : undefined;
 
     return this.filterLoadedAppointments({
       startDayHour: this.viewStartDayHour,
       endDayHour: this.viewEndDayHour,
       viewStartDayHour: this.viewStartDayHour,
       viewEndDayHour: this.viewEndDayHour,
-      min: dateRange[0],
-      max: dateRange[1],
+      min: dateUtilsTs.addOffsets(minDate, [viewOffset]),
+      max: dateUtilsTs.addOffsets(maxDate, [viewOffset]),
       resources: this.loadedResources,
       allDay,
       supportMultiDayAppointments: isTimelineView(this.viewType),
