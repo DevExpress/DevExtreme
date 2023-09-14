@@ -6,45 +6,71 @@ import { a11yCheck } from '../../helpers/accessibilityUtils';
 fixture.disablePageReloads`Gallery`
   .page(url(__dirname, '../../container.html'));
 
-function getGallerySettings(settings) {
-  const items = [{
-    ID: '1',
-    Name: 'First',
-  },
-  {
-    ID: '2',
-    Name: 'Second',
-  }];
-
-  return {
-    items,
-    height: 100,
-    loop: true,
-    itemTemplate(item) {
-      const result = document.createElement('div');
-      const span = document.createElement('span');
-
-      span.innerText = item.name;
-      result.appendChild(span);
-
-      return result;
-    },
-    ...settings,
-  };
+interface GalleryItem {
+  ID: string;
+  Name: string;
 }
 
-test('Checking Gallery via aXe when width was not set', async (t) => {
-  await a11yCheck(t);
-}).before(async () => createWidget(
-  'dxGallery',
-  getGallerySettings({}),
-));
+const defaultItems: GalleryItem[] = [{
+  ID: '1',
+  Name: 'First',
+},
+{
+  ID: '2',
+  Name: 'Second',
+}];
 
-test('Checking Gallery via aXe when width was set', async (t) => {
-  await a11yCheck(t);
-}).before(async () => createWidget(
-  'dxGallery',
-  getGallerySettings({
-    width: '100%',
-  }),
-));
+function defaultItemTemplate(item: GalleryItem) {
+  const result = document.createElement('div');
+  const span = document.createElement('span');
+
+  span.innerText = item.Name;
+  result.appendChild(span);
+
+  return result;
+}
+
+function getTestName(gallerySettings) {
+  const messageParts: string[] = [];
+  const fields = ['items', 'width', 'itemTemplate'];
+
+  fields.forEach((field) => {
+    const fieldSkipped = gallerySettings[field] === undefined;
+
+    messageParts.push(`${field} was ${fieldSkipped ? 'not' : ''} set`);
+  });
+
+  return `Checking Gallery via aXe. Settings: ${messageParts.join(', ')}`;
+}
+
+const gallerySettings = [{}, {
+  items: defaultItems,
+}, {
+  itemTemplate: defaultItemTemplate,
+}, {
+  width: '100%',
+}, {
+  loop: true,
+}, {
+  showIndicator: false,
+}].reduce((acc: any, currentValue, index, arr) => {
+  acc.push({
+    ...currentValue,
+    ...arr[index - 1],
+  });
+  return acc;
+}, []);
+
+const testsSettings = gallerySettings.map((settings) => ({
+  testName: getTestName(settings),
+  gallerySettings: settings,
+}));
+
+testsSettings.forEach((settings) => {
+  test(settings.testName, async (t) => {
+    await a11yCheck(t);
+  }).before(async () => createWidget(
+    'dxGallery',
+    gallerySettings,
+  ));
+});
