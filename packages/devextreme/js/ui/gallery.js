@@ -276,10 +276,13 @@ const Gallery = CollectionWidget.inherit({
 
         this.callBase();
 
-        this.setAria({
-            'role': 'listbox',
+        const listBoxRoleShouldBe = this._itemsCount() > 0;
+        const ariaAttrs = {
+            'role': listBoxRoleShouldBe ? 'listbox' : undefined,
             'label': 'gallery'
-        });
+        };
+
+        this.setAria(ariaAttrs);
     },
 
     _render: function() {
