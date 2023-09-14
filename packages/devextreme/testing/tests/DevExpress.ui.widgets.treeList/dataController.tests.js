@@ -2988,6 +2988,168 @@ QUnit.module('Filtering', { beforeEach: function() {
         // act
         assert.ok(true, 'no looping');
     });
+
+    // T1188243
+    QUnit.test('Search with filterMode is \'fullBranch\' when sorting is specified', function(assert) {
+        // arrange
+        /* eslint-disable */
+        const data = [
+            { id: 1, parentId: 0, sortOrder: 0, test: 'Test 1' },
+            { id: 2, parentId: 0, sortOrder: 1, test: 'Test 2' },
+                { id: 3, parentId: 2, sortOrder: 2, test: 'Test 1' },
+                    { id: 4, parentId: 3, sortOrder: 3, test: 'Test 3' },
+                    { id: 5, parentId: 3, sortOrder: 4, test: 'Test 4' },
+                { id: 6, parentId: 2, sortOrder: 5, test: 'Test 1' },
+            { id: 7, parentId: 0, sortOrder: 6, test: 'Test 1' }
+        ];
+        /* eslint-enable */
+
+        // act
+        this.setupTreeList({
+            dataSource: data,
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            filterMode: 'fullBranch',
+            expandNodesOnFiltering: true,
+            expandedRowKeys: [2, 3],
+            searchPanel: {
+                text: 'Test 1'
+            },
+            columns: ['id', {
+                dataField: 'sortOrder',
+                sortOrder: 'desc'
+            }, 'test'],
+        });
+
+        // assert
+        const items = this.dataController.items().map((item) => item.data);
+        assert.strictEqual(items.length, 7, 'item count');
+
+        /* eslint-disable */
+        assert.deepEqual(items, [
+            { id: 7, parentId: 0, sortOrder: 6, test: 'Test 1' },
+            { id: 2, parentId: 0, sortOrder: 1, test: 'Test 2' },
+                { id: 6, parentId: 2, sortOrder: 5, test: 'Test 1' },
+                { id: 3, parentId: 2, sortOrder: 2, test: 'Test 1' },
+                    { id: 5, parentId: 3, sortOrder: 4, test: 'Test 4' },
+                    { id: 4, parentId: 3, sortOrder: 3, test: 'Test 3' },
+            { id: 1, parentId: 0, sortOrder: 0, test: 'Test 1' },
+        ], 'items');
+        /* eslint-enable */
+    });
+
+    // T1188243
+    QUnit.test('Search with filterMode is \'fullBranch\' when sorting and a remote filtering are specified', function(assert) {
+        // arrange
+        /* eslint-disable */
+        const data = [
+            { id: 1, parentId: 0, sortOrder: 0, test: 'Test 1' },
+            { id: 2, parentId: 0, sortOrder: 1, test: 'Test 2' },
+                { id: 3, parentId: 2, sortOrder: 2, test: 'Test 1' },
+                    { id: 4, parentId: 3, sortOrder: 3, test: 'Test 3' },
+                    { id: 5, parentId: 3, sortOrder: 4, test: 'Test 4' },
+                { id: 6, parentId: 2, sortOrder: 5, test: 'Test 1' },
+            { id: 7, parentId: 0, sortOrder: 6, test: 'Test 1' }
+        ];
+        /* eslint-enable */
+        const store = new ArrayStore(data);
+
+        // act
+        this.setupTreeList({
+            dataSource: {
+                load: (loadOptions) => store.load(loadOptions),
+                totalCount: () => data.length
+            },
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            filterMode: 'fullBranch',
+            expandNodesOnFiltering: true,
+            expandedRowKeys: [2, 3],
+            remoteOperations: {
+                filtering: true
+            },
+            searchPanel: {
+                text: 'Test 1'
+            },
+            columns: ['id', {
+                dataField: 'sortOrder',
+                sortOrder: 'desc'
+            }, 'test'],
+        });
+
+        // assert
+        const items = this.dataController.items().map((item) => item.data);
+        assert.strictEqual(items.length, 7, 'item count');
+
+        /* eslint-disable */
+    assert.deepEqual(items, [
+        { id: 7, parentId: 0, sortOrder: 6, test: 'Test 1' },
+        { id: 2, parentId: 0, sortOrder: 1, test: 'Test 2' },
+            { id: 6, parentId: 2, sortOrder: 5, test: 'Test 1' },
+            { id: 3, parentId: 2, sortOrder: 2, test: 'Test 1' },
+                { id: 5, parentId: 3, sortOrder: 4, test: 'Test 4' },
+                { id: 4, parentId: 3, sortOrder: 3, test: 'Test 3' },
+        { id: 1, parentId: 0, sortOrder: 0, test: 'Test 1' },
+    ], 'items');
+    /* eslint-enable */
+    });
+
+    // T1188243
+    QUnit.test('Search with filterMode is \'fullBranch\' when remote sorting and a remote filtering are specified', function(assert) {
+        // arrange
+        /* eslint-disable */
+        const data = [
+            { id: 1, parentId: 0, sortOrder: 0, test: 'Test 1' },
+            { id: 2, parentId: 0, sortOrder: 1, test: 'Test 2' },
+                { id: 3, parentId: 2, sortOrder: 2, test: 'Test 1' },
+                    { id: 4, parentId: 3, sortOrder: 3, test: 'Test 3' },
+                    { id: 5, parentId: 3, sortOrder: 4, test: 'Test 4' },
+                { id: 6, parentId: 2, sortOrder: 5, test: 'Test 1' },
+            { id: 7, parentId: 0, sortOrder: 6, test: 'Test 1' }
+        ];
+        /* eslint-enable */
+        const store = new ArrayStore(data);
+
+        // act
+        this.setupTreeList({
+            dataSource: {
+                load: (loadOptions) => store.load(loadOptions),
+                totalCount: () => data.length
+            },
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            filterMode: 'fullBranch',
+            expandNodesOnFiltering: true,
+            expandedRowKeys: [2, 3],
+            remoteOperations: {
+                sorting: true,
+                filtering: true
+            },
+            searchPanel: {
+                text: 'Test 1'
+            },
+            columns: ['id', {
+                dataField: 'sortOrder',
+                sortOrder: 'desc'
+            }, 'test'],
+        });
+
+        // assert
+        const items = this.dataController.items().map((item) => item.data);
+        assert.strictEqual(items.length, 7, 'item count');
+
+        /* eslint-disable */
+    assert.deepEqual(items, [
+        { id: 7, parentId: 0, sortOrder: 6, test: 'Test 1' },
+        { id: 2, parentId: 0, sortOrder: 1, test: 'Test 2' },
+            { id: 6, parentId: 2, sortOrder: 5, test: 'Test 1' },
+            { id: 3, parentId: 2, sortOrder: 2, test: 'Test 1' },
+                { id: 5, parentId: 3, sortOrder: 4, test: 'Test 4' },
+                { id: 4, parentId: 3, sortOrder: 3, test: 'Test 3' },
+        { id: 1, parentId: 0, sortOrder: 0, test: 'Test 1' },
+    ], 'items');
+    /* eslint-enable */
+    });
 });
 
 QUnit.module('Push API', {
