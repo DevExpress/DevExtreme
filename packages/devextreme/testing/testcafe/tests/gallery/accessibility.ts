@@ -32,7 +32,7 @@ function defaultItemTemplate(item: GalleryItem) {
 
 function getTestName(gallerySettings) {
   const messageParts: string[] = [];
-  const fields = ['items', 'width', 'itemTemplate'];
+  const fields = Object.keys(gallerySettings);
 
   fields.forEach((field) => {
     const fieldSkipped = gallerySettings[field] === undefined;
