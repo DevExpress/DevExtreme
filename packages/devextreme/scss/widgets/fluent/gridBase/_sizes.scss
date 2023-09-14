@@ -13,6 +13,7 @@ $fluent-grid-base-texteditor-input-padding: null !default;
 $fluent-grid-base-menu-item-padding: null !default;
 $fluent-grid-base-column-chooser-horizontal-padding: null !default;
 $fluent-grid-base-column-chooser-paddings: null !default;
+$fluent-grid-base-header-panel-padding: null !default;
 $fluent-grid-base-grouppanel-item-margin: null !default;
 $fluent-grid-base-command-edit-column-width: null !default;
 $fluent-grid-base-command-edit-column-with-icons-width: null !default;
@@ -42,6 +43,7 @@ $fluent-command-edit-icon-margin: 2px !default;
   $fluent-grid-base-menu-item-padding: 11px 4px !default;
   $fluent-grid-base-column-chooser-horizontal-padding: 24px !default;
   $fluent-grid-base-column-chooser-paddings: 16px $fluent-grid-base-column-chooser-horizontal-padding 9px !default;
+  $fluent-grid-base-header-panel-padding: 8px 0 !default;
   $fluent-grid-base-grouppanel-item-margin: 10px !default;
 
   $fluent-grid-base-command-edit-column-width: 115px !default;
@@ -69,6 +71,7 @@ $fluent-command-edit-icon-margin: 2px !default;
   $fluent-grid-base-menu-item-padding: 8px 4px !default;
   $fluent-grid-base-column-chooser-horizontal-padding: 8px !default;
   $fluent-grid-base-column-chooser-paddings: 8px $fluent-grid-base-column-chooser-horizontal-padding 8px !default;
+  $fluent-grid-base-header-panel-padding: 5px 0 !default;
   $fluent-grid-base-grouppanel-item-margin: 8px !default;
 
   $fluent-grid-base-command-edit-column-width: 105px !default;
@@ -82,5 +85,4 @@ $fluent-command-edit-icon-margin: 2px !default;
   $fluent-command-column-additional-right-margin: 2px !default;
 }
 
-$fluent-grid-base-header-panel-padding: 0 $fluent-grid-base-cell-horizontal-padding !default;
 $fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;
