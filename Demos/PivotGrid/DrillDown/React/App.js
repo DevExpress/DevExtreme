@@ -9,91 +9,61 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import { sales } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [popupTitle, setPopupTitle] = React.useState('');
+  const [drillDownDataSource, setDrillDownDataSource] = React.useState(null);
+  const [popupVisible, setPopupVisible] = React.useState(false);
+  const dataGridRef = React.useRef(null);
 
-    this.state = {
-      popupTitle: '',
-      drillDownDataSource: null,
-      popupVisible: false,
-    };
-    this.onCellClick = this.onCellClick.bind(this);
-    this.onHiding = this.onHiding.bind(this);
-    this.onShown = this.onShown.bind(this);
-    this.getDataGridInstance = this.getDataGridInstance.bind(this);
-  }
-
-  render() {
-    const { drillDownDataSource, popupTitle, popupVisible } = this.state;
-
-    return (
-      <React.Fragment>
-        <PivotGrid
-          id="sales"
-          allowSortingBySummary={true}
-          allowSorting={true}
-          allowFiltering={true}
-          allowExpandAll={true}
-          showBorders={true}
-          dataSource={dataSource}
-          onCellClick={this.onCellClick}
-        >
-          <FieldChooser enabled={false} />
-        </PivotGrid>
-        <Popup
-          visible={popupVisible}
-          width={600}
-          height={400}
-          title={popupTitle}
-          onHiding={this.onHiding}
-          onShown={this.onShown}
-        >
-          <DataGrid
-            width={560}
-            height={300}
-            dataSource={drillDownDataSource}
-            ref={this.getDataGridInstance}
-          >
-            <Column dataField="region" />
-            <Column dataField="city" />
-            <Column dataField="amount" dataType="number" format="currency" />
-            <Column dataField="date" dataType="date" />
-          </DataGrid>
-        </Popup>
-      </React.Fragment>
-    );
-  }
-
-  getDataGridInstance(ref) {
-    this.dataGrid = ref.instance;
-  }
-
-  onCellClick(e) {
+  const onCellClick = React.useCallback((e) => {
     if (e.area === 'data') {
       const pivotGridDataSource = e.component.getDataSource();
       const rowPathLength = e.cell.rowPath.length;
       const rowPathName = e.cell.rowPath[rowPathLength - 1];
 
-      this.setState({
-        popupTitle: `${rowPathName || 'Total'} Drill Down Data`,
-        drillDownDataSource: pivotGridDataSource.createDrillDownDataSource(e.cell),
-        popupVisible: true,
-      });
+      setPopupTitle(`${rowPathName || 'Total'} Drill Down Data`);
+      setDrillDownDataSource(pivotGridDataSource.createDrillDownDataSource(e.cell));
+      setPopupVisible(true);
     }
-  }
+  }, []);
 
-  onHiding() {
-    this.setState({
-      popupVisible: false,
-    });
-  }
-
-  onShown() {
-    this.dataGrid.updateDimensions();
-  }
-}
-export default App;
+  return (
+    <React.Fragment>
+      <PivotGrid
+        id="sales"
+        allowSortingBySummary={true}
+        allowSorting={true}
+        allowFiltering={true}
+        allowExpandAll={true}
+        showBorders={true}
+        dataSource={dataSource}
+        onCellClick={onCellClick}
+      >
+        <FieldChooser enabled={false} />
+      </PivotGrid>
+      <Popup
+        visible={popupVisible}
+        width={600}
+        height={400}
+        title={popupTitle}
+        onHiding={() => setPopupVisible(false)}
+        onShown={() => dataGridRef.current.updateDimensions()}
+      >
+        <DataGrid
+          width={560}
+          height={300}
+          dataSource={drillDownDataSource}
+          ref={dataGridRef}
+        >
+          <Column dataField="region" />
+          <Column dataField="city" />
+          <Column dataField="amount" dataType="number" format="currency" />
+          <Column dataField="date" dataType="date" />
+        </DataGrid>
+      </Popup>
+    </React.Fragment>
+  );
+};
 
 const dataSource = new PivotGridDataSource({
   fields: [{
@@ -120,3 +90,5 @@ const dataSource = new PivotGridDataSource({
   }],
   store: sales,
 });
+
+export default App;

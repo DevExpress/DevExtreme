@@ -11,31 +11,27 @@ import PivotGrid, {
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import XmlaStore from 'devextreme/ui/pivot_grid/xmla_store';
 
-class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <div className="long-title">
-          <h3>Sales Statistics</h3>
-        </div>
-        <PivotGrid
-          dataSource={dataSource}
-          allowSorting={true}
-          allowFiltering={true}
-          height={570}
-          showBorders={true}
-        >
-          <FieldPanel visible={true} showFilterFields={false} />
-          <FieldChooser allowSearch={true} />
-          <HeaderFilter>
-            <Search enabled={true} />
-          </HeaderFilter>
-          <Scrolling mode="virtual" />
-        </PivotGrid>
-      </React.Fragment>
-    );
-  }
-}
+const App = () => (
+  <React.Fragment>
+    <div className="long-title">
+      <h3>Sales Statistics</h3>
+    </div>
+    <PivotGrid
+      dataSource={dataSource}
+      allowSorting={true}
+      allowFiltering={true}
+      height={570}
+      showBorders={true}
+    >
+      <FieldPanel visible={true} showFilterFields={false} />
+      <FieldChooser allowSearch={true} />
+      <HeaderFilter>
+        <Search enabled={true} />
+      </HeaderFilter>
+      <Scrolling mode="virtual" />
+    </PivotGrid>
+  </React.Fragment>
+);
 
 const dataSource = new PivotGridDataSource({
   paginate: true,

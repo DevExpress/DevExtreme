@@ -48,7 +48,7 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-export default function App() {
+const App = () => {
   const [exportDataFieldHeaders, setExportDataFieldHeaders] = React.useState(false);
   const [exportRowFieldHeaders, setExportRowFieldHeaders] = React.useState(false);
   const [exportColumnFieldHeaders, setExportColumnFieldHeaders] = React.useState(false);
@@ -103,22 +103,6 @@ export default function App() {
     exportRowFieldHeaders,
   ]);
 
-  const onExportDataFieldHeadersChanged = React.useCallback(({ value }) => {
-    setExportDataFieldHeaders(value);
-  }, [setExportDataFieldHeaders]);
-
-  const onExportRowFieldHeadersChanged = React.useCallback(({ value }) => {
-    setExportRowFieldHeaders(value);
-  }, [setExportRowFieldHeaders]);
-
-  const onExportColumnFieldHeadersChanged = React.useCallback(({ value }) => {
-    setExportColumnFieldHeaders(value);
-  }, [setExportColumnFieldHeaders]);
-
-  const onExportFilterFieldHeadersChanged = React.useCallback(({ value }) => {
-    setExportFilterFieldHeaders(value);
-  }, [setExportFilterFieldHeaders]);
-
   return (
     <React.Fragment>
       <div className="long-title">
@@ -148,22 +132,24 @@ export default function App() {
         <div className="options">
           <CheckBox id="export-data-field-headers"
             value={exportDataFieldHeaders}
-            onValueChanged={onExportDataFieldHeadersChanged}
+            onValueChange={setExportDataFieldHeaders}
             text="Export Data Field Headers" />
           <CheckBox id="export-row-field-headers"
             value={exportRowFieldHeaders}
-            onValueChanged={onExportRowFieldHeadersChanged}
+            onValueChange={setExportRowFieldHeaders}
             text="Export Row Field Headers" />
           <CheckBox id="export-column-field-headers"
             value={exportColumnFieldHeaders}
-            onValueChanged={onExportColumnFieldHeadersChanged}
+            onValueChange={setExportColumnFieldHeaders}
             text="Export Column Field Headers" />
           <CheckBox id="export-filter-field-headers"
             value={exportFilterFieldHeaders}
-            onValueChanged={onExportFilterFieldHeadersChanged}
+            onValueChange={setExportFilterFieldHeaders}
             text="Export Filter Field Headers" />
         </div>
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default App;

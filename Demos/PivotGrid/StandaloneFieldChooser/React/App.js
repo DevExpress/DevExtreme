@@ -27,125 +27,89 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import service from './data.js';
 
 const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
+const applyChangesModes = ['instantly', 'onDemand'];
+const layouts = service.getLayouts();
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [applyChangesMode, setApplyChangesMode] = React.useState('instantly');
+  const [layout, setLayout] = React.useState(0);
+  const fieldChooserRef = React.useRef(null);
 
-    this.state = {
-      applyChangesMode: 'instantly',
-      layout: 0,
-    };
+  return (
+    <React.Fragment>
+      <PivotGrid
+        dataSource={dataSource}
+        allowSortingBySummary={true}
+        allowFiltering={true}
+        allowSorting={true}
+        showBorders={true}
+      >
+        <FieldChooser enabled={false} />
+      </PivotGrid>
 
-    this.changeMode = this.changeMode.bind(this);
-    this.changeLayout = this.changeLayout.bind(this);
-    this.applyClick = this.applyClick.bind(this);
-    this.cancelClick = this.cancelClick.bind(this);
-
-    this.fieldChooser = null;
-
-    this.setFieldChooser = (ref) => {
-      this.fieldChooser = ref.instance;
-    };
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <PivotGrid
+      <div className="container">
+        <PivotGridFieldChooser
+          ref={fieldChooserRef}
           dataSource={dataSource}
-          allowSortingBySummary={true}
-          allowFiltering={true}
-          allowSorting={true}
-          showBorders={true}
+          width={400}
+          height={400}
+          layout={layout}
+          applyChangesMode={applyChangesMode}
         >
-          <FieldChooser enabled={false} />
-        </PivotGrid>
-
-        <div className="container">
-          <PivotGridFieldChooser
-            ref={this.setFieldChooser}
-            dataSource={dataSource}
-            width={400}
-            height={400}
-            layout={this.state.layout}
-            applyChangesMode={this.state.applyChangesMode}
-          >
-            <Texts
-              allFields="All"
-              columnFields="Columns"
-              dataFields="Data"
-              rowFields="Rows"
-              filterFields="Filter"
-            ></Texts>
-          </PivotGridFieldChooser>
-          { this.state.applyChangesMode === 'onDemand'
-                && <div className="bottom-bar">
-                  <Button
-                    text="Apply"
-                    type="default"
-                    onClick={this.applyClick}
-                  ></Button>
-                  <Button
-                    text="Cancel"
-                    onClick={this.cancelClick}
-                  ></Button>
-                </div>
-          }
-
-          <div className="options">
-            <div className="caption">Options</div>
-            <div className="option">
-              <span>Choose layout:</span>
-              <RadioGroup
-                items={layouts}
-                value={this.state.layout}
-                className="option-editor"
-                layout="vertical"
-                valueExpr="key"
-                displayExpr="name"
-                onValueChanged={this.changeLayout}>
-              </RadioGroup>
-            </div>
-            <div className="option">
-              <span>Apply Changes Mode:</span>
-              <SelectBox
-                className="option-editor"
-                items={applyChangesModes}
-                inputAttr={applyChangesModeLabel}
-                width={180}
-                value={this.state.applyChangesMode}
-                onValueChanged={this.changeMode}>
-              </SelectBox>
-            </div>
+          <Texts
+            allFields="All"
+            columnFields="Columns"
+            dataFields="Data"
+            rowFields="Rows"
+            filterFields="Filter"
+          ></Texts>
+        </PivotGridFieldChooser>
+        { applyChangesMode === 'onDemand'
+          && <div className="bottom-bar">
+            <Button
+              text="Apply"
+              type="default"
+              onClick={() => fieldChooserRef.current.applyChanges()}
+            ></Button>
+            <Button
+              text="Cancel"
+              onClick={() => fieldChooserRef.current.cancelChanges()}
+            ></Button>
           </div>
+        }
 
+        <div className="options">
+          <div className="caption">Options</div>
+          <div className="option">
+            <span>Choose layout:</span>
+            <RadioGroup
+              items={layouts}
+              value={layout}
+              className="option-editor"
+              layout="vertical"
+              valueExpr="key"
+              displayExpr="name"
+              onValueChange={setLayout}>
+            </RadioGroup>
+          </div>
+          <div className="option">
+            <span>Apply Changes Mode:</span>
+            <SelectBox
+              className="option-editor"
+              items={applyChangesModes}
+              inputAttr={applyChangesModeLabel}
+              width={180}
+              value={applyChangesMode}
+              onValueChange={setApplyChangesMode}>
+            </SelectBox>
+          </div>
         </div>
 
-      </React.Fragment>
-    );
-  }
+      </div>
 
-  changeMode(e) {
-    this.setState({
-      applyChangesMode: e.value,
-    });
-  }
-
-  changeLayout(e) {
-    this.setState({
-      layout: e.value,
-    });
-  }
-
-  applyClick() {
-    this.fieldChooser.applyChanges();
-  }
-
-  cancelClick() {
-    this.fieldChooser.cancelChanges();
-  }
-}
+    </React.Fragment>
+  );
+};
 
 const dataSource = new PivotGridDataSource({
   fields: [{
@@ -185,8 +149,5 @@ const dataSource = new PivotGridDataSource({
   }],
   store: service.getSales(),
 });
-
-const applyChangesModes = ['instantly', 'onDemand'];
-const layouts = service.getLayouts();
 
 export default App;

@@ -11,101 +11,59 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import sales from './data.js';
 
-class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <div id="pivotgrid-demo">
-          <div className="desc-container">Expand, filter, sort and perform other operations
-            on&nbsp;the PivotGrid&rsquo;s columns and
-            rows. <a onClick={this.onRefreshClick}>Refresh</a> the web page and note that
-            the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
-          </div>
-          <Button
-            text={"Reset the PivotGrid's State"}
-            onClick={this.onResetClick}
-          />
-          <PivotGrid
-            id="sales"
-            dataSource={dataSource}
-            allowSortingBySummary={true}
-            allowSorting={true}
-            allowFiltering={true}
-            allowExpandAll={true}
-            showBorders={true}
-            height={570}
-            onContextMenuPreparing={this.onContextMenuPreparing}
-          >
-            <StateStoring
-              enabled={true}
-              type="localStorage"
-              storageKey="dx-widget-gallery-pivotgrid-storing"
-            />
-            <FieldPanel
-              visible={true}
-            />
-            <FieldChooser enabled={true} />
-          </PivotGrid>
-        </div>
-      </React.Fragment>
-    );
-  }
+const onRefreshClick = () => {
+  window.location.reload();
+};
 
-  onRefreshClick() {
-    window.location.reload();
-  }
+const onResetClick = () => {
+  dataSource.state({});
+};
 
-  onResetClick() {
-    dataSource.state({});
-  }
+const onContextMenuPreparing = (e) => {
+  const sourceField = e.field;
 
-  onContextMenuPreparing(e) {
-    const dataSource = e.component.getDataSource();
-    const sourceField = e.field;
+  if (sourceField) {
+    if (!sourceField.groupName || sourceField.groupIndex === 0) {
+      e.items.push({
+        text: 'Hide field',
+        onItemClick() {
+          let fieldIndex;
+          if (sourceField.groupName) {
+            fieldIndex = dataSource
+              .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+              .index;
+          } else {
+            fieldIndex = sourceField.index;
+          }
 
-    if (sourceField) {
-      if (!sourceField.groupName || sourceField.groupIndex === 0) {
-        e.items.push({
-          text: 'Hide field',
-          onItemClick() {
-            let fieldIndex;
-            if (sourceField.groupName) {
-              fieldIndex = dataSource
-                .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
-                .index;
-            } else {
-              fieldIndex = sourceField.index;
-            }
-
-            dataSource.field(fieldIndex, {
-              area: null,
-            });
-            dataSource.load();
-          },
-        });
-      }
-
-      if (sourceField.dataType === 'number') {
-        const menuItems = [];
-
-        e.items.push({ text: 'Summary Type', items: menuItems });
-
-        ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
-          const summaryTypeValue = summaryType.toLowerCase();
-
-          menuItems.push({
-            text: summaryType,
-            value: summaryType.toLowerCase(),
-            onItemClick(args) {
-              setSummaryType(args, sourceField);
-            },
-            selected: e.field.summaryType === summaryTypeValue,
+          dataSource.field(fieldIndex, {
+            area: null,
           });
+          dataSource.load();
+        },
+      });
+    }
+
+    if (sourceField.dataType === 'number') {
+      const menuItems = [];
+
+      e.items.push({ text: 'Summary Type', items: menuItems });
+
+      ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
+        const summaryTypeValue = summaryType.toLowerCase();
+
+        menuItems.push({
+          text: summaryType,
+          value: summaryType.toLowerCase(),
+          onItemClick(args) {
+            setSummaryType(args, sourceField);
+          },
+          selected: e.field.summaryType === summaryTypeValue,
         });
-      }
+      });
     }
   }
-}
+};
 
 const dataSource = new PivotGridDataSource({
   fields: [{
@@ -139,12 +97,49 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function setSummaryType(args, sourceField) {
+const setSummaryType = (args, sourceField) => {
   dataSource.field(sourceField.index, {
     summaryType: args.itemData.value,
   });
 
   dataSource.load();
-}
+};
+
+const App = () => (
+  <React.Fragment>
+    <div id="pivotgrid-demo">
+      <div className="desc-container">Expand, filter, sort and perform other operations
+          on&nbsp;the PivotGrid&rsquo;s columns and
+          rows. <a onClick={onRefreshClick}>Refresh</a> the web page and note that
+          the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
+      </div>
+      <Button
+        text={"Reset the PivotGrid's State"}
+        onClick={onResetClick}
+      />
+      <PivotGrid
+        id="sales"
+        dataSource={dataSource}
+        allowSortingBySummary={true}
+        allowSorting={true}
+        allowFiltering={true}
+        allowExpandAll={true}
+        showBorders={true}
+        height={570}
+        onContextMenuPreparing={onContextMenuPreparing}
+      >
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="dx-widget-gallery-pivotgrid-storing"
+        />
+        <FieldPanel
+          visible={true}
+        />
+        <FieldChooser enabled={true} />
+      </PivotGrid>
+    </div>
+  </React.Fragment>
+);
 
 export default App;
