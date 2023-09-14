@@ -13,6 +13,7 @@
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
+@use "../button/sizes" as *;
 @use "../validation/colors" as *;
 
 // adduse
@@ -29,7 +30,7 @@ $generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-se
 $generic-grid-base-checkbox-icon-size: 16px;
 $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 $grid-masterdetail-padding: 20px;
-
+$generic-grid-base-group-panel-message-line-height: $generic-button-text-line-height;
 
 @mixin dx-set-checkbox-border-color-as-background() {
   @if $generic-color-postfix == ".contrast" {

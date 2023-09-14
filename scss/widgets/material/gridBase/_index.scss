@@ -16,6 +16,7 @@
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
+@use "../button/sizes" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
 
@@ -37,6 +38,7 @@ $material-grid-base-command-select-column-width: $material-grid-base-checkbox-si
 $material-grid-base-cell-vertical-padding: round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
 $grid-masterdetail-padding: 16px;
+$material-grid-base-group-panel-message-line-height: $material-button-text-line-height;
 
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
