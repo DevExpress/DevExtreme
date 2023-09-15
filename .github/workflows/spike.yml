@@ -20,6 +20,8 @@ jobs:
 
   self-hosted-major:
     runs-on: devextreme-shr2
+    env:
+      VERSION: 18
 
     steps:
       - run: node -v
@@ -47,6 +49,10 @@ jobs:
 
     steps:
       - run: node -v
+
+      - run: |
+          ls /opt/hostedtoolcache/node/
+          ls /opt/hostedtoolcache/node/18.17.1/x64
 
       - uses: actions/setup-node@v3
         with:
