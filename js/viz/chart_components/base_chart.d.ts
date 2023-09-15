@@ -24,7 +24,6 @@ import {
     chartSeriesObject,
     dxChartAnnotationConfig,
     dxChartSeriesTypesCommonSeriesLabel,
-    dxChartSeriesTypesCommonSeriesPoint,
 } from '../chart';
 
 import {
@@ -40,6 +39,7 @@ import BaseWidget, {
 
 import {
     AnimationEaseMode,
+    CommonSeriesPoint,
     Palette,
     PaletteExtensionMode,
 } from '../../common/charts';
@@ -103,7 +103,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_return dxChartSeriesTypes.CommonSeries.point
      * @public
      */
-    customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
+    customizePoint?: ((pointInfo: any) => CommonSeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
      * @notUsedInTheme
