@@ -24,7 +24,7 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Recurrence: 'recurrenceGroup',
 };
 
-const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
+const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
   const isCurrentDateCorrect = value === null || !!value;
@@ -309,9 +309,11 @@ export class AppointmentForm {
                   startDateEditor.option('value', new Date(allDayStartDate));
                   endDateEditor.option('value', new Date(allDayEndDate));
                 } else {
-                  const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
+                  const startDateWithStartHour = getDateWithStartHour(startDate, this.scheduler.getStartDayHour());
+                  const endDateWithStartHour = getDateWithStartHour(endDate, this.scheduler.getStartDayHour());
+                  const calculatedEndDate = this.scheduler.getCalculatedEndDate(endDateWithStartHour);
                   startDateEditor.option('value', startDateWithStartHour);
-                  endDateEditor.option('value', endDate);
+                  endDateEditor.option('value', calculatedEndDate);
                 }
               }
 
