@@ -1142,6 +1142,7 @@ class Scheduler extends Widget<any> {
       this._dataAccessors,
       this._getCurrentViewOption('cellDuration'),
       this.timeZoneCalculator,
+      this._getCurrentViewOption('offset') * toMs('minute'),
     );
   }
 

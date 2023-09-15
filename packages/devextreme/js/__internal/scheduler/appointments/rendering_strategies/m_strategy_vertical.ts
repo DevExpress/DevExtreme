@@ -347,8 +347,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const { startDate } = position.info.appointment;
-    const { normalizedEndDate } = position.info.appointment;
+    const { shiftedStartDate: startDate, normalizedEndDate } = position.info.appointment;
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
     const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
     const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');

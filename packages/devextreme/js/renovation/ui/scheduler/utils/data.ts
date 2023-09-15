@@ -1,3 +1,4 @@
+import { dateUtilsTs } from '../../../../__internal/core/utils/date';
 import type { Appointment } from '../../../../ui/scheduler';
 import { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
 import { replaceWrongEndDate } from '../../../../__internal/scheduler/appointments/data_provider/m_utils';
@@ -12,6 +13,7 @@ export const getPreparedDataItems = (
   dataAccessors: DataAccessorType,
   cellDurationInMinutes: number,
   timeZoneCalculator: TimeZoneCalculator,
+  viewOffset: number,
 ): AppointmentDataItem[] => {
   const result: AppointmentDataItem[] = [];
 
@@ -36,8 +38,10 @@ export const getPreparedDataItems = (
       result.push({
         allDay: !!adapter.allDay,
         startDate: comparableStartDate,
+        shiftedStartDate: dateUtilsTs.addOffsets(comparableStartDate, [-viewOffset]),
         startDateTimeZone: rawAppointment.startDateTimeZone,
         endDate: comparableEndDate,
+        shiftedEndDate: dateUtilsTs.addOffsets(comparableEndDate, [-viewOffset]),
         endDateTimeZone: rawAppointment.endDateTimeZone,
         recurrenceRule: adapter.recurrenceRule,
         recurrenceException: adapter.recurrenceException,

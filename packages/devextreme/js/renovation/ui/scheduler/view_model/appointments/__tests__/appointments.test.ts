@@ -432,7 +432,9 @@ describe('Appointments view model', () => {
               appointment: {
                 allDay: false,
                 startDate: new Date(2021, 8, 23),
+                shiftedStartDate: new Date(2021, 8, 23),
                 endDate: new Date(2021, 8, 24),
+                shiftedEndDate: new Date(2021, 8, 24),
                 normalizedEndDate: new Date(2021, 8, 24),
                 source: {
                   startDate: new Date(2021, 8, 23),

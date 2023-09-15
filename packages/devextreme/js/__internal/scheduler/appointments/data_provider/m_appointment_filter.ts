@@ -87,7 +87,7 @@ export class AppointmentFilterBaseStrategy {
   }
 
   filter(preparedItems) {
-    const { dateRange: [minDate, maxDate] } = this;
+    const { dateRange: [min, max] } = this;
     const { viewOffset } = this.options;
     const allDay = !this.showAllDayPanel && this.supportAllDayRow
       ? false
@@ -96,10 +96,14 @@ export class AppointmentFilterBaseStrategy {
     return this.filterLoadedAppointments({
       startDayHour: this.viewStartDayHour,
       endDayHour: this.viewEndDayHour,
+      viewOffset,
       viewStartDayHour: this.viewStartDayHour,
       viewEndDayHour: this.viewEndDayHour,
-      min: dateUtilsTs.addOffsets(minDate, [viewOffset]),
-      max: dateUtilsTs.addOffsets(maxDate, [viewOffset]),
+      min,
+      // NOTE: We get the max from the last dateTable cell
+      // Therefore we should apply offset only to max value,
+      // because only the max value shifted.
+      max: dateUtilsTs.addOffsets(max, [-viewOffset]),
       resources: this.loadedResources,
       allDay,
       supportMultiDayAppointments: isTimelineView(this.viewType),
@@ -160,6 +164,7 @@ export class AppointmentFilterBaseStrategy {
     const {
       startDayHour,
       endDayHour,
+      viewOffset,
       viewStartDayHour,
       viewEndDayHour,
       resources,
@@ -179,8 +184,8 @@ export class AppointmentFilterBaseStrategy {
       }
 
       const {
-        startDate,
-        endDate,
+        shiftedStartDate: startDate,
+        shiftedEndDate: endDate,
         hasRecurrenceRule,
       } = appointment;
 
@@ -241,6 +246,7 @@ export class AppointmentFilterBaseStrategy {
           endDate,
           startDayHour,
           endDayHour,
+          viewOffset,
           viewStartDayHour,
           viewEndDayHour,
           allDay: appointmentTakesAllDay,

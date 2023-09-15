@@ -4,6 +4,7 @@ import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { ExpressionUtils } from '../m_expression_utils';
@@ -230,10 +231,12 @@ export class DateGeneratorBaseStrategy {
 
   normalizeEndDateByViewEnd(rawAppointment, endDate) {
     let result = new Date(endDate.getTime());
+    const { viewOffset } = this.options;
     const isAllDay = isDateAndTimeView(this.viewType) && this.appointmentTakesAllDay;
 
     if (!isAllDay) {
-      const roundedEndViewDate = dateUtils.roundToHour(this.endViewDate);
+      const shiftedEndViewDate = dateUtilsTs.addOffsets(this.endViewDate, [-viewOffset]);
+      const roundedEndViewDate = dateUtils.roundToHour(shiftedEndViewDate);
 
       if (result > roundedEndViewDate) {
         result = roundedEndViewDate;
@@ -253,9 +256,9 @@ export class DateGeneratorBaseStrategy {
 
   _fillNormalizedEndDate(dateSettings, rawAppointment) {
     return dateSettings.map((item) => {
-      const { endDate } = item;
+      const { shiftedEndDate } = item;
 
-      const normalizedEndDate = this.normalizeEndDateByViewEnd(rawAppointment, endDate);
+      const normalizedEndDate = this.normalizeEndDateByViewEnd(rawAppointment, shiftedEndDate);
 
       return {
         ...item,
@@ -299,6 +302,8 @@ export class DateGeneratorBaseStrategy {
   }
 
   _createGridAppointmentList(appointmentList, appointmentAdapter) {
+    const { viewOffset } = this.options;
+
     return appointmentList.map((source) => {
       const offsetDifference = appointmentAdapter.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
@@ -309,11 +314,15 @@ export class DateGeneratorBaseStrategy {
       }
 
       const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
+      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
       const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
+      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
       return {
         startDate,
+        shiftedStartDate,
         endDate,
+        shiftedEndDate,
         allDay: appointmentAdapter.allDay || false,
         source, // TODO
       };

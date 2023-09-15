@@ -33,11 +33,13 @@ describe('Data API', () => {
       const expectedResult: AppointmentDataItem = {
         allDay: false,
         endDate: new Date(2021, 9, 9),
+        shiftedEndDate: new Date(2021, 9, 9),
         hasRecurrenceRule: true,
         rawAppointment: data[0],
         recurrenceException: undefined,
         recurrenceRule: 'FREQ=WEEKLY',
         startDate: new Date(2021, 9, 8),
+        shiftedStartDate: new Date(2021, 9, 8),
         visible: true,
       };
       const result = getPreparedDataItems(
@@ -45,6 +47,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        0,
       );
 
       expect(result)
@@ -61,11 +64,13 @@ describe('Data API', () => {
         const expectedResult: AppointmentDataItem = {
           allDay: false,
           endDate: new Date(2021, 9, 9),
+          shiftedEndDate: new Date(2021, 9, 9),
           hasRecurrenceRule: false,
           rawAppointment: data[0],
           recurrenceException: undefined,
           recurrenceRule: recurrenceRule as any,
           startDate: new Date(2021, 9, 8),
+          shiftedStartDate: new Date(2021, 9, 8),
           visible: true,
         };
         const result = getPreparedDataItems(
@@ -73,6 +78,7 @@ describe('Data API', () => {
           defaultDataAccessors,
           30,
           createTimeZoneCalculator(''),
+          0,
         );
 
         expect(result)
@@ -97,6 +103,7 @@ describe('Data API', () => {
           defaultDataAccessors,
           30,
           createTimeZoneCalculator(''),
+          0,
         );
 
         expect(result)
@@ -112,6 +119,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        0,
       );
 
       expect(result)
@@ -122,6 +130,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        0,
       );
 
       expect(result)
@@ -138,6 +147,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        0,
       );
 
       expect(result)
@@ -152,11 +162,13 @@ describe('Data API', () => {
       const expectedResult: AppointmentDataItem = {
         allDay: false,
         endDate: new Date(2021, 9, 9, 17, 30),
+        shiftedEndDate: new Date(2021, 9, 9, 17, 30),
         hasRecurrenceRule: false,
         rawAppointment: data[0],
         recurrenceException: undefined,
         recurrenceRule: undefined,
         startDate: new Date(2021, 9, 9, 17),
+        shiftedStartDate: new Date(2021, 9, 9, 17),
         visible: true,
       };
       const result = getPreparedDataItems(
@@ -164,6 +176,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        0,
       );
 
       expect(result)
@@ -186,6 +199,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        0,
       );
 
       expect(result).toMatchObject([expectedTimezones]);
