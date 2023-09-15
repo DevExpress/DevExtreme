@@ -75,6 +75,7 @@ import {
     ZoomPanAction,
     ChartsColor,
     CommonSeriesPoint,
+    CommonSeriesLabel,
 } from '../common/charts';
 
 /**
@@ -3119,7 +3120,7 @@ export interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTy
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.AreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -3174,7 +3175,7 @@ export interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTyp
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesBarSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.BarSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -3220,7 +3221,7 @@ export interface dxChartSeriesTypesBubbleSeriesAggregation extends dxChartSeries
     method?: ChartBubbleSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesBubbleSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesBubbleSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.BubbleSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -3302,7 +3303,7 @@ export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends d
     direction?: HatchDirection;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesCandleStickSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.CandleStickSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -3443,7 +3444,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @type object
      * @public
      */
-    label?: dxChartSeriesTypesCommonSeriesLabel;
+    label?: CommonSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.lowValueField
      * @default 'low'
@@ -3789,142 +3790,6 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesCommonSeriesLabel {
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.alignment
-     * @default 'center'
-     * @public
-     */
-    alignment?: HorizontalAlignment;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.argumentFormat
-     * @default undefined
-     * @public
-     */
-    argumentFormat?: Format;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.backgroundColor
-     * @default undefined
-     * @public
-     */
-    backgroundColor?: string;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.border
-     * @public
-     */
-    border?: {
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.border.color
-       * @default  '#d3d3d3'
-       */
-      color?: string;
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
-       * @default 'solid'
-       */
-      dashStyle?: DashStyle;
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
-       * @default false
-       */
-      visible?: boolean;
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.border.width
-       * @default 1
-       */
-      width?: number;
-    };
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.connector
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-     * @public
-     */
-    connector?: {
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.connector.color
-       * @default undefined
-       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-       */
-      color?: string;
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.connector.visible
-       * @default false
-       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-       */
-      visible?: boolean;
-      /**
-       * @docid dxChartSeriesTypes.CommonSeries.label.connector.width
-       * @default 1
-       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-       */
-      width?: number;
-    };
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
-     */
-    customizeText?: ((pointInfo: any) => string);
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.font
-     * @default '#FFFFFF' &prop(color)
-     * @default 14 &prop(size)
-     * @public
-     */
-    font?: Font;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.format
-     * @default undefined
-     * @public
-     */
-    format?: Format;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.horizontalOffset
-     * @default 0
-     * @public
-     */
-    horizontalOffset?: number;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.position
-     * @default 'outside'
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
-     */
-    position?: RelativePosition;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.rotationAngle
-     * @default 0
-     * @public
-     */
-    rotationAngle?: number;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.showForZeroValues
-     * @default true
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
-     */
-    showForZeroValues?: boolean;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.verticalOffset
-     * @default 0
-     * @public
-     */
-    verticalOffset?: number;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.visible
-     * @default false
-     * @public
-     */
-    visible?: boolean;
-    /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.displayFormat
-     * @default undefined
-     * @public
-     */
-     displayFormat?: string;
-}
 
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
@@ -4066,7 +3931,7 @@ export interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxCh
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4121,7 +3986,7 @@ export interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxCha
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.FullStackedBarSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4173,7 +4038,7 @@ export interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxCh
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesFullStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesFullStackedLineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.FullStackedLineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4225,7 +4090,7 @@ export interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extend
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4280,7 +4145,7 @@ export interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dx
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4326,7 +4191,7 @@ export interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTy
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesLineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.LineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4378,7 +4243,7 @@ export interface dxChartSeriesTypesRangeAreaSeriesAggregation extends dxChartSer
     method?: ChartRangeSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesRangeAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesRangeAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.RangeAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4433,7 +4298,7 @@ export interface dxChartSeriesTypesRangeBarSeriesAggregation extends dxChartSeri
     method?: ChartRangeSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesRangeBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesRangeBarSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.RangeBarSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4467,7 +4332,7 @@ export interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSerie
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesScatterSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesScatterSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.ScatterSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4519,7 +4384,7 @@ export interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSe
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesSplineAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.SplineAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4574,7 +4439,7 @@ export interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeries
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesSplineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.SplineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4626,7 +4491,7 @@ export interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartS
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStackedAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StackedAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4681,7 +4546,7 @@ export interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSe
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStackedBarSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StackedBarSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4733,7 +4598,7 @@ export interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartS
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStackedLineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StackedLineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4785,7 +4650,7 @@ export interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dx
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4840,7 +4705,7 @@ export interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChar
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStackedSplineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StackedSplineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -4937,7 +4802,7 @@ export interface dxChartSeriesTypesStepAreaSeriesHoverStyleBorder extends dxChar
     visible?: boolean;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStepAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStepAreaSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StepAreaSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -5010,7 +4875,7 @@ export interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeri
     method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStepLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStepLineSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StepLineSeries.label.customizeText
      * @type_function_param1 pointInfo:object
@@ -5062,7 +4927,7 @@ export interface dxChartSeriesTypesStockSeriesAggregation extends dxChartSeriesT
     method?: ChartFinancialSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
-export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
+export interface dxChartSeriesTypesStockSeriesLabel extends CommonSeriesLabel {
     /**
      * @docid dxChartSeriesTypes.StockSeries.label.customizeText
      * @type_function_param1 pointInfo:object
