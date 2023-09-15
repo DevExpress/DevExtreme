@@ -31,13 +31,12 @@ function defaultItemTemplate(item: GalleryItem) {
 }
 
 function getTestName(gallerySettings) {
-  const messageParts: string[] = [];
   const fields = Object.keys(gallerySettings);
 
-  fields.forEach((field) => {
+  const messageParts = fields.map((field) => {
     const fieldSkipped = gallerySettings[field] === undefined;
 
-    messageParts.push(`${field} was ${fieldSkipped ? 'not' : ''} set`);
+    return `${field} was ${fieldSkipped ? 'not' : ''} set`;
   });
 
   return `Checking Gallery via aXe. Settings: ${messageParts.join(', ')}`;
@@ -61,7 +60,10 @@ const gallerySettings = [{}, {
   return acc;
 }, []);
 
-const testsSettings = gallerySettings.map((settings) => ({
+const testsSettings: {
+  testName: string;
+  gallerySettings: any;
+}[] = gallerySettings.map((settings) => ({
   testName: getTestName(settings),
   gallerySettings: settings,
 }));
@@ -71,6 +73,6 @@ testsSettings.forEach((settings) => {
     await a11yCheck(t);
   }).before(async () => createWidget(
     'dxGallery',
-    gallerySettings,
+    settings.gallerySettings,
   ));
 });
