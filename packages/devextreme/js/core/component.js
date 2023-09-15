@@ -12,7 +12,7 @@ import { PostponedOperations } from './postponed_operations';
 import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 import { getPathParts } from './utils/data';
-import { parseToken } from '../__internal/core/license/license_validation';
+import { verifyLicense } from './utils/license';
 import { version } from './version';
 
 const getEventName = (actionName) => {
@@ -23,7 +23,7 @@ const isInnerOption = (optionName) => {
     return optionName.indexOf('_', 0) === 0;
 };
 
-let licenseVerified = false;
+let isLicenseVerified = false;
 
 export const Component = Class.inherit({
     _setDeprecatedOptions() {
@@ -87,12 +87,9 @@ export const Component = Class.inherit({
         this.postponedOperations = new PostponedOperations();
         this._createOptions(options);
 
-        if(!licenseVerified) {
-            licenseVerified = true;
-            const licenseError = verifyLicense(Config().license, version);
-            if(licenseError) {
-                errors.log(licenseError);
-            }
+        if(!isLicenseVerified) {
+            isLicenseVerified = true;
+            verifyLicense(Config().license, version);
         }
     },
 
@@ -398,36 +395,12 @@ export const Component = Class.inherit({
     }
 });
 
-export function verifyLicense(licenseToken, ver = version) {
-    if(licenseToken) {
-        const license = parseToken(licenseToken);
-
-        if(license.kind === 'corrupted') {
-            return 'W0021';
-        } else {
-            const [majorStr, minorStr] = ver.split('.');
-            const major = parseInt(majorStr, 10);
-            const minor = parseInt(minorStr, 10);
-
-            if(major * 10 + minor > license.payload.maxVersionAllowed) {
-                return 'W0020';
-            }
-        }
-    } else {
-        return 'W0019';
-    }
-}
-
 ///#DEBUG
-export function resetLicenseCheckSkipCondition() {
-    licenseVerified = false;
-}
-
-export function setLicenseCheckSkipCondition() {
-    licenseVerified = true;
+export function setLicenseCheckSkipCondition(value = true) {
+    isLicenseVerified = value;
 }
 
 export function getLicenseCheckSkipCondition() {
-    return licenseVerified;
+    return isLicenseVerified;
 }
 ///#ENDDEBUG
