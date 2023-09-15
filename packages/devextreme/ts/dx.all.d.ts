@@ -2075,6 +2075,161 @@ declare module DevExpress.common.charts {
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
+  export interface CommonSeriesPoint {
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.border]
+     */
+    border?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.border.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.border.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.border.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.color]
+     */
+    color?: string | ChartsColor;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
+     */
+    hoverMode?: PointInteractionMode;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle]
+     */
+    hoverStyle?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border]
+       */
+      border?: {
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
+       */
+      color?: string | ChartsColor;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
+       */
+      size?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.image]
+     */
+    image?:
+      | string
+      | {
+          /**
+           * [descr:dxChartSeriesTypes.CommonSeries.point.image.height]
+           */
+          height?:
+            | number
+            | {
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint]
+                 */
+                rangeMaxPoint?: number;
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint]
+                 */
+                rangeMinPoint?: number;
+              };
+          /**
+           * [descr:dxChartSeriesTypes.CommonSeries.point.image.url]
+           */
+          url?:
+            | string
+            | {
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint]
+                 */
+                rangeMaxPoint?: string;
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint]
+                 */
+                rangeMinPoint?: string;
+              };
+          /**
+           * [descr:dxChartSeriesTypes.CommonSeries.point.image.width]
+           */
+          width?:
+            | number
+            | {
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint]
+                 */
+                rangeMaxPoint?: number;
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint]
+                 */
+                rangeMinPoint?: number;
+              };
+        };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
+     */
+    selectionMode?: PointInteractionMode;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle]
+     */
+    selectionStyle?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border]
+       */
+      border?: {
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
+       */
+      color?: string | ChartsColor;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
+       */
+      size?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.size]
+     */
+    size?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.symbol]
+     */
+    symbol?: PointSymbol;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.visible]
+     */
+    visible?: boolean;
+  }
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   /**
@@ -30297,7 +30452,9 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.customizePoint]
      */
-    customizePoint?: (pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint;
+    customizePoint?: (
+      pointInfo: any
+    ) => DevExpress.common.charts.CommonSeriesPoint;
     /**
      * [descr:BaseChartOptions.dataSource]
      */
@@ -34166,7 +34323,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.point.visible]
      */
@@ -34461,7 +34618,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point]
      */
-    point?: dxChartSeriesTypesCommonSeriesPoint;
+    point?: DevExpress.common.charts.CommonSeriesPoint;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.rangeValue1Field]
      */
@@ -34771,164 +34928,6 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCommonSeriesPoint {
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.border]
-     */
-    border?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.border.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.border.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.border.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.color]
-     */
-    color?: string | DevExpress.common.charts.ChartsColor;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
-     */
-    hoverMode?: DevExpress.common.charts.PointInteractionMode;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle]
-     */
-    hoverStyle?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border]
-       */
-      border?: {
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color]
-         */
-        color?: string;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible]
-         */
-        visible?: boolean;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width]
-         */
-        width?: number;
-      };
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
-       */
-      color?: string | DevExpress.common.charts.ChartsColor;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
-       */
-      size?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.image]
-     */
-    image?:
-      | string
-      | {
-          /**
-           * [descr:dxChartSeriesTypes.CommonSeries.point.image.height]
-           */
-          height?:
-            | number
-            | {
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint]
-                 */
-                rangeMaxPoint?: number;
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint]
-                 */
-                rangeMinPoint?: number;
-              };
-          /**
-           * [descr:dxChartSeriesTypes.CommonSeries.point.image.url]
-           */
-          url?:
-            | string
-            | {
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint]
-                 */
-                rangeMaxPoint?: string;
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint]
-                 */
-                rangeMinPoint?: string;
-              };
-          /**
-           * [descr:dxChartSeriesTypes.CommonSeries.point.image.width]
-           */
-          width?:
-            | number
-            | {
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint]
-                 */
-                rangeMaxPoint?: number;
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint]
-                 */
-                rangeMinPoint?: number;
-              };
-        };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
-     */
-    selectionMode?: DevExpress.common.charts.PointInteractionMode;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle]
-     */
-    selectionStyle?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border]
-       */
-      border?: {
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color]
-         */
-        color?: string;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible]
-         */
-        visible?: boolean;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width]
-         */
-        width?: number;
-      };
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
-       */
-      color?: string | DevExpress.common.charts.ChartsColor;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
-       */
-      size?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.size]
-     */
-    size?: number;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.symbol]
-     */
-    symbol?: DevExpress.common.charts.PointSymbol;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
   export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border]
@@ -35047,7 +35046,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.point.visible]
      */
@@ -35195,7 +35194,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedSplineAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible]
      */
@@ -35335,7 +35334,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesRangeAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.point.visible]
      */
@@ -35471,7 +35470,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesSplineAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.point.visible]
      */
@@ -35569,7 +35568,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.point.visible]
      */
@@ -35717,7 +35716,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedSplineAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.point.visible]
      */
@@ -35857,7 +35856,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStepAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.CommonSeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.point.visible]
      */
