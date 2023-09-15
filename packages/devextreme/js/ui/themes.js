@@ -322,10 +322,6 @@ export function isMaterialBased(themeName) {
     return isMaterial(themeName) || isFluent(themeName);
 }
 
-export function isFluent(themeName) {
-    return isTheme('fluent', themeName);
-}
-
 export function isMaterial(themeName) {
     return isTheme('material', themeName);
 }
