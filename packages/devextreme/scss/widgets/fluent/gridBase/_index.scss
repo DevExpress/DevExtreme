@@ -15,6 +15,7 @@
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
+@use "../button/sizes" as *;
 @use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
@@ -38,6 +39,7 @@ $fluent-grid-base-command-select-column-width: $fluent-grid-base-checkbox-size +
 $fluent-grid-base-cell-vertical-padding: round(math.div($fluent-grid-base-cell-height - $fluent-grid-base-cell-line-height, 2));
 $fluent-grid-base-cell-padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
 $grid-masterdetail-padding: 16px;
+$fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-height;
 
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
