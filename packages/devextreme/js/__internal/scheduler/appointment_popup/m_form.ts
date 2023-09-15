@@ -300,15 +300,16 @@ export class AppointmentForm {
               const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
               const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
               const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
+              const endDate = dateSerialization.deserializeDate(endDateEditor.option('value'));
 
               if (this.semaphore.isFree() && startDate) {
                 if (value) {
                   const allDayStartDate = dateUtils.trimTime(startDate);
+                  const allDayEndDate = dateUtils.trimTime(endDate);
                   startDateEditor.option('value', new Date(allDayStartDate));
-                  endDateEditor.option('value', new Date(allDayStartDate));
+                  endDateEditor.option('value', new Date(allDayEndDate));
                 } else {
                   const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
-                  const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
                   startDateEditor.option('value', startDateWithStartHour);
                   endDateEditor.option('value', endDate);
                 }
