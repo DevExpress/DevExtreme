@@ -1,3 +1,5 @@
+import { HorizontalAlignment, Format } from '../common';
+
 /**
  * @public
  * @namespace DevExpress.common.charts
@@ -495,4 +497,144 @@ export interface CommonSeriesPoint {
      * @public
      */
     visible?: boolean;
+}
+
+/**
+ * @namespace DevExpress.viz
+ * @public
+*/
+export interface CommonSeriesLabel {
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.alignment
+     * @default 'center'
+     * @public
+     */
+    alignment?: HorizontalAlignment;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.argumentFormat
+     * @default undefined
+     * @public
+     */
+    argumentFormat?: Format;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.backgroundColor
+     * @default undefined
+     * @public
+     */
+    backgroundColor?: string;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.border
+     * @public
+     */
+    border?: {
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.color
+       * @default  '#d3d3d3'
+       */
+      color?: string;
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
+       * @default 'solid'
+       */
+      dashStyle?: DashStyle;
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
+       * @default false
+       */
+      visible?: boolean;
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.width
+       * @default 1
+       */
+      width?: number;
+    };
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.connector
+     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+     * @public
+     */
+    connector?: {
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.connector.color
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+       */
+      color?: string;
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.connector.visible
+       * @default false
+       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+       */
+      visible?: boolean;
+      /**
+       * @docid dxChartSeriesTypes.CommonSeries.label.connector.width
+       * @default 1
+       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+       */
+      width?: number;
+    };
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.customizeText
+     * @type_function_param1 pointInfo:object
+     * @notUsedInTheme
+     * @public
+     */
+    customizeText?: ((pointInfo: any) => string);
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.font
+     * @default '#FFFFFF' &prop(color)
+     * @default 14 &prop(size)
+     * @public
+     */
+    font?: Font;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.format
+     * @default undefined
+     * @public
+     */
+    format?: Format;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.horizontalOffset
+     * @default 0
+     * @public
+     */
+    horizontalOffset?: number;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.position
+     * @default 'outside'
+     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BubbleSeries
+     * @public
+     */
+    position?: RelativePosition;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.rotationAngle
+     * @default 0
+     * @public
+     */
+    rotationAngle?: number;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.showForZeroValues
+     * @default true
+     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
+     * @public
+     */
+    showForZeroValues?: boolean;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.verticalOffset
+     * @default 0
+     * @public
+     */
+    verticalOffset?: number;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.visible
+     * @default false
+     * @public
+     */
+    visible?: boolean;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.displayFormat
+     * @default undefined
+     * @public
+     */
+     displayFormat?: string;
 }
