@@ -16759,7 +16759,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * @deprecated Use SimpleItem instead
@@ -29604,7 +29604,7 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * [descr:dxFilterBuilderField]
