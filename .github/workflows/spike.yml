@@ -8,20 +8,18 @@ on:
 jobs:
   self-hosted-patch:
     runs-on: devextreme-shr2
-    name: Self-hosted
 
     steps:
     - run: node -v
 
     - uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.17.1'
 
     - run: node -v
 
   self-hosted-major:
     runs-on: devextreme-shr2
-    name: Self-hosted
 
     steps:
       - run: node -v
@@ -34,20 +32,18 @@ jobs:
 
   github-hosted-patch:
     runs-on: ubuntu-latest
-    name: Self-hosted
 
     steps:
       - run: node -v
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.16.1'
+          node-version: '18.17.1'
 
       - run: node -v
 
   github-hosted-major:
     runs-on: ubuntu-latest
-    name: Self-hosted
 
     steps:
       - run: node -v
