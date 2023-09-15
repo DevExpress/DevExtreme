@@ -23,7 +23,6 @@ import {
     baseSeriesObject,
     chartSeriesObject,
     dxChartAnnotationConfig,
-    dxChartSeriesTypesCommonSeriesLabel,
 } from '../chart';
 
 import {
@@ -39,6 +38,7 @@ import BaseWidget, {
 
 import {
     AnimationEaseMode,
+    CommonSeriesLabel,
     CommonSeriesPoint,
     Palette,
     PaletteExtensionMode,
@@ -110,7 +110,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_return dxChartSeriesTypes.CommonSeries.label
      * @public
      */
-    customizeLabel?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesLabel);
+    customizeLabel?: ((pointInfo: any) => CommonSeriesLabel);
     /**
      * @docid
      * @type_function_param1 pointInfo:object
