@@ -123,7 +123,7 @@ jobs:
     - name: Run TestCafe tests
       working-directory: ./packages/devextreme
       run: |
-        [ "${{ matrix.ARGS.theme }}" !== "generic.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
+        [ "${{ matrix.ARGS.theme }}" != "generic.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
