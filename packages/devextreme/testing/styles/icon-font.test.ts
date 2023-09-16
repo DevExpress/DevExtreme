@@ -47,7 +47,7 @@ describe('Equals svg to font', () => {
 
     const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
     const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`).filter((svg) => !isOnlyMaterialIcons.includes(svg));
-    const fluentIcons = readdirSync(`${BASE_PATH}/images/icons/fluent`);
+    const fluentIcons = readdirSync(`${BASE_PATH}/images/icons/fluent`).filter((svg) => !isOnlyMaterialIcons.includes(svg));
 
     const differenceFluent = fluentIcons.filter((svg) => !genericIcons.includes(svg));
     const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));

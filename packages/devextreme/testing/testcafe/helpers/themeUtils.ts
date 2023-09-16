@@ -1,14 +1,16 @@
 import { isString } from '../../../js/core/utils/type';
 import { changeTheme } from './changeTheme';
 
+const defaultThemeName = 'generic.light';
+
 export const getThemePostfix = (theme?: string): string => {
-  const themeName = (theme ?? process.env.theme) ?? 'generic.light';
+  const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
   return ` (${themeName.replace(/\./g, '-')})`;
 };
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
 
-export const getThemeName = (): string => getThemePostfix().split('.')[0];
+export const getThemeName = (): string => (process.env.theme ?? defaultThemeName).split('.')[0];
 
 export async function testScreenshot(
   t: TestController,
@@ -38,7 +40,7 @@ export async function testScreenshot(
     .ok();
 
   if (shouldTestInCompact) {
-    const themeName = (theme ?? process.env.theme) ?? 'generic.light';
+    const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
     await changeTheme(`${themeName}.compact`);
 
     await compactCallBack?.();
@@ -48,5 +50,5 @@ export async function testScreenshot(
       .ok();
   }
 
-  await changeTheme(process.env.theme ?? 'generic.light');
+  await changeTheme(process.env.theme ?? defaultThemeName);
 }
