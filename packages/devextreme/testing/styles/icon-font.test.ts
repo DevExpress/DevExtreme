@@ -35,15 +35,25 @@ describe('Equals svg to font', () => {
     expect(countElementMaterialFont).toBe(countElementMaterialSvg);
   });
 
+  test('fluent theme', () => {
+    const countElementFluentFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsfluent.ttf`);
+    const countElementFluentSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/fluent`);
+
+    expect(countElementFluentFont).toBe(countElementFluentSvg);
+  });
+
   test('check svg elements', () => {
     const isOnlyMaterialIcons = ['optionsgear.svg', 'pinmap.svg', 'send.svg'];
 
     const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
     const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`).filter((svg) => !isOnlyMaterialIcons.includes(svg));
+    const fluentIcons = readdirSync(`${BASE_PATH}/images/icons/fluent`);
 
+    const differenceFluent = fluentIcons.filter((svg) => !genericIcons.includes(svg));
     const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));
     const differenceGeneric = genericIcons.filter((svg) => !materialIcons.includes(svg));
 
     expect(differenceMaterial.toString()).toBe(differenceGeneric.toString());
+    expect(differenceFluent.toString()).toBe(differenceGeneric.toString());
   });
 });

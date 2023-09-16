@@ -8,6 +8,8 @@ export const getThemePostfix = (theme?: string): string => {
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
 
+export const getThemeName = (): string => getThemePostfix().split('.')[0];
+
 export async function testScreenshot(
   t: TestController,
   takeScreenshot: (screenshotName: string, element?: Selector | string | null) => Promise<boolean>,
