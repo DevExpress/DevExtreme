@@ -13,12 +13,10 @@
 @include dx-radiobutton-icon-mixin(
   $generic-radiobutton-size,
   $generic-radiobutton-border-width,
-  $radiogroup-border-color,
-  $radiogroup-bg,
-  $radiogroup-checked-bg,
   $generic-radiobutton-dot-size,
 );
 @include dx-radiobutton-states-mixin(
+  $radiogroup-bg,
   $radiogroup-border-color,
   $radiogroup-readonly-border-color,
   $radiogroup-hover-border-color,

@@ -126,7 +126,7 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
       .dx-list-item {
         &.dx-state-hover {
           .dx-radiobutton-icon {
-            border-color: $checkbox-hover-border-color;
+            border-color: $checkbox-border-color-hover;
           }
         }
 
@@ -139,7 +139,7 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
 
             &.dx-radiobutton-checked {
               .dx-radiobutton-icon::after {
-                background-color: color.change($radiogroup-checked-bg, $alpha: 0.1);
+                background-color: color.change($radiogroup-accent-color, $alpha: 0.1);
                 transform: scale(1);
               }
             }
@@ -154,7 +154,7 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
             &.dx-checkbox-checked,
             &.dx-checkbox-indeterminate {
               .dx-checkbox-icon::after {
-                background-color: color.change($checkbox-bg, $alpha: 0.1);
+                background-color: color.change($checkbox-accent-color, $alpha: 0.1);
                 transform: scale(1);
               }
             }
