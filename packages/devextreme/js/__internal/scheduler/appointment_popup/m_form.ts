@@ -128,7 +128,7 @@ export class AppointmentForm {
 
     const element = $('<div>');
 
-    this.form = this.scheduler.createComponent(element, Form, {
+    this.scheduler.createComponent(element, Form, {
       items,
       showValidationSummary: true,
       scrollingEnabled: true,
@@ -140,6 +140,9 @@ export class AppointmentForm {
       formData,
       showColonAfterLabel: false,
       labelLocation: 'top',
+      onInitialized: (e) => {
+        this.form = e.component;
+      },
       customizeItem: (e) => {
         if (this.form && e.itemType === 'group') {
           const dataExprs = this.scheduler.getDataAccessors().expr;
