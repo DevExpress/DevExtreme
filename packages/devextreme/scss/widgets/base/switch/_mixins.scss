@@ -184,8 +184,8 @@
   $switch-handle-on-bg,
   $switch-border,
   $switch-off-border-color,
-  $switch-off-border-hover-color,
-  $switch-off-border-active-color,
+  $switch-off-border-color-hover,
+  $switch-off-border-color-active,
   $switch-on-border-color,
   $switch-invalid-color,
   $switch-invalid-color-hover,
@@ -209,19 +209,19 @@
   }
 
   .dx-switch {
+    .dx-switch-handle::before {
+      background-color:  $switch-off-border-color;
+    }
+
     &.dx-state-hover {
       .dx-switch-container::before {
-        border-color: $switch-off-border-hover-color;
-      }
-    
-      .dx-switch-handle::before {
-        background-color:  $switch-off-border-hover-color;
+        border-color: $switch-off-border-color-hover;
       }
 
       &.dx-state-readonly {
         .dx-switch-container::before {
-          border-color: $switch-off-border-hover-color;
-        }
+          border-color: $switch-off-border-color-hover;
+        } 
       }
 
       &.dx-invalid {
@@ -234,16 +234,12 @@
     &.dx-state-active,
     &.dx-state-focused {
       .dx-switch-container::before {
-        border-color:  $switch-off-border-active-color;
-      }
-    
-      .dx-switch-handle::before {
-        background-color:  $switch-off-border-active-color;
+        border-color:  $switch-off-border-color-active;
       }
 
       &.dx-state-readonly {
         .dx-switch-container::before {
-          border-color: $switch-off-border-active-color;
+          border-color: $switch-accent-active;
         }
       }
 
@@ -275,6 +271,21 @@
     }
   }
 
+  .dx-switch:not(.dx-switch-on-value):not(.dx-state-readonly) {
+    &.dx-state-hover {
+      .dx-switch-handle::before {
+        background-color:  $switch-off-border-color-hover;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-handle::before {
+        background-color:  $switch-off-border-color-active;
+      }
+    }
+  }
+
   .dx-switch-on-value {
     .dx-switch-container::before {
       background-color: $switch-on-bg;
@@ -291,11 +302,7 @@
         background-color: $switch-accent-hover;
       }
 
-      .dx-switch-handle::before {
-        background-color: $switch-handle-on-bg;
-      }
-
-      &.dx-invalid {
+      &.dx-invalid:not(.dx-state-readonly) {
         .dx-switch-container::before {
           background-color: $switch-invalid-color-hover;
         }
@@ -309,11 +316,7 @@
         background-color: $switch-accent-active;
       }
 
-      .dx-switch-handle::before {
-        background-color: $switch-handle-on-bg;
-      }
-
-      &.dx-invalid {
+      &.dx-invalid:not(.dx-state-readonly) {
         .dx-switch-container::before {
           background-color: $switch-invalid-color-focused;
         }

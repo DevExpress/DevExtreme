@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import Button from '../button';
-import { isMaterial } from '../themes';
+import { isMaterialBased } from '../themes';
 
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
@@ -28,7 +28,7 @@ class Navigator extends Widget {
         return super._defaultOptionsRules().concat([
             {
                 device: function() {
-                    return isMaterial();
+                    return isMaterialBased();
                 },
                 options: {
                     type: 'default',

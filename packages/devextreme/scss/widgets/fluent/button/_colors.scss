@@ -241,9 +241,6 @@ $button-danger-icon-color: $button-danger-color !default;
 $button-success-icon-color: $button-success-color !default;
 
 $button-disabled-text-color: $base-foreground-disabled !default;
-$button-hover-shadow-color: $button-shadow-color !default;
-$button-focused-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
-$button-active-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
 $button-normal-outlined-hover-bg: $button-normal-hover-bg !default;
 $button-normal-outlined-focused-bg: $button-normal-hover-bg !default;
 $button-normal-outlined-active-bg: $button-normal-active-bg !default;

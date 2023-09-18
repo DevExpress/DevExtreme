@@ -48,6 +48,12 @@
 
 // NOTE: Button styles
 
+.dx-button-mode-contained {
+  &.dx-button-normal {
+    box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
+  }
+}
+
 .dx-button { // stylelint-disable-line no-duplicate-selectors
   height: $fluent-button-height;
   position: relative;
@@ -109,21 +115,6 @@
       $button-success-selected-bg,
       $button-success-selected-color,
     );
-  }
-}
-
-.dx-button-mode-contained {
-  &,
-  &.dx-state-hover {
-    box-shadow: $fluent-button-box-shadow-size $button-hover-shadow-color;
-  }
-
-  &.dx-state-focused {
-    box-shadow: $fluent-button-box-shadow-size $button-focused-shadow-color;
-  }
-
-  &.dx-state-active {
-    box-shadow: $fluent-button-active-box-shadow-size $button-active-shadow-color;
   }
 }
 

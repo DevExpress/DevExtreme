@@ -8,10 +8,6 @@
 @use "../../base/button/mixins" as *;
 
 $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizontal-padding;
-$fluent-normal-button-shadow: $fluent-button-box-shadow-size $button-shadow-color;
-$fluent-normal-button-active-state-shadow: $fluent-button-active-box-shadow-size $button-active-shadow-color;
-$fluent-normal-button-hovered-state-shadow: $fluent-button-box-shadow-size $button-hover-shadow-color;
-$fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $button-focused-shadow-color;
 
 @mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
   min-width: $fluent-button-height;
