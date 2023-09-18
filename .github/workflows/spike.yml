@@ -25,10 +25,12 @@ jobs:
       - run: node -v
 
       - run: |
-          curl https://github.com/actions/node-versions/releases/download/18.17.1-5819737873/node-18.17.1-linux-x64.tar.gz --output /tmp/node-18.tar.gz \
+          curl https://github.com/actions/node-versions/releases/download/18.17.1-5819737873/node-18.17.1-linux-x64.tar.gz --output /opt/hostedtoolcache/node/18.17.1/x64/node-18.tar.gz \
           && ls /tmp \
-          && unzip /tmp/node-18.tar.gz -d /tmp/node-18/
-#          && unzip /tmp/node-18.tar.gz -d /opt/hostedtoolcache/node/18.17.1/x64
+          && cd /opt/hostedtoolcache/node/18.17.1/x64 \
+          && tar xvzf node-18.tar.gz 2> /dev/null \
+          && rm node-18.tar.gz \
+          && ls .
 
       - uses: actions/setup-node@v3
         with:
