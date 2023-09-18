@@ -53,5 +53,19 @@
     ],
     "constraints": {
         "node": "^16.3.0"
+    },
+    "customDatasources": {
+        "chrome": {
+            "defaultRegistryUrlTemplate": "https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions",
+            "transformTemplates": [
+                "{ \"releases\": $.versions\n }"
+            ]
+        },
+        "nodejs": {
+            "defaultRegistryUrlTemplate": "https://nodejs.org/download/release/index.json",
+            "transformTemplates": [
+                "{ \"releases\": $ }"
+            ]
+        }
     }
 }
