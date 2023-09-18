@@ -36,4 +36,8 @@
       border-inline-end-width: 0;
     }
   }
+
+  &.dx-state-disabled {
+    box-shadow: none;
+  }
 }

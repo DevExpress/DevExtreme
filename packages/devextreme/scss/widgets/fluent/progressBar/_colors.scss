@@ -15,10 +15,10 @@ $progressbar-bg: $base-neutral-background6 !default;
 * $name 20. Selected range background color
 * $type color
 */
-$progressbar-range-bg: $base-accent !default;
+$progressbar-range-bg: $base-compound-accent !default;
 $progressbar-container-disabled-bg: $base-neutral-background-disabled !default;
 $progressbar-range-disabled-bg: $base-foreground-disabled !default;
-$progressbar-range-indeterminate-color: $base-accent !default;
+$progressbar-range-indeterminate-color: $base-compound-accent !default;
 $progressbar-range-invalid-color: $base-invalid-color !default;
 
 $progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
@@ -29,4 +29,4 @@ $progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $p
 * $name 30. Label color
 * $type color
 */
-$progressbar-label-color: $base-accent !default;
+$progressbar-label-color: $base-compound-accent !default;

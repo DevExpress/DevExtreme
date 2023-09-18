@@ -6,16 +6,19 @@ $fluent-radiobutton-size: null !default;
 $fluent-radiobutton-dot-size: null !default;
 $fluent-radiobutton-ripple-size: null !default;
 
-$fluent-radiobutton-border-width: 2px !default;
+$fluent-radiobutton-border-width: 1px !default;
+$fluent-radio-value-container-padding: null !default;
 
 @if $size == "default" {
-  $fluent-radiobutton-size: 20px !default;
+  $fluent-radio-value-container-padding: 12px !default;
+  $fluent-radiobutton-size: 16px !default;
   $fluent-radiobutton-dot-size: 10px !default;
-  $fluent-radiobutton-ripple-size: 40px !default;
+  $fluent-radiobutton-ripple-size: 0 !default;
 }
 
 @else if $size == "compact" {
+  $fluent-radio-value-container-padding: 8px !default;
   $fluent-radiobutton-size: 16px !default;
-  $fluent-radiobutton-dot-size: 8px !default;
-  $fluent-radiobutton-ripple-size: 32px !default;
+  $fluent-radiobutton-dot-size: 10px !default;
+  $fluent-radiobutton-ripple-size: 0 !default;
 }
