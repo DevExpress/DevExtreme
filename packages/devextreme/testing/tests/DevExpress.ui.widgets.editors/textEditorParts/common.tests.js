@@ -679,6 +679,17 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
     });
 
+    QUnit.test('aria-labelledby should not be set if inputAttr containes aria-label', function(assert) {
+        this.textEditor.option({
+            inputAttr: { 'aria-label': 'custom' },
+            label: null,
+        });
+
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
+    });
+
     QUnit.test('aria-labelledby should be equal label id if label is specified and placeholder is not specified', function(assert) {
         this.textEditor.option({ placeholder: null });
 
