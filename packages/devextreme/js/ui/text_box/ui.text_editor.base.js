@@ -493,7 +493,7 @@ const TextEditorBase = Editor.inherit({
 
         if(elementIds || force) {
             const aria = {
-                'labelledby': elementIds || undefined,
+                'labelledby': elementIds,
                 label: ariaLabel,
             };
             this.setAria(aria, this._getFieldElement());
