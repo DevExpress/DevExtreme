@@ -6,7 +6,8 @@
     "semanticCommits": "enabled",
     "baseBranches": [
         "23_2",
-        "23_1"
+        "23_1",
+        "renovatebot-chrome-node"
     ],
     "labels": [
         "dependencies"
@@ -54,6 +55,15 @@
     "constraints": {
         "node": "^16.3.0"
     },
+    "regexManagers": [
+        {
+            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
+            "matchStrings": ["#\\s*renovate:\\s*(dataSource=nodejs)?\\s*\\n\\s*node-version:\\s*(?<currentValue>.*)\\s"],
+            "depNameTemplate": "chrome",
+            "versioningTemplate": "semver-coerced",
+            "datasourceTemplate": "custom.chrome"
+        }
+    ],
     "customDatasources": {
         "chrome": {
             "defaultRegistryUrlTemplate": "https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions",

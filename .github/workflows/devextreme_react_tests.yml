@@ -17,9 +17,10 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Use Node.js 18
+    - name: Use Node.js
       uses: actions/setup-node@v3
       with:
+        # renovate: dataSource=nodejs
         node-version: '18.16.1'
 
     - name: Restore npm cache
