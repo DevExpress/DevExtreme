@@ -29817,7 +29817,6 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
-    static isMaterial(theme: string): boolean;
   }
   /**
    * [descr:Widget]

@@ -9,7 +9,7 @@ import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
 import { DateHeaderLayoutProps } from '../../../base/header_panel/date_header/layout';
 import getThemeType from '../../../../../../utils/getThemeType';
 
-const { isMaterial } = getThemeType();
+const { isMaterialBased } = getThemeType();
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -38,7 +38,7 @@ export const viewFunction = ({
         const rowsCount = dataMap.length;
         const isTimeCellTemplate = rowsCount - 1 === rowIndex;
         const isWeekDayRow = rowsCount > 1 && rowIndex === 0;
-        const splitText = isMaterial && (isMonthDateHeader || isWeekDayRow);
+        const splitText = isMaterialBased && (isMonthDateHeader || isWeekDayRow);
 
         let validLeftVirtualCellCount: number | undefined = leftVirtualCellCount;
         let validRightVirtualCellCount: number | undefined = rightVirtualCellCount;
