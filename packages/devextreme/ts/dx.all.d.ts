@@ -31999,7 +31999,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.common.Format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
      */
@@ -32053,7 +32053,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.format]
      */
-    format?: DevExpress.common.Format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
      */

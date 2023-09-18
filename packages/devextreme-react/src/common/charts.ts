@@ -7,6 +7,8 @@ export {
     ChartsColor,
     ChartsDataType,
     ChartsLabelOverlap,
+    CommonSeriesLabel,
+    CommonSeriesPoint,
     DashStyle,
     DiscreteAxisDivisionMode,
     GradientColor,
