@@ -359,7 +359,7 @@ class BlockSeparatorView extends SeparatorView {
     if ($element && !that._isShown) {
       switch (targetLocation) {
         case 'group':
-          startAnimate({ width: '50px', display: 'inline-block' });
+          this.element().css('display', 'block');
           break;
         case 'columnChooser':
           startAnimate({ width: '100%', display: 'block' });

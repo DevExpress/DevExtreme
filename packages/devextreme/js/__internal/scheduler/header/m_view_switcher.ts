@@ -1,3 +1,5 @@
+import { isFluent } from '@js/ui/themes';
+
 import {
   formatViews,
   getViewName,
@@ -22,6 +24,9 @@ const getViewsAndSelectedView = (header) => {
 export const getViewSwitcher = (header, item) => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
+  // @ts-expect-error
+  const stylingMode = isFluent() ? 'outlined' : 'contained';
+
   return {
     widget: 'dxButtonGroup',
     locateInMenu: 'auto',
@@ -30,7 +35,7 @@ export const getViewSwitcher = (header, item) => {
       items: views,
       keyExpr: 'name',
       selectedItemKeys: [selectedView],
-      stylingMode: 'contained',
+      stylingMode,
       onItemClick: (e) => {
         const { view } = e.itemData;
 
