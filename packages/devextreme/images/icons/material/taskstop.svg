@@ -1,0 +1,8 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>taskstop</title>
+<path d="M21 13h-2v-8h-14v14h8v2h-8c-1.1 0-2-0.9-2-2v-14c0-1.1 0.9-2 2-2h14c1.1 0 2 0.9 2 2v8z"></path>
+<path d="M20 16h2v6h-2v-6z"></path>
+<path d="M18 16h-2v6h2v-6z"></path>
+<path d="M14.83 11.211l1.010-1.010c0.22-0.24 0.21-0.58 0-0.79l-1.29-1.25c-0.24-0.22-0.58-0.21-0.78 0l-1.010 1.020 2.070 2.030z"></path>
+<path d="M12.17 9.721l-4.17 4.19v2.090h2.080l4.16-4.2-2.070-2.080z"></path>
+</svg>
