@@ -3863,6 +3863,16 @@
               "/Models/SampleData/DataGridEmployees.cs",
               "/Models/EmployeeTask.cs"
             ]
+          },
+          {
+            "Title": "Templates",
+            "Name": "Templates",
+            "Widget": "TabPanel",
+            "Badge": "Updated",
+            "MvcAdditionalFiles": [
+              "/Models/Company.cs",
+              "/Models/SampleData/TabPanelData.cs"
+            ]
           }
         ]
       },
