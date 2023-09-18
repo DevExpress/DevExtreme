@@ -67,9 +67,8 @@ jobs:
     steps:
       - name: Get Date
         id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%s")"
         shell: bash
+        run: echo "date=$(/bin/date -u "+%s")" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         id: notify-cache
