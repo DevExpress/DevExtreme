@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
-import { isHorizontalView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+// import { isHorizontalView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 class BaseStrategy {
   options: any;
@@ -96,7 +96,7 @@ class BaseStrategy {
   getCoordinatesByDate(date, groupIndex, inAllDayRow) {
     const validGroupIndex = groupIndex || 0;
 
-    const isVerticalView = !isHorizontalView(this.options.viewType);
+    // const isVerticalView = !isHorizontalView(this.options.viewType);
     const cellInfo = { groupIndex: validGroupIndex, startDate: date, isAllDay: inAllDayRow };
     const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
     if (!positionByMap) {
@@ -108,14 +108,14 @@ class BaseStrategy {
       inAllDayRow && !this.isVerticalGrouping,
     );
 
-    if (isVerticalView && !cellInfo.isAllDay) {
-      const topCoordinateShift = this.shiftTopCoordinate(positionByMap, date);
-      position.top += topCoordinateShift;
-    }
+    // if (isVerticalView && !cellInfo.isAllDay) {
+    //   const topCoordinateShift = this.shiftTopCoordinate(positionByMap, date);
+    //   // position.top += topCoordinateShift;
+    // }
 
     const timeShift = inAllDayRow
       ? 0
-      : this.getTimeShift(date);
+      : this.shiftTopCoordinate(positionByMap, date); // this.getTimeShift(date);
 
     const shift = this.getPositionShift(timeShift, inAllDayRow);
     const horizontalHMax = this.positionHelper.getHorizontalMax(validGroupIndex, date);
@@ -145,13 +145,13 @@ class BaseStrategy {
     positionByMap: any,
     appointmentDate: Date,
   ): number {
-    const { cellDuration, cellHeight } = this.options;
+    const { cellDuration } = this.options;
     const { rowIndex, columnIndex } = positionByMap;
     const matchedCell = this.viewDataProvider.viewDataMap.dateTableMap[rowIndex][columnIndex];
     const matchedCellStartDate = matchedCell.cellData.startDate;
 
     const shiftRatio = (appointmentDate.getTime() - matchedCellStartDate.getTime()) / cellDuration;
-    return shiftRatio * cellHeight;
+    return shiftRatio;
   }
 
   getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {

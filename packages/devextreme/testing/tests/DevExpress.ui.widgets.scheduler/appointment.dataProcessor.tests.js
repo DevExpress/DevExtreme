@@ -40,7 +40,8 @@ const createAppointmentDataProvider = (options) => {
                 options.dataSource.items(),
                 options.dataAccessors,
                 appointmentDuration,
-                { createDate: date => date }
+                { createDate: date => date },
+                0
             );
         }
     };

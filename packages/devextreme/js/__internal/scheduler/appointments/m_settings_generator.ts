@@ -424,6 +424,14 @@ export class DateGeneratorBaseStrategy {
         startDayHour: this.viewStartDayHour,
         firstViewDate: firstViewDates[idx],
       });
+
+      appointment.shiftedStartDate = this._getAppointmentResultDate({
+        appointment,
+        rawAppointment,
+        startDate: new Date(appointment.shiftedStartDate),
+        startDayHour: this.viewStartDayHour,
+        firstViewDate: firstViewDates[idx],
+      });
     });
   }
 
