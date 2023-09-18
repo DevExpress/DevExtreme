@@ -65,10 +65,10 @@ const bundlesSrc = ['src/js/bundles/**/*.js'];
 const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
 const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.js`];
 const TS_COMPILER_CONFIG = {
-    baseAbsPath: path.resolve(__dirname, '../../src'),
+    baseAbsPath: path.resolve(__dirname, '../..'),
     relativePath: {
-        tsconfig: 'js/__internal/tsconfig.json',
-        alias: 'js',
+        tsconfig: 'src/js/__internal/tsconfig.json',
+        alias: 'src/js',
         dist: TS_OUTPUT_BASE_DIR,
     },
     tsBaseDirName: '__internal',
