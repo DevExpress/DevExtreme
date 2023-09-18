@@ -1,72 +1,103 @@
 import React from 'react';
+import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import TabPanel from 'devextreme-react/tab-panel';
-import { multiViewItems as companies } from './data.js';
-import CompanyItem from './CompanyItem.js';
+import TabPanelItem from './TabPanelItem.js';
 
-const itemTitleRender = (company) => <span>{company.CompanyName}</span>;
+import {
+  tabsPositionsSelectBoxLabel,
+  tabsPositions,
+  stylingModesSelectBoxLabel,
+  stylingModes,
+  iconPositionsSelectBoxLabel,
+  iconPositions,
+  navButtonsCheckBoxLabel,
+  dataSource,
+} from './data.js';
 
 const App = () => {
-  const [animationEnabled, setAnimationEnabled] = React.useState(true);
-  const [swipeEnabled, setSwipeEnabled] = React.useState(true);
-  const [loop, setLoop] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [tabsPosition, setTabsPosition] = React.useState(tabsPositions[0]);
+  const [stylingMode, setStylingMode] = React.useState(stylingModes[0]);
+  const [iconPosition, setIconPosition] = React.useState(iconPositions[0]);
+  const [showNavButtons, setShowNavButtons] = React.useState(true);
 
-  const onSelectionChanged = React.useCallback((args) => {
-    if (args.name === 'selectedIndex') {
-      setSelectedIndex(args.value);
-    }
-  }, [setSelectedIndex]);
+  const onTabsPositionChanged = React.useCallback((args) => {
+    setTabsPosition(args.value);
+  }, [setTabsPosition]);
 
-  const onLoopChanged = React.useCallback((args) => {
-    setLoop(args.value);
-  }, [setLoop]);
+  const onStylingModeChanged = React.useCallback((args) => {
+    setStylingMode(args.value);
+  }, [setStylingMode]);
 
-  const onAnimationEnabledChanged = React.useCallback((args) => {
-    setAnimationEnabled(args.value);
-  }, [setAnimationEnabled]);
+  const onIconPositionChanged = React.useCallback((args) => {
+    setIconPosition(args.value);
+  }, [setIconPosition]);
 
-  const onSwipeEnabledChanged = React.useCallback((args) => {
-    setSwipeEnabled(args.value);
-  }, [setSwipeEnabled]);
+  const onShowNavButtonsChanged = React.useCallback((args) => {
+    setShowNavButtons(args.value);
+  }, [setShowNavButtons]);
 
   return (
-    <div>
-      <TabPanel
-        height={260}
-        dataSource={companies}
-        selectedIndex={selectedIndex}
-        onOptionChanged={onSelectionChanged}
-        loop={loop}
-        itemTitleRender={itemTitleRender}
-        itemComponent={CompanyItem}
-        animationEnabled={animationEnabled}
-        swipeEnabled={swipeEnabled}
-      />
-      <div className="item-box">
-        Item <span>{selectedIndex + 1}</span> of <span>{companies.length}</span>
+    <div className="tabpanel-demo">
+      <div className="widget-container">
+        <TabPanel
+          className="dx-theme-background-color"
+          width="100%"
+          height={418}
+          animationEnabled={true}
+          swipeEnabled={true}
+          selectedIndex={0}
+          dataSource={dataSource}
+          tabsPosition={tabsPosition}
+          stylingMode={stylingMode}
+          iconPosition={iconPosition}
+          showNavButtons={showNavButtons}
+          itemComponent={TabPanelItem}
+        />
       </div>
+
       <div className="options">
         <div className="caption">Options</div>
+
         <div className="option">
-          <CheckBox
-            value={loop}
-            onValueChanged={onLoopChanged}
-            text="Loop enabled"
+          <div className="option-label">Tabs position</div>
+
+          <SelectBox
+            inputAttr={tabsPositionsSelectBoxLabel}
+            items={tabsPositions}
+            value={tabsPosition}
+            onValueChanged={onTabsPositionChanged}
           />
         </div>
+
         <div className="option">
-          <CheckBox
-            value={animationEnabled}
-            onValueChanged={onAnimationEnabledChanged}
-            text="Animation enabled"
+          <div className="option-label">Styling mode</div>
+
+          <SelectBox
+            inputAttr={stylingModesSelectBoxLabel}
+            items={stylingModes}
+            value={stylingMode}
+            onValueChanged={onStylingModeChanged}
           />
         </div>
+
+        <div className="option">
+          <div className="option-label">Icon position</div>
+
+          <SelectBox
+            inputAttr={iconPositionsSelectBoxLabel}
+            items={iconPositions}
+            value={iconPosition}
+            onValueChanged={onIconPositionChanged}
+          />
+        </div>
+
         <div className="option">
           <CheckBox
-            value={swipeEnabled}
-            onValueChanged={onSwipeEnabledChanged}
-            text="Swipe enabled"
+            text="Show navigation buttons"
+            elementAttr={navButtonsCheckBoxLabel}
+            value={showNavButtons}
+            onValueChanged={onShowNavButtonsChanged}
           />
         </div>
       </div>

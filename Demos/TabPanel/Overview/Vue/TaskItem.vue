@@ -1,51 +1,39 @@
-.tabpanel-demo {
-  display: flex;
-  height: 100%;
-  min-height: 450px;
-}
+<template>
+  <div :class="className">
+    <p class="task-item-text">
+      {{ task.text }}
+    </p>
 
-.widget-container {
-  display: inline;
-  flex-grow: 1;
-  min-width: 450px;
-  padding: 16px 32px;
-}
+    <p class="task-item-info">
+      {{ task.date }} by {{ task.assignedBy }}
+    </p>
 
-.dx-theme-material .dx-tabpanel {
-  border-radius: 8px;
-  overflow: clip;
-}
+    <i class="task-item-pseudo-button dx-icon dx-icon-overflow"/>
+  </div>
+</template>
 
-.dx-tabs-vertical {
-  min-width: 120px;
-}
+<script>
+export default {
+  name: 'TaskItem',
 
-.options {
-  display: inline-flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  width: 300px;
-  padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-}
+  props: {
+    task: {
+      type: Object,
+      default: () => {},
+    },
+  },
 
-.tabpanel-item {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
-}
+  computed: {
+    className() {
+      const { priority } = this.task;
 
-.caption {
-  font-weight: 500;
-  font-size: 18px;
-}
+      return `task-item task-item-priority-${priority}`;
+    },
+  },
+};
+</script>
 
-.option {
-  margin-top: 20px;
-}
-
+<style>
 .task-item {
   position: relative;
   display: flex;
@@ -105,10 +93,7 @@
   opacity: 0.6;
 }
 
-.dx-theme-material .widget-container {
-  background-color: rgba(191, 191, 191, 0.15);
-}
-
 .dx-color-scheme-contrast .task-item {
   border: 1px solid #fff;
 }
+</style>

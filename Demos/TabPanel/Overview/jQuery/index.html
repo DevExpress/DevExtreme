@@ -8,58 +8,38 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme-dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme-dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
   </head>
   <body class="dx-viewport">
-    <div class="demo-container">
-      <div id="tabpanel">
-        <div id="tabpanel-container"> </div>
-
-        <div class="item-box"> Item <span class="selected-index">1</span> of <span class="item-count"></span> </div>
-
-        <div class="options">
-          <div class="caption">Options</div>
-          <div class="option">
-            <div id="loop-enabled"></div>
-          </div>
-          <div class="option">
-            <div id="animation-enabled"></div>
-          </div>
-          <div class="option">
-            <div id="swipe-enabled"></div>
-          </div>
-        </div>
+    <div class="tabpanel-demo">
+      <div class="widget-container">
+        <div id="tabpanel" class="dx-theme-background-color"></div>
       </div>
 
-      <script type="text/html" id="title">
-        <span>{{ CompanyName }}</span>
-      </script>
+      <div class="options">
+        <div class="caption">Options</div>
 
-      <script type="text/html" id="customer">
-        <div class="tabpanel-item">
-          <div>
-            <p>
-              <b>{{ City }}</b>
-              (<span>{{ State }}</span>)
-            </p>
-            <p>
-              <span>{{ Zipcode }}</span>
-              <span>{{ Address }}</span>
-            </p>
-          </div>
-          <div>
-            <p> Phone: <b>{{ Phone }}</b> </p>
-            <p> Fax: <b>{{ Fax }}</b> </p>
-            <p>
-              Website:
-              <a href="{{ Website }}" target="_blank"> {{ Website }} </a>
-            </p>
-          </div>
+        <div class="option">
+          <div class="option-label">Tabs position</div>
+          <div id="tabs-position-selectbox"></div>
         </div>
-      </script>
+
+        <div class="option">
+          <div class="option-label">Styling mode</div>
+          <div id="styling-mode-selectbox"></div>
+        </div>
+
+        <div class="option">
+          <div class="option-label">Icon position</div>
+          <div id="icon-position-selectbox"></div>
+        </div>
+
+        <div class="option">
+          <div id="show-nav-buttons-checkbox"></div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
