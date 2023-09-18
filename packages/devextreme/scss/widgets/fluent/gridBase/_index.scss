@@ -254,7 +254,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       & > td {
         padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
         font-size: $fluent-grid-base-cell-font-size;
-        line-height: $fluent-grid-base-cell-line-height;
+        line-height: $fluent-grid-base-cell-line-height - 1;
       }
     }
 
