@@ -29,7 +29,8 @@
     "webpack-dev-server": "^3.11.3"
   },
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "echo empty"
   },
   "license": "MIT"
 }

@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:dev": "ng serve --open -c dev"
+    "start:dev": "ng serve --open -c dev",
+    "build": "echo empty"
   },
   "private": true,
   "dependencies": {
