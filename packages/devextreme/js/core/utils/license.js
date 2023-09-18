@@ -1,7 +1,14 @@
 import { parseToken } from '../../__internal/core/license/license_validation';
 import errors from '../errors';
 
+let isLicenseVerified = false;
+
 export function verifyLicense(licenseToken, version) {
+    if(isLicenseVerified) {
+        return;
+    }
+    isLicenseVerified = true;
+
     let warning;
 
     if(licenseToken) {
@@ -24,3 +31,13 @@ export function verifyLicense(licenseToken, version) {
         errors.log(warning);
     }
 }
+
+///#DEBUG
+export function setLicenseCheckSkipCondition(value = true) {
+    isLicenseVerified = value;
+}
+
+export function getLicenseCheckSkipCondition() {
+    return isLicenseVerified;
+}
+///#ENDDEBUG

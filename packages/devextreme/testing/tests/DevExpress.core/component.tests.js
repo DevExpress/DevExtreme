@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import { Component, setLicenseCheckSkipCondition } from 'core/component';
+import { Component } from 'core/component';
 import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
 import devices from 'core/devices';
@@ -1713,7 +1713,7 @@ QUnit.module('action API', {}, () => {
 QUnit.module('License check', {
     beforeEach: function() {
         sinon.spy(license, 'verifyLicense');
-        setLicenseCheckSkipCondition(false);
+        license.setLicenseCheckSkipCondition(false);
     },
     afterEach: function() {
         license.verifyLicense.restore();
@@ -1723,26 +1723,5 @@ QUnit.module('License check', {
         const instance = new TestComponent();
 
         assert.ok(license.verifyLicense.calledOnce);
-    });
-
-    QUnit.test('verifyLicense() method should be called only once', function(assert) {
-        const instance1 = new TestComponent();
-        const instance2 = new TestComponent();
-
-        assert.ok(license.verifyLicense.calledOnce);
-    });
-
-    QUnit.test('verifyLicense() method should be called with current version', function(assert) {
-        const instance = new TestComponent();
-
-        assert.ok(license.verifyLicense.calledOnce);
-        assert.ok(license.verifyLicense.calledWith(undefined, version));
-    });
-
-    QUnit.test('verifyLicense() method should not be called if setLicenseCheckSkipCondition() used', function(assert) {
-        setLicenseCheckSkipCondition();
-        const instance = new TestComponent();
-
-        assert.ok(license.verifyLicense.notCalled);
     });
 });

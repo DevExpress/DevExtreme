@@ -1,11 +1,12 @@
 import config from 'core/config';
 import errors from 'core/errors';
-import { verifyLicense } from 'core/utils/license';
+import { verifyLicense, setLicenseCheckSkipCondition } from 'core/utils/license';
 const { test, module } = QUnit;
 
 module('License check', {
     beforeEach: function() {
         sinon.spy(errors, 'log');
+        setLicenseCheckSkipCondition(false);
     },
     afterEach: function() {
         config({ license: null });
@@ -27,9 +28,13 @@ module('License check', {
         assert.equal(errors.log.callCount, 1);
         assert.strictEqual(errors.log.getCall(0).args[0], 'W0019');
 
+        setLicenseCheckSkipCondition(false);
+
         verifyLicense(null, '1.0');
         assert.equal(errors.log.callCount, 2);
         assert.strictEqual(errors.log.getCall(1).args[0], 'W0019');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense(undefined, '1.0');
         assert.equal(errors.log.callCount, 3);
@@ -50,10 +55,26 @@ module('License check', {
         assert.ok(errors.log.notCalled);
     });
 
+    test('Message should be logged only once', function(assert) {
+        verifyLicense('', '1.0');
+        assert.ok(errors.log.calledOnce);
+
+        verifyLicense('', '1.0');
+        assert.ok(errors.log.calledOnce);
+    });
+
+    test('No messages should be logged if setLicenseCheckSkipCondition() used', function(assert) {
+        setLicenseCheckSkipCondition();
+        verifyLicense('', '1.0');
+        assert.ok(errors.log.notCalled);
+    });
+
     test('W0020 error should be logged if license is outdated', function(assert) {
         verifyLicense(TOKEN_23_1, '23.2');
         assert.equal(errors.log.callCount, 1);
         assert.strictEqual(errors.log.getCall(0).args[0], 'W0020');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense(TOKEN_23_2, '42.4');
         assert.equal(errors.log.callCount, 2);
@@ -64,32 +85,52 @@ module('License check', {
         verifyLicense(TOKEN_UNVERIFIED, '1.2.3');
         assert.strictEqual(errors.log.getCall(0).args[0], 'W0021');
 
+        setLicenseCheckSkipCondition(false);
+
         verifyLicense(TOKEN_INVALID_JSON, '1.2.3');
         assert.strictEqual(errors.log.getCall(1).args[0], 'W0021');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense(TOKEN_INVALID_BASE64, '1.2.3');
         assert.strictEqual(errors.log.getCall(2).args[0], 'W0021');
 
+        setLicenseCheckSkipCondition(false);
+
         verifyLicense(TOKEN_MISSING_FIELD_1, '1.2.3');
         assert.strictEqual(errors.log.getCall(3).args[0], 'W0021');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense(TOKEN_MISSING_FIELD_2, '1.2.3');
         assert.strictEqual(errors.log.getCall(4).args[0], 'W0021');
 
+        setLicenseCheckSkipCondition(false);
+
         verifyLicense(TOKEN_MISSING_FIELD_3, '1.2.3');
         assert.strictEqual(errors.log.getCall(5).args[0], 'W0021');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense(TOKEN_UNSUPPORTED_VERSION, '1.2.3');
         assert.strictEqual(errors.log.getCall(6).args[0], 'W0021');
 
+        setLicenseCheckSkipCondition(false);
+
         verifyLicense('Another', '1.2.3');
         assert.strictEqual(errors.log.getCall(7).args[0], 'W0021');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense('str@nge');
         assert.strictEqual(errors.log.getCall(8).args[0], 'W0021');
 
+        setLicenseCheckSkipCondition(false);
+
         verifyLicense('in.put');
         assert.strictEqual(errors.log.getCall(9).args[0], 'W0021');
+
+        setLicenseCheckSkipCondition(false);
 
         verifyLicense('3.2.1', '1.2.3');
         assert.strictEqual(errors.log.getCall(10).args[0], 'W0021');

@@ -13,7 +13,6 @@ import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 import { getPathParts } from './utils/data';
 import { verifyLicense } from './utils/license';
-import { version } from './version';
 
 const getEventName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3);
@@ -22,8 +21,6 @@ const getEventName = (actionName) => {
 const isInnerOption = (optionName) => {
     return optionName.indexOf('_', 0) === 0;
 };
-
-let isLicenseVerified = false;
 
 export const Component = Class.inherit({
     _setDeprecatedOptions() {
@@ -87,10 +84,7 @@ export const Component = Class.inherit({
         this.postponedOperations = new PostponedOperations();
         this._createOptions(options);
 
-        if(!isLicenseVerified) {
-            isLicenseVerified = true;
-            verifyLicense(Config().license, version);
-        }
+        verifyLicense(Config().license);
     },
 
     _createOptions(options) {
@@ -394,13 +388,3 @@ export const Component = Class.inherit({
         this.endUpdate();
     }
 });
-
-///#DEBUG
-export function setLicenseCheckSkipCondition(value = true) {
-    isLicenseVerified = value;
-}
-
-export function getLicenseCheckSkipCondition() {
-    return isLicenseVerified;
-}
-///#ENDDEBUG
