@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.compact.css';
 import Button from 'devextreme-react/button';
@@ -26,7 +26,9 @@ import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
 import DateBoxExample from './date-box-example';
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container!);
+root.render(
   <div>
     <AccordionExample />
 
@@ -50,7 +52,7 @@ ReactDOM.render(
 
     <EditorExample />
 
-    <FormExample />
+    {/* <FormExample /> */}
 
     <ListExample />
 
@@ -70,7 +72,7 @@ ReactDOM.render(
 
     <RerenderedChartExample />
 
-    <SlideOutViewExample />
+    {/* <SlideOutViewExample /> */}
 
     <ScrollViewExample />
 
@@ -80,14 +82,13 @@ ReactDOM.render(
 
     <ValidationExample />
 
-    <SchedulerExample />
+    {/* <SchedulerExample /> */}
 
     <Example title="SelectBox example">
       <SelectBoxExample />
     </Example>
 
-    <StandaloneValidatorExample />
+    {/* <StandaloneValidatorExample /> */}
 
   </div>,
-  document.getElementById('app'),
 );
