@@ -1178,7 +1178,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         assert.equal(allDayEditor.option('value'), true, 'value is right');
     });
 
-    QUnit.test('allDay changing should switch date & type in editors', function(assert) {
+    QUnit.test('allDay changing should switch type, but not date in editors', function(assert) {
         const scheduler = createInstance({
             startDayHour: 5,
         });
@@ -1200,7 +1200,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         assert.deepEqual(startDate.option('value'), new Date(2015, 1, 1), 'value is right');
         assert.equal(startDate.option('type'), 'date', 'type is right');
 
-        assert.deepEqual(endDate.option('value'), new Date(2015, 1, 1), 'value is right');
+        assert.deepEqual(endDate.option('value'), new Date(2015, 1, 2), 'value is right');
         assert.equal(endDate.option('type'), 'date', 'type is right');
 
         allDayEditor.option('value', false);
@@ -1208,7 +1208,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         assert.equal(startDate.option('type'), 'datetime', 'type is right after turning off allDay');
         assert.equal(endDate.option('type'), 'datetime', 'type is right after turning off allDay');
         assert.deepEqual(startDate.option('value'), new Date(2015, 1, 1, 5), 'startdate is OK');
-        assert.deepEqual(endDate.option('value'), new Date(2015, 1, 1, 5, 30), 'enddate is OK');
+        assert.deepEqual(endDate.option('value'), new Date(2015, 1, 2, 5, 30), 'enddate is OK');
     });
 
     QUnit.test('allDay changing should switch only type in editors, if startDate is undefined', function(assert) {
