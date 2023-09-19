@@ -610,7 +610,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   private throwWarningIfNoOnExportingEvent(): void {
     const hasProp = isDefined(this.option('onExporting'));
-    const hasEvent = (this.component as any)._eventsStrategy.hasEvent('exporting');
+    const hasEvent = (this.component as any)._eventsStrategy?.hasEvent('exporting');
     const hasOnExporting = hasProp || hasEvent;
 
     if (this.option('export.enabled') && !hasOnExporting) {
