@@ -473,8 +473,8 @@ QUnit.module('general', {}, () => {
     });
 
     QUnit.test('dxTextEditor with wrong stylingMode option should set the class according to default option value (platform specific)', function(assert) {
-        const realIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => {
+        const realIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = () => {
             return true;
         };
 
@@ -484,7 +484,7 @@ QUnit.module('general', {}, () => {
 
         assert.ok($textEditor.hasClass('dx-editor-filled'));
 
-        themes.isMaterial = realIsMaterial;
+        themes.isMaterialBased = realIsMaterialBased;
     });
 });
 

@@ -15,9 +15,8 @@
 // adduse
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0;
-$fluent-texteditor-icon-container-size: $fluent-base-icon-size - 2px;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
-$fluent-editor-custom-button-margin: 5px;
+$fluent-editor-custom-button-margin: 6px;
 
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
@@ -117,7 +116,7 @@ $fluent-editor-custom-button-margin: 5px;
   &.dx-state-focused,
   &.dx-state-focused.dx-state-hover {
     .dx-texteditor-label {
-      color: $base-accent;
+      color: $base-compound-accent;
       font-size: $fluent-texteditor-label-font-size;
     }
 
@@ -361,8 +360,8 @@ $fluent-editor-custom-button-margin: 5px;
 
 .dx-show-clear-button {
   .dx-clear-button-area {
-    width: $fluent-texteditor-icon-container-size;
-    min-width: $fluent-texteditor-icon-container-size;
+    width: $texteditor-icon-container-size;
+    min-width: $texteditor-icon-container-size;
     right: 0;
     display: flex;
     align-items: center;
@@ -535,7 +534,8 @@ $fluent-editor-custom-button-margin: 5px;
 @include dx-editor-buttons-container-material(
   $fluent-underlined-editor-button-height,
   $fluent-editor-custom-button-margin,
+  $fluent-editor-custom-button-margin,
   $fluent-filled-texteditor-input-button-horizontal-padding,
-  $fluent-filled-texteditor-spin-button-horizontal-padding,
+  $texteditor-spin-button-horizontal-padding,
   $fluent-button-vertical-padding,
 );

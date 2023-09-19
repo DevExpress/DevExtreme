@@ -78,10 +78,13 @@
 
   &.dx-state-disabled {
     .dx-tag-content {
-      background-color: $tagbox-tag-disabled-bg;
+      color: $tagbox-tag-foreground-disabled;
+      background-color: $tagbox-tag-disabled;
+    }
 
-      .dx-tag-remove-button::before {
-        color: $tagbox-tag-disabled-bg;
+    .dx-tag-remove-button {
+      &::before {
+        color: $tagbox-tag-foreground-disabled;
       }
     }
   }
@@ -143,7 +146,7 @@
   &.dx-state-focused {
     .dx-tag-content {
       color: $tagbox-tag-active-color;
-      border-color: $base-accent-active;
+      border-color: $base-compound-accent-active;
     }
   }
 }

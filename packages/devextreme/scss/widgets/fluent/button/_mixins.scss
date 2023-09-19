@@ -8,10 +8,6 @@
 @use "../../base/button/mixins" as *;
 
 $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizontal-padding;
-$fluent-normal-button-shadow: $fluent-button-box-shadow-size $button-shadow-color;
-$fluent-normal-button-active-state-shadow: $fluent-button-active-box-shadow-size $button-active-shadow-color;
-$fluent-normal-button-hovered-state-shadow: $fluent-button-box-shadow-size $button-hover-shadow-color;
-$fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $button-focused-shadow-color;
 
 @mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
   min-width: $fluent-button-height;
@@ -51,6 +47,8 @@ $fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $butt
 @mixin dx-button-styling-variant(
   $background-color,
   $text-color,
+  $text-color-hover,
+  $text-color-active,
   $hover-background-color,
   $focused-background-color,
   $active-background-color,
@@ -77,14 +75,29 @@ $fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $butt
 
   &.dx-state-hover {
     background-color: $hover-background-color;
+
+    &,
+    .dx-icon {
+      color: $text-color-hover;
+    }
   }
 
   &.dx-state-focused {
     background-color: $focused-background-color;
+    
+    &,
+    .dx-icon {
+      color: $text-color-hover;
+    }
   }
 
   &.dx-state-active {
     background-color: $active-background-color;
+    
+    &,
+    .dx-icon {
+      color: $text-color-active;
+    }
   }
 
   .dx-inkripple-wave {
@@ -106,6 +119,8 @@ $fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $butt
 
   @include dx-button-styling-variant(
     $button-bg,
+    $button-color,
+    $button-color,
     $button-color,
     $button-hover-bg,
     $button-focused-bg,
@@ -138,10 +153,12 @@ $fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $butt
   }
 }
 
-@mixin dx-button-flat-color-styling($button-color, $hover-bg, $focused-bg, $active-bg, $selected-bg: $active-bg, $selected-color: $button-color) {
+@mixin dx-button-flat-color-styling($button-color, $button-color-hover, $button-color-active, $hover-bg, $focused-bg, $active-bg, $selected-bg: $active-bg, $selected-color: $button-color) {
   @include dx-button-styling-variant(
     transparent,
     $button-color,
+    $button-color-hover,
+    $button-color-active,
     $hover-bg,
     $focused-bg,
     $active-bg,
@@ -152,7 +169,17 @@ $fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $butt
   );
 }
 
-@mixin dx-button-outlined-color-styling($button-color, $border-color, $hover-bg, $focused-bg, $active-bg, $selected-bg, $selected-color) {
+@mixin dx-button-outlined-color-styling(
+  $button-color,
+  $button-color-hover,
+  $button-color-active,
+  $border-color,
+  $hover-bg,
+  $focused-bg,
+  $active-bg,
+  $selected-bg,
+  $selected-color: $button-color-active,
+) {
   border-width: 1px;
   border-style: solid;
   border-color: $border-color;
@@ -160,11 +187,14 @@ $fluent-normal-button-focused-state-shadow: $fluent-button-box-shadow-size $butt
   @include dx-button-styling-variant(
     transparent,
     $button-color,
+    $button-color-hover,
+    $button-color-active,
     $hover-bg,
     $focused-bg,
     $active-bg,
     transparent,
     $button-color,
     $selected-bg,
+    $selected-color,
   );
 }
