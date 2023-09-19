@@ -1,7 +1,9 @@
 name: Spike Node.js install
 
 on:
-  - push
+  push:
+    branches:
+      - '**'
 
 jobs:
   self-hosted-patch:
