@@ -596,7 +596,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       box-shadow: none;
     }
 
-    border-radius: 2px;
+    border-radius: 4px;
   }
 }
 
@@ -606,6 +606,16 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-dropdown-appointment-date {
   color: $scheduler-dropdown-appointment-date-color;
+}
+
+.dx-scheduler-appointment-strip {
+  display: block;
+  position: absolute;
+  width: 6px;
+  height: 100%;
+  background-color: $base-accent;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
 }
 
 .dx-scheduler-work-space-vertical-grouped { // stylelint-disable-line no-duplicate-selectors

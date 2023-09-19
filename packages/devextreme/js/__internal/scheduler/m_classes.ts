@@ -22,6 +22,7 @@ export const APPOINTMENT_CONTENT_CLASSES = {
   APPOINTMENT_DATE: 'dx-scheduler-appointment-content-date',
   ALL_DAY_CONTENT: 'dx-scheduler-appointment-content-allday',
   ITEM: 'dx-scheduler-appointment',
+  STRIP: 'dx-scheduler-appointment-strip',
 
   AGENDA_MARKER: 'dx-scheduler-agenda-appointment-marker',
   AGENDA_RESOURCE_LIST: 'dx-scheduler-appointment-resource-list',
