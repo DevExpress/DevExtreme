@@ -71,7 +71,7 @@ const App = () => {
       defaultCurrentDate={currentDate}
       currentView={currentView}
       onCurrentViewChange={onCurrentViewChange}
-      height={600}
+      height={730}
       showAllDayPanel={false}
       firstDayOfWeek={0}
       startDayHour={9}

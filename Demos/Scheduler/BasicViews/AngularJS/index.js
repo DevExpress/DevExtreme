@@ -8,6 +8,6 @@ DemoApp.controller('DemoController', ($scope) => {
     currentView: 'day',
     startDayHour: 9,
     currentDate: new Date(2021, 3, 29),
-    height: 600,
+    height: 730,
   };
 });

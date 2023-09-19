@@ -121,7 +121,7 @@ const App = () => {
         recurrenceEditMode="series"
         onAppointmentContextMenu={onAppointmentContextMenu}
         onCellContextMenu={onCellContextMenu}
-        height={600}
+        height={730}
       >
         <Resource
           dataSource={resourcesData}

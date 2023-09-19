@@ -14,7 +14,7 @@ const App = () => (
     views={views}
     defaultCurrentView="week"
     defaultCurrentDate={currentDate}
-    height={600}
+    height={730}
     startDayHour={9} />
 );
 

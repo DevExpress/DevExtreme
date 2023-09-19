@@ -56,7 +56,7 @@ DemoApp.controller('DemoController', ($scope) => {
       dataSource: resourcesData,
       label: 'Room',
     }],
-    height: 600,
+    height: 730,
   };
 
   const onItemClick = function (contextMenuEvent) {

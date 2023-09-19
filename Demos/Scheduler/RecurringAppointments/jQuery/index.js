@@ -11,6 +11,6 @@ $(() => {
       dataSource: resourcesData,
       label: 'Room',
     }],
-    height: 600,
+    height: 730,
   });
 });

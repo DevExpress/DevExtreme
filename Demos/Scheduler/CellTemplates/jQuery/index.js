@@ -8,7 +8,7 @@ $(() => {
     startDayHour: 9,
     endDayHour: 19,
     showAllDayPanel: false,
-    height: 600,
+    height: 730,
 
     dataCellTemplate(itemData, itemIndex, itemElement) {
       const date = itemData.startDate;

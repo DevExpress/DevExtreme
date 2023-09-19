@@ -25,7 +25,7 @@ const App = () => (
     views={views}
     defaultCurrentView="Auto Mode"
     defaultCurrentDate={currentDate}
-    height={650}
+    height={730}
   >
     <Resource
       dataSource={resourcesData}

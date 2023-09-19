@@ -27,7 +27,7 @@ $(() => {
       dataSource: resourcesData,
       label: 'Room',
     }],
-    height: 600,
+    height: 730,
   });
 
   const contextMenuInstance = $('#context-menu').dxContextMenu({

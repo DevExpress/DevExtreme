@@ -31,6 +31,6 @@ $(() => {
         label: 'Priority',
       },
     ],
-    height: 700,
+    height: 730,
   }).dxScheduler('instance');
 });

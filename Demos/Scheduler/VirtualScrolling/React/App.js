@@ -17,7 +17,7 @@ const appointments = generateAppointments(startDay, endDay, startDayHour, endDay
 const App = () => (
   <Scheduler
     dataSource={appointments}
-    height={600}
+    height={730}
     defaultCurrentView='Timeline'
     defaultCurrentDate={currentDate}
     startDayHour={startDayHour}

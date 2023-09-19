@@ -8,7 +8,7 @@ $(() => {
   const appointments = generateAppointments(startDay, endDay, startDayHour, endDayHour);
 
   $('#scheduler').dxScheduler({
-    height: 600,
+    height: 730,
     currentDate: new Date(2021, 1, 2),
     dataSource: appointments,
     views: [

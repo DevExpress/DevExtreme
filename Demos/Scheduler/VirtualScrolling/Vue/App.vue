@@ -2,7 +2,7 @@
   <DxScheduler
     :data-source="dataSource"
     :current-date="currentDate"
-    :height="600"
+    :height="730"
     :start-day-hour="8"
     :end-day-hour="20"
     :cell-duration="60"

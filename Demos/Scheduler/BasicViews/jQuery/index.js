@@ -6,6 +6,6 @@ $(() => {
     currentView: 'day',
     currentDate: new Date(2021, 3, 29),
     startDayHour: 9,
-    height: 600,
+    height: 730,
   });
 });

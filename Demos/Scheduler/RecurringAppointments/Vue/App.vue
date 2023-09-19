@@ -4,7 +4,7 @@
     :data-source="dataSource"
     :current-date="currentDate"
     :views="views"
-    :height="600"
+    :height="730"
     :start-day-hour="9"
     current-view="month"
   >

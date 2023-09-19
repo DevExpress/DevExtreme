@@ -14,7 +14,7 @@ $(() => {
 
   $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
-    height: 600,
+    height: 730,
     dataSource: data,
     showAllDayPanel: false,
     views: ['day',

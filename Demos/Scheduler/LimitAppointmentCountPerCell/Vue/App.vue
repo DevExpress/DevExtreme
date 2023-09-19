@@ -4,7 +4,7 @@
       time-zone="America/Los_Angeles"
       :data-source="dataSource"
       :current-date="currentDate"
-      :height="650"
+      :height="730"
       current-view="month"
     >
       <DxResource

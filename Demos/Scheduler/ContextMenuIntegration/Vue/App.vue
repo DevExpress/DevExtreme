@@ -9,7 +9,7 @@
       :current-date="currentDate"
       :cross-scrolling-enabled="crossScrollingEnabled"
       :start-day-hour="9"
-      :height="600"
+      :height="730"
       :on-appointment-context-menu="onAppointmentContextMenu"
       :on-cell-context-menu="onCellContextMenu"
       current-view="month"

@@ -6,7 +6,7 @@
       :groups="groups"
       :group-by-date="groupByDate"
       :current-date="currentDate"
-      :height="700"
+      :height="730"
       :start-day-hour="9"
       :end-day-hour="16"
       :cross-scrolling-enabled="true"

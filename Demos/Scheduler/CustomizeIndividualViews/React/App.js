@@ -22,7 +22,7 @@ const App = () => (
     defaultCurrentView="workWeek"
     showAllDayPanel={false}
     defaultCurrentDate={currentDate}
-    height={600}
+    height={730}
     startDayHour={7}
     endDayHour={23}
   >

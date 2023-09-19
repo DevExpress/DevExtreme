@@ -6,7 +6,7 @@
     :start-day-hour="7"
     :end-day-hour="23"
     :show-all-day-panel="false"
-    height="600"
+    height="730"
     current-view="workWeek"
   >
     <DxView

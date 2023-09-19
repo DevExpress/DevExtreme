@@ -15,7 +15,7 @@ const App = () => (
     defaultCurrentView="month"
     defaultCurrentDate={currentDate}
     startDayHour={9}
-    height={600}
+    height={730}
   >
     <Resource
       dataSource={resourcesData}

@@ -26,7 +26,7 @@ DemoApp.controller('DemoController', ($scope) => {
         label: 'Priority',
       },
     ],
-    height: 700,
+    height: 730,
     bindingOptions: {
       groupByDate: 'groupByDate',
     },

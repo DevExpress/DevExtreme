@@ -22,6 +22,6 @@ $(() => {
       dataSource: resourcesData,
       label: 'Room',
     }],
-    height: 650,
+    height: 730,
   }).dxScheduler('instance');
 });

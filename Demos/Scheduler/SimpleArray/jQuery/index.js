@@ -6,6 +6,6 @@ $(() => {
     currentView: 'week',
     currentDate: new Date(2021, 2, 28),
     startDayHour: 9,
-    height: 600,
+    height: 730,
   }).dxScheduler('instance');
 });

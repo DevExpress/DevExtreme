@@ -4,7 +4,7 @@
     :current-date="currentDate"
     :views="views"
     v-model:current-view="currentView"
-    :height="600"
+    :height="730"
     :show-all-day-panel="false"
     :first-day-of-week="0"
     :start-day-hour="9"
