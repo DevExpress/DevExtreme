@@ -121,7 +121,7 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   imageAlt?: string;
   imageSrc?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;

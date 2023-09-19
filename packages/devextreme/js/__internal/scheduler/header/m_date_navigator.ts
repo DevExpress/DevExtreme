@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { isMaterial } from '@js/ui/themes';
+import { isMaterialBased } from '@js/ui/themes';
 
 const { trimTime } = dateUtils;
 
@@ -20,7 +20,7 @@ export const getDateNavigator = (header, item) => {
   ];
 
   // @ts-expect-error
-  const stylingMode = isMaterial() ? 'text' : 'contained';
+  const stylingMode = isMaterialBased() ? 'text' : 'contained';
 
   return {
     widget: 'dxButtonGroup',

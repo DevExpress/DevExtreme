@@ -5,7 +5,7 @@ import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
-import { isFunction } from '@js/core/utils/type';
+import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
@@ -18,6 +18,8 @@ import type {
 } from './m_types';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
+
+const BORDERED_VIEWS = ['columnHeadersView', 'rowsView', 'footerView', 'filterPanelView'];
 
 const ModuleItem = Class.inherit({
   _endUpdateCore() { },
@@ -256,6 +258,89 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     return this.component._getTemplate(name);
   },
 
+  getView(name) {
+    return this.component._views[name];
+  },
+
+  getFirstVisibleViewElement() {
+    const columnHeaderView = this.getView('columnHeadersView');
+    if (columnHeaderView && columnHeaderView.isVisible()) {
+      return columnHeaderView.element();
+    }
+
+    return this.getView('rowsView').element();
+  },
+
+  getLastVisibleViewElement() {
+    const filterPanelView = this.getView('filterPanelView');
+    if (filterPanelView && filterPanelView.isVisible()) {
+      return filterPanelView.element();
+    }
+
+    const footerView = this.getView('footerView');
+    if (footerView && footerView.isVisible()) {
+      return footerView.element();
+    }
+
+    return this.getView('rowsView').element();
+  },
+
+  getViewElementWithClass(className) {
+    const borderedView = BORDERED_VIEWS.map((viewName) => this.getView(viewName))
+      .filter((view) => view && view.element())
+      .find((view) => view.element().hasClass(className));
+
+    return borderedView && borderedView.element();
+  },
+
+  updateBorderedViews() {
+    const BORDERED_TOP_VIEW_CLASS = 'dx-bordered-top-view';
+    const BORDERED_BOTTOM_VIEW_CLASS = 'dx-bordered-bottom-view';
+
+    const oldFirstBorderedElement = this.getViewElementWithClass(BORDERED_TOP_VIEW_CLASS);
+    const oldLastBorderedElement = this.getViewElementWithClass(BORDERED_BOTTOM_VIEW_CLASS);
+    const newFirstBorderedElement = this.getFirstVisibleViewElement();
+    const newLastBorderedElement = this.getLastVisibleViewElement();
+
+    if (oldFirstBorderedElement && !oldFirstBorderedElement.is(newFirstBorderedElement)) {
+      oldFirstBorderedElement.removeClass(BORDERED_TOP_VIEW_CLASS);
+    }
+
+    if (oldLastBorderedElement && !oldLastBorderedElement.is(newLastBorderedElement)) {
+      oldLastBorderedElement.removeClass(BORDERED_BOTTOM_VIEW_CLASS);
+    }
+
+    if (!newFirstBorderedElement.hasClass(BORDERED_TOP_VIEW_CLASS)) {
+      newFirstBorderedElement.addClass(BORDERED_TOP_VIEW_CLASS);
+    }
+
+    if (!newLastBorderedElement.hasClass(BORDERED_BOTTOM_VIEW_CLASS)) {
+      newLastBorderedElement.addClass(BORDERED_BOTTOM_VIEW_CLASS);
+    }
+  },
+
+  isViewsStateValid() {
+    if (this.component._views) {
+      if (!BORDERED_VIEWS.includes(this.name)) {
+        return false;
+      }
+
+      const rowsView = this.getView('rowsView');
+      if (!(rowsView && isDefined(rowsView.element?.()))) {
+        return false;
+      }
+
+      const optionalViews = ['columnHeadersView', 'footerView', 'filterPanelView']
+        .map((viewName) => this.getView(viewName))
+        .filter((view) => view && view.isVisible?.());
+      const isOptionalViewsRendered = optionalViews.every((view) => view && isDefined(view.element()));
+
+      return isOptionalViewsRendered;
+    }
+
+    return false;
+  },
+
   render($parent, options) {
     let $element = this._$element;
     const isVisible = this.isVisible();
@@ -270,6 +355,11 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     }
 
     $element.toggleClass('dx-hidden', !isVisible);
+
+    if (this.isViewsStateValid()) {
+      this.updateBorderedViews();
+    }
+
     if (isVisible) {
       this.component._optionCache = {};
       const deferred = this._renderCore(options);

@@ -8,6 +8,7 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
+import errors from '@js/ui/widget/ui.errors';
 
 import gridCoreUtils from '../m_utils';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
@@ -484,6 +485,8 @@ const VirtualScrollingRowsViewExtender = (function () {
       const changeType = change && change.changeType;
       const d: any = Deferred();
 
+      this.throwHeightWarningIfNeed();
+
       const contentTable = contentElement.children().first();
       if (changeType === 'append' || changeType === 'prepend') {
         this.waitAsyncTemplates().done(() => {
@@ -744,6 +747,14 @@ const VirtualScrollingRowsViewExtender = (function () {
       }
 
       this.callBase.call(this, isLoading, messageText);
+    },
+
+    throwHeightWarningIfNeed() {
+      const needToThrow = !this._hasHeight && isVirtualPaging(this);
+      if (needToThrow && !this._heightWarningIsThrown) {
+        this._heightWarningIsThrown = true;
+        errors.log('W1025');
+      }
     },
 
     _resizeCore() {
@@ -1408,13 +1419,15 @@ export const virtualScrollingModule = {
           loadViewport(params) {
             const { checkLoadedParamsOnly, checkLoading, viewportIsNotFilled } = params ?? {};
             const virtualPaging = isVirtualPaging(this);
+
             if (virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
               this._updateLoadViewportParams();
 
               const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
-
+              const isCustomLoading = this._dataSource?.isCustomLoading();
+              const isLoading = checkLoading && !isCustomLoading && this._isLoading;
               const needToUpdateItems = !(loadingItemsStarted
-                                || this._isLoading && checkLoading
+                                || isLoading
                                 || checkLoadedParamsOnly);
 
               if (needToUpdateItems) {

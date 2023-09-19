@@ -55,6 +55,11 @@ export default class MetadataGenerator {
     return metaItems;
   }
 
+  static getOverriddenVariables(metaItems: MetaItem[]): string {
+    const result = metaItems.map((item) => `${item.Key}: getCustomVar(("${item.Key}")) !default;`).join('\n');
+    return result;
+  }
+
   static getMapFromMeta(metaItems: MetaItem[]): string {
     const result = metaItems.map((item) => `"${item.Key}": ${item.Key},\n`).join('');
     return `(\n${result})`;
@@ -64,20 +69,8 @@ export default class MetadataGenerator {
     return fileName.includes('bundles');
   }
 
-  static getMainColorsFileTheme(fileName: string): string {
-    const match = /widgets[/\\](material|generic)[/\\]_colors.scss/.exec(fileName);
-
-    if (match === null) return null;
-
-    return match[1];
-  }
-
   static getBundleContent(content: string): string {
     return content.replace(/(..\/widgets\/(material|generic))"/, '$1/tb_index"');
-  }
-
-  static getMainColorsFileContent(content: string, theme: string): string {
-    return content.replace(/\.\/variables/g, `tb_${theme}`);
   }
 
   clean(): void {
@@ -105,14 +98,8 @@ export default class MetadataGenerator {
     }
 
     let modifiedContent = content;
-    const mainFileTheme = MetadataGenerator.getMainColorsFileTheme(filePath);
-
-    if (mainFileTheme) {
-      modifiedContent = MetadataGenerator.getMainColorsFileContent(content, mainFileTheme);
-    }
 
     const metaItems = MetadataGenerator.getMetaItems(content);
-
     if (!metaItems.length) {
       return modifiedContent;
     }
@@ -121,8 +108,9 @@ export default class MetadataGenerator {
       this.fillMetaData(item, filePath);
     });
 
+    const overriddenVariables = MetadataGenerator.getOverriddenVariables(metaItems);
     const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
-    modifiedContent += collector;
+    modifiedContent = overriddenVariables + '\n\n' + modifiedContent + collector;
 
     return modifiedContent;
   }

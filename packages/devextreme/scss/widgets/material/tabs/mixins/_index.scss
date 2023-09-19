@@ -1,0 +1,89 @@
+@use "../variables/sizes" as *;
+
+// adduse
+
+
+@mixin dx-tabs-indicator-primary-mixin($position, $color) {
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: $color;
+
+    @if $position == top {
+      top: 0;
+      right: 0;
+      left: 0;
+      width: $material-indicator-length-primary;
+      height: $material-indicator-thickness-primary;
+    } @else if $position == right {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      height: $material-indicator-length-primary;
+      width: $material-indicator-thickness-primary;
+    } @else if $position == bottom {
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: $material-indicator-length-primary;
+      height: $material-indicator-thickness-primary;
+    } @else if $position == left {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: $material-indicator-length-primary;
+      width: $material-indicator-thickness-primary;
+    }
+  }
+}
+
+@mixin dx-tabs-indicator-secondary-base-mixin($position, $color) {
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: $material-indicator-length-secondary;
+    height: $material-indicator-thickness-secondary;
+    background-color: $color;
+
+    @if $position == top {
+      top: -$material-tabs-item-padding-horizontal;
+      border-bottom-right-radius: $material-indicator-border-radius-secondary;
+      border-bottom-left-radius: $material-indicator-border-radius-secondary;
+      border-top-right-radius: unset;
+      border-top-left-radius: unset;
+    } @else if $position == bottom {
+      bottom: -$material-tabs-item-padding-horizontal;
+      border-top-right-radius: $material-indicator-border-radius-secondary;
+      border-top-left-radius: $material-indicator-border-radius-secondary;
+      border-bottom-right-radius: unset;
+      border-bottom-left-radius: unset;
+    }
+  }
+}
+
+@mixin dx-tabs-indicator-secondary-vertical-mixin($position, $color) {
+  &::after {
+    content: "";
+    position: absolute;
+    top: $material-tabs-item-padding-horizontal;
+    width: $material-indicator-thickness-secondary;
+    height: calc($material-indicator-length-secondary - 2 * $material-tabs-item-padding-horizontal);
+    background-color: $color;
+
+    @if $position == right {
+      right: 0;
+      border-top-left-radius: $material-indicator-border-radius-secondary;
+      border-bottom-left-radius: $material-indicator-border-radius-secondary;
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
+    } @else if $position == left {
+      left: 0;
+      border-top-right-radius: $material-indicator-border-radius-secondary;
+      border-bottom-right-radius: $material-indicator-border-radius-secondary;
+      border-top-left-radius: unset;
+      border-bottom-left-radius: unset;
+    }
+  }
+}

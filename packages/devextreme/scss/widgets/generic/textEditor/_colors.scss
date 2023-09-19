@@ -53,6 +53,10 @@ $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !defaul
 $texteditor-filled-invalid-background: null !default;
 $texteditor-border-radius: $base-border-radius !default;
 $texteditor-input-border-radius: $base-border-radius !default;
+$texteditor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $color == "carmine" {
   $texteditor-placeholder-color: $base-label-color !default;

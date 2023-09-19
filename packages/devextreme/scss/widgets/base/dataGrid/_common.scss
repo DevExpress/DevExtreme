@@ -30,7 +30,7 @@
 }
 
 .dx-datagrid-group-panel {
-  display: inline-block;
+  display: flex;
   white-space: nowrap;
   width: 100%;
   touch-action: pinch-zoom;
@@ -44,11 +44,8 @@
   }
 
   .dx-block-separator {
-    @include dx-group-panel-item();
-
-    color: transparent;
     position: relative;
-    min-width: 0;
+    border-radius: 3px;
   }
 }
 

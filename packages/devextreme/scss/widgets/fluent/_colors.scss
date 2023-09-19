@@ -10,14 +10,22 @@ $fluent-color-accent-modificator: null !default;
   * $name 10. Accent color
   * $type color
   */
-$base-accent: #0f6cbd !default;
+$base-accent: null !default;
+$base-accent-hover: null !default;
+$base-accent-active: null !default;
+$base-accent-selected: null !default;
+
+$base-compound-accent: null !default;
+$base-compound-accent-hover: null !default;
+$base-compound-accent-active: null !default;
+
 $fluent-color-theme-modificator: null !default;
 
 /**
 * $name 10. Font family
 * $type text
 */
-$base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif !default;
+$base-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
 * $name 20. Text color
@@ -48,21 +56,56 @@ $base-spin-icon-color: null !default;
 * $type color
 */
 $base-bg: null !default;
+$base-bg-hover: null !default;
+$base-bg-active: null !default;
+$base-bg-selected: null !default;
+
+$base-brand-bg: null !default;
+$base-brand2-bg-hover: null !default;
+$base-brand2-bg-active: null !default;
+
+$base-accent-foreground: null !default;
+$base-accent-foreground2: null !default;
+$base-accent-foreground2-hover: null !default;
+$base-accent-foreground2-active: null !default;
+
+$base-bg-inverted: rgba(255, 255, 255, 1) !default; // #ffffff;
+$base-bg-inverted-hover: rgba(235, 243, 252, 1) !default; // #ebf3fc
+$base-bg-inverted-active: rgba(180, 214, 250, 1) !default; // #bdd6fa
+$base-bg-inverted-selected: rgba(207, 228, 250, 1) !default; // #cfe4fa
+
+$base-neutral-background: null !default;
+$base-neutral-background6: null !default;
+$base-neutral-foreground1: null !default;
+$base-neutral-foreground2: null !default;
+$base-neutral-foreground3: null !default;
+$base-neutral-background-hover: null !default;
 
 /**
 * $name 40. Border color
 * $type color
 */
 $base-border-color: null !default;
+$base-border-color-hover: null !default;
+$base-border-color-focused: null !default;
+$base-border-color-accessible: null !default;
+$base-border-color-accessible-hover: null !default;
+$base-border-color-accessible-focused: null !default;
 $base-inverted-bg: null !default;
 $base-element-bg: null !default;
 $base-shadow-color: null !default;
+
+$base-foreground-disabled: null !default;
+$base-neutral-background-disabled: null !default;
 
 /**
 * $name 50. Success color
 * $type color
 */
-$base-success: #107c10 !default;
+$base-success: rgba(16, 124, 16, 1) !default; // #107c10
+$base-success-hover: rgba(14, 112, 14, 1) !default; // #0e700e
+$base-success-active: rgba(9, 69, 9, 1) !default; // #094509
+$base-success-selected: darken(desaturate(adjust-hue($base-success, -1), 4.65), 9.61) !default; // #0e4e0d
 
 /**
 * $name 60. Warning color
@@ -74,7 +117,10 @@ $base-warning: #fde300 !default;
 * $name 70. Danger color
 * $type color
 */
-$base-danger: #d13438 !default;
+$base-danger: rgba(209, 52, 56, 1) !default; // #d13438
+$base-danger-hover: rgba(177, 40, 44, 1) !default; // #b1282c
+$base-danger-active: rgba(132, 30, 32, 1) !default; // #841e20
+$base-danger-selected: darken(desaturate(adjust-hue($base-danger, -1), 4.65), 9.61) !default; // #a82c31
 
 /**
 * $name 80. Hovered state text color
@@ -104,9 +150,9 @@ $typography-bg: null !default;
 $typography-color: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
+$base-disabled-color: null !default;
+$base-border-color-disabled: null !default;
 $base-dropdown-shadow-color: null !default;
-$base-invalid-color: $base-danger !default;
-$base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 $scrollview-pulldown-path: null !default;
 
 
@@ -114,22 +160,48 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-accent-modificator: "blue" !default;
 }
 
-/**
-* $name 30. Link color
-* $type color
-*/
-$base-link-color: $base-accent !default;
-
-$typography-link-color: $base-link-color !default;
-
 @if $mode == "light" {
+  $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
+  $base-accent-hover: rgba(17, 94, 163, 1) !default; // #115ea3
+  $base-accent-active: rgba(12, 59, 94, 1) !default; // #0c3b5e
+  $base-accent-selected: rgba(15, 84, 140, 1) !default; // #0f548c
+
+  $base-compound-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
+  $base-compound-accent-hover: rgba(17, 94, 163, 1) !default; // #115ea3
+  $base-compound-accent-active: rgba(15, 84, 140, 1) !default; // #0f548c
+
+  $base-accent-foreground: #0F6CBD !default;
+  $base-accent-foreground2: #115EA3 !default;
+  $base-accent-foreground2-hover: #0F548C !default;
+  $base-accent-foreground2-active: #0A2E4A !default;
+
   $fluent-color-theme-modificator: "light" !default;
   $base-text-color: rgba(36, 36, 36, 1) !default;
-  $base-label-color: $base-text-color !default;
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-bg: #fff !default;
-  $base-border-color: rgba(209, 209, 209, 1) !default;
+  $base-label-color: rgba(0, 0, 0, 0.6) !default;
+  $base-disabled-color: rgba(224, 224, 224, 1) !default; // e0e0e0 // rgba(0, 0, 0, $base-disabled-opacity) !default;
+  $base-border-color-disabled: rgba(224, 224, 224, 1) !default; // e0e0e0
+  $base-neutral-background-disabled: rgb(240, 240, 240) !default; // f0f0f0
+  $base-foreground-disabled: rgba(189, 189, 189, 1) !default; // bdbdbd
+  $base-neutral-foreground1: rgba(36, 36, 36, 1) !default; // #242424;
+  $base-neutral-foreground2: rgba(66, 66, 66, 1) !default; // #424242;
+  $base-neutral-foreground3: rgba(97, 97, 97, 1) !default; // #616161;
+  $base-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-spin-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-bg: rgba(255, 255, 255, 1) !default; // #ffffff
+  $base-bg-hover: rgba(245, 245, 245, 1) !default; // #f5f5f5
+  $base-bg-selected: rgba(235, 235, 235, 1) !default;// #ebebeb 
+  $base-bg-active: rgba(224, 224, 224, 1) !default; // e0e0e0
+  $base-brand2-bg-hover: rgba(207, 228, 250, 1) !default; // #CFE4FA
+  $base-brand2-bg-active: rgba(150, 198, 250, 1) !default; // #96C6FA
+  $base-neutral-background: rgba(245, 245, 245, 1) !default; // #f5f5f5
+  $base-neutral-background6: rgba(230, 230, 230, 1) !default; // #e6e6e6
+  $base-neutral-background-hover: rgba(235, 235, 235, 1) !default; // #ebebeb
+  $base-border-color: rgba(209, 209, 209, 1) !default; // d1d1d1
+  $base-border-color-hover: darken($base-border-color, 3.92) !default; // c7c7c7
+  $base-border-color-focused: darken($base-border-color, 11.76) !default; // b3b3b3
+  $base-border-color-accessible: rgba(97, 97, 97, 1) !default; // #616161
+  $base-border-color-accessible-hover: rgba(87, 87, 87, 1) !default; // #575757
+  $base-border-color-accessible-focused: rgba(77, 77, 77, 1) !default; // #4d4d4d
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
@@ -147,13 +219,47 @@ $typography-link-color: $base-link-color !default;
 }
 
 @if $mode == "dark" {
+  $base-accent: rgba(17, 94, 163, 1) !default; // #115ea3
+  $base-accent-hover: rgba(15, 108, 189, 1) !default; // #0f6cbd
+  $base-accent-active: rgba(12, 59, 94, 1) !default; // #0c3b5e
+  $base-accent-selected: rgba(15, 84, 140, 1) !default; // #0f548c
+
+  $base-accent-foreground: #479EF5 !default;
+  $base-accent-foreground2: #62ABF5 !default;
+  $base-accent-foreground2-hover: #96C6FA !default;
+  $base-accent-foreground2-active: #EBF3FC !default;
+
+  $base-compound-accent: rgba(71, 158, 245, 1) !default; // #479EF5
+  $base-compound-accent-hover: rgba(98, 171, 245, 1) !default; // #62ABF5
+  $base-compound-accent-active: rgba(40, 134, 222, 1) !default; // #2886DE
+
   $fluent-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
-  $base-label-color: $base-text-color !default;
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-bg: #363640 !default;
-  $base-border-color: #515159 !default;
+  $base-label-color: rgba(255, 255, 255, 0.6) !default;
+  $base-disabled-color: rgba(66, 66, 66, 1) !default; // #424242 // rgba(255, 255, 255, $base-disabled-opacity) !default;
+  $base-border-color-disabled: rgba(66, 66, 66, 1) !default; // #424242
+  $base-neutral-background-disabled: rgba(20, 20, 20, 1) !default; // #141414
+  $base-foreground-disabled: rgba(92, 92, 92, 1) !default; // #5c5c5c
+  $base-neutral-foreground1: rgba(255, 255, 255, 1) !default; // #ffffff;
+  $base-neutral-foreground2: rgba(214, 214, 214, 1) !default; // #d6d6d6;
+  $base-neutral-foreground3: rgba(173, 173, 173, 1) !default; // #adadad;
+  $base-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-spin-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-bg: rgba(41, 41, 41, 1) !default; // #292929
+  $base-bg-hover: rgba(61, 61, 61, 1) !default; // #3d3d3d
+  $base-bg-selected: rgba(56, 56, 56, 1) !default;// #383838
+  $base-bg-active: rgba(31, 31, 31, 1) !default; // #1f1f1f
+  $base-brand2-bg-hover: rgba(12, 59, 94, 1) !default; // #0C3B5E
+  $base-brand2-bg-active: rgba(6, 23, 36, 1) !default; // #061724 
+  $base-neutral-background: rgba(20, 20, 20, 1) !default; // #f5f5f5
+  $base-neutral-background6: rgba(51, 51, 51, 1) !default; // #e6e6e6
+  $base-neutral-background-hover: rgba(41, 41, 41, 1) !default; // #292929
+  $base-border-color: rgba(102, 102, 102, 1) !default; // #666666
+  $base-border-color-hover: lighten( $base-border-color, 5.88) !default; // #757575
+  $base-border-color-focused: lighten( $base-border-color, 1.96) !default; // #6b6b6b
+  $base-border-color-accessible: rgba(173, 173, 173, 1) !default; // #adadad
+  $base-border-color-accessible-hover: rgba(189, 189, 189, 1) !default; // #bdbdbd
+  $base-border-color-accessible-focused: rgba(179, 179, 179, 1) !default; // #b3b3b3
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
@@ -170,3 +276,15 @@ $typography-link-color: $base-link-color !default;
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
 }
 
+/**
+* $name 30. Link color
+* $type color
+*/
+$base-link-color: $base-accent !default;
+$typography-link-color: $base-link-color !default;
+
+$base-invalid-color: $base-danger !default;
+$base-invalid-color-hover: $base-danger-hover !default;
+$base-invalid-color-active: $base-danger-active !default;
+$base-invalid-color-selected: $base-danger-selected !default;
+$base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;

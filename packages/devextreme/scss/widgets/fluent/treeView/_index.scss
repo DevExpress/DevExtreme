@@ -137,8 +137,10 @@ $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5
   min-height: $fluent-treeview-min-item-height;
   line-height: math.div($fluent-treeview-min-item-height, 2) - 2;
 
-  .dx-treeview-item-content > .dx-icon {
-    @include dx-icon-sizing($fluent-base-icon-size);
+  .dx-treeview-item-content {
+    .dx-icon {
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
   }
 
   &.dx-state-hover {

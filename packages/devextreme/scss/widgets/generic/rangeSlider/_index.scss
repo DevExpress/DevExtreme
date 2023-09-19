@@ -11,9 +11,5 @@
 $generic-slider-handle-margin: -7px;
 
 .dx-rangeslider-start-handle {
-  margin-left: $generic-slider-handle-margin;
-}
-
-.dx-rtl .dx-rangeslider-start-handle {
-  margin-right: $generic-slider-handle-margin;
+  margin-inline-start: $generic-slider-handle-margin;
 }

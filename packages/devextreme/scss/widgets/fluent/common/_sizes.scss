@@ -3,7 +3,7 @@
 
 // adduse
 
-$fluent-line-height: 1.2857 !default;
+$fluent-line-height: null !default;
 
 $fluent-inline-borderedwidget-inner-size:
   $fluent-base-inline-widget-height -
@@ -14,3 +14,11 @@ $fluent-invalid-badge-horizontal-padding: math.div($fluent-inline-borderedwidget
 $fluent-invalid-badge-halfhorizontal-padding: math.div($fluent-invalid-badge-horizontal-padding, 2) !default;
 
 $fluent-valid-badge-font-size: $fluent-base-font-size + 6px !default;
+
+@if $size == "default" {
+  $fluent-line-height: 1.428571 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-line-height: 1.3333 !default;
+}

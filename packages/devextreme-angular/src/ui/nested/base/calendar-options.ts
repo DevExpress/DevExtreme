@@ -256,18 +256,11 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('validationStatus', value);
     }
 
-    get value(): Date | number | string {
+    get value(): Date | number | string | Array<Date | number | string> {
         return this._getOption('value');
     }
-    set value(value: Date | number | string) {
+    set value(value: Date | number | string | Array<Date | number | string>) {
         this._setOption('value', value);
-    }
-
-    get values(): Array<Date | number | string> {
-        return this._getOption('values');
-    }
-    set values(value: Array<Date | number | string>) {
-        this._setOption('values', value);
     }
 
     get visible(): boolean {

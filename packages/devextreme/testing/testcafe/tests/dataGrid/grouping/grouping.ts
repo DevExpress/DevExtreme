@@ -259,3 +259,46 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
     },
   });
 });
+
+test('Group panel message should be vertically aligned (T1186613)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(await takeScreenshot('group-panel-message-align.png', dataGrid.getToolbar().element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  groupPanel: {
+    visible: true,
+  },
+  showBorders: true,
+  searchPanel: {
+    visible: true,
+  },
+  editing: {
+    allowAdding: true,
+  },
+  toolbar: {
+    items: [
+      'groupPanel',
+      {
+        showText: 'always',
+        location: 'before',
+        name: 'addRowButton',
+        options: {
+          icon: null,
+          text: 'add a new row',
+        },
+      }, {
+        location: 'before',
+        widget: 'dxTextBox',
+        options: {
+          width: 140,
+          text: 'TestTest',
+        },
+      },
+    ],
+  },
+}));

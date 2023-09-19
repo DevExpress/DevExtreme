@@ -91,6 +91,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
+    get iconPosition(): string {
+        return this._getOption('iconPosition');
+    }
+    set iconPosition(value: string) {
+        this._setOption('iconPosition', value);
+    }
+
     get itemHoldTimeout(): number {
         return this._getOption('itemHoldTimeout');
     }
@@ -264,6 +271,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
     }
     set showNavButtons(value: boolean) {
         this._setOption('showNavButtons', value);
+    }
+
+    get stylingMode(): string {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: string) {
+        this._setOption('stylingMode', value);
     }
 
     get swipeEnabled(): boolean {

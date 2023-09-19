@@ -1,4 +1,7 @@
 export {
+  Position,
+  TabsIconPosition,
+  TabsStyle,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

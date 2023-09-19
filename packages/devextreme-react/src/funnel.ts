@@ -254,7 +254,7 @@ class Font extends NestedOption<IFontProps> {
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number);
+  parser?: ((value: string) => number | any);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -486,7 +486,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: FunnelLegendItem, element: any) => string) | template;
+  markerTemplate?: ((legendItem: FunnelLegendItem, element: any) => string | any) | template;
   orientation?: "horizontal" | "vertical";
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -731,7 +731,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }, element: any) => string) | template;
+  contentTemplate?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;

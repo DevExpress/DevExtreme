@@ -107,7 +107,15 @@
 .dx-icon-addtable,
 .dx-icon-removetable,
 .dx-icon-bell,
-.dx-icon-to {
+.dx-icon-to,
+.dx-icon-taskcomplete,
+.dx-icon-taskrejected,
+.dx-icon-taskinprogress,
+.dx-icon-taskstop,
+.dx-icon-taskhelpneeded,
+.dx-icon-clearcircle,
+.dx-icon-accountbox,
+.dx-icon-ordersbox {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -170,14 +178,15 @@
   }
 }
 
-@mixin dx-icon-margin($size) {
-  margin-right: $size;
-  margin-left: 0;
+@mixin dx-icon-margin($size, $position: start) {
+  @if $position == start {
+    margin-inline-end: $size;
+    margin-inline-start: 0;
+  }
 
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-left: $size;
-    margin-right: 0;
+  @if $position == end {
+    margin-inline-start: $size;
+    margin-inline-end: 0;
   }
 }
 
@@ -309,7 +318,9 @@ $icons: (
     "exportxlsx": "\f060",
     "exportpdf": "\f061",
     "exportselected": "\f06d",
+    "ordersbox": '\f06e',
     "warning": "\f06b",
+    "taskhelpneeded": '\f06f',
     "more": "\f06c",
     "square": "\f067",
     "clearsquare": "\f068",
@@ -351,6 +362,7 @@ $icons: (
     "mention": "\f090",
     "variable": "\f091",
     "clearformat": "\f092",
+    "accountbox": '\f094',
     "fullscreen": "\f11a",
     "hierarchy": "\f124",
     "docfile": "\f111",
@@ -415,6 +427,11 @@ $icons: (
     "imgarunlock": "\f157",
     "bell": "\f158",
     "sun": '\f159',
+    "taskcomplete": '\f15b',
+    "taskrejected": '\f15c',
+    "taskinprogress": '\f15d',
+    "taskstop": '\f15e',
+    "clearcircle": '\f15f',
     "send": '\f160',
     "pinmap": '\f161',
     "photooutline": '\f162',

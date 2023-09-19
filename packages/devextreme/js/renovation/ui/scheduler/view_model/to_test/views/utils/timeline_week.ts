@@ -1,4 +1,4 @@
-import timeZoneUtils from '../../../../../../../ui/scheduler/utils.timeZone';
+import timeZoneUtils from '../../../../../../../__internal/scheduler/m_utils_time_zone';
 import { GetDateForHeaderText } from '../types';
 import { getStartViewDateWithoutDST } from './base';
 

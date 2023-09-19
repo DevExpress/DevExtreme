@@ -13,7 +13,7 @@
     "clean": "gulp clean",
     "regenerate": "npm run clean && gulp generate",
     "lint": "eslint --ignore-pattern __tests__ src/core",
-    "pack": "npm run clean && gulp npm.pack",
+    "pack": "gulp npm.pack",
     "test": "jest"
   },
   "keywords": [
@@ -37,7 +37,6 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "del": "^3.0.0",
-    "devextreme-react-generator": "https://gitpkg.now.sh/DevExpress/devextreme-react/packages/devextreme-react-generator?master",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
     "gulp-shell": "^0.8.0",

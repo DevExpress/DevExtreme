@@ -41,25 +41,17 @@
 .dx-numberbox-spin-button {
   padding: $fluent-numberbox-spin-padding;
   height: 50%;
+
+  &.dx-state-disabled {
+    .dx-numberbox-spin-up-icon,
+    .dx-numberbox-spin-down-icon {
+      color: $base-foreground-disabled;
+    }
+  }
 }
 
 .dx-numberbox-spin.dx-numberbox-box {
-  &.dx-editor-underlined {
-    .dx-texteditor-input {
-      padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
-    }
-
-    @include validation-icon-position();
-  }
-
-  &.dx-editor-filled,
-  &.dx-editor-outlined {
-    .dx-texteditor-input {
-      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
-    }
-
-    @include validation-icon-position();
-  }
+  @include validation-icon-position();
 }
 
 .dx-numberbox-spin-touch-friendly {
@@ -67,59 +59,11 @@
 
   .dx-numberbox-spin-container {
     width: $fluent-numberbox-touch-friendly-spin-container-width;
-    border-left: none;
+    border-inline-start: none;
   }
 
   .dx-numberbox-spin-up-icon,
   .dx-numberbox-spin-down-icon {
     background-position: center;
-  }
-
-  &.dx-editor-underlined {
-    &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
-    }
-  }
-
-  &.dx-editor-filled,
-  &.dx-editor-outlined {
-    &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
-    }
-  }
-}
-
-
-.dx-rtl .dx-numberbox,
-.dx-numberbox.dx-rtl {
-  &.dx-numberbox-spin-touch-friendly {
-    .dx-numberbox-spin-container {
-      border-right: none;
-    }
-
-    &.dx-show-clear-button .dx-texteditor-input {
-      padding-left: $fluent-numberbox-spin-container-width;
-    }
-  }
-
-  &.dx-numberbox-spin {
-    &.dx-show-clear-button {
-      .dx-texteditor-input {
-        padding-left: $fluent-numberbox-spin-container-width;
-      }
-    }
-
-    &.dx-editor-underlined {
-      .dx-texteditor-input {
-        padding-left: $fluent-base-standard-texteditor-input-horizontal-padding;
-      }
-    }
-
-    &.dx-editor-filled,
-    &.dx-editor-outlined {
-      .dx-texteditor-input {
-        padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-      }
-    }
   }
 }

@@ -17,7 +17,7 @@ export const viewFunction = ({
     {
       splitText
         // eslint-disable-next-line react/jsx-key
-        ? textParts.map((part) => (<span className="dx-scheduler-header-panel-cell-date">{part}</span>))
+        ? textParts.map((part) => (<div className="dx-scheduler-header-panel-cell-date"><span>{part}</span></div>))
         : text
     }
   </Fragment>

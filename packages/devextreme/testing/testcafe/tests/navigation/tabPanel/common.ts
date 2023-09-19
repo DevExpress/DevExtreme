@@ -419,3 +419,54 @@ test('TabPanel borders without scrolling', async (t) => {
     return createWidget('dxTabPanel', tabPanelOptions);
   });
 });
+
+[true, false].forEach((rtlEnabled) => {
+  ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
+    test('TabPanel icon position', async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#container' });
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      const dataSource = [
+        {
+          title: 'John Heart',
+          text: 'John Heart',
+          icon: 'plus',
+        }, {
+          title: 'Olivia Peyton',
+          text: 'Olivia Peyton',
+          disabled: true,
+          icon: 'plus',
+        }, {
+          title: 'Robert Reagan',
+          text: 'Robert Reagan',
+          icon: 'plus',
+        }, {
+          title: 'Greta Sims',
+          text: 'Greta Sims',
+          icon: 'plus',
+        }, {
+          title: 'Olivia Peyton',
+          text: 'Olivia Peyton',
+          icon: 'plus',
+        },
+      ] as Item[];
+
+      const tabPanelOptions = {
+        dataSource,
+        height: 250,
+        width: 450,
+        iconPosition,
+        rtlEnabled,
+        // prevent firing dxinactive event for to avoid failing test
+        itemHoldTimeout: 5000,
+      };
+
+      return createWidget('dxTabPanel', tabPanelOptions);
+    });
+  });
+});

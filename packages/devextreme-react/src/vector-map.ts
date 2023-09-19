@@ -185,11 +185,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string) | template;
+  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string) | template;
+  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
   width?: number;
   wordWrap?: "normal" | "breakWord" | "none";
@@ -304,11 +304,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string) | template;
+  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string) | template;
+  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
   width?: number;
   wordWrap?: "normal" | "breakWord" | "none";
@@ -489,7 +489,7 @@ type ILegendProps = React.PropsWithChildren<{
   markerColor?: string;
   markerShape?: "circle" | "square";
   markerSize?: number;
-  markerTemplate?: ((legendItem: VectorMapLegendItem, element: any) => string) | template;
+  markerTemplate?: ((legendItem: VectorMapLegendItem, element: any) => string | any) | template;
   orientation?: "horizontal" | "vertical";
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -723,7 +723,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((info: MapLayerElement, element: any) => string) | template;
+  contentTemplate?: ((info: MapLayerElement, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((info: MapLayerElement) => Record<string, any>);
   enabled?: boolean;
