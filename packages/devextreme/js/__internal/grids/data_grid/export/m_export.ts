@@ -673,6 +673,13 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
+  optionChanged(args) {
+    super.optionChanged(args);
+    if (args.fullName === 'export.enabled') {
+      this.throwWarningIfNoOnExportingEvent();
+    }
+  }
+
   needLoadItemsOnExportingSelectedItems(): boolean {
     return this.option('loadItemsOnExportingSelectedItems')
       ?? this.getController('data')._dataSource.remoteOperations().filtering;
@@ -845,10 +852,6 @@ dataGridCore.registerModule('export', {
           if (args.name === 'export') {
             args.handled = true;
             this._invalidate();
-
-            if (args.fullName === 'export.enabled') {
-              this.throwWarningIfNoOnExportingEvent();
-            }
           }
         },
 
