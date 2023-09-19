@@ -377,7 +377,7 @@ QUnit.test('Hide helper text when validation message shows for material theme', 
     assert.ok(!isFieldWrapperInvalid(lastName), 'not invalid css class');
     assert.ok(!isFieldWrapperInvalid(firstName), 'not invalid css class');
 
-    themes.isMaterial = origIsMaterialBased;
+    themes.isMaterialBased = origIsMaterialBased;
 
 });
 

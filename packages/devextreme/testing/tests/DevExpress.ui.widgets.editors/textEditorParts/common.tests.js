@@ -484,7 +484,7 @@ QUnit.module('general', {}, () => {
 
         assert.ok($textEditor.hasClass('dx-editor-filled'));
 
-        themes.isMaterial = realIsMaterialBased;
+        themes.isMaterialBased = realIsMaterialBased;
     });
 });
 
