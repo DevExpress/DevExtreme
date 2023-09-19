@@ -345,7 +345,7 @@ export type GradientColor = {
  * @namespace DevExpress.common.charts
  * @public
  */
-export interface CommonSeriesPoint {
+export interface SeriesPoint {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.border
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -570,7 +570,7 @@ export interface CommonSeriesPoint {
  * @namespace DevExpress.viz
  * @public
 */
-export interface CommonSeriesLabel {
+export interface SeriesLabel {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.alignment
      * @default 'center'
