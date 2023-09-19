@@ -608,11 +608,18 @@ export class ExportController extends dataGridCore.ViewController {
     return headersView && headersView.isVisible() ? headersView.getColumnWidths() : rowsView.getColumnWidths();
   }
 
-  init() {
-    if (this.option('export.enabled') && !isDefined(this.option('onExporting'))) {
+  private throwWarningIfNoOnExportingEvent(): void {
+    const hasProp = isDefined(this.option('onExporting'));
+    const hasEvent = (this.component as any)._eventsStrategy.hasEvent('exporting');
+    const hasOnExporting = hasProp || hasEvent;
+
+    if (this.option('export.enabled') && !hasOnExporting) {
       errors.log('W1024');
     }
+  }
 
+  init() {
+    this.throwWarningIfNoOnExportingEvent();
     this._columnsController = this.getController('columns');
     this._rowsView = this.getView('rowsView');
     this._headersView = this.getView('columnHeadersView' as any);
@@ -840,9 +847,7 @@ dataGridCore.registerModule('export', {
             this._invalidate();
 
             if (args.fullName === 'export.enabled') {
-              if (args.value && !isDefined(this.option('onExporting'))) {
-                errors.log('W1024');
-              }
+              this.throwWarningIfNoOnExportingEvent();
             }
           }
         },
