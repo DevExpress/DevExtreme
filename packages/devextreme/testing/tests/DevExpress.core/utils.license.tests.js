@@ -24,35 +24,28 @@ module('License check', {
     const TOKEN_UNSUPPORTED_VERSION = 'ewogICJmb3JtYXQiOiAyLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.tTBymZMROsYyMiP6ldXFqGurbzqjhSQIu/pjyEUJA3v/57VgToomYl7FVzBj1asgHpadvysyTUiX3nFvPxbp166L3+LB3Jybw9ueMnwePu5vQOO0krqKLBqRq+TqHKn7k76uYRbkCIo5UajNfzetHhlkin3dJf3x2K/fcwbPW5A=';
 
     test('W0019 error should be logged if license is empty', function(assert) {
-        verifyLicense('', '1.0');
-        assert.equal(errors.log.callCount, 1);
-        assert.strictEqual(errors.log.getCall(0).args[0], 'W0019');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(null, '1.0');
-        assert.equal(errors.log.callCount, 2);
-        assert.strictEqual(errors.log.getCall(1).args[0], 'W0019');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(undefined, '1.0');
-        assert.equal(errors.log.callCount, 3);
-        assert.strictEqual(errors.log.getCall(2).args[0], 'W0019');
+        [
+            ['', '1.0'],
+            [null, '1.0'],
+            [undefined, '1.0']
+        ].forEach(([token, version], idx) => {
+            verifyLicense(token, version);
+            assert.equal(errors.log.callCount, idx + 1);
+            assert.strictEqual(errors.log.getCall(idx).args[0], 'W0019');
+            setLicenseCheckSkipCondition(false);
+        });
     });
 
     test('No messages should be logged if license is valid', function(assert) {
-        verifyLicense(TOKEN_23_1, '23.1');
-        assert.ok(errors.log.notCalled);
-
-        verifyLicense(TOKEN_23_1, '12.3');
-        assert.ok(errors.log.notCalled);
-
-        verifyLicense(TOKEN_23_2, '23.1');
-        assert.ok(errors.log.notCalled);
-
-        verifyLicense(TOKEN_23_2, '23.2');
-        assert.ok(errors.log.notCalled);
+        [
+            [TOKEN_23_1, '23.1'],
+            [TOKEN_23_1, '12.3'],
+            [TOKEN_23_2, '23.1'],
+            [TOKEN_23_2, '23.2']
+        ].forEach(([token, version]) => {
+            verifyLicense(token, version);
+            assert.ok(errors.log.notCalled);
+        });
     });
 
     test('Message should be logged only once', function(assert) {
@@ -70,69 +63,34 @@ module('License check', {
     });
 
     test('W0020 error should be logged if license is outdated', function(assert) {
-        verifyLicense(TOKEN_23_1, '23.2');
-        assert.equal(errors.log.callCount, 1);
-        assert.strictEqual(errors.log.getCall(0).args[0], 'W0020');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_23_2, '42.4');
-        assert.equal(errors.log.callCount, 2);
-        assert.strictEqual(errors.log.getCall(1).args[0], 'W0020');
+        [
+            [TOKEN_23_1, '23.2'],
+            [TOKEN_23_2, '42.4']
+        ].forEach(([token, version], idx) => {
+            verifyLicense(token, version);
+            assert.equal(errors.log.callCount, idx + 1);
+            assert.strictEqual(errors.log.getCall(idx).args[0], 'W0020', token);
+            setLicenseCheckSkipCondition(false);
+        });
     });
 
     test('W0021 error should be logged if license is corrupted/invalid', function(assert) {
-        verifyLicense(TOKEN_UNVERIFIED, '1.2.3');
-        assert.strictEqual(errors.log.getCall(0).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_INVALID_JSON, '1.2.3');
-        assert.strictEqual(errors.log.getCall(1).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_INVALID_BASE64, '1.2.3');
-        assert.strictEqual(errors.log.getCall(2).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_MISSING_FIELD_1, '1.2.3');
-        assert.strictEqual(errors.log.getCall(3).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_MISSING_FIELD_2, '1.2.3');
-        assert.strictEqual(errors.log.getCall(4).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_MISSING_FIELD_3, '1.2.3');
-        assert.strictEqual(errors.log.getCall(5).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense(TOKEN_UNSUPPORTED_VERSION, '1.2.3');
-        assert.strictEqual(errors.log.getCall(6).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense('Another', '1.2.3');
-        assert.strictEqual(errors.log.getCall(7).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense('str@nge');
-        assert.strictEqual(errors.log.getCall(8).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense('in.put');
-        assert.strictEqual(errors.log.getCall(9).args[0], 'W0021');
-
-        setLicenseCheckSkipCondition(false);
-
-        verifyLicense('3.2.1', '1.2.3');
-        assert.strictEqual(errors.log.getCall(10).args[0], 'W0021');
+        [
+            [TOKEN_UNVERIFIED, '1.2.3'],
+            [TOKEN_INVALID_JSON, '1.2.3'],
+            [TOKEN_INVALID_BASE64, '1.2.3'],
+            [TOKEN_MISSING_FIELD_1, '1.2.3'],
+            [TOKEN_MISSING_FIELD_2, '1.2.3'],
+            [TOKEN_MISSING_FIELD_3, '1.2.3'],
+            [TOKEN_UNSUPPORTED_VERSION, '1.2.3'],
+            ['Another', '1.2.3'],
+            ['str@nge'],
+            ['in.put'],
+            ['3.2.1', '1.2.3']
+        ].forEach(([token, version], idx) => {
+            verifyLicense(token, version);
+            assert.strictEqual(errors.log.getCall(idx).args[0], 'W0021', token);
+            setLicenseCheckSkipCondition(false);
+        });
     });
 });
