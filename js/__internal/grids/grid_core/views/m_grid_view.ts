@@ -57,10 +57,21 @@ const resizingControllerMembers = {
 
     if (!this._refreshSizesHandler) {
       this._refreshSizesHandler = (e) => {
+        let resizeDeferred;
+        const changeType = e?.changeType;
+        const isDelayed = e?.isDelayed;
+
         dataController.changed.remove(this._refreshSizesHandler);
 
         if (this._checkSize()) {
-          this._refreshSizes(e);
+          resizeDeferred = this._refreshSizes(e);
+        }
+
+        if (changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
+          when(resizeDeferred).done(() => {
+            this._setAriaLabel();
+            this.fireContentReadyAction();
+          });
         }
       };
       // TODO remove resubscribing
@@ -71,19 +82,19 @@ const resizingControllerMembers = {
   },
 
   _refreshSizes(e) {
-    let resizeDeferred;
-    const that = this;
-    const changeType = e && e.changeType;
-    const isDelayed = e && e.isDelayed;
-    const items = that._dataController.items();
+    // @ts-expect-error
+    let resizeDeferred = new Deferred().resolve();
+    const changeType = e?.changeType;
+    const isDelayed = e?.isDelayed;
+    const items = this._dataController.items();
 
     if (!e || changeType === 'refresh' || changeType === 'prepend' || changeType === 'append') {
       if (!isDelayed) {
-        resizeDeferred = that.resize();
+        resizeDeferred = this.resize();
       }
     } else if (changeType === 'update') {
       if (e.changeTypes?.length === 0) {
-        return;
+        return resizeDeferred;
       }
       if ((items.length > 1 || e.changeTypes[0] !== 'insert')
                 && !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
@@ -92,22 +103,17 @@ const resizingControllerMembers = {
 
         this._waitAsyncTemplates().done(() => {
           deferUpdate(() => deferRender(() => deferUpdate(() => {
-            that._setScrollerSpacing();
-            that._rowsView.resize();
+            this._setScrollerSpacing();
+            this._rowsView.resize();
             resizeDeferred.resolve();
           })));
         }).fail(resizeDeferred.reject);
       } else {
-        resizeDeferred = that.resize();
+        resizeDeferred = this.resize();
       }
     }
 
-    if (changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
-      when(resizeDeferred).done(() => {
-        that._setAriaLabel();
-        that.fireContentReadyAction();
-      });
-    }
+    return resizeDeferred;
   },
 
   fireContentReadyAction() {
