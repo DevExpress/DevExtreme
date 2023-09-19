@@ -9,7 +9,7 @@ const context = require('./context');
 
 gulp.task('aspnet', function() {
     return merge(
-        gulp.src('./js/aspnet.js')
+        gulp.src('./src/js/aspnet.js')
             .pipe(rename('dx.aspnet.mvc.js'))
             .pipe(compressionPipes.beautify())
             .pipe(headerPipes.bangLicense())

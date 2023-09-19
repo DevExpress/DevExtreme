@@ -12,12 +12,12 @@ const headerPipes = require('./header-pipes.js');
 const { packageDir } = require('./utils');
 
 const BUNDLE_CONFIG_SOURCES = [
-    'js/bundles/modules/parts/core.js',
-    'js/bundles/modules/parts/data.js',
-    'js/bundles/modules/parts/widgets-base.js',
-    'js/bundles/modules/parts/widgets-web.js',
-    'js/bundles/modules/parts/viz.js',
-    'js/bundles/modules/parts/aspnet.js'
+    'src/js/bundles/modules/parts/core.js',
+    'src/js/bundles/modules/parts/data.js',
+    'src/js/bundles/modules/parts/widgets-base.js',
+    'src/js/bundles/modules/parts/widgets-web.js',
+    'src/js/bundles/modules/parts/viz.js',
+    'src/js/bundles/modules/parts/aspnet.js'
 ];
 
 gulp.task('bundler-config', function() {
@@ -30,7 +30,7 @@ gulp.task('bundler-config', function() {
         .pipe(replace(/^[ ]{4}/gm, ''))
         .pipe(replace(/^[\n\r]{2,}/gm, '\n\n'))
         .pipe(eol())
-        .pipe(gulp.dest('js/bundles'))
+        .pipe(gulp.dest('src/js/bundles'))
         .pipe(rename('dx.custom.config.js'))
         .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
         .pipe(gulp.dest(`${context.RESULT_NPM_PATH}/${packageDir}/bundles`));

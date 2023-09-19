@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-main",
+  "name": "devextreme",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme",
   "projectType": "library",
@@ -7,24 +7,48 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build-npm-devextreme"
+        "script": "build"
       },
       "inputs": [
         "{projectRoot}/build/**/*",
-        "{projectRoot}/fonts/**/*",
-        "{projectRoot}/icons/**/*",
-        "{projectRoot}/images/**/*",
-        "{projectRoot}/js/**/*",
-        "{projectRoot}/scss/widgets/**/*",
-        "{projectRoot}/testing/**/*",
-        "!{projectRoot}/testing/*.txt",
-        "!{projectRoot}/testing/*.xml",
-        "{projectRoot}/ts/**/*",
+        "{projectRoot}/src/**/*",
+        "!{projectRoot}/src/testing/*.txt",
+        "!{projectRoot}/src/testing/*.xml",
         "{projectRoot}/*.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/internal-tools",
-        "{projectRoot}/artifacts/npm"
+        "{workspaceRoot}/artifacts/internal-tools",
+        "{projectRoot}/__internal",
+        "{projectRoot}/animation",
+        "{projectRoot}/artifacts",
+        "{projectRoot}/aspnet",
+        "{projectRoot}/bundles",
+        "{projectRoot}/cjs",
+        "{projectRoot}/color",
+        "{projectRoot}/common",
+        "{projectRoot}/core",
+        "{projectRoot}/data",
+        "{projectRoot}/data_helper",
+        "{projectRoot}/dist",
+        "{projectRoot}/esm",
+        "{projectRoot}/events",
+        "{projectRoot}/excel_exporter",
+        "{projectRoot}/exporter",
+        "{projectRoot}/file_management",
+        "{projectRoot}/format_helper",
+        "{projectRoot}/integration",
+        "{projectRoot}/localization",
+        "{projectRoot}/mobile",
+        "{projectRoot}/pdf_exporter",
+        "{projectRoot}/renovation",
+        "{projectRoot}/scss/bundles",
+        "{projectRoot}/scss/widgets/base/icons",
+        "{projectRoot}/scss/widgets/material/typography/fonts",
+        "{projectRoot}/time_zone_utils",
+        "{projectRoot}/ui",
+        "{projectRoot}/utils",
+        "{projectRoot}/viz",
+        "{projectRoot}/*.d.ts"
       ]
     }
   },

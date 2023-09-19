@@ -1,0 +1,8 @@
+/build
+/dist/js
+/dist/ts
+!/dist/css
+/src
+
+/*.*
+!/*.d.ts

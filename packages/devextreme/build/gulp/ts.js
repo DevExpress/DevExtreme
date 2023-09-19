@@ -17,8 +17,9 @@ const { packageDir } = require('./utils');
 const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
-const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-const src = ['./js/**/*.d.ts', '!./js/renovation/**/*'];
+const TS_BUNDLE_FILE_SOURCE = './src/ts/dx.all.d.ts';
+const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE_SOURCE, './src/ts/aliases.d.ts'];
+const src = ['./src/js/**/*.d.ts', '!./src/js/renovation/**/*'];
 
 const TS_TESTS_PATH = './testing/typescript';
 
@@ -40,7 +41,7 @@ const packageBundlesPath = path.join(packagePath, 'bundles');
 
 
 gulp.task('ts-copy-vendor', function() {
-    return gulp.src('./ts/vendor/*')
+    return gulp.src('./src/ts/vendor/*')
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
 });
 
@@ -124,7 +125,7 @@ gulp.task('ts-copy-modules', function() {
         .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
         .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
         .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
-        
+
         .pipe(compressionPipes.removeDebug())
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(packagePath));
@@ -136,7 +137,7 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
     let content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
-        const modulePath = `'./npm/${packageDir}/${moduleMeta.name}'`;
+        const modulePath = `'../${packageDir}/${moduleMeta.name}'`;
         if(!moduleMeta.exports) {
             return `import ${modulePath};`;
         }

@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test:bundlers": "npm run install:devextreme && npm run generate-entry-files && npm run build:all && npm run clean",
-    "install:devextreme": "bash -c \"npm install --save-dev $(npm pack ../../artifacts/npm/devextreme/)\"",
+    "install:devextreme": "bash -c \"npm install --save-dev $(npm pack ../../)\"",
     "generate-entry-files": "rimraf entry && mkdir entry && node ./generate_entry_files.js",
     "build:all": "npm run build:webpack-cjs && npm run build:browserify-cjs && npm run build:webpack && npm run build:rollup && npm run build:parcel && npm run build:vite",
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",

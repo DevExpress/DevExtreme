@@ -6,7 +6,7 @@ const lazyPipe = require('lazypipe');
 const gulpEach = require('gulp-each');
 const gulpIf = require('gulp-if');
 
-const renovatedComponentsPath = 'js/renovation/components';
+const renovatedComponentsPath = 'src/js/renovation/components';
 const fullRenovatedComponentsPath = '../../' + renovatedComponentsPath;
 
 const overwriteWidgetTemplate = require('./overwrite-renovation-widget.js');
@@ -27,17 +27,17 @@ function loadConfig() {
             return;
         }
 
-        const oldComponentFileName = path.join('./js/', component.pathInJSFolder);
+        const oldComponentFileName = path.join('./src/js/', component.pathInJSFolder);
         fileToComponentMap[path.resolve(oldComponentFileName)] = {
             ...component,
             pathToComponentRegistrator: path.relative(
                 path.dirname(oldComponentFileName),
-                './js/core/component_registrator'
+                './src/js/core/component_registrator'
             ).replace(/\\/g, '/'),
             pathInRenovationFolder: path
                 .relative(
                     path.dirname(oldComponentFileName),
-                    path.join('./js/renovation', component.pathInRenovationFolder)
+                    path.join('./src/js/renovation', component.pathInRenovationFolder)
                 ).replace(/\\/g, '/'),
         };
     });

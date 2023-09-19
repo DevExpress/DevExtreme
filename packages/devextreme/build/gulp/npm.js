@@ -10,9 +10,8 @@ const replace = require('gulp-replace');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
-const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
@@ -40,8 +39,8 @@ const esmSrcGlobs = srcGlobsPattern(
 
 const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
+    'dist/**/*.*',
     '!artifacts/transpiled**/**/*',
-    '!artifacts/npm/**/*.*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',
@@ -72,7 +71,7 @@ const distGlobsPattern = (jsFolder, exclude) => [
 const srcGlobs = esmSrcGlobs;
 const distGlobs = distGlobsPattern(ctx.RESULT_JS_PATH);
 
-const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
+const jsonGlobs = ['src/js/**/*.json', '!src/js/viz/vector_map.utils/*.*'];
 
 const sources = (src, dist, distGlob) => (() => merge(
     gulp
@@ -99,9 +98,9 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/bin`)),
 
     gulp
-        .src(`${dist}/package.json`)
+        .src('package.json')
         .pipe(replace(version, ctx.version.package))
-        .pipe(gulp.dest(dist)),
+        .pipe(gulp.dest('.')),
 
     gulp
         .src(distGlob)
@@ -110,33 +109,31 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src('README.md')
         .pipe(gulp.dest(dist)),
-
-    stringSrc('.npmignore', 'dist/js\ndist/ts\n!dist/css\nproject.json')
-        .pipe(gulp.dest(`${dist}/`))
 ));
 
 const packagePath = `${resultPath}/${packageDir}`;
 
 gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath, distGlobs)));
 
-gulp.task('npm-dist', () => gulp
-    .src([
-        `${packagePath}/dist/**/*`,
-        'build/package.json'
-    ])
-    .pipe(gulp.dest(`${resultPath}/${packageDistDir}`))
-);
+const distPath = `${resultPath}/${packageDistDir}`;
+
+gulp.task('npm-dist', gulp.parallel(
+    () => gulp
+        .src([
+            `${packagePath}/dist/**/*`
+        ])
+        .pipe(gulp.dest(distPath)),
+    () => gulp
+        .src(`${distPath}/package.json`)
+        .pipe(replace(version, ctx.version.package))
+        .pipe(gulp.dest(distPath)),
+));
 
 const scssDir = `${resultPath}/${packageDir}/scss`;
 
 gulp.task('npm-sass', gulp.series(
     'create-scss-bundles',
     gulp.parallel(
-        () => gulp
-            .src('scss/**/*')
-            .pipe(dataUri())
-            .pipe(gulp.dest(scssDir)),
-
         () => gulp
             .src('fonts/**/*', { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),

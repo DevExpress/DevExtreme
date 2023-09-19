@@ -90,7 +90,6 @@ runs:
       working-directory: ./packages/devextreme
       shell: bash
       run: |
-        rm -rf artifacts/npm
         7z x artifacts.zip
 
     - name: Build dotnet

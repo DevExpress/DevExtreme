@@ -2,6 +2,12 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "paths": {
+      "devextreme": [
+        "devextreme"
+      ],
+      "devextreme/*": [
+        "devextreme/*"
+      ],
       "devextreme-angular": [
         "devextreme-angular/src"
       ],
