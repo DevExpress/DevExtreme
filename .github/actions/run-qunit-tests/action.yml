@@ -51,13 +51,13 @@ runs:
 #        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Setup Chrome
-      if: {{ inputs.browser == 'chrome' }}
+      if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '116.0.5845.110'
 
     - name: Setup firefox profile
-      if: {{ inputs.browser == 'firefox' }}
+      if: ${{ inputs.browser == 'firefox' }}
       shell: bash
       run: |
         mkdir -p /tmp/firefox-profile
@@ -69,7 +69,7 @@ runs:
         '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
 
     - name: Setup Firefox
-      if: {{ inputs.browser == 'firefox' }}
+      if: ${{ inputs.browser == 'firefox' }}
       id: setup-firefox
       uses: browser-actions/setup-firefox@v1
 
