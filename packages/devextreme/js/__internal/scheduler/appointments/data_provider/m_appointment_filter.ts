@@ -11,7 +11,6 @@ import {
   isDateAndTimeView as calculateIsDateAndTimeView,
   isTimelineView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
@@ -100,10 +99,7 @@ export class AppointmentFilterBaseStrategy {
       viewStartDayHour: this.viewStartDayHour,
       viewEndDayHour: this.viewEndDayHour,
       min,
-      // NOTE: We get the max from the last dateTable cell
-      // Therefore we should apply offset only to max value,
-      // because only the max value shifted.
-      max: dateUtilsTs.addOffsets(max, [-viewOffset]),
+      max,
       resources: this.loadedResources,
       allDay,
       supportMultiDayAppointments: isTimelineView(this.viewType),

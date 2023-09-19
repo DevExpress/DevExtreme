@@ -105,6 +105,7 @@ export class GroupedDataMapProvider {
       : startDate.getTime();
 
     const isStartDateInCell = (cellData) => {
+      // TODO Vinogradov: Check this condition.
       if (!isDateAndTimeView(this._viewOptions.viewType)) {
         return dateUtils.sameDate(
           new Date(startDate.getTime() - viewOffset),

@@ -2,6 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
 import { calculateIsGroupedAllDayPanel } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import timeZoneUtils from '../../m_utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
@@ -124,12 +125,14 @@ export default class ViewDataProvider {
       groupOrientation,
       groupByDate,
       isAllDayPanelVisible,
+      viewOffset,
       ...restOptions
     } = renderOptions;
+    const startViewDate = this.viewDataGenerator._calculateStartViewDate(renderOptions);
 
     return {
       ...restOptions,
-      startViewDate: this.viewDataGenerator._calculateStartViewDate(renderOptions),
+      startViewDate: dateUtilsTs.addOffsets(startViewDate, [viewOffset]),
       isVerticalGrouping: isVerticalGroupingApplied(groups, groupOrientation),
       isHorizontalGrouping: isHorizontalGroupingApplied(groups, groupOrientation),
       isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
@@ -137,6 +140,7 @@ export default class ViewDataProvider {
       groups,
       groupOrientation,
       isAllDayPanelVisible,
+      viewOffset,
     };
   }
 

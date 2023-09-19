@@ -10,7 +10,7 @@ import {
   isHorizontalView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { offsetUtils } from '@ts/scheduler/utils/offset_utils';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
 import { getAllGroups, getGroupCount } from '../../resources/m_utils';
@@ -359,16 +359,9 @@ export class ViewDataGenerator {
   }
 
   getCellData(rowIndex, columnIndex, options, allDay) {
-    const { viewOffset } = options;
-    const cellData = allDay
+    return allDay
       ? this.prepareAllDayCellData(options, rowIndex, columnIndex)
       : this.prepareCellData(options, rowIndex, columnIndex);
-
-    return {
-      ...cellData,
-      startDate: dateUtilsTs.addOffsets(cellData.startDate, [viewOffset]),
-      endDate: dateUtilsTs.addOffsets(cellData.endDate, [viewOffset]),
-    };
   }
 
   prepareCellData(options, rowIndex, columnIndex) {
@@ -430,9 +423,11 @@ export class ViewDataGenerator {
       interval,
       firstDayOfWeek,
       intervalCount,
+      viewOffset,
     } = options;
 
-    const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
+    const startViewHours = offsetUtils.getViewStartHours(viewOffset, startDayHour);
+    const isStartViewDateDuringDST = startViewDate.getHours() !== startViewHours;
 
     if (isStartViewDateDuringDST) {
       const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);

@@ -324,15 +324,20 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-    const { normalizedEndDate } = position.info.appointment;
+    console.log('get width', this.options);
+    const {
+      shiftedStartDate: startDate,
+      shiftedEndDate: endDate,
+      shiftedNormalizedEndDate: normalizedEndDate,
+    } = position.info.appointment;
+    const trimmedStartDate = dateUtils.trimTime(startDate);
 
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
-    const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
+    const durationInHours = (normalizedEndDate.getTime() - trimmedStartDate.getTime()) / toMs('hour');
 
     const skippedHours = getSkippedHoursInRange(
-      position.info.appointment.startDate,
-      position.info.appointment.endDate,
+      startDate,
+      endDate,
       this.viewDataProvider,
     );
 
@@ -347,7 +352,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const { shiftedStartDate: startDate, normalizedEndDate } = position.info.appointment;
+    const {
+      shiftedStartDate: startDate,
+      shiftedNormalizedEndDate: normalizedEndDate,
+    } = position.info.appointment;
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
     const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
     const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');
