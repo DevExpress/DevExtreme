@@ -787,7 +787,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     background-color: $toolbar-bg;
 
     .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
+      @include dx-button-flat-color-styling($button-success-color, $button-success-color, $button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
     }
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
@@ -1127,6 +1127,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       @include dx-button-styling-variant(
         $button-danger-bg,
         $button-danger-color,
+        $button-danger-color,
+        $button-danger-color,
         $button-danger-bg,
         $button-danger-bg,
         $button-danger-bg,
@@ -1206,7 +1208,14 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
   .dx-#{$widget-name}-form-buttons-container {
     .dx-button {
-      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+      @include dx-button-flat-color-styling(
+        $button-default-text-color,
+        $button-default-text-color-hover,
+        $button-default-text-color-active,
+        $button-default-text-hover-bg,
+        $button-default-text-focused-bg,
+        $button-default-text-active-bg
+      );
     }
   }
 
