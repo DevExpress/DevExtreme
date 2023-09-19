@@ -63,6 +63,8 @@ runs:
 
     - name: Pin browsers
       uses: ./.github/actions/pin-browsers
+      with:
+        chrome-version: '116.0.5845.110'
 
     - name: Use Node.js
       uses: actions/setup-node@v3
