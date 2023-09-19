@@ -6,8 +6,7 @@
     "semanticCommits": "enabled",
     "baseBranches": [
         "23_2",
-        "23_1",
-        "renovate-bot-improvement"
+        "23_1"
     ],
     "labels": [
         "dependencies"
