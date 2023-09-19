@@ -56,7 +56,7 @@ runs:
       with:
         chrome-version: '116.0.5845.110'
 
-    - name: Setup firefox profile
+    - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}
       shell: bash
       run: |
