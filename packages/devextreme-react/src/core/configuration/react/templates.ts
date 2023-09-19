@@ -1,4 +1,4 @@
-import { ITemplateMeta, ITemplateProps } from 'src/core/template';
+import { ITemplateMeta, ITemplateProps } from '../../template';
 import { ITemplate } from '../config-node';
 
 function getAnonymousTemplate(
