@@ -1357,7 +1357,7 @@ class Scheduler extends Widget<any> {
 
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),
-      getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
+      getCalculatedEndDate: (date) => this._workSpace.calculateEndDate(date),
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
