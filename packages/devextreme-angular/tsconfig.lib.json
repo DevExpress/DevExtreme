@@ -6,12 +6,18 @@
     "fullTemplateTypeCheck": true
   },
   "compilerOptions": {
+    "baseUrl": "../",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "typeRoots": [
       "./node_modules/@types",
       "../../node_modules/@types"
-    ]
+    ],
+    "paths": {
+      "devextreme/*": [
+        "devextreme/artifacts/npm/devextreme/*"
+      ],
+    }
   },
   "files": []
 }

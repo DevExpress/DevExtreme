@@ -13,7 +13,8 @@ module.exports = {
     ],
     resolve: {
         alias: {
-          'devextreme-angular': path.resolve(__dirname, 'npm/dist')
+            'devextreme-angular': path.resolve(__dirname, 'npm/dist'),
+            'devextreme': path.resolve(__dirname, '../devextreme/artifacts/npm/devextreme')
         },
         fallback: { "stream": require.resolve("stream-browserify")}
       }
