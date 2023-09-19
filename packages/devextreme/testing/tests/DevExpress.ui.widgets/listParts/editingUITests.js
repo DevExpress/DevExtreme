@@ -749,7 +749,7 @@ QUnit.test('click on button should not remove item if widget disabled', function
 
 QUnit.test('button should have no text for the Material theme', function(assert) {
     const origIsMaterialBased = themes.isMaterialBased;
-    themes.origIsMaterialBased = () => { return true; };
+    themes.isMaterialBased = () => { return true; };
 
     const $list = $('#templated-list').dxList({
         items: ['0'],
@@ -765,7 +765,7 @@ QUnit.test('button should have no text for the Material theme', function(assert)
 
     assert.strictEqual($deleteButton.text(), '', 'button has no text for Material theme');
 
-    themes.isMaterial = origIsMaterialBased;
+    themes.isMaterialBased = origIsMaterialBased;
 });
 
 QUnit.test('button should have no text for the Generic theme', function(assert) {

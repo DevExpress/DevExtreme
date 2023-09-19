@@ -212,11 +212,11 @@ testComponentDefaults(DateRangeBox,
         labelMode: 'floating',
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -327,11 +327,11 @@ testComponentDefaults(TextEditor,
         labelMode: 'floating'
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1198,10 +1198,6 @@ testComponentDefaults(List,
     { platform: devices.current().platform },
     {
         useInkRipple: true,
-        pullingDownText: '',
-        pulledDownText: '',
-        refreshingText: '',
-        pageLoadingText: ''
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -1209,6 +1205,23 @@ testComponentDefaults(List,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(List,
+    { platform: devices.current().platform },
+    {
+        pullingDownText: '',
+        pulledDownText: '',
+        refreshingText: '',
+        pageLoadingText: ''
+    },
+    function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
