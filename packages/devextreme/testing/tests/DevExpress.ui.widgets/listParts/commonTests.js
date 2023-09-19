@@ -2733,7 +2733,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
 
         assert.equal(button.option('type'), 'default', 'more button should have default type for the Material theme');
 
-        themes.isMaterial = origIsMaterialBased;
+        themes.isMaterialBased = origIsMaterialBased;
     });
 
     QUnit.test('more button should have undefined type for the Generic theme', function(assert) {
