@@ -445,17 +445,17 @@ declare module DevExpress.ui {
 }
 
 declare module DevExpress.viz {
-    /** @deprecated Use DevExpress.common.ScaleBreak instead */
+    /** @deprecated Use DevExpress.common.charts.ScaleBreak instead */
     export type ScaleBreak = DevExpress.common.charts.ScaleBreak
-    /** @deprecated Use DevExpress.common.SeriesType instead */
+    /** @deprecated Use DevExpress.common.charts.SeriesType instead */
     export type SeriesType = DevExpress.common.charts.SeriesType
-    /** @deprecated Use DevExpress.common.VisualRange instead */
+    /** @deprecated Use DevExpress.common.charts.VisualRange instead */
     export type VisualRange = DevExpress.common.charts.VisualRange
-    /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
+    /** @deprecated Use DevExpress.common.charts.TimeIntervalConfig instead */
     export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
-    /** @deprecated Use SeriesPoint from DevExpress.common.charts.SeriesPoint instead */
+    /** @deprecated Use DevExpress.common.charts.SeriesPoint instead */
     export type dxChartSeriesTypesCommonSeriesPoint = DevExpress.common.charts.SeriesPoint;
-    /** @deprecated Use SeriesLabel from DevExpress.common.charts.SeriesLabel instead */
+    /** @deprecated Use DevExpress.common.charts.SeriesLabel instead */
     export type dxChartSeriesTypesCommonSeriesLabel = DevExpress.common.charts.SeriesLabel;
 }
 
