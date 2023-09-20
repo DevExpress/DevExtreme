@@ -16,7 +16,6 @@ $fluent-button-text-font-weight: 600 !default;
 $fluent-button-text-letter-spacing: normal !default; // 0.04em !default;
 
 $fluent-button-box-shadow-size: 0 1px 3px !default;
-$fluent-button-active-box-shadow-size: 0 4px 6px !default;
 
 @if $size == "default" {
   $fluent-button-horizontal-padding: 12px !default; // 16px !default;

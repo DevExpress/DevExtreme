@@ -95,17 +95,23 @@ $button-default-active-bg: $base-accent-active !default;
 */
 $button-default-selected-bg: $base-accent-selected !default;
 
+$button-default-outlined-color: $base-accent-foreground !default;
+$button-default-outlined-color-hover: $base-accent-foreground2-hover !default;
+$button-default-outlined-color-active: $base-accent-foreground2-active !default;
+$button-default-outlined-selected-color: $base-accent-foreground2-active !default;
 $button-default-outlined-hover-bg: $base-brand2-bg-hover !default;
 $button-default-outlined-focused-bg: $base-brand2-bg-hover !default;
 $button-default-outlined-active-bg: $base-brand2-bg-active !default;
 $button-default-outlined-selected-bg: $base-brand2-bg-active !default;
-$button-default-outlined-selected-color: $button-default-bg !default;
 
+$button-default-text-color: $base-accent-foreground !default;
+$button-default-text-color-hover: $base-accent-foreground2-hover !default;
+$button-default-text-color-active: $base-accent-foreground2-active !default;
+$button-default-text-selected-color: $base-accent-foreground2-active !default;
 $button-default-text-hover-bg: $base-brand2-bg-hover !default;
 $button-default-text-focused-bg: $base-brand2-bg-hover !default;
 $button-default-text-active-bg: $base-brand2-bg-active !default;
 $button-default-text-selected-bg: $base-brand2-bg-active !default;
-$button-default-text-selected-color: $button-default-bg !default;
 
 /**
 * $name 10. Text color
@@ -241,9 +247,6 @@ $button-danger-icon-color: $button-danger-color !default;
 $button-success-icon-color: $button-success-color !default;
 
 $button-disabled-text-color: $base-foreground-disabled !default;
-$button-hover-shadow-color: $button-shadow-color !default;
-$button-focused-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
-$button-active-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
 $button-normal-outlined-hover-bg: $button-normal-hover-bg !default;
 $button-normal-outlined-focused-bg: $button-normal-hover-bg !default;
 $button-normal-outlined-active-bg: $button-normal-active-bg !default;

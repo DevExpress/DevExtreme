@@ -56,7 +56,6 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
       font-size: $fluent-list-main-font-size;
     }
 
-
     .dx-clear-button-area {
       width: $fluent-base-icon-size - 1px;
     }
@@ -476,7 +475,14 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
   }
 
   .dx-button.dx-list-switchable-delete-button {
-    @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
+    @include dx-button-flat-color-styling(
+      $button-danger-bg,
+      $button-danger-bg,
+      $button-danger-bg,
+      $button-danger-text-hover-bg,
+      $button-danger-text-focused-bg,
+      $button-danger-text-active-bg
+    );
   }
 
   .dx-list-context-menucontent {
