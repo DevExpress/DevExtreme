@@ -214,7 +214,10 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - uses: ./.github/actions/pin-browsers
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '116.0.5845.110'
 
     - name: Use Node.js
       uses: actions/setup-node@v3
