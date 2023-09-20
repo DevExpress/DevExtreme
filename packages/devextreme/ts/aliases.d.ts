@@ -453,6 +453,10 @@ declare module DevExpress.viz {
     export type VisualRange = DevExpress.common.charts.VisualRange
     /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
     export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
+    /** @deprecated Use SeriesPoint from DevExpress.common.charts.SeriesPoint instead */
+    export type dxChartSeriesTypesCommonSeriesPoint = DevExpress.common.charts.SeriesPoint;
+    /** @deprecated Use SeriesLabel from DevExpress.common.charts.SeriesLabel instead */
+    export type dxChartSeriesTypesCommonSeriesLabel = DevExpress.common.charts.SeriesLabel;
 }
 
 // v23.1
