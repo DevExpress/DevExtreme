@@ -397,16 +397,12 @@ const Tabs = CollectionWidget.inherit({
         return scrollableDirection;
     },
 
-    _updateScrollableDirection() {
-        const scrollable = this.getScrollable();
-
-        if(scrollable) {
-            const scrollableDirection = this._getScrollableDirection();
-
-            scrollable.option('direction', scrollableDirection);
-        } else {
-            this._renderScrolling();
+    _updateScrollable() {
+        if(this.getScrollable()) {
+            this._cleanScrolling();
         }
+
+        this._renderScrolling();
     },
 
     _renderScrollable() {
@@ -647,7 +643,7 @@ const Tabs = CollectionWidget.inherit({
             case 'orientation': {
                 this._toggleOrientationClass(args.value);
                 if(!this._isServerSide()) {
-                    this._updateScrollableDirection();
+                    this._updateScrollable();
                 }
                 break;
             }
