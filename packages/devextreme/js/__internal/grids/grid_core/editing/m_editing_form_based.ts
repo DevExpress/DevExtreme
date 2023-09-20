@@ -12,6 +12,7 @@ import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import { current, isMaterialBased } from '@js/ui/themes';
 
 import { ModuleType } from '../m_types';
 import {
@@ -432,8 +433,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       if (!isPopupForm) {
         const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
-        this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
-        this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());
+        const stylingMode = isMaterialBased(current()) ? 'text' : 'contained';
+        this._createComponent($('<div>').appendTo($buttonsContainer), Button, { ...this._getSaveButtonConfig(), stylingMode });
+        this._createComponent($('<div>').appendTo($buttonsContainer), Button, { ...this._getCancelButtonConfig(), stylingMode });
       }
 
       this._editForm.on('contentReady', () => {
