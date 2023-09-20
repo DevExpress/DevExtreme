@@ -5041,12 +5041,12 @@ export type Options = dxChartOptions;
 
 /**
  * @namespace DevExpress.viz
- * @deprecated Use SeriesPoint from DevExpress.common.charts.SeriesPoint instead
+ * @deprecated Use DevExpress.common.charts.SeriesPoint instead
  */
 export type dxChartSeriesTypesCommonSeriesPoint = SeriesPoint;
 /**
  * @namespace DevExpress.viz
- * @deprecated Use SeriesLabel from DevExpress.common.charts.SeriesLabel instead
+ * @deprecated Use DevExpress.common.charts.SeriesLabel instead
  */
 export type dxChartSeriesTypesCommonSeriesLabel = SeriesLabel;
 
