@@ -80,7 +80,11 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
 .dx-treelist-container {
   color: $treelist-base-color;
-  background-color: $treelist-base-background-color;
+
+  > .dx-treelist-headers,
+  > .dx-treelist-rowsview {
+    background-color: $datagrid-base-background-color;
+  }
 
   .dx-sort-up {
     @include dx-icon(sortup);
@@ -96,6 +100,12 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
     &::before {
       font-family: 'DXIcons', sans-serif;
+    }
+  }
+
+  .dx-treelist-header-panel {
+    .dx-toolbar {
+      background-color: transparent;
     }
   }
 
