@@ -4700,3 +4700,18 @@ export type Properties = dxChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxChartOptions;
+
+// #region deprecated in 22.2
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use SeriesPoint from DevExpress.common.charts.SeriesPoint instead
+ */
+export type dxChartSeriesTypesCommonSeriesPoint = SeriesPoint;
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use SeriesLabel from DevExpress.common.charts.SeriesLabel instead
+ */
+export type dxChartSeriesTypesCommonSeriesLabel = SeriesLabel;
+
+// #endregion
