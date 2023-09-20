@@ -791,7 +791,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
-      border-radius: 50%;
+      border-radius: $fluent-base-border-radius;
     }
 
     .dx-#{$widget-name}-toolbar-button {
