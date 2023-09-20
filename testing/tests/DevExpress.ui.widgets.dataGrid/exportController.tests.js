@@ -2993,5 +2993,30 @@ QUnit.module('Real dataGrid ExportController tests', {
             }]
         ], 'PrepareItems is correct with custom Array prototype method');
     });
+
+    // T1189621
+    QUnit.test('The export button should be disabled using the `toolbar|items|disabled` option ', function(assert) {
+        // arrange, act
+        const $container = $('#container');
+
+        createDataGrid({
+            dataSource: [{ id: 0, field: 1 }],
+            export: {
+                enabled: true,
+            },
+            toolbar: {
+                items: [{
+                    name: 'exportButton',
+                    disabled: true
+                }]
+            },
+        });
+
+        this.clock.tick(50);
+
+        // assert
+        const $exportButton = $container.find('.dx-datagrid-export-button');
+        assert.ok($exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled'), 'export button is disabled');
+    });
 });
 
