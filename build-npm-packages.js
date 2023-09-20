@@ -39,3 +39,7 @@ sh.exec('npm run pack --ws --if-present');
 ['devextreme-angular', 'devextreme-react', 'devextreme-vue'].forEach((pkg) => {
     sh.cp(path.join(MONOREPO_ROOT, 'packages', pkg, 'npm', '**', '*.tgz'), OUTPUT_DIR);
 });
+
+
+// npm version "version" -ws --workspaces-update=false
+// npm i devextreme@23.2.1-alpha-23255-1899 --save-exact -w devextreme-angular -w devextreme-react -w devextreme-vue
