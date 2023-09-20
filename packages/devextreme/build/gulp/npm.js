@@ -6,16 +6,15 @@ const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const merge = require('merge-stream');
-const replace = require('gulp-replace');
+const through = require('through2');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
-const { version } = require('../../package.json');
-
 const resultPath = ctx.RESULT_NPM_PATH;
+
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
@@ -99,8 +98,19 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/bin`)),
 
     gulp
-        .src(`${dist}/package.json`)
-        .pipe(replace(version, ctx.version.package))
+        .src('package.json')
+        .pipe(
+            through.obj((file, enc, callback) => {
+                const pkg = JSON.parse(file.contents.toString(enc));
+
+                pkg.name = 'devextreme';
+                pkg.version = ctx.version.package;
+                delete pkg.devDependencies;
+
+                file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
+                callback(null, file);
+            })
+        )
         .pipe(gulp.dest(dist)),
 
     gulp
