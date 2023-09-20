@@ -106,6 +106,7 @@ const sources = (src, dist, distGlob) => (() => merge(
                 pkg.name = 'devextreme';
                 pkg.version = ctx.version.package;
                 delete pkg.devDependencies;
+                delete pkg.scripts;
 
                 file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
                 callback(null, file);
