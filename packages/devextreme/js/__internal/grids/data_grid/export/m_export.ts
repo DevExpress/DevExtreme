@@ -673,7 +673,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   optionChanged(args) {
     super.optionChanged(args);
-    if (args.fullName === 'export.enabled') {
+    if (args.name === 'export') {
       this.throwWarningIfNoOnExportingEvent();
     }
   }
