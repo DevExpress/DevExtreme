@@ -23,6 +23,7 @@ import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
+import { current, isFluent } from '@js/ui/themes';
 
 import modules from '../m_modules';
 import { Controllers, Views } from '../m_types';
@@ -1195,17 +1196,29 @@ class EditingControllerImpl extends modules.ViewController {
   _getPopupEditFormTemplate(rowIndex): any {}
 
   _getSaveButtonConfig() {
-    return {
+    const buttonConfig: any = {
       text: this.option('editing.texts.saveRowChanges'),
       onClick: this.saveEditData.bind(this),
     };
+
+    if (isFluent(current())) {
+      buttonConfig.type = 'default';
+    }
+
+    return buttonConfig;
   }
 
   _getCancelButtonConfig() {
-    return {
+    const buttonConfig: any = {
       text: this.option('editing.texts.cancelRowChanges'),
       onClick: this.cancelEditData.bind(this),
     };
+
+    if (isFluent(current())) {
+      buttonConfig.stylingMode = 'outlined';
+    }
+
+    return buttonConfig;
   }
 
   _removeInternalData(key) {
