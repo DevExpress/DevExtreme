@@ -4,20 +4,15 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/textArea";
+@use "../../base/textArea/mixins" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 
-
-.dx-textarea {
-  height: auto;
-
-  .dx-icon-clear {
-    top: 0;
-    margin-top: 0;
-  }
-
-  &.dx-invalid .dx-texteditor-container::after {
-    top: $generic-base-inline-borderedwidget-top-padding;
-    margin-top: 0;
-  }
-}
+@include dx-textarea(
+  0,
+  $generic-base-line-height,
+  $generic-texteditor-outlined-input-with-label-top-padding,
+  $generic-texteditor-filled-input-with-label-top-padding,
+  $generic-texteditor-underlined-input-with-label-top-padding,
+);

@@ -5,40 +5,15 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/textArea";
+@use "../../base/textArea/mixins" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 
-$textarea-vertical-padding:
-  $fluent-base-inline-widget-height -
-  $fluent-base-inline-block-height;
-
-$textarea-top-padding:
-  floor(math.div($textarea-vertical-padding, 2)) -
-  $fluent-base-border-width;
-
-.dx-textarea {
-  height: auto;
-
-  .dx-texteditor-input-container {
-    margin: 2px;
-  }
-
-  .dx-texteditor-input {
-    padding: $textarea-content-padding;
-    line-height: $textarea-content-line-height;
-  }
-
-  .dx-placeholder::before {
-    padding: ($textarea-content-padding + 3) $textarea-content-padding;
-  }
-
-  .dx-icon-clear {
-    top: 0;
-    margin-top: 0;
-  }
-
-  &.dx-invalid .dx-texteditor-container::after {
-    top: $textarea-top-padding;
-    margin-top: 0;
-  }
-}
+@include dx-textarea(
+  2px,
+  $textarea-content-line-height,
+  $fluent-filled-texteditor-input-top-padding,
+  $fluent-filled-texteditor-input-with-label-top-padding,
+  $fluent-standard-texteditor-with-label-input-top-padding,
+);

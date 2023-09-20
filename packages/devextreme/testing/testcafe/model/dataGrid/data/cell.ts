@@ -3,11 +3,13 @@ import { Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import { CellEditor } from './cellEditor';
+import DropDownButton from '../../dropDownButton';
 
 const CLASS = {
   hiddenColumn: 'hidden-column',
   editCell: 'dx-editor-cell',
   focused: 'dx-focused',
+  dropDownButton: 'dx-dropdownbutton',
   editorInput: 'dx-texteditor-input',
   invalidCell: 'dx-datagrid-invalid',
   invalidOverlayMessage: 'dx-invalid-message',
@@ -17,6 +19,7 @@ const CLASS = {
   checkbox: 'dx-checkbox',
   linkEdit: 'dx-link-edit',
   linkSave: 'dx-link-save',
+  linkDelete: 'dx-link-delete',
 };
 
 export default class DataCell extends FocusableElement {
@@ -57,12 +60,20 @@ export default class DataCell extends FocusableElement {
     return this.element.find(`.${CLASS.checkbox}`);
   }
 
+  getDropDownButton(): DropDownButton {
+    return new DropDownButton(this.element.find(`.${CLASS.dropDownButton}`));
+  }
+
   getLinkEdit(): Selector {
     return this.element.find(`.${CLASS.linkEdit}`);
   }
 
   getLinkSave(): Selector {
     return this.element.find(`.${CLASS.linkSave}`);
+  }
+
+  getLinkDelete(): Selector {
+    return this.element.find(`.${CLASS.linkDelete}`);
   }
 
   getIconByTitle(title: string): Selector {

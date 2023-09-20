@@ -18,6 +18,8 @@ import {
 
 import {
     Position,
+    TabsIconPosition,
+    TabsStyle,
 } from '../common';
 
 import CollectionWidget, {
@@ -28,6 +30,12 @@ import {
     Item as dxMultiViewItem,
     dxMultiViewBaseOptions,
 } from './multi_view';
+
+export {
+    Position,
+    TabsIconPosition,
+    TabsStyle,
+};
 
 type ItemLike = string | Item | any;
 
@@ -181,6 +189,12 @@ export interface dxTabPanelOptions<
     itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @default 'start'
+     * @public
+     */
+    iconPosition?: TabsIconPosition;
+    /**
+     * @docid
      * @type Array<string | dxTabPanelItem | any>
      * @fires dxTabPanelOptions.onOptionChanged
      * @public
@@ -235,6 +249,12 @@ export interface dxTabPanelOptions<
      * @public
      */
     showNavButtons?: boolean;
+    /**
+     * @docid
+     * @default 'primary'
+     * @public
+     */
+    stylingMode?: TabsStyle;
     /**
      * @docid
      * @default false &for(non-touch_devices)

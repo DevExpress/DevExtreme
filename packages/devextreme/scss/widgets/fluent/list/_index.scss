@@ -56,7 +56,6 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
       font-size: $fluent-list-main-font-size;
     }
 
-
     .dx-clear-button-area {
       width: $fluent-base-icon-size - 1px;
     }
@@ -126,7 +125,7 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
       .dx-list-item {
         &.dx-state-hover {
           .dx-radiobutton-icon {
-            border-color: $checkbox-hover-border-color;
+            border-color: $checkbox-border-color-hover;
           }
         }
 
@@ -139,7 +138,7 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
 
             &.dx-radiobutton-checked {
               .dx-radiobutton-icon::after {
-                background-color: color.change($radiogroup-checked-bg, $alpha: 0.1);
+                background-color: color.change($radiogroup-accent-color, $alpha: 0.1);
                 transform: scale(1);
               }
             }
@@ -154,7 +153,7 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
             &.dx-checkbox-checked,
             &.dx-checkbox-indeterminate {
               .dx-checkbox-icon::after {
-                background-color: color.change($checkbox-bg, $alpha: 0.1);
+                background-color: color.change($checkbox-accent-color, $alpha: 0.1);
                 transform: scale(1);
               }
             }
@@ -476,7 +475,14 @@ $fluent-list-searchbox-padding-top: $fluent-list-searchbox-vertical-padding - 2p
   }
 
   .dx-button.dx-list-switchable-delete-button {
-    @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
+    @include dx-button-flat-color-styling(
+      $button-danger-bg,
+      $button-danger-bg,
+      $button-danger-bg,
+      $button-danger-text-hover-bg,
+      $button-danger-text-focused-bg,
+      $button-danger-text-active-bg
+    );
   }
 
   .dx-list-context-menucontent {

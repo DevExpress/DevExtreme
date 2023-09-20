@@ -5,8 +5,9 @@
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
     "baseBranches": [
+        "23_2",
         "23_1",
-        "23_2"
+        "renovate-bot-improvement"
     ],
     "labels": [
         "dependencies"
@@ -50,9 +51,6 @@
             "matchUpdateTypes": [ "major" ],
             "dependencyDashboardApproval": true
         }
-    ],
-    "ignorePaths": [
-        ".github"
     ],
     "constraints": {
         "node": "^16.3.0"

@@ -15,6 +15,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "iconPosition" |
   "itemHoldTimeout" |
   "items" |
   "itemTemplate" |
@@ -40,6 +41,7 @@ type AccessibleOptions = Pick<Properties,
   "selectedIndex" |
   "selectedItem" |
   "showNavButtons" |
+  "stylingMode" |
   "swipeEnabled" |
   "tabIndex" |
   "tabsPosition" |
@@ -63,6 +65,7 @@ const DxTabPanel = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    iconPosition: String,
     itemHoldTimeout: Number,
     items: Array,
     itemTemplate: {},
@@ -88,6 +91,7 @@ const DxTabPanel = createComponent({
     selectedIndex: Number,
     selectedItem: {},
     showNavButtons: Boolean,
+    stylingMode: String,
     swipeEnabled: Boolean,
     tabIndex: Number,
     tabsPosition: String,
@@ -108,6 +112,7 @@ const DxTabPanel = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:iconPosition": null,
     "update:itemHoldTimeout": null,
     "update:items": null,
     "update:itemTemplate": null,
@@ -133,6 +138,7 @@ const DxTabPanel = createComponent({
     "update:selectedIndex": null,
     "update:selectedItem": null,
     "update:showNavButtons": null,
+    "update:stylingMode": null,
     "update:swipeEnabled": null,
     "update:tabIndex": null,
     "update:tabsPosition": null,

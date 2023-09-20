@@ -23,7 +23,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -64,6 +64,7 @@ jobs:
         ARGS: [
           { componentFolder: "common", name: "common" },
           { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
+          { componentFolder: "common", name: "common - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "treeList", name: "treeList", concurrency: 1 },
           { componentFolder: "dataGrid", name: "dataGrid (1/2)", indices: "1/2" },
           { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
@@ -90,7 +91,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - uses: ./.github/actions/pin-browsers
 
@@ -122,7 +123,7 @@ jobs:
     - name: Run TestCafe tests
       working-directory: ./packages/devextreme
       run: |
-        [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
+        [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
@@ -153,7 +154,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}

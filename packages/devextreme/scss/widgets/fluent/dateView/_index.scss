@@ -64,7 +64,7 @@ $fluent-dateview-roller-padding: math.div($fluent-dateview-roller-height - $flue
     content: ":";
     font-size: 2.2em;
     position: absolute;
-    right: -9%;
+    inset-inline-end: -9%;
     font-weight: bold;
     top: 37%;
     color: $dateview-color;
@@ -92,15 +92,6 @@ $fluent-dateview-roller-padding: math.div($fluent-dateview-roller-height - $flue
 .dx-dateview-item-selected {
   font-size: 1.8em;
   color: $base-accent;
-}
-
-.dx-rtl {
-  &.dx-dateviewroller-hours {
-    &::after {
-      left: -9%;
-      right: auto;
-    }
-  }
 }
 
 .dx-dateview-item-selected-frame {

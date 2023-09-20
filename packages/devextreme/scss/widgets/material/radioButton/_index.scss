@@ -15,15 +15,13 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 @include dx-radiobutton-icon-mixin(
   $material-radiobutton-size,
   $material-radiobutton-border-width,
-  $radiogroup-border-color,
-  $radiogroup-bg,
-  $radiogroup-checked-bg,
   $material-radiobutton-dot-size,
   true,
   $material-radiobutton-ripple-size,
   $material-radiobutton-ripple-transition,
 );
 @include dx-radiobutton-states-mixin(
+  $radiogroup-bg,
   $radiogroup-border-color,
   $radiogroup-readonly-border-color,
   null,

@@ -18,7 +18,7 @@ import {
   getMaxWidth,
 } from './popup_config';
 // eslint-disable-next-line import/named
-import { dxSchedulerAppointment } from '../../../../ui/scheduler';
+import type { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import { EditForm } from './edit_form/layout';
 import { DataAccessorType } from '../types';
 import { AppointmentData } from '../appointment/types';

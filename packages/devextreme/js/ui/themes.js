@@ -270,7 +270,7 @@ function getCssClasses(themeName) {
         );
 
         if(themeNameParts.length > 1) {
-            result.push('dx-color-scheme-' + themeNameParts[1] + (isMaterial(themeName) ? ('-' + themeNameParts[2]) : ''));
+            result.push('dx-color-scheme-' + themeNameParts[1] + (isMaterialBased(themeName) ? ('-' + themeNameParts[2]) : ''));
         }
     }
 
@@ -318,8 +318,16 @@ function isTheme(themeRegExp, themeName) {
     return new RegExp(themeRegExp).test(themeName);
 }
 
+export function isMaterialBased(themeName) {
+    return isMaterial(themeName) || isFluent(themeName);
+}
+
 export function isMaterial(themeName) {
     return isTheme('material', themeName);
+}
+
+export function isFluent(themeName) {
+    return isTheme('fluent', themeName);
 }
 
 export function isGeneric(themeName) {
@@ -445,6 +453,8 @@ export default {
     isDark,
     isGeneric,
     isMaterial,
+    isFluent,
+    isMaterialBased,
     detachCssClasses,
     attachCssClasses,
     current,

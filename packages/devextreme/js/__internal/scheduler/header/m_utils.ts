@@ -4,7 +4,8 @@ import { camelize } from '@js/core/utils/inflector';
 import { isFunction, isObject } from '@js/core/utils/type';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import { VIEWS } from '@js/ui/scheduler/constants';
+
+import { VIEWS } from '../m_constants';
 
 const DAY_FORMAT = 'd';
 

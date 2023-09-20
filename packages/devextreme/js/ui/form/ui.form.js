@@ -18,7 +18,7 @@ import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
-import { isMaterial } from '../themes';
+import { isMaterialBased } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
 import resizeObserverSingleton from '../../core/resize_observer';
 import './ui.form.layout_manager';
@@ -117,7 +117,7 @@ const Form = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return isMaterial();
+                    return isMaterialBased();
                 },
                 options: {
                     showColonAfterLabel: false,
@@ -1152,7 +1152,7 @@ const Form = Widget.inherit({
         this.option('isDirty', !!this._dirtyFields.size);
     },
 
-    _doForAllEditors: function(editorAction) {
+    updateRunTimeInfoForEachEditor: function(editorAction) {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
             const widgetInstance = itemRunTimeInfo.widgetInstance;
             if(isDefined(widgetInstance) && Editor.isEditor(widgetInstance)) {
@@ -1162,7 +1162,7 @@ const Form = Widget.inherit({
     },
 
     _clear: function() {
-        this._doForAllEditors(editor => {
+        this.updateRunTimeInfoForEachEditor(editor => {
             editor.clear();
             editor.option('isValid', true);
         });
@@ -1222,7 +1222,7 @@ const Form = Widget.inherit({
     },
 
     reset: function(editorsData) {
-        this._doForAllEditors(editor => {
+        this.updateRunTimeInfoForEachEditor(editor => {
             const editorName = editor.option('name');
             if(editorsData && editorName in editorsData) {
                 editor.reset(editorsData[editorName]);
@@ -1231,7 +1231,7 @@ const Form = Widget.inherit({
             }
         });
 
-        this._clearValidationSummary();
+        this._renderValidationSummary();
     },
 
     updateData: function(data, value) {

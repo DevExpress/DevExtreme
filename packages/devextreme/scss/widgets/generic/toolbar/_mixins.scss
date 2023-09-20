@@ -5,21 +5,11 @@
   overflow: visible;
 
   .dx-toolbar-before {
-    padding-right: $generic-toolbar-section-padding;
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding-right: 0;
-      padding-left: $generic-toolbar-section-padding;
-    }
+    padding-inline-end: $generic-toolbar-section-padding;
   }
 
   .dx-toolbar-after {
-    padding-left: $generic-toolbar-section-padding;
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding-left: 0;
-      padding-right: $generic-toolbar-section-padding;
-    }
+    padding-inline-start: $generic-toolbar-section-padding;
   }
 
   .dx-toolbar-before:empty,
@@ -33,30 +23,20 @@
   }
 
   .dx-toolbar-menu-container {
-    padding: 0 0 0 $item-spacing;
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding: 0 $item-spacing 0 0;
-    }
+    padding: 0;
+    padding-inline-start: $item-spacing;
   }
 
   .dx-toolbar-item {
-    padding: 0 $item-spacing 0 0;
+    padding: 0;
+    padding-inline-end: $item-spacing;
 
     &.dx-toolbar-first-in-group {
-      padding-left: $generic-toolbar-item-spacing * 4;
+      padding-inline-start: $generic-toolbar-item-spacing * 4;
     }
 
     &:last-child {
       padding: 0;
-    }
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      padding: 0 0 0 $item-spacing;
-
-      &:last-child {
-        padding: 0;
-      }
     }
   }
 
@@ -66,19 +46,14 @@
 }
 
 @mixin dx-toolbar-item-padding($padding) {
-  padding: 0 0 0 $padding;
+  padding: 0;
+  padding-inline-start: $padding;
 
   &:last-child {
-    padding: 0 0 0 $padding;
+    padding-inline-start: $padding;
   }
 
   &:first-child {
     padding: 0;
-  }
-
-  @at-root #{selector-append(".dx-rtl", &)} {
-    &:first-child {
-      padding-left: $padding;
-    }
   }
 }

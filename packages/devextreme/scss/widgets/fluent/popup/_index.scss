@@ -25,6 +25,12 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
   & > .dx-popup-fullscreen {
     border-radius: 0;
   }
+
+  .dx-state-focused {
+    &.dx-overlay-content {
+      border: 1px solid $base-accent;
+    }
+  }
 }
 
 .dx-popup-title {

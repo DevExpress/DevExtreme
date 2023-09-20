@@ -1763,6 +1763,8 @@ declare module DevExpress.common {
     type: 'stringLength';
   };
   export type SubmenuShowMode = 'onClick' | 'onHover';
+  export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
+  export type TabsStyle = 'primary' | 'secondary';
   export type TextBoxPredefinedButton = 'clear';
 
   /**
@@ -4188,7 +4190,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowInsertingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   };
   /**
    * [descr:RowKeyInfo]
@@ -4234,7 +4236,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowRemovingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * [descr:RowUpdatedInfo]
@@ -4274,7 +4276,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowUpdatingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * [descr:RowValidatingInfo]
@@ -9078,11 +9080,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?: Date | number | string;
-    /**
-     * [descr:dxCalendarOptions.values]
-     */
-    values?: Array<Date | number | string>;
+    value?: Date | number | string | Array<Date | number | string>;
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
@@ -16770,7 +16768,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * @deprecated Use SimpleItem instead
@@ -25544,6 +25542,10 @@ declare module DevExpress.ui {
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
+     * [descr:dxTabPanelOptions.iconPosition]
+     */
+    iconPosition?: DevExpress.common.TabsIconPosition;
+    /**
      * [descr:dxTabPanelOptions.items]
      */
     items?: Array<TItem>;
@@ -25581,6 +25583,10 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.showNavButtons]
      */
     showNavButtons?: boolean;
+    /**
+     * [descr:dxTabPanelOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.TabsStyle;
     /**
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
@@ -25726,7 +25732,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.iconPosition]
      */
-    iconPosition?: DevExpress.ui.dxTabs.IconPosition;
+    iconPosition?: DevExpress.common.TabsIconPosition;
     /**
      * [descr:dxTabsOptions.items]
      */
@@ -25755,6 +25761,10 @@ declare module DevExpress.ui {
      * [descr:dxTabsOptions.showNavButtons]
      */
     showNavButtons?: boolean;
+    /**
+     * [descr:dxTabsOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.TabsStyle;
   }
   /**
    * @deprecated Use Item instead
@@ -29603,7 +29613,7 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * [descr:dxFilterBuilderField]
@@ -29816,7 +29826,6 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
-    static isMaterial(theme: string): boolean;
   }
   /**
    * [descr:Widget]
@@ -30034,7 +30043,6 @@ declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;
 }
 declare module DevExpress.ui.dxTabs {
-  export type IconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type Item = dxTabsItem;
 }
 declare module DevExpress.ui.dxTileView {

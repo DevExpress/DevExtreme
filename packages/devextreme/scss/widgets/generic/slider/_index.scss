@@ -77,7 +77,7 @@ $generic-slider-radius: 2px;
 
 .dx-slider-handle {
   margin-top: math.div(-$generic-slider-height, 2);
-  margin-right: math.div(-$generic-slider-width, 2);
+  margin-inline-end: math.div(-$generic-slider-width, 2);
   width: $generic-slider-width;
   height: $generic-slider-height;
   border: 1px solid $slider-handle-border-color;
@@ -115,9 +115,5 @@ $generic-slider-radius: 2px;
       background: $slider-invalid-handle-accent-bg;
     }
   }
-}
-
-.dx-rtl .dx-slider-handle {
-  margin-left: math.div(-($generic-slider-width + 1px), 2);
 }
 

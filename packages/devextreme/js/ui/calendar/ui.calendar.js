@@ -26,6 +26,7 @@ import CalendarMultipleSelectionStrategy from './ui.calendar.multiple.selection.
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
 import { end as hoverEndEventName } from '../../events/hover';
 import eventsEngine from '../../events/core/events_engine';
+import { isFluent } from '../themes';
 
 // STYLE calendar
 
@@ -89,8 +90,6 @@ const Calendar = Editor.inherit({
             currentDate: new Date(),
 
             value: null,
-
-            values: [],
 
             dateSerializationFormat: undefined,
 
@@ -269,7 +268,6 @@ const Calendar = Editor.inherit({
     },
 
     _dateValue: function(value, event) {
-        const optionName = Array.isArray(value) ? 'values' : 'value';
         if(event) {
             if(event.type === 'keydown') {
                 const cellElement = this._view._getContouredCell().get(0);
@@ -277,23 +275,30 @@ const Calendar = Editor.inherit({
             }
             this._saveValueChangeEvent(event);
         }
-        this._dateOption(optionName, value);
+        this._dateOption('value', value);
     },
 
     _dateOption: function(optionName, optionValue) {
+        const isArray = optionName === 'value' && !this._isSingleMode();
+        const value = this.option('value');
+
         if(arguments.length === 1) {
-            const values = this.option('values') ?? [];
-            return optionName === 'values'
-                ? values.map((value) => this._convertToDate(value))
+
+            return isArray
+                ? (value ?? []).map((value) => this._convertToDate(value))
                 : this._convertToDate(this.option(optionName));
         }
 
         const serializationFormat = this._getSerializationFormat(optionName);
-        const serializedValue = optionName === 'values'
+        const serializedValue = isArray
             ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat)) || []
             : dateSerialization.serializeDate(optionValue, serializationFormat);
 
         this.option(optionName, serializedValue);
+    },
+
+    _isSingleMode: function() {
+        return this.option('selectionMode') === 'single';
     },
 
     _shiftDate: function(zoomLevel, date, offset, reverse) {
@@ -442,6 +447,7 @@ const Calendar = Editor.inherit({
 
     _refreshSelectionStrategy: function() {
         this._initSelectionStrategy();
+        this._selectionStrategy.restoreValue();
         this._refresh();
     },
 
@@ -852,7 +858,7 @@ const Calendar = Editor.inherit({
         const result = new Date(date);
         const currentValue = this._dateOption('value');
 
-        if(currentValue) {
+        if(currentValue && this._isSingleMode()) {
             result.setHours(currentValue.getHours());
             result.setMinutes(currentValue.getMinutes());
             result.setSeconds(currentValue.getSeconds());
@@ -1105,8 +1111,8 @@ const Calendar = Editor.inherit({
                     onClick: (args) => {
                         this._toTodayView(args);
                     },
-                    type: 'default',
-                    stylingMode: 'text',
+                    type: isFluent() ? 'normal' : 'default',
+                    stylingMode: isFluent() ? 'outlined' : 'text',
                     integrationOptions: {}
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);
@@ -1448,7 +1454,6 @@ const Calendar = Editor.inherit({
                 break;
             case 'selectionMode':
                 this._refreshSelectionStrategy();
-                this._selectionStrategy.restoreValue();
                 this._initCurrentDate();
                 break;
             case 'selectWeekOnClick':
@@ -1479,18 +1484,9 @@ const Calendar = Editor.inherit({
                 this._updateButtonsVisibility();
                 break;
             case 'value':
-                if(this.option('selectionMode') === 'single') {
-                    this._selectionStrategy.processValueChanged([value], [previousValue]);
-                }
+                this._selectionStrategy.processValueChanged(value, previousValue);
                 this._setSubmitValue(value);
                 this.callBase(args);
-                break;
-            case 'values':
-                if(this.option('selectionMode') !== 'single') {
-                    this._selectionStrategy.processValueChanged(value, previousValue);
-                }
-                this._raiseValueChangeAction(value, previousValue);
-                this._saveValueChangeEvent(undefined);
                 break;
             case 'viewsCount':
                 this._refreshViews();

@@ -8,4 +8,5 @@ export const CLASSES = {
   commandDrag: 'dx-command-drag',
   sortableWithoutHandle: 'dx-sortable-without-handle',
   rowsView: 'rowsview',
+  dragView: 'dragview',
 };

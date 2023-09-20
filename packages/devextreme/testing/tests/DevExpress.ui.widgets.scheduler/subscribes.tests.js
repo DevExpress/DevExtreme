@@ -1,5 +1,5 @@
 import 'generic_light.css!';
-import 'ui/scheduler/subscribes';
+import '__internal/scheduler/m_subscribes';
 import 'ui/scheduler/ui.scheduler';
 import {
     DateGeneratorBaseStrategy,
@@ -11,7 +11,7 @@ import fx from 'animation/fx';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 
-import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import { getAppointmentColor, createExpressions } from '__internal/scheduler/resources/m_utils';

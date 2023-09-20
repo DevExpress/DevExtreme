@@ -2,10 +2,10 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isNumeric, isObject } from '@js/core/utils/type';
 import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
-import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { current as currentTheme } from '@js/ui/themes';
 
+import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';

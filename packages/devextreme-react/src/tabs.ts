@@ -129,6 +129,12 @@ class Tabs<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildre
       "multiple"])
   ]),
   showNavButtons: PropTypes.bool,
+  stylingMode: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "primary",
+      "secondary"])
+  ]),
   tabIndex: PropTypes.number,
   visible: PropTypes.bool,
   width: PropTypes.oneOfType([

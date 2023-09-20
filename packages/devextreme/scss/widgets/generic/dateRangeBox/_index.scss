@@ -6,29 +6,12 @@
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../colors" as *;
-@use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
 @use "../dropDownEditor" as *;
 
 // adduse
-
-$border-width: 1px;
-$label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
-
-@include dx-filled-mixin(0, $generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
-@include dx-underlined-mixin($generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
-@include dx-outlined-mixin(
-  $base-bg,
-  2px,
-  $generic-texteditor-label-size,
-  $label-offset-y,
-  $generic-base-inline-block-height,
-  normal,
-  1.5px,
-  -1px,
-);
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
@@ -46,28 +29,7 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
     min-height: $generic-texteditor-input-height - 2px;
   }
 
-  &.dx-editor-outlined {
-    &,
-    &.dx-dropdowneditor-active,
-    &.dx-state-focused {
-      &.dx-daterangebox-with-label,
-      &.dx-daterangebox-with-floating-label {
-        .dx-datebox.dx-editor-outlined {
-          .dx-texteditor-label {
-            .dx-label {
-              span {
-                line-height: normal;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .dx-editor-outlined,
-  .dx-editor-filled,
-  .dx-editor-underlined {
+  .dx-texteditor {
     &::before {
       content: '';
       position: absolute;
@@ -108,9 +70,7 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
   }
 
   &.dx-invalid {
-    .dx-editor-outlined,
-    .dx-editor-filled,
-    .dx-editor-underlined {
+    .dx-texteditor {
       &.dx-state-hover {
         &::before {
           border-bottom-color: $texteditor-invalid-faded-border-color;
@@ -148,34 +108,23 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
   .dx-datebox {
     &.dx-start-datebox,
     &.dx-end-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-filled,
-      &.dx-editor-underlined {
+      &.dx-texteditor {
         .dx-texteditor-input {
-          padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
-
-        &.dx-rtl {
-          .dx-texteditor-input {
-            padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
-          }
+          padding-inline-end: $generic-base-inline-borderedwidget-horizontal-padding;
         }
       }
     }
 
     &.dx-end-datebox {
-      &.dx-editor-outlined,
-      &.dx-editor-filled,
-      &.dx-editor-underlined {
+      &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
-            padding-right: $generic-texteditor-invalid-badge-size;
+            padding-inline-end: $generic-texteditor-invalid-badge-size;
           }
 
           &.dx-rtl {
             .dx-texteditor-input {
               padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-              padding-left: $generic-texteditor-invalid-badge-size;
             }
           }
         }

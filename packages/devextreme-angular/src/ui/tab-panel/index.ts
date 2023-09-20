@@ -209,6 +209,19 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
+     * [descr:dxTabPanelOptions.iconPosition]
+    
+     */
+    @Input()
+    get iconPosition(): string {
+        return this._getOption('iconPosition');
+    }
+    set iconPosition(value: string) {
+        this._setOption('iconPosition', value);
+    }
+
+
+    /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
     
      */
@@ -374,6 +387,19 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
     }
     set showNavButtons(value: boolean) {
         this._setOption('showNavButtons', value);
+    }
+
+
+    /**
+     * [descr:dxTabPanelOptions.stylingMode]
+    
+     */
+    @Input()
+    get stylingMode(): string {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: string) {
+        this._setOption('stylingMode', value);
     }
 
 
@@ -619,6 +645,13 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() iconPositionChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
@@ -710,6 +743,13 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() stylingModeChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() swipeEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -787,6 +827,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
+            { emit: 'iconPositionChange' },
             { emit: 'itemHoldTimeoutChange' },
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
@@ -800,6 +841,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
             { emit: 'selectedIndexChange' },
             { emit: 'selectedItemChange' },
             { emit: 'showNavButtonsChange' },
+            { emit: 'stylingModeChange' },
             { emit: 'swipeEnabledChange' },
             { emit: 'tabIndexChange' },
             { emit: 'tabsPositionChange' },

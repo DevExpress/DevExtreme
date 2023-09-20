@@ -30,6 +30,12 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
   & > .dx-popup-fullscreen {
     border-radius: 0;
   }
+
+  .dx-state-focused {
+    &.dx-overlay-content {
+      border: 1px solid $base-accent;
+    }
+  }
 }
 
 .dx-popup-title {
@@ -49,12 +55,7 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
 
     .dx-closebutton {
       position: relative;
-      left: $generic-popup-closebutton-offset;
-
-      .dx-rtl & {
-        left: 0;
-        right: $generic-popup-closebutton-offset;
-      }
+      inset-inline-start: $generic-popup-closebutton-offset;
     }
   }
 }

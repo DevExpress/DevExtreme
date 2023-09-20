@@ -341,8 +341,8 @@ QUnit.test('Don\'t refresh form when visibility changed to \'true\'', function(a
 });
 
 QUnit.test('Hide helper text when validation message shows for material theme', function(assert) {
-    const origIsMaterial = themes.isMaterial;
-    themes.isMaterial = function() { return true; };
+    const origIsMaterialBased = themes.isMaterialBased;
+    themes.isMaterialBased = function() { return true; };
 
     const form = $('#form').dxForm({
         formData: {
@@ -377,7 +377,7 @@ QUnit.test('Hide helper text when validation message shows for material theme', 
     assert.ok(!isFieldWrapperInvalid(lastName), 'not invalid css class');
     assert.ok(!isFieldWrapperInvalid(firstName), 'not invalid css class');
 
-    themes.isMaterial = origIsMaterial;
+    themes.isMaterialBased = origIsMaterialBased;
 
 });
 
@@ -4698,5 +4698,26 @@ QUnit.module('reset', () => {
         const validationItemsAfterReset = $(`.${FORM_VALIDATION_SUMMARY}`).children();
 
         assert.strictEqual(validationItemsAfterReset.length, 0, 'form does not have validation summary items after reset');
+    });
+
+    QUnit.test('validation summary should appear after validating reset form', function(assert) {
+        const form = $('#form').dxForm({
+            formData: { field1: '' },
+            showValidationSummary: true,
+            items: [ {
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }, {
+                dataField: 'field2',
+                validationRules: [{ type: 'required' }]
+            } ]
+        }).dxForm('instance');
+
+        form.reset();
+        form.validate();
+
+        const summaryItemsAfterValidate = $(`.${FORM_VALIDATION_SUMMARY}`).children();
+
+        assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
     });
 });

@@ -1,7 +1,8 @@
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
-import { APPOINTMENT_CONTENT_CLASSES } from '@js/ui/scheduler/classes';
+
+import { APPOINTMENT_CONTENT_CLASSES } from '../m_classes';
 
 const allDayText = ` ${messageLocalization.format('dxScheduler-allDay')}: `;
 

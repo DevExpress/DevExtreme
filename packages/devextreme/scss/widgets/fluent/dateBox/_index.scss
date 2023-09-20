@@ -6,7 +6,9 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../dropDownEditor" as *;
+@use "../../base/dropDownEditor/mixins" as *;
 @use "../textEditor" as *;
+@use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../calendar/sizes" as *;
 @use "../../base/dateBox";
@@ -72,16 +74,6 @@
       background: $texteditor-hover-bg;
     }
   }
-
-  &.dx-rtl {
-    &.dx-dropdowneditor-active {
-      .dx-dropdowneditor-button {
-        .dx-dropdowneditor-icon {
-          opacity: 1;
-        }
-      }
-    }
-  }
 }
 
 .dx-datebox-wrapper-calendar {
@@ -142,7 +134,11 @@
   &,
   &:not(.dx-texteditor-empty) {
     &.dx-auto-width {
-      @include invalid-dropdowneditor-input-padding();
+      @include invalid-dropdowneditor-input-padding(
+        $fluent-dropdowneditor-invalid-badge-size,
+        $fluent-base-standard-texteditor-input-horizontal-padding,
+        $fluent-filled-texteditor-input-horizontal-padding
+      );
     }
   }
 }
@@ -151,12 +147,10 @@
   min-height: $fluent-datebox-input-min-height;
 }
 
-.dx-editor-outlined,
-.dx-editor-filled,
-.dx-editor-underlined {
+.dx-texteditor {
   &.dx-datebox-native {
     .dx-texteditor-input {
-      padding-right: $fluent-filled-texteditor-spin-button-horizontal-padding;
+      padding-right: $texteditor-spin-button-horizontal-padding;
     }
   }
 }

@@ -3,25 +3,30 @@
 // adduse
 
 $material-switch-width: null !default;
-$material-switch-handle-width: null !default;
-$material-switch-container-margin: null !default;
+$switch-padding: 10px !default;
+$switch-container-vertical-margin: null !default;
+$switch-container-horizontal-padding: null !default;
 $material-switch-height: null !default;
+$switch-handle-height: null !default;
+$switch-container-height: 14px !default;
+$switch-handle-margin: 0 !default;
 
-$material-switch-handle-offset: 2px !default;
+$material-switch-shadow-blur-radius: 10px !default;
 $material-switch-handle-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2) !default;
 $material-switch-container-adjustment: 6px !default;
-$material-switch-on-off-adding-padding: 2px !default;
 
 @if $size == "default" {
   $material-switch-width: 36px !default;
-  $material-switch-handle-width: 14px !default;
-  $material-switch-container-margin: 3px !default;
+  $switch-container-vertical-margin: 3px !default;
+  $switch-container-horizontal-padding: $switch-handle-margin !default;
   $material-switch-height: 20px !default;
+  $switch-handle-height: $material-switch-height !default;
 }
 
 @else if $size == "compact" {
   $material-switch-width: 32px !default;
-  $material-switch-handle-width: 12px !default;
-  $material-switch-container-margin: 2px !default;
+  $switch-container-vertical-margin: 2px !default;
+  $switch-container-horizontal-padding: $switch-handle-margin !default;
   $material-switch-height: 18px !default;
+  $switch-handle-height: $material-switch-height !default;
 }

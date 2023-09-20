@@ -11,6 +11,8 @@ import { addNamespace } from '@js/events/utils/index';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import Resizable from '@js/ui/resizable';
+import { hide, show } from '@js/ui/tooltip/ui.tooltip';
+
 import {
   ALL_DAY_APPOINTMENT_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
@@ -21,10 +23,9 @@ import {
   REDUCED_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
-} from '@js/ui/scheduler/classes';
-import { ExpressionUtils } from '@js/ui/scheduler/expressionUtils';
-import { getRecurrenceProcessor } from '@js/ui/scheduler/recurrence';
-import { hide, show } from '@js/ui/tooltip/ui.tooltip';
+} from '../m_classes';
+import { ExpressionUtils } from '../m_expression_utils';
+import { getRecurrenceProcessor } from '../m_recurrence';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -191,7 +192,7 @@ export class Appointment extends DOMComponent {
   }
 
   _renderReducedAppointment() {
-    const reducedPart = this.option('reduced');
+    const reducedPart: any = this.option('reduced');
 
     if (!reducedPart) {
       return;
@@ -253,7 +254,7 @@ export class Appointment extends DOMComponent {
   }
 
   _renderDirection() {
-    (this.$element() as any).addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction')]);
+    (this.$element() as any).addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction') as any]);
   }
 
   _createResizingConfig() {

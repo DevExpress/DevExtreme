@@ -5,7 +5,7 @@ import { extend } from '../../../core/utils/extend';
 import Widget from '../../widget/ui.widget';
 import Button from '../../button';
 import ToolbarMenuList from './ui.toolbar.menu.list';
-import { isMaterial } from '../../themes';
+import { isMaterialBased } from '../../themes';
 import { ChildDefaultTemplate } from '../../../core/templates/child_default_template';
 import { toggleItemFocusableElementTabIndex } from '../ui.toolbar.utils';
 import { getWindow } from '../../../core/utils/window';
@@ -68,7 +68,7 @@ export default class DropDownMenu extends Widget {
             },
             {
                 device: function() {
-                    return isMaterial();
+                    return isMaterialBased();
                 },
                 options: {
                     useInkRipple: true,

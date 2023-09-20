@@ -14,7 +14,7 @@
 .dx-loadindicator-icon {
   position: relative;
   top: 15%;
-  left: 15%;
+  inset-inline-start: 15%;
   width: 70%;
   height: 70%;
 
@@ -93,9 +93,4 @@
   .dx-loadindicator-segment15 {
     display: none;
   }
-}
-
-.dx-rtl .dx-loadindicator-icon {
-  right: 15%;
-  left: 0;
 }

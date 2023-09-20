@@ -10,13 +10,7 @@ $slider-tooltip-arrow-height: 7px;
   font-size: 0.85em;
 
   &:last-child {
-    right: 0;
-    left: auto;
-  }
-
-  .dx-rtl &:last-child {
-    left: 0;
-    right: auto;
+    inset-inline-end: 0;
   }
 }
 
@@ -71,7 +65,7 @@ $slider-tooltip-arrow-height: 7px;
 .dx-slider-handle {
   position: absolute;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   pointer-events: auto;
   -webkit-user-drag: none;
 
@@ -84,11 +78,6 @@ $slider-tooltip-arrow-height: 7px;
   .dx-slider-wrapper {
     cursor: default;
   }
-}
-
-.dx-rtl .dx-slider-handle {
-  right: auto;
-  left: 0;
 }
 
 .dx-slider-tooltip-visible-on-hover {

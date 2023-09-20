@@ -1,6 +1,6 @@
-@forward "tb_generic";
+$base-font-family: getCustomVar(("$base-font-family")) !default;
+$base-accent: getCustomVar(("$base-accent")) !default;
 
-@use "tb_generic" as *;
 @use "sass:color";
 $color: null !default;
 
