@@ -1202,6 +1202,7 @@ class EditingControllerImpl extends modules.ViewController {
     };
 
     if (isFluent(current())) {
+      buttonConfig.stylingMode = 'contained';
       buttonConfig.type = 'default';
     }
 
