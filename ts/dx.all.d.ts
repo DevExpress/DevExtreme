@@ -9970,6 +9970,9 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type ColumnButtonBase = DevExpress.common.grids.ColumnButtonBase;
+    /**
+     * [descr:_ui_data_grid_ColumnButtonClickEvent]
+     */
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
@@ -9977,7 +9980,13 @@ declare module DevExpress.ui {
       dxDataGrid<TRowData, TKey>,
       PointerEvent | MouseEvent
     > & {
+      /**
+       * [descr:_ui_data_grid_ColumnButtonClickEvent.row]
+       */
       row?: Row<TRowData, TKey>;
+      /**
+       * [descr:_ui_data_grid_ColumnButtonClickEvent.column]
+       */
       column?: Column<TRowData, TKey>;
     };
     export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
