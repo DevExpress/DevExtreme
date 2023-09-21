@@ -305,9 +305,9 @@ $button-success-text-selected-bg: null !default;
 }
 
 @if $mode == "dark" {
-  $button-default-bg: $base-compound-accent !default;
-  $button-default-hover-bg: $base-compound-accent-hover !default;
-  $button-default-focused-bg: $base-compound-accent-hover !default; // #77b7f7 
+  $button-default-bg: $base-accent !default;
+  $button-default-hover-bg: $base-accent-hover !default;
+  $button-default-focused-bg: $base-accent-hover !default;
   $button-default-active-bg: #b4d6fa !default; 
   $button-default-selected-bg: #a6cff9 !default;
 

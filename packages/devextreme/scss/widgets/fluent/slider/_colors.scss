@@ -15,9 +15,9 @@ $fluent-slider-bar-bg: $base-neutral-foreground3 !default;
 * $name 20. Selected range background color
 * $type color
 */
-$slider-accent-color: $base-compound-accent !default;
-$slider-accent-color-hover: $base-compound-accent-hover !default;
-$slider-accent-color-focused: $base-compound-accent-active !default;
+$slider-accent-color: $base-accent !default;
+$slider-accent-color-hover: $base-accent-hover !default;
+$slider-accent-color-focused: $base-accent-active !default;
 
 $slider-invalid-color: $base-invalid-color !default;
 $slider-invalid-color-hover: $base-invalid-color-hover !default;
