@@ -13,7 +13,6 @@
         v-model:icon-position="iconPosition"
         v-model:show-nav-buttons="showNavButtons"
         :data-source="dataSource"
-        :selected-index="selectedIndex"
       >
         <template #tabPanelItem="{ data }">
           <TabPanelItem
@@ -107,7 +106,6 @@ export default {
       navButtonsCheckBoxLabel,
       dataSource,
       showNavButtons: true,
-      selectedIndex: 0,
     };
   },
 };
@@ -121,10 +119,20 @@ export default {
 }
 
 .widget-container {
-  display: inline;
+  display: flex;
+  justify-content: center;
   flex-grow: 1;
-  min-width: 450px;
+  min-width: 360px;
   padding: 16px 32px;
+}
+
+.dx-theme-material .widget-container {
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.dx-tabpanel-tabs-position-left .dx-tabpanel-container,
+.dx-tabpanel-tabs-position-right .dx-tabpanel-container {
+  width: 0;
 }
 
 .dx-theme-material .dx-tabpanel {
@@ -141,7 +149,6 @@ export default {
   flex-direction: column;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: 300px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
 }
@@ -153,9 +160,5 @@ export default {
 
 .option {
   margin-top: 20px;
-}
-
-.dx-theme-material .widget-container {
-  background-color: rgba(191, 191, 191, 0.15);
 }
 </style>

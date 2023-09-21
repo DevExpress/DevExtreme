@@ -4,13 +4,13 @@ $(() => {
 
     return `
       <div class="${className}">
-        <p class="task-item-text">
+        <span class="task-item-text">
           ${task.text}
-        </p>
+        </span>
 
-        <p class="task-item-info">
+        <span class="task-item-info">
           ${task.date} by ${task.assignedBy}
-        </p>
+        </span>
 
         <i class="task-item-pseudo-button dx-icon dx-icon-overflow"></i>
       </div>
@@ -33,7 +33,6 @@ $(() => {
     height: 418,
     animationEnabled: true,
     swipeEnabled: true,
-    selectedIndex: 0,
     showNavButtons: true,
     tabsPosition: tabsPositions[0],
     stylingMode: stylingModes[0],

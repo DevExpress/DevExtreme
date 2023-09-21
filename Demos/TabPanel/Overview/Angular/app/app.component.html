@@ -7,7 +7,6 @@
       [animationEnabled]="true"
       [swipeEnabled]="true"
       [dataSource]="dataSource"
-      [selectedIndex]="selectedIndex"
       [tabsPosition]="tabsPosition"
       [stylingMode]="stylingMode"
       [iconPosition]="iconPosition"
@@ -19,13 +18,13 @@
             *ngFor="let task of tabPanelItem.tasks"
             [className]="getTaskClassName(task.priority)"
           >
-            <p class="task-item-text">
+            <span class="task-item-text">
               {{ task.text }}
-            </p>
+            </span>
 
-            <p class="task-item-info">
+            <span class="task-item-info">
               {{ task.date }} by {{ task.assignedBy }}
-            </p>
+            </span>
 
             <i class="task-item-pseudo-button dx-icon dx-icon-overflow"></i>
           </div>

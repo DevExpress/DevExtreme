@@ -46,7 +46,6 @@ const App = () => {
           height={418}
           animationEnabled={true}
           swipeEnabled={true}
-          selectedIndex={0}
           dataSource={dataSource}
           tabsPosition={tabsPosition}
           stylingMode={stylingMode}

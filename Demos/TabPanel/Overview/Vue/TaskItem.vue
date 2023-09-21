@@ -1,12 +1,12 @@
 <template>
   <div :class="className">
-    <p class="task-item-text">
+    <span class="task-item-text">
       {{ task.text }}
-    </p>
+    </span>
 
-    <p class="task-item-info">
+    <span class="task-item-info">
       {{ task.date }} by {{ task.assignedBy }}
-    </p>
+    </span>
 
     <i class="task-item-pseudo-button dx-icon dx-icon-overflow"/>
   </div>
@@ -37,16 +37,17 @@ export default {
 .task-item {
   position: relative;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   height: 48px;
-  padding: 8px;
+  padding: 8px 12px 8px 8px;
   border-radius: 4px;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 .task-item::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 8px;
   left: 6px;
@@ -69,16 +70,14 @@ export default {
 
 .task-item-text,
 .task-item-info {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 16px;
   margin: 0;
+  padding: 0 24px 0 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .task-item-info {
-  width: 240px;
-  min-width: 240px;
   font-size: 12px;
   opacity: 0.38;
 }

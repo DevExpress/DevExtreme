@@ -155,13 +155,6 @@ const tasks = [
     date: '2023/09/16',
     assignedBy: 'Greta Sims',
   },
-  {
-    status: 'Deferred',
-    priority: 'low',
-    text: 'Customer Follow Up Plan',
-    date: '2023/09/16',
-    assignedBy: 'Brett Wade',
-  },
 
   {
     status: 'Rejected',
@@ -219,6 +212,13 @@ const tasks = [
     text: 'Staff Productivity Report',
     date: '2023/09/16',
     assignedBy: 'Victor Norris',
+  },
+  {
+    status: 'Completed',
+    priority: 'medium',
+    text: 'Review HR Budget Company Wide',
+    date: '2023/09/16',
+    assignedBy: 'Mary Stern',
   },
 ];
 
