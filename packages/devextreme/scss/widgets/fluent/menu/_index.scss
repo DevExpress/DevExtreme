@@ -11,9 +11,6 @@
 @use "../menuBase" as *;
 @use "../../base/menu";
 
-
-$fluent-menu-font-size: $fluent-base-font-size;
-
 .dx-context-menu-container-border {
   background-color: transparent;
 }
@@ -49,7 +46,6 @@ $fluent-menu-font-size: $fluent-base-font-size;
   }
 
   .dx-menu-item {
-    font-size: $fluent-menu-font-size;
     border-radius: $base-border-radius;
 
     .dx-menu-item-content {
@@ -89,10 +85,6 @@ $fluent-menu-font-size: $fluent-base-font-size;
     &.dx-state-focused {
       box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
     }
-  }
-
-  .dx-treeview-toggle-item-visibility {
-    font-size: 18px;
   }
 
   .dx-treeview-node {
