@@ -70,6 +70,8 @@ const DropDownButton = Widget.inherit({
 
             text: '',
 
+            type: 'normal',
+
             icon: undefined,
 
             onButtonClick: null,
