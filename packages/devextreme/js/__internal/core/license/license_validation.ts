@@ -20,6 +20,7 @@ export type Token = {
   readonly kind: 'corrupted';
   readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
 };
+export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | null;
 
 const SPLITTER = '.';
 const FORMAT = 1;
@@ -31,6 +32,8 @@ const DECODING_ERROR: Token = { kind: CORRUPTED, error: 'decoding' };
 const DESERIALIZATION_ERROR: Token = { kind: CORRUPTED, error: 'deserialization' };
 const PAYLOAD_ERROR: Token = { kind: CORRUPTED, error: 'payload' };
 const VERSION_ERROR: Token = { kind: CORRUPTED, error: 'version' };
+
+let isLicenseVerified = false;
 
 export function parseToken(encodedToken: string | undefined): Token {
   if (encodedToken === undefined) {
@@ -83,10 +86,7 @@ export function parseToken(encodedToken: string | undefined): Token {
   };
 }
 
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | null;
-let isLicenseVerified = false;
-
-const verifyLicense = function verifyLicense(licenseToken: string, ver: string = version): void {
+export function verifyLicense(licenseToken: string, ver: string = version): void {
   if (isLicenseVerified) {
     return;
   }
@@ -113,22 +113,16 @@ const verifyLicense = function verifyLicense(licenseToken: string, ver: string =
   if (warning) {
     errors.log(warning);
   }
-};
+}
 
 /// #DEBUG
-const setLicenseCheckSkipCondition = function setLicenseCheckSkipCondition(value = true): void {
+export function setLicenseCheckSkipCondition(value = true): void {
   isLicenseVerified = value;
-};
-
-const getLicenseCheckSkipCondition = function getLicenseCheckSkipCondition(): boolean {
-  return isLicenseVerified;
-};
+}
 /// #ENDDEBUG
 
+// NOTE: We need this default export
+// to allow QUnit mock the verifyLicense function
 export default {
   verifyLicense,
-  /// #DEBUG
-  setLicenseCheckSkipCondition,
-  getLicenseCheckSkipCondition,
-  /// #ENDDEBUG
 };

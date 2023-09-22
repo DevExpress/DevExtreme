@@ -2,9 +2,11 @@ import { GlobalConfig } from '@js/common';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
 
-import licenseUtils, { parseToken } from './license_validation';
-
-const { verifyLicense, setLicenseCheckSkipCondition } = licenseUtils;
+import {
+  parseToken,
+  setLicenseCheckSkipCondition,
+  verifyLicense,
+} from './license_validation';
 
 describe('license token', () => {
   it.each([
