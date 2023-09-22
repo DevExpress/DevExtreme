@@ -94,7 +94,6 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             max: this.dateBox.dateOption('max'),
             onValueChanged: this._valueChangedHandler.bind(this),
             onCellClick: this._cellClickHandler.bind(this),
-            tabIndex: null,
             disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
             onContouredChanged: this._refreshActiveDescendant.bind(this),
             skipFocusCheck: true

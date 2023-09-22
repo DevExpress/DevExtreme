@@ -44,7 +44,7 @@ const DropDownEditor = TextBox.inherit({
                     return;
                 }
 
-                if(this.option('applyValueMode') === 'instantly') {
+                if(!this._popup.getFocusableElements().length) {
                     this.close();
                     return;
                 }
@@ -574,12 +574,39 @@ const DropDownEditor = TextBox.inherit({
             'hidden': this._popupHiddenHandler.bind(this),
             'contentReady': this._contentReadyHandler.bind(this)
         });
+        this._popup.$wrapper().on('keydown', (e) => this._popupKeyHandler(e));
 
         this._contentReadyHandler();
 
         this._setPopupContentId(this._popup.$content());
 
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
+    },
+
+    _popupKeyHandler(e) {
+        switch(e.key) {
+            case 'Tab':
+                this._popupTabHandler(e);
+                break;
+            case 'Escape':
+                this._popupEscHandler(e);
+                break;
+        }
+    },
+
+    _popupTabHandler(e) {
+        const $target = $(e.target);
+
+        if((e.shiftKey && $target.is(this._getFirstPopupElement()))
+            || (!e.shiftKey && $target.is(this._getLastPopupElement()))) {
+            eventsEngine.trigger(this._input(), 'focus');
+            e.preventDefault();
+        }
+    },
+
+    _popupEscHandler() {
+        eventsEngine.trigger(this._input(), 'focus');
+        this.close();
     },
 
     _setPopupContentId($popupContent) {
@@ -751,33 +778,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement: function() {
-        return $(this._popup.getFocusableElements()[0]);
+        return $(this._popup.getFocusableElements()).first();
     },
 
     _getLastPopupElement: function() {
-        const elements = this._popup.getFocusableElements();
-        return $(elements[elements.length - 1]);
-    },
-
-    _popupElementTabHandler: function(e) {
-        const $element = $(e.currentTarget);
-
-        if((e.shiftKey && $element.is(this._getFirstPopupElement()))
-            || (!e.shiftKey && $element.is(this._getLastPopupElement()))) {
-
-            eventsEngine.trigger(this._input(), 'focus');
-            e.preventDefault();
-        }
-    },
-
-    _popupElementEscHandler: function() {
-        eventsEngine.trigger(this._input(), 'focus');
-        this.close();
-    },
-
-    _popupButtonInitializedHandler: function(e) {
-        e.component.registerKeyHandler('tab', this._popupElementTabHandler.bind(this));
-        e.component.registerKeyHandler('escape', this._popupElementEscHandler.bind(this));
+        return $(this._popup.getFocusableElements()).last();
     },
 
     _popupToolbarItemsConfig: function() {
@@ -787,7 +792,6 @@ const DropDownEditor = TextBox.inherit({
                 options: {
                     onClick: this._applyButtonHandler.bind(this),
                     text: this.option('applyButtonText'),
-                    onInitialized: this._popupButtonInitializedHandler.bind(this)
                 }
             },
             {
@@ -795,7 +799,6 @@ const DropDownEditor = TextBox.inherit({
                 options: {
                     onClick: this._cancelButtonHandler.bind(this),
                     text: this.option('cancelButtonText'),
-                    onInitialized: this._popupButtonInitializedHandler.bind(this)
                 }
             }
         ];

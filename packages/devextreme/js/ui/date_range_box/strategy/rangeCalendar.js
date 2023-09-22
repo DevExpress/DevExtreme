@@ -101,10 +101,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
     _getTodayButtonConfig() {
         const todayButtonConfig = super._getTodayButtonConfig();
 
-        todayButtonConfig.options.onInitialized = (e) => {
-            this.dateBox._popupButtonInitializedHandler(e);
-        };
-
         return todayButtonConfig;
     }
 
