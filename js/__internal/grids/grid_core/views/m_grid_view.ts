@@ -53,21 +53,25 @@ const restoreFocus = function (focusedElement, selectionRange) {
 
 const resizingControllerMembers = {
   _initPostRenderHandlers() {
-    const dataController = this._dataController;
-
     if (!this._refreshSizesHandler) {
       this._refreshSizesHandler = (e) => {
-        let resizeDeferred;
+        // @ts-expect-error
+        let resizeDeferred = new Deferred<null>().resolve(null);
         const changeType = e?.changeType;
         const isDelayed = e?.isDelayed;
+        const needFireContentReady = changeType
+          && changeType !== 'updateSelection'
+          && changeType !== 'updateFocusedRow'
+          && changeType !== 'pageIndex'
+          && !isDelayed;
 
-        dataController.changed.remove(this._refreshSizesHandler);
+        this._dataController.changed.remove(this._refreshSizesHandler);
 
         if (this._checkSize()) {
           resizeDeferred = this._refreshSizes(e);
         }
 
-        if (changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
+        if (needFireContentReady) {
           when(resizeDeferred).done(() => {
             this._setAriaLabel();
             this.fireContentReadyAction();
@@ -75,15 +79,15 @@ const resizingControllerMembers = {
         }
       };
       // TODO remove resubscribing
-      dataController.changed.add(() => {
-        dataController.changed.add(this._refreshSizesHandler);
+      this._dataController.changed.add(() => {
+        this._dataController.changed.add(this._refreshSizesHandler);
       });
     }
   },
 
   _refreshSizes(e) {
     // @ts-expect-error
-    let resizeDeferred = new Deferred().resolve();
+    let resizeDeferred = new Deferred<null>().resolve(null);
     const changeType = e?.changeType;
     const isDelayed = e?.isDelayed;
     const items = this._dataController.items();
