@@ -20,7 +20,7 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/toast';
+import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, ToastType } from 'devextreme/ui/toast';
 
 import DxToast from 'devextreme/ui/toast';
 
@@ -414,10 +414,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get type(): string {
+    get type(): ToastType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: ToastType) {
         this._setOption('type', value);
     }
 
@@ -711,7 +711,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<string>;
+    @Output() typeChange: EventEmitter<ToastType>;
 
     /**
     

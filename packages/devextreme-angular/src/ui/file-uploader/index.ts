@@ -23,8 +23,9 @@ import {
 } from '@angular/core';
 
 
+import { ValidationStatus } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent } from 'devextreme/ui/file_uploader';
+import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, FileUploadMode, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadHttpMethod, UploadStartedEvent, ValueChangedEvent } from 'devextreme/ui/file_uploader';
 
 import DxFileUploader from 'devextreme/ui/file_uploader';
 
@@ -609,10 +610,10 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get uploadMethod(): string {
+    get uploadMethod(): UploadHttpMethod {
         return this._getOption('uploadMethod');
     }
-    set uploadMethod(value: string) {
+    set uploadMethod(value: UploadHttpMethod) {
         this._setOption('uploadMethod', value);
     }
 
@@ -622,10 +623,10 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get uploadMode(): string {
+    get uploadMode(): FileUploadMode {
         return this._getOption('uploadMode');
     }
-    set uploadMode(value: string) {
+    set uploadMode(value: FileUploadMode) {
         this._setOption('uploadMode', value);
     }
 
@@ -674,10 +675,10 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -1124,14 +1125,14 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() uploadMethodChange: EventEmitter<string>;
+    @Output() uploadMethodChange: EventEmitter<UploadHttpMethod>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() uploadModeChange: EventEmitter<string>;
+    @Output() uploadModeChange: EventEmitter<FileUploadMode>;
 
     /**
     
@@ -1159,7 +1160,7 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

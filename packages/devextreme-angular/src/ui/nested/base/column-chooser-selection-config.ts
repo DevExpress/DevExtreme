@@ -5,6 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
+import { SelectAllMode, SingleMultipleOrNone } from 'devextreme/common';
+import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 @Component({
     template: ''
@@ -38,24 +40,24 @@ export abstract class DxoColumnChooserSelectionConfig extends NestedOption {
         this._setOption('deferred', value);
     }
 
-    get mode(): string {
+    get mode(): SingleMultipleOrNone {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: SingleMultipleOrNone) {
         this._setOption('mode', value);
     }
 
-    get selectAllMode(): string {
+    get selectAllMode(): SelectAllMode {
         return this._getOption('selectAllMode');
     }
-    set selectAllMode(value: string) {
+    set selectAllMode(value: SelectAllMode) {
         this._setOption('selectAllMode', value);
     }
 
-    get showCheckBoxesMode(): string {
+    get showCheckBoxesMode(): SelectionColumnDisplayMode {
         return this._getOption('showCheckBoxesMode');
     }
-    set showCheckBoxesMode(value: string) {
+    set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
         this._setOption('showCheckBoxesMode', value);
     }
 }

@@ -12,9 +12,12 @@ import {
 
 
 
+import { SingleMultipleOrNone } from 'devextreme/common';
+import { Palette } from 'devextreme/common/charts';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Font } from 'devextreme/viz/core/base_widget';
+import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
 
 import {
     NestedOptionHost,
@@ -94,10 +97,10 @@ export class DxiLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get elementType(): string {
+    get elementType(): VectorMapMarkerType {
         return this._getOption('elementType');
     }
-    set elementType(value: string) {
+    set elementType(value: VectorMapMarkerType) {
         this._setOption('elementType', value);
     }
 
@@ -174,10 +177,10 @@ export class DxiLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get palette(): string | Array<string> {
+    get palette(): Palette | string | Array<string> {
         return this._getOption('palette');
     }
-    set palette(value: string | Array<string>) {
+    set palette(value: Palette | string | Array<string>) {
         this._setOption('palette', value);
     }
 
@@ -222,10 +225,10 @@ export class DxiLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get selectionMode(): string {
+    get selectionMode(): SingleMultipleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: SingleMultipleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -254,10 +257,10 @@ export class DxiLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): string {
+    get type(): VectorMapLayerType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: VectorMapLayerType) {
         this._setOption('type', value);
     }
 

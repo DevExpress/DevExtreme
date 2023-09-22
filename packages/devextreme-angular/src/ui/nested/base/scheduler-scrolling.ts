@@ -5,22 +5,25 @@ import {
     Component,
 } from '@angular/core';
 
+import { Mode, ScrollbarMode, ScrollMode } from 'devextreme/common';
+import { DataRenderMode } from 'devextreme/common/grids';
+import { DataGridScrollMode } from 'devextreme/ui/data_grid';
 
 @Component({
     template: ''
 })
 export abstract class DxoSchedulerScrolling extends NestedOption {
-    get columnRenderingMode(): string {
+    get columnRenderingMode(): DataRenderMode {
         return this._getOption('columnRenderingMode');
     }
-    set columnRenderingMode(value: string) {
+    set columnRenderingMode(value: DataRenderMode) {
         this._setOption('columnRenderingMode', value);
     }
 
-    get mode(): string {
+    get mode(): DataGridScrollMode | ScrollMode {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: DataGridScrollMode | ScrollMode) {
         this._setOption('mode', value);
     }
 
@@ -38,10 +41,10 @@ export abstract class DxoSchedulerScrolling extends NestedOption {
         this._setOption('renderAsync', value);
     }
 
-    get rowRenderingMode(): string {
+    get rowRenderingMode(): DataRenderMode {
         return this._getOption('rowRenderingMode');
     }
-    set rowRenderingMode(value: string) {
+    set rowRenderingMode(value: DataRenderMode) {
         this._setOption('rowRenderingMode', value);
     }
 
@@ -59,17 +62,17 @@ export abstract class DxoSchedulerScrolling extends NestedOption {
         this._setOption('scrollByThumb', value);
     }
 
-    get showScrollbar(): string {
+    get showScrollbar(): ScrollbarMode {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: string) {
+    set showScrollbar(value: ScrollbarMode) {
         this._setOption('showScrollbar', value);
     }
 
-    get useNative(): boolean | string {
+    get useNative(): Mode | boolean {
         return this._getOption('useNative');
     }
-    set useNative(value: boolean | string) {
+    set useNative(value: Mode | boolean) {
         this._setOption('useNative', value);
     }
 }
