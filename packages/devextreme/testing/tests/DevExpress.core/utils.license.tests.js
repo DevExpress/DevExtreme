@@ -1,7 +1,8 @@
 import config from 'core/config';
 import errors from 'core/errors';
-import { verifyLicense, setLicenseCheckSkipCondition } from 'core/utils/license';
+import license from '__internal/core/license/license_validation';
 const { test, module } = QUnit;
+const { verifyLicense, setLicenseCheckSkipCondition } = license;
 
 module('License check', {
     beforeEach: function() {
@@ -50,9 +51,9 @@ module('License check', {
 
     test('Message should be logged only once', function(assert) {
         verifyLicense('', '1.0');
-        assert.ok(errors.log.calledOnce);
-
         verifyLicense('', '1.0');
+        verifyLicense('', '1.0');
+
         assert.ok(errors.log.calledOnce);
     });
 

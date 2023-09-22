@@ -12,7 +12,7 @@ import { PostponedOperations } from './postponed_operations';
 import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 import { getPathParts } from './utils/data';
-import { verifyLicense } from './utils/license';
+import license from '../__internal/core/license/license_validation';
 
 const getEventName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3);
@@ -84,7 +84,7 @@ export const Component = Class.inherit({
         this.postponedOperations = new PostponedOperations();
         this._createOptions(options);
 
-        verifyLicense(Config().license);
+        license.verifyLicense(Config().license);
     },
 
     _createOptions(options) {

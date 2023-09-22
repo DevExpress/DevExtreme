@@ -5,8 +5,7 @@ import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
 import devices from 'core/devices';
 import config from 'core/config';
-import license from 'core/utils/license';
-import { version } from 'core/version';
+import license from '__internal/core/license/license_validation';
 
 const TestComponent = Component.inherit({
 
@@ -1713,10 +1712,12 @@ QUnit.module('action API', {}, () => {
 QUnit.module('License check', {
     beforeEach: function() {
         sinon.spy(license, 'verifyLicense');
+        // sinon.spy(verifyLicense);
         license.setLicenseCheckSkipCondition(false);
     },
     afterEach: function() {
         license.verifyLicense.restore();
+        // verifyLicense.restore();
     }
 }, () => {
     QUnit.test('verifyLicense() method should be called', function(assert) {
