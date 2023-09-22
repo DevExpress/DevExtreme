@@ -136,9 +136,9 @@
 
   &.dx-button-danger {
     @include dx-button-flat-color-styling(
-      $button-danger-bg,
-      $button-danger-bg,
-      $button-danger-bg,
+      $button-danger-text-color,
+      $button-danger-text-color-hover,
+      $button-danger-text-color-active,
       $button-danger-text-hover-bg,
       $button-danger-text-focused-bg,
       $button-danger-text-active-bg,
@@ -149,9 +149,9 @@
 
   &.dx-button-success {
     @include dx-button-flat-color-styling(
-      $button-success-bg,
-      $button-success-bg,
-      $button-success-bg,
+      $button-success-text-color,
+      $button-success-text-color-hover,
+      $button-success-text-color-active,
       $button-success-text-hover-bg,
       $button-success-text-focused-bg,
       $button-success-text-active-bg,
@@ -190,9 +190,9 @@
 
   &.dx-button-danger {
     @include dx-button-outlined-color-styling(
-      $button-danger-bg,
-      $button-danger-bg,
-      $button-danger-bg,
+      $button-danger-outlined-color,
+      $button-danger-outlined-color-hover,
+      $button-danger-outlined-color-active,
       $button-danger-bg,
       $button-danger-outlined-hover-bg,
       $button-danger-outlined-focused-bg,
@@ -204,9 +204,9 @@
 
   &.dx-button-success {
     @include dx-button-outlined-color-styling(
-      $button-success-bg,
-      $button-success-bg,
-      $button-success-bg,
+      $button-success-outlined-color,
+      $button-success-outlined-color-hover,
+      $button-success-outlined-color-active,
       $button-success-bg,
       $button-success-outlined-hover-bg,
       $button-success-outlined-focused-bg,
