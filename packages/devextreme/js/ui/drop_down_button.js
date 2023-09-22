@@ -720,6 +720,9 @@ const DropDownButton = Widget.inherit({
             case 'stylingMode':
                 this._updateButtonGroup(name, value);
                 break;
+            case 'type':
+                this._updateButtonGroup('items', this._getButtonGroupItems());
+                break;
             case 'itemTemplate':
             case 'grouped':
             case 'noDataText':
