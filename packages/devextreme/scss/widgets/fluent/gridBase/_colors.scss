@@ -99,7 +99,7 @@ $datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
 * $name 90. Group row text color
 * $type color
 */
-$datagrid-group-row-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
+$datagrid-group-row-color: null !default;
 
 /**
 * $name 95. Group row background color
@@ -113,7 +113,7 @@ $datagrid-master-detail-cell-bg: darken($datagrid-base-background-color, 2%) !de
 * $type color
 */
 $datagrid-search-color: $base-inverted-text-color !default;
-$datagrid-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
+$datagrid-chevron-icon-color: $base-spin-icon-color !default;
 
 /**
 * $name 110. Highlighted text background color
@@ -174,6 +174,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
+  $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -189,6 +190,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "dark" {
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
+  $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
