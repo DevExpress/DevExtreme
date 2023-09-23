@@ -85,6 +85,8 @@ jobs:
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "form", name: "form - fluent (1/2)", theme: 'fluent.blue.light', indices: "1/2" },
+          { componentFolder: "form", name: "form - fluent (2/2)", theme: 'fluent.blue.light', indices: "2/2" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
