@@ -579,6 +579,7 @@
   $material-editor-custom-button-last-child-margin,
   $material-filled-texteditor-input-button-horizontal-padding,
   $material-filled-texteditor-spin-button-horizontal-padding,
+  $last-button-horizontal-padding,
   $material-button-vertical-padding,
 ) {
   .dx-texteditor {
@@ -615,9 +616,12 @@
         }
 
         > .dx-dropdowneditor-button:last-child,
-        > .dx-numberbox-spin-container:last-child,
         > .dx-clear-button-area {
-          margin-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
+          margin-inline-end: $last-button-horizontal-padding;
+        }
+
+        > .dx-numberbox-spin-container:last-child {
+          margin-inline-end: 0;
         }
 
         > div:empty:last-child {

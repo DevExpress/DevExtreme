@@ -104,7 +104,7 @@
   }
 
   &.dx-htmleditor-filled {
-    background: $texteditor-bg;
+    background: $texteditor-filled-bg;
     border-radius: $texteditor-input-border-radius;
 
     &.dx-state-hover {
@@ -116,9 +116,9 @@
     }
 
     &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
-      background-color: color.change($texteditor-bg, $alpha: 0.12);
+    &.dx-state-readonly {
+      background-color: transparent;
+      border-color: $texteditor-disabled-color;
     }
   }
 
@@ -191,6 +191,10 @@
         }
       }
     }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
   }
 }
 
