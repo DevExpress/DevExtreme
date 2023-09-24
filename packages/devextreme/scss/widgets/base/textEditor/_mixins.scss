@@ -621,7 +621,7 @@
         }
 
         > .dx-numberbox-spin-container:last-child {
-          margin-inline-end: 0;
+          margin-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
         }
 
         > div:empty:last-child {
