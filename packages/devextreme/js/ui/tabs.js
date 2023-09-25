@@ -457,8 +457,8 @@ const Tabs = CollectionWidget.inherit({
             ? isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1)
             : isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1);
 
-        this._leftButton?.option({ disabled: isLeftButtonDisabled });
-        this._rightButton?.option({ disabled: isRightButtonDisabled });
+        this._leftButton?.option('disabled', isLeftButtonDisabled);
+        this._rightButton?.option('disabled', isRightButtonDisabled);
     },
 
     _updateScrollPosition: function(offset, duration) {
