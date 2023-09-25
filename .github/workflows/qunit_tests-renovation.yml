@@ -54,6 +54,13 @@ jobs:
         path: packages/devextreme/artifacts.zip
         retention-days: 1
 
+    - name: Upload dx.all.js as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dx.all.js
+        path: packages/devextreme/artifacts/js/dx.all.js
+        retention-days: 1
+
   qunit-tests:
     needs: build
     runs-on: devextreme-shr2
