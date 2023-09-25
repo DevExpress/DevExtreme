@@ -8,6 +8,7 @@
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
+@use "../texteditor/sizes" as *;
 @use "../../base/list" as *;
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
@@ -123,7 +124,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     }
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{$fluent-list-item-height + $fluent-list-search-height + $fluent-list-searchbox-margin-bottom});
+      height: calc(100% - #{$fluent-list-item-height + $fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
     }
 
     .dx-empty-message {

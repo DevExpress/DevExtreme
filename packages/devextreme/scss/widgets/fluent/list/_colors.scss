@@ -27,7 +27,7 @@ $list-group-header-bg: transparent !default;
 * $name 10. Item text color
 * $type color
 */
-$list-normal-color: $base-text-color !default;
+$list-normal-color: $base-neutral-foreground2 !default;
 
 /**
 * $name 25. Expanded group header text color
@@ -49,7 +49,7 @@ $list-item-selected-bg: $base-neutral-background1-selected !default;
 $list-item-selected-hover-bg: $base-neutral-background1-hover !default;
 $list-item-focused-selected-bg: $base-neutral-background1-active !default;
 $list-item-hover-color: $base-hover-color !default;
-$list-item-selected-color: $base-text-color !default;
+$list-item-selected-color: $base-neutral-foreground2 !default;
 $list-header-indicator-color: $base-icon-color !default;
 
 /**

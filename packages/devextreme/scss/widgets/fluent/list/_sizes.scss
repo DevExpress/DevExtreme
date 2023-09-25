@@ -1,11 +1,8 @@
 @use "../sizes" as *;
-@use "../list/colors" as *;
-@use "../texteditor/sizes" as *;
 
 // adduse
 
 $fluent-list-vertical-padding: null !default;
-$fluent-list-search-height: $fluent-texteditor-input-height !default;
 $fluent-list-searchbox-margin-bottom: 4px !default;
 $fluent-list-item-height: null !default;
 $fluent-list-item-vertical-padding: null !default;
