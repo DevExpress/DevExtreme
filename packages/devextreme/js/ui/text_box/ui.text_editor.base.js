@@ -803,6 +803,7 @@ const TextEditorBase = Editor.inherit({
             case 'placeholder':
                 this._renderPlaceholder();
                 this._setFieldAria(true);
+                this._applyInputAttributes(this._input());
                 break;
             case 'label':
                 this._label.updateText(value);

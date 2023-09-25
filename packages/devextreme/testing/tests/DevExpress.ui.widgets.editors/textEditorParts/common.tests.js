@@ -727,6 +727,35 @@ QUnit.module('aria-labelledby attribute', {
 
         assert.strictEqual(inputAttr, undefined);
     });
+
+    QUnit.test('the placeholder attr should be equal user placeholder', function(assert) {
+        this.textEditor.option({
+            placeholder: 'custom',
+            label: null,
+        });
+
+        const placeholder = this.$input.attr('placeholder');
+
+        assert.strictEqual(placeholder, this.textEditor.option('placeholder'));
+    });
+
+    QUnit.test('the placeholder attr should be equal user placeholder in ios or mac', function(assert) {
+        this.textEditor.option({
+            placeholder: null,
+            label: null,
+        });
+
+        const { ios, mac } = devices.real();
+        const placeholder = this.$input.attr('placeholder');
+
+        if(ios || mac) {
+            assert.strictEqual(placeholder, ' ');
+
+            return;
+        }
+
+        assert.strictEqual(placeholder, undefined);
+    });
 });
 
 QUnit.module('text option', moduleConfig, () => {
