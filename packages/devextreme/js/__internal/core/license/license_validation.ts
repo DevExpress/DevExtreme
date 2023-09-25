@@ -1,5 +1,5 @@
 import errors from '@js/core/errors';
-import { version } from '@js/core/version';
+import { version as packageVersion } from '@js/core/version';
 
 import { verify } from './rsa_pkcs1_sha1';
 
@@ -13,11 +13,16 @@ interface Payload extends Partial<License> {
   readonly format?: number;
 }
 
+const enum TokenKind {
+  corrupted = 'corrupted',
+  verified = 'verified',
+}
+
 export type Token = {
-  readonly kind: 'verified';
+  readonly kind: TokenKind.verified;
   readonly payload: License;
 } | {
-  readonly kind: 'corrupted';
+  readonly kind: TokenKind.corrupted;
   readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
 };
 export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | null;
@@ -25,13 +30,12 @@ export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | null;
 const SPLITTER = '.';
 const FORMAT = 1;
 
-const CORRUPTED = 'corrupted';
-const GENERAL_ERROR: Token = { kind: CORRUPTED, error: 'general' };
-const VERIFICATION_ERROR: Token = { kind: CORRUPTED, error: 'verification' };
-const DECODING_ERROR: Token = { kind: CORRUPTED, error: 'decoding' };
-const DESERIALIZATION_ERROR: Token = { kind: CORRUPTED, error: 'deserialization' };
-const PAYLOAD_ERROR: Token = { kind: CORRUPTED, error: 'payload' };
-const VERSION_ERROR: Token = { kind: CORRUPTED, error: 'version' };
+const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
+const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
+const DECODING_ERROR: Token = { kind: TokenKind.corrupted, error: 'decoding' };
+const DESERIALIZATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'deserialization' };
+const PAYLOAD_ERROR: Token = { kind: TokenKind.corrupted, error: 'payload' };
+const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
 let isLicenseVerified = false;
 
@@ -77,7 +81,7 @@ export function parseToken(encodedToken: string | undefined): Token {
   }
 
   return {
-    kind: 'verified',
+    kind: TokenKind.verified,
     payload: {
       customerId,
       maxVersionAllowed,
@@ -86,7 +90,7 @@ export function parseToken(encodedToken: string | undefined): Token {
   };
 }
 
-export function verifyLicense(licenseToken: string, ver: string = version): void {
+export function verifyLicense(licenseToken: string, version: string = packageVersion): void {
   if (isLicenseVerified) {
     return;
   }
@@ -97,12 +101,14 @@ export function verifyLicense(licenseToken: string, ver: string = version): void
   if (licenseToken) {
     const license = parseToken(licenseToken);
 
-    if (license.kind === CORRUPTED) {
+    if (license.kind === TokenKind.corrupted) {
       warning = 'W0021';
     } else {
-      const [major, minor] = ver.split('.').map(Number);
+      const [major, minor] = version.split('.').map(Number);
 
-      if (major * 10 + minor > license.payload.maxVersionAllowed) {
+      if (!(major && minor)) {
+        warning = 'W0021';
+      } else if (major * 10 + minor > license.payload.maxVersionAllowed) {
         warning = 'W0020';
       }
     }

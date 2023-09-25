@@ -203,6 +203,7 @@ describe('License check', () => {
       ['str@nge'],
       ['in.put'],
       ['3.2.1', '1.2.3'],
+      [TOKEN_23_1, '123'],
     ].forEach(([token, version]) => {
       verifyLicense(token, version);
       expect(errors.log).toHaveBeenCalledWith('W0021');
