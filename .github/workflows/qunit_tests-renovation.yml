@@ -54,11 +54,11 @@ jobs:
         path: packages/devextreme/artifacts.zip
         retention-days: 1
 
-    - name: Upload dx.all.js as artifact
+    - name: Upload dx.all.debug.js as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: dx.all.js
-        path: packages/devextreme/artifacts/js/dx.all.js
+        name: dx.all.debug.js
+        path: packages/devextreme/artifacts/js/dx.all.debug.js
         retention-days: 1
 
   qunit-tests:
