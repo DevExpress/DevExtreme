@@ -239,3 +239,14 @@ QUnit.module('the \'name\' option', () => {
     });
 });
 
+QUnit.module('the \'hint\' option', () => {
+    QUnit.test('widget input should get the \'title\' attribute with a correct value for hint working in FireFox (T1187412)', function(assert) {
+        const hint = 'CUSTOM HINT';
+        const $element = $('#fileuploader').dxFileUploader({
+            hint
+        });
+        const $input = $element.find('.' + FILEUPLOADER_INPUT_CLASS);
+
+        assert.equal($input.attr('title'), hint, 'the input \'title\' attribute has correct value');
+    });
+});

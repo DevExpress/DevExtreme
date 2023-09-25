@@ -301,6 +301,7 @@ class FileUploader extends Editor {
         this._$fileInput.prop({
             multiple: this.option('multiple'),
             accept: this.option('accept'),
+            title: this.option('hint') || null,
             tabIndex: -1
         });
     }
