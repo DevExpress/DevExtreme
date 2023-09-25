@@ -6,6 +6,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { current, isMaterial, isMaterialBased } from '../themes';
+import devices from '../../core/devices';
 import Editor from '../editor/editor';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
@@ -325,12 +326,15 @@ const TextEditorBase = Editor.inherit({
             .css('minHeight', this.option('height') ? '0' : '');
     },
 
-    _getDefaultAttributes: function() {
+    _getDefaultAttributes() {
+        const { ios, mac } = devices.real();
         const { placeholder } = this.option();
 
         const defaultAttributes = {
             autocomplete: 'off',
-            placeholder: placeholder || null,
+            // WA to fix vAlign (T898735)
+            // https://bugs.webkit.org/show_bug.cgi?id=142968
+            placeholder: placeholder || ((ios || mac) ? ' ' : null),
         };
 
         return defaultAttributes;
