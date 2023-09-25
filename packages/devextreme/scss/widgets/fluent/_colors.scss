@@ -15,10 +15,6 @@ $base-accent-hover: null !default;
 $base-accent-active: null !default;
 $base-accent-selected: null !default;
 
-$base-compound-accent: null !default;
-$base-compound-accent-hover: null !default;
-$base-compound-accent-active: null !default;
-
 $fluent-color-theme-modificator: null !default;
 
 /**
@@ -80,6 +76,10 @@ $base-foreground-inverted-hover: null !default;
 $base-foreground-inverted-focused: null !default;
 
 $base-neutral-background: null !default;
+$base-neutral-background1: null !default;
+$base-neutral-background1-hover: null !default;
+$base-neutral-background1-active: null !default;
+$base-neutral-background1-selected: null !default;
 $base-neutral-background2: null !default;
 $base-neutral-background2-hover: null !default;
 $base-neutral-background2-active: null !default;
@@ -177,12 +177,8 @@ $scrollview-pulldown-path: null !default;
 @if $mode == "light" {
   $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
   $base-accent-hover: rgba(17, 94, 163, 1) !default; // #115ea3
-  $base-accent-active: rgba(12, 59, 94, 1) !default; // #0c3b5e
+  $base-accent-active: rgba(15, 84, 140, 1) !default; // #0f548c
   $base-accent-selected: rgba(14, 71, 117, 1) !default; // #0E4775
-
-  $base-compound-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
-  $base-compound-accent-hover: rgba(17, 94, 163, 1) !default; // #115ea3
-  $base-compound-accent-active: rgba(15, 84, 140, 1) !default; // #0f548c
 
   $base-accent-foreground: #0F6CBD !default;
   $base-accent-foreground2: #115EA3 !default;
@@ -190,7 +186,7 @@ $scrollview-pulldown-path: null !default;
   $base-accent-foreground2-active: #0A2E4A !default;
 
   $fluent-color-theme-modificator: "light" !default;
-  $base-text-color: rgba(36, 36, 36, 1) !default;
+  $base-text-color: rgba(20, 20, 20, 1) !default;
   $base-label-color: rgba(0, 0, 0, 0.6) !default;
   $base-disabled-color: rgba(224, 224, 224, 1) !default; // e0e0e0 // rgba(0, 0, 0, $base-disabled-opacity) !default;
   $base-border-color-disabled: rgba(224, 224, 224, 1) !default; // e0e0e0
@@ -214,6 +210,10 @@ $scrollview-pulldown-path: null !default;
   $base-brand2-bg-selected: rgba(208, 229, 251, 1) !default; // #d0e5fb
 
   $base-neutral-background: rgba(245, 245, 245, 1) !default; // #f5f5f5
+  $base-neutral-background1: rgba(255, 255, 255, 1) !default; // #FFFFFF
+  $base-neutral-background1-hover: rgba(245, 245, 245, 1) !default; // #F5F5F5
+  $base-neutral-background1-active: rgba(224, 224, 224, 1) !default; // #E0E0E0
+  $base-neutral-background1-selected: rgba(235, 235, 235, 1) !default; // #EBEBEB
   $base-neutral-background2: rgba(250, 250, 250, 1) !default; // #FAFAFA
   $base-neutral-background2-hover: rgba(240, 240, 240, 1) !default; // #F0F0F0
   $base-neutral-background2-active: rgba(219, 219, 219, 1) !default; // #DBDBDB
@@ -268,19 +268,15 @@ $scrollview-pulldown-path: null !default;
 }
 
 @if $mode == "dark" {
-  $base-accent: rgba(17, 94, 163, 1) !default; // #115ea3
-  $base-accent-hover: rgba(15, 108, 189, 1) !default; // #0f6cbd
-  $base-accent-active: rgba(12, 59, 94, 1) !default; // #0c3b5e
+  $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
+  $base-accent-hover: rgba(98, 171, 245, 1) !default; // #62ABF5
+  $base-accent-active: rgba(40, 134, 222, 1) !default; // #2886DE
   $base-accent-selected: rgba(15, 84, 140, 1) !default; // #0f548c
 
   $base-accent-foreground: #479EF5 !default;
   $base-accent-foreground2: #62ABF5 !default;
   $base-accent-foreground2-hover: #B4D6F5 !default;
   $base-accent-foreground2-active: #B4D6F5 !default;
-
-  $base-compound-accent: rgba(71, 158, 245, 1) !default; // #479EF5
-  $base-compound-accent-hover: rgba(98, 171, 245, 1) !default; // #62ABF5
-  $base-compound-accent-active: rgba(40, 134, 222, 1) !default; // #2886DE
 
   $fluent-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
@@ -310,6 +306,10 @@ $scrollview-pulldown-path: null !default;
   $base-foreground-inverted-focused: rgba(15, 84, 140, 1) !default; // #0F548C
 
   $base-neutral-background: rgba(20, 20, 20, 1) !default; // #f5f5f5
+  $base-neutral-background1: rgba(41, 41, 41, 1) !default; // #292929
+  $base-neutral-background1-hover: rgba(61, 61, 61, 1) !default; // #3D3D3D
+  $base-neutral-background1-active: rgba(31, 31, 31, 1) !default; // #1F1F1F
+  $base-neutral-background1-selected: rgba(56, 56, 56, 1) !default; // #383838
   $base-neutral-background2: rgba(31, 31, 31, 1) !default; // #1F1F1F
   $base-neutral-background2-hover: rgba(51, 51, 51, 1) !default; // #333333
   $base-neutral-background2-active: rgba(20, 20, 20, 1) !default; // #141414

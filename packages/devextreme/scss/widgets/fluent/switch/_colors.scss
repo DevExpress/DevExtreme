@@ -4,9 +4,9 @@
 
 // adduse
 
-$switch-accent-color: $base-compound-accent !default;
-$switch-accent-color-hover: $base-compound-accent-hover !default;
-$switch-accent-color-focused: $base-compound-accent-active !default;
+$switch-accent-color: $base-accent !default;
+$switch-accent-color-hover: $base-accent-hover !default;
+$switch-accent-color-focused: $base-accent-active !default;
 
 /**
 * $name 20. Track 'OFF' background color
@@ -24,7 +24,7 @@ $switch-handle-off-bg: $base-border-color-accessible !default;
 * $name 40. Track 'ON' background color
 * $type color
 */
-$switch-on-bg: $base-compound-accent !default;
+$switch-on-bg: $base-accent !default;
 
 /**
 * $name 50. Handle 'ON' background color
