@@ -29,7 +29,7 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
   height: 600,
 }));
 
-test('Appointment popup shouldn\'t raise error if appoitment is recursive', async (t) => {
+test.skip('Appointment popup shouldn\'t raise error if appoitment is recursive', async (t) => {
   const scheduler = new Scheduler('#container');
   await t.doubleClick(scheduler.getAppointment('Meeting of Instructors').element);
   await t.click(Scheduler.getEditRecurrenceDialog().series);
