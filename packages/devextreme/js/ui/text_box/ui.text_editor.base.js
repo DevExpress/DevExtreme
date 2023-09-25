@@ -326,15 +326,19 @@ const TextEditorBase = Editor.inherit({
             .css('minHeight', this.option('height') ? '0' : '');
     },
 
-    _getDefaultAttributes() {
+    _getPlaceholderAttr() {
         const { ios, mac } = devices.real();
         const { placeholder } = this.option();
 
+        // WA to fix vAlign (T898735)
+        // https://bugs.webkit.org/show_bug.cgi?id=142968
+        return placeholder || ((ios || mac) ? ' ' : null);
+    },
+
+    _getDefaultAttributes() {
         const defaultAttributes = {
             autocomplete: 'off',
-            // WA to fix vAlign (T898735)
-            // https://bugs.webkit.org/show_bug.cgi?id=142968
-            placeholder: placeholder || ((ios || mac) ? ' ' : null),
+            placeholder: this._getPlaceholderAttr(),
         };
 
         return defaultAttributes;
@@ -803,7 +807,7 @@ const TextEditorBase = Editor.inherit({
             case 'placeholder':
                 this._renderPlaceholder();
                 this._setFieldAria(true);
-                this._applyInputAttributes(this._input());
+                this._input().attr({ placeholder: this._getPlaceholderAttr() });
                 break;
             case 'label':
                 this._label.updateText(value);
