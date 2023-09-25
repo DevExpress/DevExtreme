@@ -24,7 +24,7 @@ const App = () => (
     <Column dataField="Employee" />
     <Column dataField="CustomerStoreCity" caption="City" />
     <Column dataField="CustomerStoreState" caption="State" />
-    <Column dataField="SaleAmount" alignment="right" format="currency" editorOptions={saleAmountEditorOptions} />
+    <Column dataField="SaleAmount" width={160} alignment="right" format="currency" editorOptions={saleAmountEditorOptions} />
     <Summary recalculateWhileEditing={true}>
       <TotalItem
         column="OrderNumber"

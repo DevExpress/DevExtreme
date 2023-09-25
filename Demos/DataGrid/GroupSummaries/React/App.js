@@ -13,12 +13,12 @@ const App = () => (
   >
     <Selection mode="single" />
     <Column dataField="OrderNumber" width={130} caption="Invoice Number" />
-    <Column dataField="OrderDate" width={160} dataType="date" />
+    <Column dataField="OrderDate" dataType="date" />
     <Column dataField="Employee" groupIndex={0} />
     <Column dataField="CustomerStoreCity" caption="City" />
     <Column dataField="CustomerStoreState" caption="State" />
-    <Column dataField="SaleAmount" alignment="right" format="currency" />
-    <Column dataField="TotalAmount" alignment="right" format="currency" />
+    <Column dataField="SaleAmount" width={160} alignment="right" format="currency" />
+    <Column dataField="TotalAmount" width={160} alignment="right" format="currency" />
 
     <Summary>
       <GroupItem

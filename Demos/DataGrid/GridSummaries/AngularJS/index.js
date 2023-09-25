@@ -15,7 +15,6 @@ DemoApp.controller('DemoController', ($scope) => {
     }, {
       dataField: 'OrderDate',
       dataType: 'date',
-      width: 160,
     },
     'Employee', {
       caption: 'City',
@@ -27,6 +26,7 @@ DemoApp.controller('DemoController', ($scope) => {
       dataField: 'SaleAmount',
       alignment: 'right',
       format: 'currency',
+      width: 160,
     },
     ],
     summary: {

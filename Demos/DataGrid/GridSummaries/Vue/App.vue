@@ -13,7 +13,6 @@
         caption="Invoice Number"
       />
       <DxColumn
-        :width="160"
         data-field="OrderDate"
         data-type="date"
       />
@@ -27,6 +26,7 @@
         caption="State"
       />
       <DxColumn
+        :width="160"
         data-field="SaleAmount"
         alignment="right"
         format="currency"

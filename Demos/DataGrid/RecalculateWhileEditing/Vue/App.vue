@@ -33,6 +33,7 @@
         caption="State"
       />
       <DxColumn
+        :width="160"
         :editor-options="{ format: 'currency' }"
         data-field="SaleAmount"
         alignment="right"

@@ -12,7 +12,6 @@ $(() => {
       caption: 'Invoice Number',
     }, {
       dataField: 'OrderDate',
-      width: 160,
       dataType: 'date',
     }, {
       dataField: 'Employee',
@@ -25,10 +24,12 @@ $(() => {
       dataField: 'CustomerStoreState',
     }, {
       dataField: 'SaleAmount',
+      width: 160,
       alignment: 'right',
       format: 'currency',
     }, {
       dataField: 'TotalAmount',
+      width: 160,
       alignment: 'right',
       format: 'currency',
     },

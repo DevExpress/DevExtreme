@@ -14,7 +14,6 @@ DemoApp.controller('DemoController', ($scope) => {
       caption: 'Invoice Number',
     }, {
       dataField: 'OrderDate',
-      width: 160,
       dataType: 'date',
     }, {
       dataField: 'Employee',
@@ -27,10 +26,12 @@ DemoApp.controller('DemoController', ($scope) => {
       dataField: 'CustomerStoreState',
     }, {
       dataField: 'SaleAmount',
+      width: 160,
       alignment: 'right',
       format: 'currency',
     }, {
       dataField: 'TotalAmount',
+      width: 160,
       alignment: 'right',
       format: 'currency',
     },

@@ -14,7 +14,6 @@ $(() => {
       width: 130,
       caption: 'Invoice Number',
     }, {
-      width: 160,
       dataField: 'OrderDate',
       dataType: 'date',
     },
@@ -28,6 +27,7 @@ $(() => {
       dataField: 'SaleAmount',
       alignment: 'right',
       format: 'currency',
+      width: 160,
     },
     ],
     selectedRowKeys: [1, 4, 7],

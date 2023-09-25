@@ -11,7 +11,7 @@
     [width]="130"
     caption="Invoice Number"
   ></dxi-column>
-  <dxi-column dataField="OrderDate" [width]="160" dataType="date"></dxi-column>
+  <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
   <dxi-column dataField="Employee" [groupIndex]="0"></dxi-column>
   <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
   <dxi-column dataField="CustomerStoreState" caption="State"></dxi-column>
@@ -19,11 +19,13 @@
     dataField="SaleAmount"
     alignment="right"
     format="currency"
+    [width]="160"
   ></dxi-column>
   <dxi-column
     dataField="TotalAmount"
     alignment="right"
     format="currency"
+    [width]="160"
   ></dxi-column>
 
   <dxo-summary>
