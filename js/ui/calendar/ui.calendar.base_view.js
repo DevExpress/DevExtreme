@@ -316,15 +316,19 @@ const BaseView = Widget.inherit({
     },
 
     _updateSelectedClass: function(value) {
+        if(this._isRangeMode() && !this._isMonthView()) {
+            return;
+        }
+
         this._$selectedCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_SELECTED_DATE_CLASS); });
         this._$selectedCells = value.map((value) => this._getCellByDate(value));
         this._$selectedCells.forEach(($cell) => { $cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
     },
 
     _renderRange: function() {
-        const { allowValueSelection, selectionMode, value, range } = this.option();
+        const { allowValueSelection, value, range } = this.option();
 
-        if(!allowValueSelection || selectionMode !== 'range') {
+        if(!allowValueSelection || !this._isRangeMode() || !this._isMonthView()) {
             return;
         }
 
@@ -349,9 +353,9 @@ const BaseView = Widget.inherit({
     },
 
     _renderHoveredRange() {
-        const { allowValueSelection, selectionMode, hoveredRange } = this.option();
+        const { allowValueSelection, hoveredRange } = this.option();
 
-        if(!allowValueSelection || selectionMode !== 'range') {
+        if(!allowValueSelection || !this._isRangeMode() || !this._isMonthView()) {
             return;
         }
 
@@ -370,6 +374,14 @@ const BaseView = Widget.inherit({
 
         this._$rangeStartHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
         this._$rangeEndHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
+    },
+
+    _isMonthView: function() {
+        return this.option('zoomLevel') === 'month';
+    },
+
+    _isRangeMode: function() {
+        return this.option('selectionMode') === 'range';
     },
 
     getCellAriaLabel: function(date) {
