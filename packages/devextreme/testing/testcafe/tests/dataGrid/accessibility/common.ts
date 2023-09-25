@@ -1,10 +1,11 @@
+import { ClientFunction } from 'testcafe';
 import { a11yCheck } from '../../../helpers/accessibilityUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
 import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { changeTheme as originalChangeTheme } from '../../../helpers/changeTheme';
 import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 
@@ -12,6 +13,32 @@ fixture`Common tests with axe`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
+
+const themeBackgroundColors = {
+  // undefined is to remove background color
+  [Themes.genericLight]: undefined,
+  [Themes.genericDark]: '#2a2a2a',
+  [Themes.materialBlue]: undefined,
+  [Themes.materialBlueDark]: '#363640',
+  [Themes.fluentBlue]: '#fafafa',
+  [Themes.fluentBlueDark]: '#1f1f1f',
+};
+
+const changeTheme = async (theme: string): Promise<any> => {
+  await originalChangeTheme(theme);
+
+  const backgroundColor = themeBackgroundColors[theme];
+
+  await ClientFunction(() => {
+    const { body } = (window as any).document;
+
+    if (backgroundColor) {
+      body.style.backgroundColor = backgroundColor;
+    } else {
+      body.style.removeProperty('background-color');
+    }
+  }, { dependencies: { backgroundColor } })();
+};
 
 [
   Themes.genericLight,
