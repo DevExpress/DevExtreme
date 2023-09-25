@@ -574,7 +574,8 @@ const DropDownEditor = TextBox.inherit({
             'hidden': this._popupHiddenHandler.bind(this),
             'contentReady': this._contentReadyHandler.bind(this)
         });
-        this._popup.$wrapper().on('keydown', (e) => this._popupKeyHandler(e));
+
+        eventsEngine.on(this._popup._$content, addNamespace('keydown', this.NAME), (e) => this._popupKeyHandler(e));
 
         this._contentReadyHandler();
 

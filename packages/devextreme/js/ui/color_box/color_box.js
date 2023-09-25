@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
 import Color from '../../color';
 import ColorView from './color_view';
 import { extend } from '../../core/utils/extend';
@@ -63,21 +62,6 @@ const ColorBox = DropDownEditor.inherit({
         };
 
         return extend(this.callBase(), {
-            tab: function(e) {
-                if(!this.option('opened')) {
-                    return;
-                }
-
-                const $focusableElement = e.shiftKey
-                    ? this._getLastPopupElement()
-                    : this._getFirstPopupElement();
-
-                if($focusableElement) {
-                    eventsEngine.trigger($focusableElement, 'focus');
-                    $focusableElement.select();
-                }
-                e.preventDefault();
-            },
             enter: this._enterKeyHandler,
             leftArrow: arrowHandler,
             rightArrow: arrowHandler,

@@ -28,12 +28,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     getFirstPopupElement() {
-        return $(this._getPopup().getFocusableElements()[0]);
+        return $(this._getPopup().getFocusableElements()).first();
     }
 
     getLastPopupElement() {
-        const elements = this._getPopup().getFocusableElements();
-        return $(elements[elements.length - 1]);
+        return $(this._getPopup().getFocusableElements()).last();
     }
 
     supportedKeys() {
@@ -70,14 +69,13 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     return;
                 }
 
-                if(this._isInstantlyMode()) {
+                if(!this._getPopup().getFocusableElements().length) {
                     if((!e.shiftKey && this.getDateRangeBox()._isEndDateActiveElement())
                         || (e.shiftKey && this.getDateRangeBox()._isStartDateActiveElement())) {
                         this.dateRangeBox.close();
                     }
                     return;
                 }
-
 
                 if(((!e.shiftKey && this.getDateRangeBox()._isStartDateActiveElement())
                     || (e.shiftKey && this.getDateRangeBox()._isEndDateActiveElement()))) {
@@ -96,12 +94,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 e.preventDefault();
             }
         };
-    }
-
-    _getTodayButtonConfig() {
-        const todayButtonConfig = super._getTodayButtonConfig();
-
-        return todayButtonConfig;
     }
 
     _getWidgetOptions() {

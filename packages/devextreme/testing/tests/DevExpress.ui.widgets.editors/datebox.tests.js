@@ -4999,12 +4999,15 @@ if(devices.real().deviceType === 'desktop') {
 QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
         ['calendar', 'list'].forEach(pickerType => {
-            QUnit.testInActiveWindow(`Popup should be closed if tab key was pressed when applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+            QUnit.testInActiveWindow(`Popup should be closed on tab key when there is no focusable elements, applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
                     applyValueMode: 'instantly',
                     type,
                     pickerType,
+                    calendarOptions: {
+                        focusStateEnabled: false,
+                    }
                 });
                 const dateBox = $dateBox.dxDateBox('instance');
                 const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -5020,7 +5023,7 @@ QUnit.module('Popup open state', () => {
 
     ['date', 'time', 'datetime'].forEach(type => {
         ['calendar', 'list', 'rollers'].forEach(pickerType => {
-            QUnit.testInActiveWindow(`Popup should be opened if tab key was pressed when applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+            QUnit.testInActiveWindow(`Popup should be opened on tab key when there are focusable items, applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
                     applyValueMode: 'useButtons',
