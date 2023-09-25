@@ -256,7 +256,7 @@ const Tabs = CollectionWidget.inherit({
                 const maxLeftOffset = getScrollLeftMax($(this.getScrollable().container()).get(0));
                 scrollable.scrollTo({ left: maxLeftOffset });
             }
-            this._updateNavButtonsState();
+            this._updateNavButtonsVisibility();
 
             this._scrollToItem(this.option('selectedItem'));
         }
@@ -415,7 +415,7 @@ const Tabs = CollectionWidget.inherit({
             useNative: false,
             scrollByContent: this.option('scrollByContent'),
             onScroll: () => {
-                this._updateNavButtonsState();
+                this._updateNavButtonsVisibility();
             },
         });
 
@@ -448,17 +448,17 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
-    _updateNavButtonsState() {
+    _updateNavButtonsVisibility() {
         const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
 
-        const isLeftButtonDisabled = isVertical ? isReachedTop(scrollable.scrollTop(), 1) : isReachedLeft(scrollable.scrollLeft(), 1);
-        const isRightButtonDisabled = isVertical
-            ? isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1)
-            : isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1);
-
-        this._leftButton?.option('disabled', isLeftButtonDisabled);
-        this._rightButton?.option('disabled', isRightButtonDisabled);
+        if(isVertical) {
+            this._leftButton?.option('disabled', isReachedTop(scrollable.scrollTop(), 1));
+            this._rightButton?.option('disabled', isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1));
+        } else {
+            this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
+            this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
+        }
     },
 
     _updateScrollPosition: function(offset, duration) {
