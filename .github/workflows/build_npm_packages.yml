@@ -37,21 +37,3 @@ jobs:
           path: |
             npm/*.tgz
           retention-days: 1
-
-  notify:
-    runs-on: devextreme-shr2
-    name: Send notifications
-    needs:
-      - build
-      - test_bundlers
-      - test_demos
-    if: always() && contains(needs.*.result, 'failure')
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DevExpress/github-actions/send-teams-notification@main
-        with:
-          hook_url: ${{secrets.TEAMS_ALERT}}
-          bearer_token: ${{secrets.GITHUB_TOKEN}}
-          specific_repo: DevExpress/DevExtreme
-          specific_branch: 23_2
