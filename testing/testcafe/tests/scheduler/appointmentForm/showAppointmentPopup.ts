@@ -29,6 +29,30 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
   height: 600,
 }));
 
+test.skip('Appointment popup shouldn\'t raise error if appoitment is recursive', async (t) => { // skipped in 22_2 as getBrowserConsoleMessages returns undefined for some reason
+  const scheduler = new Scheduler('#container');
+  await t.doubleClick(scheduler.getAppointment('Meeting of Instructors').element);
+  await t.click(Scheduler.getEditRecurrenceDialog().series);
+
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  await t.expect(consoleMessages.error.length).eql(0);
+}).before(async () => {
+  const data = [{
+    text: 'Meeting of Instructors',
+    startDate: new Date('2020-11-01T17:00:00.000Z'),
+    endDate: new Date('2020-11-01T17:15:00.000Z'),
+    recurrenceRule: 'FREQ=DAILY;BYDAY=TU;UNTIL=20201203',
+  }];
+
+  return createWidget('dxScheduler', {
+    timeZone: 'America/Los_Angeles',
+    dataSource: data,
+    currentView: 'month',
+    currentDate: new Date(2020, 10, 25),
+    height: 600,
+  });
+});
+
 test('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointmentByIndex(0);
