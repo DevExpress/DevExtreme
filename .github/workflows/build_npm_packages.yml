@@ -1,0 +1,55 @@
+name: Build DevExtreme npm packages
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: devextreme-shr2
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+
+#      - name: Restore npm cache
+#        uses: actions/cache@v3
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: ${{ runner.os }}-node-modules
+
+      - name: Install packages in devextreme repo
+        run: npm install --no-audit --no-fund
+
+      - name: Build npm packages
+        run: npm run build-npm-packages
+
+      - name: Copy build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: devextreme-npm-packages
+          path: |
+            npm/*.tgz
+          retention-days: 1
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs:
+      - build
+      - test_bundlers
+      - test_demos
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 23_2
