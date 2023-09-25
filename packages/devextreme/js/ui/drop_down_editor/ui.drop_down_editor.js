@@ -14,7 +14,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
 import messageLocalization from '../../localization/message';
-import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
@@ -585,11 +585,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupKeyHandler(e) {
-        switch(e.key) {
-            case 'Tab':
+        switch(normalizeKeyName(e)) {
+            case 'tab':
                 this._popupTabHandler(e);
                 break;
-            case 'Escape':
+            case 'escape':
                 this._popupEscHandler(e);
                 break;
         }

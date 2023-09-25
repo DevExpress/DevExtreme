@@ -751,7 +751,7 @@ QUnit.module('focus policy', {}, () => {
         assert.equal($calendar.attr('tabindex'), null, 'calendar has not tabindex');
     });
 
-    QUnit.skip('set focus on \'tab\' key from editor to overlay and inversely', function(assert) { // testInActiveWindow
+    QUnit.testInActiveWindow('set focus on \'tab\' key from editor to overlay and inversely', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -764,14 +764,26 @@ QUnit.module('focus policy', {}, () => {
         });
 
         const instance = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        const keyboard = keyboardMock($input);
+        let keyboard = keyboardMock($dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
 
+        keyboard.keyDown('tab');
+
+        const $prevButton = instance._popup.$wrapper().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+
+        assert.ok($prevButton.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first focusable element in overlay');
+
+        $($prevButton).trigger($.Event('keydown', { key: 'Tab', shiftKey: true }));
+
+        assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'shift+tab move focus to input element');
+
+        instance.option('calendarOptions', { focusStateEnabled: false });
+        keyboard = keyboardMock($dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
         keyboard.keyDown('tab');
 
         const $hourBox = $(instance._strategy._timeView._hourBox.$element());
         const $inputHourBox = instance._strategy._timeView._hourBox._input();
+
         assert.ok($hourBox.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first input in overlay');
 
         $($inputHourBox).trigger($.Event('keydown', { key: 'Tab', shiftKey: true }));
@@ -4048,6 +4060,10 @@ QUnit.module('datebox w/ time list', {
         });
 
         QUnit.testInActiveWindow('should not close on "tab" press', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
             const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const keyboard = keyboardMock($input);
 
@@ -5000,6 +5016,10 @@ QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
         ['calendar', 'list'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be closed on tab key when there is no focusable elements, applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'test does not actual for mobile devices');
+                    return;
+                }
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
                     applyValueMode: 'instantly',
@@ -5024,6 +5044,10 @@ QUnit.module('Popup open state', () => {
     ['date', 'time', 'datetime'].forEach(type => {
         ['calendar', 'list', 'rollers'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be opened on tab key when there are focusable items, applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'test does not actual for mobile devices');
+                    return;
+                }
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
                     applyValueMode: 'useButtons',
