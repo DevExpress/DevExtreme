@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../sizes" as *;
 
 // adduse
@@ -18,6 +19,7 @@ $fluent-standard-texteditor-with-label-input-top-padding: null !default;
 $fluent-standard-texteditor-with-label-input-bottom-padding: null !default;
 $fluent-filled-texteditor-input-with-label-top-padding: null !default;
 $fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
+$texteditor-icon-container-size: $fluent-base-icon-size !default;
 
 @if $size == "default" {
   $fluent-texteditor-line-height: 1.428571 !default;
@@ -66,4 +68,4 @@ $fluent-standard-texteditor-input-padding:
   $fluent-standard-texteditor-input-bottom-padding !default;
 
 $fluent-filled-texteditor-input-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 4px;
-$fluent-filled-texteditor-spin-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 2px;
+$texteditor-spin-button-horizontal-padding: math.div($fluent-filled-texteditor-input-horizontal-padding, 2);

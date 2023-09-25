@@ -417,7 +417,9 @@ $material-editor-custom-button-margin: 5px;
 @include dx-editor-buttons-container-material(
   $material-underlined-editor-button-height,
   $material-editor-custom-button-margin,
+  $material-editor-custom-button-margin * 2,
   $material-filled-texteditor-input-button-horizontal-padding,
+  $material-filled-texteditor-spin-button-horizontal-padding, 
   $material-filled-texteditor-spin-button-horizontal-padding,
   $material-button-vertical-padding,
 );

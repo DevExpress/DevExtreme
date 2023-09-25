@@ -12,7 +12,7 @@
 
 // adduse
 
-$fluent-editor-custom-button-margin: 5px;
+$fluent-editor-custom-button-margin: 6px;
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
@@ -77,12 +77,12 @@ $fluent-editor-custom-button-margin: 5px;
         }
 
         &:last-child {
-          margin-inline-end: $fluent-editor-custom-button-margin * 2;
+          margin-inline-end: $fluent-editor-custom-button-margin;
         }
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-inline-end: $fluent-filled-texteditor-spin-button-horizontal-padding;
+        margin-inline-end: $texteditor-spin-button-horizontal-padding;
       }
 
       > .dx-clear-button-area:last-child,

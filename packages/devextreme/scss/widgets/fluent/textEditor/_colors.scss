@@ -21,8 +21,8 @@ $texteditor-label-color: $texteditor-placeholder-color;
 * $name 30. Background color
 * $type color
 */
-$texteditor-bg: $base-neutral-background !default;
-$texteditor-bg-hover: $base-neutral-background-hover !default;
+$texteditor-bg: $base-neutral-background1 !default;
+$texteditor-filled-bg: $base-neutral-background !default;
 
 /**
 * $name 40. Focused background color
@@ -54,7 +54,7 @@ $texteditor-focused-border-color: $base-accent !default;
 * $name 40. Hovered background color
 * $type color
 */
-$texteditor-hover-bg: null !default; // color.change($base-text-color, $alpha: 0.07) !default;
+$texteditor-hover-bg: null !default;
 $texteditor-button-clear-icon-color: $base-neutral-foreground3 !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
@@ -65,4 +65,3 @@ $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
-
