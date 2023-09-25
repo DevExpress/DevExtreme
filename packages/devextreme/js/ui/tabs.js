@@ -256,7 +256,7 @@ const Tabs = CollectionWidget.inherit({
                 const maxLeftOffset = getScrollLeftMax($(this.getScrollable().container()).get(0));
                 scrollable.scrollTo({ left: maxLeftOffset });
             }
-            this._updateNavButtonsVisibility();
+            this._updateNavButtonsState();
 
             this._scrollToItem(this.option('selectedItem'));
         }
@@ -415,7 +415,7 @@ const Tabs = CollectionWidget.inherit({
             useNative: false,
             scrollByContent: this.option('scrollByContent'),
             onScroll: () => {
-                this._updateNavButtonsVisibility();
+                this._updateNavButtonsState();
             },
         });
 
@@ -448,7 +448,7 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
-    _updateNavButtonsVisibility() {
+    _updateNavButtonsState() {
         const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
 
