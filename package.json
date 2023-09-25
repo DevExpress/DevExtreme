@@ -21,7 +21,7 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "build-npm-packages": "node ./build-npm-packages.js"
+    "build-npm-packages": "node build/build-npm-packages.js"
   },
   "nx": {},
   "private": true,
