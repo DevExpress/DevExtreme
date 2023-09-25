@@ -239,14 +239,20 @@ QUnit.module('the \'name\' option', () => {
     });
 });
 
-QUnit.module('the \'hint\' option', () => {
-    QUnit.test('widget input should get the \'title\' attribute with a correct value for hint working in FireFox (T1187412)', function(assert) {
+QUnit.module('the "hint" option', () => {
+    QUnit.test('widget input should get the "title" attribute with a correct value for hint working in FireFox (T1187412)', function(assert) {
         const hint = 'CUSTOM HINT';
         const $element = $('#fileuploader').dxFileUploader({
             hint
         });
-        const $input = $element.find('.' + FILEUPLOADER_INPUT_CLASS);
+        const instance = $element.dxFileUploader('instance');
+        const $input = $element.find(`.${FILEUPLOADER_INPUT_CLASS}`);
 
-        assert.equal($input.attr('title'), hint, 'the input \'title\' attribute has correct value');
+        assert.strictEqual($input.attr('title'), hint, 'the input "title" attribute has correct value');
+
+        const newHint = 'NEW HINT VALUE';
+        instance.option('hint', newHint);
+
+        assert.strictEqual($input.attr('title'), newHint, 'the input "title" attribute has changed');
     });
 });

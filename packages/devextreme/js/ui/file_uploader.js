@@ -1429,6 +1429,10 @@ class FileUploader extends Editor {
             case 'inputAttr':
                 this._applyInputAttributes(this.option(name));
                 break;
+            case 'hint':
+                this._initFileInput();
+                super._optionChanged(args);
+                break;
             default:
                 super._optionChanged(args);
         }
