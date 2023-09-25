@@ -26,7 +26,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import DxFilterBuilder from 'devextreme/ui/filter_builder';
 
@@ -216,10 +216,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get groupOperations(): Array<string> {
+    get groupOperations(): any | Array<GroupOperation> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: Array<string>) {
+    set groupOperations(value: any | Array<GroupOperation>) {
         this._setOption('groupOperations', value);
     }
 
@@ -471,7 +471,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupOperationsChange: EventEmitter<Array<string>>;
+    @Output() groupOperationsChange: EventEmitter<any | Array<GroupOperation>>;
 
     /**
     

@@ -15,6 +15,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -46,10 +47,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get hoverMode(): string {
+    get hoverMode(): PointInteractionMode {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: string) {
+    set hoverMode(value: PointInteractionMode) {
         this._setOption('hoverMode', value);
     }
 
@@ -70,10 +71,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get selectionMode(): string {
+    get selectionMode(): PointInteractionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: PointInteractionMode) {
         this._setOption('selectionMode', value);
     }
 
@@ -94,10 +95,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get symbol(): string {
+    get symbol(): PointSymbol {
         return this._getOption('symbol');
     }
-    set symbol(value: string) {
+    set symbol(value: PointSymbol) {
         this._setOption('symbol', value);
     }
 

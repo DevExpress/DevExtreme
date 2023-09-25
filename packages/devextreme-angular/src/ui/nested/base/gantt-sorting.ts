@@ -5,6 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
+import { SingleMultipleOrNone } from 'devextreme/common';
 
 @Component({
     template: ''
@@ -31,10 +32,10 @@ export abstract class DxoGanttSorting extends NestedOption {
         this._setOption('descendingText', value);
     }
 
-    get mode(): string {
+    get mode(): SingleMultipleOrNone | string {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: SingleMultipleOrNone | string) {
         this._setOption('mode', value);
     }
 

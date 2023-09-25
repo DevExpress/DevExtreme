@@ -14,6 +14,8 @@ import {
 
 
 
+import { SliderValueChangeMode } from 'devextreme/common';
+import { ValueChangedCallMode } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -45,10 +47,10 @@ export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnI
     }
 
     @Input()
-    get callValueChanged(): string {
+    get callValueChanged(): ValueChangedCallMode {
         return this._getOption('callValueChanged');
     }
-    set callValueChanged(value: string) {
+    set callValueChanged(value: ValueChangedCallMode) {
         this._setOption('callValueChanged', value);
     }
 
@@ -77,10 +79,10 @@ export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnI
     }
 
     @Input()
-    get valueChangeMode(): string {
+    get valueChangeMode(): SliderValueChangeMode {
         return this._getOption('valueChangeMode');
     }
-    set valueChangeMode(value: string) {
+    set valueChangeMode(value: SliderValueChangeMode) {
         this._setOption('valueChangeMode', value);
     }
 

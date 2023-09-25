@@ -5,8 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
+import { ValidationStatus } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent } from 'devextreme/ui/file_uploader';
+import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, FileUploadMode, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadHttpMethod, UploadStartedEvent, ValueChangedEvent } from 'devextreme/ui/file_uploader';
 
 @Component({
     template: ''
@@ -397,17 +398,17 @@ export abstract class DxoFileUploaderOptions extends NestedOption {
         this._setOption('uploadHeaders', value);
     }
 
-    get uploadMethod(): string {
+    get uploadMethod(): UploadHttpMethod {
         return this._getOption('uploadMethod');
     }
-    set uploadMethod(value: string) {
+    set uploadMethod(value: UploadHttpMethod) {
         this._setOption('uploadMethod', value);
     }
 
-    get uploadMode(): string {
+    get uploadMode(): FileUploadMode {
         return this._getOption('uploadMode');
     }
-    set uploadMode(value: string) {
+    set uploadMode(value: FileUploadMode) {
         this._setOption('uploadMode', value);
     }
 
@@ -432,10 +433,10 @@ export abstract class DxoFileUploaderOptions extends NestedOption {
         this._setOption('validationErrors', value);
     }
 
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
