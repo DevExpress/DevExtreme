@@ -5985,7 +5985,7 @@ if(devices.real().deviceType === 'desktop') {
                     inputAttributes.readonly = '';
                 }
                 if(this.isMac) {
-                    inputAttributes.placeholder = ' ';
+                    inputAttributes.placeholder = 'Select...';
                 }
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
@@ -6035,7 +6035,7 @@ if(devices.real().deviceType === 'desktop') {
                 }
 
                 if(this.isMac) {
-                    inputAttributes.placeholder = ' ';
+                    inputAttributes.placeholder = 'Select...';
                 }
 
                 helper.checkAttributes(helper.$widget, { }, 'widget');
