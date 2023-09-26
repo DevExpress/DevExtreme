@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/animation/position';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -29,9 +30,9 @@ const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEv
 const DX_HIDDEN = 'dx-hidden';
 
 interface EditorFactoryMixinType {
-  createEditor: (...args: any[]) => any;
+  createEditor(...args: any[]): any;
 
-  _getRevertTooltipsSelector: () => string;
+  _getRevertTooltipsSelector(): string;
 
 }
 
