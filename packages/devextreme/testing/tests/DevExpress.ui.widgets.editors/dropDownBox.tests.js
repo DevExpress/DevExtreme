@@ -51,6 +51,30 @@ const moduleConfig = {
 };
 
 QUnit.module('items order', moduleConfig, () => {
+    function getStore(items) {
+        return {
+            load: () => {
+                $.Deferred().resolve(items).promise();
+            },
+            byKey: (key) => {
+                const d = $.Deferred();
+                if(key === 10250) {
+                    setTimeout(() => {
+                        d.resolve(items[0]);
+                    }, 300);
+                } else if(key === 10252) {
+                    setTimeout(() => {
+                        d.resolve(items[1]);
+                    }, 500);
+                } else {
+                    d.resolve(items[2]);
+                }
+
+                return d.promise();
+            }
+        };
+    }
+
     QUnit.test('should be correct when items loaded asynchronously and display value is set', function(assert) {
         const items = [{ id: 10250, name: 'HANAR' }, { id: 10252, name: 'SUPRD' }, { id: 10249, name: 'Tomps' }];
 
@@ -82,30 +106,6 @@ QUnit.module('items order', moduleConfig, () => {
         assert.strictEqual(instance.option('text'), '10250, 10252, 10249', 'text is correct');
         assert.strictEqual($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '10250, 10252, 10249', 'input value is correct');
     });
-
-    function getStore(items) {
-        return {
-            load: () => {
-                $.Deferred().resolve(items).promise();
-            },
-            byKey: (key) => {
-                const d = $.Deferred();
-                if(key === 10250) {
-                    setTimeout(() => {
-                        d.resolve(items[0]);
-                    }, 300);
-                } else if(key === 10252) {
-                    setTimeout(() => {
-                        d.resolve(items[1]);
-                    }, 500);
-                } else {
-                    d.resolve(items[2]);
-                }
-
-                return d.promise();
-            }
-        };
-    }
 });
 
 QUnit.module('common', moduleConfig, () => {
