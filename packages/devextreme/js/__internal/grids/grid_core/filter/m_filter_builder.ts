@@ -76,6 +76,7 @@ const FilterBuilderView = modules.View.inherit({
         toolbar: 'bottom',
         location: 'after',
         widget: 'dxButton',
+        shortcut: 'done',
         options: {
           text: messageLocalization.format('OK'),
           onClick() {
@@ -89,6 +90,7 @@ const FilterBuilderView = modules.View.inherit({
         toolbar: 'bottom',
         location: 'after',
         widget: 'dxButton',
+        shortcut: 'cancel',
         options: {
           text: messageLocalization.format('Cancel'),
           onClick() {

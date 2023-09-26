@@ -160,10 +160,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         wrapperAttr: { class: editPopupClass },
         toolbarItems: [
           {
-            toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getSaveButtonConfig(),
+            toolbar: 'bottom', location: 'after', shortcut: 'done', options: this._getSaveButtonConfig(),
           },
           {
-            toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getCancelButtonConfig(),
+            toolbar: 'bottom', location: 'after', shortcut: 'cancel', options: this._getCancelButtonConfig(),
           },
         ],
         contentTemplate: this._getPopupEditFormTemplate(rowIndex),

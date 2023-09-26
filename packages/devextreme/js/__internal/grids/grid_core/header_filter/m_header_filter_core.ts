@@ -226,6 +226,7 @@ export const HeaderFilterView = modules.View.inherit({
           toolbar: 'bottom',
           location: 'after',
           widget: 'dxButton',
+          shortcut: 'done',
           options: {
             text: headerFilterOptions.texts.ok,
             onClick() {
@@ -237,6 +238,7 @@ export const HeaderFilterView = modules.View.inherit({
           toolbar: 'bottom',
           location: 'after',
           widget: 'dxButton',
+          shortcut: 'cancel',
           options: {
             text: headerFilterOptions.texts.cancel,
             onClick() {
