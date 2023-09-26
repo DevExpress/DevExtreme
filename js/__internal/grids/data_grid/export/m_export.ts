@@ -344,7 +344,7 @@ export class ExportController extends dataGridCore.ViewController {
     };
   }
 
-  _updateColumnWidth(column, width) { // this function is overridden in 'ui.grid_core.adaptivity.js'
+  _updateColumnWidth(column, width): void {
     column.width = width;
   }
 

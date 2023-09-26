@@ -14,7 +14,7 @@ const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
 
 const DEFAULT_TOOLBAR_ITEM_NAMES = ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel'];
 
-class HeaderPanel extends ColumnsView {
+export class HeaderPanel extends ColumnsView {
   private _toolbar?: Toolbar;
 
   private _toolbarOptions?: ToolbarProperties;
