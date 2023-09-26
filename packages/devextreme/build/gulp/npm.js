@@ -142,10 +142,6 @@ gulp.task('npm-sass', gulp.series(
             .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
 
         () => gulp
-            .src('fonts/**/*', { base: '.' })
-            .pipe(gulp.dest(`${scssDir}/widgets/fluent/typography`)),
-
-        () => gulp
             .src('icons/**/*', { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/base`)),
     )
