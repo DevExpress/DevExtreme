@@ -6,6 +6,7 @@ const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const config = require("./build.config");
 const path = require("path");
+const pkg = require("./package.json");
 const generateReactComponents = require('devextreme-internal-tools').generateReactComponents;
 
 const GENERATE = 'generate';
@@ -79,23 +80,22 @@ gulp.task(
   )
 );
 
-gulp.task(
-  NPM_BUILD_CJS,
-  gulp.series(() =>
-    gulp
-      .src([config.src, `!${config.testSrc}`])
-      .pipe(ts("tsconfig.json"))
-      .pipe(gulp.dest(config.npm.dist + "/cjs"))
-  )
-);
+gulp.task(NPM_BUILD_CJS, gulp.series(
+    () => gulp.src([
+        config.src,
+        `!${config.testSrc}`
+    ])
+      ,  .pipe(ts('tsconfig.json'))
+        .pipe(gulp.dest(config.npm.dist + '/cjs'))
+));
 
-gulp.task(NPM_PREPARE_MODULES, (done) => {
+gulp.tas,k(NPM_PREPARE_MODULES, (done) => {
     const packParamsForFolders = [
         ['common'],
         ['core', ['template']],
         ['common/data']
     ];
-    const modulesI,mportsFromIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
+    const modulesImportsFromIndex = fs.readFileSync(config.npm.dist + 'esm/index.js', 'utf8');
     const modulesPaths = modulesImportsFromIndex.matchAll(/from "\.\/([^;]+)";/g);
     const packParamsForModules = [...modulesPaths].map(
         ([, modulePath]) => {
@@ -106,7 +106,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     );
 
     [
-        ...,packParamsForFolders,
+        ...packParamsForFolders,
         ...packParamsForModules,
     ].forEach(
         ([folder, moduleFileNames, moduleFilePath]) => makeModule(folder, moduleFileNames, moduleFilePath)
@@ -115,7 +115,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     done();
 });
 
-g,ulp.task(NPM_BUILD, gulp.series(
+gulp.task(NPM_BUILD, gulp.series(
     NPM_CLEAN,
     gulp.parallel(
         NPM_LICENSE,
@@ -126,7 +126,7 @@ g,ulp.task(NPM_BUILD, gulp.series(
     )
 ));
 
-gulp.task(NPM_,BUILD_,WITH_HEADERS, gulp.series(
+gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
     NPM_BUILD,
     () => {
         const pkg = require('./package.json');
@@ -191,7 +191,6 @@ function makeModule(folder, moduleFileNames, moduleFilePath) {
         throw (error);
     }
 }
-
 function generatePackageJsonFile(folder, moduleFileName, filePath = folder) {
     const moduleName = moduleFileName || '';
     const absoluteModulePath = path.join(__dirname, config.npm.dist, folder, moduleName);
@@ -218,6 +217,6 @@ function findJsModuleFileNamesInFolder(dir) {
             return !fs.statSync(filePath).isDirectory()
                 && file.includes('.js')
                 && !file.includes('index.js')
-        },
+        }
     ).map((filePath) => path.parse(filePath).name);
 }
