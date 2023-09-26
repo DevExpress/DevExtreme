@@ -21,6 +21,7 @@ const RADIO_GROUP_CLASS = 'dx-radiogroup';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const FOCUSED_CLASS = 'dx-state-focused';
+const INVALID_MESSAGE_CONTENT = 'dx-invalid-message-content';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -235,6 +236,18 @@ module('layout', moduleConfig, () => {
         const itemsCount = $('#radioGroup').find(`.${RADIO_BUTTON_CLASS}`).length;
 
         assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" class were rendered`);
+    });
+
+    test('radioGroup should have role="alert" attribute on validation message', function(assert) {
+        const $radioGroup = $('#radioGroup').dxRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: 'Some error',
+            validationMessageMode: 'always',
+        });
+        const $validationMessage = $radioGroup.find(`.${INVALID_MESSAGE_CONTENT}`);
+
+        assert.strictEqual($validationMessage.attr('role'), 'alert');
     });
 });
 

@@ -21,3 +21,9 @@
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();
 }
+
+.dx-dropdownbutton {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}

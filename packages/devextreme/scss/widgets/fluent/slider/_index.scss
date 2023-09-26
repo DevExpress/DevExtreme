@@ -31,7 +31,7 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
   border-radius: $fluent-slider-track-border-radius;
 
   &.dx-slider-range-visible {
-    background: $fluent-slider-bg;
+    background: $slider-accent-color;
   }
 }
 
@@ -50,7 +50,7 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
     position: absolute;
     display: block;
     inset: 0;
-    background: $fluent-slider-bg;
+    background: $slider-accent-color;
     content: "";
     border-radius: $fluent-slider-radius;
     border-width: 3px;
@@ -60,16 +60,15 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 
   &.dx-state-hover {
     &::after {
-      background: $fluent-slider-bg-hover;
+      background: $slider-accent-color-hover;
     }
   }
 
-  &.dx-state-active,
   &.dx-state-focused {
-    border-color: $fluent-slider-bg-focused;
+    border-color: $slider-accent-color-focused;
 
     &::after {
-      background: $fluent-slider-bg-focused;
+      background: $slider-accent-color-focused;
     }
   }
 
@@ -156,22 +155,28 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-invalid {
   .dx-slider-handle {
-    &.dx-state-focused {
-      border-color: $base-invalid-color;
-    }
-
     &::after {
       background-color: $base-invalid-color;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        background-color: $slider-invalid-color-hover;
+      }
+    }
+
+    &.dx-state-focused {
+      border-color: $slider-invalid-color-focused;
+
+      &::after {
+        background-color: $slider-invalid-color-focused;
+      }
     }
   }
 
   .dx-slider-range-visible {
-    background-color: $base-invalid-color;
-    border-color: $base-invalid-color;
-  }
-
-  .dx-slider-bar {
-    background-color: color.change($base-invalid-color, $alpha: 0.4);
+    background-color: $slider-invalid-color;
+    border-color: $slider-invalid-color;
   }
 }
 

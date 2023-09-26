@@ -18,7 +18,7 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
 .dx-popup-wrapper {
   & > .dx-overlay-content {
     background: $overlay-content-bg;
-    box-shadow: 0 11px 15px -7px color.change($base-shadow-color, $alpha: 0.2), 0 24px 38px 3px color.change($base-shadow-color, $alpha: 0.14), 0 9px 46px 8px color.change($base-shadow-color, $alpha: 0.12);
+    box-shadow: color.change($base-shadow-color, $alpha: 0.133) 0 6.4px 14.4px 0, color.change($base-shadow-color, $alpha: 0.11) 0 1.2px 3.6px 0;
     border-radius: $popup-border-radius;
   }
 
@@ -28,7 +28,7 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
 
   .dx-state-focused {
     &.dx-overlay-content {
-      border: 1px solid $base-accent;
+      box-shadow: color.change($base-shadow-color, $alpha: 0.133) 0 12px 24px 0, color.change($base-shadow-color, $alpha: 0.11) 0 4px 8px 0;
     }
   }
 }

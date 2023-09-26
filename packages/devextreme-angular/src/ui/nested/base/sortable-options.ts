@@ -5,6 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
+import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
@@ -61,10 +62,10 @@ export abstract class DxoSortableOptions extends NestedOption {
         this._setOption('data', value);
     }
 
-    get dragDirection(): string {
+    get dragDirection(): DragDirection {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: string) {
+    set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
 
@@ -75,10 +76,10 @@ export abstract class DxoSortableOptions extends NestedOption {
         this._setOption('dragTemplate', value);
     }
 
-    get dropFeedbackMode(): string {
+    get dropFeedbackMode(): DragHighlight {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: string) {
+    set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
     }
 
@@ -117,10 +118,10 @@ export abstract class DxoSortableOptions extends NestedOption {
         this._setOption('height', value);
     }
 
-    get itemOrientation(): string {
+    get itemOrientation(): Orientation {
         return this._getOption('itemOrientation');
     }
-    set itemOrientation(value: string) {
+    set itemOrientation(value: Orientation) {
         this._setOption('itemOrientation', value);
     }
 

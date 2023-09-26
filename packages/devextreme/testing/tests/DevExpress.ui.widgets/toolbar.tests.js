@@ -218,8 +218,8 @@ QUnit.module('render', {
     });
 
     QUnit.test('buttons has text style in Material', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => true;
+        const origIsMaterial = themes.isMaterialBased;
+        themes.isMaterialBased = () => true;
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -235,12 +235,12 @@ QUnit.module('render', {
 
         assert.ok(button.hasClass('dx-button-mode-text'));
 
-        themes.isMaterial = origIsMaterial;
+        themes.isMaterialBased = origIsMaterial;
     });
 
     QUnit.test('drop down buttons has text style in Material', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => true;
+        const origIsMaterial = themes.isMaterialBased;
+        themes.isMaterialBased = () => true;
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -257,7 +257,7 @@ QUnit.module('render', {
         assert.ok(button.hasClass('dx-dropdownbutton-action'));
         assert.ok(button.hasClass('dx-button-mode-text'));
 
-        themes.isMaterial = origIsMaterial;
+        themes.isMaterialBased = origIsMaterial;
     });
 
     const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';

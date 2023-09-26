@@ -4,16 +4,14 @@
 
 $fluent-context-menu-horizontal-padding: null !default;
 $fluent-context-menu-container-vertical-padding: null !default;
-$fluent-context-menu-font-size: null !default;
+$fluent-context-menu-border-radius: $base-border-radius !default;
 
 @if $size == "default" {
-  $fluent-context-menu-horizontal-padding: 16px !default;
-  $fluent-context-menu-container-vertical-padding: 8px !default;
-  $fluent-context-menu-font-size: 14px !default;
+  $fluent-context-menu-horizontal-padding: 12px !default;
+  $fluent-context-menu-container-vertical-padding: 4px !default;
 }
 
 @else if $size == "compact" {
   $fluent-context-menu-horizontal-padding: 8px !default;
   $fluent-context-menu-container-vertical-padding: 4px !default;
-  $fluent-context-menu-font-size: 13px !default;
 }

@@ -13,57 +13,57 @@
 @use "../textEditor" as *;
 
 $textbox-search-icon-right-padding: math.div($fluent-filled-texteditor-input-horizontal-padding, 2);
-$textbox-standard-search-icon-size:
-  $fluent-texteditor-icon-container-size +
-  $fluent-base-standard-texteditor-input-horizontal-padding +
-  $textbox-search-icon-right-padding;
 $textbox-filled-search-icon-size:
-  $fluent-texteditor-icon-container-size +
+  $texteditor-icon-container-size +
   $fluent-filled-texteditor-input-horizontal-padding +
   $textbox-search-icon-right-padding;
 
 @mixin dx-texteditor-search-icon($texteditor-icon-size, $texteditor-padding) {
   position: absolute;
-  top: 50%;
-  margin-top: math.div(-($texteditor-icon-size), 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $texteditor-icon-size;
+  height: 100%;
 
-  @include dx-icon-sizing($fluent-texteditor-icon-container-size, $texteditor-icon-size);
-
-  padding-inline-start: $texteditor-padding;
-  padding-inline-end: $textbox-search-icon-right-padding;
+  &::before {
+    font-size: $texteditor-icon-container-size;
+  }
 }
 
 .dx-searchbox {
   .dx-icon-search {
     @include dx-icon(search);
 
-    &::before {
-      color: $textbox-search-icon-color;
-    }
-
     color: $texteditor-placeholder-color;
   }
 
   &.dx-editor-underlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($textbox-standard-search-icon-size, $fluent-base-standard-texteditor-input-horizontal-padding);
+      @include dx-texteditor-search-icon($textbox-search-icon-size, $fluent-base-standard-texteditor-input-horizontal-padding);
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-inline-start: $textbox-standard-search-icon-size;
+      padding-inline-start: $textbox-search-icon-size;
     }
   }
 
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($textbox-filled-search-icon-size, $fluent-filled-texteditor-input-horizontal-padding);
+      @include dx-texteditor-search-icon($textbox-search-icon-size, $fluent-filled-texteditor-input-horizontal-padding);
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-inline-start: $textbox-filled-search-icon-size;
+      padding-inline-start: $textbox-search-icon-size;
+    }
+  }
+
+  &.dx-state-disabled {
+    .dx-icon-search {
+      color: $base-foreground-disabled;
     }
   }
 }

@@ -21,7 +21,8 @@ import {
 } from '@angular/core';
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { FieldChooserLayout } from 'devextreme/common';
+import { ApplyChangesMode, HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid_field_chooser';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -106,10 +107,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get applyChangesMode(): string {
+    get applyChangesMode(): ApplyChangesMode {
         return this._getOption('applyChangesMode');
     }
-    set applyChangesMode(value: string) {
+    set applyChangesMode(value: ApplyChangesMode) {
         this._setOption('applyChangesMode', value);
     }
 
@@ -236,10 +237,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get layout(): number | string {
+    get layout(): FieldChooserLayout {
         return this._getOption('layout');
     }
-    set layout(value: number | string) {
+    set layout(value: FieldChooserLayout) {
         this._setOption('layout', value);
     }
 
@@ -400,7 +401,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyChangesModeChange: EventEmitter<string>;
+    @Output() applyChangesModeChange: EventEmitter<ApplyChangesMode>;
 
     /**
     
@@ -470,7 +471,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layoutChange: EventEmitter<number | string>;
+    @Output() layoutChange: EventEmitter<FieldChooserLayout>;
 
     /**
     

@@ -23,7 +23,7 @@
 
 .dx-buttongroup-mode-contained {
   border-radius: $button-border-radius;
-  box-shadow: $fluent-button-box-shadow-size $button-hover-shadow-color;
+  box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
 
   .dx-button-mode-contained {
     box-shadow: none;
@@ -35,5 +35,9 @@
     &.dx-buttongroup-last-item {
       border-inline-end-width: 0;
     }
+  }
+
+  &.dx-state-disabled {
+    box-shadow: none;
   }
 }

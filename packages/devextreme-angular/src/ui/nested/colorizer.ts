@@ -14,6 +14,8 @@ import {
 
 
 
+import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { TreeMapColorizerType } from 'devextreme/viz/tree_map';
 
 import {
     NestedOptionHost,
@@ -45,18 +47,18 @@ export class DxoColorizerComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get palette(): string | Array<string> {
+    get palette(): Palette | string | Array<string> {
         return this._getOption('palette');
     }
-    set palette(value: string | Array<string>) {
+    set palette(value: Palette | string | Array<string>) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): string {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: string) {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -69,10 +71,10 @@ export class DxoColorizerComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get type(): string | undefined {
+    get type(): TreeMapColorizerType | undefined {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: TreeMapColorizerType | undefined) {
         this._setOption('type', value);
     }
 

@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+@use "../textEditor/colors" as *;
 
 // adduse
 
@@ -9,14 +10,14 @@
 * $name 10. Tag text color
 * $type color
 */
-$tagbox-tag-color: color.change($base-text-color, $alpha: 0.6) !default;
+$tagbox-tag-color: $base-text-color !default;
 
 /**
 * $name 20. Tag background color
 * $type color
 */
-$tagbox-tag-bg: null !default;
-$tagbox-tag-hover-bg: null !default;
+$tagbox-tag-bg: $base-neutral-background4 !default;
+$tagbox-tag-hover-bg: $base-neutral-background4-hover !default;
 
 /**
 * $name 30. Tag active text color
@@ -29,23 +30,6 @@ $tagbox-tag-active-color: $base-text-color !default;
 * $type color
 */
 $tagbox-tag-button-remove-bg: $base-icon-color !default;
-$tagbox-tag-button-remove-color: null !default;
-$tagbox-tag-focused-bg: null !default;
 $tagbox-select-all-border-color: $base-border-color !default;
-
-@if $mode == "light" {
-  $tagbox-tag-bg: darken($base-bg, 12%) !default;
-  $tagbox-tag-hover-bg: darken($base-bg, 15%) !default;
-  $tagbox-tag-button-remove-color: $tagbox-tag-bg !default;
-  $tagbox-tag-focused-bg: darken($base-bg, 32%) !default;
-}
-
-@if $mode == "dark" {
-  $tagbox-tag-bg: lighten($base-bg, 12%) !default;
-  $tagbox-tag-hover-bg: lighten($base-bg, 15%) !default;
-  $tagbox-tag-button-remove-color: lighten($base-bg, 22%) !default;
-  $tagbox-tag-focused-bg: lighten($base-bg, 32%) !default;
-}
-
-$tagbox-tag-disabled-bg: $tagbox-tag-focused-bg !default;
-
+$tagbox-tag-foreground-disabled: $base-foreground-disabled !default;
+$tagbox-tag-disabled: $base-neutral-background-disabled !default;

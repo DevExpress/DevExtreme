@@ -14,6 +14,8 @@ import {
 
 
 
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { DashStyle, RelativePosition } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -38,18 +40,18 @@ export class DxoConstantLineStyleComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get dashStyle(): string {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: string) {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: string, position?: string, verticalAlignment?: string, visible?: boolean } | { font?: Font, position?: string, visible?: boolean } | { font?: Font, visible?: boolean } {
+    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, position?: RelativePosition, visible?: boolean } | { font?: Font, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: string, position?: string, verticalAlignment?: string, visible?: boolean } | { font?: Font, position?: string, visible?: boolean } | { font?: Font, visible?: boolean }) {
+    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, position?: RelativePosition, visible?: boolean } | { font?: Font, visible?: boolean }) {
         this._setOption('label', value);
     }
 

@@ -16,7 +16,7 @@
     height: 100%;
     padding-top: $fluent-tagbox-tag-container-vertical-padding;
     padding-bottom: $fluent-tagbox-tag-container-vertical-padding;
-    gap: 4px;
+    gap: $fluent-tagbox-tag-container-gap;
 
     .dx-texteditor-input {
       padding: 0;
@@ -78,10 +78,13 @@
 
   &.dx-state-disabled {
     .dx-tag-content {
-      background-color: $tagbox-tag-disabled-bg;
+      color: $tagbox-tag-foreground-disabled;
+      background-color: $tagbox-tag-disabled;
+    }
 
-      .dx-tag-remove-button::before {
-        color: $tagbox-tag-disabled-bg;
+    .dx-tag-remove-button {
+      &::before {
+        color: $tagbox-tag-foreground-disabled;
       }
     }
   }
@@ -97,7 +100,7 @@
   display: inline-flex;
   align-items: center;
   font-size: $fluent-tagbox-tag-content-font-size;
-  line-height: normal;
+  line-height: $fluent-tagbox-tag-content-line-height;
   margin: 0;
   padding-top: $fluent-tagbox-tag-content-vertical-padding;
   padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
@@ -107,6 +110,9 @@
   background-color: $tagbox-tag-bg;
   color: $tagbox-tag-color;
   border-radius: $tagbox-tag-border-radius;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base-border-color-disabled;
 }
 
 .dx-tag-remove-button {
@@ -136,12 +142,12 @@
       color: $tagbox-tag-active-color;
     }
   }
-}
 
-.dx-tag.dx-state-focused {
-  .dx-tag-content {
-    background-color: $tagbox-tag-focused-bg;
-    color: $tagbox-tag-active-color;
+  &.dx-state-focused {
+    .dx-tag-content {
+      color: $tagbox-tag-active-color;
+      border-color: $base-accent-active;
+    }
   }
 }
 

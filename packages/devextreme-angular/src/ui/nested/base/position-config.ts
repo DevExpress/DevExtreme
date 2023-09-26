@@ -5,16 +5,18 @@ import {
     Component,
 } from '@angular/core';
 
+import { CollisionResolution, CollisionResolutionCombination } from 'devextreme/animation/position';
+import { HorizontalAlignment, PositionAlignment, VerticalAlignment } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 
 @Component({
     template: ''
 })
 export abstract class DxoPositionConfig extends NestedOption {
-    get at(): string | { x?: string, y?: string } {
+    get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
     }
-    set at(value: string | { x?: string, y?: string }) {
+    set at(value: PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment }) {
         this._setOption('at', value);
     }
 
@@ -32,17 +34,17 @@ export abstract class DxoPositionConfig extends NestedOption {
         this._setOption('boundaryOffset', value);
     }
 
-    get collision(): string | { x?: string, y?: string } {
+    get collision(): CollisionResolutionCombination | { x?: CollisionResolution, y?: CollisionResolution } {
         return this._getOption('collision');
     }
-    set collision(value: string | { x?: string, y?: string }) {
+    set collision(value: CollisionResolutionCombination | { x?: CollisionResolution, y?: CollisionResolution }) {
         this._setOption('collision', value);
     }
 
-    get my(): string | { x?: string, y?: string } {
+    get my(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('my');
     }
-    set my(value: string | { x?: string, y?: string }) {
+    set my(value: PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment }) {
         this._setOption('my', value);
     }
 
