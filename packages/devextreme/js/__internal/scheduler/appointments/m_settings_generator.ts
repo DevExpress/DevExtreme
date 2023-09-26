@@ -5,7 +5,7 @@ import { isEmptyObject } from '@js/core/utils/type';
 import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
-import { createAppointmentAdapter } from '../m_appointment_adapter';
+import AppointmentAdapter, { createAppointmentAdapter } from '../m_appointment_adapter';
 import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import {
@@ -66,15 +66,27 @@ export class DateGeneratorBaseStrategy {
       : this.options.intervalDuration;
   }
 
-  generate(appointmentAdapter) {
+  generate(appointmentAdapter: AppointmentAdapter) {
     const itemGroupIndices = this._getGroupIndices(this.rawAppointment);
 
-    let appointmentList = this._createAppointments(appointmentAdapter, itemGroupIndices);
+    let appointmentList: any[] = this._createAppointments(appointmentAdapter, itemGroupIndices);
 
-    appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointmentAdapter); // T983264
+    if (appointmentAdapter.allDay) {
+      appointmentList = appointmentList.map((item) => ({
+        startDate: dateUtils.trimTime(item.startDate),
+        endDate: dateUtils.trimTime(item.endDate),
+        exceptionDate: item?.exceptionDate
+          ? dateUtils.trimTime(item.exceptionDate)
+          : undefined,
+      }));
+    }
 
-    if (this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
-      appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointmentAdapter);
+    if (!appointmentAdapter.allDay) {
+      appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointmentAdapter); // T983264
+
+      if (this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
+        appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointmentAdapter);
+      }
     }
 
     let dateSettings = this._createGridAppointmentList(appointmentList, appointmentAdapter);
