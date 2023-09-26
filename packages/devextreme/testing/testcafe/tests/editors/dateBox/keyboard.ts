@@ -9,7 +9,7 @@ fixture.disablePageReloads`DateBox keyboard navigation`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-test('DateBox should be closed by press esc key when any element in popup is focused, applyValueMode is useButtons', async (t) => {
+test('DateBox should be closed by press esc key when navigator element in popup is focused, applyValueMode is useButtons', async (t) => {
   const dateBox = new DateBox('#container');
 
   await t
@@ -77,6 +77,13 @@ test('DateBox should be closed by press esc key when any element in popup is foc
   await t
     .expect(dateBox.option('opened'))
     .eql(false);
+}).before(async () => createWidget('dxDateBox', {
+  openOnFieldClick: true,
+  applyValueMode: 'useButtons',
+}));
+
+test('DateBox should be closed by press esc key when views wrapper in popup is focused, applyValueMode is useButtons', async (t) => {
+  const dateBox = new DateBox('#container');
 
   await t
     .click(dateBox.input);
@@ -101,6 +108,13 @@ test('DateBox should be closed by press esc key when any element in popup is foc
   await t
     .expect(dateBox.option('opened'))
     .eql(false);
+}).before(async () => createWidget('dxDateBox', {
+  openOnFieldClick: true,
+  applyValueMode: 'useButtons',
+}));
+
+test('DateBox should be closed by press esc key when today/cancel/apply button in popup is focused, applyValueMode is useButtons', async (t) => {
+  const dateBox = new DateBox('#container');
 
   await t
     .click(dateBox.input);
