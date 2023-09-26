@@ -1,6 +1,6 @@
 {
   "author": "Developer Express Inc.",
-  "name": "devextreme-react-sandbox",
+  "name": "devextreme-react-playground",
   "private": true,
   "version": "23.2.0",
   "description": "DevExtreme React UI and Visualization Components Sandbox",
@@ -8,30 +8,28 @@
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
-  "peerDependencies": {
-    "devextreme": "~23.2.0"
-  },
   "dependencies": {
+    "devextreme": "~23.2.0",
     "devextreme-react": "~23.2.0",
     "react": "~18.0.0",
     "react-dom": "~18.0.0"
   },
   "devDependencies": {
-    "@types/react": "^16.14.28",
-    "@types/react-dom": "^16.9.16",
-    "css-loader": "^2.1.1",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^0.23.1",
-    "ts-loader": "^5.4.5",
-    "tsconfig-paths-webpack-plugin": "^3.5.2",
-    "typescript": "~4.2",
-    "url-loader": "^0.6.2",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3"
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "css-loader": "2.1.1",
+    "source-map-loader": "0.2.4",
+    "style-loader": "0.23.1",
+    "ts-loader": "5.4.5",
+    "tsconfig-paths-webpack-plugin": "3.5.2",
+    "url-loader": "0.6.2",
+    "webpack": "5.88.2",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.3"
   },
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "echo empty"
   },
   "license": "MIT"
 }
