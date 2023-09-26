@@ -91,7 +91,7 @@ $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $mode == "dark" {
-  $scheduler-appointment-base-color: darken($base-accent, 15%) !default;
+  $scheduler-appointment-base-color: darken($base-accent, 40%) !default;
   $scheduler-appointment-text-color: #fff !default;
 }
 

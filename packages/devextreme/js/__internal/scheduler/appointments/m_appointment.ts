@@ -30,6 +30,8 @@ import { getRecurrenceProcessor } from '../m_recurrence';
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 
+const HAS_RESOURCE_COLOR_ATTRIBUTE = 'data-has-resource-color';
+
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
@@ -166,7 +168,12 @@ export class Appointment extends DOMComponent {
 
     const deferredColor = (this.option('getAppointmentColor') as any)(appointmentConfig);
 
-    deferredColor.done((color) => color && this.coloredElement.css('backgroundColor', color));
+    deferredColor.done((color) => {
+      if (color) {
+        this.coloredElement.css('backgroundColor', color);
+        this.coloredElement.attr(HAS_RESOURCE_COLOR_ATTRIBUTE, true);
+      }
+    });
   }
 
   _renderAppointmentGeometry() {

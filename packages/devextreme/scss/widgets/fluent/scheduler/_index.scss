@@ -608,16 +608,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   color: $scheduler-dropdown-appointment-date-color;
 }
 
-.dx-scheduler-appointment-strip {
-  display: block;
-  position: absolute;
-  width: 6px;
-  height: 100%;
-  background-color: $base-accent;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-}
-
 .dx-scheduler-work-space-vertical-grouped { // stylelint-disable-line no-duplicate-selectors
   &.dx-scheduler-work-space-month {
     .dx-scheduler-date-table-scrollable {
@@ -635,6 +625,18 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     .dx-scheduler-group-header:first-child {
       border-left: none;
     }
+  }
+}
+
+.dx-scheduler-appointment:not([data-has-resource-color='true']) {
+  .dx-scheduler-appointment-strip {
+    display: block;
+    position: absolute;
+    width: 6px;
+    height: 100%;
+    background-color: $base-accent;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
   }
 }
 
