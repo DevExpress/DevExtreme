@@ -5,7 +5,7 @@ import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { current, isMaterial } from '../themes';
+import { current, isMaterial, isMaterialBased } from '../themes';
 import devices from '../../core/devices';
 import Editor from '../editor/editor';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
@@ -147,13 +147,21 @@ const TextEditorBase = Editor.inherit({
             {
                 device: function() {
                     const themeName = current();
+                    return isMaterialBased(themeName);
+                },
+                options: {
+                    labelMode: 'floating'
+                }
+            },
+            {
+                device: function() {
+                    const themeName = current();
                     return isMaterial(themeName);
                 },
                 options: {
                     stylingMode: config().editorStylingMode || 'filled',
-                    labelMode: 'floating'
                 }
-            }
+            },
         ]);
     },
 

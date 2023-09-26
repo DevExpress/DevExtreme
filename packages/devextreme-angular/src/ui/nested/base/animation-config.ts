@@ -5,7 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { AnimationConfig, AnimationState } from 'devextreme/animation/fx';
+import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/animation/fx';
+import { Direction } from 'devextreme/common';
+import { AnimationEaseMode } from 'devextreme/common/charts';
 
 @Component({
     template: ''
@@ -32,10 +34,10 @@ export abstract class DxoAnimationConfig extends NestedOption {
         this._setOption('duration', value);
     }
 
-    get easing(): string {
+    get easing(): AnimationEaseMode | string {
         return this._getOption('easing');
     }
-    set easing(value: string) {
+    set easing(value: AnimationEaseMode | string) {
         this._setOption('easing', value);
     }
 
@@ -67,10 +69,10 @@ export abstract class DxoAnimationConfig extends NestedOption {
         this._setOption('delay', value);
     }
 
-    get direction(): string | undefined {
+    get direction(): Direction | undefined {
         return this._getOption('direction');
     }
-    set direction(value: string | undefined) {
+    set direction(value: Direction | undefined) {
         this._setOption('direction', value);
     }
 
@@ -102,10 +104,10 @@ export abstract class DxoAnimationConfig extends NestedOption {
         this._setOption('to', value);
     }
 
-    get type(): string {
+    get type(): AnimationType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: AnimationType) {
         this._setOption('type', value);
     }
 }

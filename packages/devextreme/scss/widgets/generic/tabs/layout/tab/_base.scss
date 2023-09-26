@@ -101,6 +101,7 @@
   }
 
   .dx-tab-text {
+    column-gap: $generic-tabs-icon-margin;
     color: $tabs-tab-color;
     line-height: $generic-tab-text-line-height;
   }
@@ -110,14 +111,6 @@
 
     @include dx-icon-sizing($generic-base-icon-size);
   }
-}
-
-.dx-tabs-icon-position-start .dx-tab .dx-icon {
-  @include dx-icon-margin($generic-tabs-icon-margin, start);
-}
-
-.dx-tabs-icon-position-end .dx-tab .dx-icon {
-  @include dx-icon-margin($generic-tabs-icon-margin, end);
 }
 
 .dx-tabs.dx-state-focused {

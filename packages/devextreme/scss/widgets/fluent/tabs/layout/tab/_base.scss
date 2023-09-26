@@ -53,6 +53,7 @@
   }
 
   .dx-tab-text {
+    column-gap: $fluent-base-icon-margin;
     text-transform: uppercase;
     line-height: $fluent-tab-text-line-height;
     font-weight: 500;
@@ -63,12 +64,4 @@
 
     @include dx-icon-sizing($fluent-base-icon-size);
   }
-}
-
-.dx-tabs-icon-position-start .dx-tab .dx-icon {
-  @include dx-icon-margin($fluent-base-icon-margin, start);
-}
-
-.dx-tabs-icon-position-end .dx-tab .dx-icon {
-  @include dx-icon-margin($fluent-base-icon-margin, end);
 }

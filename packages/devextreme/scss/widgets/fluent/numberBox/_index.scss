@@ -11,6 +11,18 @@
 // adduse
 @use "../textEditor" as *;
 
+.dx-numberbox {
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
+    .dx-numberbox-spin-up {
+      border-start-end-radius: $base-border-radius;
+    }
+
+    .dx-numberbox-spin-down {
+      border-end-end-radius: $base-border-radius;
+    }
+  }
+}
 
 .dx-numberbox-spin-container {
   overflow: hidden;
@@ -39,8 +51,15 @@
 }
 
 .dx-numberbox-spin-button {
-  padding: $fluent-numberbox-spin-padding;
   height: 50%;
+
+  &.dx-state-hover {
+    background-color: $numberbox-spin-icon-background-hover;
+  }
+
+  &.dx-state-active {
+    background-color: $numberbox-spin-icon-background-active;
+  }
 
   &.dx-state-disabled {
     .dx-numberbox-spin-up-icon,

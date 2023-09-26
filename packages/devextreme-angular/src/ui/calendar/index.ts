@@ -23,7 +23,8 @@ import {
 } from '@angular/core';
 
 
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/calendar';
+import { FirstDayOfWeek, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { CalendarSelectionMode, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, WeekNumberRule } from 'devextreme/ui/calendar';
 
 import DxCalendar from 'devextreme/ui/calendar';
 
@@ -166,10 +167,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get firstDayOfWeek(): number | string | undefined {
+    get firstDayOfWeek(): FirstDayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: number | string | undefined) {
+    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -270,10 +271,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get maxZoomLevel(): string {
+    get maxZoomLevel(): CalendarZoomLevel {
         return this._getOption('maxZoomLevel');
     }
-    set maxZoomLevel(value: string) {
+    set maxZoomLevel(value: CalendarZoomLevel) {
         this._setOption('maxZoomLevel', value);
     }
 
@@ -296,10 +297,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get minZoomLevel(): string {
+    get minZoomLevel(): CalendarZoomLevel {
         return this._getOption('minZoomLevel');
     }
-    set minZoomLevel(value: string) {
+    set minZoomLevel(value: CalendarZoomLevel) {
         this._setOption('minZoomLevel', value);
     }
 
@@ -348,10 +349,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get selectionMode(): string {
+    get selectionMode(): CalendarSelectionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: CalendarSelectionMode) {
         this._setOption('selectionMode', value);
     }
 
@@ -439,10 +440,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -452,10 +453,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -465,10 +466,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -504,10 +505,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get weekNumberRule(): string {
+    get weekNumberRule(): WeekNumberRule {
         return this._getOption('weekNumberRule');
     }
-    set weekNumberRule(value: string) {
+    set weekNumberRule(value: WeekNumberRule) {
         this._setOption('weekNumberRule', value);
     }
 
@@ -530,10 +531,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get zoomLevel(): string {
+    get zoomLevel(): CalendarZoomLevel {
         return this._getOption('zoomLevel');
     }
-    set zoomLevel(value: string) {
+    set zoomLevel(value: CalendarZoomLevel) {
         this._setOption('zoomLevel', value);
     }
 
@@ -623,7 +624,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<number | string | undefined>;
+    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek | undefined>;
 
     /**
     
@@ -679,7 +680,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxZoomLevelChange: EventEmitter<string>;
+    @Output() maxZoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
     
@@ -693,7 +694,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minZoomLevelChange: EventEmitter<string>;
+    @Output() minZoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
     
@@ -721,7 +722,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<string>;
+    @Output() selectionModeChange: EventEmitter<CalendarSelectionMode>;
 
     /**
     
@@ -770,21 +771,21 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     
@@ -805,7 +806,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() weekNumberRuleChange: EventEmitter<string>;
+    @Output() weekNumberRuleChange: EventEmitter<WeekNumberRule>;
 
     /**
     
@@ -819,7 +820,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() zoomLevelChange: EventEmitter<string>;
+    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
     

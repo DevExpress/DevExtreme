@@ -14,6 +14,7 @@ import {
 
 
 
+import { HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,18 +38,18 @@ export class DxoItemComponent extends NestedOption implements OnDestroy, OnInit 
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: string, opacity?: number, step?: number, width?: number } } {
+    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: string, opacity?: number, step?: number, width?: number } }) {
+    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: string, opacity?: number, step?: number, width?: number } } {
+    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: string, opacity?: number, step?: number, width?: number } }) {
+    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }) {
         this._setOption('selectionStyle', value);
     }
 

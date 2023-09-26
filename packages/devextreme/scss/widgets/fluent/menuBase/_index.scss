@@ -12,8 +12,6 @@
 
 // adduse
 
-$fluent-menu-arrow-image-size: 7px;
-
 .dx-menu-item {
   color: $menu-color;
 
@@ -27,6 +25,10 @@ $fluent-menu-arrow-image-size: 7px;
 
   &.dx-state-focused {
     background-color: $menu-item-hover-bg;
+  }
+
+  &.dx-state-active {
+    background-color: $menu-item-bg-active;
   }
 }
 
@@ -60,11 +62,6 @@ $fluent-menu-arrow-image-size: 7px;
   .dx-menu-item {
     .dx-menu-item-content {
       line-height: $fluent-menu-item-line-height;
-
-      .dx-menu-item-popout {
-        min-width: $fluent-menu-arrow-image-size;
-        min-height: $fluent-menu-arrow-image-size;
-      }
     }
   }
 

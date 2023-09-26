@@ -5,6 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
+import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 @Component({
     template: ''
@@ -31,24 +34,24 @@ export abstract class DxiFileManagerToolbarItem extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get locateInMenu(): string {
+    get locateInMenu(): LocateInMenuMode {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: string) {
+    set locateInMenu(value: LocateInMenuMode) {
         this._setOption('locateInMenu', value);
     }
 
-    get location(): string {
+    get location(): ToolbarItemLocation {
         return this._getOption('location');
     }
-    set location(value: string) {
+    set location(value: ToolbarItemLocation) {
         this._setOption('location', value);
     }
 
-    get name(): string {
+    get name(): FileManagerPredefinedToolbarItem | string {
         return this._getOption('name');
     }
-    set name(value: string) {
+    set name(value: FileManagerPredefinedToolbarItem | string) {
         this._setOption('name', value);
     }
 
@@ -59,10 +62,10 @@ export abstract class DxiFileManagerToolbarItem extends CollectionNestedOption {
         this._setOption('options', value);
     }
 
-    get showText(): string {
+    get showText(): ShowTextMode {
         return this._getOption('showText');
     }
-    set showText(value: string) {
+    set showText(value: ShowTextMode) {
         this._setOption('showText', value);
     }
 
@@ -80,10 +83,10 @@ export abstract class DxiFileManagerToolbarItem extends CollectionNestedOption {
         this._setOption('visible', value);
     }
 
-    get widget(): string {
+    get widget(): ToolbarItemComponent {
         return this._getOption('widget');
     }
-    set widget(value: string) {
+    set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
     }
 }

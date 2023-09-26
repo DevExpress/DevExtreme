@@ -25,8 +25,11 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Position, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
+import { ToolbarLocation } from 'devextreme/ui/popup';
+import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import DxPopover from 'devextreme/ui/popover';
 
@@ -335,10 +338,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get position(): DevExpress.PositionConfig | string {
+    get position(): Position | DevExpress.PositionConfig {
         return this._getOption('position');
     }
-    set position(value: DevExpress.PositionConfig | string) {
+    set position(value: Position | DevExpress.PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -465,10 +468,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, toolbar?: string, visible?: boolean, widget?: string }> {
+    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }> {
         return this._getOption('toolbarItems');
     }
-    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, toolbar?: string, visible?: boolean, widget?: string }>) {
+    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>) {
         this._setOption('toolbarItems', value);
     }
 
@@ -721,7 +724,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<DevExpress.PositionConfig | string>;
+    @Output() positionChange: EventEmitter<Position | DevExpress.PositionConfig>;
 
     /**
     
@@ -791,7 +794,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolbarItemsChange: EventEmitter<Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, toolbar?: string, visible?: boolean, widget?: string }>>;
+    @Output() toolbarItemsChange: EventEmitter<Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>>;
 
     /**
     

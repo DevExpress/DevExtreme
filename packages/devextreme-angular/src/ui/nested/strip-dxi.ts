@@ -12,6 +12,7 @@ import {
 
 
 
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -44,10 +45,10 @@ export class DxiStripComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: string, text?: string | undefined, verticalAlignment?: string } | { font?: Font, text?: string | undefined } {
+    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment } | { font?: Font, text?: string | undefined } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: string, text?: string | undefined, verticalAlignment?: string } | { font?: Font, text?: string | undefined }) {
+    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment } | { font?: Font, text?: string | undefined }) {
         this._setOption('label', value);
     }
 

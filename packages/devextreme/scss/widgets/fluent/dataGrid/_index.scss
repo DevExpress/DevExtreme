@@ -43,12 +43,15 @@
   .dx-group-panel-item {
     margin-right: $fluent-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
-    font-weight: $datagrid-columnchooser-font-weight;
+    font-weight: $fluent-datagrid-grouppanel-item-font-weight;
     font-size: $fluent-grid-base-header-cell-font-size;
     line-height: $fluent-grid-base-header-line-height;
-    background: $datagrid-block-separator-bg;
+    background: $base-neutral-background4;
     border-radius: 16px;
     padding: 8px 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: $base-border-color-disabled;
   }
 
   .dx-block-separator {

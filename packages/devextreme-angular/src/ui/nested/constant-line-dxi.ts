@@ -12,6 +12,8 @@ import {
 
 
 
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { DashStyle, RelativePosition } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -36,10 +38,10 @@ export class DxiConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dashStyle(): string {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: string) {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
@@ -60,10 +62,10 @@ export class DxiConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: string, position?: string, text?: string | undefined, verticalAlignment?: string, visible?: boolean } | { font?: Font, text?: string | undefined, visible?: boolean } {
+    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, text?: string | undefined, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: string, position?: string, text?: string | undefined, verticalAlignment?: string, visible?: boolean } | { font?: Font, text?: string | undefined, visible?: boolean }) {
+    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, text?: string | undefined, visible?: boolean }) {
         this._setOption('label', value);
     }
 
