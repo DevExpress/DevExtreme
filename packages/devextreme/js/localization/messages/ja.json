@@ -701,6 +701,6 @@
         "dxGantt-dialogStartDateValidation": "開始日を {0} 以降にする必要があります",
         "dxGantt-dialogEndDateValidation": "終了日は {0} より後にする必要があります",
 
-        "dxGalley-galleryItemName": "Gallery item"
+        "dxGallery-galleryItemName": "Gallery item"
     }
 }

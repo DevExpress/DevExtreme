@@ -149,7 +149,7 @@ const Gallery = CollectionWidget.inherit({
 
             _itemAttributes: {
                 role: 'option',
-                'aria-label': messageLocalization.format('dxGalley-galleryItemName')
+                'aria-label': messageLocalization.format('dxGallery-galleryItemName')
             },
             loopItemFocus: false,
             selectOnFocus: true,
@@ -277,9 +277,9 @@ const Gallery = CollectionWidget.inherit({
 
         this.callBase();
 
-        const listBoxRoleShouldBe = this._itemsCount() > 0;
+        const useListBoxRole = this._itemsCount() > 0;
         const ariaAttrs = {
-            'role': listBoxRoleShouldBe ? 'listbox' : undefined,
+            'role': useListBoxRole ? 'listbox' : undefined,
             'label': 'gallery'
         };
 
