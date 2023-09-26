@@ -41,15 +41,15 @@ test('should rerender after useDropDownViewSwitcher option changes', function(as
     );
 });
 
-module('Meterial theme', {
+module('Material-based themes', {
     beforeEach: function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.clock.restore();
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 }, () => {
     test('should have navigator, viewSwitcher and dropDown viewSwitcher', function(assert) {

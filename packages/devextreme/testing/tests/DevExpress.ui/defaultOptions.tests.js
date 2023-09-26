@@ -1515,10 +1515,10 @@ testComponentDefaults(Scheduler,
         _appointmentOffset: 30
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
