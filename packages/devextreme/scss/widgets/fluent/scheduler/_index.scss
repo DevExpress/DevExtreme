@@ -759,6 +759,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
           margin-left: $fluent-scheduler-appointment-tooltip-content-margin-left;
 
           .dx-tooltip-appointment-item-marker-body {
+            margin-top: 12px;
             width: $fluent-tooltip-marker-dimension;
             height: $fluent-tooltip-marker-dimension;
           }
@@ -767,6 +768,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
             .dx-tooltip-appointment-item-content-subject {
               margin-top: $fluent-scheduler-appointment-tooltip-title-margin-top;
               font-size: $fluent-scheduler-appointment-tooltip-title-font-size;
+              font-weight: 600;
             }
 
             .dx-tooltip-appointment-item-content-date {
