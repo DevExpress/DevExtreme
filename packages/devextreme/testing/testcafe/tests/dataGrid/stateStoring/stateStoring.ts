@@ -69,7 +69,7 @@ test('The rows should render correctly when cellTemplates are used and the selec
     stateStoring: {
       enabled: true,
       type: 'custom',
-      customLoad: async () => ({
+      customLoad: () => Promise.resolve({
         selectedRowKeys: ['key-invalid'],
       }),
     },
