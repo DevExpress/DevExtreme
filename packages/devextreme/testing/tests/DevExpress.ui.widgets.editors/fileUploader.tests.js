@@ -3659,63 +3659,51 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
     QUnit.test('dropZoneLeave should be fired on leave when native event occurs on the border (T1178898)', function(assert) {
         const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const onDropZoneLeaveSpy = sinon.spy();
 
-        try {
-            const onDropZoneLeaveSpy = sinon.spy();
-            $('#fileuploader').dxFileUploader({
-                uploadMode: 'useButtons',
-                dropZone: $('.drop'),
-                onDropZoneLeave: onDropZoneLeaveSpy
-            });
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: $('.drop'),
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
 
-            triggerDragEvent(customDropZone, 'dragenter');
-            triggerDragEvent(customDropZone, 'dragleave');
+        triggerDragEvent(customDropZone, 'dragenter');
+        triggerDragEvent(customDropZone, 'dragleave');
 
-            assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
-            assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
-        } finally {
-            customDropZone.remove();
-        }
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
     });
 
     QUnit.test('dropZoneEnter should be fired on enter when native event occurs on the border', function(assert) {
         const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const onDropZoneEnterSpy = sinon.spy();
 
-        try {
-            const onDropZoneEnterSpy = sinon.spy();
-            $('#fileuploader').dxFileUploader({
-                uploadMode: 'useButtons',
-                dropZone: $('.drop'),
-                onDropZoneEnter: onDropZoneEnterSpy
-            });
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: $('.drop'),
+            onDropZoneEnter: onDropZoneEnterSpy
+        });
 
-            triggerDragEvent(customDropZone, 'dragenter');
+        triggerDragEvent(customDropZone, 'dragenter');
 
-            assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
-            assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
-        } finally {
-            customDropZone.remove();
-        }
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
     });
 
     QUnit.test('dropZoneEnter should be fired on FireFox drag event format (T1188612)', function(assert) {
         const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
 
-        try {
-            const onDropZoneEnterSpy = sinon.spy();
-            $('#fileuploader').dxFileUploader({
-                uploadMode: 'useButtons',
-                dropZone: $('.drop'),
-                onDropZoneEnter: onDropZoneEnterSpy
-            });
+        const onDropZoneEnterSpy = sinon.spy();
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: $('.drop'),
+            onDropZoneEnter: onDropZoneEnterSpy
+        });
 
-            triggerDragEvent(customDropZone, 'dragenter', { types: ['application/x-moz-file', 'Files'] });
+        triggerDragEvent(customDropZone, 'dragenter', { types: ['application/x-moz-file', 'Files'] });
 
-            assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
-            assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
-        } finally {
-            customDropZone.remove();
-        }
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
     });
 
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in a custom drop zone', function(assert) {
