@@ -597,9 +597,10 @@ const DropDownEditor = TextBox.inherit({
 
     _popupTabHandler(e) {
         const $target = $(e.target);
+        const moveBackward = e.shiftKey && $target.is(this._getFirstPopupElement());
+        const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 
-        if((e.shiftKey && $target.is(this._getFirstPopupElement()))
-            || (!e.shiftKey && $target.is(this._getLastPopupElement()))) {
+        if(moveForward || moveBackward) {
             eventsEngine.trigger(this._input(), 'focus');
             e.preventDefault();
         }
