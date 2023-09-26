@@ -86,12 +86,12 @@ $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 $agenda-appointment-text-color: $base-text-color !default;
 
 @if $mode == "light" {
-  $scheduler-appointment-base-color: lighten($base-accent, 40%) !default;
+  $scheduler-appointment-base-color: lighten($base-accent, 48%) !default;
   $scheduler-appointment-text-color: #000 !default;
 }
 
 @if $mode == "dark" {
-  $scheduler-appointment-base-color: darken($base-accent, 40%) !default;
+  $scheduler-appointment-base-color: darken($base-accent, 48%) !default;
   $scheduler-appointment-text-color: #fff !default;
 }
 
