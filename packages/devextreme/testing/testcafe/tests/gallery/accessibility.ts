@@ -52,10 +52,10 @@ const gallerySettings = [{}, {
   loop: true,
 }, {
   showIndicator: false,
-}].reduce((acc: any, currentValue, index, arr) => {
+}].reduce((acc: any, currentValue) => {
   acc.push({
     ...currentValue,
-    ...arr[index - 1],
+    ...acc.at(-1),
   });
   return acc;
 }, []);
