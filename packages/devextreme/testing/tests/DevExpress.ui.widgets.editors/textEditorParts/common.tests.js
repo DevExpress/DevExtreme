@@ -728,7 +728,7 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, undefined);
     });
 
-    QUnit.test('the placeholder attr should be equal user placeholder', function(assert) {
+    QUnit.test('the placeholder attr should be equal custom placeholder', function(assert) {
         this.textEditor.option({
             placeholder: 'custom',
             label: null,
@@ -739,7 +739,7 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(placeholder, this.textEditor.option('placeholder'));
     });
 
-    QUnit.test('the placeholder attr should be equal user placeholder in ios or mac', function(assert) {
+    QUnit.test('the placeholder attr should be equal empty string if placeholder is null in ios or mac', function(assert) {
         this.textEditor.option({
             placeholder: null,
             label: null,

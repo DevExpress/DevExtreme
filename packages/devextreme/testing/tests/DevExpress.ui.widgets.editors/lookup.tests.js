@@ -3394,7 +3394,6 @@ let helper;
 if(devices.real().deviceType === 'desktop') {
     QUnit.module('Aria accessibility', {
         beforeEach: function() {
-            this.isMac = devices.real().mac;
             helper = new ariaAccessibilityTestHelper({
                 createWidget: ($element, options) => new Lookup($element, options)
             });
@@ -3455,11 +3454,8 @@ if(devices.real().deviceType === 'desktop') {
                         tabindex: '0',
                         role: 'textbox',
                         'aria-label': 'Search',
+                        placeholder: 'Search',
                     };
-
-                    if(this.isMac) {
-                        expectedAttributes.placeholder = 'Search';
-                    }
 
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
@@ -3497,11 +3493,8 @@ if(devices.real().deviceType === 'desktop') {
                         spellcheck: 'false',
                         role: 'textbox',
                         'aria-label': 'Search',
+                        placeholder: 'Search',
                     };
-
-                    if(this.isMac) {
-                        expectedAttributes.placeholder = 'Search';
-                    }
 
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
