@@ -13,31 +13,22 @@ fixture`Common tests with axe`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
-
-const themeBackgroundColors = {
-  // undefined is to remove background color
-  [Themes.genericLight]: undefined,
-  [Themes.genericDark]: '#2a2a2a',
-  [Themes.materialBlue]: undefined,
-  [Themes.materialBlueDark]: '#363640',
-  [Themes.fluentBlue]: '#fafafa',
-  [Themes.fluentBlueDark]: '#1f1f1f',
-};
+const DATA_GRID_SURFACE_CLASS = 'dx-datagrid-surface';
 
 const changeTheme = async (theme: string): Promise<any> => {
   await originalChangeTheme(theme);
 
-  const backgroundColor = themeBackgroundColors[theme];
+  const needSurfaceBackground = theme !== Themes.genericLight;
 
   await ClientFunction(() => {
     const { body } = (window as any).document;
 
-    if (backgroundColor) {
-      body.style.backgroundColor = backgroundColor;
+    if (needSurfaceBackground) {
+      body.classList.add(DATA_GRID_SURFACE_CLASS);
     } else {
-      body.style.removeProperty('background-color');
+      body.classList.remove(DATA_GRID_SURFACE_CLASS);
     }
-  }, { dependencies: { backgroundColor } })();
+  }, { dependencies: { needSurfaceBackground, DATA_GRID_SURFACE_CLASS } })();
 };
 
 [
