@@ -313,10 +313,11 @@ test('DateRangeBox should be closed by press esc key when any element in popup i
   await t
     .pressKey('tab')
     .pressKey('tab')
+    .pressKey('tab')
     .pressKey('tab');
 
   await t
-    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .expect(dateRangeBox.getPopup().getViewsWrapper().focused)
     .eql(true);
 
   await t
@@ -341,7 +342,7 @@ test('DateRangeBox should be closed by press esc key when any element in popup i
     .pressKey('tab');
 
   await t
-    .expect(dateRangeBox.getPopup().getViewsWrapper().focused)
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .eql(true);
 
   await t
