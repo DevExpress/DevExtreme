@@ -41,14 +41,18 @@
 .dx-layout-manager {
   .dx-field-item {
     &:not(.dx-last-col) {
-      padding-right: 20px;
+      padding-right: 8px;
     }
 
     &:not(.dx-first-col) {
-      padding-left: 20px;
+      padding-left: 8px;
     }
 
-    padding-bottom: 10px;
+    &:not(.dx-first-row) {
+      padding-top: 8px;
+    }
+
+    padding-bottom: 8px;
     font-size: $fluent-form-label-font-size;
 
 
@@ -63,7 +67,7 @@
 .dx-form > .dx-layout-manager.dx-layout-manager-one-col {
   .dx-field-item {
     .dx-field-item.dx-last-row:not(.dx-last-col) {
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
   }
 }
@@ -97,8 +101,6 @@
 
 .dx-field-item-label-location-top {
   padding: $fluent-form-top-label-padding;
-  padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  padding-right: $fluent-filled-texteditor-input-horizontal-padding;
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;
