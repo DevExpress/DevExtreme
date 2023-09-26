@@ -391,11 +391,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     $button-normal-bg,
     $fluent-scheduler-toolbar-active-color,
   );
-  @include header-buttons-material(
-    $base-accent,
-    $fluent-scheduler-toolbar-color,
-    $fluent-scheduler-navigator-icon-font-size,
-  );
 
   .dx-scheduler-navigator-next,
   .dx-scheduler-navigator-previous {
