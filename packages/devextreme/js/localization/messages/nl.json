@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "keer",
         "dxScheduler-allDay": "Duurt hele dag",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Alleen deze afspraak of de hele serie wijzigen?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Alleen deze afspraak of de volledige serie verwijderen?",
 

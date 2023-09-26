@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "مرة (مرات)",
         "dxScheduler-allDay": "طوال اليوم",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "هل تريد تحرير هذا الموعد فقط أم السلسلة بأكملها؟",
         "dxScheduler-confirmRecurrenceDeleteMessage": "هل تريد حذف هذا الموعد فقط أم المجموعة بأكملها؟",
 

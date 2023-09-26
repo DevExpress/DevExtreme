@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "ocurrencia(s)",
         "dxScheduler-allDay": "Todo el día",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "¿Quiere modificar solo esta cita o toda la serie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "¿Quiere eliminar solo esta cita o toda la serie?",
 

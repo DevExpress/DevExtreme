@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "olaylar",
         "dxScheduler-allDay": "Tüm gün",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Yalnızca bu randevuyu veya tüm diziyi düzenlemek ister misiniz?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Yalnızca bu randevuyu veya tüm diziyi silmek istiyor musunuz?",
 

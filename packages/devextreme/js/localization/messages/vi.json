@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "số lần diễn ra",
         "dxScheduler-allDay": "Cả ngày",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Bạn có muốn sửa chỉ Lịch hẹn này hoặc Toàn bộ chuỗi?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Bạn có muốn xóa chỉ Lịch hẹn này hoặc Toàn bộ chuỗi?",
 

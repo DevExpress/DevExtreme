@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "事件",
         "dxScheduler-allDay": "全天",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "你想只修改該日程還是想修改整個系列的日程?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "你想只刪除這個日程還是想刪除整個系列的日程?",
 
