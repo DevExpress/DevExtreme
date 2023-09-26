@@ -3698,6 +3698,26 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         }
     });
 
+    QUnit.test('dropZoneEnter should be fired on FireFox drag event format (T1188612)', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+
+        try {
+            const onDropZoneEnterSpy = sinon.spy();
+            $('#fileuploader').dxFileUploader({
+                uploadMode: 'useButtons',
+                dropZone: $('.drop'),
+                onDropZoneEnter: onDropZoneEnterSpy
+            });
+
+            triggerDragEvent(customDropZone, 'dragenter', { types: ['application/x-moz-file', 'Files'] });
+
+            assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
+            assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+        } finally {
+            customDropZone.remove();
+        }
+    });
+
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in a custom drop zone', function(assert) {
         const customDropZone = $('<div>')
             .addClass('drop')
