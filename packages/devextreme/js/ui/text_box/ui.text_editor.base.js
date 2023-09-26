@@ -332,7 +332,9 @@ const TextEditorBase = Editor.inherit({
 
         // WA to fix vAlign (T898735)
         // https://bugs.webkit.org/show_bug.cgi?id=142968
-        return placeholder || ((ios || mac) ? ' ' : null);
+        const value = placeholder || ((ios || mac) ? ' ' : null);
+
+        return value;
     },
 
     _getDefaultAttributes() {
