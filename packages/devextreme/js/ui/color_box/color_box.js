@@ -150,12 +150,6 @@ const ColorBox = DropDownEditor.inherit({
         const $colorView = $('<div>').appendTo(this._popup.$content());
 
         this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
-        this._colorView.registerKeyHandler('escape', this._escapeHandler.bind(this));
-    },
-
-    _escapeHandler: function() {
-        this.close();
-        this.focus();
     },
 
     _applyNewColor: function(value) {

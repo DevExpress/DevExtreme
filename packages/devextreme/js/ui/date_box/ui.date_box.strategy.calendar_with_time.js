@@ -53,8 +53,6 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
             onValueChanged: this._valueChangedHandler.bind(this),
             stylingMode: this.dateBox.option('stylingMode')
         });
-
-        this._timeView.registerKeyHandler('escape', this._escapeHandler.bind(this));
     },
 
     renderOpenedState: function() {
