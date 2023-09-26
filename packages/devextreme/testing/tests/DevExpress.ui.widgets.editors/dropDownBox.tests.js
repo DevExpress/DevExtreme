@@ -50,6 +50,64 @@ const moduleConfig = {
     }
 };
 
+QUnit.module('items order', moduleConfig, () => {
+    QUnit.test('should be correct when items loaded asynchronously and display value is set', function(assert) {
+        const items = [{ id: 10250, name: 'HANAR' }, { id: 10252, name: 'SUPRD' }, { id: 10249, name: 'Tomps' }];
+
+        const instance = this.$element.dxDropDownBox({
+            dataSource: getStore(items),
+            valueExpr: 'id',
+            displayExpr: 'name',
+            value: [10250, 10252, 10249]
+        }).dxDropDownBox('instance');
+
+        this.clock.tick(500);
+
+        assert.deepEqual(instance.option('value'), [10250, 10252, 10249], 'value is correct');
+        assert.strictEqual(instance.option('text'), 'HANAR, SUPRD, Tomps', 'text is correct');
+        assert.strictEqual($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'HANAR, SUPRD, Tomps', 'input value is correct');
+    });
+
+    QUnit.test('should be correct when items loaded asynchronously (T1181665)', function(assert) {
+        const items = [10250, 10252, 10249];
+
+        const instance = this.$element.dxDropDownBox({
+            dataSource: getStore(items),
+            value: items
+        }).dxDropDownBox('instance');
+
+        this.clock.tick(500);
+
+        assert.deepEqual(instance.option('value'), [10250, 10252, 10249], 'value is correct');
+        assert.strictEqual(instance.option('text'), '10250, 10252, 10249', 'text is correct');
+        assert.strictEqual($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '10250, 10252, 10249', 'input value is correct');
+    });
+
+    function getStore(items) {
+        return {
+            load: () => {
+                $.Deferred().resolve(items).promise();
+            },
+            byKey: (key) => {
+                const d = $.Deferred();
+                if(key === 10250) {
+                    setTimeout(() => {
+                        d.resolve(items[0]);
+                    }, 300);
+                } else if(key === 10252) {
+                    setTimeout(() => {
+                        d.resolve(items[1]);
+                    }, 500);
+                } else {
+                    d.resolve(items[2]);
+                }
+
+                return d.promise();
+            }
+        };
+    }
+});
+
 QUnit.module('common', moduleConfig, () => {
     QUnit.test('the widget should display custom value without the dataSource', function(assert) {
         this.$element.dxDropDownBox({ value: 1, acceptCustomValue: true });
@@ -121,93 +179,6 @@ QUnit.module('common', moduleConfig, () => {
         assert.deepEqual(instance.option('value'), [1, 2], 'value is correct');
         assert.strictEqual(instance.option('text'), 'test', 'text is correct');
         assert.strictEqual($input.val(), 'test', 'input value is correct');
-    });
-
-    QUnit.test('items should be rendered in correct order when loaded asynchronously and display value is set', function(assert) {
-        const item1 = { id: 10250, name: 'HANAR' };
-        const item2 = { id: 10252, name: 'SUPRD' };
-        const item3 = { id: 10249, name: 'Tomps' };
-
-        const items = [item1, item2, item3];
-
-        const store = {
-            load: () => {
-                $.Deferred().resolve(items).promise();
-            },
-            byKey: (key) => {
-                const d = $.Deferred();
-                if(key === 10250) {
-                    setTimeout(() => {
-                        d.resolve(item1);
-                    }, 300);
-                } else if(key === 10252) {
-                    setTimeout(() => {
-                        d.resolve(item2);
-                    }, 500);
-                } else {
-                    d.resolve(item3);
-                }
-
-                return d.promise();
-            }
-        };
-
-        const instance = this.$element.dxDropDownBox({
-            dataSource: store,
-            valueExpr: 'id',
-            displayExpr: 'name',
-            value: [10250, 10252, 10249]
-        }).dxDropDownBox('instance');
-
-        const $input = $(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        this.clock.tick(500);
-
-        assert.deepEqual(instance.option('value'), [10250, 10252, 10249], 'value is correct');
-        assert.strictEqual(instance.option('text'), 'HANAR, SUPRD, Tomps', 'text is correct');
-        assert.strictEqual($input.val(), 'HANAR, SUPRD, Tomps', 'input value is correct');
-    });
-
-    QUnit.test('items should be rendered in correct order when loaded asynchronously (T1181665)', function(assert) {
-        const item1 = 10250;
-        const item2 = 10252;
-        const item3 = 10249;
-        const items = [item1, item2, item3];
-
-        const store = {
-            load: () => {
-                $.Deferred().resolve(items).promise();
-            },
-            byKey: (key) => {
-                const d = $.Deferred();
-                if(key === 10250) {
-                    setTimeout(() => {
-                        d.resolve(item1);
-                    }, 300);
-                } else if(key === 10252) {
-                    setTimeout(() => {
-                        d.resolve(item2);
-                    }, 500);
-                } else {
-                    d.resolve(item3);
-                }
-
-                return d.promise();
-            }
-        };
-
-        const instance = this.$element.dxDropDownBox({
-            dataSource: store,
-            value: items
-        }).dxDropDownBox('instance');
-
-        const $input = $(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        this.clock.tick(500);
-
-        assert.deepEqual(instance.option('value'), [10250, 10252, 10249], 'value is correct');
-        assert.strictEqual(instance.option('text'), '10250, 10252, 10249', 'text is correct');
-        assert.strictEqual($input.val(), '10250, 10252, 10249', 'input value is correct');
     });
 
     QUnit.test('the widget should work when dataSource is set to null', function(assert) {
