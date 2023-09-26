@@ -52,8 +52,10 @@ $datagrid-text-stub-background-image-path: null !default;
   word-wrap: break-word;
 }
 
-// Need this class for contrast functional tests.
-// Since header panel and pager have transparent background, we assign this grid container
+/*
+Need this class for contrast functional tests.
+Since header panel and pager have transparent background, we assign this class to a grid container.
+*/
 .dx-datagrid-surface {
   background-color: $datagrid-base-background-color;
 }
