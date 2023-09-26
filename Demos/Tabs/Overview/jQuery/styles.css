@@ -1,26 +1,56 @@
-.content {
-  text-align: justify;
-  margin-top: 25px;
+#tabs-demo {
+  display: flex;
+  min-height: 450px;
 }
 
-#longtabs {
-  margin-top: 20px;
+.widget-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  row-gap: 80px;
+  column-gap: 4px;
+  max-width: calc(100% - 300px);
+  min-width: 200px;
+  padding: 16px 32px;
+  overflow: clip;
 }
 
-#scrolledtabs {
-  margin-top: 20px;
+.widget-container-vertical {
+  flex-direction: row;
 }
 
-#tabs {
-  margin-top: 60px;
+.options {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.dx-tab {
+  width: 135px;
 }
 
 .caption {
-  font-size: 16px;
-  padding-bottom: 3px;
-  padding-left: 10px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
-.left-aligned {
-  text-align: left;
+#show-navigation-buttons {
+  margin-top: 22px;
+}
+
+.option {
+  margin-top: 20px;
+}
+
+.dx-tabs-horizontal {
+  border-bottom: 1px solid rgb(225, 225, 225, 0.4);
+}
+
+.dx-tabs-vertical {
+  border-right: 1px solid rgb(225, 225, 225, 0.4);
+  height: 250px;
 }

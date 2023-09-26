@@ -1,43 +1,76 @@
-<div id="longtabs">
-  <div class="caption">Tabs</div>
-  <dx-tabs [dataSource]="longtabs"></dx-tabs>
-</div>
-<div id="scrolledtabs">
-  <div class="caption">Tabs with Overflow</div>
-  <dx-tabs
-    [dataSource]="longtabs"
-    [width]="300"
-    [scrollByContent]="true"
-    [showNavButtons]="true"
-  ></dx-tabs>
-</div>
-<div id="tabs">
-  <div class="caption">API</div>
-  <dx-tabs
-    #apiTabs
-    [dataSource]="tabs"
-    [selectedIndex]="0"
-    (onItemClick)="selectTab($event)"
-  ></dx-tabs>
-  <div class="content dx-fieldset">
-    <div class="dx-field">
-      <div class="dx-field-label">Selected index:</div>
-      <div class="dx-field-value">
-        <dx-select-box
-          [dataSource]="tabs"
-          displayExpr="text"
-          valueExpr="id"
-          [inputAttr]="{ 'aria-label': 'Tab' }"
-          (onItemClick)="selectTab($event)"
-          [(value)]="apiTabs.selectedIndex"
-        ></dx-select-box>
-      </div>
+<div id="tabs-demo">
+  <div [class]="widgetContainerClasses">
+    <dx-tabs
+      #withText
+      [selectedIndex]="0"
+      [dataSource]="tabsWithText"
+      [scrollByContent]="false"
+      [showNavButtons]="false"
+    ></dx-tabs>
+    <dx-tabs
+      #withIconAndText
+      [selectedIndex]="0"
+      [dataSource]="tabsWithIconAndText"
+      [scrollByContent]="false"
+      [showNavButtons]="false"
+    ></dx-tabs>
+    <dx-tabs
+      #withIcon
+      [selectedIndex]="0"
+      [dataSource]="tabsWithIcon"
+      [scrollByContent]="false"
+      [showNavButtons]="false"
+    ></dx-tabs>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Orientation</span>
+      <dx-select-box
+        [items]="orientations"
+        [inputAttr]="{ 'aria-label': 'Orientation' }"
+        (onValueChanged)="onOrientationChanged($event)"
+        [(value)]="orientation"
+      ></dx-select-box>
     </div>
-    <div class="dx-field">
-      <div class="dx-field-label">Selected content:</div>
-      <div class="dx-field-value-static left-aligned">
-        {{ tabContent }}
-      </div>
+
+    <div class="option">
+      <span>Styling mode</span>
+      <dx-select-box
+        [items]="stylingModes"
+        [inputAttr]="{ 'aria-label': 'Styling Mode' }"
+        (onValueChanged)="onStylingModeChanged($event)"
+        [(value)]="stylingMode"
+      ></dx-select-box>
+    </div>
+
+    <div class="option">
+      <span>Icon position</span>
+      <dx-select-box
+        [items]="iconPositions"
+        [inputAttr]="{ 'aria-label': 'Icon Position' }"
+        (onValueChanged)="onIconPositionChanged($event)"
+        [(value)]="iconPosition"
+      ></dx-select-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        text="Show navigation buttons"
+        [value]="false"
+        id="show-navigation-buttons"
+        (onValueChanged)="onShowNavigationChanged($event)"
+      ></dx-check-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        text="Scroll content"
+        [value]="false"
+        id="scroll-content"
+        (onValueChanged)="onScrollContentChanged($event)"
+      ></dx-check-box>
     </div>
   </div>
 </div>
