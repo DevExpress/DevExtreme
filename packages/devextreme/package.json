@@ -30,8 +30,8 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.12",
-    "devexpress-diagram": "2.2.1",
-    "devexpress-gantt": "4.1.48",
+    "devexpress-diagram": "2.2.2",
+    "devexpress-gantt": "4.1.49",
     "devextreme-quill": "1.6.2",
     "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.9",
@@ -86,7 +86,6 @@
     "cssom": "0.5.0",
     "del": "2.2.2",
     "devextreme-cldr-data": "1.0.3",
-    "devextreme-internal-tools": "10.0.0-beta.19",
     "devextreme-screenshot-comparer": "2.0.15",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.7",
@@ -209,13 +208,11 @@
     "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
-    "discover-declarations": "dx-tools discover --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
-    "update-ts-reexports": "dx-tools generate-reexports --js-scripts ./js --exclude \"((dialog|export|list_light|notify|overlay|pager|palette|set_template_engine|splitter|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
-    "update-ts-bundle": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
+    "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|pager|palette|set_template_engine|splitter|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
+    "update-ts-bundle": "dx-tools generate-ts-bundle --sources ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "regenerate": "npm run update-ts-bundle && npm run update-ts-reexports",
     "validate-ts": "gulp validate-ts",
-    "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\"",
+    "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
@@ -224,8 +221,7 @@
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "test-typescript": "gulp test-ts",
-    "tcd-update": "tcd-update",
-    "discover-ci": "npm run internal-tool -- discover-ts-declarations --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" && npm run internal-tool -- discover --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\""
+    "tcd-update": "tcd-update"
   },
   "jest": {
     "modulePathIgnorePatterns": [

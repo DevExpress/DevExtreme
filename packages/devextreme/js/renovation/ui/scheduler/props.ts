@@ -413,17 +413,19 @@ export class SchedulerProps extends BaseWidgetProps {
   // eslint-disable-next-line max-len
   template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   @OneWay()
   toolbar: SchedulerToolbarItem[] = [
     {
       defaultElement: 'dateNavigator',
       location: 'before',
-    },
+    } as any,
     {
       defaultElement: 'viewSwitcher',
       location: 'after',
-    },
+    } as any,
   ];
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
 export type DataAccessorsProps = Pick<

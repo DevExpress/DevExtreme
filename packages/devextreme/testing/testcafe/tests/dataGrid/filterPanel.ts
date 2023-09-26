@@ -16,7 +16,7 @@ test('editor\'s popup inside filterBuilder is opening & closing right (T1182854)
     await dataGrid.getFilterPanel().openFilterBuilderPopup(t)
   ).getFilterBuilder();
 
-  await t.expect(await takeScreenshot('dataGrid-filterPanel-popup.png')).ok();
+  await t.expect(await takeScreenshot('dataGrid-filterPanel-popup-focused.png')).ok();
 
   await t.click(filterBuilder.getField().getValueText());
   await t.expect(await takeScreenshot('dataGrid-filterPanel-popup.-with-editor-popup')).ok();

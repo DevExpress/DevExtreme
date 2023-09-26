@@ -5,9 +5,9 @@
 $textarea-content-line-height: null !default;
 
 @if $size == "default" {
-  $textarea-content-line-height: 24px !default;
+  $textarea-content-line-height: 20px !default;
 }
 
 @else if $size == "compact" {
-  $textarea-content-line-height: 20px !default;
+  $textarea-content-line-height: 16px !default;
 }

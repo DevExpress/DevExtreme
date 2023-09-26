@@ -707,6 +707,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   selectedIndex?: number;
   selectedItem?: any;
   showNavButtons?: boolean;
+  stylingMode?: "primary" | "secondary";
   swipeEnabled?: boolean;
   tabIndex?: number;
   tabsPosition?: "bottom" | "left" | "right" | "top";

@@ -47,7 +47,7 @@ $fluent-button-icon-margin: null !default;
   $fluent-base-inline-widget-height: 32px !default; // 48px !default;
   $fluent-base-inline-block-height: 20px !default; // 19px !default;
   $fluent-base-icon-size: 20px !default; // 24px !default
-  $fluent-base-inline-horizontal-padding: 10px !default;
+  $fluent-base-inline-horizontal-padding: 12px !default; // 10px !default;
   $fluent-base-border-radius: 4px !default;
   $fluent-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color !default;
   $fluent-accordion-item-opened-margin: 16px !default;
@@ -60,14 +60,14 @@ $fluent-button-icon-margin: null !default;
   $fluent-size-postfix: ".compact" !default;
 
   // Font sizes
-  $fluent-base-font-size: 13px !default;
+  $fluent-base-font-size: 12px !default; // 13px !default;
 
   // Base sizes
-  $fluent-base-inline-widget-height: 32px !default;
-  $fluent-base-inline-block-height: 15px !default;
+  $fluent-base-inline-widget-height: 24px !default; // 32px !default;
+  $fluent-base-inline-block-height: 16px !default;// 15px !default;
   $fluent-base-icon-size: 16px !default; // 18px !default;
   $fluent-base-inline-horizontal-padding: 8px !default;
-  $fluent-base-border-radius: 2px !default;
+  $fluent-base-border-radius: 4px !default; // 2px !default;
   $fluent-base-dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color !default;
   $fluent-accordion-item-opened-margin: 8px !default;
   $fluent-button-height: 24px !default;
@@ -84,5 +84,6 @@ $fluent-base-border-width: 1px !default;
 * $type text
 */
 $base-border-radius: $fluent-base-border-radius !default;
+$fluent-grid-base-border-radius: $base-border-radius * 3 !default;
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;

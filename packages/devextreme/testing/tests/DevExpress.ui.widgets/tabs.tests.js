@@ -297,6 +297,32 @@ QUnit.module('General', () => {
         assert.notOk($element.hasClass(TABS_ORIENTATION_CLASS.vertical));
     });
 
+    QUnit.test('vertical tabs should hide the navigation after iconPosition is changed from top to start', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [
+                { text: 'item 1', icon: 'plus' },
+                { text: 'item 2', icon: 'plus' },
+                { text: 'item 3', icon: 'plus' },
+            ],
+            scrollingEnabled: true,
+            visible: true,
+            orientation: 'vertical',
+            iconPosition: 'top',
+            showNavButtons: true,
+            height: 300,
+        });
+
+        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
+        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
+
+        const instance = $element.dxTabs('instance');
+
+        instance.option('iconPosition', 'start');
+
+        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was removed');
+        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrollable was removed');
+    });
+
     QUnit.test('the tabs element must have a start icon position class by default', function(assert) {
         const $element = $('#tabs').dxTabs();
 

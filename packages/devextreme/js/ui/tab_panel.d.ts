@@ -19,6 +19,7 @@ import {
 import {
     Position,
     TabsIconPosition,
+    TabsStyle,
 } from '../common';
 
 import CollectionWidget, {
@@ -33,6 +34,7 @@ import {
 export {
     Position,
     TabsIconPosition,
+    TabsStyle,
 };
 
 type ItemLike = string | Item | any;
@@ -247,6 +249,12 @@ export interface dxTabPanelOptions<
      * @public
      */
     showNavButtons?: boolean;
+    /**
+     * @docid
+     * @default 'primary'
+     * @public
+     */
+    stylingMode?: TabsStyle;
     /**
      * @docid
      * @default false &for(non-touch_devices)

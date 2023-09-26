@@ -16759,7 +16759,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * @deprecated Use SimpleItem instead
@@ -25575,6 +25575,10 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
     /**
+     * [descr:dxTabPanelOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.TabsStyle;
+    /**
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;
@@ -29600,7 +29604,7 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * [descr:dxFilterBuilderField]
@@ -29813,7 +29817,6 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
-    static isMaterial(theme: string): boolean;
   }
   /**
    * [descr:Widget]

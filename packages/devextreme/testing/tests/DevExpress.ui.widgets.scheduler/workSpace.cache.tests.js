@@ -2,7 +2,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
+import '__internal/scheduler/workspaces/m_work_space_week';
 
 const {
     test,

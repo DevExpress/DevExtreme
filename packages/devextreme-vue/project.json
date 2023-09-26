@@ -9,7 +9,7 @@
       "options": {
         "script": "regenerate"
       },
-      "dependsOn": ["devextreme-monorepo:\"vue:copy-metadata\"", "devextreme-monorepo:\"vue:build-generator\""]
+      "dependsOn": ["devextreme-monorepo:\"vue:copy-metadata\""]
     }
   },
   "tags": []

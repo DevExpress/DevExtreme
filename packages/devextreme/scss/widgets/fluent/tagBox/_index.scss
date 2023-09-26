@@ -20,11 +20,23 @@
 
     .dx-texteditor-input {
       padding: 0;
+      min-height: 0;
     }
   }
 
-  .dx-texteditor-input {
-    height: $fluent-tagbox-tag-height;
+  &.dx-editor-underlined {
+    .dx-tag-container {
+      padding-top: $fluent-tagbox-tag-container-vertical-padding + 1px;
+      padding-bottom: $fluent-tagbox-tag-container-vertical-padding + 1px;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    .dx-texteditor-input {
+      height: $fluent-tagbox-tag-height;
+    }
   }
 
   &.dx-editor-outlined,
@@ -34,10 +46,10 @@
     }
   }
 
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
-    &.dx-texteditor-with-label,
-    &.dx-texteditor-with-floating-label {
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    &.dx-editor-filled,
+    &.dx-editor-underlined {
       .dx-tag {
         margin: 0;
       }
@@ -45,11 +57,21 @@
       .dx-texteditor-input {
         padding: 0;
       }
+    }
 
+    &.dx-editor-filled {
       .dx-tag-container,
       .dx-placeholder::before {
         padding-top: $fluent-tagbox-filled-with-label-top-padding;
         padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
+      }
+    }
+  
+    &.dx-editor-underlined {
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $fluent-tagbox-filled-with-label-top-padding + 1px;
+        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding + 1px;
       }
     }
   }
@@ -91,23 +113,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $fluent-tagbox-remove-button-width;
+  width: $fluent-tagbox-tag-height;
   height: 100%;
 
   @include dx-icon(clear);
 
-  font-size: $fluent-tagbox-tag-content-font-size - 4px;
+  font-size: $fluent-tagbox-tag-content-font-size + 2px;
 
   &::before {
+    content: "\f15f";
     display: flex;
     align-items: center;
     justify-content: center;
-    width: $fluent-tagbox-remove-button-icon-size;
-    height: $fluent-tagbox-remove-button-icon-size;
-    color: $tagbox-tag-button-remove-color;
-    background-color: $tagbox-tag-button-remove-bg;
-    border-radius: 50%;
-    transform: none;
+    color: $tagbox-tag-button-remove-bg;
   }
 }
 

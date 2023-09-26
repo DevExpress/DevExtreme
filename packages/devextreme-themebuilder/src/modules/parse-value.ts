@@ -25,3 +25,32 @@ export const parse = (value: sass.Value): string => {
 
   return result;
 };
+
+/**
+ * Parse a string as a Sass object
+ * cribbed from davidkpiano/sassport
+ *
+ * @param {string} str
+ * @return {Value}
+ */
+export const parseString = (str: string): sass.Value => {
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let result: sass.Value;
+
+  try {
+    sass.compileString(`$_: ___(${str});`, {
+      functions: {
+        '___($value)': (args) => {
+          // eslint-disable-next-line prefer-destructuring
+          result = args[0];
+          return result;
+        },
+      },
+    });
+  } catch (e) {
+    // debugger;
+    return new sass.SassString(str);
+  }
+
+  return result;
+};

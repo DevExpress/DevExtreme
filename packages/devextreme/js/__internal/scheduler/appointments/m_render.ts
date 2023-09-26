@@ -1,8 +1,8 @@
 import $ from '@js/core/renderer';
-import { utils } from '@js/ui/scheduler/utils';
 
 // @ts-expect-error
 import dxrAppointmentLayout from '../../../renovation/ui/scheduler/appointment/layout.j';
+import { utils } from '../m_utils';
 
 // This is temporary - to creating appointments from the old code
 export const renderAppointments = (options) => {

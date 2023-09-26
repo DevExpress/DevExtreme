@@ -3,9 +3,9 @@ import { mount, shallow } from 'enzyme';
 import {
   clear, emit, EVENT,
 } from '../../../../../test_utils/events_mock';
-import { ViewDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/view_data_generator';
-import { DateHeaderDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
-import { TimePanelDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
+import { ViewDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_generator';
+import { DateHeaderDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_date_header_data_generator';
+import { TimePanelDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_time_panel_data_generator';
 import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
@@ -50,7 +50,7 @@ const mockViewDataProvider = {
   getCellData: mockGetCellData,
   getCellsByGroupIndexAndAllDay: mockGetCellsByGroupIndexAndAllDay,
 };
-jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
+jest.mock('../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
 const getViewRenderConfigByType = jest.spyOn(ConfigUtils, 'getViewRenderConfigByType');
 
@@ -743,9 +743,9 @@ describe('WorkSpace', () => {
           workSpace.onPointerMove(eventMock);
 
           expect(eventMock.preventDefault)
-            .toBeCalled();
+            .toHaveBeenCalled();
           expect(eventMock.stopPropagation)
-            .toBeCalled();
+            .toHaveBeenCalled();
 
           expect(workSpace.cellsSelectionState)
             .toEqual({
@@ -1100,9 +1100,9 @@ describe('WorkSpace', () => {
           workSpace.onViewRendered();
 
           expect(onViewRendered)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
           expect(onViewRendered)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               viewDataProvider: mockViewDataProvider,
               cellsMetaData: {
                 dateTableCellsMeta: [[{
@@ -1182,9 +1182,9 @@ describe('WorkSpace', () => {
           workSpace.onViewRendered();
 
           expect(onViewRendered)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
           expect(onViewRendered)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               viewDataProvider: mockViewDataProvider,
               cellsMetaData: {
                 dateTableCellsMeta: [[{
@@ -1280,7 +1280,7 @@ describe('WorkSpace', () => {
           workSpace.onViewRendered();
 
           expect(onViewRendered)
-            .toBeCalledTimes(0);
+            .toHaveBeenCalledTimes(0);
         });
 
         it('should call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
@@ -1310,7 +1310,7 @@ describe('WorkSpace', () => {
           workSpace.onViewRendered();
 
           expect(onViewRendered)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
         });
       });
 
@@ -1334,7 +1334,7 @@ describe('WorkSpace', () => {
           emit(EVENT.scroll);
 
           expect(onWindowScroll)
-            .toBeCalled();
+            .toHaveBeenCalled();
         });
 
         it('shoud not subscribe to window onScroll if height is defined and virtual scrolling is used', () => {
@@ -1957,9 +1957,9 @@ describe('WorkSpace', () => {
           emit(EVENT.pointerMove);
 
           expect(workSpace.onPointerDown)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
           expect(workSpace.onPointerMove)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
 
           dispose!();
 
@@ -1967,9 +1967,9 @@ describe('WorkSpace', () => {
           emit(EVENT.pointerMove);
 
           expect(workSpace.onPointerDown)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
           expect(workSpace.onPointerMove)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
 
           expect(subscribeToDXPointerMoveEvent)
             .toHaveBeenCalledTimes(1);
@@ -2015,13 +2015,13 @@ describe('WorkSpace', () => {
           emit(EVENT.pointerUp);
 
           expect(workSpace.onPointerUp)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
 
           disposePointerUp!();
 
           emit(EVENT.pointerUp);
           expect(workSpace.onPointerUp)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
         });
       });
     });
@@ -2906,7 +2906,7 @@ describe('WorkSpace', () => {
               groupByDate: false,
             });
           expect(mockCreateGroupedDataMapProvider)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
         });
       });
 
@@ -3075,7 +3075,7 @@ describe('WorkSpace', () => {
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', true, 3, groups, 'vertical');
+            .toHaveBeenCalledWith('week', true, 3, groups, 'vertical');
         });
       });
 
@@ -3092,7 +3092,7 @@ describe('WorkSpace', () => {
           expect(result)
             .toBe(true);
           expect(isVerticalGroupingApplied)
-            .toBeCalledWith(groups, 'vertical');
+            .toHaveBeenCalledWith(groups, 'vertical');
         });
       });
 
@@ -3109,7 +3109,7 @@ describe('WorkSpace', () => {
           expect(result)
             .toBe(true);
           expect(isHorizontalGroupingApplied)
-            .toBeCalledWith(groups, 'horizontal');
+            .toHaveBeenCalledWith(groups, 'horizontal');
         });
       });
 
@@ -3177,7 +3177,7 @@ describe('WorkSpace', () => {
           expect(result)
             .toBe(true);
           expect(isVerticalGroupingApplied)
-            .toBeCalledWith(groups, 'horizontal');
+            .toHaveBeenCalledWith(groups, 'horizontal');
         });
 
         it('should return false if all day panel is not visible', () => {
@@ -3193,7 +3193,7 @@ describe('WorkSpace', () => {
           expect(result)
             .toBe(false);
           expect(isVerticalGroupingApplied)
-            .toBeCalledWith(groups, 'horizontal');
+            .toHaveBeenCalledWith(groups, 'horizontal');
         });
       });
 
@@ -3368,7 +3368,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-work-space-day': true,
             'dx-scheduler-work-space-count': true,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3403,7 +3403,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-work-space-day': true,
             'dx-scheduler-work-space-count': true,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3437,7 +3437,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-work-space-day': true,
             'dx-scheduler-work-space-count': true,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3471,7 +3471,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-work-space-day': true,
             'dx-scheduler-work-space-count': true,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3505,7 +3505,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-work-space-day': true,
             'dx-scheduler-work-space-count': true,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3574,7 +3574,7 @@ describe('WorkSpace', () => {
           workSpace.classes;
 
           expect(combineClasses)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               'dx-scheduler-work-space-day': true,
               'dx-scheduler-work-space-count': false,
               'dx-scheduler-work-space-odd-cells': false,
@@ -3606,7 +3606,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-work-space-day': true,
             'dx-scheduler-work-space-count': false,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3638,7 +3638,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-timeline-day dx-scheduler-timeline': true,
             'dx-scheduler-work-space-count': false,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3670,7 +3670,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-timeline-day dx-scheduler-timeline': true,
             'dx-scheduler-work-space-count': false,
             'dx-scheduler-work-space-odd-cells': false,
@@ -3703,7 +3703,7 @@ describe('WorkSpace', () => {
         workSpace.classes;
 
         expect(combineClasses)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             'dx-scheduler-timeline-day dx-scheduler-timeline': true,
             'dx-scheduler-work-space-count': false,
             'dx-scheduler-work-space-odd-cells': false,

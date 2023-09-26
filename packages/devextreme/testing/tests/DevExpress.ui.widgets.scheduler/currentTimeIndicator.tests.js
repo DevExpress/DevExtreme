@@ -10,12 +10,12 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 
 import 'generic_light.css!';
 
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import '__internal/scheduler/workspaces/m_work_space_day';
+import '__internal/scheduler/workspaces/m_work_space_week';
+import '__internal/scheduler/workspaces/m_timeline_day';
+import '__internal/scheduler/workspaces/m_timeline_week';
+import '__internal/scheduler/workspaces/m_timeline_work_week';
+import '__internal/scheduler/workspaces/m_timeline_month';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space"></div></div>');

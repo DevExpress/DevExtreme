@@ -19,7 +19,7 @@ $fluent-color-theme-modificator: null !default;
 * $name 10. Font family
 * $type text
 */
-$base-font-family: Bahnschrift, 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif !default; // stylelint-disable-line value-keyword-case
+$base-font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
 * $name 20. Text color
@@ -50,17 +50,28 @@ $base-spin-icon-color: null !default;
 * $type color
 */
 $base-bg: null !default;
+$base-bg-hover: null !default;
+$base-neutral-background: null !default;
+$base-neutral-background6: null !default;
+$base-neutral-foreground: null !default;
+$base-neutral-background-hover: null !default;
 
 /**
 * $name 40. Border color
 * $type color
 */
 $base-border-color: null !default;
-$base-border-hover-color: null !default;
-$base-border-active-color: null !default;
+$base-border-color-hover: null !default;
+$base-border-color-focused: null !default;
+$base-border-color-accessible: null !default;
+$base-border-color-accessible-hover: null !default;
+$base-border-color-accessible-focused: null !default;
 $base-inverted-bg: null !default;
 $base-element-bg: null !default;
 $base-shadow-color: null !default;
+
+$base-foreground-disabled: null !default;
+$base-neutral-background-disabled: null !default;
 
 /**
 * $name 50. Success color
@@ -127,14 +138,24 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-theme-modificator: "light" !default;
   $base-text-color: rgba(36, 36, 36, 1) !default;
   $base-label-color: rgba(0, 0, 0, 0.6) !default;
-  $base-disabled-color: rgba(0, 0, 0, $base-disabled-opacity) !default;
-  $base-disabled-border-color: rgba(240, 240, 240, 1) !default; // F0F0F0
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-bg: #fff !default;
+  $base-disabled-color: rgba(224, 224, 224, 1) !default; // e0e0e0 // rgba(0, 0, 0, $base-disabled-opacity) !default;
+  $base-disabled-border-color: rgba(224, 224, 224, 1) !default; // e0e0e0
+  $base-neutral-background-disabled: rgb(240, 240, 240) !default; // f0f0f0
+  $base-foreground-disabled: rgba(189, 189, 189, 1) !default; // bdbdbd
+  $base-neutral-foreground: rgba(97, 97, 97, 1) !default; // #616161;
+  $base-icon-color: $base-neutral-foreground !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-spin-icon-color: $base-neutral-foreground !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-bg: rgba(255, 255, 255, 1) !default; // #ffffff
+  $base-bg-hover: rgba(245, 245, 245, 1) !default; // #f5f5f5
+  $base-neutral-background: rgba(245, 245, 245, 1) !default; // #f5f5f5
+  $base-neutral-background6: rgba(230, 230, 230, 1) !default; // #e6e6e6
+  $base-neutral-background-hover: rgba(235, 235, 235, 1) !default; // #ebebeb
   $base-border-color: rgba(209, 209, 209, 1) !default; // d1d1d1
-  $base-border-hover-color: darken($base-border-color, 3.92) !default; // c7c7c7
-  $base-border-active-color: darken($base-border-color, 11.76) !default; // b3b3b3
+  $base-border-color-hover: darken($base-border-color, 3.92) !default; // c7c7c7
+  $base-border-color-focused: darken($base-border-color, 11.76) !default; // b3b3b3
+  $base-border-color-accessible: rgba(97, 97, 97, 1) !default; // #616161
+  $base-border-color-accessible-hover: rgba(87, 87, 87, 1) !default; // #575757
+  $base-border-color-accessible-focused: rgba(77, 77, 77, 1) !default; // #4d4d4d
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
@@ -158,14 +179,24 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
   $base-label-color: rgba(255, 255, 255, 0.6) !default;
-  $base-disabled-color: rgba(255, 255, 255, $base-disabled-opacity) !default;
-  $base-disabled-border-color: rgba(61, 61, 61, 1) !default; // 3d3d3d
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-bg: #363640 !default;
+  $base-disabled-color: rgba(66, 66, 66, 1) !default; // #424242 // rgba(255, 255, 255, $base-disabled-opacity) !default;
+  $base-disabled-border-color: rgba(66, 66, 66, 1) !default; // #424242
+  $base-neutral-background-disabled: rgba(20, 20, 20, 1) !default; // #141414
+  $base-foreground-disabled: rgba(92, 92, 92, 1) !default; // #5c5c5c
+  $base-neutral-foreground: rgba(173, 173, 173, 1) !default; // #adadad;
+  $base-icon-color: $base-neutral-foreground !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-spin-icon-color: $base-neutral-foreground !default; // color.change($base-text-color, $alpha: 0.54) !default;
+  $base-bg: rgba(41, 41, 41, 1) !default; // #292929
+  $base-bg-hover: rgba(61, 61, 61, 1) !default; // #3d3d3d
+  $base-neutral-background: rgba(20, 20, 20, 1) !default; // #f5f5f5
+  $base-neutral-background6: rgba(51, 51, 51, 1) !default; // #e6e6e6
+  $base-neutral-background-hover: rgba(41, 41, 41, 1) !default; // #292929
   $base-border-color: rgba(102, 102, 102, 1) !default; // #666666
-  $base-border-hover-color: lighten( $base-border-color, 5.88) !default; // #757575
-  $base-border-active-color: lighten( $base-border-color, 1.96) !default; // #6b6b6b
+  $base-border-color-hover: lighten( $base-border-color, 5.88) !default; // #757575
+  $base-border-color-focused: lighten( $base-border-color, 1.96) !default; // #6b6b6b
+  $base-border-color-accessible: rgba(173, 173, 173, 1) !default; // #adadad
+  $base-border-color-accessible-hover: rgba(189, 189, 189, 1) !default; // #bdbdbd
+  $base-border-color-accessible-focused: rgba(179, 179, 179, 1) !default; // #b3b3b3
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;

@@ -391,6 +391,19 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
+     * [descr:dxTabPanelOptions.stylingMode]
+    
+     */
+    @Input()
+    get stylingMode(): string {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: string) {
+        this._setOption('stylingMode', value);
+    }
+
+
+    /**
      * [descr:dxTabPanelOptions.swipeEnabled]
     
      */
@@ -730,6 +743,13 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() stylingModeChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() swipeEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -821,6 +841,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
             { emit: 'selectedIndexChange' },
             { emit: 'selectedItemChange' },
             { emit: 'showNavButtonsChange' },
+            { emit: 'stylingModeChange' },
             { emit: 'swipeEnabledChange' },
             { emit: 'tabIndexChange' },
             { emit: 'tabsPositionChange' },

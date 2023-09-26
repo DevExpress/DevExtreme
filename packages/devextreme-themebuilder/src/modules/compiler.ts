@@ -1,14 +1,8 @@
 import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import { parse } from './parse-value';
+import { parse, parseString } from './parse-value';
 import { optimizeCss } from './post-compiler';
-
-export enum ImportType {
-  Index,
-  Color,
-  Unknown,
-}
 
 export default class Compiler {
   changedVariables: { [key: string]: string } = {};
@@ -17,15 +11,9 @@ export default class Compiler {
 
   meta: ThemesMetadata = metadata;
 
-  userItems: ConfigMetaItem[] = [];
+  userItems: { [key: string]: ConfigMetaItem } = {};
 
   indexFileContent: string;
-
-  static getImportType = (url: string): ImportType => {
-    if (url.endsWith('tb_index')) return ImportType.Index;
-    if (url.startsWith('tb_')) return ImportType.Color;
-    return ImportType.Unknown;
-  };
 
   compile = async (
     file: string,
@@ -46,7 +34,13 @@ export default class Compiler {
     compile: (source: string, options?: sass.Options<'async'>) => Promise<sass.CompileResult>,
   ): Promise<CompilerResult> => {
     this.changedVariables = {};
-    this.userItems = items || [];
+
+    if (items) {
+      this.userItems = items.reduce((acc: { [key: string]: ConfigMetaItem }, item) => {
+        acc[item.key] = item;
+        return acc;
+      }, {});
+    }
 
     let compilerOptions: sass.Options<'async'> = {
       importers: [{
@@ -56,6 +50,7 @@ export default class Compiler {
       }],
       functions: {
         'collector($map)': this.collector,
+        'getCustomVar($value)': this.getCustomVar,
       },
     };
 
@@ -76,36 +71,26 @@ export default class Compiler {
     });
   };
 
-  getMatchingUserItemsAsString(theme: string): string {
-    const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
-    const themeKeys: string[] = meta.map((item) => item.Key);
-
-    return this.userItems
-      .filter((item) => themeKeys.includes(item.key))
-      .map((item) => `${item.key}: ${item.value};`)
-      .join('');
-  }
-
   // eslint-disable-next-line spellcheck/spell-checker
-  canonicalize = (url: string): URL => (url.includes('tb_') ? new URL(`db:${url}`) : null);
+  canonicalize = (url: string): URL => (url.includes('tb_index') ? new URL(`db:${url}`) : null);
 
-  load = (url: URL): sass.ImporterResult => {
-    const { pathname: path } = url;
-    const importType = Compiler.getImportType(path);
+  load = (): sass.ImporterResult => ({
+    contents: this.indexFileContent,
+    syntax: 'scss',
+  } as sass.ImporterResult);
 
-    let content = this.importerCache[path];
-    if (!content) {
-      content = importType === ImportType.Index
-        ? this.indexFileContent
-        : this.getMatchingUserItemsAsString(path.replace('tb_', ''));
+  getCustomVar = (values: sass.Value[]): sass.Value => {
+    const customVariable = values[0].get(0);
+    const nameVariable = customVariable.get(0) as sass.SassString;
 
-      this.importerCache[path] = content;
+    let result = sass.sassNull;
+
+    const customerVariable = this.userItems[nameVariable.text];
+    if (customerVariable) {
+      result = parseString(customerVariable.value);
     }
 
-    return {
-      contents: content,
-      syntax: 'scss',
-    } as sass.ImporterResult;
+    return result;
   };
 
   collector = (maps: sass.SassMap[]): sass.Value => {

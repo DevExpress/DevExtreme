@@ -47,6 +47,11 @@ const ICON_POSITION = {
     start: 'start',
 };
 
+const STYLING_MODE = {
+    primary: 'primary',
+    secondary: 'secondary',
+};
+
 const TabPanel = MultiView.inherit({
 
     _getDefaultOptions: function() {
@@ -66,6 +71,8 @@ const TabPanel = MultiView.inherit({
             tabsPosition: TABS_POSITION.top,
 
             iconPosition: ICON_POSITION.start,
+
+            stylingMode: STYLING_MODE.primary,
 
             onTitleClick: null,
 
@@ -247,6 +254,7 @@ const TabPanel = MultiView.inherit({
             }).bind(this),
             orientation: this._getTabsOrientation(),
             iconPosition: this.option('iconPosition'),
+            stylingMode: this.option('stylingMode'),
             _itemAttributes: {
                 class: TABPANEL_TABS_ITEM_CLASS,
             },
@@ -301,6 +309,10 @@ const TabPanel = MultiView.inherit({
 
     _updateTabsIconPosition(iconPosition) {
         this._tabs.option({ iconPosition });
+    },
+
+    _updateTabsStylingMode(stylingMode) {
+        this._tabs.option({ stylingMode });
     },
 
     _toggleWrapperFocusedClass(isFocused) {
@@ -450,6 +462,9 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'iconPosition':
                 this._updateTabsIconPosition(value);
+                break;
+            case 'stylingMode':
+                this._updateTabsStylingMode(value);
                 break;
             default:
                 this.callBase(args);

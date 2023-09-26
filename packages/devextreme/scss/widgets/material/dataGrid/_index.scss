@@ -37,6 +37,7 @@
     padding: $material-datagrid-cell-padding 0;
     border-top: $material-grid-base-border-hidden;
     border-bottom: $material-grid-base-border-hidden;
+    line-height: $material-grid-base-group-panel-message-line-height;
   }
 
   .dx-group-panel-item {
@@ -54,8 +55,7 @@
     margin-right: $material-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    padding: $material-datagrid-cell-padding;
-    background-color: $datagrid-block-separator-bg;
+    background-color: $base-accent;
   }
 
   .dx-sort {

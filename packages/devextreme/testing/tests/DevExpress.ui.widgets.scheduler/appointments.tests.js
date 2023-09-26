@@ -5,7 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
-import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
+import '__internal/scheduler/workspaces/m_work_space_week';
 import VerticalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
@@ -19,7 +19,7 @@ import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
-import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
