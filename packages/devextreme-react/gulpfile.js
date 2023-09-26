@@ -93,7 +93,7 @@ gulp.task(
 gulp.task(NPM_PREPARE_MODULES, (done) => {
   const packParamsForFolders = [
     ["common"],
-    ["core", ["template"]],
+    ["core", ["template", "config"]],
     ["common/data"],
   ];
   const modulesImportsFromIndex = fs.readFileSync(
