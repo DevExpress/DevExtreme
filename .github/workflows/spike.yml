@@ -30,7 +30,7 @@ jobs:
 
       - run: wget https://github.com/actions/node-versions/releases/download/18.17.1-5819737873/node-18.17.1-linux-x64.tar.gz
 
-      - run: ls -h .
+      - run: mv node-18.17.1-linux-x64.tar.gz /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz
 
       - run: cd /opt/actions-runner/_work/_tool/node/18.17.1/x64 && tar xvzf node-18.tar.gz
 
