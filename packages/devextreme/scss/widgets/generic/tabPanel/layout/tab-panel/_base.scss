@@ -28,4 +28,14 @@
       content: none;
     }
   }
+
+  .dx-multiview-wrapper {
+    border: $generic-tabs-border;
+  }
+
+  &.dx-state-focused {
+    .dx-multiview-wrapper.dx-state-focused {
+      border-color: $tabs-focused-border-color;
+    }
+  }
 }
