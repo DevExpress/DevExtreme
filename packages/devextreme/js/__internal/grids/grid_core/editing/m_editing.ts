@@ -1634,7 +1634,7 @@ class EditingControllerImpl extends modules.ViewController {
         }
         this._saving = true;
 
-        this._saveEditDataInner()
+        const isSaving = this._saveEditDataInner()
           .always(() => {
             this._saving = false;
             if (this._refocusEditCell) {
@@ -1643,6 +1643,8 @@ class EditingControllerImpl extends modules.ViewController {
           })
           .done(deferred.resolve)
           .fail(deferred.reject);
+
+        this.addDeferred(isSaving);
       }).fail(deferred.reject);
     }).fail(deferred.reject);
     return deferred.promise();
