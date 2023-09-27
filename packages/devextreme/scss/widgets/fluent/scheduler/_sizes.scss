@@ -24,6 +24,7 @@ $fluent-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
 $scheduler-left-column-width: 65px !default;
 $fluent-scheduler-timeline-date-table-cell-height: 50px !default;
+$fluent-scheduler-border-radius: $button-border-radius * 3 !default;
 $fluent-scheduler-navigator-border-radius: $button-border-radius !default;
 $fluent-scheduler-navigation-buttons-padding: 6px !default;
 $fluent-scheduler-navigator-icon-font-size: $fluent-base-icon-size;
@@ -54,7 +55,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $fluent-scheduler-navigator-height: 36px !default;
   $fluent-scheduler-header-panel-day-font-size: 16px !default;
 
-  $fluent-scheduler-appointment-tooltip-title-font-size: 18px !default;
+  $fluent-scheduler-appointment-tooltip-title-font-size: 16px !default;
   $fluent-scheduler-appointment-tooltip-date-font-size: 14px !default;
   $fluent-scheduler-workspace-month-cell-left-offset: 8px !default;
 
@@ -66,9 +67,9 @@ $scheduler-timeline-cell-height: 50px !default;
   $fluent-scheduler-dropdown-button-padding: 4px !default;
   $fluent-scheduler-dropdown-day-margin: 5px !default;
 
-  $fluent-scheduler-appointment-tooltip-content-margin-left: 10px !default;
-  $fluent-tooltip-marker-dimension: 24px !default;
-  $fluent-scheduler-appointment-tooltip-title-margin-top: 4px !default;
+  $fluent-scheduler-appointment-tooltip-content-margin-left: 6px !default;
+  $fluent-tooltip-marker-dimension: 12px !default;
+  $fluent-scheduler-appointment-tooltip-title-margin-top: 0 !default;
   $fluent-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
 
   $agenda-appointment-title-font-size: 14px;

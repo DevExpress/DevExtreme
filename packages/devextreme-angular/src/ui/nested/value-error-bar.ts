@@ -14,6 +14,7 @@ import {
 
 
 
+import { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoValueErrorBarComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get displayMode(): string {
+    get displayMode(): ValueErrorBarDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: string) {
+    set displayMode(value: ValueErrorBarDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -85,10 +86,10 @@ export class DxoValueErrorBarComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get type(): string | undefined {
+    get type(): ValueErrorBarType | undefined {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: ValueErrorBarType | undefined) {
         this._setOption('type', value);
     }
 

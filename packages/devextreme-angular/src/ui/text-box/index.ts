@@ -26,7 +26,8 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
+import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import DxTextBox from 'devextreme/ui/text_box';
 
@@ -107,10 +108,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get buttons(): Array<string | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -250,10 +251,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get labelMode(): string {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: string) {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -328,10 +329,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get mode(): string {
+    get mode(): TextBoxType {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: TextBoxType) {
         this._setOption('mode', value);
     }
 
@@ -406,10 +407,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get showMaskMode(): string {
+    get showMaskMode(): MaskMode {
         return this._getOption('showMaskMode');
     }
-    set showMaskMode(value: string) {
+    set showMaskMode(value: MaskMode) {
         this._setOption('showMaskMode', value);
     }
 
@@ -432,10 +433,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get stylingMode(): string {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -510,10 +511,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -523,10 +524,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -536,10 +537,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -734,7 +735,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<string | DevExpress.common.TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton>>;
 
     /**
     
@@ -811,7 +812,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<string>;
+    @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
     
@@ -853,7 +854,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() modeChange: EventEmitter<string>;
+    @Output() modeChange: EventEmitter<TextBoxType>;
 
     /**
     
@@ -895,7 +896,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showMaskModeChange: EventEmitter<string>;
+    @Output() showMaskModeChange: EventEmitter<MaskMode>;
 
     /**
     
@@ -909,7 +910,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<string>;
+    @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
     
@@ -951,21 +952,21 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

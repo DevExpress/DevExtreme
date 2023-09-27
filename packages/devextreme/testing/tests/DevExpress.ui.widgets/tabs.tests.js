@@ -483,6 +483,23 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok($scrollable.find('.' + TABS_ITEM_CLASS).length, 'items wrapped into scrollable');
     });
 
+    QUnit.test('tabs should not be wrapped into scrollable after orientation runtime changing if component width more than total tabs width', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 1' }, { text: 'item 1' }],
+            scrollingEnabled: true,
+            orientation: 'vertical',
+            width: 500,
+            height: 50,
+        });
+        const instance = $element.dxTabs('instance');
+
+        assert.strictEqual($element.children(`.${SCROLLABLE_CLASS}`).length, 1, 'scroll is created');
+
+        instance.option({ orientation: 'horizontal' });
+
+        assert.strictEqual($element.children(`.${SCROLLABLE_CLASS}`).length, 0, 'scroll was removed');
+    });
+
     QUnit.test('tabs should be wrapped into scrollable for some disabled items', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2', disabled: true }, { text: 'item 3', disabled: true }, { text: 'item 4', disabled: true }],

@@ -25,10 +25,11 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/tree_view';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent } from 'devextreme/ui/tree_view';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode, TreeViewExpandEvent } from 'devextreme/ui/tree_view';
 
 import DxTreeView from 'devextreme/ui/tree_view';
 
@@ -152,10 +153,10 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get dataStructure(): string {
+    get dataStructure(): DataStructure {
         return this._getOption('dataStructure');
     }
-    set dataStructure(value: string) {
+    set dataStructure(value: DataStructure) {
         this._setOption('dataStructure', value);
     }
 
@@ -243,10 +244,10 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get expandEvent(): string {
+    get expandEvent(): TreeViewExpandEvent {
         return this._getOption('expandEvent');
     }
-    set expandEvent(value: string) {
+    set expandEvent(value: TreeViewExpandEvent) {
         this._setOption('expandEvent', value);
     }
 
@@ -464,10 +465,10 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get scrollDirection(): string {
+    get scrollDirection(): ScrollDirection {
         return this._getOption('scrollDirection');
     }
-    set scrollDirection(value: string) {
+    set scrollDirection(value: ScrollDirection) {
         this._setOption('scrollDirection', value);
     }
 
@@ -516,10 +517,10 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get searchMode(): string {
+    get searchMode(): SearchMode {
         return this._getOption('searchMode');
     }
-    set searchMode(value: string) {
+    set searchMode(value: SearchMode) {
         this._setOption('searchMode', value);
     }
 
@@ -594,10 +595,10 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get selectionMode(): string {
+    get selectionMode(): SingleOrMultiple {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
 
@@ -620,10 +621,10 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get showCheckBoxesMode(): string {
+    get showCheckBoxesMode(): TreeViewCheckBoxMode {
         return this._getOption('showCheckBoxesMode');
     }
-    set showCheckBoxesMode(value: string) {
+    set showCheckBoxesMode(value: TreeViewCheckBoxMode) {
         this._setOption('showCheckBoxesMode', value);
     }
 
@@ -843,7 +844,7 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataStructureChange: EventEmitter<string>;
+    @Output() dataStructureChange: EventEmitter<DataStructure>;
 
     /**
     
@@ -892,7 +893,7 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() expandEventChange: EventEmitter<string>;
+    @Output() expandEventChange: EventEmitter<TreeViewExpandEvent>;
 
     /**
     
@@ -1011,7 +1012,7 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollDirectionChange: EventEmitter<string>;
+    @Output() scrollDirectionChange: EventEmitter<ScrollDirection>;
 
     /**
     
@@ -1039,7 +1040,7 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<string>;
+    @Output() searchModeChange: EventEmitter<SearchMode>;
 
     /**
     
@@ -1081,7 +1082,7 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<string>;
+    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     
@@ -1095,7 +1096,7 @@ export class DxTreeViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showCheckBoxesModeChange: EventEmitter<string>;
+    @Output() showCheckBoxesModeChange: EventEmitter<TreeViewCheckBoxMode>;
 
     /**
     

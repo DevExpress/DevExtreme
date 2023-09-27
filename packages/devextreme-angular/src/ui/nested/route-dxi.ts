@@ -15,6 +15,7 @@ import {
 
 
 
+import { RouteMode } from 'devextreme/ui/map';
 
 import {
     NestedOptionHost,
@@ -47,10 +48,10 @@ export class DxiRouteComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get mode(): string {
+    get mode(): RouteMode {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: RouteMode) {
         this._setOption('mode', value);
     }
 

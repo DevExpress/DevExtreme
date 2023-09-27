@@ -14,6 +14,7 @@ import {
 
 
 
+import { DragDirection, DragHighlight } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
@@ -86,10 +87,10 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get dragDirection(): string {
+    get dragDirection(): DragDirection {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: string) {
+    set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
 
@@ -102,10 +103,10 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get dropFeedbackMode(): string {
+    get dropFeedbackMode(): DragHighlight {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: string) {
+    set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
     }
 

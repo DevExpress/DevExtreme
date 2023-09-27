@@ -14,6 +14,7 @@ import {
 
 
 
+import { StateStoreType } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -69,10 +70,10 @@ export class DxoStateStoringComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get type(): string {
+    get type(): StateStoreType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: StateStoreType) {
         this._setOption('type', value);
     }
 

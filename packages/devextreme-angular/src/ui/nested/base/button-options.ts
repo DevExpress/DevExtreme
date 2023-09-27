@@ -5,6 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
+import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
 
 @Component({
@@ -116,10 +117,10 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('rtlEnabled', value);
     }
 
-    get stylingMode(): string {
+    get stylingMode(): ButtonStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: ButtonStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -144,10 +145,10 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('text', value);
     }
 
-    get type(): string {
+    get type(): ButtonType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: ButtonType) {
         this._setOption('type', value);
     }
 

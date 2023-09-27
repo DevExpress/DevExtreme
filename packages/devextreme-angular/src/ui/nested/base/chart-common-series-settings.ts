@@ -6,17 +6,22 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { HorizontalAlignment } from 'devextreme/common';
+import { ChartsDataType, DashStyle, HatchDirection, LabelPosition, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, TextOverflow, ValueErrorBarDisplayMode, ValueErrorBarType, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
+import { ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
 import { Font } from 'devextreme/viz/core/base_widget';
+import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
+import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 
 @Component({
     template: ''
 })
 export abstract class DxoChartCommonSeriesSettings extends NestedOption {
-    get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: string } {
+    get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
     }
-    set aggregation(value: { calculate?: Function | undefined, enabled?: boolean, method?: string }) {
+    set aggregation(value: { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }) {
         this._setOption('aggregation', value);
     }
 
@@ -69,10 +74,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('barWidth', value);
     }
 
-    get border(): { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -111,10 +116,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('cornerRadius', value);
     }
 
-    get dashStyle(): string {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: string) {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
@@ -160,17 +165,17 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('highValueField', value);
     }
 
-    get hoverMode(): string {
+    get hoverMode(): SeriesHoverMode | PieChartSeriesInteractionMode {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: string) {
+    set hoverMode(value: SeriesHoverMode | PieChartSeriesInteractionMode) {
         this._setOption('hoverMode', value);
     }
 
-    get hoverStyle(): { border?: { color?: string | undefined, dashStyle?: string, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: string, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean } {
+    get hoverStyle(): { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, dashStyle?: string, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: string, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean }) {
+    set hoverStyle(value: { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -188,10 +193,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('innerColor', value);
     }
 
-    get label(): { alignment?: string, argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: string, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, horizontalOffset?: number, position?: string, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: string, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: string, radialOffset?: number, rotationAngle?: number, textOverflow?: string, visible?: boolean, wordWrap?: string } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: string, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: string, rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean } {
+    get label(): { alignment?: HorizontalAlignment, argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { alignment?: string, argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: string, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, horizontalOffset?: number, position?: string, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: string, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: string, radialOffset?: number, rotationAngle?: number, textOverflow?: string, visible?: boolean, wordWrap?: string } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: string, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: string, rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean }) {
+    set label(value: { alignment?: HorizontalAlignment, argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } | { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -244,10 +249,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('pane', value);
     }
 
-    get point(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: string, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: string, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: string, visible?: boolean } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: string, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, image?: string | undefined | { height?: number, url?: string | undefined, width?: number }, selectionMode?: string, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, size?: number, symbol?: string, visible?: boolean } {
+    get point(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: PointSymbol, visible?: boolean } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, image?: string | undefined | { height?: number, url?: string | undefined, width?: number }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, size?: number, symbol?: PointSymbol, visible?: boolean } {
         return this._getOption('point');
     }
-    set point(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: string, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: string, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: string, visible?: boolean } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: string, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, image?: string | undefined | { height?: number, url?: string | undefined, width?: number }, selectionMode?: string, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, size?: number, symbol?: string, visible?: boolean }) {
+    set point(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: PointSymbol, visible?: boolean } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, image?: string | undefined | { height?: number, url?: string | undefined, width?: number }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }, size?: number, symbol?: PointSymbol, visible?: boolean }) {
         this._setOption('point', value);
     }
 
@@ -279,10 +284,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('rangeValue2Field', value);
     }
 
-    get reduction(): { color?: string, level?: string } {
+    get reduction(): { color?: string, level?: FinancialChartReductionLevel } {
         return this._getOption('reduction');
     }
-    set reduction(value: { color?: string, level?: string }) {
+    set reduction(value: { color?: string, level?: FinancialChartReductionLevel }) {
         this._setOption('reduction', value);
     }
 
@@ -293,17 +298,17 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('scatter', value);
     }
 
-    get selectionMode(): string {
+    get selectionMode(): SeriesSelectionMode | PieChartSeriesInteractionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: SeriesSelectionMode | PieChartSeriesInteractionMode) {
         this._setOption('selectionMode', value);
     }
 
-    get selectionStyle(): { border?: { color?: string | undefined, dashStyle?: string, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: string, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean } {
+    get selectionStyle(): { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, dashStyle?: string, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: string, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, highlight?: boolean }) {
+    set selectionStyle(value: { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } | { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }) {
         this._setOption('selectionStyle', value);
     }
 
@@ -405,17 +410,17 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('tagField', value);
     }
 
-    get type(): string {
+    get type(): SeriesType | PolarChartSeriesType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: SeriesType | PolarChartSeriesType) {
         this._setOption('type', value);
     }
 
-    get valueErrorBar(): { color?: string, displayMode?: string, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: string | undefined, value?: number } {
+    get valueErrorBar(): { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: ValueErrorBarType | undefined, value?: number } {
         return this._getOption('valueErrorBar');
     }
-    set valueErrorBar(value: { color?: string, displayMode?: string, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: string | undefined, value?: number }) {
+    set valueErrorBar(value: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: ValueErrorBarType | undefined, value?: number }) {
         this._setOption('valueErrorBar', value);
     }
 
@@ -440,10 +445,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('width', value);
     }
 
-    get argumentType(): string | undefined {
+    get argumentType(): ChartsDataType | undefined {
         return this._getOption('argumentType');
     }
-    set argumentType(value: string | undefined) {
+    set argumentType(value: ChartsDataType | undefined) {
         this._setOption('argumentType', value);
     }
 
@@ -454,10 +459,10 @@ export abstract class DxoChartCommonSeriesSettings extends NestedOption {
         this._setOption('minSegmentSize', value);
     }
 
-    get smallValuesGrouping(): { groupName?: string, mode?: string, threshold?: number | undefined, topCount?: number | undefined } {
+    get smallValuesGrouping(): { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number | undefined, topCount?: number | undefined } {
         return this._getOption('smallValuesGrouping');
     }
-    set smallValuesGrouping(value: { groupName?: string, mode?: string, threshold?: number | undefined, topCount?: number | undefined }) {
+    set smallValuesGrouping(value: { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number | undefined, topCount?: number | undefined }) {
         this._setOption('smallValuesGrouping', value);
     }
 

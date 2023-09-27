@@ -14,8 +14,11 @@ import {
 
 
 
+import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
+import { DashStyle, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { Font } from 'devextreme/viz/core/base_widget';
+import { PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
 
 import {
     NestedOptionHost,
@@ -39,10 +42,10 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -95,18 +98,18 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get horizontalAlignment(): string {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: string) {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get itemsAlignment(): string | undefined {
+    get itemsAlignment(): HorizontalAlignment | undefined {
         return this._getOption('itemsAlignment');
     }
-    set itemsAlignment(value: string | undefined) {
+    set itemsAlignment(value: HorizontalAlignment | undefined) {
         this._setOption('itemsAlignment', value);
     }
 
@@ -119,10 +122,10 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get itemTextPosition(): string | undefined {
+    get itemTextPosition(): Position | undefined {
         return this._getOption('itemTextPosition');
     }
-    set itemTextPosition(value: string | undefined) {
+    set itemTextPosition(value: Position | undefined) {
         this._setOption('itemTextPosition', value);
     }
 
@@ -151,10 +154,10 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get orientation(): string | undefined {
+    get orientation(): Orientation | undefined {
         return this._getOption('orientation');
     }
-    set orientation(value: string | undefined) {
+    set orientation(value: Orientation | undefined) {
         this._setOption('orientation', value);
     }
 
@@ -191,18 +194,18 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: string | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: string } {
+    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: string | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: string }) {
+    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
         this._setOption('title', value);
     }
 
     @Input()
-    get verticalAlignment(): string {
+    get verticalAlignment(): VerticalEdge {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: string) {
+    set verticalAlignment(value: VerticalEdge) {
         this._setOption('verticalAlignment', value);
     }
 
@@ -215,18 +218,18 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get hoverMode(): string {
+    get hoverMode(): LegendHoverMode | PieChartLegendHoverMode {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: string) {
+    set hoverMode(value: LegendHoverMode | PieChartLegendHoverMode) {
         this._setOption('hoverMode', value);
     }
 
     @Input()
-    get position(): string {
+    get position(): RelativePosition {
         return this._getOption('position');
     }
-    set position(value: string) {
+    set position(value: RelativePosition) {
         this._setOption('position', value);
     }
 

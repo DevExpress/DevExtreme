@@ -14,6 +14,7 @@ import {
 
 
 
+import { CollisionResolution } from 'devextreme/animation/position';
 
 import {
     NestedOptionHost,
@@ -29,18 +30,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get x(): string {
+    get x(): CollisionResolution {
         return this._getOption('x');
     }
-    set x(value: string) {
+    set x(value: CollisionResolution) {
         this._setOption('x', value);
     }
 
     @Input()
-    get y(): string {
+    get y(): CollisionResolution {
         return this._getOption('y');
     }
-    set y(value: string) {
+    set y(value: CollisionResolution) {
         this._setOption('y', value);
     }
 
