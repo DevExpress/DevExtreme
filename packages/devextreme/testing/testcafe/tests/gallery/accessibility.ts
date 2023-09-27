@@ -11,6 +11,14 @@ interface GalleryItem {
   Name: string;
 }
 
+interface GallerySettings {
+  items?: GalleryItem[];
+  itemTemplate?: (item: GalleryItem) => HTMLDivElement;
+  width?: string;
+  loop?: boolean;
+  showIndicator?: boolean;
+}
+
 const defaultItems: GalleryItem[] = [{
   ID: '1',
   Name: 'First',
@@ -30,7 +38,15 @@ function defaultItemTemplate(item: GalleryItem) {
   return result;
 }
 
-function getTestName(gallerySettings) {
+const allGallerySettings: GallerySettings = {
+  items: defaultItems,
+  itemTemplate: defaultItemTemplate,
+  width: '100%',
+  loop: true,
+  showIndicator: false,
+};
+
+function getTestName(gallerySettings: GallerySettings) {
   const fields = Object.keys(gallerySettings);
 
   const messageParts = fields.map((field) => {
@@ -42,37 +58,37 @@ function getTestName(gallerySettings) {
   return `Checking Gallery via aXe. Settings: ${messageParts.join(', ')}`;
 }
 
-const gallerySettings = [{}, {
-  items: defaultItems,
-}, {
-  itemTemplate: defaultItemTemplate,
-}, {
-  width: '100%',
-}, {
-  loop: true,
-}, {
-  showIndicator: false,
-}].reduce((acc: any, currentValue) => {
-  acc.push({
-    ...currentValue,
-    ...acc.at(-1),
-  });
-  return acc;
-}, []);
+function generateCombinations(allSettings: GallerySettings): GallerySettings[] {
+  const keys = Object.keys(allSettings);
+  const combinations: GallerySettings[] = [];
 
-const testsSettings: {
-  testName: string;
-  gallerySettings: any;
-}[] = gallerySettings.map((settings) => ({
-  testName: getTestName(settings),
-  gallerySettings: settings,
-}));
+  const generate = (index: number, currentCombination: GallerySettings) => {
+    if (index === keys.length) {
+      combinations.push(currentCombination);
+      return;
+    }
 
-testsSettings.forEach((settings) => {
-  test(settings.testName, async (t) => {
+    const key = keys[index];
+    const value = allSettings[key];
+
+    generate(index + 1, currentCombination);
+
+    const newCombination = { ...currentCombination, [key]: value };
+    generate(index + 1, newCombination);
+  };
+
+  generate(0, {});
+  return combinations;
+}
+
+const settingsCombinations = generateCombinations(allGallerySettings);
+
+settingsCombinations.forEach((settings) => {
+  const testName = getTestName(settings);
+  test(testName, async (t) => {
     await a11yCheck(t);
   }).before(async () => createWidget(
     'dxGallery',
-    settings.gallerySettings,
+    settings,
   ));
 });
