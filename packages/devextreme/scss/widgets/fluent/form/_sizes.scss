@@ -9,9 +9,8 @@ $fluent-form-group-caption-font-size: null !default;
 $fluent-form-group-content-padding-bottom: null !default;
 $fluent-form-default-top-padding: null !default;
 
-$fluent-form-label-font-size: 12px !default;
-$fluent-form-label-icon-size: 14px !default;
-
+$fluent-form-label-font-size: $fluent-base-font-size !default;
+$fluent-form-label-icon-size: $fluent-base-icon-size !default;
 
 @if $size == "default" {
   $fluent-form-group-caption-bottom-margin: 6px !default;

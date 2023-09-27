@@ -46,7 +46,7 @@
     }
   }
 
-  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
   &.dx-texteditor-with-floating-label {
     &.dx-editor-filled,
     &.dx-editor-underlined {

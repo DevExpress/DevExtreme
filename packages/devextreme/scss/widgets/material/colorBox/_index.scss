@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+@use "../textEditor/sizes" as *;
 @use "../../base/colorBox";
+@use "../../base/colorBox/mixins" as *;
 
 // adduse
 @use "../colorView";
@@ -36,6 +38,11 @@
       }
     }
   }
+
+  @include colorbox-label-outside-mixin(
+    $material-colorbox-preview-left + 27px,
+    $material-texteditor-label-outside-height
+  );
 }
 
 

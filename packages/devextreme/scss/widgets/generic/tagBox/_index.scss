@@ -47,7 +47,7 @@
 }
 
 
-.dx-texteditor-with-label,
+.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
 .dx-texteditor-with-floating-label {
   &.dx-editor-outlined {
     .dx-tag-container.dx-texteditor-input-container {

@@ -116,10 +116,21 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
     }
   }
 
-  &.dx-state-focused,
-  &.dx-state-focused.dx-state-hover {
+  &.dx-state-focused {
     .dx-texteditor-label {
       color: $base-accent;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $base-invalid-color;
+      }
+    }
+  }
+
+  &.dx-texteditor-label-outside {
+    .dx-texteditor-label {
+      color: $base-text-color;
     }
 
     &.dx-invalid {
@@ -235,6 +246,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-inline-block-height,
   math.div(($generic-base-border-width + $generic-base-font-size), 2),
+  $generic-texteditor-label-outside-height,
   1.5px,
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-base-inline-borderedwidget-horizontal-padding,
@@ -253,6 +265,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-font-size,
   $generic-base-inline-borderedwidget-top-padding,
   1px,
+  $generic-texteditor-label-outside-font-size,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,
@@ -260,6 +273,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-line-height,
   0,
+  -20px,
   $generic-base-font-size,
   $generic-base-inline-block-height,
   $generic-base-line-height,
@@ -273,6 +287,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-line-height,
   0,
+  -20px,
   $generic-base-font-size,
   $generic-base-inline-block-height,
   $generic-base-line-height,

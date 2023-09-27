@@ -36,6 +36,15 @@
 
   &.dx-editor-filled,
   &.dx-editor-underlined {
+    &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
+    &.dx-texteditor-with-floating-label {
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $material-tagbox-filled-with-label-top-padding;
+        padding-bottom: $material-tagbox-filled-with-label-bottom-padding;
+      }
+    }
+
     &.dx-texteditor-with-label,
     &.dx-texteditor-with-floating-label {
       .dx-tag {
@@ -44,12 +53,6 @@
 
       .dx-texteditor-input {
         padding: 0;
-      }
-
-      .dx-tag-container,
-      .dx-placeholder::before {
-        padding-top: $material-tagbox-filled-with-label-top-padding;
-        padding-bottom: $material-tagbox-filled-with-label-bottom-padding;
       }
     }
   }

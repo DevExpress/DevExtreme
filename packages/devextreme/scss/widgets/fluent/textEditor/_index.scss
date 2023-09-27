@@ -113,8 +113,7 @@ $fluent-editor-custom-button-margin: 6px;
     @include dx-texteditor-borders-position();
   }
 
-  &.dx-state-focused,
-  &.dx-state-focused.dx-state-hover {
+  &.dx-state-focused {
     .dx-texteditor-label {
       color: $base-accent;
       font-size: $fluent-texteditor-label-font-size;
@@ -127,10 +126,20 @@ $fluent-editor-custom-button-margin: 6px;
     }
   }
 
+  &.dx-texteditor-label-outside {
+    .dx-texteditor-label {
+      color: $base-text-color;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $base-invalid-color;
+      }
+    }
+  }
+
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $texteditor-focused-bg;
-
     &::before {
       border-bottom: 2px solid $texteditor-focused-border-color;
       transform: scale(1);
@@ -294,6 +303,15 @@ $fluent-editor-custom-button-margin: 6px;
       transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
     }
 
+    &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
+    &.dx-texteditor-with-floating-label {
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: $fluent-filled-texteditor-input-top-padding;
+        padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
+      }
+    }
+
     &.dx-texteditor-with-label,
     &.dx-texteditor-with-floating-label {
       &::before {
@@ -308,12 +326,6 @@ $fluent-editor-custom-button-margin: 6px;
 
       .dx-datebox {
         border: none;
-      }
-
-      .dx-placeholder::before,
-      .dx-texteditor-input {
-        padding-top: $fluent-filled-texteditor-input-top-padding;
-        padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
       }
     }
 
@@ -355,6 +367,11 @@ $fluent-editor-custom-button-margin: 6px;
         transition-duration: 200ms;
         transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
       }
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      background-color: $texteditor-focused-bg;
     }
   }
 }
@@ -471,6 +488,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-base-inline-block-height,
   $fluent-base-inline-block-height,
   math.div(1px + $fluent-texteditor-font-size, 2),
+  $fluent-texteditor-label-outside-height,
   1.5px,
   $fluent-filled-texteditor-input-horizontal-padding,
   $fluent-filled-texteditor-input-horizontal-padding,
@@ -489,6 +507,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-texteditor-font-size,
   $fluent-filled-texteditor-input-top-padding,
   1px,
+  $fluent-texteditor-font-size,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,
@@ -496,6 +515,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-texteditor-label-font-size,
   $fluent-texteditor-label-font-size,
   $fluent-texteditor-label-top-offset,
+  -20px,
   $fluent-texteditor-font-size,
   $fluent-texteditor-font-size,
   $fluent-texteditor-font-size,
@@ -509,6 +529,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-texteditor-label-font-size,
   $fluent-texteditor-label-font-size,
   $fluent-texteditor-label-top-offset,
+  -20px,
   $fluent-texteditor-font-size,
   $fluent-texteditor-font-size,
   $fluent-texteditor-font-size,

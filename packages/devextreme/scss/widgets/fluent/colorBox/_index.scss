@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+@use "../textEditor/sizes" as *;
 @use "../../base/colorBox";
+@use "../../base/colorBox/mixins" as *;
 
 // adduse
 @use "../colorView";
@@ -36,8 +38,12 @@
       }
     }
   }
-}
 
+  @include colorbox-label-outside-mixin(
+    $fluent-colorbox-preview-left + 27px,
+    $fluent-texteditor-label-outside-height
+  );
+}
 
 .dx-colorbox-color-result-preview {
   border-color: $colorview-border-color;

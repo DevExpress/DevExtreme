@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+@use "../textEditor/sizes" as *;
 @use "../../base/colorBox";
+@use "../../base/colorBox/mixins" as *;
 
 // adduse
 @use "../colorView";
@@ -18,6 +20,11 @@
       padding-inline-start: 40px;
     }
   }
+
+  @include colorbox-label-outside-mixin(
+    40px,
+    $generic-texteditor-label-outside-height
+  );
 }
 
 .dx-colorbox-input-container {
