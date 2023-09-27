@@ -924,6 +924,10 @@ const TextEditorBase = Editor.inherit({
         } else {
             this.callBase();
         }
+
+        this.option('validationStatus', 'valid');
+        this._showValidMark = false;
+        this._renderValidationState();
     },
 
     reset: function(value = undefined) {
