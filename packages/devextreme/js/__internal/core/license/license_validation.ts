@@ -98,26 +98,35 @@ export function verifyLicense(licenseToken: string, version: string = packageVer
 
   let warning: LicenseVerifyResult = null;
 
-  if (licenseToken) {
+  try {
+    if (!licenseToken) {
+      warning = 'W0019';
+      return;
+    }
+
     const license = parseToken(licenseToken);
 
     if (license.kind === TokenKind.corrupted) {
       warning = 'W0021';
-    } else {
-      const [major, minor] = version.split('.').map(Number);
-
-      if (!(major && minor)) {
-        warning = 'W0021';
-      } else if (major * 10 + minor > license.payload.maxVersionAllowed) {
-        warning = 'W0020';
-      }
+      return;
     }
-  } else {
-    warning = 'W0019';
-  }
 
-  if (warning) {
-    errors.log(warning);
+    const [major, minor] = version.split('.').map(Number);
+
+    if (!(major && minor)) {
+      warning = 'W0021';
+      return;
+    }
+
+    if (major * 10 + minor > license.payload.maxVersionAllowed) {
+      warning = 'W0020';
+    }
+  } catch (e) {
+    warning = 'W0021';
+  } finally {
+    if (warning) {
+      errors.log(warning);
+    }
   }
 }
 

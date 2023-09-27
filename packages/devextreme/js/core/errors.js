@@ -261,10 +261,10 @@ export default errorUtils({
      * @name ErrorsCore.W0020
      */
     W0020: 'DevExtreme: The license key is expired.\n\n' +
-        'A mismatch exists between license key/DevExtreme version.\n\n' +
+        'A mismatch exists between license key and DevExtreme version.\n\n' +
         'To proceed, you can:\n' +
-        ' ● use a version of DevExtreme linked to your license key https://www.devexpress.com/ClientCenter/DownloadManager/\n' +
-        ' ● renew your DevExpress Subscription (once you renew your subscription, you will be entitled to product updates and support service https://www.devexpress.com/buy/renew/)\n\n' +
+        ' • use a version of DevExtreme linked to your license key https://www.devexpress.com/ClientCenter/DownloadManager/\n' +
+        ' • renew your DevExpress Subscription: https://www.devexpress.com/buy/renew/ (once you renew your subscription, you will be entitled to product updates and support service)\n\n' +
         'If you have licensing-related questions or need help with a renewal, please email clientservices@devexpress.com. We will be happy to follow-up.\n\n',
     /**
      * @name ErrorsCore.W0021
