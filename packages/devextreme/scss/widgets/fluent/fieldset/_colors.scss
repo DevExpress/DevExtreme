@@ -8,5 +8,5 @@
 * $name 10. Label text color
 * $type color
 */
-$fieldset-field-label-color: lighten($base-label-color, 46%) !default;
+$fieldset-field-label-color: $base-label-color !default;
 $fieldset-field-value-invalid-color: $base-invalid-color !default;

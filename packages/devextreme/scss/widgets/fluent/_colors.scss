@@ -24,30 +24,6 @@ $fluent-color-theme-modificator: null !default;
 $base-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
-* $name 20. Text color
-* $type color
-*/
-$base-text-color: null !default;
-
-/**
-* $name 20. Label color
-* $type color
-*/
-$base-label-color: null !default;
-
-/**
-* $name 40. Icon color
-* $type color
-*/
-$base-icon-color: null !default;
-
-/**
-* $name 50. Spin icon color
-* $type color
-*/
-$base-spin-icon-color: null !default;
-
-/**
 * $name 30. Background color
 * $type color
 */
@@ -94,6 +70,7 @@ $base-neutral-background6: null !default;
 $base-neutral-foreground1: null !default;
 $base-neutral-foreground2: null !default;
 $base-neutral-foreground3: null !default;
+$base-neutral-foreground4: null !default;
 $base-neutral-background-hover: null !default;
 
 /**
@@ -141,12 +118,6 @@ $base-danger-active: null !default;
 $base-danger-selected: null !default;
 
 /**
-* $name 80. Hovered state text color
-* $type color
-*/
-$base-hover-color: null !default;
-
-/**
 * $name 90. Hovered state background color
 * $type color
 */
@@ -165,7 +136,6 @@ $base-focus-color: null !default;
 */
 $base-focus-bg: null !default;
 $typography-bg: null !default;
-$typography-color: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
 $base-disabled-color: null !default;
@@ -190,19 +160,15 @@ $scrollview-pulldown-path: null !default;
   $base-accent-foreground2-active: #0A2E4A !default;
 
   $fluent-color-theme-modificator: "light" !default;
-  $base-text-color: rgba(20, 20, 20, 1) !default;
-  $base-label-color: rgba(0, 0, 0, 0.6) !default;
-  $base-disabled-color: rgba(224, 224, 224, 1) !default; // e0e0e0 // rgba(0, 0, 0, $base-disabled-opacity) !default;
+  $base-disabled-color: rgba(224, 224, 224, 1) !default; // e0e0e0
   $base-border-color-disabled: rgba(224, 224, 224, 1) !default; // e0e0e0
   $base-neutral-background-disabled: rgb(240, 240, 240) !default; // f0f0f0
   $base-foreground-disabled: rgba(189, 189, 189, 1) !default; // bdbdbd
   $base-neutral-foreground1: rgba(36, 36, 36, 1) !default; // #242424;
   $base-neutral-foreground2: rgba(66, 66, 66, 1) !default; // #424242;
   $base-neutral-foreground3: rgba(97, 97, 97, 1) !default; // #616161;
+  $base-neutral-foreground4: rgba(112, 112, 112, 1) !default; // #707070
 
-  $base-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
-  
   $base-brand-bg: rgba(15, 108, 189, 1) !default; // #0F6CBD
   $base-brand-bg-hover: rgba(17, 94, 163, 1) !default; // #115EA3
   $base-brand-bg-active: rgba(12, 59, 94, 1) !default; // #0C3B5E
@@ -253,13 +219,11 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
-  $base-hover-color: $base-text-color !default;
   $base-hover-bg: $base-bg-hover !default;
   $base-inverted-text-color: #fff !default;
   $base-focus-color: $base-inverted-text-color !default;
   $base-focus-bg: $base-bg-selected !default;
   $typography-bg: $base-neutral-background2 !default;
-  $typography-color: $base-text-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
@@ -288,18 +252,15 @@ $scrollview-pulldown-path: null !default;
   $base-accent-foreground2-active: #B4D6F5 !default;
 
   $fluent-color-theme-modificator: "dark" !default;
-  $base-text-color: #fff !default;
-  $base-label-color: rgba(255, 255, 255, 0.6) !default;
-  $base-disabled-color: rgba(66, 66, 66, 1) !default; // #424242 // rgba(255, 255, 255, $base-disabled-opacity) !default;
+  $base-disabled-color: rgba(66, 66, 66, 1) !default; // #424242
   $base-border-color-disabled: rgba(66, 66, 66, 1) !default; // #424242
   $base-neutral-background-disabled: rgba(20, 20, 20, 1) !default; // #141414
   $base-foreground-disabled: rgba(92, 92, 92, 1) !default; // #5c5c5c
   $base-neutral-foreground1: rgba(255, 255, 255, 1) !default; // #ffffff;
   $base-neutral-foreground2: rgba(214, 214, 214, 1) !default; // #d6d6d6;
   $base-neutral-foreground3: rgba(173, 173, 173, 1) !default; // #adadad;
-  $base-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: $base-neutral-foreground3 !default; // color.change($base-text-color, $alpha: 0.54) !default;
-  
+  $base-neutral-foreground4: rgba(153, 153, 153, 1) !default; // #999999
+
   $base-brand-bg: rgba(17, 94, 163, 1) !default; // #115EA3
   $base-brand-bg-hover: rgba(15, 108, 189, 1) !default; // #0F6CBD
   $base-brand-bg-active: rgba(12, 59, 94, 1) !default; // #0C3B5E
@@ -351,13 +312,11 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
-  $base-hover-color: $base-text-color !default;
   $base-hover-bg: $base-bg-hover !default;
   $base-inverted-text-color: #000 !default;
   $base-focus-color: $base-inverted-text-color !default;
   $base-focus-bg: $base-bg-selected !default; 
   $typography-bg: $base-neutral-background2 !default;
-  $typography-color: $base-text-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 
@@ -373,6 +332,37 @@ $scrollview-pulldown-path: null !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
 }
+
+/**
+* $name 20. Text color
+* $type color
+*/
+$base-text-color: $base-neutral-foreground1 !default;
+
+/**
+* $name 80. Hovered state text color
+* $type color
+*/
+$base-hover-color: $base-text-color !default;
+$typography-color: $base-text-color !default;
+
+/**
+* $name 20. Label color
+* $type color
+*/
+$base-label-color: $base-neutral-foreground4 !default;
+
+/**
+* $name 40. Icon color
+* $type color
+*/
+$base-icon-color: $base-neutral-foreground3 !default;
+
+/**
+* $name 50. Spin icon color
+* $type color
+*/
+$base-spin-icon-color: $base-neutral-foreground3 !default;
 
 /**
 * $name 30. Link color
