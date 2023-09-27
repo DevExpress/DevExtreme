@@ -2764,7 +2764,7 @@ QUnit.module('accessibility', function() {
         });
     });
 
-    QUnit.test('aria-activedescendant should have link to one element only', function(assert) {
+    QUnit.test('aria-activedescendant should have link to the single element', function(assert) {
         const $gallery = $('#gallerySimple').dxGallery({
             height: 100,
             width: '100%',
@@ -2782,7 +2782,7 @@ QUnit.module('accessibility', function() {
         assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
     });
 
-    QUnit.test('aria-activedescendant should have link to one element only after resize', function(assert) {
+    QUnit.test('aria-activedescendant should have link to the single element after resize', function(assert) {
         const $gallery = $('#gallerySimple').dxGallery({
             height: 100,
             showIndicator: false,
@@ -2801,5 +2801,4 @@ QUnit.module('accessibility', function() {
 
         assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
     });
-
 });
