@@ -1154,18 +1154,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria-multiselectable property', function(assert) {
-        const $element = $('#accordion').dxAccordion({
-            multiple: false
-        });
-        const instance = $element.dxAccordion('instance');
-
-        assert.equal($element.attr('aria-multiselectable'), 'false', 'multiselectable on init');
-
-        instance.option('multiple', true);
-        assert.equal($element.attr('aria-multiselectable'), 'true', 'multiselectable on option change');
-    });
-
     QUnit.test('body should be hidden if item is closed', function(assert) {
         const accordion = new Accordion($('#accordion'), {
             items: [{ title: 'Title 1', text: 'Text 1' }],
@@ -1180,6 +1168,22 @@ QUnit.module('aria accessibility', () => {
 
         accordion.collapseItem(0);
         assert.equal($itemBody.attr('aria-hidden'), 'true', 'body readable');
+    });
+
+    QUnit.test('item should have valid aria-expanded attr', function(assert) {
+        const accordion = new Accordion($('#accordion'), {
+            items: [{ title: 'Title 1', text: 'Text 1' }],
+            collapsible: true,
+            selectedIndex: -1,
+            deferRendering: false
+        });
+        const $item = accordion.itemElements().eq(0);
+
+        accordion.expandItem(0);
+        assert.equal($item.attr('aria-expanded'), 'true', 'body readable');
+
+        accordion.collapseItem(0);
+        assert.equal($item.attr('aria-expanded'), 'false', 'body readable');
     });
 });
 
@@ -1508,13 +1512,11 @@ QUnit.module('optionChanged', moduleSetup, () => {
             assert.roughEqual(item1.outerHeight(), 93, 1.001, 'items(0) has valid height');
             assert.strictEqual(item1.is('.' + [ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join('.')), true, 'items(0) should have each of these classes');
             assert.strictEqual(!item1.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_CLOSED_CLASS].join(', .')), true, 'items(0) should not have no one of these classes');
-            assert.strictEqual(item1.attr('aria-selected'), 'true', 'items(0) should have aria-selected=true');
 
             const item2 = $items.eq(1);
             assert.roughEqual(item2.outerHeight(), 43, 1.001, 'items(1) has valid height');
             assert.strictEqual(item2.is('.' + [ACCORDION_ITEM_CLOSED_CLASS].join('.')), true, 'items(1) should have each of these classes');
             assert.strictEqual(!item2.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join(', .')), true, 'items(1) should not have no one of these classes');
-            assert.strictEqual(item2.attr('aria-selected'), 'false', 'items(1) should have aria-selected=false');
 
             const $bodyItems = $accordion.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
             assert.strictEqual($bodyItems.eq(0).attr('aria-hidden'), 'false', 'bodyItems(0) should have aria-hidden=false');

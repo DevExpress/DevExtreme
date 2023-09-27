@@ -17,6 +17,7 @@ import { when, Deferred } from '../core/utils/deferred';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { getImageContainer } from '../core/utils/icon';
 import { isMaterialBased } from './themes';
+import Guid from '../core/guid';
 
 // STYLE accordion
 
@@ -60,7 +61,7 @@ const Accordion = CollectionWidget.inherit({
 
             selectByClick: true,
             activeStateEnabled: true,
-            _itemAttributes: { role: 'tab' },
+            _itemAttributes: { role: 'region' },
             _animationEasing: 'ease'
         });
     },
@@ -133,11 +134,6 @@ const Accordion = CollectionWidget.inherit({
         this._deferredTemplateItems = [];
         this.callBase();
 
-        this.setAria({
-            'role': 'tablist',
-            'multiselectable': this.option('multiple')
-        });
-
         deferRender(() => {
             const selectedItemIndices = this._getSelectedItemIndices();
             this._renderSelection(selectedItemIndices, []);
@@ -198,6 +194,8 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _renderItemContent: function(args) {
+        const guid = new Guid();
+
         this._deferredTemplateItems[args.index] = new Deferred();
 
         const itemTitle = this.callBase(extend({}, args, {
@@ -205,6 +203,9 @@ const Accordion = CollectionWidget.inherit({
             templateProperty: 'titleTemplate',
             defaultTemplateName: this.option('itemTitleTemplate')
         }));
+
+        $(itemTitle).attr('id', guid);
+        this.setAria('labelledby', guid, $(itemTitle).parent());
 
         this._attachItemTitleClickAction(itemTitle);
 
@@ -219,10 +220,14 @@ const Accordion = CollectionWidget.inherit({
             deferred.resolve();
         }
 
-        deferred.done(this.callBase.bind(this, extend({}, args, {
+        const callBase = this.callBase.bind(this, extend({}, args, {
             contentClass: ACCORDION_ITEM_BODY_CLASS,
             container: getPublicElement($('<div>').appendTo($(itemTitle).parent()))
-        })));
+        }));
+        deferred.done(() => {
+            const bodyContent = callBase();
+            this.setAria('labelledby', guid, $(bodyContent));
+        });
     },
 
     _onItemTemplateRendered: function(_, renderArgs) {
@@ -347,6 +352,10 @@ const Accordion = CollectionWidget.inherit({
                 .not('.' + ACCORDION_ITEM_OPENED_CLASS)
                 .addClass(ACCORDION_ITEM_CLOSED_CLASS);
         });
+    },
+
+    _setAriaSelectionAttribute($target, value) {
+        this.setAria('expanded', value, $target);
     },
 
     _splitFreeSpace: function(freeSpace) {

@@ -269,27 +269,13 @@ QUnit.module('widget options', moduleSetup, () => {
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
-        const $element = $('#accordion').dxAccordion();
-
-        assert.equal($element.attr('role'), 'tablist', 'role is correct');
-    });
-
-    QUnit.test('aria-multiselectable property', function(assert) {
-        const $element = $('#accordion').dxAccordion({
-            multiple: false
-        });
-
-        assert.equal($element.attr('aria-multiselectable'), 'false', 'multiselectable on init');
-    });
-
     QUnit.test('role for items', function(assert) {
         const $element = $('#accordion').dxAccordion({
             items: [{ title: 'Title 1', text: 'Text 1' }]
         });
-        const $item = $element.find('.dx-accordion-item');
+        const $item = $element.find(`.${ACCORDION_ITEM_CLASS}`);
 
-        assert.equal($item.attr('role'), 'tab', 'role for item is correct');
+        assert.equal($item.attr('role'), 'region', 'role for item is correct');
     });
 
     QUnit.test('body should be hidden if item is closed', function(assert) {
@@ -302,6 +288,21 @@ QUnit.module('aria accessibility', () => {
         const $itemBody = accordion.itemElements().eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
 
         assert.equal($itemBody.attr('aria-hidden'), 'true', 'body not readable');
+    });
+
+    QUnit.test('id of title should be passed to accordion body and title', function(assert) {
+        const $element = $('#accordion').dxAccordion({
+            items: [{ title: 'Title 1', text: 'Text 1' }]
+        });
+        const $itemTitle = $element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`);
+        const $itemBody = $element.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
+        const $item = $element.find(`.${ACCORDION_ITEM_CLASS}`);
+
+        const accordionTitleId = $itemTitle.attr('id');
+
+        assert.strictEqual(typeof accordionTitleId, 'string');
+        assert.strictEqual($item.attr('aria-labelledby'), accordionTitleId);
+        assert.strictEqual($itemBody.attr('aria-labelledby'), accordionTitleId);
     });
 });
 
