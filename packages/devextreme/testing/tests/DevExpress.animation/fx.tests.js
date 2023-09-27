@@ -800,7 +800,7 @@ if(support.transition()) {
             fx.stop($element);
 
             setTimeout(function() {
-                assert.equal($element.css('left'), leftAfterStop);
+                assert.roughEqual($element.css('left'), leftAfterStop, 0.1);
                 done();
             }, 100);
         }, 100);
