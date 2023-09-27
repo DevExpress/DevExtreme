@@ -34,7 +34,7 @@ jobs:
 
       - run: cd /opt/actions-runner/_work/_tool/node/18.18.0/x64 && tar xvzf node-18.tar.gz
 
-      - run: rm /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz &&
+      - run: rm /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
 
       - run: ls .
 
