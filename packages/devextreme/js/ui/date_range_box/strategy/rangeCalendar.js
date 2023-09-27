@@ -1,4 +1,3 @@
-import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import eventsEngine from '../../../events/core/events_engine';
 import { extend } from '../../../core/utils/extend';
@@ -25,14 +24,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     _getPopup() {
         return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
-    }
-
-    getFirstPopupElement() {
-        return $(this._getPopup().getFocusableElements()).first();
-    }
-
-    getLastPopupElement() {
-        return $(this._getPopup().getFocusableElements()).last();
     }
 
     supportedKeys() {
@@ -83,8 +74,8 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 }
 
                 const $focusableElement = e.shiftKey
-                    ? this.getLastPopupElement()
-                    : this.getFirstPopupElement();
+                    ? this.getDateRangeBox().getStartDateBox()._getLastPopupElement()
+                    : this.getDateRangeBox().getStartDateBox()._getFirstPopupElement();
 
                 if($focusableElement) {
                     eventsEngine.trigger($focusableElement, 'focus');

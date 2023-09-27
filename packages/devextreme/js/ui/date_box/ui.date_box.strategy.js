@@ -70,10 +70,6 @@ const DateBoxStrategy = Class.inherit({
         eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
     },
 
-    getFirstPopupElement: noop,
-
-    getLastPopupElement: noop,
-
     _preventFocusOnPopup: function(e) {
         e.preventDefault();
     },

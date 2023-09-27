@@ -677,12 +677,6 @@ const TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
-    _getFirstPopupElement: function() {
-        return this.option('showSelectionControls')
-            ? this._list._focusTarget()
-            : this.callBase();
-    },
-
     _initSelectAllValueChangedAction: function() {
         this._selectAllValueChangeAction = this._createActionByOption('onSelectAllValueChanged');
     },
