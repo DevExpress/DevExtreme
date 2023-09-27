@@ -149,7 +149,7 @@ const Gallery = CollectionWidget.inherit({
 
             _itemAttributes: {
                 role: 'option',
-                'aria-label': messageLocalization.format('dxGallery-galleryItemName')
+                'aria-label': messageLocalization.format('dxGallery-itemName')
             },
             loopItemFocus: false,
             selectOnFocus: true,

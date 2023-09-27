@@ -701,6 +701,6 @@
         "dxGantt-dialogStartDateValidation": "La fecha de inicio debe ser anterior {0}",
         "dxGantt-dialogEndDateValidation": "La fecha de finalización debe ser posterior {0}",
 
-        "dxGallery-galleryItemName": "Gallery item"
+        "dxGallery-itemName": "Gallery item"
     }
 }
