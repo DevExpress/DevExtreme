@@ -49,6 +49,10 @@
       border-color: $tabs-focused-border-color;
     }
 
+    &.dx-state-focused.dx-state-disabled::after {
+      border-color: $tabs-focused-disabled-border-color;
+    }
+
     &.dx-focused-disabled-next-tab {
       &::after {
         border-inline-end: none;
