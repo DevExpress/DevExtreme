@@ -25,7 +25,7 @@ $calendar-header-color: $calendar-color !default;
 */
 $calendar-cell-other-color: $base-neutral-foreground3 !default;
 $calendar-cell-other-hover-color: $base-neutral-foreground3 !default;
-$calendar-bg: $base-bg !default;
+$calendar-bg: transparent !default;
 $calendar-hover-bg: null !default;
 $calendar-cell-hover-border-color: null !default;
 $calendar-cell-hover-color: $calendar-color !default;
@@ -34,7 +34,7 @@ $calendar-cell-hover-color: $calendar-color !default;
 * $name 50. Selected cell background color
 * $type color
 */
-$calendar-cell-selected-bg: $base-compound-accent !default;
+$calendar-cell-selected-bg: $base-accent !default;
 $calendar-cell-selected-color: $base-inverted-text-color !default;
 $calendar-cell-contoured-border-radius: 50% !default;
 $calendar-cell-contoured-border-color: null !default;
@@ -56,5 +56,5 @@ $calendar-week-number-border-radius: 0 !default;
   $calendar-hover-bg: $base-foreground-inverted-hover !default;
   $calendar-cell-hover-border-color: $base-foreground-inverted-hover !default;
   $calendar-cell-active-bg: $base-foreground-inverted-focused !default;
-  $calendar-cell-contoured-border-color: $base-compound-accent-active !default;
+  $calendar-cell-contoured-border-color: $base-accent-active !default;
 }

@@ -128,6 +128,14 @@ const DropDownBox = DropDownEditor.inherit({
         return this.option('valueExpr') === 'this' && isObject(value);
     },
 
+    _sortValuesByKeysOrder(orderedKeys, values) {
+        const sortedValues = values.sort((a, b) => {
+            return orderedKeys.indexOf(a.itemKey) - orderedKeys.indexOf(b.itemKey);
+        });
+
+        return sortedValues.map(x => x.itemDisplayValue);
+    },
+
     _renderInputValue: function() {
         this._rejectValueLoading();
         const values = [];
@@ -149,9 +157,9 @@ const DropDownBox = DropDownEditor.inherit({
                 .always(item => {
                     const displayValue = this._displayGetter(item);
                     if(isDefined(displayValue)) {
-                        values.push(displayValue);
+                        values.push({ itemKey: key, itemDisplayValue: displayValue });
                     } else if(this.option('acceptCustomValue')) {
-                        values.push(key);
+                        values.push({ itemKey: key, itemDisplayValue: key });
                     }
                     deferred.resolve();
                 });
@@ -162,8 +170,9 @@ const DropDownBox = DropDownEditor.inherit({
         return when
             .apply(this, itemLoadDeferreds)
             .always(() => {
-                this.option('displayValue', values);
-                callBase(values.length && values);
+                const orderedValues = this._sortValuesByKeysOrder(keys, values);
+                this.option('displayValue', orderedValues);
+                callBase(values.length && orderedValues);
             });
     },
 

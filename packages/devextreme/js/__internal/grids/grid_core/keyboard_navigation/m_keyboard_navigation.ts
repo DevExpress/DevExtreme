@@ -2707,8 +2707,10 @@ export const keyboardNavigationModule: import('../m_types').Module = {
         getFocusedCellInRow(rowIndex) {
           const keyboardNavigationController = this.getController('keyboardNavigation');
           let $cell = this.callBase(rowIndex);
+          const rowIndexOffset = this._dataController.getRowIndexOffset();
+          const focusedRowIndex = keyboardNavigationController._focusedCellPosition.rowIndex - rowIndexOffset;
 
-          if (keyboardNavigationController.isKeyboardEnabled() && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
+          if (keyboardNavigationController.isKeyboardEnabled() && focusedRowIndex === rowIndex) {
             const $focusedCell = keyboardNavigationController._getFocusedCell();
             if (isElementDefined($focusedCell) && !$focusedCell.hasClass(COMMAND_EDIT_CLASS)) {
               $cell = $focusedCell;

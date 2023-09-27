@@ -14,7 +14,12 @@ import {
 
 
 
+import { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
+import { ChartsAxisLabelOverlap, DashStyle, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
+import { LabelLocation } from 'devextreme/ui/form';
+import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -87,18 +92,18 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get horizontalAlignment(): string {
+    get horizontalAlignment(): HorizontalAlignment | HorizontalEdge {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: string) {
+    set horizontalAlignment(value: HorizontalAlignment | HorizontalEdge) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get position(): string {
+    get position(): RelativePosition | Position | LabelPosition | VerticalEdge {
         return this._getOption('position');
     }
-    set position(value: string) {
+    set position(value: RelativePosition | Position | LabelPosition | VerticalEdge) {
         this._setOption('position', value);
     }
 
@@ -111,18 +116,18 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get verticalAlignment(): string {
+    get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: string) {
+    set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
     }
 
     @Input()
-    get alignment(): string | undefined {
+    get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: string | undefined) {
+    set alignment(value: HorizontalAlignment | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -135,10 +140,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get displayMode(): string {
+    get displayMode(): ChartLabelDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: string) {
+    set displayMode(value: ChartLabelDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -151,10 +156,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get overlappingBehavior(): string {
+    get overlappingBehavior(): ChartsAxisLabelOverlap | LabelOverlap | TextOverflow {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: string) {
+    set overlappingBehavior(value: ChartsAxisLabelOverlap | LabelOverlap | TextOverflow) {
         this._setOption('overlappingBehavior', value);
     }
 
@@ -183,18 +188,18 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get textOverflow(): string {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: string) {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): string {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: string) {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 
@@ -215,10 +220,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: string, visible?: boolean, width?: number } | { color?: string, visible?: boolean, width?: number } {
+    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: string, visible?: boolean, width?: number } | { color?: string, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -263,10 +268,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get hideFirstOrLast(): string {
+    get hideFirstOrLast(): CircularGaugeLabelOverlap {
         return this._getOption('hideFirstOrLast');
     }
-    set hideFirstOrLast(value: string) {
+    set hideFirstOrLast(value: CircularGaugeLabelOverlap) {
         this._setOption('hideFirstOrLast', value);
     }
 
@@ -287,10 +292,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get location(): string {
+    get location(): LabelLocation {
         return this._getOption('location');
     }
-    set location(value: string) {
+    set location(value: LabelLocation) {
         this._setOption('location', value);
     }
 

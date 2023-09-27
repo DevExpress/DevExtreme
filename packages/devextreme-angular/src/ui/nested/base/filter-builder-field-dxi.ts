@@ -5,9 +5,11 @@ import {
     Component,
 } from '@angular/core';
 
+import { DataType } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
+import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { format } from 'devextreme/ui/widget/ui.widget';
 
 @Component({
@@ -42,10 +44,10 @@ export abstract class DxiFilterBuilderField extends CollectionNestedOption {
         this._setOption('dataField', value);
     }
 
-    get dataType(): string {
+    get dataType(): DataType | string {
         return this._getOption('dataType');
     }
-    set dataType(value: string) {
+    set dataType(value: DataType | string) {
         this._setOption('dataType', value);
     }
 
@@ -70,10 +72,10 @@ export abstract class DxiFilterBuilderField extends CollectionNestedOption {
         this._setOption('falseText', value);
     }
 
-    get filterOperations(): Array<string> {
+    get filterOperations(): Array<FilterBuilderOperation | string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<string>) {
+    set filterOperations(value: Array<FilterBuilderOperation | string>) {
         this._setOption('filterOperations', value);
     }
 

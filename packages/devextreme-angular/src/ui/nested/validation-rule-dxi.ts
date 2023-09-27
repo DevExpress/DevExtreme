@@ -12,6 +12,7 @@ import {
 
 
 
+import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -43,10 +44,10 @@ export class DxiValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): string {
+    get type(): ValidationRuleType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: ValidationRuleType) {
         this._setOption('type', value);
     }
 
@@ -99,10 +100,10 @@ export class DxiValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get comparisonType(): string {
+    get comparisonType(): ComparisonOperator {
         return this._getOption('comparisonType');
     }
-    set comparisonType(value: string) {
+    set comparisonType(value: ComparisonOperator) {
         this._setOption('comparisonType', value);
     }
 

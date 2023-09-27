@@ -17,6 +17,8 @@ import {
 
 
 
+import { HorizontalAlignment } from 'devextreme/common';
+import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -43,10 +45,10 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get groupItems(): Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | undefined, valueFormat?: Format | string | undefined }> {
+    get groupItems(): Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> {
         return this._getOption('groupItems');
     }
-    set groupItems(value: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | undefined, valueFormat?: Format | string | undefined }>) {
+    set groupItems(value: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>) {
         this._setOption('groupItems', value);
     }
 
@@ -75,10 +77,10 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get totalItems(): Array<any | { alignment?: string | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | undefined, valueFormat?: Format | string | undefined }> {
+    get totalItems(): Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> {
         return this._getOption('totalItems');
     }
-    set totalItems(value: Array<any | { alignment?: string | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | undefined, valueFormat?: Format | string | undefined }>) {
+    set totalItems(value: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>) {
         this._setOption('totalItems', value);
     }
 

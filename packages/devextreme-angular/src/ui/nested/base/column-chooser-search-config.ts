@@ -5,6 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
+import { SearchMode } from 'devextreme/common';
 
 @Component({
     template: ''
@@ -31,10 +32,10 @@ export abstract class DxoColumnChooserSearchConfig extends NestedOption {
         this._setOption('timeout', value);
     }
 
-    get mode(): string {
+    get mode(): SearchMode {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: SearchMode) {
         this._setOption('mode', value);
     }
 

@@ -23,6 +23,7 @@ import {
 } from '@angular/core';
 
 
+import { Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/switch';
 
 import DxSwitch from 'devextreme/ui/switch';
@@ -309,10 +310,10 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -322,10 +323,10 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -335,10 +336,10 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -552,21 +553,21 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

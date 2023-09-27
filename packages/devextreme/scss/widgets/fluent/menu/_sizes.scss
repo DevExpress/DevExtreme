@@ -5,10 +5,10 @@
 $fluent-menu-vertical-padding: null !default;
 
 @if $size == "default" {
-  $fluent-menu-vertical-padding: 12px !default;
+  $fluent-menu-vertical-padding: 6px !default;
 }
 
 @if $size == "compact" {
-  $fluent-menu-vertical-padding: 8px !default;
+  $fluent-menu-vertical-padding: 4px !default;
 }
 

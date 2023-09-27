@@ -116,7 +116,7 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-focused,
   &.dx-state-focused.dx-state-hover {
     .dx-texteditor-label {
-      color: $base-compound-accent;
+      color: $base-accent;
       font-size: $fluent-texteditor-label-font-size;
     }
 
@@ -179,7 +179,7 @@ $fluent-editor-custom-button-margin: 6px;
   }
 
   &.dx-editor-filled {
-    background-color: $texteditor-bg;
+    background-color: $texteditor-filled-bg;
     border-bottom-left-radius: $base-border-radius;
     border-bottom-right-radius: $base-border-radius;
     border: 1px solid transparent;
@@ -270,7 +270,7 @@ $fluent-editor-custom-button-margin: 6px;
   }
 
   &.dx-editor-outlined {
-    background-color: transparent;
+    background-color: $texteditor-bg;
     border-radius: $texteditor-input-border-radius;
     border: 1px solid $texteditor-border-color;
     border-bottom: 1px solid $base-border-color-accessible;
@@ -319,6 +319,7 @@ $fluent-editor-custom-button-margin: 6px;
 
     &.dx-state-disabled,
     &.dx-state-readonly {
+      background-color: transparent;
       border-color: $texteditor-disabled-color;
     }
    
@@ -536,6 +537,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-editor-custom-button-margin,
   $fluent-editor-custom-button-margin,
   $fluent-filled-texteditor-input-button-horizontal-padding,
+  0,
   $texteditor-spin-button-horizontal-padding,
   $fluent-button-vertical-padding,
 );

@@ -83,7 +83,8 @@ $icon-position: relative;
     }
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     opacity: 1; 
 
     .dx-checkbox-icon {
@@ -141,6 +142,7 @@ $icon-position: relative;
 
   &.dx-state-readonly,
   &.dx-state-disabled,
+  .dx-state-disabled &,
   &.dx-state-readonly.dx-invalid {
     .dx-checkbox-icon {
       color: $checkbox-foreground-disabled-color;
@@ -218,6 +220,7 @@ $icon-position: relative;
 
   &.dx-state-readonly,
   &.dx-state-disabled,
+  .dx-state-disabled &,
   &.dx-state-readonly.dx-invalid {
     .dx-checkbox-icon {
       &::before {

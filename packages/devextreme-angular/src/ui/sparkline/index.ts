@@ -21,12 +21,13 @@ import {
 } from '@angular/core';
 
 
+import { DashStyle, PointSymbol, Theme } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { Font } from 'devextreme/viz/core/base_widget';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/sparkline';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SparklineType, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/sparkline';
 
 import DxSparkline from 'devextreme/viz/sparkline';
 
@@ -322,10 +323,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get pointSymbol(): string {
+    get pointSymbol(): PointSymbol {
         return this._getOption('pointSymbol');
     }
-    set pointSymbol(value: string) {
+    set pointSymbol(value: PointSymbol) {
         this._setOption('pointSymbol', value);
     }
 
@@ -387,10 +388,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get theme(): string {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: string) {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -400,10 +401,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -413,10 +414,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get type(): string {
+    get type(): SparklineType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: SparklineType) {
         this._setOption('type', value);
     }
 
@@ -677,7 +678,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pointSymbolChange: EventEmitter<string>;
+    @Output() pointSymbolChange: EventEmitter<PointSymbol>;
 
     /**
     
@@ -712,21 +713,21 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<string>;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<string>;
+    @Output() typeChange: EventEmitter<SparklineType>;
 
     /**
     

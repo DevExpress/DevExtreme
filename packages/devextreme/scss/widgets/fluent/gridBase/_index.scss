@@ -1223,6 +1223,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-icon-filter {
       color: $datagrid-filter-panel-color;
+      
+      @include dx-icon-sizing($fluent-filter-panel-icon-size);
     }
   }
 

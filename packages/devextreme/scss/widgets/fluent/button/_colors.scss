@@ -26,7 +26,7 @@ $button-normal-selected-color: $base-text-color !default;
 * $name 20. Background color
 * $type color
 */
-$button-normal-bg: $base-element-bg !default;
+$button-normal-bg: $base-neutral-background1 !default;
 
 /**
 * $name 30. Hovered state background color
@@ -305,9 +305,9 @@ $button-success-text-selected-bg: null !default;
 }
 
 @if $mode == "dark" {
-  $button-default-bg: $base-compound-accent !default;
-  $button-default-hover-bg: $base-compound-accent-hover !default;
-  $button-default-focused-bg: $base-compound-accent-hover !default; // #77b7f7 
+  $button-default-bg: $base-accent !default;
+  $button-default-hover-bg: $base-accent-hover !default;
+  $button-default-focused-bg: $base-accent-hover !default;
   $button-default-active-bg: #b4d6fa !default; 
   $button-default-selected-bg: #a6cff9 !default;
 
@@ -350,8 +350,8 @@ $button-success-text-selected-bg: null !default;
 
   $button-danger-text-hover-bg: #4F1314 !default;
   $button-danger-text-focused-bg: #4F1314 !default;
-  $button-danger-text-active-bg: #521516 !default;
-  $button-danger-text-selected-bg: #3F1011 !default;
+  $button-danger-text-active-bg: #BC2F32 !default;
+  $button-danger-text-selected-bg: #751D1F !default;
 
   $button-success-text-color: #54B054 !default;
   $button-success-text-color-hover: #F1FAF1 !default;

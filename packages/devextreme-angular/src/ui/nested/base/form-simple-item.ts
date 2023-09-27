@@ -6,6 +6,8 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { HorizontalAlignment } from 'devextreme/common';
+import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
 
 @Component({
     template: ''
@@ -39,10 +41,10 @@ export abstract class DxoFormSimpleItem extends NestedOption {
         this._setOption('editorOptions', value);
     }
 
-    get editorType(): string {
+    get editorType(): FormItemComponent {
         return this._getOption('editorType');
     }
-    set editorType(value: string) {
+    set editorType(value: FormItemComponent) {
         this._setOption('editorType', value);
     }
 
@@ -60,17 +62,17 @@ export abstract class DxoFormSimpleItem extends NestedOption {
         this._setOption('isRequired', value);
     }
 
-    get itemType(): string {
+    get itemType(): FormItemType {
         return this._getOption('itemType');
     }
-    set itemType(value: string) {
+    set itemType(value: FormItemType) {
         this._setOption('itemType', value);
     }
 
-    get label(): { alignment?: string, location?: string, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
+    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { alignment?: string, location?: string, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
+    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
         this._setOption('label', value);
     }
 

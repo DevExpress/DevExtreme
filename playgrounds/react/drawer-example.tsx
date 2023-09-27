@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Drawer from 'devextreme-react/src/ui/drawer';
+import Drawer from 'devextreme-react/drawer';
 import RadioGroup from 'devextreme-react/radio-group';
 import Toolbar from 'devextreme-react/toolbar';
 import Example from './example-block';

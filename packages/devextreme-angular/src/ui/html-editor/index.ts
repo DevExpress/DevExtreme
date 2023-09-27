@@ -26,7 +26,8 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
+import { EditorStyle, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, MarkupType, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
 
 import DxHtmlEditor from 'devextreme/ui/html_editor';
 
@@ -336,10 +337,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get stylingMode(): string {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -427,10 +428,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -440,10 +441,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -453,10 +454,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -479,10 +480,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get valueType(): string {
+    get valueType(): MarkupType {
         return this._getOption('valueType');
     }
-    set valueType(value: string) {
+    set valueType(value: MarkupType) {
         this._setOption('valueType', value);
     }
 
@@ -719,7 +720,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<string>;
+    @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
     
@@ -768,21 +769,21 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     
@@ -796,7 +797,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueTypeChange: EventEmitter<string>;
+    @Output() valueTypeChange: EventEmitter<MarkupType>;
 
     /**
     

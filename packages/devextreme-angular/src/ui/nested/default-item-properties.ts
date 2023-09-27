@@ -14,6 +14,7 @@ import {
 
 
 
+import { DiagramConnectorLineEnd, DiagramConnectorLineType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -29,26 +30,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDefaultItemPropertiesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get connectorLineEnd(): string {
+    get connectorLineEnd(): DiagramConnectorLineEnd {
         return this._getOption('connectorLineEnd');
     }
-    set connectorLineEnd(value: string) {
+    set connectorLineEnd(value: DiagramConnectorLineEnd) {
         this._setOption('connectorLineEnd', value);
     }
 
     @Input()
-    get connectorLineStart(): string {
+    get connectorLineStart(): DiagramConnectorLineEnd {
         return this._getOption('connectorLineStart');
     }
-    set connectorLineStart(value: string) {
+    set connectorLineStart(value: DiagramConnectorLineEnd) {
         this._setOption('connectorLineStart', value);
     }
 
     @Input()
-    get connectorLineType(): string {
+    get connectorLineType(): DiagramConnectorLineType {
         return this._getOption('connectorLineType');
     }
-    set connectorLineType(value: string) {
+    set connectorLineType(value: DiagramConnectorLineType) {
         this._setOption('connectorLineType', value);
     }
 

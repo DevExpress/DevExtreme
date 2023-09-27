@@ -16,6 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import { ToolbarLocation } from 'devextreme/ui/popup';
+import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import {
     NestedOptionHost,
@@ -60,18 +63,18 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get locateInMenu(): string {
+    get locateInMenu(): LocateInMenuMode {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: string) {
+    set locateInMenu(value: LocateInMenuMode) {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): string {
+    get location(): ToolbarItemLocation {
         return this._getOption('location');
     }
-    set location(value: string) {
+    set location(value: ToolbarItemLocation) {
         this._setOption('location', value);
     }
 
@@ -92,10 +95,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get showText(): string {
+    get showText(): ShowTextMode {
         return this._getOption('showText');
     }
-    set showText(value: string) {
+    set showText(value: ShowTextMode) {
         this._setOption('showText', value);
     }
 
@@ -116,10 +119,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get toolbar(): string {
+    get toolbar(): ToolbarLocation {
         return this._getOption('toolbar');
     }
-    set toolbar(value: string) {
+    set toolbar(value: ToolbarLocation) {
         this._setOption('toolbar', value);
     }
 
@@ -132,10 +135,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get widget(): string {
+    get widget(): ToolbarItemComponent {
         return this._getOption('widget');
     }
-    set widget(value: string) {
+    set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
     }
 

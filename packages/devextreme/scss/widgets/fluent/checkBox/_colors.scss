@@ -10,9 +10,9 @@ $checkbox-border-color-active: $base-border-color-accessible-focused !default;
 
 $checkbox-foreground-color: $base-element-bg !default;
 
-$checkbox-accent-color: $base-compound-accent !default;
-$checkbox-accent-color-hover: $base-compound-accent-hover !default;
-$checkbox-accent-color-focused: $base-compound-accent-active !default;
+$checkbox-accent-color: $base-accent !default;
+$checkbox-accent-color-hover: $base-accent-hover !default;
+$checkbox-accent-color-focused: $base-accent-active !default;
 
 $checkbox-invalid-color: $base-invalid-color !default;
 $checkbox-invalid-color-hover: $base-invalid-color-hover !default;

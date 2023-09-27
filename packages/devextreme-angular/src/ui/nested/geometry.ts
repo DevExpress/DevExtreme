@@ -14,6 +14,7 @@ import {
 
 
 
+import { Orientation } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnI
     }
 
     @Input()
-    get orientation(): string {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: string) {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 

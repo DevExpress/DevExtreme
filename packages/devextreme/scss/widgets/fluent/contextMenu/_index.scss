@@ -17,7 +17,6 @@
 
 .dx-context-menu {
   .dx-menu-item {
-    font-size: $fluent-context-menu-font-size;
     color: $base-text-color;
 
     .dx-menu-item-content {
@@ -65,8 +64,8 @@
 
   .dx-submenu {
     background-color: $menu-popup-bg;
-    border-radius: $base-border-radius;
-    box-shadow: 0 2px 7px $menu-container-shadow-color;
+    border-radius: $fluent-context-menu-border-radius;
+    box-shadow: color.change($base-shadow-color, $alpha: 0.12) 0 2px 7.2px 0, color.change($base-shadow-color, $alpha: 0.14) 0 8px 16px 0;
   }
 
   .dx-menu-separator {
