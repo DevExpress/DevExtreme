@@ -26,14 +26,14 @@ jobs:
     steps:
       - run: node -v
 
-      - run: |
-          mkdir -p /opt/actions-runner/_work/_tool/node/18.17.1/x64 \
-          && curl https://github.com/actions/node-versions/releases/download/18.17.1-5819737873/node-18.17.1-linux-x64.tar.gz --output /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz \
-          && ls /tmp \
-          && cd /opt/actions-runner/_work/_tool/node/18.17.1/x64 \
-          && tar xvzf node-18.tar.gz 2> /dev/null \
-          && rm node-18.tar.gz \
-          && ls .
+      - run: mkdir -p /opt/actions-runner/_work/_tool/node/18.17.1/x64
+
+      - run: curl https://github.com/actions/node-versions/releases/download/18.17.1-5819737873/node-18.17.1-linux-x64.tar.gz --output /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz
+
+      - run: cd /opt/actions-runner/_work/_tool/node/18.17.1/x64 \
+          && tar xvzf node-18.tar.gz 2> /dev/null
+
+      - run: rm /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz && ls .
 
       - uses: actions/setup-node@v3
         with:
