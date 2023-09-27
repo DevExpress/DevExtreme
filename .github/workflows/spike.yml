@@ -26,15 +26,19 @@ jobs:
     steps:
       - run: node -v
 
-      - run: mkdir -p /opt/actions-runner/_work/_tool/node/18.17.1/x64
+#      - run: mkdir -p /opt/actions-runner/_work/_tool/node/18.17.1/x64
+#
+#      - run: wget https://github.com/actions/node-versions/releases/download/18.18.0-6231178035/node-18.18.0-linux-x64.tar.gz
+#
+#      - run: mv node-18.18.0-linux-x64.tar.gz /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz
+#
+#      - run: cd /opt/actions-runner/_work/_tool/node/18.17.1/x64 && tar xvzf node-18.tar.gz
+#
+#      - run: rm /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz && ls .
 
-      - run: wget https://github.com/actions/node-versions/releases/download/18.18.0-6231178035/node-18.18.0-linux-x64.tar.gz
-
-      - run: mv node-18.18.0-linux-x64.tar.gz /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz
-
-      - run: cd /opt/actions-runner/_work/_tool/node/18.17.1/x64 && tar xvzf node-18.tar.gz
-
-      - run: rm /opt/actions-runner/_work/_tool/node/18.17.1/x64/node-18.tar.gz && ls .
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
       - uses: actions/setup-node@v3
         with:
