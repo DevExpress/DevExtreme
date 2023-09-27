@@ -13,22 +13,27 @@ fixture`Common tests with axe`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
-const DATA_GRID_SURFACE_CLASS = 'dx-datagrid-surface';
+
+/*
+Datagrid's header panel and pager have transparent background-color.
+So to check contrast issues correctly we assign to body this class.
+*/
+const TYPOGRAPHY_CLASS = 'dx-theme-fluent-typography dx-theme-generic-typography dx-theme-material-typography';
 
 const changeTheme = async (theme: string): Promise<any> => {
   await originalChangeTheme(theme);
 
-  const needSurfaceBackground = theme !== Themes.genericLight;
+  const needTypographyBackground = theme !== Themes.genericLight;
 
   await ClientFunction(() => {
     const { body } = (window as any).document;
 
-    if (needSurfaceBackground) {
-      body.classList.add(DATA_GRID_SURFACE_CLASS);
+    if (needTypographyBackground) {
+      body.classList.value = TYPOGRAPHY_CLASS;
     } else {
-      body.classList.remove(DATA_GRID_SURFACE_CLASS);
+      body.classList.value = undefined;
     }
-  }, { dependencies: { needSurfaceBackground, DATA_GRID_SURFACE_CLASS } })();
+  }, { dependencies: { needTypographyBackground, TYPOGRAPHY_CLASS } })();
 };
 
 [
