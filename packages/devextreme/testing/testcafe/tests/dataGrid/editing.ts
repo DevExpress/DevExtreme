@@ -28,6 +28,42 @@ const getGridConfig = (config): Record<string, unknown> => {
 
 const encodedIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzAwMDAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIC8+DQo8L3N2Zz4NCg==';
 
+test('Tab key on editor should not raise error when onSaving\'s promise is not yet resolved', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
+    .pressKey('tab tab');
+  await t.wait(100); // wait onSaving's promise
+
+  // assert
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  await t.expect(consoleMessages.error.length).eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, field1: 'value1' },
+    { id: 2, field1: 'value2' },
+    { id: 3, field1: 'value3' },
+    { id: 4, field1: 'value4' },
+  ],
+  keyExpr: 'id',
+  showBorders: true,
+  columns: ['field1'],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+  },
+  onSaving(e) {
+    const d = $.Deferred();
+    setTimeout(() => {
+      d.resolve();
+    }, 100);
+    e.promise = d.promise();
+  },
+}));
+
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
   const dataGrid = new DataGrid('#container');
 
