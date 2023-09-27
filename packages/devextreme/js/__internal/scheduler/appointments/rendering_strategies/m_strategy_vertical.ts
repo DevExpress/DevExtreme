@@ -4,10 +4,10 @@ import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
 import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import getSkippedHoursInRange from '@js/renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
-import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
-import { ExpressionUtils } from '@js/ui/scheduler/expressionUtils';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
+import { createAppointmentAdapter } from '../../m_appointment_adapter';
+import { ExpressionUtils } from '../../m_expression_utils';
 import BaseAppointmentsStrategy from './m_strategy_base';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;

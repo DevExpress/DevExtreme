@@ -17,7 +17,7 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Use Node.js 18
+    - name: Use Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18.16.1'
@@ -52,7 +52,7 @@ jobs:
       shell: bash
       run: |
         git add . -N
-        changes=$(git diff --name-status HEAD -- packages/devextreme-vue/src packages/vue2-strategy/src)
+        changes=$(git diff --name-status HEAD -- packages/devextreme-vue/src)
         if [ -n "$changes" ]; then
           echo "Generated code is outdated. The following files have uncommitted changes:"
           echo "$changes";
@@ -73,5 +73,5 @@ jobs:
       run: npm run test
 
     - name: Check packing
-      run: npx nx run-many -t pack -p devextreme-vue devextreme-vue2-strategy
+      run: npx nx run-many -t pack -p devextreme-vue
 

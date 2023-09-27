@@ -3,12 +3,12 @@ import translator from 'animation/translator';
 import fx from 'animation/fx';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
-import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
+import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
-import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
+import AppointmentAdapter from '__internal/scheduler/m_appointment_adapter';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
@@ -222,11 +222,11 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size in material theme', function(assert) {
-        const origIsMaterial = themes.isMaterial;
+    test('Appointment collector should have correct size in material-based themes', function(assert) {
+        const origIsMaterialBased = themes.isMaterialBased;
 
         try {
-            themes.isMaterial = () => true;
+            themes.isMaterialBased = () => true;
 
             const scheduler = createInstance({
                 currentDate: new Date(2019, 2, 4),
@@ -240,7 +240,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
             assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
         } finally {
-            themes.isMaterial = origIsMaterial;
+            themes.isMaterialBased = origIsMaterialBased;
         }
     });
 

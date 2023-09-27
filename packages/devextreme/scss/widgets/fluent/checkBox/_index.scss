@@ -12,6 +12,25 @@
 $fluent-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 $icon-position: relative;
 
+.dx-checkbox-icon {
+  width: $fluent-checkbox-size;
+  height: $fluent-checkbox-size;
+  border-width: $fluent-checkbox-border-width;
+  border-style: solid;
+  border-color: $checkbox-border-color;
+  border-radius: $fluent-checkbox-border-radius;
+  background-color: $checkbox-foreground-color;
+
+  &::before {
+    z-index: 2;
+  }
+}
+
+.dx-checkbox-text {
+  padding-inline-start: $fluent-checkbox-text-padding-start;
+  padding-inline-end: $fluent-checkbox-text-padding-end;
+}
+
 .dx-checkbox {
   line-height: 0;
 
@@ -19,79 +38,66 @@ $icon-position: relative;
     overflow: visible;
   }
 
-  &.dx-state-readonly,
-  &.dx-state-disabled {
-    border-color: color.change($checkbox-border-color, $alpha: 0.26);
-  }
-
-  &.dx-state-focused,
-  &.dx-state-active {
-    .dx-checkbox-icon::after {
-      background-color: color.change($checkbox-border-color, $alpha: 0.1);
-      transform: scale(1);
+  &.dx-invalid {
+    .dx-checkbox-icon {
+      border-color: $checkbox-invalid-color;
     }
   }
 
-  &.dx-checkbox-checked,
-  &.dx-checkbox-indeterminate {
-    &.dx-state-focused,
-    &.dx-state-active {
-      .dx-checkbox-icon::after {
-        background-color: color.change($checkbox-bg, $alpha: 0.1);
-        transform: scale(1);
-      }
+  &.dx-state-readonly {
+    .dx-checkbox-icon {
+      border-color: $checkbox-disabled-color;
+    }
+  }
+
+  &.dx-state-hover {
+    .dx-checkbox-icon {
+      border-color: $checkbox-border-color-hover;
     }
 
-    &.dx-state-readonly,
-    &.dx-state-disabled {
+    &.dx-invalid {
       .dx-checkbox-icon {
-        background-color: color.change($checkbox-border-color, $alpha: 0.26);
+        border-color: $checkbox-invalid-color-hover;
       }
     }
   }
-}
 
-.dx-checkbox,
-.dx-checkbox-indeterminate,
-.dx-checkbox-checked {
-  &.dx-state-readonly.dx-state-focused {
-    .dx-checkbox-icon::after {
-      background-color: color.change($checkbox-border-color, $alpha: 0.1);
-      transform: scale(1);
+  &.dx-state-active {
+    .dx-checkbox-icon {
+      border-color: $checkbox-border-color-active;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-checkbox-icon {
+      border-color: $checkbox-accent-color-focused;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: $checkbox-invalid-color-focused;
+      }
+    }
+  }
+
+  &.dx-state-disabled,
+  .dx-state-disabled & {
+    opacity: 1; 
+
+    .dx-checkbox-icon {
+      border-color: $checkbox-disabled-color;
     }
   }
 }
 
-.dx-checkbox-icon {
-  width: $fluent-checkbox-size;
-  height: $fluent-checkbox-size;
-  border: 2px solid $checkbox-border-color;
-  border-radius: $fluent-checkbox-border-radius;
-
-  &::after {
-    content: "";
-    width: $fluent-checkbox-ripple-size;
-    height: $fluent-checkbox-ripple-size;
-    top: 50%;
-    left: 50%;
-    margin-top: math.div(-$fluent-checkbox-ripple-size, 2);
-    margin-left: math.div(-$fluent-checkbox-ripple-size, 2);
-    border-radius: 50%;
-    display: block;
-    position: absolute;
-    z-index: 1;
-    transform: scale(0.5);
-    transition: $fluent-checkbox-ripple-transition;
-  }
-
-  &::before {
-    z-index: 2;
-  }
-
-  .dx-checkbox-checked & {
-    color: $checkbox-checked-color;
-    background-color: $checkbox-bg;
-    border: none;
+.dx-checkbox-checked {
+  .dx-checkbox-icon {
+    color: $checkbox-foreground-color;
+    border: 1px solid $checkbox-accent-color;
+    background-color: $checkbox-accent-color;
 
     @include dx-icon(check);
     @include dx-icon-font-centered-sizing($fluent-checkbox-arrow-icon-size, $icon-position);
@@ -99,27 +105,127 @@ $icon-position: relative;
     font-size: $fluent-checkbox-arrow-font-size;
   }
 
-  .dx-checkbox-indeterminate & {
-    background-color: $checkbox-indeterminate-bg;
-    color: $checkbox-checked-color;
-    border: none;
+  &.dx-state-hover {
+    .dx-checkbox-icon {
+      border-color: $checkbox-accent-color-hover;
+      background-color: $checkbox-accent-color-hover;
+    }
 
-    @include dx-font-icon("\f074");
-    @include dx-icon-font-centered-sizing($fluent-checkbox-indeterminate-icon-size, $icon-position);
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: $checkbox-invalid-color-hover;
+        background-color: $checkbox-invalid-color-hover;
+      }
+    }
+  }
 
-    font-size: $fluent-checkbox-indeterminate-font-size;
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-checkbox-icon {
+      border-color: $checkbox-accent-color-focused;
+      background-color: $checkbox-accent-color-focused;
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: $checkbox-invalid-color-focused;
+        background-color: $checkbox-invalid-color-focused;
+      }
+    }
+  }
+
+  &.dx-invalid {
+    .dx-checkbox-icon {
+      background-color: $checkbox-invalid-color;
+    }
+  }
+
+  &.dx-state-readonly,
+  &.dx-state-disabled,
+  .dx-state-disabled &,
+  &.dx-state-readonly.dx-invalid {
+    .dx-checkbox-icon {
+      color: $checkbox-foreground-disabled-color;
+      background-color: $checkbox-foreground-color;
+    }
   }
 }
 
-.dx-invalid {
+.dx-checkbox-indeterminate {
   .dx-checkbox-icon {
-    border: 2px solid $checkbox-invalid-focused-border-color;
+    background-color: $checkbox-foreground-color;
+    border: 1px solid $checkbox-accent-color;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      background-color: $checkbox-accent-color;
+      border: 3px solid $base-element-bg;
+    }
+
+    font-size: $fluent-checkbox-indeterminate-font-size;
   }
 
+  &.dx-invalid {
+    .dx-checkbox-icon {
+      &::before {
+        background-color: $checkbox-invalid-color;
+      }
+    }
+  }
+
+  &.dx-state-hover {
+    .dx-checkbox-icon {
+      border-color: $checkbox-accent-color-hover;
+
+      &::before {
+        background-color: $checkbox-accent-color-hover;
+      }
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: $checkbox-invalid-color-hover;
+
+        &::before {
+          background-color: $checkbox-invalid-color-hover;
+        }
+      }
+    }
+  }
+
+  &.dx-state-active,
   &.dx-state-focused {
-    .dx-checkbox-icon::after {
-      background-color: color.change($checkbox-invalid-focused-border-color, $alpha: 0.1);
-      transform: scale(1);
+    .dx-checkbox-icon {
+      border-color: $checkbox-accent-color-focused;
+
+      &::before {
+        background-color: $checkbox-accent-color-focused;
+      }
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: $checkbox-invalid-color-focused;
+
+        &::before {
+          background-color: $checkbox-invalid-color-focused;
+        }
+      }
+    }
+  }
+
+  &.dx-state-readonly,
+  &.dx-state-disabled,
+  .dx-state-disabled &,
+  &.dx-state-readonly.dx-invalid {
+    .dx-checkbox-icon {
+      &::before {
+        background-color: $checkbox-foreground-disabled-color;
+      }
     }
   }
 }

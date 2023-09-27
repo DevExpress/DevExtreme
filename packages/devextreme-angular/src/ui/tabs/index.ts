@@ -25,6 +25,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/tabs';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Orientation, SingleOrMultiple, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/tabs';
@@ -174,10 +175,10 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get iconPosition(): string {
+    get iconPosition(): TabsIconPosition {
         return this._getOption('iconPosition');
     }
-    set iconPosition(value: string) {
+    set iconPosition(value: TabsIconPosition) {
         this._setOption('iconPosition', value);
     }
 
@@ -252,10 +253,10 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get orientation(): string {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: string) {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 
@@ -369,10 +370,10 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get selectionMode(): string {
+    get selectionMode(): SingleOrMultiple {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
 
@@ -387,6 +388,19 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set showNavButtons(value: boolean) {
         this._setOption('showNavButtons', value);
+    }
+
+
+    /**
+     * [descr:dxTabsOptions.stylingMode]
+    
+     */
+    @Input()
+    get stylingMode(): TabsStyle {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: TabsStyle) {
+        this._setOption('stylingMode', value);
     }
 
 
@@ -561,7 +575,7 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() iconPositionChange: EventEmitter<string>;
+    @Output() iconPositionChange: EventEmitter<TabsIconPosition>;
 
     /**
     
@@ -603,7 +617,7 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() orientationChange: EventEmitter<string>;
+    @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
     
@@ -666,7 +680,7 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<string>;
+    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     
@@ -674,6 +688,13 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() showNavButtonsChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() stylingModeChange: EventEmitter<TabsStyle>;
 
     /**
     
@@ -754,6 +775,7 @@ export class DxTabsComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'selectedItemsChange' },
             { emit: 'selectionModeChange' },
             { emit: 'showNavButtonsChange' },
+            { emit: 'stylingModeChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }

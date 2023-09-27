@@ -26,6 +26,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Orientation, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/radio_group';
@@ -264,10 +265,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get layout(): string {
+    get layout(): Orientation {
         return this._getOption('layout');
     }
-    set layout(value: string) {
+    set layout(value: Orientation) {
         this._setOption('layout', value);
     }
 
@@ -355,10 +356,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -368,10 +369,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -381,10 +382,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -583,7 +584,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layoutChange: EventEmitter<string>;
+    @Output() layoutChange: EventEmitter<Orientation>;
 
     /**
     
@@ -632,21 +633,21 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

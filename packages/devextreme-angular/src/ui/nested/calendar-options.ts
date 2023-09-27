@@ -16,6 +16,7 @@ import {
 
 
 
+import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
     NestedOptionHost,
@@ -65,7 +66,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'validationMessagePosition',
         'validationStatus',
         'value',
-        'values',
         'visible',
         'weekNumberRule',
         'width',
@@ -79,14 +79,14 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Date | number | string>;
+    @Output() valueChange: EventEmitter<Date | number | string | Array<Date | number | string>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() zoomLevelChange: EventEmitter<string>;
+    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
     protected get _optionPath() {
         return 'calendarOptions';
     }

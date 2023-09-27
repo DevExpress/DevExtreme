@@ -1,6 +1,6 @@
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 // eslint-disable-next-line import/named
-import { dxSchedulerAppointment } from '../../../../ui/scheduler';
+import type { dxSchedulerAppointment } from '../../../../ui/scheduler';
 
 export type Color = string | undefined;
 

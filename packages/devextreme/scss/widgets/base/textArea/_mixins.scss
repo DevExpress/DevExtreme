@@ -19,9 +19,13 @@
   
     &.dx-texteditor-with-label,
     &.dx-texteditor-with-floating-label {
-      .dx-placeholder::before,
-      .dx-texteditor-input {
-        padding-top: 0;
+      &.dx-editor-outlined,
+      &.dx-editor-filled,
+      &.dx-editor-underlined {
+        .dx-placeholder::before,
+        .dx-texteditor-input {
+          padding-top: 0;
+        }
       }
   
       &.dx-editor-outlined {

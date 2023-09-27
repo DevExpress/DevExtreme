@@ -1733,17 +1733,19 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this._isCellValid($cell);
   }
 
-  _isLastRow(rowIndex) {
-    const dataController = this._dataController as any;
-    const visibleItems = dataController
-      .items()
-      .filter((item) => item.visible !== false);
+  private _isLastRow(rowIndex: number): boolean {
+    const dataController = this._dataController;
 
     if (this._isVirtualRowRender()) {
-      return rowIndex >= dataController.getMaxRowIndex();
+      return rowIndex >= (dataController as any).getMaxRowIndex();
     }
 
-    return rowIndex === visibleItems.length - 1;
+    const lastVisibleIndex = Math.max(
+      ...dataController.items()
+        .map((item, index) => (item.visible !== false ? index : -1)),
+    );
+
+    return rowIndex === lastVisibleIndex;
   }
 
   _isFirstValidCell(cellPosition) {
@@ -2705,8 +2707,10 @@ export const keyboardNavigationModule: import('../m_types').Module = {
         getFocusedCellInRow(rowIndex) {
           const keyboardNavigationController = this.getController('keyboardNavigation');
           let $cell = this.callBase(rowIndex);
+          const rowIndexOffset = this._dataController.getRowIndexOffset();
+          const focusedRowIndex = keyboardNavigationController._focusedCellPosition.rowIndex - rowIndexOffset;
 
-          if (keyboardNavigationController.isKeyboardEnabled() && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
+          if (keyboardNavigationController.isKeyboardEnabled() && focusedRowIndex === rowIndex) {
             const $focusedCell = keyboardNavigationController._getFocusedCell();
             if (isElementDefined($focusedCell) && !$focusedCell.hasClass(COMMAND_EDIT_CLASS)) {
               $cell = $focusedCell;

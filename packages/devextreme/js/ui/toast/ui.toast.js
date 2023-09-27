@@ -7,7 +7,7 @@ import { extend } from '../../core/utils/extend';
 import pointerEvents from '../../events/pointer';
 import registerComponent from '../../core/component_registrator';
 import Overlay from '../overlay/ui.overlay';
-import { isMaterial } from '../themes';
+import { isMaterialBased } from '../themes';
 
 const ready = readyCallbacks.add;
 
@@ -106,7 +106,7 @@ const Toast = Overlay.inherit({
         };
 
         const tabletAndMobileCommonOptions = {
-            displayTime: isMaterial() ? 4000 : 2000,
+            displayTime: isMaterialBased() ? 4000 : 2000,
             hideOnOutsideClick: true,
             animation: tabletAndMobileAnimation,
         };
@@ -133,7 +133,7 @@ const Toast = Overlay.inherit({
             },
             {
                 device(device) {
-                    return isMaterial() && device.deviceType === 'desktop';
+                    return isMaterialBased() && device.deviceType === 'desktop';
                 },
                 options: {
                     minWidth: 344,

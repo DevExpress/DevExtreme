@@ -307,7 +307,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default false
      * @public
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
 }
 /**
  * @docid

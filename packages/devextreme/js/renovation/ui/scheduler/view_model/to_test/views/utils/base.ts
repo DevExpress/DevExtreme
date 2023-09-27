@@ -2,9 +2,9 @@ import errors from '../../../../../../../ui/widget/ui.errors';
 import dateUtils from '../../../../../../../core/utils/date';
 import { isDefined } from '../../../../../../../core/utils/type';
 import dateLocalization from '../../../../../../../localization/date';
-import timeZoneUtils from '../../../../../../../ui/scheduler/utils.timeZone';
-import { VERTICAL_GROUP_COUNT_CLASSES } from '../../../../../../../ui/scheduler/classes';
-import { VIEWS } from '../../../../../../../ui/scheduler/constants';
+import timeZoneUtils from '../../../../../../../__internal/scheduler/m_utils_time_zone';
+import { VERTICAL_GROUP_COUNT_CLASSES } from '../../../../../../../__internal/scheduler/m_classes';
+import { VIEWS } from '../../../../../../../__internal/scheduler/m_constants';
 import { getGroupCount } from '../../../../../../../__internal/scheduler/resources/m_utils';
 import { isVerticalGroupingApplied } from '../../../../workspaces/utils';
 import {

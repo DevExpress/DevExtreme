@@ -15,6 +15,7 @@
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
+@use "../button/sizes" as *;
 @use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
@@ -38,10 +39,21 @@ $fluent-grid-base-command-select-column-width: $fluent-grid-base-checkbox-size +
 $fluent-grid-base-cell-vertical-padding: round(math.div($fluent-grid-base-cell-height - $fluent-grid-base-cell-line-height, 2));
 $fluent-grid-base-cell-padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
 $grid-masterdetail-padding: 16px;
+$fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-height;
 
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
+    .dx-bordered-top-view {
+      border-top-left-radius: $fluent-grid-base-border-radius;
+      border-top-right-radius: $fluent-grid-base-border-radius;
+    }
+
+    .dx-bordered-bottom-view {
+      border-bottom-left-radius: $fluent-grid-base-border-radius;
+      border-bottom-right-radius: $fluent-grid-base-border-radius;
+    }
+
     .dx-menu {
       background-color: transparent;
       height: 100%;
@@ -242,13 +254,21 @@ $grid-masterdetail-padding: 16px;
       & > td {
         padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
         font-size: $fluent-grid-base-cell-font-size;
-        line-height: $fluent-grid-base-cell-line-height;
+        line-height: $fluent-grid-base-cell-line-height - 1;
       }
     }
 
     .dx-#{$widget-name}-table .dx-header-row  > td {
       padding-top: $fluent-grid-base-header-cell-vertical-padding;
       padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
+
+      &:first-child {
+        border-top-left-radius: $fluent-grid-base-border-radius;
+      }
+
+      &:last-child {
+        border-top-right-radius: $fluent-grid-base-border-radius;
+      }
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
@@ -767,11 +787,11 @@ $grid-masterdetail-padding: 16px;
     background-color: $toolbar-bg;
 
     .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
+      @include dx-button-flat-color-styling($button-success-color, $button-success-color, $button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
     }
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
-      border-radius: 50%;
+      border-radius: $fluent-base-border-radius;
     }
 
     .dx-#{$widget-name}-toolbar-button {
@@ -1107,6 +1127,8 @@ $grid-masterdetail-padding: 16px;
       @include dx-button-styling-variant(
         $button-danger-bg,
         $button-danger-color,
+        $button-danger-color,
+        $button-danger-color,
         $button-danger-bg,
         $button-danger-bg,
         $button-danger-bg,
@@ -1184,12 +1206,6 @@ $grid-masterdetail-padding: 16px;
     }
   }
 
-  .dx-#{$widget-name}-form-buttons-container {
-    .dx-button {
-      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
-    }
-  }
-
   .dx-command-adaptive {
     width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
     min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
@@ -1207,6 +1223,8 @@ $grid-masterdetail-padding: 16px;
 
     .dx-icon-filter {
       color: $datagrid-filter-panel-color;
+      
+      @include dx-icon-sizing($fluent-filter-panel-icon-size);
     }
   }
 
@@ -1217,6 +1235,14 @@ $grid-masterdetail-padding: 16px;
     &.dx-#{$widget-name}-invalid {
       padding-top: 0;
       padding-bottom: 0;
+    }
+  }
+
+  .dx-#{$widget-name}-dragview {
+    border-radius: $fluent-grid-base-border-radius;
+
+    .dx-#{$widget-name}-borders {
+      border-radius: $fluent-grid-base-border-radius;
     }
   }
 }

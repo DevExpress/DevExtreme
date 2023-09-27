@@ -12,7 +12,8 @@ import {
 
 
 
-import { dxSchedulerScrolling } from 'devextreme/ui/scheduler';
+import { FirstDayOfWeek, Orientation } from 'devextreme/common';
+import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
 
 import {
     NestedOptionHost,
@@ -36,10 +37,10 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get allDayPanelMode(): string {
+    get allDayPanelMode(): AllDayPanelMode {
         return this._getOption('allDayPanelMode');
     }
-    set allDayPanelMode(value: string) {
+    set allDayPanelMode(value: AllDayPanelMode) {
         this._setOption('allDayPanelMode', value);
     }
 
@@ -108,10 +109,10 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get firstDayOfWeek(): number | string | undefined {
+    get firstDayOfWeek(): FirstDayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: number | string | undefined) {
+    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -124,10 +125,10 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get groupOrientation(): string {
+    get groupOrientation(): Orientation {
         return this._getOption('groupOrientation');
     }
-    set groupOrientation(value: string) {
+    set groupOrientation(value: Orientation) {
         this._setOption('groupOrientation', value);
     }
 
@@ -148,10 +149,10 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get maxAppointmentsPerCell(): number | string {
+    get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
         return this._getOption('maxAppointmentsPerCell');
     }
-    set maxAppointmentsPerCell(value: number | string) {
+    set maxAppointmentsPerCell(value: CellAppointmentsLimit | number) {
         this._setOption('maxAppointmentsPerCell', value);
     }
 
@@ -204,10 +205,10 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): string | undefined {
+    get type(): ViewType | undefined {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: ViewType | undefined) {
         this._setOption('type', value);
     }
 

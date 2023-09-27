@@ -4,11 +4,11 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
-import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
+import '__internal/scheduler/workspaces/m_timeline';
+import '__internal/scheduler/workspaces/m_timeline_day';
+import '__internal/scheduler/workspaces/m_timeline_month';
+import '__internal/scheduler/workspaces/m_timeline_week';
+import '__internal/scheduler/workspaces/m_timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 

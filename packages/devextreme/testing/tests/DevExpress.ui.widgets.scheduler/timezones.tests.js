@@ -15,7 +15,7 @@ import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import dragEvents from 'events/drag';
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 const { testStart, test, module } = QUnit;
 

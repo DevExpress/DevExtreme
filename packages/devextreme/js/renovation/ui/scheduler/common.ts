@@ -1,4 +1,4 @@
-import { utils } from '../../../ui/scheduler/utils';
+import { utils } from '../../../__internal/scheduler/m_utils';
 import { DataAccessorsProps } from './props';
 import { DataAccessorType } from './types';
 import { ViewDataProviderValidationOptions } from './workspaces/types';

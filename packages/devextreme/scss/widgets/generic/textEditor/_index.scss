@@ -227,7 +227,6 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 }
 
 @include dx-editor-outlined(
-  $texteditor-border-color,
   $texteditor-input-border-radius,
   $generic-texteditor-label-size,
   1px,
@@ -240,8 +239,13 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-base-inline-borderedwidget-horizontal-padding,
   $base-bg,
+  none,
+  $texteditor-border-color,
+  $texteditor-border-color,
   color.change($texteditor-color, $alpha: 0.5),
   $texteditor-hover-border-color,
+  $texteditor-hover-border-color,
+  $texteditor-focused-border-color,
   $texteditor-focused-border-color,
   $texteditor-invalid-faded-border-color,
   $texteditor-invalid-focused-border-color,

@@ -14,6 +14,7 @@ import {
 
 
 
+import { ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get argumentAxis(): string {
+    get argumentAxis(): ChartZoomAndPanMode {
         return this._getOption('argumentAxis');
     }
-    set argumentAxis(value: string) {
+    set argumentAxis(value: ChartZoomAndPanMode) {
         this._setOption('argumentAxis', value);
     }
 
@@ -69,18 +70,18 @@ export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get panKey(): string {
+    get panKey(): EventKeyModifier {
         return this._getOption('panKey');
     }
-    set panKey(value: string) {
+    set panKey(value: EventKeyModifier) {
         this._setOption('panKey', value);
     }
 
     @Input()
-    get valueAxis(): string {
+    get valueAxis(): ChartZoomAndPanMode {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: string) {
+    set valueAxis(value: ChartZoomAndPanMode) {
         this._setOption('valueAxis', value);
     }
 

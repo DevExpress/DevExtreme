@@ -26,6 +26,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { ApplyValueMode, EditorStyle, LabelMode, Mode, PageLoadMode, Position, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/lookup';
@@ -137,10 +138,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get applyValueMode(): string {
+    get applyValueMode(): ApplyValueMode {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: string) {
+    set applyValueMode(value: ApplyValueMode) {
         this._setOption('applyValueMode', value);
     }
 
@@ -477,10 +478,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get labelMode(): string {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: string) {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -568,10 +569,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get pageLoadMode(): string {
+    get pageLoadMode(): PageLoadMode {
         return this._getOption('pageLoadMode');
     }
-    set pageLoadMode(value: string) {
+    set pageLoadMode(value: PageLoadMode) {
         this._setOption('pageLoadMode', value);
     }
 
@@ -685,10 +686,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get searchMode(): string {
+    get searchMode(): SimplifiedSearchMode {
         return this._getOption('searchMode');
     }
-    set searchMode(value: string) {
+    set searchMode(value: SimplifiedSearchMode) {
         this._setOption('searchMode', value);
     }
 
@@ -789,10 +790,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get stylingMode(): string {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -893,10 +894,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -906,10 +907,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position | Mode {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position | Mode) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -919,10 +920,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -1128,7 +1129,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<string>;
+    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
 
     /**
     
@@ -1310,7 +1311,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<string>;
+    @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
     
@@ -1359,7 +1360,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageLoadModeChange: EventEmitter<string>;
+    @Output() pageLoadModeChange: EventEmitter<PageLoadMode>;
 
     /**
     
@@ -1422,7 +1423,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<string>;
+    @Output() searchModeChange: EventEmitter<SimplifiedSearchMode>;
 
     /**
     
@@ -1478,7 +1479,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<string>;
+    @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
     
@@ -1534,21 +1535,21 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

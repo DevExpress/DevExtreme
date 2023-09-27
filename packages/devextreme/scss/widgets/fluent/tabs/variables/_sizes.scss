@@ -1,0 +1,58 @@
+@use "../../sizes" as *;
+
+// adduse
+
+
+$fluent-tabs-item-padding: null !default;
+$fluent-tabs-item-padding-horizontal: null !default;
+$fluent-tabs-item-padding-vertical: null !default;
+$fluent-tab-height: null !default;
+$fluent-tab-min-width: null !default;
+
+$fluent-tab-text-line-height: null !default;
+$fluent-base-icon-margin: null !default;
+
+$fluent-tab-nav-button-icon-width: null !default;
+$fluent-tab-nav-button-icon-height: null !default;
+$fluent-tab-nav-button-icon-font-size: null !default;
+$fluent-tab-nav-button-content-padding: null !default;
+
+$fluent-tab-vertical-nav-button-content-padding: null !default;
+
+$fluent-indicator-thickness-primary: 2px !default;
+$fluent-indicator-thickness-secondary: 3px !default;
+
+$fluent-indicator-length-primary: 100% !default;
+$fluent-indicator-length-secondary: 100% !default;
+
+$fluent-indicator-border-radius-secondary: 8px !default;
+
+@if $size == "default" {
+  $fluent-tabs-item-padding-horizontal: 12px !default;
+  $fluent-tabs-item-padding-vertical: 16px !default;
+  $fluent-tabs-item-padding: $fluent-tabs-item-padding-horizontal $fluent-tabs-item-padding-vertical !default;
+  $fluent-tab-height: auto !default;
+  $fluent-tab-min-width: 90px !default;
+  $fluent-base-icon-margin: 8px !default;
+  $fluent-tab-text-line-height: 24px !default;
+  $fluent-tab-nav-button-icon-width: 24px !default;
+  $fluent-tab-nav-button-icon-height: 24px !default;
+  $fluent-tab-nav-button-icon-font-size: 24px !default;
+  $fluent-tab-nav-button-content-padding: 0 4px !default;
+  $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-tabs-item-padding-horizontal: 6px !default;
+  $fluent-tabs-item-padding-vertical: 12px !default;
+  $fluent-tabs-item-padding: $fluent-tabs-item-padding-horizontal $fluent-tabs-item-padding-vertical !default;
+  $fluent-tab-height: auto !default;
+  $fluent-tab-min-width: 82px !default;
+  $fluent-base-icon-margin: 8px !default;
+  $fluent-tab-text-line-height: 24px !default;
+  $fluent-tab-nav-button-icon-width: 24px !default;
+  $fluent-tab-nav-button-icon-height: 24px !default;
+  $fluent-tab-nav-button-icon-font-size: 24px !default;
+  $fluent-tab-nav-button-content-padding: 0 4px !default;
+  $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
+}

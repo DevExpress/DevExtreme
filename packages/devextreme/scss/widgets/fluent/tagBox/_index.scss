@@ -16,15 +16,27 @@
     height: 100%;
     padding-top: $fluent-tagbox-tag-container-vertical-padding;
     padding-bottom: $fluent-tagbox-tag-container-vertical-padding;
-    gap: 4px;
+    gap: $fluent-tagbox-tag-container-gap;
 
     .dx-texteditor-input {
       padding: 0;
+      min-height: 0;
     }
   }
 
-  .dx-texteditor-input {
-    height: $fluent-tagbox-tag-height;
+  &.dx-editor-underlined {
+    .dx-tag-container {
+      padding-top: $fluent-tagbox-tag-container-vertical-padding + 1px;
+      padding-bottom: $fluent-tagbox-tag-container-vertical-padding + 1px;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    .dx-texteditor-input {
+      height: $fluent-tagbox-tag-height;
+    }
   }
 
   &.dx-editor-outlined,
@@ -34,10 +46,10 @@
     }
   }
 
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
-    &.dx-texteditor-with-label,
-    &.dx-texteditor-with-floating-label {
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    &.dx-editor-filled,
+    &.dx-editor-underlined {
       .dx-tag {
         margin: 0;
       }
@@ -45,21 +57,34 @@
       .dx-texteditor-input {
         padding: 0;
       }
+    }
 
+    &.dx-editor-filled {
       .dx-tag-container,
       .dx-placeholder::before {
         padding-top: $fluent-tagbox-filled-with-label-top-padding;
         padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
       }
     }
+  
+    &.dx-editor-underlined {
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $fluent-tagbox-filled-with-label-top-padding + 1px;
+        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding + 1px;
+      }
+    }
   }
 
   &.dx-state-disabled {
     .dx-tag-content {
-      background-color: $tagbox-tag-disabled-bg;
+      color: $tagbox-tag-foreground-disabled;
+      background-color: $tagbox-tag-disabled;
+    }
 
-      .dx-tag-remove-button::before {
-        color: $tagbox-tag-disabled-bg;
+    .dx-tag-remove-button {
+      &::before {
+        color: $tagbox-tag-foreground-disabled;
       }
     }
   }
@@ -75,7 +100,7 @@
   display: inline-flex;
   align-items: center;
   font-size: $fluent-tagbox-tag-content-font-size;
-  line-height: normal;
+  line-height: $fluent-tagbox-tag-content-line-height;
   margin: 0;
   padding-top: $fluent-tagbox-tag-content-vertical-padding;
   padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
@@ -85,29 +110,28 @@
   background-color: $tagbox-tag-bg;
   color: $tagbox-tag-color;
   border-radius: $tagbox-tag-border-radius;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base-border-color-disabled;
 }
 
 .dx-tag-remove-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $fluent-tagbox-remove-button-width;
+  width: $fluent-tagbox-tag-height;
   height: 100%;
 
   @include dx-icon(clear);
 
-  font-size: $fluent-tagbox-tag-content-font-size - 4px;
+  font-size: $fluent-tagbox-tag-content-font-size + 2px;
 
   &::before {
+    content: "\f15f";
     display: flex;
     align-items: center;
     justify-content: center;
-    width: $fluent-tagbox-remove-button-icon-size;
-    height: $fluent-tagbox-remove-button-icon-size;
-    color: $tagbox-tag-button-remove-color;
-    background-color: $tagbox-tag-button-remove-bg;
-    border-radius: 50%;
-    transform: none;
+    color: $tagbox-tag-button-remove-bg;
   }
 }
 
@@ -118,12 +142,12 @@
       color: $tagbox-tag-active-color;
     }
   }
-}
 
-.dx-tag.dx-state-focused {
-  .dx-tag-content {
-    background-color: $tagbox-tag-focused-bg;
-    color: $tagbox-tag-active-color;
+  &.dx-state-focused {
+    .dx-tag-content {
+      color: $tagbox-tag-active-color;
+      border-color: $base-accent-active;
+    }
   }
 }
 

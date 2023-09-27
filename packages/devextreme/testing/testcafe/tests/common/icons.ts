@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
+import { getThemeName, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
@@ -129,7 +129,9 @@ const iconSet = {
   exportxlsx: '\f060',
   exportpdf: '\f061',
   exportselected: '\f06d',
+  ordersbox: '\f06e',
   warning: '\f06b',
+  taskhelpneeded: '\f06f',
   more: '\f06c',
   square: '\f067',
   clearsquare: '\f068',
@@ -171,6 +173,7 @@ const iconSet = {
   mention: '\f090',
   variable: '\f091',
   clearformat: '\f092',
+  accountbox: '\f094',
   fullscreen: '\f11a',
   hierarchy: '\f124',
   docfile: '\f111',
@@ -235,6 +238,11 @@ const iconSet = {
   imgarunlock: '\f157',
   bell: '\f158',
   sun: '\f159',
+  taskcomplete: '\f15b',
+  taskrejected: '\f15c',
+  taskinprogress: '\f15d',
+  taskstop: '\f15e',
+  clearcircle: '\f15f',
   send: '\f160', // material only
   pinmap: '\f161', // material only
   photooutline: '\f162',
@@ -309,15 +317,15 @@ test('SVG icon set', async (t) => {
       fontSize: '10px',
     });
 
-    const isMaterialTheme = isMaterial();
+    const themeName = getThemeName();
 
     await ClientFunction(() => {
       $(`#${id}`)
-        .append($(`<img src="../../../images/icons/${isMaterialTheme ? 'material' : 'generic'}/${iconName}.svg">`))
+        .append($(`<img src="../../../images/icons/${themeName}/${iconName}.svg">`))
         .append($('<div>').text(`${iconName}`));
     }, {
       dependencies: {
-        ICON_CLASS, id, iconName, glyph, isMaterialTheme,
+        ICON_CLASS, id, iconName, glyph, themeName,
       },
     })();
   }

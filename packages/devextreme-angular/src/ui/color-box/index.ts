@@ -26,7 +26,9 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
+import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import DxColorBox from 'devextreme/ui/color_box';
@@ -147,10 +149,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get applyValueMode(): string {
+    get applyValueMode(): ApplyValueMode {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: string) {
+    set applyValueMode(value: ApplyValueMode) {
         this._setOption('applyValueMode', value);
     }
 
@@ -160,10 +162,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get buttons(): Array<string | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -394,10 +396,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get labelMode(): string {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: string) {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -511,10 +513,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get stylingMode(): string {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -576,10 +578,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -589,10 +591,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position | Mode {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position | Mode) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -602,10 +604,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -809,14 +811,14 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<string>;
+    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<string | DevExpress.common.TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>>;
 
     /**
     
@@ -942,7 +944,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<string>;
+    @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
     
@@ -1005,7 +1007,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<string>;
+    @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
     
@@ -1040,21 +1042,21 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

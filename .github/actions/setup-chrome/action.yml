@@ -1,0 +1,38 @@
+name: Pin Browsers
+description: Install and setup Chrome and Firefox
+
+# List of browser versions
+# Chrome (ubuntu): https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
+# Chrome versions: https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions
+
+inputs:
+  chrome-version:
+    description: Chrome version to install
+    default: "latest"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup latest Chrome
+      if: ${{ inputs.chrome-version == 'latest' }}
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: ${{ inputs.chrome-version }}
+    - name: Print latest Chrome version
+      if: ${{ inputs.chrome-version == 'latest' }}
+      shell: bash
+      run: google-chrome-stable --version
+    - name: Setup Chrome with specific version
+      if: ${{ inputs.chrome-version != 'latest' }}
+      shell: bash
+      env:
+        CHROME_VERSION: ${{ inputs.chrome-version }}
+      run: |
+        if [ -n "$CHROME_VERSION" ]; then
+          curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb" > /tmp/chrome.deb
+          sudo dpkg -i /tmp/chrome.deb
+          unlink /tmp/chrome.deb
+          google-chrome-stable --version
+        else
+          echo "Skip Chrome upgrade"
+        fi

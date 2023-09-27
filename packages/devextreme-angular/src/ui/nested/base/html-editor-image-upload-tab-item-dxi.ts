@@ -6,6 +6,8 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { DiagramCommand } from 'devextreme/ui/diagram';
+import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''
@@ -81,24 +83,24 @@ export abstract class DxiHtmlEditorImageUploadTabItem extends CollectionNestedOp
         this._setOption('title', value);
     }
 
-    get commands(): Array<DevExpress.ui.dxDiagramCustomCommand | string> {
+    get commands(): Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<DevExpress.ui.dxDiagramCustomCommand | string>) {
+    set commands(value: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>) {
         this._setOption('commands', value);
     }
 
-    get groups(): Array<any | { commands?: Array<DevExpress.ui.dxDiagramCustomCommand | string>, title?: string }> {
+    get groups(): Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }> {
         return this._getOption('groups');
     }
-    set groups(value: Array<any | { commands?: Array<DevExpress.ui.dxDiagramCustomCommand | string>, title?: string }>) {
+    set groups(value: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }>) {
         this._setOption('groups', value);
     }
 
-    get name(): string | undefined {
+    get name(): HtmlEditorImageUploadTab | undefined {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: HtmlEditorImageUploadTab | undefined) {
         this._setOption('name', value);
     }
 }

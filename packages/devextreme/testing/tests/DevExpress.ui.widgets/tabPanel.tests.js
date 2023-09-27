@@ -204,6 +204,14 @@ QUnit.module('options', {
         assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'top', 'option <iconPosition> of nested tabs widget successfully changed');
     });
 
+    QUnit.test('stylingMode option should be passed to tabs correctly', function(assert) {
+        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'primary', 'option <stylingMode> successfully passed to nested tabs widget');
+
+        this.tabPanelInstance.option('stylingMode', 'secondary');
+
+        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'secondary', 'option <stylingMode> of nested tabs widget successfully changed');
+    });
+
     QUnit.test('dataSource option test', function(assert) {
         assert.expect(2);
 

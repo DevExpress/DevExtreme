@@ -47,6 +47,10 @@ const knownErrors = [
     // #endregion
 ];
 
+const GENERATE_COMPONENTS_OPTIONS = {
+    excludePathPatterns: ['__internal'],
+};
+
 function deleteJQueryComponents(cb) {
     del.sync(jQueryComponentsGlob);
     cb();
@@ -66,7 +70,7 @@ function generateJQueryComponents(isWatch) {
         )) : gulp.src(SRC);
 
     return pipe
-        .pipe(generateComponents(generator))
+        .pipe(generateComponents(generator, GENERATE_COMPONENTS_OPTIONS))
         .pipe(plumber(()=>null))
         .pipe(gulp.dest('js/renovation/'));
 }
@@ -93,7 +97,7 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
 
         return gulp.src(SRC, { base: 'js' })
             .pipe(gulpIf(dev, cached('generate-inferno-component')))
-            .pipe(generateComponents(generator))
+            .pipe(generateComponents(generator, GENERATE_COMPONENTS_OPTIONS))
             .pipe(plumber(() => null))
             .pipe(tsProject({
                 error: processErrors(knownErrors, errors),

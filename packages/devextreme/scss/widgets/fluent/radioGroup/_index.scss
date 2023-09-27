@@ -12,3 +12,15 @@
   $fluent-radio-button-vertical-margin,
   0,
 );
+
+.dx-radiogroup {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+.dx-radiogroup-horizontal {
+  .dx-collection {
+    column-gap: 16px;
+  }
+}

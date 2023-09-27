@@ -9,7 +9,7 @@ import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import CustomStore from 'data/custom_store';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';

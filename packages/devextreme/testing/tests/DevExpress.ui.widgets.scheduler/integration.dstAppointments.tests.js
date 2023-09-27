@@ -2,7 +2,7 @@ import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.j
 import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import 'ui/scheduler/ui.scheduler';
 
 import 'generic_light.css!';

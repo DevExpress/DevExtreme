@@ -9,7 +9,6 @@
 // adduse
 
 $material-slider-radius: 50%;
-$material-slider-bar-height: 2px;
 $material-slider-handle-active-border-width: 2px;
 $material-slider-handle-inner-size: 12px;
 $material-slider-handle-inner-border-width: 1px;
@@ -25,8 +24,8 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-slider-bar,
 .dx-slider-range {
-  margin-top: math.div($material-slider-wrapper-height - $material-slider-bar-height, 2);
-  height: $material-slider-bar-height;
+  margin-top: math.div($material-slider-wrapper-height - $material-slider-track-height, 2);
+  height: $material-slider-track-height;
 }
 
 .dx-slider-bar {
@@ -36,7 +35,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 }
 
 .dx-slider-range {
-  top: math.div($material-slider-bar-height, 2) - math.div($material-slider-handle-size, 2);
+  top: math.div($material-slider-track-height, 2) - math.div($material-slider-handle-size, 2);
 
   &.dx-slider-range-visible {
     background: $material-slider-bg;
@@ -44,7 +43,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 }
 
 .dx-slider-handle {
-  margin-top: math.div($material-slider-bar-height, 2) - math.div($material-slider-handle-size, 2);
+  margin-top: math.div($material-slider-track-height, 2) - math.div($material-slider-handle-size, 2);
   margin-inline-end: math.div(-$material-slider-handle-size, 2);
   width: $material-slider-handle-size;
   height: $material-slider-handle-size;

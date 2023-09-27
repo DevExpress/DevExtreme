@@ -1,0 +1,390 @@
+@use "../icons" as *;
+
+@mixin dx-switch(
+  $switch-width,
+  $switch-height,
+  $switch-padding,
+  $switch-handle-height,
+  $switch-container-height,
+  $switch-container-horizontal-padding,
+  $switch-container-vertical-margin,
+  $switch-handle-margin,
+  $switch-handle-border-radius,
+  $switch-transition,
+) {
+  .dx-switch {
+    width: $switch-width;
+    height: $switch-height;
+  
+    .dx-switch-wrapper {
+      position: relative;
+      padding-top:  $switch-padding,;
+      padding-bottom:  $switch-padding,;
+      padding-inline-start: $switch-padding - $switch-container-horizontal-padding;
+      padding-inline-end: $switch-padding + $switch-container-horizontal-padding;
+      inset-inline-start: -$switch-padding;
+      top: -$switch-padding;
+      overflow: hidden;
+      vertical-align: middle;
+      box-sizing: content-box;
+    }
+  }
+
+  .dx-switch-container {
+    height: $switch-height;
+    overflow: visible;
+    position: relative;
+    padding: 0 $switch-container-horizontal-padding;
+  
+    &::before {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: $switch-container-height;
+      border-radius: 500px;
+      margin: $switch-container-vertical-margin 0;
+      transition: $switch-transition;
+    }
+  }
+  
+  .dx-switch-inner {
+    width: 200%;
+    height: 100%;
+  }
+  
+  .dx-switch-on,
+  .dx-switch-off {
+    flex-shrink: 0;
+    float: left;
+    padding: 4px 0;
+    width: 50%;
+    height: $switch-height;
+    color: transparent;
+    text-align: center;
+    line-height: 100%;
+  }
+  
+  .dx-switch-on {
+    background: transparent;
+  }
+  
+  .dx-switch-off {
+    display: none;
+    padding-bottom: 10px;
+    background-color: transparent;
+  }
+  
+  .dx-switch-handle {
+    flex-basis: $switch-handle-height;
+    flex-shrink: 0;
+    position: relative;
+    float: left;
+    margin: $switch-handle-margin;
+    width: $switch-handle-height;
+    height: $switch-handle-height;
+    border-radius: $switch-handle-border-radius;
+  
+    &::before {
+      display: block;
+      content: ' ';
+      width: 100%;
+      height: 100%;
+      border-radius: $switch-handle-border-radius;
+      transition: $switch-transition;
+    }
+  }
+}
+
+@mixin dx-switch-states(
+  $switch-handle-disabled-bg,
+  $switch-disabled-bg,
+  $switch-shadow,
+  $switch-bg,
+  $switch-on-bg,
+  $switch-handle-shadow,
+  $switch-handle-on-shadow,
+  $switch-handle-off-bg,
+  $switch-handle-on-bg,
+) {
+  .dx-switch {
+    &.dx-state-readonly,
+    &.dx-state-disabled {
+      .dx-switch-handle::before {
+        background-color: $switch-handle-disabled-bg;
+      }
+  
+      .dx-switch-container::before {
+        background-color: $switch-disabled-bg;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-handle::before {
+        box-shadow: $switch-shadow;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .dx-switch-container {
+    &::before {
+      background-color: $switch-bg;
+    }
+  }
+
+  .dx-switch-handle {
+    background-color: $switch-handle-off-bg;
+    box-shadow: $switch-handle-shadow;
+
+    &::before {
+      background-color: $switch-handle-off-bg;
+    }
+  }
+
+  .dx-switch-on-value,
+  .dx-switch {
+    &.dx-state-readonly.dx-state-focused {
+      .dx-switch-handle::before {
+        box-shadow: $switch-shadow;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .dx-switch-on-value {
+    .dx-switch-container::before {
+      background-color: $switch-on-bg;
+    }
+  
+    .dx-switch-handle::before {
+      background-color: $switch-handle-on-bg;
+    }
+  
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-handle::before {
+        box-shadow: $switch-handle-on-shadow;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+@mixin dx-switch-states-fluent(
+  $switch-on-disabled-bg,
+  $switch-handle-disabled-bg,
+  $switch-shadow,
+  $switch-bg,
+  $switch-on-bg,
+  $switch-accent-hover,
+  $switch-accent-active,
+  $switch-handle-on-shadow,
+  $switch-handle-off-bg,
+  $switch-handle-on-bg,
+  $switch-border,
+  $switch-off-border-color,
+  $switch-off-border-color-hover,
+  $switch-off-border-color-active,
+  $switch-on-border-color,
+  $switch-invalid-color,
+  $switch-invalid-color-hover,
+  $switch-invalid-color-focused,
+  $base-disabled-border-color,
+) {
+  .dx-switch-container {
+    &::before {
+      background-color: $switch-bg;
+      border: $switch-border;
+      border-color: $switch-off-border-color;
+    }
+  }
+
+  .dx-switch-handle {
+    background-color: $switch-handle-off-bg;
+
+    &::before {
+      background-color: $switch-handle-off-bg;
+    }
+  }
+
+  .dx-switch {
+    .dx-switch-handle::before {
+      background-color:  $switch-off-border-color;
+    }
+
+    &.dx-state-hover {
+      .dx-switch-container::before {
+        border-color: $switch-off-border-color-hover;
+      }
+
+      &.dx-state-readonly {
+        .dx-switch-container::before {
+          border-color: $switch-off-border-color-hover;
+        } 
+      }
+
+      &.dx-invalid {
+        .dx-switch-container::before {
+          border-color: $switch-invalid-color-hover;
+        }
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-container::before {
+        border-color:  $switch-off-border-color-active;
+      }
+
+      &.dx-state-readonly {
+        .dx-switch-container::before {
+          border-color: $switch-accent-active;
+        }
+      }
+
+      &.dx-invalid {
+        .dx-switch-container::before {
+          border-color: $switch-invalid-color-focused;
+        }
+      }
+    }
+
+    &.dx-invalid {
+      .dx-switch-container::before {
+        border-color: $switch-invalid-color;
+      }
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly {
+      opacity: 1;
+
+      .dx-switch-container::before {
+        border-color: $base-disabled-border-color;
+        background-color: transparent;
+      }
+
+      .dx-switch-handle::before {
+        background-color: $switch-handle-disabled-bg;
+      }
+    }
+  }
+
+  .dx-switch:not(.dx-switch-on-value):not(.dx-state-readonly) {
+    &.dx-state-hover {
+      .dx-switch-handle::before {
+        background-color:  $switch-off-border-color-hover;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-handle::before {
+        background-color:  $switch-off-border-color-active;
+      }
+    }
+  }
+
+  .dx-switch-on-value {
+    .dx-switch-container::before {
+      background-color: $switch-on-bg;
+      border-color: $switch-on-border-color;
+    }
+
+    .dx-switch-handle::before {
+      background-color: $switch-handle-on-bg;
+    }
+
+    &.dx-state-hover {
+      .dx-switch-container::before {
+        border-color: $switch-accent-hover;
+        background-color: $switch-accent-hover;
+      }
+
+      &.dx-invalid:not(.dx-state-readonly) {
+        .dx-switch-container::before {
+          background-color: $switch-invalid-color-hover;
+        }
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-container::before {
+        border-color: $switch-accent-active;
+        background-color: $switch-accent-active;
+      }
+
+      &.dx-invalid:not(.dx-state-readonly) {
+        .dx-switch-container::before {
+          background-color: $switch-invalid-color-focused;
+        }
+      }
+    }
+
+    &.dx-invalid {
+      .dx-switch-container::before {
+        background-color: $switch-invalid-color;
+      }
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly {
+      .dx-switch-container::before {
+        border-color: $switch-on-disabled-bg;
+        background-color: $switch-on-disabled-bg;
+      }
+    }
+  }
+}
+
+@mixin dx-switch-rtl(
+  $switch-height,
+  $switch-padding,
+  $switch-container-adjustment,
+) {
+  .dx-rtl .dx-switch,
+  .dx-switch.dx-rtl {
+    .dx-switch-off {
+      margin-left: 0;
+    }
+
+    .dx-switch-handle {
+      float: right;
+      margin-left: 0;
+      margin-right: -$switch-height;
+    }
+
+    .dx-switch-container {
+      margin: 0 0 0 (-$switch-container-adjustment);
+    }
+  }
+}
+
+@mixin dx-switch-invalid(
+  $switch-invalid-container-bg,
+  $switch-invalid-handle-bg,
+  $switch-invalid-shadow,
+) {
+  .dx-invalid {
+    &.dx-switch {
+      .dx-switch-container::before {
+        background-color: $switch-invalid-container-bg;
+      }
+    }
+  
+    &.dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled) {
+      .dx-switch-container .dx-switch-handle::before {
+        background-color: $switch-invalid-handle-bg;
+      }
+  
+      &.dx-state-active,
+      &.dx-state-focused {
+        .dx-switch-container .dx-switch-handle::before {
+          box-shadow: $switch-invalid-shadow;
+        }
+      }
+    }
+  }
+}

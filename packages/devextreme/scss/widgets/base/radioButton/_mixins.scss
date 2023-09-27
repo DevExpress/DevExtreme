@@ -3,9 +3,6 @@
 @mixin dx-radiobutton-icon-mixin(
   $icon-size,
   $border-width,
-  $border-color,
-  $radiogroup-bg,
-  $checked-color,
   $dot-size,
   $useRipple: false,
   $ripple-size: 0,
@@ -20,8 +17,6 @@
     height: $icon-size;
     border-width: $border-width;
     border-style: solid;
-    border-color: $border-color;
-    background-color: $radiogroup-bg;
     border-radius: 50%;
 
     @if $useRipple {
@@ -34,7 +29,6 @@
       border-radius: 50%;
       border-width: 0;
       border-style: solid;
-      border-color: $radiogroup-bg;
 
       @if $useRipple {
         transform: scale(0);
@@ -61,12 +55,7 @@
   }
 
   .dx-radiobutton-icon-checked {
-    @if $useRipple {
-      border-color: $checked-color;
-    }
-
     .dx-radiobutton-icon-dot {
-      background-color: $checked-color;
       border-width: $dot-icon-border-width;
 
       @if $useRipple {
@@ -77,20 +66,40 @@
 }
 
 @mixin dx-radiobutton-states-mixin(
+  $foreground-color,
   $border-color,
   $readonly-border-color,
   $hover-border-color,
   $active-bg,
   $focused-border-color,
   $checked-color,
-  $invalid-faded-border-color,
-  $invalid-hover-border-color,
-  $invalid-focused-border-color,
+  $invalid-color,
+  $invalid-color-hover,
+  $invalid-color-focused,
   $disabled-opacity,
   $useRipple: false,
   $focused-ripple-bg: transparent,
   $invalid-focused-ripple-bg: transparent,
 ) {
+  .dx-radiobutton-icon {
+    border-color: $border-color;
+    background-color: $foreground-color;
+
+    .dx-radiobutton-icon-dot {
+      border-color: $foreground-color;
+    }
+  }
+
+  .dx-radiobutton-icon-checked {
+    @if $useRipple {
+      border-color: $checked-color;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $checked-color;
+    }
+  }
+
   .dx-radiobutton {
     &.dx-state-disabled {
       opacity: $disabled-opacity;
@@ -142,23 +151,25 @@
 
   .dx-invalid {
     .dx-radiobutton-icon {
-      border-color: $invalid-faded-border-color;
+      border-color: $invalid-color;
     }
 
     @if $useRipple {
-      .dx-radiobutton-icon-dot {
-        background-color: $invalid-faded-border-color;
+      .dx-radiobutton-icon-checked {
+        .dx-radiobutton-icon-dot {
+          background-color: $invalid-color;
+        }
       }
 
       .dx-state-active,
       .dx-state-focused {
         &.dx-radiobutton {
           .dx-radiobutton-icon {
-            border-color: $invalid-focused-border-color;
+            border-color: $invalid-color-focused;
           }
 
           .dx-radiobutton-icon-dot {
-            background-color: $invalid-focused-border-color;
+            background-color: $invalid-color-focused;
           }
 
           .dx-radiobutton-icon::after {
@@ -170,14 +181,14 @@
     } @else {
       .dx-state-hover {
         &.dx-radiobutton .dx-radiobutton-icon {
-          border-color: $invalid-hover-border-color;
+          border-color: $invalid-color-hover;
         }
       }
 
       .dx-state-focused {
         &.dx-radiobutton {
           .dx-radiobutton-icon {
-            border-color: $invalid-focused-border-color;
+            border-color: $invalid-color-focused;
           }
         }
       }

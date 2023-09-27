@@ -12,24 +12,27 @@
 
 // adduse
 
-$fluent-editor-custom-button-margin: 5px;
+$fluent-editor-custom-button-margin: 6px;
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
 
-  .dx-editor-outlined {
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
     &::before {
-      display: block;
-      bottom: 1px;
+      content: none;
     }
   }
 
   .dx-editor-outlined,
   .dx-editor-filled {
-    &::before {
-      width: calc(100% - 2 * $fluent-daterangebox-active-bar-horizontal-margin);
-      margin: 0 $fluent-daterangebox-active-bar-horizontal-margin;
-    }
+    &.dx-datebox {
+      &::before {
+        border-radius: 0;
+        width: calc(100% - 2 * $fluent-daterangebox-active-bar-horizontal-margin);
+        margin: 0 $fluent-daterangebox-active-bar-horizontal-margin;
+      }
+    } 
   }
 
   &.dx-editor-underlined,
@@ -54,17 +57,6 @@ $fluent-editor-custom-button-margin: 5px;
         }
       }
     }
-
-    .dx-datebox {
-      &::before {
-        bottom: 1px;
-      }
-
-      &::after {
-        border-color: transparent;
-        bottom: 1px;
-      }
-    }
   }
 
   &.dx-editor-underlined {
@@ -85,12 +77,12 @@ $fluent-editor-custom-button-margin: 5px;
         }
 
         &:last-child {
-          margin-inline-end: $fluent-editor-custom-button-margin * 2;
+          margin-inline-end: $fluent-editor-custom-button-margin;
         }
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-inline-end: $fluent-filled-texteditor-spin-button-horizontal-padding;
+        margin-inline-end: $texteditor-spin-button-horizontal-padding;
       }
 
       > .dx-clear-button-area:last-child,
@@ -101,14 +93,6 @@ $fluent-editor-custom-button-margin: 5px;
   }
 
   .dx-datebox {
-    &.dx-start-datebox {
-      &.dx-texteditor {
-        .dx-texteditor-input {
-          padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding;
-        }
-      }
-    }
-
     &.dx-end-datebox {
       &.dx-texteditor {
         &.dx-invalid {
@@ -123,7 +107,7 @@ $fluent-editor-custom-button-margin: 5px;
 
 .dx-daterangebox-separator {
   padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  color: $texteditor-disabled-color;
+  color: $texteditor-disabled-text-color;
 
   .dx-icon {
     @include dx-icon-sizing($fluent-base-icon-size);

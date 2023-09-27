@@ -2715,8 +2715,8 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('more button should have default type for the Material theme', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => {
+        const origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = () => {
             return true;
         };
 
@@ -2733,7 +2733,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
 
         assert.equal(button.option('type'), 'default', 'more button should have default type for the Material theme');
 
-        themes.isMaterial = origIsMaterial;
+        themes.isMaterialBased = origIsMaterialBased;
     });
 
     QUnit.test('more button should have undefined type for the Generic theme', function(assert) {

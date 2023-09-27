@@ -1764,6 +1764,7 @@ declare module DevExpress.common {
   };
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
+  export type TabsStyle = 'primary' | 'secondary';
   export type TextBoxPredefinedButton = 'clear';
 
   /**
@@ -4189,7 +4190,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowInsertingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   };
   /**
    * [descr:RowKeyInfo]
@@ -4235,7 +4236,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowRemovingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * [descr:RowUpdatedInfo]
@@ -4275,7 +4276,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:RowUpdatingInfo.cancel]
      */
-    cancel: boolean | PromiseLike<void>;
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   }
   /**
    * [descr:RowValidatingInfo]
@@ -9079,11 +9080,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?: Date | number | string;
-    /**
-     * [descr:dxCalendarOptions.values]
-     */
-    values?: Array<Date | number | string>;
+    value?: Date | number | string | Array<Date | number | string>;
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
@@ -9988,6 +9985,9 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type ColumnButtonBase = DevExpress.common.grids.ColumnButtonBase;
+    /**
+     * [descr:_ui_data_grid_ColumnButtonClickEvent]
+     */
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
@@ -9995,7 +9995,13 @@ declare module DevExpress.ui {
       dxDataGrid<TRowData, TKey>,
       PointerEvent | MouseEvent
     > & {
+      /**
+       * [descr:_ui_data_grid_ColumnButtonClickEvent.row]
+       */
       row?: Row<TRowData, TKey>;
+      /**
+       * [descr:_ui_data_grid_ColumnButtonClickEvent.column]
+       */
       column?: Column<TRowData, TKey>;
     };
     export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
@@ -16762,7 +16768,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * @deprecated Use SimpleItem instead
@@ -25578,6 +25584,10 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
     /**
+     * [descr:dxTabPanelOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.TabsStyle;
+    /**
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;
@@ -25751,6 +25761,10 @@ declare module DevExpress.ui {
      * [descr:dxTabsOptions.showNavButtons]
      */
     showNavButtons?: boolean;
+    /**
+     * [descr:dxTabsOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.TabsStyle;
   }
   /**
    * @deprecated Use Item instead
@@ -29599,7 +29613,7 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.isDirty]
      */
-    isDirty?: boolean;
+    readonly isDirty?: boolean;
   }
   /**
    * [descr:dxFilterBuilderField]
@@ -29812,7 +29826,6 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
-    static isMaterial(theme: string): boolean;
   }
   /**
    * [descr:Widget]

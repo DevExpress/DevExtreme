@@ -7,19 +7,31 @@ $fluent-slider-wrapper-height: null !default;
 $fluent-slider-tooltip-width: null !default;
 $fluent-slider-top-tooltip-margin: null !default;
 
-$fluent-slider-width: 14px !default;
-$fluent-slider-track-height: 4px !default;
-$fluent-slider-height: 28px !default;
+$fluent-slider-height: 28px !default; // for fieldset height
+$fluent-slider-radius: 50% !default;
+$fluent-slider-track-height: null !default; // 2px !default;
+$fluent-slider-track-border-radius: 2px !default;
+$fluent-slider-handle-active-border-width: 2px !default;
+$fluent-slider-handle-height: null !default;
+$fluent-slider-handle-inner-size: null !default; // 12px !default;
+$fluent-slider-handle-inner-border-width: 1px !default;
+$fluent-slider-handle-inner-disabled-size: 2px !default;
 
 @if $size == "default" {
-  $fluent-slider-handle-size: 32px !default;
+  $fluent-slider-track-height: 4px !default;
+  $fluent-slider-handle-height: 18px !default;
+  $fluent-slider-handle-size: 20px !default; // 32px !default;
+  $fluent-slider-handle-inner-size: 18px !default; // 12px !default;
   $fluent-slider-wrapper-height: 32px !default;
   $fluent-slider-tooltip-width: 34px !default;
   $fluent-slider-top-tooltip-margin: -5px !default;
 }
 
 @else if $size == "compact" {
-  $fluent-slider-handle-size: 26px !default;
+  $fluent-slider-track-height: 2px !default;
+  $fluent-slider-handle-height: 14px !default;
+  $fluent-slider-handle-size: 16px !default; // 26px !default;
+  $fluent-slider-handle-inner-size: 14px !default; // 12px !default;
   $fluent-slider-wrapper-height: 26px !default;
   $fluent-slider-tooltip-width: 28px !default;
   $fluent-slider-top-tooltip-margin: -2px !default;
