@@ -2598,6 +2598,38 @@ QUnit.module('keyboard navigation', {
         assert.ok($cancelButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 
+    QUnit.testInActiveWindow('toolbar button should be focused on the "tab" key press if the input is focused and showSelectionControls is enabled', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        this.reinit({
+            opened: true,
+            showSelectionControls: true,
+            applyValueMode: 'useButtons',
+            dropDownOptions: {
+                toolbarItems: [
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            text: 'Button',
+                            elementAttr: { id: 'toolbarButton' }
+                        }
+                    }
+                ]
+            }
+        });
+
+        this.keyboard
+            .focus()
+            .press('tab');
+
+        const $toolbarButton = this.instance._popup.$wrapper().find('#toolbarButton');
+
+        assert.ok($toolbarButton.hasClass('dx-state-focused'), 'toolbar button is focused');
+    });
+
     QUnit.test('keyboard event handlers passed from a config', function(assert) {
         const keyDownStub = sinon.stub();
         const keyUpStub = sinon.stub();
