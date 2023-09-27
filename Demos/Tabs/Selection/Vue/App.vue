@@ -1,93 +1,139 @@
 <template>
-  <div>
-    <div id="longtabs">
-      <div class="caption">Tabs</div>
-      <DxTabs :data-source="longtabs"/>
-    </div>
-    <div id="scrolledtabs">
-      <div class="caption">Tabs with Overflow</div>
-      <DxTabs
-        :data-source="longtabs"
-        :width="300"
-        :scroll-by-content="true"
-        :show-nav-buttons="true"
-      />
-    </div>
-    <div id="tabs">
-      <div class="caption">API</div>
-      <DxTabs
-        :data-source="tabs"
-        v-model:selected-index="selectedIndex"
-      />
+  <div id="center-content">
+    <div id="demo-items-container">
       <div class="content dx-fieldset">
         <div class="dx-field">
-          <div class="dx-field-label">Selected index:</div>
+          <DxTabs
+            v-model:selected-item="selectedItem"
+            :data-source="employees"
+          />
+        </div>
+
+        <div class="dx-field select-box-container">
+          <div class="dx-field-label">Selected user:</div>
           <div class="dx-field-value">
             <DxSelectBox
-              v-model:value="selectedIndex"
-              :data-source="tabs"
-              :input-attr="{ 'aria-label': 'Tab' }"
               display-expr="text"
-              value-expr="id"
+              v-model:selected-item="selectedItem"
+              :data-source="employees"
+              :value="selectedItem"
+              :input-attr="{ 'aria-label': 'Select Employee' }"
             />
           </div>
         </div>
-        <div class="dx-field">
-          <div class="dx-field-label">Selected content:</div>
-          <div class="dx-field-value-static left-aligned">
-            {{ tabs[selectedIndex].content }}
-          </div>
+
+        <div class="dx-field multiview-container">
+          <DxMultiView
+            v-model:selected-item="selectedItem"
+            :height="112"
+            :data-source="employees"
+            :loop="false"
+            :animation-enabled="true"
+          >
+            <template #item="{ data }">
+              <div class="employee-info">
+                <img
+                  class="employee-photo dx-theme-border-color"
+                  :alt="data.text"
+                  :src="data.picture"
+                >
+                <p class="employee-notes">
+                  <b>Position: {{ data.position }}</b><br>
+                  {{ data.notes }}
+                </p>
+              </div>
+            </template>
+          </DxMultiView>
+        </div>
+
+        <div class="icon-container">
+          <span class="dx-icon dx-icon-info"/>
+          <span class="demo-info">You can swipe this area.</span>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script>
 
+<script>
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTabs from 'devextreme-vue/tabs';
+import DxMultiView from 'devextreme-vue/multi-view';
 
-import { tabs, longtabs } from './data.js';
+import { employees } from './data.js';
 
 export default {
   components: {
     DxSelectBox,
     DxTabs,
+    DxMultiView,
   },
   data() {
     return {
-      selectedIndex: 0,
-      tabs,
-      longtabs,
+      selectedItem: employees[0],
+      employees,
     };
   },
 };
 </script>
 <style>
-.content {
-  text-align: justify;
-  margin-top: 25px;
-}
+  #center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-#longtabs {
-  margin-top: 20px;
-}
+  .select-box-container,
+  .multiview-container {
+    padding: 16px;
+  }
 
-#scrolledtabs {
-  margin-top: 20px;
-}
+  #demo-items-container {
+    width: 680px;
+  }
 
-#tabs {
-  margin-top: 60px;
-}
+  .employee-photo {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border-width: 1px;
+    border-style: solid;
+    flex-shrink: 0;
+    object-fit: contain;
+    margin-right: 24px;
+  }
 
-.caption {
-  font-size: 16px;
-  padding-bottom: 3px;
-  padding-left: 10px;
-}
+  .employee-info {
+    display: flex;
+    align-items: center;
+  }
 
-.left-aligned {
-  text-align: left;
-}
+  .employee-notes b {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .dx-field-label {
+    font-size: 16px;
+  }
+
+  #multiview {
+    cursor: move;
+  }
+
+  .demo-info {
+    padding-left: 8px;
+    opacity: 0.6;
+  }
+
+  .icon-container {
+    padding-left: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  .dx-icon {
+    font-size: 18px;
+  }
+
 </style>

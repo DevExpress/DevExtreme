@@ -2,67 +2,79 @@ import React from 'react';
 
 import Tabs from 'devextreme-react/tabs';
 import SelectBox from 'devextreme-react/select-box';
+import MultiView from 'devextreme-react/multi-view';
 
-import { tabs, longtabs, tabLabel } from './data.js';
+import { employees, selectBoxLabel } from './data.js';
+
+class EmployeeInfo extends React.Component {
+  render() {
+    const {
+      text, picture, position, notes,
+    } = this.props.data;
+
+    return (
+      <div className="employee-info">
+        <img alt={text} className="employee-photo dx-theme-border-color" src={picture} />
+        <p className="employee-notes">
+          <b>Position: {position}</b><br />
+          {notes}
+        </p>
+      </div>
+    );
+  }
+}
 
 const App = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedItem, setSelectedItem] = React.useState(employees[0]);
 
-  const onTabsSelectionChanged = React.useCallback((args) => {
-    if (args.name === 'selectedIndex') {
-      setSelectedIndex(args.value);
-    }
-  }, [setSelectedIndex]);
-
-  const onValueChanged = React.useCallback((args) => {
-    setSelectedIndex(args.value);
-  }, [setSelectedIndex]);
+  const onSelectionChanged = React.useCallback((args) => {
+    setSelectedItem(args.selectedItem || args.addedItems[0]);
+  }, [setSelectedItem]);
 
   return (
-    <React.Fragment>
-      <div id="longtabs">
-        <div className="caption">Tabs</div>
-        <Tabs dataSource={longtabs} />
-      </div>
-      <div id="scrolledtabs">
-        <div className="caption">Tabs with Overflow</div>
-        <Tabs
-          dataSource={longtabs}
-          width={300}
-          scrollByContent={true}
-          showNavButtons={true}
-        />
-      </div>
-      <div id="tabs">
-        <div className="caption">API</div>
-        <Tabs
-          dataSource={tabs}
-          selectedIndex={selectedIndex}
-          onOptionChanged={onTabsSelectionChanged}
-        />
+    <div id="center-content">
+      <div id="demo-items-container">
         <div className="content dx-fieldset">
           <div className="dx-field">
-            <div className="dx-field-label">Selected index:</div>
+            <Tabs
+              dataSource={employees}
+              onSelectionChanged={onSelectionChanged}
+              selectedItem={selectedItem}
+            />
+          </div>
+
+          <div className="dx-field select-box-container">
+            <div className="dx-field-label">Selected user:</div>
             <div className="dx-field-value">
               <SelectBox
-                dataSource={tabs}
+                dataSource={employees}
+                inputAttr={selectBoxLabel}
+                value={selectedItem}
+                onSelectionChanged={onSelectionChanged}
                 displayExpr="text"
-                inputAttr={tabLabel}
-                valueExpr="id"
-                value={selectedIndex}
-                onValueChanged={onValueChanged}
               />
             </div>
           </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Selected content:</div>
-            <div className="dx-field-value-static left-aligned">
-              {tabs[selectedIndex].content}
-            </div>
+
+          <div className="dx-field multiview-container">
+            <MultiView
+              height={112}
+              dataSource={employees}
+              selectedItem={selectedItem}
+              onSelectionChanged={onSelectionChanged}
+              loop={false}
+              itemComponent={EmployeeInfo}
+              animationEnabled={true}
+            />
+          </div>
+
+          <div className="icon-container">
+            <span className="dx-icon dx-icon-info"></span>
+            <span className="demo-info">You can swipe this area.</span>
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

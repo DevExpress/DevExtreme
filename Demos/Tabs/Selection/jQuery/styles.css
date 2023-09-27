@@ -1,26 +1,58 @@
-.content {
-  text-align: justify;
-  margin-top: 25px;
+#center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#longtabs {
-  margin-top: 20px;
+.select-box-container,
+.multiview-container {
+  padding: 16px;
 }
 
-#scrolledtabs {
-  margin-top: 20px;
+#demo-items-container {
+  width: 680px;
 }
 
-#tabs {
-  margin-top: 60px;
+.employee-info {
+  display: flex;
+  align-items: center;
 }
 
-.caption {
+.employee-photo {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  flex-shrink: 0;
+  object-fit: contain;
+  margin-right: 24px;
+}
+
+.employee-notes b {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.dx-field-label {
   font-size: 16px;
-  padding-bottom: 3px;
-  padding-left: 10px;
 }
 
-.left-aligned {
-  text-align: left;
+#multiview {
+  cursor: move;
+}
+
+.demo-info {
+  padding-left: 8px;
+  opacity: 0.6;
+}
+
+.icon-container {
+  padding-left: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.dx-icon {
+  font-size: 18px;
 }

@@ -12,31 +12,31 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
   </head>
+
   <body class="dx-viewport">
     <div class="demo-container">
-      <div id="longtabs">
-        <div class="caption">Tabs</div>
-        <div class="tabs-container"></div>
-      </div>
-
-      <div id="scrolledtabs">
-        <div class="caption">Tabs with Overflow</div>
-        <div class="tabs-container"></div>
-      </div>
-
-      <div id="tabs">
-        <div class="caption">API</div>
-        <div class="tabs-container"></div>
-        <div class="content dx-fieldset">
-          <div class="dx-field">
-            <div class="dx-field-label">Selected index:</div>
-            <div class="dx-field-value">
-              <div id="selectbox"> </div>
+      <div id="center-content">
+        <div id="demo-items-container">
+          <div class="content dx-fieldset">
+            <div class="dx-field">
+              <div class="tabs-container"></div>
             </div>
-          </div>
-          <div class="dx-field">
-            <div class="dx-field-label">Selected content:</div>
-            <div class="dx-field-value-static left-aligned"> User tab content </div>
+
+            <div class="dx-field select-box-container">
+              <div class="dx-field-label">Selected user:</div>
+              <div class="dx-field-value">
+                <div id="selectbox"></div>
+              </div>
+            </div>
+
+            <div class="dx-field multiview-container">
+              <div id="multiview"></div>
+            </div>
+
+            <div class="icon-container">
+              <span class="dx-icon dx-icon-info"></span>
+              <span class="demo-info">You can swipe this area.</span>
+            </div>
           </div>
         </div>
       </div>

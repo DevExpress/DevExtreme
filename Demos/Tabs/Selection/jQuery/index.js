@@ -1,32 +1,45 @@
 $(() => {
-  $('#longtabs > .tabs-container').dxTabs({
-    dataSource: longtabs,
-  });
+  const tabsInstance = $('.tabs-container').dxTabs({
+    dataSource: employees,
+    selectedItem: employees[0],
 
-  $('#scrolledtabs > .tabs-container').dxTabs({
-    dataSource: longtabs,
-    width: 300,
-    scrollByContent: true,
-    showNavButtons: true,
-  });
+    onSelectionChanged({ component }) {
+      const { selectedItem } = component.option();
 
-  const tabsInstance = $('#tabs > .tabs-container').dxTabs({
-    dataSource: tabs,
-    selectedIndex: 0,
-    onItemClick(e) {
-      selectBox.option('value', e.itemData.id);
+      selectBox.option({ value: selectedItem });
+      multiView.option({ selectedItem });
     },
   }).dxTabs('instance');
 
   const selectBox = $('#selectbox').dxSelectBox({
-    value: 0,
-    dataSource: tabs,
-    inputAttr: { 'aria-label': 'Tab' },
+    value: employees[0],
+    dataSource: employees,
+    inputAttr: { 'aria-label': 'Select Employee' },
     displayExpr: 'text',
-    valueExpr: 'id',
-    onValueChanged(e) {
-      tabsInstance.option('selectedIndex', e.value);
-      $('.left-aligned').text(tabs[e.value].content);
+    onValueChanged({ value }) {
+      tabsInstance.option('selectedItem', value);
     },
   }).dxSelectBox('instance');
+
+  const multiView = $('#multiview').dxMultiView({
+    height: 112,
+    width: '100%',
+    dataSource: employees,
+    selectedItem: employees[0],
+    loop: false,
+    animationEnabled: true,
+    itemTemplate(data, index, element) {
+      const $note = $('<div>')
+        .addClass('employee-info')
+        .append($(`<img alt="${data.text}" class="employee-photo dx-theme-border-color" src="${data.picture}"/>`))
+        .append($('<p>').addClass('employee-notes').append($(`<b>Position: ${data.position}</b><br/>`)).append(data.notes));
+
+      element.append($note);
+    },
+    onSelectionChanged({ component }) {
+      const { selectedItem } = component.option();
+
+      tabsInstance.option({ selectedItem });
+    },
+  }).dxMultiView('instance');
 });

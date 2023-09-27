@@ -1,26 +1,58 @@
-::ng-deep .content {
-  text-align: justify;
-  margin-top: 25px;
+::ng-deep #center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-::ng-deep #longtabs {
-  margin-top: 20px;
+::ng-deep .select-box-container,
+.multiview-container {
+  padding: 16px;
 }
 
-::ng-deep #scrolledtabs {
-  margin-top: 20px;
+::ng-deep #demo-items-container {
+  width: 680px;
 }
 
-::ng-deep #tabs {
-  margin-top: 60px;
+::ng-deep .employee-info {
+  display: flex;
+  align-items: center;
 }
 
-::ng-deep .caption {
+::ng-deep .employee-photo {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  flex-shrink: 0;
+  object-fit: contain;
+  margin-right: 24px;
+}
+
+::ng-deep .employee-notes b {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+::ng-deep .dx-field-label {
   font-size: 16px;
-  padding-bottom: 3px;
-  padding-left: 10px;
 }
 
-::ng-deep .left-aligned {
-  text-align: left;
+::ng-deep #multiview {
+  cursor: move;
+}
+
+::ng-deep .demo-info {
+  padding-left: 8px;
+  opacity: 0.6;
+}
+
+::ng-deep .icon-container {
+  padding-left: 16px;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .dx-icon {
+  font-size: 18px;
 }
