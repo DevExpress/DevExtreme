@@ -945,7 +945,7 @@ class FileUploader extends Editor {
     _shouldRaiseDragOver(e, dropZoneElement) {
         return this._activeDropZone === null
             && this.isMouseOverElement(e, dropZoneElement, false)
-            && e.originalEvent.dataTransfer.types[0] === 'Files';
+            && e.originalEvent.dataTransfer.types.find(item => item === 'Files');
     }
 
     _dragOverHandler(isCustomTarget, e) {
