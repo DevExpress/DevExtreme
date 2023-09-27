@@ -42,11 +42,7 @@ jobs:
         with:
           node-version: '18'
 
-      - run: ls -a /opt/actions-runner/_work/_tool/node
-
-      - run: ls -a /opt/actions-runner/_work/_tool/node/18.17.1
-
-      - run: ls -a /opt/actions-runner/_work/_tool/node/18.17.1/x64
+      - run: ls -a /opt/actions-runner/_work/_tool/node/18.18.0/x64
 
 #      - uses: actions/setup-node@v3
 #        with:
@@ -80,6 +76,10 @@ jobs:
         with:
           node-version: '18'
 
-      - run: ls -a /opt/hostedtoolcache/node/18.18.0/x64
+      - run: ls -a /opt/hostedtoolcache/node
+
+      - run: ls -a /opt/hostedtoolcache/node/18.17.1
+
+      - run: ls -a /opt/hostedtoolcache/node/18.17.1/x64
 
       - run: node -v
