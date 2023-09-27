@@ -23,6 +23,7 @@ const customer = service.getCustomer();
 const checkBoxOptions = {
   text: 'I agree to the Terms and Conditions',
   value: false,
+  width: 270,
 };
 
 const cityEditorOptions = {

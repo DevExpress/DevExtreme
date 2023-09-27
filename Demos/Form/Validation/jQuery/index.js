@@ -208,6 +208,7 @@ $(() => {
           visible: false,
         },
         editorOptions: {
+          width: 270,
           text: 'I agree to the Terms and Conditions',
         },
         validationRules: [{

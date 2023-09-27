@@ -265,6 +265,7 @@ export default {
       },
       checkBoxOptions: {
         text: 'I agree to the Terms and Conditions',
+        width: 270,
         value: false,
       },
       phoneEditorOptions: {
