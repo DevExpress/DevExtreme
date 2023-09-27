@@ -800,7 +800,7 @@ if(support.transition()) {
             fx.stop($element);
 
             setTimeout(function() {
-                assert.roughEqual($element.css('left'), leftAfterStop, 0.1);
+                assert.roughEqual(parseFloat($element.css('left')), parseFloat(leftAfterStop), 0.1);
                 done();
             }, 100);
         }, 100);
