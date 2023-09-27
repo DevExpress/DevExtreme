@@ -48,11 +48,15 @@ jobs:
     steps:
       - run: node -v
 
+      - run: ls -la /opt/hostedtoolcache/node/
+
       - uses: actions/setup-node@v3
         with:
           node-version: '18.16.0'
 
       - run: node -v
+
+      - run: ls -la /opt/hostedtoolcache/node/
 
   github-hosted-major:
     runs-on: ubuntu-latest
