@@ -1,4 +1,4 @@
-name: Build DevExtreme npm packages
+name: Pack all DevExtreme npm packages
 
 on:
   pull_request:
@@ -17,18 +17,11 @@ jobs:
         with:
           node-version: '18.16.1'
 
-#      - name: Restore npm cache
-#        uses: actions/cache@v3
-#        with:
-#          path: '**/node_modules'
-#          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: ${{ runner.os }}-node-modules
-
       - name: Install packages in devextreme repo
         run: npm install --no-audit --no-fund
 
       - name: Build npm packages
-        run: npm run build-npm-packages
+        run: npm run all:pack
 
       - name: Copy build artifacts
         uses: actions/upload-artifact@v3
