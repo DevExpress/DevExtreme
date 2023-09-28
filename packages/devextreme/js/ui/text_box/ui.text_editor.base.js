@@ -5,7 +5,7 @@ import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { current, isMaterialBased } from '../themes';
+import { current, isMaterial, isMaterialBased } from '../themes';
 import devices from '../../core/devices';
 import Editor from '../editor/editor';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
@@ -150,10 +150,18 @@ const TextEditorBase = Editor.inherit({
                     return isMaterialBased(themeName);
                 },
                 options: {
-                    stylingMode: config().editorStylingMode || 'filled',
                     labelMode: 'floating'
                 }
-            }
+            },
+            {
+                device: function() {
+                    const themeName = current();
+                    return isMaterial(themeName);
+                },
+                options: {
+                    stylingMode: config().editorStylingMode || 'filled',
+                }
+            },
         ]);
     },
 
@@ -318,17 +326,22 @@ const TextEditorBase = Editor.inherit({
             .css('minHeight', this.option('height') ? '0' : '');
     },
 
-    _getDefaultAttributes: function() {
-        const defaultAttributes = {
-            autocomplete: 'off'
-        };
-
+    _getPlaceholderAttr() {
         const { ios, mac } = devices.real();
-        if(ios || mac) {
-            // WA to fix vAlign (T898735)
-            // https://bugs.webkit.org/show_bug.cgi?id=142968
-            defaultAttributes.placeholder = ' ';
-        }
+        const { placeholder } = this.option();
+
+        // WA to fix vAlign (T898735)
+        // https://bugs.webkit.org/show_bug.cgi?id=142968
+        const value = placeholder || ((ios || mac) ? ' ' : null);
+
+        return value;
+    },
+
+    _getDefaultAttributes() {
+        const defaultAttributes = {
+            autocomplete: 'off',
+            placeholder: this._getPlaceholderAttr(),
+        };
 
         return defaultAttributes;
     },
@@ -476,14 +489,17 @@ const TextEditorBase = Editor.inherit({
     },
 
     _setFieldAria(force) {
+        const { 'aria-label': ariaLabel } = this.option('inputAttr');
+
         const labelId = this._label.getId();
         const placeholderId = this._$placeholder?.attr('id');
 
-        const value = [labelId, placeholderId].filter(Boolean).join(' ');
+        const value = ariaLabel ? undefined : [labelId, placeholderId].filter(Boolean).join(' ');
 
         if(value || force) {
             const aria = {
                 'labelledby': value || undefined,
+                label: ariaLabel,
             };
             this.setAria(aria, this._getFieldElement());
         }
@@ -793,6 +809,7 @@ const TextEditorBase = Editor.inherit({
             case 'placeholder':
                 this._renderPlaceholder();
                 this._setFieldAria(true);
+                this._input().attr({ placeholder: this._getPlaceholderAttr() });
                 break;
             case 'label':
                 this._label.updateText(value);

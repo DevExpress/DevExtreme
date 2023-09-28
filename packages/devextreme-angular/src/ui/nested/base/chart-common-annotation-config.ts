@@ -5,7 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
+import { AnnotationType, DashStyle, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
+import { PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 @Component({
     template: ''
@@ -46,10 +48,10 @@ export abstract class DxoChartCommonAnnotationConfig extends NestedOption {
         this._setOption('axis', value);
     }
 
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -165,10 +167,10 @@ export abstract class DxoChartCommonAnnotationConfig extends NestedOption {
         this._setOption('text', value);
     }
 
-    get textOverflow(): string {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: string) {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
@@ -186,10 +188,10 @@ export abstract class DxoChartCommonAnnotationConfig extends NestedOption {
         this._setOption('tooltipTemplate', value);
     }
 
-    get type(): string | undefined {
+    get type(): AnnotationType | undefined {
         return this._getOption('type');
     }
-    set type(value: string | undefined) {
+    set type(value: AnnotationType | undefined) {
         this._setOption('type', value);
     }
 
@@ -207,10 +209,10 @@ export abstract class DxoChartCommonAnnotationConfig extends NestedOption {
         this._setOption('width', value);
     }
 
-    get wordWrap(): string {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: string) {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 
@@ -228,10 +230,10 @@ export abstract class DxoChartCommonAnnotationConfig extends NestedOption {
         this._setOption('y', value);
     }
 
-    get location(): string {
+    get location(): PieChartAnnotationLocation {
         return this._getOption('location');
     }
-    set location(value: string) {
+    set location(value: PieChartAnnotationLocation) {
         this._setOption('location', value);
     }
 

@@ -26,8 +26,9 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { EditorStyle, LabelMode, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
+import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, NumberBoxPredefinedButton, NumberBoxType, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
 
 import DxNumberBox from 'devextreme/ui/number_box';
 
@@ -109,10 +110,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get buttons(): Array<string | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<NumberBoxPredefinedButton | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<NumberBoxPredefinedButton | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -278,10 +279,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get labelMode(): string {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: string) {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -317,10 +318,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get mode(): string {
+    get mode(): NumberBoxType {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: NumberBoxType) {
         this._setOption('mode', value);
     }
 
@@ -421,10 +422,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get stylingMode(): string {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -499,10 +500,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -512,10 +513,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -525,10 +526,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -723,7 +724,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<string | DevExpress.common.TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | DevExpress.common.TextEditorButton>>;
 
     /**
     
@@ -814,7 +815,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<string>;
+    @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
     
@@ -835,7 +836,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() modeChange: EventEmitter<string>;
+    @Output() modeChange: EventEmitter<NumberBoxType>;
 
     /**
     
@@ -891,7 +892,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<string>;
+    @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
     
@@ -933,21 +934,21 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

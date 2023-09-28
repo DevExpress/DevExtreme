@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "esiintymiä",
         "dxScheduler-allDay": "Koko päivä",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Haluatko muokata vain tämän tapaamisen tai koko sarja?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Haluatko poistaa vain tämän tapaamisen tai koko sarja?",
 

@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "رخداد",
         "dxScheduler-allDay": "تمام روز",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "آیا می خواهید فقط این قرار ملاقات یا کل مجموعه را ویرایش کنید؟",
         "dxScheduler-confirmRecurrenceDeleteMessage": "آیا می خواهید فقط این قرار ملاقات یا کل مجموعه را حذف کنید؟",
 

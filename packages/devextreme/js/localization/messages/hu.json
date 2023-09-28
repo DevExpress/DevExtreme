@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "előfordulás(ok)",
         "dxScheduler-allDay": "Egész nap",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Csak ezt az alkalmat szeretné szerkeszteni, vagy az összes ismétlődést?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Csak ezt az alkalmat szeretné törölni, vagy az összes ismétlődést?",
 

@@ -15,6 +15,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { FileManagerItemViewMode } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
@@ -38,10 +39,10 @@ export class DxoItemViewComponent extends NestedOption implements OnDestroy, OnI
     }
 
     @Input()
-    get mode(): string {
+    get mode(): FileManagerItemViewMode {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: FileManagerItemViewMode) {
         this._setOption('mode', value);
     }
 

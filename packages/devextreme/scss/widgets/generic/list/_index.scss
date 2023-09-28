@@ -20,19 +20,19 @@ $generic-list-item-border: $generic-list-item-border-width solid $list-border-co
 $generic-list-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
 
 .dx-list-item-chevron {
-  transform: rotate(0);
-  border: none;
-  opacity: 1;
-
-  .dx-rtl & {
-    transform: rotate(0);
-  }
-
   @include dx-icon(chevronnext);
   @include dx-icon-sizing($generic-base-icon-size);
 
-  margin-left: -5px;
+  margin-inline-start: -5px;
   color: $list-item-chevron-icon-color;
+}
+
+.dx-list-item-badge-container {
+  padding-inline-end: 10px;
+}
+
+.dx-list-switchable-delete-button-inner-wrapper {
+  padding-inline-start: 1px;
 }
 
 .dx-list-item-icon-container {
@@ -47,6 +47,12 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
 .dx-list-search {
   margin-bottom: $generic-list-searchbox-margin-bottom;
+}
+
+.dx-list-item-before-bag,
+.dx-list-item-after-bag {
+  display: table-cell;
+  width: 0;
 }
 
 @mixin item-states() {
@@ -120,10 +126,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
     &.dx-list-with-search .dx-scrollable-wrapper {
       height: calc(100% - #{round($generic-list-search-editor-height + $generic-list-searchbox-margin-bottom)});
-    }
-
-    .dx-empty-message {
-      text-align: start;
     }
 
     &.dx-list-select-decorator-enabled {
@@ -222,6 +224,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
   }
 
   .dx-list-item-chevron-container {
+    display: table-cell;
+    vertical-align: middle;
     width: 6px + $item-horizontal-padding;
   }
 
@@ -234,6 +238,12 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
   }
 
   .dx-list-item-before-bag {
+    .dx-list-toggle-delete-switch {
+      display: block;
+      float: left;
+      padding: 3px 0;
+    }
+
     &.dx-list-toggle-delete-switch-container {
       width: $item-horizontal-padding + 19px;
     }
@@ -276,7 +286,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
   }
 
   .dx-list-select-all-checkbox {
-    float: left;
     margin-top: -1px;
     margin-bottom: -3px;
     margin-inline-end: $generic-list-select-all-margin-right;

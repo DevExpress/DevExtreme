@@ -91,6 +91,58 @@ QUnit.module('button group integration', {}, () => {
         const buttonGroup = getButtonGroup(dropDownButton);
         assert.strictEqual(buttonGroup.option('accessKey'), accessKey, 'accessKey is passed to buttonGroup');
     });
+
+    ['normal', 'default', 'danger', 'success'].forEach((type) => {
+        QUnit.test(`type '${type}' should be passed to action button of buttonGroup if splitbutton is false`, function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                type,
+                splitButton: false
+            }).dxDropDownButton('instance');
+
+            const actionButton = getActionButton(dropDownButton).dxButton('instance');
+
+            assert.strictEqual(actionButton.option('type'), type, `action button has ${type} type`);
+        });
+
+        QUnit.test(`type '${type}' should be passed to action and toggle buttons of buttonGroup if splitbutton is true`, function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                type,
+                splitButton: true
+            }).dxDropDownButton('instance');
+
+            const actionButton = getActionButton(dropDownButton).dxButton('instance');
+            const toggleButton = getToggleButton(dropDownButton).dxButton('instance');
+
+            assert.strictEqual(actionButton.option('type'), type, `action button has ${type} type`);
+            assert.strictEqual(toggleButton.option('type'), type, `toggle button has ${type} type`);
+        });
+
+        QUnit.test(`type '${type}' should be passed to action button of buttonGroup if splitbutton is false after change in runtime`, function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                splitButton: false
+            }).dxDropDownButton('instance');
+
+            dropDownButton.option('type', type);
+
+            const actionButton = getActionButton(dropDownButton).dxButton('instance');
+
+            assert.strictEqual(actionButton.option('type'), type, `action button has ${type} type`);
+        });
+
+        QUnit.test(`type '${type}' should be passed to action and toggle buttons of buttonGroup if splitbutton is true after change in runtime`, function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                splitButton: true
+            }).dxDropDownButton('instance');
+
+            dropDownButton.option('type', type);
+
+            const actionButton = getActionButton(dropDownButton).dxButton('instance');
+            const toggleButton = getToggleButton(dropDownButton).dxButton('instance');
+
+            assert.strictEqual(actionButton.option('type'), type, `action button has ${type} type`);
+            assert.strictEqual(toggleButton.option('type'), type, `toggle button has ${type} type`);
+        });
+    });
 });
 
 QUnit.module('popup integration', {

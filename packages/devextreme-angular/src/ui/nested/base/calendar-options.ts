@@ -5,7 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/calendar';
+import { FirstDayOfWeek, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { CalendarSelectionMode, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, WeekNumberRule } from 'devextreme/ui/calendar';
 
 @Component({
     template: ''
@@ -60,10 +61,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('elementAttr', value);
     }
 
-    get firstDayOfWeek(): number | string | undefined {
+    get firstDayOfWeek(): FirstDayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: number | string | undefined) {
+    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -116,10 +117,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('max', value);
     }
 
-    get maxZoomLevel(): string {
+    get maxZoomLevel(): CalendarZoomLevel {
         return this._getOption('maxZoomLevel');
     }
-    set maxZoomLevel(value: string) {
+    set maxZoomLevel(value: CalendarZoomLevel) {
         this._setOption('maxZoomLevel', value);
     }
 
@@ -130,10 +131,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('min', value);
     }
 
-    get minZoomLevel(): string {
+    get minZoomLevel(): CalendarZoomLevel {
         return this._getOption('minZoomLevel');
     }
-    set minZoomLevel(value: string) {
+    set minZoomLevel(value: CalendarZoomLevel) {
         this._setOption('minZoomLevel', value);
     }
 
@@ -186,10 +187,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('rtlEnabled', value);
     }
 
-    get selectionMode(): string {
+    get selectionMode(): CalendarSelectionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: CalendarSelectionMode) {
         this._setOption('selectionMode', value);
     }
 
@@ -235,24 +236,24 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('validationErrors', value);
     }
 
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -270,10 +271,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('visible', value);
     }
 
-    get weekNumberRule(): string {
+    get weekNumberRule(): WeekNumberRule {
         return this._getOption('weekNumberRule');
     }
-    set weekNumberRule(value: string) {
+    set weekNumberRule(value: WeekNumberRule) {
         this._setOption('weekNumberRule', value);
     }
 
@@ -284,10 +285,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('width', value);
     }
 
-    get zoomLevel(): string {
+    get zoomLevel(): CalendarZoomLevel {
         return this._getOption('zoomLevel');
     }
-    set zoomLevel(value: string) {
+    set zoomLevel(value: CalendarZoomLevel) {
         this._setOption('zoomLevel', value);
     }
 }

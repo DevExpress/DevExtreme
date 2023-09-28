@@ -473,8 +473,8 @@ QUnit.module('general', {}, () => {
     });
 
     QUnit.test('dxTextEditor with wrong stylingMode option should set the class according to default option value (platform specific)', function(assert) {
-        const realIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = () => {
+        const realIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => {
             return true;
         };
 
@@ -484,7 +484,7 @@ QUnit.module('general', {}, () => {
 
         assert.ok($textEditor.hasClass('dx-editor-filled'));
 
-        themes.isMaterialBased = realIsMaterialBased;
+        themes.isMaterial = realIsMaterial;
     });
 });
 
@@ -679,6 +679,17 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
     });
 
+    QUnit.test('aria-labelledby should not be set if inputAttr containes aria-label', function(assert) {
+        this.textEditor.option({
+            inputAttr: { 'aria-label': 'custom' },
+            label: null,
+        });
+
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
+    });
+
     QUnit.test('aria-labelledby should be equal label id if label is specified and placeholder is not specified', function(assert) {
         this.textEditor.option({ placeholder: null });
 
@@ -715,6 +726,35 @@ QUnit.module('aria-labelledby attribute', {
         const inputAttr = this.$input.attr('aria-labelledby');
 
         assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('the placeholder attr should be equal custom placeholder', function(assert) {
+        this.textEditor.option({
+            placeholder: 'custom',
+            label: null,
+        });
+
+        const placeholder = this.$input.attr('placeholder');
+
+        assert.strictEqual(placeholder, this.textEditor.option('placeholder'));
+    });
+
+    QUnit.test('the placeholder attr should be equal empty string if placeholder is null in ios or mac', function(assert) {
+        this.textEditor.option({
+            placeholder: null,
+            label: null,
+        });
+
+        const { ios, mac } = devices.real();
+        const placeholder = this.$input.attr('placeholder');
+
+        if(ios || mac) {
+            assert.strictEqual(placeholder, ' ');
+
+            return;
+        }
+
+        assert.strictEqual(placeholder, undefined);
     });
 });
 

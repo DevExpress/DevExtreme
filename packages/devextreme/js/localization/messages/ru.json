@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "повторений",
         "dxScheduler-allDay": "Весь день",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Вы хотите отредактировать только это событие или всю серию?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Вы хотите удалить только это событие или всю серию?",
 
