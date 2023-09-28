@@ -30,15 +30,17 @@ jobs:
 
       - run: wget https://github.com/actions/node-versions/releases/download/18.18.0-6231178035/node-18.18.0-linux-x64.tar.gz
 
-      - run: mv node-18.18.0-linux-x64.tar.gz /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
+#      - run: mv node-18.18.0-linux-x64.tar.gz /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
 
-      - run: cd /opt/actions-runner/_work/_tool/node/18.18.0/x64 && tar xvzf node-18.tar.gz
+#      - run: cd /opt/actions-runner/_work/_tool/node/18.18.0/x64 && tar xvzf node-18.tar.gz
 
-      - run: rm /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
+#      - run: rm /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
+
+      - run: /usr/bin/tar xz --strip 1 --warning=no-unknown-keyword -C /opt/actions-runner/_work/_tool/node/18.18.0/x64 -f node-18.18.0-linux-x64.tar.gz
 
       - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64
 
-      - run: set
+#      - run: set
 
 #      - run: export PATH="/opt/actions-runner/_work/_tool/node/18.18.0/x64/bin:$PATH"
 
