@@ -1448,6 +1448,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
       height: 440,
       width: 800,
       renderAsync: false,
+      // @ts-expect-error private option
       templatesRenderAsynchronously: true,
       customizeColumns(columns) {
         columns[0].width = 70;
