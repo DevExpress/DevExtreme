@@ -6,7 +6,14 @@ import { a11yCheck } from '../../../helpers/accessibilityUtils';
 fixture.disablePageReloads`Accordion`
   .page(url(__dirname, '../../container.html'));
 
-const accordionItems = [{
+interface DataItem {
+  ID: number;
+  CompanyName: string;
+  Name: string;
+  Website: string;
+}
+
+const accordionItems: DataItem[] = [{
   ID: 1,
   CompanyName: 'Super Mart of the West',
   Name: 'Name_1',
@@ -24,18 +31,18 @@ const accordionOptions = {
   collapsible: false,
   multiple: false,
   selectedItems: [accordionItems[0]],
-  itemTitleTemplate(data) {
+  itemTitleTemplate(data: DataItem) {
     const span = $('<span>');
 
     span.text(data.CompanyName);
 
     return span;
   },
-  itemTemplate(a) {
+  itemTemplate(data: DataItem) {
     const wrapper = $('<wrapper>');
     const name = $('<div>');
 
-    name.text(`Name: ${a.Name}`);
+    name.text(`Name: ${data.Name}`);
     wrapper.append(name);
 
     const websiteWrapper = $('<div>');
@@ -44,7 +51,7 @@ const accordionOptions = {
     websiteLabel.text('Website: ');
     websiteWrapper.append(websiteLabel);
 
-    const link = $(`<a href="${a.Website}">${a.Website}</a>`);
+    const link = $(`<a href="${data.Website}">${data.Website}</a>`);
 
     websiteWrapper.append(link);
     wrapper.append(websiteWrapper);
