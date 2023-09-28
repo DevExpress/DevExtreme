@@ -1,7 +1,6 @@
 name: Pack all DevExtreme npm packages
 
 on:
-  pull_request:
   workflow_dispatch:
 
 jobs:
