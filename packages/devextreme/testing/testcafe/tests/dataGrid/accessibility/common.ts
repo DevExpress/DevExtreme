@@ -1,11 +1,10 @@
-import { ClientFunction } from 'testcafe';
 import { a11yCheck } from '../../../helpers/accessibilityUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
 import { Themes } from '../../../helpers/themes';
-import { changeTheme as originalChangeTheme } from '../../../helpers/changeTheme';
+import { changeTheme } from '../../../helpers/changeTheme';
 import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 
@@ -13,28 +12,6 @@ fixture`Common tests with axe`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
-
-/*
-Datagrid's header panel and pager have transparent background-color.
-So to check contrast issues correctly we assign to body this class.
-*/
-const TYPOGRAPHY_CLASS = 'dx-theme-fluent-typography dx-theme-generic-typography dx-theme-material-typography';
-
-const changeTheme = async (theme: string): Promise<any> => {
-  await originalChangeTheme(theme);
-
-  const needTypographyBackground = theme !== Themes.genericLight;
-
-  await ClientFunction(() => {
-    const { body } = (window as any).document;
-
-    if (needTypographyBackground) {
-      body.classList.value = TYPOGRAPHY_CLASS;
-    } else {
-      body.classList.value = undefined;
-    }
-  }, { dependencies: { needTypographyBackground, TYPOGRAPHY_CLASS } })();
-};
 
 [
   Themes.genericLight,

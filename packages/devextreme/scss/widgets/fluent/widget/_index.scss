@@ -22,3 +22,7 @@
     @include disabled-widget();
   }
 }
+
+.dx-surface {
+  background-color: $base-bg;
+}
