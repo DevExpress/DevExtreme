@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
@@ -206,6 +207,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         showBorders: true,
         height: 800,
         renderAsync: true,
+        // @ts-expect-error private option
         templatesRenderAsynchronously: true,
         columnFixing: {
           enabled: true,
@@ -219,9 +221,11 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
           useNative,
         },
         onContentReady(e) {
+          // @ts-expect-error flag for test
           // eslint-disable-next-line no-underscore-dangle
           if (!e.component.__initExpand) {
-          // eslint-disable-next-line no-underscore-dangle
+            // @ts-expect-error flag for test
+            // eslint-disable-next-line no-underscore-dangle
             e.component.__initExpand = true;
             e.component.beginUpdate();
             e.component.expandRow(3);
