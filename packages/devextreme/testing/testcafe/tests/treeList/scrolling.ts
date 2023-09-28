@@ -4,6 +4,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import TreeList from '../../model/treeList';
+import CheckBox from '../../model/checkBox';
 
 const scrollWindowTo = async (position: object) => {
   await ClientFunction(
@@ -119,3 +120,59 @@ safeSizeTest('The vertical scroll bar of the container\'s parent should not be d
     $('#container').unwrap();
   })();
 });
+
+// T1189118
+safeSizeTest('All items should be selected after select all and scroll down', async (t) => {
+  // arrange
+  const treeList = new TreeList('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // assert
+  await t
+    .expect(treeList.isReady())
+    .ok();
+
+  // act
+  const selectAllCheckBox = new CheckBox(
+    treeList.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
+  );
+
+  await t.click(selectAllCheckBox.element);
+
+  // assert
+  await t
+    .expect(await takeScreenshot('T1189118-treelist-select-all-with-virtual-scrolling-1'))
+    .ok();
+
+  // act
+  await treeList.scrollTo(t, { y: 300 });
+
+  // assert
+  await t
+    .expect(await takeScreenshot('T1189118-treelist-select-all-with-virtual-scrolling-2'))
+    .ok();
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => createWidget('dxTreeList', {
+  dataSource: generateData(100),
+  height: 400,
+  rootValue: -1,
+  columnMinWidth: 80,
+  columnAutoWidth: true,
+  allowColumnResizing: true,
+  keyExpr: 'ID',
+  parentIdExpr: 'Head_ID',
+  showRowLines: true,
+  showBorders: true,
+  autoExpandAll: true,
+  scrolling: {
+    mode: 'virtual',
+  },
+  selection: {
+    allowSelectAll: true,
+    mode: 'multiple',
+  },
+  columns: ['Title', 'Full_Name', 'City'],
+}));
