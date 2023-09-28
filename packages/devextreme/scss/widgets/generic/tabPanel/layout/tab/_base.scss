@@ -16,6 +16,10 @@
 .dx-tabpanel-tab {
   padding: $generic-tabpanel-tabs-item-padding;
 
+  &.dx-state-focused::after {
+    border-color: $tabs-border-color;
+  }
+
   &.dx-state-disabled {
     &::after {
       z-index: 3;
@@ -41,6 +45,14 @@
 
 .dx-tabpanel.dx-state-focused {
   .dx-tabpanel-tab {
+    &.dx-state-focused::after {
+      border-color: $tabs-focused-border-color;
+    }
+
+    &.dx-state-focused.dx-state-disabled::after {
+      border-color: $tabs-focused-disabled-border-color;
+    }
+
     &.dx-focused-disabled-next-tab {
       &::after {
         border-inline-end: none;
