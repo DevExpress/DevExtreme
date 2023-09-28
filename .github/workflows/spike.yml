@@ -38,6 +38,8 @@ jobs:
 
       - run: /usr/bin/tar xz --strip 1 --warning=no-unknown-keyword -C /opt/actions-runner/_work/_tool/node/18.18.0/x64 -f node-18.18.0-linux-x64.tar.gz
 
+      - run: mkdir -p /opt/actions-runner/_work/_tool/node/18.18.0/x64.complete
+
       - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64
 
       - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0
