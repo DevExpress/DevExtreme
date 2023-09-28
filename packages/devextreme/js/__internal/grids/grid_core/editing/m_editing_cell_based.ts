@@ -262,11 +262,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   _beforeEditCell(rowIndex, columnIndex, item) {
     if (this.isCellEditMode() && !item.isNewRow && this.hasChanges()) {
       // @ts-expect-error
-      const d = new Deferred();
+      const isSaving = new Deferred();
       this.saveEditData().always(() => {
-        d.resolve(this.hasChanges());
+        isSaving.resolve(this.hasChanges());
       });
-      return d;
+      this.addDeferred(isSaving);
+      return isSaving;
     }
   }
 
