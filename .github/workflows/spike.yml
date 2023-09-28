@@ -54,6 +54,10 @@ jobs:
 
       - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0
 
+      - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64.complete
+
+      - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0/x64.complete
+
 #      - run: rm -rf /opt/actions-runner/_work/_tool/node/18.18.0
 
       - run: set
