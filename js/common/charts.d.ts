@@ -567,7 +567,7 @@ export interface SeriesPoint {
 }
 
 /**
- * @namespace DevExpress.viz
+ * @namespace DevExpress.common.charts
  * @public
 */
 export interface SeriesLabel {
