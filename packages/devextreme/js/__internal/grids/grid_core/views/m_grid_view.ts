@@ -129,11 +129,10 @@ const resizingControllerMembers = {
   },
 
   _setAriaLabel() {
-    const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
     this.component.setAria('label', messageLocalization.format(
       this._getWidgetAriaLabel(),
       // @ts-expect-error
-      totalItemsCount,
+      this._dataController.totalItemsCount(),
       this.component.columnCount(),
     ), this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
   },
