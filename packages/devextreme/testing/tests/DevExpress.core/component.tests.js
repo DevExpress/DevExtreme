@@ -1723,4 +1723,17 @@ QUnit.module('License check', {
 
         assert.ok(licenseModule.verifyLicense.calledOnce);
     });
+
+    QUnit.test('verifyLicense() method should be called with license from config', function(assert) {
+        try {
+            const license = 'license token';
+            config({ license });
+
+            new TestComponent();
+
+            assert.ok(licenseModule.verifyLicense.calledWith(license));
+        } finally {
+            config({ license: null });
+        }
+    });
 });
