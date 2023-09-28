@@ -402,7 +402,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Search panel in ${theme}`, async (t) => {
-    if (theme === Themes.fluentBlue) { return; }
+    // if (theme === Themes.fluentBlue) { return; }
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t
@@ -716,7 +716,7 @@ const DATA_GRID_SELECTOR = '#container';
       ...a11yCheckConfig,
       runOnly: '',
       rules: {
-        'aria-required-children': { enabled: false },
+        // 'aria-required-children': { enabled: false },
       },
     });
   }).before(async () => {
@@ -849,7 +849,7 @@ const DATA_GRID_SELECTOR = '#container';
       ...a11yCheckConfig,
       runOnly: '',
       rules: {
-        'aria-dialog-name': { enabled: false },
+        // 'aria-dialog-name': { enabled: false },
       },
     });
   }).before(async () => {
