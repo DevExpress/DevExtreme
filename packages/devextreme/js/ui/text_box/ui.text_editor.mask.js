@@ -160,7 +160,11 @@ const TextEditorMask = TextEditorBase.inherit({
         const eventName = addNamespace(DRAG_START_EVENT_NAME, this.NAME);
         const input = this._input();
 
-        const callback = (event) => focused(input) && event.preventDefault();
+        const callback = (event) => {
+            if(focused(input)) {
+                event.preventDefault();
+            }
+        };
 
         eventsEngine.off(input, eventName);
         eventsEngine.on(input, eventName, callback);
