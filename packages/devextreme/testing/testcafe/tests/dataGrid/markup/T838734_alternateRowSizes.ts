@@ -42,6 +42,7 @@ test('Alternate rows should be the same size', async (t) => {
   }],
   onCellPrepared: ({ cellElement, value }) => {
     if (typeof value === 'string' && value.startsWith('B')) {
+      // @ts-expect-error todo check
       cellElement.html(`
       <div>
         <div>B template:</div>
