@@ -1,26 +1,11 @@
 @use "../icons" as *;
 
-@mixin colorbox-label-outside-mixin(
-  $preview-width,
-  $label-outside-height,
-) {
+@mixin colorbox-label-outside-mixin() {
   &.dx-texteditor-label-outside {
-    &.dx-editor-outlined {
-      .dx-label {
-        clip-path: inset(-$label-outside-height 1px -1px (-$preview-width));
-
-        span {
-          transform: translate(-$preview-width, -$label-outside-height)
-        }
-      }
-    }
-
-    &.dx-texteditor-label-outside {
-      &.dx-editor-filled,
-      &.dx-editor-underlined {
-        .dx-label-before {
-          min-width: 0;
-        }
+    &.dx-editor-filled,
+    &.dx-editor-underlined {
+      .dx-label-before {
+        min-width: 0;
       }
     }
   }

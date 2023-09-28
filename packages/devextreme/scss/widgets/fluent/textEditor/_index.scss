@@ -11,6 +11,7 @@
 @use "../common/sizes" as *;
 @use "../../base/textEditor";
 @use "../../base/textEditor/mixins" as *;
+@use "../colorbox/sizes" as *;
 
 // adduse
 
@@ -508,6 +509,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-filled-texteditor-input-top-padding,
   1px,
   $fluent-texteditor-font-size,
+  $fluent-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,
@@ -522,6 +524,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-filled-texteditor-input-horizontal-padding,
   $fluent-filled-texteditor-input-with-label-top-padding,
   $fluent-filled-texteditor-input-with-label-bottom-padding,
+  $fluent-texteditor-font-size,
 ); 
 @include dx-editor-underlined(
   $texteditor-label-transition,
@@ -535,6 +538,7 @@ $fluent-editor-custom-button-margin: 6px;
   $fluent-texteditor-font-size,
   $fluent-standard-texteditor-with-label-input-top-padding,
   $fluent-standard-texteditor-with-label-input-bottom-padding,
+  $fluent-texteditor-font-size,
 );
 
 .dx-valid.dx-texteditor {

@@ -17,7 +17,7 @@
   .dx-colorbox-input-container {
     .dx-placeholder::before,
     .dx-colorbox-input {
-      padding-inline-start: $material-colorbox-preview-left + 27px;
+      padding-inline-start: $material-colorbox-preview-width;
     }
 
     &.dx-colorbox-color-is-not-defined {
@@ -34,19 +34,24 @@
   &.dx-texteditor {
     .dx-texteditor-label {
       .dx-label-before {
-        min-width: $material-colorbox-preview-left + 27px;
+        min-width: $material-colorbox-preview-width;
       }
     }
   }
 
-  @include colorbox-label-outside-mixin(
-    $material-colorbox-preview-left + 27px,
-    $material-texteditor-label-outside-height
-  );
+  @include colorbox-label-outside-mixin();
 }
 
 
 .dx-colorbox-color-result-preview {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 17px;
+  height: 17px;
+  margin-top: -8.5px;
+  inset-inline-start: 13px;
+  border: 1px solid;
   border-color: $colorview-border-color;
   left: $material-colorbox-preview-left;
 }

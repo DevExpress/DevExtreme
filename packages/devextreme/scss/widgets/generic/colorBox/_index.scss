@@ -17,14 +17,11 @@
   .dx-colorbox-input-container {
     .dx-colorbox-input,
     .dx-placeholder::before {
-      padding-inline-start: 40px;
+      padding-inline-start: $generic-colorbox-preview-width;
     }
   }
 
-  @include colorbox-label-outside-mixin(
-    40px,
-    $generic-texteditor-label-outside-height
-  );
+  @include colorbox-label-outside-mixin();
 }
 
 .dx-colorbox-input-container {
@@ -36,6 +33,14 @@
 }
 
 .dx-colorbox-color-result-preview {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 17px;
+  height: 17px;
+  margin-top: -8.5px;
+  inset-inline-start: 13px;
+  border: 1px solid;
   border-color: $colorview-border-color;
 }
 

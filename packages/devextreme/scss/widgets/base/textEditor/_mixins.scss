@@ -155,7 +155,7 @@
   $texteditor-input-top-padding,
   $label-margin-top-diff,
   $texteditor-label-outside-font-size,
-  $texteditor-label-outside-height: 20px,
+  $colorbox-label-outside-before-width,
 ) {
   .dx-editor-outlined {
     .dx-texteditor-label {
@@ -301,7 +301,7 @@
         border-end-end-radius: 1px;
         margin-inline-start: 0;
         padding: 0;
-        clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-font-size)}em 1px -1px (-$label-before-min-width));
+        clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em 1px -1px (-$label-before-min-width));
     
         span {
           font-size: $texteditor-label-outside-font-size;
@@ -314,7 +314,7 @@
 
       &.dx-rtl {
         .dx-label {
-          clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-font-size)}em (-$label-before-min-width) -1px 1px);
+          clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em (-$label-before-min-width) -1px 1px);
           
           span {
             transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
@@ -322,7 +322,7 @@
         }
       }
 
-      &.dx-state-focused {
+      &.dx-state-focused:not(.dx-end-datebox):not(.dx-start-datebox):not(.dx-daterangebox) {
         @include dx-state-border-color($texteditor-focused-border-color, $texteditor-focused-border-bottom-color);
         
         .dx-label {
@@ -336,7 +336,43 @@
         &.dx-rtl {
           .dx-label {
             span {
-              transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
+              transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
+            }
+          }
+        }
+      }
+
+      &.dx-colorbox {
+        .dx-label {
+          clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em 1px -1px (-$colorbox-label-outside-before-width));
+      
+          span {
+            transform: translate(-$colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
+          }
+        }
+  
+        &.dx-rtl {
+          .dx-label {
+            clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em (-$colorbox-label-outside-before-width) -1px 1px);
+            
+            span {
+              transform: translate($colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
+            }
+          }
+        }
+  
+        &.dx-state-focused {
+          .dx-label {
+            span {
+              transform: translate(-$colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
+            }
+          }
+  
+          &.dx-rtl {
+            .dx-label {
+              span {
+                transform: translate($colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
+              }
             }
           }
         }
@@ -411,6 +447,7 @@
   $texteditor-filled-input-horizontal-padding,
   $texteditor-filled-input-with-label-top-padding,
   $texteditor-filled-input-with-label-bottom-padding,
+  $texteditor-label-outside-font-size,
 ) {
   .dx-editor-filled {
     .dx-texteditor-label {
@@ -449,7 +486,7 @@
       }
 
       .dx-texteditor-label {
-        font-size: $texteditor-font-size;
+        font-size: $texteditor-label-outside-font-size;
         height: -$texteditor-label-outside-top-offset;
         line-height: -$texteditor-label-outside-top-offset;
         top: $texteditor-label-outside-top-offset;
@@ -518,6 +555,7 @@
   $texteditor-empty-label-line-height,
   $texteditor-with-label-input-top-padding,
   $texteditor-with-label-input-bottom-padding,
+  $texteditor-label-outside-font-size,
 ) {
   .dx-editor-underlined {
     &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
@@ -549,7 +587,7 @@
       }
 
       .dx-texteditor-label {
-        font-size: $texteditor-font-size;
+        font-size: $texteditor-label-outside-font-size;
         height: -$texteditor-label-outside-top-offset;
         line-height: -$texteditor-label-outside-top-offset;
         top: $texteditor-label-outside-top-offset;

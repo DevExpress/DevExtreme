@@ -11,6 +11,7 @@
 @use "../button/mixins" as *;
 @use "../../base/textEditor";
 @use "../../base/textEditor/mixins" as *;
+@use "../colorbox/sizes" as *;
 
 // adduse
 
@@ -266,6 +267,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-borderedwidget-top-padding,
   1px,
   $generic-texteditor-label-outside-font-size,
+  $generic-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,
@@ -280,6 +282,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-texteditor-filled-input-with-label-top-padding,
   $generic-texteditor-filled-input-with-label-bottom-padding,
+  $generic-texteditor-label-outside-font-size,
 ); 
 @include dx-editor-underlined(
   $texteditor-label-transition,
@@ -293,6 +296,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-line-height,
   $generic-texteditor-underlined-input-with-label-top-padding,
   $generic-texteditor-underlined-input-with-label-bottom-padding,
+  $generic-texteditor-label-outside-font-size,
 );
 
 .dx-editor-underlined {
