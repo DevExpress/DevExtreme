@@ -203,10 +203,10 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
     focusedRowEnabled: true,
     focusedRowKey: 6,
     editing: {
-      mode: mode.toLowerCase(),
+      mode: mode.toLowerCase() as any,
       allowUpdating: true,
       popup: {
-        animation: null,
+        animation: null as any, // todo check
       },
     },
   }));
@@ -522,7 +522,7 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
     focusedRowEnabled: true,
     focusedRowKey: 6,
     editing: {
-      mode: mode.toLowerCase(),
+      mode: mode.toLowerCase() as any,
       allowUpdating: true,
     },
   }));
@@ -577,7 +577,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container): any => {
-        container.append($('<div>') as any).dxDataGrid({
+        (container as any).append($('<div>')).dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,
@@ -748,8 +748,9 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
       focusedRowEnabled: true,
       focusedRowIndex: 20,
       scrolling: {
-        mode: scrollingMode,
+        mode: scrollingMode as any,
         useNative: false,
+        // @ts-expect-error private option
         prerenderedRowCount: 10,
       },
     });
