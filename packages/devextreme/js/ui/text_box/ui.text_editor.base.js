@@ -265,7 +265,6 @@ const TextEditorBase = Editor.inherit({
     _renderValidationState: function() {
         this.callBase();
         const isPending = this.option('validationStatus') === 'pending';
-        const $element = this.$element();
 
         if(isPending) {
             !this._pendingIndicator && this._renderPendingIndicator();
@@ -280,7 +279,7 @@ const TextEditorBase = Editor.inherit({
             this._disposePendingIndicator();
         }
 
-        $element.toggleClass(TEXTEDITOR_VALID_CLASS, !!this._showValidMark);
+        this._toggleValidMark();
     },
 
     _renderButtonContainers: function() {
@@ -925,9 +924,13 @@ const TextEditorBase = Editor.inherit({
             this.callBase();
         }
 
-        this.option('validationStatus', 'valid');
+        this._disposePendingIndicator();
         this._showValidMark = false;
-        this._renderValidationState();
+        this._toggleValidMark();
+    },
+
+    _toggleValidMark() {
+        this.$element().toggleClass(TEXTEDITOR_VALID_CLASS, !!this._showValidMark);
     },
 
     reset: function(value = undefined) {

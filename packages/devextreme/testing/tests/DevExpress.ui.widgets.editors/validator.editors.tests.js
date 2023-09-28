@@ -316,7 +316,6 @@ QUnit.module('Editors Standard Adapter', {
         const editor = this.fixture.createTextEditor();
 
         editor.option('validationStatus', 'pending');
-        editor.option('showValidationMark', true);
         editor.option('validationStatus', 'valid');
 
         assert.ok(this.fixture.$element.hasClass('dx-valid'), 'valid mark is rendered');
