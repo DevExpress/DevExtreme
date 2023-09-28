@@ -23,7 +23,7 @@ const READONLY_STATE_CLASS = 'dx-state-readonly';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
-const labelModes = ['static', 'floating', 'hidden'];
+const labelModes = ['static', 'floating', 'hidden', 'outside'];
 
 fixture.disablePageReloads`DateRangeBox render`
   .page(url(__dirname, '../../container.html'))

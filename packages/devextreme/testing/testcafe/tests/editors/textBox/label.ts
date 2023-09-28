@@ -17,7 +17,7 @@ fixture.disablePageReloads`TextBox_Label`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-const labelModes = ['floating', 'static', 'hidden'];
+const labelModes = ['floating', 'static', 'hidden', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
