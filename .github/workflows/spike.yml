@@ -40,13 +40,15 @@ jobs:
 
       - run: set
 
-      - run: export PATH="/opt/actions-runner/_work/_tool/node/18.18.0/x64/bin:$PATH"
+#      - run: export PATH="/opt/actions-runner/_work/_tool/node/18.18.0/x64/bin:$PATH"
 
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - run: ls -a /opt/actions-runner/_work/_tool/node/18.18.0/x64
+
+      - run: rm -rf /opt/actions-runner/_work/_tool/node/18.18.0
 
       - run: set
 
