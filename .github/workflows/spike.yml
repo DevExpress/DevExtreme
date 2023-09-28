@@ -38,11 +38,15 @@ jobs:
 
       - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64
 
+      - run: set
+
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - run: ls -a /opt/actions-runner/_work/_tool/node/18.18.0/x64
+
+      - run: set
 
       - uses: actions/setup-node@v3
         with:
