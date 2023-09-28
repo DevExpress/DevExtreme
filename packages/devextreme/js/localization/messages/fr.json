@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "occurence(s)",
         "dxScheduler-allDay": "Temps plein",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Voulez-vous éditer cet évenement ou la série entière ?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Voulez-vous supprimer cet évenement ou la série entière ?",
 
