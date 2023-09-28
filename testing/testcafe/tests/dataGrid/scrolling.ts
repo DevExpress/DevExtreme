@@ -275,6 +275,7 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
     scrolling: {
       mode: 'virtual',
       rowRenderingMode: 'virtual',
+      // @ts-expect-error private option
       updateTimeout: 0,
       useNative: false,
     },
@@ -513,6 +514,7 @@ test('New virtual mode. A detail row should be rendered when the last master row
     scrolling: {
       mode: 'virtual',
       rowRenderingMode: 'virtual',
+      // @ts-expect-error private option
       legacyMode: false,
     },
     masterDetail: {
@@ -566,6 +568,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     scrolling: {
       mode: 'virtual',
       rowRenderingMode: 'virtual',
+      // @ts-expect-error private option
       legacyMode: false,
       useNative: false,
     },
@@ -698,11 +701,12 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
       totalCount(loadOptions) {
         return (window as any).myStore.totalCount(loadOptions);
       },
-    },
+    } as any, // todo check
     height: 300,
     remoteOperations: true,
     scrolling: {
       mode: 'virtual',
+      // @ts-expect-error private option
       legacyMode: false,
     },
   });
@@ -1118,7 +1122,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
         return new Array(200).fill(null).map((_, index) => ({ id: index, field1: `item1 ${index}`, field2: `item2 ${index}` }));
       },
       key: 'id',
-    },
+    } as any, // todo check
     editing: {
       mode: 'batch',
       allowUpdating: true,
@@ -1283,7 +1287,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
       totalCount(loadOptions) {
         return (window as any).myStore.totalCount(loadOptions);
       },
-    },
+    } as any, // todo check
     height: 500,
     remoteOperations: true,
     scrolling: {
@@ -1404,7 +1408,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
             }, 500);
           });
         },
-      },
+      } as any, // todo check
       height: 500,
       remoteOperations: true,
       scrolling: {
@@ -1560,6 +1564,7 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
 
   return createWidget('dxDataGrid', {
     height: 200,
+    // @ts-expect-error private option
     loadingTimeout: null,
     dataSource: data,
     keyExpr: 'id',

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
@@ -85,6 +86,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   width: 450,
   dataSource: generateData(10, 50),
   columnWidth: 100,
+  // @ts-expect-error private option
   loadingTimeout: null,
   scrolling: {
     columnRenderingMode: 'virtual',
@@ -173,9 +175,11 @@ test('The vertical scroll position should not be reset after horizontal scrollin
     },
   },
   onContentReady(e) {
+    // @ts-expect-error flag for test
     // eslint-disable-next-line no-underscore-dangle
     if (!e.component.__initExpand) {
-    // eslint-disable-next-line no-underscore-dangle
+      // @ts-expect-error flag for test
+      // eslint-disable-next-line no-underscore-dangle
       e.component.__initExpand = true;
       e.component.expandRow(9);
     }
@@ -227,8 +231,10 @@ test('The markup should be correct after horizontal scrolling and collapse of th
     },
   },
   onContentReady(e) {
+    // @ts-expect-error flag for test
     // eslint-disable-next-line no-underscore-dangle
     if (!e.component.__initExpand) {
+      // @ts-expect-error flag for test
       // eslint-disable-next-line no-underscore-dangle
       e.component.__initExpand = true;
       e.component.expandRow(0);

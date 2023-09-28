@@ -56,6 +56,7 @@ const DATA_GRID_SELECTOR = '#container';
         allowAdding: true,
         startEditAction: 'dblClick',
       },
+      // @ts-expect-error private option
       templatesRenderAsynchronously: true,
     });
     await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR);

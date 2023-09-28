@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
@@ -56,6 +57,7 @@ test('The rows should render correctly when cellTemplates are used and the selec
   await createWidget('dxDataGrid', {
     height: 800,
     renderAsync: false,
+    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
     dataSource: getData(1000, 1),
     columns: [
@@ -67,7 +69,7 @@ test('The rows should render correctly when cellTemplates are used and the selec
     stateStoring: {
       enabled: true,
       type: 'custom',
-      customLoad: () => ({
+      customLoad: () => Promise.resolve({
         selectedRowKeys: ['key-invalid'],
       }),
     },
