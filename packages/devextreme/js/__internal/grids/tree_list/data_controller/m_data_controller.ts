@@ -43,6 +43,10 @@ export const DataController = (dataControllerModule.controllers as any).data.inh
         return false;
       }
 
+      if (item1.isSelected !== item2.isSelected) {
+        return false;
+      }
+
       if (item1.node && item2.node && item1.node.hasChildren !== item2.node.hasChildren) {
         return false;
       }
@@ -52,6 +56,17 @@ export const DataController = (dataControllerModule.controllers as any).data.inh
       }
 
       return true;
+    },
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
+      const firstDataColumnIndex = this._columnsController.getFirstDataColumnIndex();
+
+      if (columnIndex === firstDataColumnIndex && oldRow.isSelected !== newRow.isSelected) {
+        return true;
+      }
+
+      return this.callBase.apply(this, arguments);
     },
 
     init() {
