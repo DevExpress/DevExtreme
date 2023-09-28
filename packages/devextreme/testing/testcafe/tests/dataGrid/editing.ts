@@ -40,8 +40,8 @@ test('Tab key on editor should not raise error when onSaving\'s promise is not y
 
   // assert
   const consoleMessages = await t.getBrowserConsoleMessages();
-  const isNoErrorExists = !!(consoleMessages?.error.length === 0);
-  await t.expect(isNoErrorExists).ok();
+  const noErrorExists = !consoleMessages?.error.length;
+  await t.expect(noErrorExists).ok();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 1, field1: 'value1' },
