@@ -27,6 +27,8 @@ const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
 const FORWARD_DIRECTION = 'forward';
 const BACKWARD_DIRECTION = 'backward';
 
+const DRAG_START_EVENT_NAME = 'dragstart';
+
 const buildInMaskRules = {
     '0': /[0-9]/,
     '9': /[0-9\s]/,
@@ -144,9 +146,28 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _onMouseWheel: noop,
 
-    _render: function() {
+    _attachDragEventHandlers() {
+        const { mask } = this.option();
+
+        if(!mask) {
+            return;
+        }
+
+        const eventName = addNamespace(DRAG_START_EVENT_NAME, this.NAME);
+        const input = this._input();
+
+        eventsEngine.off(input, eventName);
+        eventsEngine.on(input, eventName, (event) => {
+            if(focused(input)) {
+                event.preventDefault();
+            }
+        });
+    },
+
+    _render() {
         this._renderMask();
         this.callBase();
+        this._attachDragEventHandlers();
         this._attachMouseWheelEventHandlers();
     },
 
