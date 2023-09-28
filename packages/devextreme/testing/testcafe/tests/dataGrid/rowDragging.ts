@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';

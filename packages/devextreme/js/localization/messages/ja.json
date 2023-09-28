@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "出現",
         "dxScheduler-allDay": "終日イベント",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "この予定のみを編集しますか、または定期的な予定を編集しますか？",
         "dxScheduler-confirmRecurrenceDeleteMessage": "この予定のみを削除しますか、または定期的な予定を削除しますか？",
 

@@ -1470,6 +1470,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
+  // @ts-expect-error private option
   loadingTimeout: null,
   masterDetail: {
     enabled: true,
@@ -1537,6 +1538,7 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
+  // @ts-expect-error private option
   loadingTimeout: null,
   masterDetail: {
     enabled: true,
@@ -1602,6 +1604,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
+  // @ts-expect-error private option
   loadingTimeout: null,
   masterDetail: {
     enabled: true,
@@ -1952,9 +1955,10 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
     ],
     keyExpr: 'id',
     editing: {
-      mode: editMode.toLowerCase(),
+      mode: editMode.toLowerCase() as any,
       allowUpdating: true,
     },
+    // @ts-expect-error private option
     loadingTimeout: null,
     customizeColumns(columns) {
       columns.forEach((col) => {
@@ -1996,7 +2000,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
     keyExpr: 'id',
     columns: ['field1', 'field2'],
     editing: {
-      mode: editMode.toLowerCase(),
+      mode: editMode.toLowerCase() as any,
       allowUpdating: true,
     },
   }));
@@ -2109,7 +2113,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
       totalCount(loadOptions) {
         return (window as any).myStore.totalCount(loadOptions);
       },
-    },
+    } as any, // todo check
     keyExpr: 'ID',
     editing: {
       mode: 'cell',
@@ -2142,7 +2146,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   ['viewportBottom', 13, 'virtual', 162],
   ['viewportTop', 0, 'virtual', 0],
   ['viewportTop', 5, 'virtual', 162],
-] as [string, number, string, number][])
+] as const)
   .forEach(([newRowPosition, insertedRowNumber, scrollMode, scrollTop]) => {
     test(`The first cell of the new row should be focused when
       newRowPosition = ${newRowPosition}
@@ -2385,7 +2389,7 @@ test('Component sends unexpected filtering request after inserting a new row if 
     .expect(Selector('#otherContainer').innerText)
     .eql('');
 }).before(async () => {
-  await createWidget('dxDataGrid', ClientFunction(() => {
+  await createWidget('dxDataGrid', () => {
     const dataSourceCore = [
       { ID: 1, Name: 'Name 1' },
       { ID: 2, Name: 'Name 2' },
@@ -2447,7 +2451,7 @@ test('Component sends unexpected filtering request after inserting a new row if 
       },
       remoteOperations: true,
     };
-  }));
+  });
 });
 
 test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set on event (T1181477)', async (t) => {
@@ -2463,7 +2467,7 @@ test('Component sends unexpected filtering request after inserting a new row if 
     .expect(Selector('#otherContainer').innerText)
     .eql('');
 }).before(async () => {
-  await createWidget('dxDataGrid', ClientFunction(() => {
+  await createWidget('dxDataGrid', () => {
     const dataSourceCore = [
       { ID: 1, Name: 'Name 1' },
       { ID: 2, Name: 'Name 2' },
@@ -2506,5 +2510,5 @@ test('Component sends unexpected filtering request after inserting a new row if 
       },
       remoteOperations: true,
     };
-  }));
+  });
 });
