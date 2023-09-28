@@ -40,6 +40,8 @@ jobs:
 
       - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64
 
+      - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0
+
 #      - run: set
 
 #      - run: export PATH="/opt/actions-runner/_work/_tool/node/18.18.0/x64/bin:$PATH"
@@ -50,7 +52,9 @@ jobs:
 
       - run: ls -a /opt/actions-runner/_work/_tool/node/18.18.0/x64
 
-      - run: rm -rf /opt/actions-runner/_work/_tool/node/18.18.0
+      - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0
+
+#      - run: rm -rf /opt/actions-runner/_work/_tool/node/18.18.0
 
       - run: set
 
