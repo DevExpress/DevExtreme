@@ -17,8 +17,6 @@ import {
 
 
 
-import { ChartsDataType, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -99,18 +97,18 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): string | Array<string> {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: string | Array<string>) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): string {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: string) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -139,10 +137,10 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get valueAxis(): { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } {
+    get valueAxis(): { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: string | undefined, valueType?: string | undefined } {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined }) {
+    set valueAxis(value: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: string | undefined, valueType?: string | undefined }) {
         this._setOption('valueAxis', value);
     }
 

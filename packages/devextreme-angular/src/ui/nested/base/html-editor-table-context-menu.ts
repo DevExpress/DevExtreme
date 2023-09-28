@@ -5,7 +5,6 @@ import {
     Component,
 } from '@angular/core';
 
-import { HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''
@@ -18,10 +17,10 @@ export abstract class DxoHtmlEditorTableContextMenu extends NestedOption {
         this._setOption('enabled', value);
     }
 
-    get items(): Array<HtmlEditorPredefinedContextMenuItem | any | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<HtmlEditorPredefinedContextMenuItem | any>, name?: HtmlEditorPredefinedContextMenuItem | undefined, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | string | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<any | string>, name?: string | undefined, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<HtmlEditorPredefinedContextMenuItem | any | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<HtmlEditorPredefinedContextMenuItem | any>, name?: HtmlEditorPredefinedContextMenuItem | undefined, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | string | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<any | string>, name?: string | undefined, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 }

@@ -19,7 +19,7 @@ import {
 
 
 import { UserDefinedElement } from 'devextreme/core/element';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEndEvent, ResizeEvent, ResizeHandle, ResizeStartEvent } from 'devextreme/ui/resizable';
+import { DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
 
 import DxResizable from 'devextreme/ui/resizable';
 
@@ -84,10 +84,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get handles(): ResizeHandle | string {
+    get handles(): string {
         return this._getOption('handles');
     }
-    set handles(value: ResizeHandle | string) {
+    set handles(value: string) {
         this._setOption('handles', value);
     }
 
@@ -262,7 +262,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() handlesChange: EventEmitter<ResizeHandle | string>;
+    @Output() handlesChange: EventEmitter<string>;
 
     /**
     

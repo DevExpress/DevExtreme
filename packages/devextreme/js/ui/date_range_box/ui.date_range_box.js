@@ -6,7 +6,7 @@ import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
 import devices from '../../core/devices';
 import messageLocalization from '../../localization/message';
-import { current, isMaterial, isMaterialBased } from '../themes';
+import { current, isMaterial } from '../themes';
 import Editor from '../editor/editor';
 import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
@@ -126,19 +126,11 @@ class DateRangeBox extends Editor {
             {
                 device: function() {
                     const themeName = current();
-                    return isMaterialBased(themeName);
-                },
-                options: {
-                    labelMode: 'floating'
-                }
-            },
-            {
-                device: function() {
-                    const themeName = current();
                     return isMaterial(themeName);
                 },
                 options: {
                     stylingMode: config().editorStylingMode || 'filled',
+                    labelMode: 'floating'
                 }
             },
             {

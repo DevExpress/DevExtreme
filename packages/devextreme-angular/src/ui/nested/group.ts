@@ -14,7 +14,6 @@ import {
 
 
 
-import { TextOverflow } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -71,10 +70,10 @@ export class DxoGroupComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get label(): { font?: Font, textOverflow?: TextOverflow, visible?: boolean } {
+    get label(): { font?: Font, textOverflow?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }) {
+    set label(value: { font?: Font, textOverflow?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 

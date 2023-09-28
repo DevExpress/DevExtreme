@@ -46,6 +46,8 @@ const HtmlEditor = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             focusStateEnabled: true,
+
+
             valueType: 'html',
             placeholder: '',
             toolbar: null,

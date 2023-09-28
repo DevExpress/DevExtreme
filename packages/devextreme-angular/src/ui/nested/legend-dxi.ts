@@ -12,10 +12,7 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { DashStyle } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
-import { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
 
 import {
     NestedOptionHost,
@@ -39,10 +36,10 @@ export class DxiLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -95,26 +92,26 @@ export class DxiLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalAlignment {
+    get horizontalAlignment(): string {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalAlignment) {
+    set horizontalAlignment(value: string) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get itemsAlignment(): HorizontalAlignment | undefined {
+    get itemsAlignment(): string | undefined {
         return this._getOption('itemsAlignment');
     }
-    set itemsAlignment(value: HorizontalAlignment | undefined) {
+    set itemsAlignment(value: string | undefined) {
         this._setOption('itemsAlignment', value);
     }
 
     @Input()
-    get itemTextPosition(): Position | undefined {
+    get itemTextPosition(): string | undefined {
         return this._getOption('itemTextPosition');
     }
-    set itemTextPosition(value: Position | undefined) {
+    set itemTextPosition(value: string | undefined) {
         this._setOption('itemTextPosition', value);
     }
 
@@ -135,10 +132,10 @@ export class DxiLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get markerShape(): VectorMapMarkerShape {
+    get markerShape(): string {
         return this._getOption('markerShape');
     }
-    set markerShape(value: VectorMapMarkerShape) {
+    set markerShape(value: string) {
         this._setOption('markerShape', value);
     }
 
@@ -159,10 +156,10 @@ export class DxiLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get orientation(): Orientation | undefined {
+    get orientation(): string | undefined {
         return this._getOption('orientation');
     }
-    set orientation(value: Orientation | undefined) {
+    set orientation(value: string | undefined) {
         this._setOption('orientation', value);
     }
 
@@ -207,18 +204,18 @@ export class DxiLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
+    get title(): string | { font?: Font, horizontalAlignment?: string | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: string } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
+    set title(value: string | { font?: Font, horizontalAlignment?: string | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: string }) {
         this._setOption('title', value);
     }
 
     @Input()
-    get verticalAlignment(): VerticalEdge {
+    get verticalAlignment(): string {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: VerticalEdge) {
+    set verticalAlignment(value: string) {
         this._setOption('verticalAlignment', value);
     }
 

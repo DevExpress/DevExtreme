@@ -6,8 +6,7 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Mode } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, FormLabelMode, InitializedEvent, LabelLocation, OptionChangedEvent } from 'devextreme/ui/form';
+import { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
 
 @Component({
     template: ''
@@ -41,10 +40,10 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('alignItemLabelsInAllGroups', value);
     }
 
-    get colCount(): Mode | number {
+    get colCount(): number | string {
         return this._getOption('colCount');
     }
-    set colCount(value: Mode | number) {
+    set colCount(value: number | string) {
         this._setOption('colCount', value);
     }
 
@@ -125,17 +124,17 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('items', value);
     }
 
-    get labelLocation(): LabelLocation {
+    get labelLocation(): string {
         return this._getOption('labelLocation');
     }
-    set labelLocation(value: LabelLocation) {
+    set labelLocation(value: string) {
         this._setOption('labelLocation', value);
     }
 
-    get labelMode(): FormLabelMode {
+    get labelMode(): string {
         return this._getOption('labelMode');
     }
-    set labelMode(value: FormLabelMode) {
+    set labelMode(value: string) {
         this._setOption('labelMode', value);
     }
 

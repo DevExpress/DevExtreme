@@ -16,7 +16,7 @@ import CollectionWidget from './collection/ui.collection_widget.live_update';
 import { when, Deferred } from '../core/utils/deferred';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { getImageContainer } from '../core/utils/icon';
-import { isMaterialBased } from './themes';
+import { isMaterial } from './themes';
 
 // STYLE accordion
 
@@ -77,7 +77,7 @@ const Accordion = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return isMaterialBased();
+                    return isMaterial();
                 },
                 options: {
                     animationDuration: 200,

@@ -254,7 +254,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       & > td {
         padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
         font-size: $fluent-grid-base-cell-font-size;
-        line-height: $fluent-grid-base-cell-line-height - 1;
+        line-height: $fluent-grid-base-cell-line-height;
       }
     }
 
@@ -787,11 +787,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     background-color: $toolbar-bg;
 
     .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-color, $button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
+      @include dx-button-flat-color-styling($button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
     }
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
-      border-radius: $fluent-base-border-radius;
+      border-radius: 50%;
     }
 
     .dx-#{$widget-name}-toolbar-button {
@@ -1127,8 +1127,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       @include dx-button-styling-variant(
         $button-danger-bg,
         $button-danger-color,
-        $button-danger-color,
-        $button-danger-color,
         $button-danger-bg,
         $button-danger-bg,
         $button-danger-bg,
@@ -1206,6 +1204,12 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
   }
 
+  .dx-#{$widget-name}-form-buttons-container {
+    .dx-button {
+      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+    }
+  }
+
   .dx-command-adaptive {
     width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
     min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
@@ -1223,8 +1227,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-icon-filter {
       color: $datagrid-filter-panel-color;
-      
-      @include dx-icon-sizing($fluent-filter-panel-icon-size);
     }
   }
 

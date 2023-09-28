@@ -16,7 +16,6 @@ import {
 
 
 
-import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
     NestedOptionHost,
@@ -86,7 +85,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
+    @Output() zoomLevelChange: EventEmitter<string>;
     protected get _optionPath() {
         return 'calendarOptions';
     }

@@ -15,7 +15,6 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { DashStyle, HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -31,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, width?: number | undefined } {
+    get border(): { color?: string | undefined, dashStyle?: string, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, width?: number | undefined }) {
+    set border(value: { color?: string | undefined, dashStyle?: string, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, dashStyle?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 
@@ -47,18 +46,18 @@ export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): string {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: string) {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get hatching(): { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
+    get hatching(): { direction?: string, opacity?: number, step?: number, width?: number } {
         return this._getOption('hatching');
     }
-    set hatching(value: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
+    set hatching(value: { direction?: string, opacity?: number, step?: number, width?: number }) {
         this._setOption('hatching', value);
     }
 

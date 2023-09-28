@@ -25,7 +25,6 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/action_sheet';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
@@ -176,10 +175,10 @@ export class DxActionSheetComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: ButtonStyle, template?: any, text?: string, type?: ButtonType }> {
+    get items(): Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: string, template?: any, text?: string, type?: string }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: ButtonStyle, template?: any, text?: string, type?: ButtonType }>) {
+    set items(value: Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: string, template?: any, text?: string, type?: string }>) {
         this._setOption('items', value);
     }
 
@@ -433,7 +432,7 @@ export class DxActionSheetComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: ButtonStyle, template?: any, text?: string, type?: ButtonType }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: string, template?: any, text?: string, type?: string }>>;
 
     /**
     

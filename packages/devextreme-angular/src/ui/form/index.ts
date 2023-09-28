@@ -24,8 +24,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Mode } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, FormLabelMode, InitializedEvent, LabelLocation, OptionChangedEvent } from 'devextreme/ui/form';
+import { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
 
@@ -126,10 +125,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get colCount(): Mode | number {
+    get colCount(): number | string {
         return this._getOption('colCount');
     }
-    set colCount(value: Mode | number) {
+    set colCount(value: number | string) {
         this._setOption('colCount', value);
     }
 
@@ -282,10 +281,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get labelLocation(): LabelLocation {
+    get labelLocation(): string {
         return this._getOption('labelLocation');
     }
-    set labelLocation(value: LabelLocation) {
+    set labelLocation(value: string) {
         this._setOption('labelLocation', value);
     }
 
@@ -295,10 +294,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get labelMode(): FormLabelMode {
+    get labelMode(): string {
         return this._getOption('labelMode');
     }
-    set labelMode(value: FormLabelMode) {
+    set labelMode(value: string) {
         this._setOption('labelMode', value);
     }
 
@@ -591,7 +590,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colCountChange: EventEmitter<Mode | number>;
+    @Output() colCountChange: EventEmitter<number | string>;
 
     /**
     
@@ -675,14 +674,14 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelLocationChange: EventEmitter<LabelLocation>;
+    @Output() labelLocationChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<FormLabelMode>;
+    @Output() labelModeChange: EventEmitter<string>;
 
     /**
     

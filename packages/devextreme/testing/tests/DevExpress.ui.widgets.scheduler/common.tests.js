@@ -851,15 +851,15 @@ QUnit.module('View with configuration', {
     });
 });
 
-QUnit.module('Options for Material-based themes in components', {
+QUnit.module('Options for Material theme in components', {
     beforeEach: function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.clock.restore();
-        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
     QUnit.test('_collectorOffset option should be passed to SchedulerAppointments depending on the view', function(assert) {

@@ -12,7 +12,6 @@ import {
 
 
 
-import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -93,10 +92,10 @@ export class DxiGroupItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get summaryType(): SummaryType | string | undefined {
+    get summaryType(): string | undefined {
         return this._getOption('summaryType');
     }
-    set summaryType(value: SummaryType | string | undefined) {
+    set summaryType(value: string | undefined) {
         this._setOption('summaryType', value);
     }
 

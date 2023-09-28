@@ -18,7 +18,6 @@ import {
 } from '@angular/core';
 
 
-import { DragDirection } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/draggable';
 
@@ -138,10 +137,10 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragDirection(): DragDirection {
+    get dragDirection(): string {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: DragDirection) {
+    set dragDirection(value: string) {
         this._setOption('dragDirection', value);
     }
 
@@ -357,7 +356,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragDirectionChange: EventEmitter<DragDirection>;
+    @Output() dragDirectionChange: EventEmitter<string>;
 
     /**
     

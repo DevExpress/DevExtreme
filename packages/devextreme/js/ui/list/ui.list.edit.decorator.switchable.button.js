@@ -5,7 +5,6 @@ import Button from '../button';
 import messageLocalization from '../../localization/message';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import SwitchableEditDecorator from './ui.list.edit.decorator.switchable';
-import { isMaterialBased } from '../themes';
 
 const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
 const SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = 'dx-list-switchable-delete-button-wrapper';
@@ -27,7 +26,6 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
         this._list._createComponent($button, Button, {
             text: messageLocalization.format('dxListEditDecorator-delete'),
             type: 'danger',
-            stylingMode: isMaterialBased() ? 'text' : 'contained',
             onClick: (function(e) {
                 this._deleteItem();
                 e.event.stopPropagation();

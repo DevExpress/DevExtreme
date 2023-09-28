@@ -23,7 +23,6 @@ import {
 } from '@angular/core';
 
 
-import { Position, SliderValueChangeMode, TooltipShowMode, ValidationMessageMode, ValidationStatus, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/range_slider';
 
@@ -249,10 +248,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get label(): { format?: Format | string, position?: VerticalEdge, visible?: boolean } {
+    get label(): { format?: Format | string, position?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { format?: Format | string, position?: VerticalEdge, visible?: boolean }) {
+    set label(value: { format?: Format | string, position?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -379,10 +378,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get tooltip(): { enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode } {
+    get tooltip(): { enabled?: boolean, format?: Format | string, position?: string, showMode?: string } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode }) {
+    set tooltip(value: { enabled?: boolean, format?: Format | string, position?: string, showMode?: string }) {
         this._setOption('tooltip', value);
     }
 
@@ -418,10 +417,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): string {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: string) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -431,10 +430,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessagePosition(): Position {
+    get validationMessagePosition(): string {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position) {
+    set validationMessagePosition(value: string) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -444,10 +443,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): string {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: string) {
         this._setOption('validationStatus', value);
     }
 
@@ -470,10 +469,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get valueChangeMode(): SliderValueChangeMode {
+    get valueChangeMode(): string {
         return this._getOption('valueChangeMode');
     }
-    set valueChangeMode(value: SliderValueChangeMode) {
+    set valueChangeMode(value: string) {
         this._setOption('valueChangeMode', value);
     }
 
@@ -639,7 +638,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ format?: Format | string, position?: VerticalEdge, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<{ format?: Format | string, position?: string, visible?: boolean }>;
 
     /**
     
@@ -709,7 +708,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode }>;
+    @Output() tooltipChange: EventEmitter<{ enabled?: boolean, format?: Format | string, position?: string, showMode?: string }>;
 
     /**
     
@@ -730,21 +729,21 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position>;
+    @Output() validationMessagePositionChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<string>;
 
     /**
     
@@ -758,7 +757,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChangeModeChange: EventEmitter<SliderValueChangeMode>;
+    @Output() valueChangeModeChange: EventEmitter<string>;
 
     /**
     

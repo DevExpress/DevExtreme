@@ -1035,22 +1035,9 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEv
 /** @public */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
-/**
- * @docid _ui_data_grid_ColumnButtonClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
- */
+/** @public */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
-  /**
-   * @docid _ui_data_grid_ColumnButtonClickEvent.row
-   * @type dxDataGridRowObject
-   */
   row?: Row<TRowData, TKey>;
-  /**
-   * @docid _ui_data_grid_ColumnButtonClickEvent.column
-   * @type dxDataGridColumn
-   */
   column?: Column<TRowData, TKey>;
 };
 
@@ -2316,7 +2303,12 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
     name?: DataGridPredefinedColumnButton | string;
     /**
      * @docid dxDataGridColumnButton.onClick
-     * @type_function_param1 e:{ui/data_grid:ColumnButtonClickEvent}
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxDataGrid
+     * @type_function_param1_field model:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1_field column:dxDataGridColumn
      * @public
      */
     onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);

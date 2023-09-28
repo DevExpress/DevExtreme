@@ -18,7 +18,6 @@ import {
 } from '@angular/core';
 
 
-import { ScrollDirection } from 'devextreme/common';
 import { DisposingEvent, InitializedEvent, OptionChangedEvent, PullDownEvent, ReachBottomEvent, ScrollEvent, UpdatedEvent } from 'devextreme/ui/scroll_view';
 
 import DxScrollView from 'devextreme/ui/scroll_view';
@@ -71,10 +70,10 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get direction(): ScrollDirection {
+    get direction(): string {
         return this._getOption('direction');
     }
-    set direction(value: ScrollDirection) {
+    set direction(value: string) {
         this._setOption('direction', value);
     }
 
@@ -315,7 +314,7 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<ScrollDirection>;
+    @Output() directionChange: EventEmitter<string>;
 
     /**
     

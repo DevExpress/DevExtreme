@@ -12,7 +12,6 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -28,10 +27,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiColComponent extends CollectionNestedOption {
     @Input()
-    get baseSize(): Mode | number {
+    get baseSize(): number | string {
         return this._getOption('baseSize');
     }
-    set baseSize(value: Mode | number) {
+    set baseSize(value: number | string) {
         this._setOption('baseSize', value);
     }
 

@@ -18,12 +18,8 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { ChartsDataType, DiscreteAxisDivisionMode, LabelOverlap, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
-import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 import { Font } from 'devextreme/viz/core/base_widget';
-import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -72,10 +68,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get label(): { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean } {
+    get label(): { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: string, indentFromTick?: number, overlappingBehavior?: string, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: string, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: string, topIndent?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }) {
+    set label(value: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: string, indentFromTick?: number, overlappingBehavior?: string, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: string, useRangeColors?: boolean, visible?: boolean } | { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: string, topIndent?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -88,18 +84,18 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get minorTickInterval(): number | undefined | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | undefined | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | undefined | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | undefined | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get orientation(): CircularGaugeElementOrientation {
+    get orientation(): string {
         return this._getOption('orientation');
     }
-    set orientation(value: CircularGaugeElementOrientation) {
+    set orientation(value: string) {
         this._setOption('orientation', value);
     }
 
@@ -128,26 +124,26 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get tickInterval(): number | undefined | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | undefined | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | undefined | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | undefined | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get horizontalOrientation(): HorizontalAlignment {
+    get horizontalOrientation(): string {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: HorizontalAlignment) {
+    set horizontalOrientation(value: string) {
         this._setOption('horizontalOrientation', value);
     }
 
     @Input()
-    get verticalOrientation(): VerticalAlignment {
+    get verticalOrientation(): string {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: VerticalAlignment) {
+    set verticalOrientation(value: string) {
         this._setOption('verticalOrientation', value);
     }
 
@@ -168,10 +164,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get aggregationInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get aggregationInterval(): number | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('aggregationInterval');
     }
-    set aggregationInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set aggregationInterval(value: number | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('aggregationInterval', value);
     }
 
@@ -184,10 +180,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get breakStyle(): { color?: string, line?: ScaleBreakLineStyle, width?: number } {
+    get breakStyle(): { color?: string, line?: string, width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
+    set breakStyle(value: { color?: string, line?: string, width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -200,10 +196,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
+    get discreteAxisDivisionMode(): string {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
+    set discreteAxisDivisionMode(value: string) {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -248,10 +244,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get maxRange(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get maxRange(): number | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('maxRange');
     }
-    set maxRange(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set maxRange(value: number | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('maxRange', value);
     }
 
@@ -264,10 +260,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get minRange(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minRange(): number | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minRange');
     }
-    set minRange(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minRange(value: number | string | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minRange', value);
     }
 
@@ -296,18 +292,18 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get type(): AxisScale | undefined {
+    get type(): string | undefined {
         return this._getOption('type');
     }
-    set type(value: AxisScale | undefined) {
+    set type(value: string | undefined) {
         this._setOption('type', value);
     }
 
     @Input()
-    get valueType(): ChartsDataType | undefined {
+    get valueType(): string | undefined {
         return this._getOption('valueType');
     }
-    set valueType(value: ChartsDataType | undefined) {
+    set valueType(value: string | undefined) {
         this._setOption('valueType', value);
     }
 

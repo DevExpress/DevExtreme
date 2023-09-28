@@ -5,17 +5,16 @@ import {
     Component,
 } from '@angular/core';
 
-import { ApplyFilterMode } from 'devextreme/common/grids';
 import { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
 
 @Component({
     template: ''
 })
 export abstract class DxoGanttFilterRow extends NestedOption {
-    get applyFilter(): ApplyFilterMode {
+    get applyFilter(): string {
         return this._getOption('applyFilter');
     }
-    set applyFilter(value: ApplyFilterMode) {
+    set applyFilter(value: string) {
         this._setOption('applyFilter', value);
     }
 

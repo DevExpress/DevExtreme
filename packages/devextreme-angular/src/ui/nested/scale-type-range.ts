@@ -14,7 +14,6 @@ import {
 
 
 
-import { GanttScaleType } from 'devextreme/ui/gantt';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoScaleTypeRangeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get max(): GanttScaleType {
+    get max(): string {
         return this._getOption('max');
     }
-    set max(value: GanttScaleType) {
+    set max(value: string) {
         this._setOption('max', value);
     }
 
     @Input()
-    get min(): GanttScaleType {
+    get min(): string {
         return this._getOption('min');
     }
-    set min(value: GanttScaleType) {
+    set min(value: string) {
         this._setOption('min', value);
     }
 

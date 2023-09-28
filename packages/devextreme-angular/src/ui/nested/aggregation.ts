@@ -14,7 +14,6 @@ import {
 
 
 
-import { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -46,10 +45,10 @@ export class DxoAggregationComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get method(): ChartSeriesAggregationMethod {
+    get method(): string {
         return this._getOption('method');
     }
-    set method(value: ChartSeriesAggregationMethod) {
+    set method(value: string) {
         this._setOption('method', value);
     }
 

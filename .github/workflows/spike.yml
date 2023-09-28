@@ -1,0 +1,105 @@
+name: Spike Node.js install
+
+on:
+  pull_request:
+  push:
+    branches: [23_2]
+
+jobs:
+#  self-hosted-patch:
+#    runs-on: devextreme-shr2
+#
+#    steps:
+#    - run: node -v
+#
+#    - uses: actions/setup-node@v3
+#      with:
+#        node-version: '18.17.1'
+#
+#    - run: node -v
+
+  self-hosted-major:
+    runs-on: devextreme-shr2
+    env:
+      VERSION: 18
+
+    steps:
+      - run: node -v
+
+      - run: mkdir -p /opt/actions-runner/_work/_tool/node/18.18.0/x64
+
+      - run: wget https://github.com/actions/node-versions/releases/download/18.18.0-6231178035/node-18.18.0-linux-x64.tar.gz
+
+#      - run: mv node-18.18.0-linux-x64.tar.gz /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
+
+#      - run: cd /opt/actions-runner/_work/_tool/node/18.18.0/x64 && tar xvzf node-18.tar.gz
+
+#      - run: rm /opt/actions-runner/_work/_tool/node/18.18.0/x64/node-18.tar.gz
+
+      - run: /usr/bin/tar xz --strip 1 --warning=no-unknown-keyword -C /opt/actions-runner/_work/_tool/node/18.18.0/x64 -f node-18.18.0-linux-x64.tar.gz
+
+      - run: mkdir -p /opt/actions-runner/_work/_tool/node/18.18.0/x64.complete
+
+      - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64
+
+      - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0
+
+#      - run: set
+
+#      - run: export PATH="/opt/actions-runner/_work/_tool/node/18.18.0/x64/bin:$PATH"
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - run: ls -a /opt/actions-runner/_work/_tool/node/18.18.0/x64
+
+      - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0
+
+      - run: ls /opt/actions-runner/_work/_tool/node/18.18.0/x64.complete
+
+      - run: du -s /opt/actions-runner/_work/_tool/node/18.18.0/x64.complete
+
+#      - run: rm -rf /opt/actions-runner/_work/_tool/node/18.18.0
+
+      - run: set
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - run: node -v
+
+#  github-hosted-patch:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - run: node -v
+#
+#      - run: ls -la /opt/hostedtoolcache/node/
+#
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: '18.16.0'
+#
+#      - run: node -v
+#
+#      - run: ls -la /opt/hostedtoolcache/node/
+#
+#  github-hosted-major:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - run: node -v
+#
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: '18'
+#
+#      - run: ls -a /opt/hostedtoolcache/node
+#
+#      - run: ls -a /opt/hostedtoolcache/node/18.17.1
+#
+#      - run: ls -a /opt/hostedtoolcache/node/18.17.1/x64
+#
+#      - run: node -v

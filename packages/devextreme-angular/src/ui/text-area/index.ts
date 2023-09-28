@@ -23,7 +23,6 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_area';
 
 import DxTextArea from 'devextreme/ui/text_area';
@@ -245,10 +244,10 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): string {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: string) {
         this._setOption('labelMode', value);
     }
 
@@ -362,10 +361,10 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): string {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: string) {
         this._setOption('stylingMode', value);
     }
 
@@ -427,10 +426,10 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): string {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: string) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -440,10 +439,10 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessagePosition(): Position {
+    get validationMessagePosition(): string {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position) {
+    set validationMessagePosition(value: string) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -453,10 +452,10 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): string {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: string) {
         this._setOption('validationStatus', value);
     }
 
@@ -728,7 +727,7 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<string>;
 
     /**
     
@@ -791,7 +790,7 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<string>;
 
     /**
     
@@ -826,21 +825,21 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position>;
+    @Output() validationMessagePositionChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<string>;
 
     /**
     

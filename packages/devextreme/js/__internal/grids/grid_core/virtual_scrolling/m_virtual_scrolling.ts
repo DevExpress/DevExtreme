@@ -1419,15 +1419,13 @@ export const virtualScrollingModule = {
           loadViewport(params) {
             const { checkLoadedParamsOnly, checkLoading, viewportIsNotFilled } = params ?? {};
             const virtualPaging = isVirtualPaging(this);
-
             if (virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
               this._updateLoadViewportParams();
 
               const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
-              const isCustomLoading = this._dataSource?.isCustomLoading();
-              const isLoading = checkLoading && !isCustomLoading && this._isLoading;
+
               const needToUpdateItems = !(loadingItemsStarted
-                                || isLoading
+                                || this._isLoading && checkLoading
                                 || checkLoadedParamsOnly);
 
               if (needToUpdateItems) {

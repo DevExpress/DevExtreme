@@ -26,15 +26,14 @@ export { ExplicitTypes } from 'devextreme/ui/tree_list';
 
 import { PositionConfig } from 'devextreme/animation/position';
 import DevExpress from 'devextreme/bundles/dx.all';
-import { DataStructure, DragDirection, DragHighlight, Mode, ScrollbarMode, ScrollMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, HeaderFilterSearchConfig, PagerDisplayMode, PagerPageSize, StartEditAction, StateStoreType } from 'devextreme/common/grids';
+import { ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, TreeListFilterMode } from 'devextreme/ui/tree_list';
+import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent } from 'devextreme/ui/tree_list';
 
 import DxTreeList from 'devextreme/ui/tree_list';
 
@@ -248,10 +247,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get columnChooser(): { allowSearch?: boolean, container?: string | UserDefinedElement | undefined, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number } {
+    get columnChooser(): { allowSearch?: boolean, container?: string | UserDefinedElement | undefined, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: string, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: string | undefined, title?: string, width?: number } {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: { allowSearch?: boolean, container?: string | UserDefinedElement | undefined, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number }) {
+    set columnChooser(value: { allowSearch?: boolean, container?: string | UserDefinedElement | undefined, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: string, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: string | undefined, title?: string, width?: number }) {
         this._setOption('columnChooser', value);
     }
 
@@ -300,10 +299,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get columnResizingMode(): ColumnResizeMode {
+    get columnResizingMode(): string {
         return this._getOption('columnResizingMode');
     }
-    set columnResizingMode(value: ColumnResizeMode) {
+    set columnResizingMode(value: string) {
         this._setOption('columnResizingMode', value);
     }
 
@@ -326,10 +325,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get columnWidth(): Mode | number | undefined {
+    get columnWidth(): number | string | undefined {
         return this._getOption('columnWidth');
     }
-    set columnWidth(value: Mode | number | undefined) {
+    set columnWidth(value: number | string | undefined) {
         this._setOption('columnWidth', value);
     }
 
@@ -365,10 +364,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get dataStructure(): DataStructure {
+    get dataStructure(): string {
         return this._getOption('dataStructure');
     }
-    set dataStructure(value: DataStructure) {
+    set dataStructure(value: string) {
         this._setOption('dataStructure', value);
     }
 
@@ -404,10 +403,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get editing(): { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DevExpress.common.grids.DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
+    get editing(): { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DevExpress.common.grids.DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: string, popup?: dxPopupOptions, refreshMode?: string, selectTextOnEditStart?: boolean, startEditAction?: string, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DevExpress.common.grids.DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
+    set editing(value: { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DevExpress.common.grids.DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: string, popup?: dxPopupOptions, refreshMode?: string, selectTextOnEditStart?: boolean, startEditAction?: string, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -495,10 +494,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get filterMode(): TreeListFilterMode {
+    get filterMode(): string {
         return this._getOption('filterMode');
     }
-    set filterMode(value: TreeListFilterMode) {
+    set filterMode(value: string) {
         this._setOption('filterMode', value);
     }
 
@@ -521,10 +520,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get filterRow(): { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
+    get filterRow(): { applyFilter?: string, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
         return this._getOption('filterRow');
     }
-    set filterRow(value: { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
+    set filterRow(value: { applyFilter?: string, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
         this._setOption('filterRow', value);
     }
 
@@ -534,10 +533,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get filterSyncEnabled(): Mode | boolean {
+    get filterSyncEnabled(): boolean | string {
         return this._getOption('filterSyncEnabled');
     }
-    set filterSyncEnabled(value: Mode | boolean) {
+    set filterSyncEnabled(value: boolean | string) {
         this._setOption('filterSyncEnabled', value);
     }
 
@@ -703,10 +702,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
+    get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: string, enterKeyDirection?: string } {
         return this._getOption('keyboardNavigation');
     }
-    set keyboardNavigation(value: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }) {
+    set keyboardNavigation(value: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: string, enterKeyDirection?: string }) {
         this._setOption('keyboardNavigation', value);
     }
 
@@ -729,10 +728,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get loadPanel(): { enabled?: Mode | boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
+    get loadPanel(): { enabled?: boolean | string, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: Mode | boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }) {
+    set loadPanel(value: { enabled?: boolean | string, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }) {
         this._setOption('loadPanel', value);
     }
 
@@ -755,10 +754,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get pager(): { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean } {
+    get pager(): { allowedPageSizes?: string | Array<number | string>, displayMode?: string, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | string } {
         return this._getOption('pager');
     }
-    set pager(value: { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }) {
+    set pager(value: { allowedPageSizes?: string | Array<number | string>, displayMode?: string, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | string }) {
         this._setOption('pager', value);
     }
 
@@ -794,10 +793,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get remoteOperations(): Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean } {
+    get remoteOperations(): string | { filtering?: boolean, grouping?: boolean, sorting?: boolean } {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean }) {
+    set remoteOperations(value: string | { filtering?: boolean, grouping?: boolean, sorting?: boolean }) {
         this._setOption('remoteOperations', value);
     }
 
@@ -859,10 +858,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | UserDefinedElement | undefined, container?: string | UserDefinedElement | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
+    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | UserDefinedElement | undefined, container?: string | UserDefinedElement | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: string, dragTemplate?: any | undefined, dropFeedbackMode?: string, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
         return this._getOption('rowDragging');
     }
-    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | UserDefinedElement | undefined, container?: string | UserDefinedElement | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
+    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | UserDefinedElement | undefined, container?: string | UserDefinedElement | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: string, dragTemplate?: any | undefined, dropFeedbackMode?: string, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
         this._setOption('rowDragging', value);
     }
 
@@ -885,10 +884,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean } {
+    get scrolling(): { columnRenderingMode?: string, mode?: string, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: string, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: string, useNative?: boolean | string } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }) {
+    set scrolling(value: { columnRenderingMode?: string, mode?: string, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: string, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: string, useNative?: boolean | string }) {
         this._setOption('scrolling', value);
     }
 
@@ -924,10 +923,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get selection(): { allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean } {
+    get selection(): { allowSelectAll?: boolean, mode?: string, recursive?: boolean } {
         return this._getOption('selection');
     }
-    set selection(value: { allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean }) {
+    set selection(value: { allowSelectAll?: boolean, mode?: string, recursive?: boolean }) {
         this._setOption('selection', value);
     }
 
@@ -989,10 +988,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get sorting(): { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean } {
+    get sorting(): { ascendingText?: string, clearText?: string, descendingText?: string, mode?: string, showSortIndexes?: boolean } {
         return this._getOption('sorting');
     }
-    set sorting(value: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }) {
+    set sorting(value: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: string, showSortIndexes?: boolean }) {
         this._setOption('sorting', value);
     }
 
@@ -1002,10 +1001,10 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
+    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: string } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
+    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: string }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1496,7 +1495,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: string | UserDefinedElement | undefined, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number }>;
+    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: string | UserDefinedElement | undefined, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: string, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: string | undefined, title?: string, width?: number }>;
 
     /**
     
@@ -1524,7 +1523,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnResizingModeChange: EventEmitter<ColumnResizeMode>;
+    @Output() columnResizingModeChange: EventEmitter<string>;
 
     /**
     
@@ -1538,7 +1537,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnWidthChange: EventEmitter<Mode | number | undefined>;
+    @Output() columnWidthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1559,7 +1558,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataStructureChange: EventEmitter<DataStructure>;
+    @Output() dataStructureChange: EventEmitter<string>;
 
     /**
     
@@ -1580,7 +1579,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DevExpress.common.grids.DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
+    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DevExpress.common.grids.DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: string, popup?: dxPopupOptions, refreshMode?: string, selectTextOnEditStart?: boolean, startEditAction?: string, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
     
@@ -1629,7 +1628,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterModeChange: EventEmitter<TreeListFilterMode>;
+    @Output() filterModeChange: EventEmitter<string>;
 
     /**
     
@@ -1643,14 +1642,14 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterRowChange: EventEmitter<{ applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
+    @Output() filterRowChange: EventEmitter<{ applyFilter?: string, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterSyncEnabledChange: EventEmitter<Mode | boolean>;
+    @Output() filterSyncEnabledChange: EventEmitter<boolean | string>;
 
     /**
     
@@ -1741,7 +1740,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyboardNavigationChange: EventEmitter<{ editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }>;
+    @Output() keyboardNavigationChange: EventEmitter<{ editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: string, enterKeyDirection?: string }>;
 
     /**
     
@@ -1755,7 +1754,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: Mode | boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | string, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }>;
 
     /**
     
@@ -1769,7 +1768,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pagerChange: EventEmitter<{ allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }>;
+    @Output() pagerChange: EventEmitter<{ allowedPageSizes?: string | Array<number | string>, displayMode?: string, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | string }>;
 
     /**
     
@@ -1790,7 +1789,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean }>;
+    @Output() remoteOperationsChange: EventEmitter<string | { filtering?: boolean, grouping?: boolean, sorting?: boolean }>;
 
     /**
     
@@ -1825,7 +1824,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | UserDefinedElement | undefined, container?: string | UserDefinedElement | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
+    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | UserDefinedElement | undefined, container?: string | UserDefinedElement | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: string, dragTemplate?: any | undefined, dropFeedbackMode?: string, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
     
@@ -1839,7 +1838,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }>;
+    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: string, mode?: string, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: string, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: string, useNative?: boolean | string }>;
 
     /**
     
@@ -1860,7 +1859,7 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean }>;
+    @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, mode?: string, recursive?: boolean }>;
 
     /**
     
@@ -1895,14 +1894,14 @@ export class DxTreeListComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortingChange: EventEmitter<{ ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }>;
+    @Output() sortingChange: EventEmitter<{ ascendingText?: string, clearText?: string, descendingText?: string, mode?: string, showSortIndexes?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: string }>;
 
     /**
     

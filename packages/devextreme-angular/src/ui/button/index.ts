@@ -18,7 +18,6 @@ import {
 } from '@angular/core';
 
 
-import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
 
 import DxButton from 'devextreme/ui/button';
@@ -188,10 +187,10 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get stylingMode(): ButtonStyle {
+    get stylingMode(): string {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: ButtonStyle) {
+    set stylingMode(value: string) {
         this._setOption('stylingMode', value);
     }
 
@@ -240,10 +239,10 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get type(): ButtonType {
+    get type(): string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: string) {
         this._setOption('type', value);
     }
 
@@ -414,7 +413,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<ButtonStyle>;
+    @Output() stylingModeChange: EventEmitter<string>;
 
     /**
     
@@ -442,7 +441,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<ButtonType>;
+    @Output() typeChange: EventEmitter<string>;
 
     /**
     

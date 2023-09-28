@@ -4,7 +4,7 @@ import { name as clickEventName } from '../../../events/click';
 import { getPublicElement } from '../../../core/element';
 import { captionize } from '../../../core/utils/inflector';
 import { format } from '../../../core/utils/string';
-import { isMaterialBased } from '../../themes';
+import { isMaterial } from '../../themes';
 import errors from '../../widget/ui.errors';
 
 import Validator from '../../validator';
@@ -226,7 +226,7 @@ function tryGetValidationTargetInstance($validationTarget) {
 }
 
 function subscribeWrapperInvalidClassToggle(validationTargetInstance) {
-    if(validationTargetInstance && isMaterialBased()) {
+    if(validationTargetInstance && isMaterial()) {
         const wrapperClass = `.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`;
         const toggleInvalidClass = ({ element, component }) => {
             const { isValid, validationMessageMode } = component.option();

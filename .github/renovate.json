@@ -46,7 +46,7 @@
         },
         {
             "matchPackagePatterns": [ "*" ],
-            "excludePackagePrefixes": [ "cldr-", "chrome", "firefox" ],
+            "excludePackagePrefixes": [ "cldr-" ],
             "matchUpdateTypes": [ "major" ],
             "dependencyDashboardApproval": true
         }
@@ -57,48 +57,5 @@
     },
     "constraints": {
         "node": "^16.3.0"
-    },
-    "regexManagers": [
-        {
-            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
-            "matchStrings": [
-                "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)+)['\"]?(\\s|$)"
-            ],
-            "depNameTemplate": "node",
-            "versioningTemplate": "node",
-            "datasourceTemplate": "node-version"
-        },
-        {
-            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
-            "matchStrings": [
-                "chrome-version:\\s*['\"]?(?<currentValue>\\d+(\\.\\d+)+)(-1)?['\"]?(\\s|$)"
-            ],
-            "depNameTemplate": "chrome",
-            "versioningTemplate": "regex:(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)",
-            "datasourceTemplate": "custom.chrome"
-        },
-        {
-            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
-            "matchStrings": [
-                "firefox-version:\\s*['\"]?(?<currentValue>\\d+(\\.\\d+)+)['\"]?(\\s|$)"
-            ],
-            "depNameTemplate": "firefox",
-            "versioningTemplate": "semver",
-            "datasourceTemplate": "custom.firefox"
-        }
-    ],
-    "customDatasources": {
-        "chrome": {
-            "defaultRegistryUrlTemplate": "https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions",
-            "transformTemplates": [
-                "{ \"releases\": $.versions }"
-            ]
-        },
-        "firefox": {
-            "defaultRegistryUrlTemplate": "https://product-details.mozilla.org/1.0/firefox_history_stability_releases.json",
-            "transformTemplates": [
-                "{ \"releases\": $each($, function($v, $k) { { \"version\": $k } }) }"
-            ]
-        }
     }
 }

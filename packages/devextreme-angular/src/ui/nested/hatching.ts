@@ -14,7 +14,6 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHatchingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get direction(): HatchDirection {
+    get direction(): string {
         return this._getOption('direction');
     }
-    set direction(value: HatchDirection) {
+    set direction(value: string) {
         this._setOption('direction', value);
     }
 

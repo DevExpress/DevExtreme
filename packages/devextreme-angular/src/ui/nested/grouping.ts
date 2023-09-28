@@ -14,7 +14,6 @@ import {
 
 
 
-import { GroupExpandMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -54,10 +53,10 @@ export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnI
     }
 
     @Input()
-    get expandMode(): GroupExpandMode {
+    get expandMode(): string {
         return this._getOption('expandMode');
     }
-    set expandMode(value: GroupExpandMode) {
+    set expandMode(value: string) {
         this._setOption('expandMode', value);
     }
 

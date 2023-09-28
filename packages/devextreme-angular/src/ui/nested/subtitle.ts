@@ -14,7 +14,6 @@ import {
 
 
 
-import { TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -55,18 +54,18 @@ export class DxoSubtitleComponent extends NestedOption implements OnDestroy, OnI
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
+    get textOverflow(): string {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: string) {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): WordWrap {
+    get wordWrap(): string {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: string) {
         this._setOption('wordWrap', value);
     }
 

@@ -14,7 +14,6 @@ import {
 
 
 
-import { EnterKeyAction, EnterKeyDirection } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -46,18 +45,18 @@ export class DxoKeyboardNavigationComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get enterKeyAction(): EnterKeyAction {
+    get enterKeyAction(): string {
         return this._getOption('enterKeyAction');
     }
-    set enterKeyAction(value: EnterKeyAction) {
+    set enterKeyAction(value: string) {
         this._setOption('enterKeyAction', value);
     }
 
     @Input()
-    get enterKeyDirection(): EnterKeyDirection {
+    get enterKeyDirection(): string {
         return this._getOption('enterKeyDirection');
     }
-    set enterKeyDirection(value: EnterKeyDirection) {
+    set enterKeyDirection(value: string) {
         this._setOption('enterKeyDirection', value);
     }
 

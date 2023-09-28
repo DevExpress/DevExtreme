@@ -14,7 +14,6 @@ import {
 
 
 
-import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -54,10 +53,10 @@ export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get location(): BackgroundImageLocation {
+    get location(): string {
         return this._getOption('location');
     }
-    set location(value: BackgroundImageLocation) {
+    set location(value: string) {
         this._setOption('location', value);
     }
 

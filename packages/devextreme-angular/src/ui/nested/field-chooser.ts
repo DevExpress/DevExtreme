@@ -14,8 +14,6 @@ import {
 
 
 
-import { FieldChooserLayout } from 'devextreme/common';
-import { ApplyChangesMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -39,10 +37,10 @@ export class DxoFieldChooserComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get applyChangesMode(): ApplyChangesMode {
+    get applyChangesMode(): string {
         return this._getOption('applyChangesMode');
     }
-    set applyChangesMode(value: ApplyChangesMode) {
+    set applyChangesMode(value: string) {
         this._setOption('applyChangesMode', value);
     }
 
@@ -63,10 +61,10 @@ export class DxoFieldChooserComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get layout(): FieldChooserLayout {
+    get layout(): number | string {
         return this._getOption('layout');
     }
-    set layout(value: FieldChooserLayout) {
+    set layout(value: number | string) {
         this._setOption('layout', value);
     }
 

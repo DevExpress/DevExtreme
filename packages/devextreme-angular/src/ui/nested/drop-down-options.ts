@@ -20,7 +20,6 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { PositionAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -105,7 +104,7 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | DevExpress.PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<DevExpress.PositionConfig | Function | string>;
 
     /**
     

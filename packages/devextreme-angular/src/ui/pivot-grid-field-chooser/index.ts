@@ -21,8 +21,7 @@ import {
 } from '@angular/core';
 
 
-import { FieldChooserLayout } from 'devextreme/common';
-import { ApplyChangesMode, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid_field_chooser';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -107,10 +106,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get applyChangesMode(): ApplyChangesMode {
+    get applyChangesMode(): string {
         return this._getOption('applyChangesMode');
     }
-    set applyChangesMode(value: ApplyChangesMode) {
+    set applyChangesMode(value: string) {
         this._setOption('applyChangesMode', value);
     }
 
@@ -237,10 +236,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get layout(): FieldChooserLayout {
+    get layout(): number | string {
         return this._getOption('layout');
     }
-    set layout(value: FieldChooserLayout) {
+    set layout(value: number | string) {
         this._setOption('layout', value);
     }
 
@@ -401,7 +400,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyChangesModeChange: EventEmitter<ApplyChangesMode>;
+    @Output() applyChangesModeChange: EventEmitter<string>;
 
     /**
     
@@ -471,7 +470,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layoutChange: EventEmitter<FieldChooserLayout>;
+    @Output() layoutChange: EventEmitter<number | string>;
 
     /**
     

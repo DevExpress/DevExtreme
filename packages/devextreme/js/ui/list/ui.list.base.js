@@ -18,7 +18,7 @@ import devices from '../../core/devices';
 import ListItem from './item';
 import Button from '../button';
 import { addNamespace } from '../../events/utils/index';
-import { current, isMaterial, isMaterialBased } from '../themes';
+import { current, isMaterial } from '../themes';
 import { hasWindow } from '../../core/utils/window';
 import ScrollView from '../scroll_view';
 import { deviceDependentOptions } from '../scroll_view/ui.scrollable.device';
@@ -239,18 +239,14 @@ export const ListBase = CollectionWidget.inherit({
                     return isMaterial(themeName);
                 },
                 options: {
-                    useInkRipple: true
-                }
-            },
-            {
-                device: function() {
-                    return isMaterialBased(themeName);
-                },
-                options: {
                     pullingDownText: '',
+
                     pulledDownText: '',
+
                     refreshingText: '',
+
                     pageLoadingText: '',
+                    useInkRipple: true
                 }
             }
         ]);
@@ -901,7 +897,7 @@ export const ListBase = CollectionWidget.inherit({
         this._createComponent($button, Button, {
             text: this.option('nextButtonText'),
             onClick: this._nextButtonHandler.bind(this),
-            type: isMaterialBased() ? 'default' : undefined,
+            type: isMaterial() ? 'default' : undefined,
             integrationOptions: {}
         });
 

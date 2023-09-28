@@ -16,9 +16,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import {
     NestedOptionHost,
@@ -63,18 +60,18 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get locateInMenu(): LocateInMenuMode {
+    get locateInMenu(): string {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: LocateInMenuMode) {
+    set locateInMenu(value: string) {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): ToolbarItemLocation {
+    get location(): string {
         return this._getOption('location');
     }
-    set location(value: ToolbarItemLocation) {
+    set location(value: string) {
         this._setOption('location', value);
     }
 
@@ -95,10 +92,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get showText(): ShowTextMode {
+    get showText(): string {
         return this._getOption('showText');
     }
-    set showText(value: ShowTextMode) {
+    set showText(value: string) {
         this._setOption('showText', value);
     }
 
@@ -119,10 +116,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get toolbar(): ToolbarLocation {
+    get toolbar(): string {
         return this._getOption('toolbar');
     }
-    set toolbar(value: ToolbarLocation) {
+    set toolbar(value: string) {
         this._setOption('toolbar', value);
     }
 
@@ -135,10 +132,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get widget(): ToolbarItemComponent {
+    get widget(): string {
         return this._getOption('widget');
     }
-    set widget(value: ToolbarItemComponent) {
+    set widget(value: string) {
         this._setOption('widget', value);
     }
 

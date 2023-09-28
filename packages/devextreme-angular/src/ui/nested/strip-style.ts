@@ -14,7 +14,6 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -31,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment } | { font?: Font } {
+    get label(): { font?: Font, horizontalAlignment?: string, verticalAlignment?: string } | { font?: Font } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment } | { font?: Font }) {
+    set label(value: { font?: Font, horizontalAlignment?: string, verticalAlignment?: string } | { font?: Font }) {
         this._setOption('label', value);
     }
 

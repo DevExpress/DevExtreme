@@ -5,26 +5,23 @@ import {
     Component,
 } from '@angular/core';
 
-import { TextEditorButtonLocation } from 'devextreme/common';
 import { dxButtonOptions } from 'devextreme/ui/button';
-import { ColumnButtonClickEvent, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
-import { TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 
 @Component({
     template: ''
 })
 export abstract class DxiTextEditorButton extends CollectionNestedOption {
-    get location(): TextEditorButtonLocation {
+    get location(): string {
         return this._getOption('location');
     }
-    set location(value: TextEditorButtonLocation) {
+    set location(value: string) {
         this._setOption('location', value);
     }
 
-    get name(): string | undefined | DataGridPredefinedColumnButton | TreeListPredefinedColumnButton {
+    get name(): string | undefined {
         return this._getOption('name');
     }
-    set name(value: string | undefined | DataGridPredefinedColumnButton | TreeListPredefinedColumnButton) {
+    set name(value: string | undefined) {
         this._setOption('name', value);
     }
 
@@ -63,10 +60,10 @@ export abstract class DxiTextEditorButton extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get onClick(): ((e: ColumnButtonClickEvent) => void) {
+    get onClick(): Function {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
+    set onClick(value: Function) {
         this._setOption('onClick', value);
     }
 

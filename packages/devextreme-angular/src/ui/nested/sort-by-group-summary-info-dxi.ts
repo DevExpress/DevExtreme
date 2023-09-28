@@ -12,7 +12,6 @@ import {
 
 
 
-import { SortOrder } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -36,10 +35,10 @@ export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): string | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: string | undefined) {
         this._setOption('sortOrder', value);
     }
 

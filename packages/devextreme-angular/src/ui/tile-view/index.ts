@@ -25,7 +25,6 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/tile_view';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Orientation, ScrollbarMode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
@@ -136,10 +135,10 @@ export class DxTileViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get direction(): Orientation {
+    get direction(): string {
         return this._getOption('direction');
     }
-    set direction(value: Orientation) {
+    set direction(value: string) {
         this._setOption('direction', value);
     }
 
@@ -305,10 +304,10 @@ export class DxTileViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get showScrollbar(): ScrollbarMode {
+    get showScrollbar(): string {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: ScrollbarMode) {
+    set showScrollbar(value: string) {
         this._setOption('showScrollbar', value);
     }
 
@@ -455,7 +454,7 @@ export class DxTileViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<Orientation>;
+    @Output() directionChange: EventEmitter<string>;
 
     /**
     
@@ -546,7 +545,7 @@ export class DxTileViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
+    @Output() showScrollbarChange: EventEmitter<string>;
 
     /**
     

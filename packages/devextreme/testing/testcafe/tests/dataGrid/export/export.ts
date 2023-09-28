@@ -21,22 +21,17 @@ test('Warning should be thrown in console if exporting is enabled, but onExporti
   });
 });
 
-([
-  ['export', { enabled: true }],
-  ['export.enabled', true],
-] as const).forEach(([option, value]) => {
-  test(`Warning should be thrown in console if exporting is enabled dynamically with '${option}' option, but onExporting is not specified`, async (t) => {
-    const dataGrid = new DataGrid(GRID_CONTAINER);
+test('Warning should be thrown in console if exporting is enabled dynamically, but onExporting is not specified', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
 
-    await dataGrid.option(option, value);
+  await dataGrid.option('export.enabled', true);
 
-    const consoleMessages = await t.getBrowserConsoleMessages();
-    const isWarningExist = !!consoleMessages?.warn.find((message) => message.startsWith('W1024'));
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const isWarningExist = !!consoleMessages?.warn.find((message) => message.startsWith('W1024'));
 
-    await t.expect(isWarningExist).ok();
-  }).before(async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: [],
-    });
+  await t.expect(isWarningExist).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [],
   });
 });

@@ -17,7 +17,7 @@
 
 .dx-lookup {
   .dx-lookup-arrow {
-    inset-inline-end: $texteditor-spin-button-horizontal-padding;
+    inset-inline-end: $fluent-filled-texteditor-spin-button-horizontal-padding;
   }
 
   &.dx-editor-filled,
@@ -145,9 +145,10 @@
 }
 
 .dx-lookup-popup-search .dx-list {
-  height: calc(100% - #{$fluent-texteditor-input-height + 2 * $lookup-search-padding-vertical});
+  height: calc(100% - #{$fluent-lookup-list-top});
 }
 
 .dx-lookup-search-wrapper {
-  padding: $lookup-search-padding-vertical $lookup-search-padding-horizontal;
+  padding: $fluent-lookup-popup-content-padding;
+  padding-bottom: $fluent-lookup-popup-content-padding - 6px;
 }

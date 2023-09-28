@@ -14,9 +14,6 @@ import {
 
 
 
-import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { ChartsAxisLabelOverlap, DashStyle, DiscreteAxisDivisionMode, LabelOverlap, RelativePosition, ScaleBreakLineStyle, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -33,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get aggregatedPointsPosition(): AggregatedPointsPosition {
+    get aggregatedPointsPosition(): string {
         return this._getOption('aggregatedPointsPosition');
     }
-    set aggregatedPointsPosition(value: AggregatedPointsPosition) {
+    set aggregatedPointsPosition(value: string) {
         this._setOption('aggregatedPointsPosition', value);
     }
 
@@ -49,10 +46,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get breakStyle(): { color?: string, line?: ScaleBreakLineStyle, width?: number } {
+    get breakStyle(): { color?: string, line?: string, width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
+    set breakStyle(value: { color?: string, line?: string, width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -65,18 +62,18 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): { color?: string, dashStyle?: string, label?: { font?: Font, position?: string, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: string, label?: { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: { color?: string, dashStyle?: string, label?: { font?: Font, position?: string, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: string, label?: { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
+    get discreteAxisDivisionMode(): string {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
+    set discreteAxisDivisionMode(value: string) {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -105,10 +102,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get label(): { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } | { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
+    get label(): { alignment?: string | undefined, displayMode?: string, font?: Font, indentFromAxis?: number, overlappingBehavior?: string, position?: string, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: string, visible?: boolean, wordWrap?: string } | { font?: Font, indentFromAxis?: number, overlappingBehavior?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } | { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
+    set label(value: { alignment?: string | undefined, displayMode?: string, font?: Font, indentFromAxis?: number, overlappingBehavior?: string, position?: string, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: string, visible?: boolean, wordWrap?: string } | { font?: Font, indentFromAxis?: number, overlappingBehavior?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -161,10 +158,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get stripStyle(): { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } | { label?: { font?: Font } } {
+    get stripStyle(): { label?: { font?: Font, horizontalAlignment?: string, verticalAlignment?: string }, paddingLeftRight?: number, paddingTopBottom?: number } | { label?: { font?: Font } } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } | { label?: { font?: Font } }) {
+    set stripStyle(value: { label?: { font?: Font, horizontalAlignment?: string, verticalAlignment?: string }, paddingLeftRight?: number, paddingTopBottom?: number } | { label?: { font?: Font } }) {
         this._setOption('stripStyle', value);
     }
 
@@ -177,10 +174,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get title(): { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get title(): { alignment?: string, font?: Font, margin?: number, textOverflow?: string, wordWrap?: string } {
         return this._getOption('title');
     }
-    set title(value: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set title(value: { alignment?: string, font?: Font, margin?: number, textOverflow?: string, wordWrap?: string }) {
         this._setOption('title', value);
     }
 

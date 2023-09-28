@@ -39,7 +39,7 @@ import {
   validateDayHours,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
-import { isMaterialBased } from '@js/ui/themes';
+import { isMaterial } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 
@@ -461,7 +461,7 @@ class Scheduler extends Widget<any> {
       },
       {
         device() {
-          return (isMaterialBased as any)();
+          return (isMaterial as any)();
         },
         options: {
           useDropDownViewSwitcher: true,
@@ -1357,7 +1357,7 @@ class Scheduler extends Widget<any> {
 
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),
-      getCalculatedEndDate: (date) => this._workSpace.calculateEndDate(date),
+      getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 

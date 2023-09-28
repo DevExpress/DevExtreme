@@ -14,8 +14,6 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
-import { SankeyColorMode } from 'devextreme/viz/sankey';
 
 import {
     NestedOptionHost,
@@ -47,18 +45,18 @@ export class DxoLinkComponent extends NestedOption implements OnDestroy, OnInit 
     }
 
     @Input()
-    get colorMode(): SankeyColorMode {
+    get colorMode(): string {
         return this._getOption('colorMode');
     }
-    set colorMode(value: SankeyColorMode) {
+    set colorMode(value: string) {
         this._setOption('colorMode', value);
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number } {
+    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, opacity?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number }) {
+    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: string, opacity?: number, step?: number, width?: number }, opacity?: number }) {
         this._setOption('hoverStyle', value);
     }
 

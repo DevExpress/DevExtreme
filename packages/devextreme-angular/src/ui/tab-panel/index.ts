@@ -25,7 +25,6 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/tab_panel';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
@@ -214,10 +213,10 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get iconPosition(): TabsIconPosition {
+    get iconPosition(): string {
         return this._getOption('iconPosition');
     }
-    set iconPosition(value: TabsIconPosition) {
+    set iconPosition(value: string) {
         this._setOption('iconPosition', value);
     }
 
@@ -396,10 +395,10 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get stylingMode(): TabsStyle {
+    get stylingMode(): string {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: TabsStyle) {
+    set stylingMode(value: string) {
         this._setOption('stylingMode', value);
     }
 
@@ -435,10 +434,10 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get tabsPosition(): Position {
+    get tabsPosition(): string {
         return this._getOption('tabsPosition');
     }
-    set tabsPosition(value: Position) {
+    set tabsPosition(value: string) {
         this._setOption('tabsPosition', value);
     }
 
@@ -646,7 +645,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() iconPositionChange: EventEmitter<TabsIconPosition>;
+    @Output() iconPositionChange: EventEmitter<string>;
 
     /**
     
@@ -744,7 +743,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<TabsStyle>;
+    @Output() stylingModeChange: EventEmitter<string>;
 
     /**
     
@@ -765,7 +764,7 @@ export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tabsPositionChange: EventEmitter<Position>;
+    @Output() tabsPositionChange: EventEmitter<string>;
 
     /**
     

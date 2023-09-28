@@ -5,7 +5,6 @@ import {
     Component,
 } from '@angular/core';
 
-import { DataChangeType } from 'devextreme/common/grids';
 
 @Component({
     template: ''
@@ -39,10 +38,10 @@ export abstract class DxiDataChange extends CollectionNestedOption {
         this._setOption('key', value);
     }
 
-    get type(): DataChangeType {
+    get type(): string {
         return this._getOption('type');
     }
-    set type(value: DataChangeType) {
+    set type(value: string) {
         this._setOption('type', value);
     }
 }

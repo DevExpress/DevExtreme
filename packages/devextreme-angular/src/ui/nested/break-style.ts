@@ -14,7 +14,6 @@ import {
 
 
 
-import { ScaleBreakLineStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +37,10 @@ export class DxoBreakStyleComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get line(): ScaleBreakLineStyle {
+    get line(): string {
         return this._getOption('line');
     }
-    set line(value: ScaleBreakLineStyle) {
+    set line(value: string) {
         this._setOption('line', value);
     }
 

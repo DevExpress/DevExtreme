@@ -5,8 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { SearchMode } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
@@ -36,10 +35,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('dataSource', value);
     }
 
-    get groupInterval(): HeaderFilterGroupInterval | number | undefined {
+    get groupInterval(): number | string | undefined {
         return this._getOption('groupInterval');
     }
-    set groupInterval(value: HeaderFilterGroupInterval | number | undefined) {
+    set groupInterval(value: number | string | undefined) {
         this._setOption('groupInterval', value);
     }
 
@@ -57,10 +56,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('search', value);
     }
 
-    get searchMode(): SearchMode {
+    get searchMode(): string {
         return this._getOption('searchMode');
     }
-    set searchMode(value: SearchMode) {
+    set searchMode(value: string) {
         this._setOption('searchMode', value);
     }
 

@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 @Component({
     template: ''
@@ -82,10 +82,10 @@ export abstract class DxoFilterBuilderOptions extends NestedOption {
         this._setOption('groupOperationDescriptions', value);
     }
 
-    get groupOperations(): any | Array<GroupOperation> {
+    get groupOperations(): Array<string> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: any | Array<GroupOperation>) {
+    set groupOperations(value: Array<string>) {
         this._setOption('groupOperations', value);
     }
 

@@ -126,13 +126,6 @@ const members = {
     }
   },
 
-  _isDisabledDefinedByUser(name: string): boolean {
-    const userItems = this.option('toolbar')?.items;
-    const userItem = userItems?.find((item) => item?.name === name);
-
-    return isDefined(userItem?.disabled);
-  },
-
   init() {
     this.callBase();
     this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
@@ -145,9 +138,8 @@ const members = {
 
   setToolbarItemDisabled(name, disabled: boolean): void {
     const toolbar = this._toolbar;
-    const isDefinedByUser = this._isDisabledDefinedByUser(name);
 
-    if (!toolbar || isDefinedByUser) {
+    if (!toolbar) {
       return;
     }
 

@@ -1,6 +1,5 @@
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
-import 'ui/drop_down_box';
 import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
@@ -1273,30 +1272,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.equal($cols.get(0).style.width, '700px');
         assert.equal($cols.get(1).style.width, '');
-    });
-
-    // T1188486
-    QUnit.test('onContentReady should be called when the grid is rendered in DropDownBox', function(assert) {
-        // arrange, act
-        const onContentReadySpy = sinon.spy();
-
-        $('#container').dxDropDownBox({
-            dataSource: [{ id: 0, field: 'test' }],
-            value: [0],
-            valueExpr: 'id',
-            displayExpr: 'field',
-            deferRendering: false,
-            contentTemplate(e) {
-                return $('<div>').dxDataGrid({
-                    dataSource: e.component.getDataSource(),
-                    onContentReady: onContentReadySpy
-                });
-            }
-        });
-        this.clock.tick(50);
-
-        // assert
-        assert.strictEqual(onContentReadySpy.callCount, 1, 'onContentReadySpy call count');
     });
 });
 

@@ -7,7 +7,6 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { HtmlEditorImageUploadMode, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''
@@ -20,17 +19,17 @@ export abstract class DxoHtmlEditorImageUpload extends NestedOption {
         this._setOption('fileUploaderOptions', value);
     }
 
-    get fileUploadMode(): HtmlEditorImageUploadMode {
+    get fileUploadMode(): string {
         return this._getOption('fileUploadMode');
     }
-    set fileUploadMode(value: HtmlEditorImageUploadMode) {
+    set fileUploadMode(value: string) {
         this._setOption('fileUploadMode', value);
     }
 
-    get tabs(): Array<HtmlEditorImageUploadTab | DevExpress.ui.dxHtmlEditorImageUploadTabItem> {
+    get tabs(): Array<DevExpress.ui.dxHtmlEditorImageUploadTabItem | string> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<HtmlEditorImageUploadTab | DevExpress.ui.dxHtmlEditorImageUploadTabItem>) {
+    set tabs(value: Array<DevExpress.ui.dxHtmlEditorImageUploadTabItem | string>) {
         this._setOption('tabs', value);
     }
 

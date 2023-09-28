@@ -6,26 +6,25 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Mode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { ContentReadyEvent, DisposingEvent, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
 
 @Component({
     template: ''
 })
 export abstract class DxoBoxOptions extends NestedOption {
-    get align(): Distribution {
+    get align(): string {
         return this._getOption('align');
     }
-    set align(value: Distribution) {
+    set align(value: string) {
         this._setOption('align', value);
     }
 
-    get crossAlign(): CrosswiseDistribution {
+    get crossAlign(): string {
         return this._getOption('crossAlign');
     }
-    set crossAlign(value: CrosswiseDistribution) {
+    set crossAlign(value: string) {
         this._setOption('crossAlign', value);
     }
 
@@ -36,10 +35,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('dataSource', value);
     }
 
-    get direction(): BoxDirection {
+    get direction(): string {
         return this._getOption('direction');
     }
-    set direction(value: BoxDirection) {
+    set direction(value: string) {
         this._setOption('direction', value);
     }
 
@@ -78,10 +77,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('itemHoldTimeout', value);
     }
 
-    get items(): Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 

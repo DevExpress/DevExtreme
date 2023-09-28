@@ -6,8 +6,6 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { Palette } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { Font } from 'devextreme/viz/core/base_widget';
 
@@ -50,10 +48,10 @@ export abstract class DxoGaugeIndicator extends NestedOption {
         this._setOption('color', value);
     }
 
-    get horizontalOrientation(): HorizontalEdge {
+    get horizontalOrientation(): string {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: HorizontalEdge) {
+    set horizontalOrientation(value: string) {
         this._setOption('horizontalOrientation', value);
     }
 
@@ -78,10 +76,10 @@ export abstract class DxoGaugeIndicator extends NestedOption {
         this._setOption('offset', value);
     }
 
-    get palette(): Palette | string | Array<string> {
+    get palette(): string | Array<string> {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: string | Array<string>) {
         this._setOption('palette', value);
     }
 
@@ -134,10 +132,10 @@ export abstract class DxoGaugeIndicator extends NestedOption {
         this._setOption('type', value);
     }
 
-    get verticalOrientation(): VerticalEdge {
+    get verticalOrientation(): string {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: VerticalEdge) {
+    set verticalOrientation(value: string) {
         this._setOption('verticalOrientation', value);
     }
 

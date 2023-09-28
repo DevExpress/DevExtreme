@@ -5,7 +5,6 @@ import {
     Component,
 } from '@angular/core';
 
-import { DataType } from 'devextreme/common';
 
 @Component({
     template: ''
@@ -32,10 +31,10 @@ export abstract class DxiFilterBuilderCustomOperation extends CollectionNestedOp
         this._setOption('customizeText', value);
     }
 
-    get dataTypes(): any | undefined | Array<DataType> {
+    get dataTypes(): Array<string> {
         return this._getOption('dataTypes');
     }
-    set dataTypes(value: any | undefined | Array<DataType>) {
+    set dataTypes(value: Array<string>) {
         this._setOption('dataTypes', value);
     }
 

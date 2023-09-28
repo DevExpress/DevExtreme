@@ -6,23 +6,20 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { DataType, HorizontalAlignment, HorizontalEdge, SearchMode, SortOrder } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
+import { ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { DataGridCommandColumnType, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
-import { TreeListCommandColumnType, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 
 @Component({
     template: ''
 })
 export abstract class DxiDataGridColumn extends CollectionNestedOption {
-    get alignment(): HorizontalAlignment | string | undefined {
+    get alignment(): string | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | string | undefined) {
+    set alignment(value: string | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -110,10 +107,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('autoExpandGroup', value);
     }
 
-    get buttons(): Array<DataGridPredefinedColumnButton | DevExpress.ui.dxDataGridColumnButton | TreeListPredefinedColumnButton | DevExpress.ui.dxTreeListColumnButton> {
+    get buttons(): Array<string | DevExpress.ui.dxDataGridColumnButton | DevExpress.ui.dxTreeListColumnButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DataGridPredefinedColumnButton | DevExpress.ui.dxDataGridColumnButton | TreeListPredefinedColumnButton | DevExpress.ui.dxTreeListColumnButton>) {
+    set buttons(value: Array<string | DevExpress.ui.dxDataGridColumnButton | DevExpress.ui.dxTreeListColumnButton>) {
         this._setOption('buttons', value);
     }
 
@@ -194,10 +191,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('dataField', value);
     }
 
-    get dataType(): DataType | undefined {
+    get dataType(): string | undefined {
         return this._getOption('dataType');
     }
-    set dataType(value: DataType | undefined) {
+    set dataType(value: string | undefined) {
         this._setOption('dataType', value);
     }
 
@@ -229,17 +226,17 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('falseText', value);
     }
 
-    get filterOperations(): Array<FilterOperation | string> {
+    get filterOperations(): Array<string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<FilterOperation | string>) {
+    set filterOperations(value: Array<string>) {
         this._setOption('filterOperations', value);
     }
 
-    get filterType(): FilterType {
+    get filterType(): string {
         return this._getOption('filterType');
     }
-    set filterType(value: FilterType) {
+    set filterType(value: string) {
         this._setOption('filterType', value);
     }
 
@@ -264,10 +261,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('fixed', value);
     }
 
-    get fixedPosition(): HorizontalEdge | undefined {
+    get fixedPosition(): string | undefined {
         return this._getOption('fixedPosition');
     }
-    set fixedPosition(value: HorizontalEdge | undefined) {
+    set fixedPosition(value: string | undefined) {
         this._setOption('fixedPosition', value);
     }
 
@@ -306,10 +303,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('headerCellTemplate', value);
     }
 
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: number | string | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: string, width?: number | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: number | string | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: string, width?: number | undefined }) {
         this._setOption('headerFilter', value);
     }
 
@@ -362,10 +359,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('renderAsync', value);
     }
 
-    get selectedFilterOperation(): SelectedFilterOperation | undefined {
+    get selectedFilterOperation(): string | undefined {
         return this._getOption('selectedFilterOperation');
     }
-    set selectedFilterOperation(value: SelectedFilterOperation | undefined) {
+    set selectedFilterOperation(value: string | undefined) {
         this._setOption('selectedFilterOperation', value);
     }
 
@@ -411,10 +408,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('sortingMethod', value);
     }
 
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): string | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: string | undefined) {
         this._setOption('sortOrder', value);
     }
 
@@ -425,10 +422,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('trueText', value);
     }
 
-    get type(): DataGridCommandColumnType | TreeListCommandColumnType {
+    get type(): string {
         return this._getOption('type');
     }
-    set type(value: DataGridCommandColumnType | TreeListCommandColumnType) {
+    set type(value: string) {
         this._setOption('type', value);
     }
 

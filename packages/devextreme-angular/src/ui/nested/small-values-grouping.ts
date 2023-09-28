@@ -14,7 +14,6 @@ import {
 
 
 
-import { SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
 
 import {
     NestedOptionHost,
@@ -38,10 +37,10 @@ export class DxoSmallValuesGroupingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get mode(): SmallValuesGroupingMode {
+    get mode(): string {
         return this._getOption('mode');
     }
-    set mode(value: SmallValuesGroupingMode) {
+    set mode(value: string) {
         this._setOption('mode', value);
     }
 

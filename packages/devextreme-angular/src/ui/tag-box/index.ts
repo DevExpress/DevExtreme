@@ -26,10 +26,8 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, SelectAllMode, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
 
@@ -140,10 +138,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get applyValueMode(): ApplyValueMode {
+    get applyValueMode(): string {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: ApplyValueMode) {
+    set applyValueMode(value: string) {
         this._setOption('applyValueMode', value);
     }
 
@@ -153,10 +151,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<string | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<string | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -452,10 +450,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): string {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: string) {
         this._setOption('labelMode', value);
     }
 
@@ -647,10 +645,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get searchMode(): SimplifiedSearchMode {
+    get searchMode(): string {
         return this._getOption('searchMode');
     }
-    set searchMode(value: SimplifiedSearchMode) {
+    set searchMode(value: string) {
         this._setOption('searchMode', value);
     }
 
@@ -673,10 +671,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get selectAllMode(): SelectAllMode {
+    get selectAllMode(): string {
         return this._getOption('selectAllMode');
     }
-    set selectAllMode(value: SelectAllMode) {
+    set selectAllMode(value: string) {
         this._setOption('selectAllMode', value);
     }
 
@@ -777,10 +775,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): string {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: string) {
         this._setOption('stylingMode', value);
     }
 
@@ -868,10 +866,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): string {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: string) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -881,10 +879,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): string {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: string) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -894,10 +892,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): string {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: string) {
         this._setOption('validationStatus', value);
     }
 
@@ -1159,14 +1157,14 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
+    @Output() applyValueModeChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<string | DevExpress.common.TextEditorButton>>;
 
     /**
     
@@ -1327,7 +1325,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<string>;
 
     /**
     
@@ -1432,7 +1430,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<SimplifiedSearchMode>;
+    @Output() searchModeChange: EventEmitter<string>;
 
     /**
     
@@ -1446,7 +1444,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectAllModeChange: EventEmitter<SelectAllMode>;
+    @Output() selectAllModeChange: EventEmitter<string>;
 
     /**
     
@@ -1502,7 +1500,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<string>;
 
     /**
     
@@ -1551,21 +1549,21 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<string>;
 
     /**
     

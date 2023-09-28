@@ -42,22 +42,7 @@ runs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
-
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
-    - name: Setup Chrome
-      if: ${{ inputs.browser == 'chrome' }}
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '116.0.5845.110'
-
-    - name: Setup Firefox profile
-      if: ${{ inputs.browser == 'firefox' }}
+    - name: Setup firefox profile
       shell: bash
       run: |
         mkdir -p /tmp/firefox-profile
@@ -68,12 +53,16 @@ runs:
         '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
         '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
 
-    - name: Setup Firefox
-      if: ${{ inputs.browser == 'firefox' }}
-      id: setup-firefox
-      uses: browser-actions/setup-firefox@v1
-      with:
-        firefox-version: '117.0.1'
+#    - name: Update apt
+#      run: |
+#        sudo apt-get update
+
+#    - name: Setup utils
+#      run: |
+#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
+    - name: Pin browsers
+      uses: ./.github/actions/pin-browsers
 
     - name: Use Node.js
       uses: actions/setup-node@v3

@@ -341,8 +341,8 @@ QUnit.test('Don\'t refresh form when visibility changed to \'true\'', function(a
 });
 
 QUnit.test('Hide helper text when validation message shows for material theme', function(assert) {
-    const origIsMaterialBased = themes.isMaterialBased;
-    themes.isMaterialBased = function() { return true; };
+    const origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
 
     const form = $('#form').dxForm({
         formData: {
@@ -377,7 +377,7 @@ QUnit.test('Hide helper text when validation message shows for material theme', 
     assert.ok(!isFieldWrapperInvalid(lastName), 'not invalid css class');
     assert.ok(!isFieldWrapperInvalid(firstName), 'not invalid css class');
 
-    themes.isMaterialBased = origIsMaterialBased;
+    themes.isMaterial = origIsMaterial;
 
 });
 

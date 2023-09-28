@@ -14,7 +14,6 @@ import {
 
 
 
-import { DashStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -46,10 +45,10 @@ export class DxoBorderComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get dashStyle(): DashStyle | undefined {
+    get dashStyle(): string | undefined {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle | undefined) {
+    set dashStyle(value: string | undefined) {
         this._setOption('dashStyle', value);
     }
 

@@ -204,12 +204,6 @@ class RadioGroup extends Editor {
         this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
     }
 
-    _renderValidationState() {
-        super._renderValidationState();
-
-        this._validationMessage?.$content().attr('role', 'alert');
-    }
-
     _optionChanged(args) {
         const { name, value } = args;
 

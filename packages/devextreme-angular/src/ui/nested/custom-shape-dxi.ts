@@ -19,7 +19,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { DiagramShapeType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -113,10 +112,10 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get baseType(): DiagramShapeType | string {
+    get baseType(): string {
         return this._getOption('baseType');
     }
-    set baseType(value: DiagramShapeType | string) {
+    set baseType(value: string) {
         this._setOption('baseType', value);
     }
 

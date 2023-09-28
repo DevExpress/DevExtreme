@@ -20,7 +20,6 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Position } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/tooltip';
 
@@ -314,10 +313,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): Position | DevExpress.PositionConfig {
+    get position(): DevExpress.PositionConfig | string {
         return this._getOption('position');
     }
-    set position(value: Position | DevExpress.PositionConfig) {
+    set position(value: DevExpress.PositionConfig | string) {
         this._setOption('position', value);
     }
 
@@ -620,7 +619,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<Position | DevExpress.PositionConfig>;
+    @Output() positionChange: EventEmitter<DevExpress.PositionConfig | string>;
 
     /**
     

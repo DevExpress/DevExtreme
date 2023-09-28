@@ -26,7 +26,6 @@ import CalendarMultipleSelectionStrategy from './ui.calendar.multiple.selection.
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
 import { end as hoverEndEventName } from '../../events/hover';
 import eventsEngine from '../../events/core/events_engine';
-import { isFluent } from '../themes';
 
 // STYLE calendar
 
@@ -1111,8 +1110,8 @@ const Calendar = Editor.inherit({
                     onClick: (args) => {
                         this._toTodayView(args);
                     },
-                    type: isFluent() ? 'normal' : 'default',
-                    stylingMode: isFluent() ? 'outlined' : 'text',
+                    type: 'default',
+                    stylingMode: 'text',
                     integrationOptions: {}
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);

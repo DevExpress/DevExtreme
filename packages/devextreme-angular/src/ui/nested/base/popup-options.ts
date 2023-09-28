@@ -7,11 +7,8 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Position, PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 @Component({
     template: ''
@@ -269,10 +266,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('onTitleRendered', value);
     }
 
-    get position(): PositionAlignment | DevExpress.PositionConfig | Function | Position {
+    get position(): DevExpress.PositionConfig | Function | string {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | DevExpress.PositionConfig | Function | Position) {
+    set position(value: DevExpress.PositionConfig | Function | string) {
         this._setOption('position', value);
     }
 
@@ -346,10 +343,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('titleTemplate', value);
     }
 
-    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }> {
+    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, toolbar?: string, visible?: boolean, widget?: string }> {
         return this._getOption('toolbarItems');
     }
-    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>) {
+    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, toolbar?: string, visible?: boolean, widget?: string }>) {
         this._setOption('toolbarItems', value);
     }
 

@@ -396,18 +396,4 @@ test('Calendar with disabled dates rendered correct', async (t) => {
       zoomLevel,
     }, '#calendar');
   });
-
-  test(`Calendar with range selectionMode rendered correct (maxZoomLevel=${zoomLevel})`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await testScreenshot(t, takeScreenshot, `Calendar with range selection (maxZoomLevel=${zoomLevel}).png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxCalendar', {
-    value: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2099, 1, 2)],
-    selectionMode: 'range',
-    maxZoomLevel: zoomLevel,
-  }));
 });

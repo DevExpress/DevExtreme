@@ -14,7 +14,6 @@ import {
 
 
 
-import { TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -55,10 +54,10 @@ export class DxoTileComponent extends NestedOption implements OnDestroy, OnInit 
     }
 
     @Input()
-    get label(): { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
+    get label(): { font?: Font, textOverflow?: string, visible?: boolean, wordWrap?: string } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
+    set label(value: { font?: Font, textOverflow?: string, visible?: boolean, wordWrap?: string }) {
         this._setOption('label', value);
     }
 

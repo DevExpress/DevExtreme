@@ -88,7 +88,7 @@ class RowsView extends ColumnsView {
 
   _lastColumnWidths: any;
 
-  _hideLoadingTimeoutID: any;
+  _hideLoadingTimeoutID: number | undefined;
 
   _getDefaultTemplate(column) {
     switch (column.command) {

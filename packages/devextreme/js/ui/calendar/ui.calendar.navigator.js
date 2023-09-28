@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import Button from '../button';
-import { isFluent, isMaterial } from '../themes';
+import { isMaterial } from '../themes';
 
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
@@ -35,15 +35,6 @@ class Navigator extends Widget {
                     stylingMode: 'text'
                 }
             },
-            {
-                device: function() {
-                    return isFluent();
-                },
-                options: {
-                    type: 'normal',
-                    stylingMode: 'text'
-                }
-            }
         ]);
     }
 
@@ -70,6 +61,7 @@ class Navigator extends Widget {
 
     _renderButtons() {
         const { rtlEnabled, type, stylingMode, focusStateEnabled } = this.option();
+
         const direction = 1;
 
         this._prevButton = this._createComponent($('<div>'),

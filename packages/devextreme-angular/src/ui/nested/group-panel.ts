@@ -16,7 +16,6 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -48,10 +47,10 @@ export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get visible(): Mode | boolean {
+    get visible(): boolean | string {
         return this._getOption('visible');
     }
-    set visible(value: Mode | boolean) {
+    set visible(value: boolean | string) {
         this._setOption('visible', value);
     }
 
@@ -61,7 +60,7 @@ export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visibleChange: EventEmitter<Mode | boolean>;
+    @Output() visibleChange: EventEmitter<boolean | string>;
     protected get _optionPath() {
         return 'groupPanel';
     }

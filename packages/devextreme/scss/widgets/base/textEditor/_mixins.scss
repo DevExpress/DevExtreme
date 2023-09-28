@@ -576,10 +576,8 @@
 @mixin dx-editor-buttons-container-material(
   $material-underlined-editor-button-height,
   $material-editor-custom-button-margin,
-  $material-editor-custom-button-last-child-margin,
   $material-filled-texteditor-input-button-horizontal-padding,
   $material-filled-texteditor-spin-button-horizontal-padding,
-  $last-button-horizontal-padding,
   $material-button-vertical-padding,
 ) {
   .dx-texteditor {
@@ -594,7 +592,7 @@
         > .dx-button,
         > .dx-clear-button-area {
           &:first-child {
-            margin-inline-start: $material-editor-custom-button-last-child-margin;
+            margin-inline-start: $material-editor-custom-button-margin * 2;
           }
 
           &:last-child {
@@ -611,16 +609,13 @@
           }
 
           &:last-child {
-            margin-inline-end: $material-editor-custom-button-last-child-margin;
+            margin-inline-end: $material-editor-custom-button-margin * 2;
           }
         }
 
         > .dx-dropdowneditor-button:last-child,
+        > .dx-numberbox-spin-container:last-child,
         > .dx-clear-button-area {
-          margin-inline-end: $last-button-horizontal-padding;
-        }
-
-        > .dx-numberbox-spin-container:last-child {
           margin-inline-end: $material-filled-texteditor-spin-button-horizontal-padding;
         }
 

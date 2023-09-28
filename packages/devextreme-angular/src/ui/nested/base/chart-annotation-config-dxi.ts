@@ -5,9 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { AnnotationType, DashStyle, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Font } from 'devextreme/viz/core/base_widget';
-import { PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 @Component({
     template: ''
@@ -48,10 +46,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('axis', value);
     }
 
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -174,10 +172,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('text', value);
     }
 
-    get textOverflow(): TextOverflow {
+    get textOverflow(): string {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: string) {
         this._setOption('textOverflow', value);
     }
 
@@ -195,10 +193,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('tooltipTemplate', value);
     }
 
-    get type(): AnnotationType | undefined {
+    get type(): string | undefined {
         return this._getOption('type');
     }
-    set type(value: AnnotationType | undefined) {
+    set type(value: string | undefined) {
         this._setOption('type', value);
     }
 
@@ -216,10 +214,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('width', value);
     }
 
-    get wordWrap(): WordWrap {
+    get wordWrap(): string {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: string) {
         this._setOption('wordWrap', value);
     }
 
@@ -237,10 +235,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('y', value);
     }
 
-    get location(): PieChartAnnotationLocation {
+    get location(): string {
         return this._getOption('location');
     }
-    set location(value: PieChartAnnotationLocation) {
+    set location(value: string) {
         this._setOption('location', value);
     }
 

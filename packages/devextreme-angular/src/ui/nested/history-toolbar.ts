@@ -18,7 +18,6 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { DiagramCommand } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -35,10 +34,10 @@ import { DxiCommandComponent } from './command-dxi';
 })
 export class DxoHistoryToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get commands(): Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand> {
+    get commands(): Array<DevExpress.ui.dxDiagramCustomCommand | string> {
         return this._getOption('commands');
     }
-    set commands(value: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>) {
+    set commands(value: Array<DevExpress.ui.dxDiagramCustomCommand | string>) {
         this._setOption('commands', value);
     }
 

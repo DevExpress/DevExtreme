@@ -25,10 +25,9 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/box';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Mode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { ContentReadyEvent, DisposingEvent, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
 
 import DxBox from 'devextreme/ui/box';
 
@@ -72,10 +71,10 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get align(): Distribution {
+    get align(): string {
         return this._getOption('align');
     }
-    set align(value: Distribution) {
+    set align(value: string) {
         this._setOption('align', value);
     }
 
@@ -85,10 +84,10 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get crossAlign(): CrosswiseDistribution {
+    get crossAlign(): string {
         return this._getOption('crossAlign');
     }
-    set crossAlign(value: CrosswiseDistribution) {
+    set crossAlign(value: string) {
         this._setOption('crossAlign', value);
     }
 
@@ -111,10 +110,10 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get direction(): BoxDirection {
+    get direction(): string {
         return this._getOption('direction');
     }
-    set direction(value: BoxDirection) {
+    set direction(value: string) {
         this._setOption('direction', value);
     }
 
@@ -189,10 +188,10 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get items(): Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -317,14 +316,14 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() alignChange: EventEmitter<Distribution>;
+    @Output() alignChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() crossAlignChange: EventEmitter<CrosswiseDistribution>;
+    @Output() crossAlignChange: EventEmitter<string>;
 
     /**
     
@@ -338,7 +337,7 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<BoxDirection>;
+    @Output() directionChange: EventEmitter<string>;
 
     /**
     
@@ -380,7 +379,7 @@ export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
 
     /**
     

@@ -14,7 +14,6 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get enabled(): Mode | boolean {
+    get enabled(): boolean | string {
         return this._getOption('enabled');
     }
-    set enabled(value: Mode | boolean) {
+    set enabled(value: boolean | string) {
         this._setOption('enabled', value);
     }
 

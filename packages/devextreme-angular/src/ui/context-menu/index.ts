@@ -27,11 +27,10 @@ export { ExplicitTypes } from 'devextreme/ui/context_menu';
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { PositionConfig } from 'devextreme/animation/position';
 import DevExpress from 'devextreme/bundles/dx.all';
-import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, ContextSubmenuDirection, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
+import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
 
 import DxContextMenu from 'devextreme/ui/context_menu';
 
@@ -389,10 +388,10 @@ export class DxContextMenuComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get selectionMode(): SingleOrNone {
+    get selectionMode(): string {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleOrNone) {
+    set selectionMode(value: string) {
         this._setOption('selectionMode', value);
     }
 
@@ -415,10 +414,10 @@ export class DxContextMenuComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get showSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
+    get showSubmenuMode(): string | { delay?: number | { hide?: number, show?: number }, name?: string } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
+    set showSubmenuMode(value: string | { delay?: number | { hide?: number, show?: number }, name?: string }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -428,10 +427,10 @@ export class DxContextMenuComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get submenuDirection(): ContextSubmenuDirection {
+    get submenuDirection(): string {
         return this._getOption('submenuDirection');
     }
-    set submenuDirection(value: ContextSubmenuDirection) {
+    set submenuDirection(value: string) {
         this._setOption('submenuDirection', value);
     }
 
@@ -757,7 +756,7 @@ export class DxContextMenuComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleOrNone>;
+    @Output() selectionModeChange: EventEmitter<string>;
 
     /**
     
@@ -771,14 +770,14 @@ export class DxContextMenuComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
+    @Output() showSubmenuModeChange: EventEmitter<string | { delay?: number | { hide?: number, show?: number }, name?: string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() submenuDirectionChange: EventEmitter<ContextSubmenuDirection>;
+    @Output() submenuDirectionChange: EventEmitter<string>;
 
     /**
     

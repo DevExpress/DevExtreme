@@ -111,7 +111,7 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src('README.md')
         .pipe(gulp.dest(dist)),
 
-    stringSrc('.npmignore', 'dist/js\ndist/ts\n!dist/css\n!/scss/bundles/*.scss\nproject.json')
+    stringSrc('.npmignore', 'dist/js\ndist/ts\n!dist/css\nproject.json')
         .pipe(gulp.dest(`${dist}/`))
 ));
 

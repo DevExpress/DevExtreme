@@ -24,7 +24,7 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Recurrence: 'recurrenceGroup',
 };
 
-const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
+const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
   const isCurrentDateCorrect = value === null || !!value;
@@ -128,7 +128,7 @@ export class AppointmentForm {
 
     const element = $('<div>');
 
-    this.scheduler.createComponent(element, Form, {
+    this.form = this.scheduler.createComponent(element, Form, {
       items,
       showValidationSummary: true,
       scrollingEnabled: true,
@@ -140,9 +140,6 @@ export class AppointmentForm {
       formData,
       showColonAfterLabel: false,
       labelLocation: 'top',
-      onInitialized: (e) => {
-        this.form = e.component;
-      },
       customizeItem: (e) => {
         if (this.form && e.itemType === 'group') {
           const dataExprs = this.scheduler.getDataAccessors().expr;
@@ -303,20 +300,17 @@ export class AppointmentForm {
               const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
               const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
               const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
-              const endDate = dateSerialization.deserializeDate(endDateEditor.option('value'));
 
               if (this.semaphore.isFree() && startDate) {
                 if (value) {
                   const allDayStartDate = dateUtils.trimTime(startDate);
-                  const allDayEndDate = dateUtils.trimTime(endDate);
                   startDateEditor.option('value', new Date(allDayStartDate));
-                  endDateEditor.option('value', new Date(allDayEndDate));
+                  endDateEditor.option('value', new Date(allDayStartDate));
                 } else {
-                  const startDateWithStartHour = getDateWithStartHour(startDate, this.scheduler.getStartDayHour());
-                  const endDateWithStartHour = getDateWithStartHour(endDate, this.scheduler.getStartDayHour());
-                  const calculatedEndDate = this.scheduler.getCalculatedEndDate(endDateWithStartHour);
+                  const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
+                  const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
                   startDateEditor.option('value', startDateWithStartHour);
-                  endDateEditor.option('value', calculatedEndDate);
+                  endDateEditor.option('value', endDate);
                 }
               }
 

@@ -222,11 +222,11 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size in material-based themes', function(assert) {
-        const origIsMaterialBased = themes.isMaterialBased;
+    test('Appointment collector should have correct size in material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
 
         try {
-            themes.isMaterialBased = () => true;
+            themes.isMaterial = () => true;
 
             const scheduler = createInstance({
                 currentDate: new Date(2019, 2, 4),
@@ -240,7 +240,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
             assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
         } finally {
-            themes.isMaterialBased = origIsMaterialBased;
+            themes.isMaterial = origIsMaterial;
         }
     });
 

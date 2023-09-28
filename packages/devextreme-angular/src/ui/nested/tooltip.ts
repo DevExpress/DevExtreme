@@ -14,11 +14,8 @@ import {
 
 
 
-import { TooltipShowMode, VerticalEdge } from 'devextreme/common';
-import { DashStyle } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
-import { ChartTooltipLocation } from 'devextreme/viz/chart';
 import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
@@ -43,10 +40,10 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, dashStyle?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -171,10 +168,10 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get location(): ChartTooltipLocation {
+    get location(): string {
         return this._getOption('location');
     }
-    set location(value: ChartTooltipLocation) {
+    set location(value: string) {
         this._setOption('location', value);
     }
 
@@ -203,18 +200,18 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get position(): VerticalEdge {
+    get position(): string {
         return this._getOption('position');
     }
-    set position(value: VerticalEdge) {
+    set position(value: string) {
         this._setOption('position', value);
     }
 
     @Input()
-    get showMode(): TooltipShowMode {
+    get showMode(): string {
         return this._getOption('showMode');
     }
-    set showMode(value: TooltipShowMode) {
+    set showMode(value: string) {
         this._setOption('showMode', value);
     }
 

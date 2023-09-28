@@ -14,7 +14,6 @@ import {
 
 
 
-import { DashStyle } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { Font } from 'devextreme/viz/core/base_widget';
 
@@ -40,10 +39,10 @@ export class DxoHorizontalLineComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): string {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: string) {
         this._setOption('dashStyle', value);
     }
 

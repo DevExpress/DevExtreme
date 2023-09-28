@@ -14,7 +14,6 @@ import {
 
 
 
-import { FinancialChartReductionLevel } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -38,10 +37,10 @@ export class DxoReductionComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get level(): FinancialChartReductionLevel {
+    get level(): string {
         return this._getOption('level');
     }
-    set level(value: FinancialChartReductionLevel) {
+    set level(value: string) {
         this._setOption('level', value);
     }
 

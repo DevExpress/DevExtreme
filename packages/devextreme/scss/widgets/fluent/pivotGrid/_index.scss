@@ -119,7 +119,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
       padding-left: 8px;
 
       .dx-button {
-        @include dx-button-flat-color-styling($base-text-color, $base-text-color, $base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+        @include dx-button-flat-color-styling($base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
       }
     }
   }
@@ -135,7 +135,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   .dx-filter-header {
     .dx-pivotgrid-toolbar {
       .dx-button {
-        @include dx-button-flat-color-styling($base-text-color, $base-text-color, $base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+        @include dx-button-flat-color-styling($base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
       }
     }
   }

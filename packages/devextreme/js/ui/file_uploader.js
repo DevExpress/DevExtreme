@@ -301,7 +301,6 @@ class FileUploader extends Editor {
         this._$fileInput.prop({
             multiple: this.option('multiple'),
             accept: this.option('accept'),
-            title: this.option('hint') || null,
             tabIndex: -1
         });
     }
@@ -945,7 +944,7 @@ class FileUploader extends Editor {
     _shouldRaiseDragOver(e, dropZoneElement) {
         return this._activeDropZone === null
             && this.isMouseOverElement(e, dropZoneElement, false)
-            && e.originalEvent.dataTransfer.types.find(item => item === 'Files');
+            && e.originalEvent.dataTransfer.types[0] === 'Files';
     }
 
     _dragOverHandler(isCustomTarget, e) {
@@ -1428,10 +1427,6 @@ class FileUploader extends Editor {
                 break;
             case 'inputAttr':
                 this._applyInputAttributes(this.option(name));
-                break;
-            case 'hint':
-                this._initFileInput();
-                super._optionChanged(args);
                 break;
             default:
                 super._optionChanged(args);

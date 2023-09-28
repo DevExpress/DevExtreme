@@ -25,10 +25,9 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/list';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { PageLoadMode, ScrollbarMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeleteMode, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, ListMenuMode, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent } from 'devextreme/ui/list';
+import { ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent } from 'devextreme/ui/list';
 import { dxSortableOptions } from 'devextreme/ui/sortable';
 import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
 
@@ -288,10 +287,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get itemDeleteMode(): ItemDeleteMode {
+    get itemDeleteMode(): string {
         return this._getOption('itemDeleteMode');
     }
-    set itemDeleteMode(value: ItemDeleteMode) {
+    set itemDeleteMode(value: string) {
         this._setOption('itemDeleteMode', value);
     }
 
@@ -379,10 +378,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get menuMode(): ListMenuMode {
+    get menuMode(): string {
         return this._getOption('menuMode');
     }
-    set menuMode(value: ListMenuMode) {
+    set menuMode(value: string) {
         this._setOption('menuMode', value);
     }
 
@@ -431,10 +430,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get pageLoadMode(): PageLoadMode {
+    get pageLoadMode(): string {
         return this._getOption('pageLoadMode');
     }
-    set pageLoadMode(value: PageLoadMode) {
+    set pageLoadMode(value: string) {
         this._setOption('pageLoadMode', value);
     }
 
@@ -600,10 +599,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get searchMode(): SearchMode {
+    get searchMode(): string {
         return this._getOption('searchMode');
     }
-    set searchMode(value: SearchMode) {
+    set searchMode(value: string) {
         this._setOption('searchMode', value);
     }
 
@@ -639,10 +638,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get selectAllMode(): SelectAllMode {
+    get selectAllMode(): string {
         return this._getOption('selectAllMode');
     }
-    set selectAllMode(value: SelectAllMode) {
+    set selectAllMode(value: string) {
         this._setOption('selectAllMode', value);
     }
 
@@ -704,10 +703,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get selectionMode(): SingleMultipleAllOrNone {
+    get selectionMode(): string {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleMultipleAllOrNone) {
+    set selectionMode(value: string) {
         this._setOption('selectionMode', value);
     }
 
@@ -717,10 +716,10 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get showScrollbar(): ScrollbarMode {
+    get showScrollbar(): string {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: ScrollbarMode) {
+    set showScrollbar(value: string) {
         this._setOption('showScrollbar', value);
     }
 
@@ -1050,7 +1049,7 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemDeleteModeChange: EventEmitter<ItemDeleteMode>;
+    @Output() itemDeleteModeChange: EventEmitter<string>;
 
     /**
     
@@ -1099,7 +1098,7 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() menuModeChange: EventEmitter<ListMenuMode>;
+    @Output() menuModeChange: EventEmitter<string>;
 
     /**
     
@@ -1127,7 +1126,7 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageLoadModeChange: EventEmitter<PageLoadMode>;
+    @Output() pageLoadModeChange: EventEmitter<string>;
 
     /**
     
@@ -1218,7 +1217,7 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<SearchMode>;
+    @Output() searchModeChange: EventEmitter<string>;
 
     /**
     
@@ -1239,7 +1238,7 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectAllModeChange: EventEmitter<SelectAllMode>;
+    @Output() selectAllModeChange: EventEmitter<string>;
 
     /**
     
@@ -1274,14 +1273,14 @@ export class DxListComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleMultipleAllOrNone>;
+    @Output() selectionModeChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
+    @Output() showScrollbarChange: EventEmitter<string>;
 
     /**
     

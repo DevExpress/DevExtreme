@@ -5,7 +5,6 @@ import {
     Component,
 } from '@angular/core';
 
-import { Format } from 'devextreme/common';
 
 @Component({
     template: ''
@@ -39,10 +38,10 @@ export abstract class DxoFormat extends NestedOption {
         this._setOption('precision', value);
     }
 
-    get type(): Format | string {
+    get type(): string {
         return this._getOption('type');
     }
-    set type(value: Format | string) {
+    set type(value: string) {
         this._setOption('type', value);
     }
 
