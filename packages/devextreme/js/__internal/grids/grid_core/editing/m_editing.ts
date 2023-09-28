@@ -1664,8 +1664,6 @@ class EditingControllerImpl extends modules.ViewController {
     const dataChanges = [];
     const dataSource = this._dataController.dataSource();
 
-    this.addDeferred(result);
-
     when(this._fireOnSaving())
       .done(({ cancel, changes }) => {
         if (cancel) {
