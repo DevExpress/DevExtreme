@@ -146,22 +146,24 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _onMouseWheel: noop,
 
-    _attachDragEventHandlers() {
-        const { mask } = this.option();
+    _useMaskBehavior() {
+        return Boolean(this.option('mask'));
+    },
 
-        if(!mask) {
+    _attachDragEventHandlers() {
+        const useMaskBehavior = this._useMaskBehavior();
+
+        if(!useMaskBehavior) {
             return;
         }
 
         const eventName = addNamespace(DRAG_START_EVENT_NAME, this.NAME);
         const input = this._input();
 
+        const callback = (event) => focused(input) && event.preventDefault();
+
         eventsEngine.off(input, eventName);
-        eventsEngine.on(input, eventName, (event) => {
-            if(focused(input)) {
-                event.preventDefault();
-            }
-        });
+        eventsEngine.on(input, eventName, callback);
     },
 
     _render() {
