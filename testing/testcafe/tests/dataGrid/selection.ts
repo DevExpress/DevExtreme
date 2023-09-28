@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from '../../model/dataGrid';
@@ -60,6 +61,7 @@ test.skip('The Select All checkbox should be visible when a column headerCellTem
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
     renderAsync: false,
+    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
     loadingTimeout: 200,
     columns: [
