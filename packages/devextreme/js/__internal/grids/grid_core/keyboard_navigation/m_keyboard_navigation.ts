@@ -3,7 +3,8 @@ import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
-import { Deferred, when } from '@js/core/utils/deferred';
+// @ts-expect-error
+import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import {
   getHeight,
   getOuterHeight,
@@ -2682,6 +2683,8 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           if (isCellEditing) {
             keyboardController.setupFocusedView();
           }
+
+          this.addDeferred(fromPromise(isCellEditing));
 
           return isCellEditing;
         },
