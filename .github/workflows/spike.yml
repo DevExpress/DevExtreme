@@ -6,17 +6,17 @@ on:
     branches: [23_2]
 
 jobs:
-  self-hosted-patch:
-    runs-on: devextreme-shr2
-
-    steps:
-    - run: node -v
-
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '18.17.1'
-
-    - run: node -v
+#  self-hosted-patch:
+#    runs-on: devextreme-shr2
+#
+#    steps:
+#    - run: node -v
+#
+#    - uses: actions/setup-node@v3
+#      with:
+#        node-version: '18.17.1'
+#
+#    - run: node -v
 
   self-hosted-major:
     runs-on: devextreme-shr2
@@ -50,36 +50,36 @@ jobs:
 
       - run: node -v
 
-  github-hosted-patch:
-    runs-on: ubuntu-latest
-
-    steps:
-      - run: node -v
-
-      - run: ls -la /opt/hostedtoolcache/node/
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18.16.0'
-
-      - run: node -v
-
-      - run: ls -la /opt/hostedtoolcache/node/
-
-  github-hosted-major:
-    runs-on: ubuntu-latest
-
-    steps:
-      - run: node -v
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - run: ls -a /opt/hostedtoolcache/node
-
-      - run: ls -a /opt/hostedtoolcache/node/18.17.1
-
-      - run: ls -a /opt/hostedtoolcache/node/18.17.1/x64
-
-      - run: node -v
+#  github-hosted-patch:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - run: node -v
+#
+#      - run: ls -la /opt/hostedtoolcache/node/
+#
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: '18.16.0'
+#
+#      - run: node -v
+#
+#      - run: ls -la /opt/hostedtoolcache/node/
+#
+#  github-hosted-major:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - run: node -v
+#
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: '18'
+#
+#      - run: ls -a /opt/hostedtoolcache/node
+#
+#      - run: ls -a /opt/hostedtoolcache/node/18.17.1
+#
+#      - run: ls -a /opt/hostedtoolcache/node/18.17.1/x64
+#
+#      - run: node -v
