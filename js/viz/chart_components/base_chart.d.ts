@@ -38,8 +38,8 @@ import BaseWidget, {
 
 import {
     AnimationEaseMode,
-    CommonSeriesLabel,
-    CommonSeriesPoint,
+    SeriesLabel,
+    SeriesPoint,
     Palette,
     PaletteExtensionMode,
 } from '../../common/charts';
@@ -110,14 +110,14 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_return dxChartSeriesTypes.CommonSeries.label
      * @public
      */
-    customizeLabel?: ((pointInfo: any) => CommonSeriesLabel);
+    customizeLabel?: ((pointInfo: any) => SeriesLabel);
     /**
      * @docid
      * @type_function_param1 pointInfo:object
      * @type_function_return dxChartSeriesTypes.CommonSeries.point
      * @public
      */
-    customizePoint?: ((pointInfo: any) => CommonSeriesPoint);
+    customizePoint?: ((pointInfo: any) => SeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
      * @notUsedInTheme
