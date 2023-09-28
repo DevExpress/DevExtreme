@@ -2164,6 +2164,253 @@ declare module DevExpress.common.charts {
     | 'nearestPoint'
     | 'none'
     | 'onlyPoint';
+  export interface SeriesLabel {
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.alignment]
+     */
+    alignment?: HorizontalAlignment;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
+     */
+    argumentFormat?: DevExpress.ui.Format;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
+     */
+    backgroundColor?: string;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.border]
+     */
+    border?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.border.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.border.dashStyle]
+       */
+      dashStyle?: DashStyle;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.border.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.border.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.connector]
+     */
+    connector?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.connector.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.connector.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.label.connector.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.customizeText]
+     */
+    customizeText?: (pointInfo: any) => string;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.font]
+     */
+    font?: DevExpress.viz.Font;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.format]
+     */
+    format?: DevExpress.ui.Format;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
+     */
+    horizontalOffset?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.position]
+     */
+    position?: RelativePosition;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.rotationAngle]
+     */
+    rotationAngle?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.showForZeroValues]
+     */
+    showForZeroValues?: boolean;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.verticalOffset]
+     */
+    verticalOffset?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
+     */
+    displayFormat?: string;
+  }
+  export interface SeriesPoint {
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.border]
+     */
+    border?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.border.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.border.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.border.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.color]
+     */
+    color?: string | ChartsColor;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
+     */
+    hoverMode?: PointInteractionMode;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle]
+     */
+    hoverStyle?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border]
+       */
+      border?: {
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
+       */
+      color?: string | ChartsColor;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
+       */
+      size?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.image]
+     */
+    image?:
+      | string
+      | {
+          /**
+           * [descr:dxChartSeriesTypes.CommonSeries.point.image.height]
+           */
+          height?:
+            | number
+            | {
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint]
+                 */
+                rangeMaxPoint?: number;
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint]
+                 */
+                rangeMinPoint?: number;
+              };
+          /**
+           * [descr:dxChartSeriesTypes.CommonSeries.point.image.url]
+           */
+          url?:
+            | string
+            | {
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint]
+                 */
+                rangeMaxPoint?: string;
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint]
+                 */
+                rangeMinPoint?: string;
+              };
+          /**
+           * [descr:dxChartSeriesTypes.CommonSeries.point.image.width]
+           */
+          width?:
+            | number
+            | {
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint]
+                 */
+                rangeMaxPoint?: number;
+                /**
+                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint]
+                 */
+                rangeMinPoint?: number;
+              };
+        };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
+     */
+    selectionMode?: PointInteractionMode;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle]
+     */
+    selectionStyle?: {
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border]
+       */
+      border?: {
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
+       */
+      color?: string | ChartsColor;
+      /**
+       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
+       */
+      size?: number;
+    };
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.size]
+     */
+    size?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.symbol]
+     */
+    symbol?: PointSymbol;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.point.visible]
+     */
+    visible?: boolean;
+  }
   export type SeriesSelectionMode =
     | 'allArgumentPoints'
     | 'allSeriesPoints'
@@ -30302,11 +30549,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.customizeLabel]
      */
-    customizeLabel?: (pointInfo: any) => dxChartSeriesTypesCommonSeriesLabel;
+    customizeLabel?: (pointInfo: any) => DevExpress.common.charts.SeriesLabel;
     /**
      * [descr:BaseChartOptions.customizePoint]
      */
-    customizePoint?: (pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint;
+    customizePoint?: (pointInfo: any) => DevExpress.common.charts.SeriesPoint;
     /**
      * [descr:BaseChartOptions.dataSource]
      */
@@ -34165,7 +34412,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.label.customizeText]
      */
@@ -34175,7 +34422,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.point.visible]
      */
@@ -34221,7 +34468,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesBarSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.BarSeries.label.customizeText]
      */
@@ -34267,7 +34514,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesBubbleSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.BubbleSeries.label.customizeText]
      */
@@ -34345,7 +34592,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesCandleStickSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.label.customizeText]
      */
@@ -34442,7 +34689,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label]
      */
-    label?: dxChartSeriesTypesCommonSeriesLabel;
+    label?: DevExpress.common.charts.SeriesLabel;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.lowValueField]
      */
@@ -34470,7 +34717,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point]
      */
-    point?: dxChartSeriesTypesCommonSeriesPoint;
+    point?: DevExpress.common.charts.SeriesPoint;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.rangeValue1Field]
      */
@@ -34685,259 +34932,6 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCommonSeriesLabel {
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.alignment]
-     */
-    alignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
-     */
-    argumentFormat?: DevExpress.ui.Format;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
-     */
-    backgroundColor?: string;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.border]
-     */
-    border?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.border.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.border.dashStyle]
-       */
-      dashStyle?: DevExpress.common.charts.DashStyle;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.border.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.border.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.connector]
-     */
-    connector?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.connector.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.connector.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.label.connector.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.customizeText]
-     */
-    customizeText?: (pointInfo: any) => string;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.format]
-     */
-    format?: DevExpress.ui.Format;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
-     */
-    horizontalOffset?: number;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.position]
-     */
-    position?: DevExpress.common.charts.RelativePosition;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.rotationAngle]
-     */
-    rotationAngle?: number;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.showForZeroValues]
-     */
-    showForZeroValues?: boolean;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.verticalOffset]
-     */
-    verticalOffset?: number;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
-     */
-    displayFormat?: string;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartSeriesTypesCommonSeriesPoint {
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.border]
-     */
-    border?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.border.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.border.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.border.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.color]
-     */
-    color?: string | DevExpress.common.charts.ChartsColor;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
-     */
-    hoverMode?: DevExpress.common.charts.PointInteractionMode;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle]
-     */
-    hoverStyle?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border]
-       */
-      border?: {
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color]
-         */
-        color?: string;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible]
-         */
-        visible?: boolean;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width]
-         */
-        width?: number;
-      };
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
-       */
-      color?: string | DevExpress.common.charts.ChartsColor;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
-       */
-      size?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.image]
-     */
-    image?:
-      | string
-      | {
-          /**
-           * [descr:dxChartSeriesTypes.CommonSeries.point.image.height]
-           */
-          height?:
-            | number
-            | {
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint]
-                 */
-                rangeMaxPoint?: number;
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint]
-                 */
-                rangeMinPoint?: number;
-              };
-          /**
-           * [descr:dxChartSeriesTypes.CommonSeries.point.image.url]
-           */
-          url?:
-            | string
-            | {
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint]
-                 */
-                rangeMaxPoint?: string;
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint]
-                 */
-                rangeMinPoint?: string;
-              };
-          /**
-           * [descr:dxChartSeriesTypes.CommonSeries.point.image.width]
-           */
-          width?:
-            | number
-            | {
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint]
-                 */
-                rangeMaxPoint?: number;
-                /**
-                 * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint]
-                 */
-                rangeMinPoint?: number;
-              };
-        };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
-     */
-    selectionMode?: DevExpress.common.charts.PointInteractionMode;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle]
-     */
-    selectionStyle?: {
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border]
-       */
-      border?: {
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color]
-         */
-        color?: string;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible]
-         */
-        visible?: boolean;
-        /**
-         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width]
-         */
-        width?: number;
-      };
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
-       */
-      color?: string | DevExpress.common.charts.ChartsColor;
-      /**
-       * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
-       */
-      size?: number;
-    };
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.size]
-     */
-    size?: number;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.symbol]
-     */
-    symbol?: DevExpress.common.charts.PointSymbol;
-    /**
-     * [descr:dxChartSeriesTypes.CommonSeries.point.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
   export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border]
@@ -35046,7 +35040,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText]
      */
@@ -35056,7 +35050,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.point.visible]
      */
@@ -35102,7 +35096,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedBarSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.label.customizeText]
      */
@@ -35148,7 +35142,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedLineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.FullStackedLineSeries.label.customizeText]
      */
@@ -35194,7 +35188,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText]
      */
@@ -35204,7 +35198,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedSplineAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible]
      */
@@ -35246,7 +35240,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesFullStackedSplineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText]
      */
@@ -35288,7 +35282,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesLineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.LineSeries.label.customizeText]
      */
@@ -35334,7 +35328,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesRangeAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.label.customizeText]
      */
@@ -35344,7 +35338,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesRangeAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.point.visible]
      */
@@ -35390,7 +35384,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesRangeBarSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.RangeBarSeries.label.customizeText]
      */
@@ -35424,7 +35418,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesScatterSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.ScatterSeries.label.customizeText]
      */
@@ -35470,7 +35464,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesSplineAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.label.customizeText]
      */
@@ -35480,7 +35474,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesSplineAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.point.visible]
      */
@@ -35522,7 +35516,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesSplineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.SplineSeries.label.customizeText]
      */
@@ -35568,7 +35562,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.label.customizeText]
      */
@@ -35578,7 +35572,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.point.visible]
      */
@@ -35624,7 +35618,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedBarSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.label.customizeText]
      */
@@ -35670,7 +35664,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedLineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StackedLineSeries.label.customizeText]
      */
@@ -35716,7 +35710,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText]
      */
@@ -35726,7 +35720,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedSplineAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.point.visible]
      */
@@ -35768,7 +35762,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStackedSplineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineSeries.label.customizeText]
      */
@@ -35856,7 +35850,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStepAreaSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.label.customizeText]
      */
@@ -35866,7 +35860,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStepAreaSeriesPoint
-    extends dxChartSeriesTypesCommonSeriesPoint {
+    extends DevExpress.common.charts.SeriesPoint {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.point.visible]
      */
@@ -35928,7 +35922,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStepLineSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StepLineSeries.label.customizeText]
      */
@@ -35978,7 +35972,7 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartSeriesTypesStockSeriesLabel
-    extends dxChartSeriesTypesCommonSeriesLabel {
+    extends DevExpress.common.charts.SeriesLabel {
     /**
      * [descr:dxChartSeriesTypes.StockSeries.label.customizeText]
      */

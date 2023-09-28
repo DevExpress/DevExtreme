@@ -26,6 +26,8 @@ export {
     ScaleBreak,
     ScaleBreakLineStyle,
     SeriesHoverMode,
+    SeriesLabel,
+    SeriesPoint,
     SeriesSelectionMode,
     SeriesType,
     ShiftLabelOverlap,
