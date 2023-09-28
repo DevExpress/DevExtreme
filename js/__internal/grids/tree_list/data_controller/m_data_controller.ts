@@ -39,10 +39,6 @@ export const DataController = (dataControllerModule.controllers as any).data.inh
     },
 
     _isItemEquals(item1, item2) {
-      if (!this.callBase.apply(this, arguments)) {
-        return false;
-      }
-
       if (item1.isSelected !== item2.isSelected) {
         return false;
       }
@@ -55,7 +51,7 @@ export const DataController = (dataControllerModule.controllers as any).data.inh
         return false;
       }
 
-      return true;
+      return this.callBase.apply(this, arguments);
     },
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
