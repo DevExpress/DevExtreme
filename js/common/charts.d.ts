@@ -1,4 +1,8 @@
-import { HorizontalAlignment, Format } from '../common';
+import { HorizontalAlignment } from '../common';
+import { Format } from '../localization';
+import {
+  Font,
+} from '../viz/core/base_widget';
 
 /**
  * @public
