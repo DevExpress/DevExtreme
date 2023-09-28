@@ -57,11 +57,11 @@ test('Tab key on editor should not raise error when onSaving\'s promise is not y
     allowUpdating: true,
   },
   onSaving(e) {
-    const d = $.Deferred();
-    setTimeout(() => {
-      d.resolve();
-    }, 100);
-    e.promise = d.promise();
+    e.promise = new Promise<void>((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 100);
+    });
   },
 }));
 
