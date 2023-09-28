@@ -11,7 +11,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
 
 import modules from '../m_modules';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils, { popupUtils } from '../m_utils';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
@@ -222,30 +222,18 @@ export const HeaderFilterView = modules.View.inherit({
       wrapperAttr: { class: HEADER_FILTER_MENU_CLASS },
       focusStateEnabled: false,
       toolbarItems: [
-        {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
-          shortcut: 'done',
-          options: {
-            text: headerFilterOptions.texts.ok,
-            onClick() {
-              that.applyHeaderFilter(options);
-            },
+        popupUtils.createDoneButton({
+          text: headerFilterOptions.texts.ok,
+          onClick() {
+            that.applyHeaderFilter(options);
           },
-        },
-        {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
-          shortcut: 'cancel',
-          options: {
-            text: headerFilterOptions.texts.cancel,
-            onClick() {
-              that.hideHeaderFilterMenu();
-            },
+        }),
+        popupUtils.createCancelButton({
+          text: headerFilterOptions.texts.cancel,
+          onClick() {
+            that.hideHeaderFilterMenu();
           },
-        },
+        }),
       ],
       resizeEnabled: true,
       onShowing(e) {

@@ -173,6 +173,15 @@ function normalizeGroupingLoadOptions(group) {
   });
 }
 
+export const popupUtils = {
+  createDoneButton: (options) => ({
+    toolbar: 'bottom', location: 'after', shortcut: 'done', options,
+  }),
+  createCancelButton: (options) => ({
+    toolbar: 'bottom', location: 'after', shortcut: 'cancel', options,
+  }),
+};
+
 export default {
   renderNoDataText($element) {
     const that = this;

@@ -14,6 +14,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
 import { ModuleType } from '../m_types';
+import { popupUtils } from '../m_utils';
 import {
   BUTTON_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,
@@ -150,7 +151,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _showEditPopup(rowIndex, repaintForm?) {
+  _showEditPopup(rowIndex, repaintForm?): void {
     const isMobileDevice = devices.current().deviceType !== 'desktop';
     const editPopupClass = this.addWidgetPrefix(EDIT_POPUP_CLASS);
     const popupOptions = extend(
@@ -159,15 +160,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         fullScreen: isMobileDevice,
         wrapperAttr: { class: editPopupClass },
         toolbarItems: [
-          {
-            toolbar: 'bottom', location: 'after', shortcut: 'done', options: this._getSaveButtonConfig(),
-          },
-          {
-            toolbar: 'bottom', location: 'after', shortcut: 'cancel', options: this._getCancelButtonConfig(),
-          },
+          popupUtils.createDoneButton(this._getSaveButtonConfig()),
+          popupUtils.createCancelButton(this._getCancelButtonConfig()),
         ],
         contentTemplate: this._getPopupEditFormTemplate(rowIndex),
       },
+
       this.option(EDITING_POPUP_OPTION_NAME),
     );
 
