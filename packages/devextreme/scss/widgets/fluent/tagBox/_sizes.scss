@@ -6,39 +6,42 @@ $fluent-tagbox-tag-content-padding-left: null !default;
 $fluent-tagbox-tag-content-padding-right: null !default;
 $fluent-tagbox-tag-content-vertical-padding: null !default;
 $fluent-tagbox-tag-content-font-size: null !default;
-$fluent-tagbox-tag-container-padding: null !default;
 $fluent-tagbox-tag-container-padding-left: null !default;
 $fluent-tagbox-tag-container-vertical-padding: null !default;
 $fluent-tagbox-tag-height: null !default;
 $fluent-tagbox-select-all-padding-bottom: 12px !default;
 $fluent-tagbox-select-all-margin-bottom: 3px !default;
-$tagbox-tag-border-radius: 2em !default;
+$tagbox-tag-border-radius: 999em !default;
 $fluent-tagbox-outlined-with-label-top-padding: null !default;
 $fluent-tagbox-filled-with-label-top-padding: null !default;
 $fluent-tagbox-filled-with-label-bottom-padding: null !default;
+$fluent-tagbox-tag-content-line-height: null !default;
+$fluent-tagbox-tag-container-gap: null !default;
 
 @if $size == "default" {
   $fluent-tagbox-tag-content-padding-left: 6px !default; // 8px !default;
   $fluent-tagbox-tag-content-padding-right: 20px !default; // 30px !default;
   $fluent-tagbox-tag-content-vertical-padding: 2px !default; // 4px !default;
   $fluent-tagbox-tag-content-font-size: 12px !default; // 14px !default;
-  $fluent-tagbox-tag-container-padding: 0 12px 3px 16px !default; // 0 12px 11px 16px !default;
   $fluent-tagbox-tag-container-padding-left: 12px !default; // 16px !default;
-  $fluent-tagbox-tag-container-vertical-padding: 6px !default; // 11px !default;
-  $fluent-tagbox-tag-height: 18px !default; // 26px !default; 
-  $fluent-tagbox-filled-with-label-top-padding: 10px !default; // 18px !default; 
-  $fluent-tagbox-filled-with-label-bottom-padding: 2px !default; // 4px !default;
+  $fluent-tagbox-tag-container-vertical-padding: 5px !default; // 11px !default;
+  $fluent-tagbox-tag-container-gap: 4px !default;
+  $fluent-tagbox-tag-height: 20px !default; // 26px !default;
+  $fluent-tagbox-tag-content-line-height: normal !default;
+  $fluent-tagbox-filled-with-label-top-padding: 9px !default; // 18px !default; 
+  $fluent-tagbox-filled-with-label-bottom-padding: 1px !default; // 4px !default;
 }
 
 @else if $size == "compact" {
   $fluent-tagbox-tag-content-padding-left: 4px !default;
   $fluent-tagbox-tag-content-padding-right: 20px !default;
-  $fluent-tagbox-tag-content-vertical-padding: 2px !default;
+  $fluent-tagbox-tag-content-vertical-padding: 0 !default;
   $fluent-tagbox-tag-content-font-size: 10px !default;
-  $fluent-tagbox-tag-container-padding: 0 8px 3px 11px !default;
-  $fluent-tagbox-tag-container-padding-left: 12px !default;
+  $fluent-tagbox-tag-container-padding-left: 8px !default;
   $fluent-tagbox-tag-container-vertical-padding: 3px !default;
-  $fluent-tagbox-tag-height: 16px !default;
-  $fluent-tagbox-filled-with-label-top-padding: 5px !default;
-  $fluent-tagbox-filled-with-label-bottom-padding: 1px !default;
+  $fluent-tagbox-tag-container-gap: 2px !default;
+  $fluent-tagbox-tag-height: 14px !default;
+  $fluent-tagbox-tag-content-line-height: 1.2em !default;
+  $fluent-tagbox-filled-with-label-top-padding: 6px !default;
+  $fluent-tagbox-filled-with-label-bottom-padding: 0 !default;
 }

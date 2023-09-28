@@ -25,9 +25,10 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/toolbar';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/toolbar';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, LocateInMenuMode, OptionChangedEvent, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import DxToolbar from 'devextreme/ui/toolbar';
 
@@ -148,10 +149,10 @@ export class DxToolbarComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get items(): Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, visible?: boolean, widget?: string }> {
+    get items(): Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, visible?: boolean, widget?: string }>) {
+    set items(value: Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent }>) {
         this._setOption('items', value);
     }
 
@@ -357,7 +358,7 @@ export class DxToolbarComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: string, location?: string, menuItemTemplate?: any, options?: any, showText?: string, template?: any, text?: string, visible?: boolean, widget?: string }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent }>>;
 
     /**
     

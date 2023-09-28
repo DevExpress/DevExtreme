@@ -9,10 +9,9 @@
 
 // adduse
 
-$fluent-switch-transition: all 0.2s cubic-bezier(0.33,0,0.67,1); // all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$fluent-switch-transition: all 0.2s cubic-bezier(0.33,0,0.67,1);
 $fluent-switch-handle-on-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.change($switch-handle-on-bg, $alpha: 0.1);
-$fluent-switch-shadow: none; // 0 0 0 $fluent-switch-shadow-blur-radius color.change($base-text-color, $alpha: 0.1);
-$fluent-invalid-switch-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.change($switch-invalid-handle-bg, $alpha: 0.1);
+$fluent-switch-shadow: none;
 
 @include dx-switch(
   $fluent-switch-width,
@@ -32,8 +31,8 @@ $fluent-invalid-switch-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.cha
   $fluent-switch-shadow,
   $switch-bg,
   $switch-on-bg,
-  $base-accent-hover,
-  $base-accent-active,
+  $switch-accent-color-hover,
+  $switch-accent-color-focused,
   $fluent-switch-handle-on-shadow,
   $switch-handle-off-bg,
   $switch-handle-on-bg,
@@ -41,9 +40,11 @@ $fluent-invalid-switch-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.cha
   $switch-off-border-color,
   $switch-off-border-hover-color,
   $switch-off-border-active-color,
-  $switch-on-border-color,
-  $switch-invalid-container-bg,
-  $base-disabled-border-color,
+  $switch-accent-color,
+  $switch-invalid-color,
+  $switch-invalid-color-hover,
+  $switch-invalid-color-focused,
+  $switch-border-color-disabled,
 );
 @include dx-switch-rtl(
   $switch-handle-height - $switch-handle-margin,

@@ -23,7 +23,7 @@ import {
 } from '@angular/core';
 
 
-import { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent } from 'devextreme/ui/map';
+import { ClickEvent, DisposingEvent, InitializedEvent, MapProvider, MapType, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteMode, RouteRemovedEvent } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
 
@@ -255,10 +255,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get provider(): string {
+    get provider(): MapProvider {
         return this._getOption('provider');
     }
-    set provider(value: string) {
+    set provider(value: MapProvider) {
         this._setOption('provider', value);
     }
 
@@ -268,10 +268,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get routes(): Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: string, opacity?: number, weight?: number }> {
+    get routes(): Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }> {
         return this._getOption('routes');
     }
-    set routes(value: Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: string, opacity?: number, weight?: number }>) {
+    set routes(value: Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }>) {
         this._setOption('routes', value);
     }
 
@@ -307,10 +307,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get type(): string {
+    get type(): MapType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: MapType) {
         this._setOption('type', value);
     }
 
@@ -528,14 +528,14 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() providerChange: EventEmitter<string>;
+    @Output() providerChange: EventEmitter<MapProvider>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() routesChange: EventEmitter<Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: string, opacity?: number, weight?: number }>>;
+    @Output() routesChange: EventEmitter<Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }>>;
 
     /**
     
@@ -556,7 +556,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<string>;
+    @Output() typeChange: EventEmitter<MapType>;
 
     /**
     

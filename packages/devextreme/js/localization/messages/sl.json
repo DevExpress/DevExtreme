@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "pojavitev",
         "dxScheduler-allDay": "Ves dan",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Želite urediti samo ta dogodek ali tudi nadaljne ponovitve?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Želite izbrisati samo izbrani dogodek ali tudi nadaljne ponovitve?",
 

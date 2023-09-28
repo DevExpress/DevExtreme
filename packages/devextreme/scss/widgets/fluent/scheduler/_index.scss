@@ -60,6 +60,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
 
+.dx-scheduler-container {
+  border-radius: $fluent-scheduler-border-radius;
+}
+
 .dx-scheduler-time-panel-cell {
   height: $fluent-scheduler-workspace-date-table-cell-height;
 
@@ -157,7 +161,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-date-table-row:nth-child(even) .dx-scheduler-date-table-cell {
-    border-top-style: dotted;
+    border-top-style: dashed;
   }
 }
 
@@ -383,15 +387,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     $fluent-scheduler-header-height,
     $fluent-scheduler-toolbar-item-offset,
   );
-  @include header-buttons(
-    $button-normal-bg,
-    $fluent-scheduler-toolbar-active-color,
-  );
-  @include header-buttons-material(
-    $base-accent,
-    $fluent-scheduler-toolbar-color,
-    $fluent-scheduler-navigator-icon-font-size,
-  );
 
   .dx-scheduler-navigator-next,
   .dx-scheduler-navigator-previous {
@@ -399,6 +394,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   background-color: $scheduler-header-bg;
+  border-top-right-radius: $fluent-scheduler-border-radius;
+  border-top-left-radius: $fluent-scheduler-border-radius;
 }
 
 .dx-scheduler-group-flex-container .dx-scheduler-group-header {
@@ -458,6 +455,9 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
+  border-bottom-right-radius: $fluent-scheduler-border-radius;
+  border-bottom-left-radius: $fluent-scheduler-border-radius;
+
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
     .dx-scheduler-header-panel,
     .dx-scheduler-header-panel-empty-cell {
@@ -694,7 +694,14 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     min-width: auto;
     padding: 0;
 
-    @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+    @include dx-button-flat-color-styling(
+      $button-default-text-color,
+      $button-default-text-color-hover,
+      $button-default-text-color-active,
+      $button-default-text-hover-bg,
+      $button-default-text-focused-bg,
+      $button-default-text-active-bg
+    );
 
     .dx-icon {
       @include dx-icon-sizing($fluent-base-icon-size);
@@ -752,6 +759,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
           margin-left: $fluent-scheduler-appointment-tooltip-content-margin-left;
 
           .dx-tooltip-appointment-item-marker-body {
+            margin-top: 12px;
             width: $fluent-tooltip-marker-dimension;
             height: $fluent-tooltip-marker-dimension;
           }
@@ -760,6 +768,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
             .dx-tooltip-appointment-item-content-subject {
               margin-top: $fluent-scheduler-appointment-tooltip-title-margin-top;
               font-size: $fluent-scheduler-appointment-tooltip-title-font-size;
+              font-weight: 600;
             }
 
             .dx-tooltip-appointment-item-content-date {

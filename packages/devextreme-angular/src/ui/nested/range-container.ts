@@ -18,6 +18,9 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
     NestedOptionHost,
@@ -50,26 +53,26 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get orientation(): string {
+    get orientation(): CircularGaugeElementOrientation {
         return this._getOption('orientation');
     }
-    set orientation(value: string) {
+    set orientation(value: CircularGaugeElementOrientation) {
         this._setOption('orientation', value);
     }
 
     @Input()
-    get palette(): string | Array<string> {
+    get palette(): Palette | string | Array<string> {
         return this._getOption('palette');
     }
-    set palette(value: string | Array<string>) {
+    set palette(value: Palette | string | Array<string>) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): string {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: string) {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -90,18 +93,18 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get horizontalOrientation(): string {
+    get horizontalOrientation(): HorizontalAlignment {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: string) {
+    set horizontalOrientation(value: HorizontalAlignment) {
         this._setOption('horizontalOrientation', value);
     }
 
     @Input()
-    get verticalOrientation(): string {
+    get verticalOrientation(): VerticalAlignment {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: string) {
+    set verticalOrientation(value: VerticalAlignment) {
         this._setOption('verticalOrientation', value);
     }
 

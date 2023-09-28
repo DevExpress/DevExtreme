@@ -256,7 +256,7 @@ const Tabs = CollectionWidget.inherit({
                 const maxLeftOffset = getScrollLeftMax($(this.getScrollable().container()).get(0));
                 scrollable.scrollTo({ left: maxLeftOffset });
             }
-            this._updateNavButtonsVisibility();
+            this._updateNavButtonsState();
 
             this._scrollToItem(this.option('selectedItem'));
         }
@@ -397,16 +397,12 @@ const Tabs = CollectionWidget.inherit({
         return scrollableDirection;
     },
 
-    _updateScrollableDirection() {
-        const scrollable = this.getScrollable();
-
-        if(scrollable) {
-            const scrollableDirection = this._getScrollableDirection();
-
-            scrollable.option('direction', scrollableDirection);
-        } else {
-            this._renderScrolling();
+    _updateScrollable() {
+        if(this.getScrollable()) {
+            this._cleanScrolling();
         }
+
+        this._renderScrolling();
     },
 
     _renderScrollable() {
@@ -419,7 +415,7 @@ const Tabs = CollectionWidget.inherit({
             useNative: false,
             scrollByContent: this.option('scrollByContent'),
             onScroll: () => {
-                this._updateNavButtonsVisibility();
+                this._updateNavButtonsState();
             },
         });
 
@@ -452,7 +448,7 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
-    _updateNavButtonsVisibility() {
+    _updateNavButtonsState() {
         const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
 
@@ -647,7 +643,7 @@ const Tabs = CollectionWidget.inherit({
             case 'orientation': {
                 this._toggleOrientationClass(args.value);
                 if(!this._isServerSide()) {
-                    this._updateScrollableDirection();
+                    this._updateScrollable();
                 }
                 break;
             }

@@ -208,8 +208,21 @@ testComponentDefaults(DateRangeBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
-        stylingMode: 'filled',
         labelMode: 'floating',
+    },
+    function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    {},
+    {
+        stylingMode: 'filled',
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -312,6 +325,34 @@ testComponentDefaults(DropDownMenu,
         useInkRipple: true
     },
     function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(TextEditor,
+    {},
+    {
+        labelMode: 'floating',
+    },
+    function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(TextEditor,
+    {},
+    {
+        stylingMode: 'filled',
+    },
+    function() {
         this.origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
     },
@@ -323,15 +364,14 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'filled',
-        labelMode: 'floating'
+        stylingMode: 'outlined',
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isFluent = this.origIsFluent;
     }
 );
 
@@ -370,6 +410,7 @@ testComponentDefaults(DropDownButton, {}, {
     dataSource: null,
     deferRendering: true,
     text: '',
+    type: 'normal',
     keyExpr: 'this',
     displayExpr: undefined,
     useSelectMode: false,
@@ -889,11 +930,11 @@ testComponentDefaults(ScrollView,
         reachBottomText: ''
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1059,13 +1100,13 @@ testComponentDefaults(Toast,
         },
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() {
             return true;
         };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1097,11 +1138,11 @@ testComponentDefaults(Toast,
         },
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => true;
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = () => true;
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1113,13 +1154,13 @@ testComponentDefaults(Toast,
         displayTime: 4000,
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() {
             return true;
         };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1170,11 +1211,11 @@ testComponentDefaults(LoadPanel,
         message: ''
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1198,10 +1239,6 @@ testComponentDefaults(List,
     { platform: devices.current().platform },
     {
         useInkRipple: true,
-        pullingDownText: '',
-        pulledDownText: '',
-        refreshingText: '',
-        pageLoadingText: ''
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -1209,6 +1246,23 @@ testComponentDefaults(List,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(List,
+    { platform: devices.current().platform },
+    {
+        pullingDownText: '',
+        pulledDownText: '',
+        refreshingText: '',
+        pageLoadingText: ''
+    },
+    function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1391,11 +1445,11 @@ testComponentDefaults(Form,
         showColonAfterLabel: false
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1443,11 +1497,11 @@ testComponentDefaults(Accordion,
         _animationEasing: 'cubic-bezier(0.4, 0, 0.2, 1)'
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1462,10 +1516,10 @@ testComponentDefaults(Scheduler,
         _appointmentOffset: 30
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );

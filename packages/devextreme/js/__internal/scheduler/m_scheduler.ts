@@ -39,7 +39,7 @@ import {
   validateDayHours,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
-import { isMaterial } from '@js/ui/themes';
+import { isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 
@@ -461,7 +461,7 @@ class Scheduler extends Widget<any> {
       },
       {
         device() {
-          return (isMaterial as any)();
+          return (isMaterialBased as any)();
         },
         options: {
           useDropDownViewSwitcher: true,
@@ -1357,7 +1357,7 @@ class Scheduler extends Widget<any> {
 
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),
-      getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
+      getCalculatedEndDate: (date) => this._workSpace.calculateEndDate(date),
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
@@ -1932,11 +1932,13 @@ class Scheduler extends Widget<any> {
   }
 
   _showRecurrenceChangeConfirm(isDeleted) {
+    const title = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteTitle' : 'dxScheduler-confirmRecurrenceEditTitle');
     const message = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage');
     const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
     const occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
     this._recurrenceDialog = customDialog({
+      title,
       messageHtml: message,
       showCloseButton: true,
       showTitle: true,

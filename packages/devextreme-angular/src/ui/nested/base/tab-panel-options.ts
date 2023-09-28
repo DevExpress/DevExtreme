@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
@@ -91,10 +92,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
-    get iconPosition(): string {
+    get iconPosition(): TabsIconPosition {
         return this._getOption('iconPosition');
     }
-    set iconPosition(value: string) {
+    set iconPosition(value: TabsIconPosition) {
         this._setOption('iconPosition', value);
     }
 
@@ -273,10 +274,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('showNavButtons', value);
     }
 
-    get stylingMode(): string {
+    get stylingMode(): TabsStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: TabsStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -294,10 +295,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('tabIndex', value);
     }
 
-    get tabsPosition(): string {
+    get tabsPosition(): Position {
         return this._getOption('tabsPosition');
     }
-    set tabsPosition(value: string) {
+    set tabsPosition(value: Position) {
         this._setOption('tabsPosition', value);
     }
 

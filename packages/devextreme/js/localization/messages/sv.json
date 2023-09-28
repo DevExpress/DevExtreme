@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "upprepning(ar)",
         "dxScheduler-allDay": "Hela dagen",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Vill du redigera bara denna avtalade tid eller hela serien?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Vill du radera bara denna avtalade tid eller hela serien?",
 

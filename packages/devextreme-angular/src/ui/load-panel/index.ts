@@ -20,6 +20,7 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
+import { PositionAlignment } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 
@@ -324,10 +325,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): DevExpress.PositionConfig | Function | string {
+    get position(): PositionAlignment | DevExpress.PositionConfig | Function {
         return this._getOption('position');
     }
-    set position(value: DevExpress.PositionConfig | Function | string) {
+    set position(value: PositionAlignment | DevExpress.PositionConfig | Function) {
         this._setOption('position', value);
     }
 
@@ -637,7 +638,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<DevExpress.PositionConfig | Function | string>;
+    @Output() positionChange: EventEmitter<PositionAlignment | DevExpress.PositionConfig | Function>;
 
     /**
     

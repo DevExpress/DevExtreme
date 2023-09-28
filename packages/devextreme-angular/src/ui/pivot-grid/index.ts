@@ -21,8 +21,9 @@ import {
 } from '@angular/core';
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid';
+import { FieldChooserLayout, Mode, ScrollMode } from 'devextreme/common';
+import { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from 'devextreme/common/grids';
+import { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent, OptionChangedEvent, PivotGridDataFieldArea, PivotGridRowHeaderLayout, PivotGridTotalDisplayMode } from 'devextreme/ui/pivot_grid';
 import PivotGridDataSource, { Options as PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
 
 import DxPivotGrid from 'devextreme/ui/pivot_grid';
@@ -129,10 +130,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dataFieldArea(): string {
+    get dataFieldArea(): PivotGridDataFieldArea {
         return this._getOption('dataFieldArea');
     }
-    set dataFieldArea(value: string) {
+    set dataFieldArea(value: PivotGridDataFieldArea) {
         this._setOption('dataFieldArea', value);
     }
 
@@ -207,10 +208,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get fieldChooser(): { allowSearch?: boolean, applyChangesMode?: string, enabled?: boolean, height?: number, layout?: number | string, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number } {
+    get fieldChooser(): { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number } {
         return this._getOption('fieldChooser');
     }
-    set fieldChooser(value: { allowSearch?: boolean, applyChangesMode?: string, enabled?: boolean, height?: number, layout?: number | string, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number }) {
+    set fieldChooser(value: { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number }) {
         this._setOption('fieldChooser', value);
     }
 
@@ -298,10 +299,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get rowHeaderLayout(): string {
+    get rowHeaderLayout(): PivotGridRowHeaderLayout {
         return this._getOption('rowHeaderLayout');
     }
-    set rowHeaderLayout(value: string) {
+    set rowHeaderLayout(value: PivotGridRowHeaderLayout) {
         this._setOption('rowHeaderLayout', value);
     }
 
@@ -324,10 +325,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get scrolling(): { mode?: string, useNative?: boolean | string } {
+    get scrolling(): { mode?: ScrollMode, useNative?: Mode | boolean } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: { mode?: string, useNative?: boolean | string }) {
+    set scrolling(value: { mode?: ScrollMode, useNative?: Mode | boolean }) {
         this._setOption('scrolling', value);
     }
 
@@ -402,10 +403,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get showTotalsPrior(): string {
+    get showTotalsPrior(): PivotGridTotalDisplayMode {
         return this._getOption('showTotalsPrior');
     }
-    set showTotalsPrior(value: string) {
+    set showTotalsPrior(value: PivotGridTotalDisplayMode) {
         this._setOption('showTotalsPrior', value);
     }
 
@@ -415,10 +416,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: string } {
+    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: string }) {
+    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -584,7 +585,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataFieldAreaChange: EventEmitter<string>;
+    @Output() dataFieldAreaChange: EventEmitter<PivotGridDataFieldArea>;
 
     /**
     
@@ -626,7 +627,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldChooserChange: EventEmitter<{ allowSearch?: boolean, applyChangesMode?: string, enabled?: boolean, height?: number, layout?: number | string, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number }>;
+    @Output() fieldChooserChange: EventEmitter<{ allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number }>;
 
     /**
     
@@ -675,7 +676,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowHeaderLayoutChange: EventEmitter<string>;
+    @Output() rowHeaderLayoutChange: EventEmitter<PivotGridRowHeaderLayout>;
 
     /**
     
@@ -689,7 +690,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<{ mode?: string, useNative?: boolean | string }>;
+    @Output() scrollingChange: EventEmitter<{ mode?: ScrollMode, useNative?: Mode | boolean }>;
 
     /**
     
@@ -731,14 +732,14 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showTotalsPriorChange: EventEmitter<string>;
+    @Output() showTotalsPriorChange: EventEmitter<PivotGridTotalDisplayMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: string }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
 
     /**
     

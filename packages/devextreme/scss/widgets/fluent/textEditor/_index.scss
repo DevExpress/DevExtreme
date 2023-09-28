@@ -15,9 +15,8 @@
 // adduse
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0;
-$fluent-texteditor-icon-container-size: $fluent-base-icon-size - 2px;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
-$fluent-editor-custom-button-margin: 5px;
+$fluent-editor-custom-button-margin: 6px;
 
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
@@ -180,7 +179,7 @@ $fluent-editor-custom-button-margin: 5px;
   }
 
   &.dx-editor-filled {
-    background-color: $texteditor-bg;
+    background-color: $texteditor-filled-bg;
     border-bottom-left-radius: $base-border-radius;
     border-bottom-right-radius: $base-border-radius;
     border: 1px solid transparent;
@@ -271,7 +270,7 @@ $fluent-editor-custom-button-margin: 5px;
   }
 
   &.dx-editor-outlined {
-    background-color: transparent;
+    background-color: $texteditor-bg;
     border-radius: $texteditor-input-border-radius;
     border: 1px solid $texteditor-border-color;
     border-bottom: 1px solid $base-border-color-accessible;
@@ -320,6 +319,7 @@ $fluent-editor-custom-button-margin: 5px;
 
     &.dx-state-disabled,
     &.dx-state-readonly {
+      background-color: transparent;
       border-color: $texteditor-disabled-color;
     }
    
@@ -361,8 +361,8 @@ $fluent-editor-custom-button-margin: 5px;
 
 .dx-show-clear-button {
   .dx-clear-button-area {
-    width: $fluent-texteditor-icon-container-size;
-    min-width: $fluent-texteditor-icon-container-size;
+    width: $texteditor-icon-container-size;
+    min-width: $texteditor-icon-container-size;
     right: 0;
     display: flex;
     align-items: center;
@@ -535,7 +535,9 @@ $fluent-editor-custom-button-margin: 5px;
 @include dx-editor-buttons-container-material(
   $fluent-underlined-editor-button-height,
   $fluent-editor-custom-button-margin,
+  $fluent-editor-custom-button-margin,
   $fluent-filled-texteditor-input-button-horizontal-padding,
-  $fluent-filled-texteditor-spin-button-horizontal-padding,
+  0,
+  $texteditor-spin-button-horizontal-padding,
   $fluent-button-vertical-padding,
 );

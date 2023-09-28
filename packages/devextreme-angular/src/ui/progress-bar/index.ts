@@ -23,6 +23,7 @@ import {
 } from '@angular/core';
 
 
+import { Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
 
 import DxProgressBar from 'devextreme/ui/progress_bar';
@@ -270,10 +271,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -283,10 +284,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -296,10 +297,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -500,21 +501,21 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<string>;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<string>;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<string>;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

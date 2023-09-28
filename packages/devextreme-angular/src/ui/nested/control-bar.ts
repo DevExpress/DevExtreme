@@ -14,6 +14,7 @@ import {
 
 
 
+import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -53,10 +54,10 @@ export class DxoControlBarComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get horizontalAlignment(): string {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: string) {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
@@ -85,10 +86,10 @@ export class DxoControlBarComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get verticalAlignment(): string {
+    get verticalAlignment(): VerticalEdge {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: string) {
+    set verticalAlignment(value: VerticalEdge) {
         this._setOption('verticalAlignment', value);
     }
 

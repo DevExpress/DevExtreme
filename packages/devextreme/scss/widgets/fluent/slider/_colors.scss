@@ -9,15 +9,20 @@
 * $name 10. Slider bar background color
 * $type color
 */
-$fluent-slider-bar-bg: $base-neutral-foreground !default; // color.change($base-accent, $alpha: 0.24) !default;
+$fluent-slider-bar-bg: $base-neutral-foreground3 !default;
 
 /**
 * $name 20. Selected range background color
 * $type color
 */
-$fluent-slider-bg: $base-accent !default;
-$fluent-slider-bg-hover: $base-accent-hover !default;
-$fluent-slider-bg-focused: $base-accent-active !default;
+$slider-accent-color: $base-accent !default;
+$slider-accent-color-hover: $base-accent-hover !default;
+$slider-accent-color-focused: $base-accent-active !default;
+
+$slider-invalid-color: $base-invalid-color !default;
+$slider-invalid-color-hover: $base-invalid-color-hover !default;
+$slider-invalid-color-focused: $base-invalid-color-selected !default;
+
 $fluent-slider-disabled-bg: $base-foreground-disabled !default;
 $fluent-slider-bar-disabled-bg: $base-neutral-background-disabled !default;
 $fluent-slider-tooltip-bg: $base-accent !default;
