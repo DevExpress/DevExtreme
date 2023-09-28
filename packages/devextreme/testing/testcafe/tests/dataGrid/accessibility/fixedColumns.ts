@@ -3,6 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
 import { a11yCheck } from '../../../helpers/accessibilityUtils';
+import type { Properties } from '../../../../../js/ui/data_grid';
 
 fixture`Fixed columns tests with axe`
   .page(url(__dirname, '../../container.html'));
@@ -13,7 +14,7 @@ const pressKey = async (t: TestController, key: string, times = 1) => {
   }
 };
 
-const getGridConfig = (needFixedColumnOnLeft = true) => ({
+const getGridConfig = (needFixedColumnOnLeft = true): Properties => ({
   columnWidth: 150,
   width: 800,
   keyExpr: 'id',

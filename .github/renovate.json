@@ -51,6 +51,10 @@
             "dependencyDashboardApproval": true
         }
     ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": ["before 4am on Thursday"]
+    },
     "constraints": {
         "node": "^16.3.0"
     }

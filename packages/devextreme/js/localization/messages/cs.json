@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "výskytů",
         "dxScheduler-allDay": "Celý den",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Chcete upravit pouze tuto schůzku nebo celou sérii?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Chcete smazat pouze tuto schůzku nebo celou sérii?",
 

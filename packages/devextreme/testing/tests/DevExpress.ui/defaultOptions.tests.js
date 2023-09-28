@@ -370,6 +370,7 @@ testComponentDefaults(DropDownButton, {}, {
     dataSource: null,
     deferRendering: true,
     text: '',
+    type: 'normal',
     keyExpr: 'this',
     displayExpr: undefined,
     useSelectMode: false,
