@@ -1423,7 +1423,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
 });
 
 // T1152498
-['infinite', 'virtual'].forEach((scrollingMode) => {
+(['infinite', 'virtual'] as const).forEach((scrollingMode) => {
   safeSizeTest(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
