@@ -13,7 +13,7 @@ import { deferRender, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import { isMaterial } from '@js/ui/themes';
+import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -86,7 +86,7 @@ const TreeList = (Widget as any).inherit({
       {
         device() {
           // @ts-expect-error
-          return isMaterial();
+          return isMaterialBased();
         },
         options: {
           showRowLines: true,

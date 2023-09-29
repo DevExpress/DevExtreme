@@ -206,7 +206,7 @@ $scrollview-pulldown-path: null !default;
   $base-foreground-inverted-focused: rgba(71, 158, 245, 1) !default; // #479EF5
 
   $base-neutral-background-hover: rgba(235, 235, 235, 1) !default; // #ebebeb
-  $base-border-color: rgba(209, 209, 209, 1) !default; // d1d1d1
+  $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
   $base-border-color-hover: darken($base-border-color, 3.92) !default; // c7c7c7
   $base-border-color-focused: darken($base-border-color, 11.76) !default; // b3b3b3
   $base-border-color-accessible: rgba(97, 97, 97, 1) !default; // #616161
@@ -299,7 +299,7 @@ $scrollview-pulldown-path: null !default;
   $base-bg-active: $base-neutral-background1-active !default;
 
   $base-neutral-background-hover: rgba(41, 41, 41, 1) !default; // #292929
-  $base-border-color: rgba(102, 102, 102, 1) !default; // #666666
+  $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
   $base-border-color-hover: lighten( $base-border-color, 5.88) !default; // #757575
   $base-border-color-focused: lighten( $base-border-color, 1.96) !default; // #6b6b6b
   $base-border-color-accessible: rgba(173, 173, 173, 1) !default; // #adadad
