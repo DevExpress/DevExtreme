@@ -77,15 +77,18 @@ jobs:
           { componentFolder: "scheduler", name: "scheduler (5/5)", indices: "5/5" },
           { componentFolder: "form", name: "form (1/2)", indices: "1/2" },
           { componentFolder: "form", name: "form (2/2)", indices: "2/2" },
-          { componentFolder: "editors", name: "editors" },
+          { componentFolder: "editors", name: "editors (1/2)", indices: "1/2" },
+          { componentFolder: "editors", name: "editors (2/2)", indices: "2/2" },
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "htmlEditor", name: "htmlEditor", concurrency: 1 },
           { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
           { componentFolder: "form", name: "form - material (2/2)", theme: 'material.blue.light', indices: "2/2" },
-          { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
+          { componentFolder: "editors", name: "editors - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
+          { componentFolder: "editors", name: "editors - material (2/2)", theme: 'material.blue.light', indices: "2/2" },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "editors", name: "editors - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "editors", name: "editors - fluent (1/2)", theme: 'fluent.blue.light', indices: "1/2" },
+          { componentFolder: "editors", name: "editors - fluent (2/2)", theme: 'fluent.blue.light', indices: "2/2" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
