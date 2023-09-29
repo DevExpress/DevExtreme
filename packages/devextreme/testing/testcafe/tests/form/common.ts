@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { testScreenshot, isMaterial } from '../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
@@ -14,7 +14,7 @@ test('Color of the mark (T882067)', async (t) => {
 
   await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
-  if (!isMaterial()) {
+  if (!isMaterialBased()) {
     await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
     await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
   }
