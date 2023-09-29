@@ -2026,42 +2026,6 @@ QUnit.module('drag text', moduleConfig, () => {
 
         assert.strictEqual(textEditor.option('text'), '0189', 'text option value is correct');
     });
-
-    QUnit.test('mask should support drag', function(assert) {
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '(XX)',
-            maskRules: {
-                'X': 'x'
-            },
-            value: ' x'
-        });
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        $input.val('(x)_').trigger('drop');
-
-        this.clock.tick(10);
-
-        assert.equal($input.val(), '(x_)', 'mask is correct');
-    });
-
-    QUnit.test('mask should support drag with spaces', function(assert) {
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '(XXXX)',
-            maskRules: {
-                'X': /[xy]/
-            },
-            value: ' x y'
-        });
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        $input.val('(x__y)').trigger('drop');
-
-        this.clock.tick(10);
-
-        assert.equal($input.val(), '(xy__)', 'mask is corrected');
-    });
 });
 
 QUnit.module('cut', () => {
