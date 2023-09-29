@@ -83,7 +83,7 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 * $name 40. Modified data background color
 * $type color
 */
-$datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
+$datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
 $datagrid-row-removed-bg: $datagrid-border-color !default;
 $datagrid-cell-removed-text-color: null !default;
@@ -92,7 +92,7 @@ $datagrid-cell-removed-text-color: null !default;
 * $name 45. Invalidate data faded color
 * $type color
 */
-$datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
+$datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
 $datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
 
 /**
