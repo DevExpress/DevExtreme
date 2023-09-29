@@ -28,6 +28,14 @@ const FORWARD_DIRECTION = 'forward';
 const BACKWARD_DIRECTION = 'backward';
 
 const DRAG_START_EVENT_NAME = 'dragstart';
+const DRAG_ENTER_EVENT_NAME = 'dragenter';
+const DROP_EVENT_NAME = 'drop';
+
+const DRAG_EVENT_NAMES = [
+    DRAG_START_EVENT_NAME,
+    DRAG_ENTER_EVENT_NAME,
+    DROP_EVENT_NAME,
+];
 
 const buildInMaskRules = {
     '0': /[0-9]/,
@@ -157,17 +165,17 @@ const TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        const eventName = addNamespace(DRAG_START_EVENT_NAME, this.NAME);
-        const input = this._input();
+        DRAG_EVENT_NAMES.forEach(event => {
+            const eventName = addNamespace(event, this.NAME);
+            const input = this._input();
 
-        const callback = (event) => {
-            if(focused(input)) {
-                event.preventDefault();
-            }
-        };
+            const callback = (e) => {
+                e.preventDefault();
+            };
 
-        eventsEngine.off(input, eventName);
-        eventsEngine.on(input, eventName, callback);
+            eventsEngine.off(input, eventName);
+            eventsEngine.on(input, eventName, callback);
+        });
     },
 
     _render() {
