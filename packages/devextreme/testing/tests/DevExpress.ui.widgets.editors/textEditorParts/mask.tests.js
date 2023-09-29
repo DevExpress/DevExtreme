@@ -7,6 +7,16 @@ import 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+const DRAG_START_EVENT_NAME = 'dragstart';
+const DRAG_ENTER_EVENT_NAME = 'dragenter';
+const DROP_EVENT_NAME = 'drop';
+
+const DRAG_EVENT_NAMES = [
+    DRAG_START_EVENT_NAME,
+    DRAG_ENTER_EVENT_NAME,
+    DROP_EVENT_NAME,
+];
+
 const testMaskRule = (title, config) => {
     QUnit.test(title, function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -2015,16 +2025,17 @@ QUnit.module('paste', moduleConfig, () => {
 });
 
 QUnit.module('drag text', moduleConfig, () => {
-    QUnit.test('mask should not support drag', function(assert) {
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: 'XXXX',
-            maskRules: { 'X': /[0-9]/ },
-            value: '0189',
-        });
-        const textEditor = $textEditor.dxTextEditor('instance');
-        // const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    QUnit.test('drag events should be prevented in a masked text box', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({ mask: 'XXXX' });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(textEditor.option('text'), '0189', 'text option value is correct');
+        DRAG_EVENT_NAMES.forEach(eventName => {
+            const event = $.Event(eventName);
+
+            $input.trigger(event);
+
+            assert.strictEqual(event.isDefaultPrevented(), true, `the ${eventName} event is prevented`);
+        });
     });
 });
 
