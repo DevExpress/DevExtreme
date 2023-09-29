@@ -290,7 +290,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                     const prevItemsContainer = this._itemContainer(searchEnabled, prevSelectAllEnabled);
 
                     this._removeClickEvent(prevItemsContainer);
-                    this._removeInitExpandEvent(prevItemsContainer);
+                    this._removeExpandEvent(prevItemsContainer);
 
                     this._checkBoxModeChange(value, previousValue);
                     this._invalidate();
@@ -841,11 +841,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const expandedEventName = this._getEventNameByOption(this.option('expandEvent'));
         const $itemsContainer = this._itemContainer();
 
-        this._removeInitExpandEvent($itemsContainer);
+        this._removeExpandEvent($itemsContainer);
         eventsEngine.on($itemsContainer, expandedEventName, this._itemSelector(), this._expandEventHandler.bind(this));
     },
 
-    _removeInitExpandEvent(itemsContainer) {
+    _removeExpandEvent(itemsContainer) {
         eventsEngine.off(itemsContainer, '.' + EXPAND_EVENT_NAMESPACE, this._itemSelector());
     },
 
