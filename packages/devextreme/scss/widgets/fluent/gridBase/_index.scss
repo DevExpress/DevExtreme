@@ -594,14 +594,20 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
   }
 
-  .dx-#{$widget-name}-focus-overlay:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    height: 2px;
-    background-color: $datagrid-focused-border-color;
-    left: 0;
-    right: 1px;
+  .dx-#{$widget-name}-focus-overlay {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      background-color: $datagrid-focused-border-color;
+      left: 0;
+      right: 1px;
+    }
+
+    &.dx-focused-cell-modified::after {
+      background-color: $button-success-hover-bg;
+    }
   }
 
   .dx-data-row.dx-state-hover {

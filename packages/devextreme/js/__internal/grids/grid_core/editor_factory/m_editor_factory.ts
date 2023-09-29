@@ -20,6 +20,8 @@ import gridCoreUtils from '../m_utils';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const CELL_MODIFIED_CLASS = 'dx-cell-modified';
+const FOCUSED_CELL_MODIFIED_CLASS = 'dx-focused-cell-modified';
 const FOCUS_OVERLAY_CLASS = 'focus-overlay';
 const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
@@ -190,6 +192,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
       that._$focusOverlay
         .removeClass(DX_HIDDEN)
+        .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, $element.hasClass(CELL_MODIFIED_CLASS))
         .appendTo($content);
       setOuterHeight(that._$focusOverlay, elemCoord.bottom - elemCoord.top + 1);
       setOuterWidth(that._$focusOverlay, elemCoord.right - elemCoord.left + 1);
