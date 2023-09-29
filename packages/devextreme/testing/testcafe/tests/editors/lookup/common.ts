@@ -60,7 +60,7 @@ if (isMaterial()) {
   });
 }
 
-if (!isMaterial()) {
+if (!isMaterialBased()) {
   test('Popover should have correct vertical position (T1048128)', async (t) => {
     const lookup = new Lookup('#container');
     await lookup.open();
