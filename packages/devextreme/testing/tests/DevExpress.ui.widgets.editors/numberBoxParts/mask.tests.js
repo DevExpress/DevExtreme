@@ -11,6 +11,16 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const CARET_TIMEOUT_DURATION = 0;
 
+const DRAG_START_EVENT_NAME = 'dragstart';
+const DRAG_ENTER_EVENT_NAME = 'dragenter';
+const DROP_EVENT_NAME = 'drop';
+
+const DRAG_EVENT_NAMES = [
+    DRAG_START_EVENT_NAME,
+    DRAG_ENTER_EVENT_NAME,
+    DROP_EVENT_NAME,
+];
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#numberbox').dxNumberBox({
@@ -2409,3 +2419,19 @@ QUnit.module('ShadowDOM', {}, function() {
     });
 });
 
+QUnit.module('drag text', moduleConfig, () => {
+    QUnit.test('drag events should be prevented in a masked number box', function(assert) {
+        this.instance.option({
+            format: '#.##',
+            useMaskBehavior: true,
+        });
+
+        DRAG_EVENT_NAMES.forEach(eventName => {
+            const event = $.Event(eventName);
+
+            this.input.trigger(event);
+
+            assert.strictEqual(event.isDefaultPrevented(), true, `the ${eventName} event is prevented`);
+        });
+    });
+});
