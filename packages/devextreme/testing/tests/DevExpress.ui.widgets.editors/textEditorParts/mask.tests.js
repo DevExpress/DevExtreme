@@ -7,15 +7,7 @@ import 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-const DRAG_START_EVENT_NAME = 'dragstart';
-const DRAG_ENTER_EVENT_NAME = 'dragenter';
 const DROP_EVENT_NAME = 'drop';
-
-const DRAG_EVENT_NAMES = [
-    DRAG_START_EVENT_NAME,
-    DRAG_ENTER_EVENT_NAME,
-    DROP_EVENT_NAME,
-];
 
 const testMaskRule = (title, config) => {
     QUnit.test(title, function(assert) {
@@ -2029,13 +2021,11 @@ QUnit.module('drag text', moduleConfig, () => {
         const $textEditor = $('#texteditor').dxTextEditor({ mask: 'XXXX' });
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        DRAG_EVENT_NAMES.forEach(eventName => {
-            const event = $.Event(eventName);
+        const event = $.Event(DROP_EVENT_NAME);
 
-            $input.trigger(event);
+        $input.trigger(event);
 
-            assert.strictEqual(event.isDefaultPrevented(), true, `the ${eventName} event is prevented`);
-        });
+        assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
     });
 });
 

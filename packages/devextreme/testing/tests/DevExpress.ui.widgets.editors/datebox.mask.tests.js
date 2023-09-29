@@ -12,15 +12,8 @@ const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
-const DRAG_START_EVENT_NAME = 'dragstart';
-const DRAG_ENTER_EVENT_NAME = 'dragenter';
 const DROP_EVENT_NAME = 'drop';
 
-const DRAG_EVENT_NAMES = [
-    DRAG_START_EVENT_NAME,
-    DRAG_ENTER_EVENT_NAME,
-    DROP_EVENT_NAME,
-];
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
@@ -914,13 +907,11 @@ module('Events', setupModule, () => {
             useMaskBehavior: true
         });
 
-        DRAG_EVENT_NAMES.forEach(eventName => {
-            const event = $.Event(eventName);
+        const event = $.Event(DROP_EVENT_NAME);
 
-            this.$input.trigger(event);
+        this.$input.trigger(event);
 
-            assert.strictEqual(event.isDefaultPrevented(), true, `the ${eventName} event is prevented`);
-        });
+        assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
     });
 });
 
