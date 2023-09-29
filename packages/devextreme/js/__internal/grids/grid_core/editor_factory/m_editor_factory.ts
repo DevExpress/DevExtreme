@@ -21,7 +21,9 @@ import gridCoreUtils from '../m_utils';
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const CELL_MODIFIED_CLASS = 'dx-cell-modified';
+const CELL_INVALID_CLASS = 'invalid';
 const FOCUSED_CELL_MODIFIED_CLASS = 'dx-focused-cell-modified';
+const FOCUSED_CELL_INVALID_CLASS = 'dx-focused-cell-invalid';
 const FOCUS_OVERLAY_CLASS = 'focus-overlay';
 const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
@@ -189,10 +191,13 @@ export class EditorFactory extends ViewControllerWithMixin {
       const align = browser.mozilla ? 'right bottom' : 'left top';
       const $content = $element.closest(`.${that.addWidgetPrefix(CONTENT_CLASS)}`);
       const elemCoord = getBoundingRect($element.get(0));
+      const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
+      const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
 
       that._$focusOverlay
         .removeClass(DX_HIDDEN)
-        .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, $element.hasClass(CELL_MODIFIED_CLASS))
+        .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
+        .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
         .appendTo($content);
       setOuterHeight(that._$focusOverlay, elemCoord.bottom - elemCoord.top + 1);
       setOuterWidth(that._$focusOverlay, elemCoord.right - elemCoord.left + 1);

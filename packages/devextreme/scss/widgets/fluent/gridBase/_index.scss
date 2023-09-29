@@ -608,6 +608,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     &.dx-focused-cell-modified::after {
       background-color: $button-success-hover-bg;
     }
+
+    &.dx-focused-cell-invalid::after {
+      background-color: $button-danger-hover-bg;
+    }
   }
 
   .dx-data-row.dx-state-hover {
