@@ -9,7 +9,7 @@
     validationGroup="customerData"
   >
     <dxi-item itemType="group" caption="Credentials">
-      <dxi-item dataField="Email">
+      <dxi-item dataField="Email" [editorOptions]="emailEditorOptions">
         <dxi-validation-rule type="required" message="Email is required">
         </dxi-validation-rule>
         <dxi-validation-rule type="email" message="Email is invalid">
@@ -21,14 +21,15 @@
         >
         </dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="Password" [editorOptions]="passwordOptions">
+      <dxi-item dataField="Password" [editorOptions]="passwordEditorOptions">
         <dxi-validation-rule type="required" message="Password is required">
         </dxi-validation-rule>
       </dxi-item>
       <dxi-item
         name="ConfirmPassword"
         editorType="dxTextBox"
-        [editorOptions]="confirmOptions"
+        dataField="ConfirmPassword"
+        [editorOptions]="confirmPasswordEditorOptions"
       >
         <dxo-label text="Confirm Password"> </dxo-label>
         <dxi-validation-rule
@@ -45,7 +46,7 @@
       </dxi-item>
     </dxi-item>
     <dxi-item itemType="group" caption="Personal Data">
-      <dxi-item dataField="Name">
+      <dxi-item dataField="Name" [editorOptions]="nameEditorOptions">
         <dxi-validation-rule type="required" message="Name is required">
         </dxi-validation-rule>
         <dxi-validation-rule
@@ -58,11 +59,7 @@
       <dxi-item
         dataField="Date"
         editorType="dxDateBox"
-        [editorOptions]="{
-          placeholder: 'Birth Date',
-          invalidDateMessage:
-            'The date must have the following format: MM/dd/yyyy'
-        }"
+        [editorOptions]="dateBoxOptions"
       >
         <dxo-label text="Date of birth"> </dxo-label>
         <dxi-validation-rule
@@ -114,18 +111,14 @@
         <dxi-validation-rule type="required" message="City is required">
         </dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="Address">
+      <dxi-item dataField="Address" [editorOptions]="addressEditorOptions">
         <dxi-validation-rule type="required" message="Address is required">
         </dxi-validation-rule>
       </dxi-item>
       <dxi-item
         dataField="Phone"
         helpText="Enter the phone number in USA phone format"
-        [editorOptions]="{
-          mask: '+1 (X00) 000-0000',
-          maskRules: phoneRules,
-          maskInvalidMessage: 'The phone must have a correct USA phone format'
-        }"
+        [editorOptions]="phoneEditorOptions"
       >
         <dxi-validation-rule
           type="pattern"

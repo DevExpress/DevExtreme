@@ -15,7 +15,10 @@
           validation-group="customerData"
         >
           <DxGroupItem caption="Credentials">
-            <DxSimpleItem data-field="Email">
+            <DxSimpleItem
+              data-field="Email"
+              :editor-options="emailEditorOptions"
+            >
               <DxRequiredRule message="Email is required"/>
               <DxEmailRule message="Email is invalid"/>
               <DxAsyncRule
@@ -24,14 +27,15 @@
               />
             </DxSimpleItem>
             <DxSimpleItem
-              :editor-options="passwordOptions"
+              :editor-options="passwordEditorOptions"
               data-field="Password"
             >
               <DxRequiredRule message="Password is required"/>
             </DxSimpleItem>
             <DxSimpleItem
               name="ConfirmPassword"
-              :editor-options="confirmPasswordOptions"
+              data-field="ConfirmPassword"
+              :editor-options="confirmPasswordEditorOptions"
               editor-type="dxTextBox"
             >
               <DxLabel text="Confirm Password"/>
@@ -43,7 +47,10 @@
             </DxSimpleItem>
           </DxGroupItem>
           <DxGroupItem caption="Personal Data">
-            <DxSimpleItem data-field="Name">
+            <DxSimpleItem
+              data-field="Name"
+              :editor-options="nameEditorOptions"
+            >
               <DxRequiredRule message="Name is required"/>
               <DxPatternRule
                 :pattern="namePattern"
@@ -94,7 +101,10 @@
               />
               <DxRequiredRule message="City is required"/>
             </DxSimpleItem>
-            <DxSimpleItem data-field="Address">
+            <DxSimpleItem
+              data-field="Address"
+              :editor-options="addressEditorOptions"
+            >
               <DxRequiredRule message="Address is required"/>
             </DxSimpleItem>
             <DxSimpleItem
@@ -217,8 +227,9 @@ export default {
         md: 2,
         lg: 2,
       },
-      passwordOptions: {
+      passwordEditorOptions: {
         mode: 'password',
+        valueChangeEvent: 'keyup',
         onValueChanged: () => {
           const editor = this.formInstance.getEditor('ConfirmPassword');
           if (editor.option('value')) {
@@ -238,8 +249,9 @@ export default {
           },
         ],
       },
-      confirmPasswordOptions: {
+      confirmPasswordEditorOptions: {
         mode: 'password',
+        valueChangeEvent: 'keyup',
         buttons: [
           {
             name: 'password',
@@ -252,14 +264,25 @@ export default {
           },
         ],
       },
+      emailEditorOptions: {
+        valueChangeEvent: 'keyup',
+      },
+      nameEditorOptions: {
+        valueChangeEvent: 'keyup',
+      },
+      addressEditorOptions: {
+        valueChangeEvent: 'keyup',
+      },
       dateBoxOptions: {
         placeholder: 'Birth Date',
+        acceptCustomValue: false,
         invalidDateMessage:
           'The date must have the following format: MM/dd/yyyy',
       },
       dateRangeBoxOptions: {
         endDatePlaceholder: 'End Date',
         startDatePlaceholder: 'Start Date',
+        acceptCustomValue: false,
         invalidDateMessage:
           'The date must have the following format: MM/dd/yyyy',
       },
@@ -270,6 +293,7 @@ export default {
       },
       phoneEditorOptions: {
         mask: '+1 (X00) 000-0000',
+        valueChangeEvent: 'keyup',
         maskRules: {
           X: /[02-9]/,
         },
@@ -277,6 +301,7 @@ export default {
       },
       cityEditorOptions: {
         dataSource: service.getCities(),
+        valueChangeEvent: 'keyup',
         minSearchLength: 2,
       },
       countryEditorOptions: {

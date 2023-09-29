@@ -28,6 +28,7 @@ const checkBoxOptions = {
 
 const cityEditorOptions = {
   dataSource: service.getCities(),
+  valueChangeEvent: 'keyup',
   minSearchLength: 2,
 };
 
@@ -35,8 +36,21 @@ const countryEditorOptions = {
   dataSource: service.getCountries(),
 };
 
+const emailEditorOptions = {
+  valueChangeEvent: 'keyup',
+};
+
+const nameEditorOptions = {
+  valueChangeEvent: 'keyup',
+};
+
+const addressEditorOptions = {
+  valueChangeEvent: 'keyup',
+};
+
 const phoneEditorOptions = {
   mask: '+1 (X00) 000-0000',
+  valueChangeEvent: 'keyup',
   maskRules: {
     X: /[02-9]/,
   },
@@ -54,6 +68,7 @@ const maxDate = new Date().setFullYear(new Date().getFullYear() - 21);
 
 const dateBoxOptions = {
   placeholder: 'Birth Date',
+  acceptCustomValue: false,
   invalidDateMessage:
     'The date must have the following format: MM/dd/yyyy',
 };
@@ -61,6 +76,7 @@ const dateBoxOptions = {
 const dateRangeBoxOptions = {
   startDatePlaceholder: 'Start Date',
   endDatePlaceholder: 'End Date',
+  acceptCustomValue: false,
   invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
 };
 
@@ -101,6 +117,7 @@ function App() {
 
   const getPasswordOptions = React.useCallback(() => ({
     mode: 'password',
+    valueChangeEvent: 'keyup',
     onValueChanged: () => {
       const editor = formInstance.current.getEditor('ConfirmPassword');
       if (editor.option('value')) {
@@ -123,6 +140,7 @@ function App() {
 
   const getConfirmOptions = React.useCallback(() => ({
     mode: 'password',
+    valueChangeEvent: 'keyup',
     buttons: [
       {
         name: 'password',
@@ -175,7 +193,7 @@ function App() {
           validationGroup="customerData"
         >
           <GroupItem caption="Credentials">
-            <SimpleItem dataField="Email" editorType="dxTextBox">
+            <SimpleItem dataField="Email" editorType="dxTextBox" editorOptions={emailEditorOptions}>
               <RequiredRule message="Email is required" />
               <EmailRule message="Email is invalid" />
               <AsyncRule
@@ -185,7 +203,7 @@ function App() {
             <SimpleItem dataField="Password" editorType="dxTextBox" editorOptions={getPasswordOptions()}>
               <RequiredRule message="Password is required" />
             </SimpleItem>
-            <SimpleItem name="ConfirmPassword" editorType="dxTextBox" editorOptions={getConfirmOptions()}>
+            <SimpleItem name="ConfirmPassword" dataField="ConfirmPassword" editorType="dxTextBox" editorOptions={getConfirmOptions()}>
               <Label text="Confirm Password" />
               <RequiredRule message="Confirm Password is required" />
               <CompareRule
@@ -195,7 +213,7 @@ function App() {
             </SimpleItem>
           </GroupItem>
           <GroupItem caption="Personal Data">
-            <SimpleItem dataField="Name">
+            <SimpleItem dataField="Name" editorOptions={nameEditorOptions}>
               <RequiredRule message="Name is required" />
               <PatternRule message="Do not use digits in the Name"
                 pattern={/^[^0-9]+$/} />
@@ -225,7 +243,7 @@ function App() {
               <StringLengthRule min={2} message="City must have at least 2 symbols" />
               <RequiredRule message="City is required" />
             </SimpleItem>
-            <SimpleItem dataField="Address">
+            <SimpleItem dataField="Address" editorOptions={addressEditorOptions}>
               <RequiredRule message="Address is required" />
             </SimpleItem>
             <SimpleItem dataField="Phone"

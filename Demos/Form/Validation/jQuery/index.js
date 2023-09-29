@@ -30,6 +30,9 @@ $(() => {
       caption: 'Credentials',
       items: [{
         dataField: 'Email',
+        editorOptions: {
+          valueChangeEvent: 'keyup',
+        },
         validationRules: [{
           type: 'required',
           message: 'Email is required',
@@ -47,6 +50,7 @@ $(() => {
         dataField: 'Password',
         editorOptions: {
           mode: 'password',
+          valueChangeEvent: 'keyup',
           onValueChanged() {
             const editor = formWidget.getEditor('ConfirmPassword');
             if (editor.option('value')) {
@@ -69,12 +73,14 @@ $(() => {
         }],
       }, {
         name: 'ConfirmPassword',
+        dataField: 'ConfirmPassword',
         label: {
           text: 'Confirm Password',
         },
         editorType: 'dxTextBox',
         editorOptions: {
           mode: 'password',
+          valueChangeEvent: 'keyup',
           buttons: [{
             name: 'password',
             location: 'after',
@@ -101,6 +107,9 @@ $(() => {
       caption: 'Personal Data',
       items: [{
         dataField: 'Name',
+        editorOptions: {
+          valueChangeEvent: 'keyup',
+        },
         validationRules: [{
           type: 'required',
           message: 'Name is required',
@@ -118,6 +127,7 @@ $(() => {
         editorOptions: {
           invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
           placeholder: 'Birth Date',
+          acceptCustomValue: false,
         },
         validationRules: [{
           type: 'required',
@@ -137,6 +147,7 @@ $(() => {
           startDatePlaceholder: 'Start Date',
           endDatePlaceholder: 'End Date',
           invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
+          acceptCustomValue: false,
         },
       }],
     }, {
@@ -158,6 +169,7 @@ $(() => {
         editorOptions: {
           dataSource: cities,
           minSearchLength: 2,
+          valueChangeEvent: 'keyup',
         },
         validationRules: [{
           type: 'pattern',
@@ -173,6 +185,9 @@ $(() => {
         }],
       }, {
         dataField: 'Address',
+        editorOptions: {
+          valueChangeEvent: 'keyup',
+        },
         validationRules: [{
           type: 'required',
           message: 'Address is required',
@@ -186,6 +201,7 @@ $(() => {
             X: /[02-9]/,
           },
           maskInvalidMessage: 'The phone must have a correct USA phone format',
+          valueChangeEvent: 'keyup',
         },
         validationRules: [{
           type: 'pattern',
