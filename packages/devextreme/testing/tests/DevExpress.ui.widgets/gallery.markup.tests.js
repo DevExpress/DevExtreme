@@ -66,8 +66,14 @@ QUnit.module('base', () => {
 
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
+    QUnit.test('aria role should not be set when no items', function(assert) {
         const $element = $('#gallerySimple').dxGallery();
+
+        assert.equal($element.attr('role'), undefined, 'aria role is correct');
+    });
+
+    QUnit.test('aria role should be set when gallery has items to display', function(assert) {
+        const $element = $('#gallerySimple').dxGallery({ items: [1] });
 
         assert.equal($element.attr('role'), 'listbox', 'aria role is correct');
     });
@@ -76,6 +82,14 @@ QUnit.module('aria accessibility', () => {
         const $element = $('#gallerySimple').dxGallery();
 
         assert.equal($element.attr('aria-label'), 'gallery', 'widget should have aria-label to have difference from text list');
+    });
+
+    QUnit.test('aria label for items should be set', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({ items: [1] });
+
+        const $item = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
+
+        assert.strictEqual($item.attr('aria-label'), 'Gallery item', 'item should have "aria-label"');
     });
 
     QUnit.test('aria role for items', function(assert) {
