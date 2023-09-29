@@ -12,6 +12,16 @@ const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
+const DRAG_START_EVENT_NAME = 'dragstart';
+const DRAG_ENTER_EVENT_NAME = 'dragenter';
+const DROP_EVENT_NAME = 'drop';
+
+const DRAG_EVENT_NAMES = [
+    DRAG_START_EVENT_NAME,
+    DRAG_ENTER_EVENT_NAME,
+    DROP_EVENT_NAME,
+];
+
 QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
@@ -897,8 +907,22 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
     });
-});
 
+    QUnit.test('drag events should be prevented in a masked date box', function(assert) {
+        this.instance.option({
+            displayFormat: 'dd.MM.yyyy HH:mm',
+            useMaskBehavior: true
+        });
+
+        DRAG_EVENT_NAMES.forEach(eventName => {
+            const event = $.Event(eventName);
+
+            this.$input.trigger(event);
+
+            assert.strictEqual(event.isDefaultPrevented(), true, `the ${eventName} event is prevented`);
+        });
+    });
+});
 
 module('Search', setupModule, () => {
     test('Time indication', function(assert) {
