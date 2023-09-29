@@ -106,10 +106,10 @@ export class AppComponent {
   imports: [
     BrowserModule,
     BrowserTransferStateModule,
-    DxSelectBoxModule,
     DxCalendarModule,
     DxCheckBoxModule,
     DxDateBoxModule,
+    DxSelectBoxModule,
     DxTemplateModule,
   ],
   declarations: [AppComponent],
