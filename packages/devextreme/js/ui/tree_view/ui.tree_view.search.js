@@ -90,8 +90,8 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         this.$element().empty();
     },
 
-    _itemContainer: function(isSearchMode) {
-        if(this._selectAllEnabled()) {
+    _itemContainer: function(isSearchMode, selectAllEnabled) {
+        if(selectAllEnabled === undefined ? this._selectAllEnabled() : selectAllEnabled) {
             return this._getNodeContainer();
         }
 
