@@ -5,6 +5,7 @@ import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
 import $, { dxElementWrapper } from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { resetActiveElement } from '@js/core/utils/dom';
@@ -96,7 +97,14 @@ class EditingControllerImpl extends modules.ViewController {
 
   _changes: any;
 
-  _deferreds: any;
+  /**
+   * A collection of deferred objects.
+   *
+   * Use with `waitForDeferredOperations` to await all deferred objects in this collection.
+   *
+   * Use `addDeferred` to add a deferred object to this collection.
+   */
+  _deferreds!: DeferredObj<any>[];
 
   _dataChangedHandler: any;
 
@@ -129,7 +137,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._changes = [];
 
     if (this._deferreds) {
-      this._deferreds.forEach((d) => d.reject('cancel'));
+      this._deferreds.forEach((d) => { d.reject('cancel'); });
     }
     this._deferreds = [];
 
@@ -1856,8 +1864,13 @@ class EditingControllerImpl extends modules.ViewController {
     return skipCurrentRow ? [] : [row.rowIndex];
   }
 
-  addDeferred(deferred) {
-    if (this._deferreds.indexOf(deferred) < 0) {
+  /**
+   * Adds a deferred object to the `_deferred` collection
+   *
+   * @param deferred A deferred object
+   */
+  addDeferred(deferred: DeferredObj<any>): void {
+    if (!this._deferreds.includes(deferred)) {
       this._deferreds.push(deferred);
       deferred.always(() => {
         const index = this._deferreds.indexOf(deferred);
