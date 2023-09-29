@@ -3,6 +3,7 @@
 // adduse
 
 $generic-colorbox-overlay-padding: null !default;
+$generic-colorbox-preview-width: 40px !default;
 
 @if $size == "default" {
   $generic-colorbox-overlay-padding: 20px !default;
