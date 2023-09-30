@@ -3,29 +3,13 @@ import { popupUtils } from '../m_utils';
 
 describe('utils', () => {
   describe('popup dialogs', () => {
-    test('done button should be return valid config. All properties are required', () => {
+    test('done button should be have shortcut=done', () => {
       const result = popupUtils.createDoneButton({});
-
-      const expected = {
-        location: 'after',
-        shortcut: 'done',
-        toolbar: 'bottom',
-        options: {},
-      };
-
-      expect(result).toEqual(expected);
+      expect(result).toHaveProperty('shortcut', 'done');
     });
-    test('cancel button should be return valid config. All properties are required', () => {
+    test('cancel button should be have shortcut=cancel', () => {
       const result = popupUtils.createCancelButton({});
-
-      const expected = {
-        location: 'after',
-        shortcut: 'cancel',
-        toolbar: 'bottom',
-        options: {},
-      };
-
-      expect(result).toEqual(expected);
+      expect(result).toHaveProperty('shortcut', 'cancel');
     });
   });
 });

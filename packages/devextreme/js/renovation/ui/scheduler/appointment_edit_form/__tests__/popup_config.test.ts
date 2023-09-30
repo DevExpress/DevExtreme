@@ -1,5 +1,7 @@
 import devices from '../../../../../core/devices';
 import {
+  createCancelButton,
+  createDoneButton,
   getMaxWidth,
   getPopupSize,
   getPopupToolbarItems,
@@ -176,6 +178,18 @@ describe('API', () => {
         expect(getPopupSize(isRecurrence))
           .toEqual(expected);
       });
+    });
+  });
+
+  describe('popup dialogs', () => {
+    test('done button should be have shortcut=done', () => {
+      const result = createDoneButton('after');
+      expect(result).toHaveProperty('shortcut', 'done');
+    });
+
+    test('cancel button should be have shortcut=cancel', () => {
+      const result = createCancelButton('after');
+      expect(result).toHaveProperty('shortcut', 'cancel');
     });
   });
 });

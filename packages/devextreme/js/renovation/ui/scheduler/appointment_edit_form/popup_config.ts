@@ -3,11 +3,16 @@ import devices from '../../../../core/devices';
 import { getWidth } from '../../../../core/utils/size';
 import { getWindow } from '../../../../core/utils/window';
 import type { AnimationConfig } from '../../../../animation/fx';
+import { ToolbarItemLocation } from '../../../../common';
+
+interface IToolbarButtonOptions {
+  text: string;
+}
 
 export interface IToolbarButtonConfig {
-  shortcut: string;
-  location: string;
-  options?: { text: string };
+  shortcut: 'done' | 'cancel';
+  location: ToolbarItemLocation;
+  options?: IToolbarButtonOptions;
   onClick?: (e: { cancel: boolean }) => void;
 }
 
@@ -55,26 +60,28 @@ export const defaultAnimation: {
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 const isIOSPlatform = (): boolean => devices.current().platform === 'ios';
 
-const TOOLBAR_LOCATION = {
-  AFTER: 'after',
-  BEFORE: 'before',
-};
+export const createDoneButton = (
+  location: ToolbarItemLocation, options?: IToolbarButtonOptions,
+): IToolbarButtonConfig => ({
+  shortcut: 'done',
+  location,
+  options,
+});
+
+export const createCancelButton = (
+  location: ToolbarItemLocation, options?: IToolbarButtonOptions,
+): IToolbarButtonConfig => ({
+  shortcut: 'cancel',
+  location,
+  options,
+});
 
 const getButtonsConfig = (): {
   doneButton: IToolbarButtonConfig;
   cancelButton: IToolbarButtonConfig;
 } => ({
-  doneButton: {
-    shortcut: 'done',
-    options: { text: messageLocalization.format('Done') },
-    location: TOOLBAR_LOCATION.AFTER,
-  },
-  cancelButton: {
-    shortcut: 'cancel',
-    location: isIOSPlatform()
-      ? TOOLBAR_LOCATION.BEFORE
-      : TOOLBAR_LOCATION.AFTER,
-  },
+  doneButton: createDoneButton('after', { text: messageLocalization.format('Done') }),
+  cancelButton: createCancelButton(isIOSPlatform() ? 'before' : 'after'),
 });
 
 export const getPopupToolbarItems = (
