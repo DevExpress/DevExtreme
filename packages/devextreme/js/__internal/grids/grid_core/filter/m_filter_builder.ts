@@ -7,6 +7,7 @@ import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
 
 import modules from '../m_modules';
+import { popupUtils } from '../m_utils';
 
 const FilterBuilderView = modules.View.inherit({
   _renderCore() {
@@ -70,34 +71,21 @@ const FilterBuilderView = modules.View.inherit({
   },
 
   _getPopupToolbarItems() {
-    const that = this;
     return [
-      {
-        toolbar: 'bottom',
-        location: 'after',
-        widget: 'dxButton',
-        shortcut: 'done',
-        options: {
-          text: messageLocalization.format('OK'),
-          onClick() {
-            const filter = that._filterBuilder.option('value');
-            that.option('filterValue', filter);
-            that._filterBuilderPopup.hide();
-          },
+      popupUtils.createDoneButton({
+        text: messageLocalization.format('OK'),
+        onClick() {
+          const filter = this._filterBuilder.option('value');
+          this.option('filterValue', filter);
+          this._filterBuilderPopup.hide();
         },
-      },
-      {
-        toolbar: 'bottom',
-        location: 'after',
-        widget: 'dxButton',
-        shortcut: 'cancel',
-        options: {
-          text: messageLocalization.format('Cancel'),
-          onClick() {
-            that._filterBuilderPopup.hide();
-          },
+      }),
+      popupUtils.createCancelButton({
+        text: messageLocalization.format('Cancel'),
+        onClick() {
+          this._filterBuilderPopup.hide();
         },
-      },
+      }),
     ];
   },
 
