@@ -961,7 +961,8 @@ QUnit.module('Header Filter', {
         assert.ok($popupContent.find('.dx-list-item').last().hasClass('dx-list-item-selected'), 'selected second item');
 
         // act
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
 
@@ -1016,7 +1017,7 @@ QUnit.module('Header Filter', {
         assert.ok($popupContent.find('.dx-list-item').eq(1).hasClass('dx-list-item-selected'), 'second item is selected');
 
         // act
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
 
@@ -1249,7 +1250,7 @@ QUnit.module('Header Filter', {
         assert.ok($popupContent.find('.dx-treeview-node').last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'selected last item');
 
         // act
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
 
@@ -1315,7 +1316,7 @@ QUnit.module('Header Filter', {
         assert.ok(!$popupContent.find('.dx-treeview-node').last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'unchecked last item');
 
         // act
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
         // assert
@@ -1327,7 +1328,7 @@ QUnit.module('Header Filter', {
         // act
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
         assert.deepEqual(that.columnsController.updateOptions[1].optionName, {
             filterValues: ['1986/1'],
@@ -1359,7 +1360,7 @@ QUnit.module('Header Filter', {
 
         // act
         $($popupContent.find('.dx-list-select-all-checkbox')).trigger('dxclick');
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
         // assert
@@ -1390,7 +1391,7 @@ QUnit.module('Header Filter', {
         // assert
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
         $($popupContent.find('.dx-treeview-select-all-item')).trigger('dxclick');
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
         // assert
@@ -1433,7 +1434,7 @@ QUnit.module('Header Filter', {
 
         // act
         $($popupContent.find('.dx-checkbox').eq(2)).trigger('dxclick'); // uncheck test3
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
         // assert
@@ -1447,7 +1448,7 @@ QUnit.module('Header Filter', {
         // act
         that.headerFilterController.showHeaderFilterMenu(0);
 
-        $(that.headerFilterView.getPopupContainer().$content().parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $(that.headerFilterView.getPopupContainer().$content().parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
 
         // assert
         assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, 'column index');
@@ -1738,7 +1739,7 @@ QUnit.module('Header Filter', {
         assert.ok($popupContent.find('.dx-list-select-all-checkbox').hasClass('dx-checkbox-indeterminate'), 'checkbox in an indeterminate state');
 
         // act
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
         this.clock.tick(500);
 
         // assert
@@ -1885,7 +1886,7 @@ QUnit.module('Header Filter', {
                 // act
                 const $selectAll = list.$element().find('.dx-list-select-all-checkbox');
                 $($selectAll).trigger('dxclick');
-                $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+                $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
 
                 const selectAll = $selectAll.dxCheckBox('instance');
                 const column = that.columnsController.getVisibleColumns()[0];
@@ -1931,7 +1932,7 @@ QUnit.module('Header Filter', {
                 // act
                 const $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
                 $($selectAll).trigger('dxclick');
-                $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+                $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
 
                 const selectAll = $selectAll.dxCheckBox('instance');
                 const column = that.columnsController.getVisibleColumns()[0];
@@ -1972,7 +1973,7 @@ QUnit.module('Header Filter', {
         // act
         treeView.option('searchValue', '');
         const $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
         const column = that.columnsController.getVisibleColumns()[0];
 
         // assert
@@ -2011,7 +2012,7 @@ QUnit.module('Header Filter', {
 
         // act
         $itemElements.first().children('.dx-checkbox').trigger('dxclick'); // select first item
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
 
         // assert
         const column = that.columnsController.getVisibleColumns()[0];
@@ -2045,7 +2046,7 @@ QUnit.module('Header Filter', {
 
         // act
         $itemElements.eq(1).children('.dx-checkbox').trigger('dxclick'); // select second item
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
 
         // assert
         const column = that.columnsController.getVisibleColumns()[0];
@@ -2336,7 +2337,7 @@ QUnit.module('Header Filter', {
         assert.notOk($selectAll.hasClass('dx-checkbox-indeterminate'), 'selectAll is not in the indeterminate state');
         assert.notOk($selectAll.hasClass('dx-checkbox-checked'), 'selectAll is not checked');
 
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // apply filter
         this.clock.tick(500);
 
         // assert
@@ -2632,7 +2633,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($popupContent.find('.dx-list-item').first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(applyFilterCallCount, 1, 'call applyFilter');
@@ -2700,7 +2701,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($popupContent.find('.dx-list-item').first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         items = that.dataController.items();
@@ -2744,7 +2745,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($popupContent.find('.dx-list-item').first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         items = that.dataController.items();
@@ -2789,7 +2790,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($popupContent.find('.dx-list-item').first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         items = that.dataController.items();
@@ -2835,7 +2836,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok(!$popupContent.find('.dx-list-item').first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         items = that.dataController.items();
@@ -3205,7 +3206,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.last().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(applyFilterCallCount, 1, 'call applyFilter');
@@ -3250,7 +3251,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(applyFilterCallCount, 1, 'call applyFilter');
@@ -3334,7 +3335,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(applyFilterCallCount, 1, 'call applyFilter');
@@ -3385,7 +3386,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.deepEqual(that.columnsController.getVisibleColumns()[0].filterValues, ['test1'], 'filter values of the first column');
@@ -3459,7 +3460,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($treeViewItems.eq(3).parent().find('.dx-checkbox').hasClass('dx-checkbox-checked'), 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.deepEqual(that.columnsController.getVisibleColumns()[0].filterValues, ['1992/8/28'], 'filter values of the first column');
@@ -3522,7 +3523,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(applyFilterCallCount, 1, 'call applyFilter');
@@ -3582,7 +3583,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.equal($popupContent.find('.dx-checkbox-checked').length, 1, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(applyFilterCallCount, 1, 'call applyFilter');
@@ -3627,7 +3628,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.last().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         const filter = that.getCombinedFilter();
@@ -3669,7 +3670,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.eq(1).find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(countCallColumnsChanged, 1, 'count call columnsChanged');
@@ -3710,7 +3711,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.eq(1).find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         const filter = that.getCombinedFilter();
@@ -3765,7 +3766,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.equal($popupContent.find('.dx-checkbox-checked').length, 1, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         const filter = that.getCombinedFilter();
@@ -3855,7 +3856,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.equal($popupContent.find('.dx-checkbox-checked').length, 1, 'checkbox checked');
 
         // act
-        $($popupContent.parent().find('.dx-button').first()).trigger('dxclick');
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick');
 
         // assert
         const filter = that.getCombinedFilter();
@@ -4064,7 +4065,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($popupContent.find('.dx-list-item').first().find('.dx-checkbox-checked').length, 'checked checkbox in first item');
 
         // act
-        $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
+        $($popupContent.parent().find('.dx-button').eq(1)).trigger('dxclick'); // OK button
         that.clock.tick(500);
 
         // assert
@@ -4318,8 +4319,7 @@ QUnit.module('Header Filter with real columnsController', {
         assert.ok($listItems.first().find('.dx-checkbox-checked').length, 'checkbox checked');
 
         // act
-        const $cancelButton = $popupContent.parent().find('.dx-button').last();
-        $cancelButton.trigger('dxclick');
+        $popupContent.parent().find('.dx-button').eq(0).trigger('dxclick');
 
         that.headerFilterController.showHeaderFilterMenu(0);
         $popupContent = that.headerFilterView.getPopupContainer().$content();
@@ -4847,10 +4847,9 @@ QUnit.module('Header Filter with real columnsController', {
 
         const $popupContent = $(this.headerFilterView.getPopupContainer().$overlayContent());
         const checkbox = $popupContent.find('.dx-checkbox').first().dxCheckBox('instance');
-        const applyButton = $popupContent.find('.dx-button').first();
 
         checkbox.option('value', true);
-        applyButton.trigger('dxclick');
+        $popupContent.find('.dx-button').eq(1).trigger('dxclick');
 
         this.clock.tick(500);
 
