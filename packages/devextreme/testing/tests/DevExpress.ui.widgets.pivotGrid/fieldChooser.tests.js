@@ -768,7 +768,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         const $buttons = $('.dx-header-filter-menu .dx-button');
         assert.equal($buttons.length, 2);
 
-        $buttons.eq(0).trigger('dxclick');
+        $buttons.eq(1).trigger('dxclick');
         this.clock.tick(500);
 
         // assert
@@ -970,7 +970,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         const $buttons = $('.dx-header-filter-menu .dx-button');
         assert.equal($buttons.length, 2);
 
-        $buttons.eq(0).trigger('dxclick');
+        $buttons.eq(1).trigger('dxclick');
         this.clock.tick(500);
 
         $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
@@ -2403,7 +2403,7 @@ QUnit.module('applyChangesMode: onDemand', {
         $filterIndicator.eq(0).trigger('dxclick');
         const $filterMenuList = $('.dx-header-filter-menu .dx-list');
         $filterMenuList.find('.dx-checkbox').eq(1).trigger('dxclick');
-        $('.dx-header-filter-menu .dx-button').eq(0).trigger('dxclick');
+        $('.dx-header-filter-menu .dx-button').eq(1).trigger('dxclick');
 
         // assert
         const fields = this.fieldChooser.option('state').fields;
