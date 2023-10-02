@@ -900,7 +900,7 @@ module('Events', setupModule, () => {
         assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
     });
 
-    QUnit.test('drag events should be prevented in a masked date box', function(assert) {
+    QUnit.test('drop event should be prevented in a masked date box (T1188135)', function(assert) {
         this.instance.option({
             displayFormat: 'dd.MM.yyyy HH:mm',
             useMaskBehavior: true
