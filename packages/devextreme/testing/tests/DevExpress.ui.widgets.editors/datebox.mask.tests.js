@@ -14,7 +14,6 @@ const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
 const DROP_EVENT_NAME = 'drop';
 
-
 QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });

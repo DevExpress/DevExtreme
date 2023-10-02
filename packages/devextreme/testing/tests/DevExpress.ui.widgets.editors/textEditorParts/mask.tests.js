@@ -2017,7 +2017,7 @@ QUnit.module('paste', moduleConfig, () => {
 });
 
 QUnit.module('drag text', moduleConfig, () => {
-    QUnit.test('drag events should be prevented in a masked text box', function(assert) {
+    QUnit.test('drop event should be prevented in a masked text box (T1188135)', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({ mask: 'XXXX' });
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 

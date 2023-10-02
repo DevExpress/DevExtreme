@@ -2412,7 +2412,7 @@ QUnit.module('ShadowDOM', {}, function() {
 });
 
 QUnit.module('drag text', moduleConfig, () => {
-    QUnit.test('drag events should be prevented in a masked number box', function(assert) {
+    QUnit.test('drop event should be prevented in a masked number box (T1188135)', function(assert) {
         this.instance.option({
             format: '#.##',
             useMaskBehavior: true,

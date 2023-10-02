@@ -150,7 +150,7 @@ const TextEditorMask = TextEditorBase.inherit({
         return Boolean(this.option('mask'));
     },
 
-    _attachDragEventHandlers() {
+    _attachDropEventHandler() {
         const useMaskBehavior = this._useMaskBehavior();
 
         if(!useMaskBehavior) {
@@ -160,18 +160,14 @@ const TextEditorMask = TextEditorBase.inherit({
         const eventName = addNamespace(DROP_EVENT_NAME, this.NAME);
         const input = this._input();
 
-        const callback = (e) => {
-            e.preventDefault();
-        };
-
         eventsEngine.off(input, eventName);
-        eventsEngine.on(input, eventName, callback);
+        eventsEngine.on(input, eventName, (e) => e.preventDefault());
     },
 
     _render() {
         this._renderMask();
         this.callBase();
-        this._attachDragEventHandlers();
+        this._attachDropEventHandler();
         this._attachMouseWheelEventHandlers();
     },
 
