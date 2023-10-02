@@ -3,30 +3,33 @@
 // adduse
 
 $fluent-form-group-caption-bottom-margin: null !default;
-$fluent-form-group-caption-bottom-padding: null !default;
-$fluent-form-top-label-padding: null !default;
+$fluent-form-group-caption-top-padding: null !default;
+$fluent-form-group-content-bottom-padding: null !default;
 $fluent-form-group-caption-font-size: null !default;
-$fluent-form-group-content-padding-bottom: null !default;
+$fluent-form-top-label-padding: null !default;
 $fluent-form-default-top-padding: null !default;
 
-$fluent-form-label-font-size: 12px !default;
-$fluent-form-label-icon-size: 14px !default;
+$fluent-form-help-text-font-size: 12px !default;
 
+$fluent-form-layout-manager-padding: 8px !default;
+
+$fluent-form-label-font-size: $fluent-base-font-size !default;
+$fluent-form-label-icon-size: $fluent-base-icon-size !default;
 
 @if $size == "default" {
-  $fluent-form-group-caption-bottom-margin: 6px !default;
-  $fluent-form-group-caption-bottom-padding: 19px !default;
-  $fluent-form-top-label-padding: 16px 0 3px !default;
+  $fluent-form-group-caption-bottom-margin: 4px !default;
+  $fluent-form-group-caption-top-padding: 16px !default;
+  $fluent-form-group-content-bottom-padding: 16px !default;
   $fluent-form-group-caption-font-size: 20px !default;
-  $fluent-form-group-content-padding-bottom: 20px !default;
-  $fluent-form-default-top-padding: 26px !default;
+  $fluent-form-top-label-padding: 0 !default;
+  $fluent-form-default-top-padding: 16px !default;
 }
 
 @else if $size == "compact" {
   $fluent-form-group-caption-bottom-margin: 4px !default;
-  $fluent-form-group-caption-bottom-padding: 10px !default;
-  $fluent-form-top-label-padding: 4px 0 2px !default;
+  $fluent-form-group-caption-top-padding: 12px !default;
+  $fluent-form-group-content-bottom-padding: 12px !default;
   $fluent-form-group-caption-font-size: 16px !default;
-  $fluent-form-group-content-padding-bottom: 10px !default;
-  $fluent-form-default-top-padding: 20px !default;
+  $fluent-form-top-label-padding: 0 !default;
+  $fluent-form-default-top-padding: 8px !default;
 }
