@@ -62,8 +62,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxAccordionComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxAccordion;
+export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxAccordion<TItem, TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]
