@@ -38,7 +38,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -67,6 +66,7 @@ import {
     ValueErrorBarType,
     VisualRange,
     ZoomPanAction,
+    Font,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {

@@ -34,7 +34,6 @@ import {
 } from './common';
 
 import {
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -75,6 +74,7 @@ import {
     ZoomPanAction,
     SeriesPoint,
     SeriesLabel,
+    Font,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {

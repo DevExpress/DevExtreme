@@ -19,7 +19,6 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
 } from '../core/base_widget';
 
 import {
@@ -32,6 +31,7 @@ import {
     Palette,
     PaletteExtensionMode,
     LabelOverlap,
+    Font,
 } from '../../common/charts';
 
 export interface TooltipInfo {

@@ -22,7 +22,6 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -39,6 +38,7 @@ import {
     TimeIntervalConfig,
     VisualRange,
     VisualRangeUpdateMode,
+    Font,
 } from '../common/charts';
 
 export {
