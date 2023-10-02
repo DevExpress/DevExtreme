@@ -998,7 +998,6 @@ class EditingControllerImpl extends modules.ViewController {
     d.done(() => {
       this._rowsView?.waitAsyncTemplates(true).done(() => {
         this._showAddedRow(rowIndex);
-        // @ts-expect-error
         this._afterInsertRow(change.key);
       });
     });
