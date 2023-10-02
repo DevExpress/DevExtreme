@@ -56,6 +56,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
     @include dx-overflow();
 
+    display: inherit;
     margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
     padding: 0;
   }
