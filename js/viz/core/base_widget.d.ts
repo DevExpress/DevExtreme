@@ -32,6 +32,7 @@ import {
     TextOverflow,
     Theme,
     WordWrap,
+    Font as CommonFont,
 } from '../../common/charts';
 
 export interface ExportInfo {
@@ -246,7 +247,7 @@ export interface BaseWidgetLoadingIndicator {
      * @default '#767676' &prop(color)
      * @public
      */
-    font?: Font;
+    font?: CommonFont;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.show
      * @default false
@@ -313,7 +314,7 @@ export interface BaseWidgetTitle {
      * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
      * @public
      */
-    font?: Font;
+    font?: CommonFont;
     /**
      * @docid BaseWidgetOptions.title.horizontalAlignment
      * @default 'center'
@@ -365,7 +366,7 @@ export interface BaseWidgetTitle {
        * @default 200 &prop(weight)
        * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
        */
-      font?: Font;
+      font?: CommonFont;
       /**
        * @docid BaseWidgetOptions.title.subtitle.offset
        * @default 0
@@ -481,7 +482,7 @@ export interface BaseWidgetTooltip {
      * @default '#232323' &prop(color)
      * @public
      */
-    font?: Font;
+    font?: CommonFont;
     /**
      * @docid BaseWidgetOptions.tooltip.format
      * @default undefined
@@ -610,44 +611,6 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
  * @docid
  * @type object
  * @namespace DevExpress.viz
- * @hidden
- */
-export interface Font {
-    /**
-     * @docid
-     * @public
-     */
-    color?: string;
-    /**
-     * @docid
-     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
-     * @public
-     */
-    family?: string;
-    /**
-     * @docid
-     * @default 1
-     * @public
-     */
-    opacity?: number;
-    /**
-     * @docid
-     * @default 12
-     * @public
-     */
-    size?: string | number;
-    /**
-     * @docid
-     * @default 400
-     * @public
-     */
-    weight?: number;
-}
-
-/**
- * @docid
- * @type object
- * @namespace DevExpress.viz
  */
 export interface BaseWidgetAnnotationConfig {
     /**
@@ -727,7 +690,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default '#333333' &prop(color)
      * @public
      */
-    font?: Font;
+    font?: CommonFont;
     /**
      * @docid
      * @default undefined
@@ -865,3 +828,13 @@ export interface BaseWidgetAnnotationConfig {
      */
     y?: number;
 }
+
+// #region deprecated in 22.2
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use Font from DevExpress.common.charts.Font instead
+ */
+export type Font = CommonFont;
+
+// #endregion

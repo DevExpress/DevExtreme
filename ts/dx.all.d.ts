@@ -2054,6 +2054,31 @@ declare module DevExpress.common.charts {
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
+  /**
+   * [descr:Font]
+   */
+  export type Font = {
+    /**
+     * [descr:Font.color]
+     */
+    color?: string;
+    /**
+     * [descr:Font.family]
+     */
+    family?: string;
+    /**
+     * [descr:Font.opacity]
+     */
+    opacity?: number;
+    /**
+     * [descr:Font.size]
+     */
+    size?: string | number;
+    /**
+     * [descr:Font.weight]
+     */
+    weight?: number;
+  };
   export type HatchDirection = 'left' | 'none' | 'right';
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
@@ -2171,7 +2196,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.font]
      */
-    font?: DevExpress.viz.Font;
+    font?: Font;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.format]
      */
@@ -26427,7 +26452,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.font]
      */
-    font?: Font;
+    font?: DevExpress.common.charts.Font;
     /**
      * [descr:BaseWidgetAnnotationConfig.height]
      */
@@ -26580,7 +26605,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.loadingIndicator.font]
      */
-    font?: Font;
+    font?: DevExpress.common.charts.Font;
     /**
      * [descr:BaseWidgetOptions.loadingIndicator.show]
      */
@@ -26717,7 +26742,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.font]
      */
-    font?: Font;
+    font?: DevExpress.common.charts.Font;
     /**
      * [descr:BaseWidgetOptions.title.horizontalAlignment]
      */
@@ -26757,7 +26782,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseWidgetOptions.title.subtitle.font]
            */
-          font?: Font;
+          font?: DevExpress.common.charts.Font;
           /**
            * [descr:BaseWidgetOptions.title.subtitle.offset]
            */
@@ -26845,7 +26870,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.font]
      */
-    font?: Font;
+    font?: DevExpress.common.charts.Font;
     /**
      * [descr:BaseWidgetOptions.tooltip.format]
      */
@@ -36022,32 +36047,12 @@ declare module DevExpress.viz {
       svgToCanvas?: Function;
     }
   ): void;
+
   /**
-   * [descr:Font]
+   * @deprecated Use Font from DevExpress.common.charts.Font instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface Font {
-    /**
-     * [descr:Font.color]
-     */
-    color?: string;
-    /**
-     * [descr:Font.family]
-     */
-    family?: string;
-    /**
-     * [descr:Font.opacity]
-     */
-    opacity?: number;
-    /**
-     * [descr:Font.size]
-     */
-    size?: string | number;
-    /**
-     * [descr:Font.weight]
-     */
-    weight?: number;
-  }
+  export type Font = DevExpress.common.charts.Font;
   /**
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
