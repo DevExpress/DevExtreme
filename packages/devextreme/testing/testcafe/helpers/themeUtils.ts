@@ -10,6 +10,10 @@ export const getThemePostfix = (theme?: string): string => {
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
 
+export const isFluent = (): boolean => process.env.theme === 'fluent.blue.light';
+
+export const isMaterialBased = (): boolean => isMaterial() || isFluent();
+
 export const getThemeName = (): string => (process.env.theme ?? defaultThemeName).split('.')[0];
 
 export async function testScreenshot(
