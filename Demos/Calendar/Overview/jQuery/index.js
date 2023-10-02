@@ -1,5 +1,4 @@
 $(() => {
-  const msInDay = 1000 * 60 * 60 * 24;
   const zoomLevels = ['month', 'year', 'decade', 'century'];
   const weekDays = [
     { id: 0, text: 'Sunday' },
@@ -11,7 +10,6 @@ $(() => {
     { id: 6, text: 'Saturday' },
   ];
   const weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
-  const date = new Date().getTime();
 
   const calendar = $('#calendar').dxCalendar({
     value: new Date(),
@@ -30,59 +28,6 @@ $(() => {
     },
   }).dxCalendar('instance');
 
-  $('#min-date').dxCheckBox({
-    text: 'Set minimum date',
-    onValueChanged(data) {
-      const minDate = new Date(date - msInDay * 3);
-
-      calendar.option('min', data.value ? minDate : null);
-      selectedDate.option('min', data.value ? minDate : null);
-    },
-  });
-
-  $('#max-date').dxCheckBox({
-    text: 'Set maximum date',
-    onValueChanged(data) {
-      const maxDate = new Date(date + msInDay * 3);
-
-      calendar.option('max', data.value ? maxDate : null);
-      selectedDate.option('max', data.value ? maxDate : null);
-    },
-  });
-
-  $('#disable-dates').dxCheckBox({
-    text: 'Disable weekends',
-    onValueChanged(data) {
-      if (data.value) {
-        calendar.option('disabledDates', (d) => d.view === 'month' && isWeekend(d.date));
-      } else {
-        calendar.option('disabledDates', null);
-      }
-    },
-  });
-
-  $('#week-numbers').dxCheckBox({
-    text: 'Show week numbers',
-    onValueChanged(data) {
-      calendar.option('showWeekNumbers', data.value);
-    },
-  });
-
-  $('#disabled').dxCheckBox({
-    text: 'Disable the calendar',
-    onValueChanged(data) {
-      calendar.option('disabled', data.value);
-    },
-  });
-
-  $('#custom-cell').dxCheckBox({
-    text: 'Use custom cell template',
-    value: false,
-    onValueChanged(data) {
-      calendar.option('cellTemplate', data.value ? getCellTemplate : 'cell');
-    },
-  });
-
   const zoomLevel = $('#zoom-level').dxSelectBox({
     dataSource: zoomLevels,
     value: zoomLevels[0],
@@ -99,6 +44,28 @@ $(() => {
       calendar.option('value', data.value);
     },
   }).dxDateBox('instance');
+
+  $('#custom-cell').dxCheckBox({
+    text: 'Use custom cell template',
+    value: false,
+    onValueChanged(data) {
+      calendar.option('cellTemplate', data.value ? getCellTemplate : 'cell');
+    },
+  });
+
+  $('#disabled').dxCheckBox({
+    text: 'Disable the calendar',
+    onValueChanged(data) {
+      calendar.option('disabled', data.value);
+    },
+  });
+
+  $('#week-numbers').dxCheckBox({
+    text: 'Show week numbers',
+    onValueChanged(data) {
+      calendar.option('showWeekNumbers', data.value);
+    },
+  });
 
   $('#first-day-of-week').dxSelectBox({
     dataSource: weekDays,

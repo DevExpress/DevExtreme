@@ -3,7 +3,7 @@
     <div :class="widgetContainerClasses">
       <DxTabs
         id="withText"
-        selected-index="0"
+        :selected-index="0"
         :data-source="tabsWithText"
         :scroll-by-content="false"
         :show-nav-buttons="false"
@@ -11,7 +11,7 @@
       />
       <DxTabs
         id="withIconAndText"
-        selected-index="0"
+        :selected-index="0"
         :data-source="tabsWithIconAndText"
         :scroll-by-content="false"
         :show-nav-buttons="false"
@@ -19,7 +19,7 @@
       />
       <DxTabs
         id="withIcon"
-        selected-index="0"
+        :selected-index="0"
         :data-source="tabsWithIcon"
         :scroll-by-content="false"
         :show-nav-buttons="false"

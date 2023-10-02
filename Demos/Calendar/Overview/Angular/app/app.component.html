@@ -3,9 +3,6 @@
     <dx-calendar
       #calendar
       [(value)]="currentValue"
-      [min]="minDateValue"
-      [max]="maxDateValue"
-      [disabledDates]="disabledDates"
       [showWeekNumbers]="false"
       [disabled]="false"
       [firstDayOfWeek]="0"
@@ -24,35 +21,22 @@
   <div class="options">
     <div class="caption">Options</div>
     <div class="option">
-      <dx-check-box
-        text="Set minimum date"
-        [value]="false"
-        (onValueChanged)="setMinDate($event)"
+      <span>Zoom level</span>
+      <dx-select-box
+        [dataSource]="zoomLevels"
+        [(value)]="calendar.zoomLevel"
+        [inputAttr]="{ 'aria-label': 'Zoom Level' }"
       >
-      </dx-check-box>
+      </dx-select-box>
     </div>
     <div class="option">
-      <dx-check-box
-        text="Set maximum date"
-        [value]="false"
-        (onValueChanged)="setMaxDate($event)"
+      <span>Selected date</span>
+      <dx-date-box
+        id="selected-date"
+        [(value)]="currentValue"
+        [inputAttr]="{ 'aria-label': 'Date' }"
       >
-      </dx-check-box>
-    </div>
-    <div class="option">
-      <dx-check-box
-        text="Disable weekends"
-        [value]="false"
-        (onValueChanged)="disableWeekend($event)"
-      >
-      </dx-check-box>
-    </div>
-    <div class="option">
-      <dx-check-box
-        text="Show week numbers"
-        [(value)]="calendar.showWeekNumbers"
-      >
-      </dx-check-box>
+      </dx-date-box>
     </div>
     <div class="option">
       <dx-check-box
@@ -64,6 +48,16 @@
     </div>
     <div class="option">
       <dx-check-box [(value)]="calendar.disabled" text="Disable the calendar">
+      </dx-check-box>
+    </div>
+    <div class="caption option">
+      <span>Week numeration</span>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Show week numbers"
+        [(value)]="calendar.showWeekNumbers"
+      >
       </dx-check-box>
     </div>
     <div class="option">
@@ -83,26 +77,6 @@
         [inputAttr]="{ 'aria-label': 'Week Number Rule' }"
         [(value)]="calendar.weekNumberRule"
       ></dx-select-box>
-    </div>
-    <div class="option">
-      <span>Zoom level</span>
-      <dx-select-box
-        [dataSource]="zoomLevels"
-        [(value)]="calendar.zoomLevel"
-        [inputAttr]="{ 'aria-label': 'Zoom Level' }"
-      >
-      </dx-select-box>
-    </div>
-    <div class="option">
-      <span>Selected date</span>
-      <dx-date-box
-        id="selected-date"
-        [min]="minDateValue"
-        [max]="maxDateValue"
-        [(value)]="currentValue"
-        [inputAttr]="{ 'aria-label': 'Date' }"
-      >
-      </dx-date-box>
     </div>
   </div>
 </div>

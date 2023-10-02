@@ -4132,7 +4132,14 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Calendar"
+            "Widget": "Calendar",
+            "Badge": "Updated"
+          },
+          {
+            "Title": "Multiple Selection",
+            "Name": "MultipleSelection",
+            "Widget": "Calendar",
+            "Badge": "New"
           }
         ]
       },

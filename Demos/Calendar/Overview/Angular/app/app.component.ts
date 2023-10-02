@@ -24,12 +24,6 @@ export class AppComponent {
 
   currentValue: Date = new Date();
 
-  minDateValue: Date | null = null;
-
-  maxDateValue: Date | null = null;
-
-  disabledDates: Function | null = null;
-
   zoomLevels: string[] = [
     'month', 'year', 'decade', 'century',
   ];
@@ -56,24 +50,6 @@ export class AppComponent {
     const day = date.getDay();
 
     return day === 0 || day === 6;
-  }
-
-  setMinDate({ value }) {
-    this.minDateValue = value
-      ? new Date(this.now.getTime() - 1000 * 60 * 60 * 24 * 3)
-      : null;
-  }
-
-  setMaxDate({ value }) {
-    this.maxDateValue = value
-      ? new Date(this.now.getTime() + 1000 * 60 * 60 * 24 * 3)
-      : null;
-  }
-
-  disableWeekend({ value }) {
-    this.disabledDates = value
-      ? (data) => data.view === 'month' && this.isWeekend(data.date)
-      : null;
   }
 
   useCellTemplate({ value }) {
