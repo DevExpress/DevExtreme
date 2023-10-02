@@ -288,6 +288,7 @@ export const Component = Class.inherit({
         let action;
         let eventName;
         let actionFunc;
+        config = config ? { ...config } : config;
 
         const result = (...args) => {
             if(!eventName) {
