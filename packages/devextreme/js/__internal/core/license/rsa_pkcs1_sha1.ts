@@ -1,4 +1,3 @@
-import BigInteger from './jsbn';
 import { sha1 } from './sha1';
 
 type Bytes = Uint8Array | number[];
@@ -29,19 +28,6 @@ function concat(a: Bytes, b: Bytes): Uint8Array {
   return result;
 }
 
-function bytesAreEqual(a: Bytes, b: Bytes): boolean {
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  for (let k = 0; k < a.length; k += 1) {
-    if (((a[k] ^ b[k]) & 0xff) !== 0) { // eslint-disable-line no-bitwise
-      return false;
-    }
-  }
-
-  return true;
-}
 // PKCS #1 v1.5
 // 0x00 0x01 P 0x00 A H
 // P - padding string (0xff...0xff)
@@ -67,10 +53,6 @@ function fromBase64String(base64: string): number[] {
   return atob(base64).split('').map((s) => s.charCodeAt(0));
 }
 
-function normalizeBigIntegerBytes(bytes: number[]): number[] {
-  return [0, ...bytes]; // add zero to make it positive-signed
-}
-
 // verifies RSASSA-PKCS1-v1.5 signature
 export function verify({ text, signature: encodedSignature }: {
   text: string;
@@ -78,10 +60,17 @@ export function verify({ text, signature: encodedSignature }: {
 }): boolean {
   const actual = pad(sha1(text));
 
-  const signature = new BigInteger(normalizeBigIntegerBytes(fromBase64String(encodedSignature)));
-  const exponent = PUBLIC_KEY.e;
-  const modulus = new BigInteger(normalizeBigIntegerBytes(PUBLIC_KEY.n));
-  const expected = signature.modPowInt(exponent, modulus);
+  const signature = bigIntFromBytes(fromBase64String(encodedSignature));
+  const exponent = BigInt(PUBLIC_KEY.e);
+  const modulus = bigIntFromBytes(PUBLIC_KEY.n);
+  const expected = (signature ** exponent) % modulus;
 
-  return bytesAreEqual(normalizeBigIntegerBytes(expected.toByteArray()), actual);
+  return expected === actual;
+}
+
+const ZERO = BigInt(0);
+const EIGHT = BigInt(8);
+
+function bigIntFromBytes(bytes: number[]): bigint {
+  return bytes.reduce((acc, cur) => (acc << EIGHT) + BigInt(cur) , ZERO);
 }
