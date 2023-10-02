@@ -35,17 +35,17 @@
 }
 
 .dx-scrollable-content > .dx-layout-manager {
-  padding-right: 5px;
+  padding-inline-end: 5px;
 }
 
 .dx-layout-manager {
   .dx-field-item {
     &:not(.dx-last-col) {
-      padding-right: 20px;
+      padding-inline-end: 20px;
     }
 
     &:not(.dx-first-col) {
-      padding-left: 20px;
+      padding-inline-start: 20px;
     }
 
     padding-bottom: 10px;
@@ -85,7 +85,7 @@
   }
 
   .dx-toggle-controls-paddings {
-    padding-left: $material-filled-texteditor-input-horizontal-padding;
+    padding-inline-start: $material-filled-texteditor-input-horizontal-padding;
   }
 }
 
@@ -97,8 +97,8 @@
 
 .dx-field-item-label-location-top {
   padding: $material-form-top-label-padding;
-  padding-left: $material-filled-texteditor-input-horizontal-padding;
-  padding-right: $material-filled-texteditor-input-horizontal-padding;
+  padding-inline-start: $material-filled-texteditor-input-horizontal-padding;
+  padding-inline-end: $material-filled-texteditor-input-horizontal-padding;
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;

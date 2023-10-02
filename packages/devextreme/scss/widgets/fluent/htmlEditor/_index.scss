@@ -24,10 +24,6 @@
   .dx-htmleditor-toolbar-wrapper {
     padding: 0 $fluent-htmleditor-toolbar-padding;
     position: relative;
-
-    &:first-child {
-      border-bottom: 1px solid $texteditor-border-color;
-    }
   }
 
   &::before {
@@ -125,7 +121,7 @@
 
 .dx-htmleditor-content {
   line-height: $fluent-line-height;
-  padding: $fluent-html-editor-padding;
+  padding: $fluent-html-editor-vertical-padding $fluent-html-editor-horizontal-padding;
 
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
     color: $texteditor-placeholder-color;
@@ -138,11 +134,7 @@
 
   blockquote {
     color: color.change($base-text-color, $alpha: 0.8);
-    border-left-color: $htmleditor-toolbar-border-color;
-
-    .dx-rtl & {
-      border-right-color: $htmleditor-toolbar-border-color;
-    }
+    border-inline-start-color: $htmleditor-toolbar-border-color;
   }
 
   .dx-variable {
@@ -196,11 +188,13 @@
 
 .dx-htmleditor-toolbar-separator {
   height: math.div($fluent-toolbar-height, 2);
-  border-left-color: $htmleditor-toolbar-border-color;
+  border-inline-start-color: $htmleditor-toolbar-border-color;
 }
 
 .dx-htmleditor-toolbar-menu-separator {
   border-top-color: $htmleditor-toolbar-border-color;
+  margin-top: $fluent-html-editor-toolbar-menu-separator-margin;
+  margin-bottom: $fluent-html-editor-toolbar-menu-separator-margin;
 }
 
 .dx-resize-frame {
@@ -225,7 +219,7 @@
 
 .dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
   .dx-collection .dx-field-item:not(.dx-last-col) {
-    padding-right: $fluent-html-editor-add-image-dialog-base-padding;
+    padding-inline-end: $fluent-html-editor-add-image-dialog-base-padding;
   }
 
   .dx-fix-ratio-container {
@@ -234,14 +228,14 @@
     }
 
     .dx-buttongroup {
-      margin-left: $fluent-html-editor-add-image-dialog-base-padding;
+      margin-inline-start: $fluent-html-editor-add-image-dialog-base-padding;
       width: $fluent-button-height;
       margin-top: math.div($fluent-base-inline-widget-height - $fluent-button-height, 2);
     }
   }
 
   .dx-collection .dx-field-item:not(.dx-first-col) {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .dx-fileuploader-input-wrapper {
