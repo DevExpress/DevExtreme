@@ -60,15 +60,8 @@
     border-radius: $texteditor-input-border-radius;
 
     .dx-htmleditor-content {
-      margin: 1px 1px 1px 0;
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-htmleditor-content {
-        margin-right: 0;
-        margin-left: 1px;
-      }
+      margin: 1px;
+      margin-inline-start: 0;
     }
 
     .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {

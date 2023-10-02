@@ -376,3 +376,5 @@ $base-invalid-color-hover: $base-danger-hover !default;
 $base-invalid-color-active: $base-danger-active !default;
 $base-invalid-color-selected: $base-danger-selected !default;
 $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
+
+$base-separator-color: $base-neutral-border-color2 !default;

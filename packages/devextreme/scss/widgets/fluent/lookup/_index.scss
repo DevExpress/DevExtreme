@@ -51,8 +51,6 @@
   }
 
   &.dx-invalid {
-    border-bottom-color: $base-invalid-faded-border-color;
-
     .dx-lookup-arrow::after {
       @include dx-invalid-fluent-badge();
 
