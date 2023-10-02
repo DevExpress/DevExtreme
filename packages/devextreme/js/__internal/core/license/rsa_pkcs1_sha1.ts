@@ -1,10 +1,11 @@
 import { sha1 } from './sha1';
+import { PublicKey, compare } from './rsa_comparison';
 
 type Bytes = Uint8Array | number[];
 
 // see https://datatracker.ietf.org/doc/html/rfc8017#page-47
 const ASN1_SHA1 = '3021300906052b0e03021a05000414';
-const PUBLIC_KEY = {
+const PUBLIC_KEY : PublicKey = {
   e: 65537,
   n: [
     202, 208, 20, 244, 235, 89, 121, 253, 219, 161, 162, 26, 166, 22, 65, 81, 176, 0, 101, 246,
@@ -58,19 +59,9 @@ export function verify({ text, signature: encodedSignature }: {
   text: string;
   signature: string;
 }): boolean {
-  const actual = pad(sha1(text));
-
-  const signature = bigIntFromBytes(fromBase64String(encodedSignature));
-  const exponent = BigInt(PUBLIC_KEY.e);
-  const modulus = bigIntFromBytes(PUBLIC_KEY.n);
-  const expected = (signature ** exponent) % modulus;
-
-  return expected === actual;
-}
-
-const ZERO = BigInt(0);
-const EIGHT = BigInt(8);
-
-function bigIntFromBytes(bytes: number[]): bigint {
-  return bytes.reduce((acc, cur) => (acc << EIGHT) + BigInt(cur) , ZERO);
+  return compare({
+    key: PUBLIC_KEY,
+    signature: fromBase64String(encodedSignature),
+    actual: Array.from(pad(sha1(text)))
+  });
 }
