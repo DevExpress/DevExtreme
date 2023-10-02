@@ -98,11 +98,10 @@ class EditingControllerImpl extends modules.ViewController {
   _changes: any;
 
   /**
-   * A collection of deferred objects.
+   * A collection of deferred objects that are awaited before other operations are executed.
    *
-   * Use with `waitForDeferredOperations` to await all deferred objects in this collection.
-   *
-   * Use `addDeferred` to add a deferred object to this collection.
+   * @see {@link waitForDeferredOperations}
+   * @see {@link addDeferred}
    */
   _deferreds!: DeferredObj<any>[];
 
@@ -1865,9 +1864,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   /**
-   * Adds a deferred object to the `_deferred` collection
-   *
-   * @param deferred A deferred object
+   * Adds a deferred object to be awaited before other operations are executed
    */
   addDeferred(deferred: DeferredObj<any>): void {
     if (!this._deferreds.includes(deferred)) {

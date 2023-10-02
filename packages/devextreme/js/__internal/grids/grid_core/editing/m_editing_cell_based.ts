@@ -260,10 +260,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   /**
-   * @param rowIndex Row index
-   * @param columnIndex Column index
-   * @param item Data item
-   * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
+   * @returns whether to cancel cell editing
    */
   _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
     if (this.isCellEditMode() && !item.isNewRow && this.hasChanges()) {
