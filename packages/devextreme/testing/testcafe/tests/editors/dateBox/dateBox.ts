@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
-import { isMaterial } from '../../../helpers/themeUtils';
+import { isMaterialBased } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox`
   .page(url(__dirname, '../../container.html'));
@@ -10,7 +10,7 @@ fixture.disablePageReloads`DateBox`
 const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
 
-if (!isMaterial()) {
+if (!isMaterialBased()) {
   [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
     test(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async (t) => {
       const dateBox = new DateBox('#container');

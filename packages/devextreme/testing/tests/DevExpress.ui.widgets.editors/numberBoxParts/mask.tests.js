@@ -11,6 +11,8 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const CARET_TIMEOUT_DURATION = 0;
 
+const DROP_EVENT_NAME = 'drop';
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#numberbox').dxNumberBox({
@@ -2409,3 +2411,17 @@ QUnit.module('ShadowDOM', {}, function() {
     });
 });
 
+QUnit.module('drag text', moduleConfig, () => {
+    QUnit.test('drop event should be prevented in a masked number box (T1188135)', function(assert) {
+        this.instance.option({
+            format: '#.##',
+            useMaskBehavior: true,
+        });
+
+        const event = $.Event(DROP_EVENT_NAME);
+
+        this.input.trigger(event);
+
+        assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
+    });
+});
