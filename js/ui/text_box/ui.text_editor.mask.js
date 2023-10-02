@@ -29,6 +29,8 @@ const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
 const FORWARD_DIRECTION = 'forward';
 const BACKWARD_DIRECTION = 'backward';
 
+const DROP_EVENT_NAME = 'drop';
+
 const buildInMaskRules = {
     '0': /[0-9]/,
     '9': /[0-9\s]/,
@@ -150,9 +152,28 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _onMouseWheel: noop,
 
+    _useMaskBehavior() {
+        return Boolean(this.option('mask'));
+    },
+
+    _attachDropEventHandler() {
+        const useMaskBehavior = this._useMaskBehavior();
+
+        if(!useMaskBehavior) {
+            return;
+        }
+
+        const eventName = addNamespace(DROP_EVENT_NAME, this.NAME);
+        const input = this._input();
+
+        eventsEngine.off(input, eventName);
+        eventsEngine.on(input, eventName, (e) => e.preventDefault());
+    },
+
     _render: function() {
         this._renderMask();
         this.callBase();
+        this._attachDropEventHandler();
         this._attachMouseWheelEventHandlers();
     },
 
