@@ -84,7 +84,7 @@ export const Component = Class.inherit({
         this.postponedOperations = new PostponedOperations();
         this._createOptions(options);
 
-        license.verifyLicense(Config().license);
+        license.verifyLicense(Config().licenseKey);
     },
 
     _createOptions(options) {

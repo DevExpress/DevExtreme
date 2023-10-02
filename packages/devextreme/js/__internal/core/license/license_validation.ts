@@ -39,12 +39,12 @@ const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
 let isLicenseVerified = false;
 
-export function parseToken(encodedToken: string | undefined): Token {
-  if (encodedToken === undefined) {
+export function parseLicenseKey(encodedKey: string | undefined): Token {
+  if (encodedKey === undefined) {
     return GENERAL_ERROR;
   }
 
-  const parts = encodedToken.split(SPLITTER);
+  const parts = encodedKey.split(SPLITTER);
 
   if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
     return GENERAL_ERROR;
@@ -90,7 +90,7 @@ export function parseToken(encodedToken: string | undefined): Token {
   };
 }
 
-export function verifyLicense(licenseToken: string, version: string = packageVersion): void {
+export function verifyLicense(licenseKey: string, version: string = packageVersion): void {
   if (isLicenseVerified) {
     return;
   }
@@ -99,12 +99,12 @@ export function verifyLicense(licenseToken: string, version: string = packageVer
   let warning: LicenseVerifyResult = null;
 
   try {
-    if (!licenseToken) {
+    if (!licenseKey) {
       warning = 'W0019';
       return;
     }
 
-    const license = parseToken(licenseToken);
+    const license = parseLicenseKey(licenseKey);
 
     if (license.kind === TokenKind.corrupted) {
       warning = 'W0021';

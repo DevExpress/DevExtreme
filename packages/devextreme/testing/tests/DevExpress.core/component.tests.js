@@ -1726,14 +1726,14 @@ QUnit.module('License check', {
 
     QUnit.test('verifyLicense() method should be called with license from config', function(assert) {
         try {
-            const license = 'license token';
-            config({ license });
+            const licenseKey = 'license key';
+            config({ licenseKey });
 
             new TestComponent();
 
-            assert.ok(licenseModule.verifyLicense.calledWith(license));
+            assert.ok(licenseModule.verifyLicense.calledWith(licenseKey));
         } finally {
-            config({ license: null });
+            config({ licenseKey: null });
         }
     });
 });
