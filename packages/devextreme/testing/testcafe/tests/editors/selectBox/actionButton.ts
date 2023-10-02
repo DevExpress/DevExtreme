@@ -1,7 +1,10 @@
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`SelectBox`
   .page(url(__dirname, '../../container.html'));
@@ -160,3 +163,23 @@ test('selectbox should not be opened after click on disabled action button (T111
   items: ['item1', 'item2'],
   value: 'item1',
 }));
+
+test('SelectBox: positioning content in the custom dropdown button', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'SelectBox Customize DropDown Button.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'selectBox');
+
+  return createWidget('dxSelectBox', {
+    items: ['item1', 'item2'],
+    value: 'item1',
+    dropDownButtonTemplate() {
+      return '<span style="line-height: 1">X</span>';
+    },
+  }, '#container');
+});
