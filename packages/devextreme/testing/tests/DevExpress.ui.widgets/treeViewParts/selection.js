@@ -505,7 +505,7 @@ module('selection single', () => {
         treeView.checkSelected([0], items);
     });
 
-    test('selectByClick selection should work correctly after runtime "showCheckBoxesMode" option change', function(assert) {
+    test('selectByClick selection should work correctly after runtime "showCheckBoxesMode" option change (T1190412)', function(assert) {
         const items = [{ text: 'item 1' }, { text: 'item 2' }];
         const treeView = createInstance({
             items: items,
