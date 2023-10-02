@@ -221,8 +221,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       .dx-list-group-header-indicator {
         .dx-list-collapsible-groups & {
           @include dx-icon(chevrondown);
-
-          font-size: $fluent-base-icon-size;
+          @include dx-icon-sizing($fluent-base-icon-size, $fluent-list-item-height);
         }
       }
 
@@ -256,9 +255,9 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       .dx-list-collapsible-groups & {
         @include dx-icon(chevronup);
 
-        font-size: $fluent-base-icon-size;
         float: right;
-        margin-top: -2px;
+
+        @include dx-icon-sizing($fluent-base-icon-size, $fluent-list-item-height);
       }
     }
 
