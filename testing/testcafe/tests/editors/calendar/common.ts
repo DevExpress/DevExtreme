@@ -384,7 +384,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxCalendar', {
-    value: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2099, 1, 2)],
+    value: [new Date(1023, 0, 5), new Date(1023, 0, 17), new Date(1099, 1, 2)],
     selectionMode: 'range',
     maxZoomLevel: zoomLevel,
   }));
