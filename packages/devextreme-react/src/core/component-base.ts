@@ -2,18 +2,17 @@ import * as events from 'devextreme/events';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 
-import TemplatesManager from './templates-manager';
-import { TemplatesRenderer } from './templates-renderer';
-import { TemplatesStore } from './templates-store';
+import { TemplateManager } from './template-manager-new';
 
-import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
+import { OptionsManager, unscheduleGuards } from './options-manager';
 import { ITemplateMeta } from './template';
 import { elementPropNames, getClassName } from './widget-config';
 
-import { IConfigNode } from './configuration/config-node';
+import { IConfigNode, ITemplate } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
+import { DXTemplateCollection } from './types-new';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -23,7 +22,11 @@ interface IHtmlOptions {
   style?: any;
 }
 
-abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent<P> {
+interface IComponentBaseState {
+  templateOptions: Record<string, ITemplate>;
+}
+
+abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent<P, IComponentBaseState> {
   static displayContentsStyle(): React.CSSProperties {
     return isIE()
       ? {
@@ -55,13 +58,11 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected readonly independentEvents: string[];
 
+  protected renderStage: 'config' | 'main' = 'config';
+
+  protected renderFinalizeCallback: (dxtemplates: DXTemplateCollection) => void;
+
   private _childNodes: Node[] = [];
-
-  private _templatesRendererRef: TemplatesRenderer | null;
-
-  private readonly _templatesStore: TemplatesStore;
-
-  private readonly _templatesManager: TemplatesManager;
 
   private readonly _optionsManager: OptionsManager;
 
@@ -72,16 +73,13 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   constructor(props: P) {
     super(props);
 
-    this._setTemplatesRendererRef = this._setTemplatesRendererRef.bind(this);
     this._createWidget = this._createWidget.bind(this);
 
-    this._templatesStore = new TemplatesStore(() => {
-      if (this._templatesRendererRef) {
-        this._templatesRendererRef.scheduleUpdate(this.useDeferUpdateForTemplates);
-      }
-    });
-    this._templatesManager = new TemplatesManager(this._templatesStore);
-    this._optionsManager = new OptionsManager(this._templatesManager);
+    this.state = {
+      templateOptions: {}
+    };
+
+    this._optionsManager = new OptionsManager();
   }
 
   public componentDidMount(): void {
@@ -97,16 +95,38 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     if (style) {
       this._setInlineStyles(style);
     }
+
+    const config = this._getConfig();
+    const templateOptions = this._optionsManager.getTemplateOptions(config);
+
+    this.setState({
+      templateOptions
+    });
+
+    this.renderStage = 'main';
   }
 
   public componentDidUpdate(prevProps: P): void {
     this._updateCssClasses(prevProps, this.props);
-    const config = this._getConfig();
-    this._optionsManager.update(config);
-    if (this._templatesRendererRef) {
-      this._templatesRendererRef.scheduleUpdate(this.useDeferUpdateForTemplates, scheduleGuards);
+
+    if (this.renderStage === 'config') {
+      const config = this._getConfig();
+      const templateOptions = this._optionsManager.getTemplateOptions(config);
+
+      this.setState({
+        templateOptions
+      });
+
+      this.renderFinalizeCallback = (dxtemplates) => {
+        this._optionsManager.update(config, dxtemplates);
+        unscheduleGuards();
+      };
+  
+      this.renderStage = 'main';
     }
-    unscheduleGuards();
+    else {
+      this.renderStage = 'config';
+    }
   }
 
   public componentWillUnmount(): void {
@@ -118,17 +138,26 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._optionsManager.dispose();
   }
 
-  protected _createWidget(element?: Element): void {
+  protected _createWidget(dxtemplates?: DXTemplateCollection, element?: Element): void {
     element = element || this._element;
 
     const config = this._getConfig();
-    this._instance = new this._WidgetClass(
-      element,
-      {
-        templatesRenderAsynchronously: true,
-        ...this._optionsManager.getInitialOptions(config),
-      },
-    );
+
+    let options: any = {
+      templatesRenderAsynchronously: true,
+      ...this._optionsManager.getInitialOptions(config),
+    };
+
+    if (dxtemplates) {
+      options = {
+        ...options,
+        integrationOptions: {
+          templates: dxtemplates
+        },
+      };
+    }
+
+    this._instance = new this._WidgetClass(element, options);
 
     if (!this.useRequestAnimationFrameFlag) {
       this.useDeferUpdateForTemplates = this._instance.option(
@@ -150,10 +179,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       },
       this.props,
     );
-  }
-
-  private _setTemplatesRendererRef(instance: TemplatesRenderer | null) {
-    this._templatesRendererRef = instance;
   }
 
   private _getElementProps(): Record<string, any> {
@@ -223,7 +248,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   protected renderPortal(): React.ReactNode {
-    // @ts-expect-error TS2322
     return this.portalContainer && createPortal(
       this.renderChildren(),
       this.portalContainer,
@@ -231,6 +255,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   public render(): React.ReactNode {
+    const templateOptions = this.state.templateOptions;
+
     return React.createElement(
       React.Fragment,
       {},
@@ -238,9 +264,9 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         'div',
         this._getElementProps(),
         this.renderContent(),
-        React.createElement(TemplatesRenderer, {
-          templatesStore: this._templatesStore,
-          ref: this._setTemplatesRendererRef,
+        this.renderStage === 'main' && React.createElement(TemplateManager, {
+          templateOptions,
+          init: (dxtemplates) => this.renderFinalizeCallback(dxtemplates)
         }),
       ),
       this.isPortalComponent && this.renderPortal(),

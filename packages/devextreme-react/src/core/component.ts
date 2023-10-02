@@ -14,8 +14,11 @@ class Component<P extends IHtmlOptions> extends ComponentBase<P> {
 
   public componentDidMount(): void {
     super.componentDidMount();
-    this._createWidget();
-    this._createExtensions();
+
+    this.renderFinalizeCallback = (dxtemplates) => {
+      this._createWidget(dxtemplates);
+      this._createExtensions();
+    }
   }
 
   public componentWillUnmount(): void {

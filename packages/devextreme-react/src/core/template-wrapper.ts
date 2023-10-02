@@ -113,7 +113,6 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
       : undefined;
     const nodeName = TableNodeNames[container.nodeName] || 'div';
 
-    // @ts-expect-error TS2322
     return ReactDOM.createPortal(
       React.createElement(
         React.Fragment,
