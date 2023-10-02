@@ -15,6 +15,7 @@ const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 
 const stylingModes = ['text', 'outlined', 'contained'];
+const types = ['normal', 'default', 'danger', 'success'];
 
 fixture.disablePageReloads`Drop Down Button`
   .page(url(__dirname, '../../container.html'));
@@ -58,56 +59,63 @@ test('Item collection should be updated after direct option changing (T817436)',
 });
 
 [undefined, 120].forEach((width) => {
-  test('DropDownButton renders correctly', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  types.forEach((type) => {
+    if (width && type !== 'normal') {
+      return;
+    }
 
-    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS}.dx-widget { display: inline-flex; vertical-align: middle; margin: 2px; } .${BUTTON_GROUP_CLASS} { vertical-align: middle; }`);
+    test('DropDownButton renders correctly', async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? ' with fixed width' : ''}.png`, {
-      shouldTestInCompact: true,
-    });
+      await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS}.dx-widget { display: inline-flex; vertical-align: middle; margin: 2px; } .${BUTTON_GROUP_CLASS} { vertical-align: middle; }`);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    t.ctx.ids = [];
+      await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? ' with fixed width' : ''}${type !== 'normal' ? `, type=${type}` : ''}.png`, {
+        shouldTestInCompact: true,
+      });
 
-    for (const rtlEnabled of [false, true]) {
-      for (const stylingMode of stylingModes) {
-        await appendElementTo('#container', 'div', `${stylingMode}-${rtlEnabled}`, { fontSize: '10px' });
-        await ClientFunction(() => {
-          $(`#${stylingMode}-${rtlEnabled}`).text(`StylingMode: ${stylingMode}, rtlEnabled: ${rtlEnabled}`);
-        }, {
-          dependencies: {
-            stylingMode, rtlEnabled,
-          },
-        })();
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      t.ctx.ids = [];
 
-        for (const splitButton of [true, false]) {
-          for (const showArrowIcon of [true, false]) {
-            for (const icon of ['image', '']) {
-              for (const text of ['', 'Text']) {
-                const id = `${`dx${new Guid()}`}`;
+      for (const rtlEnabled of [false, true]) {
+        for (const stylingMode of stylingModes) {
+          await appendElementTo('#container', 'div', `${stylingMode}-${rtlEnabled}`, { fontSize: '10px' });
+          await ClientFunction(() => {
+            $(`#${stylingMode}-${rtlEnabled}`).text(`StylingMode: ${stylingMode}, rtlEnabled: ${rtlEnabled}`);
+          }, {
+            dependencies: {
+              stylingMode, rtlEnabled,
+            },
+          })();
 
-                t.ctx.ids.push(id);
-                await appendElementTo('#container', 'div', id, { });
-                await createWidget('dxDropDownButton', {
-                  width,
-                  rtlEnabled,
-                  items: [{ text: 'text1' }, { text: 'text2' }],
-                  displayExpr: 'text',
-                  text,
-                  icon,
-                  stylingMode,
-                  showArrowIcon,
-                  splitButton,
-                }, `#${id}`);
+          for (const splitButton of [true, false]) {
+            for (const showArrowIcon of [true, false]) {
+              for (const icon of ['image', '']) {
+                for (const text of ['', 'Text']) {
+                  const id = `${`dx${new Guid()}`}`;
+
+                  t.ctx.ids.push(id);
+                  await appendElementTo('#container', 'div', id, { });
+                  await createWidget('dxDropDownButton', {
+                    width,
+                    rtlEnabled,
+                    items: [{ text: 'text1' }, { text: 'text2' }],
+                    displayExpr: 'text',
+                    type,
+                    text,
+                    icon,
+                    stylingMode,
+                    showArrowIcon,
+                    splitButton,
+                  }, `#${id}`);
+                }
               }
             }
           }
         }
       }
-    }
+    });
   });
 });

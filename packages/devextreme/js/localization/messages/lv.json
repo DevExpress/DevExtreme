@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "atkārtošanā(s)",
         "dxScheduler-allDay": "Visa diena",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Vai vēlaties atkārtot šo apmeklējumu vai visu apmeklējumu secību?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Vai vēlaties dzēst šo apmeklējumu vai visu apmeklējumu secību?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Rādīt Resursus",
         "dxGantt-showDependencies": "Rādīt Sasaistes",
         "dxGantt-dialogStartDateValidation": "Sākuma datumam jābūt vēlākam par {0}",
-        "dxGantt-dialogEndDateValidation": "Beigu datumam jābūt vēlākam par {0}"
+        "dxGantt-dialogEndDateValidation": "Beigu datumam jābūt vēlākam par {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

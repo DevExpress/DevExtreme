@@ -83,6 +83,7 @@ $list-searchbox-margin-bottom: 5px;
 .dx-list .dx-empty-message {
   @include dx-overflow();
 
+  text-align: start;
   min-height: 3em;
 }
 
@@ -91,7 +92,6 @@ $list-searchbox-margin-bottom: 5px;
   width: 20px;
   text-align: right;
   vertical-align: middle;
-  padding-right: 10px;
 }
 
 .dx-list-item-badge {
@@ -99,29 +99,16 @@ $list-searchbox-margin-bottom: 5px;
   position: relative;
 }
 
-.dx-list-item-chevron-container {
-  display: table-cell;
-  width: 15px;
-  vertical-align: middle;
-}
-
 .dx-list-item-icon-container {
   display: inline-block;
 }
 
 .dx-list-item-chevron {
-  height: 8px;
-  width: 8px;
-  margin-left: -6px;
-  transform: rotate(135deg);
-  border-width: 2px 0 0 2px;
-  border-style: solid;
-  opacity: 0.3;
+  transform: rotate(0);
+  opacity: 1;
 
   .dx-rtl & {
-    margin-left: auto;
-    margin-right: -6px;
-    transform: rotate(-45deg);
+    transform: rotate(180deg);
   }
 }
 
@@ -139,19 +126,11 @@ $list-searchbox-margin-bottom: 5px;
 
 .dx-list-item-before-bag,
 .dx-list-item-after-bag {
-  display: table-cell;
-  width: 0;
   height: 100%;
   vertical-align: middle;
 }
 
 .dx-list-item-before-bag {
-  .dx-list-toggle-delete-switch {
-    display: block;
-    float: left;
-    padding: 3px 0;
-  }
-
   .dx-icon-toggle-delete {
     transition: all 0.1s linear;
   }
@@ -229,7 +208,6 @@ $list-searchbox-margin-bottom: 5px;
 
 .dx-list-switchable-delete-button-inner-wrapper {
   display: table-cell;
-  padding-left: 1px;
   height: 100%;
   vertical-align: middle;
 }
@@ -313,15 +291,18 @@ $list-searchbox-margin-bottom: 5px;
   margin-bottom: $list-searchbox-margin-bottom;
 }
 
+.dx-list-select-all-checkbox {
+  float: left;
+}
+
 .dx-rtl .dx-list,
 .dx-rtl.dx-list {
-  .dx-list-item-badge-container {
-    padding-left: 10px;
-    padding-right: 0;
-  }
-
   .dx-list-item-badge {
     float: left;
+  }
+
+  .dx-list-select-all-checkbox {
+    float: right;
   }
 
   .dx-list-item-before-bag {
@@ -332,11 +313,6 @@ $list-searchbox-margin-bottom: 5px;
     .dx-list-select-checkbox {
       float: right;
     }
-  }
-
-  .dx-list-switchable-delete-button-inner-wrapper {
-    padding-right: 1px;
-    padding-left: 0;
   }
 
   .dx-list-slide-item-delete-button-container {

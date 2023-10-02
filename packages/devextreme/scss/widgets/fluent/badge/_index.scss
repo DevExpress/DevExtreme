@@ -12,7 +12,11 @@
   color: $badge-color;
   font-size: $fluent-badge-font-size;
   padding: $fluent-badge-padding;
-  margin-inline-start: 4px;
-  line-height: normal;
-  margin-top: 1px;
+  border-radius: 999em;
+  line-height: $badge-line-height;
+
+  .dx-state-disabled & {
+    color: $badge-text-color-disabled;
+    background-color: $badge-background-color-disabled;
+  }
 }

@@ -12,6 +12,8 @@ import {
 
 
 
+import { HorizontalAlignment } from 'devextreme/common';
+import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -28,10 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiTotalItemComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): string | undefined {
+    get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: string | undefined) {
+    set alignment(value: HorizontalAlignment | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -92,10 +94,10 @@ export class DxiTotalItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get summaryType(): string | undefined {
+    get summaryType(): SummaryType | string | undefined {
         return this._getOption('summaryType');
     }
-    set summaryType(value: string | undefined) {
+    set summaryType(value: SummaryType | string | undefined) {
         this._setOption('summaryType', value);
     }
 

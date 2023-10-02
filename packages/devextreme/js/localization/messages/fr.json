@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "occurence(s)",
         "dxScheduler-allDay": "Temps plein",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Voulez-vous éditer cet évenement ou la série entière ?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Voulez-vous supprimer cet évenement ou la série entière ?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Afficher les ressources",
         "dxGantt-showDependencies": "Afficher les dépendances",
         "dxGantt-dialogStartDateValidation": "La date de début doit être postérieure au {0}",
-        "dxGantt-dialogEndDateValidation": "La date de fin doit être postérieure au {0}"
+        "dxGantt-dialogEndDateValidation": "La date de fin doit être postérieure au {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

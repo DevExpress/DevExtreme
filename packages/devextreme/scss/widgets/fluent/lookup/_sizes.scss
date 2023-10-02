@@ -3,19 +3,17 @@
 // adduse
 
 $lookup-field-height: null !default;
-$fluent-lookup-popup-content-padding: null !default;
-$fluent-lookup-list-top: null !default;
+$lookup-search-padding-vertical: 4px !default;
+$lookup-search-padding-horizontal: null !default;
 
 $fluent-lookup-popup-content-top: 49px !default;
 
 @if $size == "default" {
   $lookup-field-height: 30px !default;
-  $fluent-lookup-popup-content-padding: 20px !default;
-  $fluent-lookup-list-top: 66px !default;
+  $lookup-search-padding-horizontal: 12px !default;
 }
 
 @else if $size == "compact" {
   $lookup-field-height: 22px !default;
-  $fluent-lookup-popup-content-padding: 8px !default;
-  $fluent-lookup-list-top: 36px !default;
+  $lookup-search-padding-horizontal: 8px !default;
 }

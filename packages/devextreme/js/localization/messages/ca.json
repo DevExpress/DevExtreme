@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "Aparició (s)",
         "dxScheduler-allDay": "Tot el dia",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Voleu editar només aquesta cita o tota la sèrie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Voleu eliminar només aquesta cita o tota la sèrie?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Mostrar recursos",
         "dxGantt-showDependencies": "Mostrar dependències",
         "dxGantt-dialogStartDateValidation": "La data d'inici ha de ser després de {0}",
-        "dxGantt-dialogEndDateValidation": "La data de finalització ha de ser després de {0}"
+        "dxGantt-dialogEndDateValidation": "La data de finalització ha de ser després de {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

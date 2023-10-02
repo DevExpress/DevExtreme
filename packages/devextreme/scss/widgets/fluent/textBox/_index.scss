@@ -35,10 +35,6 @@ $textbox-filled-search-icon-size:
   .dx-icon-search {
     @include dx-icon(search);
 
-    &::before {
-      color: $textbox-search-icon-color;
-    }
-
     color: $texteditor-placeholder-color;
   }
 
@@ -62,6 +58,12 @@ $textbox-filled-search-icon-size:
     .dx-texteditor-input,
     .dx-placeholder::before {
       padding-inline-start: $textbox-search-icon-size;
+    }
+  }
+
+  &.dx-state-disabled {
+    .dx-icon-search {
+      color: $base-foreground-disabled;
     }
   }
 }

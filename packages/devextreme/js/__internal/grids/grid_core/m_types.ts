@@ -73,7 +73,8 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 'onFocusedCellChanging' |
 'onFocusedRowChanged' |
 'onFocusedRowChanging' |
-'onEditingStart'
+'onEditingStart' |
+'toolbar'
 >;
 
 export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid {

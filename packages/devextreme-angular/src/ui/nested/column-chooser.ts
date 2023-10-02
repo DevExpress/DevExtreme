@@ -15,7 +15,8 @@ import {
 
 
 import { PositionConfig } from 'devextreme/animation/position';
-import { ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
+import { SortOrder } from 'devextreme/common';
+import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
@@ -72,10 +73,10 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get mode(): string {
+    get mode(): ColumnChooserMode {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: ColumnChooserMode) {
         this._setOption('mode', value);
     }
 
@@ -112,10 +113,10 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get sortOrder(): string | undefined {
+    get sortOrder(): SortOrder | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: string | undefined) {
+    set sortOrder(value: SortOrder | undefined) {
         this._setOption('sortOrder', value);
     }
 

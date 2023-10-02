@@ -26,10 +26,10 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
     ['usual', ['dataC', 'dataD']],
     ['band', [{ caption: 'Band column', columns: ['dataC', 'dataD'] }]],
   ].forEach(([secondColumnsName, secondColumns]) => {
-    [
+    ([
       ['usual', undefined],
       ['virtual', { columnRenderingMode: 'virtual', rowRenderingMode: 'virtual' }],
-    ].forEach(([scrollingName, scrolling]) => {
+    ] as const).forEach(([scrollingName, scrolling]) => {
       test(`Should change filter row icon (columns ${firstColumnsName} ${secondColumnsName}, scrolling ${scrollingName}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const dataGrid = new DataGrid(GRID_SELECTOR);

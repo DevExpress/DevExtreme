@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "upprepning(ar)",
         "dxScheduler-allDay": "Hela dagen",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Vill du redigera bara denna avtalade tid eller hela serien?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Vill du radera bara denna avtalade tid eller hela serien?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Show Resources",
         "dxGantt-showDependencies": "Show Dependencies",
         "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
-        "dxGantt-dialogEndDateValidation": "End date must be after {0}"
+        "dxGantt-dialogEndDateValidation": "End date must be after {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

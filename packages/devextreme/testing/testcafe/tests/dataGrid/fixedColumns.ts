@@ -174,6 +174,7 @@ test('Hovering over a row should work correctly when there is a fixed column and
     keyExpr: 'id',
     renderAsync: false,
     hoverStateEnabled: true,
+    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
     columns: [
       { dataField: 'id', fixed: true },
@@ -298,6 +299,7 @@ test.skip('Hovering over a row should work correctly after scrolling when there 
     keyExpr: 'id',
     renderAsync: false,
     hoverStateEnabled: true,
+    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
     columns: [
       'id',

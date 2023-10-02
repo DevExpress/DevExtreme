@@ -83,6 +83,10 @@
   &:-moz-ui-invalid {
     box-shadow: none;
   }
+
+  &::placeholder {
+    color: transparent;
+  }
 }
 
 .dx-show-clear-button {

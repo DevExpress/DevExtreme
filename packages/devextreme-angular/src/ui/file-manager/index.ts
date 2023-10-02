@@ -22,7 +22,8 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, CurrentDirectoryChangedEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, dxFileManagerContextMenu, dxFileManagerToolbar, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, FocusedItemChangedEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, OptionChangedEvent, SelectedFileOpenedEvent, SelectionChangedEvent, ToolbarItemClickEvent } from 'devextreme/ui/file_manager';
+import { SingleOrMultiple } from 'devextreme/common';
+import { ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, CurrentDirectoryChangedEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, dxFileManagerContextMenu, dxFileManagerToolbar, ErrorOccurredEvent, FileManagerItemViewMode, FileUploadedEvent, FileUploadingEvent, FocusedItemChangedEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, OptionChangedEvent, SelectedFileOpenedEvent, SelectionChangedEvent, ToolbarItemClickEvent } from 'devextreme/ui/file_manager';
 
 import DxFileManager from 'devextreme/ui/file_manager';
 
@@ -281,10 +282,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get itemView(): { details?: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }, mode?: string, showFolders?: boolean, showParentFolder?: boolean } {
+    get itemView(): { details?: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean } {
         return this._getOption('itemView');
     }
-    set itemView(value: { details?: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }, mode?: string, showFolders?: boolean, showParentFolder?: boolean }) {
+    set itemView(value: { details?: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }) {
         this._setOption('itemView', value);
     }
 
@@ -359,10 +360,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get selectionMode(): string {
+    get selectionMode(): SingleOrMultiple {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: string) {
+    set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
 
@@ -748,7 +749,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemViewChange: EventEmitter<{ details?: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }, mode?: string, showFolders?: boolean, showParentFolder?: boolean }>;
+    @Output() itemViewChange: EventEmitter<{ details?: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }>;
 
     /**
     
@@ -790,7 +791,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<string>;
+    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     
