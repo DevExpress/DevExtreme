@@ -343,6 +343,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   padding: $generic-scheduler-appointment-content-padding;
 }
 
+.dx-scheduler-appointment-strip {
+  display: none;
+}
+
 .dx-scheduler-appointment-reduced {
   .dx-scheduler-appointment-content {
     padding-right: $generic-scheduler-appointment-reduced-content-padding;
