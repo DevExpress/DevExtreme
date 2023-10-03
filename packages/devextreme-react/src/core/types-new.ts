@@ -2,8 +2,9 @@ import { FunctionComponent } from 'react';
 import { ITemplate } from './configuration/config-node';
 
 export type RenderArgs = {
-  data: any;
+  model?: any;
   container: any;
+  index?: any;
   onRendered: () => void;
 };
 
@@ -24,6 +25,7 @@ export type TemplateArgs = {
 export interface TemplateWrapperProps {
   templateFactory: FunctionComponent<TemplateArgs>;
   data: any;
+  index: any;
   container: HTMLElement;
   onRendered: () => void;
   onRemoved: () => void;
@@ -39,6 +41,7 @@ export type TemplateManagerProps = {
 export type TemplateInstanceDefinition = {
   componentKey: string;
   data: any;
+  index: any;
   container: HTMLElement;
   getJSX: TemplateFunc;
   onRendered: () => void;

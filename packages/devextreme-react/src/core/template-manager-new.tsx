@@ -4,9 +4,11 @@ import { useState, useEffect, useCallback, FC } from 'react';
 import { TemplateManagerProps, RenderedTemplateInstances, GetRenderFuncFn, DXTemplateCollection, TemplateFunc } from './types-new';
 import TemplateWrapper from './template-wrapper-new';
 import sha1 from 'sha-1';
+import jc from 'json-cycle';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
+
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOptions }) => {
   const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>({ containers: {}, instances: {} });
@@ -33,12 +35,12 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
 
   const getHash = useCallback((data: any, containerId: string) => {
     return sha1(JSON.stringify({
-      key1: data,
+      key1: jc.decycle(data),
       key2: containerId
     }));
   }, []);
 
-  const getRenderFunc: GetRenderFuncFn = useCallback((getJSX) => ({ data, container, onRendered }) => {
+  const getRenderFunc: GetRenderFuncFn = useCallback((getJSX) => ({ model: data, index, container, onRendered }) => {
     const onRemoved = () => {
       setRenderedInstances(renderedInstances => {
         const containerId = findContainerId(container, renderedInstances.containers);
@@ -78,6 +80,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
             data,
             container,
             getJSX,
+            index,
             componentKey: getRandomId(),
             onRendered: () => {
               unsubscribeOnRemoval(container, onRemoved);
@@ -149,6 +152,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
       {
         Object.values(renderedInstances.instances).map(({
           data,
+          index,
           container,
           componentKey,
           getJSX,
@@ -160,6 +164,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
           return <TemplateWrapper
             key={componentKey}
             data={data}
+            index={index}
             container={container}
             templateFactory={getJSX}
             onRemoved={onRemoved}

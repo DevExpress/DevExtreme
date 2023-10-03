@@ -1,5 +1,4 @@
 import React, { useCallback, useLayoutEffect, useState, memo, useRef } from 'react';
-import './App.css';
 import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
 import { TemplateWrapperProps } from './types-new';
@@ -17,7 +16,7 @@ const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>) 
   }
 };
 
-const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, container, onRemoved, onRendered }: TemplateWrapperProps) {
+const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, index, container, onRemoved, onRendered }: TemplateWrapperProps) {
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
 
   const onTemplateRemoved = useCallback(() => {
@@ -87,6 +86,7 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, c
         {
           templateFactory?.({
             data,
+            index,
             onRendered
           }, {}) || 'empty'
         }
