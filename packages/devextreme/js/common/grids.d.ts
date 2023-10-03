@@ -925,6 +925,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
   /**
    * @docid GridBaseOptions.editing.useIcons
    * @default true &for(Material)
+   * @default true &for(Fluent)
    * @default false
    * @public
    */
@@ -1228,6 +1229,7 @@ export type HeaderFilter = {
   /**
    * @docid GridBaseOptions.headerFilter.height
    * @default 315 &for(Material)
+   * @default 315 &for(Fluent)
    * @default 325
    */
   height?: number;
@@ -2262,6 +2264,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   /**
    * @docid
    * @default false &for(Material)
+   * @default false &for(Fluent)
    * @default true
    * @public
    */
@@ -2270,6 +2273,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @docid
    * @default true &for(iOS)
    * @default true &for(Material)
+   * @default true &for(Fluent)
    * @default false
    * @public
    */
