@@ -24,14 +24,14 @@ $scheduler-accent-border-color: $base-border-color !default;
 * $name 30. Appointment text color
 * $type color
 */
-$scheduler-appointment-text-color: $base-inverted-text-color !default;
-$scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
+$scheduler-appointment-text-color: null !default;
+$scheduler-appointment-focus-color: null !default;
 
 /**
 * $name 40. Appointment background color
 * $type color
 */
-$scheduler-appointment-base-color: $base-accent !default;
+$scheduler-appointment-base-color: null !default;
 
 /**
 * $name 50. Start appointment color
@@ -73,7 +73,6 @@ $scheduler-alldaypanel-bg: $base-element-bg !default;
 $scheduler-other-month-cell-opacity: 0.5 !default;
 $scheduler-fill-focused-appointment: false !default;
 $scheduler-time-indicator-background-color: rgba(0, 0, 0, 0.03) !default;
-$scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
 $fluent-scheduler-toolbar-color: $base-accent;
 $fluent-scheduler-toolbar-active-color: color.change($base-accent, $alpha: 0.08);
 
@@ -86,3 +85,15 @@ $agenda-appointment-hover-bg: $base-hover-bg !default;
 $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 $agenda-appointment-text-color: $base-text-color !default;
 
+@if $mode == "light" {
+  $scheduler-appointment-base-color: lighten($base-accent, 48%) !default;
+  $scheduler-appointment-text-color: #000 !default;
+}
+
+@if $mode == "dark" {
+  $scheduler-appointment-base-color: darken($base-accent, 48%) !default;
+  $scheduler-appointment-text-color: #fff !default;
+}
+
+$scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+$scheduler-appointment-focus-color: $scheduler-appointment-text-color;
