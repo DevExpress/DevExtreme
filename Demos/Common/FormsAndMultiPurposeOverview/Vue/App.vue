@@ -5,7 +5,7 @@
     </template>
     <DxGroupItem
       :col-count="4"
-      css-class="first-group"
+      css-class="form-group"
     >
       <DxSimpleItem template="avatar-template"/>
       <DxGroupItem :col-span="3">
@@ -20,7 +20,7 @@
     </DxGroupItem>
     <DxGroupItem
       :col-count="2"
-      css-class="second-group"
+      css-class="form-group"
     >
       <DxGroupItem>
         <DxSimpleItem data-field="Address"/>
@@ -90,13 +90,8 @@ export default {
 };
 </script>
 <style>
-.first-group,
-.second-group {
+.form-group {
   padding: 20px;
-}
-
-.second-group {
-  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .form-avatar {

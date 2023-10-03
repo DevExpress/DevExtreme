@@ -23,7 +23,7 @@ const avatarRender = () => (
 export default function App() {
   return (
     <Form formData={employee}>
-      <GroupItem cssClass="first-group" colCount={4}>
+      <GroupItem cssClass="form-group" colCount={4}>
         <SimpleItem render={avatarRender}>
         </SimpleItem>
         <GroupItem colSpan={3}>
@@ -36,7 +36,7 @@ export default function App() {
           />
         </GroupItem>
       </GroupItem>
-      <GroupItem cssClass="second-group" colCount={2}>
+      <GroupItem cssClass="form-group" colCount={2}>
         <GroupItem>
           <SimpleItem dataField="Address" />
           <SimpleItem dataField="City" />

@@ -5,7 +5,7 @@ DemoApp.controller('DemoController', ($scope) => {
     formData: employee,
     items: [{
       itemType: 'group',
-      cssClass: 'first-group',
+      cssClass: 'form-group',
       colCount: 4,
       items: [{
         template: "<div class='form-avatar'></div>",
@@ -26,7 +26,7 @@ DemoApp.controller('DemoController', ($scope) => {
       }],
     }, {
       itemType: 'group',
-      cssClass: 'second-group',
+      cssClass: 'form-group',
       colCount: 2,
       items: [{
         itemType: 'group',

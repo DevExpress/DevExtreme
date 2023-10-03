@@ -1,10 +1,5 @@
-::ng-deep .first-group,
-::ng-deep .second-group {
+::ng-deep .form-group {
   padding: 20px;
-}
-
-::ng-deep .second-group {
-  background-color: rgba(191, 191, 191, 0.15);
 }
 
 ::ng-deep .form-avatar {

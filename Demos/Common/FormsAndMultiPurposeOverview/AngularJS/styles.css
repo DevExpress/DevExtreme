@@ -1,10 +1,5 @@
-.first-group,
-.second-group {
+.form-group {
   padding: 20px;
-}
-
-.second-group {
-  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .form-avatar {
