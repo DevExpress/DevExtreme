@@ -110,7 +110,7 @@
     border-bottom-color: $htmleditor-border-color;
 
     .dx-htmleditor-content {
-      padding-left: 0;
+      padding-inline-start: 0;
     }
 
     &.dx-state-hover {
@@ -123,13 +123,6 @@
 
       &.dx-invalid {
         border-bottom-color: $htmleditor-invalid-border-color;
-      }
-    }
-
-    &.dx-rtl {
-      .dx-htmleditor-content {
-        padding-left: $generic-html-editor-horizontal-padding;
-        padding-right: 0;
       }
     }
 
@@ -156,11 +149,7 @@
 
   blockquote {
     color: color.change($base-text-color, $alpha: 0.8);
-    border-left-color: $htmleditor-toolbar-border-color;
-
-    .dx-rtl & {
-      border-right-color: $htmleditor-toolbar-border-color;
-    }
+    border-inline-start-color: $htmleditor-toolbar-border-color;
   }
 
   .dx-variable {
@@ -213,7 +202,7 @@
 }
 
 .dx-htmleditor-toolbar-separator {
-  border-left-color: $htmleditor-toolbar-border-color;
+  border-inline-start-color: $htmleditor-toolbar-border-color;
 }
 
 .dx-htmleditor-toolbar-menu-separator {
@@ -251,11 +240,11 @@
   }
 
   .dx-collection .dx-field-item:not(.dx-last-col) {
-    padding-right: $generic-html-editor-add-image-dialog-base-padding;
+    padding-inline-end: $generic-html-editor-add-image-dialog-base-padding;
   }
 
   .dx-collection .dx-field-item:not(.dx-first-col) {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .dx-fileuploader-input-wrapper {
@@ -288,7 +277,7 @@
     }
 
     .dx-buttongroup {
-      margin-left: $generic-html-editor-add-image-dialog-base-padding;
+      margin-inline-start: $generic-html-editor-add-image-dialog-base-padding;
       width: $generic-base-inline-widget-height;
     }
   }

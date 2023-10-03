@@ -6,14 +6,6 @@
     padding-top: 10px;
   }
 
-  .dx-field-item:not(.dx-first-col) {
-    padding-left: 15px;
-  }
-
-  .dx-field-item:not(.dx-last-col) {
-    padding-right: 15px;
-  }
-
   .dx-field-empty-item {
     width: 100%;
   }
@@ -144,7 +136,7 @@
 
   .dx-form-group {
     &.dx-form-group-with-caption {
-      padding-left: 20px;
+      padding-inline-start: 20px;
     }
   }
 }
@@ -161,11 +153,11 @@
 }
 
 .dx-field-item-label-location-left {
-  padding-right: 10px;
+  padding-inline-end: 10px;
 }
 
 .dx-field-item-label-location-right {
-  padding-left: 10px;
+  padding-inline-start: 10px;
 }
 
 .dx-field-item-required,
@@ -181,41 +173,5 @@
   .dx-field-item-required-mark,
   .dx-field-item-optional-mark {
     unicode-bidi: embed;
-  }
-
-  .dx-field-item:not(.dx-first-col) {
-    padding-left: 0;
-    padding-right: 15px;
-  }
-
-  .dx-field-item:not(.dx-last-col) {
-    padding-left: 15px;
-    padding-right: 0;
-  }
-
-  .dx-field-item-label-location-left {
-    padding-right: 0;
-    padding-left: 10px;
-  }
-
-  .dx-field-item-label-location-right {
-    padding-left: 0;
-    padding-right: 10px;
-  }
-
-  .dx-layout-manager-one-col {
-    .dx-single-column-item-content > .dx-field-item {
-      padding-right: 0;
-      padding-left: 0;
-    }
-  }
-
-  .dx-form-group-with-caption {
-    .dx-form-group {
-      &.dx-form-group-with-caption {
-        padding-left: 0;
-        padding-right: 20px;
-      }
-    }
   }
 }

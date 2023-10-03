@@ -28,11 +28,11 @@
 .dx-layout-manager {
   .dx-field-item {
     &:not(.dx-last-col) {
-      padding-right: $fluent-form-layout-manager-padding;
+      padding-inline-end: $fluent-form-layout-manager-padding;
     }
 
     &:not(.dx-first-col) {
-      padding-left: $fluent-form-layout-manager-padding;
+      padding-inline-start: $fluent-form-layout-manager-padding;
     }
 
     &:not(.dx-first-row) {
@@ -76,7 +76,7 @@
   }
 
   .dx-toggle-controls-paddings {
-    padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+    padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
   }
 }
 

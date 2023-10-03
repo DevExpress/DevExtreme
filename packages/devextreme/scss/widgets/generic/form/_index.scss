@@ -11,6 +11,16 @@
 @use "../scrollable";
 
 
+.dx-layout-manager {
+  .dx-field-item:not(.dx-first-col) {
+    padding-inline-start: 15px;
+  }
+
+  .dx-field-item:not(.dx-last-col) {
+    padding-inline-end: 15px;
+  }
+}
+
 .dx-form-group-caption {
   font-size: $generic-form-group-caption-font-size;
 }
