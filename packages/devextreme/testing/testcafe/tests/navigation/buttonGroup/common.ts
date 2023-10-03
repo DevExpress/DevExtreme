@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { setStyleAttribute, appendElementTo, setAttribute } from '../../../helpers/domUtils';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item, ButtonType } from '../../../../../js/ui/button_group.d';
@@ -70,7 +70,7 @@ fixture.disablePageReloads`ButtonGroup_Styles`
 
     await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container' });
 
-    if (!isMaterial()) {
+    if (!isMaterialBased()) {
       await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container', theme: 'generic.dark' });
       await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container', theme: 'generic.contrast' });
     }
