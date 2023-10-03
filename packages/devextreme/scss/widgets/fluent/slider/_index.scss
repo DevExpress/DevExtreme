@@ -74,37 +74,8 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 
   .dx-tooltip-wrapper {
     .dx-overlay-content {
-      background-color: transparent;
-      min-width: $fluent-slider-tooltip-width;
-
-      &::before {
-        content: "";
-        position: absolute;
-        width: $fluent-slider-tooltip-width;
-        height: $fluent-slider-tooltip-width;
-        border-radius: 0 50% 50% 50%;
-        transform: rotate(45deg);
-        display: block;
-        background-color: $fluent-slider-tooltip-bg;
-        top: 0;
-
-        .dx-slider-tooltip-position-top & {
-          transform: rotate(-135deg);
-          bottom: 0;
-          margin-top: $fluent-slider-top-tooltip-margin;
-        }
-      }
-
       .dx-popup-content {
         line-height: normal;
-        font-size: 10px;
-        max-width: $fluent-slider-tooltip-width-without-paddings;
-        min-width: $fluent-slider-tooltip-width-without-paddings;
-        width: $fluent-slider-tooltip-width-without-paddings;
-        text-overflow: ellipsis;
-        padding: math.div($fluent-slider-tooltip-width, 2) - $fluent-slider-disabled-tooltip-top-margin - 1 $fluent-slider-tooltip-popup-content-horizontal-padding 5px;
-        color: $fluent-slider-tooltip-color;
-        position: relative;
 
         .dx-slider-tooltip-position-top & {
           padding-top: 6px;
@@ -112,14 +83,6 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
       }
 
       &.dx-state-disabled {
-        &::before {
-          margin-top: $fluent-slider-disabled-tooltip-top-margin;
-
-          .dx-slider-tooltip-position-top & {
-            margin-top: -$fluent-slider-disabled-tooltip-top-margin;
-          }
-        }
-
         .dx-popup-content {
           padding-top: math.div($fluent-slider-tooltip-width, 2);
 

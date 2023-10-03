@@ -4,7 +4,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../material/tooltip/colors" as *;
 @use "../../base/slider";
+
 
 // adduse
 
@@ -64,38 +66,21 @@ $material-slider-disabled-tooltip-top-margin: 5px;
   }
 
   .dx-tooltip-wrapper {
-    .dx-overlay-content {
-      background-color: transparent;
-      min-width: $material-slider-tooltip-width;
+    &.dx-popover-wrapper .dx-popover-arrow {
+      display: block;
 
-      &::before {
-        content: "";
-        position: absolute;
-        width: $material-slider-tooltip-width;
-        height: $material-slider-tooltip-width;
-        border-radius: 0 50% 50% 50%;
-        transform: rotate(45deg);
-        display: block;
-        background-color: $material-slider-tooltip-bg;
-        top: 0;
-
-        .dx-slider-tooltip-position-top & {
-          transform: rotate(-135deg);
-          bottom: 0;
-          margin-top: $material-slider-top-tooltip-margin;
-        }
+      &::after {
+        background: $tooltip-bg;
+        border: none;
       }
+    }
+
+    .dx-overlay-content {
+      border: none;
+      opacity: 0.6;
 
       .dx-popup-content {
         line-height: normal;
-        font-size: 10px;
-        max-width: $material-slider-tooltip-width-without-paddings;
-        min-width: $material-slider-tooltip-width-without-paddings;
-        width: $material-slider-tooltip-width-without-paddings;
-        text-overflow: ellipsis;
-        padding: math.div($material-slider-tooltip-width, 2) - $material-slider-disabled-tooltip-top-margin - 1 $material-slider-tooltip-popup-content-horizontal-padding 5px;
-        color: $material-slider-tooltip-color;
-        position: relative;
 
         .dx-slider-tooltip-position-top & {
           padding-top: 6px;
@@ -103,14 +88,6 @@ $material-slider-disabled-tooltip-top-margin: 5px;
       }
 
       &.dx-state-disabled {
-        &::before {
-          margin-top: $material-slider-disabled-tooltip-top-margin;
-
-          .dx-slider-tooltip-position-top & {
-            margin-top: -$material-slider-disabled-tooltip-top-margin;
-          }
-        }
-
         .dx-popup-content {
           padding-top: math.div($material-slider-tooltip-width, 2);
 
