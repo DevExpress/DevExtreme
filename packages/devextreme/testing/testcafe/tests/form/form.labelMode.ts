@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
+import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
@@ -16,8 +16,8 @@ fixture.disablePageReloads`Form`
               && (
                 labelAlignment !== 'left'
                 || formLabelLocation !== 'left'
-                || (editorStylingMode !== 'outlined' && !isMaterial())
-                || (editorStylingMode !== 'filled' && isMaterial())
+                || (editorStylingMode !== 'outlined' && !isMaterialBased())
+                || (editorStylingMode !== 'filled' && isMaterialBased())
               )) {
               // skip excess configurations
               return;

@@ -1,10 +1,13 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+@use "../textEditor/sizes" as *;
 @use "../../base/colorBox";
+@use "../../base/colorBox/mixins" as *;
 
 // adduse
 @use "../colorView";
@@ -15,33 +18,40 @@
   .dx-colorbox-input-container {
     .dx-placeholder::before,
     .dx-colorbox-input {
-      padding-inline-start: $fluent-colorbox-preview-left + 27px;
+      padding-inline-start: $fluent-colorbox-preview-width;
     }
 
     &.dx-colorbox-color-is-not-defined {
       .dx-colorbox-color-result-preview {
         background: $colorbox-preview-empty-bg no-repeat 0 0;
+        background-size: contain;
       }
     }
 
     &::after {
-      left: $fluent-colorbox-preview-left + 1;
+      left: $fluent-colorbox-preview-padding + 1;
     }
   }
 
   &.dx-texteditor {
     .dx-texteditor-label {
       .dx-label-before {
-        min-width: $fluent-colorbox-preview-left + 27px;
+        min-width: $fluent-colorbox-preview-width;
       }
     }
   }
 }
 
-
 .dx-colorbox-color-result-preview {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: $fluent-colorbox-preview-icon-size;
+  height: $fluent-colorbox-preview-icon-size;
+  margin-top: math.div(-$fluent-colorbox-preview-icon-size, 2);
+  inset-inline-start: $fluent-colorbox-preview-padding;
+  border: 1px solid;
   border-color: $colorview-border-color;
-  left: $fluent-colorbox-preview-left;
 }
 
 .dx-colorbox-overlay {

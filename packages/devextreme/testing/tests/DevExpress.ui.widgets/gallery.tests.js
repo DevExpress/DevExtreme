@@ -385,17 +385,6 @@ QUnit.module('behavior', {
         assert.equal($loopItems.length, 2);
     });
 
-    QUnit.test('duplicate items should have role="presentation"', function(assert) {
-        const $gallery = this.$element.dxGallery({
-            items: [0, 1, 2, 3],
-            loop: true
-        });
-
-        const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
-        $loopItems.each((index, item) => {
-            assert.strictEqual($(item).attr('role'), 'presentation');
-        });
-    });
 
     QUnit.test('duplicate items is not rendered when loop=false', function(assert) {
         const $gallery = this.$element.dxGallery({
@@ -2762,3 +2751,54 @@ QUnit.module('gallery with paginated dataSource', {
     });
 });
 
+QUnit.module('accessibility', function() {
+    QUnit.test('duplicate items should have aria-hidden=true', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            items: [0, 1, 2, 3],
+            loop: true
+        });
+
+        const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
+        $loopItems.each((index, item) => {
+            assert.strictEqual($(item).attr('aria-hidden'), 'true');
+        });
+    });
+
+    QUnit.test('aria-activedescendant should have link to the single element', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            height: 100,
+            width: '100%',
+            showIndicator: false,
+            items: [1, 2],
+            loop: true
+        });
+
+        const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
+
+        const itemsWithId = Array.from($items).filter(item => {
+            return Boolean($(item).attr('id'));
+        });
+
+        assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
+    });
+
+    QUnit.test('aria-activedescendant should have link to the single element after resize', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            height: 100,
+            showIndicator: false,
+            width: '100%',
+            items: [1, 2],
+            loop: true
+        });
+
+        $gallery.dxGallery('instance').option('width', 200);
+
+        const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
+
+        const itemsWithId = Array.from($items).filter(item => {
+            return Boolean($(item).attr('id'));
+        });
+
+        assert.strictEqual(itemsWithId.length, 1, 'id attribute should be exist only on one item');
+    });
+});

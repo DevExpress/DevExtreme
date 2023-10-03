@@ -7,7 +7,7 @@ import {
 } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-const labelMods = ['floating', 'static'];
+const labelMods = ['floating', 'static', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`Lookup_Label`

@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "مرة (مرات)",
         "dxScheduler-allDay": "طوال اليوم",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "هل تريد تحرير هذا الموعد فقط أم السلسلة بأكملها؟",
         "dxScheduler-confirmRecurrenceDeleteMessage": "هل تريد حذف هذا الموعد فقط أم المجموعة بأكملها؟",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Show Resources",
         "dxGantt-showDependencies": "Show Dependencies",
         "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
-        "dxGantt-dialogEndDateValidation": "End date must be after {0}"
+        "dxGantt-dialogEndDateValidation": "End date must be after {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

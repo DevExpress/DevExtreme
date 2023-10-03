@@ -9,7 +9,7 @@ import { appendElementTo } from '../../../helpers/domUtils';
 fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'));
 
-const labelMods = ['floating', 'static'];
+const labelModes = ['floating', 'static', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 test('Label scroll input dxTextArea', async (t) => {
@@ -32,7 +32,7 @@ test('Label scroll input dxTextArea', async (t) => {
 }));
 
 stylingModes.forEach((stylingMode) => {
-  labelMods.forEach((labelMode) => {
+  labelModes.forEach((labelMode) => {
     safeSizeTest(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

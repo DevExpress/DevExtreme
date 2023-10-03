@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "kartą(us)",
         "dxScheduler-allDay": "Visa diena",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Norite redaguoti tik šį paskyrimą ar visą seriją?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Norite ištrinti tik šį paskyrimą ar visą seriją?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Rodyti resursus",
         "dxGantt-showDependencies": "Rodyti priklausomybes",
         "dxGantt-dialogStartDateValidation": "Pradžios data turi būti po {0}",
-        "dxGantt-dialogEndDateValidation": "Pabaigos data turi būti po {0}"
+        "dxGantt-dialogEndDateValidation": "Pabaigos data turi būti po {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

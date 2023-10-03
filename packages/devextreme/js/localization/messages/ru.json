@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "повторений",
         "dxScheduler-allDay": "Весь день",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Вы хотите отредактировать только это событие или всю серию?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Вы хотите удалить только это событие или всю серию?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Отображать Ресурсы",
         "dxGantt-showDependencies": "Отображать Зависимости",
         "dxGantt-dialogStartDateValidation": "Начальная дата должна быть позднее {0}",
-        "dxGantt-dialogEndDateValidation": "Конечная дата должна быть позднее {0}"
+        "dxGantt-dialogEndDateValidation": "Конечная дата должна быть позднее {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }
