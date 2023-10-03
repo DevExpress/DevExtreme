@@ -2,6 +2,7 @@ import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 // @ts-expect-error
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -864,7 +865,13 @@ export const validatingModule = {
           return result.promise ? result.promise() : result;
         },
 
-        _beforeEditCell(rowIndex, columnIndex, item) {
+        /**
+        * @param rowIndex Row index
+        * @param columnIndex Column index
+        * @param item Data item
+        * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
+        */
+        _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
           const result = this.callBase(rowIndex, columnIndex, item);
 
           if (this.getEditMode() === EDIT_MODE_CELL) {
@@ -884,6 +891,7 @@ export const validatingModule = {
               return result;
             }
           }
+          return false;
         },
 
         _afterSaveEditData(cancel) {
