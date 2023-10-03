@@ -18,6 +18,7 @@ import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
 import Overlay from '@js/ui/overlay/ui.overlay';
+import { current, isFluent } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
 import { focused } from '@js/ui/widget/selectors';
@@ -1398,7 +1399,7 @@ export const validatingModule = {
                     if (change && column && !validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
                       return;
                     }
-                    if (validationResult.status === VALIDATION_STATUS.invalid) {
+                    if (!isFluent(current()) && validationResult.status === VALIDATION_STATUS.invalid) {
                       isHideBorder = true;
                     }
                     this.updateCellState($element, validationResult, isHideBorder);
