@@ -628,7 +628,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-.dx-scheduler-appointment:not([data-has-resource-color='true']) {
+.dx-scheduler-appointment:not(.dx-scheduler-appointment-has-resource-color) {
   .dx-scheduler-appointment-strip {
     display: block;
     position: absolute;
