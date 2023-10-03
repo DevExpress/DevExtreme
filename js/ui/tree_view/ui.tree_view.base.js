@@ -241,6 +241,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _checkBoxModeChange: function(value, previousValue) {
+        const searchEnabled = this.option('searchEnabled');
+        const previousSelectAllEnabled = this._selectAllEnabled(previousValue);
+        const previousItemsContainer = this._itemContainer(searchEnabled, previousSelectAllEnabled);
+
+        this._detachClickEvent(previousItemsContainer);
+        this._detachExpandEvent(previousItemsContainer);
+
         if(previousValue === 'none' || value === 'none') {
             return;
         }
@@ -307,7 +314,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.repaint();
                 break;
             case 'expandEvent':
-                this._initExpandEvent();
+                this._attachExpandEvent();
                 break;
             case 'deferRendering':
             case 'dataStructure':
@@ -583,7 +590,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
         this._renderItems($nodeContainer, this._dataAdapter.getRootNodes());
 
-        this._initExpandEvent();
+        this._attachExpandEvent();
 
         if(this._selectAllEnabled()) {
             this._createSelectAllValueChangedAction();
@@ -679,8 +686,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option('expandIcon') || this.option('collapseIcon');
     },
 
-    _selectAllEnabled: function() {
-        return this.option('showCheckBoxesMode') === 'selectAll' && !this._isSingleSelection();
+    _selectAllEnabled: function(showCheckBoxesMode) {
+        const mode = showCheckBoxesMode ?? this.option('showCheckBoxesMode');
+        return mode === 'selectAll' && !this._isSingleSelection();
     },
 
     _renderItems: function($nodeContainer, nodes) {
@@ -827,13 +835,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _initExpandEvent: function() {
+    _attachExpandEvent: function() {
         const expandedEventName = this._getEventNameByOption(this.option('expandEvent'));
         const $itemsContainer = this._itemContainer();
-        const itemSelector = this._itemSelector();
 
-        eventsEngine.off($itemsContainer, '.' + EXPAND_EVENT_NAMESPACE, itemSelector);
-        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
+        this._detachExpandEvent($itemsContainer);
+        eventsEngine.on($itemsContainer, expandedEventName, this._itemSelector(), this._expandEventHandler.bind(this));
+    },
+
+    _detachExpandEvent(itemsContainer) {
+        eventsEngine.off(itemsContainer, `.${EXPAND_EVENT_NAMESPACE}`, this._itemSelector());
     },
 
     _getEventNameByOption: function(name) {
@@ -1415,21 +1426,38 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _attachClickEvent: function() {
-        const clickSelector = '.' + this._itemClass();
-        const pointerDownSelector = '.' + NODE_CLASS + ', .' + SELECT_ALL_ITEM_CLASS;
-        const eventName = addNamespace(clickEventName, this.NAME);
-        const pointerDownEvent = addNamespace(pointerEvents.down, this.NAME);
         const $itemContainer = this._itemContainer();
+        this._detachClickEvent($itemContainer);
 
-        const that = this;
-        eventsEngine.off($itemContainer, eventName, clickSelector);
-        eventsEngine.off($itemContainer, pointerDownEvent, pointerDownSelector);
-        eventsEngine.on($itemContainer, eventName, clickSelector, function(e) {
-            that._itemClickHandler(e, $(this));
+        const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector } = this._getItemClickEventData();
+
+        eventsEngine.on($itemContainer, clickEventNamespace, itemSelector, (e) => {
+            this._itemClickHandler(e, $(e.currentTarget));
         });
-        eventsEngine.on($itemContainer, pointerDownEvent, pointerDownSelector, function(e) {
-            that._itemPointerDownHandler(e);
+        eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e) => {
+            this._itemPointerDownHandler(e);
         });
+    },
+
+    _detachClickEvent: function(itemsContainer) {
+        const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector } = this._getItemClickEventData();
+
+        eventsEngine.off(itemsContainer, clickEventNamespace, itemSelector);
+        eventsEngine.off(itemsContainer, pointerDownEventNamespace, nodeSelector);
+    },
+
+    _getItemClickEventData: function() {
+        const itemSelector = `.${this._itemClass()}`;
+        const nodeSelector = `.${NODE_CLASS}, .${SELECT_ALL_ITEM_CLASS}`;
+        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
+        const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
+
+        return {
+            clickEventNamespace,
+            itemSelector,
+            pointerDownEventNamespace,
+            nodeSelector
+        };
     },
 
     _itemClick: function(actionArgs) {
