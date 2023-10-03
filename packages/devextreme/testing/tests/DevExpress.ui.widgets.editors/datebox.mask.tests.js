@@ -12,6 +12,8 @@ const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
+const DROP_EVENT_NAME = 'drop';
+
 QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
@@ -897,8 +899,20 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
     });
-});
 
+    QUnit.test('drop event should be prevented in a masked date box (T1188135)', function(assert) {
+        this.instance.option({
+            displayFormat: 'dd.MM.yyyy HH:mm',
+            useMaskBehavior: true
+        });
+
+        const event = $.Event(DROP_EVENT_NAME);
+
+        this.$input.trigger(event);
+
+        assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
+    });
+});
 
 module('Search', setupModule, () => {
     test('Time indication', function(assert) {

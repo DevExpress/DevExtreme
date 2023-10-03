@@ -9,7 +9,7 @@ import {
 } from '../../../helpers/domUtils';
 import SelectBox from '../../../model/selectBox';
 
-const labelMods = ['floating', 'static'];
+const labelMods = ['floating', 'static', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`Label`

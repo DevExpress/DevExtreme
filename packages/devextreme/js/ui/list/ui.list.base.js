@@ -797,7 +797,7 @@ export const ListBase = CollectionWidget.inherit({
 
         this._createItemByTemplate(groupTemplate, renderArgs);
 
-        if(isMaterial()) {
+        if(isMaterialBased()) {
             $('<div>')
                 .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
                 .prependTo($groupHeaderElement);
