@@ -12,7 +12,7 @@
             <template #imageIcon="{}">
               <img
                 alt="Custom icon"
-                src="../../../../images/icons/custom-dropbutton-icon.svg"
+                :src="'../../../../images/icons/custom-dropbutton-icon.svg'"
                 class="custom-icon"
               >
             </template>
