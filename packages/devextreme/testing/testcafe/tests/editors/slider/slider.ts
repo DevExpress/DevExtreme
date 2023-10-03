@@ -1,16 +1,17 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture`Slider`
+fixture.disablePageReloads`Slider`
   .page(url(__dirname, '../../container.html'));
 
-test('Slider screenshot', async (t) => {
+test('Slider appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'slider-appearance.png', { element: '#container' });
+
   await t
-    .expect(await takeScreenshot('slider.png', 'html'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxSlider', {
