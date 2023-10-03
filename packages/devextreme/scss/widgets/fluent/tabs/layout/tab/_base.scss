@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:string" as string;
 @use "../../../colors" as *;
 @use "../../../sizes" as *;
 @use "../../../button/colors" as *;
@@ -34,7 +35,11 @@
     }
 
     .dx-tab-text {
-      font-weight: $fluent-tab-font-weight-bold;
+      visibility: visible;
+
+      &::after {
+        visibility: hidden;
+      }
     }
   }
 
@@ -57,14 +62,30 @@
   }
 
   .dx-tab-text {
+    position: relative;
     column-gap: $fluent-base-icon-margin;
-    text-transform: uppercase;
     line-height: $fluent-tab-text-line-height;
-    font-weight: $fluent-tab-font-weight-default;
+    font-weight: $fluent-tab-font-weight-accent;
+    text-transform: uppercase;
+    visibility: hidden;
+
+    &::after {
+      content: string.unquote("attr(DATA-DX_TEXT)");
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      color: $tabs-tab-color;
+      font-weight: $fluent-tab-font-weight-basic;
+      text-align: center;
+      visibility: visible;
+    }
   }
 
   .dx-icon {
     color: $tabs-tab-icon-color;
+    visibility: visible;
 
     @include dx-icon-sizing($fluent-base-icon-size);
   }

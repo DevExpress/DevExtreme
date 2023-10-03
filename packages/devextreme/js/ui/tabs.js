@@ -192,7 +192,8 @@ const Tabs = CollectionWidget.inherit({
 
                 const $iconElement = getImageContainer(data.icon);
                 $iconElement && $iconElement.prependTo($container);
-                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
+                // TODO: ADD TEST FOR DATA_DX_TEXT
+                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS).attr('data-dx_text', data.text));
             }).bind(this), ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod'))
         });
     },

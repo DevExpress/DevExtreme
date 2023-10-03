@@ -28,7 +28,7 @@ $tabs-tab-disabled-color: color.change($tabs-tab-color, $alpha: 0.32) !default;
 * $name 40. Selected tab border color
 * $type color
 */
-$tabs-tab-border-color-selected-default: $base-accent !default;
+$tabs-tab-border-color-selected-basic: $base-accent !default;
 
 /**
 * $name 41. Selected active tab border color

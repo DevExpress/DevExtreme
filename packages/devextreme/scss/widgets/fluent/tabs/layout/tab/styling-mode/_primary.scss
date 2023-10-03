@@ -17,7 +17,7 @@
 .dx-tabs-styling-mode-primary {
   &:not(.dx-tabs-vertical) {
     .dx-tab-selected {
-      @include dx-tabs-indicator-primary-mixin(bottom, $tabs-tab-border-color-selected-default);
+      @include dx-tabs-indicator-primary-mixin(bottom, $tabs-tab-border-color-selected-basic);
   
       &.dx-state-disabled {
         @include dx-tabs-indicator-primary-mixin(bottom, $tabs-tab-border-color-disabled);
@@ -27,7 +27,7 @@
 
   &.dx-tabs-vertical {
     .dx-tab-selected {
-      @include dx-tabs-indicator-primary-mixin(right, $tabs-tab-border-color-selected-default);
+      @include dx-tabs-indicator-primary-mixin(right, $tabs-tab-border-color-selected-basic);
   
       &.dx-state-disabled {
         @include dx-tabs-indicator-primary-mixin(right, $tabs-tab-border-color-disabled);

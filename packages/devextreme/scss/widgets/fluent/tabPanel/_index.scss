@@ -45,8 +45,18 @@
   }
 
   .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+    .dx-tab {
+      &.dx-state-hover .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-active);
+      }
+    }
+
     .dx-tab-selected .dx-tab-content {
-      @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-default);
+      @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-basic);
 
       &.dx-state-disabled .dx-tab-content {
         @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-disabled);
@@ -81,7 +91,7 @@
 
   .dx-tabs-styling-mode-secondary {
     .dx-tab-selected {
-      @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-selected-default);
+      @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-selected-basic);
 
       &.dx-state-disabled {
         @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-disabled);
