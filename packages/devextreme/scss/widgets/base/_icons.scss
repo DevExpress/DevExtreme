@@ -115,7 +115,8 @@
 .dx-icon-taskhelpneeded,
 .dx-icon-clearcircle,
 .dx-icon-accountbox,
-.dx-icon-ordersbox {
+.dx-icon-ordersbox,
+.dx-icon-arrowback {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -267,6 +268,7 @@ $icons: (
     "floppy": "\f073",
     "arrowleft": "\f011",
     "arrowdown": "\f015",
+    "arrowback": "\f15a",
     "arrowright": "\f00e",
     "arrowup": "\f013",
     "spinleft": "\f04f",
