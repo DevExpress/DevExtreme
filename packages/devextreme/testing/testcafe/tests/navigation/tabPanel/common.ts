@@ -76,6 +76,47 @@ test('TabPanel borders with scrolling', async (t) => {
   return createWidget('dxTabPanel', tabPanelOptions);
 });
 
+test('TabPanel focus borders after change selectedIndex in runtime', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const tabPanel = new TabPanel('#container');
+
+  await tabPanel.option({ selectedIndex: 1 } as any);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel focus borders.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    height: 120,
+    width: 300,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});
+
 test('TabPanel borders without scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -20,6 +20,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { GridsEditMode, GridsEditRefreshMode, NewRowPosition, StartEditAction } from 'devextreme/common/grids';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
@@ -102,18 +103,18 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get mode(): string {
+    get mode(): GridsEditMode {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: GridsEditMode) {
         this._setOption('mode', value);
     }
 
     @Input()
-    get newRowPosition(): string {
+    get newRowPosition(): NewRowPosition {
         return this._getOption('newRowPosition');
     }
-    set newRowPosition(value: string) {
+    set newRowPosition(value: NewRowPosition) {
         this._setOption('newRowPosition', value);
     }
 
@@ -126,10 +127,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get refreshMode(): string {
+    get refreshMode(): GridsEditRefreshMode {
         return this._getOption('refreshMode');
     }
-    set refreshMode(value: string) {
+    set refreshMode(value: GridsEditRefreshMode) {
         this._setOption('refreshMode', value);
     }
 
@@ -142,10 +143,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get startEditAction(): string {
+    get startEditAction(): StartEditAction {
         return this._getOption('startEditAction');
     }
-    set startEditAction(value: string) {
+    set startEditAction(value: StartEditAction) {
         this._setOption('startEditAction', value);
     }
 

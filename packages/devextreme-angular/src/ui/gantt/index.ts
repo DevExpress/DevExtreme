@@ -24,9 +24,10 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { FirstDayOfWeek } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, dxGanttSorting, dxGanttToolbar, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent } from 'devextreme/ui/gantt';
+import { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, dxGanttSorting, dxGanttToolbar, GanttScaleType, GanttTaskTitlePosition, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent } from 'devextreme/ui/gantt';
 
 import DxGantt from 'devextreme/ui/gantt';
 
@@ -231,10 +232,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get firstDayOfWeek(): number | string | undefined {
+    get firstDayOfWeek(): FirstDayOfWeek | undefined {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: number | string | undefined) {
+    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -348,10 +349,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get scaleType(): string {
+    get scaleType(): GanttScaleType {
         return this._getOption('scaleType');
     }
-    set scaleType(value: string) {
+    set scaleType(value: GanttScaleType) {
         this._setOption('scaleType', value);
     }
 
@@ -361,10 +362,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get scaleTypeRange(): { max?: string, min?: string } {
+    get scaleTypeRange(): { max?: GanttScaleType, min?: GanttScaleType } {
         return this._getOption('scaleTypeRange');
     }
-    set scaleTypeRange(value: { max?: string, min?: string }) {
+    set scaleTypeRange(value: { max?: GanttScaleType, min?: GanttScaleType }) {
         this._setOption('scaleTypeRange', value);
     }
 
@@ -543,10 +544,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get taskTitlePosition(): string {
+    get taskTitlePosition(): GanttTaskTitlePosition {
         return this._getOption('taskTitlePosition');
     }
-    set taskTitlePosition(value: string) {
+    set taskTitlePosition(value: GanttTaskTitlePosition) {
         this._setOption('taskTitlePosition', value);
     }
 
@@ -945,7 +946,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<number | string | undefined>;
+    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek | undefined>;
 
     /**
     
@@ -1008,14 +1009,14 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleTypeChange: EventEmitter<string>;
+    @Output() scaleTypeChange: EventEmitter<GanttScaleType>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleTypeRangeChange: EventEmitter<{ max?: string, min?: string }>;
+    @Output() scaleTypeRangeChange: EventEmitter<{ max?: GanttScaleType, min?: GanttScaleType }>;
 
     /**
     
@@ -1113,7 +1114,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() taskTitlePositionChange: EventEmitter<string>;
+    @Output() taskTitlePositionChange: EventEmitter<GanttTaskTitlePosition>;
 
     /**
     

@@ -14,6 +14,8 @@ import {
 
 
 
+import { Orientation } from 'devextreme/common';
+import { DiagramDataLayoutType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -29,18 +31,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get orientation(): string {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: string) {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 
     @Input()
-    get type(): string {
+    get type(): DiagramDataLayoutType {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: DiagramDataLayoutType) {
         this._setOption('type', value);
     }
 

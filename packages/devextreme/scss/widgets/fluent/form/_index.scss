@@ -19,36 +19,27 @@
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
     border-top: 1px solid $form-group-border-color;
-    padding-bottom: $fluent-form-group-content-padding-bottom;
-    padding-top: $fluent-form-group-caption-bottom-padding;
+    padding-bottom: $fluent-form-group-content-bottom-padding;
+    padding-top: $fluent-form-group-caption-top-padding;
     margin-top: $fluent-form-group-caption-bottom-margin;
   }
-}
-
-.dx-form {
-  > .dx-scrollable-wrapper {
-    > .dx-scrollable-container {
-      margin-left: -10px;
-      padding-left: 10px;
-    }
-  }
-}
-
-.dx-scrollable-content > .dx-layout-manager {
-  padding-right: 5px;
 }
 
 .dx-layout-manager {
   .dx-field-item {
     &:not(.dx-last-col) {
-      padding-right: 20px;
+      padding-inline-end: $fluent-form-layout-manager-padding;
     }
 
     &:not(.dx-first-col) {
-      padding-left: 20px;
+      padding-inline-start: $fluent-form-layout-manager-padding;
     }
 
-    padding-bottom: 10px;
+    &:not(.dx-first-row) {
+      padding-top: $fluent-form-layout-manager-padding;
+    }
+
+    padding-bottom: $fluent-form-layout-manager-padding;
     font-size: $fluent-form-label-font-size;
 
 
@@ -63,7 +54,7 @@
 .dx-form > .dx-layout-manager.dx-layout-manager-one-col {
   .dx-field-item {
     .dx-field-item.dx-last-row:not(.dx-last-col) {
-      padding-bottom: 10px;
+      padding-bottom: $fluent-form-layout-manager-padding;
     }
   }
 }
@@ -85,7 +76,7 @@
   }
 
   .dx-toggle-controls-paddings {
-    padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+    padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
   }
 }
 
@@ -97,8 +88,6 @@
 
 .dx-field-item-label-location-top {
   padding: $fluent-form-top-label-padding;
-  padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  padding-right: $fluent-filled-texteditor-input-horizontal-padding;
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;
@@ -111,8 +100,9 @@
 }
 
 .dx-field-item-help-text {
-  color: $form-field-item-color;
-  padding: 6px $fluent-filled-texteditor-input-horizontal-padding 2px;
+  color: $form-item-help-text-color;
+  padding-top: 2px;
+  font-size: $fluent-form-help-text-font-size;
   font-style: normal;
 
   .dx-form-styling-mode-underlined & {

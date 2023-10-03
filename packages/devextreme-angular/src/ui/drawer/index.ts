@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 
 
-import { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/drawer';
+import { DisposingEvent, InitializedEvent, OpenedStateMode, OptionChangedEvent, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
 
 import DxDrawer from 'devextreme/ui/drawer';
 
@@ -213,10 +213,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get openedStateMode(): string {
+    get openedStateMode(): OpenedStateMode {
         return this._getOption('openedStateMode');
     }
-    set openedStateMode(value: string) {
+    set openedStateMode(value: OpenedStateMode) {
         this._setOption('openedStateMode', value);
     }
 
@@ -226,10 +226,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): string {
+    get position(): PanelLocation {
         return this._getOption('position');
     }
-    set position(value: string) {
+    set position(value: PanelLocation) {
         this._setOption('position', value);
     }
 
@@ -239,10 +239,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get revealMode(): string {
+    get revealMode(): RevealMode {
         return this._getOption('revealMode');
     }
-    set revealMode(value: string) {
+    set revealMode(value: RevealMode) {
         this._setOption('revealMode', value);
     }
 
@@ -424,21 +424,21 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() openedStateModeChange: EventEmitter<string>;
+    @Output() openedStateModeChange: EventEmitter<OpenedStateMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<string>;
+    @Output() positionChange: EventEmitter<PanelLocation>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() revealModeChange: EventEmitter<string>;
+    @Output() revealModeChange: EventEmitter<RevealMode>;
 
     /**
     

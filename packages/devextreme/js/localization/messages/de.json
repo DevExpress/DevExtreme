@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "Ereignisse",
         "dxScheduler-allDay": "Ganztägig",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Möchten Sie nur diesen Termin bearbeiten, oder die gesamte Serie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Möchten Sie nur diesen Termin löschen, oder die gesamte Serie?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Ressourcen Anzeigen",
         "dxGantt-showDependencies": "Abhängigkeiten Anzeigen",
         "dxGantt-dialogStartDateValidation": "Startdatum muss später sein als {0}",
-        "dxGantt-dialogEndDateValidation": "Enddatum muss später sein als {0}"
+        "dxGantt-dialogEndDateValidation": "Enddatum muss später sein als {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

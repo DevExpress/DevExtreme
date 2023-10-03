@@ -7,13 +7,13 @@ import { getData } from '../helpers/generateDataSourceData';
 fixture`Editing tests with axe`
   .page(url(__dirname, '../../container.html'));
 
-[
+([
   'cell',
   'batch',
   'row',
   'form',
   'popup',
-].forEach((mode) => {
+] as const).forEach((mode) => {
   test(`Embedded editors in ${mode} edit mode shoud have aria-label attribute`, async (t) => {
     const dataGrid = new DataGrid('#container');
 

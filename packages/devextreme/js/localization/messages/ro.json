@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "apariție(s)",
         "dxScheduler-allDay": "Totă ziua",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Doriți să editați doar această programare sau întreaga serie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Doriți să ștergeți doar această programare sau întreaga serie?",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Show Resources",
         "dxGantt-showDependencies": "Show Dependencies",
         "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
-        "dxGantt-dialogEndDateValidation": "End date must be after {0}"
+        "dxGantt-dialogEndDateValidation": "End date must be after {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

@@ -208,7 +208,6 @@ testComponentDefaults(DateRangeBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
-        stylingMode: 'filled',
         labelMode: 'floating',
     },
     function() {
@@ -217,6 +216,20 @@ testComponentDefaults(DateRangeBox,
     },
     function() {
         themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    {},
+    {
+        stylingMode: 'filled',
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
     }
 );
 
@@ -323,8 +336,7 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'filled',
-        labelMode: 'floating'
+        labelMode: 'floating',
     },
     function() {
         this.origIsMaterialBased = themes.isMaterialBased;
@@ -332,6 +344,34 @@ testComponentDefaults(TextEditor,
     },
     function() {
         themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(TextEditor,
+    {},
+    {
+        stylingMode: 'filled',
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(TextEditor,
+    {},
+    {
+        stylingMode: 'outlined',
+    },
+    function() {
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
+    },
+    function() {
+        themes.isFluent = this.origIsFluent;
     }
 );
 
@@ -370,6 +410,7 @@ testComponentDefaults(DropDownButton, {}, {
     dataSource: null,
     deferRendering: true,
     text: '',
+    type: 'normal',
     keyExpr: 'this',
     displayExpr: undefined,
     useSelectMode: false,
@@ -1238,11 +1279,11 @@ testComponentDefaults(TreeList,
         }
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1418,16 +1459,19 @@ testComponentDefaults(DataGrid,
         showRowLines: true,
         showColumnLines: false,
         editing: { useIcons: true },
+        headerFilter: {
+            height: 315
+        },
         selection: {
             showCheckBoxesMode: 'always'
         }
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1475,10 +1519,10 @@ testComponentDefaults(Scheduler,
         _appointmentOffset: 30
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );

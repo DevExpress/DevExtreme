@@ -54,7 +54,12 @@ $datagrid-text-stub-background-image-path: null !default;
 
 .dx-datagrid {
   color: $datagrid-base-color;
-  background-color: $datagrid-base-background-color;
+
+  > .dx-datagrid-headers,
+  > .dx-datagrid-rowsview,
+  > .dx-datagrid-total-footer {
+    background-color: $datagrid-base-background-color;
+  }
 
   .dx-sort-up {
     @include dx-icon(sortup);
@@ -74,6 +79,10 @@ $datagrid-text-stub-background-image-path: null !default;
   }
 
   .dx-datagrid-header-panel {
+    .dx-toolbar {
+      background-color: transparent;
+    }
+
     .dx-group-panel-item,
     .dx-header-filter {
       outline: none;

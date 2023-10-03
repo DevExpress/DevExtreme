@@ -19,6 +19,7 @@ import {
 
 
 
+import { Mode } from 'devextreme/common';
 import { dxBoxOptions } from 'devextreme/ui/box';
 
 import {
@@ -65,7 +66,7 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {
         return 'box';
     }

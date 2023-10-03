@@ -14,6 +14,7 @@ import {
 
 
 
+import { Position } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -53,10 +54,10 @@ export class DxoScrollBarComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get position(): string {
+    get position(): Position {
         return this._getOption('position');
     }
-    set position(value: string) {
+    set position(value: Position) {
         this._setOption('position', value);
     }
 

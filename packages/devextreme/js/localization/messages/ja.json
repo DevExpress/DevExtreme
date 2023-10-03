@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "出現",
         "dxScheduler-allDay": "終日イベント",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "この予定のみを編集しますか、または定期的な予定を編集しますか？",
         "dxScheduler-confirmRecurrenceDeleteMessage": "この予定のみを削除しますか、または定期的な予定を削除しますか？",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "リソースを表示",
         "dxGantt-showDependencies": "依存関係を表示",
         "dxGantt-dialogStartDateValidation": "開始日を {0} 以降にする必要があります",
-        "dxGantt-dialogEndDateValidation": "終了日は {0} より後にする必要があります"
+        "dxGantt-dialogEndDateValidation": "終了日は {0} より後にする必要があります",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

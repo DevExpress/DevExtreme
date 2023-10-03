@@ -83,7 +83,7 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 * $name 40. Modified data background color
 * $type color
 */
-$datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
+$datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
 $datagrid-row-removed-bg: $datagrid-border-color !default;
 $datagrid-cell-removed-text-color: null !default;
@@ -92,14 +92,14 @@ $datagrid-cell-removed-text-color: null !default;
 * $name 45. Invalidate data faded color
 * $type color
 */
-$datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
+$datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
 $datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
 
 /**
 * $name 90. Group row text color
 * $type color
 */
-$datagrid-group-row-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
+$datagrid-group-row-color: null !default;
 
 /**
 * $name 95. Group row background color
@@ -113,7 +113,7 @@ $datagrid-master-detail-cell-bg: darken($datagrid-base-background-color, 2%) !de
 * $type color
 */
 $datagrid-search-color: $base-inverted-text-color !default;
-$datagrid-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
+$datagrid-chevron-icon-color: $base-spin-icon-color !default;
 
 /**
 * $name 110. Highlighted text background color
@@ -163,7 +163,7 @@ $datagrid-row-alternation-bg: null !default;
 $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
 $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 26%) !default;
 $datagrid-summary-bg: $datagrid-base-background-color !default;
-$datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
+$datagrid-column-separator-bg: $base-accent !default;
 $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 $datagrid-text-stub-background-image-path: null !default;
@@ -174,11 +174,12 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
+  $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
-  $header-filter-color-empty: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
+  $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.72) !default;
   $datagrid-selection-bg: color.change(darken($base-element-bg, 100%), $alpha: 0.08) !default;
   $datagrid-row-error-color: $base-inverted-text-color !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
@@ -189,11 +190,12 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "dark" {
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
+  $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
-  $header-filter-color-empty: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
+  $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.38) !default;
   $datagrid-selection-bg: color.change(lighten($base-element-bg, 100%), $alpha: 0.08) !default;
   $datagrid-row-error-color: rgba(255, 255, 255, 1) !default;
   $datagrid-columnchooser-item-bg: lighten($datagrid-columnchooser-bg, 3%) !default;

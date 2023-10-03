@@ -8,8 +8,10 @@
 @use "../button/colors" as *;
 @use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
+@use "../textEditor/index" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../common/sizes" as *;
 @use "../fileUploader/sizes" as *;
 @use "../../base/htmlEditor";
 
@@ -22,13 +24,22 @@
   .dx-htmleditor-toolbar-wrapper {
     padding: 0 $fluent-htmleditor-toolbar-padding;
     position: relative;
-
-    &:first-child {
-      border-bottom: 1px solid $texteditor-border-color;
-    }
   }
 
-  &.dx-state-readonly {
+  &::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    content: '';
+    position: absolute;
+    z-index: 2;
+    transform: scale(0);
+  }
+
+  &.dx-state-readonly,
+  &.dx-state-disabled {
     .dx-htmleditor-toolbar-wrapper::before {
       position: absolute;
       top: 1px;
@@ -40,161 +51,78 @@
       content: '';
       pointer-events: none;
     }
-
-    .dx-toolbar-button .dx-button.dx-state-disabled {
-      opacity: $base-disabled-opacity;
-    }
   }
 
-  &.dx-invalid {
-    border: 1px solid $htmleditor-invalid-faded-border-color;
-
-    &.dx-state-focused {
-      border-color: $htmleditor-invalid-border-color;
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: 2px solid $texteditor-focused-border-color;
+      transform: scale(1);
+      transition-property: transform;
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
     }
   }
 
   &.dx-htmleditor-outlined {
-    box-shadow: inset 0 0 0 1px $texteditor-border-color;
-    border-color: transparent;
-    border-radius: $texteditor-input-border-radius;
+    @include texteditor-outlined-styling();
 
     .dx-htmleditor-content {
-      margin: 1px 1px 1px 0;
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-htmleditor-content {
-        margin-right: 0;
-        margin-left: 1px;
-      }
+      margin: 1px;
+      margin-inline-start: 0;
     }
 
     .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
       margin-top: 0;
     }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
-      box-shadow: inset 0 0 0 1px color.change($texteditor-color, $alpha: 0.5);
-    }
-
-    &.dx-state-hover {
-      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
-    }
-
-    &.dx-state-focused,
-    &.dx-state-active {
-      box-shadow: inset 0 0 0 1px $texteditor-focused-border-color;
-      border-color: $texteditor-focused-border-color;
-    }
-
-    &.dx-invalid {
-      border-color: transparent;
-      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
-
-      &.dx-state-focused,
-      &.dx-state-active {
-        box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
-        border-color: $texteditor-invalid-focused-border-color;
-      }
-    }
   }
 
   &.dx-htmleditor-filled {
-    background: $texteditor-bg;
-    border-radius: $texteditor-input-border-radius;
-
-    &.dx-state-hover {
-      background-color: $texteditor-hover-bg;
-
-      &:not(.dx-invalid) {
-        border-bottom: 1px solid $texteditor-hover-border-color;
-      }
-    }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
-      background-color: color.change($texteditor-bg, $alpha: 0.12);
-    }
+    @include texteditor-filled-styling();
   }
 
   &.dx-htmleditor-underlined {
-    border-color: transparent;
-    border-bottom-color: $texteditor-border-color;
-
-    .dx-htmleditor-content {
-      padding-left: 0;
-    }
-
-    &.dx-rtl {
-      .dx-htmleditor-content {
-        padding-left: $fluent-html-editor-horizontal-padding;
-        padding-right: 0;
-      }
-    }
-
-    &.dx-state-hover:not(.dx-state-focused) {
-      border-bottom: 2px solid $texteditor-hover-border-color;
-    }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
-      border-bottom-style: dotted;
-      border-bottom-width: 1px;
-    }
-
-    &.dx-invalid {
-      border-bottom-color: $texteditor-invalid-faded-border-color;
-
-      &.dx-state-focused,
-      &.dx-state-active {
-        border-color: transparent;
-        border-bottom-color: $texteditor-invalid-focused-border-color;
-      }
-
-      &.dx-state-hover:not(.dx-state-focused) {
-        border-bottom-color: $texteditor-invalid-faded-border-color;
-      }
-    }
-  }
-
-  &.dx-htmleditor-filled,
-  &.dx-htmleditor-underlined {
-    &::before {
+    &::after {
       left: 0;
       right: 0;
-      bottom: -1px;
+      bottom: 0;
       height: 0;
       width: 100%;
       content: '';
       position: absolute;
-      z-index: 2;
-      transform: scale(0);
     }
 
-    &.dx-state-focused,
-    &.dx-state-active {
-      &::before {
-        border-bottom: 2px solid $texteditor-focused-border-color;
-        transform: scale(1);
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
-      }
+    @include texteditor-underlined-styling();
 
-      &.dx-invalid {
-        &::before {
-          border-bottom-color: $texteditor-invalid-focused-border-color;
-        }
-      }
+    .dx-htmleditor-content {
+      padding-inline-start: 0;
+    }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+.dx-invalid.dx-htmleditor {
+  &.dx-state-hover {
+    &::after {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: 2px solid $texteditor-invalid-focused-border-color;
     }
   }
 }
 
 .dx-htmleditor-content {
+  line-height: $fluent-line-height;
+  padding: $fluent-html-editor-vertical-padding $fluent-html-editor-horizontal-padding;
+
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
     color: $texteditor-placeholder-color;
   }
@@ -206,11 +134,7 @@
 
   blockquote {
     color: color.change($base-text-color, $alpha: 0.8);
-    border-left-color: $htmleditor-toolbar-border-color;
-
-    .dx-rtl & {
-      border-right-color: $htmleditor-toolbar-border-color;
-    }
+    border-inline-start-color: $htmleditor-toolbar-border-color;
   }
 
   .dx-variable {
@@ -263,16 +187,14 @@
 }
 
 .dx-htmleditor-toolbar-separator {
-  height: 50%;
-  border-left-color: $htmleditor-toolbar-border-color;
-
-  .dx-toolbar-multiline & {
-    height: math.div($fluent-toolbar-height, 2);
-  }
+  height: math.div($fluent-toolbar-height, 2);
+  border-inline-start-color: $htmleditor-toolbar-border-color;
 }
 
 .dx-htmleditor-toolbar-menu-separator {
   border-top-color: $htmleditor-toolbar-border-color;
+  margin-top: $fluent-html-editor-toolbar-menu-separator-margin;
+  margin-bottom: $fluent-html-editor-toolbar-menu-separator-margin;
 }
 
 .dx-resize-frame {
@@ -297,7 +219,7 @@
 
 .dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
   .dx-collection .dx-field-item:not(.dx-last-col) {
-    padding-right: $fluent-html-editor-add-image-dialog-base-padding;
+    padding-inline-end: $fluent-html-editor-add-image-dialog-base-padding;
   }
 
   .dx-fix-ratio-container {
@@ -306,14 +228,14 @@
     }
 
     .dx-buttongroup {
-      margin-left: $fluent-html-editor-add-image-dialog-base-padding;
+      margin-inline-start: $fluent-html-editor-add-image-dialog-base-padding;
       width: $fluent-button-height;
       margin-top: math.div($fluent-base-inline-widget-height - $fluent-button-height, 2);
     }
   }
 
   .dx-collection .dx-field-item:not(.dx-first-col) {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .dx-fileuploader-input-wrapper {

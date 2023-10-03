@@ -14,6 +14,8 @@ import {
 
 
 
+import { ExportFormat } from 'devextreme/common';
+import { DataGridExportFormat } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -53,10 +55,10 @@ export class DxoExportComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get formats(): Array<string> {
+    get formats(): any | Array<ExportFormat | DataGridExportFormat | string> {
         return this._getOption('formats');
     }
-    set formats(value: Array<string>) {
+    set formats(value: any | Array<ExportFormat | DataGridExportFormat | string>) {
         this._setOption('formats', value);
     }
 

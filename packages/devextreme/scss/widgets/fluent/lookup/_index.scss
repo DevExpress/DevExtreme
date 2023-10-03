@@ -51,8 +51,6 @@
   }
 
   &.dx-invalid {
-    border-bottom-color: $base-invalid-faded-border-color;
-
     .dx-lookup-arrow::after {
       @include dx-invalid-fluent-badge();
 
@@ -145,10 +143,9 @@
 }
 
 .dx-lookup-popup-search .dx-list {
-  height: calc(100% - #{$fluent-lookup-list-top});
+  height: calc(100% - #{$fluent-texteditor-input-height + 2 * $lookup-search-padding-vertical});
 }
 
 .dx-lookup-search-wrapper {
-  padding: $fluent-lookup-popup-content-padding;
-  padding-bottom: $fluent-lookup-popup-content-padding - 6px;
+  padding: $lookup-search-padding-vertical $lookup-search-padding-horizontal;
 }

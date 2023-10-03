@@ -2006,6 +2006,7 @@ export type Selection = SelectionBase & {
      * @docid dxDataGridOptions.selection.showCheckBoxesMode
      * @default "onClick"
      * @default "always" &for(Material)
+     * @default "always" &for(Fluent)
      * @public
      */
     showCheckBoxesMode?: SelectionColumnDisplayMode;

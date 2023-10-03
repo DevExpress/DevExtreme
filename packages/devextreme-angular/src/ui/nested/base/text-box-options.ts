@@ -6,7 +6,8 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
+import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 @Component({
     template: ''
@@ -26,10 +27,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('activeStateEnabled', value);
     }
 
-    get buttons(): Array<string | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -103,10 +104,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('label', value);
     }
 
-    get labelMode(): string {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: string) {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -145,10 +146,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('maxLength', value);
     }
 
-    get mode(): string {
+    get mode(): TextBoxType {
         return this._getOption('mode');
     }
-    set mode(value: string) {
+    set mode(value: TextBoxType) {
         this._setOption('mode', value);
     }
 
@@ -292,10 +293,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('showClearButton', value);
     }
 
-    get showMaskMode(): string {
+    get showMaskMode(): MaskMode {
         return this._getOption('showMaskMode');
     }
-    set showMaskMode(value: string) {
+    set showMaskMode(value: MaskMode) {
         this._setOption('showMaskMode', value);
     }
 
@@ -306,10 +307,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('spellcheck', value);
     }
 
-    get stylingMode(): string {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: string) {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -348,24 +349,24 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('validationErrors', value);
     }
 
-    get validationMessageMode(): string {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: string) {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
-    get validationMessagePosition(): string {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: string) {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
-    get validationStatus(): string {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: string) {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 

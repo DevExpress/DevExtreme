@@ -272,6 +272,9 @@
         "dxScheduler-recurrenceRepeatCount": "περιστατικό(α)",
         "dxScheduler-allDay": "Όλη μέρα",
 
+        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Θέλετε να επεξεργαστείτε μόνο αυτό το ραντεβού ή ολόκληρη τη σειρά;",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Θέλετε να διαγράψετε μόνο αυτό το ραντεβού ή ολόκληρη τη σειρά;",
 
@@ -699,6 +702,8 @@
         "dxGantt-showResources": "Show Resources",
         "dxGantt-showDependencies": "Show Dependencies",
         "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
-        "dxGantt-dialogEndDateValidation": "End date must be after {0}"
+        "dxGantt-dialogEndDateValidation": "End date must be after {0}",
+
+        "dxGallery-itemName": "Gallery item"
     }
 }

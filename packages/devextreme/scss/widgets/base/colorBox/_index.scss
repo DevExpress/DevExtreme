@@ -1,0 +1,70 @@
+@use "../mixins" as *;
+@use "./mixins" as *;
+@use "sass:string" as string;
+
+// adduse
+
+$colorbox-input-left-padding: 40px;
+
+.dx-colorbox-input-container {
+  &.dx-colorbox-color-is-not-defined {
+    .dx-colorbox-color-result-preview {
+      border: none;
+    }
+  }
+
+  .dx-placeholder {
+    max-width: calc(100% - 25px);
+  }
+}
+
+.dx-colorbox {
+  .dx-texteditor-input-container {
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      z-index: 1;
+      width: 15px;
+      height: 15px;
+      margin-top: -7.5px;
+      inset-inline-start: 14px;
+    }
+  }
+
+  .dx-colorbox-color-is-not-defined {
+    .dx-texteditor-input-container {
+      &::before {
+        background: none;
+      }
+    }
+  }
+
+  .dx-texteditor-label {
+    .dx-label-before {
+      min-width: $colorbox-input-left-padding;
+    }
+  }
+}
+
+.dx-colorbox-overlay {
+  padding: 20px;
+
+  .dx-popup-content {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .dx-popup-bottom {
+    .dx-toolbar-item:first-child {
+      padding-right: 10px;
+    }
+  }
+
+  .dx-colorview-buttons-container {
+    .dx-button {
+      margin: 0;
+    }
+  }
+}

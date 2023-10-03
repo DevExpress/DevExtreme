@@ -18,6 +18,7 @@ import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
 import { triggerResizeEvent } from '../events/visibility_change';
+import messageLocalization from '../localization/message';
 
 // STYLE gallery
 
@@ -146,7 +147,10 @@ const Gallery = CollectionWidget.inherit({
             */
 
 
-            _itemAttributes: { role: 'option' },
+            _itemAttributes: {
+                role: 'option',
+                'aria-label': messageLocalization.format('dxGallery-itemName')
+            },
             loopItemFocus: false,
             selectOnFocus: true,
             selectionMode: 'single',
@@ -273,10 +277,13 @@ const Gallery = CollectionWidget.inherit({
 
         this.callBase();
 
-        this.setAria({
-            'role': 'listbox',
+        const useListBoxRole = this._itemsCount() > 0;
+        const ariaAttrs = {
+            'role': useListBoxRole ? 'listbox' : undefined,
             'label': 'gallery'
-        });
+        };
+
+        this.setAria(ariaAttrs);
     },
 
     _render: function() {
@@ -392,10 +399,11 @@ const Gallery = CollectionWidget.inherit({
             const $clonedItem = $(item)
                 .clone(false)
                 .addClass(GALLERY_LOOP_ITEM_CLASS)
+                .removeAttr('id')
                 .css('margin', 0)
                 .appendTo($container);
 
-            this.setAria({ role: 'presentation' }, $clonedItem);
+            this.setAria({ hidden: true }, $clonedItem);
         }
     },
 
@@ -946,7 +954,7 @@ const Gallery = CollectionWidget.inherit({
     _setFocusOnSelect: function() {
         this._userInteraction = true;
 
-        const selectedItem = this.itemElements().filter('.' + GALLERY_ITEM_SELECTED_CLASS);
+        const selectedItem = this._getRealItems().filter('.' + GALLERY_ITEM_SELECTED_CLASS);
         this.option('focusedElement', getPublicElement(selectedItem));
         this._userInteraction = false;
     },
