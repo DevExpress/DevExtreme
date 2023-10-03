@@ -1,7 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -18,9 +18,5 @@
       "es2018",
       "dom"
     ],
-    "paths": {
-      "devextreme-angular": ["../../node_modules/devextreme-angular/npm/dist"],
-      "devextreme-angular/*": ["../../node_modules/devextreme-angular/npm/dist/*"]
-    }
   }
 }

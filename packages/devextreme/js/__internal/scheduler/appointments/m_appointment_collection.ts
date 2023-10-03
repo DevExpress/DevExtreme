@@ -23,7 +23,7 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
-import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
+import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
@@ -426,6 +426,12 @@ class SchedulerAppointments extends CollectionWidget {
     $container.append(this.isAgendaView
       ? createAgendaAppointmentLayout(formatText, config)
       : createAppointmentLayout(formatText, config));
+
+    if (!this.isAgendaView) {
+      $container.parent().prepend(
+        $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.STRIP),
+      );
+    }
   }
 
   _executeItemRenderAction(index, itemData, itemElement) {

@@ -11,7 +11,7 @@ import {
 import TagBox from '../../../model/tagBox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
-const labelModes = ['static', 'floating', 'hidden'];
+const labelModes = ['static', 'floating', 'hidden', 'outside'];
 
 fixture.disablePageReloads`TagBox_Label`
   .page(url(__dirname, '../../container.html'));

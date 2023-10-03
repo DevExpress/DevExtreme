@@ -62,7 +62,7 @@
   }
 
   .dx-sort {
-    color: $datagrid-menu-icon-color;
+    color: $header-filter-color-empty;
   }
 }
 
@@ -79,7 +79,7 @@
     }
 
     font-size: $fluent-grid-base-header-cell-font-size;
-    font-weight: bold;
+    font-weight: 500;
 
     td {
       border-top-color: $fluent-grid-base-border-color;

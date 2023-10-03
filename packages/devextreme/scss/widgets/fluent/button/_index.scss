@@ -28,8 +28,6 @@
 }
 
 .dx-button-has-text {
-  min-width: $fluent-button-min-width;
-
   @include dx-button-withtext-sizing();
 }
 

@@ -3,10 +3,10 @@
     "baseUrl": "./packages",
     "paths": {
       "devextreme-angular": [
-        "devextreme-angular/src"
+        "devextreme-angular/npm/dist"
       ],
       "devextreme-angular/*": [
-        "devextreme-angular/src/*"
+        "devextreme-angular/npm/dist/*"
       ],
       "devextreme-react": [
         "devextreme-react/src"

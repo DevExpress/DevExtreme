@@ -2,10 +2,10 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
 import { getPropertyValue, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
-import { isMaterial } from '../../../helpers/themeUtils';
+import { isMaterialBased } from '../../../helpers/themeUtils';
 
 const testFixture = () => {
-  if (isMaterial()) {
+  if (isMaterialBased()) {
     return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;

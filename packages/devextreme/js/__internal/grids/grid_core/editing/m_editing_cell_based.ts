@@ -1,7 +1,7 @@
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
-import { Deferred, when } from '@js/core/utils/deferred';
+import { Deferred, DeferredObj, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
 import { createObjectWithChanges } from '@js/data/array_utils';
@@ -259,15 +259,20 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return false;
   }
 
-  _beforeEditCell(rowIndex, columnIndex, item) {
+  /**
+   * @returns whether to cancel cell editing
+   */
+  _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
     if (this.isCellEditMode() && !item.isNewRow && this.hasChanges()) {
       // @ts-expect-error
-      const d = new Deferred();
+      const isSaving = new Deferred();
       this.saveEditData().always(() => {
-        d.resolve(this.hasChanges());
+        isSaving.resolve(this.hasChanges());
       });
-      return d;
+      this.addDeferred(isSaving);
+      return isSaving;
     }
+    return false;
   }
 
   publicMethods() {

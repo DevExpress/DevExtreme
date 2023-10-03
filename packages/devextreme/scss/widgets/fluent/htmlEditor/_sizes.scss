@@ -4,18 +4,23 @@
 // adduse
 
 $fluent-toolbar-size-editor-width: null !default;
-$fluent-html-editor-horizontal-padding: 15px !default;
-$fluent-htmleditor-toolbar-padding: null !default;
+$fluent-html-editor-vertical-padding: null !default;
+$fluent-html-editor-horizontal-padding: null !default;
 $fluent-html-editor-add-image-dialog-fileuploader-padding: null !default;
+$fluent-html-editor-toolbar-menu-separator-margin: 4px !default;
 
 @if $size == "default" {
   $fluent-toolbar-size-editor-width: 120px !default;
-  $fluent-htmleditor-toolbar-padding: 16px !default;
+  $fluent-html-editor-vertical-padding: 16px !default;
+  $fluent-html-editor-horizontal-padding: 16px !default;
   $fluent-html-editor-add-image-dialog-fileuploader-padding: 50px 40px;
 }
 
 @else if $size == "compact" {
   $fluent-toolbar-size-editor-width: 90px !default;
-  $fluent-htmleditor-toolbar-padding: 11px !default;
+  $fluent-html-editor-vertical-padding: 12px !default;
+  $fluent-html-editor-horizontal-padding: 12px !default;
   $fluent-html-editor-add-image-dialog-fileuploader-padding: 40px 30px;
 }
+
+$fluent-htmleditor-toolbar-padding: $fluent-html-editor-horizontal-padding !default;

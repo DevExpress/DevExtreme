@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "start:dev": "ng serve --open -c dev",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve --open -c dev",
     "build": "echo empty"
   },
   "private": true,

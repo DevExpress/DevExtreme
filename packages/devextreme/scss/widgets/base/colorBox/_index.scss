@@ -1,3 +1,7 @@
+@use "../mixins" as *;
+@use "./mixins" as *;
+@use "sass:string" as string;
+
 // adduse
 
 $colorbox-input-left-padding: 40px;

@@ -20,12 +20,14 @@
     "vue:regenerate": "nx regenerate devextreme-vue",
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "all:pack": "ts-node build/pack-all.ts"
   },
   "nx": {},
   "private": true,
   "devDependencies": {
     "@types/node": "^18.15.3",
+    "@types/shelljs": "0.8.13",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
     "devextreme-internal-tools": "12.0.0-beta.4",
@@ -38,7 +40,7 @@
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-jest-formatting": "3.1.0",
     "eslint-plugin-jsx-a11y": "6.7.1",
-    "eslint-plugin-no-only-tests": "2.6.0",
+    "eslint-plugin-no-only-tests": "3.1.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-qunit": "7.3.4",
     "eslint-plugin-react": "7.32.2",
@@ -53,6 +55,7 @@
     "postcss": "^8.4.24",
     "shx": "0.3.4",
     "source-map": "0.7.4",
+    "ts-node": "^10.9.1",
     "typescript": "~4.2.4"
   },
   "pre-commit": [

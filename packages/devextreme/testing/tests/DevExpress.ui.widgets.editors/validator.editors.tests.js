@@ -312,6 +312,19 @@ QUnit.module('Editors Standard Adapter', {
         });
     });
 
+    QUnit.test('Reset should clear valid mark', function(assert) {
+        const editor = this.fixture.createTextEditor();
+
+        editor.option('validationStatus', 'pending');
+        editor.option('validationStatus', 'valid');
+
+        assert.ok(this.fixture.$element.hasClass('dx-valid'), 'valid mark is rendered');
+
+        editor.reset();
+
+        assert.notOk(this.fixture.$element.hasClass('dx-valid'), 'valid mark is not rendered');
+    });
+
     QUnit.test('Editor - validation options should be synchrnoized on init', function(assert) {
         const err1 = { message: '1' };
         const err2 = { message: '2' };

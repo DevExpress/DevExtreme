@@ -19,6 +19,194 @@ $fluent-base-standard-texteditor-input-horizontal-padding: 0;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
 $fluent-editor-custom-button-margin: 6px;
 
+@mixin texteditor-outlined-styling() {
+  background-color: $texteditor-bg;
+  border-radius: $texteditor-input-border-radius;
+  border: 1px solid $texteditor-border-color;
+  border-bottom: 1px solid $base-border-color-accessible;
+
+  &::before {
+    box-sizing: border-box;
+    content: "";
+    position: absolute;
+    left: -1px;
+    bottom: -1px;
+    right: -1px;
+    height: $texteditor-input-border-radius;
+    width: calc(100% + 2px);
+    border-bottom-left-radius: $texteditor-input-border-radius;
+    border-bottom-right-radius: $texteditor-input-border-radius;
+    border-bottom: 2px solid $texteditor-focused-border-color;
+    clip-path: inset(calc(100% - 2px) 0 0);
+    transform: scaleX(0);
+    transition-property: transform;
+    transition-duration: 50ms;
+    transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
+  }
+
+  &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
+  &.dx-texteditor-with-floating-label {
+    .dx-placeholder::before,
+    .dx-texteditor-input {
+      padding-top: $fluent-filled-texteditor-input-top-padding;
+      padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
+    }
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    &::before {
+      width: 100%;
+      left: 0;
+      right: 0;
+    }
+
+    .dx-texteditor-label {
+      inset-block: -1px;
+    }
+
+    .dx-datebox {
+      border: none;
+    }
+  }
+
+  &.dx-state-disabled,
+  &.dx-state-readonly {
+    background-color: transparent;
+    border-color: $texteditor-disabled-color;
+  }
+  
+  &.dx-invalid {
+    border-color: $texteditor-invalid-faded-border-color;
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+      border-color: $texteditor-invalid-focused-border-color;
+    }
+
+    &::before {        
+      border-color: $texteditor-invalid-faded-border-color;
+    }
+  }
+
+  &.dx-state-hover {
+    border-left-color: $texteditor-border-color-hover;
+    border-right-color: $texteditor-border-color-hover;
+    border-top-color: $texteditor-border-color-hover;
+    border-bottom-color: $base-border-color-accessible-hover;
+  }
+
+  &.dx-state-focused {
+    border-left-color: $texteditor-border-color-focused;
+    border-right-color: $texteditor-border-color-focused;
+    border-top-color: $texteditor-border-color-focused;
+    border-bottom-color: $base-border-color-accessible-focused;
+
+    &::before {        
+      transform: scaleX(1);
+      transition-property: transform;
+      transition-duration: 200ms;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $texteditor-focused-bg;
+  }
+}
+
+@mixin texteditor-filled-styling() {
+  background-color: $texteditor-filled-bg;
+  border-radius: $texteditor-input-border-radius;
+  border: 1px solid transparent;
+
+  .dx-placeholder::before,
+  .dx-texteditor-input {
+    padding-top: $fluent-filled-texteditor-input-top-padding;
+    padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
+  }
+
+  &::before {
+    left: -1px;
+    bottom: -1px;
+    right: -1px;
+    height: $texteditor-input-border-radius;
+    width: calc(100% + 2px);
+    border-bottom-left-radius: $texteditor-input-border-radius;
+    border-bottom-right-radius: $texteditor-input-border-radius;
+    border-bottom: 2px solid $texteditor-focused-border-color;
+    clip-path: inset(calc(100% - 2px) 0 0);
+  }
+
+  &.dx-state-hover,
+  &.dx-state-active {
+    background-color: $texteditor-hover-bg;
+  }
+
+  &.dx-state-disabled,
+  &.dx-state-readonly {
+    background-color: transparent;
+    border-color: $texteditor-disabled-color;
+  }
+
+  &.dx-invalid {
+    border-color: $texteditor-invalid-faded-border-color;
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+      border-color: $texteditor-invalid-focused-border-color;
+    }
+  }
+}
+
+@mixin texteditor-underlined-styling() {
+  background-color: transparent;
+  border-radius: 0;
+
+  &::after {
+    border-bottom: 1px solid $base-border-color-accessible;
+  }
+
+  &.dx-state-hover {
+    &::after {
+      border-bottom: 1px solid $base-border-color-accessible-hover;
+    }
+  }
+
+  .dx-texteditor-input,
+  .dx-lookup-field {
+    min-height: $fluent-texteditor-input-height;
+  }
+
+  .dx-texteditor-input,
+  .dx-placeholder::before {
+    padding-top: $fluent-standard-texteditor-input-top-padding;
+    padding-bottom: $fluent-standard-texteditor-input-bottom-padding;
+    padding-left: $fluent-base-standard-texteditor-input-horizontal-padding;
+    padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
+  }
+
+  &.dx-state-disabled,
+  &.dx-state-readonly {
+    &::after {
+      border-bottom-color: $texteditor-disabled-color;
+    }
+  }
+
+  &.dx-invalid {
+    &::after {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        border-bottom-color: $texteditor-invalid-focused-border-color;
+      }
+    }
+  }
+}
+
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
     padding-inline-end: $fluent-texteditor-invalid-badge-size + $fluent-filled-texteditor-input-horizontal-padding;
@@ -89,8 +277,7 @@ $fluent-editor-custom-button-margin: 6px;
 }
 
 .dx-texteditor {
-  border-top-left-radius: $texteditor-input-border-radius;
-  border-top-right-radius: $texteditor-input-border-radius;
+  border-radius: $texteditor-input-border-radius;
   position: relative;
 
   @mixin dx-texteditor-borders-position() {
@@ -189,191 +376,15 @@ $fluent-editor-custom-button-margin: 6px;
   }
 
   &.dx-editor-filled {
-    background-color: $texteditor-filled-bg;
-    border-bottom-left-radius: $base-border-radius;
-    border-bottom-right-radius: $base-border-radius;
-    border: 1px solid transparent;
-
-    .dx-placeholder::before,
-    .dx-texteditor-input {
-      padding-top: $fluent-filled-texteditor-input-top-padding;
-      padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
-    }
-
-    &::before {
-      left: -1px;
-      bottom: -1px;
-      right: -1px;
-      height: $texteditor-input-border-radius;
-      width: calc(100% + 2px);
-      border-bottom-left-radius: $texteditor-input-border-radius;
-      border-bottom-right-radius: $texteditor-input-border-radius;
-      border-bottom: 2px solid $texteditor-focused-border-color;
-      clip-path: inset(calc(100% - 2px) 0 0);
-    }
-
-    &.dx-state-hover,
-    &.dx-state-active {
-      background-color: $texteditor-hover-bg;
-    }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly {
-      background-color: transparent;
-      border-color: $texteditor-disabled-color;
-    }
-
-    &.dx-invalid {
-      border-color: $texteditor-invalid-faded-border-color;
-
-      &.dx-state-hover,
-      &.dx-state-focused {
-        border-color: $texteditor-invalid-focused-border-color;
-      }
-    }
+    @include texteditor-filled-styling();
   }
 
   &.dx-editor-underlined {
-    background-color: transparent;
-
-    &::after {
-      border-bottom: 1px solid $base-border-color-accessible;
-    }
-
-    &.dx-state-hover {
-      &::after {
-        border-bottom: 1px solid $base-border-color-accessible-hover;
-      }
-    }
-
-    .dx-texteditor-input,
-    .dx-lookup-field {
-      min-height: $fluent-texteditor-input-height;
-    }
-
-    .dx-texteditor-input,
-    .dx-placeholder::before {
-      padding-top: $fluent-standard-texteditor-input-top-padding;
-      padding-bottom: $fluent-standard-texteditor-input-bottom-padding;
-      padding-left: $fluent-base-standard-texteditor-input-horizontal-padding;
-      padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
-    }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly {
-      &::after {
-        border-bottom-color: $texteditor-disabled-color;
-      }
-    }
-
-    &.dx-invalid {
-      &::after {
-        border-bottom-color: $texteditor-invalid-faded-border-color;
-      }
-
-      &.dx-state-hover {
-        &::after {
-          border-bottom-color: $texteditor-invalid-focused-border-color;
-        }
-      }
-    }
+    @include texteditor-underlined-styling();
   }
 
   &.dx-editor-outlined {
-    background-color: $texteditor-bg;
-    border-radius: $texteditor-input-border-radius;
-    border: 1px solid $texteditor-border-color;
-    border-bottom: 1px solid $base-border-color-accessible;
-
-    &::before {
-      box-sizing: border-box;
-      content: "";
-      position: absolute;
-      left: -1px;
-      bottom: -1px;
-      right: -1px;
-      height: $texteditor-input-border-radius;
-      width: calc(100% + 2px);
-      border-bottom-left-radius: $texteditor-input-border-radius;
-      border-bottom-right-radius: $texteditor-input-border-radius;
-      border-bottom: 2px solid $texteditor-focused-border-color;
-      clip-path: inset(calc(100% - 2px) 0 0);
-      transform: scaleX(0);
-      transition-property: transform;
-      transition-duration: 50ms;
-      transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
-    }
-
-    &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
-    &.dx-texteditor-with-floating-label {
-      .dx-placeholder::before,
-      .dx-texteditor-input {
-        padding-top: $fluent-filled-texteditor-input-top-padding;
-        padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
-      }
-    }
-
-    &.dx-texteditor-with-label,
-    &.dx-texteditor-with-floating-label {
-      &::before {
-        width: 100%;
-        left: 0;
-        right: 0;
-      }
-
-      .dx-texteditor-label {
-        inset-block: -1px;
-      }
-
-      .dx-datebox {
-        border: none;
-      }
-    }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly {
-      background-color: transparent;
-      border-color: $texteditor-disabled-color;
-    }
-   
-    &.dx-invalid {
-      border-color: $texteditor-invalid-faded-border-color;
-
-      &.dx-state-hover,
-      &.dx-state-focused {
-        border-color: $texteditor-invalid-focused-border-color;
-      }
-
-      &::before {        
-        border-color: $texteditor-invalid-faded-border-color;
-      }
-    }
-
-    &.dx-state-hover {
-      border-left-color: $texteditor-border-color-hover;
-      border-right-color: $texteditor-border-color-hover;
-      border-top-color: $texteditor-border-color-hover;
-      border-bottom-color: $base-border-color-accessible-hover;
-    }
-
-    &.dx-state-focused {
-      border-left-color: $texteditor-border-color-focused;
-      border-right-color: $texteditor-border-color-focused;
-      border-top-color: $texteditor-border-color-focused;
-      border-bottom-color: $base-border-color-accessible-focused;
-
-      &::before {        
-        transform: scaleX(1);
-        transition-property: transform;
-        transition-duration: 200ms;
-        transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
-      }
-    }
-
-    &.dx-state-focused,
-    &.dx-state-active {
-      background-color: $texteditor-focused-bg;
-    }
+    @include texteditor-outlined-styling();
   }
 }
 
