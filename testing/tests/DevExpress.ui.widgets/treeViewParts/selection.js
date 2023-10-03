@@ -505,6 +505,34 @@ module('selection single', () => {
         treeView.checkSelected([0], items);
     });
 
+    test('selectByClick selection should work correctly after runtime "showCheckBoxesMode" option change (T1190412)', function(assert) {
+        const items = [{ text: 'item 1' }, { text: 'item 2' }];
+        const treeView = createInstance({
+            items: items,
+            selectByClick: true,
+        });
+
+        treeView.instance.option('showCheckBoxesMode', 'selectAll');
+
+        eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
+
+        treeView.checkSelected([0], items);
+    });
+
+    QUnit.test('expandEvent should work correctly after runtime "showCheckBoxesMode" option change', function(assert) {
+        const items = [{ text: 'Item 1', items: [{ text: 'Item 11' }] }];
+        const treeView = createInstance({
+            items: items,
+            expandEvent: 'click'
+        });
+
+        treeView.instance.option('showCheckBoxesMode', 'selectAll');
+
+        eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
+
+        assert.ok(items[0].expanded);
+    });
+
     test('selectByClick option should unselect item  by second click', function(assert) {
         const items = [{ text: 'item 1' }, { text: 'item 2' }];
         const treeView = createInstance({
