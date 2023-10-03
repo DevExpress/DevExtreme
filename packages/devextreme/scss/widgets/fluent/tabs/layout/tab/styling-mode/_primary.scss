@@ -17,20 +17,20 @@
 .dx-tabs-styling-mode-primary {
   &:not(.dx-tabs-vertical) {
     .dx-tab-selected {
-      @include dx-tabs-indicator-primary-mixin(bottom, $tabs-selected-tab-border-color);
+      @include dx-tabs-indicator-primary-mixin(bottom, $tabs-tab-border-color-selected-default);
   
       &.dx-state-disabled {
-        @include dx-tabs-indicator-primary-mixin(bottom, $tabs-disabled-tab-border-color);
+        @include dx-tabs-indicator-primary-mixin(bottom, $tabs-tab-border-color-disabled);
       }
     }
   }
 
   &.dx-tabs-vertical {
     .dx-tab-selected {
-      @include dx-tabs-indicator-primary-mixin(right, $tabs-selected-tab-border-color);
+      @include dx-tabs-indicator-primary-mixin(right, $tabs-tab-border-color-selected-default);
   
       &.dx-state-disabled {
-        @include dx-tabs-indicator-primary-mixin(right, $tabs-disabled-tab-border-color);
+        @include dx-tabs-indicator-primary-mixin(right, $tabs-tab-border-color-disabled);
       }
     }
   }

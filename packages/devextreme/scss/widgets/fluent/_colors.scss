@@ -207,8 +207,8 @@ $scrollview-pulldown-path: null !default;
 
   $base-neutral-background-hover: rgba(235, 235, 235, 1) !default; // #ebebeb
   $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
-  $base-border-color-hover: darken($base-border-color, 3.92) !default; // c7c7c7
-  $base-border-color-focused: darken($base-border-color, 11.76) !default; // b3b3b3
+  $base-border-color-hover: darken($base-border-color, 3.92) !default; // #c7c7c7
+  $base-border-color-focused: darken($base-border-color, 11.76) !default; // #b3b3b3
   $base-border-color-accessible: rgba(97, 97, 97, 1) !default; // #616161
   $base-border-color-accessible-hover: rgba(87, 87, 87, 1) !default; // #575757
   $base-border-color-accessible-focused: rgba(77, 77, 77, 1) !default; // #4d4d4d

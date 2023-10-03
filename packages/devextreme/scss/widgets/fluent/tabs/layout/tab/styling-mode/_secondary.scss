@@ -15,8 +15,12 @@
 
 
 .dx-tabs-styling-mode-secondary {
-  .dx-tab .dx-tab-text {
-    text-transform: initial;
+  .dx-tab {
+    border-radius: $fluent-tab-item-border-radius-secondary;
+
+    .dx-tab-text {
+      text-transform: initial;
+    }
   }
 
   .dx-tab-content {
@@ -25,23 +29,67 @@
 }
 
 .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
-  .dx-tab.dx-tab-selected .dx-tab-content {
-    @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-selected-tab-border-color);
-  }
-
-  .dx-tab.dx-state-disabled .dx-tab-content {
-    @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-disabled-tab-border-color);
-  }
-}
-
-.dx-tabs-vertical {
-  &.dx-tabs-styling-mode-secondary {
-    .dx-tab-selected {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-selected-tab-border-color);
+  .dx-tab {
+    &.dx-state-hover .dx-tab-content {
+      @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-hover);
     }
 
-    .dx-tab-selected.dx-state-disabled {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-disabled-tab-border-color);
+    &.dx-state-active .dx-tab-content {
+      @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-active);
+    }
+
+    &.dx-tab-selected {
+      .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-default);
+      }
+
+      &.dx-state-focused .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-focused);
+      }
+
+      &.dx-state-hover .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-hover);
+      }
+
+      &.dx-state-active .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-active);
+      }
+
+      &.dx-state-disabled .dx-tab-content {
+        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-disabled);
+      }
+    }
+  } 
+}
+
+.dx-tabs-vertical.dx-tabs-styling-mode-secondary {
+  .dx-tab {
+    &.dx-state-hover {
+      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-hover);
+    }
+
+    &.dx-state-active {
+      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-active);
+    }
+  }
+
+  .dx-tab-selected {
+    @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-default);
+
+    &.dx-state-focused {
+      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-focused);
+    }
+
+    &.dx-state-hover {
+      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-hover);
+    }
+
+    &.dx-state-active {
+      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-active);
+    }
+
+    &.dx-state-disabled {
+      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-disabled);
     }
   }
 }

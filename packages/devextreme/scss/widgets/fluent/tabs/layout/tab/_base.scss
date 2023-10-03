@@ -32,6 +32,10 @@
     .dx-icon {
       color: $tabs-tab-icon-selected-color;
     }
+
+    .dx-tab-text {
+      font-weight: $fluent-tab-font-weight-bold;
+    }
   }
 
   &.dx-state-focused {
@@ -56,7 +60,7 @@
     column-gap: $fluent-base-icon-margin;
     text-transform: uppercase;
     line-height: $fluent-tab-text-line-height;
-    font-weight: 500;
+    font-weight: $fluent-tab-font-weight-default;
   }
 
   .dx-icon {
