@@ -192,8 +192,15 @@ const Tabs = CollectionWidget.inherit({
 
                 const $iconElement = getImageContainer(data.icon);
                 $iconElement && $iconElement.prependTo($container);
-                // TODO: ADD TEST FOR DATA_DX_TEXT
-                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS).attr('data-dx_text', data.text));
+
+                const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
+
+                if(data.text) {
+                    // TODO: ADD TEST FOR DATA_DX_TEXT
+                    $tabItem.attr('data-dx_text', data.text);
+                }
+
+                $container.wrapInner($tabItem);
             }).bind(this), ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod'))
         });
     },
