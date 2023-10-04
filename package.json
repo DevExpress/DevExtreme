@@ -21,7 +21,9 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "all:pack": "ts-node build/pack-all.ts"
+    "all:pack": "ts-node build/pack-all.ts",
+    "build": "cd ./packages/devextreme && npm run build",
+    "dev": "cd ./packages/devextreme && npm run dev"
   },
   "nx": {},
   "private": true,
