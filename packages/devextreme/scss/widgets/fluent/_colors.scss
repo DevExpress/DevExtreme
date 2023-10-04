@@ -135,6 +135,13 @@ $base-focus-color: null !default;
 * $type color
 */
 $base-focus-bg: null !default;
+
+/**
+* $name 120. Disabled state text color
+* $type color
+*/
+$base-color-disabled: null !default;
+
 $typography-bg: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
@@ -238,6 +245,8 @@ $scrollview-pulldown-path: null !default;
   $base-success-selected: rgba(11, 81, 11, 1) !default; // #0B510B
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/light/pulldown.png') !default;
+
+  $base-color-disabled: rgba(189, 189, 189, 1) !default; // #BDBDBD
 }
 
 @if $mode == "dark" {
@@ -331,6 +340,8 @@ $scrollview-pulldown-path: null !default;
   $base-success-selected: #C9E9C9 !default; // #0B510B
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
+
+  $base-color-disabled: rgba(92, 92, 92, 1) !default; // #5C5C5C
 }
 
 /**

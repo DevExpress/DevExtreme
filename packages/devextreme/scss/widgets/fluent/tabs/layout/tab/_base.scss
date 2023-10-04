@@ -50,6 +50,10 @@
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
+    .dx-tab-text::after {
+      color: $tabs-tab-disabled-color;
+    }
+
     .dx-icon {
       color: $tabs-tab-icon-disabled-color;
     }
