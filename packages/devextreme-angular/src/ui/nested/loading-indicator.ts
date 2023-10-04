@@ -16,6 +16,7 @@ import {
 
 
 
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,10 +40,10 @@ export class DxoLoadingIndicatorComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get font(): any {
+    get font(): Font {
         return this._getOption('font');
     }
-    set font(value: any) {
+    set font(value: Font) {
         this._setOption('font', value);
     }
 

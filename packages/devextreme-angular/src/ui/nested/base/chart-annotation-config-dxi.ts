@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { AnnotationType, DashStyle, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { AnnotationType, DashStyle, Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 @Component({
@@ -82,10 +82,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('description', value);
     }
 
-    get font(): any {
+    get font(): Font {
         return this._getOption('font');
     }
-    set font(value: any) {
+    set font(value: Font) {
         this._setOption('font', value);
     }
 

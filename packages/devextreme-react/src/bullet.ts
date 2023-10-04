@@ -9,6 +9,7 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/bullet";
 import type { template } from "devextreme/core/templates/template";
 
+import type * as BaseWidgetTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -107,6 +108,19 @@ class Border extends NestedOption<IBorderProps> {
 
 // owners:
 // Tooltip
+type IFontProps = React.PropsWithChildren<{
+  color?: string;
+  family?: string;
+  opacity?: number;
+  size?: number | string;
+  weight?: number;
+}>
+class Font extends NestedOption<IFontProps> {
+  public static OptionName = "font";
+}
+
+// owners:
+// Tooltip
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | any) => string);
@@ -171,7 +185,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((pointsInfo: any) => Record<string, any>);
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -193,6 +207,7 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static OptionName = "tooltip";
   public static ExpectedChildren = {
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
   };
@@ -210,6 +225,8 @@ export {
   IBulletOptions,
   Border,
   IBorderProps,
+  Font,
+  IFontProps,
   Format,
   IFormatProps,
   Margin,

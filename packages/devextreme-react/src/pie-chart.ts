@@ -10,8 +10,8 @@ import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEve
 import type { template } from "devextreme/core/templates/template";
 import type { ChartsColor } from "devextreme/common/charts";
 
-import type * as LocalizationTypes from "devextreme/localization";
 import type * as BaseWidgetTypes from "devextreme/common/charts";
+import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -249,7 +249,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -294,6 +294,7 @@ class Annotation extends NestedOption<IAnnotationProps> {
   public static ExpectedChildren = {
     annotationBorder: { optionName: "border", isCollectionItem: false },
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     image: { optionName: "image", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
   };
@@ -391,7 +392,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -566,10 +567,15 @@ class Export extends NestedOption<IExportProps> {
 }
 
 // owners:
+// Annotation
 // Label
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
+// Tooltip
+// LoadingIndicator
+// PieChartTitle
+// PieChartTitleSubtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -813,7 +819,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -823,6 +829,9 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
+  };
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -844,7 +853,7 @@ class Margin extends NestedOption<IMarginProps> {
 // owners:
 // PieChart
 type IPieChartTitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -854,7 +863,7 @@ type IPieChartTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -868,6 +877,7 @@ type IPieChartTitleProps = React.PropsWithChildren<{
 class PieChartTitle extends NestedOption<IPieChartTitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     pieChartTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
@@ -877,7 +887,7 @@ class PieChartTitle extends NestedOption<IPieChartTitleProps> {
 // owners:
 // PieChartTitle
 type IPieChartTitleSubtitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -885,6 +895,9 @@ type IPieChartTitleSubtitleProps = React.PropsWithChildren<{
 }>
 class PieChartTitleSubtitle extends NestedOption<IPieChartTitleSubtitleProps> {
   public static OptionName = "subtitle";
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
+  };
 }
 
 // owners:
@@ -1069,7 +1082,7 @@ class SmallValuesGrouping extends NestedOption<ISmallValuesGroupingProps> {
 // LegendTitle
 // PieChartTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font | Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1083,7 +1096,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // PieChart
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font | Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -1093,7 +1106,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font | Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -1126,7 +1139,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -1150,6 +1163,7 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static ExpectedChildren = {
     argumentFormat: { optionName: "argumentFormat", isCollectionItem: false },
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }

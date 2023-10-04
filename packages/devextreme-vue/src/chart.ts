@@ -420,6 +420,7 @@ const DxAnnotation = createConfigurationComponent({
   annotationBorder: { isCollectionItem: false, optionName: "border" },
   annotationImage: { isCollectionItem: false, optionName: "image" },
   border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
   image: { isCollectionItem: false, optionName: "image" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
@@ -812,6 +813,7 @@ const DxChartTitle = createConfigurationComponent({
 (DxChartTitle as any).$_optionName = "title";
 (DxChartTitle as any).$_expectedChildren = {
   chartTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
+  font: { isCollectionItem: false, optionName: "font" },
   margin: { isCollectionItem: false, optionName: "margin" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
 };
@@ -834,6 +836,9 @@ const DxChartTitleSubtitle = createConfigurationComponent({
   }
 });
 (DxChartTitleSubtitle as any).$_optionName = "subtitle";
+(DxChartTitleSubtitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 const DxColor = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -1891,6 +1896,9 @@ const DxLoadingIndicator = createConfigurationComponent({
   }
 });
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
+(DxLoadingIndicator as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 const DxMargin = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -2588,6 +2596,7 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_expectedChildren = {
   argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
   border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" },
   tooltipBorder: { isCollectionItem: false, optionName: "border" }

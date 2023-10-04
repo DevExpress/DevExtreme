@@ -669,6 +669,9 @@ class Export extends NestedOption<IExportProps> {
 // CommonSeriesSettingsLabel
 // ScaleLabel
 // SliderMarker
+// LoadingIndicator
+// Title
+// Subtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -836,7 +839,7 @@ class Length extends NestedOption<ILengthProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -846,6 +849,9 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
+  };
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -1542,7 +1548,7 @@ class SliderMarker extends NestedOption<ISliderMarkerProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1550,6 +1556,9 @@ type ISubtitleProps = React.PropsWithChildren<{
 }>
 class Subtitle extends NestedOption<ISubtitleProps> {
   public static OptionName = "subtitle";
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
+  };
 }
 
 // owners:
@@ -1583,7 +1592,7 @@ class TickInterval extends NestedOption<ITickIntervalProps> {
 // owners:
 // RangeSelector
 type ITitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -1593,7 +1602,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -1607,6 +1616,7 @@ type ITitleProps = React.PropsWithChildren<{
 class Title extends NestedOption<ITitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
   };

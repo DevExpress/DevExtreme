@@ -254,7 +254,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -300,6 +300,7 @@ class Annotation extends NestedOption<IAnnotationProps> {
   public static ExpectedChildren = {
     annotationBorder: { optionName: "border", isCollectionItem: false },
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     image: { optionName: "image", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
   };
@@ -587,7 +588,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -1104,6 +1105,7 @@ class Export extends NestedOption<IExportProps> {
 }
 
 // owners:
+// Annotation
 // Label
 // AxisLabel
 // Label
@@ -1111,6 +1113,10 @@ class Export extends NestedOption<IExportProps> {
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
+// Tooltip
+// LoadingIndicator
+// PolarChartTitle
+// PolarChartTitleSubtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -1387,7 +1393,7 @@ class Length extends NestedOption<ILengthProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -1397,6 +1403,9 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
+  };
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -1585,7 +1594,7 @@ class PointSelectionStyle extends NestedOption<IPointSelectionStyleProps> {
 // owners:
 // PolarChart
 type IPolarChartTitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -1595,7 +1604,7 @@ type IPolarChartTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -1609,6 +1618,7 @@ type IPolarChartTitleProps = React.PropsWithChildren<{
 class PolarChartTitle extends NestedOption<IPolarChartTitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     polarChartTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
@@ -1618,7 +1628,7 @@ class PolarChartTitle extends NestedOption<IPolarChartTitleProps> {
 // owners:
 // PolarChartTitle
 type IPolarChartTitleSubtitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1626,6 +1636,9 @@ type IPolarChartTitleSubtitleProps = React.PropsWithChildren<{
 }>
 class PolarChartTitleSubtitle extends NestedOption<IPolarChartTitleSubtitleProps> {
   public static OptionName = "subtitle";
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
+  };
 }
 
 // owners:
@@ -1901,7 +1914,7 @@ class StripStyleLabel extends NestedOption<IStripStyleLabelProps> {
 // LegendTitle
 // PolarChartTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font | Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1949,7 +1962,7 @@ class TickInterval extends NestedOption<ITickIntervalProps> {
 // Legend
 // PolarChart
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font | Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -1959,7 +1972,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font | Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -1992,7 +2005,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -2016,6 +2029,7 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static ExpectedChildren = {
     argumentFormat: { optionName: "argumentFormat", isCollectionItem: false },
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }

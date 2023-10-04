@@ -131,6 +131,25 @@ const DxBorder = createConfigurationComponent({
   }
 });
 (DxBorder as any).$_optionName = "border";
+const DxFont = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:color": null,
+    "update:family": null,
+    "update:opacity": null,
+    "update:size": null,
+    "update:weight": null,
+  },
+  props: {
+    color: String,
+    family: String,
+    opacity: Number,
+    size: [Number, String],
+    weight: Number
+  }
+});
+(DxFont as any).$_optionName = "font";
 const DxFormat = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -244,6 +263,7 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
@@ -252,6 +272,7 @@ export default DxBullet;
 export {
   DxBullet,
   DxBorder,
+  DxFont,
   DxFormat,
   DxMargin,
   DxShadow,

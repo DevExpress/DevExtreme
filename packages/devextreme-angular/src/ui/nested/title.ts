@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get font(): Font | any {
+    get font(): Font {
         return this._getOption('font');
     }
-    set font(value: Font | any) {
+    set font(value: Font) {
         this._setOption('font', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: any, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: any, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 

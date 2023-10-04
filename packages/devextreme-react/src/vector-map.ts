@@ -165,7 +165,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -208,6 +208,7 @@ class Annotation extends NestedOption<IAnnotationProps> {
   public static ExpectedChildren = {
     annotationBorder: { optionName: "border", isCollectionItem: false },
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     image: { optionName: "image", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
   };
@@ -284,7 +285,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -368,10 +369,15 @@ class Export extends NestedOption<IExportProps> {
 }
 
 // owners:
+// Annotation
 // Label
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
+// Tooltip
+// LoadingIndicator
+// VectorMapTitle
+// VectorMapTitleSubtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -586,7 +592,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -596,6 +602,9 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
+  };
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -662,7 +671,7 @@ class Source extends NestedOption<ISourceProps> {
 // LegendTitle
 // VectorMapTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font | Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -676,7 +685,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // VectorMap
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font | Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -686,7 +695,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font | Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -718,7 +727,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((info: MapLayerElement) => Record<string, any>);
   enabled?: boolean;
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   opacity?: number;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -738,6 +747,7 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static OptionName = "tooltip";
   public static ExpectedChildren = {
     border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }
   };
@@ -765,7 +775,7 @@ class TooltipBorder extends NestedOption<ITooltipBorderProps> {
 // owners:
 // VectorMap
 type IVectorMapTitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -775,7 +785,7 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: Record<string, any>;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -789,6 +799,7 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
 class VectorMapTitle extends NestedOption<IVectorMapTitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false },
     vectorMapTitleSubtitle: { optionName: "subtitle", isCollectionItem: false }
@@ -798,7 +809,7 @@ class VectorMapTitle extends NestedOption<IVectorMapTitleProps> {
 // owners:
 // VectorMapTitle
 type IVectorMapTitleSubtitleProps = React.PropsWithChildren<{
-  font?: Record<string, any>;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -806,6 +817,9 @@ type IVectorMapTitleSubtitleProps = React.PropsWithChildren<{
 }>
 class VectorMapTitleSubtitle extends NestedOption<IVectorMapTitleSubtitleProps> {
   public static OptionName = "subtitle";
+  public static ExpectedChildren = {
+    font: { optionName: "font", isCollectionItem: false }
+  };
 }
 
 export default VectorMap;
