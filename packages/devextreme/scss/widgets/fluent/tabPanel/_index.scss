@@ -39,11 +39,6 @@
     }
   }
 
-  .dx-tabpanel-tab.dx-tab-selected::after {
-    top: 0;
-    bottom: unset;
-  }
-
   .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
     .dx-tab {
       &.dx-state-hover .dx-tab-content {
@@ -53,14 +48,35 @@
       &.dx-state-active .dx-tab-content {
         @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-active);
       }
-    }
-
-    .dx-tab-selected .dx-tab-content {
-      @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-basic);
-
-      &.dx-state-disabled .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-disabled);
+  
+      &.dx-tab-selected {
+        .dx-tab-content {
+          @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-basic);
+        }
+  
+        &.dx-state-focused .dx-tab-content {
+          @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-focused);
+        }
+  
+        &.dx-state-hover .dx-tab-content {
+          @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-hover);
+        }
+  
+        &.dx-state-active .dx-tab-content {
+          @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-selected-active);
+        }
+  
+        &.dx-state-disabled .dx-tab-content {
+          @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-tab-border-color-disabled);
+        }
       }
+    }
+  }
+
+  .dx-tabs-styling-mode-primary {
+    .dx-tabpanel-tab::after {
+      top: 0;
+      bottom: unset;
     }
   }
 }
@@ -105,6 +121,32 @@
 
       &.dx-state-disabled {
         @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-disabled);
+      }
+    }
+  }
+
+  .dx-tabs-styling-mode-primary {
+    .dx-tab {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-primary-mixin(left, $tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active {
+        @include dx-tabs-indicator-primary-mixin(left, $tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab.dx-tab-selected {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-primary-mixin(left, $tabs-tab-border-color-selected-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-primary-mixin(left, $tabs-tab-border-color-selected-active);
+      }
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-primary-mixin(left, $tabs-tab-border-color-disabled);
       }
     }
   }
