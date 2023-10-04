@@ -67,7 +67,7 @@
     line-height: $fluent-tab-text-line-height;
     font-weight: $fluent-tab-font-weight-accent;
     text-transform: uppercase;
-    visibility: hidden;
+    visibility: hidden; // https://fluent2.microsoft.design/components/web/react/tablist/code
 
     &::after {
       content: string.unquote("attr(DATA-DX_TEXT)");
