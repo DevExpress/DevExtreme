@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react';
 import { ITemplate } from './configuration/config-node';
+import { DoubleKeyMap } from './helpers';
 
 export type RenderArgs = {
   model?: any;
@@ -40,9 +41,7 @@ export type TemplateManagerProps = {
 
 export type TemplateInstanceDefinition = {
   componentKey: string;
-  data: any;
   index: any;
-  container: HTMLElement;
   getJSX: TemplateFunc;
   onRendered: () => void;
   onRemoved: () => void;
@@ -50,7 +49,4 @@ export type TemplateInstanceDefinition = {
 
 export type GetRenderFuncFn = (func: TemplateFunc) => RenderFunc;
 
-export type RenderedTemplateInstances = {
-  containers: Record<string, HTMLElement>;
-  instances: Record<string, TemplateInstanceDefinition>;
-};
+export type RenderedTemplateInstances = DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>;

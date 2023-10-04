@@ -1,17 +1,15 @@
 import * as React from 'react';
 import * as events from 'devextreme/events';
 import { useState, useEffect, useCallback, FC } from 'react';
-import { TemplateManagerProps, RenderedTemplateInstances, GetRenderFuncFn, DXTemplateCollection, TemplateFunc } from './types-new';
+import { TemplateManagerProps, RenderedTemplateInstances, GetRenderFuncFn, DXTemplateCollection, TemplateFunc, TemplateInstanceDefinition } from './types-new';
 import TemplateWrapper from './template-wrapper-new';
-import sha1 from 'sha-1';
-import jc from 'json-cycle';
+import { DoubleKeyMap } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
 
-
 export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOptions }) => {
-  const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>({ containers: {}, instances: {} });
+  const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
     if (container.nodeType === Node.ELEMENT_NODE) {
@@ -27,73 +25,44 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
 
   const getRandomId = useCallback(() => Math.floor(Math.random() * 100000).toString(), []); 
 
-  const findContainerId = useCallback((container: HTMLElement, containerStorage: Record<string, HTMLElement>) => {
-    const storedContainer = Object.entries(containerStorage).find(([ , element ]) => element === container);
-    
-    return storedContainer ? storedContainer[0] : null;
-  }, []);
-
-  const getHash = useCallback((data: any, containerId: string) => {
-    return sha1(JSON.stringify({
-      key1: jc.decycle(data),
-      key2: containerId
-    }));
-  }, []);
+  const createMapKey = (key1: any, key2: HTMLElement) => {
+    return { key1, key2 };
+  }
 
   const getRenderFunc: GetRenderFuncFn = useCallback((getJSX) => ({ model: data, index, container, onRendered }) => {
+    const key = createMapKey(data, container);
+  
     const onRemoved = () => {
       setRenderedInstances(renderedInstances => {
-        const containerId = findContainerId(container, renderedInstances.containers);
-
-        if (!containerId) {
-          return renderedInstances;
-        }  
-
-        const hash = getHash(data, containerId);
-
-        delete renderedInstances.instances[hash];
-
-        const containerInUse = Object
-          .values(renderedInstances.instances)
-          .some(template => template.container === container);
+        const template = renderedInstances.get(key);
         
-        if (!containerInUse) {
-          delete renderedInstances.containers[containerId];
+        if (template) {
+          renderedInstances.delete(key);
+
+          return renderedInstances.shallowCopy();
         }
 
-        return { ...renderedInstances };
+        return renderedInstances;
       })
     };
   
     setRenderedInstances(renderedInstances => {
-      const containerId = findContainerId(container, renderedInstances.containers) ?? getRandomId();
-      const hash = getHash(data, containerId);
-
-      return {
-        containers: {
-          ...renderedInstances.containers,
-          [containerId]: container
+      renderedInstances.set(key, {
+        getJSX,
+        index,
+        componentKey: getRandomId(),
+        onRendered: () => {
+          unsubscribeOnRemoval(container, onRemoved);
+          onRendered();
         },
-        instances: {
-          ...renderedInstances.instances,
-          [hash]: {
-            data,
-            container,
-            getJSX,
-            index,
-            componentKey: getRandomId(),
-            onRendered: () => {
-              unsubscribeOnRemoval(container, onRemoved);
-              onRendered();
-            },
-            onRemoved
-          }
-        }
-      }
+        onRemoved
+      })
+
+      return renderedInstances.shallowCopy();
       
     });
 
-  }, [unsubscribeOnRemoval, findContainerId, getRandomId, getHash]);
+  }, [unsubscribeOnRemoval, getRandomId]);
 
   useEffect(() => {
     function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['data'] {
@@ -144,21 +113,19 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
     init(dxTemplates);
   }, [init, getRenderFunc, templateOptions]);
 
-  if (!Object.keys(renderedInstances.instances).length)
+  if (renderedInstances.empty)
     return null;
 
   return (
     <>
       {
-        Object.values(renderedInstances.instances).map(({
-          data,
+        Array.from(renderedInstances).map(([{ key1: data, key2: container }, {
           index,
-          container,
           componentKey,
           getJSX,
           onRendered,
           onRemoved
-         }) => {
+         }]) => {
           subscribeOnRemoval(container, onRemoved);
           
           return <TemplateWrapper
