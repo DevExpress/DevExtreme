@@ -15,6 +15,20 @@
 
 
 .dx-tabs-styling-mode-primary {
+  .dx-tab {
+    &.dx-state-hover {
+      background-color: $tabs-tab-bg-color-hover-primary;
+    }
+  
+    &.dx-state-focused {
+      background-color: $tabs-tab-bg-color-focus-primary;
+    }
+  
+    &.dx-state-active {
+      background-color: $tabs-tab-bg-color-active-primary;
+    }
+  }
+
   &:not(.dx-tabs-vertical) {
     .dx-tab {
       &.dx-state-hover {
