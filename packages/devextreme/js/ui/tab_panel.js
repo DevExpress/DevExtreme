@@ -153,7 +153,7 @@ const TabPanel = MultiView.inherit({
 
                 const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
 
-                if(data.title) {
+                if(data?.title) {
                     // TODO: ADD TEST FOR DATA_DX_TEXT
                     $tabItem.attr('data-dx_text', data.title);
                 }

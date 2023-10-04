@@ -195,7 +195,7 @@ const Tabs = CollectionWidget.inherit({
 
                 const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
 
-                if(data.text) {
+                if(data?.text) {
                     // TODO: ADD TEST FOR DATA_DX_TEXT
                     $tabItem.attr('data-dx_text', data.text);
                 }
