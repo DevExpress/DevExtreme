@@ -6,8 +6,9 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
 
-import 'ui/text_box';
 import 'generic_light.css!';
+
+import 'ui/text_box';
 import 'ui/drop_down_button';
 import 'ui/tabs';
 import 'ui/toolbar';
@@ -928,6 +929,76 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         const $visibleItems = this.$element.find(`.${TOOLBAR_ITEM_CLASS}:visible`);
         assert.strictEqual($visibleItems.length, 3, 'two items was hidden');
+    });
+
+    QUnit.test('Buttons declared via template should be hidden if there is no enough free space for them (T1191856)', function(assert) {
+        this.instance.option({
+            items: [
+                {
+                    location: 'before',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto',
+                    template(e, f, g) {
+                        return $('<div />').dxButton({
+                            text: 'Button long text'
+                        });
+                    }
+                },
+                {
+                    location: 'before',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto',
+                    template() {
+                        return $('<div />').dxButton({
+                            template: 'Button long text'
+                        });
+                    }
+                },
+                {
+                    location: 'before',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto',
+                    template() {
+                        return $('<div />').dxButton({
+                            template: 'Button long text'
+                        });
+                    }
+                },
+                {
+                    location: 'before',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto',
+                    template() {
+                        return $('<div />').dxButton({
+                            template: 'Button long text'
+                        });
+                    }
+                },
+                {
+                    location: 'before',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto',
+                    template() {
+                        return $('<div />').dxButton({
+                            template: 'Button long text'
+                        });
+                    }
+                },
+                {
+                    location: 'after',
+                    locateInMenu: 'never',
+                    template() {
+                        return $('<div />').dxTextBox({
+                            width: 256
+                        });
+                    }
+                }
+            ],
+            width: 500
+        });
+
+        const $visibleItems = this.$element.find(`.${TOOLBAR_ITEM_CLASS}:visible`);
+        assert.strictEqual($visibleItems.length, 2, 'two items are visible');
     });
 
     QUnit.test('overflow items should be shown if there is free space for them after resize', function(assert) {
