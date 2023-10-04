@@ -14705,6 +14705,10 @@ declare module DevExpress.ui {
      */
     text?: string;
     /**
+     * [descr:dxDropDownButtonOptions.type]
+     */
+    type?: DevExpress.common.ButtonType;
+    /**
      * [descr:dxDropDownButtonOptions.useSelectMode]
      */
     useSelectMode?: boolean;
