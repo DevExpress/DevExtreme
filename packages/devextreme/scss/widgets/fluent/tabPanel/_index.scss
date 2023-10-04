@@ -90,7 +90,17 @@
   }
 
   .dx-tabs-styling-mode-secondary {
-    .dx-tab-selected {
+    .dx-tab {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active {
+        @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab.dx-tab-selected {
       @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-tab-border-color-selected-basic);
 
       &.dx-state-disabled {
