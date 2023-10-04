@@ -8,7 +8,7 @@
       :current-date="currentDate"
       :height="730"
       :start-day-hour="9"
-      :end-day-hour="16"
+      :end-day-hour="19"
       :cross-scrolling-enabled="true"
       current-view="week"
     >

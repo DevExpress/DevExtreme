@@ -32,6 +32,7 @@
 
 ::ng-deep .name h2 {
   color: #fff;
+  font-size: 28px;
   text-align: left;
   padding: 0 0 5px 175px;
   margin: 0;
@@ -78,8 +79,4 @@
 
 ::ng-deep .training-background-2 {
   background-image: url("../../../../images/gym/icon-fitball.png");
-}
-
-::ng-deep .dx-theme-material .name h2 {
-  font-size: 28px;
 }

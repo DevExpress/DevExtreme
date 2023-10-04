@@ -48,6 +48,7 @@ export default {
 
 .name h2 {
   color: #fff;
+  font-size: 28px;
   text-align: left;
   padding: 0 0 5px 175px;
   margin: 0;

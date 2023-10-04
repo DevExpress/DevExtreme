@@ -21,7 +21,7 @@ $(() => {
     groupByDate: groupByDate.option('value'),
     currentDate: new Date(2021, 3, 21),
     startDayHour: 9,
-    endDayHour: 16,
+    endDayHour: 19,
     groups: ['priorityId'],
     resources: [
       {
