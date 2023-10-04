@@ -278,7 +278,7 @@ export interface BaseWidgetLoadingIndicator {
     /**
      * @docid BaseWidgetOptions.loadingIndicator.font
      * @default '#767676' &prop(color)
-     * @type object
+     * @type Font
      * @public
      */
     font?: CommonFont;
@@ -358,7 +358,7 @@ export interface BaseWidgetTitle {
      * @default 28 &prop(size)
      * @default 200 &prop(weight)
      * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
-     * @type object
+     * @type Font
      * @public
      */
     font?: CommonFont;
@@ -412,7 +412,7 @@ export interface BaseWidgetTitle {
        * @default 16 &prop(size)
        * @default 200 &prop(weight)
        * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
-       * @type object
+       * @type Font
        */
       font?: CommonFont;
       /**
@@ -532,7 +532,7 @@ export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.font
      * @default '#232323' &prop(color)
-     * @type object
+     * @type Font
      * @public
      */
     font?: CommonFont;
@@ -742,7 +742,7 @@ export interface BaseWidgetAnnotationConfig {
     /**
      * @docid
      * @default '#333333' &prop(color)
-     * @type object
+     * @type Font
      * @public
      */
     font?: CommonFont;
