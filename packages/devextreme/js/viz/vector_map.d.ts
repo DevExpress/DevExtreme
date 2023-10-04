@@ -29,7 +29,6 @@ import BaseWidget, {
     BaseWidgetMargin,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,
@@ -43,6 +42,7 @@ import {
 
 import {
     Palette,
+    Font,
 } from '../common/charts';
 
 import {

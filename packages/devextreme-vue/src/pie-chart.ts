@@ -303,7 +303,6 @@ const DxAnnotation = createConfigurationComponent({
 (DxAnnotation as any).$_expectedChildren = {
   annotationBorder: { isCollectionItem: false, optionName: "border" },
   border: { isCollectionItem: false, optionName: "border" },
-  font: { isCollectionItem: false, optionName: "font" },
   image: { isCollectionItem: false, optionName: "image" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
@@ -805,9 +804,6 @@ const DxLoadingIndicator = createConfigurationComponent({
   }
 });
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
-(DxLoadingIndicator as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxMargin = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -853,7 +849,6 @@ const DxPieChartTitle = createConfigurationComponent({
 });
 (DxPieChartTitle as any).$_optionName = "title";
 (DxPieChartTitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" },
   margin: { isCollectionItem: false, optionName: "margin" },
   pieChartTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
@@ -877,9 +872,6 @@ const DxPieChartTitleSubtitle = createConfigurationComponent({
   }
 });
 (DxPieChartTitleSubtitle as any).$_optionName = "subtitle";
-(DxPieChartTitleSubtitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxSelectionStyle = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -1118,7 +1110,6 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_expectedChildren = {
   argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
   border: { isCollectionItem: false, optionName: "border" },
-  font: { isCollectionItem: false, optionName: "font" },
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" },
   tooltipBorder: { isCollectionItem: false, optionName: "border" }

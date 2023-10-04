@@ -19,7 +19,6 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
 } from '../core/base_widget';
 
 import {
@@ -33,6 +32,7 @@ import {
     PaletteExtensionMode,
     LabelOverlap,
     ChartsColor,
+    Font,
 } from '../../common/charts';
 
 /**

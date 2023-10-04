@@ -9,7 +9,7 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, dxFunnelItem, FunnelLegendItem } from "devextreme/viz/funnel";
 import type { template } from "devextreme/core/templates/template";
 
-import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
+import type * as BaseWidgetTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -233,10 +233,6 @@ class Export extends NestedOption<IExportProps> {
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
-// Tooltip
-// LoadingIndicator
-// FunnelTitle
-// FunnelTitleSubtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -266,7 +262,7 @@ class Format extends NestedOption<IFormatProps> {
 // owners:
 // Funnel
 type IFunnelTitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -276,7 +272,7 @@ type IFunnelTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: Record<string, any>;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -290,7 +286,6 @@ type IFunnelTitleProps = React.PropsWithChildren<{
 class FunnelTitle extends NestedOption<IFunnelTitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false },
     funnelTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
@@ -300,7 +295,7 @@ class FunnelTitle extends NestedOption<IFunnelTitleProps> {
 // owners:
 // FunnelTitle
 type IFunnelTitleSubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -308,9 +303,6 @@ type IFunnelTitleSubtitleProps = React.PropsWithChildren<{
 }>
 class FunnelTitleSubtitle extends NestedOption<IFunnelTitleSubtitleProps> {
   public static OptionName = "subtitle";
-  public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false }
-  };
 }
 
 // owners:
@@ -597,7 +589,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -607,9 +599,6 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
-  };
-  public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -679,7 +668,7 @@ class Size extends NestedOption<ISizeProps> {
 // LegendTitle
 // FunnelTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: BaseWidgetTypes.Font | Record<string, any>;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -693,7 +682,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // Funnel
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: BaseWidgetTypes.Font | Record<string, any>;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -703,7 +692,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: BaseWidgetTypes.Font | Record<string, any>;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -735,7 +724,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   format?: LocalizationTypes.Format;
   opacity?: number;
   paddingLeftRight?: number;
@@ -756,7 +745,6 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static OptionName = "tooltip";
   public static ExpectedChildren = {
     border: { optionName: "border", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }

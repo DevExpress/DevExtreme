@@ -311,9 +311,6 @@ const DxLoadingIndicator = createConfigurationComponent({
   }
 });
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
-(DxLoadingIndicator as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxMargin = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -490,9 +487,6 @@ const DxSubtitle = createConfigurationComponent({
   }
 });
 (DxSubtitle as any).$_optionName = "subtitle";
-(DxSubtitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxSubvalueIndicator = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -612,7 +606,6 @@ const DxTitle = createConfigurationComponent({
 });
 (DxTitle as any).$_optionName = "title";
 (DxTitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" },
   margin: { isCollectionItem: false, optionName: "margin" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
 };
@@ -659,7 +652,6 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
-  font: { isCollectionItem: false, optionName: "font" },
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };

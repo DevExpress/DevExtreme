@@ -9,7 +9,7 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, BarGaugeBarInfo, BarGaugeLegendItem } from "devextreme/viz/bar_gauge";
 import type { template } from "devextreme/core/templates/template";
 
-import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
+import type * as BaseWidgetTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -181,7 +181,7 @@ class Animation extends NestedOption<IAnimationProps> {
 // owners:
 // BarGauge
 type IBarGaugeTitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -191,7 +191,7 @@ type IBarGaugeTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: Record<string, any>;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -206,7 +206,6 @@ class BarGaugeTitle extends NestedOption<IBarGaugeTitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
     barGaugeTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
   };
@@ -215,7 +214,7 @@ class BarGaugeTitle extends NestedOption<IBarGaugeTitleProps> {
 // owners:
 // BarGaugeTitle
 type IBarGaugeTitleSubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -223,9 +222,6 @@ type IBarGaugeTitleSubtitleProps = React.PropsWithChildren<{
 }>
 class BarGaugeTitleSubtitle extends NestedOption<IBarGaugeTitleSubtitleProps> {
   public static OptionName = "subtitle";
-  public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false }
-  };
 }
 
 // owners:
@@ -263,10 +259,6 @@ class Export extends NestedOption<IExportProps> {
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
-// LoadingIndicator
-// Tooltip
-// BarGaugeTitle
-// BarGaugeTitleSubtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -476,7 +468,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 // BarGauge
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -486,9 +478,6 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
-  };
-  public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -534,7 +523,7 @@ class Size extends NestedOption<ISizeProps> {
 // LegendTitle
 // BarGaugeTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: BaseWidgetTypes.Font | Record<string, any>;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -548,7 +537,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // BarGauge
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: BaseWidgetTypes.Font | Record<string, any>;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -558,7 +547,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: BaseWidgetTypes.Font | Record<string, any>;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -590,7 +579,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -612,7 +601,6 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static OptionName = "tooltip";
   public static ExpectedChildren = {
     border: { optionName: "border", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }

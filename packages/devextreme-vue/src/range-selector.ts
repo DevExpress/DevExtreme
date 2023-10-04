@@ -877,9 +877,6 @@ const DxLoadingIndicator = createConfigurationComponent({
   }
 });
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
-(DxLoadingIndicator as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxMargin = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -1506,9 +1503,6 @@ const DxSubtitle = createConfigurationComponent({
   }
 });
 (DxSubtitle as any).$_optionName = "subtitle";
-(DxSubtitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxTick = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -1579,7 +1573,6 @@ const DxTitle = createConfigurationComponent({
 });
 (DxTitle as any).$_optionName = "title";
 (DxTitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" },
   margin: { isCollectionItem: false, optionName: "margin" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
 };

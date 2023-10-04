@@ -15,8 +15,7 @@ import {
 
 
 import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Font } from 'devextreme/viz/core/base_widget';
+import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -32,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get font(): Font {
+    get font(): Font | any {
         return this._getOption('font');
     }
-    set font(value: Font) {
+    set font(value: Font | any) {
         this._setOption('font', value);
     }
 
@@ -64,10 +63,10 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: any, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: any, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 

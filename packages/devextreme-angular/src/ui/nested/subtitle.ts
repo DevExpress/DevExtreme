@@ -14,8 +14,7 @@ import {
 
 
 
-import { TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Font } from 'devextreme/viz/core/base_widget';
+import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -31,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get font(): Font {
+    get font(): Font | any {
         return this._getOption('font');
     }
-    set font(value: Font) {
+    set font(value: Font | any) {
         this._setOption('font', value);
     }
 

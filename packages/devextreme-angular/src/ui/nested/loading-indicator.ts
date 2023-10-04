@@ -16,7 +16,6 @@ import {
 
 
 
-import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,
@@ -40,10 +39,10 @@ export class DxoLoadingIndicatorComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get font(): Font {
+    get font(): any {
         return this._getOption('font');
     }
-    set font(value: Font) {
+    set font(value: any) {
         this._setOption('font', value);
     }
 

@@ -309,7 +309,6 @@ const DxFunnelTitle = createConfigurationComponent({
 });
 (DxFunnelTitle as any).$_optionName = "title";
 (DxFunnelTitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" },
   funnelTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
   margin: { isCollectionItem: false, optionName: "margin" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
@@ -333,9 +332,6 @@ const DxFunnelTitleSubtitle = createConfigurationComponent({
   }
 });
 (DxFunnelTitleSubtitle as any).$_optionName = "subtitle";
-(DxFunnelTitleSubtitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxHatching = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -614,9 +610,6 @@ const DxLoadingIndicator = createConfigurationComponent({
   }
 });
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
-(DxLoadingIndicator as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxMargin = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -771,7 +764,6 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
-  font: { isCollectionItem: false, optionName: "font" },
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" },
   tooltipBorder: { isCollectionItem: false, optionName: "border" }

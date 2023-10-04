@@ -10,7 +10,7 @@ import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSav
 import type { ChartsColor } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 
-import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
+import type * as BaseWidgetTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -188,10 +188,6 @@ class Export extends NestedOption<IExportProps> {
 // owners:
 // Label
 // Text
-// LoadingIndicator
-// Tooltip
-// Title
-// Subtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -251,7 +247,7 @@ class Label extends NestedOption<ILabelProps> {
 // LinearGauge
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -261,9 +257,6 @@ class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
   public static OptionName = "loadingIndicator";
   public static DefaultsProps = {
     defaultShow: "show"
-  };
-  public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false }
   };
 }
 
@@ -408,7 +401,7 @@ class Size extends NestedOption<ISizeProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -416,9 +409,6 @@ type ISubtitleProps = React.PropsWithChildren<{
 }>
 class Subtitle extends NestedOption<ISubtitleProps> {
   public static OptionName = "subtitle";
-  public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false }
-  };
 }
 
 // owners:
@@ -489,7 +479,7 @@ class Tick extends NestedOption<ITickProps> {
 // owners:
 // LinearGauge
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -499,7 +489,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: Record<string, any>;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -513,7 +503,6 @@ type ITitleProps = React.PropsWithChildren<{
 class Title extends NestedOption<ITitleProps> {
   public static OptionName = "title";
   public static ExpectedChildren = {
-    font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
   };
@@ -536,7 +525,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: Record<string, any>;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -558,7 +547,6 @@ class Tooltip extends NestedOption<ITooltipProps> {
   public static OptionName = "tooltip";
   public static ExpectedChildren = {
     border: { optionName: "border", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
   };

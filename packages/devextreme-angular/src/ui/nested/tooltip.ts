@@ -19,7 +19,6 @@ import { DashStyle } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
-import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,
@@ -99,10 +98,10 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get font(): Font {
+    get font(): any {
         return this._getOption('font');
     }
-    set font(value: Font) {
+    set font(value: any) {
         this._setOption('font', value);
     }
 

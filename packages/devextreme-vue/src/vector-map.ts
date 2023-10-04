@@ -235,7 +235,6 @@ const DxAnnotation = createConfigurationComponent({
 (DxAnnotation as any).$_expectedChildren = {
   annotationBorder: { isCollectionItem: false, optionName: "border" },
   border: { isCollectionItem: false, optionName: "border" },
-  font: { isCollectionItem: false, optionName: "font" },
   image: { isCollectionItem: false, optionName: "image" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
@@ -667,9 +666,6 @@ const DxLoadingIndicator = createConfigurationComponent({
   }
 });
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
-(DxLoadingIndicator as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 const DxMargin = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -832,7 +828,6 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
-  font: { isCollectionItem: false, optionName: "font" },
   shadow: { isCollectionItem: false, optionName: "shadow" },
   tooltipBorder: { isCollectionItem: false, optionName: "border" }
 };
@@ -883,7 +878,6 @@ const DxVectorMapTitle = createConfigurationComponent({
 });
 (DxVectorMapTitle as any).$_optionName = "title";
 (DxVectorMapTitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" },
   margin: { isCollectionItem: false, optionName: "margin" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" },
   vectorMapTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" }
@@ -907,9 +901,6 @@ const DxVectorMapTitleSubtitle = createConfigurationComponent({
   }
 });
 (DxVectorMapTitleSubtitle as any).$_optionName = "subtitle";
-(DxVectorMapTitleSubtitle as any).$_expectedChildren = {
-  font: { isCollectionItem: false, optionName: "font" }
-};
 
 export default DxVectorMap;
 export {
