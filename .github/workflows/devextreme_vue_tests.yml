@@ -43,7 +43,7 @@ jobs:
 
     - name: Build devextreme package
       run: |
-        npx nx build devextreme-main
+        npx nx build devextreme
 
     - name: Generate wrappers
       run: npm run vue:regenerate

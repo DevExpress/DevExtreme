@@ -64,7 +64,6 @@
   ],
   "workspaces": [
     "packages/*",
-    "packages/devextreme/artifacts/npm/*",
     "playgrounds/*"
   ]
 }

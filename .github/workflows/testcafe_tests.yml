@@ -41,7 +41,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: npx nx build:testcafe devextreme-main
+      run: npx nx build:testcafe devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
