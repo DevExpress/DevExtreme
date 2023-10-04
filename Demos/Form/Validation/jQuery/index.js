@@ -125,7 +125,6 @@ $(() => {
           text: 'Date of birth',
         },
         editorOptions: {
-          invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
           placeholder: 'Birth Date',
           acceptCustomValue: false,
         },
@@ -143,10 +142,29 @@ $(() => {
         label: {
           text: 'Vacation Dates',
         },
+        validationRules: [{
+          type: 'custom',
+          validationCallback: ({ value }) => {
+            const [startDate, endDate] = value;
+
+            if (startDate === null && endDate === null) {
+              return true;
+            }
+
+            if (startDate === null || endDate === null) {
+              return false;
+            }
+
+            const millisecondsPerDay = 24 * 60 * 60 * 1000;
+            const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+            return daysDifference <= 25;
+          },
+          message: 'The vacation period must not exceed 25 days',
+        }],
         editorOptions: {
           startDatePlaceholder: 'Start Date',
           endDatePlaceholder: 'End Date',
-          invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
           acceptCustomValue: false,
         },
       }],

@@ -75,6 +75,10 @@
               editor-type="dxDateRangeBox"
             >
               <DxLabel text="Vacation Dates"/>
+              <DxCustomRule
+                :validation-callback="validateVacationDates"
+                message="The vacation period must not exceed 25 days"
+              />
             </DxSimpleItem>
           </DxGroupItem>
           <DxGroupItem caption="Billing address">
@@ -167,6 +171,7 @@ import DxForm, {
   DxPatternRule,
   DxEmailRule,
   DxAsyncRule,
+  DxCustomRule,
 } from 'devextreme-vue/form';
 import DxAutocomplete from 'devextreme-vue/autocomplete';
 import 'devextreme-vue/date-range-box';
@@ -200,6 +205,7 @@ export default {
     DxForm,
     DxAutocomplete,
     DxAsyncRule,
+    DxCustomRule,
     notify,
   },
   data() {
@@ -276,15 +282,11 @@ export default {
       dateBoxOptions: {
         placeholder: 'Birth Date',
         acceptCustomValue: false,
-        invalidDateMessage:
-          'The date must have the following format: MM/dd/yyyy',
       },
       dateRangeBoxOptions: {
         endDatePlaceholder: 'End Date',
         startDatePlaceholder: 'Start Date',
         acceptCustomValue: false,
-        invalidDateMessage:
-          'The date must have the following format: MM/dd/yyyy',
       },
       checkBoxOptions: {
         text: 'I agree to the Terms and Conditions',
@@ -339,6 +341,22 @@ export default {
     asyncValidation(params) {
       return sendRequest(params.value);
     },
+    validateVacationDates({ value }) {
+      const [startDate, endDate] = value;
+
+      if (startDate === null && endDate === null) {
+        return true;
+      }
+
+      if (startDate === null || endDate === null) {
+        return false;
+      }
+
+      const millisecondsPerDay = 24 * 60 * 60 * 1000;
+      const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+      return daysDifference <= 25;
+    },
     handleSubmit(e) {
       notify({
         message: 'You have submitted the form',
@@ -354,7 +372,7 @@ export default {
 </script>
 <style scoped>
 form {
-  margin: 10px;
+  margin: 10px 10px 15px;
 }
 
 .last-group {
