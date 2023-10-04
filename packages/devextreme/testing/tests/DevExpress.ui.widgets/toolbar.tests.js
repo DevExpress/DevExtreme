@@ -932,68 +932,31 @@ QUnit.module('adaptivity', moduleConfig, () => {
     });
 
     QUnit.test('Buttons declared via template should be hidden if there is no enough free space for them (T1191856)', function(assert) {
-        this.instance.option({
-            items: [
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    locateInMenu: 'auto',
-                    template(e, f, g) {
-                        return $('<div />').dxButton({
-                            text: 'Button long text'
-                        });
-                    }
-                },
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    locateInMenu: 'auto',
-                    template() {
-                        return $('<div />').dxButton({
-                            template: 'Button long text'
-                        });
-                    }
-                },
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    locateInMenu: 'auto',
-                    template() {
-                        return $('<div />').dxButton({
-                            template: 'Button long text'
-                        });
-                    }
-                },
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    locateInMenu: 'auto',
-                    template() {
-                        return $('<div />').dxButton({
-                            template: 'Button long text'
-                        });
-                    }
-                },
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    locateInMenu: 'auto',
-                    template() {
-                        return $('<div />').dxButton({
-                            template: 'Button long text'
-                        });
-                    }
-                },
-                {
-                    location: 'after',
-                    locateInMenu: 'never',
-                    template() {
-                        return $('<div />').dxTextBox({
-                            width: 256
-                        });
-                    }
+        const items = [{
+            location: 'after',
+            locateInMenu: 'never',
+            template() {
+                return $('<div />').dxTextBox({
+                    width: 256
+                });
+            }
+        }];
+
+        for(let i = 0; i < 5; i++) {
+            items.push({
+                location: 'before',
+                widget: 'dxButton',
+                locateInMenu: 'auto',
+                template() {
+                    return $('<div />').dxButton({
+                        text: 'Button long text'
+                    });
                 }
-            ],
+            });
+        }
+
+        this.instance.option({
+            items,
             width: 500
         });
 
