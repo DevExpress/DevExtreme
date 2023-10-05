@@ -75,13 +75,10 @@
     &::after {
       content: string.unquote("attr(DATA-DX_TEXT)");
       position: absolute;
-      bottom: 0;
-      left: 0;
       width: 100%;
       pointer-events: none;
       color: $tabs-tab-color;
       font-weight: $fluent-tab-font-weight-basic;
-      text-align: center;
       visibility: visible;
     }
   }
@@ -92,4 +89,24 @@
 
     @include dx-icon-sizing($fluent-base-icon-size);
   }
+}
+
+.dx-tabs-icon-position-start .dx-tab-text::after {
+  text-align: end;
+}
+
+.dx-tabs-icon-position-end .dx-tab-text::after {
+  text-align: start;
+}
+
+.dx-tabs-icon-position-top .dx-tab-text::after {
+  bottom: 0;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.dx-tabs-icon-position-bottom .dx-tab-text::after {
+  top: 0;
+  text-align: center;
+  vertical-align: top;
 }
