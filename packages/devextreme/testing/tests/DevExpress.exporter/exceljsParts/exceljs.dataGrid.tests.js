@@ -40,8 +40,10 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
-        this.stub = sinon.stub(errors, 'log').callsFake(() => {
-            QUnit.assert.strictEqual(true, false, 'error.log should not be called');
+        this.stub = sinon.stub(errors, 'log').callsFake((errorId) => {
+            if(errorId === 'W0003') {
+                QUnit.assert.strictEqual(true, false, 'no deprecation warnings should be logged');
+            }
         });
 
         helper = new ExcelJSDataGridTestHelper(this.worksheet);

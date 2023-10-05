@@ -1497,6 +1497,7 @@ declare module DevExpress.common {
        * [descr:GlobalConfig.floatingActionButtonConfig.shading]
        */
       shading?: boolean;
+      licenseKey?: string;
     };
     /**
      * [descr:GlobalConfig.forceIsoDateParsing]
