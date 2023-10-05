@@ -196,3 +196,26 @@ test('AppointmentForm should display correct dates in work-week when firstDayOfW
   height: 600,
   firstDayOfWeek: 2,
 }));
+
+test('End Date should not increment infinitely when the All day switch is toggled', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { appointmentPopup } = scheduler;
+
+  await t
+    .doubleClick(scheduler.getDateTableCell(0, 0))
+    .expect(appointmentPopup.endDateElement.value)
+    .eql('11/2/2020, 12:00 AM')
+
+    .click(appointmentPopup.allDayElement)
+    .expect(appointmentPopup.endDateElement.value)
+    .eql('11/1/2020')
+
+    .click(appointmentPopup.allDayElement)
+    .expect(appointmentPopup.endDateElement.value)
+    .eql('11/2/2020, 12:00 AM');
+}).before(async () => createWidget('dxScheduler', {
+  currentView: 'month',
+  currentDate: new Date(2020, 10, 1),
+  startDayHour: 9,
+  height: 600,
+}));
