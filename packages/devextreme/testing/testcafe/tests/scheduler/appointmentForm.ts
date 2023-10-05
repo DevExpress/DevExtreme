@@ -197,7 +197,7 @@ test('AppointmentForm should display correct dates in work-week when firstDayOfW
   firstDayOfWeek: 2,
 }));
 
-test('End Date should not increment infinitely when the All day switch is toggled', async (t) => {
+test('End Date with 12:00 AM time should not increment infinitely when the All day switch is toggled', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
