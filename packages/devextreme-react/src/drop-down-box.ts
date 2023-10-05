@@ -125,7 +125,8 @@ class DropDownBox extends BaseComponent<React.PropsWithChildren<IDropDownBoxOpti
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   maxLength: PropTypes.oneOfType([
     PropTypes.number,

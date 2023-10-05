@@ -127,7 +127,8 @@ class Autocomplete extends BaseComponent<React.PropsWithChildren<IAutocompleteOp
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   maxItemCount: PropTypes.number,
   maxLength: PropTypes.oneOfType([
