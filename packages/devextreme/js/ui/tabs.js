@@ -12,7 +12,7 @@ import pointerEvents from '../events/pointer';
 import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
 import { TABS_EXPANDED_CLASS } from './tabs/constants';
-import { isMaterial, current as currentTheme } from './themes';
+import { isMaterial, isFluent, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
 import Scrollable from './scroll_view/ui.scrollable';
 import { default as CollectionWidget } from './collection/ui.collection_widget.live_update';
@@ -132,7 +132,7 @@ const Tabs = CollectionWidget.inherit({
 
         return this.callBase().concat([
             {
-                device: function() {
+                device() {
                     return devices.real().deviceType !== 'desktop';
                 },
                 options: {
@@ -146,7 +146,7 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: function() {
+                device() {
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
@@ -154,7 +154,17 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: function() {
+                // TODO: ADD TEST
+                device() {
+                    return isFluent(themeName);
+                },
+                options: {
+                    iconPosition: ICON_POSITION.top,
+                    stylingMode: STYLING_MODE.secondary,
+                }
+            },
+            {
+                device() {
                     return isMaterial(themeName);
                 },
                 options: {
@@ -668,6 +678,10 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'stylingMode': {
                 this._toggleStylingModeClass(args.value);
+                if(!this._isServerSide()) {
+                    // TODO: ADD TEST
+                    this._dimensionChanged();
+                }
                 break;
             }
             default:
