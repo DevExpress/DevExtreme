@@ -344,21 +344,13 @@ const TabPanel = MultiView.inherit({
 
         const value = TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
 
-        this._tabs.option('_indicatorPosition', value);
+        this._setTabsOption('_indicatorPosition', value);
     },
 
     _updateTabsOrientation() {
         const orientation = this._getTabsOrientation();
 
-        this._tabs.option('orientation', orientation);
-    },
-
-    _updateTabsIconPosition(iconPosition) {
-        this._tabs.option({ iconPosition });
-    },
-
-    _updateTabsStylingMode(stylingMode) {
-        this._tabs.option({ stylingMode });
+        this._setTabsOption('orientation', orientation);
     },
 
     _toggleWrapperFocusedClass(isFocused) {
@@ -508,10 +500,10 @@ const TabPanel = MultiView.inherit({
                 this._updateTabsOrientation();
                 break;
             case 'iconPosition':
-                this._updateTabsIconPosition(value);
+                this._setTabsOption('iconPosition', value);
                 break;
             case 'stylingMode':
-                this._updateTabsStylingMode(value);
+                this._setTabsOption('stylingMode', value);
                 break;
             default:
                 this.callBase(args);
