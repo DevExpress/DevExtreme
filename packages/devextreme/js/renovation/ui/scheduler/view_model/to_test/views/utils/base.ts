@@ -33,7 +33,8 @@ export const setOptionHour = (date: Date, optionHour: number): Date => {
     return nextDate;
   }
 
-  nextDate.setHours(optionHour, (optionHour % 1) * 60, 0, 0);
+  const newHour = optionHour === 24 ? 0 : optionHour;
+  nextDate.setHours(newHour, (newHour % 1) * 60, 0, 0);
 
   return nextDate;
 };
