@@ -257,6 +257,7 @@ const iconSet = {
   description: '\f171',
   belloutline: '\f172',
   to: '\f173',
+  arrowback: '\f15a',
 };
 
 fixture.disablePageReloads`Icons`

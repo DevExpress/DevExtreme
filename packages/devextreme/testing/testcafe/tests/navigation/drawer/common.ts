@@ -3,10 +3,10 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
-import { isMaterial } from '../../../helpers/themeUtils';
+import { isMaterialBased } from '../../../helpers/themeUtils';
 
 const testFixture = () => {
-  if (isMaterial()) {
+  if (isMaterialBased()) {
     return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;

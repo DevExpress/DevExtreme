@@ -7,7 +7,7 @@ fixture`Keyboard Navigation - editOnKeyPress`
 
 const DATA_GRID_SELECTOR = '#container';
 
-test('Editing should start ', async (t) => {
+test('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await dataGrid.scrollBy({ y: 10000 });
