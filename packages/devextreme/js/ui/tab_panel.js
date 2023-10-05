@@ -38,6 +38,15 @@ const TABS_POSITION = {
     left: 'left',
 };
 
+const TABS_INDICATOR_POSITION_BY_TABS_POSITION = {
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+};
+
+const TABS_INDICATOR_POSITION_DEFAULT = 'bottom';
+
 const TABS_ORIENTATION = {
     horizontal: 'horizontal',
     vertical: 'vertical',
@@ -286,6 +295,7 @@ const TabPanel = MultiView.inherit({
             _itemAttributes: {
                 class: TABPANEL_TABS_ITEM_CLASS,
             },
+            _indicatorPosition: TABS_INDICATOR_POSITION_DEFAULT,
         };
     },
 
@@ -327,6 +337,14 @@ const TabPanel = MultiView.inherit({
         const newClass = this._getTabPanelTabsPositionClass();
 
         this.$element().addClass(newClass);
+    },
+
+    _updateTabsIndicatorPosition() {
+        const { tabsPosition } = this.option();
+
+        const value = TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
+
+        this._tabs.option('_indicatorPosition', value);
     },
 
     _updateTabsOrientation() {
@@ -486,6 +504,7 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'tabsPosition':
                 this._toggleTabPanelTabsPositionClass();
+                this._updateTabsIndicatorPosition();
                 this._updateTabsOrientation();
                 break;
             case 'iconPosition':
