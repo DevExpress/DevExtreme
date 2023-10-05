@@ -31,32 +31,32 @@
 .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
   .dx-tab {
     &.dx-state-hover .dx-tab-content {
-      @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-hover);
+      @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-hover);
     }
 
     &.dx-state-active .dx-tab-content {
-      @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-active);
+      @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-active);
     }
 
     &.dx-tab-selected {
       .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-basic);
+        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-basic);
       }
 
       &.dx-state-focused .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-focused);
+        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-focused);
       }
 
       &.dx-state-hover .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-hover);
+        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-hover);
       }
 
       &.dx-state-active .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-selected-active);
+        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-active);
       }
 
       &.dx-state-disabled .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-tab-border-color-disabled);
+        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-disabled);
       }
     }
   } 
@@ -65,31 +65,31 @@
 .dx-tabs-vertical.dx-tabs-styling-mode-secondary {
   .dx-tab {
     &.dx-state-hover {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-hover);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-hover);
     }
 
     &.dx-state-active {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-active);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-active);
     }
   }
 
   .dx-tab-selected {
-    @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-basic);
+    @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-basic);
 
     &.dx-state-focused {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-focused);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-focused);
     }
 
     &.dx-state-hover {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-hover);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-hover);
     }
 
     &.dx-state-active {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-selected-active);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-active);
     }
 
     &.dx-state-disabled {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-tab-border-color-disabled);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-disabled);
     }
   }
 }
