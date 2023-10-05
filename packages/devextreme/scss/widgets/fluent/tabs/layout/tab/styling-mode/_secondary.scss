@@ -65,7 +65,7 @@
   }
 
   &.dx-tabs-vertical {
-    .dx-tab {      
+    .dx-tab {
       @include dx-tabs-indicator-secondary();
       @include dx-tabs-vertical-indicator-secondary(right);
 
