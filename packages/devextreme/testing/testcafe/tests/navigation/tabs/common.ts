@@ -37,6 +37,59 @@ fixture.disablePageReloads`Tabs_common`
   });
 });
 
+[true, false].forEach((rtlEnabled) => {
+  ['primary', 'secondary'].forEach((stylingMode) => {
+    test('Tabs icon position', async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await testScreenshot(t, takeScreenshot, `Tabs 1 selected stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
+
+      await t.hover(firstItem);
+      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      await t.dispatchEvent(firstItem, 'mousedown');
+      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
+
+      await t
+        .dispatchEvent(firstItem, 'mouseup')
+        .click(firstItem)
+        .hover(thirdItem);
+
+      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      await t.dispatchEvent(thirdItem, 'mousedown');
+      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await appendElementTo('#container', 'div', 'tabs');
+      await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+
+      const dataSource = [
+        { text: 'user' },
+        { text: 'comment', icon: 'comment' },
+        { icon: 'user' },
+        { icon: 'money' },
+      ] as Item[];
+
+      const tabsOptions = {
+        dataSource,
+        stylingMode,
+        rtlEnabled,
+        selectedItem: dataSource[0],
+      };
+
+      return createWidget('dxTabs', tabsOptions, '#tabs');
+    });
+  });
+});
+
 test('Tabs in contrast theme', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -52,10 +105,14 @@ test('Tabs in contrast theme', async (t) => {
   await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
 
   const dataSource = [
-    { text: 'user' },
-    { text: 'comment', icon: 'comment' },
-    { icon: 'user' },
-    { icon: 'money' },
+    { text: 'John Heart' },
+    { text: 'Marina Thomas', disabled: true },
+    { text: 'Robert Reagan' },
+    { text: 'Greta Sims' },
+    { text: 'Olivia Peyton' },
+    { text: 'Ed Holmes' },
+    { text: 'Wally Hobbs' },
+    { text: 'Brad Jameson' },
   ] as Item[];
 
   const tabsOptions = {
