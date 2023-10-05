@@ -16,10 +16,9 @@
   }
 }
 
-@mixin dx-tabs-indicator-primary($position, $background-color) {
+@mixin dx-tabs-indicator-primary($position) {
   @include dx-tabs-indicator();
-  @include dx-tabs-indicator-background($background-color);
-  
+
   &::after {
     @if $position == top {
       top: 0;
