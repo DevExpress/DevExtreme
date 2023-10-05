@@ -286,8 +286,6 @@ class BaseRenderingStrategy {
     const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
     return getAppointmentTakesAllDay(
       adapter,
-      this.viewStartDayHour,
-      this.viewEndDayHour,
       this.allDayPanelMode,
     );
   }

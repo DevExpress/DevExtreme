@@ -2,8 +2,11 @@
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
-import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import {
+  isDateAndTimeView,
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { ExpressionUtils } from '../m_expression_utils';
@@ -17,6 +20,7 @@ import { createFormattedDateText } from './m_text_utils';
 const toMs = dateUtils.dateToMilliseconds;
 const APPOINTMENT_DATE_TEXT_FORMAT = 'TIME';
 
+// TODO: Vinogradov types refactoring.
 export class DateGeneratorBaseStrategy {
   options: any;
 
@@ -24,6 +28,7 @@ export class DateGeneratorBaseStrategy {
     this.options = options;
   }
 
+  // TODO Vinogradov: Remove these getters.
   get rawAppointment() { return this.options.rawAppointment; }
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
@@ -46,7 +51,9 @@ export class DateGeneratorBaseStrategy {
 
   get viewEndDayHour() { return this.options.viewEndDayHour; }
 
-  get endViewDate() { return this.options.endViewDate; }
+  get endViewDate() {
+    return dateUtilsTs.addOffsets(this.options.endViewDate, [-this.options.viewOffset]);
+  }
 
   get viewType() { return this.options.viewType; }
 
@@ -66,11 +73,26 @@ export class DateGeneratorBaseStrategy {
       : this.options.intervalDuration;
   }
 
+  private shiftByOffset(
+    appointments: any[],
+    viewOffset: number,
+  ): any[] {
+    return appointments.map((item) => ({
+      ...item,
+      startDate: dateUtilsTs.addOffsets(item.startDate, [-viewOffset]),
+      endDate: dateUtilsTs.addOffsets(item.endDate, [-viewOffset]),
+    }));
+  }
+
   generate(appointmentAdapter) {
+    const { viewOffset } = this.options;
+    const { isRecurrent } = appointmentAdapter;
+
     const itemGroupIndices = this._getGroupIndices(this.rawAppointment);
 
     let appointmentList = this._createAppointments(appointmentAdapter, itemGroupIndices);
 
+    appointmentList = this.shiftByOffset(appointmentList, viewOffset);
     appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointmentAdapter); // T983264
 
     if (this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
@@ -80,16 +102,14 @@ export class DateGeneratorBaseStrategy {
     let dateSettings = this._createGridAppointmentList(appointmentList, appointmentAdapter);
 
     const firstViewDates = this._getAppointmentsFirstViewDate(dateSettings);
-    this._fillNormalizedStartDate(dateSettings, firstViewDates);
 
+    dateSettings = this._fillNormalizedStartDate(dateSettings, firstViewDates);
     dateSettings = this._cropAppointmentsByStartDayHour(dateSettings, firstViewDates);
     dateSettings = this._fillNormalizedEndDate(dateSettings, this.rawAppointment);
 
     if (this._needSeparateLongParts()) {
       dateSettings = this._separateLongParts(dateSettings, appointmentAdapter);
     }
-
-    const { isRecurrent } = appointmentAdapter;
 
     return {
       dateSettings,
@@ -252,16 +272,10 @@ export class DateGeneratorBaseStrategy {
   }
 
   _fillNormalizedEndDate(dateSettings, rawAppointment) {
-    return dateSettings.map((item) => {
-      const { endDate } = item;
-
-      const normalizedEndDate = this.normalizeEndDateByViewEnd(rawAppointment, endDate);
-
-      return {
-        ...item,
-        normalizedEndDate,
-      };
-    });
+    return dateSettings.map((item) => ({
+      ...item,
+      normalizedEndDate: this.normalizeEndDateByViewEnd(rawAppointment, item.endDate),
+    }));
   }
 
   _separateLongParts(gridAppointmentList, appointmentAdapter) {
@@ -269,10 +283,10 @@ export class DateGeneratorBaseStrategy {
 
     gridAppointmentList.forEach((gridAppointment) => {
       const maxDate = new Date(this.dateRange[1]);
-      const { normalizedEndDate: endDateOfPart } = gridAppointment;
+      const { startDate, normalizedEndDate: endDateOfPart } = gridAppointment;
 
       const longStartDateParts = dateUtils.getDatesOfInterval(
-        gridAppointment.startDate,
+        startDate,
         endDateOfPart,
         {
           milliseconds: this.getIntervalDuration(),
@@ -398,24 +412,43 @@ export class DateGeneratorBaseStrategy {
     });
   }
 
-  _getAppointmentsFirstViewDate(appointments) {
-    return appointments.map((appointment) => this._getAppointmentFirstViewDate(appointment));
+  _getAppointmentsFirstViewDate(appointments: any[]): Date[] {
+    const { viewOffset } = this.options;
+    return appointments.map((appointment: any): Date => {
+      const firstDate = this._getAppointmentFirstViewDate({
+        ...appointment,
+        startDate: dateUtilsTs.addOffsets(appointment.startDate, [viewOffset]),
+        endDate: dateUtilsTs.addOffsets(appointment.endDate, [viewOffset]),
+      });
+
+      if (!firstDate) {
+        return appointment.startDate as Date;
+      }
+
+      const test = dateUtilsTs.addOffsets(firstDate, [-viewOffset]);
+
+      return test > appointment.startDate
+        ? test
+        : appointment.startDate as Date;
+    });
   }
 
   _fillNormalizedStartDate(
     appointments,
     firstViewDates,
+    // TODO Vinogradov: Check this unused argument.
     rawAppointment?,
   ) {
-    appointments.forEach((appointment, idx) => {
-      appointment.startDate = this._getAppointmentResultDate({
-        appointment,
+    return appointments.map((item, idx) => ({
+      ...item,
+      startDate: this._getAppointmentResultDate({
+        appointment: item,
         rawAppointment,
-        startDate: new Date(appointment.startDate),
+        startDate: new Date(item.startDate),
         startDayHour: this.viewStartDayHour,
         firstViewDate: firstViewDates[idx],
-      });
-    });
+      }),
+    }));
   }
 
   _cropAppointmentsByStartDayHour(appointments, firstViewDates) {
@@ -430,7 +463,7 @@ export class DateGeneratorBaseStrategy {
     });
   }
 
-  _getAppointmentResultDate(options) {
+  private _getAppointmentResultDate(options) {
     const {
       appointment,
       startDayHour,
@@ -454,7 +487,7 @@ export class DateGeneratorBaseStrategy {
       : resultDate;
   }
 
-  _getAppointmentFirstViewDate(appointment) {
+  _getAppointmentFirstViewDate(appointment: any): Date | null {
     const groupIndex = appointment.source.groupIndex || 0;
     const {
       startDate,
@@ -462,7 +495,7 @@ export class DateGeneratorBaseStrategy {
     } = appointment;
 
     if (this.isAllDayRowAppointment || appointment.allDay) {
-      return this.viewDataProvider.findAllDayGroupCellStartDate(groupIndex, startDate);
+      return this.viewDataProvider.findAllDayGroupCellStartDate(groupIndex);
     }
 
     return this.viewDataProvider.findGroupCellStartDate(

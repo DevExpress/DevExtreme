@@ -1,4 +1,5 @@
 /* globals Intl */
+// TODO refactoring: Review all date utils functions and move useful to __internal/core/utils/date.ts
 import { isObject, isString, isDate, isDefined, isNumeric } from './type';
 import { adjust } from './math';
 import { each } from './iterator';

@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 class BaseStrategy {
   options: any;
@@ -108,7 +108,7 @@ class BaseStrategy {
 
     const timeShift = inAllDayRow
       ? 0
-      : this.getTimeShift(date);
+      : this.getTimeShiftRatio(positionByMap, date);
 
     const shift = this.getPositionShift(timeShift, inAllDayRow);
     const horizontalHMax = this.positionHelper.getHorizontalMax(validGroupIndex, date);
@@ -136,8 +136,12 @@ class BaseStrategy {
 
   getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
     const result: any = [];
+    const { viewOffset } = this.options;
+    const shiftedStartDate = inAllDayRow
+      ? startDate
+      : dateUtilsTs.addOffsets(startDate, [-viewOffset]);
 
-    if (this.viewDataProvider.isSkippedDate(startDate)) {
+    if (this.viewDataProvider.isSkippedDate(shiftedStartDate)) {
       return result;
     }
 
@@ -187,24 +191,16 @@ class BaseStrategy {
     return validPosition;
   }
 
-  getTimeShift(date) {
-    const currentDayStart = new Date(date);
+  private getTimeShiftRatio(
+    positionByMap: any,
+    appointmentDate: Date,
+  ): number {
+    const { cellDuration, viewOffset } = this.options;
+    const { rowIndex, columnIndex } = positionByMap;
+    const matchedCell = this.viewDataProvider.viewDataMap.dateTableMap[rowIndex][columnIndex];
+    const matchedCellStartDate = dateUtilsTs.addOffsets(matchedCell.cellData.startDate, [-viewOffset]);
 
-    const currentDayEndHour = new Date(new Date(date).setHours(this.viewEndDayHour, 0, 0));
-
-    if (date.getTime() <= currentDayEndHour.getTime()) {
-      currentDayStart.setHours(this.viewStartDayHour, 0, 0, 0);
-    }
-
-    const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
-    const currentDateTime = date.getTime();
-    const currentDayStartTime = currentDayStart.getTime();
-
-    const minTime = this.startViewDate.getTime();
-
-    return currentDateTime > minTime
-      ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % this.cellDuration) / this.cellDuration
-      : 0;
+    return (appointmentDate.getTime() - matchedCellStartDate.getTime()) / cellDuration;
   }
 }
 
