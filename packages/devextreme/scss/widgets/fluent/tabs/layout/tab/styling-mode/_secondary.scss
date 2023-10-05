@@ -23,73 +23,79 @@
     }
   }
 
-  .dx-tab-content {
-    position: relative;
-  }
-}
+  &:not(.dx-tabs-vertical) {
+    .dx-tab .dx-tab-content {
+      position: relative;
 
-.dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
-  .dx-tab {
-    &.dx-state-hover .dx-tab-content {
-      @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-hover);
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-horizontal-indicator-secondary(bottom);
     }
 
-    &.dx-state-active .dx-tab-content {
-      @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-active);
-    }
-
-    &.dx-tab-selected {
-      .dx-tab-content {
-        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-basic);
-      }
-
-      &.dx-state-focused .dx-tab-content {
-        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-focused);
-      }
-
+    .dx-tab {
       &.dx-state-hover .dx-tab-content {
-        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-hover);
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
       }
-
+  
       &.dx-state-active .dx-tab-content {
-        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-selected-active);
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
       }
-
-      &.dx-state-disabled .dx-tab-content {
-        @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-tab-border-color-disabled);
+  
+      &.dx-tab-selected {
+        .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+        }
+  
+        &.dx-state-focused .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+        }
+  
+        &.dx-state-hover .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+        }
+  
+        &.dx-state-active .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+        }
+  
+        &.dx-state-disabled .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+        }
       }
-    }
-  } 
-}
-
-.dx-tabs-vertical.dx-tabs-styling-mode-secondary {
-  .dx-tab {
-    &.dx-state-hover {
-      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-hover);
-    }
-
-    &.dx-state-active {
-      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-active);
-    }
+    } 
   }
 
-  .dx-tab-selected {
-    @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-basic);
+  &.dx-tabs-vertical {
+    .dx-tab {      
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-vertical-indicator-secondary(right);
 
-    &.dx-state-focused {
-      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-focused);
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
     }
-
-    &.dx-state-hover {
-      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-hover);
-    }
-
-    &.dx-state-active {
-      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-selected-active);
-    }
-
-    &.dx-state-disabled {
-      @include dx-tabs-vertical-indicator-secondary(right, $tabs-tab-border-color-disabled);
+  
+    .dx-tab-selected {
+      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+  
+      &.dx-state-focused {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+      }
+  
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+      }
+  
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+      }
+  
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+      }
     }
   }
 }

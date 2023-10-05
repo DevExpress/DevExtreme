@@ -3,12 +3,24 @@
 // adduse
 
 
-@mixin dx-tabs-indicator-primary($position, $color) {
+@mixin dx-tabs-indicator {
   &::after {
     content: "";
     position: absolute;
-    background-color: $color;
+  }
+}
 
+@mixin dx-tabs-indicator-background($background-color) {
+  &::after {
+    background-color: $background-color;
+  }
+}
+
+@mixin dx-tabs-indicator-primary($position, $background-color) {
+  @include dx-tabs-indicator();
+  @include dx-tabs-indicator-background($background-color);
+  
+  &::after {
     @if $position == top {
       top: 0;
       right: 0;
@@ -37,16 +49,20 @@
   }
 }
 
-@mixin dx-tabs-horizontal-indicator-secondary($position, $color) {
+@mixin dx-tabs-indicator-secondary {
+  @include dx-tabs-indicator();
+  
   &::after {
-    content: "";
-    position: absolute;
+    border-radius: $fluent-indicator-border-radius-secondary;
+  }
+}
+
+@mixin dx-tabs-horizontal-indicator-secondary($position) {
+  &::after {
     right: 0;
     left: 0;
     width: $fluent-indicator-length-secondary;
     height: $fluent-indicator-thickness-secondary;
-    background-color: $color;
-    border-radius: $fluent-indicator-border-radius-secondary;
 
     @if $position == top {
       top: -$fluent-tabs-item-padding-horizontal;
@@ -56,15 +72,11 @@
   }
 }
 
-@mixin dx-tabs-vertical-indicator-secondary($position, $color) {
+@mixin dx-tabs-vertical-indicator-secondary($position) {
   &::after {
-    content: "";
-    position: absolute;
     top: $fluent-tabs-item-padding-horizontal;
     width: $fluent-indicator-thickness-secondary;
     height: calc($fluent-indicator-length-secondary - 2 * $fluent-tabs-item-padding-horizontal);
-    background-color: $color;
-    border-radius: $fluent-indicator-border-radius-secondary;
 
     @if $position == right {
       right: 0;
