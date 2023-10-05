@@ -310,6 +310,9 @@ export class AppointmentForm {
                   const allDayStartDate = dateUtils.trimTime(startDate);
                   const allDayEndDate = dateUtils.trimTime(endDate);
                   startDateEditor.option('value', new Date(allDayStartDate));
+                  if (endDate.getTime() === allDayEndDate.getTime()) {
+                    allDayEndDate.setDate(allDayEndDate.getDate() - 1);
+                  }
                   endDateEditor.option('value', new Date(allDayEndDate));
                 } else {
                   const startDateWithStartHour = getDateWithStartHour(startDate, this.scheduler.getStartDayHour());
