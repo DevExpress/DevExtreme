@@ -177,15 +177,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-area {
-    .dx-area-icon-filter {
-      background: none;
-
-      @include dx-icon(filter);
-
-      width: 14px;
-      height: 14px;
-    }
-
     .dx-area-caption {
       text-transform: uppercase;
       font-size: $material-pivotgrid-headers-font-size;
