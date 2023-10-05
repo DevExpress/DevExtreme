@@ -1,10 +1,11 @@
 import errors from '@js/core/errors';
 
+// eslint-disable-next-line forbidden-imports/no-restricted-imports
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
   verifyLicense,
-} from './license_validation';
+} from '../license_validation';
 
 describe('license token', () => {
   it.each([
