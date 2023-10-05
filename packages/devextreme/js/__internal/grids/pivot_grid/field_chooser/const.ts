@@ -44,9 +44,15 @@ export const CLASSES = {
 } as const;
 
 export const ICONS = {
-  measure: 'measure',
+  all: 'smalliconslayout',
+  column: 'columnfield',
+  row: 'rowfield',
+  filter: 'filter',
+  data: 'formula',
+
+  measure: 'formula',
   hierarchy: 'hierarchy',
-  dimension: 'dimension',
+  dimension: 'detailslayout',
 } as const;
 
 export const SORTABLE_CONST = {

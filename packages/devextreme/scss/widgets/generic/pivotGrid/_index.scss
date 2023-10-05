@@ -27,13 +27,6 @@
   $pivotgrid-data-area-color: $pivotgrid-data-area-color,
   $pivotgrid-grandtotalcolor: $pivotgrid-grandtotalcolor,
   $pivotgrid-accent-color: $pivotgrid-accent-color,
-  $pivotgrid-area-all-image: $pivotgrid-area-all-image,
-  $pivotgrid-area-filter-image: $pivotgrid-area-filter-image,
-  $pivotgrid-area-row-image: $pivotgrid-area-row-image,
-  $pivotgrid-area-column-image: $pivotgrid-area-column-image,
-  $pivotgrid-area-data-image: $pivotgrid-area-data-image,
-  $pivotgrid-dimension-image: $pivotgrid-dimension-image,
-  $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
@@ -91,6 +84,24 @@
 
 .dx-pivotgridfieldchooser {
   background-color: $pivotgrid-area-background;
+
+  .dx-treeview-item .dx-icon {
+    margin: 0 5px -1px 0;
+
+    @include dx-icon-sizing($generic-base-icon-size);
+  }
+
+  .dx-area-icon {
+    width: $generic-base-icon-size;
+    height: $generic-base-icon-size;
+    font-size: $generic-base-icon-size;
+  }
+
+  .dx-area {
+    .dx-area-caption {
+      vertical-align: middle;
+    }
+  }
 }
 
 .dx-pivotgrid-fields-container {

@@ -28,13 +28,6 @@
   $pivotgrid-data-area-color: $pivotgrid-data-area-color,
   $pivotgrid-grandtotalcolor: $pivotgrid-grandtotalcolor,
   $pivotgrid-accent-color: $pivotgrid-accent-color,
-  $pivotgrid-area-all-image: $pivotgrid-area-all-image,
-  $pivotgrid-area-filter-image: $pivotgrid-area-filter-image,
-  $pivotgrid-area-row-image: $pivotgrid-area-row-image,
-  $pivotgrid-area-column-image: $pivotgrid-area-column-image,
-  $pivotgrid-area-data-image: $pivotgrid-area-data-image,
-  $pivotgrid-dimension-image: $pivotgrid-dimension-image,
-  $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
@@ -42,7 +35,7 @@
 // adduse
 
 
-$fluent-pivotgrid-headers-font-size: 12px;
+$fluent-pivotgrid-headers-font-size: 14px;
 $fluent-pivotgrid-area-font-size: 13px;
 $fluent-pivotgrid-chevron-icon-size: 20px;
 
@@ -53,7 +46,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   &.dx-drag {
     .dx-area-field.dx-area-box {
       background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
-      border: none;
+      border: 1px solid $base-border-color-disabled;
       box-shadow: $fluent-pivotgrid-drag-header-shadow;
     }
   }
@@ -62,9 +55,10 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
     color: $pivotgrid-field-area-box-text-color;
     background-color: $pivotgrid-field-area-box-background-color;
     border-radius: 16px;
-    border: none;
+    border: 1px solid $base-border-color-disabled;
     font-size: $fluent-pivotgrid-headers-font-size;
-    font-weight: 500;
+    font-weight: $pivotgrid-field-area-box-font-weight;
+    line-height: 20px;
 
     .dx-header-filter {
       color: $base-accent;
@@ -73,6 +67,18 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
         color: $pivotgrid-area-color;
       }
     }
+  }
+
+  .dx-sort-up {
+    @include dx-icon-sizing($fluent-base-icon-size)
+  }
+
+  .dx-sort-down {
+    @include dx-icon-sizing($fluent-base-icon-size)
+  }
+
+  .dx-header-filter {
+    @include dx-icon-sizing($fluent-base-icon-size)
   }
 }
 
@@ -177,6 +183,12 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
 .dx-pivotgridfieldchooser {
   background-color: $pivotgrid-area-background;
 
+  .dx-area-icon {
+    width: $fluent-base-icon-size;
+    height: $fluent-base-icon-size;
+    font-size: $fluent-base-icon-size;
+  }
+
   .dx-area {
     .dx-area-icon-filter {
       background: none;
@@ -192,6 +204,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
       font-size: $fluent-pivotgrid-headers-font-size;
       font-weight: 500;
       color: $pivotgrid-area-color;
+      vertical-align: middle;
     }
 
     .dx-area-fields {
@@ -224,14 +237,15 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   .dx-treeview-item {
     min-height: $fluent-pivotgridfieldchooser-field-min-height;
     padding: 9px 8px;
-    line-height: normal;
+
+    .dx-icon {
+      margin: 0 5px -1px 0;
+
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
   }
 
   .dx-treeview-item-with-checkbox {
-    .dx-checkbox {
-      top: 9px;
-    }
-
     .dx-treeview-item {
       padding-left: $fluent-treeview-item-with-checkbox-offset;
     }

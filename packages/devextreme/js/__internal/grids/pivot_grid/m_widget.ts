@@ -18,6 +18,7 @@ import { addNamespace } from '@js/events/utils/index';
 import localizationMessage from '@js/localization/message';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
+import { current, isFluent } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -878,6 +879,7 @@ const PivotGrid = (Widget as any).inherit({
     this.$element().find('.dx-pivotgrid-toolbar').remove();
 
     $toolbarContainer.prependTo($targetContainer);
+    const stylingMode = isFluent(current()) ? 'text' : 'default';
 
     if (this.option('fieldChooser.enabled')) {
       const $buttonElement = $(DIV)
@@ -886,6 +888,7 @@ const PivotGrid = (Widget as any).inherit({
       const buttonOptions = {
         icon: 'columnchooser',
         hint: this.option('texts.showFieldChooser'),
+        stylingMode,
         onClick: () => {
           this.getFieldChooserPopup().show();
         },
@@ -901,6 +904,7 @@ const PivotGrid = (Widget as any).inherit({
       const buttonOptions = {
         icon: 'xlsxfile',
         hint: this.option('texts.exportToExcel'),
+        stylingMode,
         onClick: () => {
           this.exportTo();
         },
