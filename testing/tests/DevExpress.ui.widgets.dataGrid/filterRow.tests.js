@@ -1341,6 +1341,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             filterRow: {
                 visible: true,
                 showOperationChooser: true,
+                showAllText: '(All)',
                 operationDescriptions: {
                     'equal': 'Equals',
                     'notEqual': 'Not equals',
@@ -2805,6 +2806,46 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // assert
         assert.equal(this.columnHeadersView.element().find('.dx-menu-item').first().attr('aria-label'), 'Search box');
+    });
+
+    // T1192700
+    QUnit.test('Lookup select box should not show only relevant values for the current filtered column when filterSyncEnabled is true', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            filterValue: 1,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1 },
+            { column1: 2 },
+        ];
+        this.options.syncLookupFilterValues = true;
+        this.options.filterSyncEnabled = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'headerFilter', 'editorFactory', 'filterSync', 'filterBuilder', 'filterPanel'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+
+        dropDown1.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list').eq(0);
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(0).text(), '(All)');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
     });
 
     if(device.deviceType === 'desktop') {
