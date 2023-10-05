@@ -105,14 +105,10 @@ test('Tabs in contrast theme', async (t) => {
   await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
 
   const dataSource = [
-    { text: 'John Heart' },
-    { text: 'Marina Thomas', disabled: true },
-    { text: 'Robert Reagan' },
-    { text: 'Greta Sims' },
-    { text: 'Olivia Peyton' },
-    { text: 'Ed Holmes' },
-    { text: 'Wally Hobbs' },
-    { text: 'Brad Jameson' },
+    { text: 'user' },
+    { text: 'comment', icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
   ] as Item[];
 
   const tabsOptions = {
