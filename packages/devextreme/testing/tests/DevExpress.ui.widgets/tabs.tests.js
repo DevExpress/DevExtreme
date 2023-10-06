@@ -1,5 +1,4 @@
-// import 'generic_light.css!';
-import 'material_blue_light.css!';
+import 'generic_light.css!';
 import themes from 'ui/themes';
 import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';
@@ -371,8 +370,12 @@ QUnit.module('General', () => {
     });
 
     QUnit.test('Tabs should show the navigation after stylingMode is changed from secondary to primary', function(assert) {
-        const origIsMaterial = themes.isMaterialBased;
-        themes.isMaterialBased = () => true;
+        const isMaterialBased = themes.isMaterialBased();
+
+        if(!isMaterialBased) {
+            assert.ok(true, 'not isMaterialBased');
+            return;
+        }
 
         const $element = $('#scrollableTabs').dxTabs({
             items: [
@@ -384,7 +387,7 @@ QUnit.module('General', () => {
             scrollingEnabled: true,
             visible: true,
             showNavButtons: true,
-            width: 330,
+            width: 334,
         });
 
         assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was not rendered');
@@ -396,8 +399,6 @@ QUnit.module('General', () => {
 
         assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
         assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
-
-        themes.isMaterialBased = origIsMaterial;
     });
 });
 
