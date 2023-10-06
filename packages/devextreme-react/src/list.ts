@@ -404,7 +404,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   isDirty?: boolean;
   isValid?: boolean;
   label?: string;
-  labelMode?: "static" | "floating" | "hidden";
+  labelMode?: "static" | "floating" | "hidden" | "outside";
   mask?: string;
   maskChar?: string;
   maskInvalidMessage?: string;

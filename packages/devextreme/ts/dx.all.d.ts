@@ -1570,7 +1570,7 @@ declare module DevExpress.common {
   export function isLoadResultObject<TItem>(
     res: LoadResult<TItem>
   ): res is LoadResultObject<TItem>;
-  export type LabelMode = 'static' | 'floating' | 'hidden';
+  export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
   /**
    * [descr:LoadResult]
    */
