@@ -136,12 +136,8 @@ class BaseStrategy {
 
   getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
     const result: any = [];
-    const { viewOffset } = this.options;
-    const shiftedStartDate = inAllDayRow
-      ? startDate
-      : dateUtilsTs.addOffsets(startDate, [-viewOffset]);
 
-    if (this.viewDataProvider.isSkippedDate(shiftedStartDate)) {
+    if (this.viewDataProvider.isSkippedDate(startDate)) {
       return result;
     }
 
