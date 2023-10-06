@@ -679,7 +679,6 @@ const Tabs = CollectionWidget.inherit({
             case 'stylingMode': {
                 this._toggleStylingModeClass(args.value);
                 if(!this._isServerSide()) {
-                    // TODO: ADD TEST
                     this._dimensionChanged();
                 }
                 break;
