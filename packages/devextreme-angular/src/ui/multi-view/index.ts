@@ -62,8 +62,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxMultiViewComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxMultiView;
+export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxMultiView<TItem, TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]

@@ -64,8 +64,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxBoxComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxBox;
+export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxBox<TItem, TKey>;
 
     /**
      * [descr:dxBoxOptions.align]

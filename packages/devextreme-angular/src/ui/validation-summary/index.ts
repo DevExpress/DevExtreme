@@ -59,8 +59,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxValidationSummaryComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxValidationSummary;
+export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxValidationSummary<TItem, TKey>;
 
     /**
      * [descr:DOMComponentOptions.elementAttr]

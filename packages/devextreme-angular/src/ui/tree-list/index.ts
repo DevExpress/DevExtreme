@@ -123,8 +123,8 @@ import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxTreeListComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTreeList;
+export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxTreeList<TRowData, TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]

@@ -134,8 +134,8 @@ import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested
         IterableDifferHelper
     ]
 })
-export class DxDataGridComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxDataGrid;
+export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxDataGrid<TRowData, TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]

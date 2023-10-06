@@ -63,8 +63,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxToolbarComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxToolbar;
+export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxToolbar<TItem, TKey>;
 
     /**
      * [descr:dxToolbarOptions.dataSource]
