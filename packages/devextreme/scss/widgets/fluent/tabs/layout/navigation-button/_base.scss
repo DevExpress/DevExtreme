@@ -17,27 +17,16 @@
   box-shadow: none;
 }
 
+.dx-tabs-styling-mode-secondary .dx-tabs-nav-button {
+  border-radius: $fluent-tab-item-border-radius-secondary;
+}
+
 .dx-tabs-nav-button {
   border: none;
-  background-color: $tabs-tab-background;
   height: $fluent-tab-height;
-  border-radius: 0;
 
-  &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
-    @include dx-button-flat-color-styling(
-      $base-icon-color,
-      $base-icon-color,
-      $base-icon-color,
-      $fluent-tabs-nav-button-background,
-      $fluent-tabs-nav-button-background,
-      $fluent-tabs-nav-button-background,
-    );
-
-    border-radius: 0;
-
-    .dx-inkripple-wave {
-      background-color: $fluent-tabs-nav-button-background;
-    }
+  &.dx-button.dx-state-disabled.dx-button-mode-contained {
+    visibility: hidden;
   }
 
   &.dx-button-has-icon .dx-icon {
