@@ -1,4 +1,5 @@
 import {
+    ButtonType,
     ButtonStyle,
 } from '../common';
 
@@ -37,6 +38,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 export {
+    ButtonType,
     ButtonStyle,
 };
 
@@ -277,6 +279,12 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @public
      */
     text?: string;
+    /**
+     * @docid
+     * @default 'normal'
+     * @public
+     */
+    type?: ButtonType;
     /**
      * @docid
      * @default false
