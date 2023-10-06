@@ -69,6 +69,12 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
     }
   }
 
+  &.dx-pivotgridfieldchooser {
+    .dx-area-field.dx-area-box {
+      border-radius: 4px;
+    }
+  }
+
   .dx-sort-up {
     @include dx-icon-sizing($fluent-button-icon-size)
   }
