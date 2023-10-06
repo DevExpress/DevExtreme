@@ -13,13 +13,15 @@
 @use "../../../scrollable";
 @use "../../../badge";
 
+.dx-tabs .dx-tabs-nav-button {
+  box-shadow: none;
+}
 
 .dx-tabs-nav-button {
   border: none;
   background-color: $tabs-tab-background;
   height: $fluent-tab-height;
   border-radius: 0;
-  box-shadow: none;
 
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
     @include dx-button-flat-color-styling(
