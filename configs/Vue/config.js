@@ -128,6 +128,7 @@ window.config = {
 
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
     'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js',
+    'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',

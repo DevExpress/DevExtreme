@@ -43,6 +43,7 @@ window.config = {
     'react': 'npm:react/umd/react.development.js',
     'react-dom': 'npm:react-dom/umd/react-dom.development.js',
     'prop-types': 'npm:prop-types/prop-types.js',
+    'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs',
