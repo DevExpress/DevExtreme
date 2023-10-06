@@ -70,15 +70,15 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-sort-up {
-    @include dx-icon-sizing($fluent-base-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size)
   }
 
   .dx-sort-down {
-    @include dx-icon-sizing($fluent-base-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size)
   }
 
   .dx-header-filter {
-    @include dx-icon-sizing($fluent-base-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size)
   }
 }
 
@@ -184,9 +184,9 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   background-color: $pivotgrid-area-background;
 
   .dx-area-icon {
-    width: $fluent-base-icon-size;
-    height: $fluent-base-icon-size;
-    font-size: $fluent-base-icon-size;
+    width: $fluent-button-icon-size;
+    height: $fluent-button-icon-size;
+    font-size: $fluent-button-icon-size;
   }
 
   .dx-area {
@@ -232,7 +232,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
     .dx-icon {
       margin: 0 5px -1px 0;
 
-      @include dx-icon-sizing($fluent-base-icon-size);
+      @include dx-icon-sizing($fluent-button-icon-size);
     }
   }
 
