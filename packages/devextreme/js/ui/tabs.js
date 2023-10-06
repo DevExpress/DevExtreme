@@ -156,7 +156,6 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                // TODO: ADD TEST
                 device() {
                     return isFluent(themeName);
                 },

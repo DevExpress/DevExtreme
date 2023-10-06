@@ -1,4 +1,6 @@
-import 'generic_light.css!';
+// import 'generic_light.css!';
+import 'material_blue_light.css!';
+import themes from 'ui/themes';
 import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';
 import holdEvent from 'events/hold';
@@ -366,6 +368,36 @@ QUnit.module('General', () => {
         assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.secondary);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), true);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), false);
+    });
+
+    QUnit.test('Tabs should show the navigation after stylingMode is changed from secondary to primary', function(assert) {
+        const origIsMaterial = themes.isMaterialBased;
+        themes.isMaterialBased = () => true;
+
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [
+                { text: 'item 1', icon: 'plus' },
+                { text: 'item 2', icon: 'plus' },
+                { text: 'item 3', icon: 'plus' },
+            ],
+            stylingMode: 'secondary',
+            scrollingEnabled: true,
+            visible: true,
+            showNavButtons: true,
+            width: 330,
+        });
+
+        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was not rendered');
+        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrollable was not rendered');
+
+        const instance = $element.dxTabs('instance');
+
+        instance.option('stylingMode', 'primary');
+
+        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
+        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
+
+        themes.isMaterialBased = origIsMaterial;
     });
 });
 
