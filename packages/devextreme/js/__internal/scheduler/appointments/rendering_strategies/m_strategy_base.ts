@@ -4,6 +4,7 @@ import { isNumeric, isObject } from '@js/core/utils/type';
 import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { current as currentTheme } from '@js/ui/themes';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
@@ -195,7 +196,8 @@ class BaseRenderingStrategy {
     return this.cellWidth;
   }
 
-  _getItemPosition(appointment) {
+  _getItemPosition(initialAppointment) {
+    const appointment = this.shiftAppointmentByViewOffset(initialAppointment);
     const position = this.generateAppointmentSettings(appointment);
     const allDay = this.isAllDay(appointment);
 
@@ -867,6 +869,15 @@ class BaseRenderingStrategy {
       top: timeShift * this.cellHeight,
       left: 0,
       cellPosition: 0,
+    };
+  }
+
+  protected shiftAppointmentByViewOffset(appointment: any): any {
+    const { viewOffset } = this.options;
+    return {
+      ...appointment,
+      startDate: dateUtilsTs.addOffsets(new Date(appointment.startDate), [-viewOffset]),
+      endDate: dateUtilsTs.addOffsets(new Date(appointment.endDate), [-viewOffset]),
     };
   }
 }

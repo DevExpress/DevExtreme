@@ -52,7 +52,7 @@ export class DateGeneratorBaseStrategy {
   get viewEndDayHour() { return this.options.viewEndDayHour; }
 
   get endViewDate() {
-    return dateUtilsTs.addOffsets(this.options.endViewDate, [-this.options.viewOffset]);
+    return this.options.endViewDate;
   }
 
   get viewType() { return this.options.viewType; }
@@ -73,26 +73,13 @@ export class DateGeneratorBaseStrategy {
       : this.options.intervalDuration;
   }
 
-  private shiftByOffset(
-    appointments: any[],
-    viewOffset: number,
-  ): any[] {
-    return appointments.map((item) => ({
-      ...item,
-      startDate: dateUtilsTs.addOffsets(item.startDate, [-viewOffset]),
-      endDate: dateUtilsTs.addOffsets(item.endDate, [-viewOffset]),
-    }));
-  }
-
   generate(appointmentAdapter) {
-    const { viewOffset } = this.options;
     const { isRecurrent } = appointmentAdapter;
 
     const itemGroupIndices = this._getGroupIndices(this.rawAppointment);
 
     let appointmentList = this._createAppointments(appointmentAdapter, itemGroupIndices);
 
-    appointmentList = this.shiftByOffset(appointmentList, viewOffset);
     appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointmentAdapter); // T983264
 
     if (this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
@@ -415,20 +402,20 @@ export class DateGeneratorBaseStrategy {
   _getAppointmentsFirstViewDate(appointments: any[]): Date[] {
     const { viewOffset } = this.options;
     return appointments.map((appointment: any): Date => {
-      const firstDate = this._getAppointmentFirstViewDate({
+      const tableFirstDate = this._getAppointmentFirstViewDate({
         ...appointment,
         startDate: dateUtilsTs.addOffsets(appointment.startDate, [viewOffset]),
         endDate: dateUtilsTs.addOffsets(appointment.endDate, [viewOffset]),
       });
 
-      if (!firstDate) {
+      if (!tableFirstDate) {
         return appointment.startDate as Date;
       }
 
-      const test = dateUtilsTs.addOffsets(firstDate, [-viewOffset]);
+      const firstDate = dateUtilsTs.addOffsets(tableFirstDate, [-viewOffset]);
 
-      return test > appointment.startDate
-        ? test
+      return firstDate > appointment.startDate
+        ? firstDate
         : appointment.startDate as Date;
     });
   }

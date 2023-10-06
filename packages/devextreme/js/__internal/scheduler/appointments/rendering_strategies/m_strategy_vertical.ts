@@ -56,13 +56,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
   }
 
-  _getItemPosition(appointment) {
-    const allDay = this.isAllDay(appointment);
+  _getItemPosition(initialAppointment) {
+    const allDay = this.isAllDay(initialAppointment);
 
     if (allDay) {
-      return super._getItemPosition(appointment);
+      return super._getItemPosition(initialAppointment);
     }
 
+    const appointment = super.shiftAppointmentByViewOffset(initialAppointment);
     const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
     const isRecurring = !!adapter.recurrenceRule;
 
