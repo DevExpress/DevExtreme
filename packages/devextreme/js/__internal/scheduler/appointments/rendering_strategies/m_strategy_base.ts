@@ -874,10 +874,19 @@ class BaseRenderingStrategy {
 
   protected shiftAppointmentByViewOffset(appointment: any): any {
     const { viewOffset } = this.options;
+
+    // NOTE Knockout: Fix for startDate / endDate observables
+    const appointmentStartDate = typeof appointment.startDate === 'function'
+      ? new Date(appointment.startDate())
+      : new Date(appointment.startDate);
+    const appointmentEndDate = typeof appointment.endDate === 'function'
+      ? new Date(appointment.endDate())
+      : new Date(appointment.endDate);
+
     return {
       ...appointment,
-      startDate: dateUtilsTs.addOffsets(new Date(appointment.startDate), [-viewOffset]),
-      endDate: dateUtilsTs.addOffsets(new Date(appointment.endDate), [-viewOffset]),
+      startDate: dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]),
+      endDate: dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]),
     };
   }
 }
