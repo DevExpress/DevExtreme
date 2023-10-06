@@ -18,6 +18,7 @@ class Component<P extends IHtmlOptions> extends ComponentBase<P> {
     this.renderFinalizeCallback = (dxtemplates) => {
       this._createWidget(dxtemplates);
       this._createExtensions();
+      this.unlockOnRendered();
     }
   }
 

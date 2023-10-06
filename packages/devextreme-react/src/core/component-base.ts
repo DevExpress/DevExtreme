@@ -12,7 +12,8 @@ import { IConfigNode, ITemplate } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
-import { DXTemplateCollection } from './types-new';
+import { DXTemplateCollection, OnRenderedLocker } from './types-new';
+import { OnRenderedLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -37,6 +38,10 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       }
       : { display: 'contents' };
   }
+
+  static contextType?: React.Context<OnRenderedLocker> | undefined = OnRenderedLockerContext;
+
+  declare context: React.ContextType<typeof OnRenderedLockerContext> | undefined;
 
   protected _WidgetClass: any;
 
@@ -65,6 +70,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   private _childNodes: Node[] = [];
 
   private readonly _optionsManager: OptionsManager;
+
+  private onRenderLocked: boolean = false;
 
   protected useRequestAnimationFrameFlag = false;
 
@@ -104,6 +111,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     });
 
     this.renderStage = 'main';
+
+    this.lockOnRendered();
   }
 
   public componentDidUpdate(prevProps: P): void {
@@ -120,9 +129,12 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       this.renderFinalizeCallback = (dxtemplates) => {
         this._optionsManager.update(config, dxtemplates);
         unscheduleGuards();
+        this.unlockOnRendered();
       };
   
       this.renderStage = 'main';
+
+      this.lockOnRendered();
     }
     else {
       this.renderStage = 'config';
@@ -136,6 +148,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       this._instance.dispose();
     }
     this._optionsManager.dispose();
+    this.unlockOnRendered();
   }
 
   protected _createWidget(dxtemplates?: DXTemplateCollection, element?: Element): void {
@@ -224,6 +237,20 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     }
   }
 
+  protected lockOnRendered() {
+    if (this.context) {
+      this.context.lock();
+      this.onRenderLocked = true;
+    }
+  }
+
+  protected unlockOnRendered() {
+    if (this.context && this.onRenderLocked) {
+      this.context.unlock();
+      this.onRenderLocked = false;
+    }
+  }
+
   protected renderChildren(): React.ReactNode {
     // @ts-expect-error TS2339
     const { children } = this.props;
@@ -256,6 +283,17 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   public render(): React.ReactNode {
     const templateOptions = this.state.templateOptions;
+    const templateManagerOptions = this.renderStage === 'main'
+        ?
+      {
+        templateOptions,
+        init: (dxtemplates) => this.renderFinalizeCallback(dxtemplates)
+      }
+        :
+      {
+        templateOptions: {},
+        init: () => void 0
+      };
 
     return React.createElement(
       React.Fragment,
@@ -264,12 +302,9 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         'div',
         this._getElementProps(),
         this.renderContent(),
-        this.renderStage === 'main' && React.createElement(TemplateManager, {
-          templateOptions,
-          init: (dxtemplates) => this.renderFinalizeCallback(dxtemplates)
-        }),
+        React.createElement(TemplateManager, templateManagerOptions),
       ),
-      this.isPortalComponent && this.renderPortal(),
+      this.isPortalComponent && this.renderPortal()
     );
   }
 }

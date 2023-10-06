@@ -9,6 +9,11 @@ export type RenderArgs = {
   onRendered: () => void;
 };
 
+export type OnRenderedLocker = {
+  lock: () => void;
+  unlock: () => void;
+}
+
 export type DXTemplateCollection = Record<string, DevExtremeTemplate>;
 
 export type DevExtremeTemplate = {

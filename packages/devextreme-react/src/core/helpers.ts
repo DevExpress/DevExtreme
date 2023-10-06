@@ -1,6 +1,14 @@
+import { createContext } from "react";
+import { OnRenderedLocker } from "./types-new";
+
 export function generateID(): string {
   return Math.random().toString(36).substr(2);
 }
+
+export const OnRenderedLockerContext = createContext<OnRenderedLocker>({
+  lock: () => void 0,
+  unlock: () => void 0
+});
 
 export class DoubleKeyMap<TKey1, TKey2, TValue> {
   private _map: Map<TKey1, Map<TKey2, TValue>> = new Map();

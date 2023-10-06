@@ -25,9 +25,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
 
   const getRandomId = useCallback(() => Math.floor(Math.random() * 100000).toString(), []); 
 
-  const createMapKey = (key1: any, key2: HTMLElement) => {
+  const createMapKey = useCallback((key1: any, key2: HTMLElement) => {
     return { key1, key2 };
-  }
+  }, []);
 
   const getRenderFunc: GetRenderFuncFn = useCallback((getJSX) => ({ model: data, index, container, onRendered }) => {
     const key = createMapKey(data, container);
@@ -62,7 +62,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
       
     });
 
-  }, [unsubscribeOnRemoval, getRandomId]);
+  }, [unsubscribeOnRemoval, getRandomId, createMapKey]);
 
   useEffect(() => {
     function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['data'] {

@@ -1,8 +1,9 @@
-import React, { useCallback, useLayoutEffect, useState, memo, useRef } from 'react';
+import React, { useCallback, useLayoutEffect, useEffect, useState, memo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
 import { TemplateWrapperProps } from './types-new';
 import * as events from 'devextreme/events';
+import { OnRenderedLockerContext } from './helpers';
 
 const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>) => {
   const style = { display: 'none' };
@@ -17,7 +18,18 @@ const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>) 
 };
 
 const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, index, container, onRemoved, onRendered }: TemplateWrapperProps) {
+  let onRenderedLock = useRef(0);
+  
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
+  const [onRenderedLocker] = useState({
+    lock: () => onRenderedLock.current++,
+    unlock: () => {
+      onRenderedLock.current--;
+
+      if (onRenderedLock.current === 0)
+        onRendered();
+    }
+  });
 
   const onTemplateRemoved = useCallback(() => {
     if (element.current) {
@@ -29,7 +41,7 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, i
     }
 
     onRemoved();
-  }, [onRemoved])
+  }, [onRemoved]);
 
   useLayoutEffect(() => {
     const el = element.current;
@@ -46,8 +58,6 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, i
       events.off(removalListenerElement.current!, DX_REMOVE_EVENT, onTemplateRemoved);
       events.on(removalListenerElement.current!, DX_REMOVE_EVENT, onTemplateRemoved);
     }
-
-    onRendered();
 
     return () => {
       if (element.current) {
@@ -66,7 +76,13 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, i
         events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
       }
     };
-  }, [onRendered, onTemplateRemoved, removalListenerRequired, container]);
+  }, [onTemplateRemoved, removalListenerRequired, container]);
+
+  useEffect(() => {
+    if (onRenderedLock.current === 0) {
+      onRendered();
+    }
+  }, [onRendered]);
 
   const element = useRef<HTMLElement>();
   const hiddenNodeElement = useRef<HTMLElement>();
@@ -83,15 +99,17 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, i
 
   return createPortal(
       <>
-        {
-          templateFactory?.({
-            data,
-            index,
-            onRendered
-          }, {}) || 'empty'
-        }
-        { hiddenNode }
-        { removalListener }
+        <OnRenderedLockerContext.Provider value={onRenderedLocker}>
+          {
+            templateFactory?.({
+              data,
+              index,
+              onRendered
+            }, {}) || 'empty'
+          }
+          { hiddenNode }
+          { removalListener }
+        </OnRenderedLockerContext.Provider>
       </>,
       container
     );
