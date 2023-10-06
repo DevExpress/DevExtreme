@@ -21,6 +21,8 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 
+const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
     right: 'dx-tabpanel-tabs-position-right',
@@ -155,7 +157,7 @@ const TabPanel = MultiView.inherit({
 
                 if(data?.title) {
                     // TODO: ADD TEST FOR DATA_DX_TEXT
-                    $tabItem.attr('data-dx_text', data.title);
+                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, data.title);
                 }
 
                 $container.wrapInner($tabItem);

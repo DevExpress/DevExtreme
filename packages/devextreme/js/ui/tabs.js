@@ -45,6 +45,8 @@ const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 
+const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+
 const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
     horizontal: 'dx-tabs-horizontal',
@@ -205,9 +207,8 @@ const Tabs = CollectionWidget.inherit({
 
                 const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
 
-                if(data?.text) {
-                    // TODO: ADD TEST FOR DATA_DX_TEXT
-                    $tabItem.attr('data-dx_text', data.text);
+                if(data?.text || ['string', 'number'].includes(typeof data)) {
+                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, ['string', 'number'].includes(typeof data) ? data : data.text);
                 }
 
                 $container.wrapInner($tabItem);
