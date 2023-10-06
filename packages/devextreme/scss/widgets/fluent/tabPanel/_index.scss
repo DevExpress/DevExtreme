@@ -79,13 +79,6 @@
       }
     }
   }
-
-  .dx-tabs-styling-mode-primary {
-    .dx-tabpanel-tab::after {
-      top: 0;
-      bottom: unset;
-    }
-  }
 }
 
 .dx-tabpanel-tabs-position-left {
@@ -128,34 +121,6 @@
 
     .dx-tab.dx-tab-selected {
       @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
-
-      &.dx-state-disabled {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
-      }
-    }
-  }
-
-  .dx-tabs-styling-mode-primary {
-    .dx-tab {
-      @include dx-tabs-indicator-primary(left);
-
-      &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
-      }
-  
-      &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
-      }
-    }
-
-    .dx-tab.dx-tab-selected {
-      &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
-      }
-
-      &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
-      }
 
       &.dx-state-disabled {
         @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
