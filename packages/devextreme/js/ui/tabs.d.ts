@@ -195,7 +195,9 @@ export interface dxTabsBaseOptions<
     showNavButtons?: boolean;
     /**
      * @docid dxTabsOptions.stylingMode
-     * @default 'primary'
+     * @default 'primary' &for(Generic)
+     * @default 'primary' &for(Material)
+     * @default 'secondary' &for(Fluent)
      * @public
      */
     stylingMode?: TabsStyle;
