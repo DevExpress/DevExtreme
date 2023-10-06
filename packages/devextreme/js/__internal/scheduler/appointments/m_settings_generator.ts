@@ -98,11 +98,25 @@ export class DateGeneratorBaseStrategy {
       dateSettings = this._separateLongParts(dateSettings, appointmentAdapter);
     }
 
+    dateSettings = this.shiftSourceAppointmentDates(dateSettings);
+
     return {
       dateSettings,
       itemGroupIndices,
       isRecurrent,
     };
+  }
+
+  private shiftSourceAppointmentDates(dateSettings: any[]): any[] {
+    const { viewOffset } = this.options;
+    return dateSettings.map((item) => ({
+      ...item,
+      source: {
+        ...item.source,
+        startDate: dateUtilsTs.addOffsets(item.source.startDate, [viewOffset]),
+        endDate: dateUtilsTs.addOffsets(item.source.endDate, [viewOffset]),
+      },
+    }));
   }
 
   _getProcessedByAppointmentTimeZone(appointmentList, appointment) {

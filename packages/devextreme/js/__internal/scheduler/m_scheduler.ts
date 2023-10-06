@@ -42,6 +42,7 @@ import { custom as customDialog } from '@js/ui/dialog';
 import { isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
@@ -2086,8 +2087,9 @@ class Scheduler extends Widget<any> {
     }
 
     if (info) {
-      rawTargetedAppointment.displayStartDate = new Date(info.appointment.startDate);
-      rawTargetedAppointment.displayEndDate = new Date(info.appointment.endDate);
+      const viewOffset = this._getCurrentViewOption('offset') * toMs('minute');
+      rawTargetedAppointment.displayStartDate = dateUtilsTs.addOffsets(new Date(info.appointment.startDate), [viewOffset]);
+      rawTargetedAppointment.displayEndDate = dateUtilsTs.addOffsets(new Date(info.appointment.endDate), [viewOffset]);
     }
 
     return rawTargetedAppointment;
