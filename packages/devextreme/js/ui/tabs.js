@@ -7,7 +7,7 @@ import Button from './button';
 import { render } from './widget/utils.ink_ripple';
 import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
-import { isPlainObject } from '../core/utils/type';
+import { isPlainObject, isString, isNumeric } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
 import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
@@ -206,8 +206,10 @@ const Tabs = CollectionWidget.inherit({
 
                 const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
 
-                if(data?.text || ['string', 'number'].includes(typeof data)) {
-                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, ['string', 'number'].includes(typeof data) ? data : data.text);
+                const text = data?.text ?? data;
+
+                if(isString(text) || isNumeric(text)) {
+                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, text);
                 }
 
                 $container.wrapInner($tabItem);
