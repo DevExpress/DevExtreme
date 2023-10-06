@@ -130,11 +130,11 @@ export function verifyLicense(licenseKey: string, version: string = packageVersi
   }
 }
 
-/// #DEBUG
 export function setLicenseCheckSkipCondition(value = true): void {
+  /// #DEBUG
   isLicenseVerified = value;
+  /// #ENDDEBUG
 }
-/// #ENDDEBUG
 
 // NOTE: We need this default export
 // to allow QUnit mock the verifyLicense function
