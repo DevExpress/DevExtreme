@@ -171,21 +171,27 @@ export class AppComponent {
     this.customer = service.getCustomer();
   }
 
-  validateVacationDates({ value }) {
+  validateVacationDatesRange({ value }) {
+    const [startDate, endDate] = value;
+
+    if (startDate === null || endDate === null) {
+      return true;
+    }
+
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+    const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+    return daysDifference < 25;
+  }
+
+  validateVacationDatesPresence({ value }) {
     const [startDate, endDate] = value;
 
     if (startDate === null && endDate === null) {
       return true;
     }
 
-    if (startDate === null || endDate === null) {
-      return false;
-    }
-
-    const millisecondsPerDay = 24 * 60 * 60 * 1000;
-    const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
-
-    return daysDifference <= 25;
+    return startDate !== null && endDate !== null;
   }
 
   asyncValidation(params) {

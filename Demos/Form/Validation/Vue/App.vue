@@ -76,8 +76,12 @@
             >
               <DxLabel text="Vacation Dates"/>
               <DxCustomRule
-                :validation-callback="validateVacationDates"
+                :validation-callback="validateVacationDatesRange"
                 message="The vacation period must not exceed 25 days"
+              />
+              <DxCustomRule
+                :validation-callback="validateVacationDatesPresence"
+                message="Both start and end dates must be selected"
               />
             </DxSimpleItem>
           </DxGroupItem>
@@ -341,21 +345,26 @@ export default {
     asyncValidation(params) {
       return sendRequest(params.value);
     },
-    validateVacationDates({ value }) {
+    validateVacationDatesRange({ value }) {
+      const [startDate, endDate] = value;
+
+      if (startDate === null || endDate === null) {
+        return true;
+      }
+
+      const millisecondsPerDay = 24 * 60 * 60 * 1000;
+      const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+      return daysDifference < 25;
+    },
+    validateVacationDatesPresence({ value }) {
       const [startDate, endDate] = value;
 
       if (startDate === null && endDate === null) {
         return true;
       }
 
-      if (startDate === null || endDate === null) {
-        return false;
-      }
-
-      const millisecondsPerDay = 24 * 60 * 60 * 1000;
-      const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
-
-      return daysDifference <= 25;
+      return startDate !== null && endDate !== null;
     },
     handleSubmit(e) {
       notify({

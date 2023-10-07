@@ -83,7 +83,13 @@
         <dxi-validation-rule
           type="custom"
           message="The vacation period must not exceed 25 days"
-          [validationCallback]="validateVacationDates"
+          [validationCallback]="validateVacationDatesRange"
+        >
+        </dxi-validation-rule>
+        <dxi-validation-rule
+          type="custom"
+          message="Both start and end dates must be selected"
+          [validationCallback]="validateVacationDatesPresence"
         >
         </dxi-validation-rule>
       </dxi-item>

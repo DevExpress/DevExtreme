@@ -93,21 +93,27 @@ const checkComparison = () => true;
 
 const asyncValidation = (params) => sendRequest(params.value);
 
-const validateVacationDates = ({ value }) => {
+const validateVacationDatesRange = ({ value }) => {
+  const [startDate, endDate] = value;
+
+  if (startDate === null || endDate === null) {
+    return true;
+  }
+
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+  return daysDifference < 25;
+};
+
+const validateVacationDatesPresence = ({ value }) => {
   const [startDate, endDate] = value;
 
   if (startDate === null && endDate === null) {
     return true;
   }
 
-  if (startDate === null || endDate === null) {
-    return false;
-  }
-
-  const millisecondsPerDay = 24 * 60 * 60 * 1000;
-  const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
-
-  return daysDifference <= 25;
+  return startDate !== null && endDate !== null;
 };
 
 const registerButtonOptions = {
@@ -246,7 +252,8 @@ function App() {
               editorOptions={dateRangeBoxOptions}
             >
               <Label text="Vacation Dates" />
-              <CustomRule message="The vacation period must not exceed 25 days" validationCallback={validateVacationDates} />
+              <CustomRule message="The vacation period must not exceed 25 days" validationCallback={validateVacationDatesRange} />
+              <CustomRule message="Both start and end dates must be selected" validationCallback={validateVacationDatesPresence} />
             </SimpleItem>
 
           </GroupItem>

@@ -147,20 +147,28 @@ $(() => {
           validationCallback: ({ value }) => {
             const [startDate, endDate] = value;
 
-            if (startDate === null && endDate === null) {
-              return true;
-            }
-
             if (startDate === null || endDate === null) {
-              return false;
+              return true;
             }
 
             const millisecondsPerDay = 24 * 60 * 60 * 1000;
             const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
 
-            return daysDifference <= 25;
+            return daysDifference < 25;
           },
           message: 'The vacation period must not exceed 25 days',
+        }, {
+          type: 'custom',
+          validationCallback: ({ value }) => {
+            const [startDate, endDate] = value;
+
+            if (startDate === null && endDate === null) {
+              return true;
+            }
+
+            return startDate !== null && endDate !== null;
+          },
+          message: 'Both start and end dates must be selected',
         }],
         editorOptions: {
           startDatePlaceholder: 'Start Date',
