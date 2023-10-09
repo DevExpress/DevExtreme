@@ -113,6 +113,22 @@ const LoadPanel = Overlay.inherit({
 
         this.$element().addClass(LOADPANEL_CLASS);
         this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
+
+        this._setWrapperAria();
+    },
+
+    _setWrapperAria() {
+        const { message } = this.option();
+
+        const defaultLabel = isMaterialBased() ? message : null;
+        const label = message ? defaultLabel : messageLocalization.format('Loading');
+
+        const aria = {
+            role: 'alert',
+            label,
+        };
+
+        this.setAria(aria, this.$wrapper());
     },
 
     _renderContentImpl: function() {
@@ -209,6 +225,7 @@ const LoadPanel = Overlay.inherit({
                 this._cleanPreviousContent();
                 this._renderLoadIndicator();
                 this._renderMessage();
+                this._setWrapperAria();
                 break;
             case 'showPane':
                 this._togglePaneVisible();
