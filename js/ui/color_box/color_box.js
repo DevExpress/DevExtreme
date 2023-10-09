@@ -357,11 +357,16 @@ const ColorBox = DropDownEditor.inherit({
     },
 
     _applyColorFromInput: function(value) {
+        const { editAlphaChannel } = this.option();
         const newColor = new Color(value);
 
         if(newColor.colorIsInvalid) {
             this._resetInputValue();
-            value = this.option('value');
+            return this.option('value');
+        }
+
+        if(editAlphaChannel) {
+            return colorUtils.makeRgba(value);
         }
 
         return value;
