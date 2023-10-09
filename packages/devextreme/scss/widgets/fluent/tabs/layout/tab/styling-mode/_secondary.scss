@@ -17,10 +17,6 @@
 .dx-tabs-styling-mode-secondary {
   .dx-tab {
     border-radius: $fluent-tab-item-border-radius-secondary;
-
-    .dx-tab-text {
-      text-transform: initial;
-    }
   }
 
   &:not(.dx-tabs-vertical) {
