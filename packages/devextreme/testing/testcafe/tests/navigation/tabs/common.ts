@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
@@ -40,7 +40,7 @@ fixture.disablePageReloads`Tabs_common`
 test('Tabs in contrast theme', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  if (!isMaterial()) {
+  if (!isMaterialBased()) {
     await testScreenshot(t, takeScreenshot, 'Tabs in contrast theme if first tab is focused.png', { element: '#tabs', theme: 'generic.contrast' });
   }
 

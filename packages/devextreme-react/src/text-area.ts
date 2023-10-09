@@ -71,7 +71,8 @@ class TextArea extends BaseComponent<React.PropsWithChildren<ITextAreaOptions>> 
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   maxHeight: PropTypes.oneOfType([
     PropTypes.number,

@@ -114,6 +114,14 @@ class DropDownButton extends BaseComponent<React.PropsWithChildren<IDropDownButt
   ]),
   tabIndex: PropTypes.number,
   text: PropTypes.string,
+  type: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "danger",
+      "default",
+      "normal",
+      "success"])
+  ]),
   useItemTextAsTitle: PropTypes.bool,
   useSelectMode: PropTypes.bool,
   visible: PropTypes.bool,

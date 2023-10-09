@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { isMaterial } from '../../../helpers/themeUtils';
+import { isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
@@ -8,7 +8,7 @@ import { appendElementTo } from '../../../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
 const testFixture = () => {
-  if (isMaterial()) {
+  if (isMaterialBased()) {
     return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;

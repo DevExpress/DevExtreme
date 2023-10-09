@@ -11,9 +11,10 @@ $pivotgrid-border-color: $base-border-color !default;
 * $name 10. Header text color
 * $type color
 */
-$pivotgrid-area-color: color.change($base-text-color, $alpha: 0.54) !default;
+$pivotgrid-area-color: $base-text-color !default;
 $pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
-$pivotgrid-field-area-box-background-color: null !default;
+$pivotgrid-field-area-box-background-color: $base-neutral-background4 !default;
+$pivotgrid-field-area-box-font-weight: 400 !default;
 $pivotgrid-data-area-color: $base-text-color !default;
 
 /**
@@ -48,8 +49,6 @@ $pivotgrid-position-indicator-color: gray !default;
 $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
 
 @if $mode == "light" {
-  $pivotgrid-field-area-box-background-color: darken($base-bg, 12%) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/fluent/color-schemes/light/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/fluent/color-schemes/light/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/fluent/color-schemes/light/grid/area-column.png') !default;
@@ -60,8 +59,6 @@ $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
 }
 
 @if $mode == "dark" {
-  $pivotgrid-field-area-box-background-color: lighten($base-bg, 12%) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/fluent/color-schemes/dark/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/fluent/color-schemes/dark/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/fluent/color-schemes/dark/grid/area-column.png') !default;

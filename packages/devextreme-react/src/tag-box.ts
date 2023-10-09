@@ -155,7 +155,8 @@ class TagBox extends BaseComponent<React.PropsWithChildren<ITagBoxOptions>> {
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   maxDisplayedTags: PropTypes.number,
   maxFilterQueryLength: PropTypes.number,
