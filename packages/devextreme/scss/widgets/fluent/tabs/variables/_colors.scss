@@ -39,7 +39,7 @@ $tabs-tab-border-color-hover: $base-border-color-hover !default;
 * $name 50. Disabled tab border color
 * $type color
 */
-$tabs-tab-border-color-disabled: null !default;
+$tabs-tab-border-color-disabled: $base-foreground-disabled !default;
 
 /**
 * $name 60. Tab background color
@@ -88,7 +88,6 @@ $tabs-tab-bg-color-active-primary: null !default;
 $tabs-active-tab-bg-color: $base-bg !default;
 
 @if $mode == "light" {
-  $tabs-tab-border-color-disabled: color.change($tabs-tab-color, $alpha: 0.13) !default;
   $tabs-focused-tab-bg-color: $base-neutral-background !default;
   $tabs-tab-bg-color-hover-primary: $base-neutral-background !default;
   $tabs-tab-bg-color-focus-primary: $base-neutral-background !default;
@@ -96,7 +95,6 @@ $tabs-active-tab-bg-color: $base-bg !default;
 }
 
 @if $mode == "dark" {
-  $tabs-tab-border-color-disabled: color.change($tabs-tab-color, $alpha: 0.4) !default;
   $tabs-focused-tab-bg-color: $base-bg-hover !default;
   $tabs-tab-bg-color-hover-primary: $base-neutral-background !default;
   $tabs-tab-bg-color-focus-primary: $base-bg-hover !default;
