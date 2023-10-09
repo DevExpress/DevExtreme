@@ -7,12 +7,12 @@ import Button from './button';
 import { render } from './widget/utils.ink_ripple';
 import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
-import { isPlainObject } from '../core/utils/type';
+import { isPlainObject, isString, isNumeric } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
 import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
 import { TABS_EXPANDED_CLASS } from './tabs/constants';
-import { isMaterial, current as currentTheme } from './themes';
+import { isMaterial, isFluent, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
 import Scrollable from './scroll_view/ui.scrollable';
 import { default as CollectionWidget } from './collection/ui.collection_widget.live_update';
@@ -44,6 +44,8 @@ const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+
+const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
 
 const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
@@ -132,7 +134,7 @@ const Tabs = CollectionWidget.inherit({
 
         return this.callBase().concat([
             {
-                device: function() {
+                device() {
                     return devices.real().deviceType !== 'desktop';
                 },
                 options: {
@@ -146,7 +148,7 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: function() {
+                device() {
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
@@ -154,7 +156,16 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: function() {
+                device() {
+                    return isFluent(themeName);
+                },
+                options: {
+                    iconPosition: ICON_POSITION.top,
+                    stylingMode: STYLING_MODE.secondary,
+                }
+            },
+            {
+                device() {
                     return isMaterial(themeName);
                 },
                 options: {
@@ -170,7 +181,6 @@ const Tabs = CollectionWidget.inherit({
         const { orientation, stylingMode } = this.option();
 
         this.callBase();
-        this.setAria('role', 'tablist');
         this.$element().addClass(TABS_CLASS);
         this._toggleOrientationClass(orientation);
         this._toggleIconPositionClass();
@@ -193,7 +203,16 @@ const Tabs = CollectionWidget.inherit({
 
                 const $iconElement = getImageContainer(data.icon);
                 $iconElement && $iconElement.prependTo($container);
-                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
+
+                const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
+
+                const text = data?.text ?? data;
+
+                if(isString(text) || isNumeric(text)) {
+                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, text);
+                }
+
+                $container.wrapInner($tabItem);
             }).bind(this), ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod'))
         });
     },
@@ -383,6 +402,7 @@ const Tabs = CollectionWidget.inherit({
 
     _renderWrapper: function() {
         this._$wrapper = $('<div>').addClass(TABS_WRAPPER_CLASS);
+        this.setAria('role', 'tablist', this._$wrapper);
         this.$element().append(this._$wrapper);
     },
 
@@ -527,6 +547,10 @@ const Tabs = CollectionWidget.inherit({
         this.callBase(e);
     },
 
+    _refreshActiveDescendant: function() {
+        this.callBase(this._$wrapper);
+    },
+
     _clean: function() {
         this._deferredTemplates = [];
         this._cleanScrolling();
@@ -656,6 +680,9 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'stylingMode': {
                 this._toggleStylingModeClass(args.value);
+                if(!this._isServerSide()) {
+                    this._dimensionChanged();
+                }
                 break;
             }
             default:

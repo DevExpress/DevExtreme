@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:string" as string;
 @use "../../../colors" as *;
 @use "../../../sizes" as *;
 @use "../../../button/colors" as *;
@@ -32,15 +33,26 @@
     .dx-icon {
       color: $tabs-tab-icon-selected-color;
     }
+
+    .dx-tab-text {
+      visibility: visible;
+
+      &::after {
+        visibility: hidden;
+      }
+    }
   }
 
   &.dx-state-focused {
     background-color: $tabs-focused-tab-bg-color;
   }
 
-
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
+
+    .dx-tab-text::after {
+      color: $tabs-tab-disabled-color;
+    }
 
     .dx-icon {
       color: $tabs-tab-icon-disabled-color;
@@ -53,15 +65,47 @@
   }
 
   .dx-tab-text {
+    position: relative;
     column-gap: $fluent-base-icon-margin;
-    text-transform: uppercase;
     line-height: $fluent-tab-text-line-height;
-    font-weight: 500;
+    font-weight: $fluent-tab-font-weight-accent;
+    visibility: hidden;
+
+    &::after {
+      content: string.unquote("attr(DATA-DX_TEXT)");
+      position: absolute;
+      width: 100%;
+      pointer-events: none;
+      color: $tabs-tab-color;
+      font-weight: $fluent-tab-font-weight-basic;
+      visibility: visible;
+    }
   }
 
   .dx-icon {
     color: $tabs-tab-icon-color;
+    visibility: visible;
 
     @include dx-icon-sizing($fluent-base-icon-size);
   }
+}
+
+.dx-tabs-icon-position-start .dx-tab-text::after {
+  text-align: end;
+}
+
+.dx-tabs-icon-position-end .dx-tab-text::after {
+  text-align: start;
+}
+
+.dx-tabs-icon-position-top .dx-tab-text::after {
+  bottom: 0;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.dx-tabs-icon-position-bottom .dx-tab-text::after {
+  top: 0;
+  text-align: center;
+  vertical-align: top;
 }

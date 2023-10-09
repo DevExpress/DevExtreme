@@ -3,12 +3,23 @@
 // adduse
 
 
-@mixin dx-tabs-indicator-primary-mixin($position, $color) {
+@mixin dx-tabs-indicator {
   &::after {
     content: "";
     position: absolute;
-    background-color: $color;
+  }
+}
 
+@mixin dx-tabs-indicator-background($background-color) {
+  &::after {
+    background-color: $background-color;
+  }
+}
+
+@mixin dx-tabs-indicator-primary($position) {
+  @include dx-tabs-indicator();
+
+  &::after {
     @if $position == top {
       top: 0;
       right: 0;
@@ -37,53 +48,39 @@
   }
 }
 
-@mixin dx-tabs-indicator-secondary-base-mixin($position, $color) {
+@mixin dx-tabs-indicator-secondary {
+  @include dx-tabs-indicator();
+  
   &::after {
-    content: "";
-    position: absolute;
+    border-radius: $fluent-indicator-border-radius-secondary;
+  }
+}
+
+@mixin dx-tabs-horizontal-indicator-secondary($position) {
+  &::after {
     right: 0;
     left: 0;
     width: $fluent-indicator-length-secondary;
     height: $fluent-indicator-thickness-secondary;
-    background-color: $color;
 
     @if $position == top {
       top: -$fluent-tabs-item-padding-horizontal;
-      border-bottom-right-radius: $fluent-indicator-border-radius-secondary;
-      border-bottom-left-radius: $fluent-indicator-border-radius-secondary;
-      border-top-right-radius: unset;
-      border-top-left-radius: unset;
     } @else if $position == bottom {
       bottom: -$fluent-tabs-item-padding-horizontal;
-      border-top-right-radius: $fluent-indicator-border-radius-secondary;
-      border-top-left-radius: $fluent-indicator-border-radius-secondary;
-      border-bottom-right-radius: unset;
-      border-bottom-left-radius: unset;
     }
   }
 }
 
-@mixin dx-tabs-indicator-secondary-vertical-mixin($position, $color) {
+@mixin dx-tabs-vertical-indicator-secondary($position) {
   &::after {
-    content: "";
-    position: absolute;
     top: $fluent-tabs-item-padding-horizontal;
     width: $fluent-indicator-thickness-secondary;
     height: calc($fluent-indicator-length-secondary - 2 * $fluent-tabs-item-padding-horizontal);
-    background-color: $color;
 
     @if $position == right {
       right: 0;
-      border-top-left-radius: $fluent-indicator-border-radius-secondary;
-      border-bottom-left-radius: $fluent-indicator-border-radius-secondary;
-      border-top-right-radius: unset;
-      border-bottom-right-radius: unset;
     } @else if $position == left {
       left: 0;
-      border-top-right-radius: $fluent-indicator-border-radius-secondary;
-      border-bottom-right-radius: $fluent-indicator-border-radius-secondary;
-      border-top-left-radius: unset;
-      border-bottom-left-radius: unset;
     }
   }
 }

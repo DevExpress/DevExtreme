@@ -39,18 +39,51 @@
     }
   }
 
-  .dx-tabpanel-tab.dx-tab-selected::after {
-    top: 0;
-    bottom: unset;
+  .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
+    .dx-tab {
+      .dx-tab-content {
+        position: relative;
+  
+        @include dx-tabs-indicator-secondary();
+        @include dx-tabs-horizontal-indicator-secondary(top);
+      }
+
+      &.dx-state-hover .dx-tab-content {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active .dx-tab-content {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+  
+      &.dx-tab-selected {
+        .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+        }
+  
+        &.dx-state-focused .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+        }
+  
+        &.dx-state-hover .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+        }
+  
+        &.dx-state-active .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+        }
+  
+        &.dx-state-disabled .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+        }
+      }
+    }
   }
 
-  .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
-    .dx-tab-selected .dx-tab-content {
-      @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-selected-tab-border-color);
-
-      &.dx-state-disabled .dx-tab-content {
-        @include dx-tabs-indicator-secondary-base-mixin(top, $tabs-disabled-tab-border-color);
-      }
+  .dx-tabs-styling-mode-primary {
+    .dx-tabpanel-tab::after {
+      top: 0;
+      bottom: unset;
     }
   }
 }
@@ -80,11 +113,52 @@
   }
 
   .dx-tabs-styling-mode-secondary {
-    .dx-tab-selected {
-      @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-selected-tab-border-color);
+    .dx-tab {
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-vertical-indicator-secondary(left);
+
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab.dx-tab-selected {
+      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
 
       &.dx-state-disabled {
-        @include dx-tabs-indicator-secondary-vertical-mixin(left, $tabs-disabled-tab-border-color);
+        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+      }
+    }
+  }
+
+  .dx-tabs-styling-mode-primary {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(left);
+
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+  
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab.dx-tab-selected {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+      }
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
       }
     }
   }
