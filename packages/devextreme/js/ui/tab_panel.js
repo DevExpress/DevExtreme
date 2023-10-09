@@ -11,6 +11,7 @@ import { getImageContainer } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
+import { isMaterial, isFluent, current as currentTheme } from './themes';
 
 // STYLE tabPanel
 
@@ -92,6 +93,8 @@ const TabPanel = MultiView.inherit({
     },
 
     _defaultOptionsRules: function() {
+        const themeName = currentTheme();
+
         return this.callBase().concat([
             {
                 device: function() {
@@ -113,6 +116,23 @@ const TabPanel = MultiView.inherit({
                 device: { platform: 'generic' },
                 options: {
                     animationEnabled: false
+                }
+            },
+            {
+                device() {
+                    return isFluent(themeName);
+                },
+                options: {
+                    iconPosition: ICON_POSITION.top,
+                    stylingMode: STYLING_MODE.secondary,
+                }
+            },
+            {
+                device() {
+                    return isMaterial(themeName);
+                },
+                options: {
+                    iconPosition: ICON_POSITION.top,
                 }
             }
         ]);
