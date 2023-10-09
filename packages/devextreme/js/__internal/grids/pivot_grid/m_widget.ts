@@ -16,6 +16,7 @@ import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils/index';
 import localizationMessage from '@js/localization/message';
+import Button, { Properties } from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
@@ -879,13 +880,13 @@ const PivotGrid = (Widget as any).inherit({
     this.$element().find('.dx-pivotgrid-toolbar').remove();
 
     $toolbarContainer.prependTo($targetContainer);
-    const stylingMode = isFluent(current()) ? 'text' : 'default';
+    const stylingMode = isFluent(current()) ? 'text' : 'contained';
 
     if (this.option('fieldChooser.enabled')) {
       const $buttonElement = $(DIV)
         .appendTo($toolbarContainer)
         .addClass('dx-pivotgrid-field-chooser-button');
-      const buttonOptions = {
+      const buttonOptions: Properties = {
         icon: 'columnchooser',
         hint: this.option('texts.showFieldChooser'),
         stylingMode,
@@ -894,14 +895,14 @@ const PivotGrid = (Widget as any).inherit({
         },
       };
 
-      this._createComponent($buttonElement, 'dxButton', buttonOptions);
+      this._createComponent($buttonElement, Button, buttonOptions);
     }
 
     if (this.option('export.enabled')) {
       const $buttonElement = $(DIV)
         .appendTo($toolbarContainer)
         .addClass('dx-pivotgrid-export-button');
-      const buttonOptions = {
+      const buttonOptions: Properties = {
         icon: 'xlsxfile',
         hint: this.option('texts.exportToExcel'),
         stylingMode,
@@ -910,7 +911,7 @@ const PivotGrid = (Widget as any).inherit({
         },
       };
 
-      this._createComponent($buttonElement, 'dxButton', buttonOptions);
+      this._createComponent($buttonElement, Button, buttonOptions);
     }
   },
 
