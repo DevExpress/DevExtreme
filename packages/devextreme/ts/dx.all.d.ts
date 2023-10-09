@@ -24293,6 +24293,10 @@ declare module DevExpress.ui {
      */
     allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
     /**
+     * [descr:dxSchedulerOptions.offset]
+     */
+    offset?: number;
+    /**
      * [descr:dxSchedulerOptions.views]
      */
     views?: Array<
@@ -24448,6 +24452,10 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
           allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
+          /**
+           * [descr:dxSchedulerOptions.views.offset]
+           */
+          offset?: number;
         }
     >;
   }
