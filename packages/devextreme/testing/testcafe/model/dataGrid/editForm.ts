@@ -17,8 +17,8 @@ export default class EditForm extends FocusableElement {
   constructor(element: Selector, buttons: Selector) {
     super(element);
     this.form = this.element.find(`.${CLASS.form}`);
-    this.saveButton = buttons.nth(0);
-    this.cancelButton = buttons.nth(1);
+    this.cancelButton = buttons.nth(0);
+    this.saveButton = buttons.nth(1);
   }
 
   getItem(id: string): Selector {
