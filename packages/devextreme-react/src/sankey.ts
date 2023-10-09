@@ -7,9 +7,9 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, NodeClickEvent, dxSankeyNode } from "devextreme/viz/sankey";
+import type { Font as ChartsFont } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 
-import type * as BaseWidgetTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -275,7 +275,7 @@ type ILabelProps = React.PropsWithChildren<{
     width?: number;
   };
   customizeText?: ((itemInfo: dxSankeyNode) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalOffset?: number;
   overlappingBehavior?: "ellipsis" | "hide" | "none";
   shadow?: Record<string, any> | {
@@ -340,7 +340,7 @@ class Link extends NestedOption<ILinkProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -448,7 +448,7 @@ class Size extends NestedOption<ISizeProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -464,7 +464,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // owners:
 // Sankey
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -474,7 +474,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -511,7 +511,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>);
   customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   linkTooltipTemplate?: ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template;
   nodeTooltipTemplate?: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template;

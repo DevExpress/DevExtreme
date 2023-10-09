@@ -7,11 +7,11 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeries } from "devextreme/viz/polar_chart";
+import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-import type { ChartsColor } from "devextreme/common/charts";
 import type { BaseChartLegendItem } from "devextreme/viz/chart_components/base_chart";
 
-import type * as BaseWidgetTypes from "devextreme/common/charts";
+import type * as CommonChartTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -254,7 +254,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -346,7 +346,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     displayBehindSeries?: boolean;
     extendAxis?: boolean;
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       text?: string;
       visible?: boolean;
     };
@@ -357,7 +357,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     color?: string;
     dashStyle?: "dash" | "dot" | "longDash" | "solid";
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       visible?: boolean;
     };
     width?: number;
@@ -376,7 +376,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     customizeHint?: ((argument: { value: any | number | string, valueText: string }) => string);
     customizeText?: ((argument: { value: any | number | string, valueText: string }) => string);
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     indentFromAxis?: number;
     overlappingBehavior?: "hide" | "none";
@@ -418,14 +418,14 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     color?: string;
     endValue?: any | number | string;
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       text?: string;
     };
     startValue?: any | number | string;
   }[];
   stripStyle?: Record<string, any> | {
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
     };
   };
   tick?: Record<string, any> | {
@@ -520,7 +520,7 @@ class ArgumentFormat extends NestedOption<IArgumentFormatProps> {
 type IAxisLabelProps = React.PropsWithChildren<{
   customizeHint?: ((argument: { value: any | number | string, valueText: string }) => string);
   customizeText?: ((argument: { value: any | number | string, valueText: string }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   indentFromAxis?: number;
   overlappingBehavior?: "hide" | "none";
@@ -588,7 +588,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -651,7 +651,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
     color?: string;
     dashStyle?: "dash" | "dot" | "longDash" | "solid";
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       visible?: boolean;
     };
     width?: number;
@@ -666,7 +666,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
   };
   inverted?: boolean;
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     indentFromAxis?: number;
     overlappingBehavior?: "hide" | "none";
     visible?: boolean;
@@ -687,7 +687,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
   opacity?: number;
   stripStyle?: Record<string, any> | {
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
     };
   };
   tick?: Record<string, any> | {
@@ -715,7 +715,7 @@ class CommonAxisSettings extends NestedOption<ICommonAxisSettingsProps> {
 // owners:
 // CommonAxisSettings
 type ICommonAxisSettingsLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   indentFromAxis?: number;
   overlappingBehavior?: "hide" | "none";
   visible?: boolean;
@@ -804,7 +804,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     };
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     position?: "inside" | "outside";
     rotationAngle?: number;
@@ -956,7 +956,7 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   };
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   position?: "inside" | "outside";
   rotationAngle?: number;
@@ -1025,7 +1025,7 @@ type IConstantLineProps = React.PropsWithChildren<{
   displayBehindSeries?: boolean;
   extendAxis?: boolean;
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     text?: string;
     visible?: boolean;
   };
@@ -1041,7 +1041,7 @@ class ConstantLine extends NestedOption<IConstantLineProps> {
 // ConstantLine
 // ConstantLine
 type IConstantLineLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   text?: string;
   visible?: boolean;
 }>
@@ -1055,7 +1055,7 @@ type IConstantLineStyleProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: "dash" | "dot" | "longDash" | "solid";
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     visible?: boolean;
   };
   width?: number;
@@ -1071,7 +1071,7 @@ class ConstantLineStyle extends NestedOption<IConstantLineStyleProps> {
 // owners:
 // ConstantLineStyle
 type IConstantLineStyleLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   visible?: boolean;
 }>
 class ConstantLineStyleLabel extends NestedOption<IConstantLineStyleLabelProps> {
@@ -1220,7 +1220,7 @@ class Image extends NestedOption<IImageProps> {
 // CommonAxisSettings
 // CommonSeriesSettings
 type ILabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   text?: string;
   visible?: boolean;
   customizeHint?: ((argument: { value: any | number | string, valueText: string }) => string);
@@ -1267,7 +1267,7 @@ type ILegendProps = React.PropsWithChildren<{
   customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string);
   customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
   customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   hoverMode?: "excludePoints" | "includePoints" | "none";
   itemsAlignment?: "center" | "left" | "right";
@@ -1286,7 +1286,7 @@ type ILegendProps = React.PropsWithChildren<{
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     horizontalAlignment?: "center" | "left" | "right";
     margin?: Record<string, any> | {
       bottom?: number;
@@ -1296,7 +1296,7 @@ type ILegendProps = React.PropsWithChildren<{
     };
     placeholderSize?: number;
     subtitle?: Record<string, any> | string | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       offset?: number;
       text?: string;
     };
@@ -1330,7 +1330,7 @@ class Legend extends NestedOption<ILegendProps> {
 // owners:
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | {
     bottom?: number;
@@ -1340,7 +1340,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
   };
@@ -1360,7 +1360,7 @@ class LegendTitle extends NestedOption<ILegendTitleProps> {
 // owners:
 // LegendTitle
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
 }>
@@ -1393,7 +1393,7 @@ class Length extends NestedOption<ILengthProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -1594,7 +1594,7 @@ class PointSelectionStyle extends NestedOption<IPointSelectionStyleProps> {
 // owners:
 // PolarChart
 type IPolarChartTitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -1604,7 +1604,7 @@ type IPolarChartTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -1628,7 +1628,7 @@ class PolarChartTitle extends NestedOption<IPolarChartTitleProps> {
 // owners:
 // PolarChartTitle
 type IPolarChartTitleSubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1718,7 +1718,7 @@ type ISeriesProps = React.PropsWithChildren<{
     };
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     position?: "inside" | "outside";
     rotationAngle?: number;
@@ -1865,7 +1865,7 @@ type IStripProps = React.PropsWithChildren<{
   color?: string;
   endValue?: any | number | string;
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     text?: string;
   };
   startValue?: any | number | string;
@@ -1879,7 +1879,7 @@ class Strip extends NestedOption<IStripProps> {
 // Strip
 // Strip
 type IStripLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   text?: string;
 }>
 class StripLabel extends NestedOption<IStripLabelProps> {
@@ -1890,7 +1890,7 @@ class StripLabel extends NestedOption<IStripLabelProps> {
 // ArgumentAxis
 type IStripStyleProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
   };
 }>
 class StripStyle extends NestedOption<IStripStyleProps> {
@@ -1904,7 +1904,7 @@ class StripStyle extends NestedOption<IStripStyleProps> {
 // owners:
 // StripStyle
 type IStripStyleLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
 }>
 class StripStyleLabel extends NestedOption<IStripStyleLabelProps> {
   public static OptionName = "label";
@@ -1914,7 +1914,7 @@ class StripStyleLabel extends NestedOption<IStripStyleLabelProps> {
 // LegendTitle
 // PolarChartTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1962,7 +1962,7 @@ class TickInterval extends NestedOption<ITickIntervalProps> {
 // Legend
 // PolarChart
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -1972,7 +1972,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -2005,7 +2005,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -2068,7 +2068,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     displayBehindSeries?: boolean;
     extendAxis?: boolean;
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       text?: string;
       visible?: boolean;
     };
@@ -2079,7 +2079,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     color?: string;
     dashStyle?: "dash" | "dot" | "longDash" | "solid";
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       visible?: boolean;
     };
     width?: number;
@@ -2096,7 +2096,7 @@ type IValueAxisProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     customizeHint?: ((axisValue: { value: any | number | string, valueText: string }) => string);
     customizeText?: ((axisValue: { value: any | number | string, valueText: string }) => string);
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     indentFromAxis?: number;
     overlappingBehavior?: "hide" | "none";
@@ -2148,14 +2148,14 @@ type IValueAxisProps = React.PropsWithChildren<{
     color?: string;
     endValue?: any | number | string;
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       text?: string;
     };
     startValue?: any | number | string;
   }[];
   stripStyle?: Record<string, any> | {
     label?: Record<string, any> | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
     };
   };
   tick?: Record<string, any> | {

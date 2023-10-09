@@ -7,10 +7,9 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartLegendItem, PieChartSeries } from "devextreme/viz/pie_chart";
+import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-import type { ChartsColor } from "devextreme/common/charts";
 
-import type * as BaseWidgetTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -249,7 +248,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -392,7 +391,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -490,7 +489,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     };
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     position?: "columns" | "inside" | "outside";
     radialOffset?: number;
@@ -672,7 +671,7 @@ type ILabelProps = React.PropsWithChildren<{
   };
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   position?: "columns" | "inside" | "outside";
   radialOffset?: number;
@@ -710,7 +709,7 @@ type ILegendProps = React.PropsWithChildren<{
   customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string);
   customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
   customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   hoverMode?: "none" | "allArgumentPoints";
   itemsAlignment?: "center" | "left" | "right";
@@ -729,7 +728,7 @@ type ILegendProps = React.PropsWithChildren<{
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     horizontalAlignment?: "center" | "left" | "right";
     margin?: Record<string, any> | {
       bottom?: number;
@@ -739,7 +738,7 @@ type ILegendProps = React.PropsWithChildren<{
     };
     placeholderSize?: number;
     subtitle?: Record<string, any> | string | {
-      font?: BaseWidgetTypes.Font;
+      font?: ChartsFont;
       offset?: number;
       text?: string;
     };
@@ -773,7 +772,7 @@ class Legend extends NestedOption<ILegendProps> {
 // owners:
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | {
     bottom?: number;
@@ -783,7 +782,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
   };
@@ -803,7 +802,7 @@ class LegendTitle extends NestedOption<ILegendTitleProps> {
 // owners:
 // LegendTitle
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
 }>
@@ -819,7 +818,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -853,7 +852,7 @@ class Margin extends NestedOption<IMarginProps> {
 // owners:
 // PieChart
 type IPieChartTitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -863,7 +862,7 @@ type IPieChartTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -887,7 +886,7 @@ class PieChartTitle extends NestedOption<IPieChartTitleProps> {
 // owners:
 // PieChartTitle
 type IPieChartTitleSubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -973,7 +972,7 @@ type ISeriesProps = React.PropsWithChildren<{
     };
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     position?: "columns" | "inside" | "outside";
     radialOffset?: number;
@@ -1082,7 +1081,7 @@ class SmallValuesGrouping extends NestedOption<ISmallValuesGroupingProps> {
 // LegendTitle
 // PieChartTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1096,7 +1095,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // PieChart
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -1106,7 +1105,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -1139,7 +1138,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
