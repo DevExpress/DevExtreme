@@ -1605,13 +1605,21 @@ QUnit.module('action API', {}, () => {
         const config = { options: [], afterExecute: noop };
         const configEtalon = JSON.stringify(config);
 
-        //  console.log('--before--_createActionByOption------>');
-
-        // const action = instance._createActionByOption('ondrawn', config);
-
-        //  console.log('---------->', config, instance);
+        instance._createActionByOption('ondrawn', config)();
 
         assert.equal(JSON.stringify(config), configEtalon);
+
+    });
+
+    QUnit.test('_createAction should not modify config argument (T1192401)', function(assert) {
+        const instance = new TestComponent();
+
+        const config = { options: [] };
+        const configEtalon = JSON.stringify(Object.keys(config));
+
+        instance._createAction({}, config)();
+
+        assert.equal(JSON.stringify(Object.keys(config)), configEtalon);
 
     });
 

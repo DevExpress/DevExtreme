@@ -313,9 +313,7 @@ export const Component = Class.inherit({
                 actionFunc = this.option(optionName);
             }
 
-            // console.log('---------->', [optionName, eventName], this._eventsStrategy.hasEvent(eventName));
             if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
-                //   console.log('------RETURN---->', config);
                 return;
             }
 

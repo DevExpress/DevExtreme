@@ -73,13 +73,8 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
     return target;
 };
 
-const cloneJsonObject = function(jsonObject) {
-    return JSON.parse(JSON.stringify(jsonObject));
-};
-
 export {
     clone,
-    cloneJsonObject,
     orderEach,
-    deepExtendArraySafe,
+    deepExtendArraySafe
 };
