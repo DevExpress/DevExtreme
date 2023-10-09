@@ -2275,8 +2275,13 @@ class EditingControllerImpl extends modules.ViewController {
 
   isCellModified(parameters) {
     const { columnIndex } = parameters;
-    const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-    return !!modifiedValues && modifiedValues[columnIndex] !== undefined;
+    let modifiedValue = parameters?.row?.modifiedValues?.[columnIndex];
+
+    if (parameters?.row?.isNewRow) {
+      modifiedValue = parameters.value;
+    }
+
+    return modifiedValue !== undefined;
   }
 
   isNewRowInEditMode() {
