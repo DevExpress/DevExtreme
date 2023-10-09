@@ -430,8 +430,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       if (!isPopupForm) {
         const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
-        this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
         this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());
+        this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
       }
 
       this._editForm.on('contentReady', () => {
