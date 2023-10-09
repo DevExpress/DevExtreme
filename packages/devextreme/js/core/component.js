@@ -277,8 +277,7 @@ export const Component = Class.inherit({
             if(!isPlainObject(e)) {
                 e = { actionValue: e };
             }
-
-            action = action || new Action(actionSource, extend(config, this._defaultActionConfig()));
+            action = action || new Action(actionSource, extend({}, config, this._defaultActionConfig()));
 
             return action.execute.call(action, extend(e, this._defaultActionArgs()));
         };
@@ -289,7 +288,7 @@ export const Component = Class.inherit({
         let eventName;
         let actionFunc;
 
-        config = extend({}, true, config);
+        config = extend({}, config);
 
         const result = (...args) => {
             if(!eventName) {
@@ -311,7 +310,9 @@ export const Component = Class.inherit({
                 actionFunc = this.option(optionName);
             }
 
+            // console.log('---------->', [optionName, eventName], this._eventsStrategy.hasEvent(eventName));
             if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
+                //   console.log('------RETURN---->', config);
                 return;
             }
 
