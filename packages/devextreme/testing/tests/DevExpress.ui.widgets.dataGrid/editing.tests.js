@@ -17822,18 +17822,18 @@ QUnit.module('Edit Form', {
         assert.equal($buttonsContainer.length, 1, 'buttons container exists');
         const $buttons = $buttonsContainer.find('.dx-button');
         assert.equal($buttons.length, 2, 'two buttons in buttons container');
-        assert.equal($buttons.eq(0).text(), 'Save', 'first button text');
-        assert.equal($buttons.eq(1).text(), 'Cancel', 'second button text');
+        assert.equal($buttons.eq(1).text(), 'Save', 'first button text');
+        assert.equal($buttons.eq(0).text(), 'Cancel', 'second button text');
 
         // act
-        $($buttons.eq(0)).trigger('dxclick');
+        $($buttons.eq(1)).trigger('dxclick'); // done
 
         // assert
         assert.equal(that.editingController.saveEditData.callCount, 1, 'Save button call saveEditData');
         assert.equal(that.editingController.cancelEditData.callCount, 0, 'Save button do not call cancelEditData');
 
         // act
-        $($buttons.eq(1)).trigger('dxclick');
+        $($buttons.eq(0)).trigger('dxclick'); // cancel
 
         // assert
         assert.equal(that.editingController.saveEditData.callCount, 1, 'Save button do not call saveEditData');
@@ -17859,7 +17859,7 @@ QUnit.module('Edit Form', {
 
         // act
         const $buttons = testElement.find('.dx-master-detail-cell .dx-datagrid-form-buttons-container .dx-button');
-        $($buttons.eq(0)).trigger('dxclick');
+        $($buttons.eq(1)).trigger('dxclick');
 
         // assert
         assert.equal(testElement.find('.dx-row').eq(0).children().eq(0).text(), 'Test123', 'first cell saved');
@@ -18789,7 +18789,7 @@ QUnit.module('Edit Form', {
         this.cellValue(0, 'name', 'Test');
 
         let $rowElement = $(this.getRowElement(0));
-        const $saveButton = $rowElement.find('.dx-button').first();
+        const $saveButton = $rowElement.find('.dx-button').eq(1);
 
         // assert
         assert.ok($rowElement.hasClass('dx-datagrid-edit-form'), 'has edit form');
