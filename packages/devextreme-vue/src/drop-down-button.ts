@@ -37,6 +37,7 @@ type AccessibleOptions = Pick<Properties,
   "stylingMode" |
   "tabIndex" |
   "text" |
+  "type" |
   "useItemTextAsTitle" |
   "useSelectMode" |
   "visible" |
@@ -83,6 +84,7 @@ const DxDropDownButton = createComponent({
     stylingMode: String,
     tabIndex: Number,
     text: String,
+    type: String,
     useItemTextAsTitle: Boolean,
     useSelectMode: Boolean,
     visible: Boolean,
@@ -126,6 +128,7 @@ const DxDropDownButton = createComponent({
     "update:stylingMode": null,
     "update:tabIndex": null,
     "update:text": null,
+    "update:type": null,
     "update:useItemTextAsTitle": null,
     "update:useSelectMode": null,
     "update:visible": null,

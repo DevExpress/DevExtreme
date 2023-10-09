@@ -54,6 +54,7 @@ export type WidgetName =
 | 'dxValidator'
 | 'dxHtmlEditor'
 | 'dxFileUploader'
+| 'dxSlider'
 | 'dxDropDownBox';
 
 interface WidgetOptions {

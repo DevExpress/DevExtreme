@@ -62,8 +62,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxGalleryComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxGallery;
+export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxGallery<TItem, TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]

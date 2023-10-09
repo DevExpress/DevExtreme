@@ -78,7 +78,8 @@ class TextBox extends BaseComponent<React.PropsWithChildren<ITextBoxOptions>> {
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   mask: PropTypes.string,
   maskChar: PropTypes.string,

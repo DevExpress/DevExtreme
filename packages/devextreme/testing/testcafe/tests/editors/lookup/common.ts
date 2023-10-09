@@ -1,6 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import createWidget from '../../../helpers/createWidget';
@@ -60,7 +60,7 @@ if (isMaterial()) {
   });
 }
 
-if (!isMaterial()) {
+if (!isMaterialBased()) {
   test('Popover should have correct vertical position (T1048128)', async (t) => {
     const lookup = new Lookup('#container');
     await lookup.open();

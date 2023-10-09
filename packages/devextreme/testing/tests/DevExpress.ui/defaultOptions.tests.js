@@ -1279,11 +1279,11 @@ testComponentDefaults(TreeList,
         }
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1459,16 +1459,19 @@ testComponentDefaults(DataGrid,
         showRowLines: true,
         showColumnLines: false,
         editing: { useIcons: true },
+        headerFilter: {
+            height: 315
+        },
         selection: {
             showCheckBoxesMode: 'always'
         }
     },
     function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
     },
     function() {
-        themes.isMaterial = this.origIsMaterial;
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 

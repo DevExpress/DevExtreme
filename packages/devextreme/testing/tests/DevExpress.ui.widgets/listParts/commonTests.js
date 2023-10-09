@@ -302,8 +302,8 @@ QUnit.module('collapsible groups', moduleSetup, () => {
     const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';
 
     QUnit.test('group header collapsed indicator element for the Material theme', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => {
+        const origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = () => {
             return true;
         };
 
@@ -317,7 +317,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
         assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, 'group header has the collapsed indicator element for the Material theme');
 
-        themes.isMaterial = origIsMaterial;
+        themes.isMaterialBased = origIsMaterialBased;
     });
 
     QUnit.test('no group header collapsed indicator element for the Generic theme', function(assert) {

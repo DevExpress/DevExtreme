@@ -35,21 +35,11 @@ $transparent-border: 1px solid transparent;
     @include add-indent-styles($counter - 1);
 
     .ql-indent-#{$counter} {
-      padding-left: 3 * $counter * 1em;
-
-      .dx-rtl & {
-        padding-left: 0;
-        padding-right: 3 * $counter * 1em;
-      }
+      padding-inline-start: 3 * $counter * 1em;
     }
 
     li.ql-indent-#{$counter} {
-      padding-left: 3 * $counter + $list-style-outer-width;
-
-      .dx-rtl & {
-        padding-left: 0;
-        padding-right: 3 * $counter + $list-style-outer-width;
-      }
+      padding-inline-start: 3 * $counter + $list-style-outer-width;
     }
   }
 }
@@ -207,17 +197,12 @@ $transparent-border: 1px solid transparent;
 
   ol,
   ul {
-    padding-left: 1.5em;
-
-    .dx-rtl & {
-      padding-left: 0;
-      padding-right: 1.5em;
-    }
+    padding-inline-start: 1.5em;
   }
 
   li {
     list-style-type: none;
-    padding-left: $list-style-outer-width;
+    padding-inline-start: $list-style-outer-width;
     position: relative;
 
     &[data-list="bullet"]::before {
@@ -234,9 +219,9 @@ $transparent-border: 1px solid transparent;
 
     &::before {
       display: inline-block;
-      margin-left: -1 * $list-style-outer-width;
-      margin-right: $list-style-margin;
-      text-align: right;
+      margin-inline-start: -1 * $list-style-outer-width;
+      margin-inline-end: $list-style-margin;
+      text-align: end;
       white-space: nowrap;
       width: $list-style-width;
     }
@@ -249,17 +234,6 @@ $transparent-border: 1px solid transparent;
     &[data-list="checked"] {
       > .ql-ui { // stylelint-disable-line selector-class-pattern
         visibility: visible;
-      }
-    }
-
-    .dx-rtl & {
-      padding-left: 0;
-      padding-right: $list-style-outer-width;
-
-      &::before {
-        margin-left: $list-style-margin;
-        margin-right: -1 * $list-style-outer-width;
-        text-align: left;
       }
     }
   }
@@ -275,16 +249,6 @@ $transparent-border: 1px solid transparent;
 
   @include add-counter($max-indent);
   @include add-indent-styles($max-indent);
-
-  .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
-    padding-right: $list-style-outer-width;
-
-    &::before { // stylelint-disable-line no-duplicate-selectors
-      margin-left: $list-style-margin;
-      margin-right: -1 * $list-style-outer-width;
-      text-align: left;
-    }
-  }
 
   table { // stylelint-disable-line no-duplicate-selectors
     table-layout: fixed;
@@ -357,15 +321,8 @@ $transparent-border: 1px solid transparent;
   // stylelint-enable selector-class-pattern
 
   blockquote {
-    padding-left: 12px;
-    border-left: 4px solid;
-
-    .dx-rtl & {
-      padding-left: 0;
-      padding-right: 12px;
-      border-left: none;
-      border-right: 4px solid;
-    }
+    padding-inline-start: 12px;
+    border-inline-start: 4px solid;
   }
 }
 
@@ -405,11 +362,7 @@ $transparent-border: 1px solid transparent;
 }
 
 .dx-formdialog-field-target .dx-field-item-content {
-  text-align: right;
-
-  .dx-rtl & {
-    text-align: left;
-  }
+  text-align: end;
 }
 
 .dx-color-format,

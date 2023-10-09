@@ -17,6 +17,7 @@ import {
   ALL_DAY_APPOINTMENT_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
+  APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,
   EMPTY_APPOINTMENT_CLASS,
   RECURRENCE_APPOINTMENT_CLASS,
@@ -166,7 +167,12 @@ export class Appointment extends DOMComponent {
 
     const deferredColor = (this.option('getAppointmentColor') as any)(appointmentConfig);
 
-    deferredColor.done((color) => color && this.coloredElement.css('backgroundColor', color));
+    deferredColor.done((color) => {
+      if (color) {
+        this.coloredElement.css('backgroundColor', color);
+        this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
+      }
+    });
   }
 
   _renderAppointmentGeometry() {

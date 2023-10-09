@@ -60,15 +60,8 @@
     border-radius: $texteditor-input-border-radius;
 
     .dx-htmleditor-content {
-      margin: 1px 1px 1px 0;
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-htmleditor-content {
-        margin-right: 0;
-        margin-left: 1px;
-      }
+      margin: 1px;
+      margin-inline-start: 0;
     }
 
     .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
@@ -127,14 +120,7 @@
     border-bottom-color: $texteditor-border-color;
 
     .dx-htmleditor-content {
-      padding-left: 0;
-    }
-
-    &.dx-rtl {
-      .dx-htmleditor-content {
-        padding-left: $material-html-editor-horizontal-padding;
-        padding-right: 0;
-      }
+      padding-inline-start: 0;
     }
 
     &.dx-state-hover:not(.dx-state-focused) {
@@ -206,11 +192,7 @@
 
   blockquote {
     color: color.change($base-text-color, $alpha: 0.8);
-    border-left-color: $htmleditor-toolbar-border-color;
-
-    .dx-rtl & {
-      border-right-color: $htmleditor-toolbar-border-color;
-    }
+    border-inline-start-color: $htmleditor-toolbar-border-color;
   }
 
   .dx-variable {
@@ -264,7 +246,7 @@
 
 .dx-htmleditor-toolbar-separator {
   height: 50%;
-  border-left-color: $htmleditor-toolbar-border-color;
+  border-inline-start-color: $htmleditor-toolbar-border-color;
 
   .dx-toolbar-multiline & {
     height: math.div($material-toolbar-height, 2);
@@ -297,7 +279,7 @@
 
 .dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
   .dx-collection .dx-field-item:not(.dx-last-col) {
-    padding-right: $material-html-editor-add-image-dialog-base-padding;
+    padding-inline-end: $material-html-editor-add-image-dialog-base-padding;
   }
 
   .dx-fix-ratio-container {
@@ -306,14 +288,14 @@
     }
 
     .dx-buttongroup {
-      margin-left: $material-html-editor-add-image-dialog-base-padding;
+      margin-inline-start: $material-html-editor-add-image-dialog-base-padding;
       width: $material-button-height;
       margin-top: math.div($material-base-inline-widget-height - $material-button-height, 2);
     }
   }
 
   .dx-collection .dx-field-item:not(.dx-first-col) {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .dx-fileuploader-input-wrapper {

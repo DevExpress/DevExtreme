@@ -12,6 +12,7 @@ import { PostponedOperations } from './postponed_operations';
 import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 import { getPathParts } from './utils/data';
+import license from '../__internal/core/license/license_validation';
 
 const getEventName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3);
@@ -82,6 +83,8 @@ export const Component = Class.inherit({
         this._disposingCallbacks = _disposingCallbacks || Callbacks();
         this.postponedOperations = new PostponedOperations();
         this._createOptions(options);
+
+        license.verifyLicense(Config().licenseKey);
     },
 
     _createOptions(options) {

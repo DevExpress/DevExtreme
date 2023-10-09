@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/accordion.d';
@@ -15,7 +15,7 @@ fixture.disablePageReloads`Accordion_common`
 
     const screenshotName = `Accordion items render rtl=${rtlEnabled}.png`;
 
-    if (!isMaterial()) {
+    if (!isMaterialBased()) {
       await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
       await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
     }

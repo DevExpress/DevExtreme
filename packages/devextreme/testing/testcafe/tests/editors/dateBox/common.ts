@@ -17,42 +17,42 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const pickerTypes = ['calendar', 'list', 'native', 'rollers'];
-const labelModes = ['static', 'floating', 'hidden'];
+const labelModes = ['static', 'floating', 'hidden', 'outside'];
 const types = ['date', 'datetime', 'time'];
 
 fixture.disablePageReloads`DateBox render`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  test(`DateBox styles, stylingMode=${stylingMode}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  labelModes.forEach((labelMode) => {
+    test(`DateBox styles, stylingMode=${stylingMode}, labelMode=${labelMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Datebox stylingMode=${stylingMode}.png`, { element: '#container', shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `Datebox stylingMode=${stylingMode}, labelMode=${labelMode}.png`, { shouldTestInCompact: true });
 
-    for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
-      for (const id of t.ctx.ids) {
-        await setClassAttribute(Selector(`#${id}`), state);
+      for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
+        for (const id of t.ctx.ids) {
+          await setClassAttribute(Selector(`#${id}`), state);
+        }
+
+        await testScreenshot(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}, labelMode=${labelMode}.png`, { shouldTestInCompact: true });
+
+        for (const id of t.ctx.ids) {
+          await removeClassAttribute(Selector(`#${id}`), state);
+        }
       }
 
-      await testScreenshot(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, { element: '#container', shouldTestInCompact: true });
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      t.ctx.ids = [];
 
-      for (const id of t.ctx.ids) {
-        await removeClassAttribute(Selector(`#${id}`), state);
-      }
-    }
+      await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block; margin: 5px; }`);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    t.ctx.ids = [];
-
-    await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block; margin: 5px; }`);
-
-    for (const rtlEnabled of [true, false]) {
-      for (const type of types) {
-        for (const pickerType of pickerTypes) {
-          for (const labelMode of labelModes) {
+      for (const rtlEnabled of [true, false]) {
+        for (const type of types) {
+          for (const pickerType of pickerTypes) {
             const id = `${`dx${new Guid()}`}`;
 
             t.ctx.ids.push(id);
@@ -74,6 +74,6 @@ stylingModes.forEach((stylingMode) => {
           }
         }
       }
-    }
+    });
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
@@ -6,7 +7,7 @@ import {
   appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../../helpers/domUtils';
-import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, isFluent, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
@@ -17,7 +18,7 @@ fixture.disablePageReloads`TextBox_Label`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-const labelModes = ['floating', 'static', 'hidden'];
+const labelModes = ['floating', 'static', 'hidden', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
@@ -31,13 +32,13 @@ test('Label max-width changed with container size', async (t) => {
 
   await t
     .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
-    .eql(isMaterial() ? '68px' : '82px');
+    .eql(isMaterial() ? '68px' : isFluent() ? '74px' : '82px');
 
   await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), 'width: 400px;');
 
   await t
     .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
-    .eql(isMaterial() ? '368px' : '382px');
+    .eql(isMaterial() ? '368px' : isFluent() ? '374px' : '382px');
 }).before(async () => createWidget('dxTextBox', {
   width: 100,
   label: 'long label text long label text long label text long label text long label text',

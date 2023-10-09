@@ -124,7 +124,8 @@ class ColorBox extends BaseComponent<React.PropsWithChildren<IColorBoxOptions>> 
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   name: PropTypes.string,
   onChange: PropTypes.func,
