@@ -29,35 +29,10 @@ $tabs-tab-disabled-color: $base-foreground-disabled !default;
 * $type color
 */
 $tabs-tab-border-color-selected-basic: $base-accent !default;
-
-/**
-* $name 41. Selected active tab border color
-* $type color
-*/
 $tabs-tab-border-color-selected-active: $base-accent-active !default;
-
-/**
-* $name 42. Selected hover tab border color
-* $type color
-*/
 $tabs-tab-border-color-selected-hover: $base-accent-hover !default;
-
-/**
-* $name 43. Selected focused tab border color
-* $type color
-*/
 $tabs-tab-border-color-selected-focused: $base-accent !default;
-
-/**
-* $name 44. Active tab border color
-* $type color
-*/
 $tabs-tab-border-color-active: $base-border-color-focused !default;
-
-/**
-* $name 42. Hover tab border color
-* $type color
-*/
 $tabs-tab-border-color-hover: $base-border-color-hover !default;
 
 /**
@@ -102,23 +77,8 @@ $tabs-hovered-tab-bg-color: transparent !default;
 * $type color
 */
 $tabs-focused-tab-bg-color: null !default;
-
-/**
-* $name 111. Hovered tab background color primary
-* $type color
-*/
 $tabs-tab-bg-color-hover-primary: null !default;
-
-/**
-* $name 112. Focused tab background color primary
-* $type color
-*/
 $tabs-tab-bg-color-focus-primary: null !default;
-
-/**
-* $name 112. Active tab background color primary
-* $type color
-*/
 $tabs-tab-bg-color-active-primary: null !default;
 
 /**
