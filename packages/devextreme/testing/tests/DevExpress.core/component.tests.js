@@ -1602,13 +1602,12 @@ QUnit.module('action API', {}, () => {
     QUnit.test('_createActionByOption should not modify config argument (T1192401)', function(assert) {
         const instance = new TestComponent();
 
-        const config = { options: [], afterExecute: noop };
+        const config = { options: [] };
         const configEtalon = JSON.stringify(config);
 
         instance._createActionByOption('ondrawn', config)();
 
         assert.equal(JSON.stringify(config), configEtalon);
-
     });
 
     QUnit.test('_createAction should not modify config argument (T1192401)', function(assert) {
