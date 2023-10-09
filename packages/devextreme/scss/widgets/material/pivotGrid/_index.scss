@@ -28,13 +28,6 @@
   $pivotgrid-data-area-color: $pivotgrid-data-area-color,
   $pivotgrid-grandtotalcolor: $pivotgrid-grandtotalcolor,
   $pivotgrid-accent-color: $pivotgrid-accent-color,
-  $pivotgrid-area-all-image: $pivotgrid-area-all-image,
-  $pivotgrid-area-filter-image: $pivotgrid-area-filter-image,
-  $pivotgrid-area-row-image: $pivotgrid-area-row-image,
-  $pivotgrid-area-column-image: $pivotgrid-area-column-image,
-  $pivotgrid-area-data-image: $pivotgrid-area-data-image,
-  $pivotgrid-dimension-image: $pivotgrid-dimension-image,
-  $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
@@ -177,21 +170,19 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
 .dx-pivotgridfieldchooser {
   background-color: $pivotgrid-area-background;
 
+  .dx-area-icon {
+    width: $material-button-icon-size;
+    height: $material-button-icon-size;
+    font-size: $material-button-icon-size;
+  }
+
   .dx-area {
-    .dx-area-icon-filter {
-      background: none;
-
-      @include dx-icon(filter);
-
-      width: 14px;
-      height: 14px;
-    }
-
     .dx-area-caption {
       text-transform: uppercase;
       font-size: $material-pivotgrid-headers-font-size;
       font-weight: 500;
       color: $pivotgrid-area-color;
+      vertical-align: bottom;
     }
 
     .dx-area-fields {
@@ -234,6 +225,12 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
 
     .dx-treeview-item {
       padding-left: $material-treeview-item-with-checkbox-offset;
+
+      .dx-icon {
+        margin: 0 5px 2px 0;
+
+        @include dx-icon-sizing($material-button-icon-size);
+      }
     }
   }
 

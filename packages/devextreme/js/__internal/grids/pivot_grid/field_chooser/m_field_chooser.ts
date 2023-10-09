@@ -556,7 +556,7 @@ const FieldChooser = FieldChooserBase.inherit({
     let render;
 
     $('<span>').addClass(CLASSES.area.icon)
-      .addClass(`dx-area-icon-${area}`)
+      .addClass(`dx-icon-${ICONS[area]}`)
       .appendTo($fieldsHeaderContainer);
 
     $('<span>')

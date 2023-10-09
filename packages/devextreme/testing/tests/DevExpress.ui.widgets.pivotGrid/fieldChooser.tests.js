@@ -333,13 +333,13 @@ QUnit.module('dxPivotGridFieldChooser', {
             {
                 text: '[Measures]', key: '[Measures]', path: '[Measures]', selected: true, expanded: false, isMeasure: true,
                 items: [
-                    { index: 5, field: fields[5], selected: true, text: 'Field 6', key: 'field6', isDefault: undefined, isMeasure: true, icon: 'measure' }
+                    { index: 5, field: fields[5], selected: true, text: 'Field 6', key: 'field6', isDefault: undefined, isMeasure: true, icon: 'formula' }
                 ]
             },
             {
                 text: 'Dimension 1', key: 'Dimension 1', path: 'Dimension 1', selected: true, expanded: false, isMeasure: false,
                 items: [
-                    { index: 0, field: fields[0], text: 'Field 1', key: 'field1', selected: true, isDefault: undefined, isMeasure: false, icon: 'dimension' },
+                    { index: 0, field: fields[0], text: 'Field 1', key: 'field1', selected: true, isDefault: undefined, isMeasure: false, icon: 'detailslayout' },
                     { index: 1, field: fields[1], text: 'Field 2', key: 'field2', selected: true, isDefault: undefined, isMeasure: undefined, icon: undefined }
                 ]
             },
