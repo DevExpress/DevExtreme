@@ -22,7 +22,7 @@ $tabs-tab-selected-color: $base-text-color !default;
 * $name 30. Disabled tab color
 * $type color
 */
-$tabs-tab-disabled-color: $base-color-disabled !default;
+$tabs-tab-disabled-color: $base-foreground-disabled !default;
 
 /**
 * $name 40. Selected tab border color
@@ -88,7 +88,7 @@ $tabs-tab-icon-selected-color: $base-accent !default;
 * $name 90. Disabled tab icon color
 * $type color
 */
-$tabs-tab-icon-disabled-color: $base-color-disabled !default;
+$tabs-tab-icon-disabled-color: $base-foreground-disabled !default;
 $tabs-tab-button-disabled-opacity: 0 !default;
 
 /**
