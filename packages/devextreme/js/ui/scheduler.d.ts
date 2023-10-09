@@ -974,6 +974,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     allDayPanelMode?: AllDayPanelMode;
     /**
      * @docid
+     * @default 0
+     * @public
+     */
+    offset?: number;
+    /**
+     * @docid
      * @default ['day', 'week']
      * @public
      */
@@ -1104,6 +1110,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "all"
        */
        allDayPanelMode?: AllDayPanelMode;
+       /**
+        * @docid
+        * @default 0
+        * @public
+        */
+       offset?: number;
     }>;
 }
 /**
