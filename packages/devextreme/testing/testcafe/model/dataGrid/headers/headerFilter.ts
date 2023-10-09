@@ -16,7 +16,11 @@ export default class HeaderFilter {
     return new List(this.element.find(`.${CLASS.list}`));
   }
 
-  getButtons(): Selector {
-    return this.element.find(`.${CLASS.button}`);
+  getOkButton(): Selector {
+    return this.element.find(`.${CLASS.button}`).nth(1);
+  }
+
+  getCancelButton(): Selector {
+    return this.element.find(`.${CLASS.button}`).nth(0);
   }
 }

@@ -65,12 +65,12 @@ test('Should correctly change values (T1161941)', async (t) => {
   const dataCell = dataGrid.getDataRow(0).getDataCell(1);
   const filterIconElement = headerCell.getFilterIcon();
   const headerFilter = new HeaderFilter();
-  const buttons = headerFilter.getButtons();
+  const okButton = headerFilter.getOkButton();
   const list = headerFilter.getList();
 
   await t.click(filterIconElement)
     .click(list.getItem(0).element)
-    .click(buttons.nth(0));
+    .click(okButton);
 
   result[0] = await dataCell.element().innerText;
 
@@ -78,7 +78,7 @@ test('Should correctly change values (T1161941)', async (t) => {
     .click(filterIconElement)
     .click(list.getItem(0).element)
     .click(list.getItem(1).element)
-    .click(buttons.nth(0));
+    .click(okButton);
 
   result[1] = await dataCell.element().innerText;
 
