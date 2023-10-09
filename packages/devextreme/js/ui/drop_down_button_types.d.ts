@@ -1,4 +1,5 @@
 export {
+  ButtonType,
   ButtonStyle,
   ButtonClickEvent,
   ContentReadyEvent,

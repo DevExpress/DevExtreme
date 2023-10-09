@@ -129,7 +129,8 @@ class Lookup extends BaseComponent<React.PropsWithChildren<ILookupOptions>> {
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   minSearchLength: PropTypes.number,
   name: PropTypes.string,

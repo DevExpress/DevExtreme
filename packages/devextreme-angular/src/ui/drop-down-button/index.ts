@@ -24,7 +24,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ButtonStyle } from 'devextreme/common';
+import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
@@ -431,6 +431,19 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
 
     /**
+     * [descr:dxDropDownButtonOptions.type]
+    
+     */
+    @Input()
+    get type(): ButtonType {
+        return this._getOption('type');
+    }
+    set type(value: ButtonType) {
+        this._setOption('type', value);
+    }
+
+
+    /**
      * [descr:dxDropDownButtonOptions.useItemTextAsTitle]
     
      */
@@ -744,6 +757,13 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() typeChange: EventEmitter<ButtonType>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() useItemTextAsTitleChange: EventEmitter<boolean>;
 
     /**
@@ -832,6 +852,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
             { emit: 'stylingModeChange' },
             { emit: 'tabIndexChange' },
             { emit: 'textChange' },
+            { emit: 'typeChange' },
             { emit: 'useItemTextAsTitleChange' },
             { emit: 'useSelectModeChange' },
             { emit: 'visibleChange' },

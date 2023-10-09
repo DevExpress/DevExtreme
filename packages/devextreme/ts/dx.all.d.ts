@@ -1570,7 +1570,7 @@ declare module DevExpress.common {
   export function isLoadResultObject<TItem>(
     res: LoadResult<TItem>
   ): res is LoadResultObject<TItem>;
-  export type LabelMode = 'static' | 'floating' | 'hidden';
+  export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
   /**
    * [descr:LoadResult]
    */
@@ -14705,6 +14705,10 @@ declare module DevExpress.ui {
      * [descr:dxDropDownButtonOptions.text]
      */
     text?: string;
+    /**
+     * [descr:dxDropDownButtonOptions.type]
+     */
+    type?: DevExpress.common.ButtonType;
     /**
      * [descr:dxDropDownButtonOptions.useSelectMode]
      */

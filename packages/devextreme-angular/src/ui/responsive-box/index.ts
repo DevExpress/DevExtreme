@@ -68,8 +68,8 @@ import { DxiRowComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxResponsiveBoxComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxResponsiveBox;
+export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxResponsiveBox<TItem, TKey>;
 
     /**
      * [descr:dxResponsiveBoxOptions.cols]

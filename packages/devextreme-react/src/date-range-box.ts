@@ -138,7 +138,8 @@ class DateRangeBox extends BaseComponent<React.PropsWithChildren<IDateRangeBoxOp
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   multiView: PropTypes.bool,
   onChange: PropTypes.func,

@@ -142,7 +142,8 @@ class SelectBox extends BaseComponent<React.PropsWithChildren<ISelectBoxOptions>
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   maxLength: PropTypes.oneOfType([
     PropTypes.number,

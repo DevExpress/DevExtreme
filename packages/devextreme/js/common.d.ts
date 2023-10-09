@@ -393,7 +393,7 @@ export type HorizontalEdge = 'left' | 'right';
  * @public
  * @namespace DevExpress.common
  */
-export type LabelMode = 'static' | 'floating' | 'hidden';
+export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
 /**
  * @public
