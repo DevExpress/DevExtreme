@@ -2,6 +2,7 @@ import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import uiErrors from 'ui/widget/ui.errors';
+import themes from 'ui/themes';
 import fx from 'animation/fx';
 
 import 'generic_light.css!';
@@ -56,6 +57,39 @@ QUnit.module('init', {
         assert.ok($content.hasClass(LOADPANEL_CONTENT_CLASS), 'Load Indicator created');
         assert.ok($content.find(MESSAGE_SELECTOR).length);
         assert.equal($content.find(MESSAGE_SELECTOR).text(), 'Test Loading Message');
+    });
+
+    QUnit.test('role on wrapper', function(assert) {
+        const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
+
+        assert.strictEqual(instance.$wrapper().attr('role'), 'alert');
+    });
+
+    QUnit.test('aria-label on wrapper', function(assert) {
+        const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
+
+        assert.strictEqual(instance.$wrapper().attr('aria-label'), undefined);
+
+        instance.option({ message: '' });
+
+        assert.strictEqual(instance.$wrapper().attr('aria-label'), 'Loading...');
+    });
+
+    QUnit.test('aria-label on wrapper in Material based themes', function(assert) {
+        const origIsMaterial = themes.isMaterialBased;
+        themes.isMaterialBased = () => true;
+
+        try {
+            const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
+
+            assert.strictEqual(instance.$wrapper().attr('aria-label'), 'Loading...');
+
+            instance.option({ message: 'custom' });
+
+            assert.strictEqual(instance.$wrapper().attr('aria-label'), 'custom');
+        } finally {
+            themes.isMaterialBased = origIsMaterial;
+        }
     });
 
     QUnit.test('load panel created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
