@@ -6,7 +6,7 @@ const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const config = require('./build.config');
 const generateVueComponents = require('devextreme-internal-tools').generateVueComponents;
-const path = require("path");
+const path = require('path');
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -16,10 +16,10 @@ const NPM_PACKAGE = 'npm.package';
 const NPM_LICENSE = 'npm.license';
 const ADD_HEADERS = 'npm.license-headers';
 const NPM_README = 'npm.readme';
-const NPM_BUILD_ESM = "npm.build-esm";
-const NPM_BUILD_CJS = "npm.build-cjs";
+const NPM_BUILD_ESM = 'npm.build-esm';
+const NPM_BUILD_CJS = 'npm.build-cjs';
 const NPM_BUILD = 'npm.build';
-const NPM_PREPARE_MODULES = "npm.prepare-modules";
+const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 const VUE_VERSION = 3;
 
@@ -69,8 +69,8 @@ gulp.task(
   gulp.series(() =>
     gulp
       .src([config.src, `!${config.testSrc}`])
-      .pipe(ts("tsconfig.esm.json"))
-      .pipe(gulp.dest(config.npm.dist + "/esm"))
+      .pipe(ts('tsconfig.esm.json'))
+      .pipe(gulp.dest(config.npm.dist + '/esm'))
   )
 );
 
@@ -79,8 +79,8 @@ gulp.task(
   gulp.series(() =>
     gulp
       .src([config.src, `!${config.testSrc}`])
-      .pipe(ts("tsconfig.json"))
-      .pipe(gulp.dest(config.npm.dist + "/cjs"))
+      .pipe(ts('tsconfig.json'))
+      .pipe(gulp.dest(config.npm.dist + '/cjs'))
   )
 );
 
@@ -99,20 +99,20 @@ gulp.task(
 
 gulp.task(NPM_PREPARE_MODULES, (done) => {
   const packParamsForFolders = [
-    ["common"],
-    ["core", ["config"]],
-    ["common/data"],
+    ['common'],
+    ['core', ['config', 'index']],
+    ['common/data'],
   ];
   const modulesImportsFromIndex = fs.readFileSync(
-    config.npm.dist + "esm/index.js",
-    "utf8"
+    config.npm.dist + 'esm/index.js',
+    'utf8'
   );
   const modulesPaths = modulesImportsFromIndex.matchAll(/from "\.\/([^;]+)";/g);
   const packParamsForModules = [...modulesPaths].map(([, modulePath]) => {
     const [, , moduleFilePath, moduleFileName] =
       modulePath.match(/((.*)\/)?([^/]+$)/);
 
-    return ["", [moduleFileName], moduleFilePath];
+    return ['', [moduleFileName], moduleFilePath];
   });
 
   [...packParamsForFolders, ...packParamsForModules].forEach(
@@ -124,7 +124,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
 });
 
 gulp.task(ADD_HEADERS, function () {
-    const pkg = require("./package.json");
+    const pkg = require('./package.json');
     const now = new Date();
     const data = {
         pkg: pkg,
