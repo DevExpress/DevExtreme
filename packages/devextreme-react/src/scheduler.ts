@@ -208,6 +208,7 @@ class Scheduler extends BaseComponent<React.PropsWithChildren<ISchedulerOptions>
   ])
   ]),
   noDataText: PropTypes.string,
+  offset: PropTypes.number,
   onAppointmentAdded: PropTypes.func,
   onAppointmentAdding: PropTypes.func,
   onAppointmentClick: PropTypes.func,
@@ -339,6 +340,7 @@ type IViewProps = React.PropsWithChildren<{
   intervalCount?: number;
   maxAppointmentsPerCell?: number | "auto" | "unlimited";
   name?: string;
+  offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   scrolling?: dxSchedulerScrolling;
   startDate?: any | number | string;
