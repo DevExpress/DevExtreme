@@ -10,6 +10,8 @@ $fluent-tab-height: null !default;
 $fluent-tab-min-width: null !default;
 
 $fluent-tab-text-line-height: null !default;
+$fluent-tab-font-weight-basic: 400 !default;
+$fluent-tab-font-weight-accent: 500 !default;
 $fluent-base-icon-margin: null !default;
 
 $fluent-tab-nav-button-icon-width: null !default;
@@ -25,7 +27,8 @@ $fluent-indicator-thickness-secondary: 3px !default;
 $fluent-indicator-length-primary: 100% !default;
 $fluent-indicator-length-secondary: 100% !default;
 
-$fluent-indicator-border-radius-secondary: 8px !default;
+$fluent-tab-item-border-radius-secondary: 4px !default;
+$fluent-indicator-border-radius-secondary: 4px !default;
 
 @if $size == "default" {
   $fluent-tabs-item-padding-horizontal: 12px !default;

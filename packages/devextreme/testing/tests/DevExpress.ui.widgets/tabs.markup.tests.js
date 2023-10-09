@@ -17,6 +17,8 @@ QUnit.testStart(() => {
 
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
+const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
+const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -27,6 +29,27 @@ QUnit.module('Tabs markup', () => {
         });
 
         assert.ok($tabsElement.hasClass(TABS_CLASS), 'tabs has correct class');
+    });
+
+    QUnit.test(`Tabs item should have a correct ${TABS_DATA_DX_TEXT_ATTRIBUTE} attribute`, function(assert) {
+        const $tabs = $('#tabs').dxTabs({
+            items: [{ text: '1' }],
+        });
+        const tabs = $tabs.dxTabs('instance');
+
+        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item text`);
+
+        tabs.option({ items: ['1'] });
+
+        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item when item is string`);
+
+        tabs.option({ items: [1] });
+
+        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item when item is number`);
+
+        tabs.option({ items: [{ title: '1' }] });
+
+        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), undefined, `${TABS_DATA_DX_TEXT_ATTRIBUTE} is undefined`);
     });
 
     QUnit.test('tabs should have wrapper with correct class', function(assert) {
@@ -193,8 +216,6 @@ QUnit.module('Aria accessibility', {
     });
 
 });
-
-const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
 const moduleConfig = {
     beforeEach: function() {

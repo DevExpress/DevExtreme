@@ -11,6 +11,7 @@ import { getImageContainer } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
+import { isMaterial, isFluent, current as currentTheme } from './themes';
 
 // STYLE tabPanel
 
@@ -20,6 +21,8 @@ const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
+
+const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -90,6 +93,8 @@ const TabPanel = MultiView.inherit({
     },
 
     _defaultOptionsRules: function() {
+        const themeName = currentTheme();
+
         return this.callBase().concat([
             {
                 device: function() {
@@ -111,6 +116,23 @@ const TabPanel = MultiView.inherit({
                 device: { platform: 'generic' },
                 options: {
                     animationEnabled: false
+                }
+            },
+            {
+                device() {
+                    return isFluent(themeName);
+                },
+                options: {
+                    iconPosition: ICON_POSITION.top,
+                    stylingMode: STYLING_MODE.secondary,
+                }
+            },
+            {
+                device() {
+                    return isMaterial(themeName);
+                },
+                options: {
+                    iconPosition: ICON_POSITION.top,
                 }
             }
         ]);
@@ -151,7 +173,13 @@ const TabPanel = MultiView.inherit({
                     }
                 }
 
-                $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
+                const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
+
+                if(data?.title) {
+                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, data.title);
+                }
+
+                $container.wrapInner($tabItem);
             }, ['title', 'icon'], this.option('integrationOptions.watchMethod'))
         });
     },

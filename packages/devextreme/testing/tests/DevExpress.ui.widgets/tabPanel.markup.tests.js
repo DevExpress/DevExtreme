@@ -24,6 +24,8 @@ const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const TABS_ITEM_CLASS = 'dx-tab';
 const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
+const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
+const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -35,6 +37,20 @@ QUnit.module('TabPanel markup', () => {
     QUnit.test('tabPanel should have correct class', function(assert) {
         const $tabPanel = $('#tabPanel').dxTabPanel();
         assert.ok($tabPanel.hasClass(TABPANEL_CLASS), 'widget class added');
+    });
+
+    QUnit.test(`TabPanel tab item should have a correct ${TABS_DATA_DX_TEXT_ATTRIBUTE} attribute`, function(assert) {
+        const $tabPanel = $('<div>').appendTo('#qunit-fixture');
+
+        const tabPanel = $tabPanel.dxTabPanel({
+            items: [{ title: '1' }],
+        }).dxTabPanel('instance');
+
+        assert.strictEqual($tabPanel.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item title`);
+
+        tabPanel.option({ items: [1] });
+
+        assert.strictEqual($tabPanel.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), undefined, `${TABS_DATA_DX_TEXT_ATTRIBUTE} is undefined`);
     });
 
     QUnit.test('rendering tabs widget test', function(assert) {
