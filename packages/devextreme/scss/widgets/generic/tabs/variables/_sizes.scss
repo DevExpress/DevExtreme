@@ -15,7 +15,7 @@ $generic-tabs-icon-margin: null !default;
 $generic-tabs-icon-size: null !default;
 
 @if $size == "default" {
-  $generic-tabs-item-padding: 10px !default;
+  $generic-tabs-item-padding: 10px 9px !default;
   $generic-tabs-item-padding-disabled-focused: 10px !default;
   $generic-tabs-nav-button-width: 25px !default;
   $generic-tab-text-line-height: 18px !default;
