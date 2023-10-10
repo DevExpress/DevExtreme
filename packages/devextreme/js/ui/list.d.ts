@@ -503,6 +503,7 @@ export interface dxListOptions<
      * @docid
      * @default "Loading..."
      * @default "" &for(Material)
+     * @default "" &for(Fluent)
      * @public
      */
     pageLoadingText?: string;
@@ -516,6 +517,7 @@ export interface dxListOptions<
      * @docid
      * @default "Release to refresh..."
      * @default "" &for(Material)
+     * @default "" &for(Fluent)
      * @public
      */
     pulledDownText?: string;
@@ -523,6 +525,7 @@ export interface dxListOptions<
      * @docid
      * @default "Pull down to refresh..."
      * @default "" &for(Material)
+     * @default "" &for(Fluent)
      * @public
      */
     pullingDownText?: string;
@@ -530,6 +533,7 @@ export interface dxListOptions<
      * @docid
      * @default "Refreshing..."
      * @default "" &for(Material)
+     * @default "" &for(Fluent)
      * @public
      */
     refreshingText?: string;

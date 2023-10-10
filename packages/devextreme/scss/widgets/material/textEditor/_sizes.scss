@@ -57,6 +57,8 @@ $material-filled-texteditor-input-with-label-bottom-padding: null !default;
   $material-underlined-editor-button-height: 22px !default;
 }
 
+$material-texteditor-label-outside-top-offset: $material-texteditor-label-outside-height !default;
+
 $material-filled-texteditor-input-padding:
   $material-filled-texteditor-input-top-padding
   $material-filled-texteditor-input-horizontal-padding

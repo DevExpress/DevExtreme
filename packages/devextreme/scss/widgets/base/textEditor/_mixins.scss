@@ -155,6 +155,7 @@
   $texteditor-input-top-padding,
   $label-margin-top-diff,
   $texteditor-label-outside-font-size,
+  $texteditor-label-outside-height,
   $colorbox-label-outside-before-width,
 ) {
   .dx-editor-outlined {
@@ -307,8 +308,8 @@
           font-size: $texteditor-label-outside-font-size;
           margin-top: 0;
           transform: translate(-$label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
-          height: #{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em;
-          line-height: #{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em;
+          height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
+          line-height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
         }
       }
 
@@ -322,7 +323,7 @@
         }
       }
 
-      &.dx-state-focused:not(.dx-end-datebox):not(.dx-start-datebox):not(.dx-daterangebox) {
+      &.dx-state-focused {
         @include dx-state-border-color($texteditor-focused-border-color, $texteditor-focused-border-bottom-color);
         
         .dx-label {
@@ -337,6 +338,22 @@
           .dx-label {
             span {
               transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
+            }
+          }
+        }
+      }
+
+      &.dx-daterangebox {
+        .dx-label {
+          span {
+            transform: translate(-$label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
+          }
+        }
+
+        &.dx-rtl {
+          .dx-label {
+            span {
+              transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
             }
           }
         }
@@ -448,6 +465,7 @@
   $texteditor-filled-input-with-label-top-padding,
   $texteditor-filled-input-with-label-bottom-padding,
   $texteditor-label-outside-font-size,
+  $texteditor-label-outside-height,
 ) {
   .dx-editor-filled {
     .dx-texteditor-label {
@@ -479,7 +497,7 @@
     }
 
     &.dx-texteditor-label-outside {
-      margin-top: -$texteditor-label-outside-top-offset;
+      margin-top: $texteditor-label-outside-top-offset;
 
       .dx-label-before {
         min-width: 0;
@@ -487,9 +505,9 @@
 
       .dx-texteditor-label {
         font-size: $texteditor-label-outside-font-size;
-        height: -$texteditor-label-outside-top-offset;
-        line-height: -$texteditor-label-outside-top-offset;
-        top: $texteditor-label-outside-top-offset;
+        height: $texteditor-label-outside-height;
+        line-height: $texteditor-label-outside-height;
+        top: -$texteditor-label-outside-top-offset;
         margin-top: 0;
       }
     }
@@ -556,6 +574,7 @@
   $texteditor-with-label-input-top-padding,
   $texteditor-with-label-input-bottom-padding,
   $texteditor-label-outside-font-size,
+  $texteditor-label-outside-height,
 ) {
   .dx-editor-underlined {
     &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
@@ -580,7 +599,7 @@
     }
 
     &.dx-texteditor-label-outside {
-      margin-top: -$texteditor-label-outside-top-offset;
+      margin-top: $texteditor-label-outside-top-offset;
 
       .dx-label-before {
         min-width: 0;
@@ -588,9 +607,9 @@
 
       .dx-texteditor-label {
         font-size: $texteditor-label-outside-font-size;
-        height: -$texteditor-label-outside-top-offset;
-        line-height: -$texteditor-label-outside-top-offset;
-        top: $texteditor-label-outside-top-offset;
+        height: $texteditor-label-outside-height;
+        line-height: $texteditor-label-outside-height;
+        top: -$texteditor-label-outside-top-offset;
         margin-top: 0;
       }
     }

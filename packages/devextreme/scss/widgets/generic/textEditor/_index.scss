@@ -267,6 +267,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-borderedwidget-top-padding,
   1px,
   $generic-texteditor-label-outside-font-size,
+  $generic-texteditor-label-outside-height,
   $generic-colorbox-preview-width,
 );
 @include dx-editor-filled(
@@ -275,7 +276,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-line-height,
   0,
-  -20px,
+  $generic-texteditor-label-outside-top-offset,
   $generic-base-font-size,
   $generic-base-inline-block-height,
   $generic-base-line-height,
@@ -283,6 +284,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-texteditor-filled-input-with-label-top-padding,
   $generic-texteditor-filled-input-with-label-bottom-padding,
   $generic-texteditor-label-outside-font-size,
+  $generic-texteditor-label-outside-height,
 ); 
 @include dx-editor-underlined(
   $texteditor-label-transition,
@@ -290,13 +292,14 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-line-height,
   0,
-  -20px,
+  $generic-texteditor-label-outside-top-offset,
   $generic-base-font-size,
   $generic-base-inline-block-height,
   $generic-base-line-height,
   $generic-texteditor-underlined-input-with-label-top-padding,
   $generic-texteditor-underlined-input-with-label-bottom-padding,
   $generic-texteditor-label-outside-font-size,
+  $generic-texteditor-label-outside-height,
 );
 
 .dx-editor-underlined {

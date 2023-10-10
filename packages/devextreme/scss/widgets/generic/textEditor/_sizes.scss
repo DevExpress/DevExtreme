@@ -37,3 +37,5 @@ $generic-texteditor-underlined-input-with-label-bottom-padding: $generic-base-in
   $generic-texteditor-button-icononly-bottom-padding: $generic-texteditor-button-bottom-padding + 1px !default;
   $generic-texteditor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;
 }
+
+$generic-texteditor-label-outside-top-offset: $generic-texteditor-label-outside-height !default;
