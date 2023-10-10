@@ -38,7 +38,6 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
     "rrule": "^2.7.1",
-    "sha-1": "1.0.0",
     "turndown": "~7.1.0"
   },
   "jest": {
