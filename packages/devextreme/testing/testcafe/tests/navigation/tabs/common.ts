@@ -46,7 +46,7 @@ fixture.disablePageReloads`Tabs_common`
 
       const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
 
-      await t.hover(firstItem).wait(1000);
+      await t.hover(firstItem);
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
       await t.dispatchEvent(firstItem, 'mousedown');
@@ -57,8 +57,7 @@ fixture.disablePageReloads`Tabs_common`
       await t
         .dispatchEvent(firstItem, 'mouseup')
         .click(firstItem)
-        .hover(thirdItem)
-        .wait(1000);
+        .hover(thirdItem);
 
       await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
@@ -146,8 +145,7 @@ test('Tabs in contrast theme', async (t) => {
         await t
           .dispatchEvent(thirdItem, 'mouseup')
           .click(thirdItem)
-          .hover(fourthItem)
-          .wait(1000);
+          .hover(fourthItem);
 
         await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
