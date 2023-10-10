@@ -1158,7 +1158,7 @@ QUnit.module('Live Update', {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: true,
-            width: 120
+            width: 123,
         });
         const store = tabs.getDataSource().store();
 
@@ -1206,7 +1206,7 @@ QUnit.module('Live Update', {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: false,
-            width: 120
+            width: 123,
         });
         const store = tabs.getDataSource().store();
 
@@ -1229,7 +1229,7 @@ QUnit.module('Async templates', {
     }
 }, () => {
     QUnit.test('render tabs', function() {
-        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290 });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 299 });
         this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -1237,7 +1237,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('render tabs. use default and custom templates', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), {
-            width: 180,
+            width: 181,
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', template: 'item' }],
             itemTemplate: null
         });
@@ -1306,7 +1306,7 @@ QUnit.module('Async templates', {
     QUnit.test('Remove scrollable when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
         this.clock.tick(10);
-        testWrapper.width = 290;
+        testWrapper.width = 299;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -1314,14 +1314,14 @@ QUnit.module('Async templates', {
     QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
         this.clock.tick(10);
-        testWrapper.width = 290;
+        testWrapper.width = 299;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
 
     [false, true].forEach(repaintChangesOnly => {
         QUnit.test(`Add scrollable when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: false, repaintChangesOnly });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 299, showNavButtons: false, repaintChangesOnly });
 
             this.clock.tick(10);
             testWrapper.setItemsByCount(10);
@@ -1332,7 +1332,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Add scrollable and navigation buttons when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 299, showNavButtons: true, repaintChangesOnly });
 
             this.clock.tick(10);
             testWrapper.setItemsByCount(10);
@@ -1343,7 +1343,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Remove scrollable when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 299, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
 
             this.clock.tick(10);
             testWrapper.setItemsByCount(5);
@@ -1354,7 +1354,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 299, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
 
             this.clock.tick(10);
             testWrapper.setItemsByCount(5);
