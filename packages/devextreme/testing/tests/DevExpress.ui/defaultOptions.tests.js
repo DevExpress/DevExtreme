@@ -208,20 +208,21 @@ testComponentDefaults(DateRangeBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
-        labelMode: 'floating',
+        labelMode: 'outside',
     },
     function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
     },
     function() {
-        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isFluent = this.origIsFluent;
     }
 );
 
 testComponentDefaults(DateRangeBox,
     {},
     {
+        labelMode: 'floating',
         stylingMode: 'filled',
     },
     function() {
@@ -336,20 +337,21 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        labelMode: 'floating',
+        labelMode: 'outside',
     },
     function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
     },
     function() {
-        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isFluent = this.origIsFluent;
     }
 );
 
 testComponentDefaults(TextEditor,
     {},
     {
+        labelMode: 'floating',
         stylingMode: 'filled',
     },
     function() {
@@ -1442,7 +1444,6 @@ testComponentDefaults(Form,
     {},
     {
         labelLocation: 'top',
-        showColonAfterLabel: false
     },
     function() {
         this.origIsMaterialBased = themes.isMaterialBased;
@@ -1450,6 +1451,20 @@ testComponentDefaults(Form,
     },
     function() {
         themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(Form,
+    {},
+    {
+        showColonAfterLabel: false
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
     }
 );
 

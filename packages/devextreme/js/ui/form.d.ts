@@ -204,6 +204,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @docid
      * @default "left"
      * @default "top" &for(Material)
+     * @default "top" &for(Fluent)
      * @public
      */
     labelLocation?: LabelLocation;

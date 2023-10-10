@@ -1,1 +1,12 @@
+@use "../icons" as *;
 
+@mixin colorbox-label-outside-mixin() {
+  &.dx-texteditor-label-outside {
+    &.dx-editor-filled,
+    &.dx-editor-underlined {
+      .dx-label-before {
+        min-width: 0;
+      }
+    }
+  }
+}

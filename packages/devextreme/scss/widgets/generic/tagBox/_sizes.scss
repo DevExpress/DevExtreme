@@ -14,8 +14,8 @@ $generic-tagbox-input-margin-left: null !default;
 $generic-tagbox-select-all-padding-bottom: null !default;
 $generic-tagbox-select-all-margin-bottom: null !default;
 $generic-tagbox-outlined-with-label-top-padding: null !default;
-$generic-tagbox-filled--with-label-top-padding: null !default;
-$generic-tagbox-filled--with-label-bottom-padding: null !default;
+$generic-tagbox-filled-with-label-top-padding: null !default;
+$generic-tagbox-filled-with-label-bottom-padding: null !default;
 
 @if $size == "default" {
   $generic-tagbox-tag-container-padding-bottom: 4px !default;
@@ -30,8 +30,8 @@ $generic-tagbox-filled--with-label-bottom-padding: null !default;
   $generic-tagbox-select-all-padding-bottom: 11px !default;
   $generic-tagbox-select-all-margin-bottom: 3px !default;
   $generic-tagbox-outlined-with-label-top-padding: 8px !default;
-  $generic-tagbox-filled--with-label-top-padding: 12px !default;
-  $generic-tagbox-filled--with-label-bottom-padding: 2px !default;
+  $generic-tagbox-filled-with-label-top-padding: 12px !default;
+  $generic-tagbox-filled-with-label-bottom-padding: 2px !default;
 }
 
 @else if $size == "compact" {
@@ -47,6 +47,6 @@ $generic-tagbox-filled--with-label-bottom-padding: null !default;
   $generic-tagbox-select-all-padding-bottom: 5px !default;
   $generic-tagbox-select-all-margin-bottom: 1px !default;
   $generic-tagbox-outlined-with-label-top-padding: 6px !default;
-  $generic-tagbox-filled--with-label-top-padding: 11px !default;
-  $generic-tagbox-filled--with-label-bottom-padding: 0 !default;
+  $generic-tagbox-filled-with-label-top-padding: 11px !default;
+  $generic-tagbox-filled-with-label-bottom-padding: 0 !default;
 }

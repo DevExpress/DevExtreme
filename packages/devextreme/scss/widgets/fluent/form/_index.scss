@@ -88,6 +88,7 @@
 
 .dx-field-item-label-location-top {
   padding: $fluent-form-top-label-padding;
+  margin-bottom: $fluent-form-top-label-bottom-margin;
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;
