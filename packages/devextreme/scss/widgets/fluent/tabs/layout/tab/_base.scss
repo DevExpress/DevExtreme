@@ -86,7 +86,7 @@
     color: $tabs-tab-icon-color;
     visibility: visible;
 
-    @include dx-icon-sizing($fluent-base-icon-size);
+    @include dx-icon-sizing($fluent-tabs-icon-size);
   }
 }
 

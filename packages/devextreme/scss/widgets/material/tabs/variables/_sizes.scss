@@ -27,6 +27,8 @@ $material-indicator-length-secondary: 100% !default;
 
 $material-indicator-border-radius-secondary: 8px !default;
 
+$material-tabs-icon-size: null !default;
+
 @if $size == "default" {
   $material-tabs-item-padding-horizontal: 12px !default;
   $material-tabs-item-padding-vertical: 16px !default;
@@ -34,6 +36,7 @@ $material-indicator-border-radius-secondary: 8px !default;
   $material-tab-height: auto !default;
   $material-tab-min-width: 90px !default;
   $material-base-icon-margin: 8px !default;
+  $material-tabs-icon-size: 24px !default;
   $material-tab-text-line-height: 24px !default;
   $material-tab-nav-button-icon-width: 24px !default;
   $material-tab-nav-button-icon-height: 24px !default;
@@ -50,6 +53,7 @@ $material-indicator-border-radius-secondary: 8px !default;
   $material-tab-min-width: 82px !default;
   $material-base-icon-margin: 8px !default;
   $material-tab-text-line-height: 24px !default;
+  $material-tabs-icon-size: 24px !default;
   $material-tab-nav-button-icon-width: 24px !default;
   $material-tab-nav-button-icon-height: 24px !default;
   $material-tab-nav-button-icon-font-size: 24px !default;
