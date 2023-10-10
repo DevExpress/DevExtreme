@@ -1,16 +1,16 @@
 /* eslint-disable no-bitwise */
 import {
+  bytesToWords,
   leftRotate,
-  uint8FromString,
-  uint8FromUint32,
-  uint32FromUint8,
+  stringToBytes,
+  wordsToBytes,
 } from './byte_utils';
 
 export function preprocess(text: string): Uint32Array {
   const bytes = new Uint8Array(text.length + 1);
-  bytes.set(uint8FromString(text));
+  bytes.set(stringToBytes(text));
   bytes[bytes.length - 1] = 0x80;
-  const words = uint32FromUint8(new Uint8Array(bytes));
+  const words = bytesToWords(new Uint8Array(bytes));
 
   const result = new Uint32Array(Math.ceil((words.length + 2) / 16) * 16);
   result.set(words, 0);
@@ -63,5 +63,5 @@ export function sha1(text: string): Uint8Array {
     h[4] += e;
   }
 
-  return uint8FromUint32(h);
+  return wordsToBytes(h);
 }

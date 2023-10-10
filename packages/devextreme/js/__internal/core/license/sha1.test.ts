@@ -1,4 +1,4 @@
-import { hexStringFromUint8 } from './byte_utils';
+import { bytesToHex } from './byte_utils';
 import { preprocess, sha1 } from './sha1';
 
 describe('sha1', () => {
@@ -324,7 +324,7 @@ describe('sha1', () => {
       expected: '82627fd1f0fff026671b23498855c7b1046771ed',
     },
   ])('computes [%#]', ({ message, expected }) => {
-    expect(hexStringFromUint8(sha1(message))).toBe(expected);
+    expect(bytesToHex(sha1(message))).toBe(expected);
   });
 
   it.each([
