@@ -4338,3 +4338,30 @@ QUnit.module('readOnly option', moduleConfig, () => {
 
 });
 
+QUnit.module('dxButton integration', moduleConfig, () => {
+    QUnit.test('should show a file dialog via the keyboard when dialogTrigger is set to a DevExtreme button (T1178836)', function(assert) {
+        const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
+
+        $('.trigger').dxButton({
+            text: 'Dx button',
+            useSubmitBehavior: true
+        });
+
+        const instance = $('#fileuploader').dxFileUploader({
+            dialogTrigger: '.trigger',
+            visible: false
+        }).dxFileUploader('instance');
+
+        sinon.stub(instance, '_selectButtonClickHandler');
+        instance.option({
+            uploadMode: 'useButtons',
+        });
+        assert.strictEqual(instance._selectButtonClickHandler.callCount, 0, 'attachHandlers method not called');
+
+        const keyboard = keyboardMock(customDialogTrigger);
+        keyboard.keyDown('enter');
+
+        assert.strictEqual(instance._selectButtonClickHandler.callCount, 1, 'attachHandlers method called');
+        instance._selectButtonClickHandler.restore();
+    });
+});

@@ -10,6 +10,7 @@ import {
   getEventHandlers,
   EVENT,
 } from '../../test_utils/events_mock';
+import { click } from '../../../events/short';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';
@@ -36,6 +37,7 @@ jest.mock('../../../ui/themes', () => ({
 }));
 
 jest.mock('../../../core/errors');
+jest.mock('../../../events/short');
 
 describe('Button', () => {
   describe('Render', () => {
@@ -330,12 +332,12 @@ describe('Button', () => {
               originalEvent,
             };
             const button = new Button({ onClick });
+
+            button.contentRef = { current: 'whatever' } as any;
             button.keyDown(options);
             expect(options.originalEvent.preventDefault).toHaveBeenCalled();
-            expect(onClick).toHaveBeenCalledTimes(1);
-            expect(onClick).toHaveBeenCalledWith({
-              event: options.originalEvent,
-            });
+            expect(click.trigger).toHaveBeenCalledTimes(1);
+            expect(click.trigger).toHaveBeenCalledWith(button.contentRef.current);
           });
 
           it('should not simulate click by common keys down', () => {
