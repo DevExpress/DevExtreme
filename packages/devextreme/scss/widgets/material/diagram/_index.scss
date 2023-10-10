@@ -309,21 +309,16 @@ $diagram-toolbox-title-size: 18px;
     }
 
     .dx-item-content.dx-accordion-item-title {
-      height: 32px;
+      min-height: 32px;
+      padding-left: $diagram-toolbox-h-padding;
+      padding-right: $diagram-toolbox-h-padding;
 
       .dx-accordion-item-title-caption {
-        font-size: 0.8em;
         text-transform: uppercase;
-        left: $diagram-toolbox-h-padding;
-        top: $diagram-toolbox-accordion-v-padding;
-        right: 32px;
       }
 
       &::before {
-        font-size: 1em;
-        line-height: 0.8em;
-        right: 0;
-        top: $diagram-toolbox-accordion-v-padding;
+        inset-inline-end: $diagram-toolbox-h-padding;
       }
     }
 
