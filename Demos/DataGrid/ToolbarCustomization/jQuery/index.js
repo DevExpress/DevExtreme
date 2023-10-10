@@ -32,11 +32,10 @@ $(() => {
             return $('<div>')
               .addClass('informer')
               .append(
-                $('<h2>')
+                $('<div>')
                   .addClass('count')
                   .text(getGroupCount('CustomerStoreState')),
                 $('<span>')
-                  .addClass('name')
                   .text('Total Count'),
               );
           },

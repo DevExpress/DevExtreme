@@ -62,8 +62,8 @@ const App = () => {
       <Toolbar>
         <Item location="before">
           <div className="informer">
-            <h2 className="count">{totalCount}</h2>
-            <span className="name">Total Count</span>
+            <div className="count">{totalCount}</div>
+            <span>Total Count</span>
           </div>
         </Item>
         <Item location="before">

@@ -52,8 +52,8 @@
     </DxToolbar>
     <template #totalCountTemplate>
       <div class="informer">
-        <h2 class="count">{{ totalCount }}</h2>
-        <span class="name">Total Count</span>
+        <div class="count">{{ totalCount }}</div>
+        <span>Total Count</span>
       </div>
     </template>
     <template #groupingTemplate>
@@ -134,48 +134,16 @@ const refreshDataGrid = () => {
 </script>
 <style scoped>
 
-.dx-datagrid-header-panel {
-  padding: 0;
-  background-color: rgba(85, 149, 222, 0.6);
-}
-
-.dx-datagrid-header-panel .dx-toolbar {
-  margin: 0;
-  padding-right: 20px;
-  background-color: transparent;
-}
-
-.dx-datagrid-header-panel .dx-toolbar-items-container {
-  height: 70px;
-}
-
-.dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:not(:first-child) {
-  background-color: rgba(103, 171, 255, 0.6);
-}
-
-.dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:last-child {
-  padding-right: 10px;
-}
-
-.dx-datagrid-header-panel .dx-selectbox {
-  margin: auto 10px;
-}
-
-.dx-datagrid-header-panel .dx-button {
-  margin: auto 0;
-}
-
 .informer {
-  height: 70px;
-  width: 130px;
+  display: grid;
+  width: 120px;
+  grid-template-columns: 100%;
+  padding-right: 20px;
   text-align: center;
-  color: #fff;
 }
 
 .count {
-  padding-top: 15px;
-  line-height: 27px;
-  font-size: 28px;
-  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
 }
 </style>
