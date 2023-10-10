@@ -99,7 +99,7 @@ QUnit.module('Width', () => {
                 this.assert.ok(secondItemWidth > 100, this._getTabItem().outerWidth() + ' > 100');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                this.assert.ok(Math.floor(firstItemWidth) <= 34, Math.floor(firstItemWidth) + ' = 34');
+                this.assert.ok(Math.floor(firstItemWidth) <= 33, Math.floor(firstItemWidth) + ' = 33');
                 this.assert.ok(Math.floor(secondItemWidth) <= 66, Math.floor(secondItemWidth) + ' = 66');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
             }
