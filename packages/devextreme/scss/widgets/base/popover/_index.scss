@@ -2,7 +2,7 @@
 
 // adduse
 
-@include dx-popover-arrow-size(20px);
+@include dx-popover-arrow-size(20px, 4px);
 
 .dx-popover-arrow {
   position: absolute;
