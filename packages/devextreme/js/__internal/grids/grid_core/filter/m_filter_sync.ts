@@ -248,23 +248,25 @@ const DataControllerFilterSyncExtender = {
   },
 
   _calculateAdditionalFilter() {
-    const that = this;
-
-    if (that.option('filterPanel.filterEnabled') === false) {
-      return that.callBase();
+    if (this.option('filterPanel.filterEnabled') === false) {
+      return this.callBase();
     }
 
-    const filters = [that.callBase()];
-    const columns = that.getController('columns').getFilteringColumns();
-    let filterValue = that.option('filterValue');
+    const filters = [this.callBase()];
+    const columns = this.getController('columns').getFilteringColumns();
+    let filterValue = this.option('filterValue');
 
-    if (that.isFilterSyncActive()) {
-      const currentColumn = that.getController('headerFilter').getCurrentColumn();
-      if (currentColumn && filterValue) {
+    if (this.isFilterSyncActive()) {
+      const currentColumnForHeaderFilter = this.getController('headerFilter').getCurrentColumn();
+      const currentColumnForFilterRow = this.getController('applyFilter').getCurrentColumnForFiltering();
+      const currentColumn = currentColumnForHeaderFilter || currentColumnForFilterRow;
+      const needRemoveCurrentColumnFilter = currentColumnForHeaderFilter || isDefined(currentColumnForFilterRow?.filterValue);
+
+      if (needRemoveCurrentColumnFilter && filterValue) {
         filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(currentColumn));
       }
     }
-    const customOperations = that.getController('filterSync').getCustomFilterOperations();
+    const customOperations = this.getController('filterSync').getCustomFilterOperations();
     const calculatedFilterValue = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
     if (calculatedFilterValue) {
       filters.push(calculatedFilterValue);
