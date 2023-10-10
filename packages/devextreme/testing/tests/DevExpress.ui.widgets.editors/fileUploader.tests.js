@@ -4339,11 +4339,11 @@ QUnit.module('readOnly option', moduleConfig, () => {
 });
 
 QUnit.module('dxButton integration', moduleConfig, () => {
-    QUnit.test('should show a file dialog via the keyboard when dialogTrigger is set to a DevExtreme button (T1178836)', function(assert) {
+    QUnit.test('dialog should be shown after press enter key on dxButton (T1178836)', function(assert) {
         const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
 
         $('.trigger').dxButton({
-            text: 'Dx button',
+            text: 'button',
             useSubmitBehavior: true
         });
 

@@ -37,7 +37,6 @@ jest.mock('../../../ui/themes', () => ({
 }));
 
 jest.mock('../../../core/errors');
-jest.mock('../../../events/short');
 
 describe('Button', () => {
   describe('Render', () => {
@@ -322,22 +321,30 @@ describe('Button', () => {
           });
 
           it('should prevent default key down event and simulate click by space/enter keys', () => {
-            const onClick = jest.fn();
-            const originalEvent = {
-              preventDefault: jest.fn(),
-            } as unknown as Event & { cancel: boolean };
-            const options = {
-              keyName: 'enter',
-              which: 'enter',
-              originalEvent,
-            };
-            const button = new Button({ onClick });
+            const originalClick = click.trigger;
 
-            button.contentRef = { current: 'whatever' } as any;
-            button.keyDown(options);
-            expect(options.originalEvent.preventDefault).toHaveBeenCalled();
-            expect(click.trigger).toHaveBeenCalledTimes(1);
-            expect(click.trigger).toHaveBeenCalledWith(button.contentRef.current);
+            try {
+              const onClick = jest.fn();
+              const originalEvent = {
+                preventDefault: jest.fn(),
+              } as unknown as Event & { cancel: boolean };
+              const options = {
+                keyName: 'enter',
+                which: 'enter',
+                originalEvent,
+              };
+              const button = new Button({ onClick });
+
+              click.trigger = jest.fn();
+
+              button.contentRef = { current: 'whatever' } as any;
+              button.keyDown(options);
+              expect(options.originalEvent.preventDefault).toHaveBeenCalled();
+              expect(click.trigger).toHaveBeenCalledTimes(1);
+              expect(click.trigger).toHaveBeenCalledWith(button.contentRef.current);
+            } finally {
+              click.trigger = originalClick;
+            }
           });
 
           it('should not simulate click by common keys down', () => {
