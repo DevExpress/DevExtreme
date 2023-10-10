@@ -1,7 +1,11 @@
 import errors from '@js/core/errors';
 import { version as packageVersion } from '@js/core/version';
 
-import { verify } from './rsa_pkcs1_sha1';
+import { base64ToBytes } from './byte_utils';
+import { PUBLIC_KEY } from './key';
+import { pad } from './pkcs1';
+import { compareSignatures } from './rsa_bigint';
+import { sha1 } from './sha1';
 
 export interface License {
   readonly [k: string]: unknown;
@@ -39,6 +43,18 @@ const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
 let isLicenseVerified = false;
 
+// verifies RSASSA-PKCS1-v1.5 signature
+function verifySignature({ text, signature: encodedSignature }: {
+  text: string;
+  signature: string;
+}): boolean {
+  return compareSignatures({
+    key: PUBLIC_KEY,
+    signature: base64ToBytes(encodedSignature),
+    actual: pad(sha1(text)),
+  });
+}
+
 export function parseLicenseKey(encodedKey: string | undefined): Token {
   if (encodedKey === undefined) {
     return GENERAL_ERROR;
@@ -50,7 +66,7 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
     return GENERAL_ERROR;
   }
 
-  if (!verify({ text: parts[0], signature: parts[1] })) {
+  if (!verifySignature({ text: parts[0], signature: parts[1] })) {
     return VERIFICATION_ERROR;
   }
 

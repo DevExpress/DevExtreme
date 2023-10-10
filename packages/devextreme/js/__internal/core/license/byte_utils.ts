@@ -1,9 +1,9 @@
 /* eslint-disable no-bitwise */
-export function Base64ToBytes(base64: string): Uint8Array {
+export function base64ToBytes(base64: string): Uint8Array {
   return new Uint8Array(atob(base64).split('').map((s) => s.charCodeAt(0)));
 }
 
-export function HexToBytes(string: string): Uint8Array {
+export function hexToBytes(string: string): Uint8Array {
   return new Uint8Array(string.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) ?? []);
 }
 
@@ -46,4 +46,11 @@ export function bytesToHex(bytes: Uint8Array): string {
 
 export function leftRotate(x: number, n: number): number {
   return ((x << n) | (x >>> (32 - n))) >>> 0;
+}
+
+export function concatBytes(a: Uint8Array, b: Uint8Array): Uint8Array {
+  const result = new Uint8Array(a.length + b.length);
+  result.set(a, 0);
+  result.set(b, a.length);
+  return result;
 }
