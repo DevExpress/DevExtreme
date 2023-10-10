@@ -80,7 +80,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
       let templateFunc: TemplateFunc;
 
       switch(template.type) {
-        case 'children': templateFunc = () => template.content;
+        case 'children': templateFunc = () => {
+          return template.content;
+        }
         break;
 
         case 'render': templateFunc = (props) => {
