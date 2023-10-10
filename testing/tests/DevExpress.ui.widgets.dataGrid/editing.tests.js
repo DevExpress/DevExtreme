@@ -16120,6 +16120,53 @@ QUnit.module('Editing with validation', {
         assert.notDeepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell is repainted');
         assert.ok($(this.getCellElement(0, 'name')).hasClass('dx-datagrid-invalid'), 'first cell is repainted as invalid');
     });
+
+    // T1192266
+    QUnit.test('Form mode(setCellValue) - Validation should not work for non-changed editors when adding a new record', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        const gridConfig = {
+            dataSource: [],
+            editing: {
+                mode: 'form',
+                allowAdding: true
+            },
+            columns: [
+                {
+                    dataField: 'Use',
+                    dataType: 'boolean',
+                    visible: false,
+                    setCellValue: function(newData, value) {
+                        newData.Use = value;
+                    },
+                },
+                {
+                    dataField: 'City',
+                    validationRules: [ { type: 'required' } ],
+                },
+                {
+                    dataField: 'State',
+                    validationRules: [ { type: 'required' } ],
+                },
+            ]
+        };
+
+        rowsView.render($testElement);
+        this.applyOptions(gridConfig);
+        this.addRow();
+        this.clock.tick(10);
+
+        // act
+        const checkboxInstance = $(this.getCellElement(0, 0)).find('.dx-checkbox').first().dxCheckBox('instance');
+        checkboxInstance.option('value', true);
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(this.getCellElement(0, 1)).find('.dx-texteditor').hasClass('dx-invalid'), 'second cell is not marked as invalid');
+        assert.notOk($(this.getCellElement(0, 2)).find('.dx-texteditor').hasClass('dx-invalid'), 'third cell is not marked as invalid');
+    });
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
