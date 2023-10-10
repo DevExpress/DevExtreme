@@ -33,7 +33,7 @@ $fluent-indicator-border-radius-secondary: 4px !default;
 
 @if $size == "default" {
   $fluent-tabs-item-padding-horizontal: 12px !default;
-  $fluent-tabs-item-padding-vertical: 16px !default;
+  $fluent-tabs-item-padding-vertical: 10px !default;
   $fluent-tabs-item-padding: $fluent-tabs-item-padding-horizontal $fluent-tabs-item-padding-vertical !default;
   $fluent-tab-height: auto !default;
   $fluent-tab-min-width: 90px !default;
@@ -49,7 +49,7 @@ $fluent-indicator-border-radius-secondary: 4px !default;
 
 @else if $size == "compact" {
   $fluent-tabs-item-padding-horizontal: 6px !default;
-  $fluent-tabs-item-padding-vertical: 12px !default;
+  $fluent-tabs-item-padding-vertical: 8px !default;
   $fluent-tabs-item-padding: $fluent-tabs-item-padding-horizontal $fluent-tabs-item-padding-vertical !default;
   $fluent-tab-height: auto !default;
   $fluent-tab-min-width: 82px !default;
