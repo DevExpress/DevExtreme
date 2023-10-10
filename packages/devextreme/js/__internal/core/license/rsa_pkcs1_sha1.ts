@@ -1,6 +1,5 @@
-import sha1 from 'sha-1';
-
 import BigInteger from './jsbn';
+import { sha1 } from './sha1';
 
 type Bytes = Uint8Array | number[];
 
@@ -77,7 +76,7 @@ export function verify({ text, signature: encodedSignature }: {
   text: string;
   signature: string;
 }): boolean {
-  const actual = pad(new Uint8Array(fromHexString(sha1(text))));
+  const actual = pad(sha1(text));
 
   const signature = new BigInteger(normalizeBigIntegerBytes(fromBase64String(encodedSignature)));
   const exponent = PUBLIC_KEY.e;
