@@ -76,7 +76,7 @@ export default function App() {
           />
         </div>
         <div className="option">
-          <span>Selection Mode</span>
+          <span>Selection mode</span>
           <SelectBox
             dataSource={selectionModes}
             value={selectionMode}
@@ -85,7 +85,7 @@ export default function App() {
           />
         </div>
         <div className="option caption">
-          <span>Dates availability</span>
+          <span>Date availability</span>
         </div>
         <div className="option">
           <CheckBox
