@@ -4,8 +4,8 @@
 
 
 $fluent-tabs-item-padding: null !default;
-$fluent-tabs-item-padding-horizontal: null !default;
-$fluent-tabs-item-padding-vertical: null !default;
+$fluent-tabs-item-padding-top-bottom: null !default;
+$fluent-tabs-item-padding-right-left: null !default;
 $fluent-tab-height: null !default;
 $fluent-tab-min-width: null !default;
 
@@ -32,11 +32,11 @@ $fluent-tab-item-border-radius-secondary: 4px !default;
 $fluent-indicator-border-radius-secondary: 4px !default;
 
 @if $size == "default" {
-  $fluent-tabs-item-padding-horizontal: 12px !default;
-  $fluent-tabs-item-padding-vertical: 10px !default;
-  $fluent-tabs-item-padding: $fluent-tabs-item-padding-horizontal $fluent-tabs-item-padding-vertical !default;
+  $fluent-tabs-item-padding-top-bottom: 12px !default;
+  $fluent-tabs-item-padding-right-left: 10px !default;
+  $fluent-tabs-item-padding: $fluent-tabs-item-padding-top-bottom $fluent-tabs-item-padding-right-left !default;
   $fluent-tab-height: auto !default;
-  $fluent-tab-min-width: 90px !default;
+  $fluent-tab-min-width: 40px !default;
   $fluent-base-icon-margin: 8px !default;
   $fluent-tabs-icon-size: 20px !default;
   $fluent-tab-text-line-height: 20px !default;
@@ -48,11 +48,11 @@ $fluent-indicator-border-radius-secondary: 4px !default;
 }
 
 @else if $size == "compact" {
-  $fluent-tabs-item-padding-horizontal: 8px !default;
-  $fluent-tabs-item-padding-vertical: 8px !default;
-  $fluent-tabs-item-padding: $fluent-tabs-item-padding-horizontal $fluent-tabs-item-padding-vertical !default;
+  $fluent-tabs-item-padding-top-bottom: 8px !default;
+  $fluent-tabs-item-padding-right-left: 8px !default;
+  $fluent-tabs-item-padding: $fluent-tabs-item-padding-top-bottom $fluent-tabs-item-padding-right-left !default;
   $fluent-tab-height: auto !default;
-  $fluent-tab-min-width: 82px !default;
+  $fluent-tab-min-width: 32px !default;
   $fluent-base-icon-margin: 8px !default;
   $fluent-tabs-icon-size: 16px !default;
   $fluent-tab-text-line-height: 16px !default;
