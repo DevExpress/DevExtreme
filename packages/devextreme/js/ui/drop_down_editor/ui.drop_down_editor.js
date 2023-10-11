@@ -575,13 +575,17 @@ const DropDownEditor = TextBox.inherit({
             'contentReady': this._contentReadyHandler.bind(this)
         });
 
-        eventsEngine.on(this._popup.$overlayContent(), addNamespace('keydown', this.NAME), (e) => this._popupKeyHandler(e));
+        this._attachPopupKeyHandler();
 
         this._contentReadyHandler();
 
         this._setPopupContentId(this._popup.$content());
 
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
+    },
+
+    _attachPopupKeyHandler() {
+        eventsEngine.on(this._popup.$overlayContent(), addNamespace('keydown', this.NAME), (e) => this._popupKeyHandler(e));
     },
 
     _popupKeyHandler(e) {
@@ -601,7 +605,7 @@ const DropDownEditor = TextBox.inherit({
         const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 
         if(moveForward || moveBackward) {
-            eventsEngine.trigger(this._input(), 'focus');
+            eventsEngine.trigger(this.field(), 'focus');
             e.preventDefault();
         }
     },
