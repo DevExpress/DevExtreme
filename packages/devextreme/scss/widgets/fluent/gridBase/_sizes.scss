@@ -8,7 +8,6 @@ $fluent-grid-base-cell-line-height: null !default;
 $fluent-grid-base-cell-font-size: null !default;
 $fluent-grid-base-checkbox-size: null !default;
 $fluent-grid-base-cell-horizontal-padding: null !default;
-$fluent-grid-base-filter-icon-size: null !default;
 $fluent-grid-base-texteditor-input-padding: null !default;
 $fluent-grid-base-menu-item-padding: null !default;
 $fluent-grid-base-column-chooser-horizontal-padding: null !default;
@@ -31,6 +30,8 @@ $fluent-command-edit-icon-margin: 2px !default;
 $fluent-command-edit-icon-size: 20px !default;
 $fluent-filter-panel-icon-size: 20px !default;
 
+$fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
+
 @if $size == "default" {
   $fluent-grid-base-cell-height: 48px !default;
   $fluent-grid-base-header-height: 48px !default;
@@ -39,7 +40,6 @@ $fluent-filter-panel-icon-size: 20px !default;
 
   $fluent-grid-base-checkbox-size: 18px !default;
   $fluent-grid-base-cell-horizontal-padding: 16px !default;
-  $fluent-grid-base-filter-icon-size: 22px !default;
 
   $fluent-grid-base-texteditor-input-padding: 40px !default;
   $fluent-grid-base-menu-item-padding: 11px 4px !default;
@@ -66,7 +66,6 @@ $fluent-filter-panel-icon-size: 20px !default;
 
   $fluent-grid-base-checkbox-size: 16px !default;
   $fluent-grid-base-cell-horizontal-padding: 11px !default;
-  $fluent-grid-base-filter-icon-size: 18px !default;
 
   $fluent-grid-base-texteditor-input-padding: 36px !default;
   $fluent-grid-base-menu-item-padding: 8px 4px !default;
