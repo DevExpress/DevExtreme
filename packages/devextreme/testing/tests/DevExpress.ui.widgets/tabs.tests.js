@@ -1158,7 +1158,7 @@ QUnit.module('Live Update', {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: true,
-            width: 120
+            width: 120,
         });
         const store = tabs.getDataSource().store();
 
@@ -1206,7 +1206,7 @@ QUnit.module('Live Update', {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: false,
-            width: 120
+            width: 120,
         });
         const store = tabs.getDataSource().store();
 

@@ -1,6 +1,5 @@
 @use "sass:math";
 @use "../../../colors" as *;
-@use "../../../sizes" as *;
 @use "../../../button/colors" as *;
 @use "../../../../base/icons" as *;
 @use "../../../../base/tabs";
@@ -109,7 +108,7 @@
   .dx-icon {
     color: $tabs-tab-icon-color;
 
-    @include dx-icon-sizing($generic-base-icon-size);
+    @include dx-icon-sizing($generic-tabs-icon-size);
   }
 }
 
