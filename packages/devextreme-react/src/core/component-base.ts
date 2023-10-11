@@ -283,17 +283,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   public render(): React.ReactNode {
     const templateOptions = this.state.templateOptions;
-    const templateManagerOptions = this.renderStage === 'main'
-        ?
-      {
-        templateOptions,
-        init: (dxtemplates) => this.renderFinalizeCallback(dxtemplates)
-      }
-        :
-      {
-        templateOptions: {},
-        init: () => void 0
-      };
 
     return React.createElement(
       React.Fragment,
@@ -302,7 +291,11 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         'div',
         this._getElementProps(),
         this.renderContent(),
-        React.createElement(TemplateManager, templateManagerOptions),
+        React.createElement(TemplateManager, {
+          dryRun: this.renderStage === 'config',
+          templateOptions,
+          init: (dxtemplates) => this.renderFinalizeCallback(dxtemplates)
+        }),
       ),
       this.isPortalComponent && this.renderPortal()
     );

@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import { ITemplate } from './configuration/config-node';
 import { DoubleKeyMap } from './helpers';
 
@@ -29,9 +28,7 @@ export type TemplateArgs = {
 }
 
 export interface TemplateWrapperProps {
-  templateFactory: FunctionComponent<TemplateArgs>;
-  data: any;
-  index: any;
+  content: any;
   container: HTMLElement;
   onRendered: () => void;
   onRemoved: () => void;
@@ -40,18 +37,19 @@ export interface TemplateWrapperProps {
 export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
 
 export type TemplateManagerProps = {
+  dryRun: boolean;
   templateOptions: Record<string, ITemplate>;
   init: (dxTemplates: DXTemplateCollection) => void;
 };
 
 export type TemplateInstanceDefinition = {
+  templateKey: string;
   componentKey: string;
   index: any;
-  getJSX: TemplateFunc;
   onRendered: () => void;
   onRemoved: () => void;
 }
 
-export type GetRenderFuncFn = (func: TemplateFunc) => RenderFunc;
+export type GetRenderFuncFn = (templateKey: string) => RenderFunc;
 
 export type RenderedTemplateInstances = DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>;
