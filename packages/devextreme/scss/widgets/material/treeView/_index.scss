@@ -82,6 +82,23 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
   }
 }
 
+.dx-treeview-fullrow {
+  &.dx-state-hover {
+    background-color: $treeview-hover-bg;
+    color: $treeview-item-hover-color;
+  }
+
+  &:hover {
+    background-color: $treeview-hover-bg;
+    color: $treeview-item-hover-color;
+  }
+
+  position: absolute;
+  width: 100%;
+  left: 0;
+  cursor: pointer;
+}
+
 .dx-treeview-node {
   padding-left: $material-treeview-node-offset;
 }
@@ -93,18 +110,8 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-item-with-checkbox {
-  &.dx-treeview-item-with-custom-expander-icon > .dx-checkbox {
-    top: $material-treeview-with-custom-icon-checkbox-vertical-offset;
-  }
-
   .dx-treeview-item {
     color: $base-text-color;
-    padding-left: $material-treeview-item-with-checkbox-offset;
-  }
-
-  .dx-checkbox {
-    top: $material-treeview-checkbox-vertical-offset;
-    left: $material-treeview-checkbox-offset;
   }
 }
 
@@ -114,25 +121,33 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
   }
 
   &.dx-state-selected {
-    > .dx-treeview-item {
-      color: $treeview-item-selected-color;
+    > .dx-treeview-fullrow {
       background-color: $treeview-item-selected-bg;
 
       &.dx-state-hover:not(.dx-state-focused) {
         background-color: $treeview-item-selected-hover-bg;
       }
     }
+
+    > .dx-treeview-item {
+      color: $treeview-item-selected-color;
+    }
   }
 
   &.dx-state-focused {
-    > .dx-treeview-item {
+    > .dx-treeview-fullrow {
       background-color: $treeview-focused-bg;
+    }
+
+    > .dx-treeview-item {
       color: $treeview-focus-color;
     }
   }
 }
 
 .dx-treeview-item {
+  z-index: 1;
+  position: relative;
   padding: $material-treeview-item-padding;
   min-height: $material-treeview-min-item-height;
   line-height: math.div($material-treeview-min-item-height, 2) - 2;
@@ -142,25 +157,33 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
       @include dx-icon-sizing($material-base-icon-size);
     }
   }
-
-  &.dx-state-hover {
-    background-color: $treeview-hover-bg;
-    color: $treeview-item-hover-color;
-  }
 }
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(chevronright);
-  @include dx-icon-font-centered-sizing($material-base-icon-size);
+
+  // @include dx-icon-font-centered-sizing($material-base-icon-size);
+  font-size: $material-base-icon-size;
+  text-align: center;
+  line-height: $material-base-icon-size;
+
+  &::before {
+    width: $material-base-icon-size;
+  }
 
   color: $treeview-spin-icon-color;
   width: $material-treeview-toggle-item-width;
-  height: $material-treeview-min-item-height;
-  top: 0;
-  left: 0;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(chevrondown);
-    @include dx-icon-font-centered-sizing($material-base-icon-size);
+  
+    // @include dx-icon-font-centered-sizing($material-base-icon-size);
+    font-size: $material-base-icon-size;
+    text-align: center;
+    line-height: $material-base-icon-size;
+
+    &::before {
+      width: $material-base-icon-size;
+    }
   }
 }

@@ -57,8 +57,8 @@ $tree-view-icon-size: 24px;
 }
 
 .dx-treeview-node {
+  position: static;
   list-style-type: none;
-  position: relative;
 
   @include user-select(none);
 
@@ -69,16 +69,18 @@ $tree-view-icon-size: 24px;
   }
 
   .dx-checkbox {
-    position: absolute;
+    order: 1;
     margin: 0;
   }
 }
 
 .dx-treeview-item {
-  display: block;
+  display: flex;
   cursor: pointer;
 
   .dx-treeview-item-content {
+    order: 2;
+
     .dx-icon {
       display: inline-block;
       width: $tree-view-icon-size;
@@ -101,7 +103,6 @@ $tree-view-icon-size: 24px;
 .dx-treeview-toggle-item-visibility,
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
-  position: absolute;
   cursor: pointer;
 
   &.dx-state-disabled {
@@ -139,8 +140,7 @@ $tree-view-icon-size: 24px;
   .dx-treeview-toggle-item-visibility,
   .dx-treeview-custom-expand-icon,
   .dx-treeview-custom-collapse-icon {
-    left: auto;
-    right: 0;
+    order: 0;
 
     @include flip-horizontally();
   }

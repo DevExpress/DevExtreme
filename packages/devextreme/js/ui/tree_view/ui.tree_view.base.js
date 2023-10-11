@@ -56,6 +56,10 @@ const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';
 const DATA_ITEM_ID = 'data-item-id';
 const ITEM_URL_CLASS = 'dx-item-url';
 
+const HOVER_STATE_CLASS = 'dx-state-hover';
+
+const FULL_ROW_CLASS = `${WIDGET_CLASS}-fullrow`;
+
 const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _supportedKeys: function(e) {
@@ -147,6 +151,25 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _activeStateUnit: '.' + ITEM_CLASS,
+
+    _hoverStartHandler: function(e) {
+        const itemElement = $(e.currentTarget);
+        if(itemElement.hasClass(ITEM_CLASS)) {
+            const closestFullRowElement = itemElement.parent().find(`.${FULL_ROW_CLASS}`).eq(0);
+            closestFullRowElement.addClass(HOVER_STATE_CLASS);
+        }
+        this.callBase();
+    },
+
+    _hoverEndHandler: function(e) {
+        const itemElement = $(e.currentTarget);
+        if(itemElement.hasClass(ITEM_CLASS)) {
+            const closestFullRowElement = itemElement.parent().find(`.${FULL_ROW_CLASS}`).eq(0);
+            closestFullRowElement.removeClass(HOVER_STATE_CLASS);
+        }
+        this.callBase();
+
+    },
 
     _widgetClass: function() {
         return WIDGET_CLASS;
@@ -704,6 +727,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const nodeData = node.internalFields;
         const showCheckBox = this._showCheckboxes();
 
+        const fullRow = $('<div>').addClass(FULL_ROW_CLASS);
+        $node.append(fullRow);
+
         $node.addClass(showCheckBox ? ITEM_WITH_CHECKBOX_CLASS : ITEM_WITHOUT_CHECKBOX_CLASS);
         $node.toggleClass(INVISIBLE_STATE_CLASS, nodeData.item.visible === false);
 
@@ -711,8 +737,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             $node.addClass(ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS);
             $nodeContainer.addClass(CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS);
         }
-
-        showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria('selected', nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
@@ -722,6 +746,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
+
+        const treeviewItem = this._getTreeViewItem($node);
+        fullRow.height(treeviewItem.outerHeight());
 
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
@@ -794,6 +821,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    _setElementData: function(element, data, index) {
+        this.callBase(element, data, index);
+
+        if(this._showCheckboxes()) {
+            const $treeViewItem = element;
+            const node = this._getNode(data);
+
+            this._renderCheckBox($treeViewItem, node);
+        }
+    },
+
     _renderSublevel: function($node, node, childNodes) {
         const $nestedNodeContainer = this._renderNodeContainer($node, node);
 
@@ -836,6 +874,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _attachExpandEvent: function() {
+        // todo: support fullrow
         const expandedEventName = this._getEventNameByOption(this.option('expandEvent'));
         const $itemsContainer = this._itemContainer();
 
@@ -924,13 +963,25 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return $nodeContainer.not(':empty').length;
     },
 
+    _getTreeViewItem: function($node) {
+        const $treeViewItem = $node.children('.' + ITEM_CLASS);
+        return $treeViewItem;
+
+    },
+
     _createLoadIndicator: function($node) {
-        this._createComponent($('<div>').addClass(NODE_LOAD_INDICATOR_CLASS), LoadIndicator, {}).$element().appendTo($node);
-        const $icon = $node.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS},.${CUSTOM_EXPAND_ICON_CLASS}`);
+        const $treeviewItem = this._getTreeViewItem($node);
+
+        this._createComponent($('<div>').addClass(NODE_LOAD_INDICATOR_CLASS), LoadIndicator, {}).$element().appendTo($treeviewItem);
+
+        const $icon = $treeviewItem.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS},.${CUSTOM_EXPAND_ICON_CLASS}`);
         $icon.hide();
     },
 
     _renderExpanderIcon: function($node, node, $icon, iconClass) {
+        // todo
+        // const $treeViewItem = this._getTreeViewItem($node);
+        // $icon.prependTo($treeViewItem);
         $icon.appendTo($node);
         $icon.addClass(iconClass);
 
@@ -942,9 +993,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderDefaultExpanderIcons: function($node, node) {
+        const $treeViewItem = this._getTreeViewItem($node);
+
         const $icon = $('<div>')
             .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
-            .appendTo($node);
+            .prependTo($treeViewItem);
 
         if(node.internalFields.expanded) {
             $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
@@ -982,6 +1035,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         eventsEngine.off($icon, eventName);
         eventsEngine.on($icon, eventName, e => {
             this._toggleExpandedState(node.internalFields.key, undefined, e);
+            return false;
         });
     },
 
@@ -1003,7 +1057,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(!this._hasCustomExpanderIcons()) {
-            const $icon = $node.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
+            const $icon = this._getTreeViewItem($node).children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
             $icon.toggleClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS, state);
         } else if(this._nodeHasRenderedChildren($node)) {
@@ -1143,7 +1197,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             LoadIndicator.getInstance($loadIndicator)?.option('visible', false);
         }
 
-        const $toggleItem = $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS},.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
+        const $treeViewItem = this._getTreeViewItem($node);
+        const $toggleItem = $treeViewItem.children(`.${CUSTOM_COLLAPSE_ICON_CLASS},.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         if(hasNewItems) {
             $toggleItem.show();
@@ -1236,8 +1291,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckboxValue: function(e) {
-        const $node = $(e.element).parent('.' + NODE_CLASS);
-        const $item = $node.children('.' + ITEM_CLASS);
+        const $node = $(e.element).parent().parent(`.${NODE_CLASS}`);
+        const $item = this._getTreeViewItem($node);
+
         const item = this._getItemData($item);
         const node = this._getNodeByElement($item);
         const value = e.value;
@@ -1346,7 +1402,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getCheckBoxInstance: function($node) {
-        return $node.children('.dx-checkbox').dxCheckBox('instance');
+        const $treeViewItem = this._getTreeViewItem($node);
+
+        return $treeViewItem.children('.dx-checkbox').dxCheckBox('instance');
     },
 
     _updateItemsUI: function() {
@@ -1431,9 +1489,20 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector } = this._getItemClickEventData();
 
+        // todo: unsubscribe
+        eventsEngine.on($itemContainer, clickEventNamespace, `.${FULL_ROW_CLASS}`, (e) => {
+            const treeViewItem = $(e.currentTarget)[0].nextSibling;
+
+            this._itemClickHandler(e, treeViewItem);
+        });
+
         eventsEngine.on($itemContainer, clickEventNamespace, itemSelector, (e) => {
+            if($(e.target).hasClass('dx-checkbox')) {
+                return;
+            }
             this._itemClickHandler(e, $(e.currentTarget));
         });
+
         eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e) => {
             this._itemPointerDownHandler(e);
         });
@@ -1657,7 +1726,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        const node = this._getNodeByElement($focusedNode.children('.' + ITEM_CLASS));
+        const node = this._getNodeByElement(this._getTreeViewItem($focusedNode));
         this._toggleExpandedState(node, true);
     },
 
@@ -1679,7 +1748,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const nodeElement = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
         if(!$focusedNode.hasClass(IS_LEAF) && nodeElement.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-            const node = this._getNodeByElement($focusedNode.children('.' + ITEM_CLASS));
+            const node = this._getNodeByElement(this._getTreeViewItem($focusedNode));
             this._toggleExpandedState(node, false);
         } else {
             const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
@@ -1861,3 +1930,4 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 });
 
 export default TreeViewBase;
+
