@@ -56,7 +56,9 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-menu {
       background-color: transparent;
-      height: 100%;
+      margin-top: math.div(($fluent-grid-base-header-height - $fluent-button-height), 2);
+      margin-left: 5px !important; // stylelint-disable-line declaration-no-important
+      height: $fluent-button-height;
 
       .dx-menu-item {
         .dx-menu-item-content {
