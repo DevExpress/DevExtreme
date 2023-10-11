@@ -662,12 +662,15 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _popupTabHandler: noop,
+
     _renderPopup: function() {
         if(this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
             if(this.option('_scrollToSelectedItemEnabled')) {
                 this.callBase();
             } else {
                 this._renderPopover();
+                this._attachPopupKeyHandler();
             }
         } else {
             this.callBase();
@@ -805,9 +808,6 @@ const Lookup = DropDownList.inherit({
             shortcut: 'cancel',
             onClick: this._cancelButtonHandler.bind(this),
             options: {
-                onInitialized: e => {
-                    e.component.registerKeyHandler('escape', this.close.bind(this));
-                },
                 text: this.option('cancelButtonText')
             }
         } : null;
@@ -930,7 +930,6 @@ const Lookup = DropDownList.inherit({
     },
 
     _registerSearchKeyHandlers: function() {
-        this._searchBox.registerKeyHandler('escape', this.close.bind(this));
         this._searchBox.registerKeyHandler('enter', this._selectListItemHandler.bind(this));
         this._searchBox.registerKeyHandler('space', this._selectListItemHandler.bind(this));
         this._searchBox.registerKeyHandler('end', noop);
@@ -959,14 +958,6 @@ const Lookup = DropDownList.inherit({
     },
 
     _setAriaTargetForList: noop,
-
-    _renderList: function() {
-        this.callBase();
-
-        this._list.registerKeyHandler('escape', () => {
-            this.close();
-        });
-    },
 
     _listConfig: function() {
         return extend(this.callBase(), {
