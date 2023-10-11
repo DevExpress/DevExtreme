@@ -5,7 +5,7 @@ export type RenderArgs = {
   model?: any;
   container: any;
   index?: any;
-  onRendered: () => void;
+  onRendered?: () => void;
 };
 
 export type OnRenderedLocker = {

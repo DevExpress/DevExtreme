@@ -94,7 +94,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
         componentKey: getRandomId(),
         onRendered: () => {
           unsubscribeOnRemoval(container, onRemoved);
-          onRendered();
+          onRendered?.();
         },
         onRemoved
       })
