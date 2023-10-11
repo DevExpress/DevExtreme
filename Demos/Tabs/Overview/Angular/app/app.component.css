@@ -30,7 +30,7 @@
 }
 
 ::ng-deep .dx-tab {
-  width: 135px;
+  width: 136px;
 }
 
 ::ng-deep .caption {
@@ -46,11 +46,14 @@
   margin-top: 20px;
 }
 
-::ng-deep .dx-tabs-horizontal {
+::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
   border-bottom: 1px solid rgb(225, 225, 225, 0.4);
 }
 
-::ng-deep .dx-tabs-vertical {
+::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
   border-right: 1px solid rgb(225, 225, 225, 0.4);
+}
+
+::ng-deep .dx-tabs-vertical {
   height: 250px;
 }

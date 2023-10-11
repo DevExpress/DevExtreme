@@ -95,4 +95,8 @@ export default {
 .dx-color-scheme-contrast .task-item {
   border: 1px solid #fff;
 }
+
+.dx-theme-fluent.dx-color-scheme-blue-dark .task-item {
+  background-color: #1f1f1f;
+}
 </style>

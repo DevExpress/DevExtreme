@@ -135,7 +135,7 @@ export default {
   width: 0;
 }
 
-.dx-theme-material .dx-tabpanel {
+.dx-viewport:not(.dx-theme-generic) .dx-tabpanel {
   border-radius: 8px;
   overflow: clip;
 }

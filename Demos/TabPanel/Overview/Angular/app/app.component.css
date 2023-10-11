@@ -21,7 +21,7 @@
   width: 0;
 }
 
-::ng-deep .dx-theme-material .dx-tabpanel {
+::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabpanel {
   border-radius: 8px;
   overflow: clip;
 }
@@ -115,4 +115,8 @@
 
 ::ng-deep .dx-color-scheme-contrast .task-item {
   border: 1px solid #fff;
+}
+
+::ng-deep .dx-theme-fluent.dx-color-scheme-blue-dark .task-item {
+  background-color: #1f1f1f;
 }
