@@ -4033,7 +4033,7 @@ QUnit.module('default options', {
 
             const $popover = $('.dx-popover-wrapper');
 
-            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup._inputWrapper()).outerHeight() + 12 + 10, 2, 'popover position of lookup field with body padding 12px');
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup._inputWrapper()).outerHeight() + 8 + 10, 2, 'popover position of lookup field with body padding 8px');
 
             lookup.close();
 
