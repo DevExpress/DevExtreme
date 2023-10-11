@@ -119,7 +119,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
     init(dxTemplates);
   }, [init, getRenderFunc, templateFactories, dryRun]);
 
-  if (renderedInstances.empty || dryRun)
+  if (renderedInstances.empty || dryRun && Object.keys(templateOptions).length === 0)
     return null;
 
   return (
