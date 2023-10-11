@@ -10,7 +10,6 @@ import {
   getEventHandlers,
   EVENT,
 } from '../../test_utils/events_mock';
-import { click } from '../../../events/short';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';
@@ -321,30 +320,22 @@ describe('Button', () => {
           });
 
           it('should prevent default key down event and simulate click by space/enter keys', () => {
-            const originalClick = click.trigger;
+            const onClick = jest.fn();
+            const originalEvent = {
+              preventDefault: jest.fn(),
+            } as unknown as Event & { cancel: boolean };
+            const options = {
+              keyName: 'enter',
+              which: 'enter',
+              originalEvent,
+            };
+            const button = new Button({ onClick });
+            const stub = jest.fn();
 
-            try {
-              const onClick = jest.fn();
-              const originalEvent = {
-                preventDefault: jest.fn(),
-              } as unknown as Event & { cancel: boolean };
-              const options = {
-                keyName: 'enter',
-                which: 'enter',
-                originalEvent,
-              };
-              const button = new Button({ onClick });
-
-              click.trigger = jest.fn();
-
-              button.contentRef = { current: 'whatever' } as any;
-              button.keyDown(options);
-              expect(options.originalEvent.preventDefault).toHaveBeenCalled();
-              expect(click.trigger).toHaveBeenCalledTimes(1);
-              expect(click.trigger).toHaveBeenCalledWith(button.contentRef.current);
-            } finally {
-              click.trigger = originalClick;
-            }
+            button.contentRef = { current: { click: stub } } as any;
+            button.keyDown(options);
+            expect(options.originalEvent.preventDefault).toHaveBeenCalled();
+            expect(stub).toHaveBeenCalledTimes(1);
           });
 
           it('should not simulate click by common keys down', () => {

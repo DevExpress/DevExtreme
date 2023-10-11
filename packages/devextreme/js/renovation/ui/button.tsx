@@ -248,7 +248,7 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   emitClickEvent(): void {
-    click.trigger(this.contentRef.current!);
+    this.contentRef.current!.click();
   }
 
   get aria(): Record<string, string> {

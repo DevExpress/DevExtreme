@@ -4340,7 +4340,12 @@ QUnit.module('readOnly option', moduleConfig, () => {
 
 QUnit.module('dxButton integration', moduleConfig, () => {
     QUnit.test('dialog should be shown after press enter key on dxButton (T1178836)', function(assert) {
-        const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'keyboard is not supported for not generic devices');
+            return;
+        }
+
+        const $customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
 
         $('.trigger').dxButton({
             text: 'button',
@@ -4348,17 +4353,18 @@ QUnit.module('dxButton integration', moduleConfig, () => {
         });
 
         const instance = $('#fileuploader').dxFileUploader({
-            dialogTrigger: '.trigger',
+            dialogTrigger: $customDialogTrigger,
             visible: false
         }).dxFileUploader('instance');
 
         sinon.stub(instance, '_selectButtonClickHandler');
+
         instance.option({
             uploadMode: 'useButtons',
         });
         assert.strictEqual(instance._selectButtonClickHandler.callCount, 0, 'attachHandlers method not called');
 
-        const keyboard = keyboardMock(customDialogTrigger);
+        const keyboard = keyboardMock($customDialogTrigger);
         keyboard.keyDown('enter');
 
         assert.strictEqual(instance._selectButtonClickHandler.callCount, 1, 'attachHandlers method called');

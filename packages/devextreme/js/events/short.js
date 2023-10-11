@@ -91,8 +91,7 @@ export const click = {
     },
     off: ($el, { namespace } = {}) => {
         eventsEngine.off($el, addNamespace('click', namespace));
-    },
-    trigger: $el => eventsEngine.trigger($el, 'click')
+    }
 };
 
 let index = 0;
