@@ -17,7 +17,7 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 .dx-slider-wrapper {
   height: $fluent-slider-wrapper-height;
 
-  @include dx-popover-arrow-size(14px, 4px);
+  @include dx-popover-arrow-size(14px, 2px);
 }
 
 .dx-slider-bar {
