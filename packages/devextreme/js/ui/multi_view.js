@@ -13,6 +13,7 @@ import registerComponent from '../core/component_registrator';
 import CollectionWidget from './collection/ui.collection_widget.live_update';
 import Swipeable from '../events/gesture/swipeable';
 import { Deferred } from '../core/utils/deferred';
+import messageLocalization from '../localization/message';
 
 // STYLE multiView
 
@@ -67,8 +68,6 @@ const MultiView = CollectionWidget.inherit({
             * @hidden
             */
 
-
-            _itemAttributes: { role: 'tabpanel' },
             loopItemFocus: false,
             selectOnFocus: true,
             selectionMode: 'single',
@@ -210,7 +209,49 @@ const MultiView = CollectionWidget.inherit({
         deferRender(() => {
             const selectedItemIndices = this._getSelectedItemIndices();
             this._updateItems(selectedItemIndices[0]);
+
+            this._setElementAria();
+            this._setItemsAria();
         });
+    },
+
+    _getElementAria() {
+        return {
+            role: 'group',
+            'roledescription': messageLocalization.format('dxMultiView-elementAriaRoleDescription'),
+            label: messageLocalization.format('dxMultiView-elementAriaLabel'),
+        };
+    },
+
+    _setElementAria() {
+        const aria = this._getElementAria();
+
+        this.setAria(aria, this.$element());
+    },
+
+    _getItemsAria({ itemIndex, itemsCount }) {
+        const aria = {
+            role: 'group',
+            'roledescription': messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
+            label: messageLocalization.format(
+                'dxMultiView-itemAriaLabel',
+                itemIndex + 1,
+                itemsCount,
+            ),
+        };
+
+        return aria;
+    },
+
+    _setItemsAria() {
+        const $itemElements = this._itemElements();
+        const itemsCount = this._itemsCount();
+
+        $itemElements.each(((itemIndex, item) => {
+            const aria = this._getItemsAria({ itemIndex, itemsCount });
+
+            this.setAria(aria, $(item));
+        }));
     },
 
     _updateItems: function(selectedIndex, newIndex) {

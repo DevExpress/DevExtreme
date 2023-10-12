@@ -1160,6 +1160,35 @@ QUnit.module('aria accessibility', {
         assert.equal($item0.attr('aria-hidden'), 'true', 'aria-hidden is true for 1st item');
         assert.equal($item1.attr('aria-hidden'), undefined, 'aria-hidden does not exist for 2nd item');
     });
+
+    QUnit.test('element should contain correct aria attributes', function(assert) {
+        const $element = $('#multiView').dxMultiView({ items: [1, 2] });
+
+        const attributeMap = {
+            'role': 'group',
+            'aria-roledescription': 'MultiView',
+            'aria-label': 'Use arrows or swipe to navigate between views',
+        };
+
+        Object.keys(attributeMap).forEach(key => {
+            assert.strictEqual($element.attr(key), attributeMap[key], `${key} attribute is correct`);
+        });
+    });
+
+    QUnit.test('item should contain correct aria attributes', function(assert) {
+        const $element = $('#multiView').dxMultiView({ items: [1, 2] });
+        const $item = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+
+        const attributeMap = {
+            'role': 'group',
+            'aria-roledescription': 'View',
+            'aria-label': '1 of 2',
+        };
+
+        Object.keys(attributeMap).forEach(key => {
+            assert.strictEqual($item.attr(key), attributeMap[key], `${key} attribute is correct`);
+        });
+    });
 });
 
 QUnit.module('swipeable disabled state', () => {

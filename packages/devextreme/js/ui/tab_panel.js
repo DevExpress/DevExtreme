@@ -143,8 +143,14 @@ const TabPanel = MultiView.inherit({
 
         this.$element().addClass(TABPANEL_CLASS);
         this._toggleTabPanelTabsPositionClass();
+    },
 
-        this.setAria('role', 'tabpanel');
+    _getElementAria() {
+        return { role: 'tabpanel' };
+    },
+
+    _getItemsAria() {
+        return { role: 'tabpanel' };
     },
 
     _initMarkup: function() {
