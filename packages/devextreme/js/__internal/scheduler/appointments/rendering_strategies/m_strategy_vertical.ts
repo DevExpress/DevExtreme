@@ -56,13 +56,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
   }
 
-  _getItemPosition(appointment) {
-    const allDay = this.isAllDay(appointment);
+  _getItemPosition(initialAppointment) {
+    const allDay = this.isAllDay(initialAppointment);
 
     if (allDay) {
-      return super._getItemPosition(appointment);
+      return super._getItemPosition(initialAppointment);
     }
 
+    const appointment = super.shiftAppointmentByViewOffset(initialAppointment);
     const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
     const isRecurring = !!adapter.recurrenceRule;
 
@@ -309,8 +310,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
   isAllDay(appointmentData) {
     return getAppointmentTakesAllDay(
       createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
-      this.startDayHour,
-      this.endDayHour,
       this.allDayPanelMode,
     );
   }
@@ -324,15 +323,19 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-    const { normalizedEndDate } = position.info.appointment;
+    const {
+      startDate: startDateWithTime,
+      endDate,
+      normalizedEndDate,
+    } = position.info.appointment;
+    const startDate = dateUtils.trimTime(startDateWithTime);
 
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
     const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
 
     const skippedHours = getSkippedHoursInRange(
-      position.info.appointment.startDate,
-      position.info.appointment.endDate,
+      startDate,
+      endDate,
       this.viewDataProvider,
     );
 
@@ -347,8 +350,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const { startDate } = position.info.appointment;
-    const { normalizedEndDate } = position.info.appointment;
+    const {
+      startDate,
+      normalizedEndDate,
+    } = position.info.appointment;
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
     const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
     const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');

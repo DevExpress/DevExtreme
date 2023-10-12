@@ -14,6 +14,7 @@ export const getAppointmentsViewModel = (
     filteredItems,
     {
       ...model,
+      viewOffset: 0,
       isRenovatedAppointments: true,
     },
   ) as AppointmentsViewModelType;

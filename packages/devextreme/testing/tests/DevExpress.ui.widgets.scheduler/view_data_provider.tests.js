@@ -180,6 +180,7 @@ const verticalGroupingRenderOptions = {
         name: 'groupId',
         items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     }],
+    viewOffset: 0,
 };
 const horizontalGroupingRenderOptions = {
     startRowIndex: 0,
@@ -193,6 +194,7 @@ const horizontalGroupingRenderOptions = {
     isGenerateTimePanelData: true,
     viewType: 'day',
     groups: [],
+    viewOffset: 0,
 };
 
 const createViewDataProvider = ({
@@ -583,21 +585,15 @@ module('View Data Provider', {
                     this.init('vertical');
 
                     assert.deepEqual(
-                        this.viewDataProvider.findAllDayGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11)),
-                        new Date(2020, 7, 25, 0, 11),
-                        'Group 2 cell 1 allDay start date is correct'
-                    );
-
-                    assert.deepEqual(
-                        this.viewDataProvider.findAllDayGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11)),
-                        new Date(2020, 7, 25, 0, 11),
-                        'Group 2 cell 1 allDay start date is correct'
-                    );
-
-                    assert.deepEqual(
-                        this.viewDataProvider.findAllDayGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11)),
+                        this.viewDataProvider.findAllDayGroupCellStartDate(2),
                         new Date(2020, 7, 24),
-                        'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findAllDayGroupCellStartDate(3),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 1 allDay start date is correct'
                     );
                 });
             });
@@ -616,21 +612,15 @@ module('View Data Provider', {
                     });
 
                     assert.deepEqual(
-                        viewDataProvider.findAllDayGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11)),
-                        new Date(2020, 7, 25, 0, 11),
-                        'Group 2 cell 1 allDay start date is correct'
-                    );
-
-                    assert.deepEqual(
-                        viewDataProvider.findAllDayGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11)),
-                        new Date(2020, 7, 25, 0, 11),
-                        'Group 2 cell 1 allDay start date is correct'
-                    );
-
-                    assert.deepEqual(
-                        viewDataProvider.findAllDayGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11)),
+                        viewDataProvider.findAllDayGroupCellStartDate(2),
                         new Date(2020, 7, 24),
-                        'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findAllDayGroupCellStartDate(3),
+                        new Date(2020, 7, 24),
+                        'Group 3 cell 1 allDay start date is correct'
                     );
                 });
             });
