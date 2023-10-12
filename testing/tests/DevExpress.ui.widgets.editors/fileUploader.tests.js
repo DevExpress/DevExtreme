@@ -4338,3 +4338,35 @@ QUnit.module('readOnly option', moduleConfig, () => {
 
 });
 
+QUnit.module('dxButton integration', moduleConfig, () => {
+    QUnit.test('dialog should be shown after press enter key on dxButton (T1178836)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'keyboard is not supported for not generic devices');
+            return;
+        }
+
+        const $customDialogTrigger = $('<div>').appendTo('#qunit-fixture');
+
+        $customDialogTrigger.dxButton({
+            text: 'button'
+        });
+
+        const instance = $('#fileuploader').dxFileUploader({
+            dialogTrigger: $customDialogTrigger,
+            visible: false
+        }).dxFileUploader('instance');
+        const spy = sinon.spy();
+
+        $(`.${FILEUPLOADER_INPUT_CLASS}`).on('click', spy);
+
+        instance.option({
+            uploadMode: 'useButtons',
+        });
+        assert.strictEqual(spy.callCount, 0, 'click on input not fired');
+
+        const keyboard = keyboardMock($customDialogTrigger);
+        keyboard.keyDown('enter');
+
+        assert.strictEqual(spy.callCount, 1, 'click on input fired');
+    });
+});
