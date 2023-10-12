@@ -4357,7 +4357,7 @@ QUnit.module('dxButton integration', moduleConfig, () => {
         }).dxFileUploader('instance');
         const spy = sinon.spy();
 
-        $('.dx-fileuploader-input').on('click', spy);
+        $(`.${FILEUPLOADER_INPUT_CLASS}`).on('click', spy);
 
         instance.option({
             uploadMode: 'useButtons',
