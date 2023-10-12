@@ -53,8 +53,6 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
             onValueChanged: this._valueChangedHandler.bind(this),
             stylingMode: this.dateBox.option('stylingMode')
         });
-
-        this._timeView.registerKeyHandler('escape', this._escapeHandler.bind(this));
     },
 
     renderOpenedState: function() {
@@ -148,25 +146,11 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
                 return $container;
             }).bind(this)
         });
-
-        this._attachTabHandler();
     },
 
     popupConfig: function(popupConfig) {
         const calendarPopupConfig = this.callBase(popupConfig);
         return extend(calendarPopupConfig, { width: 'auto' });
-    },
-
-    _attachTabHandler: function() {
-        const dateBox = this.dateBox;
-        const handler = function(e) {
-            if(e.shiftKey) {
-                e.preventDefault();
-                dateBox.focus();
-            }
-        };
-
-        this._timeView._hourBox.registerKeyHandler('tab', handler);
     },
 
     _preventFocusOnPopup: function(e) {
