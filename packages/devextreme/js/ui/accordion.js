@@ -148,7 +148,7 @@ const Accordion = CollectionWidget.inherit({
         this.callBase();
 
         when.apply(this, this._deferredTemplateItems).done(() => {
-            this._updateItemHeights(true);
+            this._updateItemHeightsTimeout = setTimeout(() => this._updateItemHeights(true), 0);
         });
     },
 
@@ -389,6 +389,7 @@ const Accordion = CollectionWidget.inherit({
         });
         this._deferredTemplateItems = [];
         clearTimeout(this._animationTimer);
+        clearTimeout(this._updateItemHeightsTimeout);
         this.callBase();
     },
 
