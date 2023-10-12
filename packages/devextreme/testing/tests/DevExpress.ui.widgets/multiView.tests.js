@@ -1167,7 +1167,7 @@ QUnit.module('aria accessibility', {
         const attributeMap = {
             'role': 'group',
             'aria-roledescription': 'MultiView',
-            'aria-label': 'Use arrows or swipe to navigate between views',
+            'aria-label': 'Use the arrow keys or swipe to navigate between views',
         };
 
         Object.keys(attributeMap).forEach(key => {
