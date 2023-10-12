@@ -4,6 +4,7 @@ import { isNumeric, isObject } from '@js/core/utils/type';
 import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { current as currentTheme } from '@js/ui/themes';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
@@ -195,7 +196,8 @@ class BaseRenderingStrategy {
     return this.cellWidth;
   }
 
-  _getItemPosition(appointment) {
+  _getItemPosition(initialAppointment) {
+    const appointment = this.shiftAppointmentByViewOffset(initialAppointment);
     const position = this.generateAppointmentSettings(appointment);
     const allDay = this.isAllDay(appointment);
 
@@ -286,8 +288,6 @@ class BaseRenderingStrategy {
     const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
     return getAppointmentTakesAllDay(
       adapter,
-      this.viewStartDayHour,
-      this.viewEndDayHour,
       this.allDayPanelMode,
     );
   }
@@ -869,6 +869,24 @@ class BaseRenderingStrategy {
       top: timeShift * this.cellHeight,
       left: 0,
       cellPosition: 0,
+    };
+  }
+
+  protected shiftAppointmentByViewOffset(appointment: any): any {
+    const { viewOffset } = this.options;
+
+    // NOTE Knockout: Fix for startDate / endDate observables
+    const appointmentStartDate = typeof appointment.startDate === 'function'
+      ? new Date(appointment.startDate())
+      : new Date(appointment.startDate);
+    const appointmentEndDate = typeof appointment.endDate === 'function'
+      ? new Date(appointment.endDate())
+      : new Date(appointment.endDate);
+
+    return {
+      ...appointment,
+      startDate: dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]),
+      endDate: dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]),
     };
   }
 }

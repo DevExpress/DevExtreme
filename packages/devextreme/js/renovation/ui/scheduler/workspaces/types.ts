@@ -204,6 +204,7 @@ export interface ViewDataProviderOptions {
   getDateForHeaderText: GetDateForHeaderText;
   startDayHour: number;
   endDayHour: number;
+  viewOffset: number;
   cellDuration: number;
   viewType: ViewType;
   intervalCount: number;
@@ -248,6 +249,7 @@ interface CompleteViewDataGenerationOptions {
   startDate?: Date;
   startDayHour: number;
   endDayHour: number;
+  viewOffset: number;
   groupByDate: boolean;
   groups: Group[];
   intervalCount: number;
@@ -331,6 +333,7 @@ interface CompleteDateHeaderMapGenerationOptions {
   groupOrientation: GroupOrientation;
   startDayHour: number;
   endDayHour: number;
+  viewOffset: number;
   hoursInterval: number;
   isHorizontalGrouping: boolean;
   intervalCount: number;
@@ -420,6 +423,7 @@ export interface WorkSpaceGenerationOptions {
   groupOrientation: GroupOrientation;
   startDayHour: number;
   endDayHour: number;
+  viewOffset: number;
   currentDate: Date;
   startDate?: Date;
   firstDayOfWeek: number;

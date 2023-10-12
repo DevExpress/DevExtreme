@@ -5,6 +5,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { ExpressionUtils } from './m_expression_utils';
 import { getRecurrenceProcessor } from './m_recurrence';
 
+// TODO Vinogradov refactoring: add types to this module.
 const PROPERTY_NAMES = {
   startDate: 'startDate',
   endDate: 'endDate',
@@ -49,7 +50,7 @@ class AppointmentAdapter {
   }
 
   get allDay() {
-    return this.getField(PROPERTY_NAMES.allDay);
+    return this.getField(PROPERTY_NAMES.allDay) as boolean;
   }
 
   set allDay(value) {

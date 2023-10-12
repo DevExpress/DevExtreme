@@ -152,6 +152,7 @@ export const prepareGenerationOptions = (
     groupOrientation,
     startDayHour,
     endDayHour,
+    viewOffset,
     currentDate,
     startDate,
     firstDayOfWeek,
@@ -181,6 +182,7 @@ export const prepareGenerationOptions = (
     getDateForHeaderText,
     startDayHour,
     endDayHour,
+    viewOffset,
     cellDuration,
     viewType: type,
     intervalCount,
@@ -410,6 +412,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       startDate,
       startDayHour,
       endDayHour,
+      viewOffset,
       groupByDate,
       groups,
       intervalCount,
@@ -424,6 +427,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       startDate,
       startDayHour,
       endDayHour,
+      viewOffset,
       groupByDate,
       groups,
       intervalCount,
@@ -521,6 +525,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       intervalCount,
       currentDate,
       type: viewType,
+      viewOffset,
     } = this.props;
 
     return this.dateHeaderDataGenerator.getCompleteDateHeaderMap(
@@ -532,6 +537,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         isHorizontalGrouping: this.isHorizontalGrouping,
         startDayHour,
         endDayHour,
+        viewOffset,
         hoursInterval,
         intervalCount,
         headerCellTextFormat: this.renderConfig.headerCellTextFormat,
@@ -633,6 +639,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       hoursInterval,
       type,
       cellDuration,
+      viewOffset,
     } = this.props;
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
 
@@ -647,6 +654,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         groupOrientation: this.groupOrientation,
         startDayHour,
         endDayHour,
+        viewOffset,
         currentDate,
         startDate,
         firstDayOfWeek,
