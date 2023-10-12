@@ -4345,11 +4345,10 @@ QUnit.module('dxButton integration', moduleConfig, () => {
             return;
         }
 
-        const $customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
+        const $customDialogTrigger = $('<div>').appendTo('#qunit-fixture');
 
-        $('.trigger').dxButton({
-            text: 'button',
-            useSubmitBehavior: true
+        $customDialogTrigger.dxButton({
+            text: 'button'
         });
 
         const instance = $('#fileuploader').dxFileUploader({

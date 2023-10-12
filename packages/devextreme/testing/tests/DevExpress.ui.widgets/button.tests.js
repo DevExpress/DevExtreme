@@ -390,27 +390,22 @@ QUnit.module('Button', function() {
             assert.equal(clickFired, 2, 'press space on button call click action');
         });
 
-        QUnit.test('external subscriptions fires on enter', function(assert) {
-            assert.expect(2);
-
-            let clickFired = 0;
-
+        QUnit.test('click event is fired on "enter" press', function(assert) {
             const $element = $('#button').dxButton({
                 focusStateEnabled: true
             });
+            const handler = sinon.spy();
 
-            $element.on('click', () => {
-                clickFired++;
-            });
+            $element.on('click', handler);
 
             const keyboard = keyboardMock($element);
 
             $element.trigger('focusin');
             keyboard.keyDown('enter');
-            assert.equal(clickFired, 1, 'press enter on button call click action');
+            assert.strictEqual(handler.callCount, 1, 'press enter on button call click action');
 
             keyboard.keyDown('space');
-            assert.equal(clickFired, 2, 'press space on button call click action');
+            assert.strictEqual(handler.callCount, 2, 'press space on button call click action');
         });
 
         QUnit.test('arguments on key press', function(assert) {
