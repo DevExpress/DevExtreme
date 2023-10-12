@@ -246,6 +246,10 @@ export class AppointmentPopup {
       }
 
       const adapter = this._createAppointmentAdapter(this.form.formData);
+      if (adapter.allDay) {
+        adapter.startDate = dateUtils.trimTime(adapter.startDate);
+        adapter.endDate = dateUtils.trimTime(adapter.endDate);
+      }
       const clonedAdapter = adapter.clone({ pathTimeZone: 'fromAppointment' } as any); // TODO:
 
       this._addMissingDSTTime(adapter, clonedAdapter);
