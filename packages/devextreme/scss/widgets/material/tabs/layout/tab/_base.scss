@@ -62,6 +62,6 @@
   .dx-icon {
     color: $tabs-tab-icon-color;
 
-    @include dx-icon-sizing($material-base-icon-size);
+    @include dx-icon-sizing($material-tabs-icon-size);
   }
 }

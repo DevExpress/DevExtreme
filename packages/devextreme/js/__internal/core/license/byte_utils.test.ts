@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 import {
-  Base64ToBytes,
+  base64ToBytes,
   bytesToHex,
   bytesToWords,
-  HexToBytes,
+  concatBytes,
+  hexToBytes,
   leftRotate,
   stringToBytes,
   wordsToBytes,
@@ -34,7 +36,7 @@ describe('byte utils', () => {
     { value: 'YWJj', expected: [97, 98, 99] },
     { value: 'TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQ=', expected: [76, 111, 114, 101, 109, 32, 105, 112, 115, 117, 109, 32, 100, 111, 108, 111, 114, 32, 115, 105, 116, 32, 97, 109, 101, 116] },
   ])('gets bytes from base64 string', ({ value, expected }) => {
-    expect(Base64ToBytes(value)).toEqual(new Uint8Array(expected));
+    expect(base64ToBytes(value)).toEqual(new Uint8Array(expected));
   });
 
   it.each([
@@ -43,7 +45,7 @@ describe('byte utils', () => {
     { value: '616263', expected: [97, 98, 99] },
     { value: '4c6f72656d20697073756d20646f6c6f722073697420616d6574', expected: [76, 111, 114, 101, 109, 32, 105, 112, 115, 117, 109, 32, 100, 111, 108, 111, 114, 32, 115, 105, 116, 32, 97, 109, 101, 116] },
   ])('gets bytes from hex string', ({ value, expected }) => {
-    expect(HexToBytes(value)).toEqual(new Uint8Array(expected));
+    expect(hexToBytes(value)).toEqual(new Uint8Array(expected));
   });
 
   it.each([
@@ -84,5 +86,14 @@ describe('byte utils', () => {
     { value: [6, 111, 114, 101, 109, 32, 105, 112, 115, 117, 109], expected: '066f72656d20697073756d' },
   ])('converts bytes to hex string', ({ value, expected }) => {
     expect(bytesToHex(new Uint8Array(value)).toString()).toBe(expected);
+  });
+
+  it.each([
+    { value1: [], value2: [], expected: [] },
+    { value1: [6, 111, 114, 101, 109, 32], value2: [], expected: [6, 111, 114, 101, 109, 32] },
+    { value1: [], value2: [105, 112, 115, 117, 109], expected: [105, 112, 115, 117, 109] },
+    { value1: [6, 111, 114, 101, 109, 32], value2: [105, 112, 115, 117, 109], expected: [6, 111, 114, 101, 109, 32, 105, 112, 115, 117, 109] },
+  ])('concatenate byte arrays', ({ value1, value2, expected }) => {
+    expect(concatBytes(new Uint8Array(value1), new Uint8Array(value2))).toEqual(new Uint8Array(expected));
   });
 });

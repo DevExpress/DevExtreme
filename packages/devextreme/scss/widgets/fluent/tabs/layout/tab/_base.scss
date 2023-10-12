@@ -19,7 +19,7 @@
 
 .dx-tab {
   padding: $fluent-tabs-item-padding;
-  min-width: $fluent-tab-min-width;
+  min-width: 0;
   background-color: $tabs-tab-background;
   color: $tabs-tab-color;
 
@@ -86,7 +86,7 @@
     color: $tabs-tab-icon-color;
     visibility: visible;
 
-    @include dx-icon-sizing($fluent-base-icon-size);
+    @include dx-icon-sizing($fluent-tabs-icon-size);
   }
 }
 
