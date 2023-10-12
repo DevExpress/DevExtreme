@@ -163,7 +163,10 @@ const MultiView = CollectionWidget.inherit({
         this.callBase();
 
         const selectedItemIndices = this._getSelectedItemIndices();
+
         this._updateItemsVisibility(selectedItemIndices[0]);
+        this._setElementAria();
+        this._setItemsAria();
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
@@ -209,9 +212,6 @@ const MultiView = CollectionWidget.inherit({
         deferRender(() => {
             const selectedItemIndices = this._getSelectedItemIndices();
             this._updateItems(selectedItemIndices[0]);
-
-            this._setElementAria();
-            this._setItemsAria();
         });
     },
 
