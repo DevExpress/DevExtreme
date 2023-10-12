@@ -269,15 +269,6 @@ QUnit.module('widget options', moduleSetup, () => {
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('role for items', function(assert) {
-        const $element = $('#accordion').dxAccordion({
-            items: [{ title: 'Title 1', text: 'Text 1' }]
-        });
-        const $item = $element.find(`.${ACCORDION_ITEM_CLASS}`);
-
-        assert.equal($item.attr('role'), 'region', 'role for item is correct');
-    });
-
     QUnit.test('body should be hidden if item is closed', function(assert) {
         const accordion = new Accordion($('#accordion'), {
             items: [{ title: 'Title 1', text: 'Text 1' }],
@@ -296,12 +287,11 @@ QUnit.module('aria accessibility', () => {
         });
         const $itemTitle = $element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`);
         const $itemBody = $element.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
-        const $item = $element.find(`.${ACCORDION_ITEM_CLASS}`);
 
         const accordionTitleId = $itemTitle.attr('id');
 
         assert.strictEqual(typeof accordionTitleId, 'string');
-        assert.strictEqual($item.attr('aria-labelledby'), accordionTitleId);
+        assert.strictEqual($itemBody.attr('role'), 'application');
         assert.strictEqual($itemBody.attr('aria-labelledby'), accordionTitleId);
     });
 });

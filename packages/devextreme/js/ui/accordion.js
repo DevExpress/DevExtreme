@@ -6,7 +6,7 @@ import { name as clickEventName } from '../events/click';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
-import { deferRender } from '../core/utils/common';
+import { deferRender, noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import * as iteratorUtils from '../core/utils/iterator';
 import { isPlainObject, isDefined } from '../core/utils/type';
@@ -61,7 +61,6 @@ const Accordion = CollectionWidget.inherit({
 
             selectByClick: true,
             activeStateEnabled: true,
-            _itemAttributes: { role: 'region' },
             _animationEasing: 'ease'
         });
     },
@@ -205,7 +204,6 @@ const Accordion = CollectionWidget.inherit({
         }));
 
         $(itemTitle).attr('id', guid);
-        this.setAria('labelledby', guid, $(itemTitle).parent());
 
         this._attachItemTitleClickAction(itemTitle);
 
@@ -226,6 +224,7 @@ const Accordion = CollectionWidget.inherit({
         }));
         deferred.done(() => {
             const bodyContent = callBase();
+            $(bodyContent).attr('role', 'application');
             this.setAria('labelledby', guid, $(bodyContent));
         });
     },
@@ -355,7 +354,7 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _setAriaSelectionAttribute($target, value) {
-        this.setAria('expanded', value, $target);
+        this.setAria('expanded', value, $target.find(`.${ACCORDION_ITEM_BODY_CLASS}`));
     },
 
     _splitFreeSpace: function(freeSpace) {
@@ -463,8 +462,9 @@ const Accordion = CollectionWidget.inherit({
 
     updateDimensions: function() {
         return this._updateItemHeights(false);
-    }
+    },
 
+    _refreshActiveDescendant: noop,
 });
 
 registerComponent('dxAccordion', Accordion);
