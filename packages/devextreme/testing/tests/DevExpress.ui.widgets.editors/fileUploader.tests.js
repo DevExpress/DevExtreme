@@ -4355,18 +4355,18 @@ QUnit.module('dxButton integration', moduleConfig, () => {
             dialogTrigger: $customDialogTrigger,
             visible: false
         }).dxFileUploader('instance');
+        const spy = sinon.spy();
 
-        sinon.stub(instance, '_selectButtonClickHandler');
+        $('.dx-fileuploader-input').on('click', spy);
 
         instance.option({
             uploadMode: 'useButtons',
         });
-        assert.strictEqual(instance._selectButtonClickHandler.callCount, 0, 'attachHandlers method not called');
+        assert.strictEqual(spy.callCount, 0, 'click on input not fired');
 
         const keyboard = keyboardMock($customDialogTrigger);
         keyboard.keyDown('enter');
 
-        assert.strictEqual(instance._selectButtonClickHandler.callCount, 1, 'attachHandlers method called');
-        instance._selectButtonClickHandler.restore();
+        assert.strictEqual(spy.callCount, 1, 'click on input fired');
     });
 });
