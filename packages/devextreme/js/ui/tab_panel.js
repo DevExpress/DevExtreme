@@ -149,7 +149,7 @@ const TabPanel = MultiView.inherit({
         return { role: 'tabpanel' };
     },
 
-    _getItemsAria() {
+    _getItemAria() {
         return { role: 'tabpanel' };
     },
 

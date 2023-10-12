@@ -229,7 +229,7 @@ const MultiView = CollectionWidget.inherit({
         this.setAria(aria, this.$element());
     },
 
-    _getItemsAria({ itemIndex, itemsCount }) {
+    _getItemAria({ itemIndex, itemsCount }) {
         const aria = {
             role: 'group',
             'roledescription': messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
