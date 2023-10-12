@@ -57,7 +57,6 @@ const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const MULTIVIEW_ITEM_HIDDEN_CLASS = 'dx-multiview-item-hidden';
 
 const toSelector = cssClass => `.${cssClass}`;
-
 const position = $element => translator.locate($element).left;
 
 const mockFxAnimate = (animations, type, output, startAction) => {
@@ -100,6 +99,14 @@ const animationCapturing = {
         delete this._capturedAnimations;
         delete this._animations;
     }
+};
+
+const multiViewItemAttributeMap = (index) => {
+    return {
+        'role': 'group',
+        'aria-roledescription': 'View',
+        'aria-label': `${index + 1} of 2`,
+    };
 };
 
 
@@ -1175,18 +1182,35 @@ QUnit.module('aria accessibility', {
         });
     });
 
-    QUnit.test('item should contain correct aria attributes', function(assert) {
+    function checkAttributes(assert, items) {
+        items.forEach((item, index) => {
+            const attributeMap = multiViewItemAttributeMap(index);
+
+            Object.keys(attributeMap).forEach(key => {
+                assert.strictEqual(item.attr(key), attributeMap[key], `${key} attribute is correct`);
+            });
+        });
+    }
+
+    QUnit.test('items should contain correct aria attributes', function(assert) {
         const $element = $('#multiView').dxMultiView({ items: [1, 2] });
-        const $item = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+        const $firstItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+        const $secondItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
 
-        const attributeMap = {
-            'role': 'group',
-            'aria-roledescription': 'View',
-            'aria-label': '1 of 2',
-        };
+        checkAttributes(assert, [$firstItem, $secondItem]);
+    });
 
-        Object.keys(attributeMap).forEach(key => {
-            assert.strictEqual($item.attr(key), attributeMap[key], `${key} attribute is correct`);
+    ['dataSource', 'items'].forEach(prop => {
+        QUnit.test(`items should contain correct aria attributes when ${prop} was changed in runtime`, function(assert) {
+            const $element = $('#multiView').dxMultiView({ [prop]: [1, 2] });
+            const instance = $element.dxMultiView('instance');
+
+            instance.option(prop, [3, 4]);
+
+            const $firstItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+            const $secondItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+
+            checkAttributes(assert, [$firstItem, $secondItem]);
         });
     });
 });
