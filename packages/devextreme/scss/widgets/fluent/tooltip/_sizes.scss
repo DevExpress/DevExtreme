@@ -3,11 +3,14 @@
 // adduse
 
 $fluent-tooltip-padding: null !default;
+$fluent-tooltip-font-size: null !default;
 
 @if $size == "default" {
-  $fluent-tooltip-padding: 6px 8px !default;
+  $fluent-tooltip-padding: 8px 12px !default;
+  $fluent-tooltip-font-size: 12px;
 }
 
 @else if $size == "compact" {
   $fluent-tooltip-padding: 4px 6px !default;
+  $fluent-tooltip-font-size: 12px;
 }
