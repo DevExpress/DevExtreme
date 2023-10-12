@@ -327,7 +327,7 @@ test('dateBox keyboard navigation via `shift+tab` key if applyValueMode is useBu
   await t
     .expect(dateBox.option('opened'))
     .eql(true)
-    .expect(dateBox.getPopup().getApplyButton().isFocused)
+    .expect(dateBox.getPopup().getCancelButton().isFocused)
     .ok();
 
   await t
