@@ -83,6 +83,12 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   position: relative;
 }
 
+.dx-list-group-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: $fluent-list-item-gap;
+}
+
 .dx-list-collapsible-groups .dx-list-group-header {
   &::before {
     content: none;
@@ -246,7 +252,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-group-header {
-    font-weight: normal;
+    font-weight: 500;
     padding: $fluent-list-group-header-vertical-padding $item-horizontal-padding;
     background: $list-group-header-bg;
     color: $list-expanded-group-color;
@@ -271,6 +277,10 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-items {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+
     &:not(:first-of-type) {
       .dx-list-item {
         margin-top: 0;
@@ -450,6 +460,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     border: 1px solid $list-holdmenu-border-color;
     border-radius: $base-border-radius;
     box-shadow: $list-holdmenu-shadow-color 0 2px 7.2px 0;
+
+    .dx-list-items {
+      margin-left: $fluent-list-vertical-padding;
+      margin-right: $fluent-list-vertical-padding;
+    }
   }
 
   .dx-state-disabled {
