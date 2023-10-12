@@ -1,9 +1,9 @@
 @use "sass:math";
 
-@mixin dx-popover-arrow-size($width) {
+@mixin dx-popover-arrow-size($width, $popover-arrow-offset: 0) {
   $sqrt-2: 1.4142;
   $popover-arrow-width: $width;
-  $popover-arrow-heiht: math.div($popover-arrow-width, 2);
+  $popover-arrow-height: math.div($popover-arrow-width, 2);
 
   .dx-popover-wrapper {
     .dx-popover-arrow::after {
@@ -15,14 +15,14 @@
     &.dx-position-bottom {
       .dx-popover-arrow {
         width: $popover-arrow-width;
-        height: $popover-arrow-heiht;
+        height: $popover-arrow-height + $popover-arrow-offset;
       }
     }
 
     &.dx-position-right,
     &.dx-position-left {
       .dx-popover-arrow {
-        width: $popover-arrow-heiht;
+        width: $popover-arrow-height + $popover-arrow-offset;
         height: $popover-arrow-width;
       }
     }
