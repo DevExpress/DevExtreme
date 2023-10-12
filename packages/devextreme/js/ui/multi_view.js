@@ -248,7 +248,7 @@ const MultiView = CollectionWidget.inherit({
         const itemsCount = this._itemsCount();
 
         $itemElements.each(((itemIndex, item) => {
-            const aria = this._getItemsAria({ itemIndex, itemsCount });
+            const aria = this._getItemAria({ itemIndex, itemsCount });
 
             this.setAria(aria, $(item));
         }));
