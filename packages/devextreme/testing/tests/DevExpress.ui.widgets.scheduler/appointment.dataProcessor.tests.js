@@ -40,7 +40,8 @@ const createAppointmentDataProvider = (options) => {
                 options.dataSource.items(),
                 options.dataAccessors,
                 appointmentDuration,
-                { createDate: date => date }
+                { createDate: date => date },
+                0
             );
         }
     };
@@ -716,7 +717,8 @@ module('Server side filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1, 0),
-            max: new Date(2015, 0, 3)
+            max: new Date(2015, 0, 3),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
@@ -811,7 +813,8 @@ module('Client side after filtering', () => {
             min: new Date(2015, 0, 1),
             max: new Date(2015, 0, 1),
             startDayHour: 3,
-            endDayHour: 7
+            endDayHour: 7,
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }], 'Appointments are OK');
@@ -854,7 +857,8 @@ module('Client side after filtering', () => {
             min: new Date(2015, 0, 1),
             max: new Date(2015, 0, 1),
             startDayHour: 3,
-            endDayHour: 7
+            endDayHour: 7,
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], 'Appointments are OK. Appointment \'a\' was filtered');
@@ -898,7 +902,8 @@ module('Client side after filtering', () => {
             min: new Date(2015, 0, 1),
             max: new Date(2015, 0, 1),
             startDayHour: 3.5,
-            endDayHour: 7.5
+            endDayHour: 7.5,
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }], 'Appointments are OK');
@@ -947,7 +952,8 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2014, 11, 31).toString(),
-            max: new Date(2015, 0, 1, 23, 59).toString()
+            max: new Date(2015, 0, 1, 23, 59).toString(),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [
@@ -996,7 +1002,8 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
-            max: new Date(2015, 0, 11, 7, 0).toString()
+            max: new Date(2015, 0, 11, 7, 0).toString(),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [
@@ -1045,7 +1052,8 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
-            max: new Date(2015, 0, 5, 7, 0).toString()
+            max: new Date(2015, 0, 5, 7, 0).toString(),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [
@@ -1091,7 +1099,8 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1),
-            max: new Date(2015, 11, 27)
+            max: new Date(2015, 11, 27),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [
@@ -1138,7 +1147,8 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1),
-            max: new Date(2015, 11, 27)
+            max: new Date(2015, 11, 27),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [
@@ -1190,6 +1200,7 @@ module('Client side after filtering', () => {
             endDayHour: 5,
             min: new Date(2015, 2, 16),
             max: new Date(2015, 2, 17),
+            viewOffset: 0,
             resources: [
                 {
                     name: 'ownerId',
@@ -1244,7 +1255,8 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             allDay: false,
             min: new Date(2015, 0, 1, 3),
-            max: new Date(2015, 0, 1, 8)
+            max: new Date(2015, 0, 1, 8),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
@@ -1289,7 +1301,8 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 10,
             min: new Date(2015, 0, 1, 3),
-            max: new Date(2015, 0, 1, 9, 59)
+            max: new Date(2015, 0, 1, 9, 59),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
@@ -1346,7 +1359,8 @@ module('Client side after filtering', () => {
                 startDayHour: 3,
                 endDayHour: 10,
                 min: new Date(2015, 0, 1, 3),
-                max: new Date(2015, 0, 1, 9, 59)
+                max: new Date(2015, 0, 1, 9, 59),
+                viewOffset: 0,
             }, prepareDataItems());
 
             assert.equal(!!appts.length, expectedVisibility, 'Filtered correctly');
@@ -1372,7 +1386,8 @@ module('Client side after filtering', () => {
             startDayHour: 0,
             endDayHour: 24,
             min: new Date(2020, 6, 15),
-            max: new Date(2020, 6, 15, 23, 59)
+            max: new Date(2020, 6, 15, 23, 59),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.ok(!appts.length, 'Filtered');
@@ -1412,9 +1427,12 @@ module('Client side after filtering', () => {
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 1,
+            viewStartDayHour: 1,
             endDayHour: 10,
+            viewEndDayHour: 10,
             min: new Date(2015, 1, 23, 1, 0),
-            max: new Date(2015, 2, 1, 9, 59)
+            max: new Date(2015, 2, 1, 9, 59),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [], 'Appointments are OK');
@@ -1457,6 +1475,7 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 2, 2, 1, 0),
             max: new Date(2015, 2, 8, 9, 59),
+            viewOffset: 0,
             supportMultiDayAppointments: true
         }, prepareDataItems());
 
@@ -1499,7 +1518,8 @@ module('Client side after filtering', () => {
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 2, 1, 1, 0),
-            max: new Date(2015, 2, 8, 9, 59)
+            max: new Date(2015, 2, 8, 9, 59),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts, [], 'Appointments are OK');
@@ -1546,7 +1566,8 @@ module('Client side after filtering', () => {
             startDayHour: 0,
             endDayHour: 24,
             min: new Date(2015, 2, 1),
-            max: new Date(2015, 2, 8)
+            max: new Date(2015, 2, 8),
+            viewOffset: 0,
         }, prepareDataItems());
 
         assert.deepEqual(appts[0].EndDate, new Date(2015, 2, 1, 12, 0), 'EndDate of appointment should be replaced by correct value');
@@ -1672,6 +1693,7 @@ module('Virtual Scrolling', () => {
                 viewEndDayHour: 18,
                 min: new Date(2021, 8, 6, 9),
                 max: new Date(2021, 8, 6, 18),
+                viewOffset: 0,
                 allDay: false
             }, prepareDataItems());
 

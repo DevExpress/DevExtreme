@@ -2,6 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
 import { calculateIsGroupedAllDayPanel } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import timeZoneUtils from '../../m_utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
@@ -9,6 +10,7 @@ import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
 import { getViewDataGeneratorByViewType } from './m_utils';
 
+// TODO: Vinogradov types refactoring.
 export default class ViewDataProvider {
   viewDataGenerator: any;
 
@@ -20,7 +22,7 @@ export default class ViewDataProvider {
 
   viewDataMap: any;
 
-  _groupedDataMapProvider: any;
+  _groupedDataMapProvider!: GroupedDataMapProvider;
 
   _options: any;
 
@@ -38,7 +40,7 @@ export default class ViewDataProvider {
     this.completeViewDataMap = [];
     this.completeDateHeaderMap = [];
     this.viewDataMap = {};
-    this._groupedDataMapProvider = null;
+    this._groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
   }
 
   get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
@@ -79,6 +81,7 @@ export default class ViewDataProvider {
       {
         isVerticalGrouping: renderOptions.isVerticalGrouping,
         viewType: renderOptions.viewType,
+        viewOffset: options.viewOffset,
       },
     );
 
@@ -123,6 +126,7 @@ export default class ViewDataProvider {
       groupOrientation,
       groupByDate,
       isAllDayPanelVisible,
+      viewOffset,
       ...restOptions
     } = renderOptions;
 
@@ -136,6 +140,7 @@ export default class ViewDataProvider {
       groups,
       groupOrientation,
       isAllDayPanelVisible,
+      viewOffset,
     };
   }
 
@@ -166,8 +171,8 @@ export default class ViewDataProvider {
     return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
   }
 
-  findAllDayGroupCellStartDate(groupIndex, startDate) {
-    return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex, startDate);
+  findAllDayGroupCellStartDate(groupIndex: number): Date | null {
+    return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
   findCellPositionInMap(cellInfo) {
@@ -255,7 +260,7 @@ export default class ViewDataProvider {
   }
 
   isGroupIntersectDateInterval(groupIndex, startDate, endDate) {
-    const groupStartDate = this.getGroupStartDate(groupIndex);
+    const groupStartDate = this.getGroupStartDate(groupIndex)!;
     const groupEndDate = this.getGroupEndDate(groupIndex);
 
     return startDate < groupEndDate && endDate > groupStartDate;
@@ -297,16 +302,15 @@ export default class ViewDataProvider {
     return undefined;
   }
 
-  _compareDatesAndAllDay(date, cellStartDate, cellEndDate, allDay) {
-    const time = date.getTime();
-    const trimmedTime = dateUtils.trimTime(date).getTime();
-    const cellStartTime = cellStartDate.getTime();
-    const cellEndTime = cellEndDate.getTime();
-
-    return (!allDay
-            && time >= cellStartTime
-            && time < cellEndTime)
-            || (allDay && trimmedTime === cellStartTime);
+  private _compareDatesAndAllDay(
+    date: Date,
+    cellStartDate: Date,
+    cellEndDate: Date,
+    allDay: boolean,
+  ): boolean {
+    return allDay
+      ? dateUtils.sameDate(date, cellStartDate)
+      : date >= cellStartDate && date < cellEndDate;
   }
 
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
@@ -421,9 +425,10 @@ export default class ViewDataProvider {
   }
 
   getLastCellEndDate() {
-    return new Date(
+    const lastEndDate = new Date(
       this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute'),
     );
+    return dateUtilsTs.addOffsets(lastEndDate, [-this._options.viewOffset]);
   }
 
   getLastViewDateByEndDayHour(endDayHour) {

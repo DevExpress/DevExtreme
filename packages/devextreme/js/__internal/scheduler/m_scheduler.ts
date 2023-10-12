@@ -42,6 +42,7 @@ import { custom as customDialog } from '@js/ui/dialog';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
@@ -79,6 +80,8 @@ import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
+
+const toMs = dateUtils.dateToMilliseconds;
 
 const MINUTES_IN_HOUR = 60;
 const DEFAULT_AGENDA_DURATION = 7;
@@ -250,6 +253,8 @@ class Scheduler extends Widget<any> {
       startDayHour: 0,
 
       endDayHour: 24,
+
+      offset: 0,
 
       editing: {
         allowAdding: true,
@@ -629,6 +634,19 @@ class Scheduler extends Widget<any> {
 
         this._appointments.option('items', []);
         this._updateOption('workSpace', name, value);
+        this._appointments.repaint();
+        this._filterAppointmentsByDate();
+
+        this._postponeDataSourceLoading();
+        break;
+        // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
+      case 'offset':
+        this._validateDayHours();
+
+        this.updateInstances();
+
+        this._appointments.option('items', []);
+        this._updateOption('workSpace', 'viewOffset', value * toMs('minute'));
         this._appointments.repaint();
         this._filterAppointmentsByDate();
 
@@ -1039,6 +1057,7 @@ class Scheduler extends Widget<any> {
       resources: this.option('resources'),
       startDayHour: this._getCurrentViewOption('startDayHour'),
       endDayHour: this._getCurrentViewOption('endDayHour'),
+      viewOffset: this._getCurrentViewOption('offset') * toMs('minute'),
       appointmentDuration: this._getCurrentViewOption('cellDuration'),
       allDayPanelMode: this._getCurrentViewOption('allDayPanelMode'),
       showAllDayPanel: this.option('showAllDayPanel'),
@@ -1682,6 +1701,7 @@ class Scheduler extends Widget<any> {
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
+      viewOffset: this.option('offset') * toMs('minute'),
       tabIndex: this.option('tabIndex'),
       accessKey: this.option('accessKey'),
       focusStateEnabled: this.option('focusStateEnabled'),
@@ -2073,8 +2093,9 @@ class Scheduler extends Widget<any> {
     }
 
     if (info) {
-      rawTargetedAppointment.displayStartDate = new Date(info.appointment.startDate);
-      rawTargetedAppointment.displayEndDate = new Date(info.appointment.endDate);
+      const viewOffset = this._getCurrentViewOption('offset') * toMs('minute');
+      rawTargetedAppointment.displayStartDate = dateUtilsTs.addOffsets(new Date(info.appointment.startDate), [viewOffset]);
+      rawTargetedAppointment.displayEndDate = dateUtilsTs.addOffsets(new Date(info.appointment.endDate), [viewOffset]);
     }
 
     return rawTargetedAppointment;
@@ -2223,8 +2244,6 @@ class Scheduler extends Widget<any> {
 
     return getAppointmentTakesAllDay(
       appointment,
-      this._getCurrentViewOption('startDayHour'),
-      this._getCurrentViewOption('endDayHour'),
       this._getCurrentViewOption('allDayPanelMode'),
     );
   }
