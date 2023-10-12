@@ -9,6 +9,7 @@ import { isDefined } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import { hasResourceValue } from '@js/renovation/ui/scheduler/resources/hasResourceValue';
+import { current, isFluent } from '@js/ui/themes';
 
 export const getValueExpr = (resource) => resource.valueExpr || 'id';
 export const getDisplayExpr = (resource) => resource.displayExpr || 'text';
@@ -173,6 +174,7 @@ export const createResourceEditorModel = (resources, loadedResources) => resourc
       dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
       displayExpr: getDisplayExpr(resource),
       valueExpr: getValueExpr(resource),
+      stylingMode: isFluent(current()) ? 'filled' : 'outlined',
     },
     dataField,
     editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
