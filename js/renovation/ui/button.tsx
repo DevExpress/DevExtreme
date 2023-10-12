@@ -251,10 +251,14 @@ export class Button extends JSXComponent(ButtonProps) {
 
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
       (originalEvent as Event).preventDefault();
-      this.onWidgetClick(originalEvent as Event);
+      this.emitClickEvent();
     }
 
     return undefined;
+  }
+
+  emitClickEvent(): void {
+    this.contentRef.current!.click();
   }
 
   get aria(): Record<string, string> {
