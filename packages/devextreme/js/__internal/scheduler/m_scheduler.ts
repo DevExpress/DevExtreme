@@ -2094,8 +2094,18 @@ class Scheduler extends Widget<any> {
   }
 
   _updateAppointment(target, rawAppointment, onUpdatePrevented?: any, dragEvent?: any) {
+    const adapter = createAppointmentAdapter(
+      rawAppointment,
+      this._dataAccessors,
+      this.timeZoneCalculator,
+    );
+    if (adapter.allDay) {
+      adapter.startDate = dateUtils.trimTime(adapter.startDate);
+      adapter.endDate = dateUtils.trimTime(adapter.endDate);
+    }
+    const newAppointment = adapter.source();
     const updatingOptions = {
-      newData: rawAppointment,
+      newData: newAppointment,
       oldData: extend({}, target),
       cancel: false,
     };
@@ -2122,11 +2132,11 @@ class Scheduler extends Widget<any> {
       let deferred = new Deferred();
 
       if (!canceled) {
-        this._expandAllDayPanel(rawAppointment);
+        this._expandAllDayPanel(newAppointment);
 
         try {
           deferred = this.appointmentDataProvider
-            .update(target, rawAppointment)
+            .update(target, newAppointment)
             .done(() => {
               dragEvent && dragEvent.cancel.resolve(false);
             })
