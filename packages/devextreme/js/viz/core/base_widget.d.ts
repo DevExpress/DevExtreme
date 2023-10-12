@@ -888,7 +888,7 @@ export interface BaseWidgetAnnotationConfig {
 
 /**
  * @namespace DevExpress.viz
- * @deprecated Use Font from DevExpress.common.charts.Font instead
+ * @deprecated Use Font from common/charts instead
  */
 export type Font = CommonFont;
 
