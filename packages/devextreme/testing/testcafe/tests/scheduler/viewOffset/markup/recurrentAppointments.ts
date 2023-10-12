@@ -34,6 +34,21 @@ const APPOINTMENTS = [
     text: 'All day 01 -> 02',
   },
 ];
+// NOTE: Appointment has increased length for testing purpose (it makes screenshots more obvious).
+const APPOINTMENTS_TIMELINE = [
+  {
+    startDate: '2023-08-01T04:00:00',
+    endDate: '2023-08-01T18:00:00',
+    recurrenceRule: 'FREQ=HOURLY;INTERVAL=24',
+    text: 'Hourly 04-18',
+  },
+  {
+    startDate: '2023-08-01T20:00:00',
+    endDate: '2023-08-02T10:00:00',
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,TH,FR',
+    text: 'Daily 20-10',
+  },
+];
 
 const getScreenshotName = (
   viewType: string,
@@ -49,6 +64,13 @@ const getScreenshotName = (
   { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
+  { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
+  { views: [{ type: 'timelineWeek', cellDuration: 1440, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
+  // NOTE: The timelineWorkWeek view has some existing issues
+  // Therefore some screenshots is invalid :(
+  { views: [{ type: 'timelineWorkWeek', cellDuration: 1440, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
+  { views: [{ type: 'timelineWorkWeek', cellDuration: 1440, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS_TIMELINE },
+  { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
 ].forEach(({ views, dataSource }) => {
   [
     0,
