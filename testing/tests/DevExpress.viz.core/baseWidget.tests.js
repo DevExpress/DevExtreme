@@ -1191,6 +1191,37 @@ QUnit.test('with set drawn handler', function(assert) {
     }]);
 });
 
+QUnit.test('Callback for event attached with on() must calls only once with own widget (T1192401)', function(assert) {
+    const onDrawnOneCallback = sinon.spy();
+    const onDrawnTwoCallback = sinon.spy();
+
+    $(this.$container[0].parentNode).append('<div id="container2"></div>');
+
+    const widget1 = new dxBaseWidgetTester($('#container'), {});
+    const widget2 = new dxBaseWidgetTester($('#container2'), {});
+
+    widget1.on('drawn', onDrawnOneCallback);
+    widget2.on('drawn', onDrawnTwoCallback);
+
+    widget1._eventTrigger('drawn', {});
+    widget2._eventTrigger('drawn', {});
+
+    // assert
+    assert.equal(onDrawnOneCallback.callCount, 1);
+    assert.deepEqual(onDrawnOneCallback.lastCall.args, [{
+        component: widget1,
+        element: widget1.element()
+    }]);
+    assert.equal(onDrawnTwoCallback.callCount, 1);
+    assert.deepEqual(onDrawnTwoCallback.lastCall.args, [{
+        component: widget2,
+        element: widget2.element()
+    }]);
+
+    // clean
+    $('#container2').remove();
+});
+
 QUnit.module('isReady', $.extend({}, environment, {
     triggerDrawn: function() {
         this.widget._drawn();
