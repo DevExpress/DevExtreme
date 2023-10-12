@@ -83,6 +83,13 @@ const getScreenshotName = (
   { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
   { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
   { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
+  { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineDay },
+  { views: [{ type: 'timelineWeek', cellDuration: 1440, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineWeek },
+  // NOTE: The timelineWorkWeek view has some existing issues
+  // Therefore some screenshots is invalid :(
+  { views: [{ type: 'timelineWorkWeek', cellDuration: 1440, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineWeek },
+  { views: [{ type: 'timelineWorkWeek', cellDuration: 1440, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.timelineWeekWithFirstDay },
+  { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
 ].forEach(({ views, dataSource }) => {
   [
     0,
