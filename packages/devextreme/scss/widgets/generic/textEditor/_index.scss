@@ -247,7 +247,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-inline-block-height,
   math.div(($generic-base-border-width + $generic-base-font-size), 2),
-  $generic-texteditor-label-outside-height,
+  $generic-texteditor-label-outside-top-offset,
   1.5px,
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-base-inline-borderedwidget-horizontal-padding,
