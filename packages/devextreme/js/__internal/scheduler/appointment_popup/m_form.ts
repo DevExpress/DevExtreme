@@ -6,7 +6,6 @@ import '@js/ui/select_box';
 
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
-import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import DataSource from '@js/data/data_source';
@@ -23,8 +22,6 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Main: 'mainGroup',
   Recurrence: 'recurrenceGroup',
 };
-
-const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
   const isCurrentDateCorrect = value === null || !!value;
@@ -300,26 +297,6 @@ export class AppointmentForm {
           editorOptions: {
             onValueChanged: (args) => {
               const { value } = args;
-              const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
-              const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
-              const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
-              const endDate = dateSerialization.deserializeDate(endDateEditor.option('value'));
-
-              if (this.semaphore.isFree() && startDate) {
-                if (value) {
-                  const allDayStartDate = dateUtils.trimTime(startDate);
-                  const allDayEndDate = dateUtils.trimTime(endDate);
-                  startDateEditor.option('value', new Date(allDayStartDate));
-                  endDateEditor.option('value', new Date(allDayEndDate));
-                } else {
-                  const startDateWithStartHour = getDateWithStartHour(startDate, this.scheduler.getStartDayHour());
-                  const endDateWithStartHour = getDateWithStartHour(endDate, this.scheduler.getStartDayHour());
-                  const calculatedEndDate = this.scheduler.getCalculatedEndDate(endDateWithStartHour);
-                  startDateEditor.option('value', startDateWithStartHour);
-                  endDateEditor.option('value', calculatedEndDate);
-                }
-              }
-
               const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${dataExprs.startDateExpr}`;
               const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${dataExprs.endDateExpr}`;
 
