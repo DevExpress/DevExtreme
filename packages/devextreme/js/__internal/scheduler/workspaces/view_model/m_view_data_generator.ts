@@ -10,6 +10,7 @@ import {
   isHorizontalView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
 import { getAllGroups, getGroupCount } from '../../resources/m_utils';
@@ -50,6 +51,7 @@ export class ViewDataGenerator {
       startDayHour,
       endDayHour,
       hoursInterval,
+      viewOffset,
     } = options;
 
     this._setVisibilityDates(options);
@@ -93,8 +95,19 @@ export class ViewDataGenerator {
     }
 
     const completeViewDataMap = this._addKeysToCells(viewDataMap);
+    this.shiftDateTableDates(completeViewDataMap, viewOffset);
 
     return completeViewDataMap;
+  }
+
+  private shiftDateTableDates(viewDataMap, viewOffset) {
+    viewDataMap
+      .forEach((row) => {
+        row.forEach((cell) => {
+          cell.startDate = dateUtilsTs.addOffsets(cell.startDate, [viewOffset]);
+          cell.endDate = dateUtilsTs.addOffsets(cell.endDate, [viewOffset]);
+        });
+      });
   }
 
   _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {

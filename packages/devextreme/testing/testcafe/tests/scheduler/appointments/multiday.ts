@@ -151,6 +151,7 @@ test('it should render all-day appointments if allDayPanelMode is "all"', async 
       text: 'appt-00',
       startDate: new Date(2021, 2, 22, 8),
       endDate: new Date(2021, 2, 22, 10, 30),
+      allDay: true,
     }, {
       text: 'appt-01',
       startDate: new Date(2021, 2, 25, 9),

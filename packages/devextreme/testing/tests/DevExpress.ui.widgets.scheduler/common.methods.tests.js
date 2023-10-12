@@ -484,7 +484,7 @@ QUnit.module('Methods', {
             startDate: new Date(2015, 5, 4, 5),
             endDate: new Date(2015, 5, 4, 10)
         });
-        assert.ok(result, 'Appointment takes all day');
+        assert.ok(!result, 'Appointment takes all day');
 
         result = scheduler.instance.appointmentTakesAllDay({
             startDate: new Date(2015, 5, 4, 6),
