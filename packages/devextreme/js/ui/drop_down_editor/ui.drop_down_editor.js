@@ -14,7 +14,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
 import messageLocalization from '../../localization/message';
-import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
@@ -44,7 +44,7 @@ const DropDownEditor = TextBox.inherit({
                     return;
                 }
 
-                if(this.option('applyValueMode') === 'instantly') {
+                if(!this._popup.getFocusableElements().length) {
                     this.close();
                     return;
                 }
@@ -575,11 +575,44 @@ const DropDownEditor = TextBox.inherit({
             'contentReady': this._contentReadyHandler.bind(this)
         });
 
+        this._attachPopupKeyHandler();
+
         this._contentReadyHandler();
 
         this._setPopupContentId(this._popup.$content());
 
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
+    },
+
+    _attachPopupKeyHandler() {
+        eventsEngine.on(this._popup.$overlayContent(), addNamespace('keydown', this.NAME), (e) => this._popupKeyHandler(e));
+    },
+
+    _popupKeyHandler(e) {
+        switch(normalizeKeyName(e)) {
+            case 'tab':
+                this._popupTabHandler(e);
+                break;
+            case 'escape':
+                this._popupEscHandler(e);
+                break;
+        }
+    },
+
+    _popupTabHandler(e) {
+        const $target = $(e.target);
+        const moveBackward = e.shiftKey && $target.is(this._getFirstPopupElement());
+        const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
+
+        if(moveForward || moveBackward) {
+            eventsEngine.trigger(this.field(), 'focus');
+            e.preventDefault();
+        }
+    },
+
+    _popupEscHandler() {
+        eventsEngine.trigger(this._input(), 'focus');
+        this.close();
     },
 
     _setPopupContentId($popupContent) {
@@ -751,33 +784,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement: function() {
-        return $(this._popup.getFocusableElements()[0]);
+        return $(this._popup.getFocusableElements()).first();
     },
 
     _getLastPopupElement: function() {
-        const elements = this._popup.getFocusableElements();
-        return $(elements[elements.length - 1]);
-    },
-
-    _popupElementTabHandler: function(e) {
-        const $element = $(e.currentTarget);
-
-        if((e.shiftKey && $element.is(this._getFirstPopupElement()))
-            || (!e.shiftKey && $element.is(this._getLastPopupElement()))) {
-
-            eventsEngine.trigger(this._input(), 'focus');
-            e.preventDefault();
-        }
-    },
-
-    _popupElementEscHandler: function() {
-        eventsEngine.trigger(this._input(), 'focus');
-        this.close();
-    },
-
-    _popupButtonInitializedHandler: function(e) {
-        e.component.registerKeyHandler('tab', this._popupElementTabHandler.bind(this));
-        e.component.registerKeyHandler('escape', this._popupElementEscHandler.bind(this));
+        return $(this._popup.getFocusableElements()).last();
     },
 
     _popupToolbarItemsConfig: function() {
@@ -787,7 +798,6 @@ const DropDownEditor = TextBox.inherit({
                 options: {
                     onClick: this._applyButtonHandler.bind(this),
                     text: this.option('applyButtonText'),
-                    onInitialized: this._popupButtonInitializedHandler.bind(this)
                 }
             },
             {
@@ -795,7 +805,6 @@ const DropDownEditor = TextBox.inherit({
                 options: {
                     onClick: this._cancelButtonHandler.bind(this),
                     text: this.option('cancelButtonText'),
-                    onInitialized: this._popupButtonInitializedHandler.bind(this)
                 }
             }
         ];

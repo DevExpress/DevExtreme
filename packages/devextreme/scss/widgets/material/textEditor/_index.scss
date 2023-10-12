@@ -365,7 +365,7 @@ $material-editor-custom-button-margin: 5px;
   $material-texteditor-label-font-size + 2,
   $material-base-inline-block-height,
   math.div(1px + $material-texteditor-label-font-size, 2),
-  20px,
+  $material-texteditor-label-outside-top-offset,
   0.5px,
   $material-filled-texteditor-input-horizontal-padding,
   $material-filled-texteditor-input-horizontal-padding,

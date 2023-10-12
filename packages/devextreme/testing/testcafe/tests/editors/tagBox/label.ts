@@ -27,7 +27,9 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [300, 800]).before(async () => {
+  }, [300, 800]).before(async (t) => {
+    await t.click('html', { offsetX: 0, offsetY: 0 });
+
     const componentOptions = {
       label: 'label text',
       items: [...Array(10)].map((_, i) => `item${i}`),

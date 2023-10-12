@@ -1599,6 +1599,29 @@ QUnit.module('action API', {}, () => {
         assert.strictEqual(warningCount, 1);
     });
 
+    QUnit.test('_createActionByOption should not modify config argument (T1192401)', function(assert) {
+        const instance = new TestComponent();
+
+        const config = { options: [] };
+        const configEtalon = JSON.stringify(config);
+
+        instance._createActionByOption('ondrawn', config)();
+
+        assert.equal(JSON.stringify(config), configEtalon);
+    });
+
+    QUnit.test('_createAction should not modify config argument (T1192401)', function(assert) {
+        const instance = new TestComponent();
+
+        const config = { options: [] };
+        const configEtalon = JSON.stringify(Object.keys(config));
+
+        instance._createAction({}, config)();
+
+        assert.equal(JSON.stringify(Object.keys(config)), configEtalon);
+
+    });
+
     QUnit.test('action executing should fire event handlers with same arguments and context', function(assert) {
         let actionArguments = null;
         let actionContext = null;
