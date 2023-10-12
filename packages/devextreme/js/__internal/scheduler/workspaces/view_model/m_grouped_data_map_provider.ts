@@ -1,5 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 export class GroupedDataMapProvider {
   groupedDataMap: any;
@@ -14,14 +15,10 @@ export class GroupedDataMapProvider {
     this._viewOptions = viewOptions;
   }
 
-  getGroupStartDate(groupIndex) {
+  getGroupStartDate(groupIndex: number): Date | null {
     const firstRow = this.getFirstGroupRow(groupIndex);
 
-    if (firstRow) {
-      const { startDate } = firstRow[0].cellData;
-
-      return startDate;
-    }
+    return firstRow?.[0]?.cellData?.startDate as Date ?? null;
   }
 
   getGroupEndDate(groupIndex) {
@@ -86,36 +83,16 @@ export class GroupedDataMapProvider {
       : startDateVerticalSearch;
   }
 
-  findAllDayGroupCellStartDate(groupIndex, startDate) {
-    const groupStartDate = this.getGroupStartDate(groupIndex);
-
-    return groupStartDate > startDate
-      ? groupStartDate
-      : startDate;
+  findAllDayGroupCellStartDate(groupIndex: number): Date | null {
+    const groupedData = this.getGroupFromDateTableGroupMap(groupIndex);
+    const cellData = groupedData?.[0]?.[0]?.cellData;
+    return cellData?.startDate as Date ?? null;
   }
 
   findCellPositionInMap(cellInfo) {
     const {
       groupIndex, startDate, isAllDay, index,
     } = cellInfo;
-
-    const startTime = isAllDay
-      ? dateUtils.trimTime(startDate).getTime()
-      : startDate.getTime();
-
-    const isStartDateInCell = (cellData) => {
-      if (!isDateAndTimeView(this._viewOptions.viewType)) {
-        return dateUtils.sameDate(startDate, cellData.startDate);
-      }
-
-      const cellStartTime = cellData.startDate.getTime();
-      const cellEndTime = cellData.endDate.getTime();
-
-      return isAllDay
-        ? cellData.allDay && startTime >= cellStartTime && startTime <= cellEndTime
-        : startTime >= cellStartTime && startTime < cellEndTime;
-    };
-
     const {
       allDayPanelGroupedMap,
       dateTableGroupedMap,
@@ -125,15 +102,15 @@ export class GroupedDataMapProvider {
       ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : []
       : dateTableGroupedMap[groupIndex] || [];
 
-    for (let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
       const row = rows[rowIndex];
 
-      for (let columnIndex = 0; columnIndex < row.length; ++columnIndex) {
+      for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
         const cell = row[columnIndex];
         const { cellData } = cell;
 
         if (this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
-          if (isStartDateInCell(cellData)) {
+          if (this.isStartDateInCell(startDate, isAllDay, cellData)) {
             return cell.position;
           }
         }
@@ -141,6 +118,25 @@ export class GroupedDataMapProvider {
     }
 
     return undefined;
+  }
+
+  private isStartDateInCell(startDate, inAllDayRow, cellData): boolean {
+    const { viewType, viewOffset } = this._viewOptions;
+    const cellStartDate = dateUtilsTs.addOffsets(cellData.startDate, [-viewOffset]);
+    const cellEndDate = dateUtilsTs.addOffsets(cellData.endDate, [-viewOffset]);
+
+    switch (true) {
+      case !isDateAndTimeView(viewType):
+      case inAllDayRow && cellData.allDay:
+        return dateUtils.sameDate(
+          dateUtilsTs.addOffsets(startDate, [0]),
+          cellStartDate,
+        );
+      case !inAllDayRow:
+        return startDate >= cellStartDate && startDate < cellEndDate;
+      default:
+        return false;
+    }
   }
 
   _isSameGroupIndexAndIndex(cellData, groupIndex, index) {

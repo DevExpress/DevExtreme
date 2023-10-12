@@ -1,28 +1,17 @@
 import { isDefined } from '../../../../../core/utils/type';
 import dateUtils from '../../../../../core/utils/date';
 
+// TODO Vinogradov refactoring: move this module to __internal.
+
 export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
 
-const getAppointmentDurationInHours = (
+const toMs = dateUtils.dateToMilliseconds;
+const DAY_HOURS = 24;
+
+const getDurationInHours = (
   startDate: Date,
   endDate: Date,
-): number => (endDate.getTime() - startDate.getTime()) / dateUtils.dateToMilliseconds('hour');
-
-const appointmentHasShortDayDuration = (
-  startDate: Date,
-  endDate: Date,
-  viewStartDayHour: number,
-  viewEndDayHour: number,
-): boolean => {
-  const appointmentDurationInHours = getAppointmentDurationInHours(startDate, endDate);
-  const viewDurationInHours = viewEndDayHour - viewStartDayHour;
-  const startDateHours = startDate.getHours();
-  const endDateHours = endDate.getHours();
-
-  return appointmentDurationInHours >= viewDurationInHours
-    && startDateHours === viewStartDayHour
-    && endDateHours === viewEndDayHour;
-};
+): number => Math.floor((endDate.getTime() - startDate.getTime()) / toMs('hour'));
 
 export const getAppointmentTakesAllDay = (
   appointmentAdapter: {
@@ -30,47 +19,29 @@ export const getAppointmentTakesAllDay = (
     startDate: Date;
     endDate: Date | undefined | null;
   },
-  viewStartDayHour: number,
-  viewEndDayHour: number,
   allDayPanelMode: AllDayPanelModeType,
 ): boolean => {
-  const hasAllDay = (): boolean => appointmentAdapter.allDay;
+  const {
+    startDate,
+    endDate,
+    allDay,
+  } = appointmentAdapter;
 
   switch (allDayPanelMode) {
     case 'hidden':
       return false;
-
     case 'allDay':
-      return hasAllDay();
-
+      return allDay;
     case 'all':
     default:
-    {
-      if (hasAllDay()) {
+      if (allDay) {
         return true;
       }
-
-      const {
-        startDate,
-        endDate,
-      } = appointmentAdapter;
 
       if (!isDefined(endDate)) {
         return false;
       }
 
-      const appointmentDurationInHours = getAppointmentDurationInHours(
-        startDate,
-        endDate,
-      );
-
-      const dayDuration = 24;
-      return appointmentDurationInHours >= dayDuration || appointmentHasShortDayDuration(
-        startDate,
-        endDate,
-        viewStartDayHour,
-        viewEndDayHour,
-      );
-    }
+      return getDurationInHours(startDate, endDate) >= DAY_HOURS;
   }
 };
