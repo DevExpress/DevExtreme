@@ -1,14 +1,25 @@
-const normalizeDate = (options, date, sourceDate, isStartDate) => {
+import { dateUtilsTs } from '@ts/core/utils/date';
+
+const normalizeDate = (
+  options: any,
+  date: Date,
+  sourceDate: Date,
+  isStartDate: boolean,
+): Date => {
   if (!options.considerTime) {
     return date;
   }
 
+  const { viewOffset } = options;
+
   let result = new Date(date);
+  result = dateUtilsTs.addOffsets(result, [viewOffset]);
+  const shiftedSourceDate = dateUtilsTs.addOffsets(sourceDate, [viewOffset]);
 
   result.setHours(
-    sourceDate.getHours(),
-    sourceDate.getMinutes(),
-    sourceDate.getSeconds(),
+    shiftedSourceDate.getHours(),
+    shiftedSourceDate.getMinutes(),
+    shiftedSourceDate.getSeconds(),
   );
 
   const {
@@ -37,9 +48,19 @@ const normalizeDate = (options, date, sourceDate, isStartDate) => {
       : minDate;
   }
 
+  result = dateUtilsTs.addOffsets(result, [-viewOffset]);
+
   return result;
 };
 
-export const normalizeStartDate = (options, startDate, sourceStartDate) => normalizeDate(options, startDate, sourceStartDate, true);
+export const normalizeStartDate = (
+  options: any,
+  startDate: Date,
+  sourceStartDate: Date,
+): Date => normalizeDate(options, startDate, sourceStartDate, true);
 
-export const normalizeEndDate = (options, endDate, sourceEndDate) => normalizeDate(options, endDate, sourceEndDate, false);
+export const normalizeEndDate = (
+  options: any,
+  endDate: Date,
+  sourceEndDate: Date,
+): Date => normalizeDate(options, endDate, sourceEndDate, false);
