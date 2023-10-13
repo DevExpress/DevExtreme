@@ -37,7 +37,7 @@ fixture.disablePageReloads`Tabs_common`
   });
 });
 
-test('Tabs min-width', async (t) => {
+test('Tabs with width: auto in flex container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs' });
@@ -47,7 +47,7 @@ test('Tabs min-width', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+  await setAttribute('#container', 'style', 'display: flex; width: 800px;');
 
   const dataSource = [
     { text: 'ok' },
