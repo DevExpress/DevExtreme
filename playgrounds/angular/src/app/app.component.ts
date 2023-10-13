@@ -99,6 +99,14 @@ import {
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild(DxPopoverComponent) popover: DxPopoverComponent;
+  
+  value: any = [
+    new Date(),
+    new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
+  ];
+  selectionModes: string[] = ["single", "multiple", "range"];
+  selectionMode = "multiple";
+
   text = 'Initial text';
   formData = { email: '', password: '' };
   emailControl: AbstractControl;

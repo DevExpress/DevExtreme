@@ -2,6 +2,7 @@ import {
   Injectable,
   SimpleChanges,
   IterableDiffers,
+  ɵisListLikeIterable,
 } from '@angular/core';
 
 import {
@@ -43,7 +44,7 @@ export class IterableDifferHelper {
   }
 
   getChanges(prop: string, value: any) {
-    if (this._propertyDiffers[prop]) {
+    if (this._propertyDiffers[prop] && ɵisListLikeIterable(value)) {
       return this._propertyDiffers[prop].diff(value);
     }
   }
