@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import { isMaterial } from '../../../helpers/themeUtils';
+import { isMaterialBased, isFluent } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
@@ -189,27 +189,27 @@ test('Grouped list can not reorder items (T727360)', async (t) => {
 
     .dragToElement(firstGroup.getItem().reorderHandle, firstGroup.getItem(1).element)
     .expect(firstGroup.getItem().text)
-    .eql('12')
+    .eql(isFluent() ? '11' : '12')
     .expect(firstGroup.getItem(1).text)
-    .eql('11')
+    .eql(isFluent() ? '12' : '11')
 
     .click(firstGroup.header)
     .click(secondGroup.header)
 
     .dragToElement(secondGroup.getItem().reorderHandle, secondGroup.getItem(1).element)
     .expect(secondGroup.getItem().text)
-    .eql('22')
+    .eql(isFluent() ? '21' : '22')
     .expect(secondGroup.getItem(1).text)
-    .eql('21')
+    .eql(isFluent() ? '22' : '21')
 
     .click(secondGroup.header)
     .click(thirdGroup.header)
 
     .dragToElement(thirdGroup.getItem().reorderHandle, thirdGroup.getItem(1).element)
     .expect(thirdGroup.getItem().text)
-    .eql(isMaterial() ? '31' : '32')
+    .eql(isMaterialBased() ? '31' : '32')
     .expect(thirdGroup.getItem(1).text)
-    .eql(isMaterial() ? '32' : '31');
+    .eql(isMaterialBased() ? '32' : '31');
 }).before(async () => {
   const data = [
     { group: 'group1', value: '11' },
