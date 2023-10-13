@@ -101,15 +101,6 @@ const animationCapturing = {
     }
 };
 
-const multiViewItemAttributeMap = (index) => {
-    return {
-        'role': 'group',
-        'aria-roledescription': 'View',
-        'aria-label': `${index + 1} of 2`,
-    };
-};
-
-
 QUnit.module('rendering', () => {
     QUnit.test('height should be correctly updated on dxshown event', function(assert) {
         let $container;
@@ -1126,6 +1117,23 @@ QUnit.module('aria accessibility', {
         fx.off = false;
     }
 }, () => {
+    const getMultiViewItemAttributeMap = (index) => {
+        return {
+            'role': 'group',
+            'aria-roledescription': 'View',
+            'aria-label': `${index + 1} of 2`,
+        };
+    };
+
+    function checkAttributes(assert, items) {
+        items.forEach((item, index) => {
+            const attributeMap = getMultiViewItemAttributeMap(index);
+
+            Object.keys(attributeMap).forEach(key => {
+                assert.strictEqual(item.attr(key), attributeMap[key], `${key} attribute is correct`);
+            });
+        });
+    }
     QUnit.test('selected item should have unique id', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
@@ -1181,16 +1189,6 @@ QUnit.module('aria accessibility', {
             assert.strictEqual($element.attr(key), attributeMap[key], `${key} attribute is correct`);
         });
     });
-
-    function checkAttributes(assert, items) {
-        items.forEach((item, index) => {
-            const attributeMap = multiViewItemAttributeMap(index);
-
-            Object.keys(attributeMap).forEach(key => {
-                assert.strictEqual(item.attr(key), attributeMap[key], `${key} attribute is correct`);
-            });
-        });
-    }
 
     QUnit.test('items should contain correct aria attributes', function(assert) {
         const $element = $('#multiView').dxMultiView({ items: [1, 2] });

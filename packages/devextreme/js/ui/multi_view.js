@@ -164,9 +164,8 @@ const MultiView = CollectionWidget.inherit({
 
         const selectedItemIndices = this._getSelectedItemIndices();
 
-        this._updateItemsVisibility(selectedItemIndices[0]);
         this._setElementAria();
-        this._setItemsAria();
+        this._updateItemsVisibility(selectedItemIndices[0]);
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
@@ -229,29 +228,19 @@ const MultiView = CollectionWidget.inherit({
         this.setAria(aria, this.$element());
     },
 
-    _getItemAria({ itemIndex, itemsCount }) {
+    _getItemAria({ itemIndex, itemsCount, isHidden }) {
         const aria = {
-            role: 'group',
+            'role': 'group',
             'roledescription': messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
-            label: messageLocalization.format(
+            'label': messageLocalization.format(
                 'dxMultiView-itemAriaLabel',
                 itemIndex + 1,
                 itemsCount,
             ),
+            'hidden': isHidden || undefined,
         };
 
         return aria;
-    },
-
-    _setItemsAria() {
-        const $itemElements = this._itemElements();
-        const itemsCount = this._itemsCount();
-
-        $itemElements.each(((itemIndex, item) => {
-            const aria = this._getItemAria({ itemIndex, itemsCount });
-
-            this.setAria(aria, $(item));
-        }));
     },
 
     _updateItems: function(selectedIndex, newIndex) {
@@ -277,20 +266,24 @@ const MultiView = CollectionWidget.inherit({
         }
     },
 
-    _updateItemsVisibility: function(selectedIndex, newIndex) {
+    _updateItemsVisibility(selectedIndex, newIndex) {
         const $itemElements = this._itemElements();
+        const itemsCount = this._itemsCount();
 
-        $itemElements.each((function(itemIndex, item) {
+        $itemElements.each(((itemIndex, item) => {
             const $item = $(item);
             const isHidden = itemIndex !== selectedIndex && itemIndex !== newIndex;
 
             if(!isHidden) {
                 this._renderSpecificItem(itemIndex);
             }
+
             $item.toggleClass(MULTIVIEW_ITEM_HIDDEN_CLASS, isHidden);
 
-            this.setAria('hidden', isHidden || undefined, $item);
-        }).bind(this));
+            const aria = this._getItemAria({ itemIndex, itemsCount, isHidden });
+
+            this.setAria(aria, item);
+        }));
     },
 
     _renderSpecificItem: function(index) {
