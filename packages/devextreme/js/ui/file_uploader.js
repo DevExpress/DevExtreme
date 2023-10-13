@@ -17,7 +17,7 @@ import devices from '../core/devices';
 import { addNamespace, isTouchEvent } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
-import { isMaterial } from './themes';
+import { isFluent, isMaterial } from './themes';
 import domAdapter from '../core/dom_adapter';
 
 // STYLE fileUploader
@@ -194,7 +194,8 @@ class FileUploader extends Editor {
             useNativeInputClick: false,
             useDragOver: true,
             nativeDropSupported: true,
-            _uploadButtonType: 'normal'
+            _uploadButtonType: 'normal',
+            _buttonStylingMode: 'contained',
         });
     }
 
@@ -238,6 +239,12 @@ class FileUploader extends Editor {
                 device: () => isMaterial(),
                 options: {
                     _uploadButtonType: 'default'
+                }
+            },
+            {
+                device: () => isFluent(),
+                options: {
+                    _buttonStylingMode: 'text'
                 }
             }
         ]);
@@ -653,15 +660,23 @@ class FileUploader extends Editor {
             return null;
         }
 
+        const {
+            allowCanceling,
+            readOnly,
+            hoverStateEnabled,
+            _buttonStylingMode,
+        } = this.option();
+
         file.cancelButton = this._createComponent(
             $('<div>').addClass(FILEUPLOADER_BUTTON_CLASS + ' ' + FILEUPLOADER_CANCEL_BUTTON_CLASS),
             Button, {
                 onClick: () => this._removeFile(file),
                 icon: 'close',
-                visible: this.option('allowCanceling'),
-                disabled: this.option('readOnly'),
+                visible: allowCanceling,
+                disabled: readOnly,
                 integrationOptions: {},
-                hoverStateEnabled: this.option('hoverStateEnabled')
+                hoverStateEnabled: hoverStateEnabled,
+                stylingMode: _buttonStylingMode,
             }
         );
 
@@ -675,13 +690,16 @@ class FileUploader extends Editor {
             return null;
         }
 
+        const { hoverStateEnabled, _buttonStylingMode } = this.option();
+
         file.uploadButton = this._createComponent(
             $('<div>').addClass(FILEUPLOADER_BUTTON_CLASS + ' ' + FILEUPLOADER_UPLOAD_BUTTON_CLASS),
             Button,
             {
                 onClick: () => this._uploadFile(file),
                 icon: 'upload',
-                hoverStateEnabled: this.option('hoverStateEnabled')
+                hoverStateEnabled: hoverStateEnabled,
+                stylingMode: _buttonStylingMode,
             }
         );
 
