@@ -1358,6 +1358,12 @@ class FileUploader extends Editor {
             case '_uploadButtonType':
                 this._uploadButton && this._uploadButton.option('type', value);
                 break;
+            case '_buttonStylingMode':
+                this._files.forEach(file => {
+                    file.uploadButton?.option('stylingMode', value);
+                    file.cancelButton?.option('stylingMode', value);
+                });
+                break;
             case 'dialogTrigger':
                 this._detachSelectFileDialogHandler(previousValue);
                 this._attachSelectFileDialogHandler(value);
