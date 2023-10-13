@@ -37,6 +37,30 @@ fixture.disablePageReloads`Tabs_common`
   });
 });
 
+test('Tabs min-width', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+
+  const dataSource = [
+    { text: 'ok' },
+    { icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
+    { text: 'ok', icon: 'search' },
+    { text: 'alignright', icon: 'alignright' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource, width: 'auto' }, '#tabs');
+});
+
 [true, false].forEach((rtlEnabled) => {
   ['primary', 'secondary'].forEach((stylingMode) => {
     test('Tabs icon position', async (t) => {
