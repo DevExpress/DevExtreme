@@ -113,7 +113,7 @@ import {
   DxCommand,
   DxToolbox,
 } from 'devextreme-vue/diagram';
-import dialog from 'devextreme/ui/dialog';
+import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
 export default {
@@ -144,7 +144,7 @@ export default {
   methods: {
     onCustomCommand(e) {
       if (e.name === 'clear') {
-        const result = dialog.confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
+        const result = confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
         result.then(
           (dialogResult) => {
             if (dialogResult) {

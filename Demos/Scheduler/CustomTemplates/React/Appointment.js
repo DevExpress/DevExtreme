@@ -1,6 +1,6 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import localization from 'devextreme/localization';
+import { formatDate } from 'devextreme/localization';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];
@@ -18,9 +18,9 @@ const Appointment = (props) => {
         Ticket Price: <strong>${ targetedAppointmentData.price }</strong>
       </div>
       <div>
-        {localization.formatDate(targetedAppointmentData.displayStartDate, 'shortTime')}
+        {formatDate(targetedAppointmentData.displayStartDate, 'shortTime')}
         {' - '}
-        {localization.formatDate(targetedAppointmentData.displayEndDate, 'shortTime')}
+        {formatDate(targetedAppointmentData.displayEndDate, 'shortTime')}
       </div>
     </div>
   );

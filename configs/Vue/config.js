@@ -11,6 +11,9 @@ window.config = {
     '*.svg': {
       loader: 'svg-loader',
     },
+    'devextreme/time_zone_utils.js': {
+      'esModule': true,
+    },
     'devextreme/localization.js': {
       'esModule': true,
     },

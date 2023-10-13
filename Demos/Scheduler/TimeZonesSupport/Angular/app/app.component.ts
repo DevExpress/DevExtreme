@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
-import timeZoneUtils, { dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
+import { getTimeZones, dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
 import { Service, Data } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -31,15 +31,14 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.service = service;
-    this.timeZones = this.getTimeZones(this.currentDate);
+    this.timeZones = this.getDefaultTimeZones(this.currentDate);
     this.dataSource = service.getData();
     this.currentTimeZone = this.timeZones[0].id;
     this.currentDate = this.currentDate;
   }
 
-  getTimeZones(date: Date) {
-    const timeZones = timeZoneUtils.getTimeZones(date);
-    return timeZones.filter((timeZone) => this.service.getLocations().indexOf(timeZone.id) !== -1);
+  getDefaultTimeZones(date: Date) {
+    return getTimeZones(date).filter((timeZone) => this.service.getLocations().indexOf(timeZone.id) !== -1);
   }
 
   onValueChanged(e: any) {
@@ -63,7 +62,7 @@ export class AppComponent {
 
   onOptionChanged(e) {
     if (e.name === 'currentDate') {
-      this.timeZones = this.getTimeZones(e.value);
+      this.timeZones = this.getDefaultTimeZones(e.value);
     }
   }
 }

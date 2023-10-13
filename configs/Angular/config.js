@@ -23,6 +23,9 @@ window.config = {
       'esModule': true,
     },
     /**/
+    'devextreme/time_zone_utils.js': {
+      'esModule': true,
+    },
     'devextreme/localization.js': {
       'esModule': true,
     },

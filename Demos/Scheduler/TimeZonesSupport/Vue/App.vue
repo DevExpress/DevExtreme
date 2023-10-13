@@ -32,17 +32,16 @@
 
 import DxScheduler, { DxEditing } from 'devextreme-vue/scheduler';
 import DxSelectBox from 'devextreme-vue/select-box';
-import timeZoneUtils from 'devextreme/time_zone_utils';
+import { getTimeZones } from 'devextreme/time_zone_utils';
 
 import { data, locations } from './data.js';
 
-const getTimeZones = function(date) {
-  const timeZones = timeZoneUtils.getTimeZones(date);
-  return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
+const getDefaultTimeZones = function(date) {
+  return getTimeZones(date).filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
 };
 
 const currentDate = new Date(2021, 3, 27);
-const timeZones = getTimeZones(currentDate);
+const timeZones = getDefaultTimeZones(currentDate);
 
 export default {
   components: {
@@ -76,7 +75,7 @@ export default {
     },
     onOptionChanged(args) {
       if (args.name === 'currentDate') {
-        this.timeZones = getTimeZones(args.value);
+        this.timeZones = getDefaultTimeZones(args.value);
       }
     },
   },

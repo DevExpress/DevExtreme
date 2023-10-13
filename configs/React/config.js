@@ -14,6 +14,9 @@ window.config = {
     'typescript': {
       'exports': 'ts',
     },
+    'devextreme/time_zone_utils.js': {
+      'esModule': true,
+    },
     'devextreme/localization.js': {
       'esModule': true,
     },
