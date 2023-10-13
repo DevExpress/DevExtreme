@@ -164,8 +164,9 @@ const MultiView = CollectionWidget.inherit({
 
         const selectedItemIndices = this._getSelectedItemIndices();
 
-        this._setElementAria();
         this._updateItemsVisibility(selectedItemIndices[0]);
+        this._setElementAria();
+        this._setItemsAria();
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
@@ -228,7 +229,18 @@ const MultiView = CollectionWidget.inherit({
         this.setAria(aria, this.$element());
     },
 
-    _getItemAria({ itemIndex, itemsCount, isHidden }) {
+    _setItemsAria() {
+        const $itemElements = this._itemElements();
+        const itemsCount = this._itemsCount();
+
+        $itemElements.each(((itemIndex, item) => {
+            const aria = this._getItemAria({ itemIndex, itemsCount });
+
+            this.setAria(aria, $(item));
+        }));
+    },
+
+    _getItemAria({ itemIndex, itemsCount }) {
         const aria = {
             'role': 'group',
             'roledescription': messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
@@ -237,7 +249,6 @@ const MultiView = CollectionWidget.inherit({
                 itemIndex + 1,
                 itemsCount,
             ),
-            'hidden': isHidden || undefined,
         };
 
         return aria;
@@ -268,7 +279,6 @@ const MultiView = CollectionWidget.inherit({
 
     _updateItemsVisibility(selectedIndex, newIndex) {
         const $itemElements = this._itemElements();
-        const itemsCount = this._itemsCount();
 
         $itemElements.each(((itemIndex, item) => {
             const $item = $(item);
@@ -280,9 +290,7 @@ const MultiView = CollectionWidget.inherit({
 
             $item.toggleClass(MULTIVIEW_ITEM_HIDDEN_CLASS, isHidden);
 
-            const aria = this._getItemAria({ itemIndex, itemsCount, isHidden });
-
-            this.setAria(aria, $item);
+            this.setAria('hidden', isHidden || undefined, $item);
         }));
     },
 
