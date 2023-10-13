@@ -1,4 +1,5 @@
 import { getAppointmentKey } from '@js/renovation/ui/scheduler/appointment/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
@@ -27,6 +28,7 @@ export class AppointmentViewModelGenerator {
   generate(filteredItems, options) {
     const {
       isRenovatedAppointments,
+      viewOffset,
     } = options;
     const appointments = filteredItems
       ? filteredItems.slice()
@@ -36,7 +38,8 @@ export class AppointmentViewModelGenerator {
 
     const renderingStrategy = this.getRenderingStrategy();
     const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-    const viewModel = this.postProcess(appointments, positionMap, isRenovatedAppointments);
+    const shiftedViewModel = this.postProcess(appointments, positionMap, isRenovatedAppointments);
+    const viewModel = this.unshiftViewModelAppointmentsByViewOffset(shiftedViewModel, viewOffset);
 
     if (isRenovatedAppointments) {
       // TODO this structure should be by default after remove old render
@@ -204,5 +207,36 @@ export class AppointmentViewModelGenerator {
 
   getRenderingStrategy() {
     return this.renderingStrategy;
+  }
+
+  // NOTE: Unfortunately, we cannot implement immutable behavior here
+  // because in this case it will break the refs (keys) of dataSource's appointments,
+  // and it will break appointment updates :(
+  private unshiftViewModelAppointmentsByViewOffset(
+    viewModel: any[],
+    viewOffset: number,
+  ): any[] {
+    const processedAppointments = new Set();
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const model of viewModel) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const setting of model.settings ?? []) {
+        // eslint-disable-next-line prefer-destructuring
+        const appointment = setting?.info?.appointment;
+
+        if (appointment && !processedAppointments.has(appointment)) {
+          appointment.startDate = dateUtilsTs
+            .addOffsets(appointment.startDate, [viewOffset]);
+          appointment.endDate = dateUtilsTs
+            .addOffsets(appointment.endDate, [viewOffset]);
+          appointment.normalizedEndDate = dateUtilsTs
+            .addOffsets(appointment.normalizedEndDate, [viewOffset]);
+          processedAppointments.add(appointment);
+        }
+      }
+    }
+
+    return viewModel;
   }
 }

@@ -1701,7 +1701,7 @@ class Scheduler extends Widget<any> {
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
-      viewOffset: this.option('offset') * toMs('minute'),
+      viewOffset: this._getCurrentViewOption('offset') * toMs('minute'),
       tabIndex: this.option('tabIndex'),
       accessKey: this.option('accessKey'),
       focusStateEnabled: this.option('focusStateEnabled'),

@@ -54,7 +54,9 @@ const getDateRangeHorizontal = (options) => {
 
     return {
       startDate,
-      endDate: sourceAppointment.endDate,
+      endDate: startDate > sourceAppointment.endDate
+        ? startDate
+        : sourceAppointment.endDate,
     };
   }
 
@@ -76,7 +78,9 @@ const getDateRangeHorizontal = (options) => {
   );
 
   return {
-    startDate: sourceAppointment.startDate,
+    startDate: endDate < sourceAppointment.startDate
+      ? endDate
+      : sourceAppointment.startDate,
     endDate,
   };
 };
@@ -118,7 +122,9 @@ const getDateRangeHorizontalRTL = (options) => {
 
     return {
       startDate,
-      endDate: sourceAppointment.endDate,
+      endDate: startDate > sourceAppointment.endDate
+        ? startDate
+        : sourceAppointment.endDate,
     };
   }
 
@@ -132,7 +138,9 @@ const getDateRangeHorizontalRTL = (options) => {
   );
 
   return {
-    startDate: sourceAppointment.startDate,
+    startDate: endDate < sourceAppointment.startDate
+      ? endDate
+      : sourceAppointment.startDate,
     endDate,
   };
 };
