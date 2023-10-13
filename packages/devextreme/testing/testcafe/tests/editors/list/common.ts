@@ -257,7 +257,7 @@ test('Grouped List with nested List should able to reorder items (T845082)', asy
 
   await t
     .expect(group.getItem(0).text).eql('value11')
-    .dragToElement(group.getItem().reorderHandle, group.getItem(1).element)
+    .drag(group.getItem().reorderHandle, 0, await group.getItem(1).element.clientHeight)
     .expect(group.getItem(1).text)
     .eql('value11');
 }).before(async () => {
