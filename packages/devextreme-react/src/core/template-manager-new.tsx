@@ -57,7 +57,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
 
       case 'component': templateFunc = (props) => {
         props = normalizeProps(props);
-        return React.createElement.bind(null, template.content)(props.data)
+        return React.createElement.bind(null, template.content)(props)
       }; 
       break;
 
