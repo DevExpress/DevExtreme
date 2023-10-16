@@ -1170,21 +1170,6 @@ QUnit.module('aria accessibility', () => {
         assert.equal($itemBody.attr('aria-hidden'), 'true', 'body readable');
     });
 
-    QUnit.test('body of item should have valid aria-expanded attr', function(assert) {
-        const accordion = new Accordion($('#accordion'), {
-            items: [{ title: 'Title 1', text: 'Text 1' }],
-            collapsible: true,
-            selectedIndex: -1,
-            deferRendering: false
-        });
-        const $itemBody = accordion.itemElements().eq(0).find(`.${ACCORDION_ITEM_BODY_CLASS}`);
-
-        accordion.expandItem(0);
-        assert.equal($itemBody.attr('aria-expanded'), 'true', 'body readable');
-
-        accordion.collapseItem(0);
-        assert.equal($itemBody.attr('aria-expanded'), 'false', 'body readable');
-    });
 });
 
 QUnit.module('Live Update', {

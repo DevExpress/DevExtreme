@@ -224,7 +224,7 @@ const Accordion = CollectionWidget.inherit({
         }));
         deferred.done(() => {
             const bodyContent = callBase();
-            $(bodyContent).attr('role', 'application');
+            $(bodyContent).attr('role', 'region');
             this.setAria('labelledby', guid, $(bodyContent));
         });
     },
@@ -353,10 +353,6 @@ const Accordion = CollectionWidget.inherit({
         });
     },
 
-    _setAriaSelectionAttribute($target, value) {
-        this.setAria('expanded', value, $target.find(`.${ACCORDION_ITEM_BODY_CLASS}`));
-    },
-
     _splitFreeSpace: function(freeSpace) {
         if(!freeSpace) {
             return freeSpace;
@@ -465,6 +461,8 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _refreshActiveDescendant: noop,
+
+    _setAriaSelectionAttribute: noop,
 });
 
 registerComponent('dxAccordion', Accordion);

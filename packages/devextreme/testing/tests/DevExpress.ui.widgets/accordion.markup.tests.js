@@ -291,7 +291,7 @@ QUnit.module('aria accessibility', () => {
         const accordionTitleId = $itemTitle.attr('id');
 
         assert.strictEqual(typeof accordionTitleId, 'string');
-        assert.strictEqual($itemBody.attr('role'), 'application');
+        assert.strictEqual($itemBody.attr('role'), 'region');
         assert.strictEqual($itemBody.attr('aria-labelledby'), accordionTitleId);
     });
 });
