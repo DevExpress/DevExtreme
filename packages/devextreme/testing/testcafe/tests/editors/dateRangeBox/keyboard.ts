@@ -305,7 +305,7 @@ test('DateRangeBox should be closed by press esc key when today/cancel/apply but
     .pressKey('tab');
 
   await t
-    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .eql(true);
 
   await t
