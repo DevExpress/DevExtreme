@@ -2540,8 +2540,8 @@ module('Appointment dragging', {
                 const updatedItem = {
                     'text': 'Google AdWords Strategy',
                     'ownerId': [2],
-                    'startDate': new Date(2017, 4, 1, 8, 0),
-                    'endDate': new Date(2017, 4, 1, 9, 30),
+                    'startDate': new Date(2017, 4, 1, 9, 0),
+                    'endDate': new Date(2017, 4, 1, 10, 30),
                     'priority': 1
                 };
 

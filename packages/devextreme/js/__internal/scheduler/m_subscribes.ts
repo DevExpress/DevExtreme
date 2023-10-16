@@ -321,8 +321,8 @@ const subscribes = {
     return this._workSpace.option('startDayHour') || this.option('startDayHour');
   },
 
-  getViewOffset() {
-    return this._getCurrentViewOption('offset') * toMs('minute');
+  getViewOffsetMs() {
+    return this.getViewOffsetMs();
   },
 
   isAdaptive() {
