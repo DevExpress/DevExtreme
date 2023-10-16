@@ -138,9 +138,9 @@ describe('license check', () => {
 
   test('W0019 error should be logged if license is empty', () => {
     [
-      ['', '1.0'],
-      [null, '1.0'],
-      [undefined, '1.0'],
+      ['', '1.0.3'],
+      [null, '1.0.4'],
+      [undefined, '1.0.50'],
     ].forEach(([token, version], index) => {
       verifyLicense(token as string, version as string);
       expect(errors.log).toHaveBeenCalledTimes(index + 1);
@@ -149,12 +149,42 @@ describe('license check', () => {
     });
   });
 
+  test('W0022 error should be logged if version is preview', () => {
+    [
+      ['', '1.0'],
+      [null, '1.0.'],
+      [undefined, '1.0.0'],
+      [TOKEN_23_1, '23.1.0'],
+      [TOKEN_23_1, '12.3.1'],
+      [TOKEN_23_2, '23.1.2'],
+      [TOKEN_23_2, '23.2.3-preview'],
+      [TOKEN_23_1, '23.2.0'],
+      [TOKEN_23_2, '42.4.3'],
+      [TOKEN_UNVERIFIED, '1.2.0'],
+      [TOKEN_INVALID_JSON, '1.2.1'],
+      [TOKEN_INVALID_BASE64, '1.2.2'],
+      [TOKEN_MISSING_FIELD_1, '1.2'],
+      [TOKEN_MISSING_FIELD_2, '1.2.4-preview'],
+      [TOKEN_MISSING_FIELD_3, '1.2.'],
+      [TOKEN_UNSUPPORTED_VERSION, '1.2.abc'],
+      ['Another', '1.2.0'],
+      ['str@nge'],
+      ['in.put'],
+      ['3.2.1', '1.2.1'],
+      [TOKEN_23_1, '123'],
+    ].forEach(([token, version]) => {
+      verifyLicense(token as string, version as string);
+      expect(errors.log).toHaveBeenCalledWith('W0022');
+      setLicenseCheckSkipCondition(false);
+    });
+  });
+
   test('No messages should be logged if license is valid', () => {
     [
-      [TOKEN_23_1, '23.1'],
-      [TOKEN_23_1, '12.3'],
-      [TOKEN_23_2, '23.1'],
-      [TOKEN_23_2, '23.2'],
+      [TOKEN_23_1, '23.1.3'],
+      [TOKEN_23_1, '12.3.4'],
+      [TOKEN_23_2, '23.1.5'],
+      [TOKEN_23_2, '23.2.6'],
     ].forEach(([token, version]) => {
       verifyLicense(token, version);
       expect(errors.log).not.toHaveBeenCalled();
@@ -177,8 +207,8 @@ describe('license check', () => {
 
   test('W0020 error should be logged if license is outdated', () => {
     [
-      [TOKEN_23_1, '23.2'],
-      [TOKEN_23_2, '42.4'],
+      [TOKEN_23_1, '23.2.3'],
+      [TOKEN_23_2, '42.4.5'],
     ].forEach(([token, version], index) => {
       verifyLicense(token, version);
       expect(errors.log).toHaveBeenCalledTimes(index + 1);

@@ -29,10 +29,11 @@ export type Token = {
   readonly kind: TokenKind.corrupted;
   readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
 };
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | null;
+export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022' | null;
 
 const SPLITTER = '.';
 const FORMAT = 1;
+const RTM_MIN_PATCH_VERSION = 3;
 
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
@@ -115,6 +116,14 @@ export function verifyLicense(licenseKey: string, version: string = packageVersi
   let warning: LicenseVerifyResult = null;
 
   try {
+    const [major, minor, patch] = version.split('.').map(Number);
+    const preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+
+    if (preview) {
+      warning = 'W0022';
+      return;
+    }
+
     if (!licenseKey) {
       warning = 'W0019';
       return;
@@ -126,8 +135,6 @@ export function verifyLicense(licenseKey: string, version: string = packageVersi
       warning = 'W0021';
       return;
     }
-
-    const [major, minor] = version.split('.').map(Number);
 
     if (!(major && minor)) {
       warning = 'W0021';
