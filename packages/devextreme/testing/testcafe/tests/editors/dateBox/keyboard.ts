@@ -157,7 +157,7 @@ test('DateBox should be closed by press esc key when today/cancel/apply button i
     .pressKey('tab');
 
   await t
-    .expect(dateBox.getPopup().getCancelButton().isFocused)
+    .expect(dateBox.getPopup().getApplyButton().isFocused)
     .eql(true);
 
   await t
@@ -264,7 +264,7 @@ test('dateBox keyboard navigation via `tab` key if applyValueMode is useButtons,
   await t
     .expect(dateBox.option('opened'))
     .eql(true)
-    .expect(dateBox.getPopup().getCancelButton().isFocused)
+    .expect(dateBox.getPopup().getApplyButton().isFocused)
     .ok();
 
   await t
@@ -336,7 +336,7 @@ test('dateBox keyboard navigation via `shift+tab` key if applyValueMode is useBu
   await t
     .expect(dateBox.option('opened'))
     .eql(true)
-    .expect(dateBox.getPopup().getCancelButton().isFocused)
+    .expect(dateBox.getPopup().getApplyButton().isFocused)
     .ok();
 
   await t
