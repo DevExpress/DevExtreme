@@ -5,6 +5,7 @@ import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointme
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
@@ -875,18 +876,18 @@ class BaseRenderingStrategy {
   protected shiftAppointmentByViewOffset(appointment: any): any {
     const { viewOffset } = this.options;
 
-    // NOTE Knockout: Fix for startDate / endDate observables
-    const appointmentStartDate = typeof appointment.startDate === 'function'
-      ? new Date(appointment.startDate())
-      : new Date(appointment.startDate);
-    const appointmentEndDate = typeof appointment.endDate === 'function'
-      ? new Date(appointment.endDate())
-      : new Date(appointment.endDate);
+    const startDateField = this.dataAccessors.expr.startDateExpr;
+    const endDateField = this.dataAccessors.expr.endDateExpr;
+
+    let startDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', appointment));
+    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
+    let endDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment));
+    endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
     return {
       ...appointment,
-      startDate: dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]),
-      endDate: dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]),
+      [startDateField]: startDate,
+      [endDateField]: endDate,
     };
   }
 }
