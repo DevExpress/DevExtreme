@@ -211,7 +211,7 @@
     "update-ts-bundle": "dx-tools generate-ts-bundle --sources ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "regenerate": "npm run update-ts-bundle && npm run update-ts-reexports",
     "validate-ts": "gulp validate-ts",
-    "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\"",
+    "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
