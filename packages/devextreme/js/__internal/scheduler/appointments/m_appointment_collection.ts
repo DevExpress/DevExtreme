@@ -21,6 +21,7 @@ import { name as dblclickEvent } from '@js/events/double_click';
 import { addNamespace, isFakeClickEvent } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
@@ -670,15 +671,20 @@ class SchedulerAppointments extends CollectionWidget {
 
     const { allDay, info } = $element.data('dxAppointmentSettings') as any;
     const sourceAppointment = (this as any)._getItemData($element);
-    let dateRange = {};
+    const viewOffset = this.invoke('getViewOffsetMs');
+    let dateRange: { startDate: Date; endDate: Date };
 
     if (allDay) {
       dateRange = this.resizeAllDay(e);
     } else {
       const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
       const { endDate } = info.appointment;
+      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
+      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
-      dateRange = this._getDateRange(e, startDate, endDate);
+      dateRange = this._getDateRange(e, shiftedStartDate, shiftedEndDate);
+      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, [viewOffset]);
+      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, [viewOffset]);
     }
 
     this.updateResizedAppointment(
