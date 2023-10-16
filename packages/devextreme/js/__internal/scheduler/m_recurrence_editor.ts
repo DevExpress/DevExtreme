@@ -73,7 +73,7 @@ const repeatEndTypes = [
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-const stylingMode = isFluent(current()) ? 'filled' : 'outlined';
+const stylingMode = isFluent(current()) ? 'filled' : undefined;
 
 class RecurrenceRule {
   _recurrenceProcessor = getRecurrenceProcessor();

@@ -25,7 +25,7 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Recurrence: 'recurrenceGroup',
 };
 
-const stylingMode = isFluent(current()) ? 'filled' : 'outlined';
+const stylingMode = isFluent(current()) ? 'filled' : undefined;
 
 const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
 
