@@ -1228,7 +1228,7 @@ QUnit.test('Dates of allDay appointment should be changed when resize is finishe
         allDay: true
     };
     const updatedItem = $.extend({}, item, {
-        endDate: new Date(2015, 1, 10, 10)
+        endDate: new Date(2015, 1, 10, 0)
     });
 
     this.createInstance(
