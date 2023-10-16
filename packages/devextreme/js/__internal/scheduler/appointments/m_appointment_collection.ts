@@ -709,7 +709,7 @@ class SchedulerAppointments extends CollectionWidget {
       dataAccessors,
       rtlEnabled: this.option('rtlEnabled'),
       DOMMetaData: this.option('getDOMElementsMetaData')(),
-      viewOffset: this.invoke('getViewOffset'),
+      viewOffset: this.invoke('getViewOffsetMs'),
     });
   }
 
