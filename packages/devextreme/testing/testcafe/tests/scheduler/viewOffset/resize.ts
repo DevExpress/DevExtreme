@@ -9,27 +9,54 @@ fixture.disablePageReloads`Offset: Resize appointments`
   .page(url(__dirname, '../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-const APPOINTMENT_TITLE = 'Test';
+const APPOINTMENT_TITLES = {
+  usual: 'Usual',
+  allDay: 'All-day',
+};
 const REDUCE_CELLS_CSS = `
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
 const APPOINTMENTS = {
-  week: [{
-    startDate: '2023-09-05T05:00:00',
-    endDate: '2023-09-05T09:00:00',
-    text: APPOINTMENT_TITLE,
-  }],
-  month: [{
-    startDate: '2023-09-05T10:00:00',
-    endDate: '2023-09-06T15:00:00',
-    text: APPOINTMENT_TITLE,
-  }],
-  timelineMonth: [{
-    startDate: '2023-09-02T10:00:00',
-    endDate: '2023-09-03T15:00:00',
-    text: APPOINTMENT_TITLE,
-  }],
+  week: [
+    {
+      startDate: '2023-09-05T05:00:00',
+      endDate: '2023-09-05T09:00:00',
+      text: APPOINTMENT_TITLES.usual,
+    },
+    {
+      startDate: '2023-09-05T00:00:00',
+      endDate: '2023-09-06T00:00:00',
+      text: APPOINTMENT_TITLES.allDay,
+      allDay: true,
+    },
+  ],
+  month: [
+    {
+      startDate: '2023-09-05T10:00:00',
+      endDate: '2023-09-06T15:00:00',
+      text: APPOINTMENT_TITLES.usual,
+    },
+    {
+      startDate: '2023-09-05T00:00:00',
+      endDate: '2023-09-06T00:00:00',
+      text: APPOINTMENT_TITLES.allDay,
+      allDay: true,
+    },
+  ],
+  timelineMonth: [
+    {
+      startDate: '2023-09-02T10:00:00',
+      endDate: '2023-09-03T15:00:00',
+      text: APPOINTMENT_TITLES.usual,
+    },
+    {
+      startDate: '2023-09-02T00:00:00',
+      endDate: '2023-09-03T00:00:00',
+      text: APPOINTMENT_TITLES.allDay,
+      allDay: true,
+    },
+  ],
 };
 enum ResizeType {
   startPlus = 'start-plus',
@@ -38,7 +65,7 @@ enum ResizeType {
   endMinus = 'end-minus',
 }
 
-const isVerticalView = (viewType: string): boolean => viewType === 'week';
+const isVerticalView = (viewType: string, isAllDay: boolean): boolean => !isAllDay && viewType === 'week';
 const isStartResize = (
   resizeType: ResizeType,
 ): boolean => resizeType === ResizeType.startPlus || resizeType === ResizeType.startMinus;
@@ -47,11 +74,12 @@ const getResizableHandle = (
   appointment: Appointment,
   viewType: string,
   resizeType: ResizeType,
+  isAllDay: boolean,
 ): Selector => {
   switch (true) {
-    case isVerticalView(viewType) && isStartResize(resizeType):
+    case isVerticalView(viewType, isAllDay) && isStartResize(resizeType):
       return appointment.resizableHandle.top;
-    case isVerticalView(viewType) && !isStartResize(resizeType):
+    case isVerticalView(viewType, isAllDay) && !isStartResize(resizeType):
       return appointment.resizableHandle.bottom;
     case isStartResize(resizeType):
       return appointment.resizableHandle.left;
@@ -63,15 +91,16 @@ const getResizableHandle = (
 const getResizableValues = (
   viewType: string,
   resizeType: ResizeType,
+  isAllDay: boolean,
 ): { x; y } => {
   switch (true) {
-    case isVerticalView(viewType) && resizeType === ResizeType.startPlus:
+    case isVerticalView(viewType, isAllDay) && resizeType === ResizeType.startPlus:
       return { x: 0, y: -100 };
-    case isVerticalView(viewType) && resizeType === ResizeType.startMinus:
+    case isVerticalView(viewType, isAllDay) && resizeType === ResizeType.startMinus:
       return { x: 0, y: 50 };
-    case isVerticalView(viewType) && resizeType === ResizeType.endPlus:
+    case isVerticalView(viewType, isAllDay) && resizeType === ResizeType.endPlus:
       return { x: 0, y: 100 };
-    case isVerticalView(viewType) && resizeType === ResizeType.endMinus:
+    case isVerticalView(viewType, isAllDay) && resizeType === ResizeType.endMinus:
       return { x: 0, y: -50 };
     case resizeType === ResizeType.startPlus:
       return { x: -100, y: 0 };
@@ -89,9 +118,10 @@ const doResize = async (
   appointment: Appointment,
   viewType: string,
   resizeType: ResizeType,
+  isAllDay: boolean,
 ): Promise<void> => {
-  const handle = getResizableHandle(appointment, viewType, resizeType);
-  const { x, y } = getResizableValues(viewType, resizeType);
+  const handle = getResizableHandle(appointment, viewType, resizeType, isAllDay);
+  const { x, y } = getResizableValues(viewType, resizeType, isAllDay);
 
   await t.drag(handle, x, y);
 };
@@ -100,7 +130,7 @@ const getScreenshotName = (
   viewType: string,
   resizeType: string,
   offset: number,
-) => `offset_resize_usual-appts_${viewType}_${resizeType}_offset-${offset}.png`;
+) => `offset_resize-appts_${viewType}_${resizeType}_offset-${offset}.png`;
 
 [
   { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS.week },
@@ -112,13 +142,15 @@ const getScreenshotName = (
     735,
     -735,
   ].forEach((offset) => {
-    test('Usual appointments resize', async (t) => {
+    test('Appointments resize', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-      const appointment = scheduler.getAppointment(APPOINTMENT_TITLE);
+      const usualAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.usual);
+      const allDayAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.allDay);
       const viewType = views[0].type;
 
-      await doResize(t, appointment, viewType, ResizeType.startMinus);
+      await doResize(t, usualAppointment, viewType, ResizeType.startMinus, false);
+      await doResize(t, allDayAppointment, viewType, ResizeType.startMinus, true);
       await takeScreenshot(
         getScreenshotName(
           viewType,
@@ -128,7 +160,8 @@ const getScreenshotName = (
         scheduler.workSpace,
       );
 
-      await doResize(t, appointment, viewType, ResizeType.startPlus);
+      await doResize(t, usualAppointment, viewType, ResizeType.startPlus, false);
+      await doResize(t, allDayAppointment, viewType, ResizeType.startPlus, true);
       await takeScreenshot(
         getScreenshotName(
           viewType,
@@ -138,7 +171,8 @@ const getScreenshotName = (
         scheduler.workSpace,
       );
 
-      await doResize(t, appointment, viewType, ResizeType.endMinus);
+      await doResize(t, usualAppointment, viewType, ResizeType.endMinus, false);
+      await doResize(t, allDayAppointment, viewType, ResizeType.endMinus, true);
       await takeScreenshot(
         getScreenshotName(
           viewType,
@@ -148,7 +182,8 @@ const getScreenshotName = (
         scheduler.workSpace,
       );
 
-      await doResize(t, appointment, viewType, ResizeType.endPlus);
+      await doResize(t, usualAppointment, viewType, ResizeType.endPlus, false);
+      await doResize(t, allDayAppointment, viewType, ResizeType.endPlus, true);
       await takeScreenshot(
         getScreenshotName(
           viewType,
