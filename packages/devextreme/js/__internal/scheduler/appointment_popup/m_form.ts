@@ -64,11 +64,15 @@ export class AppointmentForm {
 
   semaphore: Semaphore;
 
+  isAllDayToggled: boolean;
+
   constructor(scheduler) {
     this.scheduler = scheduler;
     this.form = null;
 
     this.semaphore = new Semaphore();
+
+    this.isAllDayToggled = false;
   }
 
   get dxForm() {
@@ -302,6 +306,8 @@ export class AppointmentForm {
 
               this._changeFormItemDateType(startDateItemPath, value);
               this._changeFormItemDateType(endDateItemPath, value);
+
+              this.isAllDayToggled = true;
             },
           },
         }, {

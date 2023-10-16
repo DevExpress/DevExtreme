@@ -201,6 +201,7 @@ export class AppointmentPopup {
 
     this.form.readOnly = this._isReadOnly(formData);
     this.form.updateFormData(formData);
+    this.form.isAllDayToggled = false;
   }
 
   triggerResize() {
@@ -246,7 +247,7 @@ export class AppointmentPopup {
       }
 
       const adapter = this._createAppointmentAdapter(this.form.formData);
-      if (adapter.allDay) {
+      if (adapter.allDay && this.form.isAllDayToggled) {
         adapter.startDate = dateUtils.trimTime(adapter.startDate);
         adapter.endDate = dateUtils.trimTime(adapter.endDate);
       }
