@@ -2,7 +2,7 @@ import React from 'react';
 
 const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 
-const Form = React.forwardRef(({ ref }) => (
+const Form = React.forwardRef((_, ref) => (
   <div id="custom_markup_container" ref={ref}>
     <svg width="820px" height="420px">
       <path d="M 13 407 L 128 407 L 232 39 L 13 39" fill="#6D39C3"></path>
