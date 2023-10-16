@@ -13,6 +13,7 @@ import registerComponent from '../core/component_registrator';
 import CollectionWidget from './collection/ui.collection_widget.live_update';
 import Swipeable from '../events/gesture/swipeable';
 import { Deferred } from '../core/utils/deferred';
+import messageLocalization from '../localization/message';
 
 // STYLE multiView
 
@@ -67,8 +68,6 @@ const MultiView = CollectionWidget.inherit({
             * @hidden
             */
 
-
-            _itemAttributes: { role: 'tabpanel' },
             loopItemFocus: false,
             selectOnFocus: true,
             selectionMode: 'single',
@@ -164,7 +163,10 @@ const MultiView = CollectionWidget.inherit({
         this.callBase();
 
         const selectedItemIndices = this._getSelectedItemIndices();
+
         this._updateItemsVisibility(selectedItemIndices[0]);
+        this._setElementAria();
+        this._setItemsAria();
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
@@ -213,6 +215,45 @@ const MultiView = CollectionWidget.inherit({
         });
     },
 
+    _getElementAria() {
+        return {
+            role: 'group',
+            'roledescription': messageLocalization.format('dxMultiView-elementAriaRoleDescription'),
+            label: messageLocalization.format('dxMultiView-elementAriaLabel'),
+        };
+    },
+
+    _setElementAria() {
+        const aria = this._getElementAria();
+
+        this.setAria(aria, this.$element());
+    },
+
+    _setItemsAria() {
+        const $itemElements = this._itemElements();
+        const itemsCount = this._itemsCount();
+
+        $itemElements.each(((itemIndex, item) => {
+            const aria = this._getItemAria({ itemIndex, itemsCount });
+
+            this.setAria(aria, $(item));
+        }));
+    },
+
+    _getItemAria({ itemIndex, itemsCount }) {
+        const aria = {
+            'role': 'group',
+            'roledescription': messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
+            'label': messageLocalization.format(
+                'dxMultiView-itemAriaLabel',
+                itemIndex + 1,
+                itemsCount,
+            ),
+        };
+
+        return aria;
+    },
+
     _updateItems: function(selectedIndex, newIndex) {
         this._updateItemsPosition(selectedIndex, newIndex);
         this._updateItemsVisibility(selectedIndex, newIndex);
@@ -236,20 +277,21 @@ const MultiView = CollectionWidget.inherit({
         }
     },
 
-    _updateItemsVisibility: function(selectedIndex, newIndex) {
+    _updateItemsVisibility(selectedIndex, newIndex) {
         const $itemElements = this._itemElements();
 
-        $itemElements.each((function(itemIndex, item) {
+        $itemElements.each(((itemIndex, item) => {
             const $item = $(item);
             const isHidden = itemIndex !== selectedIndex && itemIndex !== newIndex;
 
             if(!isHidden) {
                 this._renderSpecificItem(itemIndex);
             }
+
             $item.toggleClass(MULTIVIEW_ITEM_HIDDEN_CLASS, isHidden);
 
             this.setAria('hidden', isHidden || undefined, $item);
-        }).bind(this));
+        }));
     },
 
     _renderSpecificItem: function(index) {
