@@ -694,6 +694,7 @@ const TagBox = SelectBox.inherit({
         const selectionMode = this.option('showSelectionControls') ? 'all' : 'multiple';
 
         return extend(this.callBase(), {
+            maxFilterLengthInRequest: this.option('maxFilterQueryLength'),
             selectionMode: selectionMode,
             selectAllText: this.option('selectAllText'),
             onSelectAllValueChanged: ({ value }) => {
