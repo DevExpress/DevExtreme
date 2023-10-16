@@ -8,7 +8,9 @@ $scheduler-vertical-appointment-hovering-shadow: null !default;
 $scheduler-vertical-appointment-resizable-hovering-shadow: null !default;
 $scheduler-hovered-appointment-top-shadow-size: null !default;
 $scheduler-fill-focused-appointment: null !default;
+$scheduler-is-shadow-color-for-focused-state: null !default;
 $scheduler-appointment-start-color: null !default;
+$scheduler-appointment-active-color: null !default;
 $scheduler-appointment-dragging-shadow: null !default;
 $scheduler-reduced-icon-offset: null !default;
 
@@ -29,7 +31,9 @@ $agenda-appointment-title-font-size: null !default;
   $vertical-appointment-resizable-hovering-shadow: $scheduler-vertical-appointment-resizable-hovering-shadow,
   $hovered-appointment-top-shadow-size: $scheduler-hovered-appointment-top-shadow-size,
   $fill-focused-appointment: $scheduler-fill-focused-appointment,
+  $is-shadow-color-for-focused-state: $scheduler-is-shadow-color-for-focused-state,
   $appointment-start-color: $scheduler-appointment-start-color,
+  $appointment-active-color: $scheduler-appointment-active-color,
   $appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
   $reduced-icon-offset: $scheduler-reduced-icon-offset
 );
