@@ -1057,7 +1057,7 @@ class Scheduler extends Widget<any> {
       resources: this.option('resources'),
       startDayHour: this._getCurrentViewOption('startDayHour'),
       endDayHour: this._getCurrentViewOption('endDayHour'),
-      viewOffset: this._getCurrentViewOption('offset') * toMs('minute'),
+      viewOffset: this.getViewOffsetMs(),
       appointmentDuration: this._getCurrentViewOption('cellDuration'),
       allDayPanelMode: this._getCurrentViewOption('allDayPanelMode'),
       showAllDayPanel: this.option('showAllDayPanel'),
@@ -1701,7 +1701,7 @@ class Scheduler extends Widget<any> {
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
-      viewOffset: this._getCurrentViewOption('offset') * toMs('minute'),
+      viewOffset: this.getViewOffsetMs(),
       tabIndex: this.option('tabIndex'),
       accessKey: this.option('accessKey'),
       focusStateEnabled: this.option('focusStateEnabled'),
@@ -1981,11 +1981,18 @@ class Scheduler extends Widget<any> {
   }
 
   _getUpdatedData(rawAppointment) {
-    const getConvertedFromGrid = (date) => (date
-      ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' })
-      : undefined);
+    const viewOffset = this.getViewOffsetMs();
 
-    const isValidDate = (date) => !isNaN(new Date(date).getTime());
+    const getConvertedFromGrid = (date: any): Date | undefined => {
+      if (!date) {
+        return undefined;
+      }
+
+      const result = this.timeZoneCalculator.createDate(date, { path: 'fromGrid' });
+      return dateUtilsTs.addOffsets(result, [-viewOffset]);
+    };
+
+    const isValidDate = (date: any): boolean => !isNaN(new Date(date).getTime());
 
     const targetCell = this.getTargetCellData();
     const appointment = createAppointmentAdapter(
@@ -1998,15 +2005,17 @@ class Scheduler extends Widget<any> {
     const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
     let appointmentStartDate = new Date(appointment.startDate);
+    appointmentStartDate = dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]);
     let appointmentEndDate = new Date(appointment.endDate);
-    let resultedStartDate = cellStartDate || appointmentStartDate;
+    appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]);
+    let resultedStartDate = cellStartDate ?? appointmentStartDate;
 
     if (!isValidDate(appointmentStartDate)) {
       appointmentStartDate = resultedStartDate;
     }
 
     if (!isValidDate(appointmentEndDate)) {
-      appointmentEndDate = cellEndDate;
+      appointmentEndDate = cellEndDate!;
     }
 
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
@@ -2016,12 +2025,11 @@ class Scheduler extends Widget<any> {
             && isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
-      const { trimTime } = dateUtils;
+      const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, { path: 'toGrid' });
+      const timeInMs = startDate.getTime() - dateUtils.trimTime(startDate).getTime();
 
-      const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
-      const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
-
-      resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
+      const targetCellStartDate = dateUtilsTs.addOffsets(targetCell.startDate, [-viewOffset]);
+      resultedStartDate = new Date(dateUtils.trimTime(targetCellStartDate).getTime() + timeInMs);
       resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
     }
 
@@ -2056,6 +2064,8 @@ class Scheduler extends Widget<any> {
     const timeZoneOffset = timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate);
     result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
+    result.startDate = dateUtilsTs.addOffsets(result.startDate, [viewOffset]);
+    result.endDate = dateUtilsTs.addOffsets(result.endDate, [viewOffset]);
     const rawResult = result.source();
 
     setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);
@@ -2093,7 +2103,7 @@ class Scheduler extends Widget<any> {
     }
 
     if (info) {
-      const viewOffset = this._getCurrentViewOption('offset') * toMs('minute');
+      const viewOffset = this.getViewOffsetMs();
       rawTargetedAppointment.displayStartDate = dateUtilsTs.addOffsets(new Date(info.appointment.startDate), [viewOffset]);
       rawTargetedAppointment.displayEndDate = dateUtilsTs.addOffsets(new Date(info.appointment.endDate), [viewOffset]);
     }
@@ -2620,6 +2630,10 @@ class Scheduler extends Widget<any> {
 
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
+  }
+
+  getViewOffsetMs(): number {
+    return this._getCurrentViewOption('offset') * toMs('minute');
   }
 }
 
