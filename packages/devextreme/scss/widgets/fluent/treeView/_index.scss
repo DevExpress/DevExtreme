@@ -18,41 +18,18 @@ $fluent-treeview-container-padding:
   $fluent-treeview-border-padding
   $fluent-treeview-container-with-border-offset;
 
-$fluent-select-all-item-left-padding: 26px;
-$fluent-treeview-node-offset: $fluent-treeview-toggle-item-width;
-$fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5;
-
-
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   @include dx-icon-sizing($fluent-base-icon-size);
-
-  top: $fluent-custom-icon-top;
 }
 
 .dx-treeview-node-loadindicator {
-  top: $fluent-treeview-loadincicator-offset-top;
-  left: $fluent-treeview-loadincicator-offset-left;
   width: $fluent-treeview-loadincicator-size;
   height: $fluent-treeview-loadincicator-size;
 }
 
-.dx-rtl {
-  @include dx-treeview-make-rtl($fluent-treeview-container-with-border-offset, $fluent-treeview-node-offset, $fluent-treeview-item-with-checkbox-offset, $fluent-treeview-checkbox-offset, $fluent-select-all-text-offset, $fluent-select-all-item-left-padding, $fluent-treeview-border-padding);
-
-  .dx-treeview-toggle-item-visibility,
-  .dx-treeview-custom-expand-icon,
-  .dx-treeview-custom-collapse-icon {
-    right: 0;
-  }
-
-  .dx-treeview-item-with-checkbox .dx-checkbox {
-    overflow: visible;
-  }
-}
-
 .dx-treeview-search {
-  margin-bottom: $fluent-treeview-searchbox-margin-bottom;
+  margin-block-end: $fluent-treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview-with-search > .dx-scrollable {
@@ -62,10 +39,6 @@ $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5
 .dx-treeview-border-visible {
   border: 1px solid $treeview-border-color;
 
-  .dx-treeview-select-all-item {
-    padding-left: $fluent-select-all-item-left-padding;
-  }
-
   .dx-scrollable-content {
     > .dx-treeview-node-container {
       padding: $fluent-treeview-container-padding;
@@ -74,16 +47,22 @@ $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5
 }
 
 .dx-treeview-select-all-item {
-  border-bottom: 1px solid $treeview-border-color;
+  border-block-end: 1px solid $treeview-border-color;
   padding: $fluent-select-all-item-padding;
 
-  .dx-checkbox-text {
-    padding-left: $fluent-select-all-text-offset;
+  .dx-checkbox-container {
+    .dx-checkbox-icon {
+      height: $fluent-checkbox-icon-size;
+      width: $fluent-checkbox-icon-size;
+    }
+
+    display: flex;
+    align-items: center;
   }
 }
 
 .dx-treeview-node {
-  padding-left: $fluent-treeview-node-offset;
+  padding-inline-start: $fluent-treeview-node-padding;
 }
 
 .dx-state-selected {
@@ -93,24 +72,29 @@ $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5
 }
 
 .dx-treeview-item-with-checkbox {
-  &.dx-treeview-item-with-custom-expander-icon > .dx-checkbox {
-    top: $fluent-treeview-with-custom-icon-checkbox-vertical-offset;
+  .dx-checkbox {
+    .dx-checkbox-container {
+      .dx-checkbox-icon {
+        height: $fluent-checkbox-icon-size;
+        width: $fluent-checkbox-icon-size;
+      }
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: $fluent-checkbox-container-size;
+      width: $fluent-checkbox-container-size;
+    }
   }
 
   .dx-treeview-item {
     color: $base-text-color;
-    padding-left: $fluent-treeview-item-with-checkbox-offset;
-  }
-
-  .dx-checkbox {
-    top: $fluent-treeview-checkbox-vertical-offset;
-    left: $fluent-treeview-checkbox-offset;
   }
 }
 
 .dx-treeview-item-without-checkbox {
   &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
-    padding-left: $fluent-treeview-item-side-padding;
+    padding-inline-start: $fluent-treeview-item-side-padding;
   }
 
   &.dx-state-selected {
@@ -133,9 +117,10 @@ $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5
 }
 
 .dx-treeview-item {
+  gap: $fluent-treeview-item-element-gap;
+  height: $fluent-treeview-item-height;
   padding: $fluent-treeview-item-padding;
   min-height: $fluent-treeview-min-item-height;
-  line-height: math.div($fluent-treeview-min-item-height, 2) - 2;
 
   .dx-treeview-item-content {
     .dx-icon {
@@ -151,16 +136,31 @@ $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(chevronright);
-  @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+
+  // @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+
+  font-size: $fluent-base-icon-size;
+  text-align: center;
+  width: $fluent-treeview-toggle-item-width;
+  height: $fluent-treeview-toggle-item-width;
+  height: 100%;
+
+  &::before {
+    width: $fluent-base-icon-size;
+  }
 
   color: $treeview-spin-icon-color;
-  width: $fluent-treeview-toggle-item-width;
-  height: $fluent-treeview-min-item-height;
-  top: 0;
-  left: 0;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(chevrondown);
-    @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+
+    font-size: $fluent-base-icon-size;
+    text-align: center;
+
+    &::before {
+      width: $fluent-base-icon-size;
+    }
+
+    // @include dx-icon-font-centered-sizing($fluent-base-icon-size);
   }
 }

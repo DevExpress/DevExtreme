@@ -31,28 +31,12 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-node-loadindicator {
-  top: $material-treeview-loadincicator-offset-top;
-  left: $material-treeview-loadincicator-offset-left;
   width: $material-treeview-loadincicator-size;
   height: $material-treeview-loadincicator-size;
 }
 
-.dx-rtl {
-  @include dx-treeview-make-rtl($material-treeview-container-with-border-offset, $material-treeview-node-offset, $material-treeview-item-with-checkbox-offset, $material-treeview-checkbox-offset, $material-select-all-text-offset, $material-select-all-item-left-padding, $material-treeview-border-padding);
-
-  .dx-treeview-toggle-item-visibility,
-  .dx-treeview-custom-expand-icon,
-  .dx-treeview-custom-collapse-icon {
-    right: 0;
-  }
-
-  .dx-treeview-item-with-checkbox .dx-checkbox {
-    overflow: visible;
-  }
-}
-
 .dx-treeview-search {
-  margin-bottom: $material-treeview-searchbox-margin-bottom;
+  margin-block-end: $material-treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview-with-search > .dx-scrollable {
@@ -63,7 +47,7 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
   border: 1px solid $treeview-border-color;
 
   .dx-treeview-select-all-item {
-    padding-left: $material-select-all-item-left-padding;
+    padding-inline-start: $material-select-all-item-left-padding;
   }
 
   .dx-scrollable-content {
@@ -74,33 +58,16 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-select-all-item {
-  border-bottom: 1px solid $treeview-border-color;
+  border-block-end: 1px solid $treeview-border-color;
   padding: $material-select-all-item-padding;
 
   .dx-checkbox-text {
-    padding-left: $material-select-all-text-offset;
+    padding-inline-start: $material-treeview-item-element-gap;
   }
-}
-
-.dx-treeview-fullrow {
-  &.dx-state-hover {
-    background-color: $treeview-hover-bg;
-    color: $treeview-item-hover-color;
-  }
-
-  &:hover {
-    background-color: $treeview-hover-bg;
-    color: $treeview-item-hover-color;
-  }
-
-  position: absolute;
-  width: 100%;
-  left: 0;
-  cursor: pointer;
 }
 
 .dx-treeview-node {
-  padding-left: $material-treeview-node-offset;
+  padding-inline-start: $material-treeview-node-offset + $material-treeview-item-element-gap;
 }
 
 .dx-state-selected {
@@ -110,6 +77,16 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-item-with-checkbox {
+  .dx-checkbox {
+    .dx-checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: $material-checkbox-container-size;
+      width: $material-checkbox-container-size;
+    }
+  }
+
   .dx-treeview-item {
     color: $base-text-color;
   }
@@ -117,37 +94,30 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 
 .dx-treeview-item-without-checkbox {
   &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
-    padding-left: $material-treeview-item-side-padding;
+    padding-inline-start: $material-treeview-item-side-padding;
   }
 
   &.dx-state-selected {
-    > .dx-treeview-fullrow {
+    > .dx-treeview-item {
+      color: $treeview-item-selected-color;
       background-color: $treeview-item-selected-bg;
 
       &.dx-state-hover:not(.dx-state-focused) {
         background-color: $treeview-item-selected-hover-bg;
       }
     }
-
-    > .dx-treeview-item {
-      color: $treeview-item-selected-color;
-    }
   }
 
   &.dx-state-focused {
-    > .dx-treeview-fullrow {
-      background-color: $treeview-focused-bg;
-    }
-
     > .dx-treeview-item {
       color: $treeview-focus-color;
+      background-color: $treeview-focused-bg;
     }
   }
 }
 
 .dx-treeview-item {
-  z-index: 1;
-  position: relative;
+  gap: $material-treeview-item-element-gap;
   padding: $material-treeview-item-padding;
   min-height: $material-treeview-min-item-height;
   line-height: math.div($material-treeview-min-item-height, 2) - 2;
@@ -157,12 +127,18 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
       @include dx-icon-sizing($material-base-icon-size);
     }
   }
+
+  &.dx-state-hover {
+    background-color: $treeview-hover-bg;
+    color: $treeview-item-hover-color;
+  }
 }
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(chevronright);
 
   // @include dx-icon-font-centered-sizing($material-base-icon-size);
+
   font-size: $material-base-icon-size;
   text-align: center;
   line-height: $material-base-icon-size;
@@ -173,11 +149,13 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 
   color: $treeview-spin-icon-color;
   width: $material-treeview-toggle-item-width;
+  height: $material-treeview-toggle-item-width;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(chevrondown);
   
     // @include dx-icon-font-centered-sizing($material-base-icon-size);
+  
     font-size: $material-base-icon-size;
     text-align: center;
     line-height: $material-base-icon-size;

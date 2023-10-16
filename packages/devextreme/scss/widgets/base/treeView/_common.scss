@@ -10,12 +10,8 @@ $tree-view-icon-size: 24px;
   text-align: center;
 }
 
-.dx-treeview-node-loadindicator {
-  position: absolute;
-}
-
 .dx-treeview-search {
-  margin-bottom: $treeview-searchbox-margin-bottom;
+  margin-block-end: $treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview {
@@ -31,6 +27,10 @@ $tree-view-icon-size: 24px;
 
   .dx-empty-message {
     line-height: normal;
+  }
+
+  .dx-treeview-node.dx-root-node {
+    padding-inline-start: 0;
   }
 }
 
@@ -86,7 +86,7 @@ $tree-view-icon-size: 24px;
       width: $tree-view-icon-size;
       height: $tree-view-icon-size;
       vertical-align: middle;
-      margin-right: 5px;
+      margin-inline-end: 5px;
       background-size: $tree-view-icon-size $tree-view-icon-size;
     }
 
@@ -104,6 +104,7 @@ $tree-view-icon-size: 24px;
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   cursor: pointer;
+  order: 0;
 
   &.dx-state-disabled {
     cursor: default;
@@ -111,37 +112,9 @@ $tree-view-icon-size: 24px;
 }
 
 .dx-rtl {
-  .dx-treeview-node-container {
-    &:first-child {
-      > .dx-treeview-node {
-        padding-left: 0;
-      }
-    }
-
-    .dx-treeview-node {
-      padding-left: 0;
-
-      &.dx-treeview-item-with-checkbox {
-        .dx-treeview-item {
-          padding-left: 0;
-        }
-      }
-
-      .dx-treeview-item {
-        .dx-treeview-item-content {
-          .dx-icon {
-            margin-right: 0;
-          }
-        }
-      }
-    }
-  }
-
   .dx-treeview-toggle-item-visibility,
   .dx-treeview-custom-expand-icon,
   .dx-treeview-custom-collapse-icon {
-    order: 0;
-
     @include flip-horizontally();
   }
 }
