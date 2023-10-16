@@ -3,7 +3,7 @@ import errors from '@js/core/errors';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
-  verifyLicense,
+  validateLicense,
 } from './license_validation';
 
 describe('license token', () => {
@@ -141,7 +141,7 @@ describe('license check', () => {
     { token: null, version: '1.0.4' },
     { token: undefined, version: '1.0.50' },
   ])('W0019 error should be logged if license is empty', ({ token, version }) => {
-    verifyLicense(token as string, version);
+    validateLicense(token as string, version);
     expect(errors.log).toHaveBeenCalledTimes(1);
     expect(errors.log).toHaveBeenCalledWith('W0019');
   });
@@ -169,7 +169,7 @@ describe('license check', () => {
     { token: '3.2.1', version: '1.2.1' },
     { token: TOKEN_23_1, version: '123' },
   ])('W0022 error should be logged if version is preview [%#]', ({ token, version }) => {
-    verifyLicense(token as string, version as string);
+    validateLicense(token as string, version as string);
     expect(errors.log).toHaveBeenCalledWith('W0022');
   });
 
@@ -179,21 +179,21 @@ describe('license check', () => {
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
   ])('No messages should be logged if license is valid', ({ token, version }) => {
-    verifyLicense(token, version);
+    validateLicense(token, version);
     expect(errors.log).not.toHaveBeenCalled();
   });
 
   test('Message should be logged only once', () => {
-    verifyLicense('', '1.0');
-    verifyLicense('', '1.0');
-    verifyLicense('', '1.0');
+    validateLicense('', '1.0');
+    validateLicense('', '1.0');
+    validateLicense('', '1.0');
 
     expect(errors.log).toHaveBeenCalledTimes(1);
   });
 
   test('No messages should be logged if setLicenseCheckSkipCondition() used', () => {
     setLicenseCheckSkipCondition();
-    verifyLicense('', '1.0');
+    validateLicense('', '1.0');
     expect(errors.log).not.toHaveBeenCalled();
   });
 
@@ -201,7 +201,7 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '23.2.3' },
     { token: TOKEN_23_2, version: '42.4.5' },
   ])('W0020 error should be logged if license is outdated', ({ token, version }) => {
-    verifyLicense(token, version);
+    validateLicense(token, version);
     expect(errors.log).toHaveBeenCalledTimes(1);
     expect(errors.log).toHaveBeenCalledWith('W0020');
   });
@@ -217,7 +217,7 @@ describe('license check', () => {
     { token: 'str@nge in.put', version: '1.2.3' },
     { token: '3.2.1', version: '1.2.3' },
   ])('W0021 error should be logged if license is corrupted/invalid [%#]', ({ token, version }) => {
-    verifyLicense(token, version);
+    validateLicense(token, version);
     expect(errors.log).toHaveBeenCalledWith('W0021');
   });
 });
