@@ -2103,9 +2103,8 @@ class Scheduler extends Widget<any> {
     }
 
     if (info) {
-      const viewOffset = this.getViewOffsetMs();
-      rawTargetedAppointment.displayStartDate = dateUtilsTs.addOffsets(new Date(info.appointment.startDate), [viewOffset]);
-      rawTargetedAppointment.displayEndDate = dateUtilsTs.addOffsets(new Date(info.appointment.endDate), [viewOffset]);
+      rawTargetedAppointment.displayStartDate = new Date(info.appointment.startDate);
+      rawTargetedAppointment.displayEndDate = new Date(info.appointment.endDate);
     }
 
     return rawTargetedAppointment;
