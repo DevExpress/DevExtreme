@@ -1,4 +1,5 @@
-import React, { useCallback, useLayoutEffect, useEffect, useState, useRef, memo } from 'react';
+import * as React from 'react';
+import { useCallback, useLayoutEffect, useEffect, useState, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
 import { TemplateWrapperProps } from './types-new';
