@@ -142,7 +142,7 @@ const getScreenshotName = (
     735,
     -735,
   ].forEach((offset) => {
-    test('Appointments resize', async (t) => {
+    test('Appointments resize common cases', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
       const usualAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.usual);
@@ -209,5 +209,82 @@ const getScreenshotName = (
       .after(async () => {
         await removeStylesheetRulesFromPage();
       });
+  });
+});
+
+[
+  -720,
+  720,
+].forEach((offset) => {
+  test(`Should resize appointment correctly with startDayHour and endDayHour (view: 'week', offset: ${offset})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+    const usualAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.usual);
+    const allDayAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.allDay);
+
+    await t.drag(usualAppointment.resizableHandle.bottom, 0, -50);
+    await t.drag(usualAppointment.resizableHandle.top, 0, 50);
+    await t.drag(allDayAppointment.resizableHandle.left, -100, 0);
+    await t.drag(allDayAppointment.resizableHandle.right, 100, 0);
+
+    await takeScreenshot(`offset_resize-appts_week_offset-${offset}_startDayHour-10_endDayHour-12.png`, scheduler.workSpace);
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      dataSource: [
+        {
+          startDate: '2023-09-06T22:00:00',
+          endDate: '2023-09-07T00:00:00',
+          text: APPOINTMENT_TITLES.usual,
+        },
+        {
+          startDate: '2023-09-06T00:00:00',
+          endDate: '2023-09-06T00:00:00',
+          allDay: true,
+          text: APPOINTMENT_TITLES.allDay,
+        },
+      ],
+      currentView: 'week',
+      startDayHour: 10,
+      endDayHour: 12,
+      currentDate: '2023-09-07',
+      height: 800,
+      offset,
+    });
+  });
+});
+
+[
+  { offset: -720, currentDate: '2023-09-07' },
+  { offset: 720, currentDate: '2023-09-06' },
+].forEach(({ offset, currentDate }) => {
+  test(`Should resize appointment correctly with startDayHour and endDayHour (view: 'timelineDay', offset: ${offset})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+    const usualAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.usual);
+
+    await t.drag(usualAppointment.resizableHandle.left, 200, 0);
+    await t.drag(usualAppointment.resizableHandle.right, -200, 0);
+
+    await takeScreenshot(`offset_resize-appts_timelineDay_offset-${offset}_startDayHour-10_endDayHour-12.png`, scheduler.workSpace);
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      dataSource: [{
+        startDate: '2023-09-06T22:00:00',
+        endDate: '2023-09-07T00:00:00',
+        text: APPOINTMENT_TITLES.usual,
+      }],
+      currentView: 'timelineDay',
+      startDayHour: 10,
+      endDayHour: 12,
+      height: 800,
+      currentDate,
+      offset,
+    });
   });
 });
