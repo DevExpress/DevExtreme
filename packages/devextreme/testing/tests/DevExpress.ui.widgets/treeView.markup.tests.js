@@ -386,8 +386,8 @@ QUnit.module('markup', {
             }]
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
-        const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        const $rootNode = $treeView.find(`.${NODE_CONTAINER_CLASS}:first-child`);
+        const $icon = $rootNode.find(`.${ITEM_CLASS}`).eq(0).children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).eq(0);
 
         assert.ok($icon.hasClass('dx-state-disabled'));
     });

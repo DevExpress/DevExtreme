@@ -137,8 +137,7 @@ $fluent-treeview-container-padding:
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(chevronright);
 
-  // @include dx-icon-font-centered-sizing($fluent-base-icon-size);
-
+  display: flex;
   font-size: $fluent-base-icon-size;
   text-align: center;
   width: $fluent-treeview-toggle-item-width;

@@ -53,7 +53,6 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
   padding-inline-start: $generic-treeview-toggle-item-width + $generic-treeview-item-element-gap;
 }
 
-
 .dx-state-selected {
   > .dx-treeview-item {
     color: $treeview-item-selected-color;
@@ -138,9 +137,9 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
   height: $generic-treeview-item-height;
   padding: $generic-treeview-item-padding;
 
-  .dx-treeview-item-content  {
+  .dx-treeview-item-content {
     .dx-icon {
-      @include dx-icon-sizing($generic-base-icon-size);
+      @include dx-icon-sizing($generic-base-icon-size, $generic-base-container-size);
     }
   }
 
@@ -152,29 +151,26 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
-  @include dx-icon-sizing($generic-base-icon-size);
+  @include dx-icon-sizing($generic-base-icon-size, $generic-base-container-size);
 }
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(spinright);
 
-  // @include dx-icon-font-centered-sizing($generic-treeview-arrow-icon-size);
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $generic-treeview-toggle-item-width;
   height: $generic-treeview-toggle-item-width;
   font-size: $generic-base-icon-size;
-  text-align: center;
+  color: $treeview-spin-icon-color;
 
   &::before {
     width: $generic-base-icon-size;
   }
 
-  color: $treeview-spin-icon-color;
-
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(spindown);
-
-    // @include dx-icon-font-centered-sizing($generic-treeview-arrow-icon-size);
 
     font-size: $generic-base-icon-size;
     text-align: center;

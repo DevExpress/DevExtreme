@@ -4,6 +4,7 @@ $size: null !default;
 @use "colors" as *;
 
 $generic-size-postfix: null !default;
+$generic-base-container-size: null !default;
 $generic-base-font-size: null !default;
 $generic-base-line-height: null !default;
 $generic-base-inline-widget-height: null !default;
@@ -23,6 +24,7 @@ $generic-base-inline-horizontal-padding: null !default;
   $generic-base-inline-widget-height: 36px !default;
   $generic-base-inline-block-height: 19px !default;
   $generic-base-icon-size: 18px !default;
+  $generic-base-container-size: 22px !default;
   $generic-base-more-adaptive-icon-size: 21px !default;
   $generic-base-inline-horizontal-padding: 10px !default;
 }
@@ -37,7 +39,8 @@ $generic-base-inline-horizontal-padding: null !default;
   // Base sizes
   $generic-base-inline-widget-height: 26px !default;
   $generic-base-inline-block-height: 16px !default;
-  $generic-base-icon-size: 14px !default;
+  $generic-base-icon-size: 18px !default;
+  $generic-base-container-size: 18px !default;
   $generic-base-more-adaptive-icon-size: 17px !default;
   $generic-base-inline-horizontal-padding: 6px !default;
 }

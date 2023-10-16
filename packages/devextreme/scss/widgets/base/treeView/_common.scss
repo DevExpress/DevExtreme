@@ -57,7 +57,6 @@ $tree-view-icon-size: 24px;
 }
 
 .dx-treeview-node {
-  position: static;
   list-style-type: none;
 
   @include user-select(none);
@@ -79,15 +78,12 @@ $tree-view-icon-size: 24px;
   cursor: pointer;
 
   .dx-treeview-item-content {
+    display: flex;
+    align-items: center;
     order: 2;
 
     .dx-icon {
-      display: inline-block;
-      width: $tree-view-icon-size;
-      height: $tree-view-icon-size;
-      vertical-align: middle;
-      margin-inline-end: 5px;
-      background-size: $tree-view-icon-size $tree-view-icon-size;
+      margin-inline-end: 8px;
     }
 
     span {
