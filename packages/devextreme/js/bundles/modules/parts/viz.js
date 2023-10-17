@@ -4,7 +4,8 @@ require('./data');
 
 /// BUNDLER_PARTS
 
-require('../common.charts');
+/* Chart common */
+require('../../../bundles/modules/common.charts');
 
 /* Viz core (dx.module-viz-core.js) */
 
