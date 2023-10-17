@@ -54,9 +54,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
   }
 
   calculateEndDate(startDate, interval, endDayHour) {
-    const result = setOptionHour(startDate, endDayHour);
-    result.setMinutes(result.getMinutes() - 1);
-    return result;
+    return setOptionHour(startDate, endDayHour);
   }
 
   getInterval() {
