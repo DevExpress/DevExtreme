@@ -3,6 +3,7 @@
 // adduse
 
 $generic-treeview-container-with-border-offset: null !default;
+$generic-treeview-base-container-size: null !default;
 $generic-treeview-toggle-item-width: null !default;
 $generic-treeview-item-with-checkbox-offset: null !default;
 $generic-treeview-item-height: null !default;
@@ -26,7 +27,7 @@ $generic-treeview-custom-expander-icon-offset: null !default;
 
 @if $size == "default" {
   $generic-treeview-item-height: 32px;
-
+  $generic-treeview-base-container-size: 22px !default;
   $generic-treeview-container-with-border-offset: 7px !default;
   $generic-checkbox-container-size: 22px !default;
   $generic-treeview-custom-expander-icon-offset: 20px;
@@ -47,7 +48,7 @@ $generic-treeview-custom-expander-icon-offset: null !default;
 @else if $size == "compact" {
   $generic-treeview-item-height: 28px;
   $generic-treeview-container-with-border-offset: 6px !default;
-
+  $generic-treeview-base-container-size: 18px !default;
   $generic-checkbox-container-size: 18px !default;
   $generic-treeview-custom-expander-icon-offset: 16px;
   $generic-treeview-toggle-item-width: 18px !default;

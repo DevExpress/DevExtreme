@@ -139,7 +139,7 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 
   .dx-treeview-item-content {
     .dx-icon {
-      @include dx-icon-sizing($generic-base-icon-size, $generic-base-container-size);
+      @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
     }
   }
 
@@ -151,7 +151,7 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
-  @include dx-icon-sizing($generic-base-icon-size, $generic-base-container-size);
+  @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
 }
 
 .dx-treeview-toggle-item-visibility {
