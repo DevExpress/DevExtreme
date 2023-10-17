@@ -59,6 +59,10 @@ $fluent-treeview-container-padding:
     display: flex;
     align-items: center;
   }
+  
+  .dx-checkbox-text {
+    padding-inline-start: $fluent-treeview-item-element-gap;
+  }
 }
 
 .dx-treeview-node {

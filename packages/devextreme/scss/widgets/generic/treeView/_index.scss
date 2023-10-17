@@ -41,11 +41,11 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 }
 
 .dx-treeview-select-all-item {
-  border-bottom: 1px solid $treeview-border-color;
+  border-block-end: 1px solid $treeview-border-color;
   padding: $generic-select-all-item-padding;
 
   .dx-checkbox-text {
-    padding-inline-start: $generic-select-all-text-offset;
+    padding-inline-start: $generic-treeview-item-element-gap;
   }
 }
 
