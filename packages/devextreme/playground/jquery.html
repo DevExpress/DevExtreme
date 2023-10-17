@@ -52,9 +52,32 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                const dataSource = [
+                    {
+                        id: 0,
+                        text: 'user',
+                        icon: 'user',
+                        content: 'User tab content',
+                        badge: '7',
+                    },
+                    {
+                        id: 1,
+                        text: 'comment',
+                        icon: 'comment',
+                        content: 'Comment tab content',
+                        badge: 'test',
+                    },
+                    {
+                        id: 2,
+                        text: 'find',
+                        icon: 'find',
+                        content: 'Find tab content',
+                        badge: 'VERYYYYYYYY LOOOOONG TEXTTTT!!!!',
+                    },
+                ];
+
+                $("#button").dxTabs({
+                    dataSource,
                 });
             });
         </script>
