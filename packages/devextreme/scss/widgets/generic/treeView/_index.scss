@@ -87,7 +87,7 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
   }
 
   &.dx-state-focused {
-    > .dx-checkbox .dx-checkbox-icon {
+    .dx-checkbox .dx-checkbox-icon {
       border: 1px solid $checkbox-focused-borderd-color;
     }
   }
