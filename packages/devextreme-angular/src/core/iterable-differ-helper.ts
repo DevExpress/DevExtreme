@@ -2,13 +2,15 @@ import {
   Injectable,
   SimpleChanges,
   IterableDiffers,
-  ɵisListLikeIterable,
 } from '@angular/core';
 
 import {
   DxComponent,
 } from './component';
 
+function isJsObject(o) {
+  return o !== null && (typeof o === 'function' || typeof o === 'object');
+}
 @Injectable()
 export class IterableDifferHelper {
   private _host: DxComponent;
@@ -44,7 +46,7 @@ export class IterableDifferHelper {
   }
 
   getChanges(prop: string, value: any) {
-    if (this._propertyDiffers[prop] && ɵisListLikeIterable(value)) {
+    if (this._propertyDiffers[prop] && isJsObject(value) && typeof value[Symbol.iterator] === 'function') {
       return this._propertyDiffers[prop].diff(value);
     }
   }
