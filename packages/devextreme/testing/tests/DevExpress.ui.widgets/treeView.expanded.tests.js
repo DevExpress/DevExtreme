@@ -141,7 +141,7 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
         const event = new $.Event('dxclick');
-        $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
+        $firstItem.find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
 
         const args = itemExpandedHandler.getCall(0).args[0];
         checkFunctionArguments(assert, args, {
@@ -193,7 +193,7 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
         const event = new $.Event('dxclick');
-        $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
+        $firstItem.find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
         checkFunctionArguments(assert, args, {
