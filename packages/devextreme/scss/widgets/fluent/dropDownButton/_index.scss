@@ -23,6 +23,12 @@
 }
 
 .dx-dropdownbutton {
+  &:not(.dx-dropdownbutton-has-arrow) {
+    .dx-button-has-icon:not(.dx-button-has-text) {
+      @include dx-button-onlyicon-sizing();
+    }
+  }
+
   &.dx-state-disabled {
     opacity: 1;
   }

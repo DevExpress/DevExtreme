@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "outDir": "./temp",
     "noEmitOnError": true,
     "experimentalDecorators": true,
@@ -13,12 +13,20 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "paths": {
+      "devextreme-vue": [
+        "../../node_modules/devextreme-vue/src"
+      ],
+      "devextreme-vue/*": [
+        "../../node_modules/devextreme-vue/src/*"
+      ]
+    }
   },
   "include": [
     "*.ts"
   ],
   "exclude": [
     "**/*.test.ts"
-  ]
+  ],
 }

@@ -12,17 +12,20 @@
   .dx-overlay-content {
     background-color: $tooltip-bg;
     color: $tooltip-color;
-    box-shadow: none;
+    box-shadow: $tooltip-shadow-color;
     border-radius: $tooltip-border-radius;
     min-height: auto;
 
     .dx-popup-content {
       padding: $fluent-tooltip-padding;
-      font-size: 12px;
+      font-size: $fluent-tooltip-font-size;
     }
   }
 
   &.dx-popover-wrapper .dx-popover-arrow {
-    display: none;
+    &::after {
+      box-shadow: $tooltip-shadow-color;
+      background: $tooltip-bg;
+    }
   }
 }

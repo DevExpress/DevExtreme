@@ -9,7 +9,7 @@
 * $name 10. Group header text color
 * $type color
 */
-$list-group-color: null !default;
+$list-group-color: $base-text-color !default;
 
 /**
 * $name 20. Group border color
@@ -33,7 +33,7 @@ $list-normal-color: $base-text-color !default;
 * $name 25. Expanded group header text color
 * $type color
 */
-$list-expanded-group-color: $base-accent !default;
+$list-expanded-group-color: $base-text-color !default;
 
 /**
 * $name 30. Hovered item background color
@@ -72,7 +72,6 @@ $list-icon-color: $base-icon-color !default;
 $list-item-chevron-icon-color: $base-spin-icon-color !default;
 
 @if $mode == "light" {
-  $list-group-color: $base-text-color !default;
   $list-item-selected-bg: color.change(#000, $alpha: 0.12) !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
   $list-item-focused-selected-bg: color.change(#000, $alpha: 0.18) !default;
@@ -80,7 +79,6 @@ $list-item-chevron-icon-color: $base-spin-icon-color !default;
 }
 
 @if $mode == "dark" {
-  $list-group-color: color.change($base-text-color, $alpha: 0.6) !default;
   $list-item-selected-bg: color.change(#6e6e80, $alpha: 0.5) !default;
   $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
   $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;

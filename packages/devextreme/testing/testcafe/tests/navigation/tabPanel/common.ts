@@ -511,3 +511,38 @@ test('TabPanel borders without scrolling', async (t) => {
     });
   });
 });
+
+test('TabPanel tabs min-width', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel tabs min-width.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).DevExpress.ui.dxTabs.defaultOptions({
+      options: {
+        useInkRipple: false,
+      },
+    });
+  })();
+
+  const dataSource = [
+    { text: 'ok', title: 'ok' },
+    { icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
+    { text: 'ok', title: 'ok', icon: 'search' },
+    { text: 'alignright', title: 'alignright', icon: 'alignright' },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    height: 250,
+    width: 900,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});
