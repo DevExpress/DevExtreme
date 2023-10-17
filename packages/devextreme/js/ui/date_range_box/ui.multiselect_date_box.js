@@ -94,8 +94,8 @@ class MultiselectDateBox extends DateBox {
         this._processValueChange(e);
     }
 
-    _popupElementTabHandler(e) {
-        const $element = $(e.currentTarget);
+    _popupTabHandler(e) {
+        const $element = $(e.target);
 
         if(e.shiftKey && $element.is(this._getFirstPopupElement())) {
             this._strategy.dateRangeBox.getEndDateBox().focus();

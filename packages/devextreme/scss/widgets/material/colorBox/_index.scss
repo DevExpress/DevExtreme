@@ -38,6 +38,8 @@
       }
     }
   }
+
+  @include colorbox-label-outside-mixin();
 }
 
 

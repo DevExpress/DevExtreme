@@ -18,7 +18,7 @@ import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
-import { isMaterialBased } from '../themes';
+import { isMaterialBased, isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
 import resizeObserverSingleton from '../../core/resize_observer';
 import './ui.form.layout_manager';
@@ -120,8 +120,15 @@ const Form = Widget.inherit({
                     return isMaterialBased();
                 },
                 options: {
-                    showColonAfterLabel: false,
                     labelLocation: 'top'
+                }
+            },
+            {
+                device: function() {
+                    return isMaterial();
+                },
+                options: {
+                    showColonAfterLabel: false,
                 }
             }
         ]);

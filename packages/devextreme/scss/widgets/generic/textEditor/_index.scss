@@ -11,6 +11,7 @@
 @use "../button/mixins" as *;
 @use "../../base/textEditor";
 @use "../../base/textEditor/mixins" as *;
+@use "../colorBox/sizes" as *;
 
 // adduse
 
@@ -116,10 +117,21 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
     }
   }
 
-  &.dx-state-focused,
-  &.dx-state-focused.dx-state-hover {
+  &.dx-state-focused {
     .dx-texteditor-label {
       color: $base-accent;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $base-invalid-color;
+      }
+    }
+  }
+
+  &.dx-texteditor-label-outside {
+    .dx-texteditor-label {
+      color: $base-text-color;
     }
 
     &.dx-invalid {
@@ -235,6 +247,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-inline-block-height,
   math.div(($generic-base-border-width + $generic-base-font-size), 2),
+  $generic-texteditor-label-outside-top-offset,
   1.5px,
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-base-inline-borderedwidget-horizontal-padding,
@@ -253,6 +266,9 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-font-size,
   $generic-base-inline-borderedwidget-top-padding,
   1px,
+  $generic-texteditor-label-outside-font-size,
+  $generic-texteditor-label-outside-height,
+  $generic-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,
@@ -260,12 +276,15 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-line-height,
   0,
+  $generic-texteditor-label-outside-top-offset,
   $generic-base-font-size,
   $generic-base-inline-block-height,
   $generic-base-line-height,
   $generic-base-inline-borderedwidget-horizontal-padding,
   $generic-texteditor-filled-input-with-label-top-padding,
   $generic-texteditor-filled-input-with-label-bottom-padding,
+  $generic-texteditor-label-outside-font-size,
+  $generic-texteditor-label-outside-height,
 ); 
 @include dx-editor-underlined(
   $texteditor-label-transition,
@@ -273,11 +292,14 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-base-inline-block-height,
   $generic-base-line-height,
   0,
+  $generic-texteditor-label-outside-top-offset,
   $generic-base-font-size,
   $generic-base-inline-block-height,
   $generic-base-line-height,
   $generic-texteditor-underlined-input-with-label-top-padding,
   $generic-texteditor-underlined-input-with-label-bottom-padding,
+  $generic-texteditor-label-outside-font-size,
+  $generic-texteditor-label-outside-height,
 );
 
 .dx-editor-underlined {

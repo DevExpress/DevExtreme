@@ -3,7 +3,7 @@
 // adduse
 
 
-@mixin dx-tabs-indicator-primary-mixin($position, $color) {
+@mixin dx-tabs-indicator-primary($position, $color) {
   &::after {
     content: "";
     position: absolute;
@@ -37,7 +37,7 @@
   }
 }
 
-@mixin dx-tabs-indicator-secondary-base-mixin($position, $color) {
+@mixin dx-tabs-horizontal-indicator-secondary($position, $color) {
   &::after {
     content: "";
     position: absolute;
@@ -63,7 +63,7 @@
   }
 }
 
-@mixin dx-tabs-indicator-secondary-vertical-mixin($position, $color) {
+@mixin dx-tabs-vertical-indicator-secondary($position, $color) {
   &::after {
     content: "";
     position: absolute;

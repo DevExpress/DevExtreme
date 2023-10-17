@@ -239,11 +239,6 @@ $diagram-toolbox-title-size: 18px;
   .dx-diagram-toolbox-input {
     margin: $diagram-toolbox-input-margin;
 
-    .dx-texteditor-input,
-    .dx-placeholder::before {
-      padding: $diagram-toolbox-input-v-padding $diagram-toolbox-input-h-padding;
-    }
-
     &.dx-editor-outlined {
       &:not(.dx-state-focused) {
         box-shadow: none;
@@ -309,22 +304,7 @@ $diagram-toolbox-title-size: 18px;
     }
 
     .dx-item-content.dx-accordion-item-title {
-      height: 32px;
-
-      .dx-accordion-item-title-caption {
-        font-size: 0.8em;
-        text-transform: uppercase;
-        left: $diagram-toolbox-h-padding;
-        top: $diagram-toolbox-accordion-v-padding;
-        right: 32px;
-      }
-
-      &::before {
-        font-size: 1em;
-        line-height: 0.8em;
-        right: 0;
-        top: $diagram-toolbox-accordion-v-padding;
-      }
+      min-height: 32px;
     }
 
     .dx-item-content.dx-accordion-item-body {

@@ -135,7 +135,8 @@ class DateBox extends BaseComponent<React.PropsWithChildren<IDateBoxOptions>> {
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   maxLength: PropTypes.oneOfType([
     PropTypes.number,

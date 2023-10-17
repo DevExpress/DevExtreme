@@ -6,7 +6,7 @@ import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
 import devices from '../../core/devices';
 import messageLocalization from '../../localization/message';
-import { current, isMaterial, isMaterialBased } from '../themes';
+import { current, isMaterial, isFluent } from '../themes';
 import Editor from '../editor/editor';
 import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
@@ -20,8 +20,9 @@ import { addNamespace } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
-const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
-const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
+const TEXTEDITOR_LABEL_STATIC_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_LABEL_OUTSIDE_CLASS = 'dx-texteditor-label-outside';
+const TEXTEDITOR_LABEL_FLOATING_CLASS = 'dx-texteditor-with-floating-label';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
@@ -126,19 +127,20 @@ class DateRangeBox extends Editor {
             {
                 device: function() {
                     const themeName = current();
-                    return isMaterialBased(themeName);
+                    return isMaterial(themeName);
                 },
                 options: {
-                    labelMode: 'floating'
+                    labelMode: 'floating',
+                    stylingMode: config().editorStylingMode || 'filled',
                 }
             },
             {
                 device: function() {
                     const themeName = current();
-                    return isMaterial(themeName);
+                    return isFluent(themeName);
                 },
                 options: {
-                    stylingMode: config().editorStylingMode || 'filled',
+                    labelMode: 'outside'
                 }
             },
             {
@@ -303,14 +305,20 @@ class DateRangeBox extends Editor {
         const isLabelVisible = (!!startDateLabel || !!endDateLabel) && labelMode !== 'hidden';
 
         this.$element()
-            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
+            .removeClass(TEXTEDITOR_LABEL_FLOATING_CLASS)
+            .removeClass(TEXTEDITOR_LABEL_OUTSIDE_CLASS)
+            .removeClass(TEXTEDITOR_LABEL_STATIC_CLASS);
 
         if(isLabelVisible) {
             this.$element()
                 .addClass(labelMode === 'floating'
-                    ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS
-                    : TEXTEDITOR_WITH_LABEL_CLASS);
+                    ? TEXTEDITOR_LABEL_FLOATING_CLASS
+                    : TEXTEDITOR_LABEL_STATIC_CLASS);
+
+            if(labelMode === 'outside') {
+                this.$element()
+                    .addClass(TEXTEDITOR_LABEL_OUTSIDE_CLASS);
+            }
         }
     }
 

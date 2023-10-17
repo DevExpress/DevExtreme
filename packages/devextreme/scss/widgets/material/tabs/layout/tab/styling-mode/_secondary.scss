@@ -26,22 +26,22 @@
 
 .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
   .dx-tab.dx-tab-selected .dx-tab-content {
-    @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-selected-tab-border-color);
+    @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-selected-tab-border-color);
   }
 
   .dx-tab.dx-state-disabled .dx-tab-content {
-    @include dx-tabs-indicator-secondary-base-mixin(bottom, $tabs-disabled-tab-border-color);
+    @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-disabled-tab-border-color);
   }
 }
 
 .dx-tabs-vertical {
   &.dx-tabs-styling-mode-secondary {
     .dx-tab-selected {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-selected-tab-border-color);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-selected-tab-border-color);
     }
 
     .dx-tab-selected.dx-state-disabled {
-      @include dx-tabs-indicator-secondary-vertical-mixin(right, $tabs-disabled-tab-border-color);
+      @include dx-tabs-vertical-indicator-secondary(right, $tabs-disabled-tab-border-color);
     }
   }
 }

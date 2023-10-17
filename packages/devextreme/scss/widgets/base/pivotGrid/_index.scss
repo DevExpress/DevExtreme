@@ -16,13 +16,6 @@ $pivotgrid-field-area-text-color: null !default;
 $pivotgrid-data-area-color: null !default;
 $pivotgrid-grandtotalcolor: null !default;
 $pivotgrid-accent-color: null !default;
-$pivotgrid-area-all-image: null !default;
-$pivotgrid-area-filter-image: null !default;
-$pivotgrid-area-row-image: null !default;
-$pivotgrid-area-column-image: null !default;
-$pivotgrid-area-data-image: null !default;
-$pivotgrid-dimension-image: null !default;
-$pivotgrid-hierarchy-image: null !default;
 $pivotgrid-empty-area-text-padding: null !default;
 $pivotgrid-button-top-padding: null !default;
 
@@ -480,9 +473,6 @@ $pivotgrid-expand-icon-text-offset: 0;
 
   .dx-treeview-item .dx-icon {
     vertical-align: middle;
-    margin: 0 5px 1px 0;
-
-    @include dx-icon-sizing(16px);
   }
 
   .dx-treeview-search {
@@ -492,8 +482,6 @@ $pivotgrid-expand-icon-text-offset: 0;
   .dx-area-icon {
     display: inline-block;
     vertical-align: middle;
-    width: 16px;
-    height: 16px;
   }
 
   .dx-area {
@@ -525,42 +513,6 @@ $pivotgrid-expand-icon-text-offset: 0;
 
   .dx-area-fields.dx-drag-target {
     border-color: $pivotgrid-accent-color;
-  }
-
-  .dx-area-icon-all {
-    background: $pivotgrid-area-all-image no-repeat center center;
-  }
-
-  .dx-area-icon-filter {
-    background: $pivotgrid-area-filter-image no-repeat center center;
-  }
-
-  .dx-area-icon-row {
-    background: $pivotgrid-area-row-image no-repeat center center;
-  }
-
-  .dx-area-icon-column {
-    background: $pivotgrid-area-column-image no-repeat center center;
-  }
-
-  .dx-area-icon-data {
-    background: $pivotgrid-area-data-image no-repeat center center;
-  }
-
-  .dx-icon-measure {
-    background: $pivotgrid-area-data-image no-repeat center center;
-  }
-
-  .dx-icon-dimension {
-    background: $pivotgrid-dimension-image no-repeat center center;
-  }
-
-  .dx-icon-hierarchy {
-    background: $pivotgrid-hierarchy-image no-repeat center center;
-
-    &::before {
-      content: none;
-    }
   }
 }
 

@@ -16,6 +16,7 @@ const CLASS = {
   navigatorNextView: 'dx-calendar-navigator-next-view',
   navigatorPrevView: 'dx-calendar-navigator-previous-view',
   navigatorCaption: 'dx-calendar-caption-button',
+  viewsWrapper: 'dx-calendar-views-wrapper',
 };
 export default class Popup extends Overlay {
   public static className = '.dx-popup-wrapper';
@@ -41,6 +42,11 @@ export default class Popup extends Overlay {
   // eslint-disable-next-line class-methods-use-this
   getBottomToolbar(): Selector {
     return Selector(`.${CLASS.bottomToolbar}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getViewsWrapper(): Selector {
+    return Selector(`.${CLASS.viewsWrapper}`);
   }
 
   getCloseButton(): Button {

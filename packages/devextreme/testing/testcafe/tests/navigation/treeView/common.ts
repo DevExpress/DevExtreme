@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -179,7 +179,7 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
 
       await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
-      if (!isMaterial()) {
+      if (!isMaterialBased()) {
         await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
         await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
       }

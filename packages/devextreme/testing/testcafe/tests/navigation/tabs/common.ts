@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
@@ -37,10 +37,87 @@ fixture.disablePageReloads`Tabs_common`
   });
 });
 
+test('Tabs with width: auto in flex container', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'display: flex; width: 800px;');
+
+  const dataSource = [
+    { text: 'ok' },
+    { icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
+    { text: 'ok', icon: 'search' },
+    { text: 'alignright', icon: 'alignright' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource, width: 'auto' }, '#tabs');
+});
+
+[true, false].forEach((rtlEnabled) => {
+  ['primary', 'secondary'].forEach((stylingMode) => {
+    test('Tabs icon position', async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await testScreenshot(t, takeScreenshot, `Tabs 1 selected stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
+
+      await t.hover(firstItem);
+      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      await t.dispatchEvent(firstItem, 'mousedown');
+      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
+
+      await t
+        .dispatchEvent(firstItem, 'mouseup')
+        .click(firstItem)
+        .hover(thirdItem);
+
+      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      await t.dispatchEvent(thirdItem, 'mousedown');
+      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await appendElementTo('#container', 'div', 'tabs');
+      await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+
+      const dataSource = [
+        { text: 'user' },
+        { text: 'comment', icon: 'comment' },
+        { icon: 'user' },
+        { icon: 'money' },
+      ] as Item[];
+
+      const tabsOptions = {
+        dataSource,
+        stylingMode,
+        rtlEnabled,
+        selectedItem: dataSource[0],
+      };
+
+      return createWidget('dxTabs', tabsOptions, '#tabs');
+    });
+  });
+});
+
 test('Tabs in contrast theme', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  if (!isMaterial()) {
+  if (!isMaterialBased()) {
     await testScreenshot(t, takeScreenshot, 'Tabs in contrast theme if first tab is focused.png', { element: '#tabs', theme: 'generic.contrast' });
   }
 

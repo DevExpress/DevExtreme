@@ -3,7 +3,7 @@ import {
   insertStylesheetRulesToPage,
   appendElementTo, setAttribute,
 } from '../../../helpers/domUtils';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
@@ -28,7 +28,7 @@ test('Menu items render', async (t) => {
 
   await expandMenuItems();
 
-  if (!isMaterial()) {
+  if (!isMaterialBased()) {
     await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.dark' });
     await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.contrast' });
   }

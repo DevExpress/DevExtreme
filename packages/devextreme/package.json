@@ -38,7 +38,6 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
     "rrule": "^2.7.1",
-    "sha1": "1.1.1",
     "turndown": "~7.1.0"
   },
   "devDependencies": {
@@ -89,7 +88,6 @@
     "devextreme-screenshot-comparer": "2.0.15",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.7",
-    "eslint-plugin-forbidden-imports": "file:js/__internal/.eslint-tmp-local-plugin",
     "exceljs": "4.3.0",
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",

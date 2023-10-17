@@ -80,8 +80,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxContextMenuComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxContextMenu;
+export class DxContextMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxContextMenu<TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]

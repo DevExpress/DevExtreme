@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
 import Color from '../../color';
 import ColorView from './color_view';
 import { extend } from '../../core/utils/extend';
@@ -63,21 +62,6 @@ const ColorBox = DropDownEditor.inherit({
         };
 
         return extend(this.callBase(), {
-            tab: function(e) {
-                if(!this.option('opened')) {
-                    return;
-                }
-
-                const $focusableElement = e.shiftKey
-                    ? this._getLastPopupElement()
-                    : this._getFirstPopupElement();
-
-                if($focusableElement) {
-                    eventsEngine.trigger($focusableElement, 'focus');
-                    $focusableElement.select();
-                }
-                e.preventDefault();
-            },
             enter: this._enterKeyHandler,
             leftArrow: arrowHandler,
             rightArrow: arrowHandler,
@@ -166,12 +150,6 @@ const ColorBox = DropDownEditor.inherit({
         const $colorView = $('<div>').appendTo(this._popup.$content());
 
         this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
-        this._colorView.registerKeyHandler('escape', this._escapeHandler.bind(this));
-    },
-
-    _escapeHandler: function() {
-        this.close();
-        this.focus();
     },
 
     _applyNewColor: function(value) {
@@ -344,11 +322,16 @@ const ColorBox = DropDownEditor.inherit({
     },
 
     _applyColorFromInput: function(value) {
+        const { editAlphaChannel } = this.option();
         const newColor = new Color(value);
 
         if(newColor.colorIsInvalid) {
             this._resetInputValue();
-            value = this.option('value');
+            return this.option('value');
+        }
+
+        if(editAlphaChannel) {
+            return colorUtils.makeRgba(value);
         }
 
         return value;

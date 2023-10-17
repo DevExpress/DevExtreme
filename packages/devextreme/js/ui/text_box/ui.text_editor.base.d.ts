@@ -56,6 +56,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default 'static'
      * @default 'floating' &for(Material)
+     * @default 'outside' &for(Fluent)
      * @public
      */
     labelMode?: LabelMode;

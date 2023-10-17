@@ -63,8 +63,8 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxTabPanelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTabPanel;
+export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxTabPanel<TItem, TKey>;
 
     /**
      * [descr:WidgetOptions.accessKey]

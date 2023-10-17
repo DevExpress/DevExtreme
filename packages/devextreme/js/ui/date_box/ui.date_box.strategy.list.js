@@ -25,13 +25,6 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     supportedKeys: function() {
         return {
-            tab: function() {
-                const { opened, applyValueMode } = this.option();
-
-                if(opened && applyValueMode === 'instantly') {
-                    this.close();
-                }
-            },
             space: noop,
             home: noop,
             end: noop

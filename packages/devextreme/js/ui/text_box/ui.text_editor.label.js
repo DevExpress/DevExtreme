@@ -3,6 +3,7 @@ import Guid from '../../core/guid';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_LABEL_OUTSIDE_CLASS = 'dx-texteditor-label-outside';
 const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
 
@@ -73,6 +74,7 @@ class TextEditorLabel {
     _updateEditorLabelClass(visible) {
         this._props.$editor
             .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_LABEL_OUTSIDE_CLASS)
             .removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
 
         if(visible) {
@@ -81,6 +83,10 @@ class TextEditorLabel {
                 : TEXTEDITOR_WITH_LABEL_CLASS;
 
             this._props.$editor.addClass(labelClass);
+
+            if(this._props.mode === 'outside') {
+                this._props.$editor.addClass(TEXTEDITOR_LABEL_OUTSIDE_CLASS);
+            }
         }
     }
 

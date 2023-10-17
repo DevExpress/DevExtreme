@@ -92,6 +92,7 @@ jobs:
           { componentFolder: "htmlEditor", name: "htmlEditor - fluent", theme: 'fluent.blue.light', concurrency: 1 },
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
+          { componentFolder: "navigation", name: "navigation - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -103,7 +104,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '116.0.5845.110'
+        chrome-version: '118.0.5993.70'
 
     - name: Use Node.js
       uses: actions/setup-node@v3

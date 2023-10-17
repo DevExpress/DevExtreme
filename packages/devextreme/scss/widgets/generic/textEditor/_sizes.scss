@@ -5,6 +5,9 @@
 
 $generic-texteditor-clear-icon-oversize: null !default;
 $generic-texteditor-label-size: null !default;
+$generic-texteditor-label-outside-font-size: null !default;
+$generic-texteditor-label-outside-height: null !default;
+$generic-texteditor-label-outside-top-offset: null !default;
 $generic-texteditor-button-icononly-bottom-padding: null !default;
 $generic-texteditor-button-icononly-horizontal-padding: null !default;
 
@@ -21,6 +24,9 @@ $generic-texteditor-underlined-input-with-label-bottom-padding: $generic-base-in
 @if $size == "default" {
   $generic-texteditor-clear-icon-oversize: 2px !default;
   $generic-texteditor-label-size: 12px !default;
+  $generic-texteditor-label-outside-font-size: 14px !default;
+  $generic-texteditor-label-outside-height: 20px !default;
+  $generic-texteditor-label-outside-top-offset: 24px !default;
   $generic-texteditor-button-icononly-bottom-padding: $generic-texteditor-button-bottom-padding !default;
   $generic-texteditor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;
 }
@@ -28,6 +34,9 @@ $generic-texteditor-underlined-input-with-label-bottom-padding: $generic-base-in
 @else if $size == "compact" {
   $generic-texteditor-clear-icon-oversize: 1px !default;
   $generic-texteditor-label-size: 10px !default;
+  $generic-texteditor-label-outside-font-size: 12px !default;
+  $generic-texteditor-label-outside-height: 16px !default;
+  $generic-texteditor-label-outside-top-offset: 18px !default;
   $generic-texteditor-button-icononly-bottom-padding: $generic-texteditor-button-bottom-padding + 1px !default;
   $generic-texteditor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;
 }

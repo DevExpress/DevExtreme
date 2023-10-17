@@ -28,7 +28,7 @@ $texteditor-filled-bg: $base-neutral-background !default;
 * $name 40. Focused background color
 * $type color
 */
-$texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
+$texteditor-focused-bg: $base-neutral-background1 !default;
 
 /**
 * $name 50. Border color

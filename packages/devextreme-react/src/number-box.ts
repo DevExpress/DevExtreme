@@ -85,7 +85,8 @@ class NumberBox extends BaseComponent<React.PropsWithChildren<INumberBoxOptions>
     PropTypes.oneOf([
       "static",
       "floating",
-      "hidden"])
+      "hidden",
+      "outside"])
   ]),
   max: PropTypes.number,
   min: PropTypes.number,

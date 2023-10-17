@@ -5,6 +5,7 @@ import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
 import devices from 'core/devices';
 import config from 'core/config';
+import licenseModule, { setLicenseCheckSkipCondition } from '__internal/core/license/license_validation';
 
 const TestComponent = Component.inherit({
 
@@ -1598,6 +1599,29 @@ QUnit.module('action API', {}, () => {
         assert.strictEqual(warningCount, 1);
     });
 
+    QUnit.test('_createActionByOption should not modify config argument (T1192401)', function(assert) {
+        const instance = new TestComponent();
+
+        const config = { options: [] };
+        const configEtalon = JSON.stringify(config);
+
+        instance._createActionByOption('ondrawn', config)();
+
+        assert.equal(JSON.stringify(config), configEtalon);
+    });
+
+    QUnit.test('_createAction should not modify config argument (T1192401)', function(assert) {
+        const instance = new TestComponent();
+
+        const config = { options: [] };
+        const configEtalon = JSON.stringify(Object.keys(config));
+
+        instance._createAction({}, config)();
+
+        assert.equal(JSON.stringify(Object.keys(config)), configEtalon);
+
+    });
+
     QUnit.test('action executing should fire event handlers with same arguments and context', function(assert) {
         let actionArguments = null;
         let actionContext = null;
@@ -1705,5 +1729,34 @@ QUnit.module('action API', {}, () => {
         assert.equal(count, 2);
 
         config({ wrapActionsBeforeExecute: originFlag });
+    });
+});
+
+QUnit.module('License check', {
+    beforeEach: function() {
+        sinon.spy(licenseModule, 'verifyLicense');
+        setLicenseCheckSkipCondition(false);
+    },
+    afterEach: function() {
+        licenseModule.verifyLicense.restore();
+    }
+}, () => {
+    QUnit.test('verifyLicense() method should be called once', function(assert) {
+        new TestComponent();
+
+        assert.ok(licenseModule.verifyLicense.calledOnce);
+    });
+
+    QUnit.test('verifyLicense() method should be called with license from config', function(assert) {
+        try {
+            const licenseKey = 'license key';
+            config({ licenseKey });
+
+            new TestComponent();
+
+            assert.ok(licenseModule.verifyLicense.calledWith(licenseKey));
+        } finally {
+            config({ licenseKey: null });
+        }
     });
 });

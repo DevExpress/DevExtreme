@@ -56,7 +56,9 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-menu {
       background-color: transparent;
-      height: 100%;
+      margin-top: math.div(($fluent-grid-base-header-height - $fluent-button-height), 2);
+      margin-left: 5px !important; // stylelint-disable-line declaration-no-important
+      height: $fluent-button-height;
 
       .dx-menu-item {
         .dx-menu-item-content {
@@ -74,9 +76,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     &.dx-filter-menu {
       .dx-menu-item-content {
         .dx-icon {
-          color: $datagrid-menu-icon-color;
-
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing($fluent-grid-base-filter-icon-size);
 
           &.dx-icon-filter-operation-default {
             margin-top: 2px;
@@ -258,7 +258,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       & > td {
         padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
         font-size: $fluent-grid-base-cell-font-size;
-        line-height: $fluent-grid-base-cell-line-height - 1;
+        line-height: $fluent-grid-base-cell-line-height;
       }
     }
 

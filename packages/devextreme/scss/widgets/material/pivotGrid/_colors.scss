@@ -37,36 +37,13 @@ $pivotgrid-accent-color: $base-accent !default;
 $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
 $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
 $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-$pivotgrid-area-all-image: null !default;
-$pivotgrid-area-filter-image: null !default;
-$pivotgrid-area-column-image: null !default;
-$pivotgrid-area-row-image: null !default;
-$pivotgrid-area-data-image: null !default;
-$pivotgrid-dimension-image: null !default;
-$pivotgrid-hierarchy-image: null !default;
 $pivotgrid-position-indicator-color: gray !default;
 $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
 
 @if $mode == "light" {
   $pivotgrid-field-area-box-background-color: darken($base-bg, 12%) !default;
-
-  $pivotgrid-area-all-image: data-uri('images/widgets/material/color-schemes/light/grid/area-all.png') !default;
-  $pivotgrid-area-filter-image: data-uri('images/widgets/material/color-schemes/light/grid/area-filter.png') !default;
-  $pivotgrid-area-column-image: data-uri('images/widgets/material/color-schemes/light/grid/area-column.png') !default;
-  $pivotgrid-area-row-image: data-uri('images/widgets/material/color-schemes/light/grid/area-row.png') !default;
-  $pivotgrid-area-data-image: data-uri('images/widgets/material/color-schemes/light/grid/area-data.png') !default;
-  $pivotgrid-dimension-image: data-uri('images/widgets/material/color-schemes/light/grid/dimension.png') !default;
-  $pivotgrid-hierarchy-image: data-uri('images/widgets/material/color-schemes/light/grid/hierarchy.png') !default;
 }
 
 @if $mode == "dark" {
   $pivotgrid-field-area-box-background-color: lighten($base-bg, 12%) !default;
-
-  $pivotgrid-area-all-image: data-uri('images/widgets/material/color-schemes/dark/grid/area-all.png') !default;
-  $pivotgrid-area-filter-image: data-uri('images/widgets/material/color-schemes/dark/grid/area-filter.png') !default;
-  $pivotgrid-area-column-image: data-uri('images/widgets/material/color-schemes/dark/grid/area-column.png') !default;
-  $pivotgrid-area-row-image: data-uri('images/widgets/material/color-schemes/dark/grid/area-row.png') !default;
-  $pivotgrid-area-data-image: data-uri('images/widgets/material/color-schemes/dark/grid/area-data.png') !default;
-  $pivotgrid-dimension-image: data-uri('images/widgets/material/color-schemes/dark/grid/dimension.png') !default;
-  $pivotgrid-hierarchy-image: data-uri('images/widgets/material/color-schemes/dark/grid/hierarchy.png') !default;
 }

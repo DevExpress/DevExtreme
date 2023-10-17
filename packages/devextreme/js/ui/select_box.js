@@ -49,7 +49,7 @@ const SelectBox = DropDownList.inherit({
 
         return extend({}, parent, {
             tab: function() {
-                if(this.option('opened') && this.option('applyValueMode') === 'instantly') {
+                if(this.option('opened') && !this._popup.getFocusableElements().length) {
                     this._resetCaretPosition(true);
                 }
 

@@ -42,7 +42,6 @@
     padding-bottom: $fluent-form-layout-manager-padding;
     font-size: $fluent-form-label-font-size;
 
-
     .dx-field-item {
       &.dx-last-row {
         padding-bottom: 0;
@@ -88,6 +87,7 @@
 
 .dx-field-item-label-location-top {
   padding: $fluent-form-top-label-padding;
+  margin-bottom: $fluent-form-top-label-bottom-margin;
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;
