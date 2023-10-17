@@ -20,7 +20,7 @@ import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
 import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
-import guid from 'core/guid';
+import Guid from 'core/guid';
 
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
@@ -7465,11 +7465,11 @@ QUnit.module('regression', {
         assert.ok(true, 'Widget rendered');
     });
 
-    QUnit.test('option maxFilterQueryLength should be propagated to selection controls and let exceed its default limit (T1191760)', function(assert) {
+    QUnit.test('maxFilterQueryLength option should be propagated to selection and allow to exceed its default limit (T1191760)', function(assert) {
         const arrayLength = 25;
         const arraySource = Array(arrayLength).fill(null).map((_, idx) => ({
             display: `Item ${idx}`,
-            value: new guid().toString()
+            value: new Guid().toString()
         }));
         const dataSource = new DataSource({
             paginate: true,
@@ -7522,9 +7522,9 @@ QUnit.module('regression', {
         this.clock.tick(50);
         $inputWrapper.trigger('dxclick');
 
-        const selectAllCheck = $(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
+        const selectAllCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
-        assert.equal(selectAllCheck.option('value'), true, 'the "select all" checkbox is checked');
+        assert.strictEqual(selectAllCheckBox.option('value'), true, 'the "select all" checkbox is checked');
     });
 });
 
