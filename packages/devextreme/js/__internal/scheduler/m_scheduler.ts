@@ -53,6 +53,7 @@ import { SchedulerHeader } from './header/m_header';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
+import { VIEWS } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { ExpressionUtils } from './m_expression_utils';
 import { hide as hideLoading, show as showLoading } from './m_loading';
@@ -646,7 +647,7 @@ class Scheduler extends Widget<any> {
         this.updateInstances();
 
         this._appointments.option('items', []);
-        this._updateOption('workSpace', 'viewOffset', value * toMs('minute'));
+        this._updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
         this._appointments.repaint();
         this._filterAppointmentsByDate();
 
@@ -2632,7 +2633,17 @@ class Scheduler extends Widget<any> {
   }
 
   getViewOffsetMs(): number {
-    return this._getCurrentViewOption('offset') * toMs('minute');
+    const offsetFromOptions = this._getCurrentViewOption('offset');
+    return this.normalizeViewOffsetValue(offsetFromOptions);
+  }
+
+  private normalizeViewOffsetValue(viewOffset?: number): number {
+    if (!isDefined(viewOffset)
+      || this.currentViewType === VIEWS.AGENDA) {
+      return 0;
+    }
+
+    return viewOffset * toMs('minute');
   }
 }
 
