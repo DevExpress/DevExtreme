@@ -53,8 +53,9 @@ export class IterableDifferHelper {
   }
 
   doCheck(prop: string) {
+    const hostValue = this._host[prop];
+
     if (this._propertyDiffers[prop]) {
-      const hostValue = this._host[prop];
       const isChangedOption = this.checkChangedOptions(prop, hostValue);
 
       const changes = this.getChanges(prop, hostValue);
