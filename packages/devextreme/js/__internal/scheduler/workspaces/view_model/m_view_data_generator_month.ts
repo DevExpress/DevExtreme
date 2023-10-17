@@ -26,7 +26,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
   getCellData(rowIndex, columnIndex, options, allDay) {
     const data = super.getCellData(rowIndex, columnIndex, options, false);
 
-    const { startDate } = data;
+    const { startDate, endDate } = data;
     const {
       indicatorTime,
       timeZoneCalculator,
@@ -37,6 +37,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
     data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
     data.text = getCellText(startDate, intervalCount);
+    data.endDate = new Date(endDate.getTime() - dateUtils.dateToMilliseconds('minute'));
 
     return data;
   }
