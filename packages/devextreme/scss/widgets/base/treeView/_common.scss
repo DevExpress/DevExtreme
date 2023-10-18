@@ -87,6 +87,12 @@ $tree-view-icon-size: 24px;
     .dx-icon {
       margin-inline-end: 8px;
     }
+
+    .dx-button-has-icon {
+      .dx-icon {
+        margin-inline-end: 0;
+      }
+    }
   }
 
   &.dx-state-disabled {
