@@ -73,7 +73,7 @@ const repeatEndTypes = [
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-const stylingMode = isFluent(current()) ? 'filled' : undefined;
+const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
 class RecurrenceRule {
   _recurrenceProcessor = getRecurrenceProcessor();
@@ -260,7 +260,7 @@ class RecurrenceEditor extends Editor {
       editorType: 'dxSelectBox',
       cssClass: FREQUENCY_EDITOR,
       editorOptions: {
-        stylingMode,
+        stylingMode: getStylingModeFunc(),
         items: frequencies,
         value: freq,
         field: 'freq',
@@ -290,7 +290,7 @@ class RecurrenceEditor extends Editor {
           dataField: 'interval',
           editorType: 'dxNumberBox',
           editorOptions: {
-            stylingMode,
+            stylingMode: getStylingModeFunc(),
             format: '#',
             width: recurrentEditorNumberBoxWidth,
             min: 1,
@@ -386,7 +386,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'bymonth',
       editorType: 'dxSelectBox',
       editorOptions: {
-        stylingMode,
+        stylingMode: getStylingModeFunc(),
         field: 'bymonth',
         items: months,
         value: this._monthOfYearByRules(),
@@ -410,7 +410,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'bymonthday',
       editorType: 'dxNumberBox',
       editorOptions: {
-        stylingMode,
+        stylingMode: getStylingModeFunc(),
         min: 1,
         max: 31,
         format: '#',
@@ -607,7 +607,7 @@ class RecurrenceEditor extends Editor {
       .appendTo($editorWrapper);
 
     this._repeatCountEditor = this._createComponent(this._$repeatCountEditor, NumberBox, {
-      stylingMode,
+      stylingMode: getStylingModeFunc(),
       field: 'count',
       format: '#',
       width: recurrentEditorNumberBoxWidth,
@@ -651,7 +651,7 @@ class RecurrenceEditor extends Editor {
       .appendTo($editorWrapper);
 
     this._repeatUntilDate = this._createComponent(this._$repeatDateEditor, DateBox, {
-      stylingMode,
+      stylingMode: getStylingModeFunc(),
       field: 'until',
       value: repeatUntil,
       type: 'date',
