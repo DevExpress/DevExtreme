@@ -10,6 +10,7 @@ interface MetaItem {
 interface ThemesMetadata {
   generic: MetaItem[];
   material: MetaItem[];
+  fluent: MetaItem[];
 }
 
 interface ConfigMetaItem {
