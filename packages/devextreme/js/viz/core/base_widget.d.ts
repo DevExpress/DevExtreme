@@ -886,7 +886,7 @@ export interface BaseWidgetAnnotationConfig {
     y?: number;
 }
 
-// #region deprecated in 22.2
+// #region deprecated in 23.1
 
 /**
  * @namespace DevExpress.viz
