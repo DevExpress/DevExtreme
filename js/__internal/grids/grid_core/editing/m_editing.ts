@@ -4,6 +4,7 @@ import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
 import $, { dxElementWrapper } from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { resetActiveElement } from '@js/core/utils/dom';
@@ -93,7 +94,13 @@ class EditingControllerImpl extends modules.ViewController {
 
   _changes: any;
 
-  _deferreds: any;
+  /**
+   * A collection of deferred objects that are awaited before other operations are executed.
+   *
+   * @see {@link waitForDeferredOperations}
+   * @see {@link addDeferred}
+   */
+  _deferreds!: DeferredObj<any>[];
 
   _dataChangedHandler: any;
 
@@ -126,7 +133,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._changes = [];
 
     if (this._deferreds) {
-      this._deferreds.forEach((d) => d.reject('cancel'));
+      this._deferreds.forEach((d) => { d.reject('cancel'); });
     }
     this._deferreds = [];
 
@@ -1836,8 +1843,11 @@ class EditingControllerImpl extends modules.ViewController {
     return skipCurrentRow ? [] : [row.rowIndex];
   }
 
-  addDeferred(deferred) {
-    if (this._deferreds.indexOf(deferred) < 0) {
+  /**
+   * Adds a deferred object to be awaited before other operations are executed
+   */
+  addDeferred(deferred: DeferredObj<any>): void {
+    if (!this._deferreds.includes(deferred)) {
       this._deferreds.push(deferred);
       deferred.always(() => {
         const index = this._deferreds.indexOf(deferred);
@@ -2265,8 +2275,13 @@ class EditingControllerImpl extends modules.ViewController {
 
   isCellModified(parameters) {
     const { columnIndex } = parameters;
-    const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-    return !!modifiedValues && modifiedValues[columnIndex] !== undefined;
+    let modifiedValue = parameters?.row?.modifiedValues?.[columnIndex];
+
+    if (parameters?.row?.isNewRow) {
+      modifiedValue = parameters.value;
+    }
+
+    return modifiedValue !== undefined;
   }
 
   isNewRowInEditMode() {

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, forbidden-imports/no-restricted-imports */
+/* eslint-disable no-undef */
 import each from 'jest-each';
 
 import {
