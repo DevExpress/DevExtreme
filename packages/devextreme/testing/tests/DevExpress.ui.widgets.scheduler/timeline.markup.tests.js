@@ -936,7 +936,7 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
         $cells.each(function(index) {
             assert.deepEqual(dataUtils.data($(this)[0], 'dxCellData'), {
                 startDate: new Date(2015, 3, 1 + index, 1),
-                endDate: new Date(2015, 3, 1 + index, 10),
+                endDate: new Date(2015, 3, 1 + index, 9, 59),
                 allDay: false,
                 groupIndex: 0,
             }, 'cell\'s data is correct');
@@ -990,10 +990,10 @@ QUnit.module('TimelineMonth with intervalCount', timelineMonthModuleConfig, () =
         const secondCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').last().get(0), 'dxCellData');
 
         assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), 'cell has right startDate');
-        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), 'cell has right endtDate');
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 1, 23, 59), 'cell has right endtDate');
 
         assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 31, 0), 'cell has right startDate');
-        assert.deepEqual(secondCellData.endDate, new Date(2017, 7, 1, 0), 'cell has right endtDate');
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 31, 23, 59), 'cell has right endtDate');
     });
 
     QUnit.test('Get date range', function(assert) {
@@ -1058,7 +1058,7 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
 
             assert.deepEqual(dataUtils.data($(this)[0], 'dxCellData'), {
                 startDate: new Date(2015, 3, 1 + dateIndex, 1),
-                endDate: new Date(2015, 3, 1 + dateIndex, 10),
+                endDate: new Date(2015, 3, 1 + dateIndex, 9, 59),
                 allDay: false,
                 groups: {
                     one: groupIndex
