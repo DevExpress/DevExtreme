@@ -108,6 +108,7 @@ $fluent-treeview-container-padding:
 
       &.dx-state-hover:not(.dx-state-focused) {
         background-color: $treeview-item-selected-hover-bg;
+        border-radius: 4px;
       }
     }
   }
@@ -115,12 +116,14 @@ $fluent-treeview-container-padding:
   &.dx-state-focused {
     > .dx-treeview-item {
       background-color: $treeview-focused-bg;
+      border-radius: 4px;
       color: $treeview-focus-color;
     }
   }
 }
 
 .dx-treeview-item {
+  margin: 2px 0;
   gap: $fluent-treeview-item-element-gap;
   height: $fluent-treeview-item-height;
   padding: $fluent-treeview-item-padding;
@@ -134,6 +137,7 @@ $fluent-treeview-container-padding:
 
   &.dx-state-hover {
     background-color: $treeview-hover-bg;
+    border-radius: 4px;
     color: $treeview-item-hover-color;
   }
 }
