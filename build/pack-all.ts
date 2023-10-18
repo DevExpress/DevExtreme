@@ -23,14 +23,13 @@ sh.exec('npm run devextreme:inject-descriptions');
 
 sh.exec('npm run build-dist -w devextreme-main');
 
-const DEVEXTREME_NPM_DIR = path.join(MONOREPO_ROOT, 'packages/devextreme/artifacts/npm');
+// bump version if needed
+const { "devextreme-main": devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
+if (devextremeVersion !== devextremeNpmVersion) {
+    sh.exec(`npm run all:bump -- ${devextremeNpmVersion}`);
+}
 
-/*
-TODO: We might need this when running on farm to bump non-semver versions for all packages.
-sh.exec(`npm version ${version} -ws --workspaces-update=false`);
-sh.sed('-i', /"devextreme": ".*"/, `"devextreme": "${version}"`, path.join(MONOREPO_ROOT, 'packages', '**', 'package.json'));
-sh.exec('npm i');
-*/
+const DEVEXTREME_NPM_DIR = path.join(MONOREPO_ROOT, 'packages/devextreme/artifacts/npm');
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'))
 sh.exec('npm pack');
