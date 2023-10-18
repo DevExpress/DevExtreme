@@ -14,7 +14,6 @@ $fluent-treeview-checkbox-offset: null !default;
 $fluent-select-all-item-padding: null !default;
 $fluent-treeview-item-padding: null !default;
 $fluent-treeview-min-item-height: null !default;
-$fluent-treeview-item-with-checkbox-offset: null !default;
 $fluent-treeview-loadincicator-size: null !default;
 $fluent-select-all-text-offset: null !default;
 $fluent-treeview-searchbox-margin-bottom: null !default;
@@ -31,14 +30,11 @@ $fluent-custom-icon-top: null !default;
   $fluent-checkbox-icon-size: 16px !default;
 
   $fluent-treeview-checkbox-offset: 42px !default;
-  $fluent-select-all-item-padding: 15px $fluent-treeview-checkbox-offset !default;
+  $fluent-select-all-item-padding: 15px 42px !default;
 
   $fluent-treeview-item-padding: 12px $fluent-treeview-item-side-padding !default;
   $fluent-custom-icon-top: 14px;
   $fluent-treeview-min-item-height: 44px !default;
-
-  $fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5 !default;
-
   $fluent-treeview-loadincicator-size: 20px !default;
   $fluent-select-all-text-offset: 31px !default;
 
