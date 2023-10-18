@@ -95,6 +95,13 @@ $tree-view-icon-size: 24px;
     }
   }
 
+  .dx-item-content {
+    .dx-item-url {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   &.dx-state-disabled {
     opacity: 0.5;
   }
