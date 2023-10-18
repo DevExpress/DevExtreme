@@ -25,7 +25,7 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Recurrence: 'recurrenceGroup',
 };
 
-const stylingMode = isFluent(current()) ? 'filled' : undefined;
+const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
 const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
 
@@ -54,7 +54,7 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
     type: 'required',
   }],
   editorOptions: {
-    stylingMode,
+    stylingMode: getStylingModeFunc(),
     width: '100%',
     calendarOptions: {
       firstDayOfWeek,
@@ -277,7 +277,7 @@ export class AppointmentForm {
           text: messageLocalization.format('dxScheduler-editorLabelTitle'),
         },
         editorOptions: {
-          stylingMode,
+          stylingMode: getStylingModeFunc(),
         },
       },
       {
@@ -371,7 +371,7 @@ export class AppointmentForm {
           text: messageLocalization.format('dxScheduler-editorLabelDescription'),
         },
         editorOptions: {
-          stylingMode,
+          stylingMode: getStylingModeFunc(),
         },
       },
       {
