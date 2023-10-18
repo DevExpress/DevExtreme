@@ -41720,7 +41720,7 @@ declare module DevExpress.viz {
   ): void;
 
   /**
-   * @deprecated Use Font from DevExpress.common.charts.Font instead
+   * @deprecated Use Font from common/charts instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type Font = DevExpress.common.charts.Font;
