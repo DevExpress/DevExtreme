@@ -19,7 +19,7 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 }
 
 .dx-treeview-search {
-  padding-block-end: $generic-treeview-searchbox-margin-bottom;
+  margin-block-end: $generic-treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview-with-search > .dx-scrollable {

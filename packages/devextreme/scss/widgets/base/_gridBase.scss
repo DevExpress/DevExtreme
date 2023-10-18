@@ -228,10 +228,6 @@
 
     &.dx-#{$widget-name}-column-chooser-mode-select {
       .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
-        .dx-treeview-select-all-item {
-          padding-inline-start: 4px;
-        }
-
         .dx-treeview-node {
           .dx-treeview-item {
             padding-inline-start: 4px;

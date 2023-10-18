@@ -30,6 +30,8 @@ $fluent-command-edit-icon-margin: 2px !default;
 $fluent-command-edit-icon-size: 20px !default;
 $fluent-filter-panel-icon-size: 20px !default;
 
+$fluent-grid-base-treeview-select-all-item-offset: 6px !default;
+
 $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
 
 @if $size == "default" {
