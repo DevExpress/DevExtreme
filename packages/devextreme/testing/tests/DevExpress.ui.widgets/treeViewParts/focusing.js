@@ -91,7 +91,7 @@ configs.forEach(config => {
             focusStateEnabled: true,
             scrollDirection: 'both',
             height: 150,
-            width: 150
+            width: 170
         });
 
         const $nodes = wrapper.getElement().find(`.${NODE_CLASS}`);
