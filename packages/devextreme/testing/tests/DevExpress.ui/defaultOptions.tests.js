@@ -1526,7 +1526,6 @@ testComponentDefaults(Accordion,
 testComponentDefaults(Scheduler,
     {},
     {
-        _appointmentTooltipOffset: { x: 0, y: 11 },
         _appointmentTooltipButtonsPosition: 'top',
         _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,
@@ -1539,5 +1538,19 @@ testComponentDefaults(Scheduler,
     },
     function() {
         themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(Scheduler,
+    {},
+    {
+        _appointmentTooltipOffset: { x: 0, y: 11 }
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
     }
 );

@@ -15,6 +15,7 @@ import DateBox from '@js/ui/date_box';
 import Editor from '@js/ui/editor/editor';
 import Form from '@js/ui/form';
 import NumberBox from '@js/ui/number_box';
+import { current, isFluent } from '@js/ui/themes';
 
 import { getRecurrenceProcessor } from './m_recurrence';
 
@@ -71,6 +72,8 @@ const repeatEndTypes = [
 ];
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+
+const stylingMode = isFluent(current()) ? 'filled' : undefined;
 
 class RecurrenceRule {
   _recurrenceProcessor = getRecurrenceProcessor();
@@ -257,6 +260,7 @@ class RecurrenceEditor extends Editor {
       editorType: 'dxSelectBox',
       cssClass: FREQUENCY_EDITOR,
       editorOptions: {
+        stylingMode,
         items: frequencies,
         value: freq,
         field: 'freq',
@@ -286,6 +290,7 @@ class RecurrenceEditor extends Editor {
           dataField: 'interval',
           editorType: 'dxNumberBox',
           editorOptions: {
+            stylingMode,
             format: '#',
             width: recurrentEditorNumberBoxWidth,
             min: 1,
@@ -381,6 +386,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'bymonth',
       editorType: 'dxSelectBox',
       editorOptions: {
+        stylingMode,
         field: 'bymonth',
         items: months,
         value: this._monthOfYearByRules(),
@@ -404,6 +410,7 @@ class RecurrenceEditor extends Editor {
       dataField: 'bymonthday',
       editorType: 'dxNumberBox',
       editorOptions: {
+        stylingMode,
         min: 1,
         max: 31,
         format: '#',
@@ -600,6 +607,7 @@ class RecurrenceEditor extends Editor {
       .appendTo($editorWrapper);
 
     this._repeatCountEditor = this._createComponent(this._$repeatCountEditor, NumberBox, {
+      stylingMode,
       field: 'count',
       format: '#',
       width: recurrentEditorNumberBoxWidth,
@@ -643,6 +651,7 @@ class RecurrenceEditor extends Editor {
       .appendTo($editorWrapper);
 
     this._repeatUntilDate = this._createComponent(this._$repeatDateEditor, DateBox, {
+      stylingMode,
       field: 'until',
       value: repeatUntil,
       type: 'date',
