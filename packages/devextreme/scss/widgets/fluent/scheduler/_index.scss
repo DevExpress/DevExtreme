@@ -239,20 +239,16 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       content: none;
     }
 
-    .dx-scheduler-header-panel-cell-date {
-      &:last-child {
-        span {
-          color: $scheduler-appointment-text-color;
-          background-color: $scheduler-current-time-cell-color;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          width: 28px;
-          height: 28px;
-          line-height: $fluent-scheduler-header-panel-day-font-size + 16;
-        }
-      }
+    .dx-scheduler-header-panel-cell-date:last-child {
+      color: $scheduler-appointment-text-color;
+      background-color: $scheduler-current-time-cell-color;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      line-height: $fluent-scheduler-header-panel-day-font-size + 16;
     }
   }
 
