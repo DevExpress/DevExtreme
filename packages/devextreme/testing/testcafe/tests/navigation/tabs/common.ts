@@ -26,8 +26,8 @@ fixture.disablePageReloads`Tabs_common`
       await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
 
       const dataSource = [
-        { text: 'user' },
-        { text: 'comment', icon: 'comment' },
+        { text: 'user', badge: '1' },
+        { text: 'comment', icon: 'comment', badge: 'text' },
         { icon: 'user' },
         { icon: 'money' },
       ] as Item[];
