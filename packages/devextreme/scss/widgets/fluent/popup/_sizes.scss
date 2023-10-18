@@ -4,6 +4,7 @@
 
 $fluent-popup-content-padding: null !default;
 $fluent-popup-content-withtitle-top-padding: null !default;
+$fluent-popup-content-withtitle-bottom-padding: null !default;
 $fluent-popup-toolbar-horizontal-padding: null !default;
 $fluent-popup-bottom-toolbar-height: null !default;
 $fluent-popup-toolbar-height: null !default;
@@ -14,6 +15,7 @@ $fluent-popup-toolbar-item-spacing: 8px !default;
 @if $size == "default" {
   $fluent-popup-content-padding: 24px !default;
   $fluent-popup-content-withtitle-top-padding: 24px !default;
+  $fluent-popup-content-withtitle-bottom-padding: 16px !default;
 
   $fluent-popup-toolbar-horizontal-padding: 24px !default;
   $fluent-popup-bottom-toolbar-height: 48px !default;
@@ -23,6 +25,7 @@ $fluent-popup-toolbar-item-spacing: 8px !default;
 @else if $size == "compact" {
   $fluent-popup-content-padding: 16px !default;
   $fluent-popup-content-withtitle-top-padding: 16px !default;
+  $fluent-popup-content-withtitle-bottom-padding: 12px !default;
 
   $fluent-popup-toolbar-horizontal-padding: 16px !default;
   $fluent-popup-bottom-toolbar-height: 36px !default;

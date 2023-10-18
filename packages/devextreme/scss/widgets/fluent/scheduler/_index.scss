@@ -12,6 +12,7 @@
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-appointment-start-color: $scheduler-appointment-start-color,
+  $scheduler-appointment-active-color: $scheduler-appointment-active-color,
   $scheduler-base-border-color: $scheduler-base-border-color,
   $scheduler-accent-border-color: $scheduler-accent-border-color,
   $scheduler-current-time-cell-color: $scheduler-current-time-cell-color,
@@ -31,6 +32,7 @@
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
+  $scheduler-is-shadow-color-for-focused-state: $scheduler-is-shadow-color-for-focused-state,
   $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
 
   $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,

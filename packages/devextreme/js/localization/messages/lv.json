@@ -704,6 +704,11 @@
         "dxGantt-dialogStartDateValidation": "Sākuma datumam jābūt vēlākam par {0}",
         "dxGantt-dialogEndDateValidation": "Beigu datumam jābūt vēlākam par {0}",
 
-        "dxGallery-itemName": "Gallery item"
+        "dxGallery-itemName": "Gallery item",
+
+        "dxMultiView-elementAriaRoleDescription": "MultiView",
+        "dxMultiView-elementAriaLabel": "Use the arrow keys or swipe to navigate between views",
+        "dxMultiView-itemAriaRoleDescription": "View",
+        "dxMultiView-itemAriaLabel": "{0} of {1}"
     }
 }

@@ -51,7 +51,7 @@ $scheduler-timeline-cell-height: 50px !default;
 @if $size == "default" {
   $fluent-scheduler-workspace-date-table-cell-height: 38px !default;
 
-  $fluent-scheduler-toolbar-item-offset: 0 16px !default;
+  $fluent-scheduler-toolbar-item-offset: 0 12px !default;
   $fluent-scheduler-navigator-height: 36px !default;
   $fluent-scheduler-header-panel-day-font-size: 16px !default;
 
@@ -78,7 +78,7 @@ $scheduler-timeline-cell-height: 50px !default;
 @else if $size == "compact" {
   $fluent-scheduler-workspace-date-table-cell-height: 28px !default;
 
-  $fluent-scheduler-toolbar-item-offset: 0 11px !default;
+  $fluent-scheduler-toolbar-item-offset: 0 8px !default;
   $fluent-scheduler-navigator-height: 28px !default;
   $fluent-scheduler-header-panel-day-font-size: 20px !default;
 
