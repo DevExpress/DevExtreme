@@ -4,6 +4,7 @@
 
 // adduse
 
+$generic-tabs-item-gap: 4px !default;
 $generic-tabs-item-padding: null !default;
 $generic-tabs-item-padding-disabled-focused: null !default;
 $generic-tabs-border-width: $generic-base-border-width !default;
@@ -14,6 +15,8 @@ $generic-tab-text-line-height: null !default;
 $generic-tabs-icon-margin: null !default;
 $generic-tabs-icon-size: null !default;
 
+$generic-badge-min-size: null !default;
+
 @if $size == "default" {
   $generic-tabs-item-padding: 10px 9px !default;
   $generic-tabs-item-padding-disabled-focused: 10px !default;
@@ -22,6 +25,7 @@ $generic-tabs-icon-size: null !default;
   $generic-tabs-nav-button-height: 38px !default;
   $generic-tabs-icon-margin: 8px !default;
   $generic-tabs-icon-size: 18px !default;
+  $generic-badge-min-size: 18px !default;
 }
 
 @else if $size == "compact" {
@@ -32,4 +36,5 @@ $generic-tabs-icon-size: null !default;
   $generic-tabs-nav-button-height: 38px !default;
   $generic-tabs-icon-margin: 8px !default;
   $generic-tabs-icon-size: 21px !default;
+  $generic-badge-min-size: 21px !default;
 }
