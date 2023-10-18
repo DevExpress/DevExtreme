@@ -70,18 +70,6 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
     }
   }
 
-  &.dx-treeview-item-with-custom-expander-icon {
-    padding-inline-start: $generic-treeview-custom-expander-icon-offset;
-
-    .dx-checkbox {
-      padding-inline-start: 10px;
-    }
-
-    .dx-treeview-item {
-      padding-inline-start: $generic-treeview-item-with-checkbox-offset + $generic-treeview-item-side-padding;
-    }
-  }
-
   .dx-treeview-item {
     color: $base-text-color;
   }
