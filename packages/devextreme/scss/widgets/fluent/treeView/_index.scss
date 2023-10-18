@@ -97,10 +97,6 @@ $fluent-treeview-container-padding:
 }
 
 .dx-treeview-item-without-checkbox {
-  &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
-    padding-inline-start: $fluent-treeview-item-side-padding;
-  }
-
   &.dx-state-selected {
     > .dx-treeview-item {
       color: $treeview-item-selected-color;

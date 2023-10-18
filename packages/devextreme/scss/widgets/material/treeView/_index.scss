@@ -92,10 +92,6 @@ $material-treeview-node-offset: $material-treeview-toggle-item-width;
 }
 
 .dx-treeview-item-without-checkbox {
-  &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
-    padding-inline-start: $material-treeview-item-side-padding;
-  }
-
   &.dx-state-selected {
     > .dx-treeview-item {
       color: $treeview-item-selected-color;
