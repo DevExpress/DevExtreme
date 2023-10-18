@@ -75,11 +75,11 @@ $tree-view-icon-size: 24px;
 
 .dx-treeview-item {
   display: flex;
-  cursor: pointer;
+  align-items: center;
   text-wrap: nowrap;
+  cursor: pointer;
 
   .dx-treeview-item-content {
-    display: flex;
     flex: 1 1 auto;
     align-items: center;
     order: 2;
