@@ -1,8 +1,9 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
-import { isMaterialBased } from '../../../helpers/themeUtils';
+import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox`
   .page(url(__dirname, '../../container.html'));
@@ -52,3 +53,15 @@ if (!isMaterialBased()) {
     }));
   });
 }
+
+test('Apply value mode buttons appearance', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'DateBox with useButtons mode.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDateBox', {
+  applyValueMode: 'useButtons',
+}));

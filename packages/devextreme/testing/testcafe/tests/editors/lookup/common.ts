@@ -128,3 +128,18 @@ test('Placeholder is visible after items option change when value is not chosen 
   width: 300,
   placeholder: 'Choose a value',
 }));
+
+test('Apply value mode buttons appearance', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Lookup with useButtons mode.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxLookup', {
+  width: 300,
+  items: [1, 2, 3, 4, 5],
+  value: 1,
+  applyValueMode: 'useButtons',
+}));

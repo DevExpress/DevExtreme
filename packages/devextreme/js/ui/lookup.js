@@ -13,7 +13,7 @@ import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
-import { current, isMaterial } from './themes';
+import { current, isMaterial, isMaterialBased } from './themes';
 import Popover from './popover/ui.popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
@@ -728,15 +728,14 @@ const Lookup = DropDownList.inherit({
     _preventFocusOnPopup: noop,
 
     _popupConfig: function() {
+        const useDefaultToolbarButtons = isMaterialBased(current());
+
         const result = extend(this.callBase(), {
-
             toolbarItems: this._getPopupToolbarItems(),
-
             hideOnParentScroll: false,
             onPositioned: null,
-
+            useDefaultToolbarButtons,
             maxHeight: '100vh',
-
             showTitle: this.option('dropDownOptions.showTitle'),
             title: this.option('dropDownOptions.title'),
             titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
