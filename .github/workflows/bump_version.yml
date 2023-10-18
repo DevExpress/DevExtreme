@@ -7,6 +7,10 @@ on:
         type: string
         description: XX_X (23_2+)
         required: true
+#TODO: increment version on branch or set exact version from inputs??
+      version:
+        type: string
+        description: XX.X.X Set exact version (optional)
 
 jobs:
   build:
@@ -27,7 +31,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Bump version
-        run: npm run all:bump
+        run: npm run all:bump -- ${{ inputs.version }}
 
       - name: Commit changes and make PR
         shell: bash
