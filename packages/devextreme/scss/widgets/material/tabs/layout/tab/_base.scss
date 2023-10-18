@@ -17,6 +17,7 @@
 
 
 .dx-tab {
+  gap: $material-tabs-item-gap;
   padding: $material-tabs-item-padding;
   min-width: $material-tab-min-width;
   background-color: $tabs-tab-background;
