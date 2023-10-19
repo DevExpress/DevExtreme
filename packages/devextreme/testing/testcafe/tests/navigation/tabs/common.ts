@@ -21,7 +21,7 @@ test('Tabs nav buttons', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 200px; height: 200px; background: #fafafa !important;');
+  await setAttribute('#container', 'style', 'width: 200px; height: 200px; background: #fff000 !important;');
 
   const dataSource = [
     { text: 'John Heart' },
