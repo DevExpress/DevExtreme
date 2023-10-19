@@ -1,5 +1,5 @@
 /* tslint:disable:component-selector */
-
+// @ts-nocheck
 import {
     VERSION,
     Component,

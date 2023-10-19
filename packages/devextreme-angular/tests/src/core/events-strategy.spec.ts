@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { NgEventsStrategy } from 'devextreme-angular';
 
 describe('Events strategy API', () => {
