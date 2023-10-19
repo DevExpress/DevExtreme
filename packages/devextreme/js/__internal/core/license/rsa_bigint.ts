@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 import { PublicKey } from './key';
 
 const ZERO = BigInt(0);
