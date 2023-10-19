@@ -573,7 +573,7 @@ const Popup = Overlay.inherit({
         this._toolbarItemClasses.push(itemClass);
 
         return {
-            template: function(_, __, container) {
+            template: (_, __, container) => {
                 const $toolbarItem = $('<div>').addClass(itemClass).appendTo(container);
                 this._createComponent($toolbarItem, Button, itemConfig);
             }
