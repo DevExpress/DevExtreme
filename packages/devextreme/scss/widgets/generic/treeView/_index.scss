@@ -120,6 +120,8 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
   .dx-treeview-item-content {
     .dx-icon {
       @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
+
+      vertical-align: bottom;
     }
   }
 

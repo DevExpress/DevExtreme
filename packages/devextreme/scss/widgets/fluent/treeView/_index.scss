@@ -128,6 +128,8 @@ $fluent-treeview-container-padding:
   .dx-treeview-item-content {
     .dx-icon {
       @include dx-icon-sizing($fluent-base-icon-size);
+
+      vertical-align: bottom;
     }
   }
 

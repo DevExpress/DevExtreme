@@ -120,6 +120,8 @@ $material-treeview-node-offset: $material-treeview-toggle-item-width;
   .dx-treeview-item-content {
     .dx-icon {
       @include dx-icon-sizing($material-base-icon-size);
+
+      vertical-align: bottom;
     }
   }
 
