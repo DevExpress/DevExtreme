@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as events from 'devextreme/events';
-import { useState, useEffect, useCallback, useMemo, FC } from 'react';
+import { useState, useMemo, useCallback, FC } from 'react';
 import { TemplateManagerProps, RenderedTemplateInstances, GetRenderFuncFn, DXTemplateCollection, TemplateFunc, TemplateInstanceDefinition } from './types-new';
 import TemplateWrapper from './template-wrapper-new';
 import { DoubleKeyMap } from './helpers';
@@ -19,8 +19,9 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
   return props;
 }
 
-export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOptions, dryRun }) => {
+export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
+  const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
     if (container.nodeType === Node.ELEMENT_NODE) {
@@ -39,36 +40,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
   const createMapKey = useCallback((key1: any, key2: HTMLElement) => {
     return { key1, key2 };
   }, []);
-
-  const templateFactories = useMemo(() => Object.entries(templateOptions).reduce((res, [key, template]) => {
-    let templateFunc: TemplateFunc;
-
-    switch(template.type) {
-      case 'children': templateFunc = () => {
-        return template.content;
-      }
-      break;
-
-      case 'render': templateFunc = (props) => {
-        normalizeProps(props);
-        return template.content(props.data, props.index)
-      }; 
-      break;
-
-      case 'component': templateFunc = (props) => {
-        props = normalizeProps(props);
-        return React.createElement.bind(null, template.content)(props)
-      }; 
-      break;
-
-      default: templateFunc = () => React.createElement(React.Fragment);
-    }
-
-    return {
-      ...res,
-      [key]: templateFunc
-    }
-  }, {} as Record<string, TemplateFunc>), [templateOptions]);
 
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({ model: data, index, container, onRendered }) => {
     const key = createMapKey(data, container);
@@ -105,21 +76,51 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, templateOption
 
   }, [unsubscribeOnRemoval, getRandomId, createMapKey]);
 
-  useEffect(() => {
-    if (dryRun) {
-      return;
-    }
+  useMemo(() => {
+    init(templateOptions => {
+      const factories = Object.entries(templateOptions).reduce((res, [key, template]) => {
+        let templateFunc: TemplateFunc;
+    
+        switch(template.type) {
+          case 'children': templateFunc = () => {
+            return template.content;
+          }
+          break;
+    
+          case 'render': templateFunc = (props) => {
+            normalizeProps(props);
+            return template.content(props.data, props.index);
+          }; 
+          break;
+    
+          case 'component': templateFunc = (props) => {
+            props = normalizeProps(props);
+            return React.createElement.bind(null, template.content)(props);
+          }; 
+          break;
+    
+          default: templateFunc = () => React.createElement(React.Fragment);
+        }
+    
+        return {
+          ...res,
+          [key]: templateFunc
+        }
+      }, {} as Record<string, TemplateFunc>);
 
-    const dxTemplates = Object.entries(templateFactories)
-      .reduce<DXTemplateCollection>((dxTemplates, [templateKey,]) => {
-        dxTemplates[templateKey] = { render: getRenderFunc(templateKey) };
-        return dxTemplates;
-      }, {});
+      setTemplateFactories(factories);
 
-    init(dxTemplates);
-  }, [init, getRenderFunc, templateFactories, dryRun]);
+      const dxTemplates = Object.entries(factories)
+        .reduce<DXTemplateCollection>((dxTemplates, [templateKey,]) => {
+          dxTemplates[templateKey] = { render: getRenderFunc(templateKey) };
+          return dxTemplates;
+        }, {});
 
-  if (renderedInstances.empty || dryRun && Object.keys(templateOptions).length === 0)
+      return dxTemplates;
+    });
+  }, [init, getRenderFunc]);
+
+  if (renderedInstances.empty)
     return null;
 
   return (

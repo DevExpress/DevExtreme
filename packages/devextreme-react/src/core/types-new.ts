@@ -8,11 +8,6 @@ export type RenderArgs = {
   onRendered?: () => void;
 };
 
-export type OnRenderedLocker = {
-  lock: () => void;
-  unlock: () => void;
-}
-
 export type DXTemplateCollection = Record<string, DevExtremeTemplate>;
 
 export type DevExtremeTemplate = {
@@ -36,10 +31,10 @@ export interface TemplateWrapperProps {
 
 export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
 
+export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
+
 export type TemplateManagerProps = {
-  dryRun: boolean;
-  templateOptions: Record<string, ITemplate>;
-  init: (dxTemplates: DXTemplateCollection) => void;
+  init: (getDxTemplates: DXTemplateCreator) => void;
 };
 
 export type TemplateInstanceDefinition = {
