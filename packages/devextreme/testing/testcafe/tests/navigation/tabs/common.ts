@@ -21,12 +21,17 @@ test('Tabs nav buttons', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 300px; height: 200px; background-color: #fafafa');
+  await setAttribute('#container', 'style', 'width: 200px; height: 200px; background: #fafafa !important;');
 
   const dataSource = [
-    { text: 'user' },
-    { text: 'comment' },
-    { text: 'money' },
+    { text: 'John Heart' },
+    { text: 'Marina Thomas' },
+    { text: 'Robert Reagan' },
+    { text: 'Greta Sims' },
+    { text: 'Olivia Peyton' },
+    { text: 'Ed Holmes' },
+    { text: 'Wally Hobbs' },
+    { text: 'Brad Jameson' },
   ] as Item[];
 
   return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
