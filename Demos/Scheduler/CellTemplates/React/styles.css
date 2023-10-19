@@ -34,6 +34,13 @@
   justify-content: center;
 }
 
+.dx-theme-fluent .dx-scheduler-header-panel-cell .disable-date,
+.dx-theme-material .dx-scheduler-header-panel-cell .disable-date {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: initial;
+}
+
 .dinner {
   background: rgba(255, 193, 7, 0.2);
 }
