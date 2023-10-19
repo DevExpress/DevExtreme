@@ -24,7 +24,7 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch_name }}
+          ref: 23_2
 
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -35,17 +35,17 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Bump version
-        run: npm run all:update-version -- ${{ inputs.version }}
+        run: npm run all:update-version -- 23.2.1
 
       - name: Commit changes and make PR
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
-          branch_name: 'robot/update-version-${{ inputs.branch_name }}'
+          branch_name: 'robot/update-version-23_2_1'
         run: |
           git checkout -b $branch_name
           git add . -N
           git commit -a -m "Bump devextreme version"
           git push --set-upstream origin $branch_name --force
-          gh pr create --base ${{ inputs.branch_name }} --title "Bump devextreme version (${{ inputs.branch_name }})" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
+          gh pr create --base 23_2 --title "Bump devextreme version (23.2.1)" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
       
