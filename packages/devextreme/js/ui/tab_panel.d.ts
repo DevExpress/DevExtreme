@@ -189,7 +189,7 @@ export interface dxTabPanelOptions<
     itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @default 'start' &for(Generic)
+     * @default 'start'
      * @default 'top' &for(Material)
      * @default 'top' &for(Fluent)
      * @public
@@ -253,8 +253,7 @@ export interface dxTabPanelOptions<
     showNavButtons?: boolean;
     /**
      * @docid
-     * @default 'primary' &for(Generic)
-     * @default 'primary' &for(Material)
+     * @default 'primary'
      * @default 'secondary' &for(Fluent)
      * @public
      */

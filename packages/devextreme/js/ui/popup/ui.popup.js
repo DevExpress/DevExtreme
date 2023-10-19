@@ -27,7 +27,7 @@ import PopupDrag from './popup_drag';
 import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
-import { isMaterialBased, current as currentTheme } from '../themes';
+import { isMaterialBased, isMaterial } from '../themes';
 import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
@@ -156,8 +156,6 @@ const Popup = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = currentTheme();
-
         return this.callBase().concat([
             {
                 device: { platform: 'ios' },
@@ -195,14 +193,21 @@ const Popup = Overlay.inherit({
             },
             {
                 device: function() {
-                    return isMaterialBased(themeName);
+                    return isMaterialBased();
+                },
+                options: {
+                    useFlatToolbarButtons: true,
+                }
+            },
+            {
+                device: function() {
+                    return isMaterial();
                 },
                 options: {
                     useDefaultToolbarButtons: true,
-                    useFlatToolbarButtons: true,
                     showCloseButton: false
                 }
-            }
+            },
         ]);
     },
 

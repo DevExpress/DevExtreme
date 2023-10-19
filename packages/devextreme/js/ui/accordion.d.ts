@@ -122,6 +122,7 @@ export interface dxAccordionOptions<
      * @docid
      * @default 300
      * @default 200 &for(Material)
+     * @default 200 &for(Fluent)
      * @public
      */
     animationDuration?: number;
