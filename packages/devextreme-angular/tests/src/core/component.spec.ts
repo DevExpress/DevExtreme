@@ -30,6 +30,7 @@ import {
 
 // TODO: Try to replace dxButton to Widget ('require' required)
 import dxButton from 'devextreme/ui/button';
+import {IterableDifferHelper} from "../../../src/core";
 let DxTestWidget = dxButton;
 
 DxTestWidget.defaultOptions({
@@ -71,6 +72,7 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
         ngZone: NgZone,
         templateHost: DxTemplateHost,
         _watcherHelper: WatcherHelper,
+        private _idh: IterableDifferHelper,
          transferState: TransferState,
         @Inject(PLATFORM_ID) platformId: any) {
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
@@ -87,6 +89,10 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
 
     protected _createInstance(element, options) {
         return new DxTestWidget(element, options);
+    }
+
+    getIterableDifferHelper() {
+        return this._idh;
     }
 
     ngOnDestroy() {
@@ -143,6 +149,29 @@ describe('DevExtreme Angular widget', () => {
         let element = getWidget(fixture).element();
 
         expect(element.classList).toContain('dx-test-widget');
+    });
+
+    it('Iterable doCheck should not error if value not iterable', () => {
+        let fixture = TestBed.createComponent(DxTestWidgetComponent);
+        const instance = fixture.componentInstance;
+        const checkIdh = () => {
+            fixture.detectChanges();
+            instance.getIterableDifferHelper().doCheck('testOption')
+        };
+
+        try {
+            fixture.detectChanges();
+            instance.testOption = [];
+            checkIdh();
+            instance.testOption = null;
+            checkIdh();
+            instance.testOption = 1;
+            checkIdh();
+            instance.testOption = [0,1];
+            checkIdh();
+        } catch(e) {
+            throw new Error(e);
+        }
     });
 
     it('should be disposed', () => {
