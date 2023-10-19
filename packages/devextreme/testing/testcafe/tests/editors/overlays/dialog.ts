@@ -4,7 +4,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Dialog`
+fixture`Dialog`
   .page(url(__dirname, '../../container.html'));
 
 [
@@ -38,10 +38,6 @@ fixture.disablePageReloads`Dialog`
         dialogType,
         dialogArgs,
       },
-    })();
-  }).after(async () => {
-    await ClientFunction(() => {
-      ($('.dx-poup') as any).dxPopup('instance').hide();
     })();
   });
 });
