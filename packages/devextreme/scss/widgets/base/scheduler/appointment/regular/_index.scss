@@ -13,7 +13,9 @@ $vertical-appointment-resizable-hovering-shadow: null !default;
 $hovered-appointment-top-shadow-size: null !default;
 
 $fill-focused-appointment: null !default;
+$is-shadow-color-for-focused-state: null !default;
 $appointment-start-color: null !default;
+$appointment-active-color: null !default;
 
 $appointment-dragging-shadow: null !default;
 
@@ -38,14 +40,31 @@ $reduced-icon-offset: null !default;
       left: 0;
       right: 0;
       bottom: 0;
+    }
 
-      // T314382
-      @if not $fill-focused-appointment {
-        background-color: $appointment-start-color;
-        opacity: 0.98;
+    // T314382
+    @if not $fill-focused-appointment {
+      @if $is-shadow-color-for-focused-state {
+        &:not(.dx-scheduler-appointment-drag-source)::before {
+          @include dx-scheduler-appointment-shadow-color-mixin();
+        }
+      } @else {
+        &:not(.dx-scheduler-appointment-has-resource-color):not(.dx-scheduler-appointment-drag-source)::before {
+          background-color: $appointment-active-color;
+          border-radius: 4px;
+        }
+        
+        &.dx-scheduler-appointment-has-resource-color:not(.dx-scheduler-appointment-drag-source)::before {
+          @include dx-scheduler-appointment-shadow-color-mixin();
+        }
       }
     }
   }
+}
+
+@mixin dx-scheduler-appointment-shadow-color-mixin() {
+  background-color: $appointment-start-color;
+  opacity: 0.98;
 }
 
 .dx-scheduler-appointment-content-date {

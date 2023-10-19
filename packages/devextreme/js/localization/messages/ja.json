@@ -704,6 +704,11 @@
         "dxGantt-dialogStartDateValidation": "開始日を {0} 以降にする必要があります",
         "dxGantt-dialogEndDateValidation": "終了日は {0} より後にする必要があります",
 
-        "dxGallery-itemName": "Gallery item"
+        "dxGallery-itemName": "Gallery item",
+
+        "dxMultiView-elementAriaRoleDescription": "MultiView",
+        "dxMultiView-elementAriaLabel": "Use the arrow keys or swipe to navigate between views",
+        "dxMultiView-itemAriaRoleDescription": "View",
+        "dxMultiView-itemAriaLabel": "{0} of {1}"
     }
 }

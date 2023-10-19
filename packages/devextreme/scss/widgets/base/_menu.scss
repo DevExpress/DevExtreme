@@ -72,12 +72,7 @@
     padding: 1px;
 
     .dx-item-content {
-      padding-left: 15px;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        padding-right: 15px;
-      }
+      padding-inline-start: 15px;
     }
 
     &:last-child {

@@ -37,10 +37,10 @@ function test_1Column_2Items_NotAlignedLabels(wrapper) {
 }
 
 function test_1Column_2Items_NotAlignedLabels_LocationTop(wrapper) {
-    wrapper.checkFormSize(1000, 101);
+    wrapper.checkFormSize(1000, 104);
     test_1Column_1Item__Item1(wrapper);
     wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 46, 0, 1000, 19);
-    wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 66, 1, 998, 34);
+    wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 70, 1, 998, 34);
 }
 
 function test_2Columns_2Items_AlignedLabels(wrapper) {
@@ -122,9 +122,9 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
             QUnit.test('1 column-> [text.labelLocation: top]', function() {
                 const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups },
                     [{ dataField: 'text', label: { location: 'top' } }]);
-                wrapper.checkFormSize(1000, 55);
+                wrapper.checkFormSize(1000, 59);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 0, 0, 1000, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 20, 1, 998, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 24, 1, 998, 34);
             });
 
             QUnit.test('1 column-> [text, longText]', function() {

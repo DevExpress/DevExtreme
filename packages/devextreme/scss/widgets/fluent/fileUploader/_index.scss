@@ -84,7 +84,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 
 .dx-fileuploader-files-container {
   .dx-fileuploader-show-file-list & {
-    padding: 14px 3px 0;
+    padding: $fluent-fileuploader-files-container-padding;
   }
 
   .dx-fileuploader-empty & {
@@ -103,6 +103,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     padding: $fluent-fileuploader-file-container-padding;
     margin-bottom: 4px;
+    border-radius: $fluent-fileuploader-files-container-rounding;
 
     .dx-fileuploader-button-container + .dx-fileuploader-button-container {
       .dx-button {
@@ -140,7 +141,9 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-file-size {
-  padding-bottom: math.div($fluent-fileuploader-vertical-padding, 2);
+  float: right;
+  margin: $fluent-fileuploader-file-size-margin;
+  color: $base-label-color;
 }
 
 .dx-fileuploader-invalid {

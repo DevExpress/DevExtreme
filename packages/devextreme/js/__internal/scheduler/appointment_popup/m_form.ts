@@ -13,6 +13,7 @@ import DataSource from '@js/data/data_source';
 import messageLocalization from '@js/localization/message';
 import { Semaphore } from '@js/renovation/ui/scheduler/utils/semaphore/semaphore';
 import Form from '@js/ui/form';
+import { current, isFluent } from '@js/ui/themes';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import timeZoneDataUtils from '../timezones/m_utils_timezones_data';
@@ -23,6 +24,8 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Main: 'mainGroup',
   Recurrence: 'recurrenceGroup',
 };
+
+const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
 const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
 
@@ -51,6 +54,7 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
     type: 'required',
   }],
   editorOptions: {
+    stylingMode: getStylingModeFunc(),
     width: '100%',
     calendarOptions: {
       firstDayOfWeek,
@@ -272,6 +276,9 @@ export class AppointmentForm {
         label: {
           text: messageLocalization.format('dxScheduler-editorLabelTitle'),
         },
+        editorOptions: {
+          stylingMode: getStylingModeFunc(),
+        },
       },
       {
         itemType: 'group',
@@ -362,6 +369,9 @@ export class AppointmentForm {
         colSpan: 2,
         label: {
           text: messageLocalization.format('dxScheduler-editorLabelDescription'),
+        },
+        editorOptions: {
+          stylingMode: getStylingModeFunc(),
         },
       },
       {

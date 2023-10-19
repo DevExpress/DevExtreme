@@ -20,9 +20,13 @@ safeSizeTest('Popup should have correct height when DropDownBox is opened first 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 600]).before(async () => createWidget('dxDropDownBox', {
-  dropDownOptions: {
-    templatesRenderAsynchronously: true,
-  },
-  contentTemplate: '<div style="height: 400px"></div>',
-}));
+}, [900, 600]).before(async (t) => {
+  await t.click('html', { offsetX: 0, offsetY: 0 });
+
+  return createWidget('dxDropDownBox', {
+    dropDownOptions: {
+      templatesRenderAsynchronously: true,
+    },
+    contentTemplate: '<div style="height: 400px"></div>',
+  });
+});

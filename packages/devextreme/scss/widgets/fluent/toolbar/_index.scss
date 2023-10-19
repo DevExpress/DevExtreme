@@ -160,6 +160,10 @@
   }
 }
 
+.dx-toolbar-menu-section:empty {
+  border-bottom: none;
+}
+
 .dx-toolbar-button {
   &.dx-toolbar-text-auto-hide {
     .dx-button {
@@ -167,8 +171,3 @@
     }
   }
 }
-
-.dx-toolbar .dx-tab {
-  padding: 4px;
-}
-

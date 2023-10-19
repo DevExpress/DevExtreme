@@ -67,7 +67,7 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
   &.dx-toolbar {
     @include dx-toolbar-sizing(
       $fluent-popup-bottom-toolbar-height,
-      0 $fluent-popup-content-withtitle-top-padding,
+      0 $fluent-popup-content-withtitle-top-padding $fluent-popup-content-withtitle-bottom-padding,
       $fluent-popup-toolbar-label-font-size,
       $fluent-popup-toolbar-item-spacing
     );
