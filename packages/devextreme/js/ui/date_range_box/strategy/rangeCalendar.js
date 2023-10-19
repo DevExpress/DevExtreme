@@ -90,7 +90,8 @@ class RangeCalendarStrategy extends CalendarStrategy {
     _getWidgetOptions() {
         const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
 
-        const disabledDates = isFunction(disabledDatesValue)
+        // eslint-disable-next-line no-var
+        var disabledDates = isFunction(disabledDatesValue)
             ? this._injectComponent(disabledDatesValue)
             : disabledDates;
 
