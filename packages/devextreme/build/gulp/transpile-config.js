@@ -11,9 +11,15 @@ const common = {
     ignore: ['**/*.json'],
 };
 
+const targets = {
+    ios: 11,
+    android: 52,
+    samsung: 6,
+};
+
 module.exports = {
     cjs: Object.assign({}, common, {
-        presets: ['@babel/preset-env'],
+        presets: [['@babel/preset-env', { targets }]],
         plugins: common.plugins.concat([
             ['add-module-exports', { addDefaultProperty: true }],
             ['@babel/plugin-transform-modules-commonjs', { strict: true }],
@@ -23,7 +29,7 @@ module.exports = {
     }),
 
     tsCjs: Object.assign({}, common, {
-        presets: ['@babel/preset-env'],
+        presets: [['@babel/preset-env', { targets }]],
         plugins: common.plugins.concat([
             ['@babel/plugin-transform-modules-commonjs'],
             ['@babel/plugin-transform-classes', { loose: true }],
@@ -33,7 +39,7 @@ module.exports = {
 
     esm: Object.assign({}, common, {
         // eslint-disable-next-line spellcheck/spell-checker
-        presets: [['@babel/preset-env', { modules: false, targets: { esmodules: true } }]],
+        presets: [['@babel/preset-env', { modules: false, targets: { ...targets, esmodules: true } }]],
         plugins: common.plugins.concat(
             [['@babel/plugin-transform-runtime', {
                 useESModules: true,
