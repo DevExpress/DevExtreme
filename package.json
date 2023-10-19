@@ -21,8 +21,8 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "all:pack": "ts-node build/pack-all.ts",
-    "all:bump": "ts-node build/bump-version.ts"
+    "all:update-version": "ts-node build/update-version.ts",
+    "all:build": "ts-node build/build-all.ts"
   },
   "nx": {},
   "private": true,

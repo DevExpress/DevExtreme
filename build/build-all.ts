@@ -7,7 +7,7 @@ const INTERNAL_TOOLS_ARTIFACTS = path.join(MONOREPO_ROOT, 'artifacts', 'internal
 const OUTPUT_DIR = path.join(MONOREPO_ROOT, 'artifacts');
 const NPM_OUTPUT_DIR = path.join(OUTPUT_DIR, 'npm');
 
-sh.mkdir('-p', OUTPUT_DIR, NPM_OUTPUT_DIR);
+sh.mkdir('-p', NPM_OUTPUT_DIR);
 
 const { "devextreme-main": devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
 const MAJOR_VERSION = devextremeVersion.split('.').slice(0, 2).join('_');
