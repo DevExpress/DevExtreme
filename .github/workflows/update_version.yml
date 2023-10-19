@@ -1,19 +1,23 @@
 name: Update version in all workspaces
 
 on:
-  pull_request: 
+  pull_request:
   workflow_dispatch:
     inputs:
       branch_name:
         type: string
         description: XX_X (23_2+)
         required: true
+        default: 23_2
       version:
         type: string
         description: XX.X.X Set exact version (optional)
+        required: true
+        default: 23.2.1
 
 jobs:
-  build:
+  update_version:
+    name: Update version and create PR
     runs-on: devextreme-shr2
 
     steps:
