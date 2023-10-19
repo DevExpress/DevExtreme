@@ -53,11 +53,9 @@ export class IterableDifferHelper {
   }
 
   doCheck(prop: string) {
-    const hostValue = this._host.instance && this._host[prop];
-    const typeOfValueOrFalse = hostValue && typeof hostValue;
-
-    if (typeOfValueOrFalse && (typeOfValueOrFalse === 'function' || typeOfValueOrFalse === 'object') && this._propertyDiffers[prop]) {
-      const changes = this.getChanges(prop, hostValue);
+    if (this._propertyDiffers[prop] && this._host.instance) {
+      const hostValue = this._host[prop];
+      const changes = hostValue && (typeof hostValue[Symbol.iterator] === 'function') && this.getChanges(prop, hostValue);
 
       if (changes && !this.checkChangedOptions(prop, hostValue)) {
         this._host.lockWidgetUpdate();
