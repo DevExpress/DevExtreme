@@ -55,7 +55,9 @@ export class IterableDifferHelper {
   doCheck(prop: string) {
     if (this._propertyDiffers[prop] && this._host.instance) {
       const hostValue = this._host[prop];
-      const changes = hostValue && (typeof hostValue[Symbol.iterator] === 'function') && this.getChanges(prop, hostValue);
+      console.log('---------hostValue------------->', hostValue);
+      const changes = /*hostValue && (typeof hostValue[Symbol.iterator] === 'function') && */this.getChanges(prop, hostValue);
+      console.log('---------changes------------->', changes);
 
       if (changes && !this.checkChangedOptions(prop, hostValue)) {
         this._host.lockWidgetUpdate();

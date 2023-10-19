@@ -96,6 +96,11 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
         return this._idh;
     }
 
+    _setOption(name: string, value: any) {
+        this._idh.setupSingle(name, value);
+        super._setOption(name, value);
+    }
+
     ngOnDestroy() {
         this._destroyWidget();
     }
@@ -159,10 +164,9 @@ describe('DevExtreme Angular widget', () => {
             fixture.detectChanges();
             instance.getIterableDifferHelper().doCheck('testOption')
         };
-
+        fixture.detectChanges();
+        instance.getIterableDifferHelper().setupSingle('testOption', [])
         try {
-            fixture.detectChanges();
-            instance.testOption = [];
             checkIdh();
             instance.testOption = null;
             checkIdh();
