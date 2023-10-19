@@ -8,10 +8,6 @@ import {
   DxComponent,
 } from './component';
 
-function isJsObject(o) {
-  return o !== null && (typeof o === 'function' || typeof o === 'object');
-}
-
 @Injectable()
 export class IterableDifferHelper {
   private _host: DxComponent;
@@ -57,12 +53,13 @@ export class IterableDifferHelper {
   }
 
   doCheck(prop: string) {
-    if (this._propertyDiffers[prop] && this._host.instance) {
-      const hostValue = this._host[prop];
-      const changes = hostValue && isJsObject(hostValue) && this.getChanges(prop, hostValue);
-      const isNeedHandle = changes && !this.checkChangedOptions(prop, hostValue);
+    const hostValue = this._host.instance && this._host[prop];
+    const typeOfValueOrFalse = hostValue && typeof hostValue;
 
-      if (isNeedHandle) {
+    if (typeOfValueOrFalse && (typeOfValueOrFalse === 'function' || typeOfValueOrFalse === 'object') && this._propertyDiffers[prop]) {
+      const changes = this.getChanges(prop, hostValue);
+
+      if (changes && !this.checkChangedOptions(prop, hostValue)) {
         this._host.lockWidgetUpdate();
         this._host.instance.option(prop, hostValue);
       }
