@@ -20,12 +20,10 @@ fixture.disablePageReloads`Dialog`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }, [400, 400]).before(async () => {
     const dialogArgs = dialogType === 'custom'
       ? { title: 'custom', messageHtml: 'message', buttons: [{ text: 'Custom button' }] }
       : dialogType;
-
-    await t.resizeWindow(400, 400);
 
     await ClientFunction(() => {
       const dialogFunction = (window as any).DevExpress.ui.dialog[dialogType];
@@ -40,6 +38,10 @@ fixture.disablePageReloads`Dialog`
         dialogType,
         dialogArgs,
       },
+    })();
+  }).after(async () => {
+    await ClientFunction(() => {
+      ($('.dx-poup') as any).dxPopup('instance').hide();
     })();
   });
 });
