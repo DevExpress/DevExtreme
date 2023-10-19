@@ -23,6 +23,7 @@ test('ContextMenu items render', async (t) => {
 
   const screenshotName = 'ContextMenu items render.png';
 
+  await t.debug();
   if (!isMaterialBased()) {
     await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
     await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
@@ -44,7 +45,7 @@ test('ContextMenu items render', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'contextMenu');
   await setAttribute('#container', 'class', 'dx-theme-generic-typography');
-  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 200px;');
+  await setStyleAttribute(Selector('#container'), 'width: 350px; height: 200px;');
 
   await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
 
