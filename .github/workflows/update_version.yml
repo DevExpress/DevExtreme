@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v4
-        with:
-          ref: 23_2
 
       - name: Use Node.js
         uses: actions/setup-node@v3
