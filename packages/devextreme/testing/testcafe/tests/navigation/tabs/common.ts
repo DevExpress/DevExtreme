@@ -11,6 +11,27 @@ const TAB_CLASS = 'dx-tab';
 fixture.disablePageReloads`Tabs_common`
   .page(url(__dirname, '../../container.html'));
 
+test('Tabs nav buttons', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs nav buttons.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'width: 300px; height: 200px; background-color: #fafafa');
+
+  const dataSource = [
+    { text: 'user' },
+    { text: 'comment' },
+    { text: 'money' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
+});
+
 [true, false].forEach((rtlEnabled) => {
   ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
     test('Tabs icon position', async (t) => {
