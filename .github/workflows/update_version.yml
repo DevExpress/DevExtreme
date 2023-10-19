@@ -1,13 +1,13 @@
-name: Bump version
+name: Update version in all workspaces
 
 on:
+  pull_request: 
   workflow_dispatch:
     inputs:
       branch_name:
         type: string
         description: XX_X (23_2+)
         required: true
-#TODO: increment version on branch or set exact version from inputs??
       version:
         type: string
         description: XX.X.X Set exact version (optional)
@@ -31,13 +31,13 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Bump version
-        run: npm run all:bump -- ${{ inputs.version }}
+        run: npm run all:update-version -- ${{ inputs.version }}
 
       - name: Commit changes and make PR
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
-          branch_name: 'robot/bump-version-${{ inputs.branch_name }}'
+          branch_name: 'robot/update-version-${{ inputs.branch_name }}'
         run: |
           git checkout -b $branch_name
           git add . -N
