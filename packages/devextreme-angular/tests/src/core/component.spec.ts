@@ -25,12 +25,12 @@ import {
 import {
     DxComponent,
     DxTemplateHost,
-    WatcherHelper
+    WatcherHelper,
+    IterableDifferHelper,
 } from 'devextreme-angular';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
 import dxButton from 'devextreme/ui/button';
-import {IterableDifferHelper} from "../../../src/core";
 let DxTestWidget = dxButton;
 
 DxTestWidget.defaultOptions({
@@ -43,7 +43,7 @@ DxTestWidget.defaultOptions({
 @Component({
     selector: 'dx-test-widget',
     template: '',
-    providers: [DxTemplateHost, WatcherHelper]
+    providers: [DxTemplateHost, WatcherHelper, IterableDifferHelper]
 })
 export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
     @Input()
@@ -77,6 +77,7 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
         @Inject(PLATFORM_ID) platformId: any) {
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
+        this._idh.setHost(this);
         this._createEventEmitters([
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'initialized', emit: 'onInitialized' },
