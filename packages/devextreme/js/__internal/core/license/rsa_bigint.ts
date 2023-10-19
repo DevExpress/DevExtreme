@@ -13,10 +13,11 @@ export function compareSignatures(args: Args): boolean {
     const zero = BigInt(0);
     const eight = BigInt(8);
 
-    const bigIntFromBytes = (bytes: Uint8Array): bigint => {
+    const bigIntFromBytes = (bytes: Uint8Array): bigint => bytes.reduce(
       // eslint-disable-next-line no-bitwise
-      return bytes.reduce((acc, cur) => (acc << eight) + BigInt(cur), zero);
-    }
+      (acc, cur) => (acc << eight) + BigInt(cur),
+      zero,
+    );
 
     const actual = bigIntFromBytes(args.actual);
 
