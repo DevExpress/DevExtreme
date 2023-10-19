@@ -11,6 +11,7 @@ import {
 function isJsObject(o) {
   return o !== null && (typeof o === 'function' || typeof o === 'object');
 }
+
 @Injectable()
 export class IterableDifferHelper {
   private _host: DxComponent;
@@ -46,7 +47,7 @@ export class IterableDifferHelper {
   }
 
   getChanges(prop: string, value: any) {
-    if (this._propertyDiffers[prop] && isJsObject(value) && typeof value[Symbol.iterator] === 'function') {
+    if (this._propertyDiffers[prop]) {
       return this._propertyDiffers[prop].diff(value);
     }
   }
@@ -56,10 +57,10 @@ export class IterableDifferHelper {
   }
 
   doCheck(prop: string) {
-    if (this._propertyDiffers[prop]) {
-      const hostValue = this._host[prop];
-      const isChangedOption = this.checkChangedOptions(prop, hostValue);
+    const hostValue = this._host[prop];
 
+    if (this._propertyDiffers[prop] && isJsObject(hostValue) && typeof hostValue[Symbol.iterator] === 'function') {
+      const isChangedOption = this.checkChangedOptions(prop, hostValue);
       const changes = this.getChanges(prop, hostValue);
       if (changes && this._host.instance && !isChangedOption) {
         this._host.lockWidgetUpdate();
