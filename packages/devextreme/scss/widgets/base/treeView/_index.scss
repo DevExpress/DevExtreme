@@ -147,12 +147,6 @@
     .dx-treeview-item {
       color: $base-text-color;
     }
-
-    &.dx-state-focused {
-      >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
-        border: 1px solid $checkbox-focused-borderd-color;
-      }
-    }
   }
 
   .dx-treeview-item-without-checkbox {

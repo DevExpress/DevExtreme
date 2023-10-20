@@ -51,3 +51,11 @@
   $generic-treeview-container-padding,
   $generic-treeview-load-indicator-size,
 );
+
+.dx-treeview-item-with-checkbox {
+  &.dx-state-focused {
+    >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
+      border: 1px solid $checkbox-focused-borderd-color;
+    }
+  }
+}
