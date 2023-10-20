@@ -18,7 +18,7 @@ on:
 jobs:
   update_version:
     name: Update version and create PR
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
 
     steps:
       - name: Get sources
