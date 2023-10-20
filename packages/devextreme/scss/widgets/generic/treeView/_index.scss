@@ -91,6 +91,7 @@
     color: $base-text-color;
   }
 
+  
   &.dx-state-focused {
     >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
       border: 1px solid $checkbox-focused-borderd-color;
@@ -111,15 +112,22 @@
       background-color: $treeview-focused-bg;
       color: $treeview-focus-color;
       border-radius: 0;
+
+      .dx-item-content {
+        .dx-item-url {
+          color: unset;
+        }
+      }
     }
   }
 }
 
 .dx-treeview-item {
+  margin: 0;
   gap: $generic-treeview-item-element-gap;
-  height: $generic-treeview-item-height;
   padding: $generic-treeview-item-padding;
-
+  height: $generic-treeview-item-height;
+  
   .dx-treeview-item-content {
     .dx-icon {
       @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
@@ -130,6 +138,7 @@
 
   &.dx-state-hover {
     background-color: $treeview-hover-bg;
+    border-radius: 0;
     color: $treeview-item-hover-color;
   }
 }
@@ -141,23 +150,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: $generic-base-icon-size;
   width: $generic-treeview-toggle-item-width;
   height: $generic-treeview-toggle-item-width;
-  font-size: $generic-base-icon-size;
   color: $treeview-spin-icon-color;
-
-  &::before {
-    width: $generic-base-icon-size;
-  }
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(spindown);
 
     font-size: $generic-base-icon-size;
-    text-align: center;
-
-    &::before {
-      width: $generic-base-icon-size;
-    }
   }
 }
+

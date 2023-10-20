@@ -112,16 +112,21 @@
       border-radius: 4px;
       color: $treeview-focus-color;
     }
+
+    .dx-item-content {
+      .dx-item-url {
+        color: unset;
+      }
+    }
   }
 }
 
 .dx-treeview-item {
   margin: 1px 0;
   gap: $fluent-treeview-item-element-gap;
-  height: $fluent-treeview-item-height;
   padding: $fluent-treeview-item-padding;
-  min-height: $fluent-treeview-min-item-height;
-
+  height: $fluent-treeview-item-height;
+  
   .dx-treeview-item-content {
     .dx-icon {
       @include dx-icon-sizing($fluent-base-icon-size);
@@ -141,28 +146,16 @@
   @include dx-icon(chevronright);
 
   display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: $fluent-base-icon-size;
-  text-align: center;
   width: $fluent-treeview-toggle-item-width;
   height: $fluent-treeview-toggle-item-width;
-  height: 100%;
-
-  &::before {
-    width: $fluent-base-icon-size;
-  }
-
   color: $treeview-spin-icon-color;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(chevrondown);
 
     font-size: $fluent-base-icon-size;
-    text-align: center;
-
-    &::before {
-      width: $fluent-base-icon-size;
-    }
-
-    // @include dx-icon-font-centered-sizing($fluent-base-icon-size);
   }
 }

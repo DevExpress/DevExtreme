@@ -48,8 +48,8 @@
 
   .dx-checkbox-container {
     .dx-checkbox-icon {
-      height: $material-checkbox-container-size;
-      width: $material-checkbox-container-size;
+      height: $material-checkbox-icon-size;
+      width: $material-checkbox-icon-size;
     }
 
     display: flex;
@@ -75,8 +75,8 @@
   .dx-checkbox {
     .dx-checkbox-container {
       .dx-checkbox-icon {
-        height: $material-checkbox-container-size;
-        width: $material-checkbox-container-size;
+        height: $material-checkbox-icon-size;
+        width: $material-checkbox-icon-size;
       }
 
       display: flex;
@@ -112,14 +112,22 @@
       color: $treeview-focus-color;
       border-radius: 0;
     }
+
+    .dx-item-content {
+      .dx-item-url {
+        color: unset;
+      }
+    }
   }
 }
 
 .dx-treeview-item {
+  margin: 0;
   gap: $material-treeview-item-element-gap;
   padding: $material-treeview-item-padding;
   height: $material-treeview-min-item-height;
-  line-height: math.div($material-treeview-min-item-height, 2) - 2;
+
+  // line-height: math.div($material-treeview-min-item-height, 2) - 2;
 
   .dx-treeview-item-content {
     .dx-icon {
@@ -131,6 +139,7 @@
 
   &.dx-state-hover {
     background-color: $treeview-hover-bg;
+    border-radius: 0;
     color: $treeview-item-hover-color;
   }
 }
@@ -138,31 +147,17 @@
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(chevronright);
 
-  // @include dx-icon-font-centered-sizing($material-base-icon-size);
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: $material-base-icon-size;
-  text-align: center;
-  line-height: $material-base-icon-size;
-
-  &::before {
-    width: $material-base-icon-size;
-  }
-
-  color: $treeview-spin-icon-color;
   width: $material-treeview-toggle-item-width;
   height: $material-treeview-toggle-item-width;
+  color: $treeview-spin-icon-color;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(chevrondown);
-  
-    // @include dx-icon-font-centered-sizing($material-base-icon-size);
-  
-    font-size: $material-base-icon-size;
-    text-align: center;
-    line-height: $material-base-icon-size;
 
-    &::before {
-      width: $material-base-icon-size;
-    }
+    font-size: $material-base-icon-size;
   }
 }
