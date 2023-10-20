@@ -27,7 +27,7 @@ import PopupDrag from './popup_drag';
 import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
-import { isMaterialBased, isMaterial } from '../themes';
+import { isMaterialBased, isMaterial, isFluent } from '../themes';
 import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
@@ -71,6 +71,7 @@ const BUTTON_DEFAULT_TYPE = 'default';
 const BUTTON_NORMAL_TYPE = 'normal';
 const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
+const BUTTON_OUTLINED_MODE = 'outlined';
 
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
@@ -549,6 +550,22 @@ const Popup = Overlay.inherit({
         return itemType.toLowerCase() === 'done' ? 'OK' : camelize(itemType, true);
     },
 
+    _getToolbarButtonStylingMode: function(shortcut) {
+        if(isFluent()) {
+            return shortcut === 'done' ? BUTTON_CONTAINED_MODE : BUTTON_OUTLINED_MODE;
+        }
+
+        return this.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE;
+    },
+
+    _getToolbarButtonType: function(shortcut) {
+        if(isFluent() && shortcut === 'done') {
+            return 'default';
+        }
+
+        return this.option('useDefaultToolbarButtons') ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE;
+    },
+
     _getToolbarItemByAlias: function(data) {
         const that = this;
         const itemType = data.shortcut;
@@ -561,8 +578,8 @@ const Popup = Overlay.inherit({
             text: messageLocalization.format(this._getLocalizationKey(itemType)),
             onClick: this._createToolbarItemAction(data.onClick),
             integrationOptions: {},
-            type: that.option('useDefaultToolbarButtons') ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE,
-            stylingMode: that.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE
+            type: this._getToolbarButtonType(itemType),
+            stylingMode: this._getToolbarButtonStylingMode(itemType),
         }, data.options || {});
 
         const itemClass = POPUP_CLASS + '-' + itemType;
