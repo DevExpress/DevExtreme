@@ -358,23 +358,23 @@ export class DataController extends ControllerWithDataMixin {
       return filter;
     }
 
-    let combinedFilter = filter ?? this._dataSource.filter();
+    let combined = filter ?? this._dataSource.filter();
 
     const isColumnsTypesDefined = this._columnsController.isDataSourceApplied() || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
       const additionalFilter = this._calculateAdditionalFilter();
 
-      combinedFilter = additionalFilter
-        ? gridCoreUtils.combineFilters([additionalFilter, combinedFilter])
-        : combinedFilter;
+      combined = additionalFilter
+        ? gridCoreUtils.combineFilters([additionalFilter, combined])
+        : combined;
     }
 
     const isRemoteFiltering = this._dataSource.remoteOperations().filtering || returnDataField;
 
-    combinedFilter = this._columnsController.updateFilter(combinedFilter, isRemoteFiltering);
+    combined = this._columnsController.updateFilter(combined, isRemoteFiltering);
 
-    return combinedFilter;
+    return combined;
   }
 
   waitReady() {
