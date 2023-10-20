@@ -549,11 +549,11 @@ const Popup = Overlay.inherit({
     },
 
     _getToolbarButtonType: function(shortcut) {
-        if(isFluent() && shortcut === 'done') {
-            return 'default';
+        if((isFluent() && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
+            return BUTTON_DEFAULT_TYPE;
         }
 
-        return this.option('useDefaultToolbarButtons') ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE;
+        return BUTTON_NORMAL_TYPE;
     },
 
     _getToolbarItemByAlias: function(data) {
