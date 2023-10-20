@@ -1,0 +1,53 @@
+name: Update version in all workspaces
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        type: string
+        description: XX_X (23_2+)
+        required: true
+        default: 23_2
+      version:
+        type: string
+        description: XX.X.X Set exact version (optional)
+        required: true
+        default: 23.2.1
+
+jobs:
+  update_version:
+    name: Update version and create PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+
+      - name: Setup git config
+        run: |
+          git config --global user.email "DXGitHubRobot@devexpress.com"
+          git config --global user.name "DX Robot"
+
+      - name: Install packages in devextreme repo
+        run: npm install --no-audit --no-fund
+
+      - name: Bump version
+        run: npm run all:update-version -- 23.2.1
+
+      - name: Commit changes and make PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
+          branch_name: 'robot/update-version-23_2_1'
+        run: |
+          git checkout -b $branch_name
+          git add . -N
+          git commit -a -m "Bump devextreme version"
+          git push --set-upstream origin $branch_name --force
+          gh pr create --base 23_2 --title "Bump devextreme version (23.2.1)" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
+      
