@@ -21,6 +21,8 @@ fixture`Dialog`
 
     await ClientFunction(() => {
       $(`.${DX_DIALOG_CLASS}`).remove();
+    }, {
+      dependencies: { DX_DIALOG_CLASS },
     })();
 
     await t
