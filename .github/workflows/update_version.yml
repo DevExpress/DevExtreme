@@ -29,6 +29,11 @@ jobs:
         with:
           node-version: '18.16.1'
 
+      - name: Setup git config
+        run: |
+          git config --global user.email "DXGitHubRobot@devexpress.com"
+          git config --global user.name "DX Robot"
+
       - name: Install packages in devextreme repo
         run: npm install --no-audit --no-fund
 
@@ -36,7 +41,6 @@ jobs:
         run: npm run all:update-version -- 23.2.1
 
       - name: Commit changes and make PR
-        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
           branch_name: 'robot/update-version-23_2_1'
