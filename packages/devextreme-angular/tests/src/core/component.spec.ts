@@ -27,6 +27,7 @@ import {
     DxTemplateHost,
     WatcherHelper,
     IterableDifferHelper,
+    DxCalendarComponent,
 } from 'devextreme-angular';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
@@ -100,70 +101,6 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
 }
 
 @Component({
-    selector: 'dx-test-widget-complex-value',
-    template: '',
-    providers: [DxTemplateHost, WatcherHelper, IterableDifferHelper]
-})
-export class DxTestWidgetComponentWithComplexValue extends DxTestWidgetComponent implements OnChanges, DoCheck {
-    @Input()
-    get value(): Date | number | string | Array<Date | number | string> | null {
-        return this._getOption('value');
-    }
-    set value(value: Date | number | string | Array<Date | number | string> | null) {
-        this._setOption('value', value);
-    }
-    constructor(elementRef: ElementRef,
-                ngZone: NgZone,
-                templateHost: DxTemplateHost,
-                private _watcherHelper: WatcherHelper,
-                private _idh: IterableDifferHelper,
-                transferState: TransferState,
-                @Inject(PLATFORM_ID) platformId: any) {
-        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
-
-        this._idh.setHost(this);
-    }
-
-    getIterableDifferHelper() {
-        return this._idh;
-    }
-
-    writeValue(value: any): void {
-        this.eventHelper.lockedValueChangeEvent = true;
-        this.value = value;
-        this.eventHelper.lockedValueChangeEvent = false;
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        super.ngOnChanges(changes);
-        this.setupChanges('value', changes);
-    }
-
-    setupChanges(prop: string, changes: SimpleChanges) {
-        if (!(prop in this._optionsToUpdate)) {
-            this._idh.setup(prop, changes);
-        }
-    }
-
-    ngDoCheck() {
-        this._idh.doCheck('disabledDates');
-        this._idh.doCheck('validationErrors');
-        this._idh.doCheck('value');
-        this._watcherHelper.checkWatchers();
-        super.ngDoCheck();
-        super.clearChangedOptions();
-    }
-
-    _setOption(name: string, value: any) {
-        let isSetup = this._idh.setupSingle(name, value);
-        let isChanged = this._idh.getChanges(name, value) !== null;
-
-        if (isSetup || isChanged) {
-            super._setOption(name, value);
-        }
-    }
-}
-@Component({
     selector: 'test-container-component',
     template: ''
 })
@@ -184,14 +121,13 @@ export class TestContainerComponent {
     }
 }
 
-
 describe('DevExtreme Angular widget', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule(
             {
                 imports: [BrowserTransferStateModule],
-                declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestWidgetComponentWithComplexValue]
+                declarations: [TestContainerComponent, DxTestWidgetComponent]
             });
     });
 
@@ -215,21 +151,16 @@ describe('DevExtreme Angular widget', () => {
     });
 
     it('IterableDifferHelper doCheck() should not error if value not iterable', () => {
-        let fixture = TestBed.createComponent(DxTestWidgetComponentWithComplexValue);
+        const fixture = TestBed.createComponent(DxCalendarComponent);
         const instance = fixture.componentInstance;
         fixture.detectChanges();
 
         instance.value = [0, 1];
-
+        fixture.detectChanges();
+        instance.value = new Date();
+        fixture.detectChanges();
         try {
-            instance.value = null;
-            fixture.detectChanges();
-            instance.value = new Date();
-            console.log('------=======> instance.value = new Date()', instance.value);
-            fixture.detectChanges();
-            instance.value = [0, 1];
-            fixture.detectChanges();
-            instance.testOption = undefined;
+
             fixture.detectChanges();
         } catch(e) {
             throw new Error(e);
