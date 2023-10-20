@@ -44,11 +44,11 @@ jobs:
       - name: Commit changes and make PR
         env:
           GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
-          branch_name: 'robot/update-version-${{ inputs.branch_name }}'
+          branch_name: 'robot/update-version-${{ inputs.version }}'
         run: |
           git checkout -b $branch_name
           git add . -N
           git commit -a -m "Bump devextreme version"
           git push --set-upstream origin $branch_name --force
-          gh pr create --base ${{ inputs.branch_name }} --title "Bump devextreme version (${{ inputs.branch_name }})" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
+          gh pr create --base ${{ inputs.branch_name }} --title "Bump devextreme version (${{ inputs.version }})" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
       
