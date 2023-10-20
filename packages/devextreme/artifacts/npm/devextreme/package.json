@@ -45,12 +45,6 @@
       "node_modules"
     ]
   },
-  "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%",
-    "not dead"
-  ],
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
     "devextreme-bundler": "bin/bundler.js"

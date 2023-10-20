@@ -1,5 +1,8 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
+
 const common = {
     plugins: [
         '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -11,11 +14,7 @@ const common = {
     ignore: ['**/*.json'],
 };
 
-const targets = {
-    ios: 11,
-    android: 52,
-    samsung: 6,
-};
+const targets = JSON.parse(fs.readFileSync(path.resolve('.browserslist-lock.json')));
 
 module.exports = {
     cjs: Object.assign({}, common, {
