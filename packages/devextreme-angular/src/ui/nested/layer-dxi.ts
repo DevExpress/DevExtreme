@@ -13,10 +13,9 @@ import {
 
 
 import { SingleMultipleOrNone } from 'devextreme/common';
-import { Palette } from 'devextreme/common/charts';
+import { Font, Palette } from 'devextreme/common/charts';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Font } from 'devextreme/viz/core/base_widget';
 import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
 
 import {

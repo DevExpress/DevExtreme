@@ -23,10 +23,9 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, DashStyle, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { AnimationEaseMode, DashStyle, Font, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
-import { Font } from 'devextreme/viz/core/base_widget';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/linear_gauge';
 
 import DxLinearGauge from 'devextreme/viz/linear_gauge';
