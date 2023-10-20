@@ -38,6 +38,15 @@ const TABS_POSITION = {
     left: 'left',
 };
 
+const TABS_INDICATOR_POSITION_BY_TABS_POSITION = {
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+};
+
+const TABS_INDICATOR_POSITION_DEFAULT = 'bottom';
+
 const TABS_ORIENTATION = {
     horizontal: 'horizontal',
     vertical: 'vertical',
@@ -288,9 +297,8 @@ const TabPanel = MultiView.inherit({
             orientation: this._getTabsOrientation(),
             iconPosition: this.option('iconPosition'),
             stylingMode: this.option('stylingMode'),
-            _itemAttributes: {
-                class: TABPANEL_TABS_ITEM_CLASS,
-            },
+            _itemAttributes: { class: TABPANEL_TABS_ITEM_CLASS },
+            _indicatorPosition: TABS_INDICATOR_POSITION_DEFAULT,
         };
     },
 
@@ -334,18 +342,18 @@ const TabPanel = MultiView.inherit({
         this.$element().addClass(newClass);
     },
 
+    _updateTabsIndicatorPosition() {
+        const { tabsPosition } = this.option();
+
+        const value = TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
+
+        this._setTabsOption('_indicatorPosition', value);
+    },
+
     _updateTabsOrientation() {
         const orientation = this._getTabsOrientation();
 
-        this._tabs.option('orientation', orientation);
-    },
-
-    _updateTabsIconPosition(iconPosition) {
-        this._tabs.option({ iconPosition });
-    },
-
-    _updateTabsStylingMode(stylingMode) {
-        this._tabs.option({ stylingMode });
+        this._setTabsOption('orientation', orientation);
     },
 
     _toggleWrapperFocusedClass(isFocused) {
@@ -387,7 +395,7 @@ const TabPanel = MultiView.inherit({
         this._isFocusOutHandlerExecuting = false;
     },
 
-    _setTabsOption: function(name, value) {
+    _setTabsOption(name, value) {
         if(this._tabs) {
             this._tabs.option(name, value);
         }
@@ -491,13 +499,14 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'tabsPosition':
                 this._toggleTabPanelTabsPositionClass();
+                this._updateTabsIndicatorPosition();
                 this._updateTabsOrientation();
                 break;
             case 'iconPosition':
-                this._updateTabsIconPosition(value);
+                this._setTabsOption('iconPosition', value);
                 break;
             case 'stylingMode':
-                this._updateTabsStylingMode(value);
+                this._setTabsOption('stylingMode', value);
                 break;
             default:
                 this.callBase(args);

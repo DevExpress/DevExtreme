@@ -52,6 +52,13 @@ const TABS_ORIENTATION_CLASS = {
     horizontal: 'dx-tabs-horizontal',
 };
 
+const INDICATOR_POSITION_CLASS = {
+    top: 'dx-tab-indicator-position-top',
+    right: 'dx-tab-indicator-position-right',
+    bottom: 'dx-tab-indicator-position-bottom',
+    left: 'dx-tab-indicator-position-left',
+};
+
 const TABS_ICON_POSITION_CLASS = {
     top: 'dx-tabs-icon-position-top',
     end: 'dx-tabs-icon-position-end',
@@ -78,6 +85,13 @@ const TAB_OFFSET = 30;
 const ORIENTATION = {
     horizontal: 'horizontal',
     vertical: 'vertical',
+};
+
+const INDICATOR_POSITION = {
+    top: 'top',
+    right: 'right',
+    bottom: 'bottom',
+    left: 'left',
 };
 
 const SCROLLABLE_DIRECTION = {
@@ -126,6 +140,7 @@ const Tabs = CollectionWidget.inherit({
             useInkRipple: false,
             badgeExpr: function(data) { return data ? data.badge : undefined; },
             _itemAttributes: { role: 'tab' },
+            _indicatorPosition: INDICATOR_POSITION.bottom,
         });
     },
 
@@ -183,6 +198,7 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
         this.$element().addClass(TABS_CLASS);
         this._toggleOrientationClass(orientation);
+        this._toggleIndicatorPositionClass();
         this._toggleIconPositionClass();
         this._toggleStylingModeClass(stylingMode);
         this._renderWrapper();
@@ -565,6 +581,33 @@ const Tabs = CollectionWidget.inherit({
         this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
     },
 
+    _getIndicatorPositionClass() {
+        const { _indicatorPosition } = this.option();
+        const isVertical = this._isVertical();
+
+        if(isVertical) {
+            if(_indicatorPosition === INDICATOR_POSITION.top) {
+                return INDICATOR_POSITION_CLASS.left;
+            } else if(_indicatorPosition === INDICATOR_POSITION.bottom) {
+                return INDICATOR_POSITION_CLASS.right;
+            }
+        } else {
+            if(_indicatorPosition === INDICATOR_POSITION.right) {
+                return INDICATOR_POSITION_CLASS.bottom;
+            } else if(_indicatorPosition === INDICATOR_POSITION.left) {
+                return INDICATOR_POSITION_CLASS.top;
+            }
+        }
+
+        return INDICATOR_POSITION_CLASS[_indicatorPosition];
+    },
+
+    _toggleIndicatorPositionClass() {
+        const newClass = this._getIndicatorPositionClass();
+
+        this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
+    },
+
     _toggleOrientationClass(orientation) {
         const isVertical = orientation === ORIENTATION.vertical;
 
@@ -589,11 +632,21 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _toggleIconPositionClass() {
-        for(const key in TABS_ICON_POSITION_CLASS) {
-            this.$element().removeClass(TABS_ICON_POSITION_CLASS[key]);
-        }
-
         const newClass = this._getTabsIconPositionClass();
+
+        this._toggleElementClasses(TABS_ICON_POSITION_CLASS, newClass);
+    },
+
+    _toggleStylingModeClass(value) {
+        const newClass = TABS_STYLING_MODE_CLASS[value] ?? TABS_STYLING_MODE_CLASS.primary;
+
+        this._toggleElementClasses(TABS_STYLING_MODE_CLASS, newClass);
+    },
+
+    _toggleElementClasses(classMap, newClass) {
+        for(const key in classMap) {
+            this.$element().removeClass(classMap[key]);
+        }
 
         this.$element().addClass(newClass);
     },
@@ -628,14 +681,6 @@ const Tabs = CollectionWidget.inherit({
         this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
     },
 
-    _toggleStylingModeClass(value) {
-        for(const key in TABS_STYLING_MODE_CLASS) {
-            this.$element().removeClass(TABS_STYLING_MODE_CLASS[key]);
-        }
-
-        this.$element().addClass(TABS_STYLING_MODE_CLASS[value] ?? TABS_STYLING_MODE_CLASS.primary);
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -666,6 +711,7 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'orientation': {
                 this._toggleOrientationClass(args.value);
+                this._toggleIndicatorPositionClass();
                 if(!this._isServerSide()) {
                     this._updateScrollable();
                 }
@@ -683,6 +729,11 @@ const Tabs = CollectionWidget.inherit({
                 if(!this._isServerSide()) {
                     this._dimensionChanged();
                 }
+                break;
+            }
+            case '_indicatorPosition': {
+                // TODO: ADD TEST
+                this._toggleIndicatorPositionClass();
                 break;
             }
             default:
