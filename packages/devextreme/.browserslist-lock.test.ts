@@ -1,7 +1,7 @@
 
 import { readFileSync } from 'fs';
 
-import { LOCK_FILE_PATH, getBrowsersLockChecksum } from './tools/browsers-lock';
+import { LOCK_FILE_PATH, getBrowsersLockChecksum } from './tools/browserslist-lock';
 
 describe('browserslist lock file', () => {
   

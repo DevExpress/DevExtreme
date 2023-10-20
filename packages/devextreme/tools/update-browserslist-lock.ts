@@ -3,7 +3,7 @@ import {
   getBrowsersLockChecksum,
   getTargets,
   writeBrowsersLock,
-} from "./browsers-lock";
+} from "./browserslist-lock";
 
 const result = {
   sha1: getBrowsersLockChecksum(),
