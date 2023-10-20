@@ -220,7 +220,7 @@
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "test-typescript": "gulp test-ts",
     "tcd-update": "tcd-update",
-    "update-browsers-lock": "node build/update-browsers-lock"
+    "update-browsers-lock": "ts-node ./tools/update-browsers-lock"
   },
   "jest": {
     "modulePathIgnorePatterns": [

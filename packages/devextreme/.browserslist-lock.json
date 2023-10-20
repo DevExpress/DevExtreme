@@ -1,11 +1,14 @@
 {
-  "android": "52",
-  "chrome": "109",
-  "edge": "114",
-  "firefox": "115",
-  "ios": "11",
-  "opera": "99",
-  "opera_mobile": "73",
-  "safari": "16.4",
-  "samsung": "6.2"
+  "sha1": "b023e99d41d348f822896f4dd164270d563a4960",
+  "targets": {
+    "android": "52",
+    "chrome": "109",
+    "edge": "114",
+    "firefox": "115",
+    "ios": "11",
+    "opera": "99",
+    "opera_mobile": "73",
+    "safari": "16.4",
+    "samsung": "6.2"
+  }
 }

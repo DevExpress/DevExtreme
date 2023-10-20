@@ -14,7 +14,7 @@ const common = {
     ignore: ['**/*.json'],
 };
 
-const targets = JSON.parse(fs.readFileSync(path.resolve('.browserslist-lock.json')));
+const targets = JSON.parse(fs.readFileSync(path.resolve('.browserslist-lock.json'))).targets;
 
 module.exports = {
     cjs: Object.assign({}, common, {

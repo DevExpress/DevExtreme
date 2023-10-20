@@ -44,7 +44,7 @@ module.exports = {
         './js/renovation/component_wrapper/common/template_wrapper.ts': full,
         './js/renovation/component_wrapper/common/component.ts': nearlyFull,
     },
-    roots: ['<rootDir>/js'],
+    roots: ['<rootDir>/js', '<rootDir>'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     moduleNameMapper: {
         '@js/(.*)': '<rootDir>/js/$1',
@@ -57,6 +57,7 @@ module.exports = {
     testMatch: [
         '<rootDir>/js/**/__tests__/**/*.test.[jt]s?(x)',
         '<rootDir>/js/__internal/**/*.test.ts',
+        '<rootDir>/*.test.ts',
     ],
     transform: {
         'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),
