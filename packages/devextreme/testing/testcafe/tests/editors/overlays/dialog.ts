@@ -17,6 +17,10 @@ fixture`Dialog`
 
     await testScreenshot(t, takeScreenshot, `Dialog appearance (${dialogType}).png`);
 
+    await ClientFunction(() => {
+      $('.dx-dialog').remove();
+    })();
+
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
