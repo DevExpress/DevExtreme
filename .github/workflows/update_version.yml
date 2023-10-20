@@ -1,7 +1,6 @@
 name: Update version in all workspaces
 
 on:
-  pull_request:
   workflow_dispatch:
     inputs:
       branch_name:
@@ -23,6 +22,8 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch_name }}
 
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -38,16 +39,16 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Bump version
-        run: npm run all:update-version -- 23.2.1
+        run: npm run all:update-version -- ${{ inputs.version }}
 
       - name: Commit changes and make PR
         env:
           GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
-          branch_name: 'robot/update-version-23_2_1'
+          branch_name: 'robot/update-version-${{ inputs.branch_name }}'
         run: |
           git checkout -b $branch_name
           git add . -N
           git commit -a -m "Bump devextreme version"
           git push --set-upstream origin $branch_name --force
-          gh pr create --base 23_2 --title "Bump devextreme version (23.2.1)" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
+          gh pr create --base ${{ inputs.branch_name }} --title "Bump devextreme version (${{ inputs.branch_name }})" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
       
