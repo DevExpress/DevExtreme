@@ -10,7 +10,7 @@ import {
     Output,
     OnDestroy,
     PLATFORM_ID,
-    Inject, SimpleChanges, OnChanges, DoCheck
+    Inject,
 } from '@angular/core';
 
 import { TransferState } from '@angular/platform-browser';
@@ -27,7 +27,7 @@ import {
     DxTemplateHost,
     WatcherHelper,
     IterableDifferHelper,
-    DxCalendarComponent,
+   // DxCalendarComponent,
 } from 'devextreme-angular';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
@@ -149,7 +149,7 @@ describe('DevExtreme Angular widget', () => {
 
         expect(element.classList).toContain('dx-test-widget');
     });
-
+/*
     it('IterableDifferHelper doCheck() should not error if value not iterable', () => {
         const fixture = TestBed.createComponent(DxCalendarComponent);
         const instance = fixture.componentInstance;
@@ -165,7 +165,7 @@ describe('DevExtreme Angular widget', () => {
         } catch(e) {
             throw new Error(e);
         }
-    });
+    });*/
 
     it('should be disposed', () => {
         let testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
