@@ -42,8 +42,8 @@ export function getBrowsersLockChecksum() {
 export function getTargets(): Record<string, string> {
   const babelTargets = getBabelTargets();
 
-  return Object.keys(babelTargets).reduce((acc, key) => {
-    acc[key] = babelTargets[key].replace(/(\.0)*$/, '');
+  return Object.entries(babelTargets).reduce((acc, [ key, value ]) => {
+    acc[key] = value.replace(/(\.0)*$/, '');
     return acc;
   }, {} as Record<string, string>);
 }
