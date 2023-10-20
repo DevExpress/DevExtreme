@@ -275,7 +275,7 @@ export default errorUtils({
     /**
      * @name ErrorsCore.W0022
      */
-    W0022: 'DevExtreme: Preview must not be used for any commercial purposes.\n\n' +
-        'This DevExtreme preview is distributed only for acquaintance and must not be used for any commercial purposes.',
+    W0022: 'DevExtreme: This version is a pre-release, and it is not suitable for commercial use.\n\n' +
+        'It may contain deficiencies and as such, should not be considered for use or integrated in any mission critical application.',
 
 });
