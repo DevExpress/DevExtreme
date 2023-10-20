@@ -38,7 +38,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -68,6 +67,7 @@ import {
     VisualRange,
     ZoomPanAction,
     ChartsColor,
+    Font,
 } from '../common/charts';
 
 /**

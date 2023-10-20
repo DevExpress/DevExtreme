@@ -3,10 +3,6 @@ import {
 } from './chart';
 
 import {
-    Font,
-} from './core/base_widget';
-
-import {
     HorizontalAlignment,
     Orientation,
     Position,
@@ -17,6 +13,7 @@ import {
     DashStyle,
     LegendMarkerState,
     SeriesType as CommonSeriesType,
+    Font,
 } from '../common/charts';
 
 import type * as Common from '../common/charts';
