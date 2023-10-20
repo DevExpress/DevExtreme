@@ -7,10 +7,9 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/circular_gauge";
-import type { ChartsColor } from "devextreme/common/charts";
+import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 
-import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -243,7 +242,7 @@ class Geometry extends NestedOption<IGeometryProps> {
 // Scale
 type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   hideFirstOrLast?: "first" | "last";
   indentFromTick?: number;
@@ -263,7 +262,7 @@ class Label extends NestedOption<ILabelProps> {
 // CircularGauge
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -352,7 +351,7 @@ type IScaleProps = React.PropsWithChildren<{
   endValue?: number;
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     hideFirstOrLast?: "first" | "last";
     indentFromTick?: number;
@@ -415,7 +414,7 @@ class Size extends NestedOption<ISizeProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -448,7 +447,7 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
   spindleSize?: number;
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     indent?: number;
   };
@@ -468,7 +467,7 @@ class SubvalueIndicator extends NestedOption<ISubvalueIndicatorProps> {
 // SubvalueIndicator
 type ITextProps = React.PropsWithChildren<{
   customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   indent?: number;
 }>
@@ -496,7 +495,7 @@ class Tick extends NestedOption<ITickProps> {
 // owners:
 // CircularGauge
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -506,7 +505,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -543,7 +542,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -597,7 +596,7 @@ type IValueIndicatorProps = React.PropsWithChildren<{
   spindleSize?: number;
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     indent?: number;
   };

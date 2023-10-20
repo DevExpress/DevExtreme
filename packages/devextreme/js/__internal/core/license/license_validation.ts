@@ -29,10 +29,11 @@ export type Token = {
   readonly kind: TokenKind.corrupted;
   readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
 };
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | null;
+export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022';
 
 const SPLITTER = '.';
 const FORMAT = 1;
+const RTM_MIN_PATCH_VERSION = 3;
 
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
@@ -41,7 +42,7 @@ const DESERIALIZATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'deseri
 const PAYLOAD_ERROR: Token = { kind: TokenKind.corrupted, error: 'payload' };
 const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
-let isLicenseVerified = false;
+let validationPerformed = false;
 
 // verifies RSASSA-PKCS1-v1.5 signature
 function verifySignature({ text, signature: encodedSignature }: {
@@ -106,15 +107,24 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
   };
 }
 
-export function verifyLicense(licenseKey: string, version: string = packageVersion): void {
-  if (isLicenseVerified) {
+export function validateLicense(licenseKey: string, version: string = packageVersion): void {
+  if (validationPerformed) {
     return;
   }
-  isLicenseVerified = true;
+  validationPerformed = true;
 
-  let warning: LicenseVerifyResult = null;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let warning: LicenseVerifyResult | undefined;
 
   try {
+    const [major, minor, patch] = version.split('.').map(Number);
+    const preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+
+    if (preview) {
+      warning = 'W0022';
+      return;
+    }
+
     if (!licenseKey) {
       warning = 'W0019';
       return;
@@ -126,8 +136,6 @@ export function verifyLicense(licenseKey: string, version: string = packageVersi
       warning = 'W0021';
       return;
     }
-
-    const [major, minor] = version.split('.').map(Number);
 
     if (!(major && minor)) {
       warning = 'W0021';
@@ -148,12 +156,12 @@ export function verifyLicense(licenseKey: string, version: string = packageVersi
 
 export function setLicenseCheckSkipCondition(value = true): void {
   /// #DEBUG
-  isLicenseVerified = value;
+  validationPerformed = value;
   /// #ENDDEBUG
 }
 
 // NOTE: We need this default export
-// to allow QUnit mock the verifyLicense function
+// to allow QUnit mock the validateLicense function
 export default {
-  verifyLicense,
+  validateLicense,
 };

@@ -26,7 +26,6 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -37,6 +36,7 @@ import {
     Palette,
     PaletteExtensionMode,
     ShiftLabelOverlap,
+    Font,
 } from '../common/charts';
 
 export {

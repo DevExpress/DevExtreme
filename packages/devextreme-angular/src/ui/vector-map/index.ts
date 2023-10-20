@@ -25,11 +25,10 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleMultipleOrNone, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Palette, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { DashStyle, Font, Palette, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Font } from 'devextreme/viz/core/base_widget';
 import { CenterChangedEvent, ClickEvent, DisposingEvent, DrawnEvent, dxVectorMapCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, VectorMapLayerType, VectorMapMarkerShape, VectorMapMarkerType, ZoomFactorChangedEvent } from 'devextreme/viz/vector_map';
 import { VectorMapProjection } from 'devextreme/viz/vector_map/projection';
 

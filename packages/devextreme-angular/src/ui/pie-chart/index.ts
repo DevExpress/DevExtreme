@@ -25,12 +25,11 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, DashStyle, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { AnimationEaseMode, DashStyle, Font, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { Font } from 'devextreme/viz/core/base_widget';
 import { DisposingEvent, DoneEvent, DrawnEvent, dxPieChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PieChartLegendHoverMode, PieChartSegmentDirection, PieChartType, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/pie_chart';
 
 import DxPieChart from 'devextreme/viz/pie_chart';

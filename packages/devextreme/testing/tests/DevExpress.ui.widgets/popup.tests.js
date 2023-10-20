@@ -311,7 +311,7 @@ QUnit.module('basic', () => {
         const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
         $popupBottom.dxToolbar('repaint');
-        assert.equal($popupBottom.text(), 'TodayCancelOK', 'buttons order is correct');
+        assert.equal($popupBottom.text(), 'TodayOKCancel', 'buttons order is correct');
         devices.current(devices.real());
     });
 

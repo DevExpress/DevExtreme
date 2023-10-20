@@ -1611,6 +1611,7 @@ export interface dxGanttHeaderFilter {
     /**
      * @docid
      * @default 315 &for(Material)
+     * @default 315 &for(Fluent)
      * @default 325
      */
     height?: number;

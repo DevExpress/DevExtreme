@@ -9,11 +9,10 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ValueChangedEvent } from "devextreme/viz/range_selector";
 import type { chartPointAggregationInfoObject, chartSeriesObject, dxChartCommonSeriesSettings } from "devextreme/viz/chart";
 import type { ChartSeries } from "devextreme/viz/common";
-import type { ChartsColor, ScaleBreak } from "devextreme/common/charts";
+import type { ChartsColor, Font as ChartsFont, ScaleBreak } from "devextreme/common/charts";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
 import type * as LocalizationTypes from "devextreme/localization";
-import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -391,7 +390,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     };
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     horizontalOffset?: number;
     position?: "inside" | "outside";
@@ -578,7 +577,7 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   };
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   horizontalOffset?: number;
   position?: "inside" | "outside";
@@ -803,7 +802,7 @@ type ILabelProps = React.PropsWithChildren<{
   };
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   horizontalOffset?: number;
   position?: "inside" | "outside";
@@ -840,7 +839,7 @@ class Length extends NestedOption<ILengthProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -1149,7 +1148,7 @@ type IScaleProps = React.PropsWithChildren<{
   holidays?: Array<any | string> | Array<number>;
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: any | number | string, valueText: string }) => string);
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     overlappingBehavior?: "hide" | "none";
     topIndent?: number;
@@ -1255,7 +1254,7 @@ class Scale extends NestedOption<IScaleProps> {
 // Scale
 type IScaleLabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: any | number | string, valueText: string }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   overlappingBehavior?: "hide" | "none";
   topIndent?: number;
@@ -1357,7 +1356,7 @@ type ISeriesProps = React.PropsWithChildren<{
     };
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     format?: LocalizationTypes.Format;
     horizontalOffset?: number;
     position?: "inside" | "outside";
@@ -1530,7 +1529,7 @@ class SliderHandle extends NestedOption<ISliderHandleProps> {
 type ISliderMarkerProps = React.PropsWithChildren<{
   color?: string;
   customizeText?: ((scaleValue: { value: any | number | string, valueText: string }) => string);
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   invalidRangeColor?: string;
   paddingLeftRight?: number;
@@ -1549,7 +1548,7 @@ class SliderMarker extends NestedOption<ISliderMarkerProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -1593,7 +1592,7 @@ class TickInterval extends NestedOption<ITickIntervalProps> {
 // owners:
 // RangeSelector
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -1603,7 +1602,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
