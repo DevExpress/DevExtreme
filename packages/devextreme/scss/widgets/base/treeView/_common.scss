@@ -1,4 +1,5 @@
 @use "../mixins" as *;
+@use "../../base/icons" as *;
 
 // adduse
 
@@ -122,5 +123,25 @@ $tree-view-icon-size: 24px;
   .dx-treeview-custom-expand-icon,
   .dx-treeview-custom-collapse-icon {
     @include flip-horizontally();
+  }
+}
+
+@mixin default-expander-icon($expand-icon-name, $collapse-icon-name, $font-size, $size, $color) {
+  .dx-treeview-toggle-item-visibility {
+    @include dx-icon($collapse-icon-name);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size;
+    width: $size;
+    height: $size;
+    color: $color;
+
+    &.dx-treeview-toggle-item-visibility-opened {
+      @include dx-icon($expand-icon-name);
+      
+      font-size: $font-size;
+    }
   }
 }

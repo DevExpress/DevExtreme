@@ -6,6 +6,7 @@
 @use "../_sizes" as *;
 @use "../../base/treeView" as *;
 @use "../../base/icons" as *;
+@use "../../base/treeview/common" as *;
 @use "../checkBox/colors" as *;
 
 // adduse
@@ -144,21 +145,10 @@
 }
 
 
-.dx-treeview-toggle-item-visibility {
-  @include dx-icon(spinright);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: $generic-base-icon-size;
-  width: $generic-treeview-toggle-item-width;
-  height: $generic-treeview-toggle-item-width;
-  color: $treeview-spin-icon-color;
-
-  &.dx-treeview-toggle-item-visibility-opened {
-    @include dx-icon(spindown);
-
-    font-size: $generic-base-icon-size;
-  }
-}
-
+@include default-expander-icon(
+  'spindown',
+  'spinright', 
+  $generic-base-icon-size,
+  $generic-treeview-toggle-item-width,
+  $treeview-spin-icon-color,
+);
