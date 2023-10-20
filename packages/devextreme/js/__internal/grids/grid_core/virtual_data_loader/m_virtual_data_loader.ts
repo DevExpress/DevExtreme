@@ -251,11 +251,11 @@ export class VirtualDataLoader {
   }
 
   beginPageIndex(defaultPageIndex) {
-    let beginPageIndex = getBeginPageIndex(this);
-    if (beginPageIndex < 0) {
-      beginPageIndex = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
+    let index = getBeginPageIndex(this);
+    if (index < 0) {
+      index = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
     }
-    return beginPageIndex;
+    return index;
   }
 
   endPageIndex() {
