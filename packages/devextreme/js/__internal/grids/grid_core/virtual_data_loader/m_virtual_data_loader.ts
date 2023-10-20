@@ -392,17 +392,17 @@ export class VirtualDataLoader {
   }
 
   itemsCount(isBase) {
-    let itemsCount = 0;
+    let count = 0;
     const isVirtualMode = this._controller.isVirtualMode();
 
     if (!isBase && isVirtualMode) {
       this._cache.forEach((cacheItem) => {
-        itemsCount += cacheItem.itemsCount;
+        count += cacheItem.itemsCount;
       });
     } else {
-      itemsCount = this._dataOptions.itemsCount();
+      count = this._dataOptions.itemsCount();
     }
-    return itemsCount;
+    return count;
   }
 
   virtualItemsCount() {
