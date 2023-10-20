@@ -10,7 +10,7 @@ import {
     Output,
     OnDestroy,
     PLATFORM_ID,
-    Inject
+    Inject, SimpleChanges, OnChanges, DoCheck
 } from '@angular/core';
 
 import { TransferState } from '@angular/platform-browser';
@@ -30,7 +30,7 @@ import {
 } from 'devextreme-angular';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
-import dxButton from 'devextreme/ui/button';
+import dxButton from "devextreme/ui/button";
 let DxTestWidget = dxButton;
 
 DxTestWidget.defaultOptions({
@@ -72,12 +72,10 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
         ngZone: NgZone,
         templateHost: DxTemplateHost,
         _watcherHelper: WatcherHelper,
-        private _idh: IterableDifferHelper,
          transferState: TransferState,
         @Inject(PLATFORM_ID) platformId: any) {
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._idh.setHost(this);
         this._createEventEmitters([
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'initialized', emit: 'onInitialized' },
@@ -92,12 +90,7 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
         return new DxTestWidget(element, options);
     }
 
-    getIterableDifferHelper() {
-        return this._idh;
-    }
-
     _setOption(name: string, value: any) {
-        this._idh.setupSingle(name, value);
         super._setOption(name, value);
     }
 
@@ -106,6 +99,70 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
     }
 }
 
+@Component({
+    selector: 'dx-test-widget-complex-value',
+    template: '',
+    providers: [DxTemplateHost, WatcherHelper, IterableDifferHelper]
+})
+export class DxTestWidgetComponentWithComplexValue extends DxTestWidgetComponent implements OnChanges, DoCheck {
+    @Input()
+    get value(): Date | number | string | Array<Date | number | string> | null {
+        return this._getOption('value');
+    }
+    set value(value: Date | number | string | Array<Date | number | string> | null) {
+        this._setOption('value', value);
+    }
+    constructor(elementRef: ElementRef,
+                ngZone: NgZone,
+                templateHost: DxTemplateHost,
+                private _watcherHelper: WatcherHelper,
+                private _idh: IterableDifferHelper,
+                transferState: TransferState,
+                @Inject(PLATFORM_ID) platformId: any) {
+        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+
+        this._idh.setHost(this);
+    }
+
+    getIterableDifferHelper() {
+        return this._idh;
+    }
+
+    writeValue(value: any): void {
+        this.eventHelper.lockedValueChangeEvent = true;
+        this.value = value;
+        this.eventHelper.lockedValueChangeEvent = false;
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        super.ngOnChanges(changes);
+        this.setupChanges('value', changes);
+    }
+
+    setupChanges(prop: string, changes: SimpleChanges) {
+        if (!(prop in this._optionsToUpdate)) {
+            this._idh.setup(prop, changes);
+        }
+    }
+
+    ngDoCheck() {
+        this._idh.doCheck('disabledDates');
+        this._idh.doCheck('validationErrors');
+        this._idh.doCheck('value');
+        this._watcherHelper.checkWatchers();
+        super.ngDoCheck();
+        super.clearChangedOptions();
+    }
+
+    _setOption(name: string, value: any) {
+        let isSetup = this._idh.setupSingle(name, value);
+        let isChanged = this._idh.getChanges(name, value) !== null;
+
+        if (isSetup || isChanged) {
+            super._setOption(name, value);
+        }
+    }
+}
 @Component({
     selector: 'test-container-component',
     template: ''
@@ -134,7 +191,7 @@ describe('DevExtreme Angular widget', () => {
         TestBed.configureTestingModule(
             {
                 imports: [BrowserTransferStateModule],
-                declarations: [TestContainerComponent, DxTestWidgetComponent]
+                declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestWidgetComponentWithComplexValue]
             });
     });
 
@@ -157,23 +214,23 @@ describe('DevExtreme Angular widget', () => {
         expect(element.classList).toContain('dx-test-widget');
     });
 
-    it('Iterable doCheck should not error if value not iterable', () => {
-        let fixture = TestBed.createComponent(DxTestWidgetComponent);
+    it('IterableDifferHelper doCheck() should not error if value not iterable', () => {
+        let fixture = TestBed.createComponent(DxTestWidgetComponentWithComplexValue);
         const instance = fixture.componentInstance;
-        const checkIdh = () => {
-            fixture.detectChanges();
-            instance.getIterableDifferHelper().doCheck('testOption')
-        };
         fixture.detectChanges();
-        instance.getIterableDifferHelper().setupSingle('testOption', [])
+
+        instance.value = [0, 1];
+
         try {
-            checkIdh();
-            instance.testOption = null;
-            checkIdh();
-            instance.testOption = 1;
-            checkIdh();
-            instance.testOption = [0,1];
-            checkIdh();
+            instance.value = null;
+            fixture.detectChanges();
+            instance.value = new Date();
+            console.log('------=======> instance.value = new Date()', instance.value);
+            fixture.detectChanges();
+            instance.value = [0, 1];
+            fixture.detectChanges();
+            instance.testOption = undefined;
+            fixture.detectChanges();
         } catch(e) {
             throw new Error(e);
         }
