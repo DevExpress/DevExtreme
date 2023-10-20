@@ -5,8 +5,6 @@
 $material-treeview-toggle-item-width: null !default;
 $material-treeview-checkbox-offset: null !default;
 $material-treeview-item-padding: null !default;
-$material-treeview-checkbox-vertical-offset: null !default;
-$material-treeview-with-custom-icon-checkbox-vertical-offset: null !default;
 $material-select-all-item-offset: null !default;
 $material-select-all-item-padding: null !default;
 $material-treeview-item-height: null !default;
@@ -34,10 +32,8 @@ $material-treeview-container-padding:
   $material-treeview-item-element-gap: 12px !default;
   $material-treeview-toggle-item-width: 24px !default;
   $material-treeview-checkbox-offset: 54px !default;
-  $material-treeview-checkbox-vertical-offset: 14px !default;
-  $material-treeview-with-custom-icon-checkbox-vertical-offset: 17px !default;
   $material-select-all-item-offset: $material-treeview-checkbox-offset !default;
-  $material-select-all-item-padding: 15px 0 15px $material-select-all-item-offset !default;
+  $material-select-all-item-padding: 15px $material-select-all-item-offset !default;
   $material-checkbox-container-size: 24px !default;
   $material-checkbox-icon-size: 20px !default;
   $material-treeview-item-padding: 12px $material-treeview-item-side-padding !default;
@@ -54,10 +50,8 @@ $material-treeview-container-padding:
   $material-treeview-item-element-gap: 12px !default;
   $material-treeview-toggle-item-width: 18px !default;
   $material-treeview-checkbox-offset: 46px !default;
-  $material-treeview-checkbox-vertical-offset: 10px !default;
-  $material-treeview-with-custom-icon-checkbox-vertical-offset: 11px !default;
   $material-select-all-item-offset: $material-treeview-checkbox-offset !default;
-  $material-select-all-item-padding: 10px 0 10px $material-select-all-item-offset !default;
+  $material-select-all-item-padding: 10px $material-select-all-item-offset !default;
   $material-treeview-item-padding: 9px $material-treeview-item-side-padding !default;
   $material-treeview-item-height: 36px !default;
   $material-treeview-loadincicator-offset-top: 8px !default;

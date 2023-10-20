@@ -53,7 +53,7 @@ $fluent-select-all-item-border-visible-padding: 26px !default;
   $fluent-checkbox-container-size: 16px !default;
   $fluent-checkbox-icon-size: 12px !default;
   $t: 10px !default;
-  $fluent-select-all-item-padding: 10px 0 10px $fluent-treeview-checkbox-offset !default;
+  $fluent-select-all-item-padding: 10px $fluent-treeview-checkbox-offset !default;
 
   $fluent-treeview-item-padding: 10px $fluent-treeview-item-side-padding !default;
   $fluent-treeview-min-item-height: 36px !default;
