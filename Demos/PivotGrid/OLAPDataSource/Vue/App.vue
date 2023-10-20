@@ -19,49 +19,35 @@
     </DxPivotGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxPivotGrid, {
-  DxExport,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
-
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import XmlaStore from 'devextreme/ui/pivot_grid/xmla_store';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxExport,
-    DxFieldChooser,
-  },
-  data() {
-    return {
-      dataSource: new PivotGridDataSource({
-        fields: [
-          { dataField: '[Product].[Category]', area: 'row' },
-          {
-            dataField: '[Product].[Subcategory]',
-            area: 'row',
-            headerFilter: {
-              search: {
-                enabled: true,
-              },
-            },
-          },
-          { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
-          { dataField: '[Ship Date].[Month of Year]', area: 'column' },
-          { dataField: '[Measures].[Reseller Freight Cost]', area: 'data', format: 'currency' },
-        ],
-        store: new XmlaStore({
-          type: 'xmla',
-          url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
-          catalog: 'Adventure Works DW Standard Edition',
-          cube: 'Adventure Works',
-        }),
-      }),
-    };
-  },
-};
+const dataSource = new PivotGridDataSource({
+  fields: [
+    { dataField: '[Product].[Category]', area: 'row' },
+    {
+      dataField: '[Product].[Subcategory]',
+      area: 'row',
+      headerFilter: {
+        search: {
+          enabled: true,
+        },
+      },
+    },
+    { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
+    { dataField: '[Ship Date].[Month of Year]', area: 'column' },
+    { dataField: '[Measures].[Reseller Freight Cost]', area: 'data', format: 'currency' },
+  ],
+  store: new XmlaStore({
+    url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
+    catalog: 'Adventure Works DW Standard Edition',
+    cube: 'Adventure Works',
+  }),
+});
 </script>
 <style scoped>
 .long-title h3 {

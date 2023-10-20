@@ -41,82 +41,64 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxPivotGrid, {
-  DxExport,
   DxFieldChooser,
-  DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import sales from './data.js';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxExport,
-    DxFieldChooser,
-    DxScrolling,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      showTotalsPrior: 'none',
-      dataFieldArea: 'column',
-      rowHeaderLayout: 'tree',
-      dataSource: new PivotGridDataSource({
-        fields: [{
-          caption: 'Region',
-          dataField: 'region',
-          expanded: true,
-          area: 'row',
-        }, {
-          caption: 'Country',
-          dataField: 'country',
-          expanded: true,
-          area: 'row',
-        }, {
-          caption: 'City',
-          dataField: 'city',
-          area: 'row',
-        }, {
-          dataField: 'date',
-          dataType: 'date',
-          area: 'column',
-        }, {
-          caption: 'Sales',
-          dataField: 'amount',
-          dataType: 'number',
-          summaryType: 'sum',
-          format: 'currency',
-          area: 'data',
-        }, {
-          caption: 'Percent',
-          dataField: 'amount',
-          dataType: 'number',
-          summaryType: 'sum',
-          summaryDisplayMode: 'percentOfRowGrandTotal',
-          area: 'data',
-        }],
-        store: sales,
-      }),
-    };
-  },
-  methods: {
-    onShowTotalsPriorChanged(data) {
-      this.showTotalsPrior = data.value ? 'both' : 'none';
-    },
+const showTotalsPrior = ref('none');
+const dataFieldArea = ref('column');
+const rowHeaderLayout = ref('tree');
+const dataSource = new PivotGridDataSource({
+  fields: [{
+    caption: 'Region',
+    dataField: 'region',
+    expanded: true,
+    area: 'row',
+  }, {
+    caption: 'Country',
+    dataField: 'country',
+    expanded: true,
+    area: 'row',
+  }, {
+    caption: 'City',
+    dataField: 'city',
+    area: 'row',
+  }, {
+    dataField: 'date',
+    dataType: 'date',
+    area: 'column',
+  }, {
+    caption: 'Sales',
+    dataField: 'amount',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data',
+  }, {
+    caption: 'Percent',
+    dataField: 'amount',
+    dataType: 'number',
+    summaryType: 'sum',
+    summaryDisplayMode: 'percentOfRowGrandTotal',
+    area: 'data',
+  }],
+  store: sales,
+});
 
-    onDataFieldAreaChanged(data) {
-      this.dataFieldArea = data.value ? 'row' : 'column';
-    },
-
-    onRowHeaderLayoutChanged(data) {
-      this.rowHeaderLayout = data.value ? 'tree' : 'standard';
-    },
-  },
-};
+function onShowTotalsPriorChanged(data) {
+  showTotalsPrior.value = data.value ? 'both' : 'none';
+}
+function onDataFieldAreaChanged(data) {
+  dataFieldArea.value = data.value ? 'row' : 'column';
+}
+function onRowHeaderLayoutChanged(data) {
+  rowHeaderLayout.value = data.value ? 'tree' : 'standard';
+}
 </script>
 <style scoped>
 .options {

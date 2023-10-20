@@ -17,59 +17,46 @@
     </DxPivotGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxPivotGrid, {
-  DxExport,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
 import { sales } from './data.js';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxExport,
-    DxFieldChooser,
-  },
-  data() {
-    return {
-      dataSource: new PivotGridDataSource({
-        fields: [
-          {
-            caption: 'Region',
-            width: 120,
-            dataField: 'region',
-            area: 'row',
-          },
-          {
-            caption: 'City',
-            dataField: 'city',
-            width: 150,
-            area: 'row',
-            selector(data) {
-              return `${data.city} (${data.country})`;
-            },
-          },
-          {
-            dataField: 'date',
-            dataType: 'date',
-            area: 'column',
-          },
-          {
-            caption: 'Sales',
-            dataField: 'amount',
-            dataType: 'number',
-            summaryType: 'sum',
-            format: 'currency',
-            area: 'data',
-          },
-        ],
-        store: sales,
-      }),
-    };
-  },
-};
+const dataSource = new PivotGridDataSource({
+  fields: [
+    {
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+    },
+    {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+      selector(data) {
+        return `${data.city} (${data.country})`;
+      },
+    },
+    {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    },
+    {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    },
+  ],
+  store: sales,
+});
 </script>
 <style scoped>
 #sales {

@@ -42,55 +42,40 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxPivotGrid, DxHeaderFilter, DxSearch, DxFieldChooser, DxFieldPanel,
 } from 'devextreme-vue/pivot-grid';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import XmlaStore from 'devextreme/ui/pivot_grid/xmla_store';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxHeaderFilter,
-    DxSearch,
-    DxFieldChooser,
-    DxFieldPanel,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      searchEnabled: true,
-      showRelevantValues: true,
-      dataSource: new PivotGridDataSource({
-        fields: [
-          { dataField: '[Product].[Category]', area: 'column' },
-          { dataField: '[Product].[Subcategory]', area: 'column' },
-          { dataField: '[Customer].[City]', area: 'row' },
-          { dataField: '[Measures].[Internet Total Product Cost]', area: 'data', format: 'currency' },
-          {
-            dataField: '[Customer].[Country]',
-            area: 'filter',
-            filterValues: ['[Customer].[Country].&[United Kingdom]'],
-          },
-          {
-            dataField: '[Ship Date].[Calendar Year]',
-            area: 'filter',
-            filterValues: ['[Ship Date].[Calendar Year].&[2004]'],
-          },
-        ],
-        store: new XmlaStore({
-          type: 'xmla',
-          url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
-          catalog: 'Adventure Works DW Standard Edition',
-          cube: 'Adventure Works',
-        }),
-      }),
-    };
-  },
-};
+const searchEnabled = ref(true);
+const showRelevantValues = ref(true);
+const dataSource = new PivotGridDataSource({
+  fields: [
+    { dataField: '[Product].[Category]', area: 'column' },
+    { dataField: '[Product].[Subcategory]', area: 'column' },
+    { dataField: '[Customer].[City]', area: 'row' },
+    { dataField: '[Measures].[Internet Total Product Cost]', area: 'data', format: 'currency' },
+    {
+      dataField: '[Customer].[Country]',
+      area: 'filter',
+      filterValues: ['[Customer].[Country].&[United Kingdom]'],
+    },
+    {
+      dataField: '[Ship Date].[Calendar Year]',
+      area: 'filter',
+      filterValues: ['[Ship Date].[Calendar Year].&[2004]'],
+    },
+  ],
+  store: new XmlaStore({
+    url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
+    catalog: 'Adventure Works DW Standard Edition',
+    cube: 'Adventure Works',
+  }),
+});
 </script>
 <style scoped>
 #sales {

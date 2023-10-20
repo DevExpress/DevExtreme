@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DxChart ref="chart">
+    <DxChart ref="chartRef">
       <DxTooltip
         :enabled="true"
         :customize-tooltip="customizeTooltip"
@@ -12,7 +12,7 @@
 
     <DxPivotGrid
       id="pivotgrid"
-      ref="grid"
+      ref="pivotGridRef"
       :data-source="dataSource"
       :allow-sorting-by-summary="true"
       :allow-filtering="true"
@@ -29,8 +29,8 @@
     </DxPivotGrid>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import {
   DxChart,
   DxAdaptiveLayout,
@@ -38,84 +38,74 @@ import {
   DxSize,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import {
   DxPivotGrid,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
-
+import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { sales } from './data.js';
+
+const dataSource = new PivotGridDataSource({
+  fields: [{
+    caption: 'Region',
+    width: 120,
+    dataField: 'region',
+    area: 'row',
+    sortBySummaryField: 'Total',
+  }, {
+    caption: 'City',
+    dataField: 'city',
+    width: 150,
+    area: 'row',
+  }, {
+    dataField: 'date',
+    dataType: 'date',
+    area: 'column',
+  }, {
+    groupName: 'date',
+    groupInterval: 'month',
+    visible: false,
+  }, {
+    caption: 'Total',
+    dataField: 'amount',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data',
+  }],
+  store: sales,
+});
+
+const customizeTooltip = function({ seriesName, originalValue }) {
+  const valueText = currencyFormatter.format(originalValue);
+  return {
+    html: `${seriesName} | Total<div class='currency'>${valueText}</div>`,
+  };
+};
+const pivotGridRef = ref<DxPivotGrid>();
+const chartRef = ref<DxChart>();
+
+onMounted(() => {
+  const pivotGrid = pivotGridRef.value?.instance;
+
+  pivotGrid?.bindChart(chartRef.value?.instance, {
+    dataFieldsDisplayMode: 'splitPanes',
+    alternateDataFields: false,
+  });
+
+  const pivotGridDataSource = pivotGrid?.getDataSource();
+
+  setTimeout(() => {
+    pivotGridDataSource?.expandHeaderItem('row', ['North America']);
+    pivotGridDataSource?.expandHeaderItem('column', [2013]);
+  });
+});
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
 });
-
-export default {
-  components: {
-    DxChart,
-    DxAdaptiveLayout,
-    DxCommonSeriesSettings,
-    DxSize,
-    DxTooltip,
-    DxPivotGrid,
-    DxFieldChooser,
-  },
-  data() {
-    return {
-      dataSource: {
-        fields: [{
-          caption: 'Region',
-          width: 120,
-          dataField: 'region',
-          area: 'row',
-          sortBySummaryField: 'Total',
-        }, {
-          caption: 'City',
-          dataField: 'city',
-          width: 150,
-          area: 'row',
-        }, {
-          dataField: 'date',
-          dataType: 'date',
-          area: 'column',
-        }, {
-          groupName: 'date',
-          groupInterval: 'month',
-          visible: false,
-        }, {
-          caption: 'Total',
-          dataField: 'amount',
-          dataType: 'number',
-          summaryType: 'sum',
-          format: 'currency',
-          area: 'data',
-        }],
-        store: sales,
-      },
-      customizeTooltip(args) {
-        const valueText = currencyFormatter.format(args.originalValue);
-        return {
-          html: `${args.seriesName} | Total<div class='currency'>${valueText}</div>`,
-        };
-      },
-    };
-  },
-  mounted() {
-    const pivotGrid = this.$refs.grid.instance;
-    const chart = this.$refs.chart.instance;
-    pivotGrid.bindChart(chart, {
-      dataFieldsDisplayMode: 'splitPanes',
-      alternateDataFields: false,
-    });
-    const dataSource = pivotGrid.getDataSource();
-    setTimeout(() => {
-      dataSource.expandHeaderItem('row', ['North America']);
-      dataSource.expandHeaderItem('column', [2013]);
-    }, 0);
-  },
-};
 </script>
 <style>
 #pivotgrid {

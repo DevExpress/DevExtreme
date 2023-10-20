@@ -15,9 +15,9 @@
         :data-source="dataSource"
         :width="400"
         :height="400"
-        v-model:layout="layout"
-        v-model:apply-changes-mode="applyChangesMode"
-        v-model:state="state"
+        :layout="layout"
+        :apply-changes-mode="applyChangesMode"
+        :state="state"
       >
         <DxTexts
           all-fields="All"
@@ -70,101 +70,79 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxPivotGrid,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
-
 import {
   DxPivotGridFieldChooser,
   DxTexts,
 } from 'devextreme-vue/pivot-grid-field-chooser';
-
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
 import {
   DxSelectBox,
 } from 'devextreme-vue/select-box';
-
 import {
   DxButton,
 } from 'devextreme-vue/button';
-
 import {
   DxRadioGroup,
 } from 'devextreme-vue/radio-group';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxFieldChooser,
-    DxSelectBox,
-    DxButton,
-    DxRadioGroup,
-    DxPivotGridFieldChooser,
-    DxTexts,
-  },
-  data() {
-    const dataSource = new PivotGridDataSource({
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-        headerFilter: {
-          search: {
-            enabled: true,
-          },
-        },
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-        headerFilter: {
-          search: {
-            enabled: true,
-          },
-        },
-        selector(data) {
-          return `${data.city} (${data.country})`;
-        },
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        caption: 'Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    });
-    return {
-      dataSource,
-      state: dataSource.state(),
-      layouts: service.getLayouts(),
-      layout: 0,
-      applyChangesModes: ['instantly', 'onDemand'],
-      applyChangesMode: 'instantly',
-    };
-  },
-  methods: {
-    applyClick() {
-      this.dataSource.state(this.state);
+const dataSource = new PivotGridDataSource({
+  fields: [{
+    caption: 'Region',
+    width: 120,
+    dataField: 'region',
+    area: 'row',
+    headerFilter: {
+      search: {
+        enabled: true,
+      },
     },
-    cancelClick() {
-      this.state = this.dataSource.state();
+  }, {
+    caption: 'City',
+    dataField: 'city',
+    width: 150,
+    area: 'row',
+    headerFilter: {
+      search: {
+        enabled: true,
+      },
     },
-  },
-};
+    selector(data) {
+      return `${data.city} (${data.country})`;
+    },
+  }, {
+    dataField: 'date',
+    dataType: 'date',
+    area: 'column',
+  }, {
+    caption: 'Sales',
+    dataField: 'amount',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data',
+  }],
+  store: service.getSales(),
+});
+
+const state = ref(dataSource.state());
+const layouts = ref(service.getLayouts());
+const layout = ref(0);
+const applyChangesModes = ['instantly', 'onDemand'];
+const applyChangesMode = ref('instantly');
+
+function applyClick() {
+  dataSource.state(state.value);
+}
+function cancelClick() {
+  state.value = dataSource.state();
+}
 </script>
 <style>
 .container {

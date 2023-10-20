@@ -20,7 +20,7 @@
       @shown="onShown"
     >
       <DxDataGrid
-        :ref="dataGridRefName"
+        :ref="dataGridRef"
         :width="560"
         :height="300"
         :data-source="drillDownDataSource"
@@ -40,83 +40,64 @@
     </DxPopup>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxPivotGrid, DxFieldChooser } from 'devextreme-vue/pivot-grid';
 import { DxPopup } from 'devextreme-vue/popup';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
 import { sales } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPivotGrid,
-    DxFieldChooser,
-    DxPopup,
-  },
-  data() {
-    return {
-      dataSource: new PivotGridDataSource({
-        fields: [
-          {
-            caption: 'Region',
-            width: 120,
-            dataField: 'region',
-            area: 'row',
-          },
-          {
-            caption: 'City',
-            dataField: 'city',
-            width: 150,
-            area: 'row',
-          },
-          {
-            dataField: 'date',
-            dataType: 'date',
-            area: 'column',
-          },
-          {
-            caption: 'Total',
-            dataField: 'amount',
-            dataType: 'number',
-            summaryType: 'sum',
-            format: 'currency',
-            area: 'data',
-          },
-        ],
-        store: sales,
-      }),
-      dataGridRefName: 'dataGrid',
-      drillDownDataSource: null,
-      popupTitle: '',
-      popupVisible: false,
-    };
-  },
-  computed: {
-    dataGrid() {
-      return this.$refs[this.dataGridRefName].instance;
+const dataSource = new PivotGridDataSource({
+  fields: [
+    {
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
     },
-  },
-  methods: {
-    onCellClick(e) {
-      if (e.area === 'data') {
-        const pivotGridDataSource = e.component.getDataSource();
-        const rowPathLength = e.cell.rowPath.length;
-        const rowPathName = e.cell.rowPath[rowPathLength - 1];
-        this.drillDownDataSource = pivotGridDataSource.createDrillDownDataSource(e.cell);
-        this.popupTitle = `${
-          rowPathName || 'Total'
-        } Drill Down Data`;
-        this.popupVisible = !this.popupVisible;
-      }
+    {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
     },
-    onShown() {
-      this.dataGrid.updateDimensions();
+    {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
     },
-  },
-};
+    {
+      caption: 'Total',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    },
+  ],
+  store: sales,
+});
+const dataGridRef = ref<DxDataGrid>();
+const drillDownDataSource = ref(null);
+const popupTitle = ref('');
+const popupVisible = ref(false);
+
+function onCellClick(e) {
+  if (e.area === 'data') {
+    const pivotGridDataSource = e.component.getDataSource();
+    const rowPathLength = e.cell.rowPath.length;
+    const rowPathName = e.cell.rowPath[rowPathLength - 1];
+    drillDownDataSource.value = pivotGridDataSource.createDrillDownDataSource(e.cell);
+    popupTitle.value = `${
+      rowPathName || 'Total'
+    } Drill Down Data`;
+    popupVisible.value = !popupVisible.value;
+  }
+}
+function onShown() {
+  dataGridRef.value?.instance?.updateDimensions();
+}
 </script>
 <style scoped>
 #sales {

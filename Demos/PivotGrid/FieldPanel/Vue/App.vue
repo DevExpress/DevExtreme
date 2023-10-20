@@ -7,7 +7,7 @@
       :allow-filtering="true"
       :height="490"
       :show-borders="true"
-      :data-source="dataSource"
+      :data-source="gridDataSource"
       :on-context-menu-preparing="onContextMenuPreparing"
     >
       <DxFieldChooser :height="500"/>
@@ -61,125 +61,112 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxPivotGrid, {
   DxFieldChooser,
   DxFieldPanel,
 } from 'devextreme-vue/pivot-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
 import sales from './data.js';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxFieldChooser,
-    DxFieldPanel,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      showColumnFields: true,
-      showDataFields: true,
-      showFilterFields: true,
-      showRowFields: true,
-      allowCrossGroupCalculation: true,
-      dataSource: new PivotGridDataSource({
-        fields: [{
-          caption: 'Region',
-          width: 120,
-          dataField: 'region',
-          area: 'row',
-        }, {
-          caption: 'City',
-          dataField: 'city',
-          width: 150,
-          area: 'row',
-          selector(data) {
-            return `${data.city} (${data.country})`;
-          },
-        }, {
-          dataField: 'date',
-          dataType: 'date',
-          area: 'column',
-        }, {
-          dataField: 'sales',
-          dataType: 'number',
-          summaryType: 'sum',
-          format: 'currency',
-          area: 'data',
-        }],
-        store: sales,
-      }),
-    };
-  },
-  methods: {
-    OnShowColumnFieldsChanged(e) {
-      this.showColumnFields = e.value;
+const showColumnFields = ref(true);
+const showDataFields = ref(true);
+const showFilterFields = ref(true);
+const showRowFields = ref(true);
+const gridDataSource = new PivotGridDataSource({
+  fields: [{
+    caption: 'Region',
+    width: 120,
+    dataField: 'region',
+    area: 'row',
+  }, {
+    caption: 'City',
+    dataField: 'city',
+    width: 150,
+    area: 'row',
+    selector(data) {
+      return `${data.city} (${data.country})`;
     },
-    OnShowDataFieldsChanged(e) {
-      this.showDataFields = e.value;
-    },
-    OnShowFilterFieldsChanged(e) {
-      this.showFilterFields = e.value;
-    },
-    OnShowRowFieldsChanged(e) {
-      this.showRowFields = e.value;
-    },
-    onContextMenuPreparing(e) {
-      const dataSource = e.component.getDataSource();
-      const sourceField = e.field;
+  }, {
+    dataField: 'date',
+    dataType: 'date',
+    area: 'column',
+  }, {
+    dataField: 'sales',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data',
+  }],
+  store: sales,
+});
 
-      if (sourceField) {
-        if (!sourceField.groupName || sourceField.groupIndex === 0) {
-          e.items.push({
-            text: 'Hide field',
-            onItemClick() {
-              let fieldIndex;
-              if (sourceField.groupName) {
-                fieldIndex = dataSource
-                  .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
-                  .index;
-              } else {
-                fieldIndex = sourceField.index;
-              }
+function OnShowColumnFieldsChanged(e) {
+  showColumnFields.value = e.value;
+}
+function OnShowDataFieldsChanged(e) {
+  showDataFields.value = e.value;
+}
+function OnShowFilterFieldsChanged(e) {
+  showFilterFields.value = e.value;
+}
+function OnShowRowFieldsChanged(e) {
+  showRowFields.value = e.value;
+}
+function onContextMenuPreparing(e) {
+  const dataSource = e.component.getDataSource();
+  const sourceField = e.field;
 
-              dataSource.field(fieldIndex, {
-                area: null,
-              });
-              dataSource.load();
-            },
+  if (sourceField) {
+    if (!sourceField.groupName || sourceField.groupIndex === 0) {
+      e.items.push({
+        text: 'Hide field',
+        onItemClick() {
+          let fieldIndex: number;
+
+          if (sourceField.groupName) {
+            fieldIndex = dataSource
+              .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+              .index;
+          } else {
+            fieldIndex = sourceField.index;
+          }
+
+          dataSource.field(fieldIndex, {
+            area: null,
           });
-        }
+          dataSource.load();
+        },
+      });
+    }
 
-        if (sourceField.dataType === 'number') {
-          const setSummaryType = function(args) {
-            dataSource.field(sourceField.index, {
-              summaryType: args.itemData.value,
-            });
+    if (sourceField.dataType === 'number') {
+      const setSummaryType = function(args) {
+        dataSource.field(sourceField.index, {
+          summaryType: args.itemData.value,
+        });
 
-            dataSource.load();
-          };
-          const menuItems = [];
+        dataSource.load();
+      };
+      const menuItems: Record<string, any>[] = [];
 
-          e.items.push({ text: 'Summary Type', items: menuItems });
+      e.items.push({ text: 'Summary Type', items: menuItems });
 
-          ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
-            const summaryTypeValue = summaryType.toLowerCase();
+      ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
+        const summaryTypeValue = summaryType.toLowerCase();
 
-            menuItems.push({
-              text: summaryType,
-              value: summaryType.toLowerCase(),
-              onItemClick: setSummaryType,
-              selected: e.field.summaryType === summaryTypeValue,
-            });
-          });
-        }
-      }
-    },
-  },
-};
+        menuItems.push({
+          text: summaryType,
+          value: summaryType.toLowerCase(),
+          onItemClick: setSummaryType,
+          selected: e.field.summaryType === summaryTypeValue,
+        });
+      });
+    }
+  }
+}
 </script>
 <style scoped>
 #sales {

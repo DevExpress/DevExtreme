@@ -29,53 +29,41 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxPivotGrid,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
-
 import {
   DxSelectBox,
 } from 'devextreme-vue/select-box';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxFieldChooser,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource: {
-        fields: [
-          { dataField: '[Product].[Category]', area: 'row' },
-          {
-            dataField: '[Product].[Subcategory]',
-            area: 'row',
-            headerFilter: {
-              search: {
-                enabled: true,
-              },
-            },
-          },
-          { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
-          { dataField: '[Ship Date].[Month of Year]', area: 'column' },
-          { dataField: '[Measures].[Customer Count]', area: 'data' },
-        ],
-        store: {
-          type: 'xmla',
-          url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
-          catalog: 'Adventure Works DW Standard Edition',
-          cube: 'Adventure Works',
+const dataSource = {
+  fields: [
+    { dataField: '[Product].[Category]', area: 'row' },
+    {
+      dataField: '[Product].[Subcategory]',
+      area: 'row',
+      headerFilter: {
+        search: {
+          enabled: true,
         },
       },
-      applyChangesModes: ['instantly', 'onDemand'],
-      applyChangesMode: 'instantly',
-    };
+    },
+    { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
+    { dataField: '[Ship Date].[Month of Year]', area: 'column' },
+    { dataField: '[Measures].[Customer Count]', area: 'data' },
+  ],
+  store: {
+    type: 'xmla',
+    url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
+    catalog: 'Adventure Works DW Standard Edition',
+    cube: 'Adventure Works',
   },
 };
+const applyChangesModes = ['instantly', 'onDemand'];
+const applyChangesMode = ref<string>('instantly');
 </script>
 <style>
 .options {

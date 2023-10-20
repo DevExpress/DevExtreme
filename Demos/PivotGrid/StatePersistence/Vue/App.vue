@@ -8,7 +8,7 @@
     <DxButton
       id="reset"
       text="Reset the PivotGrid's State"
-      @click="() => dataSource.state({})"
+      @click="() => gridDataSource.state({})"
     />
     <DxPivotGrid
       id="sales"
@@ -18,7 +18,7 @@
       :allow-expand-all="true"
       :height="570"
       :show-borders="true"
-      :data-source="dataSource"
+      :data-source="gridDataSource"
       :on-context-menu-preparing="onContextMenuPreparing"
     >
       <DxFieldChooser :enabled="true"/>
@@ -31,7 +31,7 @@
     </DxPivotGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxPivotGrid, {
   DxFieldChooser,
   DxFieldPanel,
@@ -39,114 +39,94 @@ import DxPivotGrid, {
 } from 'devextreme-vue/pivot-grid';
 import DxButton from 'devextreme-vue/button';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
 import sales from './data.js';
 
-export default {
-  components: {
-    DxPivotGrid,
-    DxFieldChooser,
-    DxFieldPanel,
-    DxStateStoring,
-    DxButton,
-  },
-  data() {
-    return {
-      showColumnFields: true,
-      showDataFields: true,
-      showFilterFields: true,
-      showRowFields: true,
-      allowCrossGroupCalculation: true,
-      dataSource: new PivotGridDataSource({
-        fields: [{
-          caption: 'Region',
-          width: 120,
-          dataField: 'region',
-          area: 'row',
-          sortBySummaryField: 'sales',
-        }, {
-          caption: 'City',
-          dataField: 'city',
-          width: 150,
-          area: 'row',
-        }, {
-          dataField: 'date',
-          dataType: 'date',
-          area: 'column',
-        }, {
-          groupName: 'date',
-          groupInterval: 'year',
-        }, {
-          groupName: 'date',
-          groupInterval: 'quarter',
-        }, {
-          dataField: 'sales',
-          dataType: 'number',
-          summaryType: 'sum',
-          format: 'currency',
-          area: 'data',
-        }],
-        store: sales,
-      }),
-    };
-  },
-  methods: {
-    onRefreshClick() {
-      window.location.reload();
-    },
-    onContextMenuPreparing(e) {
-      const dataSource = e.component.getDataSource();
-      const sourceField = e.field;
+const gridDataSource = new PivotGridDataSource({
+  fields: [{
+    caption: 'Region',
+    width: 120,
+    dataField: 'region',
+    area: 'row',
+    sortBySummaryField: 'sales',
+  }, {
+    caption: 'City',
+    dataField: 'city',
+    width: 150,
+    area: 'row',
+  }, {
+    dataField: 'date',
+    dataType: 'date',
+    area: 'column',
+  }, {
+    groupName: 'date',
+    groupInterval: 'year',
+  }, {
+    groupName: 'date',
+    groupInterval: 'quarter',
+  }, {
+    dataField: 'sales',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data',
+  }],
+  store: sales,
+});
 
-      if (sourceField) {
-        if (!sourceField.groupName || sourceField.groupIndex === 0) {
-          e.items.push({
-            text: 'Hide field',
-            onItemClick() {
-              let fieldIndex;
-              if (sourceField.groupName) {
-                fieldIndex = dataSource
-                  .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
-                  .index;
-              } else {
-                fieldIndex = sourceField.index;
-              }
+function onRefreshClick() {
+  window.location.reload();
+}
+function onContextMenuPreparing(e) {
+  const dataSource = e.component.getDataSource();
+  const sourceField = e.field;
 
-              dataSource.field(fieldIndex, {
-                area: null,
-              });
-              dataSource.load();
-            },
+  if (sourceField) {
+    if (!sourceField.groupName || sourceField.groupIndex === 0) {
+      e.items.push({
+        text: 'Hide field',
+        onItemClick() {
+          let fieldIndex;
+          if (sourceField.groupName) {
+            fieldIndex = dataSource
+              .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+              .index;
+          } else {
+            fieldIndex = sourceField.index;
+          }
+
+          dataSource.field(fieldIndex, {
+            area: null,
           });
-        }
+          dataSource.load();
+        },
+      });
+    }
 
-        if (sourceField.dataType === 'number') {
-          const setSummaryType = function(args) {
-            dataSource.field(sourceField.index, {
-              summaryType: args.itemData.value,
-            });
+    if (sourceField.dataType === 'number') {
+      const setSummaryType = function(args) {
+        dataSource.field(sourceField.index, {
+          summaryType: args.itemData.value,
+        });
 
-            dataSource.load();
-          };
-          const menuItems = [];
+        dataSource.load();
+      };
+      const menuItems: Record<string, any>[] = [];
 
-          e.items.push({ text: 'Summary Type', items: menuItems });
+      e.items.push({ text: 'Summary Type', items: menuItems });
 
-          ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
-            const summaryTypeValue = summaryType.toLowerCase();
+      ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
+        const summaryTypeValue = summaryType.toLowerCase();
 
-            menuItems.push({
-              text: summaryType,
-              value: summaryType.toLowerCase(),
-              onItemClick: setSummaryType,
-              selected: e.field.summaryType === summaryTypeValue,
-            });
-          });
-        }
-      }
-    },
-  },
-};
+        menuItems.push({
+          text: summaryType,
+          value: summaryType.toLowerCase(),
+          onItemClick: setSummaryType,
+          selected: e.field.summaryType === summaryTypeValue,
+        });
+      });
+    }
+  }
+}
 </script>
 <style scoped>
 #pivotgrid-demo > .dx-button {
