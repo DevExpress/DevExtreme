@@ -10,8 +10,10 @@
 
 // adduse
 
-
-$generic-treeview-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
+}
 
 .dx-treeview-node-loadindicator {
   width: $generic-treeview-loadincicator-size;
@@ -44,6 +46,16 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
   border-block-end: 1px solid $treeview-border-color;
   padding: $generic-select-all-item-padding;
 
+  .dx-checkbox-container {
+    .dx-checkbox-icon {
+      height: $generic-checkbox-container-size;
+      width: $generic-checkbox-container-size;
+    }
+
+    display: flex;
+    align-items: center;
+  }
+
   .dx-checkbox-text {
     padding-inline-start: $generic-treeview-item-element-gap;
   }
@@ -62,6 +74,11 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 .dx-treeview-item-with-checkbox {
   .dx-checkbox {
     .dx-checkbox-container {
+      .dx-checkbox-icon {
+        height: $generic-checkbox-container-size;
+        width: $generic-checkbox-container-size;
+      }
+
       display: flex;
       align-items: center;
       justify-content: center;
@@ -87,30 +104,16 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
       color: $treeview-item-selected-color;
       background-color: $treeview-item-selected-bg;
     }
-
-    &:not(.dx-state-focused) {
-      > .dx-treeview-item {
-        &.dx-state-hover {
-          background-color: $treeview-item-selected-hover-bg;
-        }
-      }
-    }
   }
 
   &.dx-state-focused {
     > .dx-treeview-item {
       background-color: $treeview-focused-bg;
       color: $treeview-focus-color;
-
-      .dx-item-content {
-        .dx-item-url {
-          color: unset;
-        }
-      }
+      border-radius: 0;
     }
   }
 }
-
 
 .dx-treeview-item {
   gap: $generic-treeview-item-element-gap;
@@ -131,10 +134,6 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
   }
 }
 
-.dx-treeview-custom-expand-icon,
-.dx-treeview-custom-collapse-icon {
-  @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
-}
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(spinright);

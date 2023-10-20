@@ -3,11 +3,18 @@
 // adduse
 
 $fluent-treeview-toggle-item-width: null !default;
-
 $fluent-treeview-item-height: null !default;
 $fluent-checkbox-container-size: null !default;
 $fluent-treeview-node-padding: null !default;
+$fluent-treeview-container-with-border-offset: 8px;
 $fluent-treeview-item-element-gap: 8px !default;
+
+$fluent-treeview-border-padding: 1px;
+$fluent-treeview-container-padding:
+  $fluent-treeview-border-padding
+  $fluent-treeview-border-padding
+  $fluent-treeview-border-padding
+  $fluent-treeview-container-with-border-offset;
 
 $fluent-checkbox-icon-size: null !default;
 $fluent-treeview-checkbox-offset: null !default;
@@ -19,7 +26,7 @@ $fluent-select-all-text-offset: null !default;
 $fluent-treeview-searchbox-margin-bottom: null !default;
 $fluent-treeview-search-editor-height: null !default;
 $fluent-treeview-item-side-padding: 12px !default;
-$fluent-custom-icon-top: null !default;
+$fluent-select-all-item-left-padding: 26px !default;
 
 @if $size == "default" {
   $fluent-treeview-item-height: 44px !default;
@@ -33,11 +40,9 @@ $fluent-custom-icon-top: null !default;
   $fluent-select-all-item-padding: 15px 42px !default;
 
   $fluent-treeview-item-padding: 12px $fluent-treeview-item-side-padding !default;
-  $fluent-custom-icon-top: 14px;
   $fluent-treeview-min-item-height: 44px !default;
   $fluent-treeview-loadincicator-size: 20px !default;
   $fluent-select-all-text-offset: 31px !default;
-
   $fluent-treeview-searchbox-margin-bottom: 8px !default;
   $fluent-treeview-search-editor-height: 48px;
 
@@ -57,7 +62,6 @@ $fluent-custom-icon-top: null !default;
   $fluent-select-all-item-padding: 10px 0 10px $fluent-treeview-checkbox-offset !default;
 
   $fluent-treeview-item-padding: 10px $fluent-treeview-item-side-padding !default;
-  $fluent-custom-icon-top: 10px;
   $fluent-treeview-min-item-height: 36px !default;
 
   $fluent-treeview-loadincicator-size: 16px !default;

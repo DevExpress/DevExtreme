@@ -10,14 +10,6 @@
 
 // adduse
 
-$fluent-treeview-container-with-border-offset: 8px;
-$fluent-treeview-border-padding: 1px;
-$fluent-treeview-container-padding:
-  $fluent-treeview-border-padding
-  $fluent-treeview-border-padding
-  $fluent-treeview-border-padding
-  $fluent-treeview-container-with-border-offset;
-
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   @include dx-icon-sizing($fluent-base-icon-size);
@@ -39,6 +31,10 @@ $fluent-treeview-container-padding:
 .dx-treeview-border-visible {
   border: 1px solid $treeview-border-color;
 
+  .dx-treeview-select-all-item {
+    padding-inline-start: $fluent-select-all-item-left-padding;
+  }
+
   .dx-scrollable-content {
     > .dx-treeview-node-container {
       padding: $fluent-treeview-container-padding;
@@ -49,7 +45,7 @@ $fluent-treeview-container-padding:
 .dx-treeview-select-all-item {
   border-block-end: 1px solid $treeview-border-color;
   padding: $fluent-select-all-item-padding;
-
+  
   .dx-checkbox-container {
     .dx-checkbox-icon {
       height: $fluent-checkbox-icon-size;
@@ -94,6 +90,12 @@ $fluent-treeview-container-padding:
   .dx-treeview-item {
     color: $base-text-color;
   }
+
+  &.dx-state-focused {
+    >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
+      border: 1px solid $checkbox-focused-borderd-color;
+    }
+  }
 }
 
 .dx-treeview-item-without-checkbox {
@@ -101,11 +103,6 @@ $fluent-treeview-container-padding:
     > .dx-treeview-item {
       color: $treeview-item-selected-color;
       background-color: $treeview-item-selected-bg;
-
-      &.dx-state-hover:not(.dx-state-focused) {
-        background-color: $treeview-item-selected-hover-bg;
-        border-radius: 4px;
-      }
     }
   }
 

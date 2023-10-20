@@ -18,8 +18,16 @@ $material-select-all-text-offset: null !default;
 $material-treeview-item-element-gap: null !default;
 $material-treeview-searchbox-margin-bottom: null !default;
 $material-treeview-search-editor-height: null !default;
-$material-custom-icon-top: null !default;
+
 $material-treeview-item-side-padding: 16px !default;
+$material-select-all-item-left-padding: 26px !default;
+$material-treeview-container-with-border-offset: 8px !default;;
+$material-treeview-border-padding: 1px !default;;
+$material-treeview-container-padding:
+  $material-treeview-border-padding
+  $material-treeview-border-padding
+  $material-treeview-border-padding
+  $material-treeview-container-with-border-offset;
 
 @if $size == "default" {
   $material-treeview-item-element-gap: 12px !default;
@@ -31,7 +39,6 @@ $material-treeview-item-side-padding: 16px !default;
   $material-select-all-item-padding: 15px 0 15px $material-select-all-item-offset !default;
   $material-checkbox-container-size: 24px;
   $material-treeview-item-padding: 12px $material-treeview-item-side-padding !default;
-  $material-custom-icon-top: 14px;
   $material-treeview-min-item-height: 48px !default;
   $material-treeview-loadincicator-offset-top: 13px !default;
   $material-treeview-loadincicator-offset-left: 2px !default;
@@ -50,7 +57,6 @@ $material-treeview-item-side-padding: 16px !default;
   $material-select-all-item-offset: $material-treeview-checkbox-offset !default;
   $material-select-all-item-padding: 10px 0 10px $material-select-all-item-offset !default;
   $material-treeview-item-padding: 9px $material-treeview-item-side-padding !default;
-  $material-custom-icon-top: 10px;
   $material-treeview-min-item-height: 36px !default;
   $material-treeview-loadincicator-offset-top: 8px !default;
   $material-treeview-loadincicator-offset-left: 0 !default;
