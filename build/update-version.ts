@@ -12,7 +12,7 @@ const MONOREPO_ROOT = path.join(__dirname, '..');
 const packagesPath = path.join(MONOREPO_ROOT, 'packages', '**', 'package.json');
 const playgroundsPath = path.join(MONOREPO_ROOT, 'playgrounds', '**', 'package.json');
 
-sh.exec(`npm version ${version} -ws --include-workspace-root --workspaces-update=false`);
+sh.exec(`npm version ${version} -ws --include-workspace-root --git-tag-version=false --workspaces-update=false`);
 
 const setStrictVersion = /.*-(build|alpha|beta).*/.test(version);
 
