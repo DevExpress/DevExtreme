@@ -25,7 +25,7 @@ $fluent-select-all-text-offset: null !default;
 $fluent-treeview-searchbox-margin-bottom: null !default;
 $fluent-treeview-search-editor-height: null !default;
 $fluent-treeview-item-side-padding: 12px !default;
-$fluent-select-all-item-left-padding: 26px !default;
+$fluent-select-all-item-border-visible-padding: 26px !default;
 
 @if $size == "default" {
   $fluent-treeview-item-height: 44px !default;
