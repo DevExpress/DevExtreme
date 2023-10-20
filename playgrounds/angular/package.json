@@ -1,6 +1,6 @@
 {
   "name": "devextreme-angular-playground",
-  "version": "0.0.0",
+  "version": "23.2.1",
   "scripts": {
     "ng": "ng",
     "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve --open -c dev",
