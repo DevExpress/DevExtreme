@@ -240,15 +240,14 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-header-panel-cell-date:last-child {
-      color: $scheduler-appointment-text-color;
+      color: $base-inverted-text-color;
       background-color: $scheduler-current-time-cell-color;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      line-height: $fluent-scheduler-header-panel-day-font-size + 16;
+      width: 25px;
+      height: 25px;
     }
   }
 
@@ -262,12 +261,12 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     &:first-child {
       font-size: $fluent-scheduler-header-panel-week-font-size;
-      line-height: 7px;
     }
 
     &:last-child {
       font-size: $fluent-scheduler-header-panel-day-font-size;
-      line-height: $fluent-scheduler-header-panel-day-font-size + 19;
+      margin-top: 5px;
+      margin-bottom: 3px;
     }
   }
 }
