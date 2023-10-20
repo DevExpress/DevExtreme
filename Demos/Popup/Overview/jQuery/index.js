@@ -50,6 +50,7 @@ $(() => {
       location: 'before',
       options: {
         icon: 'email',
+        stylingMode: 'contained',
         text: 'Send',
         onClick() {
           const message = `Email is sent to ${employee.FirstName} ${employee.LastName}`;
@@ -68,6 +69,8 @@ $(() => {
       location: 'after',
       options: {
         text: 'Close',
+        stylingMode: 'outlined',
+        type: 'normal',
         onClick() {
           popup.hide();
         },

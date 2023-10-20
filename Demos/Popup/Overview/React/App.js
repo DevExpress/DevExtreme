@@ -57,12 +57,15 @@ export default function App() {
 
   const getEmailButtonOptions = React.useCallback(() => ({
     icon: 'email',
+    stylingMode: 'contained',
     text: 'Send',
     onClick: sendEmail,
   }), [sendEmail]);
 
   const getCloseButtonOptions = React.useCallback(() => ({
     text: 'Close',
+    stylingMode: 'outlined',
+    type: 'normal',
     onClick: hideInfo,
   }), [hideInfo]);
 

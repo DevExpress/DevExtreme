@@ -102,6 +102,7 @@ export default {
       },
       emailButtonOptions: {
         icon: 'email',
+        stylingMode: 'contained',
         text: 'Send',
         onClick: () => {
           const message = `Email is sent to ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
@@ -116,6 +117,8 @@ export default {
       },
       closeButtonOptions: {
         text: 'Close',
+        stylingMode: 'outlined',
+        type: 'normal',
         onClick: () => {
           this.popupVisible = false;
         },

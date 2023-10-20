@@ -50,6 +50,7 @@ export class AppComponent {
     };
     this.emailButtonOptions = {
       icon: 'email',
+      stylingMode: 'contained',
       text: 'Send',
       onClick(e) {
         const message = `Email is sent to ${that.currentEmployee.FirstName} ${that.currentEmployee.LastName}`;
@@ -64,6 +65,8 @@ export class AppComponent {
     };
     this.closeButtonOptions = {
       text: 'Close',
+      stylingMode: 'outlined',
+      type: 'normal',
       onClick(e) {
         that.popupVisible = false;
       },
