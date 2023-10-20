@@ -37,7 +37,6 @@ import {
 } from './common';
 
 import {
-    Font,
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,
@@ -54,6 +53,7 @@ import {
     TextOverflow,
     WordWrap,
     ChartsColor,
+    Font,
 } from '../common/charts';
 
 export {
