@@ -55,7 +55,7 @@ $material-command-edit-icon-margin: 2px !default;
   $material-filter-row-between-editor-padding: 12px !default;
   $material-command-column-additional-right-margin: 0 !default;
 
-  $material-grid-base-treeview-select-all-item-offset: 7px !default;
+  $material-grid-base-treeview-select-all-item-offset: 6px !default;
 }
 
 @else if $size == "compact" {
@@ -84,7 +84,7 @@ $material-command-edit-icon-margin: 2px !default;
   $material-filter-row-between-editor-padding: 8px !default;
   $material-command-column-additional-right-margin: 2px !default;
 
-  $material-grid-base-treeview-select-all-item-offset: 5px !default;
+  $material-grid-base-treeview-select-all-item-offset: 4px !default;
 }
 
 $material-grid-base-header-panel-padding: 0 $material-grid-base-cell-horizontal-padding !default;
