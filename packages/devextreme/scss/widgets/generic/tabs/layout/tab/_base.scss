@@ -12,6 +12,7 @@
 
 
 .dx-tab {
+  gap: $generic-tabs-item-gap;
   padding: $generic-tabs-item-padding;
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
@@ -109,6 +110,11 @@
     color: $tabs-tab-icon-color;
 
     @include dx-icon-sizing($generic-tabs-icon-size);
+  }
+
+  .dx-tabs-item-badge {
+    min-width: $generic-badge-min-size;
+    min-height: $generic-badge-min-size;
   }
 }
 

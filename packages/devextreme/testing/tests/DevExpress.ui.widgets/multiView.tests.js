@@ -57,7 +57,6 @@ const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const MULTIVIEW_ITEM_HIDDEN_CLASS = 'dx-multiview-item-hidden';
 
 const toSelector = cssClass => `.${cssClass}`;
-
 const position = $element => translator.locate($element).left;
 
 const mockFxAnimate = (animations, type, output, startAction) => {
@@ -101,7 +100,6 @@ const animationCapturing = {
         delete this._animations;
     }
 };
-
 
 QUnit.module('rendering', () => {
     QUnit.test('height should be correctly updated on dxshown event', function(assert) {
@@ -1119,6 +1117,23 @@ QUnit.module('aria accessibility', {
         fx.off = false;
     }
 }, () => {
+    const getMultiViewItemAttributeMap = (index) => {
+        return {
+            'role': 'group',
+            'aria-roledescription': 'View',
+            'aria-label': `${index + 1} of 2`,
+        };
+    };
+
+    function checkAttributes(assert, items) {
+        items.forEach((item, index) => {
+            const attributeMap = getMultiViewItemAttributeMap(index);
+
+            Object.keys(attributeMap).forEach(key => {
+                assert.strictEqual(item.attr(key), attributeMap[key], `${key} attribute is correct`);
+            });
+        });
+    }
     QUnit.test('selected item should have unique id', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
@@ -1159,6 +1174,42 @@ QUnit.module('aria accessibility', {
 
         assert.equal($item0.attr('aria-hidden'), 'true', 'aria-hidden is true for 1st item');
         assert.equal($item1.attr('aria-hidden'), undefined, 'aria-hidden does not exist for 2nd item');
+    });
+
+    QUnit.test('element should contain correct aria attributes', function(assert) {
+        const $element = $('#multiView').dxMultiView({ items: [1, 2] });
+
+        const attributeMap = {
+            'role': 'group',
+            'aria-roledescription': 'MultiView',
+            'aria-label': 'Use the arrow keys or swipe to navigate between views',
+        };
+
+        Object.keys(attributeMap).forEach(key => {
+            assert.strictEqual($element.attr(key), attributeMap[key], `${key} attribute is correct`);
+        });
+    });
+
+    QUnit.test('items should contain correct aria attributes', function(assert) {
+        const $element = $('#multiView').dxMultiView({ items: [1, 2] });
+        const $firstItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+        const $secondItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+
+        checkAttributes(assert, [$firstItem, $secondItem]);
+    });
+
+    ['dataSource', 'items'].forEach(prop => {
+        QUnit.test(`items should contain correct aria attributes when ${prop} was changed in runtime`, function(assert) {
+            const $element = $('#multiView').dxMultiView({ [prop]: [1, 2] });
+            const instance = $element.dxMultiView('instance');
+
+            instance.option(prop, [3, 4]);
+
+            const $firstItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+            const $secondItem = $element.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+
+            checkAttributes(assert, [$firstItem, $secondItem]);
+        });
     });
 });
 

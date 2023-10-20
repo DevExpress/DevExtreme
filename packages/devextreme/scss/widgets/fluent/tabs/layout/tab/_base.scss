@@ -18,6 +18,7 @@
 
 
 .dx-tab {
+  gap: $fluent-tabs-item-gap;
   padding: $fluent-tabs-item-padding;
   min-width: 0;
   background-color: $tabs-tab-background;
@@ -87,6 +88,11 @@
     visibility: visible;
 
     @include dx-icon-sizing($fluent-tabs-icon-size);
+  }
+
+  .dx-tabs-item-badge {
+    min-width: $fluent-badge-min-size;
+    min-height: $fluent-badge-min-size;
   }
 }
 

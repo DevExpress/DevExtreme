@@ -39,7 +39,7 @@ import {
   validateDayHours,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
-import { isMaterialBased } from '@js/ui/themes';
+import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 
@@ -477,13 +477,19 @@ class Scheduler extends Widget<any> {
               if (!index) $(element).append(' ' as any);
             });
           },
-
-          _appointmentTooltipOffset: { x: 0, y: 11 },
           _appointmentTooltipButtonsPosition: 'top',
           _appointmentTooltipOpenButtonText: null,
           _appointmentCountPerCell: 1,
           _collectorOffset: 20,
           _appointmentOffset: 30,
+        },
+      },
+      {
+        device() {
+          return (isMaterial as any)();
+        },
+        options: {
+          _appointmentTooltipOffset: { x: 0, y: 11 },
         },
       },
     ]);

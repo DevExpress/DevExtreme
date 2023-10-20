@@ -126,7 +126,7 @@ QUnit.module('aria accessibility', () => {
         const $multiView = $('#multiView').dxMultiView({ items: [1, 2] });
         const $item = $multiView.find('.dx-item:first');
 
-        assert.equal($item.attr('role'), 'tabpanel');
+        assert.equal($item.attr('role'), 'group');
     });
 
     QUnit.test('inactive item should have aria-hidden attribute', function(assert) {

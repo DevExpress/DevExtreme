@@ -9,7 +9,7 @@
 * $name 10. Group header text color
 * $type color
 */
-$list-group-color: $base-neutral-foreground3 !default;
+$list-group-color: $base-text-color !default;
 
 /**
 * $name 20. Group border color
@@ -33,7 +33,7 @@ $list-normal-color: $base-neutral-foreground2 !default;
 * $name 25. Expanded group header text color
 * $type color
 */
-$list-expanded-group-color: $base-accent !default;
+$list-expanded-group-color: $base-text-color !default;
 
 /**
 * $name 30. Hovered item background color

@@ -50,10 +50,16 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 }
 
+.dx-list-item-chevron-container {
+  padding-inline: $fluent-list-item-vertical-padding;
+}
+
 .dx-list-item-chevron {
   @include dx-icon(chevronnext);
-  @include dx-icon-sizing($fluent-base-icon-size, $fluent-list-item-height);
+  @include dx-icon-sizing($fluent-base-icon-size);
 
+  display: flex;
+  align-items: center;
   color: $list-icon-color;
 }
 
@@ -81,6 +87,12 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 .dx-list-item,
 .dx-list-group-header {
   position: relative;
+}
+
+.dx-list-group-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: $fluent-list-item-gap;
 }
 
 .dx-list-collapsible-groups .dx-list-group-header {
@@ -138,6 +150,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     &.dx-list-select-decorator-enabled {
       .dx-list-select-all,
       .dx-list-item {
+        .dx-list-select-all-label,
+        .dx-list-item-content {
+          padding-inline-start: $fluent-list-vertical-padding;
+        }
+
         &.dx-state-hover {
           .dx-radiobutton-icon {
             border-color: $radiogroup-accent-color-hover;
@@ -225,7 +242,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       .dx-list-group-header-indicator {
         .dx-list-collapsible-groups & {
           @include dx-icon(chevrondown);
-          @include dx-icon-sizing($fluent-base-icon-size, $fluent-list-item-height);
+          @include dx-icon-sizing($fluent-base-icon-size);
         }
       }
 
@@ -246,22 +263,24 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-group-header {
-    font-weight: normal;
+    font-weight: 500;
     padding: $fluent-list-group-header-vertical-padding $item-horizontal-padding;
     background: $list-group-header-bg;
     color: $list-expanded-group-color;
     border-top: $fluent-list-item-border;
     border-top-color: transparent;
+    display: flex;
+    align-items: center;
+    column-gap: $fluent-list-item-horizontal-padding;
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;
+      display: flex;
+      align-items: center;
 
       .dx-list-collapsible-groups & {
-        @include dx-icon(chevronup);
-
-        float: right;
-
-        @include dx-icon-sizing($fluent-base-icon-size, $fluent-list-item-height);
+        @include dx-icon(chevronright);
+        @include dx-icon-sizing($fluent-base-icon-size);
       }
     }
 
@@ -271,6 +290,10 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-items {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+
     &:not(:first-of-type) {
       .dx-list-item {
         margin-top: 0;
@@ -399,16 +422,22 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-item-after-bag {
+    padding-inline: $fluent-list-item-vertical-padding;
+
     &.dx-list-static-delete-button-container {
       width: $item-horizontal-padding + $fluent-button-icon-size;
     }
 
     .dx-list-reorder-handle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       @include dx-icon(dragvertical);
 
       color: $list-icon-color;
-
-      @include dx-icon-sizing($fluent-base-icon-size, $fluent-list-item-height);
+      
+      @include dx-icon-sizing($fluent-base-icon-size);
     }
   }
 
@@ -450,6 +479,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     border: 1px solid $list-holdmenu-border-color;
     border-radius: $base-border-radius;
     box-shadow: $list-holdmenu-shadow-color 0 2px 7.2px 0;
+
+    .dx-list-items {
+      margin-left: $fluent-list-vertical-padding;
+      margin-right: $fluent-list-vertical-padding;
+    }
   }
 
   .dx-state-disabled {

@@ -5,6 +5,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/slider";
+@use "../../base/popover/mixins" as *;
 
 // adduse
 
@@ -15,6 +16,8 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-slider-wrapper {
   height: $fluent-slider-wrapper-height;
+
+  @include dx-popover-arrow-size(14px, 2px);
 }
 
 .dx-slider-bar {
