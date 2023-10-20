@@ -123,28 +123,14 @@
   }
 }
 
-.dx-treeview-item {
-  margin: 0;
-  gap: $generic-treeview-item-element-gap;
-  padding: $generic-treeview-item-padding;
-  height: $generic-treeview-item-height;
-  
-  .dx-treeview-item-content {
-    .dx-icon {
-      @include dx-icon-sizing($generic-base-icon-size, $generic-treeview-base-container-size);
-
-      vertical-align: bottom;
-    }
-  }
-
-  &.dx-state-hover {
-    background-color: $treeview-hover-bg;
-    border-radius: 0;
-    color: $treeview-item-hover-color;
-  }
-}
-
-
+@include treeview-item (
+  $generic-treeview-item-element-gap,
+  $generic-treeview-item-padding,
+  $generic-treeview-item-height,
+  $generic-base-icon-size,
+  $treeview-hover-bg,
+  $treeview-item-hover-color,
+);
 @include default-expander-icon(
   'spindown',
   'spinright', 

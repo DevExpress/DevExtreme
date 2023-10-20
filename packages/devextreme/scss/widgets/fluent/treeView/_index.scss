@@ -11,6 +11,24 @@
 
 // adduse
 
+@include default-expander-icon(
+  'chevrondown',
+  'chevronright',
+  $fluent-base-icon-size,
+  $fluent-treeview-toggle-item-width,
+  $treeview-spin-icon-color,
+);
+@include treeview-item(
+  $fluent-treeview-item-element-gap,
+  $fluent-treeview-item-padding,
+  $fluent-treeview-item-height,
+  $fluent-base-icon-size,
+  $treeview-hover-bg,
+  $treeview-item-hover-color,
+  1px 0,
+  4px,
+);
+
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   @include dx-icon-sizing($fluent-base-icon-size);
@@ -121,32 +139,3 @@
     }
   }
 }
-
-.dx-treeview-item {
-  margin: 1px 0;
-  gap: $fluent-treeview-item-element-gap;
-  padding: $fluent-treeview-item-padding;
-  height: $fluent-treeview-item-height;
-  
-  .dx-treeview-item-content {
-    .dx-icon {
-      @include dx-icon-sizing($fluent-base-icon-size);
-
-      vertical-align: bottom;
-    }
-  }
-
-  &.dx-state-hover {
-    background-color: $treeview-hover-bg;
-    border-radius: 4px;
-    color: $treeview-item-hover-color;
-  }
-}
-
-@include default-expander-icon(
-  'chevrondown',
-  'chevronright', 
-  $fluent-base-icon-size,
-  $fluent-treeview-toggle-item-width,
-  $treeview-spin-icon-color,
-);

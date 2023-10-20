@@ -3,7 +3,6 @@
 
 // adduse
 
-
 $treeview-searchbox-margin-bottom: 5px;
 $tree-view-icon-size: 24px;
 
@@ -140,8 +139,32 @@ $tree-view-icon-size: 24px;
 
     &.dx-treeview-toggle-item-visibility-opened {
       @include dx-icon($expand-icon-name);
-      
+
       font-size: $font-size;
+    }
+  }
+}
+
+
+@mixin treeview-item($gap, $padding, $height, $icon-size, $hover-bg, $item-hover-color, $margin: 0, $border-radius: 0) {
+  .dx-treeview-item {
+    gap: $gap;
+    padding: $padding;
+    height: $height;
+    margin: $margin;
+    
+    .dx-treeview-item-content {
+      .dx-icon {
+        @include dx-icon-sizing($icon-size);
+  
+        vertical-align: bottom;
+      }
+    }
+  
+    &.dx-state-hover {
+      background-color: $hover-bg;
+      border-radius: $border-radius;
+      color: $item-hover-color;
     }
   }
 }
