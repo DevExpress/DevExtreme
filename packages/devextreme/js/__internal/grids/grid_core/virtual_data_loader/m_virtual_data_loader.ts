@@ -251,11 +251,11 @@ export class VirtualDataLoader {
   }
 
   beginPageIndex(defaultPageIndex) {
-    let beginPageIndex = getBeginPageIndex(this);
-    if (beginPageIndex < 0) {
-      beginPageIndex = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
+    let index = getBeginPageIndex(this);
+    if (index < 0) {
+      index = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
     }
-    return beginPageIndex;
+    return index;
   }
 
   endPageIndex() {
@@ -392,17 +392,17 @@ export class VirtualDataLoader {
   }
 
   itemsCount(isBase) {
-    let itemsCount = 0;
+    let count = 0;
     const isVirtualMode = this._controller.isVirtualMode();
 
     if (!isBase && isVirtualMode) {
       this._cache.forEach((cacheItem) => {
-        itemsCount += cacheItem.itemsCount;
+        count += cacheItem.itemsCount;
       });
     } else {
-      itemsCount = this._dataOptions.itemsCount();
+      count = this._dataOptions.itemsCount();
     }
-    return itemsCount;
+    return count;
   }
 
   virtualItemsCount() {
