@@ -62,9 +62,11 @@
 
 .dx-treeview-item-without-checkbox {
   &.dx-state-focused {
-    .dx-item-content {
-      .dx-item-url {
-        color: unset;
+    >.dx-treeview-item {
+      .dx-item-content {
+        .dx-item-url {
+          color: unset;
+        }
       }
     }
   }
