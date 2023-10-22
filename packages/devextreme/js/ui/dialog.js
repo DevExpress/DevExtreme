@@ -4,7 +4,6 @@ import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';
 import Guid from '../core/guid';
-
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
 import { isPlainObject } from '../core/utils/type';
@@ -13,7 +12,7 @@ import { extend } from '../core/utils/extend';
 import { getWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { value as getViewport } from '../core/utils/view_port';
-
+import { isFluent } from './themes';
 import messageLocalization from '../localization/message';
 import errors from './widget/ui.errors';
 import Popup from './popup/ui.popup';
@@ -40,6 +39,24 @@ const DX_DIALOG_BUTTONS_CLASSNAME = `${DX_DIALOG_CLASSNAME}-buttons`;
 const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
+
+const getApplyButtonConfig = () => {
+    const isFluentTheme = isFluent();
+
+    return {
+        stylingMode: isFluentTheme ? 'contained' : undefined,
+        type: isFluentTheme ? 'default' : undefined,
+    };
+};
+
+const getCancelButtonConfig = () => {
+    const isFluentTheme = isFluent();
+
+    return {
+        stylingMode: isFluentTheme ? 'outlined' : undefined,
+        type: isFluentTheme ? 'default' : undefined,
+    };
+};
 
 export const custom = function(options) {
     const deferred = new Deferred();
@@ -185,7 +202,19 @@ export const custom = function(options) {
 };
 
 export const alert = function(messageHtml, title = '', showTitle) {
-    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
+    const options = isPlainObject(messageHtml)
+        ? messageHtml : {
+            title,
+            messageHtml,
+            showTitle,
+            buttons: [
+                {
+                    ...DEFAULT_BUTTON,
+                    ...getApplyButtonConfig(),
+                }
+            ],
+            dragEnabled: showTitle
+        };
 
     return custom(options).show();
 };
@@ -198,8 +227,16 @@ export const confirm = function(messageHtml, title = '', showTitle) {
             messageHtml,
             showTitle,
             buttons: [
-                { text: messageLocalization.format('Yes'), onClick: function() { return true; } },
-                { text: messageLocalization.format('No'), onClick: function() { return false; } }
+                {
+                    text: messageLocalization.format('Yes'),
+                    onClick: function() { return true; },
+                    ...getApplyButtonConfig(),
+                },
+                {
+                    text: messageLocalization.format('No'),
+                    onClick: function() { return false; },
+                    ...getCancelButtonConfig(),
+                }
             ],
             dragEnabled: showTitle
         };
