@@ -93,8 +93,8 @@ const stylingModes = [
 ];
 
 const iconPositions = [
-  'start',
   'top',
+  'start',
   'end',
   'bottom',
 ];

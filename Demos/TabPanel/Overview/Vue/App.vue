@@ -26,7 +26,7 @@
       <div class="caption">Options</div>
 
       <div class="option">
-        <div class="option-label">Tabs position</div>
+        <div class="option-label">Tab position</div>
 
         <DxSelectBox
           v-model:value="tabsPosition"

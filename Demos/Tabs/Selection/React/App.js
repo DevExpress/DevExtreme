@@ -70,7 +70,7 @@ const App = () => {
 
           <div className="icon-container">
             <span className="dx-icon dx-icon-info"></span>
-            <span className="demo-info">You can swipe this area.</span>
+            <span className="demo-info">You can use swipe gestures in this area.</span>
           </div>
         </div>
       </div>

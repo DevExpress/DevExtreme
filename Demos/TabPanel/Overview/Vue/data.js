@@ -1,4 +1,4 @@
-export const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tabs positions' };
+export const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tab position' };
 
 export const tabsPositions = [
   'left',

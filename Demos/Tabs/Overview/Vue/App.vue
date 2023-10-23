@@ -1,30 +1,20 @@
 <template>
   <div id="tabs-demo">
-    <div :class="widgetContainerClasses">
-      <DxTabs
-        id="withText"
-        :selected-index="0"
-        :data-source="tabsWithText"
-        :scroll-by-content="false"
-        :show-nav-buttons="false"
-        @initialized="saveTabInstance1"
-      />
-      <DxTabs
-        id="withIconAndText"
-        :selected-index="0"
-        :data-source="tabsWithIconAndText"
-        :scroll-by-content="false"
-        :show-nav-buttons="false"
-        @initialized="saveTabInstance2"
-      />
-      <DxTabs
-        id="withIcon"
-        :selected-index="0"
-        :data-source="tabsWithIcon"
-        :scroll-by-content="false"
-        :show-nav-buttons="false"
-        @initialized="saveTabInstance3"
-      />
+    <div class="widget-container">
+      <div :class="widgetWrapperClasses">
+        <DxTabs
+          v-for="(dataSource, index) in dataSources"
+          :key="index"
+          :selected-index="0"
+          :width="tabsWidth"
+          :data-source="dataSource"
+          :orientation="orientation"
+          :styling-mode="stylingMode"
+          :icon-position="iconPosition"
+          :show-nav-buttons="showNavButtons"
+          :scroll-by-content="scrollByContent"
+        />
+      </div>
     </div>
 
     <div class="options">
@@ -35,7 +25,6 @@
           :items="orientations"
           :input-attr="{ 'aria-label': 'Orientation' }"
           v-model:value="orientation"
-          @value-changed="onOrientationChanged"
         />
       </div>
 
@@ -45,7 +34,6 @@
           :items="stylingModes"
           :input-attr="{ 'aria-label': 'Styling Mode' }"
           v-model:value="stylingMode"
-          @value-changed="onStylingModeChanged"
         />
       </div>
 
@@ -55,7 +43,6 @@
           :items="iconPositions"
           :input-attr="{ 'aria-label': 'Icon Position' }"
           v-model:value="iconPosition"
-          @value-changed="onIconPositionChanged"
         />
       </div>
 
@@ -63,16 +50,24 @@
         <DxCheckBox
           id="show-navigation-buttons"
           text="Show navigation buttons"
-          :value="false"
-          @value-changed="onShowNavigationChanged"
+          :element-attr="{ 'aria-label': 'Show navigation buttons' }"
+          v-model:value="showNavButtons"
         />
       </div>
+
       <div class="option">
         <DxCheckBox
-          id="scroll-content"
           text="Scroll content"
-          :value="false"
-          @value-changed="onScrollContentChanged"
+          :element-attr="{ 'aria-label': 'Scroll content' }"
+          v-model:value="scrollByContent"
+        />
+      </div>
+
+      <div class="option">
+        <DxCheckBox
+          text="Full width"
+          :element-attr="{ 'aria-label': 'Full width' }"
+          v-model:value="fullWidth"
         />
       </div>
     </div>
@@ -85,63 +80,49 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxTabs from 'devextreme-vue/tabs';
 
-import service, { orientations, stylingModes, iconPositions } from './data.js';
+import {
+  orientations,
+  stylingModes,
+  iconPositions,
+  tabsWithText,
+  tabsWithIconAndText,
+  tabsWithIcon,
+} from './data.js';
 
 export default {
   components: {
+    DxCheckBox,
     DxSelectBox,
     DxTabs,
-    DxCheckBox,
   },
+
   data() {
     return {
       orientations,
       stylingModes,
       iconPositions,
-      tabsWithText: service.getTabsWithText(),
-      tabsWithIcon: service.getTabsWithIcon(),
-      tabsWithIconAndText: service.getTabsWithIconAndText(),
+      fullWidth: false,
+      scrollByContent: false,
+      showNavButtons: false,
       orientation: orientations[0],
       iconPosition: iconPositions[0],
-      stylingMode: stylingModes[0],
+      stylingMode: stylingModes[1],
     };
   },
+
   computed: {
-    widgetContainerClasses() {
+    widgetWrapperClasses() {
       const { orientation } = this;
 
-      return `widget-container widget-container-${orientation}`;
+      return `widget-wrapper widget-wrapper-${orientation}`;
     },
-  },
-  methods: {
-    saveTabInstance1(e) {
-      this.tabInstance1 = e.component;
+    tabsWidth() {
+      const { fullWidth } = this;
+
+      return fullWidth ? '100%' : 'auto';
     },
-    saveTabInstance2(e) {
-      this.tabInstance2 = e.component;
-    },
-    saveTabInstance3(e) {
-      this.tabInstance3 = e.component;
-    },
-    onShowNavigationChanged(e) {
-      this.setTabsOption('showNavButtons', e.value);
-    },
-    onScrollContentChanged(e) {
-      this.setTabsOption('scrollByContent', e.value);
-    },
-    onStylingModeChanged(e) {
-      this.setTabsOption('stylingMode', e.value);
-    },
-    onIconPositionChanged(e) {
-      this.setTabsOption('iconPosition', e.value);
-    },
-    onOrientationChanged(e) {
-      this.setTabsOption('orientation', e.value);
-    },
-    setTabsOption(propertyName, value) {
-      this.tabInstance1.option(propertyName, value);
-      this.tabInstance2.option(propertyName, value);
-      this.tabInstance3.option(propertyName, value);
+    dataSources() {
+      return [tabsWithText, tabsWithIconAndText, tabsWithIcon];
     },
   },
 };
@@ -154,20 +135,29 @@ export default {
 
 .widget-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   flex-grow: 1;
-  row-gap: 80px;
-  column-gap: 4px;
   max-width: calc(100% - 300px);
   min-width: 200px;
   padding: 16px 32px;
   overflow: clip;
 }
 
-.widget-container-vertical {
+.widget-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 80px;
+  column-gap: 4px;
+  max-width: 100%;
+}
+
+.widget-wrapper-vertical {
+  width: 100%;
   flex-direction: row;
+  align-items: center;
 }
 
 .options {
@@ -176,10 +166,6 @@ export default {
   flex-shrink: 0;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-}
-
-.dx-tab {
-  width: 136px;
 }
 
 .caption {
@@ -195,15 +181,20 @@ export default {
   margin-top: 20px;
 }
 
+.dx-tabs {
+  max-width: 100%;
+}
+
+.dx-tabs-vertical {
+  height: 216px;
+}
+
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
   border-bottom: 1px solid rgb(225, 225, 225, 0.4);
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
+  height: 232px;
   border-right: 1px solid rgb(225, 225, 225, 0.4);
-}
-
-.dx-tabs-vertical {
-  height: 250px;
 }
 </style>

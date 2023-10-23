@@ -1,33 +1,44 @@
 $(() => {
   const tab1 = $('#withText').dxTabs({
+    width: 'auto',
+    selectedIndex: 0,
     showNavButtons: false,
     dataSource: tabsText,
-    selectedIndex: 0,
+    orientation: orientations[0],
+    stylingMode: stylingModes[1],
+    iconPosition: iconPositions[0],
   }).dxTabs('instance');
 
   const tab2 = $('#withIconAndText').dxTabs({
+    width: 'auto',
+    selectedIndex: 0,
     showNavButtons: false,
     dataSource: tabsIconAndText,
+    orientation: orientations[0],
+    stylingMode: stylingModes[1],
     iconPosition: iconPositions[0],
-    selectedIndex: 0,
   }).dxTabs('instance');
 
   const tab3 = $('#withIcon').dxTabs({
+    width: 'auto',
+    selectedIndex: 0,
     showNavButtons: false,
     dataSource: tabsIcon,
-    selectedIndex: 0,
+    orientation: orientations[0],
+    stylingMode: stylingModes[1],
+    iconPosition: iconPositions[0],
   }).dxTabs('instance');
 
   $('#orientation').dxSelectBox({
     showNavButtons: false,
     items: orientations,
-    value: 'horizontal',
+    value: orientations[0],
     inputAttr: { 'aria-label': 'Orientation' },
     onValueChanged(data) {
-      const $widgetContainer = $('.widget-container');
+      const $widgetWrapper = $('.widget-wrapper');
 
-      $widgetContainer.removeClass();
-      $widgetContainer.addClass(`widget-container widget-container-${data.value}`);
+      $widgetWrapper.removeClass();
+      $widgetWrapper.addClass(`widget-wrapper widget-wrapper-${data.value}`);
 
       setTabsOption('orientation', data.value);
     },
@@ -35,7 +46,7 @@ $(() => {
 
   $('#styling-mode').dxSelectBox({
     items: stylingModes,
-    value: stylingModes[0],
+    value: stylingModes[1],
     inputAttr: { 'aria-label': 'Styling Mode' },
     onValueChanged(data) {
       setTabsOption('stylingMode', data.value);
@@ -53,7 +64,7 @@ $(() => {
 
   $('#show-navigation-buttons').dxCheckBox({
     text: 'Show navigation buttons',
-    inputAttr: { 'aria-label': 'Show Navigation Buttons' },
+    elementAttr: { 'aria-label': 'Show Navigation Buttons' },
     value: false,
     onValueChanged(data) {
       setTabsOption('showNavButtons', data.value);
@@ -62,9 +73,19 @@ $(() => {
 
   $('#scroll-content').dxCheckBox({
     text: 'Scroll content',
+    elementAttr: { 'aria-label': 'Scroll content' },
     value: false,
     onValueChanged(data) {
       setTabsOption('scrollByContent', data.value);
+    },
+  });
+
+  $('#full-width').dxCheckBox({
+    text: 'Full width',
+    elementAttr: { 'aria-label': 'Full width' },
+    value: false,
+    onValueChanged(data) {
+      setTabsOption('width', data.value ? '100%' : 'auto');
     },
   });
 

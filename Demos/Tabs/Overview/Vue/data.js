@@ -1,4 +1,4 @@
-const tabsWithText = [
+export const tabsWithText = [
   {
     id: 0,
     text: 'User',
@@ -25,7 +25,7 @@ const tabsWithText = [
   },
 ];
 
-const tabsWithIconAndText = [
+export const tabsWithIconAndText = [
   {
     id: 0,
     text: 'User',
@@ -58,7 +58,7 @@ const tabsWithIconAndText = [
   },
 ];
 
-const tabsWithIcon = [
+export const tabsWithIcon = [
   {
     id: 0,
     icon: 'user',
@@ -93,20 +93,8 @@ export const stylingModes = [
 ];
 
 export const iconPositions = [
-  'start',
   'top',
+  'start',
   'end',
   'bottom',
 ];
-
-export default {
-  getTabsWithText() {
-    return tabsWithText;
-  },
-  getTabsWithIconAndText() {
-    return tabsWithIconAndText;
-  },
-  getTabsWithIcon() {
-    return tabsWithIcon;
-  },
-};

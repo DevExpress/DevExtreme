@@ -5,20 +5,29 @@
 
 .widget-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   flex-grow: 1;
-  row-gap: 80px;
-  column-gap: 4px;
   max-width: calc(100% - 300px);
   min-width: 200px;
   padding: 16px 32px;
   overflow: clip;
 }
 
-.widget-container-vertical {
+.widget-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 80px;
+  column-gap: 4px;
+  max-width: 100%;
+}
+
+.widget-wrapper-vertical {
+  width: 100%;
   flex-direction: row;
+  align-items: center;
 }
 
 .options {
@@ -27,10 +36,6 @@
   flex-shrink: 0;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-}
-
-.dx-tab {
-  width: 136px;
 }
 
 .caption {
@@ -46,14 +51,19 @@
   margin-top: 20px;
 }
 
+.dx-tabs {
+  max-width: 100%;
+}
+
+.dx-tabs-vertical {
+  height: 216px;
+}
+
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
   border-bottom: 1px solid rgb(225, 225, 225, 0.4);
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
+  height: 232px;
   border-right: 1px solid rgb(225, 225, 225, 0.4);
-}
-
-.dx-tabs-vertical {
-  height: 250px;
 }

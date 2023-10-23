@@ -1,4 +1,4 @@
-const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tabs positions' };
+const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tab position' };
 
 const tabsPositions = [
   'left',

@@ -15,12 +15,12 @@
         <div class="tabpanel-item">
           <div>
             <p>
-              <b>{{ company.City }}</b>
-              (<span>{{ company.State }}</span>)
+              <span>{{ company.Address }}</span>
             </p>
             <p>
-              <span>{{ company.Zipcode }}&nbsp;</span>
-              <span>{{ company.Address }}</span>
+              <span><b>{{ company.City }}</b>,&nbsp;</span>
+              <span>{{ company.State }}&nbsp;</span>
+              <span>{{ company.Zipcode }}</span>
             </p>
           </div>
           <div>

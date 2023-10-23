@@ -5,20 +5,29 @@
 
 ::ng-deep .widget-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   flex-grow: 1;
-  row-gap: 80px;
-  column-gap: 4px;
   max-width: calc(100% - 300px);
   min-width: 200px;
   padding: 16px 32px;
   overflow: clip;
 }
 
-::ng-deep .widget-container-vertical {
+::ng-deep .widget-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 80px;
+  column-gap: 4px;
+  max-width: 100%;
+}
+
+::ng-deep .widget-wrapper-vertical {
+  width: 100%;
   flex-direction: row;
+  align-items: center;
 }
 
 ::ng-deep .options {
@@ -27,10 +36,6 @@
   flex-shrink: 0;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-}
-
-::ng-deep .dx-tab {
-  width: 136px;
 }
 
 ::ng-deep .caption {
@@ -46,14 +51,19 @@
   margin-top: 20px;
 }
 
+::ng-deep .dx-tabs {
+  max-width: 100%;
+}
+
+::ng-deep .dx-tabs-vertical {
+  height: 216px;
+}
+
 ::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
   border-bottom: 1px solid rgb(225, 225, 225, 0.4);
 }
 
 ::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
+  height: 232px;
   border-right: 1px solid rgb(225, 225, 225, 0.4);
-}
-
-::ng-deep .dx-tabs-vertical {
-  height: 250px;
 }
