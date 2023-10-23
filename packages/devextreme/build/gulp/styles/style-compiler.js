@@ -14,7 +14,7 @@ const parseArguments = require('minimist');
 
 const cleanCssSanitizeOptions = require('./clean-css-options.json');
 const cleanCssOptions = require('../../../../devextreme-themebuilder/src/data/clean-css-options.json');
-const { sizes, materialColors, materialModes, genericColors, fluentColors, fluentModes } = require('./theme-options');
+const { getThemes } = require('./theme-options');
 const functions = require('../gulp-data-uri').sassFunctions;
 const starLicense = require('../header-pipes').starLicense;
 
@@ -83,17 +83,7 @@ function generateScssBundles(bundlesFolder, getBundleContent) {
         saveBundleFile(bundlesFolder, bundleName, content);
     };
 
-    sizes.forEach(size => {
-        fluentModes.forEach(mode => {
-            fluentColors.forEach(color => saveBundle('fluent', size, color, mode));
-        });
-
-        materialModes.forEach(mode => {
-            materialColors.forEach(color => saveBundle('material', size, color, mode));
-        });
-
-        genericColors.forEach(color => saveBundle('generic', size, color));
-    });
+    getThemes().forEach(([theme, size, color, mode]) => saveBundle(theme, size, color, mode));
 }
 
 function createBundles(callback) {
