@@ -1,7 +1,7 @@
 import { sendRequest } from './utils';
 import './query_adapter';
 
-const DEFAULT_PROTOCOL_VERSION = 2;
+const DEFAULT_PROTOCOL_VERSION = 4;
 
 export default class RequestDispatcher {
     constructor(options) {
