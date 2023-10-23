@@ -631,6 +631,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             direction: this.option('scrollDirection'),
             useKeyboard: false
         });
+
+        this.setAria('role', 'treeitem', this._scrollable.$element());
     },
 
     _renderNodeContainer: function($parent) {
