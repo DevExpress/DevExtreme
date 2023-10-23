@@ -25,10 +25,11 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, SliderValueChangeMode, VerticalEdge } from 'devextreme/common';
-import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, Palette, PaletteExtensionMode, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
+import { ChartsDataType, DiscreteAxisDivisionMode, LabelOverlap, Palette, PaletteExtensionMode, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
+import { Font } from 'devextreme/viz/core/base_widget';
 import { AxisScale, BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedCallMode, ValueChangedEvent } from 'devextreme/viz/range_selector';
 
 import DxRangeSelector from 'devextreme/viz/range_selector';

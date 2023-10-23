@@ -25,11 +25,12 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, LegendHoverMode, Palette, PaletteExtensionMode, TextOverflow, Theme, TimeInterval, WordWrap } from 'devextreme/common/charts';
+import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, LabelOverlap, LegendHoverMode, Palette, PaletteExtensionMode, TextOverflow, Theme, TimeInterval, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
+import { Font } from 'devextreme/viz/core/base_widget';
 import { DisposingEvent, DoneEvent, DrawnEvent, dxPolarChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ValueAxisVisualRangeUpdateMode, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/polar_chart';
 
 import DxPolarChart from 'devextreme/viz/polar_chart';

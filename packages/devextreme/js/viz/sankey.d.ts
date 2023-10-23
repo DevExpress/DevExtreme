@@ -19,6 +19,7 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
+    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -33,7 +34,6 @@ import {
     Palette,
     PaletteExtensionMode,
     TextOverflow,
-    Font,
 } from '../common/charts';
 
 export {

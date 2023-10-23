@@ -14,8 +14,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

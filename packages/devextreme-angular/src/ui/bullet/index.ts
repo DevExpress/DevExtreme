@@ -18,10 +18,11 @@ import {
 } from '@angular/core';
 
 
-import { DashStyle, Font, Theme } from 'devextreme/common/charts';
+import { DashStyle, Theme } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bullet';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import DxBullet from 'devextreme/viz/bullet';
 

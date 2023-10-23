@@ -65,6 +65,7 @@ const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
+const APPLY_VALUE_BUTTONS_ORDER = ['cancel', 'done'];
 
 const BUTTON_DEFAULT_TYPE = 'default';
 const BUTTON_NORMAL_TYPE = 'normal';
@@ -74,7 +75,14 @@ const BUTTON_CONTAINED_MODE = 'contained';
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
-const getButtonPlace = name => {
+
+const sortApplyValueItems = (actionButtonsItems) => {
+    return actionButtonsItems.sort((a, b) => {
+        return APPLY_VALUE_BUTTONS_ORDER.indexOf(a.shortcut) - APPLY_VALUE_BUTTONS_ORDER.indexOf(b.shortcut);
+    });
+};
+
+const getButtonInfo = shortcut => {
 
     const device = devices.current();
     const platform = device.platform;
@@ -82,7 +90,7 @@ const getButtonPlace = name => {
     let location = 'before';
 
     if(platform === 'ios') {
-        switch(name) {
+        switch(shortcut) {
             case 'cancel':
                 toolbar = 'top';
                 break;
@@ -95,7 +103,7 @@ const getButtonPlace = name => {
                 break;
         }
     } else if(platform === 'android') {
-        switch(name) {
+        switch(shortcut) {
             case 'cancel':
                 location = 'after';
                 break;
@@ -107,7 +115,8 @@ const getButtonPlace = name => {
 
     return {
         toolbar,
-        location
+        location,
+        shortcut
     };
 };
 
@@ -483,19 +492,16 @@ const Popup = Overlay.inherit({
     },
 
     _getToolbarItems: function(toolbar) {
-
         const toolbarItems = this.option('toolbarItems');
-
         const toolbarsItems = [];
-
         this._toolbarItemClasses = [];
-
         const currentPlatform = devices.current().platform;
         let index = 0;
+        const applyValueButtonsInfo = [];
 
         each(toolbarItems, (_, data) => {
             const isShortcut = isDefined(data.shortcut);
-            const item = isShortcut ? getButtonPlace(data.shortcut) : data;
+            const item = isShortcut ? getButtonInfo(data.shortcut) : data;
 
             if(isShortcut && currentPlatform === 'ios' && index < 2) {
                 item.toolbar = 'top';
@@ -504,15 +510,17 @@ const Popup = Overlay.inherit({
 
             item.toolbar = data.toolbar || item.toolbar || 'top';
 
-            if(item && item.toolbar === toolbar) {
+            if(item?.toolbar === toolbar) {
                 if(isShortcut) {
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
-                }
-
-                const isLTROrder = currentPlatform === 'generic';
-
-                if((data.shortcut === 'done' && isLTROrder) || (data.shortcut === 'cancel' && !isLTROrder)) {
-                    toolbarsItems.unshift(item);
+                    if(APPLY_VALUE_BUTTONS_ORDER.includes(data.shortcut)) {
+                        applyValueButtonsInfo.push({
+                            shortcut: data.shortcut,
+                            item
+                        });
+                    } else {
+                        toolbarsItems.push(item);
+                    }
                 } else {
                     toolbarsItems.push(item);
                 }
@@ -523,7 +531,9 @@ const Popup = Overlay.inherit({
             toolbarsItems.push(this._getCloseButton());
         }
 
-        return toolbarsItems;
+        const sortedApplyValueItems = sortApplyValueItems(applyValueButtonsInfo).map(item => item.item);
+
+        return toolbarsItems.concat(...sortedApplyValueItems);
     },
 
     _hasCloseButton() {

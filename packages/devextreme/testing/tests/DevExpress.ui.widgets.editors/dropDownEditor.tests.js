@@ -801,12 +801,12 @@ if(devices.real().deviceType === 'desktop') {
         QUnit.testInActiveWindow('the first popup element should be focused on the \'tab\' key press if the input is focused', function(assert) {
             this.instance.open();
             this.triggerKeyPress(this.$input, TAB_KEY_CODE);
-            assert.ok(this.$doneButton.hasClass('dx-state-focused'), 'the first popup element is focused');
+            assert.ok(this.$cancelButton.hasClass('dx-state-focused'), 'the first popup element is focused');
         });
 
         QUnit.testInActiveWindow('the input should be focused on the \'tab\' key press if the last element is focused', function(assert) {
             this.instance.open();
-            this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE);
+            this.triggerKeyPress(this.$doneButton, TAB_KEY_CODE);
             assert.ok(this.$element.hasClass('dx-state-focused'), 'the input is focused');
         });
 
@@ -866,21 +866,21 @@ if(devices.real().deviceType === 'desktop') {
 
         QUnit.testInActiveWindow('the input should be focused on the \'tab+shift\' key press if the first element is focused', function(assert) {
             this.instance.open();
-            this.triggerKeyPress(this.$doneButton, TAB_KEY_CODE, true);
+            this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE, true);
             assert.ok(this.$element.hasClass('dx-state-focused'), 'the input is focused');
         });
 
         QUnit.testInActiveWindow('the last popup element should be focused on the \'tab+shift\' key press if the input is focused', function(assert) {
             this.instance.open();
             this.triggerKeyPress(this.$input, TAB_KEY_CODE, true);
-            assert.ok(this.$cancelButton.hasClass('dx-state-focused'), 'the last popup element is focused');
+            assert.ok(this.$doneButton.hasClass('dx-state-focused'), 'the last popup element is focused');
         });
 
         QUnit.testInActiveWindow('default event should be prevented on the tab key press if the input is focused', function(assert) {
             this.instance.open();
             const spy = sinon.spy();
-            this.$cancelButton.on('keydown', spy);
-            this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE);
+            this.$doneButton.on('keydown', spy);
+            this.triggerKeyPress(this.$doneButton, TAB_KEY_CODE);
             assert.ok(spy.args[0][0].isDefaultPrevented(), 'default is prevented');
         });
 

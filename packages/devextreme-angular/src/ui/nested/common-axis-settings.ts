@@ -15,8 +15,9 @@ import {
 
 
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { ChartsAxisLabelOverlap, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, RelativePosition, ScaleBreakLineStyle, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { ChartsAxisLabelOverlap, DashStyle, DiscreteAxisDivisionMode, LabelOverlap, RelativePosition, ScaleBreakLineStyle, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

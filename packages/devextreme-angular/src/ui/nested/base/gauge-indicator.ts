@@ -7,8 +7,9 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { Font, Palette } from 'devextreme/common/charts';
+import { Palette } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 @Component({
     template: ''

@@ -7,9 +7,9 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, BarGaugeBarInfo, BarGaugeLegendItem } from "devextreme/viz/bar_gauge";
-import type { Font as ChartsFont } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 
+import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -181,7 +181,7 @@ class Animation extends NestedOption<IAnimationProps> {
 // owners:
 // BarGauge
 type IBarGaugeTitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -191,7 +191,7 @@ type IBarGaugeTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -215,7 +215,7 @@ class BarGaugeTitle extends NestedOption<IBarGaugeTitleProps> {
 // owners:
 // BarGaugeTitle
 type IBarGaugeTitleSubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -323,7 +323,7 @@ type ILabelProps = React.PropsWithChildren<{
   connectorColor?: string;
   connectorWidth?: number;
   customizeText?: ((barValue: { value: number, valueText: string }) => string);
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   indent?: number;
   visible?: boolean;
@@ -353,7 +353,7 @@ type ILegendProps = React.PropsWithChildren<{
   customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string);
   customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
   customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string);
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   itemsAlignment?: "center" | "left" | "right";
   itemTextFormat?: LocalizationTypes.Format;
@@ -372,7 +372,7 @@ type ILegendProps = React.PropsWithChildren<{
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     horizontalAlignment?: "center" | "left" | "right";
     margin?: Record<string, any> | {
       bottom?: number;
@@ -382,7 +382,7 @@ type ILegendProps = React.PropsWithChildren<{
     };
     placeholderSize?: number;
     subtitle?: Record<string, any> | string | {
-      font?: ChartsFont;
+      font?: BaseWidgetTypes.Font;
       offset?: number;
       text?: string;
     };
@@ -431,7 +431,7 @@ class LegendBorder extends NestedOption<ILegendBorderProps> {
 // owners:
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | {
     bottom?: number;
@@ -441,7 +441,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
   };
@@ -461,7 +461,7 @@ class LegendTitle extends NestedOption<ILegendTitleProps> {
 // owners:
 // LegendTitle
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
 }>
@@ -476,7 +476,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 // BarGauge
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -534,7 +534,7 @@ class Size extends NestedOption<ISizeProps> {
 // LegendTitle
 // BarGaugeTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -548,7 +548,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // BarGauge
 type ITitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -558,7 +558,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -590,7 +590,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;

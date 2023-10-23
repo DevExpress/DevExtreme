@@ -15,7 +15,8 @@ import {
 
 
 import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

@@ -13,7 +13,8 @@ import {
 
 
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import { DashStyle, RelativePosition } from 'devextreme/common/charts';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

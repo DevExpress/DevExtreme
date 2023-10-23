@@ -7,9 +7,10 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/linear_gauge";
-import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
+import type { ChartsColor } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 
+import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -231,7 +232,7 @@ class Geometry extends NestedOption<IGeometryProps> {
 // Scale
 type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   indentFromTick?: number;
   overlappingBehavior?: "hide" | "none";
@@ -250,7 +251,7 @@ class Label extends NestedOption<ILabelProps> {
 // LinearGauge
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -345,7 +346,7 @@ type IScaleProps = React.PropsWithChildren<{
   horizontalOrientation?: "center" | "left" | "right";
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     format?: LocalizationTypes.Format;
     indentFromTick?: number;
     overlappingBehavior?: "hide" | "none";
@@ -407,7 +408,7 @@ class Size extends NestedOption<ISizeProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -440,7 +441,7 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
   spindleSize?: number;
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     format?: LocalizationTypes.Format;
     indent?: number;
   };
@@ -460,7 +461,7 @@ class SubvalueIndicator extends NestedOption<ISubvalueIndicatorProps> {
 // SubvalueIndicator
 type ITextProps = React.PropsWithChildren<{
   customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   indent?: number;
 }>
@@ -488,7 +489,7 @@ class Tick extends NestedOption<ITickProps> {
 // owners:
 // LinearGauge
 type ITitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -498,7 +499,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -535,7 +536,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   format?: LocalizationTypes.Format;
   interactive?: boolean;
   opacity?: number;
@@ -589,7 +590,7 @@ type IValueIndicatorProps = React.PropsWithChildren<{
   spindleSize?: number;
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     format?: LocalizationTypes.Format;
     indent?: number;
   };

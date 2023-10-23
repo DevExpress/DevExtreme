@@ -22,10 +22,11 @@ import {
 
 
 import { ExportFormat, HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, DashStyle, Font, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { AnimationEaseMode, DashStyle, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bar_gauge';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import DxBarGauge from 'devextreme/viz/bar_gauge';
 

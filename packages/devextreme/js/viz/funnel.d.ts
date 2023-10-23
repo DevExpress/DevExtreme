@@ -28,6 +28,7 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
+    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -47,7 +48,6 @@ import {
     ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
-    Font,
 } from '../common/charts';
 
 export {

@@ -7,12 +7,13 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, dxVectorMapAnnotationConfig, MapLayerElement, VectorMapLegendItem } from "devextreme/viz/vector_map";
-import type { Font as ChartsFont } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/abstract_store";
 
 import type DataSource from "devextreme/data/data_source";
+
+import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -164,7 +165,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -284,7 +285,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>);
   data?: any;
   description?: string;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   height?: number;
   image?: Record<string, any> | string | {
     height?: number;
@@ -404,7 +405,7 @@ class Image extends NestedOption<IImageProps> {
 type ILabelProps = React.PropsWithChildren<{
   dataField?: string;
   enabled?: boolean;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
 }>
 class Label extends NestedOption<ILabelProps> {
   public static OptionName = "label";
@@ -432,7 +433,7 @@ type ILayerProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     dataField?: string;
     enabled?: boolean;
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
   };
   maxSize?: number;
   minSize?: number;
@@ -475,7 +476,7 @@ type ILegendProps = React.PropsWithChildren<{
   customizeHint?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string);
   customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
   customizeText?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string);
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   itemsAlignment?: "center" | "left" | "right";
   itemTextPosition?: "bottom" | "left" | "right" | "top";
@@ -499,7 +500,7 @@ type ILegendProps = React.PropsWithChildren<{
     layer?: string;
   };
   title?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     horizontalAlignment?: "center" | "left" | "right";
     margin?: Record<string, any> | {
       bottom?: number;
@@ -509,7 +510,7 @@ type ILegendProps = React.PropsWithChildren<{
     };
     placeholderSize?: number;
     subtitle?: Record<string, any> | string | {
-      font?: ChartsFont;
+      font?: BaseWidgetTypes.Font;
       offset?: number;
       text?: string;
     };
@@ -545,7 +546,7 @@ class Legend extends NestedOption<ILegendProps> {
 // owners:
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | {
     bottom?: number;
@@ -555,7 +556,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
   };
@@ -575,7 +576,7 @@ class LegendTitle extends NestedOption<ILegendTitleProps> {
 // owners:
 // LegendTitle
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
 }>
@@ -591,7 +592,7 @@ class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -670,7 +671,7 @@ class Source extends NestedOption<ISourceProps> {
 // LegendTitle
 // VectorMapTitle
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -684,7 +685,7 @@ class Subtitle extends NestedOption<ISubtitleProps> {
 // Legend
 // VectorMap
 type ITitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: Record<string, any> | number | {
     bottom?: number;
@@ -694,7 +695,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -726,7 +727,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((info: MapLayerElement) => Record<string, any>);
   enabled?: boolean;
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   opacity?: number;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -774,7 +775,7 @@ class TooltipBorder extends NestedOption<ITooltipBorderProps> {
 // owners:
 // VectorMap
 type IVectorMapTitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -784,7 +785,7 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: ChartsFont;
+    font?: BaseWidgetTypes.Font;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -808,7 +809,7 @@ class VectorMapTitle extends NestedOption<IVectorMapTitleProps> {
 // owners:
 // VectorMapTitle
 type IVectorMapTitleSubtitleProps = React.PropsWithChildren<{
-  font?: ChartsFont;
+  font?: BaseWidgetTypes.Font;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";

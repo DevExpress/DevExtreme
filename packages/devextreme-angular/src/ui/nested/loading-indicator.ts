@@ -16,7 +16,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

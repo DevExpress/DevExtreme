@@ -7,9 +7,10 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalAlignment } from 'devextreme/common';
-import { ChartsDataType, DashStyle, Font, HatchDirection, LabelPosition, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, TextOverflow, ValueErrorBarDisplayMode, ValueErrorBarType, WordWrap } from 'devextreme/common/charts';
+import { ChartsDataType, DashStyle, HatchDirection, LabelPosition, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, TextOverflow, ValueErrorBarDisplayMode, ValueErrorBarType, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/viz/core/base_widget';
 import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
 import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 

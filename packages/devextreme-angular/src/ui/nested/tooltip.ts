@@ -15,10 +15,11 @@ import {
 
 
 import { TooltipShowMode, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font } from 'devextreme/common/charts';
+import { DashStyle } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "../../artifacts/dist_ts",
     "module": "es6",
-    "target": "ES2017",
+    "target": "es6",
     "baseUrl": "../",
     "skipLibCheck": true,
     "allowJs": true,
@@ -25,8 +25,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "lib": [
-      "ES2017",
-      "ES2020.BigInt",
+      "ESNext",
       "DOM"
     ],
     "strict": true,

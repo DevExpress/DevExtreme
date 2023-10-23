@@ -14,7 +14,8 @@ import {
 
 
 
-import { Font, TextOverflow } from 'devextreme/common/charts';
+import { TextOverflow } from 'devextreme/common/charts';
+import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

@@ -1,5 +1,8 @@
 import { HorizontalAlignment } from '../common';
 import { Format } from '../localization';
+import {
+  Font,
+} from '../viz/core/base_widget';
 
 /**
  * @public
@@ -336,43 +339,6 @@ export type GradientColor = {
    * @public
    */
     color: string;
-};
-
-/**
- * @docid
- * @namespace DevExpress.common.charts
- * @public
- */
-export type Font = {
-  /**
-   * @docid
-   * @public
-   */
-  color?: string;
-  /**
-   * @docid
-   * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
-   * @public
-   */
-  family?: string;
-  /**
-   * @docid
-   * @default 1
-   * @public
-   */
-  opacity?: number;
-  /**
-   * @docid
-   * @default 12
-   * @public
-   */
-  size?: string | number;
-  /**
-   * @docid
-   * @default 400
-   * @public
-   */
-  weight?: number;
 };
 
 /**

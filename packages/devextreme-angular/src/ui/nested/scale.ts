@@ -19,9 +19,10 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
+import { ChartsDataType, DiscreteAxisDivisionMode, LabelOverlap, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import { Font } from 'devextreme/viz/core/base_widget';
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
