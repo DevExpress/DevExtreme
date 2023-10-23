@@ -351,6 +351,26 @@ const ListEdit = ListBase.inherit({
     */
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
+    },
+
+    /**
+     * @name dxList.deleteItem
+     * @publicName deleteItem(itemElement)
+     * @param1 itemElement:Element
+     * @hidden
+     */
+    deleteItem(itemElement) {
+        const editStrategy = this._editStrategy;
+        const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
+        const focusedElement = this.option('focusedElement');
+        const focusedItemIndex = focusedElement ? editStrategy.getNormalizedIndex(focusedElement) : deletingElementIndex;
+        const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
+        const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
+            ? focusedItemIndex - 1
+            : focusedItemIndex;
+
+        this.callBase(itemElement);
+        this.focusListItem(nextFocusedItem);
     }
 });
 
