@@ -409,7 +409,7 @@ QUnit.test('respects customQueryParams (T413790)', function(assert) {
         }
     });
 
-    new ODataStore({ url: 'example.com' })
+    new ODataStore({ url: 'example.com', version: 2 })
         .totalCount({
             customQueryParams: {
                 p1: 42
