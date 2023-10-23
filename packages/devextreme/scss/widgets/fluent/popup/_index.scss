@@ -53,7 +53,7 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
 }
 
 .dx-popup-content {
-  padding: $fluent-popup-content-vertical-padding $fluent-popup-content-horizontal-padding;
+  padding: $fluent-popup-content-vertical-padding $fluent-popup-content-padding;
 
   & > .dx-button {
     margin: $fluent-popup-button-margin;
