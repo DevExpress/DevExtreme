@@ -4,20 +4,22 @@
       <div class="caption">Options</div>
       <div className="editors-modes">
         <div class="option">
-          <label>Styling Mode</label>
           <DxSelectBox
             :input-attr="{ 'aria-label': 'Styling Mode' }"
             :items="[ 'outlined', 'filled', 'underlined' ]"
             styling-mode="outlined"
+            label="Styling Mode"
+            label-mode="outside"
             v-model:value="stylingMode"
           />
         </div>
         <div class="option">
-          <label>Label Mode</label>
           <DxSelectBox
             :input-attr="{ 'aria-label': 'Label Mode' }"
-            :items="[ 'static', 'floating', 'hidden' ]"
+            :items="[ 'static', 'floating', 'hidden', 'outside' ]"
             styling-mode="outlined"
+            label="Label Mode"
+            label-mode="outside"
             v-model:value="labelMode"
           />
         </div>

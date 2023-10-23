@@ -4442,6 +4442,7 @@
           {
             "Title": "Editor Appearance Variants",
             "Name": "EditorAppearanceVariants",
+            "Badge": "Updated",
             "DocUrl": "",
             "Widget": "Common",
             "DemoType": "Web"

@@ -10,6 +10,7 @@ $(() => {
     placeholder: 'Type...',
     inputAttr: { 'aria-label': 'Name' },
     label: 'Name',
+    labelMode,
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -32,6 +33,7 @@ $(() => {
     placeholder: 'Select...',
     value: '6/3/1981',
     inputAttr: { 'aria-label': 'Birth Date' },
+    labelMode,
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -54,6 +56,7 @@ $(() => {
     startDateLabel: 'Start Vacation Date',
     endDate: '12/3/2023',
     endDateLabel: 'End Vacation Date',
+    labelMode,
   }).dxDateRangeBox('instance');
 
   const state = $('#state').dxSelectBox({
@@ -75,6 +78,7 @@ $(() => {
     maskRules: {
       X: /[02-9]/,
     },
+    labelMode,
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -85,6 +89,7 @@ $(() => {
     value: 'Olivia loves to sell. She has been selling DevAV products since 2012.',
     placeholder: 'Type...',
     label: 'Notes',
+    labelMode,
     inputAttr: { 'aria-label': 'Notes' },
   }).dxTextArea('instance');
 
@@ -111,13 +116,17 @@ $(() => {
   $('#styling-mode-selector').dxSelectBox({
     items: ['outlined', 'filled', 'underlined'],
     value: 'outlined',
-    inputAttr: { 'aria-label': 'Mode' },
+    label: 'Styling Mode',
+    labelMode: 'outside',
+    inputAttr: { 'aria-label': 'Styling Mode' },
     onValueChanged: getValueChangedHandler('stylingMode'),
   }).dxSelectBox('instance');
 
   $('#label-mode-selector').dxSelectBox({
-    items: ['static', 'floating', 'hidden'],
+    items: ['static', 'floating', 'hidden', 'outside'],
     value: 'static',
+    label: 'Label Mode',
+    labelMode: 'outside',
     inputAttr: { 'aria-label': 'Label Mode' },
     onValueChanged: getValueChangedHandler('labelMode'),
   }).dxSelectBox('instance');

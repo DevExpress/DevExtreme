@@ -51,7 +51,7 @@ export const states = [
   'WY',
 ];
 export const stylingModes = ['outlined', 'filled', 'underlined'];
-export const labelModes = ['static', 'floating', 'hidden'];
+export const labelModes = ['static', 'floating', 'hidden', 'outside'];
 export const notesLabel = { 'aria-label': 'Notes' };
 export const birthDateLabel = { 'aria-label': 'Birth Date' };
 export const hireDateLabel = { 'aria-label': 'Hire Date' };
