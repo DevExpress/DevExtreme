@@ -516,6 +516,7 @@ export interface BaseWidgetTooltip {
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
      * @default 4 &for(Material)
+     * @default 4 &for(Fluent)
      * @public
      */
     cornerRadius?: number;
@@ -732,6 +733,7 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 0
        * @default 4 &for(Material)
+       * @default 4 &for(Fluent)
        */
       cornerRadius?: number;
       /**

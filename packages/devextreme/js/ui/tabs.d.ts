@@ -144,7 +144,7 @@ export interface dxTabsBaseOptions<
     hoverStateEnabled?: boolean;
     /**
      * @docid dxTabsOptions.iconPosition
-     * @default 'start' &for(Generic)
+     * @default 'start'
      * @default 'top' &for(Material)
      * @default 'top' &for(Fluent)
      * @public
@@ -197,8 +197,7 @@ export interface dxTabsBaseOptions<
     showNavButtons?: boolean;
     /**
      * @docid dxTabsOptions.stylingMode
-     * @default 'primary' &for(Generic)
-     * @default 'primary' &for(Material)
+     * @default 'primary'
      * @default 'secondary' &for(Fluent)
      * @public
      */
