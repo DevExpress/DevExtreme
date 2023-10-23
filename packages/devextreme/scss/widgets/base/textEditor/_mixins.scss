@@ -478,10 +478,17 @@
     &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
     &.dx-texteditor-with-floating-label {
       .dx-texteditor-input,
-      .dx-placeholder::before,
-      .dx-lookup-field {
+      .dx-placeholder::before {
         padding-top: $texteditor-filled-input-with-label-top-padding;
         padding-bottom: $texteditor-filled-input-with-label-bottom-padding;
+      }
+      
+
+      &.dx-lookup {
+        .dx-lookup-field {
+          padding-top: $texteditor-filled-input-with-label-top-padding;
+          padding-bottom: $texteditor-filled-input-with-label-bottom-padding;
+        }
       }
     }
 
@@ -580,10 +587,16 @@
     &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
     &.dx-texteditor-with-floating-label {  
       .dx-texteditor-input,
-      .dx-lookup-field,
       .dx-placeholder::before {
         padding-top: $texteditor-with-label-input-top-padding;
         padding-bottom: $texteditor-with-label-input-bottom-padding;
+      }
+
+      &.dx-lookup {
+        .dx-lookup-field {
+          padding-top: $texteditor-with-label-input-top-padding;
+          padding-bottom: $texteditor-with-label-input-bottom-padding;
+        }
       }
     }
 
