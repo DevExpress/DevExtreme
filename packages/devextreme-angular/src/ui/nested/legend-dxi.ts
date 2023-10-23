@@ -13,8 +13,7 @@ import {
 
 
 import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { DashStyle } from 'devextreme/common/charts';
-import { Font } from 'devextreme/viz/core/base_widget';
+import { DashStyle, Font } from 'devextreme/common/charts';
 import { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
 
 import {

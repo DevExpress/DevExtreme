@@ -24,6 +24,7 @@
 .dx-tabs-nav-button {
   border: none;
   height: $fluent-tab-height;
+  background-color: $tabs-nav-button-bg-color;
 
   &.dx-button.dx-state-disabled.dx-button-mode-contained {
     visibility: hidden;

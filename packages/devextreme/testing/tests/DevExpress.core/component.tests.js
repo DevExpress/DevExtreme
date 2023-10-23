@@ -1734,27 +1734,27 @@ QUnit.module('action API', {}, () => {
 
 QUnit.module('License check', {
     beforeEach: function() {
-        sinon.spy(licenseModule, 'verifyLicense');
+        sinon.spy(licenseModule, 'validateLicense');
         setLicenseCheckSkipCondition(false);
     },
     afterEach: function() {
-        licenseModule.verifyLicense.restore();
+        licenseModule.validateLicense.restore();
     }
 }, () => {
-    QUnit.test('verifyLicense() method should be called once', function(assert) {
+    QUnit.test('validateLicense() method should be called once', function(assert) {
         new TestComponent();
 
-        assert.ok(licenseModule.verifyLicense.calledOnce);
+        assert.ok(licenseModule.validateLicense.calledOnce);
     });
 
-    QUnit.test('verifyLicense() method should be called with license from config', function(assert) {
+    QUnit.test('validateLicense() method should be called with license from config', function(assert) {
         try {
             const licenseKey = 'license key';
             config({ licenseKey });
 
             new TestComponent();
 
-            assert.ok(licenseModule.verifyLicense.calledWith(licenseKey));
+            assert.ok(licenseModule.validateLicense.calledWith(licenseKey));
         } finally {
             config({ licenseKey: null });
         }

@@ -27,7 +27,7 @@ import PopupDrag from './popup_drag';
 import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
-import { isMaterialBased, current as currentTheme } from '../themes';
+import { isMaterialBased, isMaterial, isFluent } from '../themes';
 import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
@@ -65,24 +65,17 @@ const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
-const APPLY_VALUE_BUTTONS_ORDER = ['cancel', 'done'];
 
 const BUTTON_DEFAULT_TYPE = 'default';
 const BUTTON_NORMAL_TYPE = 'normal';
 const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
+const BUTTON_OUTLINED_MODE = 'outlined';
 
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
-
-const sortApplyValueItems = (actionButtonsItems) => {
-    return actionButtonsItems.sort((a, b) => {
-        return APPLY_VALUE_BUTTONS_ORDER.indexOf(a.shortcut) - APPLY_VALUE_BUTTONS_ORDER.indexOf(b.shortcut);
-    });
-};
-
-const getButtonInfo = shortcut => {
+const getButtonPlace = name => {
 
     const device = devices.current();
     const platform = device.platform;
@@ -90,7 +83,7 @@ const getButtonInfo = shortcut => {
     let location = 'before';
 
     if(platform === 'ios') {
-        switch(shortcut) {
+        switch(name) {
             case 'cancel':
                 toolbar = 'top';
                 break;
@@ -103,7 +96,7 @@ const getButtonInfo = shortcut => {
                 break;
         }
     } else if(platform === 'android') {
-        switch(shortcut) {
+        switch(name) {
             case 'cancel':
                 location = 'after';
                 break;
@@ -115,8 +108,7 @@ const getButtonInfo = shortcut => {
 
     return {
         toolbar,
-        location,
-        shortcut
+        location
     };
 };
 
@@ -156,8 +148,6 @@ const Popup = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = currentTheme();
-
         return this.callBase().concat([
             {
                 device: { platform: 'ios' },
@@ -195,14 +185,21 @@ const Popup = Overlay.inherit({
             },
             {
                 device: function() {
-                    return isMaterialBased(themeName);
+                    return isMaterialBased();
+                },
+                options: {
+                    useFlatToolbarButtons: true,
+                }
+            },
+            {
+                device: function() {
+                    return isMaterial();
                 },
                 options: {
                     useDefaultToolbarButtons: true,
-                    useFlatToolbarButtons: true,
                     showCloseButton: false
                 }
-            }
+            },
         ]);
     },
 
@@ -492,16 +489,19 @@ const Popup = Overlay.inherit({
     },
 
     _getToolbarItems: function(toolbar) {
+
         const toolbarItems = this.option('toolbarItems');
+
         const toolbarsItems = [];
+
         this._toolbarItemClasses = [];
+
         const currentPlatform = devices.current().platform;
         let index = 0;
-        const applyValueButtonsInfo = [];
 
         each(toolbarItems, (_, data) => {
             const isShortcut = isDefined(data.shortcut);
-            const item = isShortcut ? getButtonInfo(data.shortcut) : data;
+            const item = isShortcut ? getButtonPlace(data.shortcut) : data;
 
             if(isShortcut && currentPlatform === 'ios' && index < 2) {
                 item.toolbar = 'top';
@@ -510,17 +510,15 @@ const Popup = Overlay.inherit({
 
             item.toolbar = data.toolbar || item.toolbar || 'top';
 
-            if(item?.toolbar === toolbar) {
+            if(item && item.toolbar === toolbar) {
                 if(isShortcut) {
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
-                    if(APPLY_VALUE_BUTTONS_ORDER.includes(data.shortcut)) {
-                        applyValueButtonsInfo.push({
-                            shortcut: data.shortcut,
-                            item
-                        });
-                    } else {
-                        toolbarsItems.push(item);
-                    }
+                }
+
+                const isLTROrder = currentPlatform === 'generic';
+
+                if((data.shortcut === 'done' && isLTROrder) || (data.shortcut === 'cancel' && !isLTROrder)) {
+                    toolbarsItems.unshift(item);
                 } else {
                     toolbarsItems.push(item);
                 }
@@ -531,9 +529,7 @@ const Popup = Overlay.inherit({
             toolbarsItems.push(this._getCloseButton());
         }
 
-        const sortedApplyValueItems = sortApplyValueItems(applyValueButtonsInfo).map(item => item.item);
-
-        return toolbarsItems.concat(...sortedApplyValueItems);
+        return toolbarsItems;
     },
 
     _hasCloseButton() {
@@ -542,6 +538,22 @@ const Popup = Overlay.inherit({
 
     _getLocalizationKey(itemType) {
         return itemType.toLowerCase() === 'done' ? 'OK' : camelize(itemType, true);
+    },
+
+    _getToolbarButtonStylingMode: function(shortcut) {
+        if(isFluent()) {
+            return shortcut === 'done' ? BUTTON_CONTAINED_MODE : BUTTON_OUTLINED_MODE;
+        }
+
+        return this.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE;
+    },
+
+    _getToolbarButtonType: function(shortcut) {
+        if((isFluent() && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
+            return BUTTON_DEFAULT_TYPE;
+        }
+
+        return BUTTON_NORMAL_TYPE;
     },
 
     _getToolbarItemByAlias: function(data) {
@@ -556,8 +568,8 @@ const Popup = Overlay.inherit({
             text: messageLocalization.format(this._getLocalizationKey(itemType)),
             onClick: this._createToolbarItemAction(data.onClick),
             integrationOptions: {},
-            type: that.option('useDefaultToolbarButtons') ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE,
-            stylingMode: that.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE
+            type: this._getToolbarButtonType(itemType),
+            stylingMode: this._getToolbarButtonStylingMode(itemType),
         }, data.options || {});
 
         const itemClass = POPUP_CLASS + '-' + itemType;

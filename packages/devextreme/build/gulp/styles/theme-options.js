@@ -7,11 +7,12 @@ const fluentColors = ['blue'];
 const fluentModes = ['light', 'dark'];
 const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
 
+const getThemes = () => sizes.flatMap((size) => [
+    ...materialModes.flatMap((mode) => materialColors.map((color) => ['material', size, color, mode])),
+    ...fluentModes.flatMap((mode) => fluentColors.map((color) => ['fluent', size, color, mode])),
+    ...genericColors.map((color) => ['generic', size, color])
+]);
+
 module.exports = {
-    sizes,
-    materialColors,
-    materialModes,
-    genericColors,
-    fluentColors,
-    fluentModes,
+    getThemes
 };

@@ -11,7 +11,7 @@ import { getImageContainer } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
-import { isMaterial, isFluent, current as currentTheme } from './themes';
+import { isMaterialBased, isFluent, current as currentTheme } from './themes';
 
 // STYLE tabPanel
 
@@ -123,13 +123,12 @@ const TabPanel = MultiView.inherit({
                     return isFluent(themeName);
                 },
                 options: {
-                    iconPosition: ICON_POSITION.top,
                     stylingMode: STYLING_MODE.secondary,
                 }
             },
             {
                 device() {
-                    return isMaterial(themeName);
+                    return isMaterialBased(themeName);
                 },
                 options: {
                     iconPosition: ICON_POSITION.top,
@@ -143,8 +142,14 @@ const TabPanel = MultiView.inherit({
 
         this.$element().addClass(TABPANEL_CLASS);
         this._toggleTabPanelTabsPositionClass();
+    },
 
-        this.setAria('role', 'tabpanel');
+    _getElementAria() {
+        return { role: 'tabpanel' };
+    },
+
+    _getItemAria() {
+        return { role: 'tabpanel' };
     },
 
     _initMarkup: function() {

@@ -1,5 +1,6 @@
 $scheduler-appointment-base-color: null !default;
 $scheduler-appointment-start-color: null !default;
+$scheduler-appointment-active-color: null !default;
 $scheduler-base-border-color: null !default;
 $scheduler-accent-border-color: null !default;
 $scheduler-current-time-cell-color: null !default;
@@ -18,6 +19,7 @@ $scheduler-workspace-focused-cell-color: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 $scheduler-appointment-text-color: null !default;
 $scheduler-fill-focused-appointment: null !default;
+$scheduler-is-shadow-color-for-focused-state: null !default;
 $scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -106,7 +108,9 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-vertical-appointment-resizable-hovering-shadow: $scheduler-vertical-appointment-resizable-hovering-shadow,
   $scheduler-hovered-appointment-top-shadow-size: $scheduler-hovered-appointment-top-shadow-size,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
+  $scheduler-is-shadow-color-for-focused-state: $scheduler-is-shadow-color-for-focused-state,
   $scheduler-appointment-start-color: $scheduler-appointment-start-color,
+  $scheduler-appointment-active-color: $scheduler-appointment-active-color,
   $scheduler-appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
   $scheduler-reduced-icon-offset: $scheduler-reduced-icon-offset,
 

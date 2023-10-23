@@ -20,6 +20,7 @@ import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
 import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
+import Guid from 'core/guid';
 
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
@@ -2579,7 +2580,7 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(this.instance.option('value'), expectedValue, 'the value is correct');
     });
 
-    QUnit.testInActiveWindow('the \'cancel\' button should be focused on the \'tab\' key press if the input is focused and showSelectionControls if false (T389453)', function(assert) {
+    QUnit.testInActiveWindow('the \'apply\' button should be focused on the \'tab\' key press if the input is focused and showSelectionControls if false (T389453)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
             return;
@@ -2594,8 +2595,8 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $cancelButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-cancel');
-        assert.ok($cancelButton.hasClass('dx-state-focused'), 'the apply button is focused');
+        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
+        assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 
     QUnit.testInActiveWindow('toolbar button should be focused on the "tab" key press if the input is focused and showSelectionControls is enabled', function(assert) {
@@ -7462,6 +7463,68 @@ QUnit.module('regression', {
         }
 
         assert.ok(true, 'Widget rendered');
+    });
+
+    QUnit.test('maxFilterQueryLength option should be propagated to selection and allow to exceed its default limit (T1191760)', function(assert) {
+        const arrayLength = 25;
+        const arraySource = Array(arrayLength).fill(null).map((_, idx) => ({
+            display: `Item ${idx}`,
+            value: new Guid().toString()
+        }));
+        const dataSource = new DataSource({
+            paginate: true,
+            store: new CustomStore({
+                key: 'value',
+                byKey: (key) => arraySource.find(item => item.value === key),
+                load: (loadOptions) => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        if(loadOptions.filter) {
+                            d.resolve({
+                                data: arraySource,
+                                request: { skip: 0, take: arrayLength },
+                                totalCount: arrayLength
+                            });
+                        } else if(loadOptions.skip === 0) {
+                            d.resolve({
+                                data: arraySource.slice(0, 19),
+                                request: { skip: 0, take: 20 },
+                                totalCount: arrayLength
+                            });
+                        } else if(loadOptions.skip === 20) {
+                            d.resolve({
+                                data: arraySource.slice(20),
+                                request: { skip: 20, take: 20 },
+                                totalCount: arrayLength
+                            });
+                        }
+                    }, 0);
+
+                    return d.promise();
+                }
+            })
+        });
+        const value = arraySource.map(o => o.value);
+        const $element = $('#tagBox')
+            .dxTagBox({
+                dataSource,
+                value,
+                keyExpr: 'value',
+                displayExpr: 'display',
+                showSelectionControls: true,
+                maxFilterQueryLength: 9999,
+                deferRendering: false,
+            });
+
+        const $inputWrapper = $element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+
+        this.clock.tick(50);
+        $inputWrapper.trigger('dxclick');
+
+        const selectAllCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
+
+        assert.strictEqual(selectAllCheckBox.option('value'), true, 'the "select all" checkbox is checked');
     });
 });
 

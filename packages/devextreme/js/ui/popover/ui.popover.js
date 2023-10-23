@@ -14,6 +14,7 @@ import { addNamespace } from '../../events/utils/index';
 import errors from '../widget/ui.errors';
 import Popup from '../popup/ui.popup';
 import { getBoundingRect } from '../../core/utils/position';
+import { isMaterialBased, isMaterial } from '../themes';
 import { PopoverPositionController, POPOVER_POSITION_ALIASES } from './popover_position_controller';
 
 // STYLE popover
@@ -246,7 +247,24 @@ const Popover = Popup.inherit({
                 options: {
                     animation: null
                 }
-            }
+            },
+            {
+                device: function() {
+                    return isMaterialBased();
+                },
+                options: {
+                    useFlatToolbarButtons: true,
+                }
+            },
+            {
+                device: function() {
+                    return isMaterial();
+                },
+                options: {
+                    useDefaultToolbarButtons: true,
+                    showCloseButton: false
+                }
+            },
         ];
     },
 

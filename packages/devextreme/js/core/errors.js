@@ -272,4 +272,10 @@ export default errorUtils({
     W0021: 'DevExtreme: License key verification failed.\n\n' +
         'Make certain to specify a correct key in the GlobalConfig. If you continue to encounter an error, please visit https://www.devexpress.com/ClientCenter/DownloadManager/ to obtain a valid key.\n\n' +
         'If you have a valid license and this problem persists, please submit a support ticket via the DevExpress Support Center. We will be happy to follow-up: https://supportcenter.devexpress.com/ticket/create.\n\n',
+    /**
+     * @name ErrorsCore.W0022
+     */
+    W0022: 'DevExtreme: This version is a pre-release, and it is not suitable for commercial use.\n\n' +
+        'It may contain deficiencies and as such, should not be considered for use or integrated in any mission critical application.',
+
 });

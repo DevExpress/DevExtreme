@@ -629,7 +629,6 @@ testComponentDefaults(Lookup,
     }
 );
 
-
 testComponentDefaults(Popup,
     {},
     { focusStateEnabled: true },
@@ -720,6 +719,36 @@ testComponentDefaults(Popup,
     {
         preventScrollEvents: false,
         enableBodyScroll: true,
+        showCloseButton: true,
+    }
+);
+
+testComponentDefaults(Popup,
+    {},
+    {
+        useDefaultToolbarButtons: true,
+        showCloseButton: false,
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(Popup,
+    {},
+    {
+        useFlatToolbarButtons: true,
+    },
+    function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
     }
 );
 
@@ -1173,6 +1202,34 @@ testComponentDefaults(TabPanel,
     }
 );
 
+testComponentDefaults(TabPanel,
+    { },
+    {
+        iconPosition: 'top',
+    },
+    function() {
+        this.origIsMaterialBased = themes.isMaterialBased;
+        themes.isMaterialBased = function() { return true; };
+    },
+    function() {
+        themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(TabPanel,
+    { },
+    {
+        stylingMode: 'secondary',
+    },
+    function() {
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
+    },
+    function() {
+        themes.isFluent = this.origIsFluent;
+    }
+);
+
 testComponentDefaults(LoadIndicator,
     {},
     {
@@ -1355,7 +1412,9 @@ testComponentDefaults(Tabs,
     { },
     {
         useInkRipple: true,
-        selectOnFocus: false
+        selectOnFocus: false,
+        iconPosition: 'top',
+        stylingMode: 'primary',
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -1367,10 +1426,26 @@ testComponentDefaults(Tabs,
 );
 
 testComponentDefaults(Tabs,
+    { },
+    {
+        iconPosition: 'top',
+        stylingMode: 'secondary',
+    },
+    function() {
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
+    },
+    function() {
+        themes.isFluent = this.origIsFluent;
+    }
+);
+
+testComponentDefaults(Tabs,
     {},
     {
         showNavButtons: true,
-        selectOnFocus: true
+        selectOnFocus: true,
+        iconPosition: 'start'
     },
     function() {
         this._origDevice = devices.real();
@@ -1526,7 +1601,6 @@ testComponentDefaults(Accordion,
 testComponentDefaults(Scheduler,
     {},
     {
-        _appointmentTooltipOffset: { x: 0, y: 11 },
         _appointmentTooltipButtonsPosition: 'top',
         _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,
@@ -1539,5 +1613,19 @@ testComponentDefaults(Scheduler,
     },
     function() {
         themes.isMaterialBased = this.origIsMaterialBased;
+    }
+);
+
+testComponentDefaults(Scheduler,
+    {},
+    {
+        _appointmentTooltipOffset: { x: 0, y: 11 }
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
     }
 );
