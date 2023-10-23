@@ -16,11 +16,11 @@ const moduleConfig = {
 };
 
 QUnit.module('ctor');
-QUnit.test('use second version by default', function(assert) {
+QUnit.test('use fourth version by default', function(assert) {
     assert.expect(2);
 
-    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' }).version(), 2);
-    assert.equal(new ODataContext({ url: 'odata.org/EntitySet/' }).version(), 2);
+    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' }).version(), 4);
+    assert.equal(new ODataContext({ url: 'odata.org/EntitySet/' }).version(), 4);
 });
 
 QUnit.test('fieldTypes are updated correctly', function(assert) {
@@ -231,7 +231,7 @@ QUnit.test('with params', function(assert) {
     };
 
     const promises = [
-        new ODataStore({ url: 'odata2.org' })
+        new ODataStore({ version: 2, url: 'odata2.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
@@ -255,7 +255,7 @@ QUnit.test('with params', function(assert) {
                 }]);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
@@ -294,14 +294,14 @@ QUnit.test('with explicit expand', function(assert) {
     const options = { expand: ['a', 'b.c'] };
 
     const promises = [
-        new ODataStore({ url: 'odata.org' })
+        new ODataStore({ version: 2, url: 'odata.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
                 assert.deepEqual(r, ['a,b/c']);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
@@ -334,7 +334,7 @@ QUnit.test('with requireTotalCount', function(assert) {
     });
 
     const promises = [
-        new ODataStore({ url: 'odata.org' })
+        new ODataStore({ version: 2, url: 'odata.org' })
             .load({ requireTotalCount: true })
             .done(function(r, extra) {
                 assert.deepEqual(r, ['allpages']);
@@ -343,7 +343,7 @@ QUnit.test('with requireTotalCount', function(assert) {
                 });
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load({ requireTotalCount: true })
             .done(function(r, extra) {
                 assert.deepEqual(r, ['true']);
