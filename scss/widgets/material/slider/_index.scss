@@ -88,6 +88,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
       }
 
       .dx-popup-content {
+        overflow: hidden;
         line-height: normal;
         font-size: 10px;
         max-width: $material-slider-tooltip-width-without-paddings;
