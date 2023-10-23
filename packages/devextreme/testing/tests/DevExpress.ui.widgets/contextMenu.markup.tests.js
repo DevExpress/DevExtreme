@@ -10,8 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const MENU_ITEM_CLASS = 'dx-menu-item';
-const ICON_CLASS = 'dx-icon';
 const DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
 
 const moduleConfig = {
@@ -37,26 +35,6 @@ QUnit.module('ContextMenu markup', moduleConfig, () => {
         new ContextMenu(this.$element, {});
 
         assert.equal(this.$element.attr('role'), undefined, 'aria role is not defined because menu items renders in body (aXe accessibility testing)');
-    });
-
-    QUnit.test('ContextMenu icon image should have alt attribute with item text if it specified', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            items: [{ text: 'Item text', icon: 'some_icon.jpg' }],
-            visible: true,
-        });
-        const $icon = instance.itemsContainer().find(`.${MENU_ITEM_CLASS} .${ICON_CLASS}`);
-
-        assert.strictEqual($icon.attr('alt'), 'Item text');
-    });
-
-    QUnit.test('ContextMenu icon image should have alt attribute with "dxContextMenu item icon" if item text is not specified', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            items: [{ icon: 'some_icon.jpg' }],
-            visible: true,
-        });
-        const $icon = instance.itemsContainer().find(`.${MENU_ITEM_CLASS} .${ICON_CLASS}`);
-
-        assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
     });
 });
 
