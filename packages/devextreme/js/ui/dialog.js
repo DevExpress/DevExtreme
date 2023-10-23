@@ -41,21 +41,25 @@ const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
 const getApplyButtonConfig = () => {
-    const isFluentTheme = isFluent();
+    if(isFluent()) {
+        return {
+            stylingMode: 'contained',
+            type: 'default',
+        };
+    }
 
-    return {
-        stylingMode: isFluentTheme ? 'contained' : undefined,
-        type: isFluentTheme ? 'default' : undefined,
-    };
+    return {};
 };
 
 const getCancelButtonConfig = () => {
-    const isFluentTheme = isFluent();
+    if(isFluent()) {
+        return {
+            stylingMode: 'contoutlinedained',
+            type: 'default',
+        };
+    }
 
-    return {
-        stylingMode: isFluentTheme ? 'outlined' : undefined,
-        type: isFluentTheme ? 'default' : undefined,
-    };
+    return {};
 };
 
 export const custom = function(options) {
