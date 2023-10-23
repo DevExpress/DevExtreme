@@ -64,7 +64,7 @@
     </DxTreeList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxTreeList,
   DxRemoteOperations,
@@ -75,54 +75,37 @@ import {
   DxRequiredRule,
   DxLookup,
 } from 'devextreme-vue/tree-list';
-import AspNetData from 'devextreme-aspnet-data-nojquery';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
 
-export default {
-  components: {
-    DxTreeList,
-    DxRemoteOperations,
-    DxColumn,
-    DxSearchPanel,
-    DxHeaderFilter,
-    DxEditing,
-    DxRequiredRule,
-    DxLookup,
+const tasksData = createStore({
+  key: 'Task_ID',
+  loadUrl: `${url}/Tasks`,
+  insertUrl: `${url}/InsertTask`,
+  updateUrl: `${url}/UpdateTask`,
+  deleteUrl: `${url}/DeleteTask`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
   },
-  data() {
-    return {
-      tasksData: AspNetData.createStore({
-        key: 'Task_ID',
-        loadUrl: `${url}/Tasks`,
-        insertUrl: `${url}/InsertTask`,
-        updateUrl: `${url}/UpdateTask`,
-        deleteUrl: `${url}/DeleteTask`,
-        onBeforeSend(method, ajaxOptions) {
-          ajaxOptions.xhrFields = { withCredentials: true };
-        },
-      }),
-      employeesData: AspNetData.createStore({
-        key: 'ID',
-        loadUrl: `${url}/TaskEmployees`,
-      }),
-      statusesData: [
-        'Not Started',
-        'Need Assistance',
-        'In Progress',
-        'Deferred',
-        'Completed',
-      ],
-    };
-  },
-  methods: {
-    initNewRow(e) {
-      e.data.Task_Status = 'Not Started';
-      e.data.Task_Start_Date = new Date();
-      e.data.Task_Due_Date = new Date();
-    },
-  },
-};
+});
+const employeesData = createStore({
+  key: 'ID',
+  loadUrl: `${url}/TaskEmployees`,
+});
+const statusesData = [
+  'Not Started',
+  'Need Assistance',
+  'In Progress',
+  'Deferred',
+  'Completed',
+];
+
+function initNewRow({ data }) {
+  data.Task_Status = 'Not Started';
+  data.Task_Start_Date = new Date();
+  data.Task_Due_Date = new Date();
+}
 </script>
 <style scoped>
 #tree-list {

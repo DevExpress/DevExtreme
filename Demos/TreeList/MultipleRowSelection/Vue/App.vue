@@ -61,49 +61,34 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxTreeList, DxSelection, DxColumn } from 'devextreme-vue/tree-list';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
 const emptySelectedText = 'Nobody has been selected';
+const expandedRowKeys = [1, 2, 10];
+const selectedRowKeys = ref([]);
+const recursive = ref(false);
+const selectedEmployeeNames = ref(emptySelectedText);
+const selectionMode = ref('all');
 
-export default {
-  components: {
-    DxTreeList,
-    DxSelection,
-    DxColumn,
-    DxCheckBox,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      employees,
-      expandedRowKeys: [1, 2, 10],
-      selectedRowKeys: [],
-      recursive: false,
-      selectedEmployeeNames: emptySelectedText,
-      selectionMode: 'all',
-    };
-  },
-  methods: {
-    onOptionsChanged() {
-      this.selectedRowKeys = [];
-      this.selectedEmployeeNames = emptySelectedText;
-    },
-    onSelectionChanged({ component }) {
-      const selectedData = component.getSelectedRowsData(this.selectionMode);
-      this.selectedEmployeeNames = this.getEmployeeNames(selectedData);
-    },
-    getEmployeeNames(employeeList) {
-      if (employeeList.length > 0) {
-        return employeeList.map((employee) => employee.Full_Name).join(', ');
-      }
-      return emptySelectedText;
-    },
-  },
-};
+function onOptionsChanged() {
+  selectedRowKeys.value = [];
+  selectedEmployeeNames.value = emptySelectedText;
+}
+function onSelectionChanged({ component }) {
+  const selectedData = component.getSelectedRowsData(selectionMode.value);
+  selectedEmployeeNames.value = getEmployeeNames(selectedData);
+}
+function getEmployeeNames(employeeList) {
+  if (employeeList.length > 0) {
+    return employeeList.map((employee) => employee.Full_Name).join(', ');
+  }
+  return emptySelectedText;
+}
 </script>
 <style scoped>
 #employees {

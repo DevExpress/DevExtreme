@@ -58,37 +58,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup,
 } from 'devextreme-vue/tree-list';
 import { tasks, employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup,
-  },
-  data() {
-    return {
-      tasks,
-      employees,
-      statuses: [
-        'Not Started',
-        'Need Assistance',
-        'In Progress',
-        'Deferred',
-        'Completed',
-      ],
-    };
-  },
-  methods: {
-    onInitNewRow(e) {
-      e.data.Task_Status = 'Not Started';
-      e.data.Task_Start_Date = new Date();
-      e.data.Task_Due_Date = new Date();
-    },
-  },
-};
+const statuses = [
+  'Not Started',
+  'Need Assistance',
+  'In Progress',
+  'Deferred',
+  'Completed',
+];
+
+function onInitNewRow({ data }) {
+  data.Task_Status = 'Not Started';
+  data.Task_Start_Date = new Date();
+  data.Task_Due_Date = new Date();
+}
 </script>
 <style scoped>
 #tree-list-demo {

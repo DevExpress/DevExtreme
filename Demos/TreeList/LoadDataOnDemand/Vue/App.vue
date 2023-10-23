@@ -33,43 +33,32 @@
     </DxTreeList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxTreeList, DxRemoteOperations, DxColumn } from 'devextreme-vue/tree-list';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxTreeList, DxRemoteOperations, DxColumn,
-  },
-  data() {
-    return {
-      dataSource: {
-        load(loadOptions) {
-          const parentIdsParam = loadOptions.parentIds;
-          const url = new URL('https://js.devexpress.com/Demos/Mvc/api/treeListData');
-          if (parentIdsParam) {
-            parentIdsParam.forEach((id) => {
-              url.searchParams.append('parentIds', id);
-            });
-          }
+const dataSource = {
+  load(loadOptions) {
+    const parentIdsParam = loadOptions.parentIds;
+    const url = new URL('https://js.devexpress.com/Demos/Mvc/api/treeListData');
+    if (parentIdsParam) {
+      parentIdsParam.forEach((id) => {
+        url.searchParams.append('parentIds', id);
+      });
+    }
 
-          return fetch(url)
-            .then((response) => response.json())
-            .catch(() => { throw new Error('Data Loading Error'); });
-        },
-      },
-    };
-  },
-  methods: {
-    customizeText(e) {
-      if (e.value !== null) {
-        return `${Math.ceil(e.value / 1024)} KB`;
-      }
-      return null;
-    },
+    return fetch(url.toString())
+      .then((response) => response.json())
+      .catch(() => { throw new Error('Data Loading Error'); });
   },
 };
 
+function customizeText({ value }) {
+  if (value !== null) {
+    return `${Math.ceil(value / 1024)} KB`;
+  }
+  return null;
+}
 </script>
 <style scoped>
 #treelist {

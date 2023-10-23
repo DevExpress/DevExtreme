@@ -56,40 +56,29 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxButton,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxButton,
-  },
-  data() {
-    return {
-      employees,
-      expandedRowKeys: [1, 2, 3, 4, 5],
-      dataSource: {
-        store: employees,
-        sort: 'Full_Name',
-      },
-    };
-  },
-  methods: {
-    onEditorPreparing(e) {
-      if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
-        e.cancel = true;
-      }
-    },
-    onInitNewRow(e) {
-      e.data.Head_ID = 1;
-    },
-    allowDeleting(e) {
-      return e.row.data.ID !== 1;
-    },
-  },
+const expandedRowKeys = [1, 2, 3, 4, 5];
+const dataSource = {
+  store: employees,
+  sort: 'Full_Name',
 };
+
+function onEditorPreparing(e) {
+  if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+    e.cancel = true;
+  }
+}
+function onInitNewRow(e) {
+  e.data.Head_ID = 1;
+}
+function allowDeleting(e) {
+  return e.row.data.ID !== 1;
+}
 </script>
 <style scoped>
 #tree-list-demo {

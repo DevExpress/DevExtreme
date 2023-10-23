@@ -33,21 +33,11 @@
     </DxTreeList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxTreeList, DxColumn } from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList, DxColumn,
-  },
-  data() {
-    return {
-      employees,
-      expandedRowKeys: [1],
-    };
-  },
-};
+const expandedRowKeys = [1];
 </script>
 <style scoped>
 #employees {

@@ -55,25 +55,15 @@
     </DxTreeList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxTreeList, DxHeaderFilter, DxSearch, DxSelection, DxColumn,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList, DxHeaderFilter, DxSearch, DxSelection, DxColumn,
-  },
-  data() {
-    return {
-      employees,
-      expandedRowKeys: [1],
-      searchExpr: ['City', 'State'],
-      editorOptions: { placeholder: 'Search city or state' },
-    };
-  },
-};
+const expandedRowKeys = [1];
+const searchExpr = ['City', 'State'];
+const editorOptions = { placeholder: 'Search city or state' };
 </script>
 <style scoped>
 #employees {

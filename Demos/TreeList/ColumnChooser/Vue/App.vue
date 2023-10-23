@@ -112,7 +112,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxTreeList, DxColumn, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
   DxPosition,
@@ -121,37 +122,20 @@ import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList,
-    DxColumn,
-    DxColumnChooser,
-    DxColumnChooserSearch,
-    DxColumnChooserSelection,
-    DxSelectBox,
-    DxCheckBox,
-    DxPosition,
-  },
-  data() {
-    return {
-      employees,
-      columnChooserModes: [{
-        key: 'dragAndDrop',
-        name: 'Drag and drop',
-      }, {
-        key: 'select',
-        name: 'Select',
-      }],
-      mode: 'select',
-      searchEnabled: true,
-      allowSelectAll: true,
-      selectByClick: true,
-      recursive: true,
-      expandedRowKeys: [1, 5],
-      editorOptions: { placeholder: 'Search column' },
-    };
-  },
-};
+const columnChooserModes = ref([{
+  key: 'dragAndDrop',
+  name: 'Drag and drop',
+}, {
+  key: 'select',
+  name: 'Select',
+}]);
+const mode = ref('select');
+const searchEnabled = ref(true);
+const allowSelectAll = ref(true);
+const selectByClick = ref(true);
+const recursive = ref(true);
+const expandedRowKeys = [1, 5];
+const editorOptions = { placeholder: 'Search column' };
 </script>
 <style scoped>
 #employees {

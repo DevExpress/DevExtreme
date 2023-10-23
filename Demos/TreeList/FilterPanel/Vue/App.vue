@@ -46,24 +46,14 @@
     </DxTreeList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxTreeList, DxFilterRow, DxFilterPanel, DxHeaderFilter, DxColumn,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList, DxFilterRow, DxFilterPanel, DxHeaderFilter, DxColumn,
-  },
-  data() {
-    return {
-      employees,
-      expandedRowKeys: [1],
-      filterValue: ['City', '=', 'Bentonville'],
-    };
-  },
-};
+const expandedRowKeys = [1];
+const filterValue = ['City', '=', 'Bentonville'];
 </script>
 <style scoped>
 .demo-container {

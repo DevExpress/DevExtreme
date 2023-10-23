@@ -57,72 +57,60 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxTreeList, DxColumn, DxRowDragging } from 'devextreme-vue/tree-list';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { employees } from './data.js';
+import { employees as employeesData } from './data.js';
 
-export default {
-  components: {
-    DxTreeList,
-    DxColumn,
-    DxRowDragging,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      employees,
-      allowDropInsideItem: true,
-      allowReordering: true,
-      showDragIcons: true,
-      expandedRowKeys: [1],
-    };
-  },
-  methods: {
-    onDragChange(e) {
-      const visibleRows = e.component.getVisibleRows();
-      const sourceNode = e.component.getNodeByKey(e.itemData.ID);
-      let targetNode = visibleRows[e.toIndex].node;
+const allowDropInsideItem = ref(true);
+const allowReordering = ref(true);
+const showDragIcons = ref(true);
+const expandedRowKeys = [1];
 
-      while (targetNode && targetNode.data) {
-        if (targetNode.data.ID === sourceNode.data.ID) {
-          e.cancel = true;
-          break;
-        }
-        targetNode = targetNode.parent;
-      }
-    },
-    onReorder(e) {
-      const visibleRows = e.component.getVisibleRows();
+const employees = ref<any[]>(employeesData);
 
-      if (e.dropInsideItem) {
-        e.itemData.Head_ID = visibleRows[e.toIndex].key;
+function onDragChange(e) {
+  const visibleRows = e.component.getVisibleRows();
+  const sourceNode = e.component.getNodeByKey(e.itemData.ID);
+  let targetNode = visibleRows[e.toIndex].node;
 
-        e.component.refresh();
-      } else {
-        const employeeList = this.employees.slice();
-        const sourceData = e.itemData;
-        const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
-        let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
+  while (targetNode && targetNode.data) {
+    if (targetNode.data.ID === sourceNode.data.ID) {
+      e.cancel = true;
+      break;
+    }
+    targetNode = targetNode.parent;
+  }
+}
+function onReorder(e) {
+  const visibleRows = e.component.getVisibleRows();
 
-        if (targetData && e.component.isRowExpanded(targetData.ID)) {
-          sourceData.Head_ID = targetData.ID;
-          targetData = null;
-        } else {
-          sourceData.Head_ID = targetData ? targetData.Head_ID : -1;
-        }
+  if (e.dropInsideItem) {
+    e.itemData.Head_ID = visibleRows[e.toIndex].key;
 
-        const sourceIndex = this.employees.indexOf(sourceData);
-        employeeList.splice(sourceIndex, 1);
+    e.component.refresh();
+  } else {
+    const employeeList = employees.value.slice();
+    const sourceData = e.itemData;
+    const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
+    let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
 
-        const targetIndex = this.employees.indexOf(targetData) + 1;
-        employeeList.splice(targetIndex, 0, sourceData);
+    if (targetData && e.component.isRowExpanded(targetData.ID)) {
+      sourceData.Head_ID = targetData.ID;
+      targetData = null;
+    } else {
+      sourceData.Head_ID = targetData ? targetData.Head_ID : -1;
+    }
 
-        this.employees = employeeList;
-      }
-    },
-  },
-};
+    const sourceIndex = employees.value.indexOf(sourceData);
+    employeeList.splice(sourceIndex, 1);
+
+    const targetIndex = employees.value.indexOf(targetData) + 1;
+    employeeList.splice(targetIndex, 0, sourceData);
+    employees.value = employeeList;
+  }
+}
 </script>
 
 <style>

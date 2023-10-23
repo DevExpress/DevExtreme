@@ -48,31 +48,22 @@
     </DxTreeList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxTreeList, DxSelection, DxFilterRow, DxStateStoring, DxColumn,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList, DxSelection, DxFilterRow, DxStateStoring, DxColumn,
-  },
-  data() {
-    return {
-      employees,
-      expandedRowKeys: [1, 2, 10],
-    };
-  },
-  methods: {
-    onRefreshClick() {
-      window.location.reload();
-    },
-    onStateResetClick() {
-      this.$refs.treeList.instance.state(null);
-    },
-  },
-};
+const expandedRowKeys = [1, 2, 10];
+const treeList = ref<DxTreeList>();
+
+function onRefreshClick() {
+  window.location.reload();
+}
+function onStateResetClick() {
+  treeList.value?.instance?.state(null);
+}
 </script>
 <style scoped>
 #employees {

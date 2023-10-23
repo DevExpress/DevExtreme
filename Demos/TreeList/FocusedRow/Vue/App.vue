@@ -75,64 +75,51 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxTreeList, DxColumn, DxLookup } from 'devextreme-vue/tree-list';
 import DxNumberBox from 'devextreme-vue/number-box';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
-
-export default {
-  components: {
-    DxTreeList,
-    DxColumn,
-    DxLookup,
-    DxNumberBox,
+const taskSubject = ref('');
+const taskAssigned = ref('');
+const startDate = ref('');
+const taskStatus = ref('');
+const taskProgress = ref('');
+const dataSource = createStore({
+  key: 'Task_ID',
+  loadUrl: `${url}/Tasks`,
+  onBeforeSend(_, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
   },
-  data() {
-    return {
-      taskSubject: '',
-      taskAssigned: '',
-      startDate: '',
-      taskStatus: '',
-      taskProgress: '',
-      dataSource: AspNetData.createStore({
-        key: 'Task_ID',
-        loadUrl: `${url}/Tasks`,
-        onBeforeSend(_, ajaxOptions) {
-          ajaxOptions.xhrFields = { withCredentials: true };
-        },
-      }),
-      taskEmployees: AspNetData.createStore({
-        key: 'ID',
-        loadMode: 'raw',
-        loadUrl: `${url}/TaskEmployees`,
-      }),
-      focusedRowKey: 45,
-    };
-  },
-  methods: {
-    onFocusedRowChanged(e) {
-      const rowData = e.row && e.row.data;
-      let cellValue;
-      let assigned;
+});
+const taskEmployees = createStore({
+  key: 'ID',
+  loadMode: 'raw',
+  loadUrl: `${url}/TaskEmployees`,
+});
+const focusedRowKey = ref(45);
 
-      if (rowData) {
-        cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
-        this.taskEmployees.byKey(cellValue).done((item) => {
-          assigned = item.Name;
-        });
+function onFocusedRowChanged(e) {
+  const rowData = e.row && e.row.data;
+  let cellValue;
+  let assigned;
 
-        this.taskSubject = rowData.Task_Subject;
-        this.taskAssigned = assigned;
-        this.startDate = new Date(rowData.Task_Start_Date).toLocaleDateString();
+  if (rowData) {
+    cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
+    taskEmployees.byKey(cellValue).done((item) => {
+      assigned = item.Name;
+    });
 
-        this.taskStatus = rowData.Task_Status;
-        this.taskProgress = rowData.Task_Completion
-          ? `${rowData.Task_Completion}%`
-          : '';
-      }
-    },
-  },
-};
+    taskSubject.value = rowData.Task_Subject;
+    taskAssigned.value = assigned;
+    startDate.value = new Date(rowData.Task_Start_Date).toLocaleDateString();
+
+    taskStatus.value = rowData.Task_Status;
+    taskProgress.value = rowData.Task_Completion
+      ? `${rowData.Task_Completion}%`
+      : '';
+  }
+}
 </script>

@@ -69,7 +69,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxTreeList,
   DxEditing,
@@ -80,30 +81,15 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxTreeList,
-    DxColumn,
-    DxEditing,
-    DxKeyboardNavigation,
-    DxCheckBox,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource: employees,
-      expandedRowKeys: [1, 2, 4, 5],
-      editOnKeyPress: true,
-      enterKeyActions: ['startEdit', 'moveFocus'],
-      enterKeyDirections: ['none', 'column', 'row'],
-      enterKeyDirection: 'column',
-      enterKeyAction: 'moveFocus',
-    };
-  },
-  methods: {
-    onFocusedCellChanging(e) {
-      e.isHighlighted = true;
-    },
-  },
-};
+const dataSource = employees;
+const expandedRowKeys = [1, 2, 4, 5];
+const editOnKeyPress = ref(true);
+const enterKeyActions = ['startEdit', 'moveFocus'];
+const enterKeyDirections = ['none', 'column', 'row'];
+const enterKeyDirection = ref('column');
+const enterKeyAction = ref('moveFocus');
+
+function onFocusedCellChanging(e) {
+  e.isHighlighted = true;
+}
 </script>

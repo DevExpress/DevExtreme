@@ -11,16 +11,12 @@
     >{{ cellData.Task_Assigned_Employee.Name }}</span>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  cellData?: object
+}>(), {
+  cellData: () => {},
+});
 </script>
 <style>
 .img,

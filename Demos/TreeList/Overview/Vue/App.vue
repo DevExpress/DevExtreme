@@ -78,8 +78,7 @@
     </template>
   </DxTreeList>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxTreeList,
   DxColumn,
@@ -89,10 +88,15 @@ import {
   DxSelection,
   DxLookup,
 } from 'devextreme-vue/tree-list';
-
 import { tasks, employees, priorities } from './data.js';
 import EmployeeCell from './EmployeeCell.vue';
 
+const expandedRowKeys = [1, 2];
+const selectedRowKeys = [1, 29, 42];
+
+function customizeTaskCompletionText({ valueText }) {
+  return `${valueText}%`;
+}
 const statuses = [
   'Not Started',
   'Need Assistance',
@@ -100,45 +104,14 @@ const statuses = [
   'Deferred',
   'Completed',
 ];
-
-export default {
-  components: {
-    DxTreeList,
-    DxColumn,
-    DxColumnChooser,
-    DxHeaderFilter,
-    DxSearchPanel,
-    DxSelection,
-    DxLookup,
-    EmployeeCell,
-  },
-  data() {
-    return {
-      expandedRowKeys: [1, 2],
-      selectedRowKeys: [1, 29, 42],
-      employees,
-      priorities,
-      statuses,
-    };
-  },
-  computed: {
-    dataSource() {
-      return tasks.map((task) => {
-        employees.forEach((employee) => {
-          if (task.Task_Assigned_Employee_ID === employee.ID) {
-            task.Task_Assigned_Employee = employee;
-          }
-        });
-        return task;
-      });
-    },
-  },
-  methods: {
-    customizeTaskCompletionText(cellInfo) {
-      return `${cellInfo.valueText}%`;
-    },
-  },
-};
+const dataSource = tasks.map((task) => {
+  employees.forEach((employee) => {
+    if (task.Task_Assigned_Employee_ID === employee.ID) {
+      task.Task_Assigned_Employee = employee;
+    }
+  });
+  return task;
+});
 </script>
 <style>
 #tasks {

@@ -53,26 +53,14 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxTreeList, DxColumn, DxSearchPanel } from 'devextreme-vue/tree-list';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxTreeList,
-    DxColumn,
-    DxSearchPanel,
-  },
-  data() {
-    return {
-      employees,
-      filterMode: 'matchOnly',
-      filterModes: ['matchOnly', 'withAncestors', 'fullBranch'],
-    };
-  },
-};
+const filterMode = ref('matchOnly');
+const filterModes = ['matchOnly', 'withAncestors', 'fullBranch'];
 </script>
 <style scoped>
 #employees {
