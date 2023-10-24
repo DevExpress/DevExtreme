@@ -33,3 +33,14 @@
     opacity: 1;
   }
 }
+
+.dx-dropdownbutton-action {
+  &.dx-button-has-icon,
+  &.dx-button-has-text {
+    .dx-icon-spindown.dx-icon-right {
+      width: $fluent-dropdownbutton-icon-spindown-right-size;
+      height: $fluent-dropdownbutton-icon-spindown-right-size;
+    }
+  }
+}
+

@@ -2,12 +2,12 @@
 
 // adduse
 
-$generic-badge-horizontal-padding: null !default;
+$generic-badge-padding: null !default;
 
 @if $size == "default" {
-  $generic-badge-horizontal-padding: 6px !default;
+  $generic-badge-padding: 0 6px !default;
 }
 
 @else if $size == "compact" {
-  $generic-badge-horizontal-padding: 5px !default;
+  $generic-badge-padding: 0 5px !default;
 }

@@ -2,6 +2,7 @@ export default class MetadataGenerator {
   metadata: ThemesMetadata = {
     generic: [],
     material: [],
+    fluent: [],
   };
 
   static capitalize(key: string): string {
@@ -70,13 +71,14 @@ export default class MetadataGenerator {
   }
 
   static getBundleContent(content: string): string {
-    return content.replace(/(..\/widgets\/(material|generic))"/, '$1/tb_index"');
+    return content.replace(/(..\/widgets\/(material|generic|fluent))"/, '$1/tb_index"');
   }
 
   clean(): void {
     this.metadata = {
       generic: [],
       material: [],
+      fluent: [],
     };
   }
 
@@ -85,9 +87,10 @@ export default class MetadataGenerator {
   }
 
   fillMetaData(item: MetaItem, filePath: string): void {
-    const target = filePath.includes('generic')
-      ? this.metadata.generic
-      : this.metadata.material;
+    const target =
+        filePath.includes('generic') ? this.metadata.generic :
+        filePath.includes('material') ? this.metadata.material :
+        filePath.includes('fluent') ? this.metadata.fluent : [];
 
     target.push(item);
   }

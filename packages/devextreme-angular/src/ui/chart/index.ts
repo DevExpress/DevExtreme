@@ -25,13 +25,12 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, ChartsLabelOverlap, DashStyle, DiscreteAxisDivisionMode, LegendHoverMode, Palette, PaletteExtensionMode, RelativePosition, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
+import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, ChartsLabelOverlap, DashStyle, DiscreteAxisDivisionMode, Font, LegendHoverMode, Palette, PaletteExtensionMode, RelativePosition, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { AggregatedPointsPosition, ArgumentAxisClickEvent, ChartLabelDisplayMode, ChartTooltipLocation, ChartZoomAndPanMode, DisposingEvent, DoneEvent, DrawnEvent, dxChartCommonAnnotationConfig, EventKeyModifier, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/chart';
-import { Font } from 'devextreme/viz/core/base_widget';
 
 import DxChart from 'devextreme/viz/chart';
 

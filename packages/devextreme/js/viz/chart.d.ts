@@ -34,7 +34,6 @@ import {
 } from './common';
 
 import {
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -76,6 +75,7 @@ import {
     ChartsColor,
     SeriesPoint,
     SeriesLabel,
+    Font,
 } from '../common/charts';
 
 /**

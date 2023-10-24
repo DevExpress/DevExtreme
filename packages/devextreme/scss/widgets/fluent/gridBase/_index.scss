@@ -357,7 +357,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-#{$widget-name}-edit-popup-form {
-    padding: $fluent-popup-content-padding;
+    padding: $fluent-popup-content-vertical-padding $fluent-popup-content-padding;
   }
 
   .dx-#{$widget-name}-headers,
@@ -1209,8 +1209,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
   .dx-header-filter-menu {
     .dx-popup-content {
-      padding: 12px 8px 0 8px;
-      border-bottom: 1px solid $fluent-grid-base-border-color;
+      padding: 8px 8px 0 8px;
     }
   }
 
@@ -1231,7 +1230,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-icon-filter {
       color: $datagrid-filter-panel-color;
-      
+
       @include dx-icon-sizing($fluent-filter-panel-icon-size);
     }
   }

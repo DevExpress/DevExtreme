@@ -25,9 +25,9 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
   Recurrence: 'recurrenceGroup',
 };
 
-const stylingMode = isFluent(current()) ? 'filled' : undefined;
+const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
-const getDateWithStartHour = (date, startDayHour) => new Date(new Date(date).setHours(startDayHour));
+const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
   const isCurrentDateCorrect = value === null || !!value;
@@ -54,7 +54,7 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
     type: 'required',
   }],
   editorOptions: {
-    stylingMode,
+    stylingMode: getStylingModeFunc(),
     width: '100%',
     calendarOptions: {
       firstDayOfWeek,
@@ -277,7 +277,7 @@ export class AppointmentForm {
           text: messageLocalization.format('dxScheduler-editorLabelTitle'),
         },
         editorOptions: {
-          stylingMode,
+          stylingMode: getStylingModeFunc(),
         },
       },
       {
@@ -310,20 +310,17 @@ export class AppointmentForm {
               const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
               const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
               const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
-              const endDate = dateSerialization.deserializeDate(endDateEditor.option('value'));
 
               if (this.semaphore.isFree() && startDate) {
                 if (value) {
                   const allDayStartDate = dateUtils.trimTime(startDate);
-                  const allDayEndDate = dateUtils.trimTime(endDate);
                   startDateEditor.option('value', new Date(allDayStartDate));
-                  endDateEditor.option('value', new Date(allDayEndDate));
+                  endDateEditor.option('value', new Date(allDayStartDate));
                 } else {
-                  const startDateWithStartHour = getDateWithStartHour(startDate, this.scheduler.getStartDayHour());
-                  const endDateWithStartHour = getDateWithStartHour(endDate, this.scheduler.getStartDayHour());
-                  const calculatedEndDate = this.scheduler.getCalculatedEndDate(endDateWithStartHour);
+                  const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
+                  const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
                   startDateEditor.option('value', startDateWithStartHour);
-                  endDateEditor.option('value', calculatedEndDate);
+                  endDateEditor.option('value', endDate);
                 }
               }
 
@@ -371,7 +368,7 @@ export class AppointmentForm {
           text: messageLocalization.format('dxScheduler-editorLabelDescription'),
         },
         editorOptions: {
-          stylingMode,
+          stylingMode: getStylingModeFunc(),
         },
       },
       {

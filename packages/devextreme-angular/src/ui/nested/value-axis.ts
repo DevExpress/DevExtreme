@@ -20,9 +20,8 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, LabelOverlap, TimeInterval } from 'devextreme/common/charts';
+import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
-import { Font } from 'devextreme/viz/core/base_widget';
 import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
 

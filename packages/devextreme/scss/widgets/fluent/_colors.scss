@@ -141,7 +141,6 @@ $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
 $base-disabled-color: null !default;
 $base-border-color-disabled: null !default;
-$base-dropdown-shadow-color: null !default;
 $scrollview-pulldown-path: null !default;
 
 
@@ -226,7 +225,6 @@ $scrollview-pulldown-path: null !default;
   $base-focus-bg: $base-bg-selected !default;
   $typography-bg: $base-neutral-background2 !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
   $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
   $base-danger-hover: rgba(188, 47, 50, 1) !default; // #bc2f32
@@ -316,10 +314,9 @@ $scrollview-pulldown-path: null !default;
   $base-hover-bg: $base-bg-hover !default;
   $base-inverted-text-color: #000 !default;
   $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: $base-bg-selected !default; 
+  $base-focus-bg: $base-bg-selected !default;
   $typography-bg: $base-neutral-background2 !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 
   $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
   $base-danger-hover: rgba(234, 156, 158, 1) !default; // #EA9C9E

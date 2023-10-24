@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "../sizes" as *;
+@use "./colors" as *;
 
 // adduse
 
@@ -15,10 +16,14 @@ $fluent-invalid-badge-halfhorizontal-padding: math.div($fluent-invalid-badge-hor
 
 $fluent-valid-badge-font-size: $fluent-base-font-size + 6px !default;
 
+$fluent-base-dropdown-widgets-shadow: null !default;
+
 @if $size == "default" {
   $fluent-line-height: 1.428571 !default;
+  $fluent-base-dropdown-widgets-shadow: 0 0 2px 0 $base-dropdown-shadow-color1, 0 8px 16px 0 $base-dropdown-shadow-color2 !default;
 }
 
 @else if $size == "compact" {
   $fluent-line-height: 1.3333 !default;
+  $fluent-base-dropdown-widgets-shadow: 0 0 2px 0 $base-dropdown-shadow-color1, 0 4px 8px 0 $base-dropdown-shadow-color2 !default;
 }

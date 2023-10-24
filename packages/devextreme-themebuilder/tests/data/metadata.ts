@@ -14,6 +14,7 @@ export const metadata: ThemesMetadata = {
     },
   ],
   material: [],
+  fluent: [],
 };
 export const version = '';
 export const dependencies: FlatStylesDependencies = {};

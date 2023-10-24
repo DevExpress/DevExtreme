@@ -7,9 +7,9 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, dxTreeMapNode } from "devextreme/viz/tree_map";
+import type { Font as ChartsFont } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 
-import type * as BaseWidgetTypes from "devextreme/viz/core/base_widget";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -245,7 +245,7 @@ type IGroupProps = React.PropsWithChildren<{
     color?: string;
   };
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     textOverflow?: "ellipsis" | "hide" | "none";
     visible?: boolean;
   };
@@ -273,7 +273,7 @@ class Group extends NestedOption<IGroupProps> {
 // owners:
 // Group
 type IGroupLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
 }>
@@ -302,7 +302,7 @@ class HoverStyle extends NestedOption<IHoverStyleProps> {
 // Group
 // Tile
 type ILabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
@@ -316,7 +316,7 @@ class Label extends NestedOption<ILabelProps> {
 type ILoadingIndicatorProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   show?: boolean;
   text?: string;
   defaultShow?: boolean;
@@ -384,7 +384,7 @@ class Size extends NestedOption<ISizeProps> {
 // owners:
 // Title
 type ISubtitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   offset?: number;
   text?: string;
   textOverflow?: "ellipsis" | "hide" | "none";
@@ -413,7 +413,7 @@ type ITileProps = React.PropsWithChildren<{
     color?: string;
   };
   label?: Record<string, any> | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     textOverflow?: "ellipsis" | "hide" | "none";
     visible?: boolean;
     wordWrap?: "normal" | "breakWord" | "none";
@@ -441,7 +441,7 @@ class Tile extends NestedOption<ITileProps> {
 // owners:
 // Tile
 type ITileLabelProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
@@ -456,7 +456,7 @@ class TileLabel extends NestedOption<ITileLabelProps> {
 // owners:
 // TreeMap
 type ITitleProps = React.PropsWithChildren<{
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -466,7 +466,7 @@ type ITitleProps = React.PropsWithChildren<{
   };
   placeholderSize?: number;
   subtitle?: Record<string, any> | string | {
-    font?: BaseWidgetTypes.Font;
+    font?: ChartsFont;
     offset?: number;
     text?: string;
     textOverflow?: "ellipsis" | "hide" | "none";
@@ -503,7 +503,7 @@ type ITooltipProps = React.PropsWithChildren<{
   cornerRadius?: number;
   customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
-  font?: BaseWidgetTypes.Font;
+  font?: ChartsFont;
   format?: LocalizationTypes.Format;
   opacity?: number;
   paddingLeftRight?: number;
