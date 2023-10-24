@@ -1,5 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -1625,3 +1626,36 @@ test('Warning should be thrown if scrolling is virtual and height is not specifi
     mode: 'virtual',
   },
 }));
+
+test('Warning should not be thrown if scrolling is virtual and height is specified with option', async (t) => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+  await t.expect(warningExists).notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  scrolling: {
+    mode: 'virtual',
+  },
+  height: 200,
+}));
+
+test('Warning should not be thrown if scrolling is virtual and height is specified with css', async (t) => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+  await t.expect(warningExists).notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+
+  await insertStylesheetRulesToPage(`
+    #container {
+      height: 200px;
+    }
+  `);
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
+});
