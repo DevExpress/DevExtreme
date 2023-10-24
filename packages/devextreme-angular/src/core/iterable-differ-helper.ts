@@ -8,6 +8,9 @@ import {
   DxComponent,
 } from './component';
 
+function isIterable(value) {
+  return value && (typeof value[Symbol.iterator] === 'function');
+}
 @Injectable()
 export class IterableDifferHelper {
   private _host: DxComponent;
@@ -55,7 +58,7 @@ export class IterableDifferHelper {
   doCheck(prop: string) {
     if (this._propertyDiffers[prop] && this._host.instance) {
       const hostValue = this._host[prop];
-      const changes = hostValue && (typeof hostValue[Symbol.iterator] === 'function') && this.getChanges(prop, hostValue);
+      const changes = isIterable(hostValue) && this.getChanges(prop, hostValue);
 
       if (changes && !this.checkChangedOptions(prop, hostValue)) {
         this._host.lockWidgetUpdate();
