@@ -1,10 +1,10 @@
-import sh from "shelljs";
-import path from "node:path";
+import sh from 'shelljs';
+import path from 'node:path';
 
 const version = process.argv[2];
 
 if (version == null) {
-    console.error(`Usage: "npm run all:update-version -- $version" (XX.X.X)`);
+    console.error(`Usage: 'npm run all:update-version -- $version' (XX.X.X)`);
     process.exit(1);
 }
 

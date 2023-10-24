@@ -1,5 +1,5 @@
-import sh from "shelljs";
-import path from "node:path";
+import sh from 'shelljs';
+import path from 'node:path';
 
 const MONOREPO_ROOT = path.join(__dirname, '..');
 const INTERNAL_TOOLS_ARTIFACTS = path.join(MONOREPO_ROOT, 'artifacts', 'internal-tools');
@@ -9,7 +9,7 @@ const NPM_OUTPUT_DIR = path.join(OUTPUT_DIR, 'npm');
 
 sh.mkdir('-p', NPM_OUTPUT_DIR);
 
-const { "devextreme-main": devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
+const { 'devextreme-main': devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
 const MAJOR_VERSION = devextremeVersion.split('.').slice(0, 2).join('_');
 
 // Prepare metadata
@@ -46,7 +46,7 @@ sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR
 
 // Update versions for non-semver builds (daily, alpha and beta)
 if (devextremeVersion !== devextremeNpmVersion) {
-    sh.exec(`npm run all:bump -- ${devextremeNpmVersion}`);
+    sh.exec(`npm run all:update-version -- ${devextremeNpmVersion}`);
 }
 
 const DEVEXTREME_NPM_DIR = path.join(MONOREPO_ROOT, 'packages/devextreme/artifacts/npm');

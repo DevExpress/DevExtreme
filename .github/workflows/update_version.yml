@@ -5,14 +5,12 @@ on:
     inputs:
       branch_name:
         type: string
-        description: XX_X (23_2+)
+        description: XX_X Branch name (23_2+)
         required: true
-        default: 23_2
       version:
         type: string
-        description: XX.X.X Set exact version (optional)
+        description: XX.X.X Set exact version
         required: true
-        default: 23.2.1
 
 jobs:
   update_version:
