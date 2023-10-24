@@ -347,7 +347,7 @@ class RowsView extends ColumnsView {
                       if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
                         $rowElement.toggle(item.visible);
                       } else if (columnIndices) {
-                        this._updateCells($rowElement, $newRowElement, columnIndices);
+                        this._updateCells($rowElement, $newRowElement, columnIndices, change);
                       } else {
                         $rowElement.replaceWith($newRowElement);
                       }
