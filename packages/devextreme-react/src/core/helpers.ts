@@ -1,3 +1,11 @@
+import { createContext } from "react";
+import { UpdateLocker } from "./types-new";
+
+export const OnRemovedLockerContext = createContext<UpdateLocker>({
+  lock: () => void 0,
+  unlock: () => void 0
+});
+
 export function generateID(): string {
   return Math.random().toString(36).substr(2);
 }

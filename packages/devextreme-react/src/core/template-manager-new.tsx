@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as events from 'devextreme/events';
-import { useState, useMemo, useCallback, FC } from 'react';
+import { useState, useMemo, useCallback, useRef, FC } from 'react';
 import { TemplateManagerProps, RenderedTemplateInstances, GetRenderFuncFn, DXTemplateCollection, TemplateFunc, TemplateInstanceDefinition } from './types-new';
 import TemplateWrapper from './template-wrapper-new';
 import { DoubleKeyMap } from './helpers';
@@ -22,6 +22,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
   const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
+  const widgetId = useRef('');
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
     if (container.nodeType === Node.ELEMENT_NODE) {
@@ -55,8 +56,10 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         }
 
         return renderedInstances;
-      })
+      });
     };
+
+    const hostWidgetId = widgetId.current;
   
     setRenderedInstances(renderedInstances => {
       renderedInstances.set(key, {
@@ -65,13 +68,15 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         componentKey: getRandomId(),
         onRendered: () => {
           unsubscribeOnRemoval(container, onRemoved);
-          onRendered?.();
+
+          if (hostWidgetId === widgetId.current) {
+            onRendered?.();
+          }
         },
         onRemoved
-      })
+      });
 
       return renderedInstances.shallowCopy();
-      
     });
 
   }, [unsubscribeOnRemoval, getRandomId, createMapKey]);
@@ -117,8 +122,11 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         }, {});
 
       return dxTemplates;
+    }, () => {
+      widgetId.current = getRandomId();
+      setRenderedInstances(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
     });
-  }, [init, getRenderFunc]);
+  }, [init, getRenderFunc, getRandomId]);
 
   if (renderedInstances.empty)
     return null;

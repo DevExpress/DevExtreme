@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
 import { TemplateWrapperProps } from './types-new';
 import * as events from 'devextreme/events';
+import { OnRemovedLockerContext } from './helpers';
 
 const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>, defaultElement: string) => {
   const style = { display: 'none' };
@@ -18,9 +19,24 @@ const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>, 
 };
 
 const TemplateWrapper = memo(function TemplateWrapper({ content, container, onRemoved, onRendered }: TemplateWrapperProps) {
-  const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
+  let onRemovedLock = useRef(0);
 
-  const onTemplateRemoved = useCallback(() => {
+  const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
+  const [onRemovedLocker] = useState({
+    lock: () => onRemovedLock.current++,
+    unlock: () => onRemovedLock.current--
+  });
+
+
+  const element = useRef<HTMLElement>();
+  const hiddenNodeElement = useRef<HTMLElement>();
+  const removalListenerElement = useRef<HTMLElement>();
+
+  const onTemplateRemoved = useCallback((_, args) => {
+    if (args?.fromReactUnmount || onRemovedLock) {
+      return;
+    }
+
     if (element.current) {
       events.off(element.current, DX_REMOVE_EVENT, onTemplateRemoved);
     }
@@ -71,10 +87,6 @@ const TemplateWrapper = memo(function TemplateWrapper({ content, container, onRe
     onRendered();
   }, [onRendered]);
 
-  const element = useRef<HTMLElement>();
-  const hiddenNodeElement = useRef<HTMLElement>();
-  const removalListenerElement = useRef<HTMLElement>();
-
   const hiddenNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
     hiddenNodeElement.current = node as HTMLElement;
     element.current = node?.previousSibling as HTMLElement
@@ -86,9 +98,11 @@ const TemplateWrapper = memo(function TemplateWrapper({ content, container, onRe
 
   return createPortal(
       <>
-        { content }
-        { hiddenNode }
-        { removalListener }
+        <OnRemovedLockerContext.Provider value={onRemovedLocker}>
+          { content }
+          { hiddenNode }
+          { removalListener }
+        </OnRemovedLockerContext.Provider>
       </>,
       container
     );
