@@ -57,6 +57,9 @@ test('ContextMenu items render', async (t) => {
   return createWidget('dxContextMenu', {
     cssClass: 'custom-class',
     items: menuItems,
-    target: 'body',
+    target: '#container',
+    position: {
+      boundaryOffset: '-10 -10',
+    },
   }, '#contextMenu');
 });
