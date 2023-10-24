@@ -750,6 +750,10 @@ const VirtualScrollingRowsViewExtender = (function () {
     },
 
     throwHeightWarningIfNeed() {
+      if (this._hasHeight === undefined) {
+        return;
+      }
+
       const needToThrow = !this._hasHeight && isVirtualPaging(this);
       if (needToThrow && !this._heightWarningIsThrown) {
         this._heightWarningIsThrown = true;
