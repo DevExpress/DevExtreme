@@ -45,8 +45,6 @@ const TABS_INDICATOR_POSITION_BY_TABS_POSITION = {
     left: 'right',
 };
 
-const TABS_INDICATOR_POSITION_DEFAULT = 'bottom';
-
 const TABS_ORIENTATION = {
     horizontal: 'horizontal',
     vertical: 'vertical',
@@ -92,12 +90,14 @@ const TabPanel = MultiView.inherit({
 
             onTitleRendered: null,
 
-            badgeExpr: function(data) { return data ? data.badge : undefined; }
+            badgeExpr: function(data) { return data ? data.badge : undefined; },
 
             /**
             * @name dxTabPanelItem.visible
             * @hidden
             */
+
+            _tabsIndicatorPosition: null,
         });
     },
 
@@ -251,7 +251,19 @@ const TabPanel = MultiView.inherit({
         this.setAria('controls', id, $activeTab);
     },
 
-    _tabConfig: function() {
+    _getTabsIndicatorPosition() {
+        const { _tabsIndicatorPosition, tabsPosition } = this.option();
+
+        if(_tabsIndicatorPosition) {
+            return _tabsIndicatorPosition;
+        } else {
+            return TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
+        }
+    },
+
+    _tabConfig() {
+        const tabsIndicatorPosition = this._getTabsIndicatorPosition();
+
         return {
             selectOnFocus: true,
             focusStateEnabled: this.option('focusStateEnabled'),
@@ -298,7 +310,7 @@ const TabPanel = MultiView.inherit({
             iconPosition: this.option('iconPosition'),
             stylingMode: this.option('stylingMode'),
             _itemAttributes: { class: TABPANEL_TABS_ITEM_CLASS },
-            _indicatorPosition: TABS_INDICATOR_POSITION_DEFAULT,
+            _indicatorPosition: tabsIndicatorPosition,
         };
     },
 
@@ -340,14 +352,6 @@ const TabPanel = MultiView.inherit({
         const newClass = this._getTabPanelTabsPositionClass();
 
         this.$element().addClass(newClass);
-    },
-
-    _updateTabsIndicatorPosition() {
-        const { tabsPosition } = this.option();
-
-        const value = TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
-
-        this._setTabsOption('_indicatorPosition', value);
     },
 
     _updateTabsOrientation() {
@@ -418,6 +422,12 @@ const TabPanel = MultiView.inherit({
     repaint: function() {
         this.callBase();
         this._tabs.repaint();
+    },
+
+    _updateTabsIndicatorPosition() {
+        const value = this._getTabsIndicatorPosition();
+
+        this.option('_tabsIndicatorPosition', value);
     },
 
     _optionChanged: function(args) {
@@ -507,6 +517,9 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'stylingMode':
                 this._setTabsOption('stylingMode', value);
+                break;
+            case '_tabsIndicatorPosition':
+                this._setTabsOption('_indicatorPosition', value);
                 break;
             default:
                 this.callBase(args);
