@@ -16,6 +16,8 @@ QUnit.testStart(() => {
 });
 
 const DX_MENU_CLASS = 'dx-menu';
+const MENU_ITEM_CLASS = 'dx-menu-item';
+const ICON_CLASS = 'dx-icon';
 const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
 const DX_MENU_ITEM_SELECTED_CLASS = 'dx-menu-item-selected';
 const DX_MENU_HORIZONTAL = 'dx-menu-horizontal';
@@ -71,6 +73,26 @@ QUnit.module('Menu rendering', {
 
         assert.ok(menu);
         assert.equal(root.length, 0, 'no root');
+    });
+
+    QUnit.test('Menu icon image should have alt attribute with item text if it specified', function(assert) {
+        const menu = createMenu({
+            items: [{ text: 'Item text', icon: 'some_icon.jpg' }]
+        });
+
+        const $icon = menu.element.find(`.${MENU_ITEM_CLASS} .${ICON_CLASS}`);
+
+        assert.strictEqual($icon.attr('alt'), 'Item text');
+    });
+
+    QUnit.test('Menu icon image should have alt attribute with "dxMenu item icon" if item text is not specified', function(assert) {
+        const menu = createMenu({
+            items: [{ icon: 'some_icon.jpg' }]
+        });
+
+        const $icon = menu.element.find(`.${MENU_ITEM_CLASS} .${ICON_CLASS}`);
+
+        assert.strictEqual($icon.attr('alt'), 'dxMenu item icon');
     });
 });
 

@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../common/sizes" as *;
 @use "../../base/filterBuilder" as * with (
     $filterbuilder-bg: $filterbuilder-bg,
     $filterbuilder-text-color: $filterbuilder-text-color,
