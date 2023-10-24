@@ -48,5 +48,4 @@ const appointments = [{
   text: 'Prepare 2021 Marketing Plan',
   startDate: new Date('2021-04-29T18:00:00.000Z'),
   endDate: new Date('2021-04-29T20:30:00.000Z'),
-},
-];
+}];
