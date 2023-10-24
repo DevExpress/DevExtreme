@@ -140,7 +140,7 @@ const Tabs = CollectionWidget.inherit({
             useInkRipple: false,
             badgeExpr: function(data) { return data ? data.badge : undefined; },
             _itemAttributes: { role: 'tab' },
-            _indicatorPosition: INDICATOR_POSITION.bottom,
+            _indicatorPosition: null,
         });
     },
 
@@ -194,11 +194,12 @@ const Tabs = CollectionWidget.inherit({
 
     _init() {
         const { orientation, stylingMode } = this.option();
+        const indicatorPosition = this._getIndicatorPosition();
 
         this.callBase();
         this.$element().addClass(TABS_CLASS);
         this._toggleOrientationClass(orientation);
-        this._toggleIndicatorPositionClass();
+        this._toggleIndicatorPositionClass(indicatorPosition);
         this._toggleIconPositionClass();
         this._toggleStylingModeClass(stylingMode);
         this._renderWrapper();
@@ -581,29 +582,28 @@ const Tabs = CollectionWidget.inherit({
         this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
     },
 
-    _getIndicatorPositionClass() {
-        const { _indicatorPosition } = this.option();
-        const isVertical = this._isVertical();
-
-        if(isVertical) {
-            if(_indicatorPosition === INDICATOR_POSITION.top) {
-                return INDICATOR_POSITION_CLASS.left;
-            } else if(_indicatorPosition === INDICATOR_POSITION.bottom) {
-                return INDICATOR_POSITION_CLASS.right;
-            }
-        } else {
-            if(_indicatorPosition === INDICATOR_POSITION.right) {
-                return INDICATOR_POSITION_CLASS.bottom;
-            } else if(_indicatorPosition === INDICATOR_POSITION.left) {
-                return INDICATOR_POSITION_CLASS.top;
-            }
-        }
-
-        return INDICATOR_POSITION_CLASS[_indicatorPosition];
+    _getIndicatorPositionClass(indicatorPosition) {
+        return INDICATOR_POSITION_CLASS[indicatorPosition];
     },
 
-    _toggleIndicatorPositionClass() {
-        const newClass = this._getIndicatorPositionClass();
+    _getIndicatorPosition() {
+        const { _indicatorPosition, rtlEnabled } = this.option();
+
+        if(_indicatorPosition) {
+            return _indicatorPosition;
+        }
+
+        const isVertical = this._isVertical();
+
+        if(rtlEnabled) {
+            return isVertical ? INDICATOR_POSITION.left : INDICATOR_POSITION.bottom;
+        } else {
+            return isVertical ? INDICATOR_POSITION.right : INDICATOR_POSITION.bottom;
+        }
+    },
+
+    _toggleIndicatorPositionClass(indicatorPosition) {
+        const newClass = this._getIndicatorPositionClass(indicatorPosition);
 
         this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
     },
@@ -711,7 +711,8 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'orientation': {
                 this._toggleOrientationClass(args.value);
-                this._toggleIndicatorPositionClass();
+                const indicatorPosition = this._getIndicatorPosition();
+                this._toggleIndicatorPositionClass(indicatorPosition);
                 if(!this._isServerSide()) {
                     this._updateScrollable();
                 }
@@ -732,8 +733,7 @@ const Tabs = CollectionWidget.inherit({
                 break;
             }
             case '_indicatorPosition': {
-                // TODO: ADD TEST
-                this._toggleIndicatorPositionClass();
+                this._toggleIndicatorPositionClass(args.value);
                 break;
             }
             default:
