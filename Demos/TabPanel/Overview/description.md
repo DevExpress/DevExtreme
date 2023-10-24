@@ -2,13 +2,13 @@ The [TabPanel](/Documentation/ApiReference/UI_Components/dxTabPanel/) UI compone
 
 To get started with the DevExtreme TabPanel component, refer to the following tutorial for step-by-step instructions: [Getting Started with TabPanel](/Documentation/Guide/UI_Components/TabPanel/Getting_Started_with_TabPanel/).
 
-### Generate Similar Tabs Based on a Data Source       
+## Generate Similar Tabs Based on a Data Source       
 
 To generate similar tabs and views, bind the TabPanel to data. Use the [items[]](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/items/) or [dataSource](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#dataSource) property to do this. Both these properties can work with local arrays, but **dataSource** also accepts a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object. You can use this object if you need to process the local array or fetch the array from a remote data source. In this demo, the **dataSource** property is set to a local array.
 
 Each object in the **items[]** or **dataSource** array can contain predefined fields, such as **title** or **icon** (see the [items[]](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/items/) section for the full list). The TabPanel automatically recognizes these fields and creates the default tab and view appearance based on them.
 
-# Customize Tab Contents and Appearance
+## Customize Tab Contents and Appearance
 
 You can initialize a tab’s contents (text, icons and badges) with values from underlying data objects.
 
