@@ -14,10 +14,6 @@ const playgroundsPath = path.join(MONOREPO_ROOT, 'playgrounds', '**', 'package.j
 
 sh.exec(`npm version ${version} -ws --include-workspace-root --git-tag-version=false --workspaces-update=false`);
 
-const setStrictVersion = /.*-(build|alpha|beta).*/.test(version);
-
-if (setStrictVersion) {
-    sh.sed('-i', /"devextreme(-angular|-react|-vue)?": ".*"/, `"devextreme$1": "${version}"`, [packagesPath, playgroundsPath]);
-}
+sh.sed('-i', /"devextreme(-angular|-react|-vue)?": ".*"/, `"devextreme$1": "~${version}"`, [packagesPath, playgroundsPath]);
 
 sh.exec('npm i');
