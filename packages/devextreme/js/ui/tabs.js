@@ -709,6 +709,12 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollToItem(args.value);
                 break;
             }
+            case 'rtlEnabled': {
+                this.callBase(args);
+                const indicatorPosition = this._getIndicatorPosition();
+                this._toggleIndicatorPositionClass(indicatorPosition);
+                break;
+            }
             case 'orientation': {
                 this._toggleOrientationClass(args.value);
                 const indicatorPosition = this._getIndicatorPosition();
