@@ -18,7 +18,7 @@ test('ContextMenu items render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await contextMenu.show();
-  await t.debug();
+
   await t.click(contextMenu.items.nth(0));
 
   const screenshotName = 'ContextMenu items render.png';
