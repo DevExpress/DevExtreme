@@ -2803,6 +2803,41 @@ QUnit.module('Headers with band columns', {
             assert.strictEqual($(headerCellElement).attr('rowspan'), undefined);
         });
     });
+
+    // T1193153
+    QUnit.test('setColumnWidths - the command column should have the correct minWidth, width, maxWidth when there are band columns', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.columns = [{
+            caption: 'Band column 1',
+            columns: [{
+                caption: 'column 1',
+                width: 150
+            }]
+        }, {
+            caption: 'Default column'
+        }, {
+            type: 'buttons',
+            width: 50,
+            command: 'edit',
+            visible: true,
+            cssClass: 'dx-command-edit',
+        }];
+        this.options.columnAutoWidth = true;
+        this.setupDataGrid();
+        this.columnHeadersView.render($testElement);
+
+        // act
+        this.columnHeadersView.setColumnWidths({ widths: [150, 666, 50] });
+
+        // assert
+        const commandCell = $testElement.find('td').get(2);
+        assert.ok($(commandCell).hasClass('dx-command-edit'), 'command column');
+        assert.strictEqual(commandCell.style.width, '50px', 'width of the command column');
+        assert.strictEqual(commandCell.style.minWidth, '50px', 'minWidth of the command column');
+        assert.strictEqual(commandCell.style.maxWidth, '50px', 'maxWidth of the command column');
+    });
 });
 
 QUnit.module('Multiple sorting', {
