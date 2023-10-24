@@ -1625,6 +1625,9 @@ test('Warning should be thrown if scrolling is virtual and height is not specifi
   scrolling: {
     mode: 'virtual',
   },
+  dataSource: [
+    { column: 'value' },
+  ],
 }));
 
 test('Warning should not be thrown if scrolling is virtual and height is specified with option', async (t) => {
@@ -1636,6 +1639,9 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
   scrolling: {
     mode: 'virtual',
   },
+  dataSource: [
+    { column: 'value' },
+  ],
   height: 200,
 }));
 
@@ -1649,6 +1655,9 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
     scrolling: {
       mode: 'virtual',
     },
+    dataSource: [
+      { column: 'value' },
+    ],
   });
 
   await insertStylesheetRulesToPage(`
