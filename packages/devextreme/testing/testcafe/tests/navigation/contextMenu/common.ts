@@ -18,7 +18,7 @@ test('ContextMenu items render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await contextMenu.show();
-
+  await t.debug();
   await t.click(contextMenu.items.nth(0));
 
   const screenshotName = 'ContextMenu items render.png';
@@ -57,9 +57,9 @@ test('ContextMenu items render', async (t) => {
   return createWidget('dxContextMenu', {
     cssClass: 'custom-class',
     items: menuItems,
-    target: '#container',
+    target: 'body',
     position: {
-      boundaryOffset: '-10 -10',
+      offset: '10 10',
     },
   }, '#contextMenu');
 });
