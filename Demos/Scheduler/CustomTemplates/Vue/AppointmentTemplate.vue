@@ -2,7 +2,7 @@
   <div class="showtime-preview">
     <div> {{ movieData.text }}</div>
     <div>
-      Ticket Price: <strong>{{ '$' + templateModel.targetedAppointmentData.price }}</strong>
+      Ticket Price: <strong>${{ templateModel.targetedAppointmentData.price }}</strong>
     </div>
     <div>
       {{ getFormatDate(templateModel.targetedAppointmentData.displayStartDate) }} -
@@ -10,48 +10,31 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import { formatDate } from 'devextreme/localization';
-import DxButton from 'devextreme-vue/button';
 import Query from 'devextreme/data/query';
 
 import { moviesData } from './data.js';
 
-const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const props = withDefaults(defineProps<{
+  scheduler?: any
+  templateModel?: any
+}>(), {
+  scheduler: () => ({ }),
+  templateModel: () => { },
+});
 
+function getFormatDate(value) {
+  return formatDate(value, 'shortTime');
+}
 const getMovieById = function(resourceId) {
   return Query(moviesData)
-    .filter('id', resourceId)
+    .filter(['id', resourceId])
     .toArray()[0];
 };
 
-export default {
-  components: {
-    DxButton,
-  },
-  props: {
-    scheduler: {
-      type: Object,
-      default: () => { },
-    },
-    templateModel: {
-      type: Object,
-      default: () => { },
-    },
-  },
-  data() {
-    return {
-      dayOfWeekNames,
-      movieData: getMovieById(this.templateModel.targetedAppointmentData.movieId),
-    };
-  },
-  methods: {
-    getFormatDate(value) {
-      return formatDate(value, 'shortTime');
-    },
-  },
-};
+const movieData = getMovieById(props.templateModel.targetedAppointmentData.movieId);
+
 </script>
 <style scoped>
   .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {

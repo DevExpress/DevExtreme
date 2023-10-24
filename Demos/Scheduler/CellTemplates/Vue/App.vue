@@ -41,76 +41,54 @@
 
   </DxScheduler>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import { DxScheduler } from 'devextreme-vue/scheduler';
 import notify from 'devextreme/ui/notify';
 import { data, holidays } from './data.js';
 import Utils from './utils.js';
-
 import DataCell from './DataCell.vue';
 import DataCellMonth from './DataCellMonth.vue';
 import DateCell from './DateCell.vue';
 import TimeCell from './TimeCell.vue';
 
-export default {
-  components: {
-    DxScheduler,
-    DataCell,
-    DataCellMonth,
-    DateCell,
-    TimeCell,
-  },
-  data() {
-    return {
-      views: ['workWeek', 'month'],
-      currentView: 'workWeek',
-      currentDate: new Date(2021, 3, 27),
-      dataSource: data,
-    };
-  },
-  computed: {
-    isMonthView() {
-      return this.currentView === 'month';
-    },
-  },
-  methods: {
-    onAppointmentFormOpening(e) {
-      const startDate = new Date(e.appointmentData.startDate);
-      if (!Utils.isValidAppointmentDate(startDate)) {
-        e.cancel = true;
-        this.notifyDisableDate();
-      }
-      this.applyDisableDatesToDateEditors(e.form);
-    },
+const views = ['workWeek', 'month'];
+const currentView = ref('workWeek');
+const currentDate = new Date(2021, 3, 27);
+const dataSource = data;
 
-    onAppointmentAdding(e) {
-      const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
-      if (!isValidAppointment) {
-        e.cancel = true;
-        this.notifyDisableDate();
-      }
-    },
+const isMonthView = computed(() => currentView.value === 'month');
 
-    onAppointmentUpdating(e) {
-      const isValidAppointment = Utils.isValidAppointment(e.component, e.newData);
-      if (!isValidAppointment) {
-        e.cancel = true;
-        this.notifyDisableDate();
-      }
-    },
+function onAppointmentFormOpening(e) {
+  const startDate = new Date(e.appointmentData.startDate);
+  if (!Utils.isValidAppointmentDate(startDate)) {
+    e.cancel = true;
+    notifyDisableDate();
+  }
+  applyDisableDatesToDateEditors(e.form);
+}
+function onAppointmentAdding(e) {
+  const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
+  if (!isValidAppointment) {
+    e.cancel = true;
+    notifyDisableDate();
+  }
+}
+function onAppointmentUpdating(e) {
+  const isValidAppointment = Utils.isValidAppointment(e.component, e.newData);
+  if (!isValidAppointment) {
+    e.cancel = true;
+    notifyDisableDate();
+  }
+}
+function notifyDisableDate() {
+  notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
+}
+function applyDisableDatesToDateEditors(form) {
+  const startDateEditor = form.getEditor('startDate');
+  startDateEditor.option('disabledDates', holidays);
 
-    notifyDisableDate() {
-      notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
-    },
-
-    applyDisableDatesToDateEditors(form) {
-      const startDateEditor = form.getEditor('startDate');
-      startDateEditor.option('disabledDates', holidays);
-
-      const endDateEditor = form.getEditor('endDate');
-      endDateEditor.option('disabledDates', holidays);
-    },
-  },
-};
+  const endDateEditor = form.getEditor('endDate');
+  endDateEditor.option('disabledDates', holidays);
+}
 </script>

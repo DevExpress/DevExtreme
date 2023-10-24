@@ -1,16 +1,15 @@
 <template>
   <div>
     <DxScheduler
-      :ref="schedulerRef"
+      ref="schedulerRef"
       time-zone="America/Los_Angeles"
       :data-source="dataSource"
-      v-model:current-date="currentDate"
+      :current-date="currentDate"
       :cell-duration="cellDuration"
       :views="views"
       :height="590"
       :start-day-hour="9"
       :adaptivity-enabled="true"
-      :on-content-ready="onContentReady"
       current-view="month"
     >
       <DxResource
@@ -25,35 +24,18 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 import DxSpeedDialAction from 'devextreme-vue/speed-dial-action';
-
 import { data, priorities } from './data.js';
 
-const schedulerRef = 'scheduler-ref';
-
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DxSpeedDialAction,
-  },
-  data() {
-    return {
-      views: ['week', 'month'],
-      currentDate: new Date(2021, 2, 25),
-      cellDuration: 30,
-      dataSource: data,
-      priorities,
-      schedulerRef,
-    };
-  },
-  methods: {
-    showPopup() {
-      this.$refs[schedulerRef].instance.showAppointmentPopup();
-    },
-  },
-};
+const views = ['week', 'month'];
+const currentDate = new Date(2021, 2, 25);
+const cellDuration = 30;
+const dataSource = data;
+const schedulerRef = ref<DxScheduler>();
+function showPopup() {
+  schedulerRef.value!.instance!.showAppointmentPopup();
+}
 </script>

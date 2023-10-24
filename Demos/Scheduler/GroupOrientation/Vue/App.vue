@@ -31,28 +31,14 @@
     />
   </DxScheduler>
 </template>
-<script>
-
+<script setup lang="ts">
 import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler';
-
 import { data, priorityData } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DxView,
-  },
-  data() {
-    return {
-      currentView: 'Vertical Grouping',
-      groups: ['priorityId'],
-      currentDate: new Date(2021, 3, 21),
-      dataSource: data,
-      priorityData,
-    };
-  },
-};
+const currentView = 'Vertical Grouping';
+const groups = ['priorityId'];
+const currentDate = new Date(2021, 3, 21);
+const dataSource = data;
 </script>
 
 <style scoped>

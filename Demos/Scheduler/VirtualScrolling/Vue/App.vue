@@ -33,25 +33,12 @@
     />
   </DxScheduler>
 </template>
-<script>
+<script setup lang="ts">
 import DxScheduler, { DxResource, DxView, DxScrolling } from 'devextreme-vue/scheduler';
 import { resources, generateAppointments } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DxView,
-    DxScrolling,
-  },
-  data() {
-    return {
-      dataSource: generateAppointments(new Date(2021, 1, 1), new Date(2021, 1, 28), 8, 20),
-      currentDate: new Date(2021, 1, 2),
-      currentView: 'Timeline',
-      groups: ['humanId'],
-      resources,
-    };
-  },
-};
+const dataSource = generateAppointments(new Date(2021, 1, 1), new Date(2021, 1, 28), 8, 20);
+const currentDate = new Date(2021, 1, 2);
+const currentView = 'Timeline';
+const groups = ['humanId'];
 </script>

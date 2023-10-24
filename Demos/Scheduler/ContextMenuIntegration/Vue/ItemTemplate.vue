@@ -9,20 +9,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    itemData: {
-      type: Object,
-      default() { },
-    },
-  },
-  data() {
-    return {
-      styleObject: { backgroundColor: this.itemData.color },
-    };
-  },
-};
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const props = withDefaults(defineProps<{
+  itemData?: any
+}>(), {
+  itemData: () => {},
+});
+
+const styleObject = ref({ backgroundColor: props.itemData.color });
 </script>
 
 <style scoped>

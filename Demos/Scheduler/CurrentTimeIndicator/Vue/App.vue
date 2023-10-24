@@ -65,48 +65,30 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 import { DxSwitch } from 'devextreme-vue/switch';
 import { DxNumberBox } from 'devextreme-vue/number-box';
-
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import { data, moviesData } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DxSwitch,
-    DxNumberBox,
-    AppointmentTemplate,
-  },
-  data() {
-    return {
-      views: ['week', 'timelineWeek'],
-      currentDate: new Date(),
-      showCurrentTimeIndicator: true,
-      shadeUntilCurrentTime: true,
-      updateInterval: 10,
-      dataSource: data,
-      moviesData,
-    };
-  },
-  methods: {
-    onContentReady(e) {
-      e.component.scrollTo(new Date());
-    },
+const views = ['week', 'timelineWeek'];
+const currentDate = new Date();
+const showCurrentTimeIndicator = ref(true);
+const shadeUntilCurrentTime = ref(true);
+const updateInterval = ref(10);
+const dataSource = data;
 
-    onAppointmentClick(e) {
-      e.cancel = true;
-    },
-
-    onAppointmentDblClick(e) {
-      e.cancel = true;
-    },
-  },
-};
+function onContentReady(e) {
+  e.component.scrollTo(new Date());
+}
+function onAppointmentClick(e) {
+  e.cancel = true;
+}
+function onAppointmentDblClick(e) {
+  e.cancel = true;
+}
 </script>
 
 <style scoped>

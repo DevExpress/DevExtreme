@@ -7,30 +7,22 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
 import Utils from './utils.js';
 
-export default {
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  computed: {
-    isDinner() {
-      const { date } = this.cellData;
-      return Utils.isDinner(date);
-    },
-    hasCoffeeCupIcon() {
-      const { date } = this.cellData;
-      return Utils.hasCoffeeCupIcon(date);
-    },
-  },
-  methods: {
-    markTimeCell(cellData) {
-      return { dinner: Utils.isDinner(cellData.date) };
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  cellData?: any
+}>(), {
+  cellData: () => {},
+});
+
+const hasCoffeeCupIcon = computed(() => {
+  const { date } = props.cellData;
+  return Utils.hasCoffeeCupIcon(date);
+});
+
+function markTimeCell(cellData) {
+  return { dinner: Utils.isDinner(cellData.date) };
+}
 </script>

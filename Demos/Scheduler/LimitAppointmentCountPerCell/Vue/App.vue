@@ -31,23 +31,10 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import DxScheduler, { DxResource, DxView } from 'devextreme-vue/scheduler';
-
 import { resourcesData, data } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DxView,
-  },
-  data() {
-    return {
-      currentDate: new Date(2021, 2, 25),
-      dataSource: data,
-      resourcesData,
-    };
-  },
-};
+const currentDate = new Date(2021, 2, 25);
+const dataSource = data;
 </script>

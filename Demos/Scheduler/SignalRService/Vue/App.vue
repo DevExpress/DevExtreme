@@ -39,14 +39,16 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxScheduler from 'devextreme-vue/scheduler';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { createStore as createAspNetDataStore } from 'devextreme-aspnet-data-nojquery';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 
+const views = ['day', 'workWeek'];
+const currentDate = new Date(2021, 3, 27);
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
 const url = `${BASE_PATH}api/SchedulerSignalR`;
-const createStore = () => AspNetData.createStore({
+const createStore = () => createAspNetDataStore({
   key: 'AppointmentId',
   loadUrl: url,
   insertUrl: url,
@@ -58,14 +60,12 @@ const createStore = () => AspNetData.createStore({
 });
 const store1 = createStore();
 const store2 = createStore();
-
 const connection = new HubConnectionBuilder()
   .withUrl(`${BASE_PATH}schedulerSignalRHub`, {
     skipNegotiation: true,
     transport: HttpTransportType.WebSockets,
   })
   .build();
-
 connection
   .start()
   .then(() => {
@@ -84,20 +84,6 @@ connection
       store2.push([{ type: 'remove', key }]);
     });
   });
-
-export default {
-  components: {
-    DxScheduler,
-  },
-  data() {
-    return {
-      views: ['day', 'workWeek'],
-      currentDate: new Date(2021, 3, 27),
-      store1,
-      store2,
-    };
-  },
-};
 </script>
 <style scoped>
 .schedulers {

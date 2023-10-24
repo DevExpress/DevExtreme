@@ -6,23 +6,16 @@
     {{ day() }}
   </DataCell>
 </template>
-<script>
+<script setup lang="ts">
 import DataCell from './DataCell.vue';
 
-export default {
-  components: {
-    DataCell,
-  },
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  methods: {
-    day() {
-      return this.cellData.startDate.getDate();
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  cellData?: any
+}>(), {
+  cellData: () => {},
+});
+
+function day() {
+  return props.cellData.startDate.getDate();
+}
 </script>

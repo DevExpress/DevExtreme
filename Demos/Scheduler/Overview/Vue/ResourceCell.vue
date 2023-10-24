@@ -19,16 +19,12 @@
     </div>
   </div>
 </template>
-<script>
-
-export default {
-  props: {
-    employee: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  employee?: any
+}>(), {
+  employee: () => {},
+});
 </script>
 <style>
 .avatar {

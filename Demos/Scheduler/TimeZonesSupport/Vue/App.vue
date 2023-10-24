@@ -28,58 +28,43 @@
     </DxScheduler>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxScheduler, { DxEditing } from 'devextreme-vue/scheduler';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { getTimeZones } from 'devextreme/time_zone_utils';
-
+import { getTimeZones as getTimeZonesUtility } from 'devextreme/time_zone_utils';
 import { data, locations } from './data.js';
 
-const getDefaultTimeZones = function(date) {
-  return getTimeZones(date).filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
-};
-
+const views = ['workWeek'];
+const dataSource = data;
 const currentDate = new Date(2021, 3, 27);
-const timeZones = getDefaultTimeZones(currentDate);
 
-export default {
-  components: {
-    DxScheduler,
-    DxSelectBox,
-    DxEditing,
-  },
-  data() {
-    return {
-      views: ['workWeek'],
-      currentDate,
-      currentTimeZone: timeZones[0].id,
-      dataSource: data,
-      timeZones,
-    };
-  },
-  methods: {
-    onAppointmentFormOpening(args) {
-      const { form } = args;
-
-      const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-      const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-      const startDateDataSource = startDateTimezoneEditor.option('dataSource');
-      const endDateDataSource = endDateTimezoneEditor.option('dataSource');
-
-      startDateDataSource.filter(['id', 'contains', 'Europe']);
-      endDateDataSource.filter(['id', 'contains', 'Europe']);
-
-      startDateDataSource.load();
-      endDateDataSource.load();
-    },
-    onOptionChanged(args) {
-      if (args.name === 'currentDate') {
-        this.timeZones = getDefaultTimeZones(args.value);
-      }
-    },
-  },
+const getTimeZones = function(date) {
+  const timeZones = getTimeZonesUtility(date);
+  return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
 };
+
+const timeZones = ref(getTimeZones(currentDate));
+const currentTimeZone = ref(timeZones.value[0].id);
+function onAppointmentFormOpening(args) {
+  const { form } = args;
+
+  const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+  const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+  const startDateDataSource = startDateTimezoneEditor.option('dataSource');
+  const endDateDataSource = endDateTimezoneEditor.option('dataSource');
+
+  startDateDataSource.filter(['id', 'contains', 'Europe']);
+  endDateDataSource.filter(['id', 'contains', 'Europe']);
+
+  startDateDataSource.load();
+  endDateDataSource.load();
+}
+function onOptionChanged(args) {
+  if (args.name === 'currentDate') {
+    timeZones.value = getTimeZones(args.value);
+  }
+}
 </script>
 
 <style scoped>

@@ -43,40 +43,23 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
-
 import DxRadioGroup from 'devextreme-vue/radio-group';
-
 import {
   resourcesList, data, priorities, assignees, rooms,
 } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DxRadioGroup,
-  },
-  data() {
-    return {
-      views: ['workWeek'],
-      currentDate: new Date(2021, 3, 27),
-      currentResource: 'Assignee',
-      dataSource: data,
-      resources: resourcesList,
-      assignees,
-      priorities,
-      rooms,
-    };
-  },
-  methods: {
-    onRadioGroupValueChanged(e) {
-      this.radioGroupValue = e.value;
-    },
-  },
-};
+const views = ['workWeek'];
+const currentDate = new Date(2021, 3, 27);
+const currentResource = ref('Assignee');
+const dataSource = data;
+const resources = resourcesList;
+
+function onRadioGroupValueChanged(e) {
+  currentResource.value = e.value;
+}
 </script>
 
 <style scoped>

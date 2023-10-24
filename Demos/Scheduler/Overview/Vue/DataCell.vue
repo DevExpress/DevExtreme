@@ -7,45 +7,39 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  methods: {
-    markWeekEnd(cellData) {
-      function isWeekEnd(date) {
-        const day = date.getDay();
-        return day === 0 || day === 6;
-      }
-      const classObject = {};
-      classObject[`employee-${cellData.groups.employeeID}`] = true;
-      classObject[`employee-weekend-${cellData.groups.employeeID}`] = isWeekEnd(cellData.startDate);
-      return classObject;
-    },
+<script setup lang="ts">
+withDefaults(defineProps<{
+  cellData?: any
+}>(), {
+  cellData: () => {},
+});
 
-    markTraining(cellData) {
-      const classObject = {
-        'day-cell': true,
-      };
+function markWeekEnd(cellData) {
+  function isWeekEnd(date) {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  }
+  const classObject = {};
+  classObject[`employee-${cellData.groups.employeeID}`] = true;
+  classObject[`employee-weekend-${cellData.groups.employeeID}`] = isWeekEnd(cellData.startDate);
+  return classObject;
+}
+function markTraining(cellData) {
+  const classObject = {
+    'day-cell': true,
+  };
 
-      classObject[
-        this.getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)
-      ] = true;
-      return classObject;
-    },
+  classObject[
+    getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)
+  ] = true;
+  return classObject;
+}
+function getCurrentTraining(date, employeeID) {
+  const result = (date + employeeID) % 3;
+  const currentTraining = `training-background-${result}`;
 
-    getCurrentTraining(date, employeeID) {
-      const result = (date + employeeID) % 3;
-      const currentTraining = `training-background-${result}`;
-
-      return currentTraining;
-    },
-  },
-};
+  return currentTraining;
+}
 </script>
 <style>
 .day-cell {

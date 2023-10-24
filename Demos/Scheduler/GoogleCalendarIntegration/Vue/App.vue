@@ -19,37 +19,27 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import 'whatwg-fetch';
 import DxScheduler from 'devextreme-vue/scheduler';
 import CustomStore from 'devextreme/data/custom_store';
 
-export default {
-  components: {
-    DxScheduler,
-  },
-  data() {
-    return {
-      views: ['day', 'workWeek', 'month'],
-      currentDate: new Date(2017, 4, 25),
-      dataSource: new CustomStore({
-        load: (options) => this.getData(options, { showDeleted: false }),
-      }),
-    };
-  },
-  methods: {
-    getData(_, requestOptions) {
-      const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k';
-      const CALENDAR_ID = 'f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com';
-      const dataUrl = ['https://www.googleapis.com/calendar/v3/calendars/',
-        CALENDAR_ID, '/events?key=', PUBLIC_KEY].join('');
+const views = ['day', 'workWeek', 'month'];
+const currentDate = new Date(2017, 4, 25);
+const dataSource = new CustomStore({
+  load: (options) => getData(options, { showDeleted: false }),
+});
 
-      return fetch(dataUrl, requestOptions).then(
-        (response) => response.json(),
-      ).then((data) => data.items);
-    },
-  },
-};
+function getData(_, requestOptions) {
+  const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k';
+  const CALENDAR_ID = 'f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com';
+  const dataUrl = ['https://www.googleapis.com/calendar/v3/calendars/',
+    CALENDAR_ID, '/events?key=', PUBLIC_KEY].join('');
+
+  return fetch(dataUrl, requestOptions).then(
+    (response) => response.json(),
+  ).then((data) => data.items);
+}
 </script>
 <style>
 .long-title h3 {

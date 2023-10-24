@@ -27,25 +27,12 @@
     />
   </DxScheduler>
 </template>
-<script>
+<script setup lang="ts">
 import { DxScheduler, DxResource } from 'devextreme-vue/scheduler';
-
 import { data, priorityData, resourcesData } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-  },
-  data() {
-    return {
-      views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
-      groups: ['priority'],
-      currentDate: new Date(2021, 1, 2),
-      dataSource: data,
-      priorityData,
-      resourcesData,
-    };
-  },
-};
+const views = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const groups = ['priority'];
+const currentDate = new Date(2021, 1, 2);
+const dataSource = data;
 </script>

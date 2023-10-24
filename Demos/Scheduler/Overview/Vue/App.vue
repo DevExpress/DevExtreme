@@ -34,32 +34,16 @@
     </template>
   </DxScheduler>
 </template>
-<script>
-
+<script setup lang="ts">
 import { DxScheduler, DxResource } from 'devextreme-vue/scheduler';
-
 import { employees, data } from './data.js';
-
 import DataCell from './DataCell.vue';
 import ResourceCell from './ResourceCell.vue';
 
-export default {
-  components: {
-    DxScheduler,
-    DxResource,
-    DataCell,
-    ResourceCell,
-  },
-  data() {
-    return {
-      groups: ['employeeID'],
-      views: ['month'],
-      currentDate: new Date(2021, 5, 2, 11, 30),
-      employees,
-      dataSource: data,
-    };
-  },
-};
+const groups = ['employeeID'];
+const views = ['month'];
+const currentDate = new Date(2021, 5, 2, 11, 30);
+const dataSource = data;
 </script>
 <style>
 .dx-scheduler-group-header,

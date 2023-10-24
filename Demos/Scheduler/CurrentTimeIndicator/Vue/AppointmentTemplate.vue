@@ -5,29 +5,22 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import Query from 'devextreme/data/query';
-
 import { moviesData } from './data.js';
 
+const props = withDefaults(defineProps<{
+  appointmentModel?: {
+    appointmentData?: any
+  }
+}>(), {
+  appointmentModel: () => ({}),
+});
 const getMovieInfo = function(data) {
   return Query(moviesData)
-    .filter('id', data.movieId)
+    .filter(['id', data.movieId])
     .toArray()[0] || {};
 };
+const movieInfo = getMovieInfo(props.appointmentModel.appointmentData);
 
-export default {
-  props: {
-    appointmentModel: {
-      type: Object,
-      default: () => { },
-    },
-  },
-  data() {
-    return {
-      moviesData,
-      movieInfo: getMovieInfo(this.appointmentModel.appointmentData),
-    };
-  },
-};
 </script>

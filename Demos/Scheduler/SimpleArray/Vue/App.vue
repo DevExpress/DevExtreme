@@ -9,22 +9,11 @@
     current-view="week"
   />
 </template>
-<script>
-
+<script setup lang="ts">
 import DxScheduler from 'devextreme-vue/scheduler';
-
 import { data } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-  },
-  data() {
-    return {
-      views: ['week', 'month'],
-      currentDate: new Date(2021, 2, 28),
-      dataSource: data,
-    };
-  },
-};
+const views = ['week', 'month'];
+const currentDate = new Date(2021, 2, 28);
+const dataSource = data;
 </script>

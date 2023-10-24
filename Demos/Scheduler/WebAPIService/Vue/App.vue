@@ -18,31 +18,21 @@
     recurrence-exception-expr="RecurrenceException"
   />
 </template>
-<script>
+<script setup lang="ts">
 import DxScheduler from 'devextreme-vue/scheduler';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
-
-export default {
-  components: {
-    DxScheduler,
+const views = ['day', 'workWeek', 'month'];
+const currentDate = new Date(2021, 3, 27);
+const dataSource = createStore({
+  key: 'AppointmentId',
+  loadUrl: `${url}/Get`,
+  insertUrl: `${url}/Post`,
+  updateUrl: `${url}/Put`,
+  deleteUrl: `${url}/Delete`,
+  onBeforeSend(_, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
   },
-  data() {
-    return {
-      views: ['day', 'workWeek', 'month'],
-      currentDate: new Date(2021, 3, 27),
-      dataSource: AspNetData.createStore({
-        key: 'AppointmentId',
-        loadUrl: `${url}/Get`,
-        insertUrl: `${url}/Post`,
-        updateUrl: `${url}/Put`,
-        deleteUrl: `${url}/Delete`,
-        onBeforeSend(_, ajaxOptions) {
-          ajaxOptions.xhrFields = { withCredentials: true };
-        },
-      }),
-    };
-  },
-};
+});
 </script>

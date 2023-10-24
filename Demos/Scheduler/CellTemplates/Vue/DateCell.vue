@@ -3,27 +3,21 @@
     {{ cellData.text }}
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import Utils from './utils.js';
 
-export default {
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-    currentView: {
-      type: String,
-      default: '',
-    },
-  },
-  methods: {
-    markDateCell(cellData, currentView) {
-      const isDisabled = currentView === 'month'
-        ? Utils.isWeekend(cellData.date)
-        : Utils.isDisableDate(cellData.date);
-      return { 'disable-date': isDisabled };
-    },
-  },
-};
+withDefaults(defineProps<{
+  cellData?: any
+  currentView?: string
+}>(), {
+  cellData: () => {},
+  currentView: '',
+});
+
+function markDateCell(cellData, currentView) {
+  const isDisabled = currentView === 'month'
+    ? Utils.isWeekend(cellData.date)
+    : Utils.isDisableDate(cellData.date);
+  return { 'disable-date': isDisabled };
+}
 </script>

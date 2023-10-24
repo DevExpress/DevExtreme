@@ -24,33 +24,21 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxScheduler from 'devextreme-vue/scheduler';
 import { DxRadioGroup } from 'devextreme-vue/radio-group';
-
 import { data } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxRadioGroup,
+const currentDate = new Date(2021, 2, 28);
+const views = [
+  {
+    type: 'day',
+    name: '4 Days',
+    intervalCount: 4,
   },
-  data() {
-    return {
-      currentDate: new Date(2021, 2, 28),
-      views: [
-        {
-          type: 'day',
-          name: '4 Days',
-          intervalCount: 4,
-        },
-        'week',
-      ],
-      allDayPanelItems: ['all', 'allDay', 'hidden'],
-      allDayPanelMode: 'allDay',
-      data,
-    };
-  },
-};
+  'week',
+];
+const allDayPanelItems = ['all', 'allDay', 'hidden'];
+const allDayPanelMode = ref('allDay');
 </script>

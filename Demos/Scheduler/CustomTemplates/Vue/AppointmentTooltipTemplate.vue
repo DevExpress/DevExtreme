@@ -13,38 +13,24 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import Query from 'devextreme/data/query';
-
 import { moviesData } from './data.js';
 
-const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const props = withDefaults(defineProps<{
+  scheduler?: any
+  templateTooltipModel?: any
+}>(), {
+  scheduler: () => { },
+  templateTooltipModel: () => { },
+});
 
 const getMovieById = function(resourceId) {
   return Query(moviesData)
-    .filter('id', resourceId)
+    .filter(['id', resourceId])
     .toArray()[0];
 };
-
-export default {
-  props: {
-    scheduler: {
-      type: Object,
-      default: () => { },
-    },
-    templateTooltipModel: {
-      type: Object,
-      default: () => { },
-    },
-  },
-  data() {
-    return {
-      dayOfWeekNames,
-      movieData: getMovieById(this.templateTooltipModel.appointmentData.movieId),
-    };
-  },
-};
+const movieData = getMovieById(props.templateTooltipModel.appointmentData.movieId);
 </script>
 <style scoped>
   .appointment-content {

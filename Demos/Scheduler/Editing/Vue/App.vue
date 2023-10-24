@@ -8,12 +8,19 @@
       :height="600"
       :start-day-hour="9"
       :end-day-hour="19"
-      :editing="editing"
       :on-appointment-added="showAddedToast"
       :on-appointment-updated="showUpdatedToast"
       :on-appointment-deleted="showDeletedToast"
       current-view="week"
-    />
+    >
+      <DxEditing
+        :allow-adding="allowAdding"
+        :allow-deleting="allowDeleting"
+        :allow-updating="allowUpdating"
+        :allow-resizing="allowResizing"
+        :allow-dragging="allowDragging"
+      />
+    </DxScheduler>
     <div class="options">
       <div class="caption">Options</div>
       <div class="options-container">
@@ -53,62 +60,34 @@
     </div>
   </div>
 </template>
-<script>
-
-import DxScheduler from 'devextreme-vue/scheduler';
-
+<script setup lang="ts">
+import { ref } from 'vue';
+import DxScheduler, { DxEditing } from 'devextreme-vue/scheduler';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import notify from 'devextreme/ui/notify';
-
 import { data } from './data.js';
 
-export default {
-  components: {
-    DxScheduler,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      views: ['day', 'week'],
-      currentDate: new Date(2021, 3, 29),
-      dataSource: data,
-      allowAdding: true,
-      allowDeleting: true,
-      allowUpdating: true,
-      allowResizing: true,
-      allowDragging: true,
-    };
-  },
-  computed: {
-    editing() {
-      return {
-        allowAdding: this.allowAdding,
-        allowDeleting: this.allowDeleting,
-        allowUpdating: this.allowUpdating,
-        allowResizing: this.allowResizing,
-        allowDragging: this.allowDragging,
-      };
-    },
-  },
-  methods: {
-    showToast(event, value, type) {
-      notify(`${event} "${value}" task`, type, 800);
-    },
+const views = ['day', 'week'];
+const currentDate = new Date(2021, 3, 29);
+const dataSource = data;
+const allowAdding = ref(true);
+const allowDeleting = ref(true);
+const allowUpdating = ref(true);
+const allowResizing = ref(true);
+const allowDragging = ref(true);
 
-    showAddedToast(e) {
-      this.showToast('Added', e.appointmentData.text, 'success');
-    },
-
-    showUpdatedToast(e) {
-      this.showToast('Updated', e.appointmentData.text, 'info');
-    },
-
-    showDeletedToast(e) {
-      this.showToast('Deleted', e.appointmentData.text, 'warning');
-    },
-  },
-};
+function showToast(event, value, type) {
+  notify(`${event} "${value}" task`, type, 800);
+}
+function showAddedToast(e) {
+  showToast('Added', e.appointmentData.text, 'success');
+}
+function showUpdatedToast(e) {
+  showToast('Updated', e.appointmentData.text, 'info');
+}
+function showDeletedToast(e) {
+  showToast('Deleted', e.appointmentData.text, 'warning');
+}
 </script>
 
 <style scoped>

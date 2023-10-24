@@ -4,21 +4,11 @@
     <div class="number"> {{ cellData.date.getDate() }}</div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+withDefaults(defineProps<{
+  cellData?: any,
+}>(), {
+  cellData: () => {},
+});
 const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-export default {
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      dayOfWeekNames,
-    };
-  },
-};
 </script>
