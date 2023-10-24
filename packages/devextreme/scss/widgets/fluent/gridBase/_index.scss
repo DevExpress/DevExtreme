@@ -357,7 +357,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-#{$widget-name}-edit-popup-form {
-    padding: $fluent-popup-content-padding;
+    padding: $fluent-popup-content-vertical-padding $fluent-popup-content-padding;
   }
 
   .dx-#{$widget-name}-headers,

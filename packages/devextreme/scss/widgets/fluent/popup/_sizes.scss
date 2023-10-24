@@ -4,6 +4,7 @@
 // adduse
 
 $fluent-popup-content-padding: null !default;
+$fluent-popup-content-vertical-padding: null !default;
 $fluent-popup-content-withtitle-top-padding: null !default;
 $fluent-popup-content-withtitle-bottom-padding: null !default;
 $fluent-popup-toolbar-horizontal-padding: null !default;
@@ -18,6 +19,7 @@ $fluent-popup-focused-content-shadow: null !default;
 
 @if $size == "default" {
   $fluent-popup-content-padding: 24px !default;
+  $fluent-popup-content-vertical-padding: 16px !default;
   $fluent-popup-content-withtitle-top-padding: 24px !default;
   $fluent-popup-content-withtitle-bottom-padding: 16px !default;
 
@@ -31,6 +33,7 @@ $fluent-popup-focused-content-shadow: null !default;
 
 @else if $size == "compact" {
   $fluent-popup-content-padding: 16px !default;
+  $fluent-popup-content-vertical-padding: 12px !default;
   $fluent-popup-content-withtitle-top-padding: 16px !default;
   $fluent-popup-content-withtitle-bottom-padding: 12px !default;
 
