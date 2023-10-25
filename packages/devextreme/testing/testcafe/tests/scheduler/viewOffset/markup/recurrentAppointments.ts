@@ -91,6 +91,7 @@ const getScreenshotNameForEdgeCase = (
     ].forEach(({ startDayHour, endDayHour }) => {
       test(`
 Recurrence appointments and workspaces render (
+view: ${views[0].type},
 offset: ${offset},
 start: ${startDayHour},
 end: ${endDayHour},
