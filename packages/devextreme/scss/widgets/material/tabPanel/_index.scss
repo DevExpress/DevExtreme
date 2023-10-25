@@ -38,21 +38,6 @@
       border-top: none;
     }
   }
-
-  .dx-tabpanel-tab.dx-tab-selected::after {
-    top: 0;
-    bottom: unset;
-  }
-
-  .dx-tabs-styling-mode-secondary:not(.dx-tabs-vertical) {
-    .dx-tab-selected .dx-tab-content {
-      @include dx-tabs-horizontal-indicator-secondary(top, $tabs-selected-tab-border-color);
-
-      &.dx-state-disabled .dx-tab-content {
-        @include dx-tabs-horizontal-indicator-secondary(top, $tabs-disabled-tab-border-color);
-      }
-    }
-  }
 }
 
 .dx-tabpanel-tabs-position-left {
@@ -71,21 +56,6 @@
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
       border-left: none;
-    }
-  }
-
-  .dx-tabpanel-tab.dx-tab-selected::after {
-    left: 0;
-    right: unset;
-  }
-
-  .dx-tabs-styling-mode-secondary {
-    .dx-tab-selected {
-      @include dx-tabs-vertical-indicator-secondary(left, $tabs-selected-tab-border-color);
-
-      &.dx-state-disabled {
-        @include dx-tabs-vertical-indicator-secondary(left, $tabs-disabled-tab-border-color);
-      }
     }
   }
 }
