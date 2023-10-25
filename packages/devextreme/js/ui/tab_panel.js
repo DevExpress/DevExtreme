@@ -254,11 +254,7 @@ const TabPanel = MultiView.inherit({
     _getTabsIndicatorPosition() {
         const { _tabsIndicatorPosition, tabsPosition } = this.option();
 
-        if(_tabsIndicatorPosition) {
-            return _tabsIndicatorPosition;
-        } else {
-            return TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
-        }
+        return _tabsIndicatorPosition ?? TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
     },
 
     _tabConfig() {
