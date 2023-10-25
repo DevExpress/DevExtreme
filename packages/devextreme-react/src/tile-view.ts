@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import dxTileView, {
     Properties

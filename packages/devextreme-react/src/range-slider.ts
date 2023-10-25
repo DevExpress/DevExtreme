@@ -1,3 +1,4 @@
+"use client"
 import dxRangeSlider, {
     Properties
 } from "devextreme/ui/range_slider";

@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/data_grid";
 import dxDataGrid, {
     Properties

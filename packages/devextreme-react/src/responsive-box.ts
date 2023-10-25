@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
 import dxResponsiveBox, {
     Properties

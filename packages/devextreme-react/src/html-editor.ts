@@ -1,3 +1,4 @@
+"use client"
 import dxHtmlEditor, {
     Properties
 } from "devextreme/ui/html_editor";

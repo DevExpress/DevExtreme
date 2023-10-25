@@ -1,3 +1,4 @@
+"use client"
 import dxSankey, {
     Properties
 } from "devextreme/viz/sankey";

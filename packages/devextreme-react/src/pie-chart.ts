@@ -1,3 +1,4 @@
+"use client"
 import dxPieChart, {
     Properties
 } from "devextreme/viz/pie_chart";

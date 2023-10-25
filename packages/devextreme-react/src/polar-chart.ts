@@ -1,3 +1,4 @@
+"use client"
 import dxPolarChart, {
     Properties
 } from "devextreme/viz/polar_chart";

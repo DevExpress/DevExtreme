@@ -1,3 +1,4 @@
+"use client"
 import dxValidator, {
     Properties
 } from "devextreme/ui/validator";

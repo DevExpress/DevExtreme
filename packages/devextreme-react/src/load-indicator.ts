@@ -1,3 +1,4 @@
+"use client"
 import dxLoadIndicator, {
     Properties
 } from "devextreme/ui/load_indicator";

@@ -1,3 +1,4 @@
+"use client"
 import dxColorBox, {
     Properties
 } from "devextreme/ui/color_box";

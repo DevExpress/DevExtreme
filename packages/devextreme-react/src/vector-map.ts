@@ -1,3 +1,4 @@
+"use client"
 import dxVectorMap, {
     Properties
 } from "devextreme/viz/vector_map";
