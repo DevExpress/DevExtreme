@@ -189,10 +189,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get items(): Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { baseSize?: Mode | number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { baseSize?: Mode | number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -380,7 +380,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: Mode | number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
 
     /**
     

@@ -78,10 +78,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('itemHoldTimeout', value);
     }
 
-    get items(): Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { baseSize?: Mode | number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { baseSize?: Mode | number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 

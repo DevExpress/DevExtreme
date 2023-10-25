@@ -101,10 +101,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('type', value);
     }
 
-    get baseSize(): Mode | number {
+    get baseSize(): Mode | number | string {
         return this._getOption('baseSize');
     }
-    set baseSize(value: Mode | number) {
+    set baseSize(value: Mode | number | string) {
         this._setOption('baseSize', value);
     }
 

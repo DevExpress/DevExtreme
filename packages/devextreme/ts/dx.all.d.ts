@@ -8954,7 +8954,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxItem.baseSize]
      */
-    baseSize?: number | DevExpress.common.Mode;
+    baseSize?: number | DevExpress.common.Mode | string;
     /**
      * [descr:dxBoxItem.box]
      */
