@@ -1,9 +1,18 @@
 import * as React from 'react';
 import * as events from 'devextreme/events';
 import { useState, useMemo, useCallback, useRef, FC } from 'react';
-import { TemplateManagerProps, RenderedTemplateInstances, GetRenderFuncFn, DXTemplateCollection, TemplateFunc, TemplateInstanceDefinition } from './types-new';
+
+import {
+  TemplateManagerProps,
+  RenderedTemplateInstances,
+  GetRenderFuncFn,
+  DXTemplateCollection,
+  TemplateFunc,
+  TemplateInstanceDefinition
+} from './types-new';
+
 import TemplateWrapper from './template-wrapper-new';
-import { DoubleKeyMap } from './helpers';
+import { DoubleKeyMap, generateID } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
@@ -36,11 +45,11 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     }
   }, []);
 
-  const getRandomId = useCallback(() => Math.floor(Math.random() * 100000).toString(), []); 
-
   const createMapKey = useCallback((key1: any, key2: HTMLElement) => {
     return { key1, key2 };
   }, []);
+
+  const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []); 
 
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({ model: data, index, container, onRendered }) => {
     const key = createMapKey(data, container);
@@ -79,7 +88,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       return renderedInstances.shallowCopy();
     });
 
-  }, [unsubscribeOnRemoval, getRandomId, createMapKey]);
+  }, [unsubscribeOnRemoval, createMapKey]);
 
   useMemo(() => {
     init(templateOptions => {
@@ -115,8 +124,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
       setTemplateFactories(factories);
 
-      const dxTemplates = Object.entries(factories)
-        .reduce<DXTemplateCollection>((dxTemplates, [templateKey,]) => {
+      const dxTemplates = Object.keys(factories)
+        .reduce<DXTemplateCollection>((dxTemplates, templateKey) => {
           dxTemplates[templateKey] = { render: getRenderFunc(templateKey) };
           return dxTemplates;
         }, {});
@@ -126,7 +135,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       widgetId.current = getRandomId();
       setRenderedInstances(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
     });
-  }, [init, getRenderFunc, getRandomId]);
+  }, [init, getRenderFunc]);
 
   if (renderedInstances.empty)
     return null;
@@ -145,7 +154,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
           
           return <TemplateWrapper
             key={componentKey}
-            content={templateFactories[templateKey]({ data, index, onRendered })}
+            templateFactory={templateFactories[templateKey]}
+            data={data}
+            index={index}
             container={container}
             onRemoved={onRemoved}
             onRendered={onRendered}

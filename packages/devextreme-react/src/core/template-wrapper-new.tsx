@@ -18,7 +18,7 @@ const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>, 
   }
 };
 
-const TemplateWrapper = memo(function TemplateWrapper({ content, container, onRemoved, onRendered }: TemplateWrapperProps) {
+const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, index, container, onRemoved, onRendered }: TemplateWrapperProps) {
   let onRemovedLock = useRef(0);
 
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
@@ -99,7 +99,7 @@ const TemplateWrapper = memo(function TemplateWrapper({ content, container, onRe
   return createPortal(
       <>
         <OnRemovedLockerContext.Provider value={onRemovedLocker}>
-          { content }
+          { templateFactory({ data, index, onRendered }) }
           { hiddenNode }
           { removalListener }
         </OnRemovedLockerContext.Provider>

@@ -28,7 +28,9 @@ export type TemplateArgs = {
 }
 
 export interface TemplateWrapperProps {
-  content: any;
+  templateFactory: TemplateFunc;
+  data: any;
+  index: number;
   container: HTMLElement;
   onRendered: () => void;
   onRemoved: () => void;

@@ -7,7 +7,7 @@ export const OnRemovedLockerContext = createContext<UpdateLocker>({
 });
 
 export function generateID(): string {
-  return Math.random().toString(36).substr(2);
+  return Math.random().toString(36).substring(2);
 }
 
 export class DoubleKeyMap<TKey1, TKey2, TValue> {
