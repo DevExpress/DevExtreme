@@ -137,3 +137,10 @@
 .dx-tabs-icon-position-bottom .dx-tab-text {
   flex-direction: column-reverse;
 }
+
+.dx-tabs-vertical.dx-tabs-icon-position-end,
+.dx-tabs-vertical.dx-tabs-icon-position-start {
+  .dx-tab {
+    justify-content: flex-start;
+  }
+}
