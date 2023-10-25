@@ -84,6 +84,7 @@ $tabs-tab-bg-color-active-primary: null !default;
 * $type color
 */
 $tabs-active-tab-bg-color: $base-bg !default;
+$tabs-nav-button-bg-color: transparent !default;
 
 @if $mode == "light" {
   $tabs-focused-tab-bg-color: $base-neutral-background !default;

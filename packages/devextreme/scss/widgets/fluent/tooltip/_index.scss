@@ -12,7 +12,6 @@
   .dx-overlay-content {
     background-color: $tooltip-bg;
     color: $tooltip-color;
-    box-shadow: $tooltip-shadow-color;
     border-radius: $tooltip-border-radius;
     min-height: auto;
 
@@ -24,8 +23,17 @@
 
   &.dx-popover-wrapper .dx-popover-arrow {
     &::after {
-      box-shadow: $tooltip-shadow-color;
+      box-shadow: $fluent-tooltip-shadow;
       background: $tooltip-bg;
+      border-top-right-radius: $fluent-tooltip-arrow-border-radius;
+    }
+  }
+
+  &.dx-popover-wrapper.dx-position-top {
+    .dx-popover-arrow {
+      &::after {
+        border-bottom-left-radius: $fluent-tooltip-arrow-border-radius;
+      }
     }
   }
 }
