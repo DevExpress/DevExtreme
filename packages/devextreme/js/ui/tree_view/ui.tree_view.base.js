@@ -56,6 +56,7 @@ const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';
 const DATA_ITEM_ID = 'data-item-id';
 const ITEM_URL_CLASS = 'dx-item-url';
 const CHECK_BOX_CLASS = 'dx-checkbox';
+const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
 
 const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
@@ -740,6 +741,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderChildren: function($node, node) {
         if(!this._hasChildren(node)) {
             this._addLeafClass($node);
+            $('<div>')
+                .addClass('expander-icon-stub')
+                .prependTo(this._getItem($node));
             return;
         }
 
@@ -1464,9 +1468,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector } = this._getItemClickEventData();
 
         eventsEngine.on($itemContainer, clickEventNamespace, itemSelector, (e) => {
-            if(!$(e.target).hasClass(CHECK_BOX_CLASS)) {
-                this._itemClickHandler(e, $(e.currentTarget));
+            if($(e.target).hasClass(CHECK_BOX_ICON_CLASS) || $(e.target).hasClass(CHECK_BOX_CLASS)) {
+                return;
             }
+            this._itemClickHandler(e, $(e.currentTarget));
         });
 
         eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e) => {

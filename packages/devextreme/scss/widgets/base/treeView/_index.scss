@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use "./common";
 @use "../../base/icons" as *;
 
@@ -23,6 +24,11 @@
 
       font-size: $font-size;
     }
+  }
+
+  .dx-expander-icon-stub {
+    width: $size;
+    height: $size;
   }
 }
 
@@ -55,7 +61,7 @@
   }
 
   .dx-treeview-node {
-    padding-inline-start: $node-padding;
+    padding-inline-start: math.div($node-padding, 2);
   }
 }
 
