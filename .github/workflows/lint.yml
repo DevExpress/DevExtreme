@@ -20,7 +20,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -52,7 +52,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -97,7 +97,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -129,7 +129,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -155,7 +155,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -181,7 +181,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Check package-lock
       run: |
@@ -200,7 +200,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3

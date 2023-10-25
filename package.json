@@ -27,7 +27,7 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.17.6",
     "@types/shelljs": "0.8.13",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
