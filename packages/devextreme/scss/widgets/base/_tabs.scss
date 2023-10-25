@@ -125,8 +125,8 @@
     }
   }
 
-  .dx-tabs-icon-position-start,
-  .dx-tabs-icon-position-end {
+  &.dx-tabs-icon-position-start,
+  &.dx-tabs-icon-position-end {
     .dx-tab {
       justify-content: flex-start;
     }
