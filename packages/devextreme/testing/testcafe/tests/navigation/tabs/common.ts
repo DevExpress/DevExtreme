@@ -58,7 +58,12 @@ test('Tabs nav buttons', async (t) => {
         { icon: 'money' },
       ] as Item[];
 
-      return createWidget('dxTabs', { dataSource, iconPosition, rtlEnabled }, '#tabs');
+      return createWidget('dxTabs', {
+        dataSource,
+        iconPosition,
+        rtlEnabled,
+        selectedIndex: 0,
+      }, '#tabs');
     });
   });
 });

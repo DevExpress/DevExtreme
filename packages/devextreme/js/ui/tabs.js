@@ -44,6 +44,7 @@ const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 
 const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
 
@@ -234,15 +235,25 @@ const Tabs = CollectionWidget.inherit({
         });
     },
 
-    _createItemByTemplate: function _createItemByTemplate(itemTemplate, renderArgs) {
+    _createItemByTemplate(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
+
         this._deferredTemplates[index] = new Deferred();
+
         return itemTemplate.render({
             model: itemData,
             container,
             index,
             onRendered: () => this._deferredTemplates[index].resolve()
         });
+    },
+
+    _moveBadgeIntoContent($itemFrame, $itemContent) {
+        const $badge = $itemFrame.find(`.${TABS_ITEM_BADGE_CLASS}`);
+
+        if($badge) {
+            $badge.detach().appendTo($itemContent);
+        }
     },
 
     _itemClass: function() {

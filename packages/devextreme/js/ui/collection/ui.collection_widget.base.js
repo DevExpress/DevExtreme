@@ -875,16 +875,17 @@ const CollectionWidget = Widget.inherit({
             defaultTemplateName: this.option('itemTemplate')
         });
 
-        const that = this;
-        when(renderContentPromise).done(function($itemContent) {
-            that._postprocessRenderItem({
+        when(renderContentPromise).done(($itemContent) => {
+            this._postprocessRenderItem({
                 itemElement: $itemFrame,
                 itemContent: $itemContent,
                 itemData: itemData,
                 itemIndex: itemIndex
             });
 
-            that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
+            this._moveBadgeIntoContent?.($itemFrame, $itemContent);
+
+            this._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
         });
 
         return $itemFrame;

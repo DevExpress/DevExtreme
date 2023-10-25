@@ -12,7 +12,6 @@
 
 
 .dx-tab {
-  gap: $generic-tabs-item-gap;
   padding: $generic-tabs-item-padding;
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
@@ -98,6 +97,10 @@
       $generic-tabs-border-focused-disabled-bottom,
       $generic-tabs-border-focused-disabled-left,
     );
+  }
+
+  .dx-tab-content {
+    gap: $generic-tabs-item-gap;
   }
 
   .dx-tab-text {

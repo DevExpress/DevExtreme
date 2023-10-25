@@ -17,7 +17,6 @@
 
 
 .dx-tab {
-  gap: $material-tabs-item-gap;
   padding: $material-tabs-item-padding;
   min-width: $material-tab-min-width;
   background-color: $tabs-tab-background;
@@ -51,6 +50,10 @@
   &.dx-state-active,
   &.dx-state-active .dx-inkripple-wave {
     background-color: $tabs-active-tab-bg-color;
+  }
+
+  .dx-tab-content {
+    gap: $material-tabs-item-gap;
   }
 
   .dx-tab-text {
