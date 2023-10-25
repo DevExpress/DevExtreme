@@ -21,7 +21,8 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "all:pack": "ts-node build/pack-all.ts"
+    "all:update-version": "ts-node build/update-version.ts",
+    "all:build": "ts-node build/build-all.ts"
   },
   "nx": {},
   "private": true,
@@ -30,7 +31,7 @@
     "@types/shelljs": "0.8.13",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
-    "devextreme-internal-tools": "12.0.0-beta.5",
+    "devextreme-internal-tools": "12.0.0-beta.8",
     "eslint": "8.47.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "17.0.0",

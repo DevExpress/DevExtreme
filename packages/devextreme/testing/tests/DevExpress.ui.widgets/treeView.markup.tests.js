@@ -10,10 +10,12 @@ QUnit.testStart(function() {
 import 'ui/tree_view';
 
 const WIDGET_CLASS = 'dx-treeview';
+const SCROLLABLE_CLASS = 'dx-scrollable';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 const OPENED_NODE_CONTAINER_CLASS = 'dx-treeview-node-container-opened';
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
+const ICON_CLASS = 'dx-icon';
 const SELECTED_STATE_CLASS = 'dx-state-selected';
 const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
@@ -54,6 +56,12 @@ QUnit.module('aria accessibility', {
 }, () => {
     QUnit.test('aria role', function(assert) {
         assert.equal(this.$element.attr('role'), 'tree', 'role is correct');
+    });
+
+    QUnit.test('scrollable should have role treeitem attribute', function(assert) {
+        const $scrollable = this.$element.find('.' + SCROLLABLE_CLASS);
+
+        assert.equal($scrollable.attr('role'), 'treeitem', 'role is correct');
     });
 
     QUnit.test('aria role for items', function(assert) {
@@ -603,6 +611,24 @@ QUnit.module('markup', {
         const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'));
+    });
+
+    QUnit.test('TreeView icon image should have alt attribute with item text if it specified', function(assert) {
+        const $treeView = initTree({
+            items: [{ text: 'Item text', icon: 'some_icon.jpg' }]
+        });
+        const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
+
+        assert.strictEqual($icon.attr('alt'), 'Item text');
+    });
+
+    QUnit.test('TreeView icon image should have alt attribute with "dxTreeView item icon" if item text is not specified', function(assert) {
+        const $treeView = initTree({
+            items: [{ icon: 'some_icon.jpg' }]
+        });
+        const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
+
+        assert.strictEqual($icon.attr('alt'), 'dxTreeView item icon');
     });
 });
 

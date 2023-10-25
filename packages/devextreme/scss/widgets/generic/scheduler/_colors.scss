@@ -81,6 +81,7 @@ $scheduler-tab-selected-before-bg: null !default;
 $scheduler-tab-focused-border-color: null !default;
 $scheduler-other-month-cell-opacity: null !default;
 $scheduler-fill-focused-appointment: null !default;
+$scheduler-is-shadow-color-for-focused-state: true !default;
 $scheduler-time-indicator-background-color: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 $scheduler-time-panel-background-color: null !default;
@@ -408,4 +409,6 @@ $agenda-appointment-text-color: null !default;
   $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 }
+
+$scheduler-appointment-active-color: $scheduler-appointment-start-color;
 

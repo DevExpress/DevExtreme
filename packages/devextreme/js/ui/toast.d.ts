@@ -122,6 +122,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @default 2000
      * @default 4000 &for(Material)
+     * @default 4000 &for(Fluent)
      * @public
      */
     displayTime?: number;
@@ -142,6 +143,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @default 568 &for(Material)
+     * @default 568 &for(Fluent)
      * @public
      */
     maxWidth?: number | string | (() => number | string);
@@ -154,6 +156,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @default 344 &for(Material)
+     * @default 344 &for(Fluent)
      * @public
      */
     minWidth?: number | string | (() => number | string);

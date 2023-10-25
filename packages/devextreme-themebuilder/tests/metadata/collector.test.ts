@@ -85,11 +85,11 @@ describe('MetadataCollector', () => {
     const fileName = join('metadata', 'dx-theme-builder-metadata.ts');
     const expectedFileName = resolve(fileName);
     const expectedDirName = dirname(expectedFileName);
-    const meta: ThemesMetadata = { generic: [{ Key: '$var', Value: '\'ON\'' }], material: [] };
+    const meta: ThemesMetadata = { generic: [{ Key: '$var', Value: '\'ON\'' }], material: [], fluent: [] };
 
     collector.generator.metadata = meta;
 
-    let metaContent = 'export const metadata: ThemesMetadata = {\'generic\':[{\'Key\':\'$var\',\'Value\':\'"ON"\'}],\'material\':[]};\n';
+    let metaContent = 'export const metadata: ThemesMetadata = {\'generic\':[{\'Key\':\'$var\',\'Value\':\'"ON"\'}],\'material\':[],\'fluent\':[]};\n';
     metaContent += `export const version: string = '${version}';\n`;
     metaContent += 'export const browsersList: Array<string> = [];\n';
     metaContent += 'export const dependencies: FlatStylesDependencies = {};\n';

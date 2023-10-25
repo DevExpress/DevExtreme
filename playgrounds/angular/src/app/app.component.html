@@ -119,7 +119,13 @@
 
     <dx-date-box [(value)]="currentDate"></dx-date-box>
 
-    <dx-calendar [(value)]="currentDate"></dx-calendar>
+    <dx-calendar #calendar [value]="value" [selectionMode]="selectionMode">
+    </dx-calendar>
+    <dx-select-box
+      [dataSource]="selectionModes"
+      [(value)]="selectionMode"
+    >
+    </dx-select-box>
 
     <h2>Custom Templates</h2>
 

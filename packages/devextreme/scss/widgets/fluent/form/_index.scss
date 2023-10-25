@@ -28,18 +28,18 @@
 .dx-layout-manager {
   .dx-field-item {
     &:not(.dx-last-col) {
-      padding-inline-end: $fluent-form-layout-manager-padding;
+      padding-inline-end: $fluent-form-layout-manager-horizontal-padding;
     }
 
     &:not(.dx-first-col) {
-      padding-inline-start: $fluent-form-layout-manager-padding;
+      padding-inline-start: $fluent-form-layout-manager-horizontal-padding;
     }
 
     &:not(.dx-first-row) {
-      padding-top: $fluent-form-layout-manager-padding;
+      padding-top: $fluent-form-layout-manager-vertical-padding;
     }
 
-    padding-bottom: $fluent-form-layout-manager-padding;
+    padding-bottom: $fluent-form-layout-manager-vertical-padding;
     font-size: $fluent-form-label-font-size;
 
     .dx-field-item {
@@ -48,12 +48,17 @@
       }
     }
   }
+
+  .dx-tabpanel .dx-multiview-item-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .dx-form > .dx-layout-manager.dx-layout-manager-one-col {
   .dx-field-item {
     .dx-field-item.dx-last-row:not(.dx-last-col) {
-      padding-bottom: $fluent-form-layout-manager-padding;
+      padding-bottom: $fluent-form-layout-manager-vertical-padding;
     }
   }
 }

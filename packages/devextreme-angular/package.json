@@ -38,7 +38,6 @@
     "codelyzer": "6.0.2",
     "core-js": "^2.6.12",
     "del": "^2.2.2",
-    "devextreme": "~23.2.0",
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
     "gulp-replace": "^0.6.1",
@@ -67,7 +66,7 @@
   ],
   "dependencies": {
     "@angular-devkit/schematics": "^12.2.18",
-    "devextreme-schematics": "latest",
+    "devextreme-schematics": "*",
     "inferno-server": "7.4.11"
   },
   "schematics": "./schematics/collection.json",

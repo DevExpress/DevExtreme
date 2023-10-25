@@ -15,12 +15,11 @@ import {
 
 
 import { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { ChartsAxisLabelOverlap, DashStyle, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { ChartsAxisLabelOverlap, DashStyle, Font, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { LabelLocation } from 'devextreme/ui/form';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
-import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

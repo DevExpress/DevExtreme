@@ -302,8 +302,9 @@ const HeaderFilterController = modules.ViewController.inherit((function () {
       if (column) {
         const visibleIndex = columnsController.getVisibleIndex(columnIndex);
         const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
-        // @ts-expect-error TODO: Check this code, how it works in runtime without error?
-        const $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
+
+        // eslint-disable-next-line no-var, vars-on-top
+        var $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
         this.showHeaderFilterMenuBase({
           columnElement: $columnElement,

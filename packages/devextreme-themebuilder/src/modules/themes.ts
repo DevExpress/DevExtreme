@@ -115,6 +115,18 @@ const themes: Theme[] = [
   {
     themeId: 42, name: 'material', colorScheme: 'teal-dark-compact', text: 'Teal Dark Compact', group: 'Material Design (Compact)',
   },
+  {
+    themeId: 51, name: 'fluent', colorScheme: 'blue-light', text: 'Blue Light', group: 'Fluent Design',
+  },
+  {
+    themeId: 52, name: 'fluent', colorScheme: 'blue-dark', text: 'Blue Dark', group: 'Fluent Design',
+  },
+  {
+    themeId: 53, name: 'fluent', colorScheme: 'blue-light-compact', text: 'Blue Light Compact', group: 'Fluent Design (Compact)',
+  },
+  {
+    themeId: 54, name: 'fluent', colorScheme: 'blue-dark-compact', text: 'Blue Dark Compact', group: 'Fluent Design (Compact)',
+  },
 ];
 
 export default themes;

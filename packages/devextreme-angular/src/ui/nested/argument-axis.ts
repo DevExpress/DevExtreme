@@ -21,10 +21,9 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, LabelOverlap, RelativePosition, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
+import { ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, RelativePosition, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
-import { Font } from 'devextreme/viz/core/base_widget';
 
 import {
     NestedOptionHost,

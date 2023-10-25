@@ -58,5 +58,8 @@ test('ContextMenu items render', async (t) => {
     cssClass: 'custom-class',
     items: menuItems,
     target: 'body',
+    position: {
+      offset: '10 10',
+    },
   }, '#contextMenu');
 });

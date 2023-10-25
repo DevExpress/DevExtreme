@@ -105,7 +105,17 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _getIconContainer: function(itemData) {
-        return itemData.icon ? getImageContainer(itemData.icon) : undefined;
+        if(!itemData.icon) {
+            return undefined;
+        }
+
+        const $imageContainer = getImageContainer(itemData.icon);
+
+        if($imageContainer.is('img')) {
+            $imageContainer.attr('alt', itemData.text ?? `${this.NAME} item icon`);
+        }
+
+        return $imageContainer;
     },
 
     _getTextContainer: function(itemData) {

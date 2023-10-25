@@ -9,7 +9,6 @@
 // adduse
 @use "../overlay";
 
-$fluent-fa-button-size: 40px;
 $fluent-fa-button-label-offset: 16px;
 $fluent-fa-button-label-padding: 4px 8px;
 
@@ -37,9 +36,15 @@ $fluent-fa-button-label-padding: 4px 8px;
       .dx-fa-button-label {
         padding: $fluent-main-fa-button-label-padding;
         font-size: $fluent-base-font-size;
-        text-transform: uppercase;
-        letter-spacing: 1.25px;
         font-weight: 500;
+      }
+    }
+
+    &.dx-fa-button-with-label {
+      .dx-overlay-content {
+        .dx-fa-button-icon {
+          padding-inline-start: $fluent-main-fa-button-horizontal-padding;
+        }
       }
     }
   }

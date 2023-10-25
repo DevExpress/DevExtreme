@@ -21,12 +21,12 @@ $fluent-h6-font-size: null !default;
   $fluent-s-font-size: 18px !default;
   $fluent-xs-font-size: 12px !default;
 
-  $fluent-h1-font-size: 96px !default;
-  $fluent-h2-font-size: 60px !default;
-  $fluent-h3-font-size: 48px !default;
-  $fluent-h4-font-size: 34px !default;
-  $fluent-h5-font-size: 24px !default;
-  $fluent-h6-font-size: 20px !default;
+  $fluent-h1-font-size: 40px !default;
+  $fluent-h2-font-size: 36px !default;
+  $fluent-h3-font-size: 32px !default;
+  $fluent-h4-font-size: 26px !default;
+  $fluent-h5-font-size: 22px !default;
+  $fluent-h6-font-size: 22px !default;
 }
 
 @else if $size == "compact" {
@@ -36,11 +36,11 @@ $fluent-h6-font-size: null !default;
   $fluent-s-font-size: 14px !default;
   $fluent-xs-font-size: 12px !default;
 
-  $fluent-h1-font-size: 64px !default;
-  $fluent-h2-font-size: 42px !default;
-  $fluent-h3-font-size: 20px !default;
-  $fluent-h4-font-size: 18px !default;
+  $fluent-h1-font-size: 32px !default;
+  $fluent-h2-font-size: 28px !default;
+  $fluent-h3-font-size: 24px !default;
+  $fluent-h4-font-size: 20px !default;
   $fluent-h5-font-size: 16px !default;
-  $fluent-h6-font-size: 14px !default;
+  $fluent-h6-font-size: 16px !default;
 }
 

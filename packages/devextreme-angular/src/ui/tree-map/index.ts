@@ -22,12 +22,11 @@ import {
 
 
 import { ExportFormat, HorizontalAlignment, SingleMultipleOrNone, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { DashStyle, Font, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { Font } from 'devextreme/viz/core/base_widget';
 import { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, OptionChangedEvent, SelectionChangedEvent, TreeMapColorizerType, TreeMapLayoutAlgorithm, TreeMapLayoutDirection } from 'devextreme/viz/tree_map';
 
 import DxTreeMap from 'devextreme/viz/tree_map';

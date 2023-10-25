@@ -9,6 +9,7 @@ export {
     ChartsLabelOverlap,
     DashStyle,
     DiscreteAxisDivisionMode,
+    Font,
     GradientColor,
     HatchDirection,
     LabelOverlap,

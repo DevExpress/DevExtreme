@@ -3,6 +3,7 @@
 // adduse
 
 
+$fluent-tabs-item-gap: 4px !default;
 $fluent-tabs-item-padding: null !default;
 $fluent-tabs-item-padding-top-bottom: null !default;
 $fluent-tabs-item-padding-right-left: null !default;
@@ -30,6 +31,8 @@ $fluent-indicator-length-secondary: 100% !default;
 $fluent-tab-item-border-radius-secondary: 4px !default;
 $fluent-indicator-border-radius-secondary: 4px !default;
 
+$fluent-badge-min-size: null !default;
+
 @if $size == "default" {
   $fluent-tabs-item-padding-top-bottom: 12px !default;
   $fluent-tabs-item-padding-right-left: 10px !default;
@@ -43,6 +46,7 @@ $fluent-indicator-border-radius-secondary: 4px !default;
   $fluent-tab-nav-button-icon-font-size: 20px !default;
   $fluent-tab-nav-button-content-padding: 0 4px !default;
   $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
+  $fluent-badge-min-size: 20px !default;
 }
 
 @else if $size == "compact" {
@@ -58,4 +62,5 @@ $fluent-indicator-border-radius-secondary: 4px !default;
   $fluent-tab-nav-button-icon-font-size: 16px !default;
   $fluent-tab-nav-button-content-padding: 0 4px !default;
   $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
+  $fluent-badge-min-size: 16px !default;
 }
