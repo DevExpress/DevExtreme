@@ -20,7 +20,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -73,7 +73,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Get sources
       uses: actions/checkout@v4
@@ -158,7 +158,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -225,7 +225,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '18.18.2'
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
