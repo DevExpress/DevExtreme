@@ -63,6 +63,10 @@
 .dx-treeview-item-without-checkbox {
   &.dx-state-focused {
     >.dx-treeview-item {
+      .dx-treeview-toggle-item-visibility {
+        color: unset;
+      }
+
       .dx-item-content {
         .dx-item-url {
           color: unset;
