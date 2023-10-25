@@ -1,3 +1,4 @@
+"use client"
 import dxBullet, {
     Properties
 } from "devextreme/viz/bullet";

@@ -1,3 +1,4 @@
+"use client"
 import dxToast, {
     Properties
 } from "devextreme/ui/toast";

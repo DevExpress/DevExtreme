@@ -1,3 +1,4 @@
+"use client"
 import dxSpeedDialAction, {
     Properties
 } from "devextreme/ui/speed_dial_action";

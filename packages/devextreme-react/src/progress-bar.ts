@@ -1,3 +1,4 @@
+"use client"
 import dxProgressBar, {
     Properties
 } from "devextreme/ui/progress_bar";

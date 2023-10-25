@@ -1,3 +1,4 @@
+"use client"
 import dxSlider, {
     Properties
 } from "devextreme/ui/slider";

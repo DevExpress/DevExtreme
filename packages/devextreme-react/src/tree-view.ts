@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/tree_view";
 import dxTreeView, {
     Properties

@@ -1,3 +1,4 @@
+"use client"
 import dxSwitch, {
     Properties
 } from "devextreme/ui/switch";

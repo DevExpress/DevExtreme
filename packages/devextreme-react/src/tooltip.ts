@@ -1,3 +1,4 @@
+"use client"
 import dxTooltip, {
     Properties
 } from "devextreme/ui/tooltip";

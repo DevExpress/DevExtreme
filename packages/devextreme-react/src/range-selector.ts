@@ -1,3 +1,4 @@
+"use client"
 import dxRangeSelector, {
     Properties
 } from "devextreme/viz/range_selector";

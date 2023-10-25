@@ -1,3 +1,4 @@
+"use client"
 import dxGantt, {
     Properties
 } from "devextreme/ui/gantt";

@@ -1,3 +1,4 @@
+"use client"
 import dxLookup, {
     Properties
 } from "devextreme/ui/lookup";

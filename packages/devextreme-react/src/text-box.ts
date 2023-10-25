@@ -1,3 +1,4 @@
+"use client"
 import dxTextBox, {
     Properties
 } from "devextreme/ui/text_box";

@@ -1,3 +1,4 @@
+"use client"
 import dxDateRangeBox, {
     Properties
 } from "devextreme/ui/date_range_box";
