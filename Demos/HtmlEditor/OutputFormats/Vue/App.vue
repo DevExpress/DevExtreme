@@ -47,63 +47,41 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import {
   DxHtmlEditor,
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/html-editor';
-
 import {
   DxButtonGroup,
   DxItem as DxButtonGroupItem,
 } from 'devextreme-vue/button-group';
-
-import prettier from 'prettier/standalone';
-import parserHtml from 'prettier/parser-html';
+import * as prettier from 'prettier/standalone';
+import * as parserHtml from 'prettier/parser-html';
 import { markup } from './data.js';
 import 'devextreme/ui/html_editor/converters/markdown';
 
-export default {
-  components: {
-    DxHtmlEditor,
-    DxToolbar,
-    DxItem,
-    DxButtonGroup,
-    DxButtonGroupItem,
-  },
+const valueContent = ref(markup);
+const selectedItems = ref([{ text: 'Html' }]);
+const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
+const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
+const fontSizeOptions = { inputAttr: { 'aria-label': 'Font size' } };
+const fontFamilyOptions = { inputAttr: { 'aria-label': 'Font family' } };
 
-  data() {
-    return {
-      valueContent: markup,
-      selectedItems: [{ text: 'Html' }],
-      sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
-      fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
-      fontSizeOptions: { inputAttr: { 'aria-label': 'Font size' } },
-      fontFamilyOptions: { inputAttr: { 'aria-label': 'Font family' } },
-    };
-  },
+const editorValueType = computed(() => selectedItems.value[0].text.toLowerCase());
 
-  computed: {
-    editorValueType() {
-      return this.selectedItems[0].text.toLowerCase();
-    },
-  },
+function prettierFormat(text) {
+  if (editorValueType.value === 'html') {
+    return prettier.format(text, {
+      parser: 'html',
+      plugins: [parserHtml],
+    });
+  }
 
-  methods: {
-    prettierFormat(text) {
-      if (this.editorValueType === 'html') {
-        return prettier.format(text, {
-          parser: 'html',
-          plugins: [parserHtml],
-        });
-      }
-
-      return text;
-    },
-  },
-};
+  return text;
+}
 </script>
 <style>
 .dx-htmleditor-content img {

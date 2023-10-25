@@ -38,8 +38,8 @@
     </DxPopup>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxHtmlEditor,
   DxToolbar,
@@ -48,29 +48,15 @@ import {
 import { DxPopup } from 'devextreme-vue/popup';
 import { markup } from './data.js';
 
-export default {
-  components: {
-    DxHtmlEditor,
-    DxToolbar,
-    DxItem,
-    DxPopup,
-  },
-  data() {
-    return {
-      value: markup,
-      popupVisible: false,
-      sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
-      fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
-      headerValues: [false, 1, 2, 3, 4, 5],
-      headerOptions: { inputAttr: { 'aria-label': 'Header' } },
-      toolbarButtonOptions: {
-        text: 'Show markup',
-        stylingMode: 'text',
-        onClick: () => {
-          this.popupVisible = true;
-        },
-      },
-    };
+const value = ref(markup);
+const popupVisible = ref(false);
+const headerValues = [false, 1, 2, 3, 4, 5];
+const headerOptions = { inputAttr: { 'aria-label': 'Header' } };
+const toolbarButtonOptions = {
+  text: 'Show markup',
+  stylingMode: 'text',
+  onClick: () => {
+    popupVisible.value = true;
   },
 };
 </script>

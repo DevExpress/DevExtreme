@@ -8,7 +8,7 @@
         <div class="photo">
           <img
             alt="Kevin Carter"
-            src="../../../../images/mentions/Kevin-Carter.png"
+            :src="'../../../../images/mentions/Kevin-Carter.png'"
           >
         </div>
         <div class="name">
@@ -32,7 +32,7 @@
         <div class="photo">
           <img
             alt="John Heart"
-            src="../../../../images/mentions/John-Heart.png"
+            :src="'../../../../images/mentions/John-Heart.png'"
           >
         </div>
         <div class="name">
@@ -54,7 +54,7 @@
         <div class="photo">
           <img
             alt="Kevin Carter"
-            src="../../../../images/mentions/Kevin-Carter.png"
+            :src="'../../../../images/mentions/Kevin-Carter.png'"
           >
         </div>
         <div class="name">
@@ -86,28 +86,19 @@
     </DxHtmlEditor>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxHtmlEditor,
 } from 'devextreme-vue/html-editor';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxHtmlEditor,
-  },
-  data() {
-    return {
-      mentions: [{
-        dataSource: employees,
-        searchExpr: 'text',
-        displayExpr: 'text',
-        valueExpr: 'text',
-      }],
-    };
-  },
-};
+const mentions = ref([{
+  dataSource: employees,
+  searchExpr: 'text',
+  displayExpr: 'text',
+  valueExpr: 'text',
+}]);
 </script>
 <style>
 #chat-window {

@@ -84,8 +84,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxHtmlEditor,
   DxToolbar,
@@ -101,32 +101,14 @@ import {
 } from 'devextreme-vue/select-box';
 import { markup, tabs } from './data.js';
 
-export default {
-  components: {
-    DxHtmlEditor,
-    DxMediaResizing,
-    DxToolbar,
-    DxItem,
-    DxImageUpload,
-    DxCheckBox,
-    DxSelectBox,
-  },
-
-  data() {
-    return {
-      markup,
-      tabs,
-      sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
-      fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
-      headerValues: [false, 1, 2, 3, 4, 5],
-      currentTabs: tabs[2].value,
-      isMultiline: true,
-      fontSizeOptions: { inputAttr: { 'aria-label': 'Font size' } },
-      fontFamilyOptions: { inputAttr: { 'aria-label': 'Font family' } },
-      headerOptions: { inputAttr: { 'aria-label': 'Font family' } },
-    };
-  },
-};
+const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
+const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
+const headerValues = [false, 1, 2, 3, 4, 5];
+const currentTabs = ref(tabs[2].value);
+const isMultiline = ref(true);
+const fontSizeOptions = { inputAttr: { 'aria-label': 'Font size' } };
+const fontFamilyOptions = { inputAttr: { 'aria-label': 'Font family' } };
+const headerOptions = { inputAttr: { 'aria-label': 'Font family' } };
 </script>
 <style>
 .dx-htmleditor-content img {

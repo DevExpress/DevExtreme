@@ -47,8 +47,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxHtmlEditor,
   DxTableContextMenu,
@@ -59,23 +59,8 @@ import {
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { markup } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxHtmlEditor,
-    DxTableContextMenu,
-    DxTableResizing,
-    DxToolbar,
-    DxItem,
-  },
-  data() {
-    return {
-      markup,
-      allowResizing: true,
-      contextMenuEnabled: true,
-    };
-  },
-};
+const allowResizing = ref(true);
+const contextMenuEnabled = ref(true);
 </script>
 <style>
 .demo-container {
