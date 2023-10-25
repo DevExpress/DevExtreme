@@ -164,7 +164,7 @@ export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
      * @default 0
      * @public
      */
-    baseSize?: number | Mode;
+    baseSize?: number | Mode | string;
     /**
      * @docid
      * @default undefined
