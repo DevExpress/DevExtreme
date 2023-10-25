@@ -119,15 +119,16 @@
     height: auto;
   }
 
-  &:not(.dx-tabs-icon-position-top, .dx-tabs-icon-position-bottom) {
-    .dx-tab {
-      justify-content: flex-start;
-    }
-  }
-
   .dx-tabs-nav-button {
     .dx-icon {
       transform: rotate(90deg);
+    }
+  }
+
+  .dx-tabs-icon-position-start,
+  .dx-tabs-icon-position-end {
+    .dx-tab {
+      justify-content: flex-start;
     }
   }
 }
