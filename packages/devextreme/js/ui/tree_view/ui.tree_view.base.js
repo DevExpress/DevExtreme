@@ -742,7 +742,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!this._hasChildren(node)) {
             this._addLeafClass($node);
             $('<div>')
-                .addClass('expander-icon-stub')
+                .addClass('dx-expander-icon-stub')
                 .prependTo(this._getItem($node));
             return;
         }
