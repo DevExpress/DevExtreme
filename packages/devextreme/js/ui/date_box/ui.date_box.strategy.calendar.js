@@ -5,7 +5,7 @@ import { splitPair } from '../../core/utils/common';
 import { isFunction, isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
-import { isFluent } from '../themes';
+import { isMaterial } from '../themes';
 
 const TODAY_BUTTON_CLASS = 'dx-button-today';
 
@@ -116,10 +116,23 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         this.dateBox.setAria('activedescendant', e.actionValue);
     },
 
+    _getTodayButtonStyleConfig() {
+        if(isMaterial()) {
+            return {
+                stylingMode: 'text',
+                type: 'default',
+            };
+        }
+
+        return {
+            stylingMode: 'outlined',
+            type: 'normal',
+        };
+    },
+
     _getTodayButtonConfig() {
         const buttonsLocation = this.dateBox.option('buttonsLocation');
         const isButtonsLocationDefault = buttonsLocation === 'default';
-        const stylingMode = isFluent() ? 'outlined' : undefined;
         const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
 
         return {
@@ -129,8 +142,8 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             options: {
                 onClick: (args) => { this._widget._toTodayView(args); },
                 text: this.dateBox.option('todayButtonText'),
-                stylingMode,
                 elementAttr: { class: TODAY_BUTTON_CLASS },
+                ...this._getTodayButtonStyleConfig(),
             }
         };
     },
