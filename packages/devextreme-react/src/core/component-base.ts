@@ -2,7 +2,7 @@ import * as events from 'devextreme/events';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 
-import { TemplateManager } from './template-manager-new';
+import { TemplateManager } from './template-manager';
 
 import { OptionsManager, unscheduleGuards } from './options-manager';
 import { ITemplateMeta } from './template';
@@ -12,7 +12,7 @@ import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
-import { DXTemplateCreator, UpdateLocker } from './types-new';
+import { DXTemplateCreator, UpdateLocker } from './types';
 import { OnRemovedLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';

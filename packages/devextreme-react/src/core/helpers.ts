@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { UpdateLocker } from "./types-new";
+import { UpdateLocker } from "./types";
 
 export const OnRemovedLockerContext = createContext<UpdateLocker>({
   lock: () => void 0,

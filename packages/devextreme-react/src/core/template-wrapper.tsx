@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useLayoutEffect, useEffect, useState, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
-import { TemplateWrapperProps } from './types-new';
+import { TemplateWrapperProps } from './types';
 import * as events from 'devextreme/events';
 import { OnRemovedLockerContext } from './helpers';
 

@@ -9,9 +9,9 @@ import {
   DXTemplateCollection,
   TemplateFunc,
   TemplateInstanceDefinition
-} from './types-new';
+} from './types';
 
-import TemplateWrapper from './template-wrapper-new';
+import TemplateWrapper from './template-wrapper';
 import { DoubleKeyMap, generateID } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';

@@ -4,7 +4,7 @@ import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';
 import { capitalizeFirstLetter } from './helpers';
 import type { IConfigNode, ITemplate } from './configuration/config-node';
-import { DXTemplateCollection } from './types-new';
+import { DXTemplateCollection } from './types';
 
 const optionsManagers = new Set<OptionsManager>();
 let guardTimeoutHandler = -1;
