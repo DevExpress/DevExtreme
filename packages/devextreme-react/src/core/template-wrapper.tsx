@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useCallback, useLayoutEffect, useEffect, useState, useRef, memo } from 'react';
+import { useCallback, useLayoutEffect, useEffect, useState, useRef, useMemo, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
-import { TemplateWrapperProps } from './types';
+import { DXRemoveCustomArgs, TemplateWrapperProps } from './types';
 import * as events from 'devextreme/events';
-import { OnRemovedLockerContext } from './helpers';
+import { RemovalLockerContext } from './helpers';
 
 const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>, defaultElement: string) => {
   const style = { display: 'none' };
@@ -19,21 +19,19 @@ const createHiddenNode = (containerNodeName: string, ref: React.LegacyRef<any>, 
 };
 
 const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, index, container, onRemoved, onRendered }: TemplateWrapperProps) {
-  let onRemovedLock = useRef(0);
-
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
-  const [onRemovedLocker] = useState({
-    lock: () => onRemovedLock.current++,
-    unlock: () => onRemovedLock.current--
-  });
-
+  const isRemovalLocked = useRef(false);
+  const removalLocker = useMemo(() => ({
+    lock: () => isRemovalLocked.current = true,
+    unlock: () => isRemovalLocked.current = false
+  }), []);
 
   const element = useRef<HTMLElement>();
   const hiddenNodeElement = useRef<HTMLElement>();
   const removalListenerElement = useRef<HTMLElement>();
 
-  const onTemplateRemoved = useCallback((_, args) => {
-    if (args?.fromReactUnmount || onRemovedLock) {
+  const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
+    if (args?.isUnmounting || isRemovalLocked) {
       return;
     }
 
@@ -59,9 +57,9 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, i
     if (!removalListenerRequired) {
       setRemovalListenerRequired(true);
     }
-    else {
-      events.off(removalListenerElement.current!, DX_REMOVE_EVENT, onTemplateRemoved);
-      events.on(removalListenerElement.current!, DX_REMOVE_EVENT, onTemplateRemoved);
+    else if (removalListenerElement.current) {
+      events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
+      events.on(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
     }
 
     return () => {
@@ -98,11 +96,11 @@ const TemplateWrapper = memo(function TemplateWrapper({ templateFactory, data, i
 
   return createPortal(
       <>
-        <OnRemovedLockerContext.Provider value={onRemovedLocker}>
+        <RemovalLockerContext.Provider value={removalLocker}>
           { templateFactory({ data, index, onRendered }) }
           { hiddenNode }
           { removalListener }
-        </OnRemovedLockerContext.Provider>
+        </RemovalLockerContext.Provider>
       </>,
       container
     );

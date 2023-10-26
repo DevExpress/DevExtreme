@@ -4,18 +4,17 @@ import { useState, useMemo, useCallback, useRef, FC } from 'react';
 
 import {
   TemplateManagerProps,
-  RenderedTemplateInstances,
   GetRenderFuncFn,
   DXTemplateCollection,
-  TemplateFunc,
-  TemplateInstanceDefinition
+  TemplateFunc
 } from './types';
 
 import TemplateWrapper from './template-wrapper';
-import { DoubleKeyMap, generateID } from './helpers';
+import { RenderedTemplateInstances, generateID } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
+import { ITemplate } from './configuration/config-node';
 
 function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['data'] {
   if (getConfigOption('useLegacyTemplateEngine')) {
@@ -29,7 +28,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 }
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
-  const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
+  const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>(new RenderedTemplateInstances());
   const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
   const widgetId = useRef('');
 
@@ -91,36 +90,33 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   }, [unsubscribeOnRemoval, createMapKey]);
 
   useMemo(() => {
-    init(templateOptions => {
-      const factories = Object.entries(templateOptions).reduce((res, [key, template]) => {
-        let templateFunc: TemplateFunc;
-    
-        switch(template.type) {
-          case 'children': templateFunc = () => {
-            return template.content;
-          }
-          break;
-    
-          case 'render': templateFunc = (props) => {
-            normalizeProps(props);
-            return template.content(props.data, props.index);
-          }; 
-          break;
-    
-          case 'component': templateFunc = (props) => {
-            props = normalizeProps(props);
-            return React.createElement.bind(null, template.content)(props);
-          }; 
-          break;
-    
-          default: templateFunc = () => React.createElement(React.Fragment);
+    function getTemplateFunction (template: ITemplate): TemplateFunc {
+      switch(template.type) {
+        case 'children': return () => {
+          return template.content;
         }
-    
-        return {
+  
+        case 'render': return (props) => {
+          normalizeProps(props);
+          return template.content(props.data, props.index);
+        }; 
+  
+        case 'component': return (props) => {
+          props = normalizeProps(props);
+          return React.createElement.bind(null, template.content)(props);
+        }; 
+  
+        default: return () => React.createElement(React.Fragment);
+      }
+    }
+
+    function getDXTemplates (templateOptions: Record<string, ITemplate>) {
+      const factories = Object.entries(templateOptions)
+        .reduce((res, [key, template]) => ({
           ...res,
-          [key]: templateFunc
-        }
-      }, {} as Record<string, TemplateFunc>);
+          [key]: getTemplateFunction(template)
+      }),
+      {} as Record<string, TemplateFunc>);
 
       setTemplateFactories(factories);
 
@@ -131,10 +127,14 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         }, {});
 
       return dxTemplates;
-    }, () => {
+    }
+
+    function clearRenderedInstances () {
       widgetId.current = getRandomId();
-      setRenderedInstances(new DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>());
-    });
+      setRenderedInstances(new RenderedTemplateInstances());
+    }
+
+    init(getDXTemplates, clearRenderedInstances);
   }, [init, getRenderFunc]);
 
   if (renderedInstances.empty)

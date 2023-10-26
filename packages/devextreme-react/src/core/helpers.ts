@@ -1,7 +1,7 @@
 import { createContext } from "react";
-import { UpdateLocker } from "./types";
+import { TemplateInstanceDefinition, UpdateLocker } from "./types";
 
-export const OnRemovedLockerContext = createContext<UpdateLocker>({
+export const RemovalLockerContext = createContext<UpdateLocker>({
   lock: () => void 0,
   unlock: () => void 0
 });
@@ -57,6 +57,12 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
         yield ([{ key1, key2 }, value]);
       }
     }
+  }
+}
+
+export class RenderedTemplateInstances extends DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition> {
+  constructor() {
+    super();
   }
 }
 

@@ -1,5 +1,16 @@
 import { ITemplate } from './configuration/config-node';
-import { DoubleKeyMap } from './helpers';
+
+type DXTemplate = {
+  render: RenderFunc;
+};
+
+type RenderFunc = (arg: RenderArgs) => void;
+
+type TemplateArgs = {
+  data: any;
+  index?: number;
+  onRendered: () => void;
+}
 
 export type RenderArgs = {
   model?: any;
@@ -13,19 +24,7 @@ export type UpdateLocker = {
   unlock: () => void;
 }
 
-export type DXTemplateCollection = Record<string, DevExtremeTemplate>;
-
-export type DevExtremeTemplate = {
-  render: RenderFunc;
-};
-
-export type RenderFunc = (arg: RenderArgs) => void;
-
-export type TemplateArgs = {
-  data: any;
-  index?: number;
-  onRendered: () => void;
-}
+export type DXTemplateCollection = Record<string, DXTemplate>;
 
 export interface TemplateWrapperProps {
   templateFactory: TemplateFunc;
@@ -41,7 +40,7 @@ export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
 export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
 
 export type TemplateManagerProps = {
-  init: (getDxTemplates: DXTemplateCreator, clearRenderedInstances: () => void) => void;
+  init: (getDXTemplates: DXTemplateCreator, clearRenderedInstances: () => void) => void;
 };
 
 export type TemplateInstanceDefinition = {
@@ -54,4 +53,6 @@ export type TemplateInstanceDefinition = {
 
 export type GetRenderFuncFn = (templateKey: string) => RenderFunc;
 
-export type RenderedTemplateInstances = DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition>;
+export type DXRemoveCustomArgs = {
+  isUnmounting: boolean;
+};

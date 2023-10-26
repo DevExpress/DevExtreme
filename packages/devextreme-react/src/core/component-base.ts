@@ -12,8 +12,8 @@ import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
-import { DXTemplateCreator, UpdateLocker } from './types';
-import { OnRemovedLockerContext } from './helpers';
+import { DXRemoveCustomArgs, DXTemplateCreator, UpdateLocker } from './types';
+import { RemovalLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -35,9 +35,9 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       : { display: 'contents' };
   }
 
-  static contextType?: React.Context<UpdateLocker> | undefined = OnRemovedLockerContext;
+  static contextType?: React.Context<UpdateLocker> | undefined = RemovalLockerContext;
 
-  declare context: React.ContextType<typeof OnRemovedLockerContext> | undefined;
+  declare context: React.ContextType<typeof RemovalLockerContext> | undefined;
 
   protected _WidgetClass: any;
 
@@ -107,16 +107,18 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   public componentWillUnmount(): void {
-    this.context?.lock();
+    this._lockParentOnRemoved();
 
     if (this._instance) {
+      const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
+
       this._childNodes?.forEach((child) => child.parentNode?.removeChild(child));
-      events.triggerHandler(this._element, DX_REMOVE_EVENT, { fromReactUnmount: true });
+      events.triggerHandler(this._element, DX_REMOVE_EVENT, dxRemoveArgs);
       this._instance.dispose();
     }
     this._optionsManager.dispose();
 
-    this.context?.unlock();
+    this._unlockParentOnRemoved();
   }
 
   protected _createWidget(element?: Element): void {
@@ -130,7 +132,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     };
 
     const templateOptions = this._optionsManager.getTemplateOptions(config);
-
     const dxTemplates = this._createDXTemplates?.(templateOptions);
 
     if (dxTemplates) {
@@ -209,6 +210,14 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         this._element.classList.add(...classNames);
       }
     }
+  }
+
+  private _lockParentOnRemoved() {
+    this.context?.lock();
+  }
+
+  private _unlockParentOnRemoved() {
+    this.context?.unlock();
   }
 
   private _setTemplateManagerHooks(createDXTemplates: DXTemplateCreator, clearRenderedInstances: () => void)  {
