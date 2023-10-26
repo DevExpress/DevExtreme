@@ -886,8 +886,11 @@ export class ColumnsView extends viewWithColumnStateMixin {
       case 'onCellPrepared':
       case 'onRowPrepared':
       case 'onCellHoverChanged':
-      case 'keyboardNavigation':
         this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'keyboardNavigation':
+        this.keyboardNavigationOptionChangedHandler(args);
         args.handled = true;
         break;
     }
@@ -1310,6 +1313,15 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
       this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
       this._templateTimeouts?.clear();
+    }
+  }
+
+  private keyboardNavigationOptionChangedHandler({ fullName, previousValue, value }: any): void {
+    const isEnableOptionChanged = fullName === 'keyboardNavigation.enabled'
+      && previousValue !== value;
+
+    if (isEnableOptionChanged) {
+      this._invalidate(true, true);
     }
   }
 }
