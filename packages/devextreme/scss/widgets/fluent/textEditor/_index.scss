@@ -73,7 +73,7 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $texteditor-disabled-color;
+    border-color: $texteditor-border-color-disabled;
   }
   
   &.dx-invalid {
@@ -147,7 +147,7 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $texteditor-disabled-color;
+    border-color: $texteditor-border-color-disabled;
   }
 
   &.dx-invalid {
@@ -190,7 +190,7 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-disabled,
   &.dx-state-readonly {
     &::after {
-      border-bottom-color: $texteditor-disabled-color;
+      border-bottom-color: $texteditor-border-color-disabled;
     }
   }
 
@@ -303,7 +303,7 @@ $fluent-editor-custom-button-margin: 6px;
 
   &.dx-state-focused {
     .dx-texteditor-label {
-      color: $base-accent;
+      color: $texteditor-label-color-focused;
       font-size: $fluent-texteditor-label-font-size;
     }
 
@@ -508,7 +508,7 @@ $fluent-editor-custom-button-margin: 6px;
   1px solid transparent,
   $texteditor-border-color,
   $base-border-color-accessible,
-  $texteditor-disabled-color,
+  $texteditor-border-color-disabled,
   $texteditor-border-color-hover,
   $base-border-color-accessible-hover,
   $texteditor-border-color-focused,

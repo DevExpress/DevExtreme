@@ -16,6 +16,7 @@ $texteditor-color: $base-text-color !default;
 */
 $texteditor-placeholder-color: $base-label-color !default;
 $texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color-focused: $base-accent;
 
 /**
 * $name 30. Background color
@@ -58,7 +59,7 @@ $texteditor-hover-bg: null !default;
 $texteditor-button-clear-icon-color: $base-neutral-foreground3 !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color-hover !default;
 $texteditor-invalid-faded-border-color: $base-invalid-color !default;
-$texteditor-disabled-color: $base-disabled-color !default;
+$texteditor-border-color-disabled: $base-border-color-disabled !default;
 $texteditor-disabled-text-color: $base-foreground-disabled !default;
 $texteditor-input-border-radius: $base-border-radius !default;
 $texteditor-label-transition:

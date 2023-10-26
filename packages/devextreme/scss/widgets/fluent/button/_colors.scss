@@ -5,7 +5,7 @@
 // adduse
 
 $button-border-radius: $base-border-radius !default;
-$button-disabled-background: $base-neutral-background-disabled !default;
+$button-disabled-background: $base-background-disabled !default;
 $button-disabled-icon-opacity: 0.6 !default;
 $button-disabled-text-opacity: 0.6 !default;
 $button-shadow-color: null !default;
@@ -95,19 +95,19 @@ $button-default-active-bg: null !default;
 */
 $button-default-selected-bg: null !default;
 
-$button-default-outlined-color: $base-accent-foreground !default;
+$button-default-outlined-color: $base-accent !default;
 $button-default-outlined-color-hover: null !default;
-$button-default-outlined-color-active: $base-accent-foreground2-active !default;
-$button-default-outlined-selected-color: $base-accent-foreground2-active !default;
+$button-default-outlined-color-active: null !default;
+$button-default-outlined-selected-color: null !default;
 $button-default-outlined-hover-bg: null !default;
 $button-default-outlined-focused-bg: null !default;
 $button-default-outlined-active-bg: null !default;
 $button-default-outlined-selected-bg: null !default;
 
-$button-default-text-color: $base-accent-foreground !default;
+$button-default-text-color: $base-accent !default;
 $button-default-text-color-hover: null !default;
-$button-default-text-color-active: $base-accent-foreground2-active !default;
-$button-default-text-selected-color: $base-accent-foreground2-active !default;
+$button-default-text-color-active: null !default;
+$button-default-text-selected-color: null !default;
 $button-default-text-hover-bg: null !default;
 $button-default-text-focused-bg: null !default;
 $button-default-text-active-bg: null !default;
@@ -233,21 +233,29 @@ $button-success-text-focused-bg: null !default;
 $button-success-text-active-bg: null !default;
 $button-success-text-selected-bg: null !default;
 
+$button-accent-foreground-color: null !default;
+
 @if $mode == "light" {
+  $button-accent-foreground-bg: #0A2E4A !default;
+
   $button-default-bg: $base-accent !default;
   $button-default-hover-bg: $base-accent-hover !default;
   $button-default-focused-bg: $base-accent-hover !default;
   $button-default-active-bg: $base-accent-active !default;
   $button-default-selected-bg: $base-accent-selected !default;
 
-  $button-default-outlined-color-hover: $base-accent-foreground2-active !default;
+  $button-default-outlined-color-hover: $button-accent-foreground-color !default;
+  $button-default-outlined-color-active: $button-accent-foreground-color !default;
+  $button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
   $button-default-outlined-hover-bg: $base-brand2-bg !default;
   $button-default-outlined-focused-bg: $base-brand2-bg !default;
   $button-default-outlined-active-bg: $base-brand2-bg-active !default;
   $button-default-outlined-selected-bg: $base-brand2-bg-selected !default;
 
-  $button-default-text-color-hover: $base-accent-foreground2-active !default;
+  $button-default-text-color-hover: $button-accent-foreground-color !default;
+  $button-default-text-color-active: $button-accent-foreground-color !default;
+  $button-default-text-selected-color: $button-accent-foreground-color !default;
 
   $button-default-text-hover-bg: $base-brand2-bg !default;
   $button-default-text-focused-bg: $base-brand2-bg !default;
@@ -305,19 +313,27 @@ $button-success-text-selected-bg: null !default;
 }
 
 @if $mode == "dark" {
+  $button-accent-foreground-bg: #B4D6F5 !default;
+
   $button-default-bg: $base-accent !default;
   $button-default-hover-bg: $base-accent-hover !default;
   $button-default-focused-bg: $base-accent-hover !default;
   $button-default-active-bg: #b4d6fa !default; 
   $button-default-selected-bg: #a6cff9 !default;
 
-  $button-default-outlined-color-hover: $base-accent-foreground2-hover !default;
+  $button-default-outlined-color-hover: $button-accent-foreground-color !default;
+  $button-default-outlined-color-active: $button-accent-foreground-color !default;
+  $button-default-outlined-selected-color: $button-accent-foreground-color !default;
+
   $button-default-outlined-hover-bg: #082338 !default;
   $button-default-outlined-focused-bg: #082338 !default;
   $button-default-outlined-active-bg: #0F548C !default;
   $button-default-outlined-selected-bg: #0C3B5E !default;
 
-  $button-default-text-color-hover: $base-accent-foreground2-hover !default;
+  $button-default-text-color-hover: $button-accent-foreground-color !default;
+  $button-default-text-color-active: $button-accent-foreground-color !default;
+  $button-default-text-selected-color: $button-accent-foreground-color !default;
+
   $button-default-text-hover-bg: #082338 !default;
   $button-default-text-focused-bg: #082338 !default;
   $button-default-text-active-bg: #0F548C !default;

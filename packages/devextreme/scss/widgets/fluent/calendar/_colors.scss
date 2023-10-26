@@ -53,8 +53,8 @@ $calendar-week-number-border-radius: 0 !default;
 }
 
 @if $mode == "dark" {
-  $calendar-hover-bg: $base-foreground-inverted-hover !default;
-  $calendar-cell-hover-border-color: $base-foreground-inverted-hover !default;
-  $calendar-cell-active-bg: $base-foreground-inverted-focused !default;
+  $calendar-hover-bg: $base-brand-bg !default;
+  $calendar-cell-hover-border-color: $base-brand-bg !default;
+  $calendar-cell-active-bg: $base-brand-bg-selected !default;
   $calendar-cell-contoured-border-color: $base-accent-active !default;
 }
