@@ -65,10 +65,10 @@ import MouseAndTouchStrategy from './pointer/mouse_and_touch';
 */
 
 const getStrategy = (support, { tablet, phone }) => {
-    const pointerEventsStrategy = getStrategyFromGlobalConfig();
+    const pointerEventStrategy = getStrategyFromGlobalConfig();
 
-    if(pointerEventsStrategy) {
-        return pointerEventsStrategy;
+    if(pointerEventStrategy) {
+        return pointerEventStrategy;
     }
 
     if(support.touch && !(tablet || phone)) {
@@ -101,13 +101,13 @@ const pointer = {
 
 function getStrategyFromGlobalConfig(name) {
     const config = GlobalConfig();
-    const eventsStrategyName = config.pointerEventsStrategy;
+    const eventStrategyName = config.pointerEventStrategy;
 
     return {
         'mouse-and-touch': MouseAndTouchStrategy,
         'touch': TouchStrategy,
         'mouse': MouseStrategy,
-    }[eventsStrategyName];
+    }[eventStrategyName];
 }
 
 ///#DEBUG
