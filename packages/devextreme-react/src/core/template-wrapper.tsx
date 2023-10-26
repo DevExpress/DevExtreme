@@ -8,7 +8,8 @@ import {
   useState,
   useRef,
   useMemo,
-  memo
+  memo,
+  FC,
 } from 'react';
 
 import { createPortal } from 'react-dom';
@@ -19,7 +20,7 @@ import { RemovalLockerContext } from './helpers';
 const createHiddenNode = (
   containerNodeName: string,
   ref: React.LegacyRef<any>,
-  defaultElement: string
+  defaultElement: string,
 ) => {
   const style = { display: 'none' };
   switch (containerNodeName) {
@@ -32,19 +33,19 @@ const createHiddenNode = (
   }
 };
 
-const TemplateWrapper = memo(function TemplateWrapper({
+const TemplateWrapper: FC<TemplateWrapperProps> = ({
   templateFactory,
   data,
   index,
   container,
   onRemoved,
-  onRendered
-}: TemplateWrapperProps) {
+  onRendered,
+}) => {
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
   const isRemovalLocked = useRef(false);
   const removalLocker = useMemo(() => ({
-    lock: (): void => { isRemovalLocked.current = true },
-    unlock: (): void => { isRemovalLocked.current = false },
+    lock: (): void => { isRemovalLocked.current = true; },
+    unlock: (): void => { isRemovalLocked.current = false; },
   }), []);
 
   const element = useRef<HTMLElement>();
@@ -77,8 +78,7 @@ const TemplateWrapper = memo(function TemplateWrapper({
 
     if (!removalListenerRequired) {
       setRemovalListenerRequired(true);
-    }
-    else if (removalListenerElement.current) {
+    } else if (removalListenerElement.current) {
       events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
       events.on(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
     }
@@ -107,12 +107,12 @@ const TemplateWrapper = memo(function TemplateWrapper({
   }, [onRendered]);
 
   const hiddenNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
-    hiddenNodeElement.current = node as HTMLElement;
+    hiddenNodeElement.current = node;
     element.current = node?.previousSibling as HTMLElement;
   }, 'div');
 
   const removalListener = removalListenerRequired
-    ? createHiddenNode(container?.nodeName, (node: HTMLElement) => { removalListenerElement.current = node }, 'span')
+    ? createHiddenNode(container?.nodeName, (node: HTMLElement) => { removalListenerElement.current = node; }, 'span')
     : undefined;
 
   return createPortal(
@@ -124,7 +124,7 @@ const TemplateWrapper = memo(function TemplateWrapper({
         </RemovalLockerContext.Provider>
       </>,
       container,
-    );
-});
+  );
+};
 
-export default TemplateWrapper;
+export default memo(TemplateWrapper);

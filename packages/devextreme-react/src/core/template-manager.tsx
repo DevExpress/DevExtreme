@@ -119,21 +119,21 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
     function getDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
-      .reduce((res, [key, template]) => (
-        {
-          ...res,
-          [key]: getTemplateFunction(template),
-        }
-      ), {});
+        .reduce((res, [key, template]) => (
+          {
+            ...res,
+            [key]: getTemplateFunction(template),
+          }
+        ), {});
 
       setTemplateFactories(factories);
 
       const dxTemplates = Object.keys(factories)
-      .reduce<DXTemplateCollection>((templates, templateKey) => {
-        templates[templateKey] = { render: getRenderFunc(templateKey) };
+        .reduce<DXTemplateCollection>((templates, templateKey) => {
+          templates[templateKey] = { render: getRenderFunc(templateKey) };
 
-        return templates;
-      }, {});
+          return templates;
+        }, {});
 
       return dxTemplates;
     }
@@ -159,7 +159,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
           componentKey,
           onRendered,
           onRemoved,
-         }]) => {
+        }]) => {
           subscribeOnRemoval(container, onRemoved);
 
           return <TemplateWrapper
