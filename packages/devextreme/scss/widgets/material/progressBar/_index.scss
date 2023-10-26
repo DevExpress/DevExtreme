@@ -49,7 +49,7 @@ $material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $
 
 .dx-progressbar-status {
   padding-top: $material-progressbar-status-padding;
-  color: $progressbar-label-color;
+  color: $base-text-color;
 
   .dx-progressbar .dx-position-right & {
     padding-top: 0;

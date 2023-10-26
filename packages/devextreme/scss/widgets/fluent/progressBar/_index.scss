@@ -60,7 +60,7 @@
   }
 
   .dx-progressbar-status {
-    color: $base-foreground-disabled;
+    color: $base-text-color;
   }
 
   .dx-progressbar-animating-container {
@@ -74,7 +74,7 @@
 
 .dx-progressbar-status {
   margin-top: $progressbar-status-height;
-  color: $progressbar-label-color;
+  color: $base-text-color;
   height: $progressbar-status-height;
 
   .dx-progressbar .dx-position-right & {
