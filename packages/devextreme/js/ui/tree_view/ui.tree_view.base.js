@@ -57,6 +57,8 @@ const DATA_ITEM_ID = 'data-item-id';
 const ITEM_URL_CLASS = 'dx-item-url';
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
+const HOVER_STATE_CLASS = 'dx-state-hover';
+const FULL_ROW_CLASS = `${WIDGET_CLASS}-fullrow`;
 
 const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
@@ -217,6 +219,27 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
             }
         ]);
+    },
+
+    _hoverStartHandler: function(e) {
+        this.callBase();
+        this._hoverHandler($(e.currentTarget), true);
+    },
+
+    _hoverEndHandler: function(e) {
+        this.callBase();
+        this._hoverHandler($(e.currentTarget), false);
+    },
+
+    _hoverHandler: function($element, hovered) {
+        if($element.hasClass(ITEM_CLASS)) {
+            const closestFullRowElement = $element.parent().find(`.${FULL_ROW_CLASS}`).eq(0);
+            if(hovered) {
+                closestFullRowElement.addClass(HOVER_STATE_CLASS);
+            } else {
+                closestFullRowElement.removeClass(HOVER_STATE_CLASS);
+            }
+        }
     },
 
     // TODO: implement these functions
@@ -708,6 +731,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const nodeData = node.internalFields;
         const showCheckBox = this._showCheckboxes();
 
+        const fullRow = $('<div>').addClass(FULL_ROW_CLASS);
+        $node.append(fullRow);
+
         $node.addClass(showCheckBox ? ITEM_WITH_CHECKBOX_CLASS : ITEM_WITHOUT_CHECKBOX_CLASS);
         $node.toggleClass(INVISIBLE_STATE_CLASS, nodeData.item.visible === false);
 
@@ -734,6 +760,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
         }
+
+        const item = this._getItem($node);
+        const itemHeight = item.outerHeight();
+
+        fullRow.height(itemHeight);
     },
 
     _setAriaSelectionAttribute: noop,
@@ -862,10 +893,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._detachExpandEvent($itemsContainer);
         eventsEngine.on($itemsContainer, expandedEventName, this._itemSelector(), this._expandEventHandler.bind(this));
+        eventsEngine.on($itemsContainer, expandedEventName, `.${FULL_ROW_CLASS}`, this._expandEventHandler.bind(this));
     },
 
     _detachExpandEvent(itemsContainer) {
         eventsEngine.off(itemsContainer, `.${EXPAND_EVENT_NAMESPACE}`, this._itemSelector());
+        eventsEngine.off(itemsContainer, `.${EXPAND_EVENT_NAMESPACE}`, `.${FULL_ROW_CLASS}`);
     },
 
     _getEventNameByOption: function(name) {
@@ -1465,7 +1498,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $itemContainer = this._itemContainer();
         this._detachClickEvent($itemContainer);
 
-        const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector } = this._getItemClickEventData();
+        const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector, fullRowSelector } = this._getItemClickEventData();
+
+        eventsEngine.on($itemContainer, clickEventNamespace, fullRowSelector, (e) => {
+            const item = $(e.currentTarget)[0].nextSibling;
+
+            this._itemClickHandler(e, item);
+        });
 
         eventsEngine.on($itemContainer, clickEventNamespace, itemSelector, (e) => {
             if($(e.target).hasClass(CHECK_BOX_ICON_CLASS) || $(e.target).hasClass(CHECK_BOX_CLASS)) {
@@ -1480,15 +1519,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _detachClickEvent: function(itemsContainer) {
-        const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector } = this._getItemClickEventData();
+        const { clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector, fullRowSelector } = this._getItemClickEventData();
 
         eventsEngine.off(itemsContainer, clickEventNamespace, itemSelector);
+
+        eventsEngine.off(itemsContainer, clickEventNamespace, fullRowSelector);
+
         eventsEngine.off(itemsContainer, pointerDownEventNamespace, nodeSelector);
     },
 
     _getItemClickEventData: function() {
         const itemSelector = `.${this._itemClass()}`;
         const nodeSelector = `.${NODE_CLASS}, .${SELECT_ALL_ITEM_CLASS}`;
+        const fullRowSelector = `.${FULL_ROW_CLASS}`;
         const clickEventNamespace = addNamespace(clickEventName, this.NAME);
         const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
 
@@ -1496,7 +1539,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             clickEventNamespace,
             itemSelector,
             pointerDownEventNamespace,
-            nodeSelector
+            nodeSelector,
+            fullRowSelector
         };
     },
 

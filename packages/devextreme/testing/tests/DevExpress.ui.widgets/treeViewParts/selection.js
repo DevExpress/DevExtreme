@@ -7,6 +7,8 @@ const { module, test } = QUnit;
 
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
+const FULL_ROW_CLASS = 'dx-treeview-fullrow';
+
 module('selection common', () => {
     test('selection should work without checkboxes on init', function() {
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2' }];
@@ -519,6 +521,23 @@ module('selection single', () => {
         treeView.checkSelected([0], items);
     });
 
+    test('selectByClick should work correctly when clicking on the full row item after runtime "showCheckBoxesMode" option change', function(assert) {
+        const items = [{ text: 'item 1' }, { text: 'item 2' }];
+        const treeView = createInstance({
+            items: items,
+            selectByClick: true,
+        });
+
+        treeView.instance.option('showCheckBoxesMode', 'selectAll');
+
+        const $node = treeView.getNodes().eq(0);
+        const fullRow = $node.find(`.${FULL_ROW_CLASS}`);
+
+        eventsEngine.trigger(fullRow, 'dxclick');
+
+        treeView.checkSelected([0], items);
+    });
+
     QUnit.test('expandEvent should work correctly after runtime "showCheckBoxesMode" option change', function(assert) {
         const items = [{ text: 'Item 1', items: [{ text: 'Item 11' }] }];
         const treeView = createInstance({
@@ -529,6 +548,23 @@ module('selection single', () => {
         treeView.instance.option('showCheckBoxesMode', 'selectAll');
 
         eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
+
+        assert.ok(items[0].expanded);
+    });
+
+    QUnit.test('expandEvent should work correctly when clicking on the full row item after runtime "showCheckBoxesMode" option change', function(assert) {
+        const items = [{ text: 'Item 1', items: [{ text: 'Item 11' }] }];
+        const treeView = createInstance({
+            items: items,
+            expandEvent: 'click'
+        });
+
+        treeView.instance.option('showCheckBoxesMode', 'selectAll');
+
+        const $node = treeView.getNodes().eq(0);
+        const fullRowItem = $node.find(`.${FULL_ROW_CLASS}`);
+
+        eventsEngine.trigger(fullRowItem, 'dxclick');
 
         assert.ok(items[0].expanded);
     });

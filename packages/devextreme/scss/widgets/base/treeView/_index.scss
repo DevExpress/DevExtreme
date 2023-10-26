@@ -34,6 +34,8 @@
 
 @mixin treeview-item($gap, $padding, $height, $icon-size, $hover-bg, $item-hover-color, $item-selected-color, $node-padding, $margin: 0, $border-radius: 0) {
   .dx-treeview-item {
+    z-index: 1;
+    position: relative;
     gap: $gap;
     padding: $padding;
     margin: $margin;
@@ -45,12 +47,6 @@
         vertical-align: bottom;
       }
     }
-  
-    &.dx-state-hover {
-      background-color: $hover-bg;
-      border-radius: $border-radius;
-      color: $item-hover-color;
-    }
   }
 
   .dx-state-selected {
@@ -61,6 +57,23 @@
 
   .dx-treeview-node {
     padding-inline-start: math.div($node-padding, 2);
+  }
+
+  .dx-treeview-fullrow {
+    &.dx-state-hover {
+      background-color: $hover-bg;
+      border-radius: $border-radius;
+    }
+
+    &:hover {
+      background-color: $hover-bg;
+      border-radius: $border-radius;
+    }
+
+    position: absolute;
+    width: 100%;
+    left: 0;
+    cursor: pointer;
   }
 }
 
@@ -156,17 +169,24 @@
 
   .dx-treeview-item-without-checkbox {
     &.dx-state-selected {
+      > .dx-treeview-fullrow {
+        border-radius: $border-radius;
+        background-color: $treeview-item-selected-bg;
+      }
+
       > .dx-treeview-item {
         color: $treeview-item-selected-color;
-        background-color: $treeview-item-selected-bg;
       }
     }
 
     &.dx-state-focused {
-      > .dx-treeview-item {
+      > .dx-treeview-fullrow {
         background-color: $treeview-focused-bg;
-        color: $treeview-focus-color;
         border-radius: $border-radius;
+      }
+      
+      > .dx-treeview-item {
+        color: $treeview-focus-color;
       }
     }
   }
