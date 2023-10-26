@@ -9,8 +9,8 @@ const NPM_OUTPUT_DIR = path.join(OUTPUT_DIR, 'npm');
 
 sh.mkdir('-p', NPM_OUTPUT_DIR);
 
-const { 'devextreme-main': devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
-const MAJOR_VERSION = devextremeVersion.split('.').slice(0, 2).join('_');
+const monorepoVersion = sh.exec('npm pkg get version').stdout;
+const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
 // Prepare metadata
 sh.cd(MONOREPO_ROOT);
@@ -43,6 +43,8 @@ sh.popd();
 const BOOTSTRAP_DIR = path.join(MONOREPO_ROOT, 'node_modules', 'bootstrap', 'dist');
 sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], path.join(OUTPUT_DIR, 'js'));
 sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.css')], path.join(OUTPUT_DIR, 'css'));
+
+const { 'devextreme-main': devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
 
 // Update versions for non-semver builds (daily, alpha and beta)
 if (devextremeVersion !== devextremeNpmVersion) {
