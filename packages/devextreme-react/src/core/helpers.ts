@@ -55,7 +55,7 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
   * [Symbol.iterator](): Generator<[{ key1: TKey1; key2: TKey2 }, TValue]> {
     for (const [key1, innerMap] of this._map) {
       for (const [key2, value] of innerMap) {
-        yield ([{ key1, key2 }, value]);
+        yield [{ key1, key2 }, value];
       }
     }
   }
