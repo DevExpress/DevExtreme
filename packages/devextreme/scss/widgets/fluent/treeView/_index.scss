@@ -23,7 +23,6 @@
 @include treeview-item(
   $fluent-treeview-item-element-gap,
   $fluent-treeview-item-padding,
-  $fluent-treeview-item-height,
   $fluent-base-icon-size,
   $treeview-hover-bg,
   $treeview-item-hover-color,
@@ -36,7 +35,7 @@
   $fluent-checkbox-icon-size,
   $fluent-checkbox-container-size,
   $base-text-color,
-  $checkbox-focused-borderd-color,
+  $checkbox-border-color-focused,
   $treeview-item-selected-color,
   $treeview-item-selected-bg,
   $treeview-focused-bg,

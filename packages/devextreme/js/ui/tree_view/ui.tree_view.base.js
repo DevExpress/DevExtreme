@@ -57,6 +57,8 @@ const DATA_ITEM_ID = 'data-item-id';
 const ITEM_URL_CLASS = 'dx-item-url';
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
+const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
+const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
 
 const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
@@ -728,7 +730,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const parent = this._getNode(node.internalFields.parentKey);
 
         if(!parent) {
-            $node.addClass('dx-root-node');
+            $node.addClass(ROOT_NODE_CLASS);
         }
 
         if(nodeData.item.visible !== false) {
@@ -742,7 +744,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!this._hasChildren(node)) {
             this._addLeafClass($node);
             $('<div>')
-                .addClass('dx-expander-icon-stub')
+                .addClass(EXPANDER_ICON_STUB_CLASS)
                 .appendTo(this._getItem($node));
             return;
         }
@@ -946,7 +948,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getItem: function($node) {
-        return $node.children(`.${ITEM_CLASS}`);
+        return $node.children(`.${ITEM_CLASS}`).eq(0);
     },
 
     _createLoadIndicator: function($node) {
@@ -1269,7 +1271,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckboxValue: function(e) {
-        const $node = $(e.element).parent().parent(`.${NODE_CLASS}`);
+        const $node = $(e.element).closest(`.${NODE_CLASS}`);
         const $item = this._getItem($node);
 
         const item = this._getItemData($item);

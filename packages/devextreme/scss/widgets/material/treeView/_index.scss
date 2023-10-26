@@ -16,7 +16,6 @@
 @include treeview-item(
   $material-treeview-item-element-gap,
   $material-treeview-item-padding,
-  $material-treeview-item-height,
   $material-base-icon-size,
   $treeview-hover-bg,
   $treeview-item-hover-color,
@@ -34,7 +33,7 @@
   $material-checkbox-icon-size,
   $material-checkbox-container-size,
   $base-text-color,
-  $checkbox-focused-borderd-color,
+  $checkbox-border-color-focused,
   $treeview-item-selected-color,
   $treeview-item-selected-bg,
   $treeview-focused-bg,

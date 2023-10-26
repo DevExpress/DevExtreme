@@ -16,7 +16,6 @@
 @include treeview-item(
   $generic-treeview-item-element-gap,
   $generic-treeview-item-padding,
-  $generic-treeview-item-height,
   $generic-base-icon-size,
   $treeview-hover-bg,
   $treeview-item-hover-color,
@@ -34,7 +33,7 @@
   $generic-checkbox-container-size,
   $generic-checkbox-container-size,
   $base-text-color,
-  $checkbox-focused-borderd-color,
+  $checkbox-border-color-focused,
   $treeview-item-selected-color,
   $treeview-item-selected-bg,
   $treeview-focused-bg,
@@ -55,7 +54,7 @@
 .dx-treeview-item-with-checkbox {
   &.dx-state-focused {
     >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
-      border: 1px solid $checkbox-focused-borderd-color;
+      border: 1px solid $checkbox-border-color-focused;
     }
   }
 }

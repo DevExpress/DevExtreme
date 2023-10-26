@@ -26,7 +26,7 @@
     }
   }
 
-  .dx-expander-icon-stub {
+  .dx-treeview-expander-icon-stub {
     display: flex;
     flex-shrink: 0;
     width: $size;
@@ -34,7 +34,7 @@
   }
 }
 
-@mixin treeview-item($gap, $padding, $height, $icon-size, $hover-bg, $item-hover-color, $item-selected-color, $node-padding, $margin: 0, $border-radius: 0) {
+@mixin treeview-item($gap, $padding, $icon-size, $hover-bg, $item-hover-color, $item-selected-color, $node-padding, $margin: 0, $border-radius: 0) {
   .dx-treeview-item {
     gap: $gap;
     padding: $padding;
@@ -78,7 +78,7 @@
   $load-indicator-size,
 ) {
   .dx-treeview-search {
-    margin-block-end: $searchbox-margin-bottom;
+    margin-bottom: $searchbox-margin-bottom;
   }
   
   .dx-treeview-with-search > .dx-scrollable {
@@ -128,7 +128,7 @@
   $checkbox-icon-size, 
   $checkbox-container-size, 
   $base-text-color, 
-  $checkbox-focused-borderd-color,
+  $checkbox-border-color-focused,
   $treeview-item-selected-color,
   $treeview-item-selected-bg,
   $treeview-focused-bg,
