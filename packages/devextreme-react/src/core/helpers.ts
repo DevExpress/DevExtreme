@@ -1,9 +1,10 @@
-import { createContext } from "react";
-import { TemplateInstanceDefinition, UpdateLocker } from "./types";
+/* eslint-disable max-classes-per-file, no-restricted-syntax */
+import { createContext } from 'react';
+import { TemplateInstanceDefinition, UpdateLocker } from './types';
 
 export const RemovalLockerContext = createContext<UpdateLocker>({
-  lock: () => void 0,
-  unlock: () => void 0
+  lock: () => undefined,
+  unlock: () => undefined,
 });
 
 export function generateID(): string {
@@ -51,7 +52,7 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
     return copy;
   }
 
-  *[Symbol.iterator](): Generator<[{ key1: TKey1, key2: TKey2 }, TValue]> {
+  * [Symbol.iterator](): Generator<[{ key1: TKey1; key2: TKey2 }, TValue]> {
     for (const [key1, innerMap] of this._map) {
       for (const [key2, value] of innerMap) {
         yield ([{ key1, key2 }, value]);
@@ -60,11 +61,7 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
   }
 }
 
-export class RenderedTemplateInstances extends DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition> {
-  constructor() {
-    super();
-  }
-}
+export class RenderedTemplateInstances extends DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition> {}
 
 export function capitalizeFirstLetter(text: string): string {
   if (text.length) {

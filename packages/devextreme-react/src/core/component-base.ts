@@ -61,7 +61,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   private _createDXTemplates: DXTemplateCreator | undefined;
 
-  private _clearRenderedInstances: () => void | undefined;
+  private _clearRenderedInstances: (() => void) | undefined;
 
   private _childNodes: Node[] = [];
 
@@ -128,7 +128,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     let options: any = {
       templatesRenderAsynchronously: true,
-      ...this._optionsManager.getInitialOptions(config)
+      ...this._optionsManager.getInitialOptions(config),
     };
 
     const templateOptions = this._optionsManager.getTemplateOptions(config);
@@ -138,7 +138,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       options = {
         ...options,
         integrationOptions: {
-          templates: dxTemplates
+          templates: dxTemplates,
         },
       };
     }
@@ -220,10 +220,10 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this.context?.unlock();
   }
 
-  private _setTemplateManagerHooks(createDXTemplates: DXTemplateCreator, clearRenderedInstances: () => void)  {
+  private _setTemplateManagerHooks(createDXTemplates: DXTemplateCreator, clearRenderedInstances: () => void) {
     this._createDXTemplates = createDXTemplates;
     this._clearRenderedInstances = clearRenderedInstances;
-  };
+  }
 
   protected renderChildren(): React.ReactNode {
     // @ts-expect-error TS2339
@@ -264,10 +264,10 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         this._getElementProps(),
         this.renderContent(),
         React.createElement(TemplateManager, {
-          init: this._setTemplateManagerHooks
+          init: this._setTemplateManagerHooks,
         }),
       ),
-      this.isPortalComponent && this.renderPortal()
+      this.isPortalComponent && this.renderPortal(),
     );
   }
 }

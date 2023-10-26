@@ -1,12 +1,19 @@
 import * as React from 'react';
 import * as events from 'devextreme/events';
-import { useState, useMemo, useCallback, useRef, FC } from 'react';
+
+import {
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  FC,
+} from 'react';
 
 import {
   TemplateManagerProps,
   GetRenderFuncFn,
   DXTemplateCollection,
-  TemplateFunc
+  TemplateFunc,
 } from './types';
 
 import TemplateWrapper from './template-wrapper';
@@ -28,7 +35,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 }
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
-  const [renderedInstances, setRenderedInstances] = useState<RenderedTemplateInstances>(new RenderedTemplateInstances());
+  const [renderedInstances, setRenderedInstances] = useState(new RenderedTemplateInstances());
   const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
   const widgetId = useRef('');
 
@@ -44,33 +51,36 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     }
   }, []);
 
-  const createMapKey = useCallback((key1: any, key2: HTMLElement) => {
-    return { key1, key2 };
-  }, []);
+  const createMapKey = useCallback((key1: any, key2: HTMLElement) => ({ key1, key2 }), []);
 
-  const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []); 
+  const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
 
-  const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({ model: data, index, container, onRendered }) => {
+  const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
+    model: data,
+    index,
+    container,
+    onRendered
+  }) => {
     const key = createMapKey(data, container);
-  
-    const onRemoved = () => {
-      setRenderedInstances(renderedInstances => {
-        const template = renderedInstances.get(key);
-        
-        if (template) {
-          renderedInstances.delete(key);
 
-          return renderedInstances.shallowCopy();
+    const onRemoved = (): void => {
+      setRenderedInstances((currentRenderedInstances) => {
+        const template = currentRenderedInstances.get(key);
+
+        if (template) {
+          currentRenderedInstances.delete(key);
+
+          return currentRenderedInstances.shallowCopy();
         }
 
-        return renderedInstances;
+        return currentRenderedInstances;
       });
     };
 
     const hostWidgetId = widgetId.current;
-  
-    setRenderedInstances(renderedInstances => {
-      renderedInstances.set(key, {
+
+    setRenderedInstances((currentRenderedInstances) => {
+      currentRenderedInstances.set(key, {
         templateKey,
         index,
         componentKey: getRandomId(),
@@ -81,26 +91,23 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
             onRendered?.();
           }
         },
-        onRemoved
+        onRemoved,
       });
 
-      return renderedInstances.shallowCopy();
+      return currentRenderedInstances.shallowCopy();
     });
-
   }, [unsubscribeOnRemoval, createMapKey]);
 
   useMemo(() => {
-    function getTemplateFunction (template: ITemplate): TemplateFunc {
-      switch(template.type) {
-        case 'children': return () => {
-          return template.content;
-        }
-  
+    function getTemplateFunction(template: ITemplate): TemplateFunc {
+      switch (template.type) {
+        case 'children': return () => template.content as JSX.Element;
+
         case 'render': return (props) => {
           normalizeProps(props);
           return template.content(props.data, props.index);
-        }; 
-  
+        };
+
         case 'component': return (props) => {
           props = normalizeProps(props);
           return React.createElement.bind(null, template.content)(props);
@@ -110,7 +117,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       }
     }
 
-    function getDXTemplates (templateOptions: Record<string, ITemplate>) {
+    function getDXTemplates(templateOptions: Record<string, ITemplate>) {
       const factories = Object.entries(templateOptions)
         .reduce((res, [key, template]) => ({
           ...res,
@@ -123,13 +130,14 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       const dxTemplates = Object.keys(factories)
         .reduce<DXTemplateCollection>((dxTemplates, templateKey) => {
           dxTemplates[templateKey] = { render: getRenderFunc(templateKey) };
+
           return dxTemplates;
         }, {});
 
       return dxTemplates;
     }
 
-    function clearRenderedInstances () {
+    function clearRenderedInstances() {
       widgetId.current = getRandomId();
       setRenderedInstances(new RenderedTemplateInstances());
     }
@@ -148,7 +156,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
           templateKey,
           componentKey,
           onRendered,
-          onRemoved
+          onRemoved,
          }]) => {
           subscribeOnRemoval(container, onRemoved);
           
