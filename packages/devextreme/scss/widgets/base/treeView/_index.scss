@@ -27,6 +27,8 @@
   }
 
   .dx-expander-icon-stub {
+    display: flex;
+    flex-shrink: 0;
     width: $size;
     height: $size;
   }
