@@ -130,10 +130,10 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
       const dxTemplates = Object.keys(factories)
         .reduce<DXTemplateCollection>((templates, templateKey) => {
-          templates[templateKey] = { render: getRenderFunc(templateKey) };
+        templates[templateKey] = { render: getRenderFunc(templateKey) };
 
-          return templates;
-        }, {});
+        return templates;
+      }, {});
 
       return dxTemplates;
     }
