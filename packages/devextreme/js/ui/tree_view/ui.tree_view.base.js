@@ -743,7 +743,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._addLeafClass($node);
             $('<div>')
                 .addClass('dx-expander-icon-stub')
-                .prependTo(this._getItem($node));
+                .appendTo(this._getItem($node));
             return;
         }
 
@@ -959,7 +959,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderExpanderIcon: function($node, node, $icon, iconClass) {
-        $icon.prependTo(this._getItem($node));
+        $icon.appendTo(this._getItem($node));
         $icon.addClass(iconClass);
 
         if(node.internalFields.disabled) {
@@ -974,7 +974,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const $icon = $('<div>')
             .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
-            .prependTo($treeViewItem);
+            .appendTo($treeViewItem);
 
         if(node.internalFields.expanded) {
             $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
