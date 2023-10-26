@@ -9,8 +9,8 @@ const NPM_OUTPUT_DIR = path.join(OUTPUT_DIR, 'npm');
 
 sh.mkdir('-p', NPM_OUTPUT_DIR);
 
-const { devextreme: packageVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
-const MAJOR_VERSION = packageVersion.split('.').slice(0, 2).join('_');
+const monorepoVersion = sh.exec('npm pkg get version').stdout;
+const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
 // Prepare metadata
 sh.cd(MONOREPO_ROOT);
