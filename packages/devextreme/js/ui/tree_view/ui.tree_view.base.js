@@ -809,12 +809,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _setElementData: function(element, data, index) {
-        this.callBase(element, data, index);
+    _postprocessRenderItem(args) {
+        const { itemData, itemElement } = args;
 
         if(this._showCheckboxes()) {
-            this._renderCheckBox(element, this._getNode(data));
+            this._renderCheckBox(itemElement, this._getNode(itemData));
         }
+
+        this.callBase(args);
     },
 
     _renderSublevel: function($node, node, childNodes) {
