@@ -35,7 +35,7 @@ QUnit.module('scrollToItem', {
             displayExpr: 'id',
             scrollDirection: scrollDirection,
             height: 150,
-            width: 170,
+            width: 175,
             animationEnabled: false,
             items: items,
             rtlEnabled: rtlEnabled,
