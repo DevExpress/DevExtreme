@@ -7,9 +7,11 @@ const INTERNAL_TOOLS_ARTIFACTS = path.join(MONOREPO_ROOT, 'artifacts', 'internal
 const OUTPUT_DIR = path.join(MONOREPO_ROOT, 'artifacts');
 const NPM_OUTPUT_DIR = path.join(OUTPUT_DIR, 'npm');
 
+sh.set('-e');
+
 sh.mkdir('-p', NPM_OUTPUT_DIR);
 
-const monorepoVersion = sh.exec('npm pkg get version').stdout;
+const monorepoVersion = sh.exec('npm pkg get version', { silent: true }).stdout.replaceAll('"', '');
 const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
 // Prepare metadata
@@ -54,21 +56,22 @@ if (devextremeVersion !== devextremeNpmVersion) {
 const DEVEXTREME_NPM_DIR = path.join(MONOREPO_ROOT, 'packages/devextreme/artifacts/npm');
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'))
-sh.exec('npm pack');
+sh.exec('npm pack', { silent: true });
 sh.cp('*.tgz', NPM_OUTPUT_DIR);
 sh.popd();
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist'))
-sh.exec('npm pack');
+sh.exec('npm pack', { silent: true });
 sh.cp('*.tgz', NPM_OUTPUT_DIR);
 sh.popd();
 
 sh.pushd(path.join(MONOREPO_ROOT, 'packages', 'devextreme-themebuilder'))
-sh.exec('npm run build && npm run pack');
+sh.exec('npm run build');
+sh.exec('npm run pack', { silent: true });
 sh.cp('dist/*.tgz', NPM_OUTPUT_DIR);
 sh.popd();
 
-sh.exec('npm run pack --ws --if-present');
+sh.exec('npm run pack --ws --if-present', { silent: true });
 
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_OUTPUT_DIR);
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_OUTPUT_DIR);
