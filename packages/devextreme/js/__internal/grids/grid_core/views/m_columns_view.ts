@@ -1119,21 +1119,20 @@ export class ColumnsView extends viewWithColumnStateMixin {
         const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
         for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-          let $cell: dxElementWrapper | undefined;
-          const $row = $rows.eq(rowIndex);
           const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
 
           if (visibleIndex >= 0) {
-            $cell = $row.hasClass(GROUP_ROW_CLASS)
+            const $row = $rows.eq(rowIndex);
+            const $cell = $row.hasClass(GROUP_ROW_CLASS)
               ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
               : $row.find('td').eq(visibleIndex);
-          }
 
-          const cell = $cell?.get(0) as HTMLElement;
+            if ($cell.length) {
+              const cell = $cell.get(0) as HTMLElement;
 
-          if (cell) {
-            setCellWidth(cell, column, width);
-            cell.style.minWidth = minWidth;
+              setCellWidth(cell, column, width);
+              cell.style.minWidth = minWidth;
+            }
           }
         }
       }
