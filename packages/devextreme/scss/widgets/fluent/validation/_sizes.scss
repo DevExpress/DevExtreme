@@ -13,7 +13,7 @@ $fluent-validation-message-font-size: 12px !default;
 
 @if $size == "default" {
   $fluent-validation-message-padding: 6px !default;
-  $fluent-validationsummary-item-margin: 10px !default;
+  $fluent-validationsummary-item-margin: 6px !default;
 
   $fluent-validation-message-horizontal-padding: 8px !default;
   $fluent-validation-message-line-height: 16px !default;
@@ -21,7 +21,7 @@ $fluent-validation-message-font-size: 12px !default;
 
 @else if $size == "compact" {
   $fluent-validation-message-padding: 4px !default;
-  $fluent-validationsummary-item-margin: 6px !default;
+  $fluent-validationsummary-item-margin: 4px !default;
 
   $fluent-validation-message-horizontal-padding: 6px !default;
   $fluent-validation-message-line-height: 12px !default;
