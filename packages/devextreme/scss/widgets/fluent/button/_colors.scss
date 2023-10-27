@@ -214,6 +214,7 @@ $button-success-outlined-selected-bg: null !default;
 $button-accent-foreground-color: null !default;
 
 @if $mode == "light" {
+  $button-accent-foreground-color: null !default;
   $button-accent-foreground-bg: #0A2E4A !default;
 
   $button-default-bg: $base-accent !default;
@@ -266,6 +267,7 @@ $button-accent-foreground-color: null !default;
 }
 
 @if $mode == "dark" {
+  $button-accent-foreground-color: null !default;
   $button-accent-foreground-bg: #B4D6F5 !default;
 
   $button-default-bg: $base-accent !default;
