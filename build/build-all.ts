@@ -44,7 +44,7 @@ sh.popd();
 // TODO: maybe we should add bootstrap to vendors
 const BOOTSTRAP_DIR = path.join(MONOREPO_ROOT, 'node_modules', 'bootstrap', 'dist');
 sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], path.join(OUTPUT_DIR, 'js'));
-sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.css')], path.join(OUTPUT_DIR, 'css'));
+sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], path.join(OUTPUT_DIR, 'css'));
 
 const { 'devextreme-main': devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
 
