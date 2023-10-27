@@ -47,8 +47,11 @@ $fluent-scheduler-header-height: $fluent-toolbar-height + 2px !default;
 
 $scheduler-timeline-cell-height: 50px !default;
 
+$header-day-element-height: null !default;
+
 
 @if $size == "default" {
+  $header-day-element-height: 26px;
   $fluent-scheduler-workspace-date-table-cell-height: 38px !default;
 
   $fluent-scheduler-toolbar-item-offset: 0 12px !default;
@@ -76,11 +79,12 @@ $scheduler-timeline-cell-height: 50px !default;
 }
 
 @else if $size == "compact" {
+  $header-day-element-height: 24px;
   $fluent-scheduler-workspace-date-table-cell-height: 28px !default;
 
   $fluent-scheduler-toolbar-item-offset: 0 8px !default;
   $fluent-scheduler-navigator-height: 28px !default;
-  $fluent-scheduler-header-panel-day-font-size: 20px !default;
+  $fluent-scheduler-header-panel-day-font-size: 14px !default;
 
   $fluent-scheduler-appointment-tooltip-title-font-size: 14px !default;
   $fluent-scheduler-appointment-tooltip-date-font-size: 11px !default;
