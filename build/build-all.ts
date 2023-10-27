@@ -33,6 +33,7 @@ sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
 sh.exec('npm run devextreme:inject-descriptions');
 
 sh.exec('npm run build-dist -w devextreme-main');
+sh.exec('npm run build -w devextreme-themebuilder');
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(MONOREPO_ROOT, 'packages/devextreme/artifacts'));
@@ -65,13 +66,13 @@ sh.exec('npm pack', { silent: true });
 sh.cp('*.tgz', NPM_OUTPUT_DIR);
 sh.popd();
 
-sh.pushd(path.join(MONOREPO_ROOT, 'packages', 'devextreme-themebuilder'))
-sh.exec('npm run build');
-sh.exec('npm run pack', { silent: true });
-sh.cp('dist/*.tgz', NPM_OUTPUT_DIR);
+sh.pushd(path.join(MONOREPO_ROOT, 'packages', 'devextreme-themebuilder', 'dist'));
+sh.exec(`npm pkg set version="${devextremeNpmVersion}"`);
+sh.exec('npm pack', { silent: true });
+sh.cp('*.tgz', NPM_OUTPUT_DIR);
 sh.popd();
 
-sh.exec('npm run pack --ws --if-present', { silent: true });
+sh.exec('npm run pack -w devextreme-angular -w devextreme-react -w devextreme-vue', { silent: true });
 
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_OUTPUT_DIR);
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_OUTPUT_DIR);
