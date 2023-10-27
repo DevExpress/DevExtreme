@@ -165,10 +165,17 @@ gulp.task('npm.pack', gulp.series(
     .pipe(gulp.dest('./node_modules/devextreme-angular')); }
 ));
 
+gulp.task('copy.source', function() {
+    var npmConfig = buildConfig.npm;
+    return gulp.src(`${path.join(npmConfig.distPath, '/**/*.*')}`)
+        .pipe(gulp.dest('./node_modules/devextreme-angular'));
+});
+
 //------------Main------------
 
 var buildTask = gulp.series(
-    'build.components'
+    'build.components',
+    'copy.source'
 );
 
 gulp.task('build', buildTask);
@@ -243,17 +250,11 @@ gulp.task('test.components.server.debug', function(done) {
     new karmaServer(config, done).start();
 });
 
-gulp.task('copy.source', function() {
-    var npmConfig = buildConfig.npm;
-    return gulp.src(`${path.join(npmConfig.distPath, '/**/*.*')}`)
-        .pipe(gulp.dest('./node_modules/devextreme-angular'));
-});
-
 gulp.task('run.tests', gulp.series('test.components.client'));
 
 // gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
 
-gulp.task('test', gulp.series('build', 'copy.source', 'run.tests'));
+gulp.task('test', gulp.series('build', 'run.tests'));
 
 gulp.task('watch.test', function(done) {
     new karmaServer({
