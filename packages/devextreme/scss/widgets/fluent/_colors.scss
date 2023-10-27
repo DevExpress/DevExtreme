@@ -126,10 +126,10 @@ $scrollview-pulldown-path: null !default;
   $base-accent-selected: rgba(14, 71, 117, 1) !default; // #0E4775
   
   $base-text-color: rgba(36, 36, 36, 1) !default; // #242424;
-  $base-foreground-disabled: rgba(189, 189, 189, 1) !default; // bdbdbd
   $base-neutral-foreground2: lighten($base-text-color, 11.76) !default; // #424242;
   $base-neutral-foreground3: lighten($base-text-color, 23.92) !default; // #616161;
   $base-neutral-foreground4: lighten($base-text-color, 29.80) !default; // #707070
+  $base-foreground-disabled: lighten($base-text-color, 60) !default; // #bdbdbd
 
   $base-brand-bg: rgba(15, 108, 189, 1) !default; // #0F6CBD
   $base-brand-bg-hover: rgba(17, 94, 163, 1) !default; // #115EA3
@@ -195,10 +195,10 @@ $scrollview-pulldown-path: null !default;
   $base-accent-selected: rgba(15, 84, 140, 1) !default; // #0f548c
   
   $base-text-color: rgba(255, 255, 255, 1) !default; // #ffffff;
-  $base-foreground-disabled: rgba(92, 92, 92, 1) !default; // #5c5c5c
   $base-neutral-foreground2: darken($base-text-color, 16.08) !default; // #d6d6d6;
   $base-neutral-foreground3: darken($base-text-color, 32.16) !default; // #adadad;
   $base-neutral-foreground4: darken($base-text-color, 40.00) !default; // #999999
+  $base-foreground-disabled: darken($base-text-color, 63.9) !default; // #5c5c5c
 
   $base-brand-bg: rgba(17, 94, 163, 1) !default; // #115EA3
   $base-brand-bg-hover: rgba(15, 108, 189, 1) !default; // #0F6CBD
