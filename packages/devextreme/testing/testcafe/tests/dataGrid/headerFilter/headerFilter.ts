@@ -4,14 +4,13 @@ import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 import { getData } from '../helpers/generateDataSourceData';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Header Filter`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';
 
-safeSizeTest('HeaderFilter icon should be grayed out after the clearFilter call (T1193648)', async (t) => {
+test('HeaderFilter icon should be grayed out after the clearFilter call (T1193648)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
