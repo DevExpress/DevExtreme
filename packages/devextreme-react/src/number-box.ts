@@ -1,3 +1,4 @@
+"use client"
 import dxNumberBox, {
     Properties
 } from "devextreme/ui/number_box";

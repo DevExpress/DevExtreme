@@ -1,3 +1,4 @@
+@use "../variables/colors" as *;
 @use "../variables/sizes" as *;
 
 // adduse
@@ -84,6 +85,16 @@
       border-bottom-right-radius: $material-indicator-border-radius-secondary;
       border-top-left-radius: unset;
       border-bottom-left-radius: unset;
+    }
+  }
+}
+
+@mixin dx-tabs-indicator-primary-base($position) {
+  .dx-tab-selected {
+    @include dx-tabs-indicator-primary($position, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-indicator-primary($position, $tabs-disabled-tab-border-color);
     }
   }
 }

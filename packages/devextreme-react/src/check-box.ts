@@ -1,3 +1,4 @@
+"use client"
 import dxCheckBox, {
     Properties
 } from "devextreme/ui/check_box";

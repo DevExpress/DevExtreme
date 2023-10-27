@@ -1,3 +1,4 @@
+"use client"
 import dxScheduler, {
     Properties
 } from "devextreme/ui/scheduler";

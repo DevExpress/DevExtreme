@@ -1,3 +1,4 @@
+"use client"
 import dxAutocomplete, {
     Properties
 } from "devextreme/ui/autocomplete";
