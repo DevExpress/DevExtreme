@@ -58,6 +58,14 @@ const getScreenshotName = (
   firstDay?: number,
 ) => `view_markup_recurrent-appts_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}_first-day-${firstDay}.png`;
 
+const getScreenshotNameForEdgeCase = (
+  edgeCaseName: string,
+  viewType: string,
+  offset: number,
+  startDayHour: number,
+  endDayHour: number,
+) => `view_markup_recurrent-appts_${edgeCaseName}_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}.png`;
+
 [
   { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
@@ -123,5 +131,179 @@ first day: ${views[0].firstDayOfWeek}
           await removeStylesheetRulesFromPage();
         });
     });
+  });
+});
+
+[
+  { views: [{ type: 'day', cellDuration: 60 }] },
+  { views: [{ type: 'timelineDay', cellDuration: 240 }] },
+].forEach(({ views }) => {
+  [
+    // Positive offset case without limits
+    {
+      dataSource: [{
+        startDate: '2023-09-01T10:00:00',
+        endDate: '2023-09-01T14:00:00',
+        text: '#0 WE 10:00->14:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      },
+      {
+        startDate: '2023-09-01T20:00:00',
+        endDate: '2023-09-02T04:00:00',
+        text: '#1 WE 20:00->04:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      },
+      {
+        startDate: '2023-09-01T10:00:00',
+        endDate: '2023-09-01T14:00:00',
+        text: '#2 TH 10:00->14:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TH',
+      },
+      {
+        startDate: '2023-09-01T00:00:00',
+        endDate: '2023-09-01T00:00:00',
+        text: '#3 All-day TH',
+        allDay: true,
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TH',
+      }],
+      offset: 720,
+      startDayHour: 0,
+      endDayHour: 24,
+    },
+    // Positive offset case with limits
+    {
+      dataSource: [{
+        startDate: '2023-09-01T20:00:00',
+        endDate: '2023-09-01T22:00:00',
+        text: '#0 WE 15:00->19:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      },
+      {
+        startDate: '2023-09-01T23:00:00',
+        endDate: '2023-09-02T01:00:00',
+        text: '#1 WE 23:00->01:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      },
+      {
+        startDate: '2023-09-01T04:00:00',
+        endDate: '2023-09-01T06:00:00',
+        text: '#2 TH 04:00->06:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TH',
+      },
+      {
+        startDate: '2023-09-01T00:00:00',
+        endDate: '2023-09-01T00:00:00',
+        text: '#3 All-day TH',
+        allDay: true,
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TH',
+      }],
+      offset: 720,
+      startDayHour: 9,
+      endDayHour: 17,
+    },
+    // Negative offset case without limits
+    {
+      dataSource: [{
+        startDate: '2023-09-01T10:00:00',
+        endDate: '2023-09-01T14:00:00',
+        text: '#0 TU 10:00->14:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+      },
+      {
+        startDate: '2023-09-01T20:00:00',
+        endDate: '2023-09-02T04:00:00',
+        text: '#1 TU 20:00->04:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+      },
+      {
+        startDate: '2023-09-01T10:00:00',
+        endDate: '2023-09-01T14:00:00',
+        text: '#2 WE 10:00->14:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      },
+      {
+        startDate: '2023-09-01T00:00:00',
+        endDate: '2023-09-01T00:00:00',
+        text: '#3 All-day WE',
+        allDay: true,
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      }],
+      offset: -720,
+      startDayHour: 0,
+      endDayHour: 24,
+    },
+    // Negative offset case with limits
+    {
+      dataSource: [{
+        startDate: '2023-09-01T20:00:00',
+        endDate: '2023-09-01T22:00:00',
+        text: '#0 TU 15:00->19:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+      },
+      {
+        startDate: '2023-09-01T23:00:00',
+        endDate: '2023-09-02T01:00:00',
+        text: '#1 TU 23:00->01:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+      },
+      {
+        startDate: '2023-09-01T04:00:00',
+        endDate: '2023-09-01T06:00:00',
+        text: '#2 WE 04:00->06:00',
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      },
+      {
+        startDate: '2023-09-01T00:00:00',
+        endDate: '2023-09-01T00:00:00',
+        text: '#3 All-day WE',
+        allDay: true,
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
+      }],
+      offset: -720,
+      startDayHour: 9,
+      endDayHour: 17,
+    },
+  ].forEach(({
+    dataSource, offset, startDayHour, endDayHour,
+  }) => {
+    test(`
+Recurrence appointments and workspaces render in short day views (
+offset: ${offset},
+start: ${startDayHour},
+end: ${endDayHour}
+)`, async (t) => {
+      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await takeScreenshot(
+        getScreenshotNameForEdgeCase(
+          'short-day-views',
+          views[0].type,
+          offset,
+          startDayHour,
+          endDayHour,
+        ),
+        scheduler.workSpace,
+      );
+
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await insertStylesheetRulesToPage(REDUCE_CELLS_CSS);
+      await createWidget('dxScheduler', {
+        currentDate: '2023-09-06',
+        height: 800,
+        maxAppointmentsPerCell: 'unlimited',
+        currentView: views[0].type,
+        dataSource,
+        views,
+        offset,
+        startDayHour,
+        endDayHour,
+      });
+    })
+      .after(async () => {
+        await removeStylesheetRulesFromPage();
+      });
   });
 });
