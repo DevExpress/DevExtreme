@@ -116,6 +116,7 @@ const getScreenshotName = (
     ].forEach(({ startDayHour, endDayHour }) => {
       test(`
 All-day appointments and workspaces render (
+view: ${views[0].type},
 offset: ${offset},
 start: ${startDayHour},
 end: ${endDayHour}
