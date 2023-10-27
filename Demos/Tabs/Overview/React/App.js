@@ -9,9 +9,6 @@ import {
   tabsText,
   stylingModeLabel,
   iconPositionLabel,
-  scrollContentLabel,
-  fullWidthLabel,
-  showNavigationLabel,
   tabsIconAndText,
   stylingModes,
   iconPositions,
@@ -35,6 +32,7 @@ const App = () => {
   const [showNavigation, setShowNavigation] = React.useState(false);
   const [scrollContent, setScrollContent] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(false);
+  const [rtlEnabled, setRtlEnabled] = React.useState(false);
   const [widgetWrapperClasses, setWidgetWrapperClasses] = React.useState('widget-wrapper widget-wrapper-horizontal');
 
   const stylingModeChanged = React.useCallback((e) => {
@@ -64,6 +62,10 @@ const App = () => {
     setFullWidth(e.value);
   }, [setFullWidth]);
 
+  const rtlEnabledChanged = React.useCallback((e) => {
+    setRtlEnabled(e.value);
+  }, [setRtlEnabled]);
+
   return (
     <div id="tabs-demo">
       <div className="widget-container">
@@ -72,17 +74,20 @@ const App = () => {
             id="withText"
             width="auto"
             selectedIndex={0}
+            rtlEnabled={rtlEnabled}
             dataSource={tabsText}
             scrollByContent={scrollContent}
             showNavButtons={showNavigation}
             orientation={orientation}
             stylingMode={stylingMode}
+            iconPosition={iconPosition}
           />
 
           <Tabs
             id="withIconAndText"
             width="auto"
             selectedIndex={0}
+            rtlEnabled={rtlEnabled}
             dataSource={tabsIconAndText}
             scrollByContent={scrollContent}
             showNavButtons={showNavigation}
@@ -95,6 +100,7 @@ const App = () => {
             id="withIcon"
             width="auto"
             selectedIndex={0}
+            rtlEnabled={rtlEnabled}
             dataSource={tabsIcon}
             scrollByContent={scrollContent}
             showNavButtons={showNavigation}
@@ -139,7 +145,6 @@ const App = () => {
           <CheckBox
             id="show-navigation-buttons"
             text="Show navigation buttons"
-            elementAttr={showNavigationLabel}
             value={showNavigation}
             onValueChanged={showNavigationChanged}
           />
@@ -148,7 +153,6 @@ const App = () => {
         <div className="option">
           <CheckBox
             text="Scroll content"
-            elementAttr={scrollContentLabel}
             value={scrollContent}
             onValueChanged={scrollContentChanged}
           />
@@ -157,9 +161,16 @@ const App = () => {
         <div className="option">
           <CheckBox
             text="Full width"
-            elementAttr={fullWidthLabel}
             value={fullWidth}
             onValueChanged={fullWidthChanged}
+          />
+        </div>
+
+        <div className="option">
+          <CheckBox
+            text="Right-to-left mode"
+            value={rtlEnabled}
+            onValueChanged={rtlEnabledChanged}
           />
         </div>
       </div>

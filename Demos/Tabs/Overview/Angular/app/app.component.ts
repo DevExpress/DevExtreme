@@ -49,6 +49,8 @@ export class AppComponent {
 
   scrollByContent = false;
 
+  rtlEnabled = false;
+
   widgetWrapperClasses = 'widget-wrapper widget-wrapper-horizontal';
 
   constructor(service: Service) {

@@ -1,6 +1,7 @@
 $(() => {
   const tab1 = $('#withText').dxTabs({
     width: 'auto',
+    rtlEnabled: false,
     selectedIndex: 0,
     showNavButtons: false,
     dataSource: tabsText,
@@ -11,6 +12,7 @@ $(() => {
 
   const tab2 = $('#withIconAndText').dxTabs({
     width: 'auto',
+    rtlEnabled: false,
     selectedIndex: 0,
     showNavButtons: false,
     dataSource: tabsIconAndText,
@@ -21,6 +23,7 @@ $(() => {
 
   const tab3 = $('#withIcon').dxTabs({
     width: 'auto',
+    rtlEnabled: false,
     selectedIndex: 0,
     showNavButtons: false,
     dataSource: tabsIcon,
@@ -64,7 +67,6 @@ $(() => {
 
   $('#show-navigation-buttons').dxCheckBox({
     text: 'Show navigation buttons',
-    elementAttr: { 'aria-label': 'Show Navigation Buttons' },
     value: false,
     onValueChanged(data) {
       setTabsOption('showNavButtons', data.value);
@@ -73,7 +75,6 @@ $(() => {
 
   $('#scroll-content').dxCheckBox({
     text: 'Scroll content',
-    elementAttr: { 'aria-label': 'Scroll content' },
     value: false,
     onValueChanged(data) {
       setTabsOption('scrollByContent', data.value);
@@ -82,10 +83,17 @@ $(() => {
 
   $('#full-width').dxCheckBox({
     text: 'Full width',
-    elementAttr: { 'aria-label': 'Full width' },
     value: false,
     onValueChanged(data) {
       setTabsOption('width', data.value ? '100%' : 'auto');
+    },
+  });
+
+  $('#rtl').dxCheckBox({
+    text: 'Right-to-left mode',
+    value: false,
+    onValueChanged(data) {
+      setTabsOption('rtlEnabled', data.value);
     },
   });
 
