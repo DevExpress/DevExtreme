@@ -13,12 +13,12 @@ The `devextreme-angular` package allows you to use [DevExtreme components](http:
 
 ## License
 
-The `devextreme-angular` package is an **MIT-licensed (free and open-source)** add-on to DevExtreme.
+The `devextreme-angular` package is an **MIT-licensed (free and open-source)** add-on for DevExtreme.
 
 For more information on licensing requirements, read the [FAQ](https://js.devexpress.com/Licensing/). DevExpress offers a [free trial](http://js.devexpress.com/Buy/) of the product.
 
 ## Support & Feedback
 
-For more information on the Angular framework and how to use it, read the [official documentation](https://angular.io/docs).
+For more information on the Angular framework and how to use it, see the [official documentation](https://angular.io/docs).
 
 If you own an active [commercial DevExtreme license](https://js.devexpress.com/Licensing/#Commercial), submit your questions, suggestions, and bug reports to the [DevExpress Support Center](https://www.devexpress.com/sc). Alternatively, create a new [issue](https://github.com/DevExpress/devextreme/issues) in the GitHub repo.
