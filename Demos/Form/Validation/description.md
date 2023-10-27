@@ -1,4 +1,4 @@
-﻿This demo shows how to validate Form editors. To apply validation rules to an editor, declare them in the [validationRules[]](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/) array. Specify [type](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/RequiredRule/#type) and other properties for each rule. 
+﻿This demo shows how to validate Form editors. To apply validation rules to an editor, declare them in the [validationRules](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/) array. Specify [type](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/RequiredRule/#type) and other properties for each rule. 
 
 The following validation rules are shown in this demo:  
 - [RequiredRule](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/RequiredRule/)  
@@ -21,6 +21,9 @@ Requires that an editor value matches the Email pattern.
 
 - [AsyncRule](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/AsyncRule/)    
 Allows you to add custom server-side validation logic. Rules of this type run last, only if all other rules passed. In this demo, an AsyncRule checks whether user input matches `test@dx-email.com`.
+
+- [CustomRule](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/CustomRule/)    
+A rule with custom validation logic.
 
 To submit form data, do the following:
 

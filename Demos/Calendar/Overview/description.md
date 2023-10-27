@@ -1,14 +1,21 @@
 When you add a Calendar to an application, you need to specify its [value](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#value) in one of the following formats: 
 
-- Date objects
+- Date    
+Specifies the date directly.
 
-- The number of milliseconds since 00:00:00 on January 1, 1970
+- Number    
+Specifies the date with a timestamp (total milliseconds since 1970/01/01).
 
-- Strings that match the following patterns: 
-    - 'yyyy-MM-dd'
-    - 'yyyy-MM-ddTHH:mm:ss'
-    - 'yyyy-MM-ddTHH:mm:ssZ'
-    - 'yyyy-MM-ddTHH:mm:ssx' 
+- String    
+Specifies the date with a string value. The UI component supports the following formats of a date string:
+
+    - "yyyy-MM-dd" (for example, "2017-03-06")
+    - "yyyy-MM-ddTHH:mm:ss" (for example, "2017-03-27T16:54:48")
+    - "yyyy-MM-ddTHH:mm:ssZ" (for example, "2017-03-27T13:55:41Z")
+    - "yyyy-MM-ddTHH:mm:ssx" (for example, "2017-03-27T16:54:10+03")
+
+- Array of the formats mentioned before    
+Available only for *'multiple'* and *'range'* [selection modes](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#selectionMode). The array includes all selected dates. 
 
 This demo shows how to use additional properties to customize your Calendar. You can toggle the checkboxes on the right to change the Calendar in real time.
 
