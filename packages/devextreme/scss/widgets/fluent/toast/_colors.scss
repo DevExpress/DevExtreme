@@ -8,7 +8,7 @@
 * $name 10. Text color
 * $type color
 */
-$toast-color: color.change(#fff, $alpha: 0.87) !default;
+$toast-color: #fff !default;
 $toast-border-radius: $base-border-radius !default;
 $toast-default-bg: color.change(#000, $alpha: 0.87) !default;
 
