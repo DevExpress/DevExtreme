@@ -359,22 +359,30 @@ export class DateGeneratorBaseStrategy {
   }
 
   _createRecurrenceOptions(appointment, groupIndex?) {
+    const { viewOffset } = this.options;
+    // NOTE: For creating a recurrent appointments,
+    // we should use original appointment's dates (without view offset).
+    const originalAppointmentStartDate = dateUtilsTs.addOffsets(appointment.startDate, [viewOffset]);
+    const originalAppointmentEndDate = dateUtilsTs.addOffsets(appointment.endDate, [viewOffset]);
+
     const [
       minRecurrenceDate,
       maxRecurrenceDate,
     ] = this._createExtremeRecurrenceDates(groupIndex);
+    const shiftedMinRecurrenceDate = dateUtilsTs.addOffsets(minRecurrenceDate, [viewOffset]);
+    const shiftedMaxRecurrenceDate = dateUtilsTs.addOffsets(maxRecurrenceDate, [viewOffset]);
 
     return {
       rule: appointment.recurrenceRule,
       exception: appointment.recurrenceException,
-      min: minRecurrenceDate,
-      max: maxRecurrenceDate,
+      min: shiftedMinRecurrenceDate,
+      max: shiftedMaxRecurrenceDate,
       firstDayOfWeek: this.firstDayOfWeek,
 
-      start: appointment.startDate,
-      end: appointment.endDate,
+      start: originalAppointmentStartDate,
+      end: originalAppointmentEndDate,
       appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
-        appointment.startDate,
+        originalAppointmentStartDate,
         appointment.rawAppointment.startDateTimeZone,
         true,
       ),
@@ -384,7 +392,7 @@ export class DateGeneratorBaseStrategy {
           return date;
         }
 
-        const appointmentOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common;
+        const appointmentOffset = this.timeZoneCalculator.getOffsets(originalAppointmentStartDate).common;
         const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
 
         let diff = appointmentOffset - exceptionAppointmentOffset;
@@ -398,19 +406,27 @@ export class DateGeneratorBaseStrategy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _createRecurrenceAppointments(appointment, groupIndices) {
     const { duration } = appointment;
+    const { viewOffset } = this.options;
     const option = this._createRecurrenceOptions(appointment);
     const generatedStartDates = getRecurrenceProcessor().generateDates(option);
 
-    return generatedStartDates.map((date) => {
-      const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date) as Date;
-      utcDate.setTime(utcDate.getTime() + duration);
-      const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
+    return generatedStartDates
+      .map((date) => {
+        const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date) as Date;
+        utcDate.setTime(utcDate.getTime() + duration);
+        const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
 
-      return {
-        startDate: new Date(date),
-        endDate,
-      };
-    });
+        return {
+          startDate: new Date(date),
+          endDate,
+        };
+      })
+      // NOTE: For the next calculations,
+      // we should shift recurrence appointments by view offset.
+      .map(({ startDate, endDate }) => ({
+        startDate: dateUtilsTs.addOffsets(startDate, [-viewOffset]),
+        endDate: dateUtilsTs.addOffsets(endDate, [-viewOffset]),
+      }));
   }
 
   _getAppointmentsFirstViewDate(appointments: any[]): Date[] {

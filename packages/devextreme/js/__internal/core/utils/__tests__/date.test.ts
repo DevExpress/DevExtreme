@@ -1,6 +1,5 @@
 import each from 'jest-each';
 
-// eslint-disable-next-line forbidden-imports/no-restricted-imports
 import { dateUtilsTs } from '../date';
 
 const SECOND_MS = 1000;
