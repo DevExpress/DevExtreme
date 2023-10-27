@@ -90,11 +90,6 @@
     padding: $select-all-item-padding;
   
     .dx-checkbox-container {
-      .dx-checkbox-icon {
-        height: $checkbox-icon-size;
-        width: $checkbox-icon-size;
-      }
-  
       display: flex;
       align-items: center;
     }
@@ -138,11 +133,6 @@
   .dx-treeview-item-with-checkbox {
     .dx-checkbox {
       .dx-checkbox-container {
-        .dx-checkbox-icon {
-          height: $checkbox-icon-size;
-          width: $checkbox-icon-size;
-        }
-
         display: flex;
         align-items: center;
         justify-content: center;
