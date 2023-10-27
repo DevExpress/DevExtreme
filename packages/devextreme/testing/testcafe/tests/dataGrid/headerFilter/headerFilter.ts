@@ -10,6 +10,38 @@ fixture.disablePageReloads`Header Filter`
 
 const GRID_CONTAINER = '#container';
 
+test('HeaderFilter icon should be grayed out after the clearFilter call (T1193648)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+
+  // act
+  await dataGrid.apiClearFilter();
+
+  // assert
+  await t
+    .expect(await takeScreenshot('header-filter-icon-clear-filter.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    Name: 'A',
+  }, {
+    ID: 2,
+    Name: 'B',
+  }],
+  keyExpr: 'ID',
+  showBorders: true,
+  headerFilter: { visible: true },
+  filterRow: { visible: true },
+  columns: [{
+    dataField: 'Name',
+    filterValues: ['A'],
+    filterValue: 'A',
+  }],
+}));
+
 test('The header filter should fit inside the viewport if the grid is scrolled horizontally (T1156848)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
