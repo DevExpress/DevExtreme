@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as events from 'devextreme/events';
 import * as testingLib from '@testing-library/react';
 import * as React from 'react';

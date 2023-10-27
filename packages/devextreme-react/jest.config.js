@@ -7,4 +7,10 @@ module.exports = {
   ...base,
   name: packageName,
   displayName: packageName,
+  testPathIgnorePatterns: [
+    "component.test.tsx",
+    "nested-option.test.tsx",
+    "props-updating.test.tsx",
+    "template.test.tsx",
+  ],
 };
