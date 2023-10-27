@@ -323,13 +323,14 @@ export class AppointmentFilterBaseStrategy {
     }
 
     if (result && recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
+      const { viewOffset } = this.options;
       result = recurrenceProcessor.hasRecurrence({
         rule: recurrenceRule,
         exception: recurrenceException,
         start: appointmentStartDate,
         end: appointmentEndDate,
-        min,
-        max,
+        min: dateUtilsTs.addOffsets(min, [viewOffset]),
+        max: dateUtilsTs.addOffsets(max, [viewOffset]),
         firstDayOfWeek,
         appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
           appointmentStartDate,
