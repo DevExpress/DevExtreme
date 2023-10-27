@@ -380,19 +380,25 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
 
     const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
+    const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, [viewOffset]);
     const filterOptions: any = [];
 
     const groupsInfo = this.viewDataProvider.getCompletedGroupsInfo();
     groupsInfo.forEach((item) => {
       const { groupIndex } = item;
-      const groupStartDate = item.startDate;
+      const groupStartDate: Date = item.startDate;
+      const groupEndDate: Date = new Date(
+        Math.min(
+          item.endDate.getTime(),
+          shiftedEndViewDate.getTime(),
+        ),
+      );
 
-      const groupEndDate: any = new Date(Math.min(item.endDate, endViewDate));
       const startDayHour = isCalculateStartAndEndDayHour
         ? groupStartDate.getHours()
         : this.viewStartDayHour;
       const endDayHour = isCalculateStartAndEndDayHour
-        ? startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate - groupStartDate) / hourMs
+        ? startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
         : this.viewEndDayHour;
 
       const resources = this._getPrerenderFilterResources(groupIndex);
