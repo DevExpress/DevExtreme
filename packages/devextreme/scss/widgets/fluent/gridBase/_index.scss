@@ -1219,6 +1219,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-#{$widget-name}-filter-panel {
+    background-color: $datagrid-base-background-color;
     padding: 18px $fluent-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
