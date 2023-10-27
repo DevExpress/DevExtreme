@@ -26,7 +26,5 @@ DemoApp.controller('DemoController', ($scope) => {
     startDateExpr: 'StartDate',
     endDateExpr: 'EndDate',
     allDayExpr: 'AllDay',
-    recurrenceRuleExpr: 'RecurrenceRule',
-    recurrenceExceptionExpr: 'RecurrenceException',
   };
 });

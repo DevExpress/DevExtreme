@@ -24,7 +24,5 @@ $(() => {
     startDateExpr: 'StartDate',
     endDateExpr: 'EndDate',
     allDayExpr: 'AllDay',
-    recurrenceRuleExpr: 'RecurrenceRule',
-    recurrenceExceptionExpr: 'RecurrenceException',
   });
 });
