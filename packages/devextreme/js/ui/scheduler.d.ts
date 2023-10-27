@@ -963,6 +963,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default false
      * @default true &for(Android|iOS)
      * @default true &for(Material)
+     * @default true &for(Fluent)
      * @public
      */
     useDropDownViewSwitcher?: boolean;
