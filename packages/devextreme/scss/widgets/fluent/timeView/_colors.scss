@@ -6,9 +6,9 @@
 $clock-digits-color: null !default;
 
 @if $mode == "light" {
-  $clock-digits-color: color.change($base-text-color, $alpha: 0.54) !default;
+  $clock-digits-color: $base-text-color !default;
 }
 
 @if $mode == "dark" {
-  $clock-digits-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $clock-digits-color: $base-text-color !default;
 }
