@@ -116,24 +116,11 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         this.dateBox.setAria('activedescendant', e.actionValue);
     },
 
-    _getTodayButtonStyleConfig() {
-        if(isMaterial()) {
-            return {
-                stylingMode: 'text',
-                type: 'default',
-            };
-        }
-
-        return {
-            stylingMode: 'outlined',
-            type: 'normal',
-        };
-    },
-
     _getTodayButtonConfig() {
         const buttonsLocation = this.dateBox.option('buttonsLocation');
         const isButtonsLocationDefault = buttonsLocation === 'default';
         const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
+        const stylingMode = isMaterial() ? 'text' : 'outlined';
 
         return {
             widget: 'dxButton',
@@ -143,7 +130,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                 onClick: (args) => { this._widget._toTodayView(args); },
                 text: this.dateBox.option('todayButtonText'),
                 elementAttr: { class: TODAY_BUTTON_CLASS },
-                ...this._getTodayButtonStyleConfig(),
+                stylingMode,
             }
         };
     },
