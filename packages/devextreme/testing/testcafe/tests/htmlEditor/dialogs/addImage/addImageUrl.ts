@@ -17,6 +17,12 @@ test('Image uploader from url appearance', async (t) => {
   await t
     .click(htmlEditor.toolbar.getItemByName('image'));
 
+  await t
+    .click(htmlEditor.dialog.addImageUrlForm.lockButton.element);
+
+  await t
+    .click(htmlEditor.dialog.addImageUrlForm.url.element);
+
   await testScreenshot(t, takeScreenshot, 'Image uploader from url appearance.png', { element: ADD_IMAGE_POPUP_CONTENT_SELECTOR });
 
   await t.expect(compareResults.isValid())
