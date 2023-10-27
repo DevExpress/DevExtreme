@@ -46,7 +46,7 @@ test('ContextMenu items render', async (t) => {
   await setAttribute('#container', 'class', 'dx-theme-generic-typography');
   await setStyleAttribute(Selector('#container'), 'width: 300px; height: 200px;');
 
-  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; margin-left: 5px;  }');
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
 
   const menuItems = [
     { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
