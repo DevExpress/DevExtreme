@@ -22,14 +22,14 @@ $texteditor-label-color-focused: $base-accent;
 * $name 30. Background color
 * $type color
 */
-$texteditor-bg: $base-neutral-background1 !default;
-$texteditor-filled-bg: $base-neutral-background !default;
+$texteditor-bg: $base-bg !default;
+$texteditor-filled-bg: null !default;
 
 /**
 * $name 40. Focused background color
 * $type color
 */
-$texteditor-focused-bg: $base-neutral-background1 !default;
+$texteditor-focused-bg: $base-bg !default;
 
 /**
 * $name 50. Border color
@@ -66,3 +66,12 @@ $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+@if $mode == "light" {
+  $texteditor-filled-bg: darken($texteditor-bg, 3.9) !default;
+}
+
+@if $mode == "dark" {
+  $texteditor-filled-bg: darken($texteditor-bg, 8.2) !default;
+}
+  

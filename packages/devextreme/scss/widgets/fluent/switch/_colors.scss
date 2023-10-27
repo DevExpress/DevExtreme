@@ -12,7 +12,7 @@ $switch-accent-color-focused: $base-accent-active !default;
 * $name 20. Track 'OFF' background color
 * $type color
 */
-$switch-bg: null !default;
+$switch-bg: transparent !default;
 
 /**
 * $name 30. Handle 'OFF' background color
@@ -43,12 +43,4 @@ $switch-off-border-active-color: $base-border-color-accessible-focused !default;
 $switch-invalid-color: $base-invalid-color !default;
 $switch-invalid-color-hover: $base-invalid-color-hover !default;
 $switch-invalid-color-focused: $base-invalid-color-selected !default;
-
-@if $mode == "light" {
-  $switch-bg: transparent !default;
-}
-
-@if $mode == "dark" {
-  $switch-bg: transparent !default;
-}
 
