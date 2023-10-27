@@ -40,6 +40,7 @@ test('HeaderFilter icon should be grayed out after the clearFilter call (T119364
     filterValues: ['A'],
     filterValue: 'A',
   }],
+  height: 140,
 }));
 
 test('The header filter should fit inside the viewport if the grid is scrolled horizontally (T1156848)', async (t) => {
