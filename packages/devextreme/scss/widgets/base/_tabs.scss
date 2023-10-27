@@ -124,6 +124,13 @@
       transform: rotate(90deg);
     }
   }
+
+  &.dx-tabs-icon-position-start,
+  &.dx-tabs-icon-position-end {
+    .dx-tab {
+      justify-content: flex-start;
+    }
+  }
 }
 
 .dx-tabs-icon-position-end .dx-tab-text {

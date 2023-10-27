@@ -1601,6 +1601,7 @@ testComponentDefaults(Accordion,
 testComponentDefaults(Scheduler,
     {},
     {
+        useDropDownViewSwitcher: true,
         _appointmentTooltipButtonsPosition: 'top',
         _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,
