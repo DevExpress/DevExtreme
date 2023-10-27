@@ -32,6 +32,7 @@ const createAppointmentDataProvider = (options) => {
                 createDate: date => date
             }),
             getIsVirtualScrolling: () => false,
+            viewOffset: 0,
             ...options
         }),
         prepareDataItems: () => {
