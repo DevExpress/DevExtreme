@@ -90,7 +90,7 @@ export default function App() {
           showWeekNumbers={showWeekNumbers}
           disabled={disabled}
           zoomLevel={zoomLevel}
-          cellRender={useCellTemplate ? CustomCell : null}
+          cellComponent={useCellTemplate ? CustomCell : null}
         />
       </div>
       <div className="options">
