@@ -1,3 +1,4 @@
+"use client"
 import dxDrawer, {
     Properties
 } from "devextreme/ui/drawer";

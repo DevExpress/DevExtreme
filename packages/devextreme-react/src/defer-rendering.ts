@@ -1,3 +1,4 @@
+"use client"
 import dxDeferRendering, {
     Properties
 } from "devextreme/ui/defer_rendering";

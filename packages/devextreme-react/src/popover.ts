@@ -1,3 +1,4 @@
+"use client"
 import dxPopover, {
     Properties
 } from "devextreme/ui/popover";

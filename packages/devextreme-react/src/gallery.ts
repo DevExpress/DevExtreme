@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/gallery";
 import dxGallery, {
     Properties

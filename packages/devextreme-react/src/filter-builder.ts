@@ -1,3 +1,4 @@
+"use client"
 import dxFilterBuilder, {
     Properties
 } from "devextreme/ui/filter_builder";

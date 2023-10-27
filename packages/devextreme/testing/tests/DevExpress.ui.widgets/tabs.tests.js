@@ -57,6 +57,12 @@ const STYLING_MODE = {
     primary: 'primary',
     secondary: 'secondary',
 };
+const INDICATOR_POSITION_CLASS = {
+    top: 'dx-tab-indicator-position-top',
+    right: 'dx-tab-indicator-position-right',
+    bottom: 'dx-tab-indicator-position-bottom',
+    left: 'dx-tab-indicator-position-left',
+};
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
@@ -1466,5 +1472,63 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
         });
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
+    });
+});
+
+QUnit.module('Indicator position', () => {
+    [true, false].forEach(rtlEnabled => {
+        QUnit.test(`The element must have the correct indicator position class when rtlEnabled=${rtlEnabled}`, function(assert) {
+            const tabsElement = $('#tabs').dxTabs({
+                items: [ 1, 2, 3 ],
+                rtlEnabled,
+            });
+            const tabsInstance = tabsElement.dxTabs('instance');
+
+            assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+
+            tabsInstance.option({ orientation: 'vertical' });
+
+            assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+            assert.ok(tabsElement.hasClass(rtlEnabled ? INDICATOR_POSITION_CLASS.left : INDICATOR_POSITION_CLASS.right));
+        });
+    });
+
+    QUnit.test('The element must have the correct indicator position class when rtlEnabled was changed in vertical orientation', function(assert) {
+        const tabsElement = $('#tabs').dxTabs({
+            items: [ 1, 2, 3 ],
+            orientation: 'vertical',
+        });
+        const tabsInstance = tabsElement.dxTabs('instance');
+
+        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.right));
+
+        tabsInstance.option({ rtlEnabled: true });
+
+        assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.right));
+        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.left));
+    });
+
+    QUnit.test('The element must have the correct indicator position class when rtlEnabled was changed in vertical horizontal', function(assert) {
+        const tabsElement = $('#tabs').dxTabs({ items: [ 1, 2, 3 ] });
+        const tabsInstance = tabsElement.dxTabs('instance');
+
+        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+
+        tabsInstance.option({ rtlEnabled: true });
+
+        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+        assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.top));
+    });
+
+    QUnit.test('The element must have the correct indicator position class when _indicatorPosition was changed', function(assert) {
+        const tabsElement = $('#tabs').dxTabs({ items: [ 1, 2, 3 ] });
+        const tabsInstance = tabsElement.dxTabs('instance');
+
+        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+
+        tabsInstance.option({ _indicatorPosition: 'top' });
+
+        assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.top));
     });
 });
