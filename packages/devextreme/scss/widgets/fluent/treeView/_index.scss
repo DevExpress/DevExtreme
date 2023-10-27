@@ -28,8 +28,8 @@
   $treeview-item-hover-color,
   $treeview-item-selected-color,
   $fluent-treeview-toggle-item-width + $fluent-treeview-item-element-gap,
-  1px 0,
-  4px,
+  $fluent-treeview-item-margin,
+  $fluent-treeview-item-border-radius,
 );
 @include treeview-checkbox(
   $fluent-checkbox-icon-size,
@@ -40,7 +40,7 @@
   $treeview-item-selected-bg,
   $treeview-focused-bg,
   $treeview-focus-color,
-  4px
+  $fluent-treeview-item-border-radius
 );
 @include treeview-aux-items(
   $fluent-treeview-searchbox-margin-bottom,
