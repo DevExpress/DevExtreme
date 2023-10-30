@@ -1645,27 +1645,29 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
   height: 200,
 }));
 
-test('Warning should not be thrown if scrolling is virtual and height is specified with css', async (t) => {
-  await t.debug();
-  const consoleMessages = await t.getBrowserConsoleMessages();
-  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+['height', 'max-height'].forEach((cssOption) => {
+  test(`Warning should not be thrown if scrolling is virtual and height is specified with css (${cssOption})`, async (t) => {
+    await t.debug();
+    const consoleMessages = await t.getBrowserConsoleMessages();
+    const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 
-  await t.expect(warningExists).notOk();
-}).before(async () => {
-  await insertStylesheetRulesToPage(`
-    #container {
-      height: 200px;
-    }
-  `);
+    await t.expect(warningExists).notOk();
+  }).before(async () => {
+    await insertStylesheetRulesToPage(`
+      #container {
+        ${cssOption}: 200px;
+      }
+    `);
 
-  await createWidget('dxDataGrid', {
-    scrolling: {
-      mode: 'virtual',
-    },
-    dataSource: [
-      { column: 'value' },
-    ],
+    await createWidget('dxDataGrid', {
+      scrolling: {
+        mode: 'virtual',
+      },
+      dataSource: [
+        { column: 'value' },
+      ],
+    });
+  }).after(async () => {
+    await removeStylesheetRulesFromPage();
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
