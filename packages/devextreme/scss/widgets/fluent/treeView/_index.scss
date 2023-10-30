@@ -32,7 +32,6 @@
   $fluent-treeview-item-border-radius,
 );
 @include treeview-checkbox(
-  $fluent-checkbox-icon-size,
   $fluent-checkbox-container-size,
   $base-text-color,
   $checkbox-border-color-focused,
@@ -47,7 +46,6 @@
   $fluent-treeview-search-editor-height,
   $treeview-border-color,
   $fluent-select-all-item-padding,
-  $fluent-checkbox-icon-size,
   $fluent-treeview-item-element-gap,
   $fluent-select-all-item-border-visible-padding,
   $fluent-treeview-container-padding,

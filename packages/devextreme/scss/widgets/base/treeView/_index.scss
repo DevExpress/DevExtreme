@@ -71,7 +71,6 @@
   $search-editor-height,
   $border-color,
   $select-all-item-padding,
-  $checkbox-icon-size,
   $item-element-gap,
   $select-all-item-border-visible-padding,
   $treeview-container-padding,
@@ -86,7 +85,7 @@
   }
   
   .dx-treeview-select-all-item {
-    border-block-end: 1px solid $border-color;
+    border-bottom: 1px solid $border-color;
     padding: $select-all-item-padding;
   
     .dx-checkbox-container {
@@ -120,7 +119,6 @@
 }
 
 @mixin treeview-checkbox(
-  $checkbox-icon-size, 
   $checkbox-container-size, 
   $base-text-color, 
   $checkbox-border-color-focused,

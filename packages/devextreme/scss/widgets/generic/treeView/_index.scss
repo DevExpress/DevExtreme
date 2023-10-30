@@ -31,7 +31,6 @@
 );
 @include treeview-checkbox(
   $generic-checkbox-container-size,
-  $generic-checkbox-container-size,
   $base-text-color,
   $checkbox-border-color-focused,
   $treeview-item-selected-color,
@@ -44,7 +43,6 @@
   $generic-treeview-search-editor-height,
   $treeview-border-color,
   $generic-select-all-item-padding,
-  $generic-checkbox-container-size,
   $generic-treeview-item-element-gap,
   $generic-select-all-item-border-visible-padding,
   $generic-treeview-container-padding,
@@ -64,6 +62,14 @@
     >.dx-treeview-item {
       .dx-treeview-toggle-item-visibility {
         color: unset;
+      }
+
+      .dx-treeview-node-loadindicator {
+        .dx-loadindicator-icon {
+          .dx-loadindicator-segment {
+            background: #fff;
+          }
+        }
       }
 
       .dx-item-content {

@@ -30,7 +30,6 @@
   $treeview-spin-icon-color,
 );
 @include treeview-checkbox(
-  $material-checkbox-icon-size,
   $material-checkbox-container-size,
   $base-text-color,
   $checkbox-border-color-focused,
@@ -44,7 +43,6 @@
   $material-treeview-search-editor-height,
   $treeview-border-color,
   $material-select-all-item-padding,
-  $material-checkbox-icon-size,
   $material-treeview-item-element-gap,
   $material-select-all-item-border-visible-padding,
   $material-treeview-container-padding,
