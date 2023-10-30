@@ -67,7 +67,7 @@
       .dx-treeview-node-loadindicator {
         .dx-loadindicator-icon {
           .dx-loadindicator-segment {
-            background: #fff;
+            background: $generic-treeview-focused-row-load-indicator-color;
           }
         }
       }

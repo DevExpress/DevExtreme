@@ -40,6 +40,8 @@ $treeview-item-selected-hover-bg: null !default;
 */
 $treeview-spin-icon-color: null !default;
 
+$generic-treeview-focused-row-load-indicator-color: #fff;
+
 @if $color == "carmine" {
   $treeview-color: $base-text-color !default;
   $treeview-focused-bg: $base-focus-bg !default;
