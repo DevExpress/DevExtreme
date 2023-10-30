@@ -78,7 +78,7 @@ runs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20.9.0'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -108,6 +108,11 @@ runs:
       working-directory: ./packages/devextreme
       shell: bash
       run: dotnet build build/build-dotnet.sln
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.16.1'
 
     - name: Run QUnit tests
       working-directory: ./packages/devextreme
