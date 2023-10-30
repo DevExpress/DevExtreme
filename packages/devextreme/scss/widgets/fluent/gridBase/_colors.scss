@@ -85,7 +85,7 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 */
 $datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
-$datagrid-row-removed-bg: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $base-bg-active !default;
 $datagrid-cell-removed-text-color: null !default;
 
 /**
