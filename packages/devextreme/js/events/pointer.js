@@ -100,8 +100,7 @@ const pointer = {
 };
 
 function getStrategyFromGlobalConfig(name) {
-    const config = GlobalConfig();
-    const eventStrategyName = config.pointerEventStrategy;
+    const eventStrategyName = GlobalConfig().pointerEventStrategy;
 
     return {
         'mouse-and-touch': MouseAndTouchStrategy,
