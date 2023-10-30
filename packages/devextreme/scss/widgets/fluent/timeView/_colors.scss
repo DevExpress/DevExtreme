@@ -3,12 +3,4 @@
 @use "../colors" as *;
 
 // adduse
-$clock-digits-color: null !default;
-
-@if $mode == "light" {
-  $clock-digits-color: $base-text-color !default;
-}
-
-@if $mode == "dark" {
-  $clock-digits-color: $base-text-color !default;
-}
+$clock-digits-color: $base-text-color !default;
