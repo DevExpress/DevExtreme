@@ -99,7 +99,7 @@ const pointer = {
     out: 'dxpointerout'
 };
 
-function getStrategyFromGlobalConfig(name) {
+function getStrategyFromGlobalConfig() {
     const eventStrategyName = GlobalConfig().pointerEventStrategy;
 
     return {
