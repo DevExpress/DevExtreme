@@ -6,6 +6,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution":"node",
+    "noImplicitThis": false,
+    "strictNullChecks": false,
     "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types",

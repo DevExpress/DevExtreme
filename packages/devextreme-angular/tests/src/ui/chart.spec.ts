@@ -1,6 +1,4 @@
 /* tslint:disable:component-selector */
-// @ts-nocheck
-
 import {
     Component,
     ViewChild
@@ -15,6 +13,7 @@ import {
 import {
     DxChartModule, DxChartComponent, DxScrollViewModule
 } from 'devextreme-angular';
+
 import dxChart from 'devextreme/viz/chart';
 
 @Component({
@@ -26,12 +25,12 @@ class TestContainerComponent {
         label: 'label1'
     }];
     @ViewChild(DxChartComponent) chart: DxChartComponent;
-    dataSource = [];
+    dataSource: any = [];
     disposed = false;
     commonSeriesSettings = {
         argumentField: undefined
     };
-    seriesAsArray = [];
+    seriesAsArray: any = [];
     seriesAsObject = {
         valueField: undefined
     };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NgModule, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import domAdapter from 'devextreme/core/dom_adapter';
