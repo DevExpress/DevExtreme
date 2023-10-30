@@ -74,10 +74,10 @@ $tabs-hovered-tab-bg-color: transparent !default;
 * $name 110. Focused tab background color
 * $type color
 */
-$tabs-focused-tab-bg-color: null !default;
-$tabs-tab-bg-color-hover-primary: null !default;
-$tabs-tab-bg-color-focus-primary: null !default;
-$tabs-tab-bg-color-active-primary: null !default;
+$tabs-focused-tab-bg-color: $base-bg-hover !default;
+$tabs-tab-bg-color-hover-primary: $base-bg-hover !default;
+$tabs-tab-bg-color-focus-primary: $base-bg-hover !default;
+$tabs-tab-bg-color-active-primary: $base-bg-selected !default;
 
 /**
 * $name 120. Active tab background color
@@ -85,17 +85,3 @@ $tabs-tab-bg-color-active-primary: null !default;
 */
 $tabs-active-tab-bg-color: $base-bg !default;
 $tabs-nav-button-bg-color: transparent !default;
-
-@if $mode == "light" {
-  $tabs-focused-tab-bg-color: $base-neutral-background !default;
-  $tabs-tab-bg-color-hover-primary: $base-neutral-background !default;
-  $tabs-tab-bg-color-focus-primary: $base-neutral-background !default;
-  $tabs-tab-bg-color-active-primary: $base-neutral-background1-selected !default;
-}
-
-@if $mode == "dark" {
-  $tabs-focused-tab-bg-color: $base-bg-hover !default;
-  $tabs-tab-bg-color-hover-primary: $base-neutral-background !default;
-  $tabs-tab-bg-color-focus-primary: $base-bg-hover !default;
-  $tabs-tab-bg-color-active-primary: $base-neutral-background2-selected !default;
-}

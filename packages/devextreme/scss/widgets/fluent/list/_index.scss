@@ -27,12 +27,12 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     .dx-list-item {
       opacity: 1;
-      color: $base-disabled-color;
+      color: $base-foreground-disabled;
     }
   }
 
   .dx-list-select-all-label {
-    color: $base-disabled-color;
+    color: $base-foreground-disabled;
 
     &::after {
       color: $base-border-color-disabled;
