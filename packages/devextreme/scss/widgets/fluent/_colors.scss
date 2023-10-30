@@ -50,8 +50,8 @@ $base-border-color-focused: null !default;
 $base-border-color-accessible: null !default;
 $base-border-color-accessible-hover: null !default;
 $base-border-color-accessible-focused: null !default;
-$base-neutral-border-color2: null !default;
-$base-neutral-border-color3: null !default;
+
+$base-separator-color: null !default;
 
 $base-inverted-bg: null !default;
 $base-shadow-color: null !default;
@@ -132,8 +132,7 @@ $scrollview-pulldown-path: null !default;
   $base-border-color-accessible-focused: darken($base-border-color-accessible-hover, 3.92) !default; // #4d4d4d
   $base-border-color-disabled: $base-border-color !default; // e0e0e0
 
-  $base-neutral-border-color2: $base-border-color !default; // #E0E0E0
-  $base-neutral-border-color3: lighten($base-border-color, 6.27) !default; // #F0F0F0
+  $base-separator-color: $base-border-color !default; // #E0E0E0
 
   $base-inverted-bg: rgba(235, 243, 252, 1) !default; // #EBF3FC
   $base-shadow-color: #000 !default;
@@ -184,8 +183,7 @@ $scrollview-pulldown-path: null !default;
   $base-border-color-accessible-focused: lighten($base-border-color-accessible-hover, 3.92) !default; // #b3b3b3
   $base-border-color-disabled: darken($base-border-color, 12.16) !default; // #424242
 
-  $base-neutral-border-color2: darken($base-border-color, 5.88) !default; // #525252
-  $base-neutral-border-color3: darken($base-border-color, 14.12) !default; // #3d3d3d
+  $base-separator-color: darken($base-border-color, 5.88) !default; // #525252
 
   $base-inverted-bg: rgba(8, 35, 56, 1) !default; // #082338
   $base-shadow-color: #000 !default;
@@ -261,5 +259,3 @@ $base-invalid-color: $base-danger !default;
 $base-invalid-color-hover: $base-danger-hover !default;
 $base-invalid-color-active: $base-danger-active !default;
 $base-invalid-color-selected: $base-danger-selected !default;
-
-$base-separator-color: $base-neutral-border-color2 !default;

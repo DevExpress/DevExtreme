@@ -42,7 +42,7 @@ $calendar-cell-active-bg: null !default;
 $calendar-invalid-border-color: $base-invalid-color !default;
 $calendar-invalid-border-color-focused: $base-invalid-color-active !default;
 $calendar-week-number-cell-color: $base-neutral-foreground3 !default;
-$calendar-week-number-cell-bg: $base-neutral-border-color3 !default;
+$calendar-week-number-cell-bg: null !default;
 $calendar-week-number-border-radius: 0 !default;
 
 @if $mode == "light" {
@@ -50,6 +50,7 @@ $calendar-week-number-border-radius: 0 !default;
   $calendar-cell-hover-border-color: $calendar-hover-bg !default;
   $calendar-cell-active-bg: $button-default-outlined-active-bg !default;
   $calendar-cell-contoured-border-color: $calendar-cell-active-bg !default;
+  $calendar-week-number-cell-bg: $base-background-disabled !default;
 }
 
 @if $mode == "dark" {
@@ -57,4 +58,5 @@ $calendar-week-number-border-radius: 0 !default;
   $calendar-cell-hover-border-color: $base-accent-bg !default;
   $calendar-cell-active-bg: $base-accent-selected !default;
   $calendar-cell-contoured-border-color: $base-accent-active !default;
+  $calendar-week-number-cell-bg: $base-bg-hover !default;
 }
