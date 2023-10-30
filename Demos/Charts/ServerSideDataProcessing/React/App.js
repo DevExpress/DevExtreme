@@ -21,6 +21,7 @@ import { months, monthLabel } from './data.js';
 const chartDataSource = new DataSource({
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
   },
   postProcess(results) {

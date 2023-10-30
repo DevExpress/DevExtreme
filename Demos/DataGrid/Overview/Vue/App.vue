@@ -87,6 +87,7 @@ import DiscountCell from './DiscountCell.vue';
 const dataSource = new DataSource({
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
     key: 'Id',
     beforeSend(request) {

@@ -28,6 +28,7 @@ export class AppComponent {
     this.chartDataSource = new DataSource({
       store: {
         type: 'odata',
+        version: 2,
         url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
       },
       postProcess: (results) => results[0].DayItems,

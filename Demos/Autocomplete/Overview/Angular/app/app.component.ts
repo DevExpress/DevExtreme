@@ -5,7 +5,7 @@ import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxAutocompleteModule, DxTemplateModule } from 'devextreme-angular';
-import data from 'devextreme/data/odata/store';
+import ODataStore from 'devextreme/data/odata/store';
 import CustomStore from 'devextreme/data/custom_store';
 
 import { Service } from './app.service';
@@ -70,7 +70,8 @@ export class AppComponent {
           .catch((error) => { throw 'Data Loading Error'; });
       },
     });
-    this.states = new data({
+    this.states = new ODataStore({
+      version: 2,
       url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
       key: 'Sate_ID',
       keyType: 'Int32',

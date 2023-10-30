@@ -6,6 +6,7 @@ $(() => {
     dataSource: {
       store: {
         type: 'odata',
+        version: 2,
         url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
         key: 'Task_ID',
       },

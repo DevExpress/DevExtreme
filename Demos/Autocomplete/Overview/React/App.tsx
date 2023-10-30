@@ -1,5 +1,5 @@
 import React from 'react';
-import OData from 'devextreme/data/odata/store';
+import ODataStore from 'devextreme/data/odata/store';
 import { Autocomplete, AutocompleteTypes } from 'devextreme-react/autocomplete';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
@@ -11,7 +11,8 @@ function isNotEmpty(value: string) {
 
 const position = positions[0];
 
-const states = new OData({
+const states = new ODataStore({
+  version: 2,
   url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
   key: 'Sate_ID',
   keyType: 'Int32',

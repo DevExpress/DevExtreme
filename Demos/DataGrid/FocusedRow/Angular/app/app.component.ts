@@ -52,6 +52,7 @@ export class AppComponent {
     this.dataSource = {
       store: {
         type: 'odata',
+        version: 2,
         key: 'Task_ID',
         url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
       },

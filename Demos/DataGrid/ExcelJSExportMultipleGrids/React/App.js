@@ -10,6 +10,7 @@ import 'devextreme/data/odata/store';
 const priceDataSource = {
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
     key: 'Product_ID',
   },
@@ -19,6 +20,7 @@ const priceDataSource = {
 const ratingDataSource = {
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
     key: 'Product_ID',
   },

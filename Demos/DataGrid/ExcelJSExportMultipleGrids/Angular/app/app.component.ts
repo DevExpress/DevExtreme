@@ -36,6 +36,7 @@ export class AppComponent {
     this.priceDataSource = {
       store: {
         type: 'odata',
+        version: 2,
         url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
         key: 'Product_ID',
       },
@@ -46,6 +47,7 @@ export class AppComponent {
     this.ratingDataSource = {
       store: {
         type: 'odata',
+        version: 2,
         url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
         key: 'Product_ID',
       },

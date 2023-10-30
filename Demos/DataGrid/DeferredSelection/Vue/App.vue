@@ -82,6 +82,7 @@ const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 const dataSource: DataSourceOptions = {
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
     key: 'Task_ID',
   },

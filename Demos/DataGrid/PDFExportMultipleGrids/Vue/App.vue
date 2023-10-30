@@ -96,6 +96,7 @@ const ratingGridRef = ref<DxDataGrid | null>(null);
 const priceDataSource: DataSourceOptions = {
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
     key: 'Product_ID',
   },
@@ -106,6 +107,7 @@ const priceDataSource: DataSourceOptions = {
 const ratingDataSource: DataSourceOptions = {
   store: {
     type: 'odata',
+    version: 2,
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
     key: 'Product_ID',
   },

@@ -19,6 +19,7 @@ export class AppComponent {
   constructor() {
     this.dataSource = new DataSource({
       store: new ODataStore({
+        version: 2,
         url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
       }),
     });

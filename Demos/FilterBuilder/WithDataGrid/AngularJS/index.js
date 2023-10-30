@@ -25,6 +25,7 @@ DemoApp.controller('DemoController', ($scope) => {
     dataSource: {
       store: {
         type: 'odata',
+        version: 2,
         fieldTypes: {
           Product_Cost: 'Decimal',
           Product_Sale_Price: 'Decimal',

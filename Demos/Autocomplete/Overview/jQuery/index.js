@@ -32,6 +32,7 @@ $(() => {
 
   $('#state').dxAutocomplete({
     dataSource: new DevExpress.data.ODataStore({
+      version: 2,
       url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
       key: 'Sate_ID',
       keyType: 'Int32',
