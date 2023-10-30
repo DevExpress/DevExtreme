@@ -36,8 +36,6 @@ $typography-bg: null !default;
 
 $base-accent-bg: null !default;
 
-$base-brand2-bg: null !default;
-
 $base-neutral-foreground2: null !default;
 $base-neutral-foreground3: null !default;
 $base-neutral-foreground4: null !default;
@@ -55,7 +53,7 @@ $base-border-color-accessible-focused: null !default;
 $base-neutral-border-color2: null !default;
 $base-neutral-border-color3: null !default;
 
-$base-inverted-bg: null !default; // TODO: remove colorview only
+$base-inverted-bg: null !default;
 $base-shadow-color: null !default;
 
 $base-foreground-disabled: null !default;
@@ -118,13 +116,11 @@ $scrollview-pulldown-path: null !default;
 
   $base-accent-bg: $base-accent !default; // #0F6CBD
 
-  $base-brand2-bg: rgba(235, 243, 252, 1) !default; // #EBF3FC
-
   $base-bg: rgba(255, 255, 255, 1) !default; // #FFFFFF
-  $base-bg-hover: rgba(245, 245, 245, 1) !default; // #F5F5F5
-  $base-bg-selected: rgba(235, 235, 235, 1) !default; // #EBEBEB
-  $base-bg-active: rgba(224, 224, 224, 1) !default; // #E0E0E0
-  $base-background-disabled: rgb(240, 240, 240) !default; // f0f0f0
+  $base-bg-hover: darken($base-bg, 3.9) !default; // #F5F5F5
+  $base-bg-selected: darken($base-bg, 7.8) !default; // #EBEBEB
+  $base-bg-active: darken($base-bg, 12.2) !default; // #E0E0E0
+  $base-background-disabled: darken($base-bg, 5.9) !default; // f0f0f0
 
   $typography-bg: darken($base-bg, 2) !default; // #FAFAFA
 
@@ -139,8 +135,8 @@ $scrollview-pulldown-path: null !default;
   $base-neutral-border-color2: $base-border-color !default; // #E0E0E0
   $base-neutral-border-color3: lighten($base-border-color, 6.27) !default; // #F0F0F0
 
-  $base-inverted-bg: darken($base-bg, 100%) !default;
-  $base-shadow-color: $base-inverted-bg !default;
+  $base-inverted-bg: rgba(235, 243, 252, 1) !default; // #EBF3FC
+  $base-shadow-color: #000 !default;
   $base-inverted-text-color: #fff !default;
 
   $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
@@ -170,15 +166,13 @@ $scrollview-pulldown-path: null !default;
   $base-neutral-foreground4: darken($base-text-color, 40.00) !default; // #999999
   $base-foreground-disabled: darken($base-text-color, 63.9) !default; // #5c5c5c
 
-  $base-accent-bg: rgba(17, 94, 163, 1) !default; // #115EA3
-
-  $base-brand2-bg: rgba(8, 35, 56, 1) !default; // #082338
+  $base-accent-bg: darken(desaturate(adjust-hue($base-accent, 358.4), 8.6), 26.7) !default; // #115EA3
 
   $base-bg: rgba(41, 41, 41, 1) !default; // #292929
-  $base-bg-hover: rgba(61, 61, 61, 1) !default; // #3D3D3D
-  $base-bg-selected: rgba(56, 56, 56, 1) !default; // #383838
-  $base-bg-active: rgba(31, 31, 31, 1) !default; // #1F1F1F
-  $base-background-disabled: rgba(20, 20, 20, 1) !default; // #141414
+  $base-bg-hover: lighten($base-bg, 7.8) !default; // #3D3D3D
+  $base-bg-selected: lighten($base-bg, 5.9) !default; // #383838
+  $base-bg-active: darken($base-bg, 3.9) !default; // #1F1F1F
+  $base-background-disabled: darken($base-bg, 8.2) !default; // #141414
 
   $typography-bg: $base-bg-active !default; // #1F1F1F
 
@@ -193,7 +187,7 @@ $scrollview-pulldown-path: null !default;
   $base-neutral-border-color2: darken($base-border-color, 5.88) !default; // #525252
   $base-neutral-border-color3: darken($base-border-color, 14.12) !default; // #3d3d3d
 
-  $base-inverted-bg: lighten($base-bg, 100%) !default;
+  $base-inverted-bg: rgba(8, 35, 56, 1) !default; // #082338
   $base-shadow-color: #000 !default;
   $base-inverted-text-color: #000 !default;
 

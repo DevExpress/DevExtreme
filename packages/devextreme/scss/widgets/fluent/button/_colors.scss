@@ -223,8 +223,8 @@ $button-accent-foreground-color: null !default;
   $button-default-outlined-color-active: $button-accent-foreground-color !default;
   $button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
-  $button-default-outlined-hover-bg: $base-brand2-bg !default;
-  $button-default-outlined-focused-bg: $base-brand2-bg !default;
+  $button-default-outlined-hover-bg: $base-inverted-bg !default;
+  $button-default-outlined-focused-bg: $base-inverted-bg !default;
   $button-default-outlined-active-bg: darken(saturate(adjust-hue($button-default-outlined-hover-bg, -1), 17.00), 17.06) !default;
   $button-default-outlined-selected-bg: darken(saturate(adjust-hue($button-default-outlined-hover-bg, -1), 10.40), 5.49) !default;
 
@@ -233,20 +233,20 @@ $button-accent-foreground-color: null !default;
   $button-danger-outlined-color-active: $base-danger-active !default;
   $button-danger-outlined-selected-color: $base-danger-selected !default;
 
-  $button-danger-outlined-hover-bg: #FDF6F6 !default;
-  $button-danger-outlined-focused-bg: #FDF6F6 !default;
-  $button-danger-outlined-active-bg: #F1BBBC !default;
-  $button-danger-outlined-selected-bg: #F7D9DA !default;
+  $button-danger-outlined-hover-bg: lighten(saturate(adjust-hue($base-danger, 1.5), 0.6), 46.7) !default; // #FDF6F6
+  $button-danger-outlined-focused-bg: $button-danger-outlined-hover-bg !default; // #FDF6F6
+  $button-danger-outlined-active-bg: darken(saturate(adjust-hue($button-danger-outlined-hover-bg, 358.9), 2.2), 13.9) !default; // #F1BBBC
+  $button-danger-outlined-selected-bg: lighten(desaturate(adjust-hue($button-danger-outlined-active-bg, 359.1), 0.6), 7.1) !default; // #F7D9DA
 
   $button-success-outlined-color: $base-success !default;
   $button-success-outlined-color-hover: $base-success-selected !default;
   $button-success-outlined-color-active: $base-success-active !default;
   $button-success-outlined-selected-color: $base-success-selected !default;
 
-  $button-success-outlined-hover-bg: #F1FAF1 !default;
-  $button-success-outlined-focused-bg: #F1FAF1 !default;
-  $button-success-outlined-active-bg: #9FD89F !default;
-  $button-success-outlined-selected-bg: #C9E9C9 !default;
+  $button-success-outlined-hover-bg: lighten(desaturate($base-success, 29.8), 68.8) !default; // #F1FAF1
+  $button-success-outlined-focused-bg: $button-success-outlined-hover-bg !default;
+  $button-success-outlined-active-bg: lighten(desaturate($base-success, 34.9), 46.1) !default; // #9FD89F
+  $button-success-outlined-selected-bg: lighten(desaturate($base-success, 35), 57.6) !default; // #C9E9C9
 
   $button-default-color: $base-inverted-text-color !default;
   $button-default-selected-color: $base-inverted-text-color !default;
@@ -259,20 +259,20 @@ $button-accent-foreground-color: null !default;
 }
 
 @if $mode == "dark" {
-  $button-accent-foreground-color: #B4D6FA !default;
+  $button-accent-foreground-color: lighten(desaturate(adjust-hue($base-accent, 0.9), 2.2), 22.4) !default; // #b4d6fa
 
   $button-default-bg: $base-accent !default;
   $button-default-hover-bg: $base-accent-hover !default;
   $button-default-focused-bg: $base-accent-hover !default;
-  $button-default-active-bg: #b4d6fa !default; 
-  $button-default-selected-bg: #CFE4FA !default;
+  $button-default-active-bg: $button-accent-foreground-color !default;
+  $button-default-selected-bg: lighten(desaturate($button-default-active-bg, 6.4), 5.3) !default; // #CFE4FA
 
   $button-default-outlined-color-hover: $button-accent-foreground-color !default;
   $button-default-outlined-color-active: $button-accent-foreground-color !default;
   $button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
-  $button-default-outlined-hover-bg: $base-brand2-bg !default;
-  $button-default-outlined-focused-bg: $base-brand2-bg !default;
+  $button-default-outlined-hover-bg: $base-inverted-bg !default;
+  $button-default-outlined-focused-bg: $base-inverted-bg !default;
   $button-default-outlined-active-bg: $base-accent-selected !default;
   $button-default-outlined-selected-bg: darken(desaturate(adjust-hue($base-accent-bg, -3), 3.75), 14.51) !default; // #0C3B5E
 
@@ -281,20 +281,20 @@ $button-accent-foreground-color: null !default;
   $button-danger-outlined-color-active: $base-danger-active !default;
   $button-danger-outlined-selected-color: $base-danger-active !default;
 
-  $button-danger-outlined-hover-bg: #3F1011 !default;
-  $button-danger-outlined-focused-bg: #3F1011 !default;
-  $button-danger-outlined-active-bg: #BC2F32 !default;
-  $button-danger-outlined-selected-bg: #751D1F !default;
+  $button-danger-outlined-hover-bg: darken(desaturate($base-danger, 5.1), 53.5) !default; // #3F1011
+  $button-danger-outlined-focused-bg: $button-danger-outlined-hover-bg !default; // #3F1011
+  $button-danger-outlined-active-bg: darken(desaturate($base-danger, 4.6), 22.9) !default; // #BC2F32
+  $button-danger-outlined-selected-bg: darken(desaturate($base-danger, 4.3), 40.4) !default; // #751D1F
 
   $button-success-outlined-color: $base-success !default;
   $button-success-outlined-color-hover: $base-success-active !default;
   $button-success-outlined-color-active: $base-success-active !default;
   $button-success-outlined-selected-color: $base-success-active !default;
 
-  $button-success-outlined-hover-bg: #052505 !default;
-  $button-success-outlined-focused-bg: #052505 !default;
-  $button-success-outlined-active-bg: #0B500B !default;
-  $button-success-outlined-selected-bg: #094509 !default;
+  $button-success-outlined-hover-bg: darken(saturate($base-success, 39.4), 42.7) !default; // #052505
+  $button-success-outlined-focused-bg: $button-success-outlined-hover-bg !default; // #052505
+  $button-success-outlined-active-bg: darken(saturate($base-success, 39), 33.1) !default; // #0B500B
+  $button-success-outlined-selected-bg: darken(saturate($base-success, 40.1), 35.7) !default; // #094509
 
   $button-default-color: $typography-bg !default;
   $button-default-selected-color: $typography-bg !default;
