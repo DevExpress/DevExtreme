@@ -23073,7 +23073,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.cols.baseSize]
        */
-      baseSize?: number | DevExpress.common.Mode;
+      baseSize?: number | string;
       /**
        * [descr:dxResponsiveBoxOptions.cols.ratio]
        */
@@ -23106,7 +23106,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.rows.baseSize]
        */
-      baseSize?: number | DevExpress.common.Mode;
+      baseSize?: number | string;
       /**
        * [descr:dxResponsiveBoxOptions.rows.ratio]
        */
