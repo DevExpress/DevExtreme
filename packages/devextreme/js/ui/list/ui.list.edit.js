@@ -368,9 +368,11 @@ const ListEdit = ListBase.inherit({
         const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
             ? focusedItemIndex - 1
             : focusedItemIndex;
+        const promise = this.callBase(itemElement);
 
-        this.callBase(itemElement);
-        this.focusListItem(nextFocusedItem);
+        return promise.done(function() {
+            return this.focusListItem(nextFocusedItem);
+        });
     }
 });
 
