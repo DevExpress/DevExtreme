@@ -43,8 +43,6 @@ export interface AddEvent {
     readonly component: dxSortable;
     /** @docid _ui_sortable_AddEvent.element */
     readonly element: DxElement;
-    /** @docid _ui_sortable_AddEvent.model */
-    readonly model?: any;
     /**
      * @docid _ui_sortable_AddEvent.event
      * @type event

@@ -25070,10 +25070,6 @@ declare module DevExpress.ui {
        */
       readonly element: DevExpress.core.DxElement;
       /**
-       * [descr:_ui_sortable_AddEvent.model]
-       */
-      readonly model?: any;
-      /**
        * [descr:_ui_sortable_AddEvent.event]
        */
       readonly event: DevExpress.events.DxEvent<
