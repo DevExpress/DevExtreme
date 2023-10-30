@@ -238,15 +238,21 @@
     padding-inline-start: 0;
   }
 
+  .dx-tabs {
+    padding: 0 $fluent-html-editor-add-image-dialog-tabs-padding;
+  }
+
   .dx-fileuploader-input-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     padding: $fluent-html-editor-add-image-dialog-fileuploader-padding;
-    border: 1px dashed $htmleditor-fileuploader-input-wrapper-border-color;
-    background-color: $htmleditor-fileuploader-input-wrapper-bg-color;
+    border-width: $fluent-html-editor-fileuploader-input-wrapper-border-size;
+    border-style: dashed;
+    border-color: $htmleditor-fileuploader-input-wrapper-border-color;
     border-radius: $fluent-html-editor-fileuploader-input-wrapper-border-radius;
+    background-color: $htmleditor-fileuploader-input-wrapper-bg-color;
 
     &::after,
     &::before {
@@ -271,6 +277,10 @@
       background-color: color.change($htmleditor-border-color, $alpha: 0.8);
     }
   }
+}
+
+.dx-formdialog .dx-formdialog-field-target .dx-field-item-content {
+  text-align: start;
 }
 
 .dx-mention {

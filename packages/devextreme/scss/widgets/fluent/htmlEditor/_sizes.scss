@@ -9,6 +9,8 @@ $fluent-html-editor-horizontal-padding: null !default;
 $fluent-html-editor-add-image-dialog-fileuploader-padding: null !default;
 $fluent-html-editor-toolbar-menu-separator-margin: 4px !default;
 $fluent-html-editor-fileuploader-input-wrapper-border-radius: 8px !default;
+$fluent-html-editor-fileuploader-input-wrapper-border-size: 1.5px !default;
+$fluent-html-editor-add-image-dialog-tabs-padding: 12px !default;
 
 @if $size == "default" {
   $fluent-toolbar-size-editor-width: 120px !default;
