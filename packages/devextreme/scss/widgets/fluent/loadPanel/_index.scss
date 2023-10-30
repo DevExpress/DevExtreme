@@ -10,13 +10,9 @@
 
 
 .dx-loadpanel-content {
-  border: 1px solid $loadpanel-border-color;
+  border: none;
   background: $loadpanel-content-bg;
-  padding: 13px;
-  border-radius: 50%;
-  box-shadow: 0 6px 12px $loadpanel-content-shadow-color;
-}
-
-.dx-loadpanel-message {
-  display: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.14);
 }
