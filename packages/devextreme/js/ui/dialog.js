@@ -54,7 +54,7 @@ const getApplyButtonConfig = () => {
 const getCancelButtonConfig = () => {
     if(isFluent()) {
         return {
-            stylingMode: 'contoutlinedained',
+            stylingMode: 'outlined',
             type: 'default',
         };
     }
