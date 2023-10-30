@@ -195,7 +195,7 @@ $scrollview-pulldown-path: null !default;
   $base-danger-selected: lighten(saturate(adjust-hue($base-danger, 0.7), 1.3), 14.9); // #F1BBBC
 
   $base-success: #54B054 !default; // #54B054
-  $base-success-hover: lighten(saturate(#54B054, 5.4), 22.5) !default; // #9FD89F
+  $base-success-hover: lighten(saturate($base-success, 5.4), 22.5) !default; // #9FD89F
   $base-success-active: lighten(saturate($base-success, 10.6), 45.3) !default; // #F1FAF1
   $base-success-selected: lighten(saturate($base-success, 5.3), 34.1) !default; // #C9E9C9
 
