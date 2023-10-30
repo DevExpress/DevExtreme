@@ -1281,6 +1281,21 @@ testComponentDefaults(LoadPanel,
 testComponentDefaults(LoadPanel,
     {},
     {
+        width: 'auto',
+        height: 'auto'
+    },
+    function() {
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
+    },
+    function() {
+        themes.isFluent = this.origIsFluent;
+    }
+);
+
+testComponentDefaults(LoadPanel,
+    {},
+    {
         focusStateEnabled: false,
         propagateOutsideClick: true,
         preventScrollEvents: false,

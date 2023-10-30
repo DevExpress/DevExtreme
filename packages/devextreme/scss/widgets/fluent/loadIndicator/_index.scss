@@ -79,7 +79,7 @@
   box-sizing: border-box;
 
   .dx-loadindicator-segment-inner {
-    border-color: #D0E5FB;
+    border-color: $load-indicator-inner-segment-border-color;
     width: 100%;
     left: 0;
   }

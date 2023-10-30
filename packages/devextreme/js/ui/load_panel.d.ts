@@ -125,7 +125,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default 90
      * @default 60 &for(Material)
-     * @default auto &for(Fluent)
+     * @default 'auto' &for(Fluent)
      * @public
      */
     height?: number | string | (() => number | string);
@@ -182,7 +182,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default 222
      * @default 60 &for(Material)
-     * @default auto &for(Fluent)
+     * @default 'auto' &for(Fluent)
      * @public
      */
     width?: number | string | (() => number | string);

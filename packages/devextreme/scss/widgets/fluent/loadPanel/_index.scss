@@ -12,7 +12,7 @@
 .dx-loadpanel-content {
   border: none;
   background: $loadpanel-content-bg;
-  padding: 12px 24px;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.14);
+  padding: $load-panel-padding;
+  border-radius: $load-panel-border-radius;
+  box-shadow: $load-panel-box-shadow;
 }
