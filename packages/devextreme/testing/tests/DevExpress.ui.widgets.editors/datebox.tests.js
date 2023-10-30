@@ -58,6 +58,8 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const BUTTON_CLASS = 'dx-button';
+const TODAY_BUTTON_CLASS = 'dx-button-today';
 const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -74,7 +76,7 @@ const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
-const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
+const TODAY_BUTTON_SELECTOR = `.${TODAY_BUTTON_CLASS}.${BUTTON_CLASS}`;
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
@@ -537,6 +539,19 @@ QUnit.module('toolbar buttons', {}, () => {
     ];
 
     types.forEach(type => {
+        QUnit.test(`Today button should have "dx-button-today" class (type=${type})`, function(assert) {
+            const dateBox = $('#dateBox').dxDateBox({
+                type,
+                pickerType: 'calendar',
+                opened: true,
+                applyValueMode: 'useButtons',
+            }).dxDateBox('instance');
+            const $overlayContent = $(dateBox.content()).parent();
+            const $todayButton = $overlayContent.find(`.${TODAY_BUTTON_CLASS}`);
+
+            assert.strictEqual($todayButton.length, 1);
+        });
+
         buttons.forEach(button => {
             QUnit.test(`"${button.optionName}" should customize ${button.name} button on init when type="${type}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
