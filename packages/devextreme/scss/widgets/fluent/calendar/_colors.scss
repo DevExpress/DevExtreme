@@ -46,8 +46,8 @@ $calendar-week-number-cell-bg: $base-neutral-border-color3 !default;
 $calendar-week-number-border-radius: 0 !default;
 
 @if $mode == "light" {
-  $calendar-hover-bg: $button-default-outlined-hover-bg !default;
-  $calendar-cell-hover-border-color: $calendar-cell-hover-border-color !default;
+  $calendar-hover-bg: $button-default-outlined-selected-bg !default;
+  $calendar-cell-hover-border-color: $calendar-hover-bg !default;
   $calendar-cell-active-bg: $button-default-outlined-active-bg !default;
   $calendar-cell-contoured-border-color: $calendar-cell-active-bg !default;
 }
