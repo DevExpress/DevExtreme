@@ -12,7 +12,7 @@ $datagrid-base-color: $base-text-color !default;
 * $type color
 */
 $datagrid-base-background-color: $base-bg !default;
-$datagrid-border-color: $base-neutral-border-color3 !default;
+$datagrid-border-color: null !default;
 $datagrid-border: 1px solid $datagrid-border-color !default;
 
 /**
@@ -173,6 +173,7 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
+  $datagrid-border-color: lighten($base-border-color, 6.27) !default;
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
@@ -189,6 +190,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $mode == "dark" {
+  $datagrid-border-color: darken($base-border-color, 14.12) !default;
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;

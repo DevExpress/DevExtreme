@@ -10,7 +10,7 @@
 // adduse
 
 $fluent-fileuploader-file-wrapper-border-size: 3px;
-$fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+$fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.1);
 
 .dx-fileuploader-wrapper {
   padding: $fluent-fileuploader-vertical-padding;

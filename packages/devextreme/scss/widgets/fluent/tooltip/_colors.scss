@@ -28,6 +28,6 @@ $tooltip-border-radius: $base-border-radius !default;
 
 @if $mode == "dark" {
   $tooltip-color: $base-text-color !default;
-  $tooltip-bg: $base-neutral-background1-hover !default;
+  $tooltip-bg: $base-bg-hover !default;
 }
 
