@@ -96,9 +96,6 @@ $button-default-active-bg: null !default;
 $button-default-selected-bg: null !default;
 
 $button-default-outlined-color: $base-accent !default;
-$button-default-outlined-color-hover: null !default;
-$button-default-outlined-color-active: null !default;
-$button-default-outlined-selected-color: null !default;
 $button-default-outlined-hover-bg: null !default;
 $button-default-outlined-focused-bg: null !default;
 $button-default-outlined-active-bg: null !default;
@@ -211,17 +208,13 @@ $button-success-outlined-selected-bg: null !default;
 $button-accent-foreground-color: null !default;
 
 @if $mode == "light" {
-  $button-accent-foreground-color: #0A2E4A !default;
+  $button-accent-foreground-color: darken(desaturate(adjust-hue($base-accent, -2), 9.10), 23.53) !default;
 
   $button-default-bg: $base-accent !default;
   $button-default-hover-bg: $base-accent-hover !default;
   $button-default-focused-bg: $base-accent-hover !default;
   $button-default-active-bg: $base-accent-active !default;
   $button-default-selected-bg: $base-accent-selected !default;
-
-  $button-default-outlined-color-hover: $button-accent-foreground-color !default;
-  $button-default-outlined-color-active: $button-accent-foreground-color !default;
-  $button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
   $button-default-outlined-hover-bg: $base-inverted-bg !default;
   $button-default-outlined-focused-bg: $base-inverted-bg !default;
@@ -266,10 +259,6 @@ $button-accent-foreground-color: null !default;
   $button-default-focused-bg: $base-accent-hover !default;
   $button-default-active-bg: $button-accent-foreground-color !default;
   $button-default-selected-bg: lighten(desaturate($button-default-active-bg, 6.4), 5.3) !default; // #CFE4FA
-
-  $button-default-outlined-color-hover: $button-accent-foreground-color !default;
-  $button-default-outlined-color-active: $button-accent-foreground-color !default;
-  $button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
   $button-default-outlined-hover-bg: $base-inverted-bg !default;
   $button-default-outlined-focused-bg: $base-inverted-bg !default;
@@ -322,6 +311,10 @@ $button-normal-text-hover-bg: $button-normal-hover-bg !default;
 $button-normal-text-focused-bg: $button-normal-hover-bg !default;
 $button-normal-text-active-bg: $button-normal-active-bg !default;
 $button-normal-text-selected-bg: $button-normal-selected-bg !default;
+
+$button-default-outlined-color-hover: $button-accent-foreground-color !default;
+$button-default-outlined-color-active: $button-accent-foreground-color !default;
+$button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
 $button-default-text-color-hover: $button-default-outlined-color-hover !default;
 $button-default-text-color-active: $button-default-outlined-color-active !default;
