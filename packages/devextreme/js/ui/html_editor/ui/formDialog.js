@@ -115,7 +115,7 @@ class FormDialog {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('OK'),
                         onClick: (e) => this.callAddButtonAction(e.event),
-                        ...getApplyButtonConfig()
+                        ...getApplyButtonConfig(),
                     }
                 }, {
                     toolbar: 'bottom',
