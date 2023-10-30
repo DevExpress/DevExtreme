@@ -29,7 +29,7 @@ class TestContainerComponent implements AfterViewChecked {
     emptyItems = undefined;
     items = [1];
     complexItems = [{ text: 'Item 1' }];
-    emptyDataSource: any = { items: [] };
+    emptyDataSource: Record<string, unknown> = { items: [] };
     defaultTemplateItems = [{ text: 'test', disabled: false }];
     disabled = false;
     @ViewChild(DxListComponent) innerWidget: DxListComponent;

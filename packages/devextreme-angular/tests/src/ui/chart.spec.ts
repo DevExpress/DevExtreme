@@ -25,12 +25,12 @@ class TestContainerComponent {
         label: 'label1'
     }];
     @ViewChild(DxChartComponent) chart: DxChartComponent;
-    dataSource: any = [];
+    dataSource: any[] = [];
     disposed = false;
     commonSeriesSettings = {
         argumentField: undefined
     };
-    seriesAsArray: any = [];
+    seriesAsArray: any[] = [];
     seriesAsObject = {
         valueField: undefined
     };
