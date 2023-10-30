@@ -5,7 +5,7 @@ import { isDefined, isString } from '../../core/utils/type';
 import { ensureDefined } from '../../core/utils/common';
 import messageLocalization from '../../localization/message';
 import { extendAttributes } from './ui.file_manager.common';
-import { isFluent, isMaterial } from '../themes';
+import { isCompact, isFluent, isMaterial } from '../themes';
 
 import Widget from '../widget/ui.widget';
 import Toolbar from '../toolbar';
@@ -377,12 +377,14 @@ class FileManagerToolbar extends Widget {
         });
 
         const selectedIndex = this.option('itemViewMode') === 'thumbnails' ? 1 : 0;
-        let dropDownWidth = null;
+        const dropDownOptions = {
+            container: this._$viewSwitcherPopup
+        };
 
         if(isMaterial()) {
-            dropDownWidth = 36;
+            dropDownOptions.width = isCompact() ? 28 : 36;
         } else if(isFluent()) {
-            dropDownWidth = 40;
+            dropDownOptions.width = isCompact() ? 34 : 40;
         }
 
         return {
@@ -397,10 +399,7 @@ class FileManagerToolbar extends Widget {
                 stylingMode: 'text',
                 showArrowIcon: false,
                 useSelectMode: true,
-                dropDownOptions: {
-                    container: this._$viewSwitcherPopup,
-                    width: dropDownWidth
-                },
+                dropDownOptions,
                 onItemClick: e => this._executeCommand(e.itemData.name)
             }
         };
