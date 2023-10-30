@@ -26,11 +26,13 @@ $badge-invalid-bg: $base-invalid-color;
 @mixin badge-settings() {
   pointer-events: none;
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 50%;
   margin-top: math.div(-$fluent-invalid-badge-size, 2);
   width: $fluent-invalid-badge-size;
   height: $fluent-invalid-badge-size;
-  text-align: center;
   line-height: $fluent-invalid-badge-size + 1;
   font-size: $fluent-base-font-size;
 }
