@@ -1,8 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "ES2020",
+    "target": "ES2015",
+    "module": "ES2015",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution":"node",
