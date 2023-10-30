@@ -485,8 +485,6 @@ const VirtualScrollingRowsViewExtender = (function () {
       const changeType = change && change.changeType;
       const d: any = Deferred();
 
-      this.throwHeightWarningIfNeed();
-
       const contentTable = contentElement.children().first();
       if (changeType === 'append' || changeType === 'prepend') {
         this.waitAsyncTemplates().done(() => {
@@ -766,6 +764,8 @@ const VirtualScrollingRowsViewExtender = (function () {
       const $element = that.element();
 
       that.callBase();
+
+      this.throwHeightWarningIfNeed();
 
       if (that.component.$element() && !that._windowScroll && isElementInDom($element)) {
         that._windowScroll = subscribeToExternalScrollers($element, (scrollPos) => {
