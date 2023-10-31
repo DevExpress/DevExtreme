@@ -7,11 +7,6 @@ module.exports = {
     },
     plugins: [
         'simple-import-sort',
-        // TODO Vinogradov: Move this plugin to this package:
-        //   https://github.com/DevExpress/eslint-config-devextreme
-        // This custom plugin clones the @typescript-eslint/no-restricted-imports rule
-        // See issue: https://github.com/eslint/eslint/issues/14061
-        'forbidden-imports',
     ],
     overrides: [
         // General TS rules.
@@ -38,21 +33,6 @@ module.exports = {
                     }
                 ],
                 'no-restricted-imports': 'off',
-                'forbidden-imports/no-restricted-imports': [
-                    'error',
-                    {
-                        paths: [{
-                            name: '@js/core/utils/iterator',
-                            message: 'Please use @dom_utils/element_wrapper_iterator or native js methods instead.',
-                        }],
-                        patterns: [
-                            {
-                                group: ['../'],
-                                message: 'Please try to avoid import of modules from upper directories.',
-                            }
-                        ]
-                    }
-                ],
                 '@typescript-eslint/no-restricted-imports': [
                     'error',
                     {
@@ -141,7 +121,6 @@ module.exports = {
                 '@typescript-eslint/no-implied-eval': 'warn',
                 '@typescript-eslint/ban-ts-comment': 'warn',
                 '@typescript-eslint/prefer-for-of': 'warn',
-                'forbidden-imports/no-restricted-imports': 'warn',
             }
         },
     ],
