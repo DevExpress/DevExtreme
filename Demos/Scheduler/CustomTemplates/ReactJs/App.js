@@ -9,10 +9,9 @@ const currentDate = new Date(2021, 3, 27);
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 const onAppointmentFormOpening = (e) => {
-  const { form } = e;
   let movieInfo = getMovieById(e.appointmentData.movieId) || {};
   let { startDate } = e.appointmentData;
-  form.option('items', [
+  e.form.option('items', [
     {
       label: {
         text: 'Movie',
@@ -25,8 +24,8 @@ const onAppointmentFormOpening = (e) => {
         valueExpr: 'id',
         onValueChanged(args) {
           movieInfo = getMovieById(args.value);
-          form.updateData('director', movieInfo.director);
-          form.updateData(
+          e.form.updateData('director', movieInfo.director);
+          e.form.updateData(
             'endDate',
             new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration),
           );
@@ -52,7 +51,7 @@ const onAppointmentFormOpening = (e) => {
         type: 'datetime',
         onValueChanged(args) {
           startDate = args.value;
-          form.updateData(
+          e.form.updateData(
             'endDate',
             new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration),
           );

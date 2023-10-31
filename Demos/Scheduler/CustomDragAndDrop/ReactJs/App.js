@@ -70,8 +70,8 @@ const App = () => {
         </Draggable>
       </ScrollView>
       <Scheduler
-        timeZone="America/Los_Angeles"
         id="scheduler"
+        timeZone="America/Los_Angeles"
         dataSource={state.appointments}
         views={views}
         defaultCurrentDate={currentDate}

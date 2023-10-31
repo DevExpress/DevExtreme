@@ -14,7 +14,7 @@ const dataSource = {
       });
     }
 
-    const result = await fetch(url);
+    const result = await fetch(url.toString());
 
     if (result.status === 200) {
       return result.json();

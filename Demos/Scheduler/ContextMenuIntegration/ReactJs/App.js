@@ -7,11 +7,8 @@ import AppointmentMenuTemplate from './AppointmentTemplate.js';
 const views = ['day', 'month'];
 const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
-const onContextMenuItemClick = (
-  // eslint-disable-next-line no-unused-vars
-  e,
-) => {
-  e.itemData.onItemClick(e);
+const onContextMenuItemClick = (e) => {
+  e.itemData.onItemClick?.(e);
 };
 const App = () => {
   const schedulerRef = React.useRef(null);
@@ -19,62 +16,64 @@ const App = () => {
   const [contextMenuItems, setContextMenuItems] = React.useState([]);
   const [target, setTarget] = React.useState(appointmentClassName);
   const [disabled, setDisabled] = React.useState(true);
-  const [groups, setGroups] = React.useState(null);
+  const [groups, setGroups] = React.useState(undefined);
   const [crossScrollingEnabled, setCrossScrollingEnabled] = React.useState(false);
-  const onAppointmentContextMenu = React.useCallback(
-    ({ appointmentData, targetedAppointmentData }) => {
-      const scheduler = schedulerRef.current.instance;
-      const resourceItems = resourcesData.map((item) => ({
-        ...item,
-        onItemClick: ({ itemData }) =>
-          scheduler.updateAppointment(appointmentData, {
-            ...appointmentData,
-            ...{ roomId: [itemData.id] },
+  const onAppointmentContextMenu = React.useCallback((event) => {
+    const { appointmentData, targetedAppointmentData } = event;
+    const scheduler = schedulerRef.current?.instance;
+    const resourceItems = resourcesData.map((item) => ({
+      ...item,
+      onItemClick: (e) =>
+        scheduler?.updateAppointment(appointmentData, {
+          ...appointmentData,
+          ...{ roomId: [e.itemData.id] },
+        }),
+    }));
+    setTarget(appointmentClassName);
+    setDisabled(false);
+    setContextMenuItems([
+      {
+        text: 'Open',
+        onItemClick: () => scheduler?.showAppointmentPopup(appointmentData),
+      },
+      {
+        text: 'Delete',
+        onItemClick: () => scheduler?.deleteAppointment(appointmentData),
+      },
+      {
+        text: 'Repeat Weekly',
+        beginGroup: true,
+        onItemClick: () =>
+          scheduler?.updateAppointment(appointmentData, {
+            startDate: targetedAppointmentData?.startDate,
+            recurrenceRule: 'FREQ=WEEKLY',
           }),
-      }));
-      setTarget(appointmentClassName);
-      setDisabled(false);
-      setContextMenuItems([
-        {
-          text: 'Open',
-          onItemClick: () => scheduler.showAppointmentPopup(appointmentData),
-        },
-        {
-          text: 'Delete',
-          onItemClick: () => scheduler.deleteAppointment(appointmentData),
-        },
-        {
-          text: 'Repeat Weekly',
-          beginGroup: true,
-          onItemClick: () =>
-            scheduler.updateAppointment(appointmentData, {
-              startDate: targetedAppointmentData.startDate,
-              recurrenceRule: 'FREQ=WEEKLY',
-            }),
-        },
-        { text: 'Set Room', beginGroup: true, disabled: true },
-        ...resourceItems,
-      ]);
-    },
-    [],
-  );
+      },
+      {
+        text: 'Set Room',
+        beginGroup: true,
+        disabled: true,
+      },
+      ...resourceItems,
+    ]);
+  }, []);
   const onCellContextMenu = React.useCallback(
-    ({ cellData }) => {
-      const scheduler = schedulerRef.current.instance;
+    (e) => {
+      const scheduler = schedulerRef.current?.instance;
       setTarget(cellClassName);
       setDisabled(false);
       setContextMenuItems([
         {
           text: 'New Appointment',
           onItemClick: () =>
-            scheduler.showAppointmentPopup({ startDate: cellData.startDate }, true),
+            scheduler?.showAppointmentPopup({ startDate: e.cellData.startDate }, true),
         },
         {
           text: 'New Recurring Appointment',
           onItemClick: () =>
-            scheduler.showAppointmentPopup(
+            scheduler?.showAppointmentPopup(
               {
-                startDate: cellData.startDate,
+                startDate: e.cellData.startDate,
                 recurrenceRule: 'FREQ=DAILY',
               },
               true,
@@ -86,7 +85,7 @@ const App = () => {
           onItemClick: () => {
             if (groups) {
               setCrossScrollingEnabled(false);
-              setGroups(null);
+              setGroups(undefined);
             } else {
               setCrossScrollingEnabled(true);
               setGroups(['roomId']);

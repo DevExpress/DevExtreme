@@ -1,37 +1,3 @@
-export const resourcesData = [
-  {
-    text: 'Samantha Bright',
-    id: 1,
-    color: '#cb6bb2',
-  },
-  {
-    text: 'John Heart',
-    id: 2,
-    color: '#56ca85',
-  },
-  {
-    text: 'Todd Hoffman',
-    id: 3,
-    color: '#1e90ff',
-  },
-  {
-    text: 'Sandra Johnson',
-    id: 4,
-    color: '#ff9747',
-  },
-];
-export const priorityData = [
-  {
-    text: 'Low Priority',
-    id: 1,
-    color: '#1e90ff',
-  },
-  {
-    text: 'High Priority',
-    id: 2,
-    color: '#ff9747',
-  },
-];
 export const data = [
   {
     text: 'Google AdWords Strategy',
@@ -431,5 +397,39 @@ export const data = [
     startDate: new Date('2021-02-26T23:15:00.000Z'),
     endDate: new Date('2021-02-27T02:30:00.000Z'),
     priority: 2,
+  },
+];
+export const resourcesData = [
+  {
+    text: 'Samantha Bright',
+    id: 1,
+    color: '#cb6bb2',
+  },
+  {
+    text: 'John Heart',
+    id: 2,
+    color: '#56ca85',
+  },
+  {
+    text: 'Todd Hoffman',
+    id: 3,
+    color: '#1e90ff',
+  },
+  {
+    text: 'Sandra Johnson',
+    id: 4,
+    color: '#ff9747',
+  },
+];
+export const priorityData = [
+  {
+    text: 'Low Priority',
+    id: 1,
+    color: '#1e90ff',
+  },
+  {
+    text: 'High Priority',
+    id: 2,
+    color: '#ff9747',
   },
 ];

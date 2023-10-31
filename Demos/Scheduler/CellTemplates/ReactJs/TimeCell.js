@@ -8,7 +8,7 @@ const TimeCell = (props) => {
   return (
     <div className={isDinner ? 'dinner' : null}>
       {text}
-      {hasCoffeeCupIcon ? <div className="cafe" /> : null}
+      {hasCoffeeCupIcon && <div className="cafe" />}
     </div>
   );
 };

@@ -25,8 +25,8 @@ const App = () => {
   const [groups, setGroups] = React.useState<string[] | undefined>(undefined);
   const [crossScrollingEnabled, setCrossScrollingEnabled] = React.useState(false);
 
-  const onAppointmentContextMenu = React.useCallback((e: SchedulerTypes.AppointmentContextMenuEvent) => {
-    const { appointmentData, targetedAppointmentData } = e;
+  const onAppointmentContextMenu = React.useCallback((event: SchedulerTypes.AppointmentContextMenuEvent) => {
+    const { appointmentData, targetedAppointmentData } = event;
     const scheduler = schedulerRef.current?.instance;
 
     const resourceItems: ContextMenuItem[] = resourcesData.map((item) => ({

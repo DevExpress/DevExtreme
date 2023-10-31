@@ -1,16 +1,14 @@
 import React from 'react';
 
-const AppointmentMenuTemplate = ({ data }) => (
+const AppointmentMenuTemplate = (props) => (
   <div>
-    {data.color ? (
+    {props.data.color && (
       <div
         className="item-badge"
-        style={{ backgroundColor: data.color }}
+        style={{ backgroundColor: props.data.color }}
       />
-    ) : (
-      ''
     )}
-    {data.text}
+    {props.data.text}
   </div>
 );
 export default AppointmentMenuTemplate;

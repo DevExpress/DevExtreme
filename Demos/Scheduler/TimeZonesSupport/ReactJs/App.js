@@ -16,8 +16,8 @@ const onAppointmentFormOpening = (e) => {
   const { form } = e;
   const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
   const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-  const startDateDataSource = startDateTimezoneEditor.option('dataSource');
-  const endDateDataSource = endDateTimezoneEditor.option('dataSource');
+  const startDateDataSource = startDateTimezoneEditor?.option('dataSource');
+  const endDateDataSource = endDateTimezoneEditor?.option('dataSource');
   startDateDataSource.filter(['id', 'contains', 'Europe']);
   endDateDataSource.filter(['id', 'contains', 'Europe']);
   startDateDataSource.load();

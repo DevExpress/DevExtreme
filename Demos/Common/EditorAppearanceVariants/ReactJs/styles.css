@@ -5,11 +5,11 @@
 .widgets-container {
   display: grid;
   grid-template-areas:
-    "title title title title"
-    "name name birthDate birthDate "
-    "address address state phone"
-    "hireDate hireDate range range"
-    "notes notes notes notes";
+    'title title title title'
+    'name name birthDate birthDate '
+    'address address state phone'
+    'hireDate hireDate range range'
+    'notes notes notes notes';
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 20px;
   padding-left: 20px;

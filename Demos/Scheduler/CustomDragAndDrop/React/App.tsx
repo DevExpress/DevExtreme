@@ -94,8 +94,8 @@ const App = () => {
       >
         <AppointmentDragging
           group={draggingGroupName}
-          onRemove={onAppointmentRemove}
-          onAdd={onAppointmentAdd}
+          onRemove={onAppointmentRemove as any}
+          onAdd={onAppointmentAdd as any}
         />
       </Scheduler>
     </React.Fragment>

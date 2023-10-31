@@ -55,8 +55,9 @@ export default function App() {
         <div className="caption">Options</div>
         <div className="editors-modes">
           <div className="option">
-            <label>Styling Mode</label>
             <SelectBox
+              label="Styling Mode"
+              labelMode="outside"
               stylingMode={defaultStylingMode}
               items={stylingModes}
               inputAttr={stylingModeLabel}
@@ -65,8 +66,9 @@ export default function App() {
             />
           </div>
           <div className="option">
-            <label>Label Mode</label>
             <SelectBox
+              label="Label Mode"
+              labelMode="outside"
               stylingMode={defaultStylingMode}
               items={labelModes}
               inputAttr={labelModeLabel}

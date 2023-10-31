@@ -20,17 +20,19 @@ const notifyDisableDate = () => {
 };
 const applyDisableDatesToDateEditors = (form) => {
   const startDateEditor = form.getEditor('startDate');
-  startDateEditor.option('disabledDates', holidays);
+  startDateEditor?.option('disabledDates', holidays);
   const endDateEditor = form.getEditor('endDate');
-  endDateEditor.option('disabledDates', holidays);
+  endDateEditor?.option('disabledDates', holidays);
 };
 const onAppointmentFormOpening = (e) => {
-  const startDate = new Date(e.appointmentData.startDate);
-  if (!Utils.isValidAppointmentDate(startDate)) {
-    e.cancel = true;
-    notifyDisableDate();
+  if (e.appointmentData?.startDate) {
+    const startDate = new Date(e.appointmentData.startDate);
+    if (!Utils.isValidAppointmentDate(startDate)) {
+      e.cancel = true;
+      notifyDisableDate();
+    }
+    applyDisableDatesToDateEditors(e.form);
   }
-  applyDisableDatesToDateEditors(e.form);
 };
 const onAppointmentAdding = (e) => {
   const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
@@ -52,7 +54,7 @@ const App = () => {
     () => (currentView === 'month' ? DataCellMonth : DataCell),
     [currentView],
   );
-  const onCurrentViewChange = React.useCallback((value) => setCurrentView(value), []);
+  const onCurrentViewChange = React.useCallback((value) => setCurrentView(value), [setCurrentView]);
   const renderDateCell = React.useCallback(
     (itemData) => (
       <DateCell
@@ -60,7 +62,7 @@ const App = () => {
         currentView={currentView}
       />
     ),
-    [currentView],
+    [],
   );
   return (
     <Scheduler

@@ -5,9 +5,7 @@ import { employees as employeeList } from './data.js';
 
 const expandedRowKeys = [1];
 const onDragChange = (e) => {
-  // @ts-ignore
   const visibleRows = e.component.getVisibleRows();
-  // @ts-ignore
   const sourceNode = e.component.getNodeByKey(e.itemData.ID);
   let targetNode = visibleRows[e.toIndex].node;
   while (targetNode && targetNode.data) {
@@ -25,7 +23,6 @@ const App = () => {
   const [showDragIcons, setShowDragIcons] = React.useState(true);
   const onReorder = React.useCallback(
     (e) => {
-      // @ts-ignore
       const visibleRows = e.component.getVisibleRows();
       let sourceData = e.itemData;
       const updatedEmployees = [...employees];
@@ -37,7 +34,6 @@ const App = () => {
       } else {
         const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
         let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
-        // @ts-ignore
         if (targetData && e.component.isRowExpanded(targetData.ID)) {
           sourceData = { ...sourceData, Head_ID: targetData.ID };
           targetData = null;

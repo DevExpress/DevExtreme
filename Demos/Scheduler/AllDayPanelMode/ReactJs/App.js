@@ -15,9 +15,12 @@ const views = [
 const allDayPanelItems = ['all', 'allDay', 'hidden'];
 const App = () => {
   const [allDayPanelMode, setAllDayPanelMode] = React.useState('allDay');
-  const onChangeAllDayPanelMode = React.useCallback((e) => {
-    setAllDayPanelMode(e.value);
-  }, []);
+  const onChangeAllDayPanelMode = React.useCallback(
+    (e) => {
+      setAllDayPanelMode(e.value);
+    },
+    [setAllDayPanelMode],
+  );
   return (
     <React.Fragment>
       <Scheduler
