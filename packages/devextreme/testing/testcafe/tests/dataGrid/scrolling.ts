@@ -1647,7 +1647,6 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
 
 ['height', 'max-height'].forEach((cssOption) => {
   test(`Warning should not be thrown if scrolling is virtual and height is specified with css (${cssOption})`, async (t) => {
-    await t.debug();
     const consoleMessages = await t.getBrowserConsoleMessages();
     const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 
