@@ -208,7 +208,7 @@ $button-success-outlined-selected-bg: null !default;
 $button-accent-foreground-color: null !default;
 
 @if $mode == "light" {
-  $button-accent-foreground-color: darken(desaturate(adjust-hue($base-accent, -2), 9.10), 23.53) !default;
+  $button-accent-foreground-color: darken(desaturate(adjust-hue($base-accent, -2), 9.10), 23.53) !default; // #0a2e4a
 
   $button-default-bg: $base-accent !default;
   $button-default-hover-bg: $base-accent-hover !default;
