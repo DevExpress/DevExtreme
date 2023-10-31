@@ -353,12 +353,6 @@ const ListEdit = ListBase.inherit({
         return this._editStrategy.getItemDataByIndex(index);
     },
 
-    /**
-     * @name dxList.deleteItem
-     * @publicName deleteItem(itemElement)
-     * @param1 itemElement:Element
-     * @hidden
-     */
     deleteItem(itemElement) {
         const editStrategy = this._editStrategy;
         const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
