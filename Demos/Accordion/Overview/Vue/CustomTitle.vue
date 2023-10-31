@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ itemData.CompanyName }}</h1>
+  <div class="header">{{ itemData.CompanyName }}</div>
 </template>
 <script>
 

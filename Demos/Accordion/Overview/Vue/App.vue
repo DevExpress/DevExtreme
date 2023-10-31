@@ -88,11 +88,11 @@ export default {
   height: 700px;
 }
 
-#accordion h1 {
+#accordion .header {
   font-size: 20px;
 }
 
-#accordion h1,
+#accordion .header,
 #accordion p {
   margin: 0;
 }
@@ -105,7 +105,7 @@ export default {
   display: flex;
 }
 
-.dx-theme-material #accordion h1 {
+.dx-theme-material #accordion .header {
   align-self: center;
 }
 

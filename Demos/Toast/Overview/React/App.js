@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div id="product-list">
-      <h1>Product List</h1>
+      <div className="header">Product List</div>
       <ul>{items}</ul>
       <Toast
         visible={toastConfig.isVisible}

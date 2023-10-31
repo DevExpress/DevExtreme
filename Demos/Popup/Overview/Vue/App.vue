@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <h1>Employees</h1>
+    <div class="header">Employees</div>
 
     <ul>
       <EmployeeItem
@@ -136,6 +136,11 @@ export default {
 };
 </script>
 <style>
+.header {
+  font-size: 34px;
+  text-align: center;
+}
+
 #container {
   padding: 10px;
 }

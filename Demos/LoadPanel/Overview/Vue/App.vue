@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header-container">
-      <h1>John Heart</h1>
+      <div class="header">John Heart</div>
       <DxButton
         :on-click="showLoadPanel"
         text="Load Data"
@@ -108,7 +108,8 @@ export default {
 };
 </script>
 <style>
-h1 {
+.header {
+  font-size: 34px;
   display: inline-block;
   vertical-align: middle;
   padding: 10px 14px 10px 10px;

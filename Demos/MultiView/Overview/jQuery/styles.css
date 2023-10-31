@@ -24,12 +24,13 @@
 }
 
 #multiview p,
-#multiview h1 {
+#multiview .header {
   margin: 0;
 }
 
-#multiview h1 {
+#multiview .header {
   font-size: 34px;
+  padding-top: 0;
 }
 
 .options {

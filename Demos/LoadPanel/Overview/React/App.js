@@ -43,7 +43,7 @@ export default function App() {
 
   return (
     <React.Fragment>
-      <h1>John Heart</h1>
+      <div className="header">John Heart</div>
       &nbsp;
       <Button text="Load Data" onClick={onClick}></Button>
 

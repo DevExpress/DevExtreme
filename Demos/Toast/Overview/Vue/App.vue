@@ -1,6 +1,6 @@
 <template>
   <div id="product-list">
-    <h1>Product List</h1>
+    <div class="header">Product List</div>
 
     <ul>
       <ProductItem
@@ -47,6 +47,11 @@ export default {
 };
 </script>
 <style>
+.header {
+  font-size: 34px;
+  text-align: center;
+}
+
 #product-list {
   padding: 10px;
 }

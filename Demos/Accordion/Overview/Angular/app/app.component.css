@@ -2,11 +2,11 @@
   height: 700px;
 }
 
-::ng-deep #accordion h1 {
+::ng-deep #accordion .header {
   font-size: 20px;
 }
 
-::ng-deep #accordion h1,
+::ng-deep #accordion .header,
 ::ng-deep #accordion p {
   margin: 0;
 }
@@ -19,7 +19,7 @@
   display: flex;
 }
 
-::ng-deep .dx-theme-material #accordion h1 {
+::ng-deep .dx-theme-material #accordion .header {
   align-self: center;
 }
 

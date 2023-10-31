@@ -23,13 +23,14 @@
   padding-left: 25px;
 }
 
-::ng-deep #multiview p {
+::ng-deep #multiview p,
+::ng-deep #multiview .header {
   margin: 0;
 }
 
-::ng-deep #multiview p,
-::ng-deep #multiview h1 {
-  margin: 0;
+::ng-deep #multiview .header {
+  font-size: 34px;
+  padding-top: 0;
 }
 
 ::ng-deep .options {

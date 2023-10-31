@@ -14,7 +14,7 @@
       <template #item="{ data: company }">
         <div>
           <div class="multiview-item">
-            <h1>{{ company.CompanyName }}</h1>
+            <div class="header">{{ company.CompanyName }}</div>
             <div>
               <p>
                 <b>{{ company.City }}</b>
@@ -107,12 +107,13 @@ export default {
 }
 
 #multiview p,
-#multiview h1 {
+#multiview .header {
   margin: 0;
 }
 
-#multiview h1 {
+#multiview .header {
   font-size: 34px;
+  padding-top: 0;
 }
 
 .options {

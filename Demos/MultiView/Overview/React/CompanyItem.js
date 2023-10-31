@@ -5,7 +5,7 @@ function CompanyItem({ data }) {
   return (
     <div>
       <div className="multiview-item">
-        <h1>{ company.CompanyName }</h1>
+        <div className="header">{ company.CompanyName }</div>
         <div>
           <p>
             <b>{ company.City } </b>

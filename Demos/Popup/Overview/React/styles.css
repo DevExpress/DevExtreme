@@ -1,3 +1,8 @@
+.header {
+  font-size: 34px;
+  text-align: center;
+}
+
 #container {
   padding: 10px;
 }

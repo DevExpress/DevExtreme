@@ -1,3 +1,8 @@
+::ng-deep .header {
+  font-size: 34px;
+  text-align: center;
+}
+
 ::ng-deep #container {
   padding: 10px;
 }
