@@ -47,6 +47,12 @@ $header-filter-color-empty: null !default;
 $datagrid-selection-bg: $base-bg-active !default;
 
 /**
+* $name 60. Selected row border color
+* $type color
+*/
+$datagrid-row-selected-border-color: $base-bg-active !default;
+
+/**
 * $name 50. Selected row text color
 * $type color
 */
@@ -77,6 +83,8 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
+$datagrid-cell-removed-border-color: $base-bg-active !default;
+$datagrid-row-removed-bg: $base-bg-active !default;
 $datagrid-cell-removed-text-color: null !default;
 
 /**
@@ -196,12 +204,4 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 $datagrid-border: 1px solid $datagrid-border-color !default;
-
-/**
-* $name 60. Selected row border color
-* $type color
-*/
-$datagrid-row-selected-border-color: $datagrid-border-color !default;
-$datagrid-cell-removed-border-color: $datagrid-border-color !default;
-$datagrid-row-removed-bg: $datagrid-border-color !default;
 
