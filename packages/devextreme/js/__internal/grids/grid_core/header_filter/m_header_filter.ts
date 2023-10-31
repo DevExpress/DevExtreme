@@ -418,21 +418,18 @@ const ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
 
   _columnOptionChanged(e) {
     const { optionNames } = e;
+    const isFilterRowAndHeaderFilterValuesChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterValue']);
+    const isHeaderFilterValuesAndTypeChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType']);
 
-    if (gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterValue'])) {
+    if (isFilterRowAndHeaderFilterValuesChanged || isHeaderFilterValuesAndTypeChanged) {
       if (this._needUpdateFilterIndicators()) {
         this._updateHeaderFilterIndicators();
       }
     }
 
-    if (gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType'])) {
-      if (this._needUpdateFilterIndicators()) {
-        this._updateHeaderFilterIndicators();
-      }
-      return;
+    if (!isHeaderFilterValuesAndTypeChanged) {
+      this.callBase(e);
     }
-
-    this.callBase(e);
   },
 });
 
