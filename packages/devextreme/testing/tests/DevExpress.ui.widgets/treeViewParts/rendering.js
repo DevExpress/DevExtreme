@@ -12,6 +12,7 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
 const TREEVIEW_ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const DX_LOAD_INDICATOR_CLASS = 'dx-loadindicator';
+const CHECK_BOX_CLASS = 'dx-checkbox';
 
 QUnit.module('Rendering', {
     beforeEach: function() {
@@ -207,7 +208,7 @@ QUnit.test('\'getNodes\' method should return right result when some item was se
     });
 
     const treeView = $treeView.dxTreeView('instance');
-    const $checkbox = $treeView.find('.dx-checkbox').eq(2);
+    const $checkbox = $treeView.find(`.${CHECK_BOX_CLASS}`).eq(2);
 
     $checkbox.trigger('dxclick');
 
@@ -315,8 +316,8 @@ QUnit.test('Render checkbox before itemRendered is fired', function(assert) {
         showCheckBoxesMode: 'normal',
         onItemRendered: function(e) {
             i++;
-            assert.equal($(e.element).find('.' + internals.NODE_CLASS).find('.dx-checkbox').length, i);
-            assert.equal($(e.element).find('.' + internals.NODE_CLASS + `.${TREEVIEW_ITEM_WITH_CHECKBOX_CLASS}`).length, i);
+            assert.equal($(e.element).find(`.${internals.NODE_CLASS}`).find(`.${internals.ITEM_CLASS}`).find(`.${CHECK_BOX_CLASS}`).length, i);
+            assert.equal($(e.element).find(`.${internals.NODE_CLASS}.${TREEVIEW_ITEM_WITH_CHECKBOX_CLASS}`).length, i);
         }
     });
 
@@ -388,14 +389,14 @@ QUnit.test('showCheckBoxesMode option', function(assert) {
     });
     const instance = $treeView.dxTreeView('instance');
 
-    assert.notOk($treeView.find('.dx-checkbox').length, 'there are no checkboxes');
+    assert.notOk($treeView.find(`.${CHECK_BOX_CLASS}`).length, 'there are no checkboxes');
 
     instance.option('showCheckBoxesMode', 'selectAll');
-    assert.ok($treeView.find('.dx-checkbox').length, 'checkboxes was rendered');
+    assert.ok($treeView.find(`.${CHECK_BOX_CLASS}`).length, 'checkboxes was rendered');
     assert.ok($treeView.find('.dx-treeview-select-all-item').length, 'selectAll item was rendered');
 
     instance.option('showCheckBoxesMode', 'normal');
-    assert.ok($treeView.find('.dx-checkbox').length, 'checkboxes was rendered');
+    assert.ok($treeView.find(`.${CHECK_BOX_CLASS}`).length, 'checkboxes was rendered');
     assert.notOk($treeView.find('.dx-treeview-select-all-item').length, 'selectAll item was not rendered');
 });
 

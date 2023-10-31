@@ -101,7 +101,7 @@
     &.dx-tab-selected,
     &.dx-state-focused,
     &.dx-state-disabled {
-      margin-block-end: -$generic-tabs-border-width;
+      margin-bottom: -$generic-tabs-border-width;
     }
   }
 
