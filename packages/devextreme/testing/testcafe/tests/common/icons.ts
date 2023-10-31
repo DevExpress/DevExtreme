@@ -258,6 +258,10 @@ const iconSet = {
   belloutline: '\f172',
   to: '\f173',
   arrowback: '\f15a',
+  datatrending: '\f175',
+  dataarea: '\f176',
+  datausage: '\f177',
+  datapie: '\f178',
 };
 
 fixture.disablePageReloads`Icons`
