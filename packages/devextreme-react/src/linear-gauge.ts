@@ -1,3 +1,4 @@
+"use client"
 import dxLinearGauge, {
     Properties
 } from "devextreme/viz/linear_gauge";

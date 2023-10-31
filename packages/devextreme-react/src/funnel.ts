@@ -1,3 +1,4 @@
+"use client"
 import dxFunnel, {
     Properties
 } from "devextreme/viz/funnel";

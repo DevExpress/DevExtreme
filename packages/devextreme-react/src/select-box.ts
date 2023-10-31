@@ -1,3 +1,4 @@
+"use client"
 import dxSelectBox, {
     Properties
 } from "devextreme/ui/select_box";

@@ -80,6 +80,7 @@
 }
 
 .dx-tab-content {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -121,6 +122,13 @@
   .dx-tabs-nav-button {
     .dx-icon {
       transform: rotate(90deg);
+    }
+  }
+
+  &.dx-tabs-icon-position-start,
+  &.dx-tabs-icon-position-end {
+    .dx-tab {
+      justify-content: flex-start;
     }
   }
 }

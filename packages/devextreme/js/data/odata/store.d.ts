@@ -78,7 +78,7 @@ export interface ODataStoreOptions<
     url?: string;
     /**
      * @docid
-     * @default 2
+     * @default 4
      * @acceptValues 2|3|4
      * @public
      */

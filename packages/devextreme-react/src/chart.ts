@@ -1,3 +1,4 @@
+"use client"
 import dxChart, {
     Properties
 } from "devextreme/viz/chart";

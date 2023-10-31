@@ -1,12 +1,10 @@
 {
   "name": "devextreme-angular-playground",
-  "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve --open -c dev",
-    "build": "echo empty"
-  },
+  "description": "DevExtreme Angular UI and Visualization Components",
   "private": true,
+  "version": "23.2.0",
+  "author": "Developer Express Inc.",
+  "license": "MIT",
   "dependencies": {
     "@angular/animations": "~15.2.10",
     "@angular/common": "~15.2.10",
@@ -28,7 +26,12 @@
     "@angular/cli": "15.2.10",
     "@angular/compiler-cli": "15.2.10",
     "@angular/language-service": "15.2.10",
-    "@types/node": "8.10.66",
+    "@types/node": "20.8.9",
     "ts-node": "7.0.1"
+  },
+  "scripts": {
+    "ng": "ng",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve --open -c dev",
+    "build": "echo empty"
   }
 }

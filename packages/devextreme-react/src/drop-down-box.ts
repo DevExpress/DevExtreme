@@ -1,3 +1,4 @@
+"use client"
 import dxDropDownBox, {
     Properties
 } from "devextreme/ui/drop_down_box";

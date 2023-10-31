@@ -1,3 +1,4 @@
+"use client"
 import dxPivotGridFieldChooser, {
     Properties
 } from "devextreme/ui/pivot_grid_field_chooser";

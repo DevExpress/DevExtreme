@@ -39,15 +39,15 @@ $list-expanded-group-color: $base-text-color !default;
 * $name 30. Hovered item background color
 * $type color
 */
-$list-item-hover-bg: $base-neutral-background1-hover !default;
+$list-item-hover-bg: $base-bg-hover !default;
 
 /**
 * $name 30. Selected item state background color
 * $type color
 */
-$list-item-selected-bg: $base-neutral-background1-selected !default;
-$list-item-selected-hover-bg: $base-neutral-background1-hover !default;
-$list-item-focused-selected-bg: $base-neutral-background1-active !default;
+$list-item-selected-bg: $base-bg-selected !default;
+$list-item-selected-hover-bg: $base-bg-hover !default;
+$list-item-focused-selected-bg: $base-bg-active !default;
 $list-item-hover-color: $base-hover-color !default;
 $list-item-selected-color: $base-neutral-foreground2 !default;
 $list-header-indicator-color: $base-icon-color !default;
@@ -56,7 +56,7 @@ $list-header-indicator-color: $base-icon-color !default;
 * $name 40. Active state item background color
 * $type color
 */
-$list-item-active-bg: $base-neutral-background1-active !default;
+$list-item-active-bg: $base-bg-active !default;
 $list-holdmenu-bg: $base-bg !default;
 $list-holdmenu-border-color: $list-border-color !default;
 $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.12) !default;

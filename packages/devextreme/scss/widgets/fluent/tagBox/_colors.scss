@@ -16,8 +16,8 @@ $tagbox-tag-color: $base-text-color !default;
 * $name 20. Tag background color
 * $type color
 */
-$tagbox-tag-bg: $base-neutral-background4 !default;
-$tagbox-tag-hover-bg: $base-neutral-background4-hover !default;
+$tagbox-tag-bg: null !default;
+$tagbox-tag-hover-bg: $typography-bg !default;
 
 /**
 * $name 30. Tag active text color
@@ -30,6 +30,15 @@ $tagbox-tag-active-color: $base-text-color !default;
 * $type color
 */
 $tagbox-tag-button-remove-bg: $base-icon-color !default;
+$tagbox-tag-border-color-focused: $base-accent-active !default;
 $tagbox-select-all-border-color: $base-border-color !default;
 $tagbox-tag-foreground-disabled: $base-foreground-disabled !default;
-$tagbox-tag-disabled: $base-neutral-background-disabled !default;
+$tagbox-tag-disabled: $base-background-disabled !default;
+
+@if $mode == "light" {
+  $switch-bg: darken($base-bg, 5.88) !default;
+}
+
+@if $mode == "dark" {
+  $switch-bg: darken($base-bg, 12.16) !default;
+}

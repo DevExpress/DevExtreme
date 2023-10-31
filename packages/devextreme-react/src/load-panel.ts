@@ -1,3 +1,4 @@
+"use client"
 import dxLoadPanel, {
     Properties
 } from "devextreme/ui/load_panel";

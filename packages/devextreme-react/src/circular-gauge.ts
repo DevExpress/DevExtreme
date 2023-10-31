@@ -1,3 +1,4 @@
+"use client"
 import dxCircularGauge, {
     Properties
 } from "devextreme/viz/circular_gauge";
