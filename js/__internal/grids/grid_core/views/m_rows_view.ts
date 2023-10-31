@@ -897,7 +897,7 @@ class RowsView extends ColumnsView {
     that._scrollTop = 0;
     that._scrollLeft = -1;
     that._scrollRight = 0;
-    that._hasHeight = false;
+    that._hasHeight = undefined;
     that._contentChanges = [];
     dataController.loadingChanged.add((isLoading, messageText) => {
       that.setLoading(isLoading, messageText);

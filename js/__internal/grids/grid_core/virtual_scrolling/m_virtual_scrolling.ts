@@ -485,8 +485,6 @@ const VirtualScrollingRowsViewExtender = (function () {
       const changeType = change && change.changeType;
       const d: any = Deferred();
 
-      this.throwHeightWarningIfNeed();
-
       const contentTable = contentElement.children().first();
       if (changeType === 'append' || changeType === 'prepend') {
         this.waitAsyncTemplates().done(() => {
@@ -749,7 +747,13 @@ const VirtualScrollingRowsViewExtender = (function () {
       this.callBase.call(this, isLoading, messageText);
     },
 
+    // NOTE: warning won't be thrown if height was specified and then removed,
+    // because for some reason `_hasHeight` is not updated properly in this case
     throwHeightWarningIfNeed() {
+      if (this._hasHeight === undefined) {
+        return;
+      }
+
       const needToThrow = !this._hasHeight && isVirtualPaging(this);
       if (needToThrow && !this._heightWarningIsThrown) {
         this._heightWarningIsThrown = true;
@@ -762,6 +766,8 @@ const VirtualScrollingRowsViewExtender = (function () {
       const $element = that.element();
 
       that.callBase();
+
+      this.throwHeightWarningIfNeed();
 
       if (that.component.$element() && !that._windowScroll && isElementInDom($element)) {
         that._windowScroll = subscribeToExternalScrollers($element, (scrollPos) => {
