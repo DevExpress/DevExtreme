@@ -134,8 +134,8 @@ $scrollview-pulldown-path: null !default;
 
   $base-separator-color: $base-border-color !default; // #E0E0E0
 
-  $base-inverted-bg: rgba(235, 243, 252, 1) !default; // #EBF3FC
-  $base-shadow-color: #000 !default;
+  $base-inverted-bg: darken($base-bg, 100%) !default; // #EBF3FC
+  $base-shadow-color: $base-inverted-bg !default;
   $base-inverted-text-color: #fff !default;
 
   $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
@@ -185,7 +185,7 @@ $scrollview-pulldown-path: null !default;
 
   $base-separator-color: darken($base-border-color, 5.88) !default; // #525252
 
-  $base-inverted-bg: rgba(8, 35, 56, 1) !default; // #082338
+  $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-shadow-color: #000 !default;
   $base-inverted-text-color: #000 !default;
 
