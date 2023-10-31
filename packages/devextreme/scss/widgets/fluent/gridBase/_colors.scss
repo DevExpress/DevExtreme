@@ -13,7 +13,6 @@ $datagrid-base-color: $base-text-color !default;
 */
 $datagrid-base-background-color: $base-bg !default;
 $datagrid-border-color: null !default;
-$datagrid-border: 1px solid $datagrid-border-color !default;
 
 /**
 * $name 20. Header text color
@@ -203,4 +202,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/dark/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
+
+$datagrid-border: 1px solid $datagrid-border-color !default;
 
