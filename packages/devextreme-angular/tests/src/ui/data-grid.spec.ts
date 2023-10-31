@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ViewChildren,
@@ -184,8 +183,8 @@ describe('DxDataGrid', () => {
         if (typeof column === 'string') {
             fail();
         } else {
-            expect(column.columns.length).toBe(1);
-            expect(column.columns[0]['dataField']).toBe('Field');
+            expect(column?.columns?.length).toBe(1);
+            expect(column?.columns?.[0]['dataField']).toBe('Field');
         }
     });
 
@@ -236,11 +235,11 @@ describe('DxDataGrid', () => {
         jasmine.clock().tick(101);
         let testComponent = fixture.componentInstance;
         const instance = testComponent.innerWidgets.last.instance;
-        expect(instance.option('columnChooser').enabled).toBe(true);
+        expect(instance?.option('columnChooser')?.enabled).toBe(true);
 
         testComponent.showComponent = false;
         fixture.detectChanges();
-        expect(instance.option('columnChooser').enabled).toBe(false);
+        expect(instance?.option('columnChooser')?.enabled).toBe(false);
         jasmine.clock().uninstall();
     });
 
@@ -511,7 +510,7 @@ describe('Nested DxDataGrid', () => {
         setTimeout(() => {
             let instance = fixture.componentInstance.innerWidgets.first.instance;
             let element = instance.element().querySelector('.my-template');
-            expect(element.textContent).toBe('String');
+            expect(element?.textContent).toBe('String');
             done();
         }, 1000);
     });
