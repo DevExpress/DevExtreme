@@ -1628,22 +1628,6 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.deepEqual(list.option('items'), [1, 2, 3, 4], 'item is not deleted');
     });
 
-    QUnit.test('allowItemDeleting option changed from false to true', function(assert) {
-        const $list = $('#list').dxList({
-            items: [1, 2, 3, 4],
-            allowItemDeleting: false,
-            focusStateEnabled: true
-        });
-        const list = $list.dxList('instance');
-
-        list.option('allowItemDeleting', true);
-        list.focus();
-        const keyboard = getListKeyboard($list);
-        keyboard.keyDown('del');
-
-        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
-    });
-
     QUnit.test('allowItemDeleting option changed twice', function(assert) {
         const $list = $('#list').dxList({
             items: [1, 2, 3, 4],
@@ -1875,6 +1859,22 @@ QUnit.module('selectByClick', {
     });
 
     QUnit.module('on multiple mode', ()=> {
+        QUnit.test('allowItemDeleting option changed from false to true', function(assert) {
+            const $list = $('#list').dxList({
+                items: [1, 2, 3, 4],
+                allowItemDeleting: false,
+                focusStateEnabled: true
+            });
+            const list = $list.dxList('instance');
+
+            list.option('allowItemDeleting', true);
+            list.focus();
+            const keyboard = getListKeyboard($list);
+            keyboard.keyDown('del');
+
+            assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
+        });
+
         QUnit.test('selection should be changed on item click if selectByClick=true', function(assert) {
             const $list = this.createList('multiple', true);
             const $items = $list.find(`.${LIST_ITEM_CLASS}`);
