@@ -4,7 +4,7 @@ interface DXTemplate {
   render: RenderFunc;
 }
 
-type RenderFunc = (arg: RenderArgs) => void;
+type RenderFunc = (arg: RenderArgs) => HTMLElement;
 
 interface TemplateArgs {
   data: any;

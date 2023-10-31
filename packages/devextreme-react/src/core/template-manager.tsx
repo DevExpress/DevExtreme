@@ -96,6 +96,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
       return currentRenderedInstances.shallowCopy();
     });
+
+    return container;
   }, [unsubscribeOnRemoval, createMapKey]);
 
   useMemo(() => {
