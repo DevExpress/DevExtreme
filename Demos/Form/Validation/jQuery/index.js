@@ -127,6 +127,7 @@ $(() => {
         editorOptions: {
           placeholder: 'Birth Date',
           acceptCustomValue: false,
+          openOnFieldClick: true,
         },
         validationRules: [{
           type: 'required',

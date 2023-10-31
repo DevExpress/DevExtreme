@@ -125,6 +125,7 @@ export class AppComponent {
   dateBoxOptions = {
     placeholder: 'Birth Date',
     acceptCustomValue: false,
+    openOnFieldClick: true,
   };
 
   dateRangeBoxOptions = {

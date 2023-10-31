@@ -286,6 +286,7 @@ export default {
       dateBoxOptions: {
         placeholder: 'Birth Date',
         acceptCustomValue: false,
+        openOnFieldClick: true,
       },
       dateRangeBoxOptions: {
         endDatePlaceholder: 'End Date',
