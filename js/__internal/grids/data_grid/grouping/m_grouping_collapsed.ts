@@ -546,6 +546,10 @@ export const GroupingHelper = GroupingHelperCore.inherit((function () {
 
         if (!options.remoteOperations.paging) {
           that._updatePagingOptions(options);
+          options.lastLoadOptions.skip = options.skip;
+          options.lastLoadOptions.skips = options.skips;
+          options.lastLoadOptions.take = options.take;
+          options.lastLoadOptions.takes = options.takes;
         }
         callBase(options);
 
