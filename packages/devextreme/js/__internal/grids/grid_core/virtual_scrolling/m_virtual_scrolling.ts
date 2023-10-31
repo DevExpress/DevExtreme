@@ -1218,7 +1218,7 @@ export const virtualScrollingModule = {
 
             return delta < 0 ? 0 : delta;
           },
-          getRowIndexOffset(byLoadedRows) {
+          getRowIndexOffset(byLoadedRows, needGroupOffset) {
             let offset = 0;
             const dataSource = this.dataSource();
             const rowsScrollController = this._rowsScrollController;
@@ -1240,8 +1240,11 @@ export const virtualScrollingModule = {
             } else if (virtualPaging && newMode && dataSource) {
               const lastLoadOptions = dataSource.lastLoadOptions();
 
-              offset = lastLoadOptions.skip ?? 0;
-              offset += lastLoadOptions.skips?.reduce((res, skip) => res + skip, 0) ?? 0;
+              if (needGroupOffset && lastLoadOptions.skips?.length) {
+                offset = lastLoadOptions.skips.reduce((res: number, skip: number) => res + skip, 0);
+              } else {
+                offset = lastLoadOptions.skip ?? 0;
+              }
             } else if (isVirtualMode(this) && dataSource) {
               offset = dataSource.beginPageIndex() * dataSource.pageSize();
             }
@@ -1250,7 +1253,7 @@ export const virtualScrollingModule = {
           },
           getDataIndex() {
             if (this.option(LEGACY_SCROLLING_MODE) === false) {
-              return this.getRowIndexOffset(true);
+              return this.getRowIndexOffset(true, true);
             }
 
             return this.callBase.apply(this, arguments);
