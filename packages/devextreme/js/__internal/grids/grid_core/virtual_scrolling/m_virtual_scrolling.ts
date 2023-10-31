@@ -747,6 +747,8 @@ const VirtualScrollingRowsViewExtender = (function () {
       this.callBase.call(this, isLoading, messageText);
     },
 
+    // NOTE: warning won't be thrown if height was specified and then removed,
+    // because for some reason `_hasHeight` is not updated properly in this case
     throwHeightWarningIfNeed() {
       if (this._hasHeight === undefined) {
         return;
