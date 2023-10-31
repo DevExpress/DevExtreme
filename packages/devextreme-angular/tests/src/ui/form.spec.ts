@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ViewChild
@@ -134,7 +133,7 @@ describe('DxForm', () => {
         let instance = getWidget(fixture);
         let input = instance.element().querySelector('input');
         input.value = 'test value';
-        input.dispatchEvent(new Event('change'));
+        input?.dispatchEvent(new Event('change'));
 
         expect(document.getElementById('text').innerText.trim()).toBe('test value');
         fixture.autoDetectChanges(false);

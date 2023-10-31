@@ -532,6 +532,12 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       .dx-popup-content {
         padding: $fluent-grid-base-column-chooser-paddings;
       }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $fluent-grid-base-treeview-select-all-item-offset;
+        }
+      }
     }
 
     .dx-overlay-content {
@@ -1219,6 +1225,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-#{$widget-name}-filter-panel {
+    background-color: $datagrid-base-background-color;
     padding: 18px $fluent-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,

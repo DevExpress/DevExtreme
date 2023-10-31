@@ -141,7 +141,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
         &.dx-state-focused {
           .dx-radiobutton-icon,
           .dx-checkbox-icon {
-            border: 1px solid $checkbox-focused-borderd-color;
+            border: 1px solid $checkbox-border-color-focused;
           }
         }
       }
