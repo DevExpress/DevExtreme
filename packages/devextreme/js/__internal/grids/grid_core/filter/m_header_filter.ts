@@ -22,6 +22,8 @@ import {
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
 } from './m_header_filter_core';
+import { getWrappedLookupDataSource } from './m_sync_lookup_utils';
+import { normalizeLookupDataSource } from './m_utils';
 
 const DATE_INTERVAL_FORMATS = {
   month(value) {
@@ -222,9 +224,9 @@ const HeaderFilterController = modules.ViewController.inherit((function () {
           const filter = this._dataController.getCombinedFilter();
           this._currentColumn = null;
 
-          options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+          options.dataSource = getWrappedLookupDataSource(column, dataSource, filter);
         } else {
-          options.dataSource = gridCoreUtils.normalizeLookupDataSource(column.lookup);
+          options.dataSource = normalizeLookupDataSource(column.lookup);
         }
       } else {
         const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;

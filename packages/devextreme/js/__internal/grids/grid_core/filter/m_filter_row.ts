@@ -14,6 +14,7 @@ import { selectView } from '@js/ui/shared/accessibility';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { getWrappedLookupDataSource } from './m_sync_lookup_utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
@@ -493,7 +494,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
         const filter = this.getController('data').getCombinedFilter();
         filterRowController.setCurrentColumnForFiltering(null);
 
-        const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
+        const lookupDataSource = getWrappedLookupDataSource(options, dataSource, filter);
         const lookupOptions = {
           ...options,
           lookup: {
@@ -716,7 +717,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
                         || !equalByValue(editorDataSource.__dataGridSourceFilter, filter);
 
           if (shouldUpdateFilter) {
-            const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+            const lookupDataSource = getWrappedLookupDataSource(column, dataSource, filter);
             editor.option('dataSource', lookupDataSource);
           }
         }
