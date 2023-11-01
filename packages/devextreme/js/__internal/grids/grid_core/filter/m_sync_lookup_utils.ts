@@ -27,7 +27,7 @@ function sliceItems<T>(items: T[], loadOptions: { skip: number; take: number }):
   return items.slice(start, end);
 }
 
-function createUniqueRelevantItemsLoader(dataSource, column, filter) {
+function createUniqueRelevantItemsLoader(column, dataSource, filter) {
   const hasGroupPaging = dataSource.remoteOperations().groupPaging;
   const hasLookupOptimization = column.displayField && isString(column.displayField);
 
