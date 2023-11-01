@@ -61,7 +61,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   private _createDXTemplates: DXTemplateCreator | undefined;
 
-  private _clearRenderedInstances: (() => void) | undefined;
+  private _clearInstantiationModels: (() => void) | undefined;
 
   private _childNodes: Node[] = [];
 
@@ -143,7 +143,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       };
     }
 
-    this._clearRenderedInstances?.();
+    this._clearInstantiationModels?.();
 
     this._instance = new this._WidgetClass(element, options);
 
@@ -220,9 +220,9 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this.context?.unlock();
   }
 
-  private _setTemplateManagerHooks(createDXTemplates: DXTemplateCreator, clearRenderedInstances: () => void) {
+  private _setTemplateManagerHooks(createDXTemplates: DXTemplateCreator, clearInstantiationModels: () => void) {
     this._createDXTemplates = createDXTemplates;
-    this._clearRenderedInstances = clearRenderedInstances;
+    this._clearInstantiationModels = clearInstantiationModels;
   }
 
   protected renderChildren(): React.ReactNode {

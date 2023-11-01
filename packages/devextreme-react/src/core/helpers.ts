@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file, no-restricted-syntax */
 import { createContext } from 'react';
-import { TemplateInstanceDefinition, UpdateLocker } from './types';
+import { TemplateInstantiationModel, UpdateLocker } from './types';
 
 export const RemovalLockerContext = createContext<UpdateLocker>({
   lock: () => undefined,
@@ -61,7 +61,7 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
   }
 }
 
-export class RenderedTemplateInstances extends DoubleKeyMap<any, HTMLElement, TemplateInstanceDefinition> {}
+export class TemplateInstantiationModels extends DoubleKeyMap<any, HTMLElement, TemplateInstantiationModel> {}
 
 export function capitalizeFirstLetter(text: string): string {
   if (text.length) {

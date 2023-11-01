@@ -40,10 +40,10 @@ export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
 export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
 
 export interface TemplateManagerProps {
-  init: (getDXTemplates: DXTemplateCreator, clearRenderedInstances: () => void) => void;
+  init: (getDXTemplates: DXTemplateCreator, clearInstantiationModels: () => void) => void;
 }
 
-export interface TemplateInstanceDefinition {
+export interface TemplateInstantiationModel {
   templateKey: string;
   componentKey: string;
   index: any;

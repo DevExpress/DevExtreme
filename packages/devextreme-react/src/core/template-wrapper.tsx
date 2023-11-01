@@ -33,7 +33,7 @@ const createHiddenNode = (
   }
 };
 
-const TemplateWrapper: FC<TemplateWrapperProps> = ({
+const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   templateFactory,
   data,
   index,
@@ -44,8 +44,8 @@ const TemplateWrapper: FC<TemplateWrapperProps> = ({
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
   const isRemovalLocked = useRef(false);
   const removalLocker = useMemo(() => ({
-    lock: (): void => { isRemovalLocked.current = true; },
-    unlock: (): void => { isRemovalLocked.current = false; },
+    lock(): void { isRemovalLocked.current = true; },
+    unlock(): void { isRemovalLocked.current = false; },
   }), []);
 
   const element = useRef<HTMLElement>();
@@ -127,4 +127,4 @@ const TemplateWrapper: FC<TemplateWrapperProps> = ({
   );
 };
 
-export default memo(TemplateWrapper);
+export const TemplateWrapper = memo(TemplateWrapperComponent);

@@ -16,8 +16,8 @@ import {
   TemplateFunc,
 } from './types';
 
-import TemplateWrapper from './template-wrapper';
-import { RenderedTemplateInstances, generateID } from './helpers';
+import { TemplateWrapper } from './template-wrapper';
+import { TemplateInstantiationModels, generateID } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
@@ -35,7 +35,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 }
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
-  const [renderedInstances, setRenderedInstances] = useState(new RenderedTemplateInstances());
+  const [instantiationModels, setInstantiationModels] = useState(new TemplateInstantiationModels());
   const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
   const widgetId = useRef('');
 
@@ -64,23 +64,23 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     const key = createMapKey(data, container);
 
     const onRemoved = (): void => {
-      setRenderedInstances((currentRenderedInstances) => {
-        const template = currentRenderedInstances.get(key);
+      setInstantiationModels((currentInstantiationModels) => {
+        const template = currentInstantiationModels.get(key);
 
         if (template) {
-          currentRenderedInstances.delete(key);
+          currentInstantiationModels.delete(key);
 
-          return currentRenderedInstances.shallowCopy();
+          return currentInstantiationModels.shallowCopy();
         }
 
-        return currentRenderedInstances;
+        return currentInstantiationModels;
       });
     };
 
     const hostWidgetId = widgetId.current;
 
-    setRenderedInstances((currentRenderedInstances) => {
-      currentRenderedInstances.set(key, {
+    setInstantiationModels((currentInstantiationModels) => {
+      currentInstantiationModels.set(key, {
         templateKey,
         index,
         componentKey: getRandomId(),
@@ -94,7 +94,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         onRemoved,
       });
 
-      return currentRenderedInstances.shallowCopy();
+      return currentInstantiationModels.shallowCopy();
     });
 
     return container;
@@ -140,22 +140,22 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       return dxTemplates;
     }
 
-    function clearRenderedInstances(): void {
+    function clearInstantiationModels(): void {
       widgetId.current = getRandomId();
-      setRenderedInstances(new RenderedTemplateInstances());
+      setInstantiationModels(new TemplateInstantiationModels());
     }
 
-    init(getDXTemplates, clearRenderedInstances);
+    init(getDXTemplates, clearInstantiationModels);
   }, [init, getRenderFunc]);
 
-  if (renderedInstances.empty) {
+  if (instantiationModels.empty) {
     return null;
   }
 
   return (
     <>
       {
-        Array.from(renderedInstances).map(([{ key1: data, key2: container }, {
+        Array.from(instantiationModels).map(([{ key1: data, key2: container }, {
           index,
           templateKey,
           componentKey,
