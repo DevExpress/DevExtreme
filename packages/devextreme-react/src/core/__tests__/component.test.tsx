@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as events from 'devextreme/events';
 import * as testingLib from '@testing-library/react';
 import * as React from 'react';
@@ -11,6 +10,8 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+
+// @ts-ignore: Non-existent module
 import { TemplatesRenderer } from '../templates-renderer';
 
 jest.useFakeTimers();
@@ -161,7 +162,6 @@ describe('rendering', () => {
       <TestComponent />,
     );
 
-    // @ts-ignore
     expect(WidgetClass.mock.calls[0][1]).toEqual({ templatesRenderAsynchronously: true });
   });
 
@@ -194,7 +194,6 @@ describe('rendering', () => {
       </TestComponent>,
     );
 
-    // @ts-ignore
     expect(WidgetClass.mock.calls[1][1].children).toBeUndefined();
   });
 });

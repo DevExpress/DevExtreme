@@ -1,10 +1,9 @@
-// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import * as events from 'devextreme/events';
 import { cleanup, render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { Component } from '../component';
+import { Component, IHtmlOptions } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { Template } from '../template';
 import {
@@ -12,7 +11,10 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+
+// @ts-ignore: Non-existent module
 import { TemplatesStore } from '../templates-store';
+// @ts-ignore: Non-existent module
 import { TemplateWrapperRenderer } from '../template-wrapper';
 
 jest.useFakeTimers();
@@ -30,7 +32,7 @@ class ComponentWithTemplates extends TestComponent {
   protected _templateProps = templateProps;
 }
 
-class ComponentWithAsyncTemplates<P = {}> extends Component<P> {
+class ComponentWithAsyncTemplates<P = {}> extends Component<P & IHtmlOptions> {
   protected _WidgetClass = WidgetClass;
 
   protected _templateProps = templateProps;
@@ -326,7 +328,7 @@ function testTemplateOption(testedOption: string) {
       <ComponentWithTemplates {...elementOptions} ref={ref} />,
     );
 
-    const componentInstance = ref.current as {
+    const componentInstance = ref.current as unknown as {
       _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> }; };
 
     act(() => { renderItemTemplate({ text: 1 }); });
@@ -351,7 +353,7 @@ function testTemplateOption(testedOption: string) {
       <ComponentWithTemplates {...elementOptions} ref={ref} />,
     );
 
-    const componentInstance = ref.current as {
+    const componentInstance = ref.current as unknown as {
       _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> }; };
 
     const container = document.createElement('div');
@@ -370,7 +372,7 @@ function testTemplateOption(testedOption: string) {
     elementOptions[testedOption] = prepareTemplate((data: Record<string, unknown>) => (
       <div className="template">
         Template
-        {data.text}
+        {data.text as string}
       </div>
     ));
     elementOptions.itemKeyFn = (data) => data.text;
@@ -381,7 +383,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 1 }); });
     act(() => { renderItemTemplate({ text: 2 }); });
 
-    const componentInstance = ref.current as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
+    const componentInstance = ref.current as unknown as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
 
     const templatesKeys = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
     expect(templatesKeys.length).toBe(2);
@@ -406,7 +408,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    const componentInstance = ref.current as { _templatesStore: TemplatesStore };
+    const componentInstance = ref.current as unknown as { _templatesStore: TemplatesStore };
 
     act(() => { renderItemTemplate({}, refContainer.current); });
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(1);
@@ -450,7 +452,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    const componentInstance = ref.current as { _templatesStore: TemplatesStore };
+    const componentInstance = ref.current as unknown as { _templatesStore: TemplatesStore };
 
     act(() => { renderItemTemplate(undefined, refContainer.current); });
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(1);
@@ -698,7 +700,7 @@ describe('component/render in nested options', () => {
     item?: any;
     itemRender?: any;
     itemComponent?: any;
-  }> {
+  } & React.PropsWithChildren> {
     public static OptionName = 'option';
 
     public static TemplateProps = [{
@@ -712,7 +714,7 @@ describe('component/render in nested options', () => {
     template?: any;
     render?: any;
     component?: any;
-  }> {
+  } & React.PropsWithChildren> {
     public static IsCollectionItem = true;
 
     public static OptionName = 'collection';
