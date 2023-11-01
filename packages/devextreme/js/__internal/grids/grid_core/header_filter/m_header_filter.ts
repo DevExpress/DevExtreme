@@ -421,10 +421,12 @@ const ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
     const isFilterRowAndHeaderFilterValuesChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterValue']);
     const isHeaderFilterValuesAndTypeChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType']);
 
-    if (isFilterRowAndHeaderFilterValuesChanged || isHeaderFilterValuesAndTypeChanged) {
-      if (this._needUpdateFilterIndicators()) {
-        this._updateHeaderFilterIndicators();
-      }
+    const shouldUpdateFilterIndicators = (
+      isFilterRowAndHeaderFilterValuesChanged || isHeaderFilterValuesAndTypeChanged
+    ) && this._needUpdateFilterIndicators();
+
+    if (shouldUpdateFilterIndicators) {
+      this._updateHeaderFilterIndicators();
     }
 
     if (!isHeaderFilterValuesAndTypeChanged) {
