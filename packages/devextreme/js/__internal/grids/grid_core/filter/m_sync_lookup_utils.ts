@@ -21,7 +21,7 @@ function normalizeGroupingLoadOptions(group) {
   });
 }
 
-function sliceItems(items, loadOptions) {
+function sliceItems<T>(items: T[], loadOptions: { skip: number; take: number }): T[] {
   const start = loadOptions.skip ?? 0;
   const end = loadOptions.take ? start + loadOptions.take : items.length;
   return items.slice(start, end);
@@ -39,8 +39,7 @@ function createUniqueRelevantItemsLoader(dataSource, column, filter) {
     const group = normalizeGroupingLoadOptions(
       hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField,
     );
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred<any>();
 
     const canUseCache = cachedUniqueRelevantItems && (
       !hasGroupPaging
@@ -86,8 +85,7 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
     ...lookupDataSourceOptions,
     __dataGridSourceFilter: filter,
     load: (loadOptions) => {
-      // @ts-expect-error
-      const d = new Deferred();
+      const d = Deferred<any>();
       loadUniqueRelevantItems(loadOptions).done((items) => {
         if (items.length === 0) {
           d.resolve([]);
@@ -113,6 +111,7 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
           .load()
           .done(d.resolve)
           .fail(d.fail);
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       }).fail(d.fail);
       return d;
     },
