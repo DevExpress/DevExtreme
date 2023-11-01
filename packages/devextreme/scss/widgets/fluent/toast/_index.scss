@@ -9,13 +9,17 @@
 @use "../overlay";
 
 
+.dx-toast-stack {
+  overflow: visible;
+  gap: $fluent-toast-item-gap;
+}
+
 .dx-toast-content {
-  color: $toast-color;
   font-size: $fluent-base-font-size;
   font-weight: 400;
   padding: $fluent-toast-content-padding;
   border-radius: $toast-border-radius;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, $fluent-toast-shadow-color);
+  box-shadow: 0 0 2 0 rgba(0, 0, 0, 0.12), 0 8 16 0 rgba(0, 0, 0, 0.14);
   min-height: $fluent-toast-height;
   display: flex;
   align-items: center;
@@ -31,16 +35,32 @@
 
 .dx-toast-info {
   background-color: $toast-info-bg;
+
+  &.dx-toast-content {
+    color: $toast-info-color;
+  }
 }
 
 .dx-toast-warning {
   background-color: $toast-warning-bg;
+
+  &.dx-toast-content {
+    color: $toast-warning-color;
+  }
 }
 
 .dx-toast-error {
   background-color: $toast-error-bg;
+
+  &.dx-toast-content {
+    color: $toast-error-color;
+  }
 }
 
 .dx-toast-success {
   background-color: $toast-success-bg;
+
+  &.dx-toast-content {
+    color: $toast-success-color;
+  }
 }
