@@ -31,6 +31,7 @@ const Widget = {
 
 const WidgetClass = jest.fn(() => Widget);
 
+// @ts-expect-error
 class TestComponent<P = any> extends Component<P> {
   protected _WidgetClass = WidgetClass;
 

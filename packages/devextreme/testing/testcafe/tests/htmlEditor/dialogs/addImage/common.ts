@@ -18,7 +18,10 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
 
   await t.click(htmlEditor.toolbar.getItemByName('image'));
 
-  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', { element: ADD_IMAGE_POPUP_CONTENT_SELECTOR });
+  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', {
+    element: ADD_IMAGE_POPUP_CONTENT_SELECTOR,
+    shouldTestInCompact: true,
+  });
 
   await t
     .expect(compareResults.isValid())

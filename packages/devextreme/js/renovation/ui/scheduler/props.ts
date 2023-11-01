@@ -7,8 +7,9 @@ import {
   TwoWay,
   Nested,
   Template,
-  JSXTemplate,
 } from '@devextreme-generator/declarations';
+
+import type { JSXTemplate } from '@devextreme-generator/declarations';
 
 import { SchedulerToolbarItem } from './header/props';
 import type { template } from '../../../core/templates/template';
@@ -40,11 +41,11 @@ import type {
 
 import type { UserDefinedElement, DxElement } from '../../../core/element'; // eslint-disable-line import/named
 import messageLocalization from '../../../localization/message';
-import { ViewType } from './types';
+import type { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
 import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
-import { AllDayPanelModeType } from './appointment/utils/getAppointmentTakesAllDay';
+import type { AllDayPanelModeType } from './appointment/utils/getAppointmentTakesAllDay';
 
 @ComponentBindings()
 export class ScrollingProps {

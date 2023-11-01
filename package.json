@@ -27,7 +27,7 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@types/node": "^18.15.3",
+    "@types/node": "^20.0.0",
     "@types/shelljs": "0.8.13",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
@@ -57,7 +57,7 @@
     "shx": "0.3.4",
     "source-map": "0.7.4",
     "ts-node": "^10.9.1",
-    "typescript": "~4.2.4"
+    "typescript": "^4.9.5"
   },
   "pre-commit": [
     "lint-staged",

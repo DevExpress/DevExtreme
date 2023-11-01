@@ -10,7 +10,7 @@
 
 // adduse
 
-@include clock-action-icons-mixin($base-accent, $base-bg, $clock-digits-color);
+@include clock-action-icons-mixin($base-inverted-bg, $typography-bg, $clock-digits-color);
 
 .dx-timeview {
   height: auto;

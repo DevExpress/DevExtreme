@@ -6,7 +6,7 @@ const { assert } = QUnit;
 
 const ITEM_CLASS = 'dx-item';
 const TREEVIEW_NODE_CLASS = 'dx-treeview-node';
-
+const CHECK_BOX_CLASS = 'dx-checkbox';
 class ariaAccessibilityTestHelper {
     constructor(args) {
         const { createWidget } = args;
@@ -72,7 +72,7 @@ class ariaAccessibilityTestHelper {
 
     _checkCheckboxAttributes(options, index, defaultValue) {
         const { attributes } = options;
-        const $checkBox = this.getItems().eq(index).prev();
+        const $checkBox = this.getItems().eq(index).find(`.${CHECK_BOX_CLASS}`);
 
         const expectedAttributes = {
             role: 'checkbox',

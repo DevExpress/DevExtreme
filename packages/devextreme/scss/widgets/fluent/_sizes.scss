@@ -81,6 +81,6 @@ $fluent-base-border-width: 1px !default;
 * $type text
 */
 $base-border-radius: $fluent-base-border-radius !default;
-$fluent-grid-base-border-radius: $base-border-radius * 3 !default;
+$fluent-grid-base-border-radius: 0 !default;
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;

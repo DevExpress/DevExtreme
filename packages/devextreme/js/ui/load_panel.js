@@ -6,7 +6,7 @@ import { extend } from '../core/utils/extend';
 import LoadIndicator from './load_indicator';
 import Overlay from './overlay/ui.overlay';
 import { Deferred } from '../core/utils/deferred';
-import { isMaterialBased } from './themes';
+import { isMaterial, isMaterialBased, isFluent } from './themes';
 
 // STYLE loadPanel
 
@@ -87,18 +87,23 @@ const LoadPanel = Overlay.inherit({
             },
             {
                 device: function() {
-                    return isMaterialBased();
+                    return isMaterial();
                 },
                 options: {
                     message: '',
-
                     width: 60,
-
                     height: 60,
-
                     maxHeight: 60,
-
                     maxWidth: 60
+                }
+            },
+            {
+                device: function() {
+                    return isFluent();
+                },
+                options: {
+                    width: 'auto',
+                    height: 'auto',
                 }
             }
         ]);

@@ -53,6 +53,10 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
 
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
+        let iconPosition;
+        if (widgetName === 'dxTabs') {
+          iconPosition = 'start';
+        }
         const itemConfig = {
           location: 'before',
           locateInMenu,
@@ -63,6 +67,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
             text: `${widgetName}`,
             icon: 'refresh',
             items: [{ text: `${widgetName}`, icon: 'export' }],
+            iconPosition,
           },
         };
 

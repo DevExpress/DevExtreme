@@ -146,7 +146,7 @@
   &.dx-state-focused {
     .dx-tag-content {
       color: $tagbox-tag-active-color;
-      border-color: $base-accent-active;
+      border-color: $tagbox-tag-border-color-focused;
     }
   }
 }

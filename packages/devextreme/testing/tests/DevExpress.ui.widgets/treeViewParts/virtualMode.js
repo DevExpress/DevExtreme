@@ -109,7 +109,7 @@ QUnit.test('Render second level in virtualMode after click on icon', function(as
     });
 
     const $firstItem = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
-    const $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    const $icon = $firstItem.find(`> .${internals.TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
     $icon.trigger('dxclick');
 
@@ -118,7 +118,7 @@ QUnit.test('Render second level in virtualMode after click on icon', function(as
     assert.equal(treeView.option('items').length, 6);
 
     // T378648
-    const $itemsContainer = $icon.siblings('.' + internals.NODE_CONTAINER_CLASS);
+    const $itemsContainer = $icon.parent().siblings(`.${internals.NODE_CONTAINER_CLASS}`);
     $icon.trigger('dxclick');
     assert.ok(!$itemsContainer.is(':visible'), 'collapsed');
 
@@ -1119,7 +1119,7 @@ QUnit.test('Expand all method with the virtual mode', function(assert) {
     assert.equal(nodes[0].items[0].items.length, 0, 'children count of the item 11');
 });
 
-QUnit.test('load indicator should be located before an item', function(assert) {
+QUnit.test('load indicator should be located inside an item', function(assert) {
     const treeView = new TreeView($('#treeView'), {
         virtualModeEnabled: true,
         items: [
@@ -1129,18 +1129,20 @@ QUnit.test('load indicator should be located before an item', function(assert) {
         dataStructure: 'plain'
     });
 
-    let itemOffsetLeft;
-    let loadIndicatorOffsetLeft;
+    let itemRect;
+    let loadIndicatorRect;
     const createLoadIndicator = treeView._createLoadIndicator;
+
     treeView._createLoadIndicator = $node => {
         createLoadIndicator.call(treeView, $node);
-        itemOffsetLeft = $node.find(`.${TREEVIEW_ITEM_CLASS}`).offset().left;
-        loadIndicatorOffsetLeft = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`).offset().left;
+
+        itemRect = $node.find(`.${TREEVIEW_ITEM_CLASS}`)[0].getBoundingClientRect();
+        loadIndicatorRect = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`)[0].getBoundingClientRect();
     };
 
     treeView.expandItem(1);
 
-    assert.ok(loadIndicatorOffsetLeft < itemOffsetLeft, 'the load indicator is shown before item');
+    assert.ok(itemRect.left < loadIndicatorRect.left && itemRect.right > loadIndicatorRect.right, 'load indicator is located inside an item');
 });
 
 QUnit.module('the \'createChildren\' option');
