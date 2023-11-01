@@ -21,29 +21,19 @@ function normalizeGroupingLoadOptions(group) {
   });
 }
 
-export function getWrappedLookupDataSource(column, dataSource, filter) {
-  if (!dataSource) {
-    return [];
-  }
+function sliceItems(items, loadOptions) {
+  const start = loadOptions.skip ?? 0;
+  const end = loadOptions.take ? start + loadOptions.take : items.length;
+  return items.slice(start, end);
+}
 
-  const lookupDataSourceOptions = normalizeLookupDataSource(column.lookup);
-
-  if (column.calculateCellValue !== column.defaultCalculateCellValue) {
-    return lookupDataSourceOptions;
-  }
-
+function createUniqueRelevantItemsLoader(dataSource, column, filter) {
   const hasGroupPaging = dataSource.remoteOperations().groupPaging;
   const hasLookupOptimization = column.displayField && isString(column.displayField);
 
   let cachedUniqueRelevantItems;
   let previousTake;
   let previousSkip;
-
-  const sliceItems = (items, loadOptions) => {
-    const start = loadOptions.skip ?? 0;
-    const end = loadOptions.take ? start + loadOptions.take : items.length;
-    return items.slice(start, end);
-  };
 
   const loadUniqueRelevantItems = (loadOptions) => {
     const group = normalizeGroupingLoadOptions(
@@ -54,7 +44,7 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
 
     const canUseCache = cachedUniqueRelevantItems && (
       !hasGroupPaging
-              || (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
+      || (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
     );
 
     if (canUseCache) {
@@ -75,6 +65,22 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
 
     return d;
   };
+
+  return loadUniqueRelevantItems;
+}
+
+export function getWrappedLookupDataSource(column, dataSource, filter) {
+  if (!dataSource) {
+    return [];
+  }
+
+  const lookupDataSourceOptions = normalizeLookupDataSource(column.lookup);
+
+  if (column.calculateCellValue !== column.defaultCalculateCellValue) {
+    return lookupDataSourceOptions;
+  }
+
+  const loadUniqueRelevantItems = createUniqueRelevantItemsLoader(column, dataSource, filter);
 
   const lookupDataSource = {
     ...lookupDataSourceOptions,
