@@ -503,9 +503,21 @@ const Draggable = (DOMComponent as any).inherit({
       template.render(this._getDragTemplateArgs($element, result));
     } else if (clone) {
       result = $('<div>').appendTo($container);
+
+      const computedStyles = window.getComputedStyle($element[0]);
+
+      const paddingTop = parseInt(computedStyles.paddingTop, 10);
+      const paddingBottom = parseInt(computedStyles.paddingBottom, 10);
+
+      const paddingLeft = parseInt(computedStyles.paddingLeft, 10);
+      const paddingRight = parseInt(computedStyles.paddingRight, 10);
+
+      const heightWithoutPadding = $element[0].offsetHeight - paddingTop - paddingBottom;
+      const widthWithoutPadding = $element[0].offsetWidth - paddingLeft - paddingRight;
+
       $element.clone().css({
-        width: $element.css('width'),
-        height: $element.css('height'),
+        height: `${heightWithoutPadding}px`,
+        width: `${widthWithoutPadding}px`,
       }).appendTo(result);
     }
 
