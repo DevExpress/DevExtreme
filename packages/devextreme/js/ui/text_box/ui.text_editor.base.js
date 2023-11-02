@@ -512,6 +512,7 @@ const TextEditorBase = Editor.inherit({
         const { label, labelMode, labelMark } = this.option();
 
         const labelConfig = {
+            editor: this,
             $editor: this.$element(),
             text: label,
             mark: labelMark,
