@@ -351,6 +351,22 @@ const ListEdit = ListBase.inherit({
     */
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
+    },
+
+    deleteItem(itemElement) {
+        const editStrategy = this._editStrategy;
+        const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
+        const focusedElement = this.option('focusedElement');
+        const focusedItemIndex = focusedElement ? editStrategy.getNormalizedIndex(focusedElement) : deletingElementIndex;
+        const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
+        const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
+            ? focusedItemIndex - 1
+            : focusedItemIndex;
+        const promise = this.callBase(itemElement);
+
+        return promise.done(function() {
+            return this.focusListItem(nextFocusedItem);
+        });
     }
 });
 
