@@ -35,7 +35,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       : { display: 'contents' };
   }
 
-  static contextType?: React.Context<UpdateLocker> | undefined = RemovalLockerContext;
+  static contextType: React.Context<UpdateLocker> = RemovalLockerContext;
 
   declare context: React.ContextType<typeof RemovalLockerContext> | undefined;
 
