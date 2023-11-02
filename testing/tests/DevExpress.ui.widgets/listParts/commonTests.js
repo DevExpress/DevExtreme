@@ -3785,7 +3785,8 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('allow delete item using keyboard after set allowItemDeleting option from false to true', function(assert) {
-        const $list = $('#list').dxList({
+        const $element = $('#list');
+        const $list = $element.dxList({
             items: [1, 2, 3, 4],
             allowItemDeleting: false,
             focusStateEnabled: true
@@ -3795,9 +3796,7 @@ QUnit.module('keyboard navigation', {
         list.option('allowItemDeleting', true);
         list.focus();
 
-        const $itemContainer = $list.find(`.${LIST_ITEMS_CLASS}`).eq(0).parent();
-
-        $itemContainer.trigger($.Event('keydown', { key: 'Delete' }));
+        $element.trigger($.Event('keydown', { key: 'Delete' }));
 
         assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
     });
