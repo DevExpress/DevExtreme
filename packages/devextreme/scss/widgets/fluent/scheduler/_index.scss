@@ -65,6 +65,12 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   height: auto;
 }
 
+.dx-scheduler-date-time-indicator {
+  &::before {
+    display: none;
+  }
+}
+
 .dx-scheduler-container {
   border-radius: $fluent-scheduler-border-radius;
 }
@@ -162,10 +168,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-date-time-indicator {
-    &::before {
-      display: none;
-    }
-
     height: 2px;
   }
 
@@ -303,6 +305,12 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
+  .dx-scheduler-header-panel-cell-date:last-child {
+    color: $header-panel-cell-date;
+    border-radius: initial;
+    background-color: initial;
+  }
+
   .dx-scheduler-appointment-content {
     padding: 4px 8px 0 12px;
     font-size: $fluent-scheduler-appointment-month-text-size;
