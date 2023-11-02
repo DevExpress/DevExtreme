@@ -18,7 +18,7 @@
   font-weight: 400;
   padding: $fluent-toast-content-padding;
   border-radius: $toast-border-radius;
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12), 0 8px 16px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 8px 16px 0 color.change($base-shadow-color, $alpha: 0.14);
   min-height: $fluent-toast-height;
   display: flex;
   align-items: center;
