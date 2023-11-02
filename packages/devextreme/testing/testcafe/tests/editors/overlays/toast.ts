@@ -9,9 +9,8 @@ fixture.disablePageReloads`Toast`
 
 const types = ['info', 'warning', 'error', 'success'];
 
-const showToast = async (type: string):
-Promise<any> => ClientFunction(
-  () => new Promise((resolve) => {
+const showToast = ClientFunction(
+  (type) => new Promise((resolve) => {
     (window as any).DevExpress.ui.notify(
       {
         message: `Toast ${type}`,
@@ -31,7 +30,7 @@ Promise<any> => ClientFunction(
       },
     );
   }),
-)();
+);
 
 test('Toasts rendered', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
