@@ -2,12 +2,13 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { setAttribute } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage, setAttribute } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Toast`
-  .page(url(__dirname, '../containerQuill.html'));
+fixture`Toast`
+  .page(url(__dirname, '../../container.html'));
 
 const types = ['info', 'warning', 'error', 'success'];
+const STACK_TONTAINER_SELECTOR = '.dx-toast-stack';
 
 const showToast = ClientFunction(
   (type) => {
@@ -24,19 +25,19 @@ const showToast = ClientFunction(
         },
       },
       {
-        position: 'bottom center',
-        direction: 'up-push',
+        position: 'top center',
+        direction: 'down-push',
       },
     );
   },
 );
 
-test('Toasts rendered', async (t) => {
+test('Toasts', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Toasts rendered.png', { element: '.dx-toast-stack', shouldTestInCompact: true });
-  await testScreenshot(t, takeScreenshot, 'Toasts rendered.png', {
-    element: '.dx-toast-stack',
+  await testScreenshot(t, takeScreenshot, 'Toasts.png', { element: STACK_TONTAINER_SELECTOR, shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Toasts.png', {
+    element: STACK_TONTAINER_SELECTOR,
     theme: process.env.theme?.replace('.light', '.dark'),
   });
 
@@ -44,10 +45,8 @@ test('Toasts rendered', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await showToast(types[0]);
-  await showToast(types[1]);
-  await showToast(types[2]);
-  await showToast(types[3]);
+  await Promise.all(types.map((type) => showToast(type)));
 
-  await setAttribute('.dx-toast-stack', 'class', `dx-theme-${process.env.theme?.split('.')[0]}-typography`);
+  await insertStylesheetRulesToPage(`${STACK_TONTAINER_SELECTOR} { padding: 20px; }`);
+  await setAttribute('body', 'class', `dx-theme-${process.env.theme}-typography`);
 });
