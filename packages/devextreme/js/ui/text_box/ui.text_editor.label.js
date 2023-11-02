@@ -98,8 +98,6 @@ class TextEditorLabel {
                     this._props.editor.focus();
                     e.preventDefault();
                 }
-
-
             });
             eventsEngine.on(this._$labelSpan, hoverStartEventName, (e) => {
                 e.stopPropagation();
@@ -154,6 +152,8 @@ class TextEditorLabel {
 
     _updateBeforeWidth() {
         this._$before.css({ width: this._props.beforeWidth });
+
+        this._$labelSpan.css('transform', '');
 
         if(this._isVisible() && this._isOutsideMode()) {
             const sign = this._props.editor.option('rtlEnabled') ? 1 : -1;
