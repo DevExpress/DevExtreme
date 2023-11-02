@@ -88,6 +88,7 @@ class TextEditorLabel {
 
         eventsEngine.off(this._$labelSpan, clickEventName);
         eventsEngine.off(this._$labelSpan, hoverStartEventName);
+        eventsEngine.off(this._$labelSpan, activeEventName);
 
         if(this._isVisible() && this._isOutsideMode()) {
             eventsEngine.on(this._$labelSpan, clickEventName, (e) => {

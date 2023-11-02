@@ -21,6 +21,7 @@ QUnit.module('textEditorLabel', {
     beforeEach: function() {
         this.$editor = $('#textEditor');
         this.labelInitialConfig = {
+            editor: { NAME: 'TextEditor' },
             $editor: this.$editor,
             text: 'Label',
             mark: '*',
