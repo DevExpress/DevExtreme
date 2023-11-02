@@ -10,7 +10,7 @@ fixture.disablePageReloads`Toast`
 const types = ['info', 'warning', 'error', 'success'];
 
 const showToast = ClientFunction(
-  (type) => new Promise((resolve) => {
+  (type) => {
     (window as any).DevExpress.ui.notify(
       {
         message: `Toast ${type}`,
@@ -22,14 +22,13 @@ const showToast = ClientFunction(
           },
           hide: { type: 'fade', duration: 0 },
         },
-        onShown: resolve,
       },
       {
         position: 'bottom center',
         direction: 'up-push',
       },
     );
-  }),
+  },
 );
 
 test('Toasts rendered', async (t) => {
