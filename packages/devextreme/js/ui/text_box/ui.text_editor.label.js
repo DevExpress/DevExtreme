@@ -181,6 +181,7 @@ class TextEditorLabel {
     updateMode(mode) {
         this._props.mode = mode;
         this._toggleMarkupVisibility();
+        this._updateBeforeWidth();
     }
 
     updateText(text) {
