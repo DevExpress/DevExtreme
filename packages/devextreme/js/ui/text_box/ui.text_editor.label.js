@@ -3,7 +3,6 @@ import Guid from '../../core/guid';
 import { name as click } from '../../events/click';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
-import { move } from '../../animation/translator';
 import { start as hoverStart } from '../../events/hover';
 import { getWindow } from '../../core/utils/window';
 
@@ -153,12 +152,16 @@ class TextEditorLabel {
     _updateBeforeWidth() {
         this._$before.css({ width: this._props.beforeWidth });
 
+        this._updateLabelTransform();
+    }
+
+    _updateLabelTransform() {
         this._$labelSpan.css('transform', '');
 
         if(this._isVisible() && this._isOutsideMode()) {
             const sign = this._props.editor.option('rtlEnabled') ? 1 : -1;
 
-            move(this._$labelSpan, { left: sign * this._$before.width() });
+            this._$labelSpan.css('transform', ' translateX(' + sign * this._$before.width() + 'px)');
         }
     }
 
@@ -181,7 +184,7 @@ class TextEditorLabel {
     updateMode(mode) {
         this._props.mode = mode;
         this._toggleMarkupVisibility();
-        this._updateBeforeWidth();
+        this._updateLabelTransform();
     }
 
     updateText(text) {

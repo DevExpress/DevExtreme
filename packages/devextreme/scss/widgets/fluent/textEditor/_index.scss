@@ -55,14 +55,9 @@ $fluent-editor-custom-button-margin: 6px;
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    &::before {
-      width: 100%;
-      left: 0;
-      right: 0;
-    }
-
     .dx-texteditor-label {
-      inset-block: -1px;
+      width: calc(100% + 2px);
+      inset: -1px;
     }
 
     .dx-datebox {
