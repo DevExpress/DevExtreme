@@ -46,10 +46,10 @@ test('Toasts rendered', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setAttribute('.dx-toast-stack', 'class', `dx-theme-${process.env.theme?.split('.')[0]}-typography`);
-
   await showToast(types[0]);
   await showToast(types[1]);
   await showToast(types[2]);
   await showToast(types[3]);
+
+  await setAttribute('.dx-toast-stack', 'class', `dx-theme-${process.env.theme?.split('.')[0]}-typography`);
 });
