@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { setAttribute } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toast`
   .page(url(__dirname, '../containerQuill.html'));
