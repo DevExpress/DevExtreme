@@ -32,6 +32,12 @@ const showToast = ClientFunction(
   },
 );
 
+const closeAllToasts = ClientFunction(() => {
+  document.querySelectorAll('.dx-toast').forEach((node) => {
+    (window as any).DevExpress.ui.dxToast.getInstance(node).hide();
+  });
+});
+
 test('Toasts', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -49,4 +55,6 @@ test('Toasts', async (t) => {
 
   await insertStylesheetRulesToPage(`${STACK_TONTAINER_SELECTOR} { padding: 20px; }`);
   await setAttribute('body', 'class', `dx-theme-${process.env.theme}-typography`);
+}).after(async () => {
+  await closeAllToasts();
 });
