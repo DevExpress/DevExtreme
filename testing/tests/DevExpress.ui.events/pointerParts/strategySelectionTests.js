@@ -1,3 +1,4 @@
+import GlobalConfig from 'core/config';
 import { getStrategy } from 'events/pointer';
 import TouchStrategy from 'events/pointer/touch';
 import MouseStrategy from 'events/pointer/mouse';
@@ -6,6 +7,15 @@ import MouseAndTouchStrategy from 'events/pointer/mouse_and_touch';
 const { test } = QUnit;
 
 QUnit.module('Strategy selection', () => {
+    test('Use strategy from GlobalConfig', function(assert) {
+        GlobalConfig({ pointerEventStrategy: 'mouse-and-touch' });
+
+        const strategy = getStrategy({}, {}, {});
+
+        assert.strictEqual(strategy, MouseAndTouchStrategy);
+        GlobalConfig({ pointerEventStrategy: null });
+    });
+
     test('Use the Mouse strategy by default', function(assert) {
         const strategy = getStrategy({}, {}, {});
 
