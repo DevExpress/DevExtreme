@@ -3973,7 +3973,7 @@ QUnit.module('keyboard navigation', {
         list.option('allowItemDeleting', true);
         list.focus();
 
-        const $itemContainer = $list.find(`.${LIST_ITEMS_CLASS}`).eq(0).parent();
+        const $itemContainer = $list.find(`.${LIST_ITEM_CLASS}`).eq(0).parent();
 
         $itemContainer.trigger($.Event('keydown', { key: 'Delete' }));
 
