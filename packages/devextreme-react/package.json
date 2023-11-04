@@ -37,7 +37,7 @@
     "@types/jest": "^26.0.24",
     "@types/react": "~18.0.0",
     "@types/react-dom": "~18.0.0",
-    "del": "^3.0.0",
+    "del": "^7.0.0",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
     "gulp-shell": "^0.8.0",
