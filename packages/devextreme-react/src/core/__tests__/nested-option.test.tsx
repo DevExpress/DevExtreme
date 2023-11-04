@@ -1,18 +1,17 @@
-// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
-import { Component } from '../component';
+import { Component, IHtmlOptions } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { TestComponent, Widget, WidgetClass } from './test-component';
 
 jest.useFakeTimers();
 
-class NestedComponent extends ConfigurationComponent<{ a: number }> {
+class NestedComponent extends ConfigurationComponent<{ a: number } & React.PropsWithChildren> {
   public static OptionName = 'option';
 }
 
-class NestedComponentWithPredfeinedProps extends ConfigurationComponent<{ a: number }> {
+class NestedComponentWithPredfeinedProps extends ConfigurationComponent<{ a: number } & React.PropsWithChildren> {
   public static OptionName = 'option';
 
   public static PredefinedProps = {
@@ -170,7 +169,7 @@ describe('nested option', () => {
   });
 
   it('is pulled according to expectations', () => {
-    class TestComponentWithExpectation<P = any> extends Component<P> {
+    class TestComponentWithExpectation<P = any> extends Component<P & IHtmlOptions> {
       protected _expectedChildren = {
         option: {
           optionName: 'expectedItemOptions',
@@ -505,7 +504,7 @@ describe('nested sub-option', () => {
   });
 
   it('is pulled according to expectations', () => {
-    class NestedComponentWithExpectations extends ConfigurationComponent<{ a: number }> {
+    class NestedComponentWithExpectations extends ConfigurationComponent<{ a: number } & React.PropsWithChildren> {
       public static OptionName = 'option';
 
       public static ExpectedChildren = {
