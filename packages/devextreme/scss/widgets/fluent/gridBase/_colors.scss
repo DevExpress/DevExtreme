@@ -137,7 +137,7 @@ $datagrid-link-color: $base-link-color !default;
 * $name 75. Focused cell border color
 * $type color
 */
-$datagrid-focused-border-color: #D0E5FB !default;
+$datagrid-focused-border-color: $datagrid-border-color !default;
 
 /**
 * $name 80. Editor background
