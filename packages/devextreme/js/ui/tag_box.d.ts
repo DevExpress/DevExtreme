@@ -327,7 +327,7 @@ export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
      * @publicName reset(value)
      * @public
      */
-    reset(value?: Array<string | number | any>): void;
+    reset(value?: Array<any>): void;
  }
 
 /** @public */

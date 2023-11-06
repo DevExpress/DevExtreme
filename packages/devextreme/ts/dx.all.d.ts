@@ -26123,7 +26123,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTagBox.reset(value)]
      */
-    reset(value?: Array<string | number | any>): void;
+    reset(value?: Array<any>): void;
   }
   module dxTagBox {
     /**
