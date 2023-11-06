@@ -5,6 +5,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { start as hoverStart } from '../../events/hover';
 import { getWindow } from '../../core/utils/window';
+import { getWidth } from '../../core/utils/size';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
@@ -163,6 +164,7 @@ class TextEditorLabel {
             const sign = this._props.editor.option('rtlEnabled') ? 1 : -1;
 
             this._$labelSpan.css('transform', ' translateX(' + sign * this._$before.width() + 'px)');
+            this._$labelSpan.css('transform', 'translateX(' + sign * getWidth(this._$before) + 'px)');
         }
     }
 
