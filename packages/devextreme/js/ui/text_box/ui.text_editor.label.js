@@ -18,22 +18,9 @@ const LABEL_CLASS = 'dx-label';
 const LABEL_AFTER_CLASS = 'dx-label-after';
 
 class TextEditorLabel {
-    constructor({
-        editor,
-        $editor,
-        text, mode, mark,
-        containsButtonsBefore,
-        containerWidth,
-        beforeWidth
-    }) {
-        this._props = {
-            editor,
-            $editor,
-            text, mode, mark,
-            containsButtonsBefore,
-            containerWidth,
-            beforeWidth
-        };
+    constructor(props) {
+        this.NAME = 'dxLabel';
+        this._props = props;
 
         this._id = `${TEXTEDITOR_LABEL_CLASS}-${new Guid()}`;
 
@@ -82,28 +69,22 @@ class TextEditorLabel {
     }
 
     _attachEvents() {
-        const editorName = this._props.editor.NAME;
-        const clickEventName = addNamespace(click, editorName);
-        const hoverStartEventName = addNamespace(hoverStart, editorName);
-        const activeEventName = addNamespace('dxactive', editorName);
+        const clickEventName = addNamespace(click, this.NAME);
+        const hoverStartEventName = addNamespace(hoverStart, this.NAME);
 
         eventsEngine.off(this._$labelSpan, clickEventName);
         eventsEngine.off(this._$labelSpan, hoverStartEventName);
-        eventsEngine.off(this._$labelSpan, activeEventName);
 
         if(this._isVisible() && this._isOutsideMode()) {
             eventsEngine.on(this._$labelSpan, clickEventName, (e) => {
                 const selectedText = getWindow().getSelection().toString();
 
                 if(selectedText === '') {
-                    this._props.editor.focus();
+                    this._props.onClickHandler();
                     e.preventDefault();
                 }
             });
             eventsEngine.on(this._$labelSpan, hoverStartEventName, (e) => {
-                e.stopPropagation();
-            });
-            eventsEngine.on(this._$labelSpan, activeEventName, (e) => {
                 e.stopPropagation();
             });
         }
@@ -161,7 +142,8 @@ class TextEditorLabel {
         this._$labelSpan.css('transform', '');
 
         if(this._isVisible() && this._isOutsideMode()) {
-            const sign = this._props.editor.option('rtlEnabled') ? 1 : -1;
+            const sign = this._props.rtlEnabled ? 1 : -1;
+
             this._$labelSpan.css('transform', 'translateX(' + sign * getWidth(this._$before) + 'px)');
         }
     }
