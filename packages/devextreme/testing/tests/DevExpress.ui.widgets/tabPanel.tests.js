@@ -811,6 +811,21 @@ QUnit.module('Tabs Indicator position', () => {
 
         assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
         assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+
+        tabPanel.option({ tabsPosition: 'bottom' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+
+        tabPanel.option({ tabsPosition: 'right' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+
+        tabPanel.option({ tabsPosition: 'top' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
     });
 
     QUnit.test('The tabs element must have the correct indicator position class when _tabsIndicatorPosition was changed', function(assert) {
