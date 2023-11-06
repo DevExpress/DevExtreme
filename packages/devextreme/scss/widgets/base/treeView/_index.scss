@@ -1,71 +1,163 @@
+@use 'sass:math';
 @use "./common";
-
-.dx-treeview-node-loadindicator {
-  left: auto;
-  right: 0;
-}
+@use "../../base/icons" as *;
 
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
-  position: absolute;
-  left: 0;
-  top: 0;
   cursor: pointer;
 }
 
-@mixin dx-treeview-make-rtl($container-with-border-offset, $node-offset, $item-with-checkbox-offset, $checkbox-offset, $select-all-text-offset, $select-all-item-left-padding, $border-padding) {
-  &.dx-treeview-border-visible {
-    .dx-treeview-select-all-item {
-      padding-left: 0;
-      padding-right: $select-all-item-left-padding;
-    }
+@mixin default-expander-icon($expand-icon-name, $collapse-icon-name, $font-size, $size, $color) {
+  .dx-treeview-toggle-item-visibility {
+    @include dx-icon($collapse-icon-name);
 
-    .dx-scrollable-content {
-      > .dx-treeview-node-container {
-        padding-left: $border-padding;
-        padding-right: $container-with-border-offset;
-      }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size;
+    width: $size;
+    height: $size;
+    color: $color;
+
+    &.dx-treeview-toggle-item-visibility-opened {
+      @include dx-icon($expand-icon-name);
+
+      font-size: $font-size;
     }
   }
 
-  .dx-treeview-node {
-    padding-right: $node-offset;
+  .dx-treeview-expander-icon-stub {
+    display: flex;
+    flex-shrink: 0;
+    width: $size;
+    height: $size;
   }
+}
 
+@mixin treeview-item($gap, $padding, $icon-size, $hover-bg, $item-hover-color, $item-selected-color, $node-padding, $margin: 0, $border-radius: 0) {
   .dx-treeview-item {
+    gap: $gap;
+    padding: $padding;
+    margin: $margin;
+    
     .dx-treeview-item-content {
       .dx-icon {
-        margin-left: 5px;
+        @include dx-icon-sizing($icon-size);
+  
+        vertical-align: bottom;
+      }
+    }
+  
+    &.dx-state-hover {
+      background-color: $hover-bg;
+      border-radius: $border-radius;
+      color: $item-hover-color;
+    }
+  }
+
+  .dx-state-selected {
+    > .dx-treeview-item {
+      color: $item-selected-color;
+    }
+  }
+
+  .dx-treeview-node {
+    padding-inline-start: math.div($node-padding, 2);
+  }
+}
+
+@mixin treeview-aux-items(
+  $searchbox-margin-bottom,
+  $search-editor-height,
+  $border-color,
+  $select-all-item-padding,
+  $item-element-gap,
+  $select-all-item-border-visible-padding,
+  $treeview-container-padding,
+  $load-indicator-size,
+) {
+  .dx-treeview-search {
+    margin-bottom: $searchbox-margin-bottom;
+  }
+  
+  .dx-treeview-with-search > .dx-scrollable {
+    height: calc(100% - #{round($search-editor-height + $searchbox-margin-bottom)});
+  }
+  
+  .dx-treeview-select-all-item {
+    border-bottom: 1px solid $border-color;
+    padding: $select-all-item-padding;
+  
+    .dx-checkbox-container {
+      display: flex;
+      align-items: center;
+    }
+  
+    .dx-checkbox-text {
+      padding-inline-start: $item-element-gap;
+    }
+  }
+
+  .dx-treeview-node-loadindicator {
+    width: $load-indicator-size;
+    height: $load-indicator-size;
+  }
+
+  .dx-treeview-border-visible {
+    border: 1px solid $border-color;
+  
+    .dx-treeview-select-all-item {
+      padding-inline-start: $select-all-item-border-visible-padding;
+    }
+  
+    .dx-scrollable-content {
+      > .dx-treeview-node-container {
+        padding: $treeview-container-padding;
       }
     }
   }
+}
 
+@mixin treeview-checkbox(
+  $checkbox-container-size, 
+  $base-text-color, 
+  $checkbox-border-color-focused,
+  $treeview-item-selected-color,
+  $treeview-item-selected-bg,
+  $treeview-focused-bg,
+  $treeview-focus-color,
+  $border-radius: 0,
+  ) {
   .dx-treeview-item-with-checkbox {
+    .dx-checkbox {
+      .dx-checkbox-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: $checkbox-container-size;
+        width: $checkbox-container-size;
+      }
+    }
+
     .dx-treeview-item {
-      padding-right: $item-with-checkbox-offset;
-    }
-
-    .dx-checkbox {
-      right: $checkbox-offset;
+      color: $base-text-color;
     }
   }
 
-  .dx-treeview-select-all-item {
-    padding-left: 0;
-    padding-right: $checkbox-offset;
-
-    .dx-checkbox-text {
-      padding-left: 0;
-      padding-right: $select-all-text-offset;
+  .dx-treeview-item-without-checkbox {
+    &.dx-state-selected {
+      > .dx-treeview-item {
+        color: $treeview-item-selected-color;
+        background-color: $treeview-item-selected-bg;
+      }
     }
-  }
-}
 
-.dx-rtl {
-  .dx-treeview-node {
-    .dx-checkbox {
-      left: auto;
+    &.dx-state-focused {
+      > .dx-treeview-item {
+        background-color: $treeview-focused-bg;
+        color: $treeview-focus-color;
+        border-radius: $border-radius;
+      }
     }
   }
 }
-

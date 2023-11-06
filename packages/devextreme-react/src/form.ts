@@ -1,3 +1,4 @@
+"use client"
 import dxForm, {
     Properties
 } from "devextreme/ui/form";

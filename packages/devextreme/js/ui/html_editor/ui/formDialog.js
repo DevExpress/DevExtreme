@@ -7,10 +7,32 @@ import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
 import { getCurrentScreenFactor, hasWindow } from '../../../core/utils/window';
 import devices from '../../../core/devices';
-import { isMaterialBased } from '../../themes';
+import { isFluent, isMaterialBased } from '../../themes';
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
+
+const getApplyButtonConfig = () => {
+    if(isFluent()) {
+        return {
+            stylingMode: 'contained',
+            type: 'default',
+        };
+    }
+
+    return {};
+};
+
+const getCancelButtonConfig = () => {
+    if(isFluent()) {
+        return {
+            stylingMode: 'outlined',
+            type: 'normal',
+        };
+    }
+
+    return {};
+};
 
 class FormDialog {
     constructor(editorInstance, popupConfig) {
@@ -92,7 +114,8 @@ class FormDialog {
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('OK'),
-                        onClick: (e) => this.callAddButtonAction(e.event)
+                        onClick: (e) => this.callAddButtonAction(e.event),
+                        ...getApplyButtonConfig(),
                     }
                 }, {
                     toolbar: 'bottom',
@@ -103,7 +126,8 @@ class FormDialog {
                         text: localizationMessage.format('Cancel'),
                         onClick: () => {
                             this._popup.hide();
-                        }
+                        },
+                        ...getCancelButtonConfig(),
                     }
                 }
             ],

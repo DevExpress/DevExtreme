@@ -1,3 +1,4 @@
+"use client"
 import dxDiagram, {
     Properties
 } from "devextreme/ui/diagram";

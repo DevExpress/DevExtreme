@@ -62,6 +62,20 @@ const TABS_ORIENTATION = {
     vertical: 'vertical',
 };
 
+const TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION = {
+    top: 'dx-tab-indicator-position-bottom',
+    right: 'dx-tab-indicator-position-left',
+    bottom: 'dx-tab-indicator-position-top',
+    left: 'dx-tab-indicator-position-right',
+};
+
+const TABS_INDICATOR_POSITION_CLASS = {
+    top: 'dx-tab-indicator-position-top',
+    right: 'dx-tab-indicator-position-right',
+    bottom: 'dx-tab-indicator-position-bottom',
+    left: 'dx-tab-indicator-position-left',
+};
+
 const toSelector = cssClass => {
     return '.' + cssClass;
 };
@@ -773,5 +787,57 @@ QUnit.module('dataSource integration', () => {
         });
 
         assert.equal(dataSourceLoadCalled, 1, 'dataSource load called once');
+    });
+});
+
+QUnit.module('Tabs Indicator position', () => {
+    ['top', 'right', 'bottom', 'left'].forEach(tabsPosition => {
+        QUnit.test(`The tabs element must have the correct indicator position class when tabsPosition=${tabsPosition}`, function(assert) {
+            const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3], tabsPosition });
+            const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+
+            assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION[tabsPosition]));
+        });
+    });
+
+    QUnit.test('The tabs element must have the correct indicator position class when tabsPosition was changed', function(assert) {
+        const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
+        const tabPanel = $tabPanel.dxTabPanel('instance');
+        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
+
+        tabPanel.option({ tabsPosition: 'left' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+
+        tabPanel.option({ tabsPosition: 'bottom' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+
+        tabPanel.option({ tabsPosition: 'right' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+
+        tabPanel.option({ tabsPosition: 'top' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
+    });
+
+    QUnit.test('The tabs element must have the correct indicator position class when _tabsIndicatorPosition was changed', function(assert) {
+        const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
+        const tabPanel = $tabPanel.dxTabPanel('instance');
+        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+
+        tabPanel.option({ _tabsIndicatorPosition: 'left' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.left));
     });
 });

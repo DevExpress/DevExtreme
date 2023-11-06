@@ -194,24 +194,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     padding-right: 8px;
   }
 
-  .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
-    padding-left: 0;
-
-    .dx-checkbox {
-      left: 8px;
-    }
-  }
-
-  .dx-treeview-node-container-opened {
-    .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
-      padding-left: $material-treeview-toggle-item-width;
-
-      .dx-checkbox {
-        left: $material-treeview-checkbox-offset;
-      }
-    }
-  }
-
   .dx-treeview-item {
     min-height: $material-pivotgridfieldchooser-field-min-height;
     padding: 9px 8px;
@@ -224,8 +206,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     }
 
     .dx-treeview-item {
-      padding-left: $material-treeview-item-with-checkbox-offset;
-
       .dx-icon {
         margin: 0 5px 2px 0;
 

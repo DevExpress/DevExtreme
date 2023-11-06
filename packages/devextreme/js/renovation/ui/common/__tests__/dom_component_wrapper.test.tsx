@@ -165,7 +165,7 @@ describe('DomComponentWrapper', () => {
         } as Partial<DomComponentWrapperProps> as any);
         const { onValueChanged } = component.properties;
 
-        (onValueChanged as (({ value: number }) => any))({ value: 5 });
+        (onValueChanged as (({ value }) => any))({ value: 5 });
 
         expect(fn.mock.calls).toEqual([[5]]);
       });

@@ -1,3 +1,4 @@
+"use client"
 import dxTagBox, {
     Properties
 } from "devextreme/ui/tag_box";

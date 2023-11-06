@@ -1270,11 +1270,26 @@ testComponentDefaults(LoadPanel,
         message: ''
     },
     function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
     },
     function() {
-        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(LoadPanel,
+    {},
+    {
+        width: 'auto',
+        height: 'auto'
+    },
+    function() {
+        this.origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
+    },
+    function() {
+        themes.isFluent = this.origIsFluent;
     }
 );
 
@@ -1601,6 +1616,7 @@ testComponentDefaults(Accordion,
 testComponentDefaults(Scheduler,
     {},
     {
+        useDropDownViewSwitcher: true,
         _appointmentTooltipButtonsPosition: 'top',
         _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,

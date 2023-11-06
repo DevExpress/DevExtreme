@@ -16,7 +16,7 @@ $checkbox-indeterminate-bg: null !default;
 * $name 70. Focused state border color
 * $type color
 */
-$checkbox-focused-borderd-color: null !default;
+$checkbox-border-color-focused: null !default;
 
 /**
 * $name 40. Background color
@@ -43,7 +43,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "carmine" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-bg !default;
+  $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
@@ -54,7 +54,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "contrast" {
   $checkbox-checked-color: $base-text-color !default;
   $checkbox-indeterminate-bg: $base-inverted-bg !default;
-  $checkbox-focused-borderd-color: $base-focus-color !default;
+  $checkbox-border-color-focused: $base-focus-color !default;
   $checkbox-bg: $base-bg !default;
   $checkbox-hover-border-color: $base-border-color !default;
   $checkbox-active-icon-bg: $base-inverted-bg !default;
@@ -65,7 +65,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "dark" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-bg !default;
+  $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: lighten($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
@@ -76,7 +76,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "darkmoon" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-bg !default;
+  $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: lighten($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
@@ -87,7 +87,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "darkviolet" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-color !default;
+  $checkbox-border-color-focused: $base-focus-color !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: $base-accent-highlight-color !default;
   $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
@@ -98,7 +98,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "greenmist" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-bg !default;
+  $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
@@ -109,7 +109,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "light" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-bg !default;
+  $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
@@ -120,7 +120,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 @if $color == "softblue" {
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-focused-borderd-color: $base-focus-bg !default;
+  $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;

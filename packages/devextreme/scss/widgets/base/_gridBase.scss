@@ -227,16 +227,10 @@
     }
 
     &.dx-#{$widget-name}-column-chooser-mode-select {
-      .dx-#{$widget-name}-column-chooser-plain {
-        .dx-treeview-select-all-item {
-          padding-left: 4px;
-        }
-
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
         .dx-treeview-node {
-          padding-left: 0;
-
-          .dx-checkbox {
-            left: 4px;
+          .dx-treeview-item {
+            padding-inline-start: 4px;
           }
         }
       }

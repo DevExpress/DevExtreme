@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ButtonStyle, ButtonType, HorizontalAlignment, Mode, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
+import { ButtonStyle, ButtonType, HorizontalAlignment, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { dxBoxOptions } from 'devextreme/ui/box';
 import { dxButtonOptions } from 'devextreme/ui/button';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
@@ -101,10 +101,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('type', value);
     }
 
-    get baseSize(): Mode | number {
+    get baseSize(): number | string {
         return this._getOption('baseSize');
     }
-    set baseSize(value: Mode | number) {
+    set baseSize(value: number | string) {
         this._setOption('baseSize', value);
     }
 

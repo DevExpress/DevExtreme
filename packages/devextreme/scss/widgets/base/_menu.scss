@@ -54,14 +54,7 @@
 
 .dx-menu-adaptive-mode {
   .dx-treeview-toggle-item-visibility {
-    left: auto;
-    right: 0;
-
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      left: 0;
-      right: auto;
-    }
+    order: 3;
   }
 
   .dx-treeview-item {

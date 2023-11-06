@@ -1,3 +1,4 @@
+"use client"
 import dxFileManager, {
     Properties
 } from "devextreme/ui/file_manager";

@@ -1,3 +1,4 @@
+"use client"
 import dxBarGauge, {
     Properties
 } from "devextreme/viz/bar_gauge";

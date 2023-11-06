@@ -1,3 +1,4 @@
+"use client"
 import dxTreeMap, {
     Properties
 } from "devextreme/viz/tree_map";

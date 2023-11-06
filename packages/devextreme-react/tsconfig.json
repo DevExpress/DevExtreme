@@ -3,7 +3,8 @@
 
   "compilerOptions": {
     "baseUrl": "./",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "downlevelIteration": true
   },
 
   "include": [

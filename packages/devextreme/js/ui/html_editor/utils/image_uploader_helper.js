@@ -5,6 +5,7 @@ import { extend } from '../../../core/utils/extend';
 import { getHeight, getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
+import { isFluent } from '../../themes';
 const isMobile = devices.current().deviceType === 'phone';
 
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
@@ -318,6 +319,8 @@ class AddUrlStrategy extends BaseStrategy {
     }
 
     getItemsConfig() {
+        const stylingMode = isFluent() ? 'text' : 'outlined';
+
         return [
             { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) },
                 validationRules: [{ type: 'required' }, { type: 'stringLength', min: 1 }],
@@ -338,7 +341,7 @@ class AddUrlStrategy extends BaseStrategy {
                     hint: localizationMessage.format(DIALOG_IMAGE_KEEP_ASPECT_RATIO),
                     focusStateEnabled: false,
                     keyExpr: 'value',
-                    stylingMode: 'outlined',
+                    stylingMode,
                     selectionMode: 'multiple',
                     selectedItemKeys: ['keepRatio'],
                     onSelectionChanged: (e) => {

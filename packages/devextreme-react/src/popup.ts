@@ -1,3 +1,4 @@
+"use client"
 import dxPopup, {
     Properties
 } from "devextreme/ui/popup";

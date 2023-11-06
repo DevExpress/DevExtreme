@@ -1,3 +1,4 @@
+"use client"
 import dxCalendar, {
     Properties
 } from "devextreme/ui/calendar";
