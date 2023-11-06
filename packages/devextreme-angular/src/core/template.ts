@@ -11,7 +11,7 @@ import {
   EmbeddedViewRef,
 } from '@angular/core';
 
-import { one } from 'devextreme/events';
+import * as events from 'devextreme/events';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { DxTemplateHost } from './template-host';
 import { getElement } from './utils';
@@ -80,7 +80,7 @@ export class DxTemplateDirective {
         domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
       }
 
-      one(element, 'dxremove', ({}, params) => {
+      events.one(element, 'dxremove', ({}, params) => {
         if (!params || !params._angularIntegration) {
           childView.destroy();
         }
