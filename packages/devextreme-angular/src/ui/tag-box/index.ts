@@ -604,7 +604,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxTagBoxOptions.reset]
+     * [descr:dxTextBoxOptions.reset]
     
      */
     @Input()

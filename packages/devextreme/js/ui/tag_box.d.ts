@@ -313,13 +313,6 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @public
      */
     value?: Array<string | number | any>;
-    /**
-     * @docid
-     * @type_function_param1 value:Array<string | number | any>
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: Array<string | number | any>): void;
 }
 /**
  * @docid

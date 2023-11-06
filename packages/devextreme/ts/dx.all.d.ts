@@ -26331,10 +26331,6 @@ declare module DevExpress.ui {
      * [descr:dxTagBoxOptions.value]
      */
     value?: Array<string | number | any>;
-    /**
-     * [descr:dxTagBoxOptions.reset(value)]
-     */
-    reset(value?: Array<string | number | any>): void;
   }
   /**
    * [descr:dxTextArea]
