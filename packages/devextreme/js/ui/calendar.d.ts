@@ -210,13 +210,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     value?: Date | number | string | Array<Date | number | string>;
     /**
      * @docid
-     * @type_function_param1 value:Date | number | string | Array<Date | number | string> | null
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: Date | number | string | Array<Date | number | string> | null): void;
-    /**
-     * @docid
      * @default 'month'
      * @fires dxCalendarOptions.onOptionChanged
      * @public
@@ -230,7 +223,15 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxCalendar extends Editor<dxCalendarOptions> { }
+export default class dxCalendar extends Editor<dxCalendarOptions> {
+    /**
+     * @docid
+     * @type_function_param1 value:Date | number | string | Array<Date | number | string> | null
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Date | number | string | Array<Date | number | string> | null): void;
+}
 
 /** @public */
 export type Properties = dxCalendarOptions;

@@ -54,7 +54,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'onOptionChanged',
         'onValueChanged',
         'readOnly',
-        'reset(value)',
         'rtlEnabled',
         'selectionMode',
         'selectWeekOnClick',

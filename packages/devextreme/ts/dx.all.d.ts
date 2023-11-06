@@ -9223,7 +9223,14 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCalendar]
    */
-  export class dxCalendar extends Editor<dxCalendarOptions> {}
+  export class dxCalendar extends Editor<dxCalendarOptions> {
+    /**
+     * [descr:dxCalendar.reset(value)]
+     */
+    reset(
+      value?: Date | number | string | Array<Date | number | string> | null
+    ): void;
+  }
   module dxCalendar {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
@@ -9360,12 +9367,6 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.value]
      */
     value?: Date | number | string | Array<Date | number | string>;
-    /**
-     * [descr:dxCalendarOptions.reset(value)]
-     */
-    reset(
-      value?: Date | number | string | Array<Date | number | string> | null
-    ): void;
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */

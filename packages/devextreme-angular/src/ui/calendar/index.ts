@@ -332,19 +332,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
 
     /**
-     * [descr:dxCalendarOptions.reset]
-    
-     */
-    @Input()
-    get reset(value)(): Function {
-        return this._getOption('reset(value)');
-    }
-    set reset(value)(value: Function) {
-        this._setOption('reset(value)', value);
-    }
-
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -728,13 +715,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() reset(value)Change: EventEmitter<Function>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -892,7 +872,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'minZoomLevelChange' },
             { emit: 'nameChange' },
             { emit: 'readOnlyChange' },
-            { emit: 'reset(value)Change' },
             { emit: 'rtlEnabledChange' },
             { emit: 'selectionModeChange' },
             { emit: 'selectWeekOnClickChange' },
