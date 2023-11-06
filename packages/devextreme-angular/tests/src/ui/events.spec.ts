@@ -1,4 +1,5 @@
 /* tslint:disable:component-selector */
+
 import {
     Component, NgZone
 } from '@angular/core';
@@ -75,7 +76,7 @@ describe('events', () => {
 
         const element = fixture.nativeElement.querySelector('.elem');
         let counter = 0;
-        fixture?.ngZone?.runOutsideAngular(() => {
+        fixture.ngZone.runOutsideAngular(() => {
             on(element, 'click', () => {
                 expect(NgZone.isInAngularZone()).toBe(true);
                 counter++;
