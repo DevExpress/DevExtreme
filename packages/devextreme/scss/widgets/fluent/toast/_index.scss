@@ -34,32 +34,20 @@
 
 .dx-toast-info {
   background-color: $toast-info-bg;
-
-  &.dx-toast-content {
-    color: $toast-info-color;
-  }
+  color: $toast-info-color;
 }
 
 .dx-toast-warning {
   background-color: $toast-warning-bg;
-
-  &.dx-toast-content {
-    color: $toast-warning-color;
-  }
+  color: $toast-warning-color;
 }
 
 .dx-toast-error {
   background-color: $toast-error-bg;
-
-  &.dx-toast-content {
-    color: $toast-error-color;
-  }
+  color: $toast-error-color;
 }
 
 .dx-toast-success {
   background-color: $toast-success-bg;
-
-  &.dx-toast-content {
-    color: $toast-success-color;
-  }
+  color: $toast-success-color;
 }

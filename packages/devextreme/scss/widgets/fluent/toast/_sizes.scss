@@ -11,11 +11,11 @@ $fluent-toast-content-horizontal-padding: 12px !default;
 @if $size == "default" {
   $fluent-toast-content-vertical-padding: 12px !default;
   $fluent-toast-height: 44px !default;
-  $fluent-toast-item-gap: 12px;
+  $fluent-toast-item-gap: 12px !default;
 }
 
 @else if $size == "compact" {
   $fluent-toast-content-vertical-padding: 8px !default;
   $fluent-toast-height: 36px !default;
-  $fluent-toast-item-gap: 8px;
+  $fluent-toast-item-gap: 8px !default;
 }
