@@ -44,7 +44,7 @@ $header-filter-color-empty: null !default;
 * $name 55. Selected row background color
 * $type color
 */
-$datagrid-selection-bg: $base-bg-active !default;
+$datagrid-selection-bg: $button-default-outlined-hover-bg !default;
 
 /**
 * $name 60. Selected row border color
