@@ -37,6 +37,10 @@ $(() => {
     value: initialValue,
   });
 
+  $('#disable-out-of-range-selection').dxDateRangeBox({
+    disableOutOfRangeSelection: true,
+  });
+
   function getCurrentMonthRange() {
     const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
