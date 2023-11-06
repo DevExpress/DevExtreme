@@ -116,16 +116,8 @@ export default {
 }
 
 .long-title h3 {
-  font-family:
-    'Segoe UI Light',
-    'Helvetica Neue Light',
-    'Segoe UI',
-    'Helvetica Neue',
-    'Trebuchet MS',
-    Verdana;
-  font-weight: 200;
-  font-size: 28px;
+  font-size: 24px;
   text-align: center;
-  margin-bottom: 20px;
+  line-height: 2em;
 }
 </style>
