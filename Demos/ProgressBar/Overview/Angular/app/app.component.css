@@ -9,6 +9,7 @@
 
 ::ng-deep #progress-bar-status {
   display: inline-block;
+  padding-top: 8px;
 }
 
 ::ng-deep .complete .dx-progressbar-range {

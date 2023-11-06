@@ -96,6 +96,7 @@ export default {
 
 #progress-bar-status {
   display: inline-block;
+  padding-top: 8px;
 }
 
 .complete .dx-progressbar-range {
