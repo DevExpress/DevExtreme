@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import { getThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { getFullThemeName, getThemeName, testScreenshot } from '../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage, setClassAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toast`
@@ -42,7 +42,7 @@ test('Toasts', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Toasts.png', { element: STACK_CONTAINER_SELECTOR, shouldTestInCompact: true });
   await testScreenshot(t, takeScreenshot, 'Toasts.png', {
     element: STACK_CONTAINER_SELECTOR,
-    theme: `${getThemeName()}.dark`,
+    theme: `${getFullThemeName().replace('light', 'dark')}`,
   });
 
   await t
@@ -58,5 +58,7 @@ test('Toasts', async (t) => {
 
   await ClientFunction(() => {
     $(STACK_CONTAINER_SELECTOR).remove();
+  }, {
+    dependencies: { STACK_CONTAINER_SELECTOR },
   })();
 });
