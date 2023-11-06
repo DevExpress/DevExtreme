@@ -162,8 +162,6 @@ class TextEditorLabel {
 
         if(this._isVisible() && this._isOutsideMode()) {
             const sign = this._props.editor.option('rtlEnabled') ? 1 : -1;
-
-            this._$labelSpan.css('transform', ' translateX(' + sign * this._$before.width() + 'px)');
             this._$labelSpan.css('transform', 'translateX(' + sign * getWidth(this._$before) + 'px)');
         }
     }
