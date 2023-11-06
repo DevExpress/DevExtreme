@@ -66,6 +66,7 @@ function App() {
         dataSource={gridDataSource}
         columns={gridColumns}
         hoverStateEnabled={true}
+        showBorders={true}
         selectedRowKeys={gridBoxValue}
         onSelectionChanged={dataGridOnSelectionChanged}
         height="100%"

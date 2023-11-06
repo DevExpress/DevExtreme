@@ -50,6 +50,7 @@
               :data-source="gridDataSource"
               :columns="gridColumns"
               :hover-state-enabled="true"
+              :show-borders="true"
               v-model:selected-row-keys="gridBoxValue"
               @selection-changed="onGridSelectionChanged($event)"
               height="100%"

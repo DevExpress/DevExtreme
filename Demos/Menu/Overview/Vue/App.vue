@@ -94,6 +94,7 @@ export default {
 
 .label {
   font-size: 22px;
+  padding-bottom: 24px;
 }
 
 #product-details {

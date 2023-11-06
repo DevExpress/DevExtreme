@@ -82,6 +82,7 @@ $(() => {
         selection: { mode: 'single' },
         selectedRowKeys: [value],
         height: '100%',
+        showBorders: true,
         onSelectionChanged(selectedItems) {
           const keys = selectedItems.selectedRowKeys;
           const hasSelection = keys.length;
