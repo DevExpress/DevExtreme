@@ -26119,12 +26119,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxTagBox]
    */
-  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
-    /**
-     * [descr:dxTagBox.reset(value)]
-     */
-    reset(value?: Array<any>): void;
-  }
+  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
   module dxTagBox {
     /**
      * [descr:_ui_tag_box_ChangeEvent]
