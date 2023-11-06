@@ -2,7 +2,7 @@ import {
   Injectable,
 } from '@angular/core';
 
-import { equalByValue } from 'devextreme/core/utils/common';
+import * as commonUtils from 'devextreme/core/utils/common';
 
 @Injectable()
 export class WatcherHelper {
@@ -66,7 +66,7 @@ export class WatcherHelper {
       let isEqualObjects = false;
 
       if (typeof oldValue === 'object' && typeof newValue === 'object') {
-        isEqualObjects = equalByValue(oldValue, newValue);
+        isEqualObjects = commonUtils.equalByValue(oldValue, newValue);
       }
       if (oldValue !== newValue && !isEqualObjects) {
         return true;
