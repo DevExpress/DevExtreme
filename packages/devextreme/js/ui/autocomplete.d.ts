@@ -217,6 +217,13 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
      * @type dxPopupOptions
      */
     dropDownOptions?: PopupProperties;
+    /**
+     * @docid
+     * @type_function_param1 value:string | null
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: string | null): void;
 }
 /**
  * @docid

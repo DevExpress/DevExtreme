@@ -53,6 +53,7 @@ type AccessibleOptions = Pick<Properties,
   "openOnFieldClick" |
   "placeholder" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "searchExpr" |
   "searchMode" |
@@ -133,6 +134,7 @@ const DxAutocomplete = createComponent({
     openOnFieldClick: Boolean,
     placeholder: String,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     searchExpr: [Array, Function, String],
     searchMode: String,
@@ -210,6 +212,7 @@ const DxAutocomplete = createComponent({
     "update:openOnFieldClick": null,
     "update:placeholder": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:searchExpr": null,
     "update:searchMode": null,

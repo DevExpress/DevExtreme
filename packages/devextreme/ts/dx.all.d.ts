@@ -8840,6 +8840,10 @@ declare module DevExpress.ui {
      * [descr:dxAutocompleteOptions.dropDownOptions]
      */
     dropDownOptions?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:dxAutocompleteOptions.reset(value)]
+     */
+    reset(value?: string | null): void;
   }
   /**
    * [descr:dxBox]
