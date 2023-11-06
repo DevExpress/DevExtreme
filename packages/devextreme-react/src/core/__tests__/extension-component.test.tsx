@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-// @ts-nocheck
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { ExtensionComponent } from '../extension-component';
