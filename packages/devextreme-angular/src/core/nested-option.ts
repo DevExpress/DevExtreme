@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
-import * as events from 'devextreme/events';
+import * as dxEvents from 'devextreme/events';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { getElement } from './utils';
 import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
@@ -229,7 +229,7 @@ const triggerShownEvent = function (element) {
   changeHandlers.push.apply(changeHandlers, element.querySelectorAll(`.${VISIBILITY_CHANGE_SELECTOR}`));
 
   for (let i = 0; i < changeHandlers.length; i++) {
-    events.triggerHandler(changeHandlers[i], 'dxshown');
+    dxEvents.triggerHandler(changeHandlers[i], 'dxshown');
   }
 };
 
