@@ -327,6 +327,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   onValueChanged?: ((e: ValueChangedEvent) => void);
   placeholder?: string;
   readOnly?: boolean;
+  reset?: ((value: string, value: string) => void);
   rtlEnabled?: boolean;
   showClearButton?: boolean;
   showMaskMode?: "always" | "onFocus";

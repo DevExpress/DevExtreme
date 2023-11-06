@@ -40,6 +40,7 @@ type AccessibleOptions = Pick<Properties,
   "onValueChanged" |
   "placeholder" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "showClearButton" |
   "showSpinButtons" |
@@ -101,6 +102,7 @@ const DxNumberBox = createComponent({
     onValueChanged: Function,
     placeholder: String,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showSpinButtons: Boolean,
@@ -159,6 +161,7 @@ const DxNumberBox = createComponent({
     "update:onValueChanged": null,
     "update:placeholder": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:showClearButton": null,
     "update:showSpinButtons": null,

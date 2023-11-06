@@ -173,6 +173,7 @@ class DateBox extends BaseComponent<React.PropsWithChildren<IDateBoxOptions>> {
   ]),
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showAnalogClock: PropTypes.bool,
   showClearButton: PropTypes.bool,
@@ -306,6 +307,7 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   onValueChanged?: ((e: CalendarValueChangedEvent) => void);
   readOnly?: boolean;
+  reset?: ((value: any | number | string | Array<any | number | string> | null, value: any | number | string | Array<any | number | string> | null) => void);
   rtlEnabled?: boolean;
   selectionMode?: "single" | "multiple" | "range";
   selectWeekOnClick?: boolean;

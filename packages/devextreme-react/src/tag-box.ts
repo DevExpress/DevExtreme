@@ -192,6 +192,7 @@ class TagBox extends BaseComponent<React.PropsWithChildren<ITagBoxOptions>> {
   openOnFieldClick: PropTypes.bool,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   searchEnabled: PropTypes.bool,
   searchExpr: PropTypes.oneOfType([

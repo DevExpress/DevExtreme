@@ -162,6 +162,7 @@ class Lookup extends BaseComponent<React.PropsWithChildren<ILookupOptions>> {
   pullingDownText: PropTypes.string,
   pullRefreshEnabled: PropTypes.bool,
   refreshingText: PropTypes.string,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   searchEnabled: PropTypes.bool,
   searchExpr: PropTypes.oneOfType([

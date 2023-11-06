@@ -58,6 +58,7 @@ type AccessibleOptions = Pick<Properties,
   "opened" |
   "openOnFieldClick" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "showClearButton" |
   "showDropDownButton" |
@@ -144,6 +145,7 @@ const DxDateRangeBox = createComponent({
     opened: Boolean,
     openOnFieldClick: Boolean,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showDropDownButton: Boolean,
@@ -227,6 +229,7 @@ const DxDateRangeBox = createComponent({
     "update:opened": null,
     "update:openOnFieldClick": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:showClearButton": null,
     "update:showDropDownButton": null,
@@ -361,6 +364,7 @@ const DxCalendarOptions = createConfigurationComponent({
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:selectionMode": null,
     "update:selectWeekOnClick": null,
@@ -415,6 +419,7 @@ const DxCalendarOptions = createConfigurationComponent({
     onOptionChanged: Function,
     onValueChanged: Function,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     selectionMode: String,
     selectWeekOnClick: Boolean,

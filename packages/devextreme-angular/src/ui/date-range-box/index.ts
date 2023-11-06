@@ -591,6 +591,19 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 
 
     /**
+     * [descr:dxTextBoxOptions.reset]
+    
+     */
+    @Input()
+    get reset(value)(): Function {
+        return this._getOption('reset(value)');
+    }
+    set reset(value)(value: Function) {
+        this._setOption('reset(value)', value);
+    }
+
+
+    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -1308,6 +1321,13 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() reset(value)Change: EventEmitter<Function>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -1560,6 +1580,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
             { emit: 'openedChange' },
             { emit: 'openOnFieldClickChange' },
             { emit: 'readOnlyChange' },
+            { emit: 'reset(value)Change' },
             { emit: 'rtlEnabledChange' },
             { emit: 'showClearButtonChange' },
             { emit: 'showDropDownButtonChange' },

@@ -163,6 +163,13 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
      * @public
      */
     value?: string;
+    /**
+     * @docid
+     * @type_function_param1 value:string
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: string): void;
 }
 /**
  * @docid

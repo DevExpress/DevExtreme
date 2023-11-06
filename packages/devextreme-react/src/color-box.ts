@@ -149,6 +149,7 @@ class ColorBox extends BaseComponent<React.PropsWithChildren<IColorBoxOptions>> 
   openOnFieldClick: PropTypes.bool,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showClearButton: PropTypes.bool,
   showDropDownButton: PropTypes.bool,

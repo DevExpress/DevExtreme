@@ -180,6 +180,13 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('readOnly', value);
     }
 
+    get reset(value)(): Function {
+        return this._getOption('reset(value)');
+    }
+    set reset(value)(value: Function) {
+        this._setOption('reset(value)', value);
+    }
+
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
     }

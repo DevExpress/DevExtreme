@@ -21,6 +21,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onValueChanged" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "tabIndex" |
   "text" |
@@ -58,6 +59,7 @@ const DxCheckBox = createComponent({
     onOptionChanged: Function,
     onValueChanged: Function,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     tabIndex: Number,
     text: String,
@@ -92,6 +94,7 @@ const DxCheckBox = createComponent({
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:tabIndex": null,
     "update:text": null,

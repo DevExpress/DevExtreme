@@ -37,6 +37,7 @@ type AccessibleOptions = Pick<Properties,
   "onValueChanged" |
   "placeholder" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "spellcheck" |
   "stylingMode" |
@@ -93,6 +94,7 @@ const DxTextArea = createComponent({
     onValueChanged: Function,
     placeholder: String,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     spellcheck: Boolean,
     stylingMode: String,
@@ -146,6 +148,7 @@ const DxTextArea = createComponent({
     "update:onValueChanged": null,
     "update:placeholder": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:spellcheck": null,
     "update:stylingMode": null,

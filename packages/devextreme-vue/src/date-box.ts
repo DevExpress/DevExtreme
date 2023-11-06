@@ -58,6 +58,7 @@ type AccessibleOptions = Pick<Properties,
   "pickerType" |
   "placeholder" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "showAnalogClock" |
   "showClearButton" |
@@ -140,6 +141,7 @@ const DxDateBox = createComponent({
     pickerType: String,
     placeholder: String,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     showAnalogClock: Boolean,
     showClearButton: Boolean,
@@ -219,6 +221,7 @@ const DxDateBox = createComponent({
     "update:pickerType": null,
     "update:placeholder": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:showAnalogClock": null,
     "update:showClearButton": null,
@@ -349,6 +352,7 @@ const DxCalendarOptions = createConfigurationComponent({
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:selectionMode": null,
     "update:selectWeekOnClick": null,
@@ -403,6 +407,7 @@ const DxCalendarOptions = createConfigurationComponent({
     onOptionChanged: Function,
     onValueChanged: Function,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     selectionMode: String,
     selectWeekOnClick: Boolean,

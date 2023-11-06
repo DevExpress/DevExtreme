@@ -106,6 +106,13 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @public
      */
     value?: Array<number>;
+    /**
+     * @docid
+     * @type_function_param1 value:Array<number>
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Array<number>): void;
 }
 /**
  * @docid

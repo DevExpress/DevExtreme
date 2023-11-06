@@ -41,6 +41,7 @@ type AccessibleOptions = Pick<Properties,
   "onValueChanged" |
   "placeholder" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "showClearButton" |
   "showMaskMode" |
@@ -103,6 +104,7 @@ const DxTextBox = createComponent({
     onValueChanged: Function,
     placeholder: String,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showMaskMode: String,
@@ -162,6 +164,7 @@ const DxTextBox = createComponent({
     "update:onValueChanged": null,
     "update:placeholder": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:showClearButton": null,
     "update:showMaskMode": null,

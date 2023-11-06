@@ -62,6 +62,7 @@ class Switch extends BaseComponent<React.PropsWithChildren<ISwitchOptions>> {
   onOptionChanged: PropTypes.func,
   onValueChanged: PropTypes.func,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   switchedOffText: PropTypes.string,
   switchedOnText: PropTypes.string,

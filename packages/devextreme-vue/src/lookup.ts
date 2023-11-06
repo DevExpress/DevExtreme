@@ -57,6 +57,7 @@ type AccessibleOptions = Pick<Properties,
   "pullingDownText" |
   "pullRefreshEnabled" |
   "refreshingText" |
+  "reset" |
   "rtlEnabled" |
   "searchEnabled" |
   "searchExpr" |
@@ -146,6 +147,7 @@ const DxLookup = createComponent({
     pullingDownText: String,
     pullRefreshEnabled: Boolean,
     refreshingText: String,
+    reset: Function,
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String],
@@ -232,6 +234,7 @@ const DxLookup = createComponent({
     "update:pullingDownText": null,
     "update:pullRefreshEnabled": null,
     "update:refreshingText": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:searchEnabled": null,
     "update:searchExpr": null,

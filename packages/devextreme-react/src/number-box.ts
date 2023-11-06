@@ -116,6 +116,7 @@ class NumberBox extends BaseComponent<React.PropsWithChildren<INumberBoxOptions>
   onValueChanged: PropTypes.func,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showClearButton: PropTypes.bool,
   showSpinButtons: PropTypes.bool,

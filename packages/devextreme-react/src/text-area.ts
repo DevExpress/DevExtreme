@@ -105,6 +105,7 @@ class TextArea extends BaseComponent<React.PropsWithChildren<ITextAreaOptions>> 
   onValueChanged: PropTypes.func,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   spellcheck: PropTypes.bool,
   stylingMode: PropTypes.oneOfType([

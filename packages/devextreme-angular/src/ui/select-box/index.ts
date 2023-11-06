@@ -552,6 +552,19 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
 
     /**
+     * [descr:dxTextBoxOptions.reset]
+    
+     */
+    @Input()
+    get reset(value)(): Function {
+        return this._getOption('reset(value)');
+    }
+    set reset(value)(value: Function) {
+        this._setOption('reset(value)', value);
+    }
+
+
+    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -1300,6 +1313,13 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() reset(value)Change: EventEmitter<Function>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -1574,6 +1594,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
             { emit: 'openOnFieldClickChange' },
             { emit: 'placeholderChange' },
             { emit: 'readOnlyChange' },
+            { emit: 'reset(value)Change' },
             { emit: 'rtlEnabledChange' },
             { emit: 'searchEnabledChange' },
             { emit: 'searchExprChange' },

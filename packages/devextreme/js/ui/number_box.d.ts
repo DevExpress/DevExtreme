@@ -217,6 +217,13 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @public
      */
     value?: number;
+    /**
+     * @docid
+     * @type_function_param1 value:number
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: number): void;
 }
 /**
  * @docid

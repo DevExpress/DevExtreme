@@ -71,6 +71,7 @@ import { DxiButtonComponent } from './button-dxi';
         'onValueChanged',
         'placeholder',
         'readOnly',
+        'reset(value)',
         'rtlEnabled',
         'showClearButton',
         'showMaskMode',

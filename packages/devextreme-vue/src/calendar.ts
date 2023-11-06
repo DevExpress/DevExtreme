@@ -26,6 +26,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onValueChanged" |
   "readOnly" |
+  "reset" |
   "rtlEnabled" |
   "selectionMode" |
   "selectWeekOnClick" |
@@ -84,6 +85,7 @@ const DxCalendar = createComponent({
     onOptionChanged: Function,
     onValueChanged: Function,
     readOnly: Boolean,
+    reset: Function,
     rtlEnabled: Boolean,
     selectionMode: String,
     selectWeekOnClick: Boolean,
@@ -128,6 +130,7 @@ const DxCalendar = createComponent({
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
     "update:readOnly": null,
+    "update:reset": null,
     "update:rtlEnabled": null,
     "update:selectionMode": null,
     "update:selectWeekOnClick": null,

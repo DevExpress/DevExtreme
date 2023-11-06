@@ -98,6 +98,13 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      * @public
      */
     value?: boolean;
+    /**
+     * @docid
+     * @type_function_param1 value:boolean
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: boolean): void;
 }
 /**
  * @docid

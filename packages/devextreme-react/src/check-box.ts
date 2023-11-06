@@ -67,6 +67,7 @@ class CheckBox extends BaseComponent<React.PropsWithChildren<ICheckBoxOptions>> 
   onOptionChanged: PropTypes.func,
   onValueChanged: PropTypes.func,
   readOnly: PropTypes.bool,
+  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   tabIndex: PropTypes.number,
   text: PropTypes.string,

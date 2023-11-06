@@ -292,6 +292,13 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @public
      */
     value?: Array<Date | number | string>;
+    /**
+     * @docid
+     * @type_function_param1 value:Array<Date | number | string | null>
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Array<Date | number | string | null>): void;
 };
 
 /**

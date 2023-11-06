@@ -9361,6 +9361,12 @@ declare module DevExpress.ui {
      */
     value?: Date | number | string | Array<Date | number | string>;
     /**
+     * [descr:dxCalendarOptions.reset(value)]
+     */
+    reset(
+      value?: Date | number | string | Array<Date | number | string> | null
+    ): void;
+    /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
@@ -9441,6 +9447,10 @@ declare module DevExpress.ui {
      * [descr:dxCheckBoxOptions.value]
      */
     value?: boolean | null | undefined;
+    /**
+     * [descr:dxCheckBoxOptions.reset(value)]
+     */
+    reset(value?: boolean | null | undefined): void;
   }
   /**
    * [descr:dxColorBox]
@@ -9595,7 +9605,10 @@ declare module DevExpress.ui {
      * [descr:dxColorBoxOptions.value]
      */
     value?: string;
-
+    /**
+     * [descr:dxColorBoxOptions.reset(value)]
+     */
+    reset(value?: string | null): void;
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
      */
@@ -12293,6 +12306,10 @@ declare module DevExpress.ui {
      * [descr:dxDateBoxOptions.value]
      */
     value?: Date | number | string;
+    /**
+     * [descr:dxDateBoxOptions.reset(value)]
+     */
+    reset(value?: Date | number | string | null): void;
   }
   /**
    * [descr:dxDateRangeBox]
@@ -12495,6 +12512,10 @@ declare module DevExpress.ui {
        * [descr:dxDateRangeBoxOptions.value]
        */
       value?: Array<Date | number | string>;
+      /**
+       * [descr:Properties.reset(value)]
+       */
+      reset(value?: Array<Date | number | string | null>): void;
     };
     /**
      * [descr:_ui_date_range_box_ValueChangedEvent]
@@ -21448,6 +21469,10 @@ declare module DevExpress.ui {
      * [descr:dxNumberBoxOptions.value]
      */
     value?: number;
+    /**
+     * [descr:dxNumberBoxOptions.reset(value)]
+     */
+    reset(value?: number): void;
   }
   /**
    * [descr:dxOverlay]
@@ -23049,6 +23074,10 @@ declare module DevExpress.ui {
      * [descr:dxRangeSliderOptions.value]
      */
     value?: Array<number>;
+    /**
+     * [descr:dxRangeSliderOptions.reset(value)]
+     */
+    reset(value?: Array<number>): void;
   }
   /**
    * [descr:dxRecurrenceEditor]
@@ -25056,6 +25085,10 @@ declare module DevExpress.ui {
      * [descr:dxSliderOptions.value]
      */
     value?: number;
+    /**
+     * [descr:dxSliderOptions.reset(value)]
+     */
+    reset(value?: number): void;
   }
   /**
    * [descr:dxSortable]
@@ -25611,6 +25644,10 @@ declare module DevExpress.ui {
      * [descr:dxSwitchOptions.value]
      */
     value?: boolean;
+    /**
+     * [descr:dxSwitchOptions.reset(value)]
+     */
+    reset(value?: boolean): void;
   }
   /**
    * [descr:dxTabPanel]
@@ -26294,6 +26331,10 @@ declare module DevExpress.ui {
      * [descr:dxTagBoxOptions.value]
      */
     value?: Array<string | number | any>;
+    /**
+     * [descr:dxTagBoxOptions.reset(value)]
+     */
+    reset(value?: Array<string | number | any>): void;
   }
   /**
    * [descr:dxTextArea]
@@ -26564,6 +26605,10 @@ declare module DevExpress.ui {
      * [descr:dxTextBoxOptions.value]
      */
     value?: string;
+    /**
+     * [descr:dxTextBoxOptions.reset(value)]
+     */
+    reset(value?: string): void;
   }
   /**
    * [descr:dxTextEditor]
