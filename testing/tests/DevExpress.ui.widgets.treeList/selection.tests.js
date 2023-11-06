@@ -1718,5 +1718,48 @@ QUnit.module('Recursive selection', {
         assert.strictEqual(items[0].isSelected, undefined, 'selection state of the first item is indeterminate');
         assert.strictEqual($(this.rowsView.getRowElement(0)).attr('aria-selected'), 'undefined', 'aria-selected attr with \'undefined\' value');
     });
+
+    // T1196887
+    QUnit.test('No exceptions on deselect -> select row when cacheEnabled = false', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+        const clock = sinon.useFakeTimers();
+
+        this.options.itemsExpr = 'items';
+        this.options.loadingTimeout = 30;
+        this.options.cacheEnabled = false;
+        this.options.dataStructure = 'tree';
+        this.options.dataSource = new Array(100)
+            .fill(null)
+            .map((_, i) => {
+                return {
+                    id: i + 1,
+                    text: `test${i}`,
+                    items: [{ id: i + 101, text: `test${i + 101}` }]
+                };
+            });
+        this.options.selectedRowKeys = new Array(100).fill(null).map((_, index) => index + 1);
+        this.setupTreeList();
+        clock.tick(100);
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.ok(this.selectionController.isSelectAll(), 'select all state');
+
+        try {
+            // act
+            this.selectionController.changeItemSelection(0, {});
+            clock.tick(100);
+            this.selectionController.changeItemSelection(0, {});
+            clock.tick(100);
+
+            // assert
+            assert.ok(this.selectionController.isSelectAll(), 'select all state');
+        } catch(e) {
+            assert.ok(false, 'exception');
+        } finally {
+            clock.restore();
+        }
+    });
 });
 
