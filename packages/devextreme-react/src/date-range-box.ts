@@ -163,7 +163,6 @@ class DateRangeBox extends BaseComponent<React.PropsWithChildren<IDateRangeBoxOp
   opened: PropTypes.bool,
   openOnFieldClick: PropTypes.bool,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showClearButton: PropTypes.bool,
   showDropDownButton: PropTypes.bool,

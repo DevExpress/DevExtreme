@@ -75,7 +75,6 @@ class RangeSlider extends BaseComponent<React.PropsWithChildren<IRangeSliderOpti
   onOptionChanged: PropTypes.func,
   onValueChanged: PropTypes.func,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showRange: PropTypes.bool,
   start: PropTypes.number,

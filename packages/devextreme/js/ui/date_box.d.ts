@@ -278,13 +278,6 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
      * @public
      */
     value?: Date | number | string;
-    /**
-     * @docid
-     * @type_function_param1 value:Date | number | string | null
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: Date | number | string | null): void;
 }
 
 /**
@@ -384,7 +377,14 @@ export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TPro
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateBox extends DateBoxBase<Properties> {}
+export default class dxDateBox extends DateBoxBase<Properties> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Date | number | string | null): void;
+}
 
 /**
  * @public

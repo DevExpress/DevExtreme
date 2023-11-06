@@ -19,7 +19,6 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onValueChanged" |
   "readOnly" |
-  "reset" |
   "rtlEnabled" |
   "switchedOffText" |
   "switchedOnText" |
@@ -56,7 +55,6 @@ const DxSwitch = createComponent({
     onOptionChanged: Function,
     onValueChanged: Function,
     readOnly: Boolean,
-    reset: Function,
     rtlEnabled: Boolean,
     switchedOffText: String,
     switchedOnText: String,
@@ -90,7 +88,6 @@ const DxSwitch = createComponent({
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
     "update:readOnly": null,
-    "update:reset": null,
     "update:rtlEnabled": null,
     "update:switchedOffText": null,
     "update:switchedOnText": null,

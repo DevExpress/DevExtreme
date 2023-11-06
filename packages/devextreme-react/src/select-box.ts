@@ -177,7 +177,6 @@ class SelectBox extends BaseComponent<React.PropsWithChildren<ISelectBoxOptions>
   openOnFieldClick: PropTypes.bool,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   searchEnabled: PropTypes.bool,
   searchExpr: PropTypes.oneOfType([

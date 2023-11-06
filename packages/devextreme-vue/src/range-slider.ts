@@ -25,7 +25,6 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onValueChanged" |
   "readOnly" |
-  "reset" |
   "rtlEnabled" |
   "showRange" |
   "start" |
@@ -71,7 +70,6 @@ const DxRangeSlider = createComponent({
     onOptionChanged: Function,
     onValueChanged: Function,
     readOnly: Boolean,
-    reset: Function,
     rtlEnabled: Boolean,
     showRange: Boolean,
     start: Number,
@@ -114,7 +112,6 @@ const DxRangeSlider = createComponent({
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
     "update:readOnly": null,
-    "update:reset": null,
     "update:rtlEnabled": null,
     "update:showRange": null,
     "update:start": null,

@@ -98,13 +98,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      * @public
      */
     value?: boolean;
-    /**
-     * @docid
-     * @type_function_param1 value:boolean
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: boolean): void;
 }
 /**
  * @docid
@@ -113,7 +106,14 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSwitch extends Editor<dxSwitchOptions> { }
+export default class dxSwitch extends Editor<dxSwitchOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: boolean): void;
+}
 
 /** @public */
 export type Properties = dxSwitchOptions;

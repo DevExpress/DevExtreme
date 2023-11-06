@@ -297,19 +297,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
 
     /**
-     * [descr:dxRangeSliderOptions.reset]
-    
-     */
-    @Input()
-    get reset(value)(): Function {
-        return this._getOption('reset(value)');
-    }
-    set reset(value)(value: Function) {
-        this._setOption('reset(value)', value);
-    }
-
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -680,13 +667,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() reset(value)Change: EventEmitter<Function>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -842,7 +822,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
             { emit: 'maxChange' },
             { emit: 'minChange' },
             { emit: 'readOnlyChange' },
-            { emit: 'reset(value)Change' },
             { emit: 'rtlEnabledChange' },
             { emit: 'showRangeChange' },
             { emit: 'startChange' },

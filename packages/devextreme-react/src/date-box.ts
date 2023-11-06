@@ -173,7 +173,6 @@ class DateBox extends BaseComponent<React.PropsWithChildren<IDateBoxOptions>> {
   ]),
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showAnalogClock: PropTypes.bool,
   showClearButton: PropTypes.bool,

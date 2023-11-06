@@ -85,13 +85,6 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
      * @public
      */
     value?: number;
-    /**
-     * @docid
-     * @type_function_param1 value:number
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: number): void;
 }
 /**
  * @docid
@@ -100,7 +93,14 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSlider extends dxTrackBar<dxSliderOptions> { }
+export default class dxSlider extends dxTrackBar<dxSliderOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: number): void;
+}
 
 /**
  * @docid

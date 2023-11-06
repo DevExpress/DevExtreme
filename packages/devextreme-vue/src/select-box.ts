@@ -58,7 +58,6 @@ type AccessibleOptions = Pick<Properties,
   "openOnFieldClick" |
   "placeholder" |
   "readOnly" |
-  "reset" |
   "rtlEnabled" |
   "searchEnabled" |
   "searchExpr" |
@@ -147,7 +146,6 @@ const DxSelectBox = createComponent({
     openOnFieldClick: Boolean,
     placeholder: String,
     readOnly: Boolean,
-    reset: Function,
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String],
@@ -233,7 +231,6 @@ const DxSelectBox = createComponent({
     "update:openOnFieldClick": null,
     "update:placeholder": null,
     "update:readOnly": null,
-    "update:reset": null,
     "update:rtlEnabled": null,
     "update:searchEnabled": null,
     "update:searchExpr": null,

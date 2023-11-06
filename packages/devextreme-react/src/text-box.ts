@@ -117,7 +117,6 @@ class TextBox extends BaseComponent<React.PropsWithChildren<ITextBoxOptions>> {
   onValueChanged: PropTypes.func,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showClearButton: PropTypes.bool,
   showMaskMode: PropTypes.oneOfType([

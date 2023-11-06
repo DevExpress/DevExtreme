@@ -106,13 +106,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @public
      */
     value?: Array<number>;
-    /**
-     * @docid
-     * @type_function_param1 value:Array<number>
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: Array<number>): void;
 }
 /**
  * @docid
@@ -121,7 +114,15 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> { }
+export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
+    /**
+     * @docid
+     * @type_function_param1 value:Array<number>
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Array<number>): void;
+ }
 
 /** @public */
 export type Properties = dxRangeSliderOptions;

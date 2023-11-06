@@ -48,7 +48,6 @@ type AccessibleOptions = Pick<Properties,
   "openOnFieldClick" |
   "placeholder" |
   "readOnly" |
-  "reset" |
   "rtlEnabled" |
   "showClearButton" |
   "showDropDownButton" |
@@ -115,7 +114,6 @@ const DxColorBox = createComponent({
     openOnFieldClick: Boolean,
     placeholder: String,
     readOnly: Boolean,
-    reset: Function,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showDropDownButton: Boolean,
@@ -179,7 +177,6 @@ const DxColorBox = createComponent({
     "update:openOnFieldClick": null,
     "update:placeholder": null,
     "update:readOnly": null,
-    "update:reset": null,
     "update:rtlEnabled": null,
     "update:showClearButton": null,
     "update:showDropDownButton": null,

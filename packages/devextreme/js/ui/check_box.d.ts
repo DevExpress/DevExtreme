@@ -104,13 +104,6 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @public
      */
     value?: boolean | null | undefined;
-    /**
-     * @docid
-     * @type_function_param1 value:boolean | null | undefined
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: boolean | null | undefined): void;
 }
 /**
  * @docid
@@ -126,6 +119,12 @@ export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
      * @public
      */
      blur(): void;
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: boolean | null | undefined): void;
 }
 
 /** @public */

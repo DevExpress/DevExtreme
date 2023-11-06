@@ -74,7 +74,6 @@ class Slider extends BaseComponent<React.PropsWithChildren<ISliderOptions>> {
   onOptionChanged: PropTypes.func,
   onValueChanged: PropTypes.func,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showRange: PropTypes.bool,
   step: PropTypes.number,

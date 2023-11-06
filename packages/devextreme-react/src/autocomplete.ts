@@ -161,7 +161,6 @@ class Autocomplete extends BaseComponent<React.PropsWithChildren<IAutocompleteOp
   openOnFieldClick: PropTypes.bool,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   searchExpr: PropTypes.oneOfType([
     PropTypes.array,

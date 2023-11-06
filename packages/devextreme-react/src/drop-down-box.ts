@@ -154,7 +154,6 @@ class DropDownBox extends BaseComponent<React.PropsWithChildren<IDropDownBoxOpti
   openOnFieldClick: PropTypes.bool,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
-  reset: PropTypes.func,
   rtlEnabled: PropTypes.bool,
   showClearButton: PropTypes.bool,
   showDropDownButton: PropTypes.bool,
