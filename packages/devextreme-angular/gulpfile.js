@@ -112,7 +112,7 @@ gulp.task('build.ngc', function() {
 
    return ngPackagr
         .ngPackagr()
-        .forProject(path.join(config.outputPath, 'ng-package.json'))
+        .forProject(path.join(config.outputPath, 'package.json'))
         .withTsConfig('tsconfig.lib.json')
         .build()
 });
@@ -160,22 +160,13 @@ gulp.task('npm.pack', gulp.series(
     (cb) => {
         argv.withDescriptions ? exec('npm --prefix ../../ run angular:inject-descriptions', (err) => cb(err)) : cb();
     },
-    (cb) => { exec('npm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)) },
-    () => { return  gulp.src(buildConfig.npm.distPath)
-    .pipe(gulp.dest('./node_modules/devextreme-angular')); }
+    (cb) => { exec('npm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)) }
 ));
-
-gulp.task('copy.source', function() {
-    var npmConfig = buildConfig.npm;
-    return gulp.src(`${path.join(npmConfig.distPath, '/**/*.*')}`)
-        .pipe(gulp.dest('./node_modules/devextreme-angular'));
-});
 
 //------------Main------------
 
 var buildTask = gulp.series(
-    'build.components',
-    'copy.source'
+    'build.components'
 );
 
 gulp.task('build', buildTask);
@@ -250,9 +241,7 @@ gulp.task('test.components.server.debug', function(done) {
     new karmaServer(config, done).start();
 });
 
-gulp.task('run.tests', gulp.series('test.components.client'));
-
-// gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
+gulp.task('run.tests', gulp.series('test.components.server', 'test.components.client'));
 
 gulp.task('test', gulp.series('build', 'run.tests'));
 

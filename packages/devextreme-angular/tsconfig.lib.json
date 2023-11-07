@@ -1,11 +1,9 @@
 {
   "extends": "./node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json",
   "angularCompilerOptions": {
+    "enableIvy": true,
     "annotateForClosureCompiler": true,
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
-    "enableResourceInlining": true
+    "fullTemplateTypeCheck": true
   },
   "compilerOptions": {
     "experimentalDecorators": true,

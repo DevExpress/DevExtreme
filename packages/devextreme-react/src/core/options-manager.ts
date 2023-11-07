@@ -3,9 +3,8 @@ import { getChanges } from './configuration/comparer';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';
 import { capitalizeFirstLetter } from './helpers';
-
-import type TemplatesManager from './templates-manager';
-import type { IConfigNode } from './configuration/config-node';
+import type { IConfigNode, ITemplate } from './configuration/config-node';
+import { DXTemplateCollection } from './types';
 
 const optionsManagers = new Set<OptionsManager>();
 let guardTimeoutHandler = -1;
@@ -23,8 +22,6 @@ export function scheduleGuards(): void {
 class OptionsManager {
   private readonly guards: Record<string, () => void> = {};
 
-  private readonly templatesManager: TemplatesManager;
-
   private instance: any;
 
   private isUpdating = false;
@@ -35,8 +32,7 @@ class OptionsManager {
 
   private independentEvents: Set<string>;
 
-  constructor(templatesManager: TemplatesManager) {
-    this.templatesManager = templatesManager;
+  constructor() {
     optionsManagers.add(this);
 
     this.onOptionChanged = this.onOptionChanged.bind(this);
@@ -58,25 +54,22 @@ class OptionsManager {
   public getInitialOptions(rootNode: IConfigNode): Record<string, unknown> {
     const config = buildConfig(rootNode, false);
 
-    Object.keys(config.templates).forEach((key) => {
-      this.templatesManager.add(key, config.templates[key]);
-    });
     const options: Record<string, unknown> = {};
 
     Object.keys(config.options).forEach((key) => {
       options[key] = this.wrapOptionValue(key, config.options[key]);
     });
 
-    if (this.templatesManager.templatesCount > 0) {
-      options.integrationOptions = {
-        templates: this.templatesManager.templates,
-      };
-    }
-
     return options;
   }
 
-  public update(config: IConfigNode): void {
+  public getTemplateOptions(rootNode: IConfigNode): Record<string, ITemplate> {
+    const config = buildConfig(rootNode, false);
+
+    return config.templates;
+  }
+
+  public update(config: IConfigNode, dxtemplates: DXTemplateCollection): void {
     const changedOptions: [string, unknown][] = [];
     const optionChangedHandler = ({ value, fullName }) => {
       changedOptions.push([fullName, value]);
@@ -96,14 +89,11 @@ class OptionsManager {
       this.resetOption(optionName);
     });
 
-    Object.keys(changes.templates).forEach((key) => {
-      this.templatesManager.add(key, changes.templates[key]);
-    });
-    if (this.templatesManager.templatesCount > 0) {
+    if (Object.keys(dxtemplates).length > 0) {
       this.setValue(
         'integrationOptions',
         {
-          templates: this.templatesManager.templates,
+          templates: dxtemplates,
         },
       );
     }

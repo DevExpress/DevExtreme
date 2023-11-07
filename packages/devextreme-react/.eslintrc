@@ -43,7 +43,7 @@
     },
     "overrides": [
         {
-            "files": [ "*.ts" ],
+            "files": [ "*.ts", "*.tsx" ],
             "rules": {
                 "import/extensions": "warn",
                 "max-len": ["error", { "code": 150 }],
