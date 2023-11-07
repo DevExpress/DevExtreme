@@ -226,7 +226,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
 export default class dxCalendar extends Editor<dxCalendarOptions> {
     /**
      * @docid
-     * @type_function_param1 value:Date | number | string | Array<Date | number | string> | null
      * @publicName reset(value)
      * @public
      */

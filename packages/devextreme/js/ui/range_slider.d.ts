@@ -117,7 +117,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
 export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
     /**
      * @docid
-     * @type_function_param1 value:Array<number>
      * @publicName reset(value)
      * @public
      */
