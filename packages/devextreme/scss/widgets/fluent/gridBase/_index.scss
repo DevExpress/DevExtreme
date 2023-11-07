@@ -997,11 +997,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           }
         }
 
-        & .dx-command-edit .dx-link:focus {
-          background-color: $datagrid-base-background-color;
-          color: $datagrid-link-color;
-        }
-
         &:not(.dx-row-lines) {
           & > td,
           & > tr:first-child > td {
