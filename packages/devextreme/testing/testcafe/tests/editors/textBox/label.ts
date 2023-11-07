@@ -108,7 +108,7 @@ stylingModes.forEach((stylingMode) => {
 
       await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-      await testScreenshot(t, takeScreenshot, `Textbox with buttons container,stMode=${stylingMode},lMode=static=${labelMode}.png`, { shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `Textbox with buttons container,stMode=${stylingMode},lMode=${labelMode}.png`, { shouldTestInCompact: true });
 
       await removeStylesheetRulesFromPage();
 
