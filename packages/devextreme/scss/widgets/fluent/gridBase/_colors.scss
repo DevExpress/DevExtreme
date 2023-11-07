@@ -84,7 +84,7 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 */
 $datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
-$datagrid-row-removed-bg: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-hover-bg !default;
 $datagrid-cell-removed-text-color: null !default;
 
 /**
@@ -137,7 +137,7 @@ $datagrid-link-color: $base-link-color !default;
 * $name 75. Focused cell border color
 * $type color
 */
-$datagrid-focused-border-color: $datagrid-border-color !default;
+$datagrid-focused-border-color: mix($base-bg, $base-accent, 20%) !default;
 
 /**
 * $name 80. Editor background

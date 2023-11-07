@@ -1002,11 +1002,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           color: $datagrid-link-color;
         }
 
-        & > td,
-        & > tr:last-child > td {
-          border-bottom: 1px solid $datagrid-focused-border-color;
-        }
-
         &:not(.dx-row-lines) {
           & > td,
           & > tr:first-child > td {
