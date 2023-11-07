@@ -209,6 +209,10 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     background: $list-group-header-bg;
     color: $list-expanded-group-color;
     border-top: $material-list-item-border;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
     border-top-color: transparent;
     font-size: $material-list-main-font-size;
 
