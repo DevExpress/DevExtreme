@@ -19,9 +19,9 @@ QUnit.testStart(function() {
 
 QUnit.module('textEditorLabel', {
     beforeEach: function() {
+        this.spy = sinon.spy();
         this.$editor = $('#textEditor');
         this.labelInitialConfig = {
-            editor: { NAME: 'TextEditor' },
             $editor: this.$editor,
             text: 'Label',
             mark: '*',
@@ -93,6 +93,82 @@ QUnit.module('textEditorLabel', {
                 assert.notOk(this.$editor.find(LABEL_SELECTOR).length, 'markup is detached');
             });
         });
+    });
+
+    QUnit.module('Outside labelMode', () => {
+        ['init', 'runtime'].forEach((scenario) => {
+            QUnit.test(`onClickHandler should be called on label click when mode is set to "outside" on ${scenario}`, function(assert) {
+                const setOnInit = scenario === 'init';
+                this.reinit({
+                    onClickHandler: this.spy,
+                    mode: setOnInit ? 'outside' : 'static',
+                });
+
+                if(!setOnInit) {
+                    this.label.updateMode('outside');
+                }
+                $(this.getSpan()).trigger('dxclick');
+
+                assert.strictEqual(this.spy.callCount, 1, 'onClick handler was called on label click');
+            });
+
+            QUnit.test(`onClickHandler should not be called on label with empty text click when mode is set to "outside" on ${scenario}`, function(assert) {
+                const setOnInit = scenario === 'init';
+                this.reinit({
+                    onClickHandler: this.spy,
+                    mode: setOnInit ? 'outside' : 'static',
+                    text: '',
+                });
+
+                if(!setOnInit) {
+                    this.label.updateMode('outside');
+                }
+                $(this.getSpan()).trigger('dxclick');
+
+                assert.strictEqual(this.spy.callCount, 0, 'onClick handler was not called on label click');
+            });
+
+            QUnit.test(`label should have tranform styles when "outside" mode is set on ${scenario}`, function(assert) {
+                const setOnInit = scenario === 'init';
+                this.reinit({
+                    mode: setOnInit ? 'outside' : 'static',
+                });
+
+                if(!setOnInit) {
+                    this.label.updateMode('outside');
+                }
+                const transformStyles = $(this.getSpan()).css('transform');
+
+                assert.ok(transformStyles, 'transform inline styles are set');
+            });
+        });
+
+        QUnit.test('label should not have tranform styles when "outside" mode is disabled on runtime', function(assert) {
+            this.reinit({
+                mode: 'outside',
+            });
+
+            this.label.updateMode('static');
+            const transformStyles = $(this.getSpan()).css('transform');
+
+            assert.strictEqual(transformStyles, 'none', 'transform inline style are not set');
+        });
+
+        [false, true].forEach((rtlEnabled) => {
+            QUnit.test(`label transform translateX should be ${rtlEnabled ? 'positive' : 'negative'} (rtlEnabled=${rtlEnabled})`, function(assert) {
+                this.reinit({
+                    mode: 'outside',
+                    rtlEnabled,
+                });
+
+                const transformStyles = $(this.getSpan()).css('transform');
+                const translateX = transformStyles.split(',')[4].trim();
+
+                assert.ok(rtlEnabled ? translateX > 0 : translateX < 0);
+            });
+        });
+
+
     });
 
     QUnit.module('public methods', () => {
