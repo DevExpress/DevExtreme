@@ -101,7 +101,7 @@ stylingModes.forEach((stylingMode) => {
 
       await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-      await testScreenshot(t, takeScreenshot, `DRB render with buttons container, stylingMode=${stylingMode}, labelMode=${labelMode}.png`, { shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `DRB with buttons container,stMode=${stylingMode},lMode=${labelMode}.png`, { shouldTestInCompact: true });
 
       await t
         .expect(compareResults.isValid())
