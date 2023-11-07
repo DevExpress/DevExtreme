@@ -101,45 +101,46 @@ stylingModes.forEach((stylingMode) => {
       }
     }
   });
-});
 
-test('Textbox with buttons container', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  test(`Textbox with buttons container, stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${TEXTBOX_CLASS} { width: 220px; margin: 2px; }`);
+    await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${TEXTBOX_CLASS} { width: 220px; margin: 2px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Textbox render with buttons container.png', { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Textbox render with buttons container,stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
 
-  await removeStylesheetRulesFromPage();
+    await removeStylesheetRulesFromPage();
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  for (const isValid of [true, false]) {
-    for (const stylingMode of stylingModes) {
-      for (const buttons of [
-        ['clear'],
-        ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
-        [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
-        ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
-        [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear'],
-      ]) {
-        for (const rtlEnabled of [true, false]) {
-          const id = `${`dx${new Guid()}`}`;
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    for (const isValid of [true, false]) {
+      for (const labelMode of labelModes) {
+        for (const buttons of [
+          ['clear'],
+          ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
+          [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
+          ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
+          [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear'],
+        ]) {
+          for (const rtlEnabled of [true, false]) {
+            const id = `${`dx${new Guid()}`}`;
 
-          await appendElementTo('#container', 'div', id, { });
+            await appendElementTo('#container', 'div', id, { });
 
-          await createWidget('dxTextBox', {
-            value: 'Text',
-            stylingMode,
-            rtlEnabled,
-            buttons,
-            showClearButton: true,
-            isValid,
-          }, `#${id}`);
+            await createWidget('dxTextBox', {
+              value: 'Text',
+              stylingMode,
+              labelMode,
+              rtlEnabled,
+              buttons,
+              showClearButton: true,
+              isValid,
+            }, `#${id}`);
+          }
         }
       }
     }
-  }
+  });
 });
