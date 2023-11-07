@@ -40,15 +40,14 @@ jobs:
         working-directory: ./packages/devextreme
         run: npm run build
 
-      #angular
       - name: Generate wrappers
-        run: npm run angular:regenerate
+        run: npm run regenerate-all
 
       - name: Check generated code
         shell: bash
         run: |
           git add . -N
-          changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src)
+          changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src packages/devextreme-react/src packages/devextreme-vue/src)
           if [ -n "$changes" ]; then
             echo "Generated code is outdated. The following files have uncommitted changes:"
             echo "$changes";
@@ -56,61 +55,29 @@ jobs:
             exit 1
           fi
 
-      - name: Build wrappers
+      - name: Angular - Build
         working-directory: ./packages/devextreme-angular
         run: npm run build
 
-      - name: Run tests
+      - name: Angular - Run tests
         working-directory: ./packages/devextreme-angular
         run: npm run test:dev
 
-      - name: Check packing
+      - name: Angular - Check packing
         working-directory: ./packages/devextreme-angular
         run: npm run pack
 
-      # react
-      - name: Generate wrappers
-        run: npm run react:regenerate
-
-      - name: Check generated code
-        shell: bash
-        run: |
-          git add . -N
-          changes=$(git diff --name-status HEAD -- packages/devextreme-react/src)
-          if [ -n "$changes" ]; then
-            echo "Generated code is outdated. The following files have uncommitted changes:"
-            echo "$changes";
-            echo "To update generated code, use "npm run regenerate-all" and commit changes."
-            exit 1
-          fi
-
-      - name: Run tests with React
+      - name: React - Run tests
         run: npx nx test devextreme-react
 
-      - name: Check packing
+      - name: React - Check packing
         run: npx nx pack devextreme-react
 
-      #vue
-      - name: Generate wrappers
-        run: npm run vue:regenerate
-
-      - name: Check generated code
-        shell: bash
-        run: |
-          git add . -N
-          changes=$(git diff --name-status HEAD -- packages/devextreme-vue/src)
-          if [ -n "$changes" ]; then
-            echo "Generated code is outdated. The following files have uncommitted changes:"
-            echo "$changes";
-            echo "To update generated code, use "npm run regenerate-all" and commit changes."
-            exit 1
-          fi
-
-      - name: Run tests with Vue
+      - name: Vue - Run tests
         working-directory: packages/devextreme-vue
         run: npm run test
 
-      - name: Check packing
+      - name: Vue - Check packing
         run: npx nx run-many -t pack -p devextreme-vue
 
       - name: Archive internal-tools artifacts
