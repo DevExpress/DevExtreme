@@ -998,6 +998,13 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
+      &:not(.dx-row-lines) {
+        & > td,
+        & > tr:first-child > td {
+          border-bottom: 1px solid $datagrid-row-focused-bg;
+        }
+      }
+
       &.dx-data-row.dx-edit-row {
         & > td.dx-editor-cell:not(.dx-command-select),
         & > tr > td.dx-editor-cell:not(.dx-command-select) {
