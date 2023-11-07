@@ -138,13 +138,13 @@ class TextEditorLabel {
         this._updateLabelTransform();
     }
 
-    _updateLabelTransform() {
+    _updateLabelTransform(offset = 0) {
         this._$labelSpan.css('transform', '');
 
         if(this._isVisible() && this._isOutsideMode()) {
             const sign = this._props.rtlEnabled ? 1 : -1;
 
-            this._$labelSpan.css('transform', 'translateX(' + sign * getWidth(this._$before) + 'px)');
+            this._$labelSpan.css('transform', 'translateX(' + sign * (getWidth(this._$before) + offset) + 'px)');
         }
     }
 
