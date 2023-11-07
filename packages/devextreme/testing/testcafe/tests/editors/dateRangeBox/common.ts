@@ -95,13 +95,13 @@ stylingModes.forEach((stylingMode) => {
     });
   });
 
-  labelModes.forEach((labelMode) => {
+  ['static', 'floating', 'outside'].forEach((labelMode) => {
     test(`DateRangeBox with buttons container, stylingMode=${stylingMode}, labelMode=${labelMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-      await testScreenshot(t, takeScreenshot, `DRB render with buttons container, stylingMode=${stylingMode}, labelMode=${labelMode}}.png`, { shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `DRB render with buttons container, stylingMode=${stylingMode}, labelMode=${labelMode}.png`, { shouldTestInCompact: true });
 
       await t
         .expect(compareResults.isValid())
@@ -123,7 +123,7 @@ stylingModes.forEach((stylingMode) => {
           await appendElementTo('#container', 'div', id, { });
 
           await createWidget('dxDateRangeBox', {
-            width: 300,
+            width: 500,
             value: [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
             labelMode,
             stylingMode,
