@@ -19841,6 +19841,28 @@ QUnit.module('Editing - "popup" mode', {
         // assert
         assert.equal(spy.callCount, 1, 'Edit form has repainted only once');
     });
+
+    // T1198534
+    QUnit.test('No exceptions on editing row whene there is unbound column', function(assert) {
+        // arrange
+        this.options.repaintChangesOnly = true;
+        this.columns.push({ name: 'test' });
+        this.setupModules(this);
+        this.renderRowsView();
+
+        try {
+            // act
+            this.editRow(0);
+            this.clock.tick(10);
+
+            // assert
+            this.preparePopupHelpers();
+            assert.ok(this.isEditingPopupVisible(), 'Edit popup is visible');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        }
+    });
 });
 
 QUnit.module('Promises in callbacks and events', {
