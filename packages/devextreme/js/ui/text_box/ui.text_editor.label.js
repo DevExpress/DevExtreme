@@ -4,6 +4,7 @@ import { name as click } from '../../events/click';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { start as hoverStart } from '../../events/hover';
+import { active } from '../../events/core/emitter.feedback';
 import { getWindow } from '../../core/utils/window';
 import { getWidth } from '../../core/utils/size';
 
@@ -71,6 +72,7 @@ class TextEditorLabel {
     _attachEvents() {
         const clickEventName = addNamespace(click, this.NAME);
         const hoverStartEventName = addNamespace(hoverStart, this.NAME);
+        const activeEventName = addNamespace(active, this.NAME);
 
         eventsEngine.off(this._$labelSpan, clickEventName);
         eventsEngine.off(this._$labelSpan, hoverStartEventName);
@@ -85,6 +87,9 @@ class TextEditorLabel {
                 }
             });
             eventsEngine.on(this._$labelSpan, hoverStartEventName, (e) => {
+                e.stopPropagation();
+            });
+            eventsEngine.on(this._$labelSpan, activeEventName, (e) => {
                 e.stopPropagation();
             });
         }
