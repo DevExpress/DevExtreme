@@ -87,10 +87,10 @@ class TextEditorLabel {
                 }
             });
             eventsEngine.on(this._$labelSpan, hoverStartEventName, (e) => {
-                this._props.onHoverHandler();
+                this._props.onHoverHandler(e);
             });
             eventsEngine.on(this._$labelSpan, activeEventName, (e) => {
-                this._props.onActiveHandler();
+                this._props.onActiveHandler(e);
             });
         }
     }
