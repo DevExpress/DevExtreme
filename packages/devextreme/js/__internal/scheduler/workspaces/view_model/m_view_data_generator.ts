@@ -18,6 +18,8 @@ import { getAllGroups, getGroupCount } from '../../resources/m_utils';
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 const DAY_MS = dateUtils.dateToMilliseconds('day');
 
+const toMs = dateUtils.dateToMilliseconds;
+
 export class ViewDataGenerator {
   readonly daysInInterval: number = 1;
 
@@ -95,17 +97,17 @@ export class ViewDataGenerator {
     }
 
     const completeViewDataMap = this._addKeysToCells(viewDataMap);
-    this.shiftDateTableDates(completeViewDataMap, viewOffset);
+    this.shiftDateTableCellDates(completeViewDataMap, viewOffset);
 
     return completeViewDataMap;
   }
 
-  private shiftDateTableDates(viewDataMap, viewOffset) {
+  private shiftDateTableCellDates(viewDataMap, viewOffset) {
     viewDataMap
       .forEach((row) => {
         row.forEach((cell) => {
-          cell.startDate = dateUtilsTs.addOffsets(cell.startDate, [viewOffset]);
-          cell.endDate = dateUtilsTs.addOffsets(cell.endDate, [viewOffset]);
+          cell.startDate = this.shiftDateTableDate(cell.startDate, viewOffset);
+          cell.endDate = this.shiftDateTableDate(cell.endDate, viewOffset);
         });
       });
   }
@@ -715,5 +717,11 @@ export class ViewDataGenerator {
 
   getFirstDayOfWeek(firstDayOfWeekOption) {
     return firstDayOfWeekOption;
+  }
+
+  private shiftDateTableDate(date, viewOffset) {
+    const shiftedDate = dateUtilsTs.addOffsets(date, [viewOffset]);
+    const daySavingLightDiff = shiftedDate.getTimezoneOffset() - date.getTimezoneOffset();
+    return dateUtilsTs.addOffsets(shiftedDate, [daySavingLightDiff * toMs('minute')]);
   }
 }

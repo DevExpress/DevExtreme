@@ -6,7 +6,11 @@ import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
 import '__internal/scheduler/workspaces/m_work_space_work_week';
 
-const CELL_CLASS = 'dx-scheduler-date-table-cell';
+const CLASSES = {
+    timePanelCell: '.dx-scheduler-time-panel-cell',
+    headerPanelCell: '.dx-scheduler-header-panel-cell',
+    dateTableCell: '.dx-scheduler-date-table-cell'
+};
 
 QUnit.dump.maxDepth = 10;
 
@@ -169,7 +173,7 @@ module('Work Space Week', () => {
                 renovateRender: false,
             });
 
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(8);
+            const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
 
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 2, 17, 5, 30),
@@ -187,7 +191,7 @@ module('Work Space Week', () => {
                 renovateRender: false,
             });
 
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(8);
+            const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
 
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 2, 3, 0, 30),
@@ -246,7 +250,10 @@ module('Work Space Week', () => {
                 groupIndex: 0,
             };
 
-            assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 100, left: 100 }, false), cellData, 'Cell data is OK');
+            assert.deepEqual(this.instance.getCellDataByCoordinates({
+                top: 100,
+                left: 100
+            }, false), cellData, 'Cell data is OK');
         });
 
         test('Cell data should be correct if DST makes sense (T442904)', function(assert) {
@@ -279,7 +286,10 @@ module('Work Space Week', () => {
                 groupIndex: 0,
             };
 
-            assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 51, left: 100 }, true), cellData, 'Cell data is OK');
+            assert.deepEqual(this.instance.getCellDataByCoordinates({
+                top: 51,
+                left: 100
+            }, true), cellData, 'Cell data is OK');
         });
 
         test('Get last view date', function(assert) {
@@ -576,6 +586,389 @@ module('Work Space Week', () => {
 
             this.instance.option('intervalCount', 4);
             assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 15, 0, 0), new Date(2015, 3, 11, 23, 59)], 'Range is OK');
+        });
+    });
+
+    module('View offset', {
+        beforeEach: function() {
+            this.createInstance = function(options) {
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek(options).dxSchedulerWorkSpaceWeek('instance');
+            };
+        },
+    }, () => {
+        const minuteMs = 60000;
+
+        [
+            // Apply DST cases
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 0,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:00 AM', '', '1:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 0,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:00 AM', '', '4:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 0,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:00 PM', '', '10:00 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 120 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['2:00 AM', '', '3:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 120 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['5:00 AM', '', '6:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 120 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['11:00 PM', '', '12:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 765 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:45 PM', '', '1:45 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 765 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:45 PM', '', '4:45 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 765 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:45 AM', '', '10:45 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 1440 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:00 AM', '', '1:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 1440 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:00 AM', '', '4:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: 1440 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:00 PM', '', '10:00 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -120 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['10:00 PM', '', '11:00 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -120 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['1:00 AM', '', '2:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -120 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['7:00 PM', '', '8:00 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -765 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['11:15 AM', '', '12:15 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -765 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['2:15 PM', '', '3:15 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -765 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['8:15 AM', '', '9:15 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -1440 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:00 AM', '', '1:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -1440 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:00 AM', '', '4:00 AM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            {
+                currentDate: '2023-10-30T00:00:00',
+                viewOffset: -1440 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:00 PM', '', '10:00 PM'],
+                dates: ['Sun 29', 'Mon 30']
+            },
+            // Remove DST cases
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 0,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:00 AM', '', '1:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 0,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:00 AM', '', '4:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 0,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:00 PM', '', '10:00 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 120 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['2:00 AM', '', '3:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 120 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['5:00 AM', '', '6:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 120 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['11:00 PM', '', '12:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 765 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:45 PM', '', '1:45 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 765 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:45 PM', '', '4:45 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 765 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:45 AM', '', '10:45 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 1440 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:00 AM', '', '1:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 1440 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:00 AM', '', '4:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: 1440 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:00 PM', '', '10:00 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -120 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['10:00 PM', '', '11:00 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -120 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['1:00 AM', '', '2:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -120 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['7:00 PM', '', '8:00 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -765 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['11:15 AM', '', '12:15 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -765 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['2:15 PM', '', '3:15 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -765 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['8:15 AM', '', '9:15 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -1440 * minuteMs,
+                startDayHour: 0,
+                endDayHour: 24,
+                times: ['12:00 AM', '', '1:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -1440 * minuteMs,
+                startDayHour: 3,
+                endDayHour: 5,
+                times: ['3:00 AM', '', '4:00 AM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+            {
+                currentDate: '2024-03-31T00:00:00',
+                viewOffset: -1440 * minuteMs,
+                startDayHour: 21,
+                endDayHour: 23,
+                times: ['9:00 PM', '', '10:00 PM'],
+                dates: ['Sun 31', 'Mon 1']
+            },
+        ].forEach(({
+            currentDate,
+            viewOffset,
+            times,
+            dates,
+            startDayHour,
+            endDayHour,
+        }) => {
+            test(`Should have correct dates in header and time in left side bar (
+currentDate: ${currentDate},
+viewOffset: ${viewOffset / minuteMs},
+start: ${startDayHour},
+end: ${endDayHour}
+)`, function(assert) {
+                this.createInstance({
+                    currentDate,
+                    viewOffset,
+                    startDayHour,
+                    endDayHour,
+                });
+                const $workspace = this.instance.$element();
+
+                const $timeCells = $workspace.find(`${CLASSES.timePanelCell} div`);
+                const $headerCells = $workspace.find(CLASSES.headerPanelCell);
+
+                assert.equal($timeCells[0].innerHTML, times[0]);
+                assert.equal($timeCells[1].innerHTML, times[1]);
+                assert.equal($timeCells[2].innerHTML, times[2]);
+
+                assert.equal($headerCells[0].innerHTML, dates[0]);
+                assert.equal($headerCells[1].innerHTML, dates[1]);
+            });
         });
     });
 });
