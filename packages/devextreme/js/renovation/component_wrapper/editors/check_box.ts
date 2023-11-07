@@ -6,14 +6,6 @@ export default class CheckBox extends Editor {
     return false;
   }
 
-  reset(value: boolean | null | undefined): void {
-    if (arguments.length) {
-      super.reset(value);
-    } else {
-      super.reset();
-    }
-  }
-
   _isFocused(): boolean {
     const focusTarget: Element = this.$element()[0];
 
