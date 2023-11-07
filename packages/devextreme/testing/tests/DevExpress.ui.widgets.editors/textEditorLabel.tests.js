@@ -97,19 +97,34 @@ QUnit.module('textEditorLabel', {
 
     QUnit.module('Outside labelMode', () => {
         ['init', 'runtime'].forEach((scenario) => {
-            QUnit.test(`onClickHandler should be called on label click when mode is set to "outside" on ${scenario}`, function(assert) {
-                const setOnInit = scenario === 'init';
-                this.reinit({
-                    onClickHandler: this.spy,
-                    mode: setOnInit ? 'outside' : 'static',
-                });
-
-                if(!setOnInit) {
-                    this.label.updateMode('outside');
+            [
+                {
+                    eventName: 'dxclick',
+                    handlerName: 'onClickHandler',
+                },
+                {
+                    eventName: 'dxhoverstart',
+                    handlerName: 'onHoverHandler',
+                },
+                {
+                    eventName: 'dxactive',
+                    handlerName: 'onActiveHandler',
                 }
-                $(this.getSpan()).trigger('dxclick');
+            ].forEach(({ eventName, handlerName }) => {
+                QUnit.test(`${handlerName} should be called on label ${eventName} when mode is set to "outside" on ${scenario}`, function(assert) {
+                    const setOnInit = scenario === 'init';
+                    this.reinit({
+                        [handlerName]: this.spy,
+                        mode: setOnInit ? 'outside' : 'static',
+                    });
 
-                assert.strictEqual(this.spy.callCount, 1, 'onClick handler was called on label click');
+                    if(!setOnInit) {
+                        this.label.updateMode('outside');
+                    }
+                    $(this.getSpan()).trigger(eventName);
+
+                    assert.strictEqual(this.spy.callCount, 1, `${handlerName} was called`);
+                });
             });
 
             QUnit.test(`onClickHandler should not be called on label with empty text click when mode is set to "outside" on ${scenario}`, function(assert) {

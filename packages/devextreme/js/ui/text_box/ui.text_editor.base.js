@@ -515,6 +515,8 @@ const TextEditorBase = Editor.inherit({
             onClickHandler: () => {
                 this.focus();
             },
+            onHoverHandler: (e) => { e.stopPropagation(); },
+            onActiveHandler: (e) => { e.stopPropagation(); },
             $editor: this.$element(),
             text: label,
             mark: labelMark,
