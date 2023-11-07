@@ -260,7 +260,7 @@ jobs:
       working-directory: ./packages/devextreme-react
       run: npm run lint
 
-    - name: Run devextreme-vue
+    - name: Lint devextreme-vue
       working-directory: ./packages/devextreme-vue
       run: npm run lint
 
