@@ -167,8 +167,6 @@ QUnit.module('textEditorLabel', {
                 assert.ok(rtlEnabled ? translateX > 0 : translateX < 0);
             });
         });
-
-
     });
 
     QUnit.module('public methods', () => {
