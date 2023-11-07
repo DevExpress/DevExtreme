@@ -944,9 +944,17 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
+      color: $datagrid-cell-removed-text-color;
+    }
+
+    .dx-row-removed.dx-row-lines > td {
       border-top: 1px solid $datagrid-cell-removed-border-color;
       border-bottom: 1px solid $datagrid-cell-removed-border-color;
-      color: $datagrid-cell-removed-text-color;
+    }
+
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-top: 1px solid $datagrid-hover-bg;
+      border-bottom: 1px solid $datagrid-hover-bg;
     }
 
     .dx-adaptive-detail-row {
