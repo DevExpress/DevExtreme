@@ -253,30 +253,28 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0019
     */
-    W0019: 'Valid license key not found.\n\n' +
-        'You used a trial version, or you did not specify a valid key within GlobalConfig.\n\n' +
-        'Please refer to https://js.devexpress.com/EULAs/DevExtremeComplete for more information on the terms that govern use of DevExtreme.\n\n' +
-        'If you are using a trial version, you must uninstall all copies of DevExtreme once your 30-day trial period expires.\n\n' +
-        'If you choose to integrate DevExtreme libraries in a project, you must purchase a valid license. For pricing/licensing options, please visit https://js.devexpress.com/Buy.\n\n' +
-        'If you have licensing-related questions or need help with a purchase, please contact a member of the DevExpress Client Services Team.\n\n',
+    W0019: 'DevExtreme: Unable to Locate a Valid License Key\n\n' +
+        'If you are using a 30-day trial version of DevExtreme, you must uninstall all copies of DevExtreme once your 30-day trial period expires. For terms and conditions that govern use of DevExtreme UI components/libraries, please refer to the DevExtreme End User License Agreement: https://js.devexpress.com/EULAs/DevExtremeComplete.\n\n' +
+        'To use DevExtreme in a commercial project, you must purchase a license. For pricing/licensing options, please visit: http://js.devexpres.com/Buy.\n\n' +
+        'If you have licensing-related questions or need help with a purchase, please email clientservices@devexpress.com.\n\n',
     /**
      * @name ErrorsCore.W0020
      */
-    W0020: 'The license key has expired.\n\n' +
-        'A mismatch exists between license key and DevExtreme version used.\n\n' +
-        'When your license key has expired, you can:\n' +
-        '1) Use the version of DevExtreme linked to your license key (visit https://www.devexpress.com/ClientCenter/DownloadManager to validate license/version information)\n' +
-        '2) Renew/upgrade your DevExpress Subscription at https://www.devexpress.com/buy/renew (once you renew/upgrade your subscription, you will be entitled to product updates and support services per the DevExtreme End User License Agreement)\n\n' +
-        'If you have licensing-related questions or need help with a purchase, please contact a member of the DevExpress Client Services Team.\n\n',
+    W0020: 'DevExtreme: License Key Has Expired.\n\n' +
+        'A mismatch exists between the license key used and the DevExtreme version referenced in this project.\n\n' +
+        'To proceed, you can:\n' +
+        '• use a version of DevExtreme linked to your license key: https://www.devexpress.com/ClientCenter/DownloadManager\n' +
+        '• renew your DevExpress Subscription: https://www.devexpress.com/buy/renew/ (once you renew your subscription, you will be entitled to product updates and support service as defined in the DevExtreme End User License Agreement)\n\n' +
+        'If you have licensing-related questions or need help with a renewal, please email clientservices@devexpress.com.\n\n',
     /**
      * @name ErrorsCore.W0021
      */
-    W0021: 'License key verification failed.\n\n' +
-        'Make certain to specify a valid key within GlobalConfig. If you continue to encounter this error, please return to https://www.devexpress.com/ClientCenter/DownloadManager to obtain a valid key and try again.\n\n' +
-        'If you have a valid license key and the problem persists, please submit a support ticket via https://supportcenter.devexpress.com/ticket/create. We will be happy to follow-up.\n\n',
+    W0021: 'DevExtreme: License Key Verification Has Failed.\n\n' +
+        'To verify your DevExtreme license, make certain to specify a correct key in the GlobalConfig. If you continue to encounter this error, please visit https://www.devexpress.com/ClientCenter/DownloadManager/ to obtain a valid license key.\n\n' +
+        'If you have a valid license and this problem persists, please submit a support ticket via the DevExpress Support Center. We will be happy to follow-up: https://supportcenter.devexpress.com/ticket/create.\n\n',
     /**
      * @name ErrorsCore.W0022
      */
-    W0022: 'Pre-release version (Alpha, Beta, Community Technology Preview "CTP", or Release Candidate "RC", Early Access Preview “EAP”)\n\n' +
-        'These are pre-release versions. Pre-release versions may contain deficiencies and as such, should not be considered for production use or integrated into any mission critical application.\n\n',
+    W0022: 'DevExtreme: This version is a pre-release, and it is not suitable for commercial use.\n\n' +
+        'It may contain deficiencies and as such, should not be considered for use or integrated in any mission critical application.\n\n',
 });
