@@ -3,10 +3,14 @@
   margin-top: 30px;
 }
 
-.full-width-content > .dx-widget {
+.full-width-content .textarea-wrapper > .dx-widget {
   margin-bottom: 20px;
 }
 
 .full-width-content .dx-field {
   max-width: 385px;
+}
+
+.textarea-wrapper {
+  padding: 0 20px;
 }

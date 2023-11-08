@@ -16,7 +16,7 @@
     ></dx-check-box>
   </div>
 </div>
-<div class="left-content">
+<div class="textarea-wrapper">
   <dx-text-area
     [(height)]="height"
     [maxLength]="maxLength"
@@ -43,18 +43,20 @@
       </div>
     </div>
   </div>
-  <dx-text-area
-    [height]="90"
-    [(value)]="valueForEditableTextArea"
-    [valueChangeEvent]="eventValue"
-    [inputAttr]="{ 'aria-label': 'Notes' }"
-  >
-  </dx-text-area>
-  <dx-text-area
-    [height]="90"
-    [readOnly]="true"
-    [(value)]="valueForEditableTextArea"
-    [inputAttr]="{ 'aria-label': 'Notes' }"
-  >
-  </dx-text-area>
+  <div class="textarea-wrapper">
+    <dx-text-area
+      [height]="90"
+      [(value)]="valueForEditableTextArea"
+      [valueChangeEvent]="eventValue"
+      [inputAttr]="{ 'aria-label': 'Notes' }"
+    >
+    </dx-text-area>
+    <dx-text-area
+      [height]="90"
+      [readOnly]="true"
+      [(value)]="valueForEditableTextArea"
+      [inputAttr]="{ 'aria-label': 'Notes' }"
+    >
+    </dx-text-area>
+  </div>
 </div>

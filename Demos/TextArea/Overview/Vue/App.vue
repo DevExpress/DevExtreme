@@ -17,7 +17,7 @@
         />
       </div>
     </div>
-    <div class="left-content">
+    <div class="textarea-wrapper">
       <DxTextArea
         v-model:height="height"
         :max-length="maxLength"
@@ -42,18 +42,20 @@
           </div>
         </div>
       </div>
-      <DxTextArea
-        :height="90"
-        :input-attr="{ 'aria-label': 'Notes' }"
-        v-model:value="valueForEditableTextArea"
-        :value-change-event="eventValue"
-      />
-      <DxTextArea
-        :height="90"
-        :read-only="true"
-        :value="valueForEditableTextArea"
-        :input-attr="{ 'aria-label': 'Notes' }"
-      />
+      <div class="textarea-wrapper">
+        <DxTextArea
+          :height="90"
+          :input-attr="{ 'aria-label': 'Notes' }"
+          v-model:value="valueForEditableTextArea"
+          :value-change-event="eventValue"
+        />
+        <DxTextArea
+          :height="90"
+          :read-only="true"
+          :value="valueForEditableTextArea"
+          :input-attr="{ 'aria-label': 'Notes' }"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -88,11 +90,15 @@ function onAutoResizeChanged(e) {
   margin-top: 30px;
 }
 
-.full-width-content > .dx-widget {
+.full-width-content .textarea-wrapper > .dx-widget {
   margin-bottom: 20px;
 }
 
 .full-width-content .dx-field {
   max-width: 385px;
+}
+
+.textarea-wrapper {
+  padding: 0 20px;
 }
 </style>

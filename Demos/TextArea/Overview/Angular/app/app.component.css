@@ -3,10 +3,14 @@
   margin-top: 30px;
 }
 
-::ng-deep .full-width-content > .dx-widget {
+::ng-deep .full-width-content .textarea-wrapper > .dx-widget {
   margin-bottom: 20px;
 }
 
 ::ng-deep .full-width-content .dx-field {
   max-width: 385px;
+}
+
+::ng-deep .textarea-wrapper {
+  padding: 0 20px;
 }

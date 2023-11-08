@@ -56,7 +56,7 @@ function App() {
           ></CheckBox>
         </div>
       </div>
-      <div className="left-content">
+      <div className="textarea-wrapper">
         <TextArea
           height={height}
           maxLength={maxLength}
@@ -82,20 +82,22 @@ function App() {
             </div>
           </div>
         </div>
-        <TextArea
-          height={90}
-          value={valueForEditableTestArea}
-          valueChangeEvent={eventValue}
-          inputAttr={notesLabel}
-          onValueChanged={onTextAreaValueChanged}
-        />
-        <TextArea
-          height={90}
-          value={valueForEditableTestArea}
-          readOnly={true}
-          inputAttr={notesLabel}
-          valueChangeEvent={eventValue}
-        />
+        <div className="textarea-wrapper">
+          <TextArea
+            height={90}
+            value={valueForEditableTestArea}
+            valueChangeEvent={eventValue}
+            inputAttr={notesLabel}
+            onValueChanged={onTextAreaValueChanged}
+          />
+          <TextArea
+            height={90}
+            value={valueForEditableTestArea}
+            readOnly={true}
+            inputAttr={notesLabel}
+            valueChangeEvent={eventValue}
+          />
+        </div>
       </div>
     </React.Fragment>
   );
