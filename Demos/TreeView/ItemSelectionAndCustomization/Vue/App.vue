@@ -178,7 +178,7 @@ export default {
   margin-top: 20px;
 }
 
-.dx-list-item-content {
+.selected-container .dx-list-item-content {
   padding-left: 0;
 }
 

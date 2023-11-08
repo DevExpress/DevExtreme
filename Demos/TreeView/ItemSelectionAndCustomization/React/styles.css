@@ -12,16 +12,16 @@
   margin-top: 20px;
 }
 
+.selected-container .dx-list-item-content {
+  padding-left: 0;
+}
+
 .selected-container {
   padding: 20px;
   margin-left: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   font-size: 115%;
   font-weight: bold;
-}
-
-.dx-list-item-content {
-  padding-left: 0;
 }
 
 .options {

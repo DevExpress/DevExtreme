@@ -32,7 +32,7 @@ $(() => {
   }
 
   $('#showCheckBoxesMode').dxSelectBox({
-    items: ['selectAll', 'normal', 'none'],
+    items: ['normal', 'selectAll', 'none'],
     inputAttr: { 'aria-label': 'Show Checkboxes Mode' },
     value: 'normal',
     onValueChanged(e) {

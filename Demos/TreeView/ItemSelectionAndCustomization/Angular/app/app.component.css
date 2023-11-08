@@ -20,7 +20,7 @@
   margin-top: 20px;
 }
 
-::ng-deep .dx-list-item-content {
+::ng-deep .selected-container .dx-list-item-content {
   padding-left: 0;
 }
 
