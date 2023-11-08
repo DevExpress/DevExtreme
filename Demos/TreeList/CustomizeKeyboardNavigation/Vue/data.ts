@@ -389,4 +389,3 @@ export const employees = [{
   Birth_Date: '1972-09-11',
   Hire_Date: '2009-04-22',
 }];
-

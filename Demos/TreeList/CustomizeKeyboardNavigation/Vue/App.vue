@@ -76,20 +76,21 @@ import {
   DxEditing,
   DxColumn,
   DxKeyboardNavigation,
+  DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const dataSource = employees;
 const expandedRowKeys = [1, 2, 4, 5];
 const editOnKeyPress = ref(true);
-const enterKeyActions = ['startEdit', 'moveFocus'];
-const enterKeyDirections = ['none', 'column', 'row'];
-const enterKeyDirection = ref('column');
-const enterKeyAction = ref('moveFocus');
+const enterKeyActions: DxTreeListTypes.EnterKeyAction[] = ['startEdit', 'moveFocus'];
+const enterKeyDirections: DxTreeListTypes.EnterKeyDirection = ['none', 'column', 'row'];
+const enterKeyDirection = ref<DxTreeListTypes.EnterKeyDirection>('column');
+const enterKeyAction = ref<DxTreeListTypes.EnterKeyAction>('moveFocus');
 
-function onFocusedCellChanging(e) {
+function onFocusedCellChanging(e: DxTreeListTypes.FocusedCellChangingEvent) {
   e.isHighlighted = true;
 }
 </script>

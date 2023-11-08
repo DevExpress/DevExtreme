@@ -77,7 +77,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxTreeList, DxColumn, DxLookup } from 'devextreme-vue/tree-list';
+import {
+  DxTreeList, DxColumn, DxLookup, DxTreeListTypes,
+} from 'devextreme-vue/tree-list';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
@@ -101,7 +103,7 @@ const taskEmployees = createStore({
 });
 const focusedRowKey = ref(45);
 
-function onFocusedRowChanged(e) {
+function onFocusedRowChanged(e: DxTreeListTypes.FocusedCellChangedEvent) {
   const rowData = e.row && e.row.data;
   let cellValue;
   let assigned;

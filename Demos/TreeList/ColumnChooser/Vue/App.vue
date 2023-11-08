@@ -117,10 +117,11 @@ import { ref } from 'vue';
 import {
   DxTreeList, DxColumn, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
   DxPosition,
+  DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const columnChooserModes = ref([{
   key: 'dragAndDrop',
@@ -129,7 +130,7 @@ const columnChooserModes = ref([{
   key: 'select',
   name: 'Select',
 }]);
-const mode = ref('select');
+const mode = ref<DxTreeListTypes.ColumnChooserMode>('select');
 const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);

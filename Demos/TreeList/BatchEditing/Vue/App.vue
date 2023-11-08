@@ -60,9 +60,9 @@
 </template>
 <script setup lang="ts">
 import {
-  DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup,
+  DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
-import { tasks, employees } from './data.js';
+import { tasks, employees } from './data.ts';
 
 const statuses = [
   'Not Started',
@@ -72,7 +72,7 @@ const statuses = [
   'Completed',
 ];
 
-function onInitNewRow({ data }) {
+function onInitNewRow({ data }: DxTreeListTypes.InitNewRowEvent) {
   data.Task_Status = 'Not Started';
   data.Task_Start_Date = new Date();
   data.Task_Due_Date = new Date();

@@ -34,7 +34,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { DxTreeList, DxRemoteOperations, DxColumn } from 'devextreme-vue/tree-list';
+import {
+  DxTreeList, DxRemoteOperations, DxColumn, DxTreeListTypes,
+} from 'devextreme-vue/tree-list';
 import 'whatwg-fetch';
 
 const dataSource = {
@@ -53,7 +55,7 @@ const dataSource = {
   },
 };
 
-function customizeText({ value }) {
+function customizeText({ value }: DxTreeListTypes.ColumnCustomizeTextArg) {
   if (value !== null) {
     return `${Math.ceil(value / 1024)} KB`;
   }

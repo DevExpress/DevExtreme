@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { DxTreeList, DxColumn } from 'devextreme-vue/tree-list';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const expandedRowKeys = [1];
 </script>

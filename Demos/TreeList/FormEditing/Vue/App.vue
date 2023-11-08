@@ -81,9 +81,9 @@
 </template>
 <script setup lang="ts">
 import {
-  DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton,
+  DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton, DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const expandedRowKeys = [1, 2, 3, 4, 5];
 const lookupData = {
@@ -91,13 +91,13 @@ const lookupData = {
   sort: 'Full_Name',
 };
 
-function onEditorPreparing(e) {
+function onEditorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
   if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
     e.editorOptions.disabled = true;
     e.editorOptions.value = null;
   }
 }
-function onInitNewRow(e) {
+function onInitNewRow(e: DxTreeListTypes.InitNewRowEvent) {
   e.data.Head_ID = 1;
 }
 function allowDeleting(e) {

@@ -88,7 +88,7 @@ import {
   DxSelection,
   DxLookup,
 } from 'devextreme-vue/tree-list';
-import { tasks, employees, priorities } from './data.js';
+import { tasks, employees, priorities } from './data.ts';
 import EmployeeCell from './EmployeeCell.vue';
 
 const expandedRowKeys = [1, 2];

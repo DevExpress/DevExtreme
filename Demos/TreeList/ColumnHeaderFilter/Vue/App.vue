@@ -59,7 +59,7 @@
 import {
   DxTreeList, DxHeaderFilter, DxSearch, DxSelection, DxColumn,
 } from 'devextreme-vue/tree-list';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const expandedRowKeys = [1];
 const searchExpr = ['City', 'State'];

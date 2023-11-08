@@ -62,7 +62,7 @@
 import {
   DxTreeList, DxScrolling, DxPaging, DxPager, DxColumn, DxLookup,
 } from 'devextreme-vue/tree-list';
-import { tasks, employees } from './data.js';
+import { tasks, employees } from './data.ts';
 
 const allowedPageSizes = [5, 10, 20];
 const statuses = [

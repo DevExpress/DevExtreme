@@ -66,7 +66,7 @@ import { ref } from 'vue';
 import { DxTreeList, DxSelection, DxColumn } from 'devextreme-vue/tree-list';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const emptySelectedText = 'Nobody has been selected';
 const expandedRowKeys = [1, 2, 10];

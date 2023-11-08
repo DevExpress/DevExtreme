@@ -55,7 +55,7 @@
 import {
   DxTreeList, DxSorting, DxColumn, DxLookup,
 } from 'devextreme-vue/tree-list';
-import { tasks, employees } from './data.js';
+import { tasks, employees } from './data.ts';
 
 const statuses = [
   'Not Started',

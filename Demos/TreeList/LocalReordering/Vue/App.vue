@@ -61,14 +61,14 @@
 import { ref } from 'vue';
 import { DxTreeList, DxColumn, DxRowDragging } from 'devextreme-vue/tree-list';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { employees as employeesData } from './data.js';
+import { employees as employeesData } from './data.ts';
 
 const allowDropInsideItem = ref(true);
 const allowReordering = ref(true);
 const showDragIcons = ref(true);
 const expandedRowKeys = [1];
 
-const employees = ref<any[]>(employeesData);
+const employees = ref(employeesData);
 
 function onDragChange(e) {
   const visibleRows = e.component.getVisibleRows();

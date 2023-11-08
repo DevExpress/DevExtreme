@@ -74,6 +74,7 @@ import {
   DxEditing,
   DxRequiredRule,
   DxLookup,
+  DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
@@ -101,7 +102,7 @@ const statusesData = [
   'Completed',
 ];
 
-function initNewRow({ data }) {
+function initNewRow({ data }: DxTreeListTypes.InitNewRowEvent) {
   data.Task_Status = 'Not Started';
   data.Task_Start_Date = new Date();
   data.Task_Due_Date = new Date();
