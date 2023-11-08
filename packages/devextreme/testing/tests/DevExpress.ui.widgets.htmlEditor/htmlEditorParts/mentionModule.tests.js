@@ -197,19 +197,21 @@ QUnit.module('Mention format', () => {
         assert.strictEqual(element.children[0].innerText, '@John Smith');
     });
 
-    test('async template renders correctly in React strict mode (T1187274)', function(assert) {
-        let spy;
-        try {
-            const node = MentionFormat.create({ marker: '@', value: 'val', id: 'id' });
-            spy = sinon.spy(MentionFormat.prototype, 'renderContent');
+    test('mention content should be rendered to embed container (T1187274)', function(assert) {
+        let containerNode;
 
-            new MentionFormat({}, node);
-
-            assert.ok(spy.calledOnce);
-            assert.strictEqual(spy.getCall(0).args[0], node.children[0]);
-        } finally {
-            spy && spy.restore();
+        class MentionTest extends MentionFormat {
+            renderContent(node) {
+                containerNode = node;
+            }
         }
+
+        const node = $('<div />')[0];
+
+        new MentionTest({}, node);
+
+        assert.ok(!!containerNode);
+        assert.strictEqual(containerNode, node.children[0]);
     });
 });
 
