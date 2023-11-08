@@ -71,6 +71,14 @@ export default {
     min-height: 32px;
   }
 
+  .dx-lookup {
+    height: 36px;
+  }
+
+  .dx-theme-material .dx-lookup {
+    height: 48px;
+  }
+
   .dx-lookup.field-customization .dx-lookup-field {
     padding: 2px 5px;
   }

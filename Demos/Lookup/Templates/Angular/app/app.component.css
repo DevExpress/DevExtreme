@@ -2,6 +2,14 @@
   min-height: 32px;
 }
 
+::ng-deep .dx-lookup {
+  height: 36px;
+}
+
+::ng-deep .dx-theme-material .dx-lookup {
+  height: 48px;
+}
+
 ::ng-deep .dx-lookup.field-customization .dx-lookup-field {
   padding: 2px 5px;
 }
