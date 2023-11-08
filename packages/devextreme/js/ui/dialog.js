@@ -87,24 +87,6 @@ export const custom = function(options) {
 
     const popupToolbarItems = [];
 
-    each(options.buttons || [DEFAULT_BUTTON], function() {
-        const action = new Action(this.onClick, {
-            context: popupInstance
-        });
-
-        popupToolbarItems.push({
-            toolbar: 'bottom',
-            location: devices.current().android ? 'after' : 'center',
-            widget: 'dxButton',
-            options: extend({}, this, {
-                onClick: function() {
-                    const result = action.execute(...arguments);
-                    hide(result);
-                }
-            })
-        });
-    });
-
     const popupInstance = new Popup($element, extend({
         title: options.title ?? '',
         showTitle: ensureDefined(options.showTitle, true),
@@ -172,6 +154,24 @@ export const custom = function(options) {
             boundaryOffset: { h: 10, v: 0 }
         }
     }, options.popupOptions));
+
+    each(options.buttons || [DEFAULT_BUTTON], function() {
+        const action = new Action(this.onClick, {
+            context: popupInstance
+        });
+
+        popupToolbarItems.push({
+            toolbar: 'bottom',
+            location: devices.current().android ? 'after' : 'center',
+            widget: 'dxButton',
+            options: extend({}, this, {
+                onClick: function() {
+                    const result = action.execute(...arguments);
+                    hide(result);
+                }
+            })
+        });
+    });
 
     popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 

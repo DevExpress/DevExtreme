@@ -90,9 +90,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
     _getWidgetOptions() {
         const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
 
-        const disabledDates = isFunction(disabledDatesValue)
-            ? this._injectComponent(disabledDatesValue)
-            : disabledDates;
+        let disabledDates;
+        if(isFunction(disabledDatesValue)) {
+            disabledDates = this._injectComponent(disabledDatesValue);
+        }
 
         return extend(super._getWidgetOptions(), {
             disabledDates,
