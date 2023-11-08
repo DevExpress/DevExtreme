@@ -1,4 +1,3 @@
-
 export const sales = [{
   id: 10248,
   region: 'North America',

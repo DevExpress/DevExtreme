@@ -59,13 +59,14 @@ import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
   DxFieldPanel,
+  DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import { sales } from './data.js';
+import { sales } from './data.ts';
 
 const exportDataFieldHeaders = ref(false);
 const exportRowFieldHeaders = ref(false);
@@ -116,7 +117,7 @@ function onExportColumnFieldHeadersChanged({ value }) {
 function onExportFilterFieldHeadersChanged({ value }) {
   exportFilterFieldHeaders.value = value;
 }
-function onExporting(e) {
+function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   const workbook = new Workbook();
   const worksheet = workbook.addWorksheet('Sales');
 

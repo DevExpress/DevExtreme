@@ -41,7 +41,7 @@ import {
   DxPivotGrid,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
-import sales from './data.js';
+import sales from './data.ts';
 
 const grid = ref<DxPivotGrid>();
 const chart = ref<DxChart>();

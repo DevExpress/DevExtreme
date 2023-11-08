@@ -90,7 +90,7 @@ import {
 import {
   DxRadioGroup,
 } from 'devextreme-vue/radio-group';
-import service from './data.js';
+import service from './data.ts';
 
 const dataSource = new PivotGridDataSource({
   fields: [{

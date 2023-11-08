@@ -43,7 +43,7 @@ import {
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { sales } from './data.js';
+import { sales } from './data.ts';
 
 const dataSource = new PivotGridDataSource({
   fields: [{

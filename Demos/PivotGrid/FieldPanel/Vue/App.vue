@@ -69,7 +69,7 @@ import DxPivotGrid, {
 } from 'devextreme-vue/pivot-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.js';
+import sales from './data.ts';
 
 const showColumnFields = ref(true);
 const showDataFields = ref(true);

@@ -20,6 +20,7 @@
 import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
+  DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
@@ -27,7 +28,13 @@ import { Workbook } from 'exceljs';
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import { sales } from './data.js';
+import { sales } from './data.ts';
+
+interface ConditionalAppearance {
+  fill: string,
+  font: string,
+  bold?: boolean,
+}
 
 const dataSource = new PivotGridDataSource({
   fields: [{
@@ -55,7 +62,7 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function onExporting(e) {
+function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   const workbook = new Workbook();
   const worksheet = workbook.addWorksheet('Sales');
 
@@ -95,20 +102,20 @@ function isDataCell(cell) {
 function isTotalCell(cell) {
   return (cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'T' || cell.rowType === 'GT' || cell.columnType === 'T' || cell.columnType === 'GT');
 }
-function getExcelCellFormat({ fill, font, bold = false }) {
+function getExcelCellFormat({ fill, font, bold = false }: ConditionalAppearance) {
   return {
     fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: fill } },
     font: { color: { argb: font }, bold },
   };
 }
-function getCssStyles({ fill, font, bold = false }) {
+function getCssStyles({ fill, font, bold = false }: ConditionalAppearance) {
   return {
     'background-color': `#${fill}`,
     color: `#${font}`,
     'font-weight': bold ? 'bold' : undefined,
   };
 }
-function getConditionalAppearance(cell) {
+function getConditionalAppearance(cell): ConditionalAppearance {
   if (isTotalCell(cell)) {
     return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
   }

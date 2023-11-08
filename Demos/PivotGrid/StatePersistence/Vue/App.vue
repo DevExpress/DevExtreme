@@ -39,7 +39,7 @@ import DxPivotGrid, {
 } from 'devextreme-vue/pivot-grid';
 import DxButton from 'devextreme-vue/button';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.js';
+import sales from './data.ts';
 
 const gridDataSource = new PivotGridDataSource({
   fields: [{

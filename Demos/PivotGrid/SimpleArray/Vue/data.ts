@@ -4486,4 +4486,3 @@ export const sales = [{
   amount: 780,
   date: '2015/05/07',
 }];
-

@@ -17,11 +17,12 @@
 <script setup lang="ts">
 import {
   DxPivotGrid,
+  DxPivotGridTypes,
   DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const dataSource = {
+const dataSource: DxPivotGridTypes.Properties['dataSource'] = {
   remoteOperations: true,
   store: createStore({
     key: 'OrderID',

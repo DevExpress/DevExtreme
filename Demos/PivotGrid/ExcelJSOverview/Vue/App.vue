@@ -16,6 +16,7 @@
 import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
+  DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
@@ -23,7 +24,7 @@ import { Workbook } from 'exceljs';
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import { sales } from './data.js';
+import { sales } from './data.ts';
 
 const dataSource = new PivotGridDataSource({
   fields: [{
@@ -52,7 +53,7 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function onExporting(e) {
+function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   const workbook = new Workbook();
   const worksheet = workbook.addWorksheet('Sales');
 
