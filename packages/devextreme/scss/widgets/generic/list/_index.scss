@@ -163,7 +163,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     color: $list-group-color;
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
     justify-content: space-between;
 
     .dx-list-group:first-of-type & {
@@ -175,11 +174,12 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     .dx-list-group-header-indicator {
+      order: 1;
+
       &::before {
         width: 0;
         height: 0;
         display: block;
-        float: right;
         border-style: solid;
         border-color: transparent;
         border-width: 5px 5px 0 5px;
