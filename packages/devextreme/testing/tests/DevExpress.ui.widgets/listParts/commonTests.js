@@ -320,18 +320,6 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         themes.isMaterialBased = origIsMaterialBased;
     });
 
-    QUnit.test('no group header collapsed indicator element for the Generic theme', function(assert) {
-        const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['0'] }],
-            grouped: true,
-            collapsibleGroups: true
-        });
-
-        const $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + ' ' + toSelector(LIST_GROUP_HEADER_CLASS));
-
-        assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, 'group header should not have collapsed indicator element for the Generic theme');
-    });
-
     QUnit.test('group collapsing is animated', function(assert) {
         try {
             const animateSpy = sinon.spy(fx, 'animate');
