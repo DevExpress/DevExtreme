@@ -41,7 +41,8 @@ export default function(baseErrors, errors) {
     }
 
     function formatMessage(id, details) {
-        return format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
+        const kind =  id?.startsWith('W') ? 'warning' : 'error';
+        return format.apply(this, ['{0} - {1}. For additional information on this {2} message, see: {3}', id, details, kind, getErrorUrl(id)]);
     }
 
     function makeError(args) {
