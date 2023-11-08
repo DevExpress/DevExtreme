@@ -17,6 +17,10 @@ test('Grouped list appearance', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Grouped list appearance.png', { element: '#container' });
 
+  await list.option('collapsibleGroups', false);
+
+  await testScreenshot(t, takeScreenshot, 'Grouped list appearance,collapsibleGroups=false.png', { element: '#container' });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
