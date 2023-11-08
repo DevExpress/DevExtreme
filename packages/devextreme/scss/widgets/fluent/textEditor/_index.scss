@@ -18,6 +18,7 @@
 $fluent-base-standard-texteditor-input-horizontal-padding: 0;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
 $fluent-editor-custom-button-margin: 6px;
+$fluent-editor-border-width: 1px;
 
 @mixin texteditor-outlined-styling() {
   background-color: $texteditor-bg;
@@ -33,7 +34,7 @@ $fluent-editor-custom-button-margin: 6px;
     bottom: -1px;
     right: -1px;
     height: $texteditor-input-border-radius;
-    width: calc(100% + 2px);
+    width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
     border-bottom-right-radius: $texteditor-input-border-radius;
     border-bottom: 2px solid $texteditor-focused-border-color;
@@ -55,14 +56,9 @@ $fluent-editor-custom-button-margin: 6px;
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    &::before {
-      width: 100%;
-      left: 0;
-      right: 0;
-    }
-
     .dx-texteditor-label {
-      inset-block: -1px;
+      width: calc(100% + 2 * $fluent-editor-border-width);
+      inset: -1px;
     }
 
     .dx-datebox {
@@ -132,7 +128,7 @@ $fluent-editor-custom-button-margin: 6px;
     bottom: -1px;
     right: -1px;
     height: $texteditor-input-border-radius;
-    width: calc(100% + 2px);
+    width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
     border-bottom-right-radius: $texteditor-input-border-radius;
     border-bottom: 2px solid $texteditor-focused-border-color;
@@ -521,7 +517,6 @@ $fluent-editor-custom-button-margin: 6px;
   1px,
   $fluent-texteditor-font-size,
   $fluent-texteditor-label-outside-height,
-  $fluent-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

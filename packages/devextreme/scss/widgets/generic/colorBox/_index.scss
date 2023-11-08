@@ -20,8 +20,6 @@
       padding-inline-start: $generic-colorbox-preview-width;
     }
   }
-
-  @include colorbox-label-outside-mixin();
 }
 
 .dx-colorbox-input-container {
