@@ -80,8 +80,8 @@ import { DxDateBox, DxButton as DxDateBoxButton } from 'devextreme-vue/date-box'
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 const passwordMode = ref('password');
 const passwordButton = {
-  icon: '../../../../images/icons/eye.png',
-  type: 'default',
+  icon: 'eyeopen',
+  stylingMode: 'text',
   onClick: () => {
     passwordMode.value = passwordMode.value === 'text' ? 'password' : 'text';
   },
@@ -110,6 +110,7 @@ const currencyButton = {
 const dateValue = ref(new Date().getTime());
 const todayButton = {
   text: 'Today',
+  stylingMode: 'text',
   onClick: () => {
     dateValue.value = new Date().getTime();
   },

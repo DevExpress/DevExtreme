@@ -63,16 +63,16 @@ export class AppComponent {
   };
 
   passwordButton: any = {
-    icon: '../../../../images/icons/eye.png',
-    type: 'default',
+    icon: 'eyeopen',
+    stylingMode: 'text',
     onClick: () => {
       this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
     },
   };
 
   confirmPasswordButton: any = {
-    icon: '../../../../images/icons/eye.png',
-    type: 'default',
+    icon: 'eyeopen',
+    stylingMode: 'text',
     onClick: () => {
       this.confirmPasswordMode = this.confirmPasswordMode === 'text' ? 'password' : 'text';
     },

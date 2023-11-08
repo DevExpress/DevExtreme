@@ -135,7 +135,7 @@ DemoApp.controller('DemoController', ($scope) => {
       name: 'password',
       location: 'after',
       options: {
-        icon: '../../../../images/icons/eye.png',
+        icon: 'eyeopen',
         type: 'default',
         onClick: () => changePasswordMode('#password-validation'),
       },
@@ -148,7 +148,7 @@ DemoApp.controller('DemoController', ($scope) => {
       name: 'password',
       location: 'after',
       options: {
-        icon: '../../../../images/icons/eye.png',
+        icon: 'eyeopen',
         type: 'default',
         onClick: () => changePasswordMode('#confirm-password-validation'),
       },

@@ -232,15 +232,15 @@ const confirmPassword = ref('');
 const passwordMode = ref('password');
 const confirmPasswordMode = ref('password');
 const passwordButton = ref({
-  icon: '../../../../images/icons/eye.png',
-  type: 'default',
+  icon: 'eyeopen',
+  stylingMode: 'text',
   onClick: () => {
     passwordMode.value = passwordMode.value === 'text' ? 'password' : 'text';
   },
 });
 const confirmPasswordButton = ref({
-  icon: '../../../../images/icons/eye.png',
-  type: 'default',
+  icon: 'eyeopen',
+  stylingMode: 'text',
   onClick: () => {
     confirmPasswordMode.value = confirmPasswordMode.value === 'text' ? 'password' : 'text';
   },

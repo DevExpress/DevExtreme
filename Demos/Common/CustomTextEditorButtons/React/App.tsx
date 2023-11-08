@@ -18,8 +18,8 @@ function App() {
 
   const passwordButton = React.useMemo<ButtonTypes.Properties>(
     () => ({
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
+      icon: 'eyeopen',
+      stylingMode: 'text',
       onClick: () => {
         setPasswordMode((prevPasswordMode: string) =>
           (prevPasswordMode === 'text' ? 'password' : 'text'));
@@ -51,9 +51,10 @@ function App() {
     [setCurrencyFormat, setCurrencyValue],
   );
 
-  const todayButton = React.useMemo(
+  const todayButton = React.useMemo<ButtonTypes.Properties>(
     () => ({
       text: 'Today',
+      stylingMode: 'text',
       onClick: () => {
         setDateValue(new Date().getTime());
       },

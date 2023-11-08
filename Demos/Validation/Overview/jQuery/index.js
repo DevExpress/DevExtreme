@@ -51,8 +51,8 @@ $(() => {
       name: 'password',
       location: 'after',
       options: {
-        icon: '../../../../images/icons/eye.png',
-        type: 'default',
+        icon: 'eyeopen',
+        stylingMode: 'text',
         onClick: () => changePasswordMode('#password-validation'),
       },
     }],
@@ -70,8 +70,8 @@ $(() => {
       name: 'password',
       location: 'after',
       options: {
-        icon: '../../../../images/icons/eye.png',
-        type: 'default',
+        icon: 'eyeopen',
+        stylingMode: 'text',
         onClick: () => changePasswordMode('#confirm-password-validation'),
       },
     }],

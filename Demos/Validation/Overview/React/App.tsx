@@ -65,8 +65,8 @@ function App() {
 
   const passwordButton = React.useMemo<ButtonTypes.Properties>(
     () => ({
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
+      icon: 'eyeopen',
+      stylingMode: 'text',
       onClick: () => {
         setPasswordMode(passwordMode === 'text' ? 'password' : 'text');
       },
@@ -76,8 +76,8 @@ function App() {
 
   const confirmPasswordButton = React.useMemo<ButtonTypes.Properties>(
     () => ({
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
+      icon: 'eyeopen',
+      stylingMode: 'text',
       onClick: () => {
         setConfirmPasswordMode(confirmPasswordMode === 'text' ? 'password' : 'text');
       },

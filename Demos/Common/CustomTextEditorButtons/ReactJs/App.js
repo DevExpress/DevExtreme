@@ -14,8 +14,8 @@ function App() {
   const [dateValue, setDateValue] = React.useState(new Date().getTime());
   const passwordButton = React.useMemo(
     () => ({
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
+      icon: 'eyeopen',
+      stylingMode: 'text',
       onClick: () => {
         setPasswordMode((prevPasswordMode) => (prevPasswordMode === 'text' ? 'password' : 'text'));
       },
@@ -47,6 +47,7 @@ function App() {
   const todayButton = React.useMemo(
     () => ({
       text: 'Today',
+      stylingMode: 'text',
       onClick: () => {
         setDateValue(new Date().getTime());
       },

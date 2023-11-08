@@ -59,8 +59,8 @@ function App() {
   const validatorRef = React.useRef(null);
   const passwordButton = React.useMemo(
     () => ({
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
+      icon: 'eyeopen',
+      stylingMode: 'text',
       onClick: () => {
         setPasswordMode(passwordMode === 'text' ? 'password' : 'text');
       },
@@ -69,8 +69,8 @@ function App() {
   );
   const confirmPasswordButton = React.useMemo(
     () => ({
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
+      icon: 'eyeopen',
+      stylingMode: 'text',
       onClick: () => {
         setConfirmPasswordMode(confirmPasswordMode === 'text' ? 'password' : 'text');
       },
