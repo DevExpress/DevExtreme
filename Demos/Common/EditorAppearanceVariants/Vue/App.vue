@@ -85,6 +85,7 @@
         id="state"
         placeholder="Select..."
         label="State"
+        validation-message-position="left"
       >
         <DxValidator>
           <DxRequiredRule/>

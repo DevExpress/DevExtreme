@@ -65,6 +65,7 @@ $(() => {
     placeholder: 'Select...',
     label: 'State',
     labelMode,
+    validationMessagePosition: 'left',
   }).dxValidator({
     validationRules: [{
       type: 'required',

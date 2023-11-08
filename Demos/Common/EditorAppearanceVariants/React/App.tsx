@@ -142,6 +142,7 @@ export default function App() {
           placeholder="Select..."
           label="State"
           labelMode={labelMode}
+          validationMessagePosition="left"
         >
           <Validator>
             <RequiredRule />
