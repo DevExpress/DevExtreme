@@ -105,8 +105,7 @@ export const custom = function(options) {
         });
     });
 
-    // eslint-disable-next-line no-var
-    var popupInstance = new Popup($element, extend({
+    const popupInstance = new Popup($element, extend({
         title: options.title ?? '',
         showTitle: ensureDefined(options.showTitle, true),
         dragEnabled: ensureDefined(options.dragEnabled, true),
