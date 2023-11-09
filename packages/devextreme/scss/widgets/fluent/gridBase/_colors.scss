@@ -92,7 +92,7 @@ $datagrid-cell-removed-text-color: null !default;
 * $type color
 */
 $datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
-$datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
+$datagrid-nodata-color: lighten($datagrid-base-color, 20%) !default;
 
 /**
 * $name 90. Group row text color
