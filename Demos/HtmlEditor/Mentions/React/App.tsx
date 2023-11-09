@@ -1,6 +1,6 @@
 import React from 'react';
 import HtmlEditor from 'devextreme-react/html-editor';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const mentionsConfig = [{
   dataSource: employees,

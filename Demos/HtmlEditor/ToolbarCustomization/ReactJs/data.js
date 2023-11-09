@@ -1,9 +1,3 @@
-export const tabs = [
-  { name: 'From This Device', value: ['file'] },
-  { name: 'From the Web', value: ['url'] },
-  { name: 'Both', value: ['file', 'url'] },
-];
-
 export const markup = `
     <h2>
         <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
@@ -36,26 +30,4 @@ export const markup = `
         <li>Copy-paste rich content (unsupported formats are removed)</li>
         <li>Tables support</li>
     </ul>
-    <br>
-    <p>Supported frameworks and libraries</p>
-    <table>
-        <tr>
-            <td><strong>jQuery</strong></td>
-            <td style="text-align: right;">v2.1 - v2.2 and v3.x</td>
-        </tr>
-        <tr>
-            <td><strong>Angular</strong></td>
-            <td style="text-align: right;">v7.0+</td>
-        </tr>
-        <tr>
-            <td><strong>React</strong></td>
-            <td style="text-align: right;">v16.2+</td>
-        </tr>
-        <tr>
-            <td><strong>Vue</strong></td>
-            <td style="text-align: right;">v2.6.3+</td>
-        </tr>
-    </table>
 `;
-
-export const tabLabel = { 'aria-label': 'Tab' };

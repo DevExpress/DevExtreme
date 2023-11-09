@@ -5,18 +5,18 @@ import HtmlEditor, {
   Toolbar,
   Item,
 } from 'devextreme-react/html-editor';
-import { CheckBox } from 'devextreme-react/check-box';
-import { markup } from './data.js';
+import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { markup } from './data.ts';
 
 export default function App() {
   const [allowResizing, setAllowResizing] = React.useState(true);
   const [contextMenuEnabled, setContextMenuEnabled] = React.useState(true);
 
-  const tableResizingChanged = React.useCallback((e) => {
+  const tableResizingChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setAllowResizing(e.value);
   }, [setAllowResizing]);
 
-  const tableContextMenuChanged = React.useCallback((e) => {
+  const tableContextMenuChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setContextMenuEnabled(e.value);
   }, [setContextMenuEnabled]);
 

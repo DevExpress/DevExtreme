@@ -5,9 +5,9 @@ import HtmlEditor, {
   ImageUpload,
   Item,
 } from 'devextreme-react/html-editor';
-import CheckBox from 'devextreme-react/check-box';
-import SelectBox from 'devextreme-react/select-box';
-import { markup, tabs, tabLabel } from './data.js';
+import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import { markup, tabs, tabLabel } from './data.ts';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = [
@@ -41,11 +41,11 @@ export default function App() {
   const [isMultiline, setIsMultiline] = React.useState(true);
   const [currentTab, setCurrentTab] = React.useState(tabs[2].value);
 
-  const multilineChanged = React.useCallback((e) => {
+  const multilineChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setIsMultiline(e.value);
   }, [setIsMultiline]);
 
-  const currentTabChanged = React.useCallback((e) => {
+  const currentTabChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setCurrentTab(e.value);
   }, [setCurrentTab]);
 

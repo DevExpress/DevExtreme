@@ -3,7 +3,7 @@ import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import ButtonGroup, { Item as ButtonItem } from 'devextreme-react/button-group';
 import prettier from 'prettier/standalone';
 import parserHtml from 'prettier/parser-html';
-import { markup } from './data.js';
+import { markup } from './data.ts';
 import 'devextreme/ui/html_editor/converters/markdown';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
@@ -22,14 +22,15 @@ const fontFamilyOptions = {
 
 export default function App() {
   const [valueContent, setValueContent] = React.useState(markup);
-  const [editorValueType, setEditorValueType] = React.useState('html');
+  const [editorValueType, setEditorValueType] = React.useState<'html' | 'markdown'>('html');
 
-  const valueChanged = React.useCallback((e) => {
+  const valueChanged = React.useCallback((e: { value?: string; }) => {
     setValueContent(e.value);
   }, [setValueContent]);
 
-  const valueTypeChanged = React.useCallback((e) => {
-    setEditorValueType(e.addedItems[0].text.toLowerCase());
+  const valueTypeChanged = React.useCallback((e: { addedItems: { text: string; }[]; }) => {
+    const newEditorValue = e.addedItems[0].text.toLowerCase() as 'html' | 'markdown';
+    setEditorValueType(newEditorValue);
   }, [setEditorValueType]);
 
   const prettierFormat = React.useCallback((text) => {

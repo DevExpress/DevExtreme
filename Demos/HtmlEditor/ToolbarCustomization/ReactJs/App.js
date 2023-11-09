@@ -5,37 +5,44 @@ import { markup } from './data.js';
 
 const headerValues = [false, 1, 2, 3, 4, 5];
 const headerOptions = { inputAttr: { 'aria-label': 'Header' } };
-
 export default function App() {
   const [value, setValue] = React.useState(markup);
   const [popupVisible, setPopupVisible] = React.useState(false);
-
-  const getToolbarButtonOptions = React.useCallback(() => ({
-    text: 'Show markup',
-    stylingMode: 'text',
-    onClick: customButtonClick,
-  }), [customButtonClick]);
-
-  const valueChanged = React.useCallback((e) => {
-    setValue(e.value);
-  }, [setValue]);
-
-  const popupHiding = React.useCallback(() => {
-    setPopupVisible(false);
-  }, [setPopupVisible]);
-
   const customButtonClick = React.useCallback(() => {
     setPopupVisible(true);
   }, [setPopupVisible]);
-
+  const getToolbarButtonOptions = React.useCallback(
+    () => ({
+      text: 'Show markup',
+      stylingMode: 'text',
+      onClick: customButtonClick,
+    }),
+    [customButtonClick],
+  );
+  const valueChanged = React.useCallback(
+    (e) => {
+      setValue(e.value);
+    },
+    [setValue],
+  );
+  const popupHiding = React.useCallback(() => {
+    setPopupVisible(false);
+  }, [setPopupVisible]);
   return (
     <div className="widget-container">
-      <HtmlEditor value={value} onValueChanged={valueChanged}>
+      <HtmlEditor
+        value={value}
+        onValueChanged={valueChanged}
+      >
         <Toolbar>
           <Item name="undo" />
           <Item name="redo" />
           <Item name="separator" />
-          <Item name="header" acceptedValues={headerValues} options={headerOptions} />
+          <Item
+            name="header"
+            acceptedValues={headerValues}
+            options={headerOptions}
+          />
           <Item name="separator" />
           <Item name="bold" />
           <Item name="italic" />
@@ -47,10 +54,18 @@ export default function App() {
           <Item name="alignRight" />
           <Item name="alignJustify" />
           <Item name="separator" />
-          <Item widget="dxButton" options={getToolbarButtonOptions()} />
+          <Item
+            widget="dxButton"
+            options={getToolbarButtonOptions()}
+          />
         </Toolbar>
       </HtmlEditor>
-      <Popup showTitle={true} title="Markup" visible={popupVisible} onHiding={popupHiding}>
+      <Popup
+        showTitle={true}
+        title="Markup"
+        visible={popupVisible}
+        onHiding={popupHiding}
+      >
         {value}
       </Popup>
     </div>
