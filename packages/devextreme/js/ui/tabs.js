@@ -742,6 +742,16 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleIndicatorPositionClass(args.value);
                 break;
             }
+            case 'selectedIndex': {
+                this.callBase(args);
+
+                if(this.option('focusStateEnabled')) {
+                    const selectedItem = this._itemElements().eq(args.value);
+
+                    this.option({ focusedElement: selectedItem });
+                }
+                break;
+            }
             default:
                 this.callBase(args);
         }

@@ -44,10 +44,6 @@
     }
   }
 
-  &.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
-  }
-
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
@@ -93,6 +89,12 @@
   .dx-tabs-item-badge {
     min-width: $fluent-badge-min-size;
     min-height: $fluent-badge-min-size;
+  }
+}
+
+.dx-tabs.dx-state-focused {
+  .dx-tab.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
   }
 }
 
