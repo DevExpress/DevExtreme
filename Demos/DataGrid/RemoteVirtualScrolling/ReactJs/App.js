@@ -31,7 +31,7 @@ const App = () => (
 
     <Column
       dataField="Id"
-      width={75}
+      width={90}
     />
     <Column
       dataField="StoreName"
@@ -52,7 +52,7 @@ const App = () => (
       caption="Date"
       dataType="date"
       format="yyyy-MM-dd"
-      width={100}
+      width={110}
     />
     <Column
       dataField="SalesAmount"

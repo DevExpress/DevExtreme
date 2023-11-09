@@ -22,7 +22,7 @@ $(() => {
     showBorders: true,
     columns: [{
       dataField: 'Id',
-      width: 75,
+      width: 90,
     }, {
       caption: 'Store',
       dataField: 'StoreName',
@@ -39,7 +39,7 @@ $(() => {
       dataField: 'DateKey',
       dataType: 'date',
       format: 'yyyy-MM-dd',
-      width: 100,
+      width: 110,
     }, {
       caption: 'Amount',
       dataField: 'SalesAmount',

@@ -23,11 +23,11 @@ const App = () => (
       <Search enabled={true} />
     </HeaderFilter>
 
-    <Column dataField="Id" width={75} />
+    <Column dataField="Id" width={90} />
     <Column dataField="StoreName" caption="Store" width={150} />
     <Column dataField="ProductCategoryName" caption="Category" width={120} />
     <Column dataField="ProductName" caption="Product" />
-    <Column dataField="DateKey" caption="Date" dataType="date" format="yyyy-MM-dd" width={100} />
+    <Column dataField="DateKey" caption="Date" dataType="date" format="yyyy-MM-dd" width={110} />
     <Column dataField="SalesAmount" caption="Amount" format="currency" width={100}>
       <HeaderFilter groupInterval={1000} />
     </Column>

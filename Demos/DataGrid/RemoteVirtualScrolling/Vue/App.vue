@@ -21,7 +21,7 @@
 
     <DxColumn
       data-field="Id"
-      width="75"
+      width="90"
     />
     <DxColumn
       data-field="StoreName"
@@ -42,7 +42,7 @@
       caption="Date"
       data-type="date"
       format="yyyy-MM-dd"
-      width="100"
+      width="110"
     />
     <DxColumn
       data-field="SalesAmount"
