@@ -76,6 +76,7 @@ class TextEditorLabel {
 
         eventsEngine.off(this._$labelSpan, clickEventName);
         eventsEngine.off(this._$labelSpan, hoverStartEventName);
+        eventsEngine.off(this._$labelSpan, activeEventName);
 
         if(this._isVisible() && this._isOutsideMode()) {
             eventsEngine.on(this._$labelSpan, clickEventName, (e) => {
@@ -149,7 +150,9 @@ class TextEditorLabel {
         if(this._isVisible() && this._isOutsideMode()) {
             const sign = this._props.rtlEnabled ? 1 : -1;
 
-            this._$labelSpan.css('transform', 'translateX(' + sign * (getWidth(this._$before) + offset) + 'px)');
+            const labelTranslateX = sign * (getWidth(this._$before) + offset);
+
+            this._$labelSpan.css('transform', `translateX(${labelTranslateX}px)`);
         }
     }
 
