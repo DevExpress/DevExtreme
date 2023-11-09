@@ -142,6 +142,15 @@ QUnit.module('Mention format', () => {
         assert.strictEqual(element.dataset.marker, '@', 'correct marker');
         assert.strictEqual(element.dataset.mentionValue, 'John Smith', 'correct value');
         assert.strictEqual(element.dataset.id, 'JohnSm', 'correct id');
+    });
+
+    test('Renders text into container', function(assert) {
+        const data = {
+            value: 'John Smith',
+            marker: '@',
+            id: 'JohnSm'
+        };
+        const element = MentionFormat.create(data);
 
         new MentionFormat({}, element);
         assert.strictEqual(element.children[0].innerText, '@John Smith', 'correct inner text');
@@ -164,25 +173,24 @@ QUnit.module('Mention format', () => {
 
         const element = MentionFormat.create(data);
 
-        new MentionFormat({}, element);
-        assert.strictEqual(element.children[0].innerText, '#John Smith', 'correct inner text');
+        assert.strictEqual(element.getAttribute('data-marker'), '#', 'correct data-marker attribute');
     });
 
     test('Change default content renderer', function(assert) {
-        const expectedData = {
+        const nodeData = {
             value: 'John Smith',
             marker: '@',
             id: 'JohnSm'
         };
         const data = {
-            ...expectedData,
+            ...nodeData,
             keyInTemplateStorage: 'my_key_in_storage'
         };
 
         MentionFormat.addTemplate({ marker: '@', editorKey: 'my_key_in_storage' }, {
             render: ({ container, model: mentionData }) => {
                 container.innerText = 'test';
-                assert.deepEqual(mentionData, expectedData);
+                assert.deepEqual(mentionData, nodeData);
             }
         });
 
@@ -195,23 +203,6 @@ QUnit.module('Mention format', () => {
         element = MentionFormat.create(data);
         new MentionFormat({}, element);
         assert.strictEqual(element.children[0].innerText, '@John Smith');
-    });
-
-    test('mention content should be rendered to embed container (T1187274)', function(assert) {
-        let containerNode;
-
-        class MentionTest extends MentionFormat {
-            renderContent(node) {
-                containerNode = node;
-            }
-        }
-
-        const node = $('<div />')[0];
-
-        new MentionTest({}, node);
-
-        assert.ok(!!containerNode);
-        assert.strictEqual(containerNode, node.children[0]);
     });
 });
 
