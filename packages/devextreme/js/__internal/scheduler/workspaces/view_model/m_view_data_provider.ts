@@ -175,8 +175,8 @@ export default class ViewDataProvider {
     return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
-  findCellPositionInMap(cellInfo) {
-    return this._groupedDataMapProvider.findCellPositionInMap(cellInfo);
+  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): any {
+    return this._groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 
   hasAllDayPanel() {
