@@ -31,7 +31,7 @@
     />
   </DxGantt>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxGantt,
   DxTasks,
@@ -39,26 +39,11 @@ import {
   DxValidation,
   DxStripLine,
 } from 'devextreme-vue/gantt';
-
 import {
   tasks,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxColumn,
-    DxValidation,
-    DxStripLine,
-  },
-  data() {
-    return {
-      tasks,
-      currentTime: new Date(),
-    };
-  },
-};
+const currentTime = new Date();
 </script>
 <style>
   .dx-gantt .dx-gantt-tm.current-time {

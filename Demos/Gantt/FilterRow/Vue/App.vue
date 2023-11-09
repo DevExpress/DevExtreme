@@ -29,7 +29,7 @@
     <DxFilterRow :visible="true"/>
   </DxGantt>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxGantt,
   DxTasks,
@@ -40,37 +40,10 @@ import {
   DxEditing,
   DxFilterRow,
 } from 'devextreme-vue/gantt';
-
 import {
   tasks,
   dependencies,
   resources,
   resourceAssignments,
 } from './data.js';
-
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxFilterRow,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-    };
-  },
-};
 </script>
-<style>
-  #gantt {
-    height: 700px;
-  }
-</style>

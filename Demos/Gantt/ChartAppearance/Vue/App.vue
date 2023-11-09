@@ -130,7 +130,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxGantt,
   DxTasks,
@@ -143,7 +144,6 @@ import {
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
-
 import {
   tasks,
   dependencies,
@@ -151,47 +151,20 @@ import {
   resourceAssignments,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxCheckBox,
-    DxSelectBox,
-    DxDateBox,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-      scaleType: 'months',
-      taskTitlePosition: 'outside',
-      showResources: true,
-      showDependencies: true,
-      showCustomTaskTooltip: true,
-      startDateRange: new Date(2018, 11, 1),
-      endDateRange: new Date(2019, 11, 1),
-    };
-  },
-  methods: {
-    getTimeEstimate(task) {
-      return Math.abs(task.start - task.end) / 36e5;
-    },
-    getTimeLeft(task) {
-      const timeEstimate = Math.abs(task.start - task.end) / 36e5;
-      return Math.floor(((100 - task.progress) / 100) * timeEstimate);
-    },
-    getTime(date) {
-      return date.toLocaleString();
-    },
-  },
-};
+const scaleType = ref('months');
+const taskTitlePosition = ref('outside');
+const showResources = ref(true);
+const showDependencies = ref(true);
+const showCustomTaskTooltip = ref(true);
+const startDateRange = ref(new Date(2018, 11, 1));
+const endDateRange = ref(new Date(2019, 11, 1));
+
+const getTime = (date) => date.toLocaleString();
+const getTimeEstimate = (task) => Math.abs(task.start - task.end) / 36e5;
+function getTimeLeft(task) {
+  const timeEstimate = Math.abs(task.start - task.end) / 36e5;
+  return Math.floor(((100 - task.progress) / 100) * timeEstimate);
+}
 </script>
 <style>
   #gantt {

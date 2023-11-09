@@ -56,7 +56,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxGantt,
   DxTasks,
@@ -66,38 +67,16 @@ import {
   DxValidation,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import {
   tasks,
   dependencies,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxColumn,
-    DxEditing,
-    DxValidation,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      autoUpdateParentTasks: true,
-      validateDependencies: true,
-      enablePredecessorGap: true,
-    };
-  },
-};
+const autoUpdateParentTasks = ref(true);
+const validateDependencies = ref(true);
+const enablePredecessorGap = ref(true);
 </script>
 <style>
-  #gantt {
-    height: 700px;
-  }
-
   .options {
     margin-bottom: 20px;
     padding: 20px;

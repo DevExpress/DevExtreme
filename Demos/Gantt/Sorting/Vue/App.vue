@@ -9,7 +9,7 @@
             :items="['single', 'multiple', 'none']"
             v-model:value="sortingMode"
             :input-attr="{ 'aria-label': 'Sorting Mode' }"
-            @value-changed="sortingChanged($event)"
+            @value-changed="sortingChanged()"
           />
         </div>
       </div>
@@ -58,7 +58,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxGantt,
   DxTasks,
@@ -71,7 +72,6 @@ import {
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import {
   tasks,
   dependencies,
@@ -79,42 +79,15 @@ import {
   resourceAssignments,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxCheckBox,
-    DxSelectBox,
-    DxSorting,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-      sortingMode: 'single',
-      showSortIndexes: false,
-      showSortIndexesDisabled: true,
-    };
-  },
-  methods: {
-    sortingChanged() {
-      this.showSortIndexesDisabled = this.sortingMode !== 'multiple';
-    },
-  },
-};
+const sortingMode = ref('single');
+const showSortIndexes = ref(false);
+const showSortIndexesDisabled = ref(true);
+
+function sortingChanged() {
+  showSortIndexesDisabled.value = sortingMode.value !== 'multiple';
+}
 </script>
 <style>
-  #gantt {
-    height: 700px;
-  }
-
   .options {
     margin-bottom: 20px;
     padding: 20px;

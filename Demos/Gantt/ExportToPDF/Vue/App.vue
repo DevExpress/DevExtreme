@@ -1,7 +1,7 @@
 <template>
   <div>
     <DxGantt
-      :ref="ganttRef"
+      ref="ganttRef"
       :task-list-width="500"
       :height="700"
       scale-type="weeks"
@@ -144,7 +144,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxGantt,
   DxTasks,
@@ -156,16 +157,13 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/gantt';
-
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
-
 import {
   tasks,
   dependencies,
@@ -176,108 +174,64 @@ import {
   dateRanges,
 } from './data.js';
 
-const ganttRef = 'gantt';
+const ganttRef = ref();
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxToolbar,
-    DxItem,
-    DxCheckBox,
-    DxNumberBox,
-    DxDateBox,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      ganttRef,
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-      exportButtonOptions: {
-        hint: 'Export to PDF',
-        icon: 'exportpdf',
-        stylingMode: 'text',
-        onClick: () => {
-          this.exportGantt();
-        },
-      },
-      formats,
-      exportModes,
-      dateRanges,
-
-      dateRangeBoxRefName: 'date-range-box',
-
-      formatBoxValue: null,
-      exportModeBoxValue: null,
-      dateRangeBoxValue: null,
-      landscapeCheckBoxValue: true,
-
-      startTaskIndex: 0,
-      endTaskIndex: 3,
-      startDate: null,
-      endDate: null,
-
-      customRangeDisabled: true,
-    };
-  },
-  computed: {
-    gantt() {
-      return this.$refs[ganttRef].instance;
-    },
-  },
-  created() {
-    this.formatBoxValue = formats[0];
-    this.exportModeBoxValue = exportModes[0];
-    this.dateRangeBoxValue = dateRanges[1];
-    this.startDate = tasks[0].start;
-    this.endDate = tasks[0].end;
-  },
-  methods: {
-    exportGantt() {
-      const format = this.formatBoxValue.toLowerCase();
-      const isLandscape = this.landscapeCheckBoxValue;
-      const exportMode = this.exportModeBoxValue === 'Tree List' ? 'treeList' : this.exportModeBoxValue.toLowerCase();
-      const dataRangeMode = this.dateRangeBoxValue.toLowerCase();
-      let dataRange;
-      if (dataRangeMode === 'custom') {
-        dataRange = {
-          startIndex: this.startTaskIndex,
-          endIndex: this.endTaskIndex,
-          startDate: this.startDate,
-          endDate: this.endDate,
-        };
-      } else {
-        dataRange = dataRangeMode;
-      }
-      exportGanttToPdf({
-        component: this.gantt,
-        // eslint-disable-next-line new-cap
-        createDocumentMethod: (args) => new jsPDF(args),
-        format,
-        landscape: isLandscape,
-        exportMode,
-        dateRange: dataRange,
-      }).then((doc) => doc.save('gantt.pdf'));
-    },
-    dateRangeBoxSelectionChanged(e) {
-      this.customRangeDisabled = e.value !== 'Custom';
-    },
-    startTaskIndexChanged(e) {
-      this.startTaskIndex = e.value;
-    },
-    endTaskIndexChanged(e) {
-      this.endTaskIndex = e.value;
-    },
+const exportButtonOptions = {
+  hint: 'Export to PDF',
+  icon: 'exportpdf',
+  stylingMode: 'text',
+  onClick: () => {
+    exportGantt();
   },
 };
+const formatBoxValue = ref(formats[0]);
+const exportModeBoxValue = ref(exportModes[0]);
+const dateRangeBoxValue = ref(dateRanges[1]);
+const landscapeCheckBoxValue = ref(true);
+const startTaskIndex = ref(0);
+const endTaskIndex = ref(3);
+const startDate = ref(tasks[0].start);
+const endDate = ref(tasks[0].end);
+const customRangeDisabled = ref(true);
+
+async function exportGantt() {
+  const format = formatBoxValue.value.toLowerCase();
+  const isLandscape = landscapeCheckBoxValue.value;
+  const exportMode = exportModeBoxValue.value === 'Tree List' ? 'treeList' : exportModeBoxValue.value.toLowerCase();
+  const dataRangeMode = dateRangeBoxValue.value.toLowerCase();
+  let dataRange;
+  if (dataRangeMode === 'custom') {
+    dataRange = {
+      startIndex: startTaskIndex.value,
+      endIndex: endTaskIndex.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+    };
+  } else {
+    dataRange = dataRangeMode;
+  }
+  const doc = await exportGanttToPdf({
+    component: ganttRef.value.instance,
+    // eslint-disable-next-line new-cap
+    createDocumentMethod: (args) => new jsPDF(args),
+    format,
+    landscape: isLandscape,
+    exportMode,
+    dateRange: dataRange,
+  });
+
+  doc.save('gantt.pdf');
+}
+function dateRangeBoxSelectionChanged(e) {
+  customRangeDisabled.value = e.value !== 'Custom';
+}
+function startTaskIndexChanged(e) {
+  startTaskIndex.value = e.value;
+}
+function endTaskIndexChanged(e) {
+  endTaskIndex.value = e.value;
+}
+
 </script>
 <style>
   #gantt {

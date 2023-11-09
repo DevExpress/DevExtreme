@@ -27,7 +27,7 @@
         :on-context-menu-preparing="onContextMenuPreparing"
       >
         <DxContextMenu
-          :items="contextMenuItems"
+          :items="contextMenuActualItems"
         />
 
         <DxTasks :data-source="tasks"/>
@@ -54,7 +54,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxGantt,
   DxTasks,
@@ -66,7 +67,6 @@ import {
   DxContextMenu,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import {
   tasks,
   dependencies,
@@ -74,57 +74,33 @@ import {
   resourceAssignments,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxCheckBox,
-    DxContextMenu,
+const showResources = ref(true);
+const disableContextMenu = ref(false);
+const contextMenuItems = [
+  'addTask',
+  'taskdetails',
+  'deleteTask',
+  {
+    name: 'ToggleDisplayOfResources',
+    text: 'Toggle Display of Resources',
   },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-      showResources: true,
-      disableContextMenu: false,
-      contextMenuItems: this.getContextMenuItems(),
-    };
-  },
-  methods: {
-    onContextMenuPreparing(e) {
-      e.cancel = this.disableContextMenu;
-    },
-    onCustomizeContextMenu(e) {
-      this.contextMenuItems = e.value ? this.getContextMenuItems() : null;
-    },
-    onPreventContextMenuShowing(e) {
-      this.disableContextMenu = e.value;
-    },
-    onCustomCommandClick(e) {
-      if (e.name === 'ToggleDisplayOfResources') {
-        this.showResources = !this.showResources;
-      }
-    },
-    getContextMenuItems() {
-      return [
-        'addTask',
-        'taskdetails',
-        'deleteTask',
-        {
-          name: 'ToggleDisplayOfResources',
-          text: 'Toggle Display of Resources',
-        },
-      ];
-    },
-  },
-};
+];
+const contextMenuActualItems = ref(contextMenuItems);
+
+function onContextMenuPreparing(e) {
+  e.cancel = disableContextMenu.value;
+}
+function onCustomizeContextMenu(e) {
+  contextMenuActualItems.value = e.value ? contextMenuItems : null;
+}
+function onPreventContextMenuShowing(e) {
+  disableContextMenu.value = e.value;
+}
+function onCustomCommandClick(e) {
+  if (e.name === 'ToggleDisplayOfResources') {
+    showResources.value = !showResources.value;
+  }
+}
 </script>
 <style>
   #gantt {

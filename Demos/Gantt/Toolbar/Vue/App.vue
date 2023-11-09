@@ -69,7 +69,8 @@
     </DxPopup>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxGantt,
   DxTasks,
@@ -82,7 +83,6 @@ import {
   DxItem,
 } from 'devextreme-vue/gantt';
 import { DxPopup } from 'devextreme-vue/popup';
-
 import {
   tasks,
   dependencies,
@@ -90,35 +90,13 @@ import {
   resourceAssignments,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxToolbar,
-    DxItem,
-    DxPopup,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-      popupVisible: false,
-      aboutButtonOptions: {
-        text: 'About',
-        icon: 'info',
-        stylingMode: 'text',
-        onClick: () => {
-          this.popupVisible = true;
-        },
-      },
-    };
+const popupVisible = ref(false);
+const aboutButtonOptions = {
+  text: 'About',
+  icon: 'info',
+  stylingMode: 'text',
+  onClick: () => {
+    popupVisible.value = true;
   },
 };
 </script>

@@ -54,7 +54,7 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxGantt,
   DxTasks,
@@ -64,7 +64,6 @@ import {
   DxColumn,
   DxEditing,
 } from 'devextreme-vue/gantt';
-
 import {
   tasks,
   dependencies,
@@ -72,37 +71,11 @@ import {
   resourceAssignments,
 } from './data.js';
 
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-    };
-  },
-  methods: {
-    getImagePath(taskId) {
-      const imgPath = '../../../../images/employees';
-      let img = taskId < 10 ? `0${taskId}` : taskId;
-      img = `${imgPath}/${img}.png`;
-      return img;
-    },
-    getTaskColor(taskId) {
-      const color = taskId % 6;
-      return `custom-task-color-${color}`;
-    },
-  },
-};
+const getTaskColor = (taskId) => `custom-task-color-${taskId % 6}`;
+function getImagePath(taskId) {
+  const img = taskId < 10 ? `0${taskId}` : taskId;
+  return `../../../../images/employees/${img}.png`;
+}
 </script>
 <style>
 #gantt {

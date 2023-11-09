@@ -42,7 +42,7 @@
     />
   </DxGantt>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxGantt,
   DxTasks,
@@ -55,36 +55,12 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/gantt';
-
 import {
   tasks,
   dependencies,
   resources,
   resourceAssignments,
 } from './data.js';
-
-export default {
-  components: {
-    DxGantt,
-    DxTasks,
-    DxDependencies,
-    DxResources,
-    DxResourceAssignments,
-    DxColumn,
-    DxEditing,
-    DxValidation,
-    DxToolbar,
-    DxItem,
-  },
-  data() {
-    return {
-      tasks,
-      dependencies,
-      resources,
-      resourceAssignments,
-    };
-  },
-};
 </script>
 <style>
   #gantt {
