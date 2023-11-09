@@ -130,7 +130,6 @@ export const custom = function(options) {
         onHidden: function({ element }) {
             $(element).remove();
         },
-        toolbarItems: popupToolbarItems,
         animation: {
             show: {
                 type: 'pop',
@@ -172,6 +171,8 @@ export const custom = function(options) {
             })
         });
     });
+
+    popupInstance.option('toolbarItems', popupToolbarItems);
 
     popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 
