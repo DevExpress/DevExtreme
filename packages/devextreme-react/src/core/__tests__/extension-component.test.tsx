@@ -13,7 +13,7 @@ import { IHtmlOptions } from '../component-base';
 
 const ExtensionWidgetClass = jest.fn<typeof Widget, any[]>(() => Widget);
 
-class TestExtensionComponent<P = any> extends ExtensionComponent<P> {
+class TestExtensionComponent<P extends HTMLElement = HTMLElement> extends ExtensionComponent<P> {
   constructor(props: P) {
     super(props as P & IHtmlOptions);
 
