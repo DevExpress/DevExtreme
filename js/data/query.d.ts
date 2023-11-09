@@ -5,6 +5,7 @@ import {
 /**
  * @docid
  * @type object
+ * @public
  */
 export interface Query {
     /**
