@@ -16,6 +16,7 @@ $fluent-slider-handle-height: null !default;
 $fluent-slider-handle-inner-size: null !default; // 12px !default;
 $fluent-slider-handle-inner-border-width: 1px !default;
 $fluent-slider-handle-inner-disabled-size: 2px !default;
+$fluent-slider-tooltip-popup-content-padding: null !default;
 
 @if $size == "default" {
   $fluent-slider-track-height: 4px !default;
@@ -25,6 +26,7 @@ $fluent-slider-handle-inner-disabled-size: 2px !default;
   $fluent-slider-wrapper-height: 32px !default;
   $fluent-slider-tooltip-width: 34px !default;
   $fluent-slider-top-tooltip-margin: -5px !default;
+  $fluent-slider-tooltip-popup-content-padding: 7px 11px !default;
 }
 
 @else if $size == "compact" {
@@ -35,4 +37,5 @@ $fluent-slider-handle-inner-disabled-size: 2px !default;
   $fluent-slider-wrapper-height: 26px !default;
   $fluent-slider-tooltip-width: 28px !default;
   $fluent-slider-top-tooltip-margin: -2px !default;
+  $fluent-slider-tooltip-popup-content-padding: 3px 5px !default;
 }
