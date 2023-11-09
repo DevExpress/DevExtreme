@@ -8,11 +8,13 @@ const { test } = QUnit;
 
 QUnit.module('Strategy selection', () => {
     test('Use strategy from GlobalConfig', function(assert) {
+        // @ts-ignore
         GlobalConfig({ pointerEventStrategy: 'mouse-and-touch' });
 
         const strategy = getStrategy({}, {}, {});
 
         assert.strictEqual(strategy, MouseAndTouchStrategy);
+        // @ts-ignore
         GlobalConfig({ pointerEventStrategy: null });
     });
 
