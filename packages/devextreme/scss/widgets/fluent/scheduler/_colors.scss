@@ -88,14 +88,20 @@ $agenda-appointment-hover-bg: $base-hover-bg !default;
 $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 $agenda-appointment-text-color: $base-text-color !default;
 
+$header-panel-cell-date: null !default;
+
 @if $mode == "light" {
   $scheduler-appointment-base-color: lighten($base-accent, 48%) !default;
   $scheduler-appointment-text-color: #000 !default;
+  $scheduler-panel-text-color: #707070;
+  $header-panel-cell-date: #424242;
 }
 
 @if $mode == "dark" {
   $scheduler-appointment-base-color: darken($base-accent, 48%) !default;
   $scheduler-appointment-text-color: #fff !default;
+  $scheduler-panel-text-color: #999;
+  $header-panel-cell-date: #adadad;
 }
 
 $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;

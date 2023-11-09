@@ -4,6 +4,7 @@ import RangeCalendarStrategy from './strategy/rangeCalendar';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { getDeserializedDate, monthDifference } from './ui.date_range.utils';
+import { getWidth } from '../../core/utils/size';
 
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 class MultiselectDateBox extends DateBox {
@@ -183,6 +184,18 @@ class MultiselectDateBox extends DateBox {
         const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
 
         return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
+    }
+
+    _updateLabelWidth() {
+        const $beforeButtonsContainer = this._strategy.dateRangeBox._$beforeButtonsContainer;
+        const { labelMode } = this.option();
+
+        if(labelMode === 'outside' && $beforeButtonsContainer && this._isStartDateBox()) {
+            this._label._updateLabelTransform(getWidth($beforeButtonsContainer));
+            return;
+        }
+
+        super._updateLabelWidth();
     }
 
     _optionChanged(args) {

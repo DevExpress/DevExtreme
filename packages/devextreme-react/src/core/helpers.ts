@@ -1,9 +1,18 @@
+/* eslint-disable max-classes-per-file, no-restricted-syntax */
+import { createContext } from 'react';
+import { TemplateInstantiationModel, UpdateLocker } from './types';
+
+export const RemovalLockerContext = createContext<UpdateLocker>({
+  lock: () => undefined,
+  unlock: () => undefined,
+});
+
 export function generateID(): string {
-  return Math.random().toString(36).substr(2);
+  return Math.random().toString(36).substring(2);
 }
 
 export class DoubleKeyMap<TKey1, TKey2, TValue> {
-  private readonly _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
+  private _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
 
   public set({ key1, key2 }: { key1: TKey1; key2: TKey2 }, value: TValue): void {
     let innerMap = this._map.get(key1);
@@ -31,7 +40,28 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
       this._map.delete(key1);
     }
   }
+
+  public get empty(): boolean {
+    return this._map.size === 0;
+  }
+
+  public shallowCopy(): DoubleKeyMap<TKey1, TKey2, TValue> {
+    const copy = new DoubleKeyMap<TKey1, TKey2, TValue>();
+
+    copy._map = this._map;
+    return copy;
+  }
+
+  * [Symbol.iterator](): Generator<[{ key1: TKey1; key2: TKey2 }, TValue]> {
+    for (const [key1, innerMap] of this._map) {
+      for (const [key2, value] of innerMap) {
+        yield [{ key1, key2 }, value];
+      }
+    }
+  }
 }
+
+export class TemplateInstantiationModels extends DoubleKeyMap<any, HTMLElement, TemplateInstantiationModel> {}
 
 export function capitalizeFirstLetter(text: string): string {
   if (text.length) {

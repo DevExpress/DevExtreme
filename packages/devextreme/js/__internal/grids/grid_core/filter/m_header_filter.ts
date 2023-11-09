@@ -304,9 +304,8 @@ const HeaderFilterController = modules.ViewController.inherit((function () {
       if (column) {
         const visibleIndex = columnsController.getVisibleIndex(columnIndex);
         const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
-
-        // eslint-disable-next-line no-var, vars-on-top
-        var $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
+        const $columnElement = view.getColumnElements()
+          .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
         this.showHeaderFilterMenuBase({
           columnElement: $columnElement,
@@ -420,15 +419,20 @@ const ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
 
   _columnOptionChanged(e) {
     const { optionNames } = e;
+    const isFilterRowAndHeaderFilterValuesChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterValue']);
+    const isHeaderFilterValuesAndTypeChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType']);
 
-    if (gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType'])) {
-      if (this._needUpdateFilterIndicators()) {
-        this._updateHeaderFilterIndicators();
-      }
-      return;
+    const shouldUpdateFilterIndicators = (
+      isFilterRowAndHeaderFilterValuesChanged || isHeaderFilterValuesAndTypeChanged
+    ) && this._needUpdateFilterIndicators();
+
+    if (shouldUpdateFilterIndicators) {
+      this._updateHeaderFilterIndicators();
     }
 
-    this.callBase(e);
+    if (!isHeaderFilterValuesAndTypeChanged) {
+      this.callBase(e);
+    }
   },
 });
 

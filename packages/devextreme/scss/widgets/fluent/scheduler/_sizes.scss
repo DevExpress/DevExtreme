@@ -2,7 +2,6 @@
 @use "../button/colors" as *;
 @use "../toolbar/sizes" as *;
 
-// adduse
 
 $fluent-scheduler-workspace-date-table-cell-height: null !default;
 $fluent-scheduler-toolbar-item-offset: null !default;
@@ -11,7 +10,6 @@ $fluent-scheduler-header-panel-day-font-size: null !default;
 $fluent-scheduler-appointment-tooltip-title-font-size: null !default;
 $fluent-scheduler-appointment-tooltip-date-font-size: null !default;
 $fluent-scheduler-workspace-month-cell-left-offset: null !default;
-$fluent-scheduler-header-panel-table-cell-height: null !default;
 $fluent-scheduler-appointment-content-padding: null !default;
 $fluent-scheduler-dropdown-appointment-margin-top: null !default;
 $fluent-scheduler-dropdown-button-height: null !default;
@@ -24,7 +22,13 @@ $fluent-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
 $scheduler-left-column-width: 65px !default;
 $fluent-scheduler-timeline-date-table-cell-height: 50px !default;
-$fluent-scheduler-border-radius: 0 !default;
+
+/**
+* $name 15. Border radius
+* $type text
+*/
+$scheduler-border-radius: 0 !default;
+
 $fluent-scheduler-navigator-border-radius: $button-border-radius !default;
 $fluent-scheduler-navigation-buttons-padding: 6px !default;
 $fluent-scheduler-navigator-icon-font-size: $fluent-base-icon-size;
@@ -47,8 +51,19 @@ $fluent-scheduler-header-height: $fluent-toolbar-height + 2px !default;
 
 $scheduler-timeline-cell-height: 50px !default;
 
+$header-day-element-height: null !default;
+
+$fluent-scheduler-collapsed-all-day-table-cell-height: null !default;
+
+$header-panel-time-cell-height: 32px !default;
+$header-panel-time-cell-padding: null !default;
+
 
 @if $size == "default" {
+  $fluent-scheduler-collapsed-all-day-table-cell-height: 32px !default;
+  $header-panel-time-cell-padding: 12px !default;
+
+  $header-day-element-height: 26px;
   $fluent-scheduler-workspace-date-table-cell-height: 38px !default;
 
   $fluent-scheduler-toolbar-item-offset: 0 12px !default;
@@ -59,8 +74,6 @@ $scheduler-timeline-cell-height: 50px !default;
   $fluent-scheduler-appointment-tooltip-date-font-size: 14px !default;
   $fluent-scheduler-workspace-month-cell-left-offset: 8px !default;
 
-
-  $fluent-scheduler-header-panel-table-cell-height: 56px !default;
   $fluent-scheduler-appointment-content-padding: 6px 8px 6px 12px !default;
   $fluent-scheduler-dropdown-appointment-margin-top: 7px !default;
   $fluent-scheduler-dropdown-button-height: 22px !default;
@@ -76,18 +89,20 @@ $scheduler-timeline-cell-height: 50px !default;
 }
 
 @else if $size == "compact" {
+  $fluent-scheduler-collapsed-all-day-table-cell-height: 24px !default;
+  $header-panel-time-cell-padding: 8px !default;
+
+  $header-day-element-height: 24px;
   $fluent-scheduler-workspace-date-table-cell-height: 28px !default;
 
   $fluent-scheduler-toolbar-item-offset: 0 8px !default;
   $fluent-scheduler-navigator-height: 28px !default;
-  $fluent-scheduler-header-panel-day-font-size: 20px !default;
+  $fluent-scheduler-header-panel-day-font-size: 14px !default;
 
   $fluent-scheduler-appointment-tooltip-title-font-size: 14px !default;
   $fluent-scheduler-appointment-tooltip-date-font-size: 11px !default;
   $fluent-scheduler-workspace-month-cell-left-offset: 4px !default;
 
-
-  $fluent-scheduler-header-panel-table-cell-height: 40px !default;
   $fluent-scheduler-appointment-content-padding: 4px 6px 4px 8px !default;
   $fluent-scheduler-dropdown-appointment-margin-top: 3px !default;
   $fluent-scheduler-dropdown-button-height: 18px !default;

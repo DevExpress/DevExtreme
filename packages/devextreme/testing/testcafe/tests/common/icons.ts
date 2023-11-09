@@ -238,6 +238,7 @@ const iconSet = {
   imgarunlock: '\f157',
   bell: '\f158',
   sun: '\f159',
+  arrowback: '\f15a',
   taskcomplete: '\f15b',
   taskrejected: '\f15c',
   taskinprogress: '\f15d',
@@ -257,7 +258,11 @@ const iconSet = {
   description: '\f171',
   belloutline: '\f172',
   to: '\f173',
-  arrowback: '\f15a',
+  errorcircle: '\f174',
+  datatrending: '\f175',
+  dataarea: '\f176',
+  datausage: '\f177',
+  datapie: '\f178',
 };
 
 fixture.disablePageReloads`Icons`
