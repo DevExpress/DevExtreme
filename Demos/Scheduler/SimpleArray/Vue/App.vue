@@ -10,10 +10,10 @@
   />
 </template>
 <script setup lang="ts">
-import DxScheduler from 'devextreme-vue/scheduler';
-import { data } from './data.js';
+import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { data } from './data.ts';
 
-const views = ['week', 'month'];
+const views: DxSchedulerTypes.ViewType[] = ['week', 'month'];
 const currentDate = new Date(2021, 2, 28);
 const dataSource = data;
 </script>

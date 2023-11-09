@@ -15,15 +15,13 @@
 </template>
 <script setup lang="ts">
 import Query from 'devextreme/data/query';
-import { moviesData } from './data.js';
+import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { moviesData } from './data.ts';
 
-const props = withDefaults(defineProps<{
-  scheduler?: any
-  templateTooltipModel?: any
-}>(), {
-  scheduler: () => { },
-  templateTooltipModel: () => { },
-});
+const props = defineProps<{
+  scheduler?: DxScheduler['instance']
+  templateTooltipModel?: DxSchedulerTypes.AppointmentTooltipTemplateData
+}>();
 
 const getMovieById = function(resourceId) {
   return Query(moviesData)

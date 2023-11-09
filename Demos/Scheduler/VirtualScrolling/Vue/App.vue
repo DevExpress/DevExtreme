@@ -35,7 +35,7 @@
 </template>
 <script setup lang="ts">
 import DxScheduler, { DxResource, DxView, DxScrolling } from 'devextreme-vue/scheduler';
-import { resources, generateAppointments } from './data.js';
+import { resources, generateAppointments } from './data.ts';
 
 const dataSource = generateAppointments(new Date(2021, 1, 1), new Date(2021, 1, 28), 8, 20);
 const currentDate = new Date(2021, 1, 2);

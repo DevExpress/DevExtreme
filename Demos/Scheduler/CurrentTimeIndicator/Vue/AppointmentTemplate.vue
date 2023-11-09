@@ -7,16 +7,14 @@
 
 <script setup lang="ts">
 import Query from 'devextreme/data/query';
-import { moviesData } from './data.js';
+import { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { moviesData } from './data.ts';
 
-const props = withDefaults(defineProps<{
-  appointmentModel?: {
-    appointmentData?: any
-  }
-}>(), {
-  appointmentModel: () => ({}),
-});
-const getMovieInfo = function(data) {
+const props = defineProps<{
+  appointmentModel: DxSchedulerTypes.AppointmentTemplateData
+}>();
+
+const getMovieInfo = function(data: DxSchedulerTypes.Appointment) {
   return Query(moviesData)
     .filter(['id', data.movieId])
     .toArray()[0] || {};

@@ -1,4 +1,8 @@
-export const tasks = [
+export interface Task {
+  text: string;
+}
+
+export const tasks: Task[] = [
   {
     text: 'New Brochures',
   }, {

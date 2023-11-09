@@ -42,17 +42,18 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxAppointmentDragging } from 'devextreme-vue/scheduler';
-import DxDraggable from 'devextreme-vue/draggable';
+import DxScheduler, { DxAppointmentDragging, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxDraggable, { DxDraggableTypes } from 'devextreme-vue/draggable';
 import DxScrollView from 'devextreme-vue/scroll-view';
-import { appointments as appointmentsData, tasks as tasksData } from './data.js';
+import { appointments as appointmentsData, tasks as tasksData, Task } from './data.ts';
 
 const draggingGroupName = ref('appointmentsGroup');
 const views = ref([{ type: 'day', intervalCount: 3 }]);
 const currentDate = ref(new Date(2021, 3, 26));
-const tasks = ref<Array<{text: string}>>(tasksData);
-const appointments = ref<Array<{text: string, startDate: Date, endDate: Date}>>(appointmentsData);
-function onAppointmentRemove({ itemData }) {
+const tasks = ref<Task[]>(tasksData);
+const appointments = ref<DxSchedulerTypes.Appointment[]>(appointmentsData);
+
+function onAppointmentRemove({ itemData }: DxSchedulerTypes.AppointmentDraggingRemoveEvent) {
   const index = appointments.value.indexOf(itemData);
 
   if (index >= 0) {
@@ -61,7 +62,7 @@ function onAppointmentRemove({ itemData }) {
     tasks.value = [...tasks.value, itemData];
   }
 }
-function onAppointmentAdd(e) {
+function onAppointmentAdd(e: DxSchedulerTypes.AppointmentDraggingAddEvent) {
   const index = tasks.value.indexOf(e.fromData);
 
   if (index >= 0) {
@@ -70,13 +71,13 @@ function onAppointmentAdd(e) {
     appointments.value = [...appointments.value, e.itemData];
   }
 }
-function onListDragStart(e) {
+function onListDragStart(e: DxDraggableTypes.DragStartEvent) {
   e.cancel = true;
 }
-function onItemDragStart(e) {
+function onItemDragStart(e: DxDraggableTypes.DragStartEvent) {
   e.itemData = e.fromData;
 }
-function onItemDragEnd(e) {
+function onItemDragEnd(e: DxDraggableTypes.DragEndEvent) {
   if (e.toData) {
     e.cancel = true;
   }

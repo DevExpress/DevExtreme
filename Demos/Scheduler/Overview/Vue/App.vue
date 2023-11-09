@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { DxScheduler, DxResource } from 'devextreme-vue/scheduler';
-import { employees, data } from './data.js';
+import { employees, data } from './data.ts';
 import DataCell from './DataCell.vue';
 import ResourceCell from './ResourceCell.vue';
 

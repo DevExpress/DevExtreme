@@ -62,10 +62,10 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxEditing } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxEditing, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxCheckBox from 'devextreme-vue/check-box';
 import notify from 'devextreme/ui/notify';
-import { data } from './data.js';
+import { data } from './data.ts';
 
 const views = ['day', 'week'];
 const currentDate = new Date(2021, 3, 29);
@@ -79,13 +79,13 @@ const allowDragging = ref(true);
 function showToast(event, value, type) {
   notify(`${event} "${value}" task`, type, 800);
 }
-function showAddedToast(e) {
+function showAddedToast(e: DxSchedulerTypes.AppointmentAddedEvent) {
   showToast('Added', e.appointmentData.text, 'success');
 }
-function showUpdatedToast(e) {
+function showUpdatedToast(e: DxSchedulerTypes.AppointmentUpdatedEvent) {
   showToast('Updated', e.appointmentData.text, 'info');
 }
-function showDeletedToast(e) {
+function showDeletedToast(e: DxSchedulerTypes.AppointmentDeletedEvent) {
   showToast('Deleted', e.appointmentData.text, 'warning');
 }
 </script>

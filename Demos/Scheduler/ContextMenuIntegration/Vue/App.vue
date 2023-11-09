@@ -38,24 +38,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxContextMenu from 'devextreme-vue/context-menu';
 import ItemTemplate from './ItemTemplate.vue';
-import { resourcesData, data } from './data.js';
+import { resourcesData, data } from './data.ts';
 
 const views = ['day', 'month'];
 const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 const currentDate = ref(new Date(2020, 10, 25));
 const dataSource = data;
-const groups = ref<any>(undefined);
+const groups = ref<string[]>(undefined);
 const crossScrollingEnabled = ref(false);
 const disabled = ref(true);
-const contextMenuItems = ref<any[]>([]);
+const contextMenuItems = ref([]);
 const target = ref(appointmentClassName);
 const schedulerRef = ref<DxScheduler>();
 
-function onAppointmentContextMenu({ appointmentData, targetedAppointmentData }) {
+function onAppointmentContextMenu(
+  { appointmentData, targetedAppointmentData }: DxSchedulerTypes.AppointmentContextMenuEvent,
+) {
   const scheduler = schedulerRef.value!.instance!;
   const resourceItems = resourcesData.map((item) => ({
     ...item,
@@ -87,7 +89,7 @@ function onAppointmentContextMenu({ appointmentData, targetedAppointmentData }) 
     ...resourceItems,
   ];
 }
-function onCellContextMenu({ cellData }) {
+function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) {
   const scheduler = schedulerRef.value!.instance!;
   target.value = cellClassName;
   disabled.value = false;

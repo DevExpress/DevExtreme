@@ -26,9 +26,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler from 'devextreme-vue/scheduler';
+import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxRadioGroup } from 'devextreme-vue/radio-group';
-import { data } from './data.js';
+import { data } from './data.ts';
 
 const currentDate = new Date(2021, 2, 28);
 const views = [
@@ -39,6 +39,6 @@ const views = [
   },
   'week',
 ];
-const allDayPanelItems = ['all', 'allDay', 'hidden'];
-const allDayPanelMode = ref('allDay');
+const allDayPanelItems: DxSchedulerTypes.AllDayPanelMode[] = ['all', 'allDay', 'hidden'];
+const allDayPanelMode = ref<DxSchedulerTypes.AllDayPanelMode>('allDay');
 </script>

@@ -30,29 +30,30 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxEditing } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxEditing, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { getTimeZones as getTimeZonesUtility } from 'devextreme/time_zone_utils';
-import { data, locations } from './data.js';
+import DataSource from 'devextreme/data/data_source';
+import { data, locations } from './data.ts';
 
 const views = ['workWeek'];
 const dataSource = data;
 const currentDate = new Date(2021, 3, 27);
 
-const getTimeZones = function(date) {
+const getTimeZones = function(date: Date) {
   const timeZones = getTimeZonesUtility(date);
   return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
 };
 
 const timeZones = ref(getTimeZones(currentDate));
 const currentTimeZone = ref(timeZones.value[0].id);
-function onAppointmentFormOpening(args) {
+function onAppointmentFormOpening(args: DxSchedulerTypes.AppointmentFormOpeningEvent) {
   const { form } = args;
 
   const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
   const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-  const startDateDataSource = startDateTimezoneEditor.option('dataSource');
-  const endDateDataSource = endDateTimezoneEditor.option('dataSource');
+  const startDateDataSource = startDateTimezoneEditor.option('dataSource') as DataSource;
+  const endDateDataSource = endDateTimezoneEditor.option('dataSource') as DataSource;
 
   startDateDataSource.filter(['id', 'contains', 'Europe']);
   endDateDataSource.filter(['id', 'contains', 'Europe']);

@@ -28,7 +28,7 @@
 import { ref } from 'vue';
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 import DxSpeedDialAction from 'devextreme-vue/speed-dial-action';
-import { data, priorities } from './data.js';
+import { data, priorities } from './data.ts';
 
 const views = ['week', 'month'];
 const currentDate = new Date(2021, 2, 25);
@@ -36,6 +36,6 @@ const cellDuration = 30;
 const dataSource = data;
 const schedulerRef = ref<DxScheduler>();
 function showPopup() {
-  schedulerRef.value!.instance!.showAppointmentPopup();
+  schedulerRef.value?.instance?.showAppointmentPopup();
 }
 </script>

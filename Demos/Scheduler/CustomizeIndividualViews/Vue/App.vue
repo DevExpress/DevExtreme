@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import DxScheduler, { DxResource, DxView } from 'devextreme-vue/scheduler';
 import DateCell from './DateCell.vue';
-import { data, priorityData, typeData } from './data.js';
+import { data, priorityData, typeData } from './data.ts';
 
 const dataSource = data;
 const typeGroups = ['typeId'];

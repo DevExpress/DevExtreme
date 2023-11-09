@@ -16,10 +16,10 @@
   </DxScheduler>
 </template>
 <script setup lang="ts">
-import { DxScheduler, DxResource } from 'devextreme-vue/scheduler';
-import { data, resourcesData } from './data.js';
+import { DxScheduler, DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { data, resourcesData } from './data.ts';
 
-const views = ['day', 'week', 'month'];
+const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'month'];
 const currentDate = new Date(2020, 10, 25);
 const dataSource = data;
 </script>

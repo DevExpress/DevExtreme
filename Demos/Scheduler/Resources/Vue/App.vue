@@ -45,13 +45,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import {
   resourcesList, data, priorities, assignees, rooms,
-} from './data.js';
+} from './data.ts';
 
-const views = ['workWeek'];
+const views: DxSchedulerTypes.ViewType[] = ['workWeek'];
 const currentDate = new Date(2021, 3, 27);
 const currentResource = ref('Assignee');
 const dataSource = data;

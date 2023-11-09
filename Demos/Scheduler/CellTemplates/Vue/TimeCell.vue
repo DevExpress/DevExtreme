@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
-import Utils from './utils.js';
+import Utils from './utils.ts';
 
 const props = withDefaults(defineProps<{
   cellData?: any

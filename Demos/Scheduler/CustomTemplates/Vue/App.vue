@@ -51,26 +51,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import Query from 'devextreme/data/query';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
-import { data, moviesData, theatreData } from './data.js';
+import { data, moviesData, theatreData } from './data.ts';
 
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
-const scheduler = ref(null);
+const scheduler = ref<DxScheduler['instance']>(null);
 const currentDate = new Date(2021, 3, 27);
 const dataSource = data;
 const editing = { allowAdding: false };
 
-function onContentReady(e) {
+function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
   scheduler.value = e.component;
 }
-function onAppointmentFormOpening(e) {
+function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
   const { form } = e;
   let movieInfo = getMovieById(e.appointmentData.movieId) || {};
-  let { startDate } = e.appointmentData;
+  let startDate = e.appointmentData.startDate as Date;
 
   form.option('items', [{
     label: {
@@ -106,7 +106,7 @@ function onAppointmentFormOpening(e) {
       width: '100%',
       type: 'datetime',
       onValueChanged(args) {
-        startDate = args.value;
+        startDate = args.value as Date;
         form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
       },
     },

@@ -67,11 +67,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxSwitch } from 'devextreme-vue/switch';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import AppointmentTemplate from './AppointmentTemplate.vue';
-import { data, moviesData } from './data.js';
+import { data, moviesData } from './data.ts';
 
 const views = ['week', 'timelineWeek'];
 const currentDate = new Date();
@@ -80,13 +80,13 @@ const shadeUntilCurrentTime = ref(true);
 const updateInterval = ref(10);
 const dataSource = data;
 
-function onContentReady(e) {
+function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
   e.component.scrollTo(new Date());
 }
-function onAppointmentClick(e) {
+function onAppointmentClick(e: DxSchedulerTypes.AppointmentClickEvent) {
   e.cancel = true;
 }
-function onAppointmentDblClick(e) {
+function onAppointmentDblClick(e: DxSchedulerTypes.AppointmentDblClickEvent) {
   e.cancel = true;
 }
 </script>

@@ -28,10 +28,10 @@
   </DxScheduler>
 </template>
 <script setup lang="ts">
-import { DxScheduler, DxResource } from 'devextreme-vue/scheduler';
-import { data, priorityData, resourcesData } from './data.js';
+import { DxScheduler, DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { data, priorityData, resourcesData } from './data.ts';
 
-const views = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const views: DxSchedulerTypes.ViewType[] = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
 const currentDate = new Date(2021, 1, 2);
 const dataSource = data;

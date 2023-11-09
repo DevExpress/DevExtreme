@@ -24,7 +24,7 @@
 </template>
 <script setup lang="ts">
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
-import { data, assignees, priorities } from './data.js';
+import { data, assignees, priorities } from './data.ts';
 
 const views = ['agenda'];
 const currentDate = new Date(2021, 4, 11);

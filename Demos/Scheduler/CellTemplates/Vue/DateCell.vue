@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import Utils from './utils.js';
+import Utils from './utils.ts';
 
 withDefaults(defineProps<{
   cellData?: any

@@ -42,7 +42,7 @@
 import { ref } from 'vue';
 import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler';
 import DxSwitch from 'devextreme-vue/switch';
-import { data, priorityData } from './data.js';
+import { data, priorityData } from './data.ts';
 
 const groupByDate = ref(true);
 const groups = ['priorityId'];

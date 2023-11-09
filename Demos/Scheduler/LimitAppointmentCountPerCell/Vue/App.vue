@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import DxScheduler, { DxResource, DxView } from 'devextreme-vue/scheduler';
-import { resourcesData, data } from './data.js';
+import { resourcesData, data } from './data.ts';
 
 const currentDate = new Date(2021, 2, 25);
 const dataSource = data;

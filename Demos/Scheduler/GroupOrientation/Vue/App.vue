@@ -33,7 +33,7 @@
 </template>
 <script setup lang="ts">
 import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler';
-import { data, priorityData } from './data.js';
+import { data, priorityData } from './data.ts';
 
 const currentView = 'Vertical Grouping';
 const groups = ['priorityId'];
