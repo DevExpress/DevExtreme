@@ -6,25 +6,19 @@
       :src="fieldData.ImageSrc"
     >
     <DxTextBox
-      :value="fieldData && fieldData.Name"
+      :value="fieldData?.Name"
       :read-only="true"
       :input-attr="{ 'aria-label': 'Name' }"
       class="product-name"
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxTextBox from 'devextreme-vue/text-box';
 
-export default {
-  components: {
-    DxTextBox,
-  },
-  props: {
-    fieldData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+withDefaults(defineProps<{
+  fieldData?: Record<string, any>
+}>(), {
+  fieldData: () => {},
+});
 </script>

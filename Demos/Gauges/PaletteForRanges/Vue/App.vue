@@ -42,16 +42,10 @@
     </DxCircularGauge>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxTitle, DxFont, DxExport,
 } from 'devextreme-vue/circular-gauge';
-
-export default {
-  components: {
-    DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxTitle, DxFont, DxExport,
-  },
-};
 </script>
 <style scoped>
 #gauge {

@@ -55,7 +55,7 @@
     </DxLinearGauge>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxLinearGauge,
   DxScale,
@@ -70,27 +70,8 @@ import {
   DxFont,
 } from 'devextreme-vue/linear-gauge';
 
-export default {
-  components: {
-    DxLinearGauge,
-    DxScale,
-    DxTick,
-    DxLabel,
-    DxRangeContainer,
-    DxRange,
-    DxValueIndicator,
-    DxSubvalueIndicator,
-    DxExport,
-    DxTitle,
-    DxFont,
-  },
-  data() {
-    return {
-      subvalues: [5, 25],
-      value: 17,
-    };
-  },
-};
+const subvalues = [5, 25];
+const value = 17;
 </script>
 <style scoped>
 #gauge {

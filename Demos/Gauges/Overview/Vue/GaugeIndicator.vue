@@ -16,8 +16,7 @@
     />
   </DxCircularGauge>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxCircularGauge, {
   DxSize,
   DxValueIndicator,
@@ -25,31 +24,15 @@ import DxCircularGauge, {
   DxScale,
 } from 'devextreme-vue/circular-gauge';
 
-export default {
-  components: {
-    DxCircularGauge,
-    DxSize,
-    DxValueIndicator,
-    DxGeometry,
-    DxScale,
-  },
-  props: {
-    value: {
-      type: Number,
-      default: 0,
-    },
-    startAngle: {
-      type: Number,
-      default: 0,
-    },
-    endAngle: {
-      type: Number,
-      default: 90,
-    },
-    inverted: {
-      type: Boolean,
-      default: true,
-    },
-  },
-};
+withDefaults(defineProps<{
+  value?: number
+  startAngle?: number
+  endAngle?: number
+  inverted?: boolean
+}>(), {
+  value: 0,
+  startAngle: 0,
+  endAngle: 90,
+  inverted: true,
+});
 </script>

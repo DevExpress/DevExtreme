@@ -107,8 +107,8 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSlider from 'devextreme-vue/slider';
 import DxCircularGauge, {
   DxSize,
@@ -123,34 +123,9 @@ import DxLinearGauge, {
   DxMinorTick,
   DxLabel,
 } from 'devextreme-vue/linear-gauge';
-
 import GaugeIndicator from './GaugeIndicator.vue';
 
-export default {
-  components: {
-    DxSlider,
-
-    DxCircularGauge,
-    DxSize,
-    DxValueIndicator,
-    DxGeometry,
-    DxScale,
-
-    DxLinearGauge,
-    DxLinearSize,
-    DxLinearValueIndicator,
-    DxLinearScale,
-    DxMinorTick,
-    DxLabel,
-
-    GaugeIndicator,
-  },
-  data() {
-    return {
-      speedValue: 40,
-      color: '#f05b41',
-    };
-  },
-};
+const speedValue = ref(40);
+const color = '#f05b41';
 </script>
 <style src="./styles.css"></style>

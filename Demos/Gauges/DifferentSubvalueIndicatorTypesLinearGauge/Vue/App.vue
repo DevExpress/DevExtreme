@@ -92,22 +92,12 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxLinearGauge, DxScale, DxSubvalueIndicator, DxLabel,
 } from 'devextreme-vue/linear-gauge';
 
-export default {
-  components: {
-    DxLinearGauge, DxScale, DxSubvalueIndicator, DxLabel,
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `$${valueText}`;
-    },
-  },
-};
+const customizeText = ({ valueText }) => `$${valueText}`;
 </script>
 <style scoped>
 #gauge-demo {

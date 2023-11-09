@@ -48,47 +48,25 @@
         :width="150"
         :input-attr="{ 'aria-label': 'Season' }"
         :data-source="dataSource"
-        v-model:value="value"
+        v-model:value="selected"
         display-expr="name"
+        value-expr="name"
       />
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import {
   DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxTooltip, DxTitle, DxFont,
 } from 'devextreme-vue/circular-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxCircularGauge,
-    DxScale,
-    DxLabel,
-    DxRangeContainer,
-    DxRange,
-    DxTooltip,
-    DxTitle,
-    DxFont,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource,
-      value: dataSource[0],
-    };
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} °C`;
-    },
-    onSelectionChanged({ selectedItem }) {
-      this.value = selectedItem.mean;
-      this.subvalues = [selectedItem.min, selectedItem.max];
-    },
-  },
-};
+const selected = ref(dataSource[0].name);
+const value = computed(() => dataSource.find((item) => item.name === selected.value));
+
+const customizeText = ({ valueText }) => `${valueText} °C`;
 </script>
 <style scoped>
 #gauge-demo {

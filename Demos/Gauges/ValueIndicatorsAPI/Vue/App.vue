@@ -3,7 +3,6 @@
     <div id="gauge-demo">
       <div class="widget-container">
         <DxCircularGauge
-          id="gauge"
           ref="gauge"
         >
           <DxScale
@@ -77,47 +76,30 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import {
   DxCircularGauge, DxScale, DxLabel, DxTooltip, DxTitle, DxFont,
 } from 'devextreme-vue/circular-gauge';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxButton } from 'devextreme-vue/button';
 
-export default {
-  components: {
-    DxCircularGauge,
-    DxScale,
-    DxLabel,
-    DxTooltip,
-    DxTitle,
-    DxFont,
-    DxNumberBox,
-    DxButton,
-  },
-  data() {
-    return {
-      additionalGenerator1Value: 12,
-      additionalGenerator2Value: 23,
-      mainGeneratorValue: 34,
-    };
-  },
-  mounted() {
-    this.updateValues();
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} kV`;
-    },
-    updateValues() {
-      this.$refs.gauge.instance.value(this.mainGeneratorValue);
-      this.$refs.gauge.instance.subvalues([
-        this.additionalGenerator1Value,
-        this.additionalGenerator2Value,
-      ]);
-    },
-  },
-};
+const additionalGenerator1Value = ref(12);
+const additionalGenerator2Value = ref(23);
+const mainGeneratorValue = ref(34);
+const gauge = ref();
+const customizeText = ({ valueText }) => `${valueText} kV`;
+
+onMounted(() => {
+  updateValues();
+});
+function updateValues() {
+  gauge.value.instance.value(mainGeneratorValue.value);
+  gauge.value.instance.subvalues([
+    additionalGenerator1Value.value,
+    additionalGenerator2Value.value,
+  ]);
+}
 </script>
 <style scoped>
 .widget-container {

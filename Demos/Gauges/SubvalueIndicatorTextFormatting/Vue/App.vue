@@ -35,29 +35,17 @@
     </DxCircularGauge>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxCircularGauge, DxScale, DxLabel, DxSubvalueIndicator, DxText, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/circular-gauge';
 
-export default {
-  components: {
-    DxCircularGauge, DxScale, DxLabel, DxSubvalueIndicator, DxText, DxExport, DxTitle, DxFont,
-  },
-  data() {
-    return {
-      format: {
-        type: 'thousands',
-        precision: 1,
-      },
-    };
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} °C`;
-    },
-  },
+const format = {
+  type: 'thousands',
+  precision: 1,
 };
+
+const customizeText = ({ valueText }) => `${valueText} °C`;
 </script>
 <style scoped>
 #gauge {

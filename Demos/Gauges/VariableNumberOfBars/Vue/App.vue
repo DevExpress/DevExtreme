@@ -17,7 +17,7 @@
       </DxBarGauge>
       <div id="panel">
         <DxCheckBox
-          v-for="p in products"
+          v-for="p in productsRef"
           :data="p"
           :key="p.name"
           v-model:value="p.active"
@@ -27,42 +27,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import { DxBarGauge, DxLabel } from 'devextreme-vue/bar-gauge';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { products } from './data.js';
 
-export default {
-  components: {
-    DxBarGauge, DxLabel, DxCheckBox,
-  },
-  data() {
-    return {
-      products,
-      values: [],
-      format: {
-        type: 'fixedPoint',
-        precision: 0,
-      },
-    };
-  },
-  watch: {
-    products: {
-      handler() {
-        this.values = this.getActiveItems();
-      },
-      deep: true,
-    },
-  },
-  created() {
-    this.values = this.getActiveItems();
-  },
-  methods: {
-    getActiveItems() {
-      return this.products.filter((p) => p.active).map((p) => p.count);
-    },
-  },
+const productsRef = ref(products);
+const getActiveItems = () => products.filter((p) => p.active).map((p) => p.count);
+const values = ref(getActiveItems());
+const format = {
+  type: 'fixedPoint',
+  precision: 0,
 };
+
+watch(() => productsRef, () => {
+  values.value = getActiveItems();
+}, {
+  deep: true,
+});
 </script>
 <style scoped>
 #gauge-demo {

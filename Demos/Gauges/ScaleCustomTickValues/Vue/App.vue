@@ -25,21 +25,12 @@
     </DxLinearGauge>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxLinearGauge, DxGeometry, DxScale, DxTitle, DxFont, DxExport,
 } from 'devextreme-vue/linear-gauge';
 
-export default {
-  components: {
-    DxLinearGauge, DxGeometry, DxScale, DxTitle, DxFont, DxExport,
-  },
-  data() {
-    return {
-      customTicks: [0, 10, 25, 50],
-    };
-  },
-};
+const customTicks = [0, 10, 25, 50];
 </script>
 <style scoped>
 #gauge {

@@ -117,12 +117,14 @@
       id="selectbox"
       :data-source="cities"
       :input-attr="{ 'aria-label': 'City' }"
-      v-model:value="value"
+      v-model:value="selected"
       display-expr="name"
+      value-expr="name"
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import {
   DxLinearGauge,
   DxTitle,
@@ -137,30 +139,10 @@ import {
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { cities } from './data.js';
 
-export default {
-  components: {
-    DxLinearGauge,
-    DxTitle,
-    DxFont,
-    DxGeometry,
-    DxScale,
-    DxRangeContainer,
-    DxRange,
-    DxValueIndicator,
-    DxLabel,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      cities,
-      value: cities[0],
-      customTicks: [900, 1000, 1020, 1100],
-      pressureLabelFormat: {
-        type: 'decimal',
-      },
-    };
-  },
-};
+const selected = ref(cities[0].name);
+const customTicks = [900, 1000, 1020, 1100];
+const pressureLabelFormat = { type: 'decimal' };
+const value = computed(() => cities.find(({ name }) => name === selected.value));
 </script>
 <style scoped>
 #gauge-demo {

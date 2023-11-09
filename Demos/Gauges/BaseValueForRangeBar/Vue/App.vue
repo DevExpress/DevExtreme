@@ -49,7 +49,7 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxCircularGauge, DxGeometry, DxScale, DxLabel, DxValueIndicator,
 } from 'devextreme-vue/circular-gauge';
@@ -61,25 +61,7 @@ import {
   DxValueIndicator as DxLinearValueIndicator,
 } from 'devextreme-vue/linear-gauge';
 
-export default {
-  components: {
-    DxCircularGauge,
-    DxGeometry,
-    DxScale,
-    DxLabel,
-    DxValueIndicator,
-    DxLinearGauge,
-    'dx-linear-geometry': DxLinearGeometry,
-    'dx-linear-scale': DxLinearScale,
-    'dx-linear-label': DxLinearLabel,
-    'dx-linear-value-indicator': DxLinearValueIndicator,
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText}°`;
-    },
-  },
-};
+const customizeText = ({ valueText }) => `${valueText}°`;
 </script>
 <style scoped>
 #gauge-demo {

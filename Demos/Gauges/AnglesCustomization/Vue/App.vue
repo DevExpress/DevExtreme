@@ -67,15 +67,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import { DxCircularGauge, DxScale, DxGeometry } from 'devextreme-vue/circular-gauge';
-
-export default {
-  components: {
-    DxCircularGauge, DxScale, DxGeometry,
-  },
-};
 </script>
 <style scoped>
 #gauge-demo {

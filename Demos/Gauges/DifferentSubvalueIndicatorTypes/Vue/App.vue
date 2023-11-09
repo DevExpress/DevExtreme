@@ -104,17 +104,10 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator,
 } from 'devextreme-vue/circular-gauge';
-
-export default {
-  components: {
-    DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator,
-  },
-};
 </script>
 <style scoped>
 #gauge-demo {

@@ -98,40 +98,26 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import ArrayStore from 'devextreme/data/array_store';
 import notify from 'devextreme/ui/notify';
 import Field from './Field.vue';
 import Item from './Item.vue';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    Field,
-    Item,
-  },
-  data() {
-    const products = service.getProducts();
-    const simpleProducts = service.getSimpleProducts();
-    return {
-      products,
-      simpleProducts,
-      data: new ArrayStore({
-        data: products,
-        key: 'ID',
-      }),
-      value: simpleProducts[0],
-    };
-  },
-  methods: {
-    onValueChanged(e) {
-      notify(`The value is changed to: "${e.value}"`);
-    },
-  },
-};
+const products = service.getProducts();
+const simpleProducts = service.getSimpleProducts();
+const value = ref(simpleProducts[0]);
+const data = new ArrayStore({
+  data: products,
+  key: 'ID',
+});
+function onValueChanged(e) {
+  notify(`The value is changed to: "${e.value}"`);
+}
+
 </script>
 <style scoped>
 .dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {

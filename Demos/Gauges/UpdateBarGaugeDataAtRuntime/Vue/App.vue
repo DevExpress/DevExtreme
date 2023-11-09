@@ -17,56 +17,40 @@
       </DxBarGauge>
       <div class="action-container">
         <DxSelectBox
-          id="select-color"
           :width="150"
           :input-attr="{ 'aria-label': 'Color' }"
           :data-source="colors"
           v-model:value="value"
           display-expr="name"
+          value-expr="code"
         />
         <div
-          :style="{ 'background-color': value.code }"
+          :style="{ 'background-color': value }"
           class="color-box"
         />
       </div>
     </div>
   </div>
 </template>
-<script>
-import { DxBarGauge, DxPalette, DxLabel } from 'devextreme-vue/bar-gauge';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { DxBarGauge, DxLabel } from 'devextreme-vue/bar-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { colors } from './data.js';
 
-export default {
-  components: {
-    DxBarGauge,
-    DxPalette,
-    DxLabel,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      colors,
-      palette: ['#ff0000', '#00ff00', '#0000ff'],
-      value: colors[0],
-    };
-  },
-  computed: {
-    values() {
-      return this.getBasicColors(this.value.code);
-    },
-  },
-  methods: {
-    getBasicColors(value) {
-      const code = Number(`0x${value.slice(1)}`);
-      return [
-        (code >> 16) & 0xff,
-        (code >> 8) & 0xff,
-        code & 0xff,
-      ];
-    },
-  },
-};
+const palette = ['#ff0000', '#00ff00', '#0000ff'];
+const value = ref(colors[0].code);
+
+const values = computed(() => getBasicColors(value.value));
+
+function getBasicColors(selectValue) {
+  const code = Number(`0x${selectValue.slice(1)}`);
+  return [
+    (code >> 16) & 0xff,
+    (code >> 8) & 0xff,
+    code & 0xff,
+  ];
+}
 </script>
 <style scoped>
 #gauge-demo {

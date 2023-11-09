@@ -24,30 +24,18 @@
     </DxBarGauge>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxBarGauge, DxLabel, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/bar-gauge';
 
-export default {
-  components: {
-    DxBarGauge, DxLabel, DxExport, DxTitle, DxFont,
-  },
-  data() {
-    return {
-      values: [47.27, 65.32, 84.59, 71.86],
-      format: {
-        type: 'fixedPoint',
-        precision: 1,
-      },
-    };
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} %`;
-    },
-  },
+const values = [47.27, 65.32, 84.59, 71.86];
+const format = {
+  type: 'fixedPoint',
+  precision: 1,
 };
+
+const customizeText = ({ valueText }) => `${valueText} %`;
 </script>
 <style scoped>
 #gauge {

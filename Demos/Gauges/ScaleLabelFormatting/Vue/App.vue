@@ -43,21 +43,12 @@
     </DxCircularGauge>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/circular-gauge';
 
-export default {
-  components: {
-    DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont,
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} %`;
-    },
-  },
-};
+const customizeText = ({ valueText }) => `${valueText} %`;
 </script>
 <style scoped>
 #gauge {

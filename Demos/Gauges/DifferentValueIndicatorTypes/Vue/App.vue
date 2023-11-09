@@ -128,24 +128,12 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator,
 } from 'devextreme-vue/circular-gauge';
 
-export default {
-  components: {
-    DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator,
-  },
-
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} %`;
-    },
-  },
-};
-
+const customizeText = ({ valueText }) => `${valueText} %`;
 </script>
 <style scoped>
 #chart-demo {
