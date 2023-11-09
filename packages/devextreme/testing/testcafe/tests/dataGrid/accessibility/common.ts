@@ -410,7 +410,6 @@ const DATA_GRID_SELECTOR = '#container';
       runOnly: '',
       rules: {
         'color-contrast': { enabled: false },
-        'aria-dialog-name': { enabled: false },
       },
     });
     if (isFluent) {
@@ -911,9 +910,6 @@ const DATA_GRID_SELECTOR = '#container';
     await a11yCheck(t, {
       ...a11yCheckConfig,
       runOnly: '',
-      rules: {
-        'aria-dialog-name': { enabled: false },
-      },
     });
     if (isFluent) {
       await screenshotCheck(t, 'row-editing-mode', theme, dataGrid.element);
@@ -1384,9 +1380,6 @@ const DATA_GRID_SELECTOR = '#container';
     await a11yCheck(t, {
       ...a11yCheckConfig,
       runOnly: '',
-      rules: {
-        'aria-dialog-name': { enabled: false },
-      },
     });
     if (isFluent) {
       await screenshotCheck(t, 'export-button', theme, dataGrid.element);
