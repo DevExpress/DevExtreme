@@ -1,0 +1,20 @@
+form {
+  margin: 10px 10px 15px;
+}
+
+.last-group {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.last-group .dx-box-item-content {
+  justify-content: center !important;
+}
+
+.buttons-group .dx-box-flex {
+  align-items: flex-end !important;
+}
+
+.buttons-group .dx-box-flex .dx-field-button-item {
+  padding: 5px;
+}
