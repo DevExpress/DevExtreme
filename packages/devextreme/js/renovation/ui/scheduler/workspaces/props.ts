@@ -63,6 +63,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() endDayHour = 24;
 
+  @OneWay() viewOffset = 0;
+
   @OneWay() firstDayOfWeek = 0;
 
   @OneWay() currentDate!: Date;

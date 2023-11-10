@@ -87,7 +87,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
     const leftPosition = this._getLeftPosition(settings);
 
-    const hasTailChunk = this.endViewDate > settings.info.appointment.endDate;
+    const { endDate } = settings.info.appointment;
+    const hasTailChunk = this.endViewDate > endDate;
     const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth, settings);
 
     const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);

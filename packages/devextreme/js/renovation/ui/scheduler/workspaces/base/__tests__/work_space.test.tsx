@@ -2873,6 +2873,7 @@ describe('WorkSpace', () => {
             focusedCell: undefined,
             startDayHour: 0,
             endDayHour: 24,
+            viewOffset: 0,
             cellDuration: 30,
             intervalCount: 1,
             hoursInterval: 0.5,

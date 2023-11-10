@@ -156,7 +156,6 @@
   $label-margin-top-diff,
   $texteditor-label-outside-font-size,
   $texteditor-label-outside-height,
-  $colorbox-label-outside-before-width,
 ) {
   .dx-editor-outlined {
     .dx-texteditor-label {
@@ -291,107 +290,35 @@
     &.dx-texteditor-label-outside {
       margin-top: $label-offset-y-outside;
 
-      .dx-label-before {
+      .dx-texteditor-label {
+        user-select: auto;
+      }
+
+      .dx-label-before,
+      .dx-label-after {
         clip-path: none;
       }
 
       .dx-label {
+        margin: 0;
+        clip-path: none;
         border-top-width: $label-border-width;
         border-radius: 0;
         border-start-end-radius: 1px;
         border-end-end-radius: 1px;
         margin-inline-start: 0;
         padding: 0;
-        clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em 1px -1px (-$label-before-min-width));
     
         span {
+          position: absolute;
+          width: 100%;
+          cursor: default;
+          pointer-events: auto;
           font-size: $texteditor-label-outside-font-size;
           margin-top: 0;
-          transform: translate(-$label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
+          top: -$label-offset-y-outside;
           height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
           line-height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
-        }
-      }
-
-      &.dx-rtl {
-        .dx-label {
-          clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em (-$label-before-min-width) -1px 1px);
-          
-          span {
-            transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
-          }
-        }
-      }
-
-      &.dx-state-focused {
-        @include dx-state-border-color($texteditor-focused-border-color, $texteditor-focused-border-bottom-color);
-        
-        .dx-label {
-          border-top-width: $label-active-border-width;
-
-          span {
-            transform: translate(-$label-before-min-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
-          }
-        }
-
-        &.dx-rtl {
-          .dx-label {
-            span {
-              transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
-            }
-          }
-        }
-      }
-
-      &.dx-daterangebox {
-        .dx-label {
-          span {
-            transform: translate(-$label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
-          }
-        }
-
-        &.dx-rtl {
-          .dx-label {
-            span {
-              transform: translate($label-before-min-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
-            }
-          }
-        }
-      }
-
-      &.dx-colorbox {
-        .dx-label {
-          clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em 1px -1px (-$colorbox-label-outside-before-width));
-      
-          span {
-            transform: translate(-$colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
-          }
-        }
-  
-        &.dx-rtl {
-          .dx-label {
-            clip-path: inset(-#{math.div($label-offset-y-outside, $texteditor-label-outside-font-size)}em (-$colorbox-label-outside-before-width) -1px 1px);
-            
-            span {
-              transform: translate($colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-border-width, $texteditor-label-outside-font-size)}em);
-            }
-          }
-        }
-  
-        &.dx-state-focused {
-          .dx-label {
-            span {
-              transform: translate(-$colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
-            }
-          }
-  
-          &.dx-rtl {
-            .dx-label {
-              span {
-                transform: translate($colorbox-label-outside-before-width, -#{math.div($label-offset-y-outside + $label-active-border-width, $texteditor-label-outside-font-size)}em);
-              }
-            }
-          }
         }
       }
     }
@@ -506,16 +433,24 @@
     &.dx-texteditor-label-outside {
       margin-top: $texteditor-label-outside-top-offset;
 
-      .dx-label-before {
-        min-width: 0;
-      }
-
       .dx-texteditor-label {
+        user-select: auto;
         font-size: $texteditor-label-outside-font-size;
         height: $texteditor-label-outside-height;
         line-height: $texteditor-label-outside-height;
-        top: -$texteditor-label-outside-top-offset;
         margin-top: 0;
+        top: -$texteditor-label-outside-top-offset;
+      }
+
+      .dx-label {
+        cursor: default;
+
+        span {
+          width: 100%;
+          pointer-events: auto;
+          position: absolute;
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -614,16 +549,24 @@
     &.dx-texteditor-label-outside {
       margin-top: $texteditor-label-outside-top-offset;
 
-      .dx-label-before {
-        min-width: 0;
-      }
-
       .dx-texteditor-label {
+        user-select: auto;
         font-size: $texteditor-label-outside-font-size;
         height: $texteditor-label-outside-height;
         line-height: $texteditor-label-outside-height;
         top: -$texteditor-label-outside-top-offset;
         margin-top: 0;
+      }
+
+      .dx-label {
+        cursor: default;
+
+        span {
+          width: 100%;
+          pointer-events: auto;
+          position: absolute;
+          margin-bottom: 0;
+        }
       }
     }
   

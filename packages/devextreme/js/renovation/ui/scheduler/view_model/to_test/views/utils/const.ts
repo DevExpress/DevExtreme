@@ -1,5 +1,6 @@
 import { ViewType } from '../../../../types';
 
+// TODO Vinogradov: Move these types to __internal
 export const VIEWS: Record<string, ViewType> = {
   DAY: 'day',
   WEEK: 'week',

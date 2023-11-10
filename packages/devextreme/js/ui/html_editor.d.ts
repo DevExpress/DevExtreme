@@ -560,7 +560,7 @@ export interface dxHtmlEditorMention {
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<string> | null;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @default "this"

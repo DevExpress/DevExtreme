@@ -12,7 +12,7 @@ $datagrid-base-color: $base-text-color !default;
 * $type color
 */
 $datagrid-base-background-color: $base-bg !default;
-$datagrid-border-color: null !default;
+$datagrid-border-color: $base-border-color !default;
 
 /**
 * $name 20. Header text color
@@ -44,13 +44,13 @@ $header-filter-color-empty: null !default;
 * $name 55. Selected row background color
 * $type color
 */
-$datagrid-selection-bg: $base-bg-active !default;
+$datagrid-selection-bg: $button-default-outlined-hover-bg !default;
 
 /**
 * $name 60. Selected row border color
 * $type color
 */
-$datagrid-row-selected-border-color: $base-bg-active !default;
+$datagrid-row-selected-border-color: $datagrid-border-color !default;
 
 /**
 * $name 50. Selected row text color
@@ -62,13 +62,13 @@ $datagrid-row-selected-color: $datagrid-base-color !default;
 * $name 65. Focused row text color
 * $type color
 */
-$datagrid-row-focused-color: $base-inverted-text-color !default;
+$datagrid-row-focused-color: $base-text-color !default;
 
 /**
 * $name 70. Focused row background color
 * $type color
 */
-$datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+$datagrid-row-focused-bg: null !default;
 $datagrid-hover-bg: $base-hover-bg !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
 
@@ -83,8 +83,8 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
-$datagrid-cell-removed-border-color: $base-bg-active !default;
-$datagrid-row-removed-bg: $base-bg-active !default;
+$datagrid-cell-removed-border-color: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-hover-bg !default;
 $datagrid-cell-removed-text-color: null !default;
 
 /**
@@ -172,7 +172,7 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
-  $datagrid-border-color: lighten($base-border-color, 6.27) !default;
+  $datagrid-row-focused-bg: #d0e5fb !default;
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
@@ -188,7 +188,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $mode == "dark" {
-  $datagrid-border-color: darken($base-border-color, 14.12) !default;
+  $datagrid-row-focused-bg: #0c3b5e !default;
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;

@@ -5,6 +5,7 @@ import { WidgetName } from '../helpers/createWidget';
 const CLASS = {
   input: 'dx-texteditor-input',
   isInvalid: 'dx-invalid',
+  label: 'dx-label',
 };
 export default class TextBox extends Widget {
   input: Selector;
@@ -31,5 +32,9 @@ export default class TextBox extends Widget {
 
   getButton(index: number): ActionButton {
     return new ActionButton(this.element, index);
+  }
+
+  getLabel(): Selector {
+    return this.element.find(`.${CLASS.label} span`);
   }
 }

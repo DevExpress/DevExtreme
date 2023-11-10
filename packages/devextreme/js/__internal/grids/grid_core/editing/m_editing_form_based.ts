@@ -318,7 +318,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   getFormEditorTemplate(cellOptions, item) {
-    const column = this.component.columnOption(item.dataField);
+    const column = this.component.columnOption(item.name || item.dataField);
 
     return (options, container) => {
       const $container = $(container);

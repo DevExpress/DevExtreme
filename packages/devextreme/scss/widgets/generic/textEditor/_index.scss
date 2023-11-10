@@ -268,7 +268,6 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   1px,
   $generic-texteditor-label-outside-font-size,
   $generic-texteditor-label-outside-height,
-  $generic-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

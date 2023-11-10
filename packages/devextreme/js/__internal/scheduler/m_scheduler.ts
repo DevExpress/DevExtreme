@@ -42,6 +42,7 @@ import { custom as customDialog } from '@js/ui/dialog';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
@@ -52,6 +53,7 @@ import { SchedulerHeader } from './header/m_header';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
+import { VIEWS } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { ExpressionUtils } from './m_expression_utils';
 import { hide as hideLoading, show as showLoading } from './m_loading';
@@ -79,6 +81,8 @@ import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
+
+const toMs = dateUtils.dateToMilliseconds;
 
 const MINUTES_IN_HOUR = 60;
 const DEFAULT_AGENDA_DURATION = 7;
@@ -250,6 +254,8 @@ class Scheduler extends Widget<any> {
       startDayHour: 0,
 
       endDayHour: 24,
+
+      offset: 0,
 
       editing: {
         allowAdding: true,
@@ -629,6 +635,19 @@ class Scheduler extends Widget<any> {
 
         this._appointments.option('items', []);
         this._updateOption('workSpace', name, value);
+        this._appointments.repaint();
+        this._filterAppointmentsByDate();
+
+        this._postponeDataSourceLoading();
+        break;
+        // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
+      case 'offset':
+        this._validateDayHours();
+
+        this.updateInstances();
+
+        this._appointments.option('items', []);
+        this._updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
         this._appointments.repaint();
         this._filterAppointmentsByDate();
 
@@ -1039,6 +1058,7 @@ class Scheduler extends Widget<any> {
       resources: this.option('resources'),
       startDayHour: this._getCurrentViewOption('startDayHour'),
       endDayHour: this._getCurrentViewOption('endDayHour'),
+      viewOffset: this.getViewOffsetMs(),
       appointmentDuration: this._getCurrentViewOption('cellDuration'),
       allDayPanelMode: this._getCurrentViewOption('allDayPanelMode'),
       showAllDayPanel: this.option('showAllDayPanel'),
@@ -1682,6 +1702,7 @@ class Scheduler extends Widget<any> {
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
+      viewOffset: this.getViewOffsetMs(),
       tabIndex: this.option('tabIndex'),
       accessKey: this.option('accessKey'),
       focusStateEnabled: this.option('focusStateEnabled'),
@@ -1961,11 +1982,18 @@ class Scheduler extends Widget<any> {
   }
 
   _getUpdatedData(rawAppointment) {
-    const getConvertedFromGrid = (date) => (date
-      ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' })
-      : undefined);
+    const viewOffset = this.getViewOffsetMs();
 
-    const isValidDate = (date) => !isNaN(new Date(date).getTime());
+    const getConvertedFromGrid = (date: any): Date | undefined => {
+      if (!date) {
+        return undefined;
+      }
+
+      const result = this.timeZoneCalculator.createDate(date, { path: 'fromGrid' });
+      return dateUtilsTs.addOffsets(result, [-viewOffset]);
+    };
+
+    const isValidDate = (date: any): boolean => !isNaN(new Date(date).getTime());
 
     const targetCell = this.getTargetCellData();
     const appointment = createAppointmentAdapter(
@@ -1978,15 +2006,17 @@ class Scheduler extends Widget<any> {
     const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
     let appointmentStartDate = new Date(appointment.startDate);
+    appointmentStartDate = dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]);
     let appointmentEndDate = new Date(appointment.endDate);
-    let resultedStartDate = cellStartDate || appointmentStartDate;
+    appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]);
+    let resultedStartDate = cellStartDate ?? appointmentStartDate;
 
     if (!isValidDate(appointmentStartDate)) {
       appointmentStartDate = resultedStartDate;
     }
 
     if (!isValidDate(appointmentEndDate)) {
-      appointmentEndDate = cellEndDate;
+      appointmentEndDate = cellEndDate!;
     }
 
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
@@ -1996,12 +2026,11 @@ class Scheduler extends Widget<any> {
             && isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
-      const { trimTime } = dateUtils;
+      const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, { path: 'toGrid' });
+      const timeInMs = startDate.getTime() - dateUtils.trimTime(startDate).getTime();
 
-      const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
-      const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
-
-      resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
+      const targetCellStartDate = dateUtilsTs.addOffsets(targetCell.startDate, [-viewOffset]);
+      resultedStartDate = new Date(dateUtils.trimTime(targetCellStartDate).getTime() + timeInMs);
       resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
     }
 
@@ -2036,6 +2065,8 @@ class Scheduler extends Widget<any> {
     const timeZoneOffset = timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate);
     result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
+    result.startDate = dateUtilsTs.addOffsets(result.startDate, [viewOffset]);
+    result.endDate = dateUtilsTs.addOffsets(result.endDate, [viewOffset]);
     const rawResult = result.source();
 
     setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);
@@ -2223,8 +2254,6 @@ class Scheduler extends Widget<any> {
 
     return getAppointmentTakesAllDay(
       appointment,
-      this._getCurrentViewOption('startDayHour'),
-      this._getCurrentViewOption('endDayHour'),
       this._getCurrentViewOption('allDayPanelMode'),
     );
   }
@@ -2601,6 +2630,20 @@ class Scheduler extends Widget<any> {
 
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
+  }
+
+  getViewOffsetMs(): number {
+    const offsetFromOptions = this._getCurrentViewOption('offset');
+    return this.normalizeViewOffsetValue(offsetFromOptions);
+  }
+
+  private normalizeViewOffsetValue(viewOffset?: number): number {
+    if (!isDefined(viewOffset)
+      || this.currentViewType === VIEWS.AGENDA) {
+      return 0;
+    }
+
+    return viewOffset * toMs('minute');
   }
 }
 

@@ -4,6 +4,8 @@ import { isNumeric, isObject } from '@js/core/utils/type';
 import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { current as currentTheme } from '@js/ui/themes';
+import { dateUtilsTs } from '@ts/core/utils/date';
+import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
@@ -195,7 +197,8 @@ class BaseRenderingStrategy {
     return this.cellWidth;
   }
 
-  _getItemPosition(appointment) {
+  _getItemPosition(initialAppointment) {
+    const appointment = this.shiftAppointmentByViewOffset(initialAppointment);
     const position = this.generateAppointmentSettings(appointment);
     const allDay = this.isAllDay(appointment);
 
@@ -286,8 +289,6 @@ class BaseRenderingStrategy {
     const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
     return getAppointmentTakesAllDay(
       adapter,
-      this.viewStartDayHour,
-      this.viewEndDayHour,
       this.allDayPanelMode,
     );
   }
@@ -869,6 +870,24 @@ class BaseRenderingStrategy {
       top: timeShift * this.cellHeight,
       left: 0,
       cellPosition: 0,
+    };
+  }
+
+  protected shiftAppointmentByViewOffset(appointment: any): any {
+    const { viewOffset } = this.options;
+
+    const startDateField = this.dataAccessors.expr.startDateExpr;
+    const endDateField = this.dataAccessors.expr.endDateExpr;
+
+    let startDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', appointment));
+    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
+    let endDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment));
+    endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
+
+    return {
+      ...appointment,
+      [startDateField]: startDate,
+      [endDateField]: endDate,
     };
   }
 }

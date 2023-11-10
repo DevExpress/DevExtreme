@@ -509,13 +509,19 @@ const TextEditorBase = Editor.inherit({
 
         this._labelContainerElement = $(this._getLabelContainer()).get(0);
 
-        const { label, labelMode, labelMark } = this.option();
+        const { label, labelMode, labelMark, rtlEnabled } = this.option();
 
         const labelConfig = {
+            onClickHandler: () => {
+                this.focus();
+            },
+            onHoverHandler: (e) => { e.stopPropagation(); },
+            onActiveHandler: (e) => { e.stopPropagation(); },
             $editor: this.$element(),
             text: label,
             mark: labelMark,
             mode: labelMode,
+            rtlEnabled,
             containsButtonsBefore: !!this._$beforeButtonsContainer,
             containerWidth: this._getLabelContainerWidth(),
             beforeWidth: this._getLabelBeforeWidth()
