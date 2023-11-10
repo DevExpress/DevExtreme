@@ -64,7 +64,6 @@ import { DxSwitchModule } from 'devextreme-angular/ui/switch';
 import { DxTabPanelModule } from 'devextreme-angular/ui/tab-panel';
 import { DxTabsModule } from 'devextreme-angular/ui/tabs';
 import { DxTagBoxModule } from 'devextreme-angular/ui/tag-box';
-import { DxTagBoxBaseModule } from 'devextreme-angular/ui/tag-box-base';
 import { DxTextAreaModule } from 'devextreme-angular/ui/text-area';
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
 import { DxTileViewModule } from 'devextreme-angular/ui/tile-view';
@@ -147,7 +146,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxTabPanelModule,
     DxTabsModule,
     DxTagBoxModule,
-    DxTagBoxBaseModule,
     DxTextAreaModule,
     DxTextBoxModule,
     DxTileViewModule,
@@ -229,7 +227,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxTabPanelModule,
     DxTabsModule,
     DxTagBoxModule,
-    DxTagBoxBaseModule,
     DxTextAreaModule,
     DxTextBoxModule,
     DxTileViewModule,
