@@ -3954,6 +3954,18 @@ QUnit.module('calendarOptions', moduleConfig, () => {
             assert.deepEqual(calendar.option(name), value);
         });
     });
+
+    QUnit.test('disabledDates should be passed to calendarOptions from dateRangeBox options', function(assert) {
+        const dates = [new Date('07/1/2018')];
+        this.reinit({
+            deferRendering: false,
+            disabledDates: dates,
+        });
+
+        const calendar = this.getCalendar();
+
+        assert.deepEqual(calendar.option('disabledDates'), dates);
+    });
 });
 
 QUnit.module('Aria accessibility', {
