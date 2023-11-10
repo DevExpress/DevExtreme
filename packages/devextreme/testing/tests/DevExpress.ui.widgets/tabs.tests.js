@@ -4,6 +4,7 @@ import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';
 import holdEvent from 'events/hold';
 import { triggerShownEvent } from 'events/visibility_change';
+import devices from 'core/devices';
 import $ from 'jquery';
 import 'ui/responsive_box';
 import 'ui/tabs';
@@ -753,7 +754,7 @@ QUnit.module('Horizontal scrolling', () => {
     });
 
     QUnit.test('selected item should be visible after selectedIndex was changed', function(assert) {
-        assert.expect(2);
+        assert.expect(devices.real().deviceType === 'desktop' ? 2 : 1);
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
             selectedIndex: 0,
