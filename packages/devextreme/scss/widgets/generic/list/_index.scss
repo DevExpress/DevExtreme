@@ -161,17 +161,36 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     border-bottom: $list-group-header-border-bottom;
     background: $list-group-header-bg;
     color: $list-group-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     .dx-list-group:first-of-type & {
       border-top: none;
     }
 
-    &::before {
-      border-top-color: $list-group-color;
+    .dx-list-group-collapsed .dx-list-group-header-indicator &::before {
+      border-bottom-color: $list-group-color;
     }
 
-    .dx-list-group-collapsed &::before {
-      border-bottom-color: $list-group-color;
+    .dx-list-group-header-indicator {
+      order: 1;
+
+      .dx-list-collapsible-groups &::before {
+        width: 0;
+        height: 0;
+        display: block;
+        border-style: solid;
+        border-color: transparent;
+        border-width: 5px 5px 0 5px;
+        border-top-color: $list-group-color;
+        content: ' ';
+      }
+      
+      .dx-list-group-collapsed &::before {
+        border-bottom-color: $list-group-color;
+        border-width: 0 5px 5px 5px;
+      }
     }
   }
 
