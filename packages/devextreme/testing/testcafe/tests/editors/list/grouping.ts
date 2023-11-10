@@ -65,9 +65,8 @@ test('Grouped list appearance with template', async (t) => {
     $(`<span>${data.key}</span>`)
       .appendTo(wrapper);
 
-    $('<div>').dxButton({
-      icon: 'plus',
-    }).appendTo(wrapper);
+    $('<div>second row</div>')
+      .appendTo(wrapper);
 
     return wrapper;
   },
