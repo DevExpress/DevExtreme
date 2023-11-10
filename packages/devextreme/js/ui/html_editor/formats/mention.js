@@ -10,6 +10,11 @@ if(Quill) {
     const MENTION_CLASS = 'dx-mention';
 
     Mention = class Mention extends Embed {
+        constructor(scroll, node) {
+            super(scroll, node);
+            this.renderContent(this.contentNode, Mention.value(node));
+        }
+
         static create(data) {
             const node = super.create();
 
@@ -17,8 +22,6 @@ if(Quill) {
             node.dataset.marker = data.marker;
             node.dataset.mentionValue = data.value;
             node.dataset.id = data.id;
-
-            this.renderContent(node, data);
 
             return node;
         }
@@ -31,8 +34,8 @@ if(Quill) {
             };
         }
 
-        static renderContent(node, data) {
-            const template = this._templatesStorage.get({ editorKey: data.keyInTemplateStorage, marker: data.marker });
+        renderContent(node, data) {
+            const template = Mention._templatesStorage.get({ editorKey: data.keyInTemplateStorage, marker: data.marker });
 
             if(template) {
                 template.render({
@@ -45,7 +48,7 @@ if(Quill) {
 
         }
 
-        static baseContentRender(node, data) {
+        baseContentRender(node, data) {
             const $marker = $('<span>').text(data.marker);
 
             $(node)
