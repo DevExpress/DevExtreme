@@ -321,7 +321,16 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> { }
+declare const TagBoxBase: Omit<typeof dxSelectBox, 'new' | 'prototype'> & (new(element: UserDefinedElement, options?: Properties) => Omit<dxSelectBox<Properties>, 'reset'>);
+
+export default class dxTagBox extends TagBoxBase {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Array<string | number | any>): void;
+}
 
 /** @public */
 export type Properties = dxTagBoxOptions;

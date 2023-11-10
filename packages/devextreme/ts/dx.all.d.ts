@@ -26075,9 +26075,14 @@ declare module DevExpress.ui {
     TKey = any
   > extends DevExpress.ui.dxTabs.Properties<TItem, TKey> {}
   /**
-   * [descr:dxTagBox]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
+  export class dxTagBox extends TagBoxBase {
+    /**
+     * [descr:dxTagBox.reset(value)]
+     */
+    reset(value?: Array<string | number | any>): void;
+  }
   module dxTagBox {
     /**
      * [descr:_ui_tag_box_ChangeEvent]
@@ -30087,6 +30092,14 @@ declare module DevExpress.ui {
       | 'left-stack'
       | 'right-stack';
   }
+  /**
+   * [descr:TagBoxBase]
+   */
+  export const TagBoxBase: Omit<typeof dxSelectBox, 'new' | 'prototype'> &
+    (new (
+      element: DevExpress.core.UserDefinedElement,
+      options?: DevExpress.ui.dxTagBox.Properties
+    ) => Omit<dxSelectBox<DevExpress.ui.dxTagBox.Properties>, 'reset'>);
   /**
    * [descr:ui.template]
    * @deprecated [depNote:ui.template]

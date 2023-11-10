@@ -26,14 +26,14 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, SelectAllMode, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { EditorStyle, LabelMode, Mode, Position, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
+import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/select_box';
 
-import DxTagBox from 'devextreme/ui/tag_box';
+import TagBoxBase from 'devextreme/ui/tag_box';
 
 import {
     ControlValueAccessor,
@@ -75,15 +75,15 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DxTagBoxComponent),
+    useExisting: forwardRef(() => TagBoxBaseComponent),
     multi: true
 };
 /**
- * [descr:dxTagBox]
+ * [descr:TagBoxBase]
 
  */
 @Component({
-    selector: 'dx-tag-box',
+    selector: 'tag-box-base',
     template: '',
     providers: [
         DxTemplateHost,
@@ -93,8 +93,8 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
         IterableDifferHelper
     ]
 })
-export class DxTagBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxTagBox;
+export class TagBoxBaseComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+    instance: TagBoxBase;
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]
@@ -132,19 +132,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.applyValueMode]
-    
-     */
-    @Input()
-    get applyValueMode(): ApplyValueMode {
-        return this._getOption('applyValueMode');
-    }
-    set applyValueMode(value: ApplyValueMode) {
-        this._setOption('applyValueMode', value);
     }
 
 
@@ -223,6 +210,19 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set displayExpr(value: Function | string | undefined) {
         this._setOption('displayExpr', value);
+    }
+
+
+    /**
+     * [descr:dxDropDownListOptions.displayValue]
+    
+     */
+    @Input()
+    get displayValue(): string | undefined {
+        return this._getOption('displayValue');
+    }
+    set displayValue(value: string | undefined) {
+        this._setOption('displayValue', value);
     }
 
 
@@ -327,19 +327,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set height(value: number | Function | string | undefined) {
         this._setOption('height', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.hideSelectedItems]
-    
-     */
-    @Input()
-    get hideSelectedItems(): boolean {
-        return this._getOption('hideSelectedItems');
-    }
-    set hideSelectedItems(value: boolean) {
-        this._setOption('hideSelectedItems', value);
     }
 
 
@@ -461,32 +448,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxTagBoxOptions.maxDisplayedTags]
-    
-     */
-    @Input()
-    get maxDisplayedTags(): number | undefined {
-        return this._getOption('maxDisplayedTags');
-    }
-    set maxDisplayedTags(value: number | undefined) {
-        this._setOption('maxDisplayedTags', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.maxFilterQueryLength]
-    
-     */
-    @Input()
-    get maxFilterQueryLength(): number {
-        return this._getOption('maxFilterQueryLength');
-    }
-    set maxFilterQueryLength(value: number) {
-        this._setOption('maxFilterQueryLength', value);
-    }
-
-
-    /**
      * [descr:dxTextBoxOptions.maxLength]
     
      */
@@ -509,19 +470,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set minSearchLength(value: number) {
         this._setOption('minSearchLength', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.multiline]
-    
-     */
-    @Input()
-    get multiline(): boolean {
-        return this._getOption('multiline');
-    }
-    set multiline(value: boolean) {
-        this._setOption('multiline', value);
     }
 
 
@@ -669,41 +617,15 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxTagBoxOptions.selectAllMode]
+     * [descr:dxDropDownListOptions.selectedItem]
     
      */
     @Input()
-    get selectAllMode(): SelectAllMode {
-        return this._getOption('selectAllMode');
+    get selectedItem(): any {
+        return this._getOption('selectedItem');
     }
-    set selectAllMode(value: SelectAllMode) {
-        this._setOption('selectAllMode', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.selectAllText]
-    
-     */
-    @Input()
-    get selectAllText(): string {
-        return this._getOption('selectAllText');
-    }
-    set selectAllText(value: string) {
-        this._setOption('selectAllText', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.selectedItems]
-    
-     */
-    @Input()
-    get selectedItems(): Array<string | number | any> {
-        return this._getOption('selectedItems');
-    }
-    set selectedItems(value: Array<string | number | any>) {
-        this._setOption('selectedItems', value);
+    set selectedItem(value: any) {
+        this._setOption('selectedItem', value);
     }
 
 
@@ -734,7 +656,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxTagBoxOptions.showDropDownButton]
+     * [descr:dxSelectBoxOptions.showDropDownButton]
     
      */
     @Input()
@@ -743,19 +665,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set showDropDownButton(value: boolean) {
         this._setOption('showDropDownButton', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.showMultiTagOnly]
-    
-     */
-    @Input()
-    get showMultiTagOnly(): boolean {
-        return this._getOption('showMultiTagOnly');
-    }
-    set showMultiTagOnly(value: boolean) {
-        this._setOption('showMultiTagOnly', value);
     }
 
 
@@ -769,6 +678,19 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set showSelectionControls(value: boolean) {
         this._setOption('showSelectionControls', value);
+    }
+
+
+    /**
+     * [descr:dxTextEditorOptions.spellcheck]
+    
+     */
+    @Input()
+    get spellcheck(): boolean {
+        return this._getOption('spellcheck');
+    }
+    set spellcheck(value: boolean) {
+        this._setOption('spellcheck', value);
     }
 
 
@@ -795,19 +717,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
-    }
-
-
-    /**
-     * [descr:dxTagBoxOptions.tagTemplate]
-    
-     */
-    @Input()
-    get tagTemplate(): any {
-        return this._getOption('tagTemplate');
-    }
-    set tagTemplate(value: any) {
-        this._setOption('tagTemplate', value);
     }
 
 
@@ -903,14 +812,14 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxTagBoxOptions.value]
+     * [descr:dxDropDownListOptions.value]
     
      */
     @Input()
-    get value(): Array<string | number | any> {
+    get value(): any {
         return this._getOption('value');
     }
-    set value(value: Array<string | number | any>) {
+    set value(value: any) {
         this._setOption('value', value);
     }
 
@@ -983,7 +892,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onChange]
+     * [descr:dxSelectBoxOptions.onChange]
     
     
      */
@@ -991,7 +900,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onClosed]
+     * [descr:dxSelectBoxOptions.onClosed]
     
     
      */
@@ -999,7 +908,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onContentReady]
+     * [descr:dxSelectBoxOptions.onContentReady]
     
     
      */
@@ -1007,7 +916,15 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onCustomItemCreating]
+     * [descr:dxSelectBoxOptions.onCopy]
+    
+    
+     */
+    @Output() onCopy: EventEmitter<CopyEvent>;
+
+    /**
+    
+     * [descr:dxSelectBoxOptions.onCustomItemCreating]
     
     
      */
@@ -1015,7 +932,15 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onDisposing]
+     * [descr:dxSelectBoxOptions.onCut]
+    
+    
+     */
+    @Output() onCut: EventEmitter<CutEvent>;
+
+    /**
+    
+     * [descr:dxSelectBoxOptions.onDisposing]
     
     
      */
@@ -1023,7 +948,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onEnterKey]
+     * [descr:dxSelectBoxOptions.onEnterKey]
     
     
      */
@@ -1031,7 +956,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onFocusIn]
+     * [descr:dxSelectBoxOptions.onFocusIn]
     
     
      */
@@ -1039,7 +964,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onFocusOut]
+     * [descr:dxSelectBoxOptions.onFocusOut]
     
     
      */
@@ -1047,7 +972,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onInitialized]
+     * [descr:dxSelectBoxOptions.onInitialized]
     
     
      */
@@ -1055,7 +980,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onInput]
+     * [descr:dxSelectBoxOptions.onInput]
     
     
      */
@@ -1063,7 +988,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onItemClick]
+     * [descr:dxSelectBoxOptions.onItemClick]
     
     
      */
@@ -1071,7 +996,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onKeyDown]
+     * [descr:dxSelectBoxOptions.onKeyDown]
     
     
      */
@@ -1079,7 +1004,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onKeyUp]
+     * [descr:dxSelectBoxOptions.onKeyUp]
     
     
      */
@@ -1087,15 +1012,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onMultiTagPreparing]
-    
-    
-     */
-    @Output() onMultiTagPreparing: EventEmitter<MultiTagPreparingEvent>;
-
-    /**
-    
-     * [descr:dxTagBoxOptions.onOpened]
+     * [descr:dxSelectBoxOptions.onOpened]
     
     
      */
@@ -1103,7 +1020,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onOptionChanged]
+     * [descr:dxSelectBoxOptions.onOptionChanged]
     
     
      */
@@ -1111,15 +1028,15 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onSelectAllValueChanged]
+     * [descr:dxSelectBoxOptions.onPaste]
     
     
      */
-    @Output() onSelectAllValueChanged: EventEmitter<SelectAllValueChangedEvent>;
+    @Output() onPaste: EventEmitter<PasteEvent>;
 
     /**
     
-     * [descr:dxTagBoxOptions.onSelectionChanged]
+     * [descr:dxSelectBoxOptions.onSelectionChanged]
     
     
      */
@@ -1127,7 +1044,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onValueChanged]
+     * [descr:dxSelectBoxOptions.onValueChanged]
     
     
      */
@@ -1153,13 +1070,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
 
     /**
     
@@ -1202,6 +1112,13 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Output() displayExprChange: EventEmitter<Function | string | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() displayValueChange: EventEmitter<string | undefined>;
 
     /**
     
@@ -1258,13 +1175,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Output() heightChange: EventEmitter<number | Function | string | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() hideSelectedItemsChange: EventEmitter<boolean>;
 
     /**
     
@@ -1334,20 +1244,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxDisplayedTagsChange: EventEmitter<number | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() maxFilterQueryLengthChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() maxLengthChange: EventEmitter<number | string>;
 
     /**
@@ -1356,13 +1252,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Output() minSearchLengthChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() multilineChange: EventEmitter<boolean>;
 
     /**
     
@@ -1446,21 +1335,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectAllModeChange: EventEmitter<SelectAllMode>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() selectAllTextChange: EventEmitter<string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() selectedItemsChange: EventEmitter<Array<string | number | any>>;
+    @Output() selectedItemChange: EventEmitter<any>;
 
     /**
     
@@ -1488,14 +1363,14 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showMultiTagOnlyChange: EventEmitter<boolean>;
+    @Output() showSelectionControlsChange: EventEmitter<boolean>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSelectionControlsChange: EventEmitter<boolean>;
+    @Output() spellcheckChange: EventEmitter<boolean>;
 
     /**
     
@@ -1510,13 +1385,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Output() tabIndexChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() tagTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1572,7 +1440,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<string | number | any>>;
+    @Output() valueChange: EventEmitter<any>;
 
     /**
     
@@ -1654,7 +1522,9 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { subscribe: 'change', emit: 'onChange' },
             { subscribe: 'closed', emit: 'onClosed' },
             { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'copy', emit: 'onCopy' },
             { subscribe: 'customItemCreating', emit: 'onCustomItemCreating' },
+            { subscribe: 'cut', emit: 'onCut' },
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'enterKey', emit: 'onEnterKey' },
             { subscribe: 'focusIn', emit: 'onFocusIn' },
@@ -1664,22 +1534,21 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { subscribe: 'itemClick', emit: 'onItemClick' },
             { subscribe: 'keyDown', emit: 'onKeyDown' },
             { subscribe: 'keyUp', emit: 'onKeyUp' },
-            { subscribe: 'multiTagPreparing', emit: 'onMultiTagPreparing' },
             { subscribe: 'opened', emit: 'onOpened' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
+            { subscribe: 'paste', emit: 'onPaste' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'acceptCustomValueChange' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
-            { emit: 'applyValueModeChange' },
             { emit: 'buttonsChange' },
             { emit: 'customItemCreateEventChange' },
             { emit: 'dataSourceChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
             { emit: 'displayExprChange' },
+            { emit: 'displayValueChange' },
             { emit: 'dropDownButtonTemplateChange' },
             { emit: 'dropDownOptionsChange' },
             { emit: 'elementAttrChange' },
@@ -1688,7 +1557,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { emit: 'groupedChange' },
             { emit: 'groupTemplateChange' },
             { emit: 'heightChange' },
-            { emit: 'hideSelectedItemsChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'inputAttrChange' },
@@ -1698,11 +1566,8 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { emit: 'itemTemplateChange' },
             { emit: 'labelChange' },
             { emit: 'labelModeChange' },
-            { emit: 'maxDisplayedTagsChange' },
-            { emit: 'maxFilterQueryLengthChange' },
             { emit: 'maxLengthChange' },
             { emit: 'minSearchLengthChange' },
-            { emit: 'multilineChange' },
             { emit: 'nameChange' },
             { emit: 'noDataTextChange' },
             { emit: 'openedChange' },
@@ -1714,17 +1579,14 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { emit: 'searchExprChange' },
             { emit: 'searchModeChange' },
             { emit: 'searchTimeoutChange' },
-            { emit: 'selectAllModeChange' },
-            { emit: 'selectAllTextChange' },
-            { emit: 'selectedItemsChange' },
+            { emit: 'selectedItemChange' },
             { emit: 'showClearButtonChange' },
             { emit: 'showDataBeforeSearchChange' },
             { emit: 'showDropDownButtonChange' },
-            { emit: 'showMultiTagOnlyChange' },
             { emit: 'showSelectionControlsChange' },
+            { emit: 'spellcheckChange' },
             { emit: 'stylingModeChange' },
             { emit: 'tabIndexChange' },
-            { emit: 'tagTemplateChange' },
             { emit: 'textChange' },
             { emit: 'useItemTextAsTitleChange' },
             { emit: 'validationErrorChange' },
@@ -1747,7 +1609,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     protected _createInstance(element, options) {
 
-        return new DxTagBox(element, options);
+        return new TagBoxBase(element, options);
     }
 
 
@@ -1781,9 +1643,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this.setupChanges('dataSource', changes);
         this.setupChanges('items', changes);
         this.setupChanges('searchExpr', changes);
-        this.setupChanges('selectedItems', changes);
         this.setupChanges('validationErrors', changes);
-        this.setupChanges('value', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -1797,9 +1657,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._idh.doCheck('dataSource');
         this._idh.doCheck('items');
         this._idh.doCheck('searchExpr');
-        this._idh.doCheck('selectedItems');
         this._idh.doCheck('validationErrors');
-        this._idh.doCheck('value');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
@@ -1837,10 +1695,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxTemplateModule
   ],
   declarations: [
-    DxTagBoxComponent
+    TagBoxBaseComponent
   ],
   exports: [
-    DxTagBoxComponent,
+    TagBoxBaseComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1860,9 +1718,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxTemplateModule
   ]
 })
-export class DxTagBoxModule { }
-
-import type * as DxTagBoxTypes from "devextreme/ui/tag_box_types";
-export { DxTagBoxTypes };
+export class TagBoxBaseModule { }
 
 

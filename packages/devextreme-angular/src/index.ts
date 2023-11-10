@@ -67,7 +67,7 @@ export { DxSpeedDialActionComponent, DxSpeedDialActionModule } from 'devextreme-
 export { DxSwitchComponent, DxSwitchModule } from 'devextreme-angular/ui/switch';
 export { DxTabPanelComponent, DxTabPanelModule } from 'devextreme-angular/ui/tab-panel';
 export { DxTabsComponent, DxTabsModule } from 'devextreme-angular/ui/tabs';
-export { DxTagBoxComponent, DxTagBoxModule } from 'devextreme-angular/ui/tag-box';
+export { DxTagBoxBaseComponent, DxTagBoxBaseModule } from 'devextreme-angular/ui/tag-box-base';
 export { DxTextAreaComponent, DxTextAreaModule } from 'devextreme-angular/ui/text-area';
 export { DxTextBoxComponent, DxTextBoxModule } from 'devextreme-angular/ui/text-box';
 export { DxTileViewComponent, DxTileViewModule } from 'devextreme-angular/ui/tile-view';
