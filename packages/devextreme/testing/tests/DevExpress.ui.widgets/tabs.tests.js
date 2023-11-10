@@ -753,7 +753,7 @@ QUnit.module('Horizontal scrolling', () => {
     });
 
     QUnit.test('selected item should be visible after selectedIndex was changed', function(assert) {
-        assert.expect(1);
+        assert.expect(2);
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
             selectedIndex: 0,

@@ -752,10 +752,6 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleIndicatorPositionClass(args.value);
                 break;
             }
-            case 'items': {
-                this.callBase(args);
-                break;
-            }
             case 'selectedIndex': {
                 this.callBase(args);
                 this._updateFocusedElement();
