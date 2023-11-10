@@ -62,6 +62,7 @@ export { DxSpeedDialAction } from "./speed-dial-action";
 export { DxSwitch } from "./switch";
 export { DxTabPanel } from "./tab-panel";
 export { DxTabs } from "./tabs";
+export { DxTagBox } from "./tag-box";
 export { DxTextArea } from "./text-area";
 export { DxTextBox } from "./text-box";
 export { DxTileView } from "./tile-view";

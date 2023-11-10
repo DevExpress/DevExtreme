@@ -62,9 +62,7 @@ type ITagBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITag
   tagComponent?: React.ComponentType<any>;
   tagKeyFn?: (data: any) => string;
   defaultOpened?: boolean;
-  defaultValue?: Array<any | number | string>;
   onOpenedChange?: (value: boolean) => void;
-  onValueChange?: (value: Array<any | number | string>) => void;
 }>
 
 class TagBox extends BaseComponent<React.PropsWithChildren<ITagBoxOptions>> {
@@ -75,13 +73,12 @@ class TagBox extends BaseComponent<React.PropsWithChildren<ITagBoxOptions>> {
 
   protected _WidgetClass = dxTagBox;
 
-  protected subscribableOptions = ["opened","value"];
+  protected subscribableOptions = ["opened"];
 
   protected independentEvents = ["onChange","onClosed","onContentReady","onCustomItemCreating","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onMultiTagPreparing","onOpened","onSelectAllValueChanged","onValueChanged"];
 
   protected _defaults = {
-    defaultOpened: "opened",
-    defaultValue: "value"
+    defaultOpened: "opened"
   };
 
   protected _expectedChildren = {

@@ -328,6 +328,7 @@ declare const TagBoxBase: Omit<typeof dxSelectBox, 'new' | 'prototype'> & (new(e
  * @isEditor
  * @inherits TagBoxBase
  * @namespace DevExpress.ui
+ * @options dxTagBoxOptions
  * @public
  */
 export default class dxTagBox extends TagBoxBase {

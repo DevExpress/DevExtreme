@@ -63,6 +63,7 @@ export { SpeedDialAction } from "./speed-dial-action";
 export { Switch } from "./switch";
 export { TabPanel } from "./tab-panel";
 export { Tabs } from "./tabs";
+export { TagBox } from "./tag-box";
 export { TextArea } from "./text-area";
 export { TextBox } from "./text-box";
 export { TileView } from "./tile-view";
