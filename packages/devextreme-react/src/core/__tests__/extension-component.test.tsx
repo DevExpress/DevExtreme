@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-// @ts-nocheck
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { ExtensionComponent } from '../extension-component';
@@ -13,7 +12,7 @@ import { IHtmlOptions } from '../component-base';
 
 const ExtensionWidgetClass = jest.fn<typeof Widget, any[]>(() => Widget);
 
-class TestExtensionComponent<P = any> extends ExtensionComponent<P> {
+class TestExtensionComponent<P = any> extends ExtensionComponent<P & IHtmlOptions> {
   constructor(props: P) {
     super(props as P & IHtmlOptions);
 

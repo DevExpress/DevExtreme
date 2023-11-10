@@ -134,7 +134,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     const templateOptions = this._optionsManager.getTemplateOptions(config);
     const dxTemplates = this._createDXTemplates?.(templateOptions);
 
-    if (dxTemplates) {
+    if (dxTemplates && Object.keys(dxTemplates).length) {
       options = {
         ...options,
         integrationOptions: {
