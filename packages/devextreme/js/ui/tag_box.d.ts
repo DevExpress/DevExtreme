@@ -314,15 +314,21 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      */
     value?: Array<string | number | any>;
 }
+
 /**
  * @docid
- * @isEditor
  * @inherits dxSelectBox
  * @namespace DevExpress.ui
- * @public
  */
 declare const TagBoxBase: Omit<typeof dxSelectBox, 'new' | 'prototype'> & (new(element: UserDefinedElement, options?: Properties) => Omit<dxSelectBox<Properties>, 'reset'>);
 
+/**
+ * @docid
+ * @isEditor
+ * @inherits TagBoxBase
+ * @namespace DevExpress.ui
+ * @public
+ */
 export default class dxTagBox extends TagBoxBase {
     /**
      * @docid

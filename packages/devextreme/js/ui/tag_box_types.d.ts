@@ -20,6 +20,5 @@ export {
   SelectionChangedEvent,
   ValueChangedEvent,
   DropDownButtonTemplateData,
-  TagBoxBase,
   Properties,
 } from './tag_box';

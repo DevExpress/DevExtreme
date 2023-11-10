@@ -26075,7 +26075,7 @@ declare module DevExpress.ui {
     TKey = any
   > extends DevExpress.ui.dxTabs.Properties<TItem, TKey> {}
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:dxTagBox]
    */
   export class dxTagBox extends TagBoxBase {
     /**
@@ -30094,6 +30094,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:TagBoxBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export const TagBoxBase: Omit<typeof dxSelectBox, 'new' | 'prototype'> &
     (new (
