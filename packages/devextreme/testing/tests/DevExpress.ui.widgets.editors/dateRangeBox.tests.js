@@ -3955,7 +3955,7 @@ QUnit.module('calendarOptions', moduleConfig, () => {
         });
     });
 
-    QUnit.test('disabledDates should be passed to calendarOptions from dateRangeBox options', function(assert) {
+    QUnit.test('disabledDates should be passed to calendarOptions from dateRangeBox options when disabledDates option is array', function(assert) {
         const dates = [new Date('07/1/2018')];
         this.reinit({
             deferRendering: false,
