@@ -6,10 +6,15 @@
   target="#image"
   (onItemClick)="itemClick($event)"
 >
-  <div *dxTemplate="let e of 'item'">
-    <div>
-      <span [ngClass]="e.icon"></span>
-      <span *ngIf="e.items" class="dx-icon-spinright"></span> {{ e.text }}
+  <div *dxTemplate="let itemData of 'item'">
+    <div class="item-template-container">
+      <span
+        *ngIf="itemData.icon"
+        [ngClass]="itemData.icon"
+        class="dx-icon"
+      ></span>
+      <span class="dx-menu-item-text">{{ itemData.text }}</span>
+      <span *ngIf="itemData.items" class="dx-icon-spinright dx-icon"></span>
     </div>
   </div>
 </dx-context-menu>

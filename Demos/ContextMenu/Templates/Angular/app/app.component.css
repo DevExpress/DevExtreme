@@ -1,11 +1,12 @@
-::ng-deep .dx-menu-item-content span {
-  margin-right: 5px;
+::ng-deep .item-template-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
 }
 
-::ng-deep .dx-menu-item .dx-icon-spinright {
-  position: absolute;
-  top: 7px;
-  right: 2px;
+::ng-deep .dx-menu-item-text {
+  flex-grow: 1;
 }
 
 ::ng-deep #image {

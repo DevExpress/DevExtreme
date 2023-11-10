@@ -4,14 +4,18 @@ $(() => {
     width: 200,
     target: '#image',
     itemTemplate(itemData) {
-      const template = $('<div></div>');
+      const template = $('<div class="item-template-container"></div>');
+
       if (itemData.icon) {
-        template.append(`<span class="${itemData.icon}"><span>`);
+        template.append(`<span class="${itemData.icon} dx-icon "></span>`);
       }
+
+      template.append(`<span class="dx-menu-item-text">${itemData.text}</span>`);
+
       if (itemData.items) {
-        template.append('<span class="dx-icon-spinright"><span>');
+        template.append('<span class="dx-icon-spinright dx-icon"></span>');
       }
-      template.append(itemData.text);
+
       return template;
     },
     onItemClick(e) {

@@ -9,12 +9,12 @@ const itemClick = (e) => {
   }
 };
 
-const ItemTemplate = (e) => (
-  <React.Fragment>
-    <span className={ e.icon } />
-    { e.items ? <span className="dx-icon-spinright" /> : null }
-    { e.text }
-  </React.Fragment>
+const ItemTemplate = (itemData) => (
+  <div className="item-template-container">
+    {itemData.icon && <span className={`${itemData.icon} dx-icon`}></span>}
+    <span className="dx-menu-item-text">{itemData.text}</span>
+    {itemData.items && <span className="dx-icon-spinright dx-icon"></span>}
+  </div>
 );
 
 const App = () => (
