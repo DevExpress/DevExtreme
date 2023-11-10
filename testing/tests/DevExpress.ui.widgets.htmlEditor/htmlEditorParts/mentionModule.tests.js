@@ -142,7 +142,18 @@ QUnit.module('Mention format', () => {
         assert.strictEqual(element.dataset.marker, '@', 'correct marker');
         assert.strictEqual(element.dataset.mentionValue, 'John Smith', 'correct value');
         assert.strictEqual(element.dataset.id, 'JohnSm', 'correct id');
-        assert.strictEqual(element.innerText, '@John Smith', 'correct inner text');
+    });
+
+    test('Renders text into container', function(assert) {
+        const data = {
+            value: 'John Smith',
+            marker: '@',
+            id: 'JohnSm'
+        };
+        const element = MentionFormat.create(data);
+
+        new MentionFormat({}, element);
+        assert.strictEqual(element.children[0].innerText, '@John Smith', 'correct inner text');
     });
 
     test('Get data from element', function(assert) {
@@ -161,32 +172,37 @@ QUnit.module('Mention format', () => {
         };
 
         const element = MentionFormat.create(data);
-        assert.strictEqual(element.innerText, '#John Smith', 'correct inner text');
+
+        assert.strictEqual(element.getAttribute('data-marker'), '#', 'correct data-marker attribute');
     });
 
     test('Change default content renderer', function(assert) {
-        const data = {
+        const nodeData = {
             value: 'John Smith',
             marker: '@',
-            id: 'JohnSm',
+            id: 'JohnSm'
+        };
+        const data = {
+            ...nodeData,
             keyInTemplateStorage: 'my_key_in_storage'
         };
 
         MentionFormat.addTemplate({ marker: '@', editorKey: 'my_key_in_storage' }, {
             render: ({ container, model: mentionData }) => {
                 container.innerText = 'test';
-                assert.deepEqual(mentionData, data);
+                assert.deepEqual(mentionData, nodeData);
             }
         });
 
         let element = MentionFormat.create(data);
 
-        assert.strictEqual(element.innerText, 'test');
+        new MentionFormat({}, element);
+        assert.strictEqual(element.children[0].innerText, 'test');
 
         MentionFormat.removeTemplate({ marker: '@', editorKey: 'my_key_in_storage' });
         element = MentionFormat.create(data);
-
-        assert.strictEqual(element.innerText, '@John Smith');
+        new MentionFormat({}, element);
+        assert.strictEqual(element.children[0].innerText, '@John Smith');
     });
 });
 
@@ -441,8 +457,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
             return;
         }
 
+        const totalItems = 60;
+        const pageSize = 50;
         const items = [];
-        for(let i = 0; i < 60; i++) {
+        for(let i = 0; i < totalItems; i++) {
             items.push(i);
         }
 
@@ -454,7 +472,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         this.options.mentions = [{
             dataSource: {
                 store: items,
-                pageSize: 50,
+                pageSize,
                 paginate: true
             },
         }];
@@ -468,15 +486,15 @@ QUnit.module('Mentions module', moduleConfig, () => {
         this.clock.tick(10);
 
         let $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
-        assert.strictEqual($items.length, 50);
+        assert.strictEqual($items.length, pageSize);
 
         this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
 
         $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
-        const isLastItemOnPageFocused = $items.eq(49).hasClass(FOCUSED_STATE_CLASS);
+        const isLastItemOnPageFocused = $items.eq(pageSize - 1).hasClass(FOCUSED_STATE_CLASS);
 
         assert.ok(isLastItemOnPageFocused);
-        assert.strictEqual($items.length, 60, 'next page has loaded');
+        assert.strictEqual($items.length, totalItems, 'next page has loaded');
     });
 
     test('trigger \'arrow up\' should focus previous list item', function(assert) {
