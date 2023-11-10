@@ -82,13 +82,6 @@
     &::after {
       z-index: 2;
     }
-
-    @include dx-tabs-border-mixin(
-      $generic-tabs-border-focused-disabled-top,
-      $generic-tabs-border-focused-disabled-right,
-      $generic-tabs-border-focused-disabled-bottom,
-      $generic-tabs-border-focused-disabled-left,
-    );
   }
 
   .dx-tab-text {
@@ -117,6 +110,15 @@
         $generic-tabs-border-focused-right,
         $generic-tabs-border-focused-bottom,
         $generic-tabs-border-focused-left,
+      );
+    }
+
+    &.dx-state-focused.dx-state-disabled {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-border-focused-disabled-top,
+        $generic-tabs-border-focused-disabled-right,
+        $generic-tabs-border-focused-disabled-bottom,
+        $generic-tabs-border-focused-disabled-left,
       );
     }
 
