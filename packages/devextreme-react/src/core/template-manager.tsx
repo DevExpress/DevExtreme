@@ -38,7 +38,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [instantiationModels, setInstantiationModels] = useState(new TemplateInstantiationModels());
   const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
-  const [componentCallback, setComponentCallback] = useState<Function | undefined>(undefined);
+  const [componentCallback, setComponentCallback] = useState<() => void>();
   const widgetId = useRef('');
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
