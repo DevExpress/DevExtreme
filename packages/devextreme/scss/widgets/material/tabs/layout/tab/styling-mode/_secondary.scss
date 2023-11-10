@@ -15,8 +15,12 @@
 
 
 .dx-tabs-styling-mode-secondary {
-  .dx-tab .dx-tab-text {
-    text-transform: initial;
+  .dx-tab {
+    min-width: 0;
+
+    .dx-tab-text {
+      text-transform: none;
+    }
   }
 
   .dx-tab-content {
