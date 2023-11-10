@@ -69,7 +69,7 @@ class OptionsManager {
     return config.templates;
   }
 
-  public update(config: IConfigNode, dxtemplates: DXTemplateCollection): void {
+  public update(config: IConfigNode): void {
     const changedOptions: [string, unknown][] = [];
     const optionChangedHandler = ({ value, fullName }) => {
       changedOptions.push([fullName, value]);
@@ -89,15 +89,6 @@ class OptionsManager {
       this.resetOption(optionName);
     });
 
-    if (Object.keys(dxtemplates).length > 0) {
-      this.setValue(
-        'integrationOptions',
-        {
-          templates: dxtemplates,
-        },
-      );
-    }
-
     Object.keys(changes.options).forEach((key) => {
       this.setValue(key, changes.options[key]);
     });
@@ -114,6 +105,17 @@ class OptionsManager {
       }
     });
     this.instance.endUpdate();
+  }
+
+  public updateTemplates(dxtemplates: DXTemplateCollection): void {
+    if (Object.keys(dxtemplates).length > 0) {
+      this.setValue(
+        'integrationOptions',
+        {
+          templates: dxtemplates,
+        },
+      );
+    }
   }
 
   public onOptionChanged(e: { name: string; fullName: string; value: unknown }): void {

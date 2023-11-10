@@ -5,6 +5,7 @@ import {
   useState,
   useMemo,
   useCallback,
+  useEffect,
   useRef,
   FC,
 } from 'react';
@@ -37,6 +38,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [instantiationModels, setInstantiationModels] = useState(new TemplateInstantiationModels());
   const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
+  const [componentCallback, setComponentCallback] = useState<() => void>();
   const widgetId = useRef('');
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
@@ -119,7 +121,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       }
     }
 
-    function getDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
+    function getDXTemplates(templateOptions: Record<string, ITemplate>, callback?: () => void): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
         .reduce((res, [key, template]) => (
           {
@@ -129,6 +131,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         ), {});
 
       setTemplateFactories(factories);
+      setComponentCallback(callback);
 
       const dxTemplates = Object.keys(factories)
         .reduce<DXTemplateCollection>((templates, templateKey) => {
@@ -147,6 +150,12 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
     init(getDXTemplates, clearInstantiationModels);
   }, [init, getRenderFunc]);
+
+  useEffect(() => {
+    if (componentCallback) {
+      componentCallback();
+    }
+  }, []);
 
   if (instantiationModels.empty) {
     return null;

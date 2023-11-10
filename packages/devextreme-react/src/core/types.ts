@@ -37,7 +37,7 @@ export interface TemplateWrapperProps {
 
 export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
 
-export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
+export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>, callback?: () => void) => DXTemplateCollection;
 
 export interface TemplateManagerProps {
   init: (getDXTemplates: DXTemplateCreator, clearInstantiationModels: () => void) => void;
