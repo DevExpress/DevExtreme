@@ -92,7 +92,7 @@ $datagrid-cell-removed-text-color: null !default;
 * $type color
 */
 $datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
-$datagrid-nodata-color: null !default;
+$datagrid-nodata-color: $base-label-color !default;
 
 /**
 * $name 90. Group row text color
@@ -185,7 +185,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/light/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
-  $datagrid-nodata-color: #707070 !default;
 }
 
 @if $mode == "dark" {
@@ -202,7 +201,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/dark/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
-  $datagrid-nodata-color: #999 !default;
 }
 
 $datagrid-border: 1px solid $datagrid-border-color !default;
