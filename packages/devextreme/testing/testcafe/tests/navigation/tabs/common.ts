@@ -57,7 +57,7 @@ test('Tab item width in secondary stylingMode', async (t) => {
     { icon: 'user' },
   ] as Item[];
 
-  return createWidget('dxTabs', { dataSource, width: 'auto' }, '#tabs');
+  return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
 });
 
 [true, false].forEach((rtlEnabled) => {
