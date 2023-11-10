@@ -311,6 +311,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @docid
      * @default []
      * @public
+     * @fires dxTagBoxOptions.onValueChanged
      */
     value?: Array<string | number | any>;
 }
