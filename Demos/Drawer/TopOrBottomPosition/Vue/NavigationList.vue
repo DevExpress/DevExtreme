@@ -5,7 +5,7 @@
       :active-state-enabled="false"
       :hover-state-enabled="false"
       :focus-state-enabled="false"
-      class="panel-list dx-theme-accent-as-background-color"
+      class="panel-list"
     />
   </div>
 </template>

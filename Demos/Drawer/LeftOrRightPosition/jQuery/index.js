@@ -13,7 +13,6 @@ $(() => {
         hoverStateEnabled: false,
         focusStateEnabled: false,
         activeStateEnabled: false,
-        elementAttr: { class: 'dx-theme-accent-as-background-color' },
       });
     },
   }).dxDrawer('instance');

@@ -92,8 +92,9 @@ export default {
 </script>
 <style scoped>
     .dx-toolbar {
-      background-color: rgba(191, 191, 191, 0.15);
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       padding: 5px 10px;
+      margin-bottom: 5px;
     }
 
     .dx-list-item-icon-container,
@@ -121,12 +122,7 @@ export default {
     }
 
     .panel-list .dx-list-item {
-      color: #fff;
       border-top: 1px solid rgba(221, 221, 221, 0.2);
-    }
-
-    .panel-list .dx-list-item .dx-icon {
-      color: #fff !important;
     }
 
     .options {
@@ -155,8 +151,7 @@ export default {
     }
 
     #content {
-      height: 100%;
-      padding: 10px 20px;
+      padding: 0 24px;
     }
 
     #content h2 {
