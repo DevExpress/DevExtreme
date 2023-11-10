@@ -176,7 +176,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     .dx-list-group-header-indicator {
       order: 1;
 
-      &::before {
+      .dx-list-collapsible-groups &::before {
         width: 0;
         height: 0;
         display: block;
