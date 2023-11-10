@@ -27,7 +27,7 @@ const createScheduler = async (
   });
 };
 
-['generic.light', 'material.blue.light'].forEach((theme) => {
+['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
   const themePrefix = theme.split('.')[0];
 
   [false, true].forEach((rtlEnabled) => {
