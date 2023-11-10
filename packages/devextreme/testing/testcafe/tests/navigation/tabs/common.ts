@@ -50,11 +50,11 @@ test('Tab item width in secondary stylingMode', async (t) => {
   await setAttribute('#container', 'style', 'display: flex; width: 800px; height: 600px;');
 
   const dataSource = [
-    { icon: 'user' },
-    { icon: 'user' },
-    { icon: 'user' },
-    { icon: 'user' },
-    { icon: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
   ] as Item[];
 
   return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
