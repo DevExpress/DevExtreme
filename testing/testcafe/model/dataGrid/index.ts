@@ -524,6 +524,16 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiRefresh(): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        (getInstance() as DataGridInstance).refresh().catch(() => {});
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
   apiToggleKeyboardNavigation(value: boolean): Promise<void> {
     const { getInstance } = this;
 
