@@ -301,12 +301,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';
 
-    QUnit.test('group header collapsed indicator element for the Material theme', function(assert) {
-        const origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = () => {
-            return true;
-        };
-
+    QUnit.test('group header collapsed indicator element', function(assert) {
         const $element = this.element.dxList({
             items: [{ key: 'a', items: ['0'] }],
             grouped: true,
@@ -316,8 +311,6 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         const $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + ' ' + toSelector(LIST_GROUP_HEADER_CLASS));
 
         assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, 'group header has the collapsed indicator element for the Material theme');
-
-        themes.isMaterialBased = origIsMaterialBased;
     });
 
     QUnit.test('group collapsing is animated', function(assert) {
