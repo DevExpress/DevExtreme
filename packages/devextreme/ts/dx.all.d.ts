@@ -6719,6 +6719,10 @@ declare module DevExpress.events {
      * [descr:EventInfo.element]
      */
     readonly element: DevExpress.core.DxElement;
+    /**
+     * [descr:EventInfo.model]
+     */
+    readonly model?: any;
   }
   /**
    * [descr:EventObject]
@@ -6825,6 +6829,10 @@ declare module DevExpress.events {
      * [descr:NativeEventInfo.element]
      */
     readonly element: DevExpress.core.DxElement;
+    /**
+     * [descr:NativeEventInfo.model]
+     */
+    readonly model?: any;
     /**
      * [descr:NativeEventInfo.event]
      */

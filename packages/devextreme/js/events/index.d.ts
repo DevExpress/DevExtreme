@@ -38,6 +38,8 @@ export interface EventInfo<TComponent> {
     readonly component: TComponent;
     /** @docid */
     readonly element: DxElement;
+    /** @docid */
+    readonly model?: any;
 }
 
 /**
@@ -52,6 +54,8 @@ export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly component: TComponent;
     /** @docid */
     readonly element: DxElement;
+    /** @docid */
+    readonly model?: any;
     /**
      * @docid
      * @type event
