@@ -38437,6 +38437,7 @@ declare module DevExpress.viz {
       | ((e: {
           component?: dxPolarChart;
           element?: DevExpress.core.DxElement;
+          model?: any;
           event?: DevExpress.events.DxEvent;
           argument?: Date | number | string;
         }) => void)

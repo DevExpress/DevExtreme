@@ -446,7 +446,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @action
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart; element?: DxElement; event?: DxEvent; argument?: Date | number | string }) => void) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart; element?: DxElement; model?: any; event?: DxEvent; argument?: Date | number | string }) => void) | string;
     /**
      * @docid
      * @default null
