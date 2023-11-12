@@ -73,6 +73,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:this
             * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -91,6 +92,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:this
             * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -108,6 +110,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:this
             * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
