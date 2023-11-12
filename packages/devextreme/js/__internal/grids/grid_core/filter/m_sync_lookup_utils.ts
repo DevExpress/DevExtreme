@@ -2,6 +2,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 
+import gridCoreUtils from '../m_utils';
 import { normalizeLookupDataSource } from './m_utils';
 
 function normalizeGroupingLoadOptions(group) {
@@ -92,7 +93,7 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
           return;
         }
 
-        const filter = this.combineFilters(
+        const filter = gridCoreUtils.combineFilters(
           items.flatMap((data) => data.key).map((key) => [
             column.lookup.valueExpr, key,
           ]),
@@ -102,7 +103,7 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
         const newDataSource = new DataSource({
           ...lookupDataSourceOptions,
           ...loadOptions,
-          filter: this.combineFilters([filter, loadOptions.filter], 'and'),
+          filter: gridCoreUtils.combineFilters([filter, loadOptions.filter], 'and'),
           paginate: false, // pagination is included to filter
         });
 
