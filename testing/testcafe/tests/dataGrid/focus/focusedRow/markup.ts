@@ -100,4 +100,4 @@ test(`Invalid cells in a focused row should have the correct background color (T
       validationRules: [{ type: 'required' }],
     }, 'dataB', 'dataC'],
   });
-}).after(async () => changeTheme(Themes.genericLight));;
+}).after(async () => changeTheme(Themes.genericLight));
