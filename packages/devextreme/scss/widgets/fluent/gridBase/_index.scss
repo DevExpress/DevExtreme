@@ -994,7 +994,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-focused {
       &.dx-data-row {
-        & > td:not(.dx-focused):not(.dx-cell-modified),
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
           background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
@@ -1014,8 +1014,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       &.dx-data-row.dx-edit-row {
-        & > td.dx-editor-cell:not(.dx-command-select),
-        & > tr > td.dx-editor-cell:not(.dx-command-select) {
+        & > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
+        & > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
           background-color: $datagrid-base-background-color;
           color: $datagrid-base-color;
         }
