@@ -92,7 +92,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         const disabledDates = isFunction(disabledDatesValue)
             ? this._injectComponent(disabledDatesValue)
-            : (disabledDatesValue || undefined);
+            : (disabledDatesValue ?? undefined);
 
         return extend(super._getWidgetOptions(), {
             disabledDates,

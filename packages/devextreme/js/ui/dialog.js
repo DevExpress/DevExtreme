@@ -7,7 +7,6 @@ import Guid from '../core/guid';
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
 import { isPlainObject } from '../core/utils/type';
-import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { getWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
@@ -154,21 +153,23 @@ export const custom = function(options) {
         }
     }, options.popupOptions));
 
-    each(options.buttons || [DEFAULT_BUTTON], function() {
-        const action = new Action(this.onClick, {
-            context: popupInstance
+    const buttonOptions = options.buttons || [DEFAULT_BUTTON];
+
+    buttonOptions.forEach((options) => {
+        const action = new Action(options.onClick, {
+            context: popupInstance,
         });
 
         popupToolbarItems.push({
             toolbar: 'bottom',
             location: devices.current().android ? 'after' : 'center',
             widget: 'dxButton',
-            options: extend({}, this, {
+            options: Object.assign({}, options, {
                 onClick: function() {
                     const result = action.execute(...arguments);
                     hide(result);
-                }
-            })
+                },
+            }),
         });
     });
 
