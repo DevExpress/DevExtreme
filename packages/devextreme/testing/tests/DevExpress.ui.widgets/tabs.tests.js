@@ -505,6 +505,77 @@ QUnit.module('Tab select action', () => {
 
         assert.equal(instance.option('selectedItems').length, 2, 'selected two items in multiple mode');
     });
+
+    QUnit.test('focusedElement must be changed after changing the selectedIndex', function(assert) {
+        const $tabs = $('#tabs').dxTabs({
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2' },
+            ],
+        });
+        const tabs = $tabs.dxTabs('instance');
+
+        const $target1 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        $target1.trigger('dxclick');
+        const $focusedElement1 = tabs.option('focusedElement')[0];
+
+        assert.strictEqual($focusedElement1, $target1[0]);
+
+        tabs.option({ selectedIndex: 1 });
+
+        const $target2 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
+        const $focusedElement2 = tabs.option('focusedElement')[0];
+
+        assert.strictEqual($focusedElement2, $target2);
+    });
+
+    QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
+        const $tabs = $('#tabs').dxTabs({
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2' },
+            ],
+        });
+        const tabs = $tabs.dxTabs('instance');
+
+        const $target1 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        $target1.trigger('dxclick');
+        const $focusedElement1 = tabs.option('focusedElement')[0];
+
+        assert.strictEqual($focusedElement1, $target1[0]);
+
+        tabs.option({ selectedItem: tabs.option('items[1]') });
+
+        const $target2 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
+        const $focusedElement2 = tabs.option('focusedElement')[0];
+
+        assert.strictEqual($focusedElement2, $target2);
+    });
+
+    QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
+        const items = [
+            { text: '0' },
+            { text: '1' },
+            { text: '2' },
+        ];
+        const $tabs = $('#tabs').dxTabs({ items });
+        const tabs = $tabs.dxTabs('instance');
+
+        const $target1 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        $target1.trigger('dxclick');
+        const $focusedElement1 = tabs.option('focusedElement')[0];
+
+        assert.strictEqual($focusedElement1, $target1[0]);
+
+        tabs.option({ selectedItems: [items[1], items[2]] });
+
+        const $target2 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
+        const $focusedElement2 = tabs.option('focusedElement')[0];
+
+        assert.strictEqual($focusedElement2, $target2);
+    });
 });
 
 QUnit.module('Horizontal scrolling', () => {
