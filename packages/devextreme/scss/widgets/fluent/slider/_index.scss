@@ -77,11 +77,8 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
 
   .dx-tooltip-wrapper {
     .dx-overlay-content {
-      border: 1px solid transparent;
-
       .dx-popup-content {
         line-height: normal;
-        padding: $fluent-slider-tooltip-popup-content-padding;
 
         .dx-slider-tooltip-position-top & {
           padding-top: 6px;
