@@ -683,9 +683,10 @@ const Tabs = CollectionWidget.inherit({
 
     _updateFocusedElement() {
         const { focusStateEnabled, selectedIndex } = this.option();
-        const selectedItem = this._itemElements?.().eq(selectedIndex) || null;
 
-        if(focusStateEnabled && selectedItem) {
+        if(focusStateEnabled) {
+            const selectedItem = this._itemElements().eq(selectedIndex) || null;
+
             this.option({ focusedElement: selectedItem });
         }
     },
@@ -754,8 +755,10 @@ const Tabs = CollectionWidget.inherit({
             case 'selectedIndex':
             case 'selectedItem':
             case 'selectedItems': {
-                this.callBase(args);
-                this._updateFocusedElement();
+                if(this._itemElements) {
+                    this.callBase(args);
+                    this._updateFocusedElement();
+                }
                 break;
             }
             default:
