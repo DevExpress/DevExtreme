@@ -756,10 +756,7 @@ const Tabs = CollectionWidget.inherit({
             case 'selectedItem':
             case 'selectedItems':
                 this.callBase(args);
-
-                if(this?._itemElements) {
-                    this._updateFocusedElement();
-                }
+                this._updateFocusedElement();
                 break;
             default:
                 this.callBase(args);
