@@ -652,6 +652,18 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     width: 6px;
     height: 100%;
     background-color: $base-accent;
+  }
+}
+
+.dx-rtl.dx-scheduler-appointment:not(.dx-scheduler-appointment-has-resource-color) {
+  .dx-scheduler-appointment-strip {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+}
+
+.dx-scheduler-appointment:not(.dx-scheduler-appointment-has-resource-color):not(.dx-rtl) {
+  .dx-scheduler-appointment-strip {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
   }
