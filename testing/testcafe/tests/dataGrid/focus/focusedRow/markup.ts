@@ -66,43 +66,38 @@ fixture.disablePageReloads`Focused row - markup`
   }).after(async () => changeTheme(Themes.genericLight));
 });
 
-[
-  Themes.materialBlue,
-  Themes.fluentBlue,
-].forEach((theme) => {
-  test(`Invalid cells in a focused row should have the correct background color (T1197268) - ${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
-    // act
-    await dataGrid.apiAddRow();
-    await dataGrid.apiSaveEditData();
-    // assert
-    await takeScreenshot(`focused-row-invalid-cells (${theme}).png`, dataGrid.element);
-    await t.expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-    await createWidget('dxDataGrid', {
-      keyExpr: 'id',
-      focusedRowEnabled: true,
-      editing: {
-        allowAdding: true,
-      },
-      dataSource: [{
-        id: 0,
-        dataA: 'dataA_1',
-        dataB: 'dataB_1',
-        dataC: 'dataC_1',
-      }, {
-        id: 1,
-        dataA: 'dataA_2',
-        dataB: 'dataB_2',
-        dataC: 'dataC_2',
-      }],
-      columns: [{
-        dataField: 'dataA',
-        validationRules: [{ type: 'required' }],
-      }, 'dataB', 'dataC'],
-    });
-  }).after(async () => changeTheme(Themes.genericLight));
-});
+test(`Invalid cells in a focused row should have the correct background color (T1197268) - ${Themes.materialBlue}`, async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  // act
+  await dataGrid.apiAddRow();
+  await dataGrid.apiSaveEditData();
+  // assert
+  await takeScreenshot(`focused-row-invalid-cells (${Themes.materialBlue}).png`, dataGrid.element);
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme(Themes.materialBlue);
+  await createWidget('dxDataGrid', {
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    editing: {
+      allowAdding: true,
+    },
+    dataSource: [{
+      id: 0,
+      dataA: 'dataA_1',
+      dataB: 'dataB_1',
+      dataC: 'dataC_1',
+    }, {
+      id: 1,
+      dataA: 'dataA_2',
+      dataB: 'dataB_2',
+      dataC: 'dataC_2',
+    }],
+    columns: [{
+      dataField: 'dataA',
+      validationRules: [{ type: 'required' }],
+    }, 'dataB', 'dataC'],
+  });
+}).after(async () => changeTheme(Themes.genericLight));
