@@ -72,12 +72,9 @@ export default class MaskStrategy {
             }
 
             this._clearSelectedText();
-
             this._autoFillHandler(originalEvent);
-
-            this._editorCaret(currentCaret);
-
             this._handleInsertTextInputEvent(originalEvent.data);
+            this._editorCaret(currentCaret);
         }
 
         if(this._editorOption('text') === this._previousText) {
