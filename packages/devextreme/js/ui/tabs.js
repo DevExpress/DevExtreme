@@ -685,7 +685,7 @@ const Tabs = CollectionWidget.inherit({
         const { focusStateEnabled, selectedIndex } = this.option();
 
         if(focusStateEnabled) {
-            const selectedItem = this._itemElements().eq(selectedIndex) || null;
+            const selectedItem = this._itemElements().eq(selectedIndex);
 
             this.option({ focusedElement: selectedItem });
         }
@@ -752,15 +752,15 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleIndicatorPositionClass(args.value);
                 break;
             }
-            case 'selectedIndex':
-            case 'selectedItem':
-            case 'selectedItems': {
-                if(this._itemElements) {
-                    this.callBase(args);
-                    this._updateFocusedElement();
-                }
-                break;
-            }
+            // case 'selectedIndex':
+            // case 'selectedItem':
+            // case 'selectedItems': {
+            //     if(this._itemElements) {
+            //         this.callBase(args);
+            //         this._updateFocusedElement();
+            //     }
+            //     break;
+            // }
             default:
                 this.callBase(args);
         }
