@@ -683,7 +683,7 @@ const Tabs = CollectionWidget.inherit({
 
     _updateFocusedElement() {
         const { focusStateEnabled, selectedIndex } = this.option();
-        const selectedItem = this._itemElements()?.eq(selectedIndex) || null;
+        const selectedItem = this._itemElements?.().eq(selectedIndex) || null;
 
         if(focusStateEnabled && selectedItem) {
             this.option({ focusedElement: selectedItem });
