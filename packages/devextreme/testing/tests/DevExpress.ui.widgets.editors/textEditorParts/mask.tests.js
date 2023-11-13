@@ -2165,6 +2165,26 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
             value: ' y'
         });
     });
+
+    QUnit.test('caret moving correctly if maskChar set to empty string', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '00',
+            maskChar: ''
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        caretWorkaround($input);
+
+        const keyboard = keyboardMock($input, true);
+        keyboard.caret(0);
+
+        keyboard
+            .type('1')
+            .type('2');
+
+        assert.equal($input.val(), '12', 'both symbols appeared');
+    });
 });
 
 QUnit.module('escape built-in rules', {}, () => {
