@@ -77,13 +77,6 @@
     vertical-align: middle;
   }
 
-  &.dx-label-v-align {
-    .dx-invalid-message > .dx-overlay-wrapper,
-    .dx-invalid-message > .dx-overlay-content {
-      transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
-    }
-  }
-
   .dx-toggle-controls-paddings {
     padding-inline-start: $material-filled-texteditor-input-horizontal-padding;
   }
