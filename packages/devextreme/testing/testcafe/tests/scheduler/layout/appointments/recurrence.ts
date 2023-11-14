@@ -1,0 +1,44 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Scheduler from '../../../../model/scheduler';
+import createWidget from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { changeTheme } from '../../../../helpers/changeTheme';
+
+fixture`AppointmentForm screenshot tests`
+  .page(url(__dirname, '../../../container.html'));
+
+['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+  ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'].forEach((currentView) => {
+    [true, false].forEach((rtlEnabled) => {
+      test('Appointemt form tests', async (t) => {
+        const scheduler = new Scheduler('#container');
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        await t
+          .expect(await takeScreenshot(`recurrent-appointment-in-${currentView}_view-and-${rtlEnabled ? 'rtl' : 'non-rtl'}_mode-${theme}.png`, scheduler.element))
+          .ok()
+
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        await changeTheme(theme);
+        await createWidget('dxScheduler', {
+          dataSource: [{
+            text: 'Long Long Long Long Long Long Long Long Long Description',
+            startDate: new Date('2021-01-01T01:30:00.000Z'),
+            endDate: new Date('2021-01-01T03:00:00.000Z'),
+            recurrenceRule: 'FREQ=DAILY;COUNT=30',
+          }],
+          timeZone: 'Etc/UTC',
+          currentDate: new Date(2021, 0, 4),
+          height: 600,
+          currentView,
+          rtlEnabled,
+        });
+      }).after(async () => {
+        await changeTheme('generic.light');
+        window.location.reload();
+      });
+    });
+  });
+});
