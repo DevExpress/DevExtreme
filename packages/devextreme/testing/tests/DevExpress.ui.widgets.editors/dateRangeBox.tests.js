@@ -3954,6 +3954,31 @@ QUnit.module('calendarOptions', moduleConfig, () => {
             assert.deepEqual(calendar.option(name), value);
         });
     });
+
+    QUnit.test('disabledDates should be passed to calendarOptions from dateRangeBox options when disabledDates option is array', function(assert) {
+        const dates = [new Date('07/1/2018')];
+        this.reinit({
+            deferRendering: false,
+            disabledDates: dates,
+        });
+
+        const calendar = this.getCalendar();
+
+        assert.deepEqual(calendar.option('disabledDates'), dates);
+    });
+
+    QUnit.test('disabledDates should be passed to calendarOptions from dateRangeBox options when disabledDates option is array and option changed at runtime', function(assert) {
+        const dates = [new Date('07/1/2018')];
+        this.reinit({
+            deferRendering: false,
+        });
+
+        this.instance.option('disabledDates', dates);
+
+        const calendar = this.getCalendar();
+
+        assert.deepEqual(calendar.option('disabledDates'), dates);
+    });
 });
 
 QUnit.module('Aria accessibility', {
