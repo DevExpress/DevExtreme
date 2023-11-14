@@ -435,6 +435,17 @@ const Tabs = CollectionWidget.inherit({
         this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextTabFocused);
     },
 
+    _updateFocusedElement() {
+        const { focusStateEnabled, selectedIndex } = this.option();
+        const itemElements = this._itemElements();
+
+        if(focusStateEnabled && itemElements.length) {
+            const selectedItem = itemElements.get(selectedIndex);
+
+            this.option({ focusedElement: selectedItem });
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -468,6 +479,12 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollToItem(args.value);
                 break;
             }
+            case 'selectedIndex':
+            case 'selectedItem':
+            case 'selectedItems':
+                this.callBase(args);
+                this._updateFocusedElement();
+                break;
             default:
                 this.callBase(args);
         }
