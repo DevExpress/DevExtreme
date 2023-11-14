@@ -466,7 +466,7 @@ class NumericRule extends NestedOption<INumericRuleProps> {
 type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  pattern?: any | string;
+  pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
 class PatternRule extends NestedOption<IPatternRuleProps> {
@@ -798,7 +798,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
-  pattern?: any | string;
+  pattern?: RegExp | string;
 }>
 class ValidationRule extends NestedOption<IValidationRuleProps> {
   public static OptionName = "validationRules";

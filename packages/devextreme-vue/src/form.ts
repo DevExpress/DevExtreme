@@ -542,7 +542,7 @@ const DxPatternRule = createConfigurationComponent({
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    pattern: {},
+    pattern: [RegExp, String],
     type: String
   }
 });
@@ -890,7 +890,7 @@ const DxValidationRule = createConfigurationComponent({
     max: [Date, Number],
     message: String,
     min: [Date, Number],
-    pattern: {},
+    pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
     type: String,
