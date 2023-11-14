@@ -13,21 +13,25 @@
           <DxSimpleItem
             data-field="ID"
           />
-          <DxSimpleItem
-            data-field="FirstName"
-          />
-          <DxSimpleItem
-            data-field="LastName"
-          />
-          <DxSimpleItem
-            data-field="HireDate"
-          />
-          <DxSimpleItem
-            data-field="Position"
-          />
-          <DxSimpleItem
-            data-field="OfficeNo"
-          />
+          <DxGroupItem
+            caption="Main Information"
+          >
+            <DxSimpleItem
+              data-field="FirstName"
+            />
+            <DxSimpleItem
+              data-field="LastName"
+            />
+            <DxSimpleItem
+              data-field="HireDate"
+            />
+            <DxSimpleItem
+              data-field="Position"
+            />
+            <DxSimpleItem
+              data-field="OfficeNo"
+            />
+          </DxGroupItem>
         </DxGroupItem>
         <DxGroupItem
           caption="Personal Data"

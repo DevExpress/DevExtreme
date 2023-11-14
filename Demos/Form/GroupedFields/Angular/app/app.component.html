@@ -5,11 +5,13 @@
   <dx-form id="form" [formData]="employee" [colCount]="2">
     <dxi-item itemType="group" caption="System Information">
       <dxi-item dataField="ID"></dxi-item>
-      <dxi-item dataField="FirstName"></dxi-item>
-      <dxi-item dataField="LastName"></dxi-item>
-      <dxi-item dataField="HireDate"></dxi-item>
-      <dxi-item dataField="Position"></dxi-item>
-      <dxi-item dataField="OfficeNo"></dxi-item>
+      <dxi-item itemType="group" caption="Main Information">
+        <dxi-item dataField="FirstName"></dxi-item>
+        <dxi-item dataField="LastName"></dxi-item>
+        <dxi-item dataField="HireDate"></dxi-item>
+        <dxi-item dataField="Position"></dxi-item>
+        <dxi-item dataField="OfficeNo"></dxi-item>
+      </dxi-item>
     </dxi-item>
     <dxi-item itemType="group" caption="Personal Data">
       <dxi-item dataField="BirthDate"></dxi-item>

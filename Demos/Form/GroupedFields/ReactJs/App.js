@@ -24,11 +24,13 @@ export default function App() {
         >
           <GroupItem caption="System Information">
             <SimpleItem dataField="ID" />
-            <SimpleItem dataField="FirstName" />
-            <SimpleItem dataField="LastName" />
-            <SimpleItem dataField="HireDate" />
-            <SimpleItem dataField="Position" />
-            <SimpleItem dataField="OfficeNo" />
+            <GroupItem caption="Main Information">
+              <SimpleItem dataField="FirstName" />
+              <SimpleItem dataField="LastName" />
+              <SimpleItem dataField="HireDate" />
+              <SimpleItem dataField="Position" />
+              <SimpleItem dataField="OfficeNo" />
+            </GroupItem>
           </GroupItem>
           <GroupItem caption="Personal Data">
             <SimpleItem dataField="BirthDate" />

@@ -5,7 +5,11 @@ $(() => {
     items: [{
       itemType: 'group',
       caption: 'System Information',
-      items: ['ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'],
+      items: ['ID', {
+        itemType: 'group',
+        caption: 'Main Information',
+        items: ['FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'],
+      }],
     }, {
       itemType: 'group',
       caption: 'Personal Data',
