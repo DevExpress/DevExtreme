@@ -1797,6 +1797,17 @@
             "Name": "AllDayPanelMode",
             "Widget": "Scheduler",
             "DemoType": "Web"
+          },
+          {
+            "Title": "Work Shifts",
+            "Name": "WorkShifts",
+            "DocUrl": "",
+            "Widget": "Scheduler",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       },

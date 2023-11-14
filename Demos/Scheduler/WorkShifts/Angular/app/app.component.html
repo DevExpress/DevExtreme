@@ -1,0 +1,27 @@
+<div class="options">
+  <div class="option">
+    <div class="label">Work Hours</div>
+    <div class="value">
+      <dx-radio-group
+        [items]="shifts"
+        [value]="shifts[0]"
+        layout="horizontal"
+        (onValueChanged)="onShiftChanged($event)"
+      >
+      </dx-radio-group>
+    </div>
+  </div>
+</div>
+<br />
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [dataSource]="appointments"
+  [views]="['day', 'week']"
+  currentView="week"
+  [currentDate]="currentDate"
+  [startDayHour]="0"
+  [endDayHour]="8"
+  [height]="600"
+  [showAllDayPanel]="false"
+>
+</dx-scheduler>
