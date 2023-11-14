@@ -47,15 +47,6 @@
       );
     }
 
-    &.dx-state-focused {
-      @include dx-tabs-border-mixin(
-        $generic-tabs-vertical-border-focused-top,
-        $generic-tabs-vertical-border-focused-right,
-        $generic-tabs-vertical-border-focused-bottom,
-        $generic-tabs-vertical-border-focused-left,
-      );
-    }
-
     &.dx-state-focused.dx-state-disabled {
       @include dx-tabs-border-mixin(
         $generic-tabs-vertical-border-focused-disabled-top,
@@ -68,6 +59,15 @@
 
   &.dx-state-focused {
     .dx-tab {
+      &.dx-state-focused {
+        @include dx-tabs-border-mixin(
+          $generic-tabs-vertical-border-focused-top,
+          $generic-tabs-vertical-border-focused-right,
+          $generic-tabs-vertical-border-focused-bottom,
+          $generic-tabs-vertical-border-focused-left,
+        );
+      }
+
       &.dx-focused-disabled-next-tab {
         &::after {
           border-inline-end: $generic-tabs-border;

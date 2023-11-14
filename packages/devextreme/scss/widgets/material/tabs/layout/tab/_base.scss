@@ -35,11 +35,6 @@
     }
   }
 
-  &.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
-  }
-
-
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
@@ -64,5 +59,11 @@
     color: $tabs-tab-icon-color;
 
     @include dx-icon-sizing($material-tabs-icon-size);
+  }
+}
+
+.dx-tabs.dx-state-focused {
+  .dx-tab.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
   }
 }

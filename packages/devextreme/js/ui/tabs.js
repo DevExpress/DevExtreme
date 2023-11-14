@@ -681,6 +681,17 @@ const Tabs = CollectionWidget.inherit({
         this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
     },
 
+    _updateFocusedElement() {
+        const { focusStateEnabled, selectedIndex } = this.option();
+        const itemElements = this._itemElements();
+
+        if(focusStateEnabled && itemElements.length) {
+            const selectedItem = itemElements.get(selectedIndex);
+
+            this.option({ focusedElement: selectedItem });
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -742,6 +753,12 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleIndicatorPositionClass(args.value);
                 break;
             }
+            case 'selectedIndex':
+            case 'selectedItem':
+            case 'selectedItems':
+                this.callBase(args);
+                this._updateFocusedElement();
+                break;
             default:
                 this.callBase(args);
         }
