@@ -93,13 +93,15 @@
     color: $tabs-tab-selected-color;
   }
 
-  &.dx-state-focused {
-    @include dx-tabs-border-mixin($generic-tab-focus-border, $generic-tab-focus-border);
-  }
-
   &.dx-tab-selected {
     background-color: $tabs-tab-selected-bg;
     color: $tabs-tab-selected-color;
+  }
+}
+
+.dx-tabs.dx-state-focused .dx-tab {
+  &.dx-state-focused {
+    @include dx-tabs-border-mixin($generic-tab-focus-border, $generic-tab-focus-border);
   }
 }
 
