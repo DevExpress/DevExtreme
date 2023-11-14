@@ -4,7 +4,6 @@ import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';
 import holdEvent from 'events/hold';
 import { triggerShownEvent } from 'events/visibility_change';
-import devices from 'core/devices';
 import $ from 'jquery';
 import 'ui/responsive_box';
 import 'ui/tabs';
