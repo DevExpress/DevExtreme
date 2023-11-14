@@ -334,11 +334,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-appointment-content {
-    font-size: $fluent-scheduler-appointment-month-text-size;
-  }
-
-  .dx-scheduler-appointment-content { // stylelint-disable-line no-duplicate-selectors
     padding: 4px 8px 0 12px;
+    font-size: $fluent-scheduler-appointment-month-text-size;
   }
 
   .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
