@@ -92,8 +92,6 @@
 
   .dx-icon {
     color: $tabs-tab-icon-color;
-
-    @include dx-icon-sizing($generic-tabs-icon-size);
   }
 
   .dx-tabs-item-badge {

@@ -82,8 +82,6 @@
   .dx-icon {
     color: $tabs-tab-icon-color;
     visibility: visible;
-
-    @include dx-icon-sizing($fluent-tabs-icon-size);
   }
 
   .dx-tabs-item-badge {
