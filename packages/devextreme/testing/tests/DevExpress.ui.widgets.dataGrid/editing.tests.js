@@ -8887,6 +8887,53 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
     });
 
+    // T1196383
+    QUnit.test('Watchers should be destroyed after rows are repainted when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        const disposeFuncs = [];
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        this.options.repaintChangesOnly = true;
+        $.extend(this.options.editing, {
+            mode: 'row',
+            allowUpdating: true,
+            allowDeleting: true
+        });
+        this.editingController.init();
+
+        sinon.stub(rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = commonUtils.noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        // act
+        rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 14, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        rowsView.render($testElement);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
+    });
+
     QUnit.module('Editing state', {
         beforeEach: function() {
             this.options.dataSource = this.options.dataSource.store;
