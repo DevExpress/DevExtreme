@@ -170,9 +170,23 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   font-size: 10px;
 }
 
+.dx-rtl .dx-scheduler-work-space-day {
+  .dx-scheduler-all-day-appointment {
+    .dx-scheduler-appointment-content {
+      padding: $fluent-scheduler-appointment-content-padding-rtl;
+    }
+  }
+}
+
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week,
 .dx-scheduler-work-space-day {
+  .dx-scheduler-all-day-appointment {
+    .dx-scheduler-appointment-content {
+      padding: $fluent-scheduler-appointment-content-padding;
+    }
+  }
+
   .dx-scheduler-date-time-indicator {
     height: 2px;
   }
