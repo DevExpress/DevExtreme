@@ -521,12 +521,12 @@ QUnit.module('Tab select action', () => {
         $target1.trigger('dxclick');
         const $focusedElement1 = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElement1[0], $target1[0]);
+        assert.strictEqual($focusedElement1, $target1[0]);
 
         tabs.option({ selectedIndex: 1 });
 
         const $target2 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
-        const $focusedElement2 = tabs.option('focusedElement')[0];
+        const $focusedElement2 = tabs.option('focusedElement');
 
         assert.strictEqual($focusedElement2, $target2);
     });
@@ -544,14 +544,14 @@ QUnit.module('Tab select action', () => {
 
         const $target1 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
         $target1.trigger('dxclick');
-        const $focusedElement1 = tabs.option('focusedElement')[0];
+        const $focusedElement1 = tabs.option('focusedElement');
 
         assert.strictEqual($focusedElement1, $target1[0]);
 
         tabs.option({ selectedItem: tabs.option('items[1]') });
 
         const $target2 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
-        const $focusedElement2 = tabs.option('focusedElement')[0];
+        const $focusedElement2 = tabs.option('focusedElement');
 
         assert.strictEqual($focusedElement2, $target2);
     });
@@ -567,14 +567,14 @@ QUnit.module('Tab select action', () => {
 
         const $target1 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
         $target1.trigger('dxclick');
-        const $focusedElement1 = tabs.option('focusedElement')[0];
+        const $focusedElement1 = tabs.option('focusedElement');
 
         assert.strictEqual($focusedElement1, $target1[0]);
 
         tabs.option({ selectedItems: [items[1], items[2]] });
 
         const $target2 = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
-        const $focusedElement2 = tabs.option('focusedElement')[0];
+        const $focusedElement2 = tabs.option('focusedElement');
 
         assert.strictEqual($focusedElement2, $target2);
     });
