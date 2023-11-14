@@ -125,6 +125,39 @@ $(() => {
     }],
   });
 
+  $('#vacation-validation').dxDateRangeBox({
+    inputAttr: { 'aria-label': 'Vacation Dates' },
+  }).dxValidator({
+    validationRules: [{
+      type: 'custom',
+      validationCallback: ({ value }) => {
+        const [startDate, endDate] = value;
+
+        if (startDate === null || endDate === null) {
+          return true;
+        }
+
+        const millisecondsPerDay = 24 * 60 * 60 * 1000;
+        const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+        return daysDifference < 25;
+      },
+      message: 'The vacation period must not exceed 25 days',
+    }, {
+      type: 'custom',
+      validationCallback: ({ value }) => {
+        const [startDate, endDate] = value;
+
+        if (startDate === null && endDate === null) {
+          return true;
+        }
+
+        return startDate !== null && endDate !== null;
+      },
+      message: 'Both start and end dates must be selected',
+    }],
+  });
+
   $('#country-validation').dxSelectBox({
     dataSource: countries,
     inputAttr: { 'aria-label': 'Country' },
@@ -185,6 +218,7 @@ $(() => {
   $('#check').dxCheckBox({
     value: false,
     text: 'I agree to the Terms and Conditions',
+    validationMessagePosition: 'right',
   }).dxValidator({
     validationRules: [{
       type: 'compare',
@@ -206,9 +240,9 @@ $(() => {
   });
 
   $('#button').dxButton({
-    width: '100%',
+    width: '120px',
     text: 'Register',
-    type: 'success',
+    type: 'default',
     useSubmitBehavior: true,
   });
 });

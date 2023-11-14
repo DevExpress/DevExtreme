@@ -8,6 +8,7 @@ import {
   DxCheckBoxModule,
   DxTextBoxModule,
   DxDateBoxModule,
+  DxDateRangeBoxModule,
   DxButtonModule,
   DxValidatorModule,
   DxValidatorComponent,
@@ -89,6 +90,29 @@ export class AppComponent {
     return true;
   }
 
+  validateVacationDatesRange({ value }) {
+    const [startDate, endDate] = value;
+
+    if (startDate === null || endDate === null) {
+      return true;
+    }
+
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+    const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+    return daysDifference < 25;
+  }
+
+  validateVacationDatesPresence({ value }) {
+    const [startDate, endDate] = value;
+
+    if (startDate === null && endDate === null) {
+      return true;
+    }
+
+    return startDate !== null && endDate !== null;
+  }
+
   asyncValidation(params) {
     return sendRequest(params.value);
   }
@@ -120,6 +144,7 @@ export class AppComponent {
     DxCheckBoxModule,
     DxTextBoxModule,
     DxDateBoxModule,
+    DxDateRangeBoxModule,
     DxButtonModule,
     DxValidatorModule,
     DxValidationSummaryModule,

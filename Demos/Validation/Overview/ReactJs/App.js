@@ -3,6 +3,7 @@ import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import { TextBox, Button as TextBoxButton } from 'devextreme-react/text-box';
 import DateBox from 'devextreme-react/date-box';
+import DateRangeBox from 'devextreme-react/date-range-box';
 import Button from 'devextreme-react/button';
 import ValidationSummary from 'devextreme-react/validation-summary';
 import {
@@ -14,6 +15,7 @@ import {
   StringLengthRule,
   RangeRule,
   AsyncRule,
+  CustomRule,
 } from 'devextreme-react/validator';
 import notify from 'devextreme/ui/notify';
 import {
@@ -197,6 +199,23 @@ function App() {
             </DateBox>
           </div>
         </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Vacation Dates</div>
+          <div className="dx-field-value">
+            <DateRangeBox>
+              <Validator>
+                <CustomRule
+                  message="The vacation period must not exceed 25 days"
+                  validationCallback={validateVacationDatesRange}
+                />
+                <CustomRule
+                  message="Both start and end dates must be selected"
+                  validationCallback={validateVacationDatesPresence}
+                />
+              </Validator>
+            </DateRangeBox>
+          </div>
+        </div>
       </div>
       <div className="dx-fieldset">
         <div className="dx-fieldset-header">Billing address</div>
@@ -269,31 +288,36 @@ function App() {
             </TextBox>
           </div>
         </div>
-        <div>
-          <CheckBox
-            id="check"
-            defaultValue={false}
-            text="I agree to the Terms and Conditions"
-          >
-            <Validator>
-              <CompareRule
-                message="You must agree to the Terms and Conditions"
-                comparisonTarget={checkComparison}
-              />
-            </Validator>
-          </CheckBox>
-        </div>
       </div>
 
       <div className="dx-fieldset">
+        <div className="dx-field">
+          <div className="dx-field-label">
+            <CheckBox
+              id="check"
+              defaultValue={false}
+              text="I agree to the Terms and Conditions"
+              validationMessagePosition="right"
+            >
+              <Validator>
+                <CompareRule
+                  message="You must agree to the Terms and Conditions"
+                  comparisonTarget={checkComparison}
+                />
+              </Validator>
+            </CheckBox>
+          </div>
+          <div className="dx-field-value">
+            <Button
+              width="120px"
+              id="button"
+              text="Register"
+              type="default"
+              useSubmitBehavior={true}
+            />
+          </div>
+        </div>
         <ValidationSummary id="summary" />
-        <Button
-          width="100%"
-          id="button"
-          text="Register"
-          type="success"
-          useSubmitBehavior={true}
-        />
       </div>
     </form>
   );
@@ -308,5 +332,21 @@ function sendRequest(value) {
 }
 function asyncValidation(params) {
   return sendRequest(params.value);
+}
+function validateVacationDatesRange({ value }) {
+  const [startDate, endDate] = value;
+  if (startDate === null || endDate === null) {
+    return true;
+  }
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+  return daysDifference < 25;
+}
+function validateVacationDatesPresence({ value }) {
+  const [startDate, endDate] = value;
+  if (startDate === null && endDate === null) {
+    return true;
+  }
+  return startDate !== null && endDate !== null;
 }
 export default App;

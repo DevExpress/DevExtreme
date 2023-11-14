@@ -104,6 +104,25 @@
           </DxDateBox>
         </div>
       </div>
+      <div class="dx-field">
+        <div class="dx-field-label">Vacation Dates</div>
+        <div class="dx-field-value">
+          <DxDateRangeBox
+            :input-attr="{ 'aria-label': 'Vacation' }"
+          >
+            <DxValidator>
+              <DxCustomRule
+                :validation-callback="validateVacationDatesRange"
+                message="The vacation period must not exceed 25 days"
+              />
+              <DxCustomRule
+                :validation-callback="validateVacationDatesPresence"
+                message="Both start and end dates must be selected"
+              />
+            </DxValidator>
+          </DxDateRangeBox>
+        </div>
+      </div>
     </div>
     <div class="dx-fieldset">
       <div class="dx-fieldset-header">Billing address</div>
@@ -174,30 +193,35 @@
           </DxTextBox>
         </div>
       </div>
-      <div>
-        <DxCheckBox
-          id="check"
-          :value="false"
-          text="I agree to the Terms and Conditions"
-        >
-          <DxValidator>
-            <DxCompareRule
-              :comparison-target="checkComparison"
-              message="You must agree to the Terms and Conditions"
-            />
-          </DxValidator>
-        </DxCheckBox>
-      </div>
     </div>
 
     <div class="dx-fieldset">
+      <div class="dx-field">
+        <div class="dx-field-label">
+          <DxCheckBox
+            id="check"
+            :value="false"
+            text="I agree to the Terms and Conditions"
+            validation-message-position="right"
+          >
+            <DxValidator>
+              <DxCompareRule
+                :comparison-target="checkComparison"
+                message="You must agree to the Terms and Conditions"
+              />
+            </DxValidator>
+          </DxCheckBox>
+        </div>
+        <div class="dx-field-value">
+          <DxButton
+            width="120px"
+            :use-submit-behavior="true"
+            text="Register"
+            type="default"
+          />
+        </div>
+      </div>
       <DxValidationSummary id="summary"/>
-      <DxButton
-        width="100%"
-        :use-submit-behavior="true"
-        text="Register"
-        type="success"
-      />
     </div>
   </form>
 </template>
@@ -207,6 +231,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
 import DxDateBox from 'devextreme-vue/date-box';
+import DxDateRangeBox from 'devextreme-vue/date-range-box';
 import DxButton from 'devextreme-vue/button';
 import DxValidationSummary from 'devextreme-vue/validation-summary';
 import {
@@ -218,6 +243,7 @@ import {
   DxStringLengthRule,
   DxRangeRule,
   DxAsyncRule,
+  DxCustomRule,
 } from 'devextreme-vue/validator';
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
@@ -261,6 +287,29 @@ function checkComparison() {
 
 function asyncValidation(params) {
   return sendRequest(params.value);
+}
+
+function validateVacationDatesRange({ value }) {
+  const [startDate, endDate] = value;
+
+  if (startDate === null || endDate === null) {
+    return true;
+  }
+
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+  return daysDifference < 25;
+}
+
+function validateVacationDatesPresence({ value }) {
+  const [startDate, endDate] = value;
+
+  if (startDate === null && endDate === null) {
+    return true;
+  }
+
+  return startDate !== null && endDate !== null;
 }
 
 function onPasswordChanged() {

@@ -120,6 +120,27 @@
         </dx-date-box>
       </div>
     </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Vacation Dates</div>
+      <div class="dx-field-value">
+        <dx-date-range-box>
+          <dx-validator>
+            <dxi-validation-rule
+              type="custom"
+              message="The vacation period must not exceed 25 days"
+              [validationCallback]="validateVacationDatesRange"
+            >
+            </dxi-validation-rule>
+            <dxi-validation-rule
+              type="custom"
+              message="Both start and end dates must be selected"
+              [validationCallback]="validateVacationDatesPresence"
+            >
+            </dxi-validation-rule>
+          </dx-validator>
+        </dx-date-range-box>
+      </div>
+    </div>
   </div>
   <div class="dx-fieldset">
     <div class="dx-fieldset-header">Billing address</div>
@@ -202,33 +223,37 @@
         </dx-text-box>
       </div>
     </div>
-    <div>
-      <dx-check-box
-        id="check"
-        [value]="false"
-        text="I agree to the Terms and Conditions"
-      >
-        <dx-validator>
-          <dxi-validation-rule
-            type="compare"
-            [comparisonTarget]="checkComparison"
-            message="You must agree to the Terms and Conditions"
-          ></dxi-validation-rule>
-        </dx-validator>
-      </dx-check-box>
-    </div>
   </div>
 
   <div class="dx-fieldset">
-    <dx-validation-summary id="summary"></dx-validation-summary>
-
-    <dx-button
-      width="100%"
-      id="button"
-      text="Register"
-      type="success"
-      [useSubmitBehavior]="true"
-    >
-    </dx-button>
+    <div class="dx-field">
+      <div class="dx-field-label">
+        <dx-check-box
+          id="check"
+          [value]="false"
+          text="I agree to the Terms and Conditions"
+          validationMessagePosition="right"
+        >
+          <dx-validator>
+            <dxi-validation-rule
+              type="compare"
+              [comparisonTarget]="checkComparison"
+              message="You must agree to the Terms and Conditions"
+            ></dxi-validation-rule>
+          </dx-validator>
+        </dx-check-box>
+      </div>
+      <div class="dx-field-value">
+        <dx-button
+          width="120px"
+          id="button"
+          text="Register"
+          type="default"
+          [useSubmitBehavior]="true"
+        >
+        </dx-button>
+        <dx-validation-summary id="summary"></dx-validation-summary>
+      </div>
+    </div>
   </div>
 </form>
