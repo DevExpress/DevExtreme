@@ -1265,18 +1265,18 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const isFirstExpandColumn = targetColumn?.command === 'expand' && prevColumn?.command !== 'expand';
 
     const sourceColumnReorderingDisabled = sourceColumn && !sourceColumn.allowReordering;
-    const otherColumnReorderingDisabled = !targetColumn?.allowReordering && !prevColumn?.allowReordering;
+    const otherColumnsReorderingDisabled = !targetColumn?.allowReordering && !prevColumn?.allowReordering;
 
     switch (location) {
       case 'columnChooser':
         return true;
       case 'headers':
-        if (sourceColumnReorderingDisabled || otherColumnReorderingDisabled) {
+        if (sourceColumnReorderingDisabled) {
           return true;
         }
 
         if (!isFirstExpandColumn) {
-          return isColumnAfterExpandColumn;
+          return isColumnAfterExpandColumn || otherColumnsReorderingDisabled;
         }
 
         if (this.isCustomGroupColumnPosition) {
