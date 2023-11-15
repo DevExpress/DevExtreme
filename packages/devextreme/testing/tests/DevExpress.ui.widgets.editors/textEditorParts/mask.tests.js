@@ -2166,7 +2166,7 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
         });
     });
 
-    QUnit.test('caret moving correctly if maskChar set to empty string', function(assert) {
+    QUnit.test('caret is shifted after input if maskChar is set to an empty string (T1197442)', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '00',
             maskChar: ''
@@ -2180,10 +2180,9 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
         keyboard.caret(0);
 
         keyboard
-            .type('1')
-            .type('2');
+            .type('1');
 
-        assert.equal($input.val(), '12', 'both symbols appeared');
+        assert.strictEqual(keyboard.caret().start, 1, 'caret is on correct position');
     });
 });
 
