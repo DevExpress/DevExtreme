@@ -46,7 +46,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -61,35 +62,12 @@ import {
   DxTooltip,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import service from './data.js';
 
-export default {
-
-  components: {
-    DxSelectBox,
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxCommonSeriesSettings,
-    DxExport,
-    DxGrid,
-    DxMargin,
-    DxLegend,
-    DxTitle,
-    DxSubtitle,
-    DxTooltip,
-  },
-
-  data() {
-    return {
-      dataSource: service.getCountriesInfo(),
-      energySources: service.getEnergySources(),
-      types: ['line', 'stackedline', 'fullstackedline'],
-      type: 'line',
-    };
-  },
-};
+const dataSource = service.getCountriesInfo();
+const energySources = service.getEnergySources();
+const types = ['line', 'stackedline', 'fullstackedline'];
+const type = ref('line');
 </script>
 <style>
 .options {

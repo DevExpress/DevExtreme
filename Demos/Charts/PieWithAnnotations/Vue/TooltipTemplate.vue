@@ -14,21 +14,16 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 
-export default {
-  props: {
-    annotation: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  data() {
-    return {
-      data: this.annotation.data,
-    };
-  },
-};
+const props = withDefaults(defineProps<{
+  annotation?: Record<string, any>
+}>(), {
+  annotation: () => ({}),
+});
+
+const data = ref(props.annotation.data);
 </script>
 <style>
 .medal-tooltip {

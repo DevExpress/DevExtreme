@@ -57,8 +57,8 @@
     </DxRangeSelector>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxSeries,
   DxAggregation,
@@ -70,7 +70,6 @@ import DxChart, {
   DxLegend,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import DxRangeSelector, {
   DxSize,
   DxScale,
@@ -80,37 +79,9 @@ import DxRangeSelector, {
   DxAggregation as DxRsAggregation,
   DxBehavior,
 } from 'devextreme-vue/range-selector';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxAggregation,
-    DxArgumentAxis,
-    DxGrid,
-    DxLabel,
-    DxValueAxis,
-    DxMargin,
-    DxLegend,
-    DxTooltip,
-    DxRangeSelector,
-    DxSize,
-    DxScale,
-    DxRsChart,
-    DxRsValueAxis,
-    DxRsSeries,
-    DxRsAggregation,
-    DxBehavior,
-  },
-  data() {
-    return {
-      dataSource,
-      visualRange: [],
-    };
-  },
-};
+const visualRange = ref([]);
 </script>
 <style>
 #chart-demo {

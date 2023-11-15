@@ -34,7 +34,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxPieChart, {
   DxSeries,
   DxLabel,
@@ -44,33 +45,11 @@ import DxPieChart, {
   DxAnimation,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSeries,
-    DxLabel,
-    DxMargin,
-    DxExport,
-    DxLegend,
-    DxAnimation,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource,
-      resolveModes: ['shift', 'hide', 'none'],
-      resolveMode: 'shift',
-    };
-  },
-  methods: {
-    formatText(pointInfo) {
-      return `${pointInfo.argumentText} (${pointInfo.percentText})`;
-    },
-  },
-};
+const resolveModes = ['shift', 'hide', 'none'];
+const resolveMode = ref('shift');
+const formatText = ({ argumentText, percentText }) => `${argumentText} (${percentText})`;
 </script>
 
 <style>

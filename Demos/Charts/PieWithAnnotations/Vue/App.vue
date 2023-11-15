@@ -59,8 +59,7 @@
   </DxPieChart>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxCommonAnnotationSettings,
   DxAnnotation,
@@ -73,32 +72,10 @@ import DxPieChart, {
   DxTooltip,
   DxLegend,
 } from 'devextreme-vue/pie-chart';
-
 import { dataSource, getAnnotationSources } from './data.js';
 import TooltipTemplate from './TooltipTemplate.vue';
 
-export default {
-  components: {
-    DxPieChart,
-    DxCommonAnnotationSettings,
-    DxAnnotation,
-    DxImage,
-    DxBorder,
-    DxShadow,
-    DxSeries,
-    DxLabel,
-    DxFont,
-    DxTooltip,
-    DxLegend,
-    TooltipTemplate,
-  },
-  data() {
-    return {
-      dataSource,
-      annotations: getAnnotationSources(),
-    };
-  },
-};
+const annotations = getAnnotationSources();
 </script>
 
 <style>

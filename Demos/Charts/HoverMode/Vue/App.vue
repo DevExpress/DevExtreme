@@ -26,8 +26,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxChart,
   DxCommonSeriesSettings,
@@ -36,27 +35,7 @@ import {
   DxLegend,
   DxPoint,
 } from 'devextreme-vue/chart';
-
 import { yearSources, grossProductData } from './data.js';
-
-export default {
-
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxExport,
-    DxLegend,
-    DxPoint,
-  },
-
-  data() {
-    return {
-      yearSources,
-      grossProductData,
-    };
-  },
-};
 </script>
 <style>
 #chart {

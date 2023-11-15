@@ -1,5 +1,6 @@
-import { registerGradient, registerPattern } from 'devextreme/common/charts';
+import * as chartMethods from 'devextreme/common/charts';
 
+const { registerGradient, registerPattern } = chartMethods.default;
 const imagePatternSize = 12;
 const shapePatternSize = 6;
 

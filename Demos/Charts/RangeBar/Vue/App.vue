@@ -36,8 +36,7 @@
     />
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -49,25 +48,6 @@ import DxChart, {
   DxTooltip,
 } from 'devextreme-vue/chart';
 import { oilPrices } from './data.js';
-
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxLabel,
-    DxExport,
-    DxLegend,
-    DxTooltip,
-  },
-  data() {
-    return {
-      oilPrices,
-    };
-  },
-};
 </script>
 <style>
 #chart {

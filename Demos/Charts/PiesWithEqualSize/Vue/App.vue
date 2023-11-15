@@ -28,37 +28,23 @@
   </div>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxSeries,
   DxLabel,
   DxLegend,
 } from 'devextreme-vue/pie-chart';
-
 import { countries, waterLandRatio } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSeries,
-    DxLabel,
-    DxLegend,
-  },
-  data() {
-    return {
-      pieCharts: [{
-        title: 'Area of Countries',
-        palette: 'Soft',
-        dataSource: countries,
-      }, {
-        title: 'Water/Land Ratio',
-        palette: 'Soft Pastel',
-        dataSource: waterLandRatio,
-      }],
-    };
-  },
-};
+const pieCharts = [{
+  title: 'Area of Countries',
+  palette: 'Soft',
+  dataSource: countries,
+}, {
+  title: 'Water/Land Ratio',
+  palette: 'Soft Pastel',
+  dataSource: waterLandRatio,
+}];
 </script>
 
 <style>

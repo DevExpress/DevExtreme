@@ -31,7 +31,7 @@
     <DxTooltip :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -44,54 +44,28 @@ import {
   DxTooltip,
   DxCommonPaneSettings,
   DxBorder,
-  DxTitle,
   DxPoint,
 } from 'devextreme-vue/chart';
-
 import { dataSource } from './data.js';
 
-export default {
+function customizePoint({ data: { type } }) {
+  let color;
+  let hoverStyle;
 
-  components: {
-    DxChart,
-    DxSeries,
-    DxValueAxis,
-    DxLabel,
-    DxLegend,
-    DxExport,
-    DxGrid,
-    DxArgumentAxis,
-    DxTooltip,
-    DxCommonPaneSettings,
-    DxBorder,
-    DxTitle,
-    DxPoint,
-  },
-
-  data() {
-    return { dataSource };
-  },
-
-  methods: {
-    customizePoint({ data }) {
-      let color; let
-        hoverStyle;
-      switch (data.type) {
-        case 'Star':
-          color = 'red';
-          hoverStyle = { border: { color: 'red' } };
-          break;
-        case 'Satellite':
-          color = 'gray';
-          hoverStyle = { border: { color: 'gray' } };
-          break;
-        default:
-          break;
-      }
-      return { color, hoverStyle };
-    },
-  },
-};
+  switch (type) {
+    case 'Star':
+      color = 'red';
+      hoverStyle = { border: { color: 'red' } };
+      break;
+    case 'Satellite':
+      color = 'gray';
+      hoverStyle = { border: { color: 'gray' } };
+      break;
+    default:
+      break;
+  }
+  return { color, hoverStyle };
+}
 </script>
 <style>
 #chart {

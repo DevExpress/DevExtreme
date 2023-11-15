@@ -18,8 +18,7 @@
     <DxExport :enabled="true"/>
   </DxPieChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxSeries,
   DxLabel,
@@ -35,51 +34,32 @@ import {
 } from './utils.js';
 import { data } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxExport,
-    DxConnector,
-    DxLabel,
-    DxSeries,
-  },
-  data() {
-    return {
-      data,
-    };
-  },
-  methods: {
-    customizePoint(point) {
-      const color = point.series.getPointsByArg(point.argument)[0].getColor();
-      let fillId;
-      switch (point.argument) {
-        case 'Stripes':
-          fillId = getStrokePattern(color);
-          break;
-        case 'Grid':
-          fillId = getSquarePattern(color);
-          break;
-        case 'Linear Gradient':
-          fillId = getLinearGradient(color);
-          break;
-        case 'Radial Gradient':
-          fillId = getRadialGradient(color);
-          break;
-        case 'Image':
-          fillId = getPatternImage(color);
-          break;
-        default:
-          break;
-      }
+function customizePoint(point) {
+  const color = point.series.getPointsByArg(point.argument)[0].getColor();
+  let fillId;
+  switch (point.argument) {
+    case 'Stripes':
+      fillId = getStrokePattern(color);
+      break;
+    case 'Grid':
+      fillId = getSquarePattern(color);
+      break;
+    case 'Linear Gradient':
+      fillId = getLinearGradient(color);
+      break;
+    case 'Radial Gradient':
+      fillId = getRadialGradient(color);
+      break;
+    case 'Image':
+      fillId = getPatternImage(color);
+      break;
+    default:
+      break;
+  }
 
-      return { color: { fillId } };
-    },
-
-    customizeText(info) {
-      return info.argument;
-    },
-  },
-};
+  return { color: { fillId } };
+}
+const customizeText = ({ argument }) => argument;
 </script>
 
 <style>

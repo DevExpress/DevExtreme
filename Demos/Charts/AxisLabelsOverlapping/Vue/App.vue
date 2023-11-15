@@ -27,8 +27,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -37,28 +37,9 @@ import {
   DxLabel,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { overlappingModes, population } from './data.js';
 
-export default {
-
-  components: {
-    DxSelectBox,
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxLegend,
-    DxLabel,
-  },
-
-  data() {
-    return {
-      population,
-      overlappingModes,
-      currentMode: overlappingModes[0],
-    };
-  },
-};
+const currentMode = ref(overlappingModes[0]);
 </script>
 <style>
 #chart {

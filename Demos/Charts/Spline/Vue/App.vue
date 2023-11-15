@@ -48,8 +48,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -65,36 +65,10 @@ import {
   DxFormat,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { architectureSources, sharingStatisticsInfo } from './data.js';
 
-export default {
-
-  components: {
-    DxSelectBox,
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxCommonSeriesSettings,
-    DxCommonAxisSettings,
-    DxGrid,
-    DxExport,
-    DxLegend,
-    DxMargin,
-    DxTooltip,
-    DxLabel,
-    DxFormat,
-  },
-
-  data() {
-    return {
-      sharingStatisticsInfo,
-      architectureSources,
-      types: ['spline', 'stackedspline', 'fullstackedspline'],
-      type: 'spline',
-    };
-  },
-};
+const types = ['spline', 'stackedspline', 'fullstackedspline'];
+const type = ref('spline');
 </script>
 <style>
 .options {

@@ -19,8 +19,7 @@
     <DxLegend :visible="false"/>
   </DxPolarChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxPolarChart,
   DxSeries,
@@ -28,25 +27,7 @@ import {
   DxExport,
   DxLegend,
 } from 'devextreme-vue/polar-chart';
-
 import { dataSource } from './data.js';
-
-export default {
-
-  components: {
-    DxPolarChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxExport,
-    DxLegend,
-  },
-
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>
 <style>
 #chart {

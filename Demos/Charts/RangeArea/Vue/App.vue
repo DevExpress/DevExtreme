@@ -38,8 +38,7 @@
     <DxLegend :visible="false"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -53,30 +52,7 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { inflationData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxLabel,
-    DxVisualRange,
-    DxFormat,
-    DxExport,
-    DxLegend,
-  },
-  data() {
-    return {
-      inflationData,
-    };
-  },
-  methods: {
-    customizeLabelText({ valueText }) {
-      return `${valueText} %`;
-    },
-  },
-};
+const customizeLabelText = ({ valueText }) => `${valueText} %`;
 </script>
 <style>
 #chart {

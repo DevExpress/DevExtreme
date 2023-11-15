@@ -3,7 +3,7 @@
     id="chart"
     :data-source="dataSource"
     :palette="palette"
-    title="Correlation between Total Population and\n Population with Age over 60"
+    :title="'Correlation between Total Population and\n Population with Age over 60'"
     @series-click="seriesClick"
   >
     <DxCommonSeriesSettings type="bubble"/>
@@ -56,12 +56,11 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
   DxCommonSeriesSettings,
-  DxPoint,
   DxLegend,
   DxValueAxis,
   DxArgumentAxis,
@@ -72,45 +71,19 @@ import {
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxPoint,
-    DxLegend,
-    DxValueAxis,
-    DxArgumentAxis,
-    DxLabel,
-    DxBorder,
-    DxTooltip,
-    DxExport,
-  },
-  data() {
-    return {
-      dataSource,
-      palette: ['#00ced1', '#008000', '#ffd700', '#ff7f50'],
-    };
-  },
-  methods: {
-    customizeTooltip(pointInfo) {
-      return {
-        text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
-      };
-    },
-    seriesClick(e) {
-      const series = e.target;
-      if (series.isVisible()) {
-        series.hide();
-      } else {
-        series.show();
-      }
-    },
-    customizeText(e) {
-      return `${e.value}M`;
-    },
-  },
-};
+const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
+const customizeText = (e) => `${e.value}M`;
+const customizeTooltip = (pointInfo) => ({
+  text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
+});
+function seriesClick(e) {
+  const series = e.target;
+  if (series.isVisible()) {
+    series.hide();
+  } else {
+    series.show();
+  }
+}
 </script>
 <style>
 #chart {

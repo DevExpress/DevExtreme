@@ -50,8 +50,7 @@
     <DxTooltip :enabled="true"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxChart,
   DxCommonSeriesSettings,
@@ -69,33 +68,6 @@ import {
   DxTooltip,
 } from 'devextreme-vue/chart';
 import { energySources, countriesInfo } from './data.js';
-
-export default {
-
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxArgumentAxis,
-    DxGrid,
-    DxCrosshair,
-    DxExport,
-    DxLegend,
-    DxPoint,
-    DxLabel,
-    DxFont,
-    DxTitle,
-    DxSubtitle,
-    DxTooltip,
-  },
-
-  data() {
-    return {
-      countriesInfo,
-      energySources,
-    };
-  },
-};
 </script>
 <style>
 #chart {

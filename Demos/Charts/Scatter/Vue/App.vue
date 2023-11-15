@@ -25,7 +25,7 @@
     </DxCommonPaneSettings>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -41,26 +41,7 @@ import {
 } from 'devextreme-vue/chart';
 import { generateDataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxPoint,
-    DxCommonSeriesSettings,
-    DxLegend,
-    DxValueAxis,
-    DxArgumentAxis,
-    DxGrid,
-    DxMinorGrid,
-    DxCommonPaneSettings,
-    DxBorder,
-  },
-  data() {
-    return {
-      dataSource: generateDataSource(),
-    };
-  },
-};
+const dataSource = generateDataSource();
 </script>
 <style>
 #chart {

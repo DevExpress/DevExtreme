@@ -30,17 +30,18 @@
         :width="300"
         :data-source="windRoseData"
         :input-attr="{ 'aria-label': 'Period' }"
-        v-model:value="periodValues"
+        v-model:value="selectedPeriod"
         display-expr="period"
-        value-expr="values"
+        value-expr="period"
       />
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import {
   DxPolarChart,
+  DxPolarChartTypes,
   DxCommonSeriesSettings,
   DxSeries,
   DxArgumentAxis,
@@ -49,40 +50,18 @@ import {
   DxExport,
 } from 'devextreme-vue/polar-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { windSources, windRoseData } from './data.js';
 
-export default {
+const selectedPeriod = ref(windRoseData[0].period);
+const periodValues = computed(
+  () => windRoseData.find(({ period }) => period === selectedPeriod.value).values,
+);
 
-  components: {
-    DxSelectBox,
-    DxPolarChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxMargin,
-    DxExport,
-  },
-
-  data() {
-    return {
-      windSources,
-      windRoseData,
-      periodValues: windRoseData[0].values,
-    };
-  },
-
-  methods: {
-    onLegendClick({ target: series }) {
-      if (series.isVisible()) {
-        series.hide();
-      } else {
-        series.show();
-      }
-    },
-  },
-};
+function onLegendClick({ target }: DxPolarChartTypes.LegendClickEvent) {
+  target.isVisible()
+    ? target.hide()
+    : target.show();
+}
 </script>
 <style>
 #chart-demo {

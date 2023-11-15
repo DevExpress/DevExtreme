@@ -30,7 +30,7 @@
     </DxLegend>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxCommonSeriesSettings,
@@ -43,24 +43,7 @@ import {
 } from 'devextreme-vue/chart';
 import dataSource from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxArgumentAxis,
-    DxAnimation,
-    DxSeriesTemplate,
-    DxLegend,
-    DxTitle,
-    DxTick,
-  },
-  data() {
-    return {
-      dataSource,
-      categories: ['Royal Houses'],
-    };
-  },
-};
+const categories = ['Royal Houses'];
 </script>
 <style>
 #chart {

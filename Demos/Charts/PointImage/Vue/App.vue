@@ -3,7 +3,7 @@
     id="chart"
     :data-source="iceHockeyStatistics"
     :customize-point="customizePoint"
-    title="Canadian Men’s National Ice Hockey Team\n at the World Championships"
+    :title="'Canadian Men’s National Ice Hockey Team\n at the World Championships'"
   >
     <DxCommonSeriesSettings
       argument-field="year"
@@ -33,8 +33,7 @@
     <DxLegend :visible="false"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxChart,
   DxCommonSeriesSettings,
@@ -48,58 +47,32 @@ import {
   DxLegend,
   DxPoint,
 } from 'devextreme-vue/chart';
-
 import { iceHockeyStatistics } from './data.js';
 
-export default {
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
 
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxArgumentAxis,
-    DxGrid,
-    DxLabel,
-    DxFormat,
-    DxValueAxis,
-    DxExport,
-    DxLegend,
-    DxPoint,
-  },
-
-  data() {
-    return {
-      iceHockeyStatistics,
-      exportFormats: ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'],
-    };
-  },
-
-  methods: {
-    customizePoint({ value }) {
-      if (value === 1) {
-        return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
-      }
-      if (value === 2) {
-        return { image: { url: '../../../../images/Charts/PointImage/icon-medal-silver.png', width: 20, height: 20 }, visible: true };
-      }
-      if (value === 3) {
-        return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
-      }
-      return null;
-    },
-
-    customizeText({ valueText }) {
-      if (valueText === '1') {
-        return `${valueText}st place`;
-      } if (valueText === '2') {
-        return `${valueText}nd place`;
-      } if (valueText === '3') {
-        return `${valueText}rd place`;
-      }
-      return `${valueText}th place`;
-    },
-  },
-};
+function customizePoint({ value }) {
+  if (value === 1) {
+    return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
+  }
+  if (value === 2) {
+    return { image: { url: '../../../../images/Charts/PointImage/icon-medal-silver.png', width: 20, height: 20 }, visible: true };
+  }
+  if (value === 3) {
+    return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
+  }
+  return null;
+}
+function customizeText({ valueText }) {
+  if (valueText === '1') {
+    return `${valueText}st place`;
+  } if (valueText === '2') {
+    return `${valueText}nd place`;
+  } if (valueText === '3') {
+    return `${valueText}rd place`;
+  }
+  return `${valueText}th place`;
+}
 </script>
 <style>
 #chart {

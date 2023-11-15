@@ -45,8 +45,8 @@
   </div>
 </template>
 
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxPieChart, {
   DxSeries,
   DxLegend,
@@ -55,28 +55,9 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import { getPalette } from 'devextreme/viz/palette';
 import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSeries,
-    DxLegend,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      paletteCollection,
-      palette: paletteCollection[0],
-      paletteExtensionModes,
-      paletteExtensionMode: paletteExtensionModes[1],
-      dataSource,
-    };
-  },
-  computed: {
-    baseColors() {
-      return getPalette(this.palette).simpleSet;
-    },
-  },
-};
+const palette = ref(paletteCollection[0]);
+const paletteExtensionMode = ref(paletteExtensionModes[1]);
+const baseColors = computed(() => getPalette(palette.value).simpleSet);
 </script>
 
 <style>

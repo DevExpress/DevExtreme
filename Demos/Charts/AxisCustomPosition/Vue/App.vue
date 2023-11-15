@@ -73,8 +73,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxCommonSeriesSettings,
@@ -85,33 +85,13 @@ import {
   DxLegend,
 } from 'devextreme-vue/chart';
 import DxNumberBox from 'devextreme-vue/number-box';
-
 import { generateDataSource } from './data.js';
 
+const argumentPosition = ref(0);
+const argumentOffset = ref(0);
+const valuePosition = ref(0);
+const valueOffset = ref(0);
 const dataSource = generateDataSource();
-
-export default {
-  components: {
-    DxNumberBox,
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxPoint,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxLegend,
-  },
-
-  data() {
-    return {
-      dataSource,
-      argumentPosition: 0,
-      argumentOffset: 0,
-      valuePosition: 0,
-      valueOffset: 0,
-    };
-  },
-};
 </script>
 <style>
 .options {

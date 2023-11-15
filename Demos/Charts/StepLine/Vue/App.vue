@@ -29,8 +29,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -43,28 +42,6 @@ import {
   DxFormat,
 } from 'devextreme-vue/chart';
 import { medalSources, olympicAchievements } from './data.js';
-
-export default {
-
-  components: {
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxCommonSeriesSettings,
-    DxExport,
-    DxLegend,
-    DxPoint,
-    DxLabel,
-    DxFormat,
-  },
-
-  data() {
-    return {
-      olympicAchievements,
-      medalSources,
-    };
-  },
-};
 </script>
 <style>
 #container {

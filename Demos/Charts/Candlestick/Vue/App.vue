@@ -38,8 +38,7 @@
     />
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -53,40 +52,16 @@ import DxChart, {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxReduction,
-    DxArgumentAxis,
-    DxLabel,
-    DxFormat,
-    DxValueAxis,
-    DxTitle,
-    DxLegend,
-    DxExport,
-    DxTooltip,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    customizeTooltip(pointInfo) {
-      return {
-        text: `Open: $${pointInfo.openValue}<br/>
-Close: $${pointInfo.closeValue}<br/>
-High: $${pointInfo.highValue}<br/>
-Low: $${pointInfo.lowValue}<br/>`,
-      };
-    },
-  },
-};
+const customizeTooltip = ({
+  openValue, closeValue, highValue, lowValue,
+}) => ({
+  text: `Open: $${openValue}<br/>
+Close: $${closeValue}<br/>
+High: $${highValue}<br/>
+Low: $${lowValue}<br/>`,
+});
 </script>
 <style>
 #chart {

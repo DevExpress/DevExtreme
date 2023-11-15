@@ -43,7 +43,7 @@
     </DxChart>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxPane,
@@ -58,28 +58,9 @@ import {
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxPane,
-    DxSeries,
-    DxCommonAxisSettings,
-    DxValueAxis,
-    DxTooltip,
-    DxCrosshair,
-    DxHorizontalLine,
-    DxLabel,
-    DxLegend,
-  },
-  data() {
-    return {
-      dataSource,
-      crosshairFormat: {
-        type: 'fixedPoint',
-        precision: 2,
-      },
-    };
-  },
+const crosshairFormat = {
+  type: 'fixedPoint',
+  precision: 2,
 };
 </script>
 <style scoped>

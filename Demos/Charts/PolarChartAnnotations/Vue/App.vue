@@ -89,8 +89,7 @@
     />
   </DxPolarChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxPolarChart,
   DxCommonSeriesSettings,
@@ -101,32 +100,10 @@ import {
   DxStrip,
   DxLegend,
 } from 'devextreme-vue/polar-chart';
-
 import { dataSource, maxDay, minNight } from './data.js';
 
-export default {
-
-  components: {
-    DxPolarChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxCommonAnnotationSettings,
-    DxAnnotation,
-    DxArgumentAxis,
-    DxStrip,
-    DxLegend,
-  },
-
-  data() {
-    return {
-      dataSource,
-      maxDay,
-      minNight,
-      maxTempText: `Highest temperature: ${maxDay.day} °C`,
-      minTempText: `Lowest temperature: ${minNight.night} °C`,
-    };
-  },
-};
+const maxTempText = `Highest temperature: ${maxDay.day} °C`;
+const minTempText = `Lowest temperature: ${minNight.night} °C`;
 </script>
 <style>
 #radarChart {

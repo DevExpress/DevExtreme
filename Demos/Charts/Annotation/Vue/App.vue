@@ -46,7 +46,7 @@
     </DxAnnotation>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxTitle,
@@ -62,34 +62,7 @@ import {
 } from 'devextreme-vue/chart';
 import { dataSource, annotationSources } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxTitle,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxLegend,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxCommonAnnotationSettings,
-    DxFont,
-    DxImage,
-    DxAnnotation,
-  },
-  data() {
-    return {
-      dataSource,
-      annotationSources,
-    };
-  },
-  methods: {
-    customizeTooltip(annotation) {
-      return {
-        html: `<div class='tooltip'>${annotation.description}</div>`,
-      };
-    },
-  },
-};
+const customizeTooltip = ({ description }) => ({ html: `<div class='tooltip'>${description}</div>` });
 </script>
 <style scoped>
 #chart {

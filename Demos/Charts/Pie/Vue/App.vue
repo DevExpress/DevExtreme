@@ -23,47 +23,29 @@
   </DxPieChart>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxSize,
   DxSeries,
   DxLabel,
   DxConnector,
   DxExport,
+  DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
-
 import { areas } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSize,
-    DxSeries,
-    DxLabel,
-    DxConnector,
-    DxExport,
-  },
-  data() {
-    return {
-      areas,
-    };
-  },
-  methods: {
-    pointClickHandler(e) {
-      this.toggleVisibility(e.target);
-    },
-    legendClickHandler(e) {
-      const arg = e.target;
-      const item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
+function pointClickHandler(e: DxPieChartTypes.PointClickEvent) {
+  toggleVisibility(e.target);
+}
+function legendClickHandler(e: DxPieChartTypes.LegendClickEvent) {
+  const arg = e.target;
+  const item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
 
-      this.toggleVisibility(item);
-    },
-    toggleVisibility(item) {
-      item.isVisible() ? item.hide() : item.show();
-    },
-  },
-};
+  toggleVisibility(item);
+}
+function toggleVisibility(item) {
+  item.isVisible() ? item.hide() : item.show();
+}
 </script>
 
 <style>

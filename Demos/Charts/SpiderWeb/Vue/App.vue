@@ -16,8 +16,7 @@
     <DxTooltip :enabled="true"/>
   </DxPolarChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxPolarChart,
   DxCommonSeriesSettings,
@@ -25,26 +24,7 @@ import {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/polar-chart';
-
 import { fruitSources, productionData } from './data.js';
-
-export default {
-
-  components: {
-    DxPolarChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxExport,
-    DxTooltip,
-  },
-
-  data() {
-    return {
-      fruitSources,
-      productionData,
-    };
-  },
-};
 </script>
 <style>
 #chart {
