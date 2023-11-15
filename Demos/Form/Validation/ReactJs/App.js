@@ -50,6 +50,8 @@ const phoneEditorOptions = {
   },
   maskInvalidMessage: 'The phone must have a correct USA phone format',
 };
+const noDigitsPattern = /^[^0-9]+$/;
+const phonePattern = /^[02-9]\d{9}$/;
 const colCountByScreen = {
   xs: 2,
   sm: 2,
@@ -237,7 +239,7 @@ function App() {
               <RequiredRule message="Name is required" />
               <PatternRule
                 message="Do not use digits in the Name"
-                pattern={/^[^0-9]+$/}
+                pattern={noDigitsPattern}
               />
             </SimpleItem>
             <SimpleItem
@@ -283,7 +285,7 @@ function App() {
               editorOptions={cityEditorOptions}
             >
               <PatternRule
-                pattern={/^[^0-9]+$/}
+                pattern={noDigitsPattern}
                 message="Do not use digits in the City name"
               />
               <StringLengthRule
@@ -305,7 +307,7 @@ function App() {
             >
               <PatternRule
                 message="The phone must have a correct USA phone format"
-                pattern={/^[02-9]\d{9}$/}
+                pattern={phonePattern}
               />
             </SimpleItem>
           </GroupItem>

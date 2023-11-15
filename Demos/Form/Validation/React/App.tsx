@@ -60,6 +60,9 @@ const phoneEditorOptions = {
   maskInvalidMessage: 'The phone must have a correct USA phone format',
 };
 
+const noDigitsPattern = /^[^0-9]+$/;
+const phonePattern = /^[02-9]\d{9}$/;
+
 const colCountByScreen = {
   xs: 2,
   sm: 2,
@@ -236,7 +239,7 @@ function App() {
             <SimpleItem dataField="Name" editorOptions={nameEditorOptions}>
               <RequiredRule message="Name is required" />
               <PatternRule message="Do not use digits in the Name"
-                pattern={/^[^0-9]+$/} />
+                pattern={noDigitsPattern} />
             </SimpleItem>
             <SimpleItem dataField="Date"
               editorType="dxDateBox"
@@ -261,7 +264,7 @@ function App() {
               <RequiredRule message="Country is required" />
             </SimpleItem>
             <SimpleItem dataField="City" editorType="dxAutocomplete" editorOptions={cityEditorOptions}>
-              <PatternRule pattern={/^[^0-9]+$/} message="Do not use digits in the City name" />
+              <PatternRule pattern={noDigitsPattern} message="Do not use digits in the City name" />
               <StringLengthRule min={2} message="City must have at least 2 symbols" />
               <RequiredRule message="City is required" />
             </SimpleItem>
@@ -274,7 +277,7 @@ function App() {
             >
               <PatternRule
                 message="The phone must have a correct USA phone format"
-                pattern={/^[02-9]\d{9}$/}
+                pattern={phonePattern}
               />
             </SimpleItem>
           </GroupItem>
