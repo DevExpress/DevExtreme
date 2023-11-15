@@ -1506,6 +1506,7 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.oDataFilterToLower]
      */
     oDataFilterToLower?: boolean;
+    pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
     /**
      * [descr:GlobalConfig.rtlEnabled]
      */
