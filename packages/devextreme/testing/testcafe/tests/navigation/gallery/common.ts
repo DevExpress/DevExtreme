@@ -39,7 +39,7 @@ test('click on indicator item should change selected item', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [110, 110]).before(async () => createWidget('dxGallery', {
+  }, [150, 110]).before(async () => createWidget('dxGallery', {
     height: 110,
     showIndicator,
     items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
