@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Gallery from '../../../model/gallery';
@@ -26,16 +27,13 @@ test('click on indicator item should change selected item', async (t) => {
 [true, false].forEach((showIndicator) => {
   test(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    await t
-      .expect(await takeScreenshot(`Gallery. showIndicator=${showIndicator}.png`))
-      .ok();
+
+    await testScreenshot(t, takeScreenshot, `Gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
 
     await t
       .click('#container');
 
-    await t
-      .expect(await takeScreenshot(`Focused gallery. showIndicator=${showIndicator}.png`))
-      .ok();
+    await testScreenshot(t, takeScreenshot, `Focused gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
