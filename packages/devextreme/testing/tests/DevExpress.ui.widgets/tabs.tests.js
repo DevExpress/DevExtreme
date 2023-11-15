@@ -520,10 +520,9 @@ QUnit.module('Tab select action', () => {
 
         $tabs.focusin();
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0)[0];
-        let focusedElement = tabs.option('focusedElement')[0];
+        let focusedElement = tabs.option('focusedElement');
 
-        assert.strictEqual(focusedElement, tabsItemFirst);
+        assert.strictEqual($(focusedElement).index(), 0);
 
         $tabs.focusout();
 
@@ -534,10 +533,9 @@ QUnit.module('Tab select action', () => {
         tabs.option({ selectedIndex: 1 });
         $tabs.focusin();
 
-        const tabsItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
-        focusedElement = tabs.option('focusedElement')[0];
+        focusedElement = tabs.option('focusedElement');
 
-        assert.strictEqual(focusedElement, tabsItemSecond);
+        assert.strictEqual($(focusedElement).index(), 1);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
@@ -555,10 +553,9 @@ QUnit.module('Tab select action', () => {
 
         $tabs.focusin();
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0)[0];
-        let focusedElement = tabs.option('focusedElement')[0];
+        let focusedElement = tabs.option('focusedElement');
 
-        assert.strictEqual(focusedElement, tabsItemFirst);
+        assert.strictEqual($(focusedElement).index(), 0);
 
         $tabs.focusout();
 
@@ -569,10 +566,9 @@ QUnit.module('Tab select action', () => {
         tabs.option({ selectedItem: tabs.option('items[1]') });
         $tabs.focusin();
 
-        const tabsItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
-        focusedElement = tabs.option('focusedElement')[0];
+        focusedElement = tabs.option('focusedElement');
 
-        assert.strictEqual(focusedElement, tabsItemSecond);
+        assert.strictEqual($(focusedElement).index(), 1);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
@@ -588,10 +584,9 @@ QUnit.module('Tab select action', () => {
 
         $tabs.focusin();
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0)[0];
-        let focusedElement = tabs.option('focusedElement')[0];
+        let focusedElement = tabs.option('focusedElement');
 
-        assert.strictEqual(focusedElement, tabsItemFirst);
+        assert.strictEqual($(focusedElement).index(), 0);
 
         $tabs.focusout();
 
@@ -602,10 +597,9 @@ QUnit.module('Tab select action', () => {
         tabs.option({ selectedItems: [items[1], items[2]] });
         $tabs.focusin();
 
-        const tabsItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
-        focusedElement = tabs.option('focusedElement')[0];
+        focusedElement = tabs.option('focusedElement');
 
-        assert.strictEqual(focusedElement, tabsItemSecond);
+        assert.strictEqual($(focusedElement).index(), 1);
     });
 });
 
