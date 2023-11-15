@@ -17,6 +17,7 @@ export class TimePanelDataGenerator {
       viewType,
       hoursInterval,
       endDayHour,
+      viewOffset,
     } = options;
 
     const rowCountInGroup = this._viewDataGenerator.getRowCount({
@@ -60,7 +61,14 @@ export class TimePanelDataGenerator {
         ...restCellProps,
         startDate,
         allDay,
-        text: getTimePanelCellText(timeIndex, startDate, startViewDate, cellDuration, startDayHour),
+        text: getTimePanelCellText(
+          timeIndex,
+          startDate,
+          startViewDate,
+          cellDuration,
+          startDayHour,
+          viewOffset,
+        ),
         groups: isVerticalGrouping ? groups : undefined,
         groupIndex: isVerticalGrouping ? groupIndex : undefined,
         isFirstGroupCell: isVerticalGrouping && isFirstGroupCell,

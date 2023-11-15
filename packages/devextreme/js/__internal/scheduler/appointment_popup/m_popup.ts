@@ -339,7 +339,7 @@ export class AppointmentPopup {
     this.state.saveChangesLocker = false;
   }
 
-  // NOTE: Fix ticket T1100758
+  // NOTE: Fix ticket T1102713
   _addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
     const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
 

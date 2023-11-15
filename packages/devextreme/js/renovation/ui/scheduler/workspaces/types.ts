@@ -388,6 +388,7 @@ interface CompleteTimePanelMapGenerationOptions {
   currentDate: Date;
   viewType: ViewType;
   hoursInterval: number;
+  viewOffset: number;
 }
 
 interface TimePanelDataGenerationOptions {
