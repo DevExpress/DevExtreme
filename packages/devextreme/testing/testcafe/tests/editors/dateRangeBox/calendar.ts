@@ -696,6 +696,39 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
   }, '#dateRangeBox');
 });
 
+test('Hover styles appearance on second date pick (disableOutOfRangeSelection=true)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  const calendar = dateRangeBox.getCalendar();
+
+  await t
+    .click(calendar.getCellByDate('2020/02/20'));
+
+  await t
+    .hover(calendar.getCellByDate('2020/02/25'));
+
+  await testScreenshot(t, takeScreenshot, 'Hover styles on second date pick.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+
+  return createWidget('dxDateRangeBox', {
+    width: 500,
+    disableOutOfRangeSelection: true,
+    calendarOptions: {
+      currentDate: new Date('2020/02/20'),
+    },
+  }, '#dateRangeBox');
+});
+
 test('Dates selection with focusStateEnabled=false', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
   const calendar = dateRangeBox.getCalendar();
