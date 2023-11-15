@@ -15866,6 +15866,10 @@ declare module DevExpress.ui {
      * [descr:dxFileUploader.removeFile(file)]
      */
     removeFile(file: File): void;
+    /**
+     * [descr:dxFileUploader.reset(value)]
+     */
+    reset(value?: Array<File>): void;
   }
   module dxFileUploader {
     /**
@@ -22878,7 +22882,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxProgressBar]
    */
-  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {}
+  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
+    /**
+     * [descr:dxProgressBar.reset(value)]
+     */
+    reset(value?: Number | false): void;
+  }
   module dxProgressBar {
     /**
      * [descr:_ui_progress_bar_CompleteEvent]
