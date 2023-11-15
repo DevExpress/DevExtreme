@@ -21,7 +21,6 @@ const POPUP_APPLY_BUTTON_CLASS = 'dx-popup-done';
 const POPUP_DONE_BUTTON = `${POPUP_APPLY_BUTTON_CLASS}.dx-button`;
 const POPUP_CANCEL_BUTTON = 'dx-popup-cancel.dx-button';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
-const STATE_HOVER_CLASS = 'dx-state-hover';
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
