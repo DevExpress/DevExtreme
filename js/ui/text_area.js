@@ -15,7 +15,6 @@ import TextBox from './text_box';
 // STYLE textArea
 
 const TEXTAREA_CLASS = 'dx-textarea';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
 const TextArea = TextBox.inherit({
@@ -100,10 +99,7 @@ const TextArea = TextBox.inherit({
         return $input;
     },
 
-    _applyInputAttributes: function($input, customAttributes) {
-        $input.attr(customAttributes)
-            .addClass(TEXTEDITOR_INPUT_CLASS);
-    },
+    _setInputMinHeight: noop,
 
     _renderScrollHandler: function() {
         this._eventY = 0;
@@ -130,7 +126,6 @@ const TextArea = TextBox.inherit({
 
         this._eventY = currentEventY;
     },
-
 
     _renderDimensions: function() {
         const $element = this.$element();
