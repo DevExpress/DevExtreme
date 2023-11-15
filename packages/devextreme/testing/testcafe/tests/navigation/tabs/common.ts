@@ -89,7 +89,7 @@ test('Tab item width in secondary stylingMode', async (t) => {
 test('Tabs with width: auto in flex container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())
