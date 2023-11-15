@@ -1,4 +1,6 @@
 import $ from '@js/core/renderer';
+import eventsEngine from '@js/events/core/events_engine';
+import { removeEvent } from '@js/events/remove';
 import { rowsModule } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
@@ -36,10 +38,18 @@ export const RowsView = rowsModule.views.rowsView.inherit((function () {
         .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
         .appendTo($container);
 
-      options.watch && options.watch(() => [options.row.level, options.row.isExpanded, options.row.node.hasChildren], () => {
-        $iconContainer.empty();
-        this._renderIcons($iconContainer, options);
-      });
+      if (options.watch) {
+        const dispose = options.watch(() => [
+          options.row.level,
+          options.row.isExpanded,
+          options.row.node.hasChildren,
+        ], () => {
+          $iconContainer.empty();
+          this._renderIcons($iconContainer, options);
+        });
+
+        eventsEngine.on($iconContainer, removeEvent, dispose);
+      }
 
       $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
 

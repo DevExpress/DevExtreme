@@ -18943,6 +18943,50 @@ QUnit.module('Edit Form', {
             oldValue = newValue;
         }
     });
+
+    // T1196383
+    QUnit.test('Watchers should be destroyed after repainting the edit row when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        let disposeFuncs = [];
+        const $testElement = $('#container');
+
+        this.options.repaintChangesOnly = true;
+        this.setupModules(this);
+
+        sinon.stub(this.rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = commonUtils.noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        this.rowsView.render($testElement);
+        disposeFuncs = [];
+
+        // act
+        this.editRow(0);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 5, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
+    });
 });
 
 QUnit.module('Editing - "popup" mode', {
