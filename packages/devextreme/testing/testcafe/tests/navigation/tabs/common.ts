@@ -110,6 +110,57 @@ test('Tabs with width: auto in flex container', async (t) => {
   return createWidget('dxTabs', { dataSource, width: 'auto' }, '#tabs');
 });
 
+test('Tabs wrapper width changing must update tab item width', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs with auto width.png', { element: '#container' });
+
+  await ClientFunction(() => {
+    $('#tabs-wrapper').css({ width: '250px' });
+  })();
+
+  await ClientFunction(() => {
+    const tabs = $('#tabs')('instance');
+
+    tabs.option({ scrollByContent: true, width: '100%' });
+  })();
+
+  await testScreenshot(t, takeScreenshot, 'Tabs with 100% width and scrollByContent=true.png', { element: '#container' });
+
+  await ClientFunction(() => {
+    $('#tabs-wrapper').css({ width: '800px' });
+  })();
+
+  await ClientFunction(() => {
+    const tabs = $('#tabs')('instance');
+
+    tabs.option({ scrollByContent: false });
+  })();
+
+  await testScreenshot(t, takeScreenshot, 'Tabs with 100% width and scrollByContent=false.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs-wrapper');
+  await appendElementTo('#tabs-wrapper', 'div', 'tabs');
+
+  await setAttribute('#container', 'style', 'display: flex; justify-content: center; width: 800px;');
+  await setAttribute('#tabs-wrapper', 'style', 'display: inline-flex;');
+
+  const dataSource = [
+    { text: 'User' },
+    { text: 'Analytics' },
+    { text: 'Clients' },
+    { text: 'Orders' },
+    { text: 'Favorites' },
+    { text: 'Search' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource, width: 'auto' }, '#tabs');
+});
+
 [true, false].forEach((rtlEnabled) => {
   ['primary', 'secondary'].forEach((stylingMode) => {
     test('Tabs icon position', async (t) => {
