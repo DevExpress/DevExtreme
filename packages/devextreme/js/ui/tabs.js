@@ -703,7 +703,9 @@ const Tabs = CollectionWidget.inherit({
                 if(this._scrollable) {
                     this._scrollable.option(args.name, args.value);
                 }
-                this._dimensionChanged();
+                if(!this._isServerSide()) {
+                    this._dimensionChanged();
+                }
                 break;
             case 'width':
             case 'height':
