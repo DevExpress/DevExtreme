@@ -9,6 +9,8 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
 import DateRangeBox from '../../../model/dateRangeBox';
 
+const STATE_HOVER_CLASS = 'dx-state-hover';
+
 fixture.disablePageReloads`DateRangeBox range selection`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
@@ -696,9 +698,8 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
   }, '#dateRangeBox');
 });
 
-test('Hover styles appearance on second date pick (disableOutOfRangeSelection=true)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+test(`Hovered cell should have "${STATE_HOVER_CLASS}" class after one date selected (disableOutOfRangeSelection=true)`, async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
 
   await t
     .click(dateRangeBox.getStartDateBox().input);
@@ -708,26 +709,17 @@ test('Hover styles appearance on second date pick (disableOutOfRangeSelection=tr
   await t
     .click(calendar.getCellByDate('2020/02/20'));
 
+  const targetCell = calendar.getView().getCellByDate(new Date('2020/02/22'));
   await t
-    .hover(calendar.getCellByDate('2020/02/25'));
-
-  await testScreenshot(t, takeScreenshot, 'Hover styles on second date pick.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'dateRangeBox');
-  await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
-
-  return createWidget('dxDateRangeBox', {
-    width: 500,
-    disableOutOfRangeSelection: true,
-    calendarOptions: {
-      currentDate: new Date('2020/02/20'),
-    },
-  }, '#dateRangeBox');
-});
+    .hover(targetCell)
+    .expect(targetCell.hasClass(STATE_HOVER_CLASS))
+    .eql(true);
+}).before(async () => createWidget('dxDateRangeBox', {
+  disableOutOfRangeSelection: true,
+  calendarOptions: {
+    currentDate: new Date('2020/02/20'),
+  },
+}, '#container'));
 
 test('Dates selection with focusStateEnabled=false', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
