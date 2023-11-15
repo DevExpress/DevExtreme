@@ -41,8 +41,19 @@ test('click on indicator item should change selected item', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxGallery', {
-    height: 300,
+    height: 110,
     showIndicator,
     items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
+    itemTemplate(item: string) {
+      const result = $('<div>');
+
+      $('<img>')
+        .attr({ src: item })
+        .height(100)
+        .width(100)
+        .appendTo(result);
+
+      return result;
+    },
   }));
 });
