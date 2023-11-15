@@ -151,8 +151,8 @@
     </DxPopup>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDiagram,
   DxNodes,
@@ -172,117 +172,66 @@ import CustomShapeTemplate from './CustomShapeTemplate.vue';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.vue';
 import service from './data.js';
 
-export default {
-  components: {
-    DxDiagram,
-    DxNodes,
-    DxAutoLayout,
-    DxCustomShape,
-    DxContextToolbox,
-    DxPropertiesPanel,
-    DxGroup,
-    DxTab,
-    DxToolbox,
-    CustomShapeTemplate,
-    CustomShapeToolboxTemplate,
-    DxPopup,
-    DxTextBox,
-    DxButton,
+let generatedID = 100;
+const dataSource = new ArrayStore({
+  key: 'ID',
+  data: service.getEmployees(),
+  onInserting(values) {
+    values.ID = values.ID || (generatedID += 1);
+    values.Full_Name = values.Full_Name || "Employee's Name";
+    values.Title = values.Title || "Employee's Title";
   },
-  data() {
-    const that = this;
-    this.generatedID = 100;
-    return {
-      employees: service.getEmployees(),
-      dataSource: new ArrayStore({
-        key: 'ID',
-        data: service.getEmployees(),
-        onInserting(values) {
-          values.ID = values.ID || (that.generatedID += 1);
-          values.Full_Name = values.Full_Name || "Employee's Name";
-          values.Title = values.Title || "Employee's Title";
-        },
-      }),
-      currentEmployee: {},
-      popupVisible: false,
-    };
-  },
-  methods: {
-    itemTypeExpr() {
-      return 'employee';
-    },
-    itemCustomDataExpr(obj, value) {
-      if (value === undefined) {
-        return {
-          Full_Name: obj.Full_Name,
-          Prefix: obj.Prefix,
-          Title: obj.Title,
-          City: obj.City,
-          State: obj.State,
-          Email: obj.Email,
-          Skype: obj.Skype,
-          Mobile_Phone: obj.Mobile_Phone,
-        };
-      }
-      obj.Full_Name = value.Full_Name;
-      obj.Prefix = value.Prefix;
-      obj.Title = value.Title;
-      obj.City = value.City;
-      obj.State = value.State;
-      obj.Email = value.Email;
-      obj.Skype = value.Skype;
-      obj.Mobile_Phone = value.Mobile_Phone;
-      return null;
-    },
-    onRequestLayoutUpdate(e) {
-      for (let i = 0; i < e.changes.length; i += 1) {
-        if (e.changes[i].type === 'remove') {
-          e.allowed = true;
-        } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
-          e.allowed = true;
-        }
-      }
-    },
-    editEmployee(employee) {
-      this.currentEmployee = {
-        Full_Name: '',
-        Prefix: '',
-        Title: '',
-        City: '',
-        State: '',
-        Email: '',
-        Skype: '',
-        Mobile_Phone: '',
-        ...employee,
-      };
-      this.popupVisible = true;
-    },
-    deleteEmployee(employee) {
-      this.dataSource.push([{ type: 'remove', key: employee.ID }]);
-    },
-    updateEmployee() {
-      this.dataSource.push([{
-        type: 'update',
-        key: this.currentEmployee.ID,
-        data: {
-          Full_Name: this.currentEmployee.Full_Name,
-          Title: this.currentEmployee.Title,
-          City: this.currentEmployee.City,
-          State: this.currentEmployee.State,
-          Email: this.currentEmployee.Email,
-          Skype: this.currentEmployee.Skype,
-          Mobile_Phone: this.currentEmployee.Mobile_Phone,
-        },
-      }]);
-      this.currentEmployee = {};
-      this.popupVisible = false;
-    },
-    cancelEditEmployee() {
-      this.currentEmployee = {};
-      this.popupVisible = false;
-    },
-  },
-};
+});
+const currentEmployee = ref({} as Record<string, any>);
+const popupVisible = ref(false);
+
+const itemTypeExpr = () => 'employee';
+function itemCustomDataExpr(obj, value) {
+  if (value === undefined) {
+    return { ...obj };
+  }
+  Object.assign(obj, value);
+  return null;
+}
+function onRequestLayoutUpdate(e) {
+  for (let i = 0; i < e.changes.length; i += 1) {
+    if (e.changes[i].type === 'remove') {
+      e.allowed = true;
+    } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
+      e.allowed = true;
+    }
+  }
+}
+function editEmployee(employee) {
+  currentEmployee.value = {
+    Full_Name: '',
+    Prefix: '',
+    Title: '',
+    City: '',
+    State: '',
+    Email: '',
+    Skype: '',
+    Mobile_Phone: '',
+    ...employee,
+  };
+  popupVisible.value = true;
+}
+function deleteEmployee(employee) {
+  dataSource.push([{ type: 'remove', key: employee.ID }]);
+}
+function updateEmployee() {
+  dataSource.push([{
+    type: 'update',
+    key: currentEmployee.value.ID,
+    data: { ...currentEmployee.value },
+  }]);
+  currentEmployee.value = {};
+  popupVisible.value = false;
+}
+function cancelEditEmployee() {
+  currentEmployee.value = {};
+  popupVisible.value = false;
+}
 </script>
 <style scoped>
     #diagram {

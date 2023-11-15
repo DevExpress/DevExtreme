@@ -27,14 +27,13 @@
     </DxToolbox>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxContextToolbox, DxGroup,
 } from 'devextreme-vue/diagram';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';
-
 const dataSource = createStore({
   key: 'ID',
   loadUrl: `${url}/Employees`,
@@ -54,17 +53,6 @@ const dataSource = createStore({
     values.HireDate = new Date();
   },
 });
-
-export default {
-  components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxContextToolbox, DxGroup,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>
 <style scoped>
     #diagram {

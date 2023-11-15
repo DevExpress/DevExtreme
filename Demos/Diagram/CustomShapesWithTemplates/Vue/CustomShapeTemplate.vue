@@ -24,27 +24,17 @@
     </text>
   </svg>
 </template>
-<script>
-
-export default {
-  props: {
-    employee: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-    showInfo: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
-  },
-  methods: {
-    showEmployeeInfo() {
-      this.showInfo(this.employee);
-    },
-  },
-};
+<script setup lang="ts">
+const props = withDefaults(defineProps<{
+  employee: Record<string, any>
+  showInfo: Function
+}>(), {
+  employee: () => ({}),
+  showInfo: () => ({}),
+});
+function showEmployeeInfo() {
+  props.showInfo(props.employee);
+}
 </script>
 
 <style>

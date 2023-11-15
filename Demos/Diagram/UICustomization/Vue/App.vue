@@ -99,7 +99,8 @@
     </DxToolbox>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
+import { watch, ref } from 'vue';
 import {
   DxDiagram,
   DxContextMenu,
@@ -116,46 +117,32 @@ import {
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxDiagram,
-    DxContextMenu,
-    DxContextToolbox,
-    DxPropertiesPanel,
-    DxGroup,
-    DxTab,
-    DxHistoryToolbar,
-    DxViewToolbar,
-    DxMainToolbar,
-    DxCommand,
-    DxToolbox,
-  },
-  mounted() {
-    const diagram = this.$refs.diagram.instance;
+const diagram = ref();
+
+watch(diagram,
+  ({ instance }) => {
     fetch('../../../../data/diagram-flow.json')
       .then((response) => response.json())
       .then((json) => {
-        diagram.import(JSON.stringify(json));
+        instance.import(JSON.stringify(json));
       })
       .catch(() => {
         throw new Error('Data Loading Error');
       });
-  },
-  methods: {
-    onCustomCommand(e) {
-      if (e.name === 'clear') {
-        const result = confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
-        result.then(
-          (dialogResult) => {
-            if (dialogResult) {
-              e.component.import('');
-            }
-          },
-        );
-      }
-    },
-  },
-};
+  });
+
+function onCustomCommand(e) {
+  if (e.name === 'clear') {
+    const result = confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
+    result.then(
+      (dialogResult) => {
+        if (dialogResult) {
+          e.component.import('');
+        }
+      },
+    );
+  }
+}
 </script>
 <style scoped>
     #diagram {

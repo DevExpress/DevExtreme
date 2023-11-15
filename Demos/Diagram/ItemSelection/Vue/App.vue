@@ -27,48 +27,39 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
-export default {
-  components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
-  },
-  data() {
-    return {
-      dataSource: new ArrayStore({
-        key: 'ID',
-        data: service.getEmployees(),
-      }),
-      selectedItemNames: 'Nobody has been selected',
-    };
-  },
-  methods: {
-    onContentReady(e) {
-      const diagram = e.component;
-      // preselect some shape
-      const items = diagram.getItems().filter((item) => item.itemType === 'shape' && (item.text === 'Greta Sims'));
-      if (items.length > 0) {
-        diagram.setSelectedItems(items);
-        diagram.scrollToItem(items[0]);
-        diagram.focus();
-      }
-    },
-    onSelectionChanged({ items }) {
-      this.selectedItemNames = 'Nobody has been selected';
-      const filteredItems = items
-        .filter((item) => item.itemType === 'shape')
-        .map((item) => item.text);
-      if (filteredItems.length > 0) {
-        this.selectedItemNames = filteredItems.join(', ');
-      }
-    },
-  },
-};
+const dataSource = new ArrayStore({
+  key: 'ID',
+  data: service.getEmployees(),
+});
+const selectedItemNames = ref('Nobody has been selected');
+
+function onContentReady(e) {
+  const diagram = e.component;
+  // preselect some shape
+  const items = diagram.getItems().filter(({ itemType, text }) => itemType === 'shape' && (text === 'Greta Sims'));
+  if (items.length > 0) {
+    diagram.setSelectedItems(items);
+    diagram.scrollToItem(items[0]);
+    diagram.focus();
+  }
+}
+function onSelectionChanged({ items }) {
+  selectedItemNames.value = 'Nobody has been selected';
+  const filteredItems = items
+    .filter((item) => item.itemType === 'shape')
+    .map((item) => item.text);
+  if (filteredItems.length > 0) {
+    selectedItemNames.value = filteredItems.join(', ');
+  }
+}
 </script>
 <style scoped>
     #diagram {

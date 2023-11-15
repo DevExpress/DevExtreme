@@ -21,34 +21,28 @@
     </DxToolbox>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
+import { watch, ref } from 'vue';
 import {
   DxDiagram, DxGroup, DxToolbox, DxCustomShape,
 } from 'devextreme-vue/diagram';
 import service from './data.js';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxDiagram, DxGroup, DxToolbox, DxCustomShape,
-  },
-  data() {
-    return {
-      employees: service.getEmployees(),
-    };
-  },
-  mounted() {
-    const diagram = this.$refs.diagram.instance;
+const employees = service.getEmployees();
+const diagram = ref();
+
+watch(diagram,
+  ({ instance }) => {
     fetch('../../../../data/diagram-employees.json')
       .then((response) => response.json())
       .then((json) => {
-        diagram.import(JSON.stringify(json));
+        instance.import(JSON.stringify(json));
       })
       .catch(() => {
         throw new Error('Data Loading Error');
       });
-  },
-};
+  });
 </script>
 <style scoped>
     #diagram {

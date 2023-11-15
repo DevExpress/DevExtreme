@@ -16,26 +16,24 @@
     </DxToolbox>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
+import { watch, ref } from 'vue';
 import { DxDiagram, DxToolbox, DxGroup } from 'devextreme-vue/diagram';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxDiagram, DxToolbox, DxGroup,
-  },
-  mounted() {
-    const diagram = this.$refs.diagram.instance;
+const diagram = ref();
+
+watch(diagram,
+  ({ instance }) => {
     fetch('../../../../data/diagram-structure.json')
       .then((response) => response.json())
       .then((json) => {
-        diagram.import(JSON.stringify(json));
+        instance.import(JSON.stringify(json));
       })
       .catch(() => {
         throw new Error('Data Loading Error');
       });
-  },
-};
+  });
 </script>
 <style scoped>
     #diagram {

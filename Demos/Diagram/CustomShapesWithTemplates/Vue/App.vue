@@ -50,8 +50,8 @@
     </DxPopup>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxCustomShape,
 } from 'devextreme-vue/diagram';
@@ -60,31 +60,19 @@ import ArrayStore from 'devextreme/data/array_store';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
 import service from './data.js';
 
-export default {
-  components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, CustomShapeTemplate, DxPopup,
-  },
-  data() {
-    return {
-      employees: service.getEmployees(),
-      dataSource: new ArrayStore({
-        key: 'ID',
-        data: service.getEmployees(),
-      }),
-      currentEmployee: {},
-      popupVisible: false,
-    };
-  },
-  methods: {
-    itemTypeExpr(obj) {
-      return `employee${obj.ID}`;
-    },
-    showInfo(employee) {
-      this.currentEmployee = employee;
-      this.popupVisible = true;
-    },
-  },
-};
+const employees = service.getEmployees();
+const dataSource = new ArrayStore({
+  key: 'ID',
+  data: service.getEmployees(),
+});
+const currentEmployee = ref({} as Record<string, any>);
+const popupVisible = ref(false);
+const itemTypeExpr = ({ ID }) => `employee${ID}`;
+
+function showInfo(employee) {
+  currentEmployee.value = employee;
+  popupVisible.value = true;
+}
 </script>
 <style scoped>
     #diagram {

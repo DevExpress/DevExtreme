@@ -26,30 +26,21 @@
     </DxToolbox>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
-export default {
-  components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup,
-  },
-  data() {
-    return {
-      orgItemsDataSource: new ArrayStore({
-        key: 'id',
-        data: service.getOrgItems(),
-      }),
-      orgLinksDataSource: new ArrayStore({
-        key: 'id',
-        data: service.getOrgLinks(),
-      }),
-    };
-  },
-};
+const orgItemsDataSource = new ArrayStore({
+  key: 'id',
+  data: service.getOrgItems(),
+});
+const orgLinksDataSource = new ArrayStore({
+  key: 'id',
+  data: service.getOrgLinks(),
+});
 </script>
 <style scoped>
     #diagram {

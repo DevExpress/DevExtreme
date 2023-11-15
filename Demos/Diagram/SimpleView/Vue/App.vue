@@ -18,26 +18,17 @@
     <DxPropertiesPanel :visibility="'disabled'"/>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
-export default {
-  components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
-  },
-  data() {
-    return {
-      dataSource: new ArrayStore({
-        key: 'ID',
-        data: service.getEmployees(),
-      }),
-    };
-  },
-};
+const dataSource = new ArrayStore({
+  key: 'ID',
+  data: service.getEmployees(),
+});
 </script>
 <style scoped>
     #diagram {

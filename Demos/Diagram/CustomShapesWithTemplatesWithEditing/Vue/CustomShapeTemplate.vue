@@ -33,42 +33,21 @@
   </svg>
 </template>
 
-<script>
-export default {
-  props: {
-    employee: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-    editEmployee: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
-    deleteEmployee: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
-  },
-  computed: {
-    employeeName() {
-      return this.employee && this.employee.Full_Name ? this.employee.Full_Name : 'Employee\'s Name';
-    },
-    employeeTitle() {
-      return this.employee && this.employee.Title ? this.employee.Title : 'Employee\'s Title';
-    },
-  },
-  methods: {
-    editEmployeeFunc() {
-      this.editEmployee(this.employee);
-    },
-    deleteEmployeeFunc() {
-      this.deleteEmployee(this.employee);
-    },
-  },
-};
+<script setup lang="ts">
+
+const props = withDefaults(defineProps<{
+  employee: Record<string, any>
+  editEmployee: Function
+  deleteEmployee: Function
+}>(), {
+  employee: () => ({}),
+  editEmployee: () => ({}),
+  deleteEmployee: () => ({}),
+});
+const employeeName = props.employee?.Full_Name || 'Employee\'s Name';
+const employeeTitle = props.employee?.Title || 'Employee\'s Title';
+const editEmployeeFunc = () => props.editEmployee(props.employee);
+const deleteEmployeeFunc = () => props.deleteEmployee(props.employee);
 </script>
 
 <style>

@@ -18,26 +18,17 @@
     </DxToolbox>
   </DxDiagram>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
-export default {
-  components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup,
-  },
-  data() {
-    return {
-      dataSource: new ArrayStore({
-        key: 'this',
-        data: service.getEmployees(),
-      }),
-    };
-  },
-};
+const dataSource = new ArrayStore({
+  key: 'this',
+  data: service.getEmployees(),
+});
 </script>
 <style scoped>
     #diagram {

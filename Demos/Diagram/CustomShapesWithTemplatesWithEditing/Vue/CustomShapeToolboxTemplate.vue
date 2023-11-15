@@ -15,13 +15,8 @@
   </svg>
 </template>
 
-<script>
-export default {
-  props: {
-  },
-  methods: {
-  },
-};
+<script setup lang="ts">
+// for SFC compiler
 </script>
 
 <style>
