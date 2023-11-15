@@ -26,8 +26,9 @@
         <DxSelectBox
           :items="showSubmenuModes"
           :input-attr="{ 'aria-label': 'Language' }"
-          v-model:value="showFirstSubmenuModes"
+          v-model:value="selectedFirstSubmenuModes"
           display-expr="name"
+          value-expr="name"
         />
       </div>
       <div class="option">
@@ -47,41 +48,34 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxMenu from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.js';
 
-export default {
-  components: {
-    DxMenu, DxSelectBox, DxCheckBox,
-  },
-  data() {
-    const showSubmenuModes = [{
-      name: 'onHover',
-      delay: { show: 0, hide: 500 },
-    }, {
-      name: 'onClick',
-      delay: { show: 0, hide: 300 },
-    }];
-    return {
-      products: service.getProducts(),
-      showSubmenuModes,
-      showFirstSubmenuModes: showSubmenuModes[1],
-      orientation: 'horizontal',
-      hideSubmenuOnMouseLeave: false,
-      currentProduct: null,
-    };
-  },
-  methods: {
-    itemClick(e) {
-      if (e.itemData.price) {
-        this.currentProduct = e.itemData;
-      }
-    },
-  },
-};
+const showSubmenuModes = [{
+  name: 'onHover',
+  delay: { show: 0, hide: 500 },
+}, {
+  name: 'onClick',
+  delay: { show: 0, hide: 300 },
+}];
+const products = ref(service.getProducts());
+const selectedFirstSubmenuModes = ref(showSubmenuModes[1].name);
+const showFirstSubmenuModes = computed(() => showSubmenuModes.find(
+  ({ name }) => selectedFirstSubmenuModes.value === name,
+));
+const orientation = ref('horizontal');
+const hideSubmenuOnMouseLeave = ref(false);
+const currentProduct = ref(null);
+
+function itemClick(e) {
+  if (e.itemData.price) {
+    currentProduct.value = e.itemData;
+  }
+}
 </script>
 <style scoped>
 .form {

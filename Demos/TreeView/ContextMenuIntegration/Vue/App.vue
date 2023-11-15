@@ -2,7 +2,7 @@
   <div class="form">
     <DxTreeView
       id="treeview"
-      :ref="treeViewRef"
+      ref="treeViewRef"
       :items="products"
       :width="300"
       :height="450"
@@ -19,85 +19,68 @@
       />
     </div>
     <DxContextMenu
-      :ref="contextMenuRef"
+      ref="contextMenuRef"
       v-model:data-source="menuItems"
       target="#treeview .dx-treeview-item"
       @item-click="contextMenuItemClick"
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
 import DxContextMenu from 'devextreme-vue/context-menu';
 import service from './data.js';
 
-const treeViewRef = 'treeView';
-const contextMenuRef = 'contextMenu';
+const products = ref(service.getProducts());
+const menuItems = ref(service.getMenuItems());
+const logItems = ref([]);
+const selectedTreeItem = ref(undefined);
+const treeViewRef = ref();
+const contextMenuRef = ref();
 
-export default {
-  components: {
-    DxTreeView, DxList, DxContextMenu,
-  },
-  data() {
-    return {
-      products: service.getProducts(),
-      menuItems: service.getMenuItems(),
-      logItems: [],
-      selectedTreeItem: undefined,
-      treeViewRef,
-      contextMenuRef,
-    };
-  },
-  computed: {
-    treeView() {
-      return this.$refs[treeViewRef].instance;
-    },
-    contextMenu() {
-      return this.$refs[contextMenuRef].instance;
-    },
-  },
-  methods: {
-    treeViewItemContextMenu(e) {
-      this.selectedTreeItem = e.itemData;
+function treeViewItemContextMenu(e) {
+  selectedTreeItem.value = e.itemData;
+  const contextMenu = contextMenuRef.value.instance;
+  const isProduct = e.itemData.price !== undefined;
 
-      const isProduct = e.itemData.price !== undefined;
-      this.contextMenu.option('items[0].visible', !isProduct);
-      this.contextMenu.option('items[1].visible', !isProduct);
-      this.contextMenu.option('items[2].visible', isProduct);
-      this.contextMenu.option('items[3].visible', isProduct);
+  contextMenu.option('items[0].visible', !isProduct);
+  contextMenu.option('items[1].visible', !isProduct);
+  contextMenu.option('items[2].visible', isProduct);
+  contextMenu.option('items[3].visible', isProduct);
 
-      this.contextMenu.option('items[0].disabled', e.node.expanded);
-      this.contextMenu.option('items[1].disabled', !e.node.expanded);
-    },
-    contextMenuItemClick(e) {
-      let logEntry = '';
-      switch (e.itemData.id) {
-        case 'expand': {
-          logEntry = `The '${this.selectedTreeItem.text}' group was expanded`;
-          this.treeView.expandItem(this.selectedTreeItem.id);
-          break;
-        }
-        case 'collapse': {
-          logEntry = `The '${this.selectedTreeItem.text}' group was collapsed`;
-          this.treeView.collapseItem(this.selectedTreeItem.id);
-          break;
-        }
-        case 'details': {
-          logEntry = `Details about '${this.selectedTreeItem.text}' were displayed`;
-          break;
-        }
-        case 'copy': {
-          logEntry = `Information about '${this.selectedTreeItem.text}' was copied`;
-          break;
-        }
-        default:
-          break;
-      }
-      this.logItems = this.logItems.concat(logEntry);
-    },
-  },
-};
+  contextMenu.option('items[0].disabled', e.node.expanded);
+  contextMenu.option('items[1].disabled', !e.node.expanded);
+}
+function contextMenuItemClick(e) {
+  const treeView = treeViewRef.value.instance;
+  let logEntry = '';
+
+  switch (e.itemData.id) {
+    case 'expand': {
+      logEntry = `The '${selectedTreeItem.value.text}' group was expanded`;
+      treeView.expandItem(selectedTreeItem.value.id);
+      break;
+    }
+    case 'collapse': {
+      logEntry = `The '${selectedTreeItem.value.text}' group was collapsed`;
+      treeView.collapseItem(selectedTreeItem.value.id);
+      break;
+    }
+    case 'details': {
+      logEntry = `Details about '${selectedTreeItem.value.text}' were displayed`;
+      break;
+    }
+    case 'copy': {
+      logEntry = `Information about '${selectedTreeItem.value.text}' was copied`;
+      break;
+    }
+    default:
+      break;
+  }
+  logItems.value = logItems.value.concat(logEntry);
+}
 </script>
 <style scoped>
 .form {

@@ -20,26 +20,14 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { products } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxTreeView,
-  },
-  data() {
-    return {
-      products,
-      options: ['contains', 'startswith', 'equals'],
-      searchMode: 'contains',
-    };
-  },
-};
+const options = ['contains', 'startswith', 'equals'];
+const searchMode = ref('contains');
 </script>
 <style scoped>
 #treeview {

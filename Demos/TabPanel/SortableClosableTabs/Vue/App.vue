@@ -39,7 +39,7 @@
           </template>
           <template #itemTemplate="{ data: employee }">
             <EmployeeTemplate
-              :template-data="employee"
+              :employee="employee"
             />
           </template>
         </DxTabPanel>
@@ -47,69 +47,48 @@
     </DxSortable>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSortable from 'devextreme-vue/sortable';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel from 'devextreme-vue/tab-panel';
-import { DxDataGrid } from 'devextreme-vue/data-grid';
-
 import EmployeeTemplate from './EmployeeTemplate.vue';
 import service from './data.js';
 
 const allEmployees = service.getEmployees();
+const employees = ref(allEmployees.slice(0, 3));
+const selectedIndex = ref(0);
 
-export default {
-  components: {
-    DxButton,
-    DxTabPanel,
-    DxDataGrid,
-    DxSortable,
-    EmployeeTemplate,
-  },
-  data() {
-    return {
-      employees: allEmployees.slice(0, 3),
-      selectedIndex: 0,
-    };
-  },
-  methods: {
-    onTabDragStart(e) {
-      e.itemData = e.fromData[e.fromIndex];
-    },
+function onTabDragStart(e) {
+  e.itemData = e.fromData[e.fromIndex];
+}
+function onTabDrop(e) {
+  const newEmployees = [...employees.value];
 
-    onTabDrop(e) {
-      const newEmployees = [...this.employees];
+  newEmployees.splice(e.fromIndex, 1);
+  newEmployees.splice(e.toIndex, 0, e.itemData);
 
-      newEmployees.splice(e.fromIndex, 1);
-      newEmployees.splice(e.toIndex, 0, e.itemData);
+  employees.value = newEmployees;
+}
+function addButtonHandler() {
+  const newItem = allEmployees
+    .filter((employee) => employees.value.every((item) => employee.ID !== item.ID))[0];
 
-      this.employees = newEmployees;
-    },
+  selectedIndex.value = employees.value.length;
+  employees.value = [...employees.value, newItem];
+}
+function closeButtonHandler(itemData) {
+  const index = employees.value.indexOf(itemData);
 
-    addButtonHandler() {
-      const newItem = allEmployees
-        .filter((employee) => this.employees.every((item) => employee.ID !== item.ID))[0];
-
-      this.selectedIndex = this.employees.length;
-      this.employees = [...this.employees, newItem];
-    },
-
-    closeButtonHandler(itemData) {
-      const index = this.employees.indexOf(itemData);
-
-      this.employees = this.employees.filter((e) => e !== itemData);
-      if (index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
-    },
-
-    disableButton() {
-      return this.employees.length === allEmployees.length;
-    },
-
-    showCloseButton() {
-      return this.employees.length > 1;
-    },
-  },
-};
+  employees.value = employees.value.filter((e) => e !== itemData);
+  if (index >= employees.value.length && index > 0) selectedIndex.value = index - 1;
+}
+function disableButton() {
+  return employees.value.length === allEmployees.length;
+}
+function showCloseButton() {
+  return employees.value.length > 1;
+}
 </script>
 <style>
 #container {

@@ -4,7 +4,7 @@
       <div class="content dx-fieldset">
         <div class="dx-field">
           <DxTabs
-            v-model:selected-item="selectedItem"
+            v-model:selected-index="selectedItemId"
             :data-source="employees"
           />
         </div>
@@ -14,9 +14,9 @@
           <div class="dx-field-value">
             <DxSelectBox
               display-expr="text"
-              v-model:selected-item="selectedItem"
+              value-expr="id"
               :data-source="employees"
-              :value="selectedItem"
+              v-model:value="selectedItemId"
               :input-attr="{ 'aria-label': 'Select Employee' }"
             />
           </div>
@@ -24,7 +24,7 @@
 
         <div class="dx-field multiview-container">
           <DxMultiView
-            v-model:selected-item="selectedItem"
+            v-model:selected-index="selectedItemId"
             :height="112"
             :data-source="employees"
             :loop="false"
@@ -55,26 +55,14 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTabs from 'devextreme-vue/tabs';
 import DxMultiView from 'devextreme-vue/multi-view';
-
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxTabs,
-    DxMultiView,
-  },
-  data() {
-    return {
-      selectedItem: employees[0],
-      employees,
-    };
-  },
-};
+const selectedItemId = ref(employees[0].id);
 </script>
 <style>
   #center-content {

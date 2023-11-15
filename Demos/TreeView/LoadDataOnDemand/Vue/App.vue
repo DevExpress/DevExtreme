@@ -10,23 +10,15 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxTreeView from 'devextreme-vue/tree-view';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxTreeView,
-  },
-  methods: {
-    createChildren(parent) {
-      const parentId = parent ? parent.itemData.id : '';
+function createChildren(parent) {
+  const parentId = parent ? parent.itemData.id : '';
 
-      return fetch(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
-        .then((response) => response.json())
-        .catch(() => { throw new Error('Data Loading Error'); });
-    },
-  },
-};
+  return fetch(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
+    .then((response) => response.json())
+    .catch(() => { throw new Error('Data Loading Error'); });
+}
 </script>

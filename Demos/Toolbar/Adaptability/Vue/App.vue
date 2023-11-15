@@ -302,7 +302,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
 import DxButton from 'devextreme-vue/button';
@@ -327,123 +328,70 @@ const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;
 const headingDefault = headings[0].text;
+const multiline = ref(true);
+const lineHeight = ref(lineHeightDefault);
+const textAlign = ref(textAlignDefault);
+const fontSize = ref(fontSizeDefault);
+const heading = ref(headingDefault);
 
-export default {
-  components: {
-    DxCheckBox,
-    DxToolbar,
-    DxButton,
-    DxButtonGroup,
-    DxItem,
-    DxResizable,
-    DxDropDownButton,
-    DxSelectBox,
-  },
+function onTextAlignItemClick(e) {
+  const { alignment, hint } = e.itemData;
 
-  data() {
-    return {
-      multiline: true,
-      lineHeight: lineHeightDefault,
-      textAlign: textAlignDefault,
-      fontSize: fontSizeDefault,
-      heading: headingDefault,
-      fontSizes,
-      lineHeights,
-      fontFamilies,
-      fontStyles,
-      listTypes,
-      headings,
-    };
-  },
+  textAlign.value = alignment;
 
-  computed: {
-    textAlignItems() {
-      return textAlignItems;
-    },
-
-    textAlignItemsExtended() {
-      return textAlignItemsExtended;
-    },
-  },
-
-  methods: {
-    onTextAlignItemClick(e) {
-      const { alignment, hint } = e.itemData;
-
-      this.textAlign = alignment;
-
-      this.onButtonClick(hint);
-    },
-
-    onButtonClick(name) {
-      notify(`The "${name}" button has been clicked`);
-    },
-
-    onUndoButtonClick() {
-      this.onButtonClick('Undo');
-    },
-
-    onRedoButtonClick() {
-      this.onButtonClick('Redo');
-    },
-
-    onFontStyleItemClick(e) {
-      this.onButtonClick(e.itemData.hint);
-    },
-
-    onListTypeButtonClick(e) {
-      this.onButtonClick(e.itemData.hint);
-    },
-
-    onLinkButtonClick() {
-      this.onButtonClick('Link');
-    },
-
-    onAddImageButtonClick() {
-      this.onButtonClick('Add Image');
-    },
-
-    onClearButtonClick() {
-      this.onButtonClick('Clear Formating');
-    },
-
-    onCodeBlockButtonClick() {
-      this.onButtonClick('Code Block');
-    },
-
-    onQuoteButtonClick() {
-      this.onButtonClick('Blockquote');
-    },
-
-    onAttachButtonClick() {
-      this.onButtonClick('Attach');
-    },
-
-    onAboutButtonClick() {
-      this.onButtonClick('About');
-    },
-
-    onSelectionChanged(name) {
-      notify(`The "${name}" value has been changed`);
-    },
-
-    onFontSizeSelectionChanged() {
-      this.onSelectionChanged('Font Size');
-    },
-
-    onLineHeightSelectionChanged() {
-      this.onSelectionChanged('Line Height');
-    },
-
-    onHeadingClick() {
-      notify('The "Heading" value has been changed');
-    },
-
-    onFontFamilyClick() {
-      notify('The "Font Family" value has been changed');
-    },
-  },
-};
+  onButtonClick(hint);
+}
+function onButtonClick(name) {
+  notify(`The "${name}" button has been clicked`);
+}
+function onUndoButtonClick() {
+  onButtonClick('Undo');
+}
+function onRedoButtonClick() {
+  onButtonClick('Redo');
+}
+function onFontStyleItemClick(e) {
+  onButtonClick(e.itemData.hint);
+}
+function onListTypeButtonClick(e) {
+  onButtonClick(e.itemData.hint);
+}
+function onLinkButtonClick() {
+  onButtonClick('Link');
+}
+function onAddImageButtonClick() {
+  onButtonClick('Add Image');
+}
+function onClearButtonClick() {
+  onButtonClick('Clear Formating');
+}
+function onCodeBlockButtonClick() {
+  onButtonClick('Code Block');
+}
+function onQuoteButtonClick() {
+  onButtonClick('Blockquote');
+}
+function onAttachButtonClick() {
+  onButtonClick('Attach');
+}
+function onAboutButtonClick() {
+  onButtonClick('About');
+}
+function onSelectionChanged(name) {
+  notify(`The "${name}" value has been changed`);
+}
+function onFontSizeSelectionChanged() {
+  onSelectionChanged('Font Size');
+}
+function onLineHeightSelectionChanged() {
+  onSelectionChanged('Line Height');
+}
+function onHeadingClick() {
+  notify('The "Heading" value has been changed');
+}
+function onFontFamilyClick() {
+  notify('The "Font Family" value has been changed');
+}
 </script>
 
 <style>

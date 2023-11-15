@@ -79,35 +79,22 @@
   </div>
 
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import DxTreeView from 'devextreme-vue/tree-view';
 import { continents } from './data.js';
 
-export default {
-  components: {
-    DxTabPanel,
-    DxTreeView,
-  },
-  data() {
-    return {
-      continents,
-      tabPanelIndex: 0,
-      countryData: continents[0].items[0],
-      citiesData: continents[0].items[0].cities,
-    };
-  },
-  methods: {
-    changeSelection(e) {
-      const countryData = e.itemData;
-      if (countryData.cities) {
-        this.countryData = e.itemData;
-        this.citiesData = countryData.cities;
-        this.tabPanelIndex = 0;
-      }
-    },
-  },
-};
+const tabPanelIndex = ref(0);
+const countryData = ref(continents[0].items[0]);
+const citiesData = ref(continents[0].items[0].cities);
+
+function changeSelection({ itemData }) {
+  if (itemData.cities) {
+    countryData.value = itemData;
+    citiesData.value = itemData.cities;
+    tabPanelIndex.value = 0;
+  }
+}
 </script>
 <style src="./styles.css"></style>

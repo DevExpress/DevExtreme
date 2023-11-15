@@ -70,28 +70,17 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxTabPanel from 'devextreme-vue/tab-panel';
-
 import { multiViewItems } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxTabPanel,
-  },
-  data() {
-    return {
-      selectedIndex: 0,
-      loop: false,
-      animationEnabled: true,
-      swipeEnabled: true,
-      companies: multiViewItems,
-    };
-  },
-};
+const companies = multiViewItems;
+const selectedIndex = ref(0);
+const loop = ref(false);
+const animationEnabled = ref(true);
+const swipeEnabled = ref(true);
 </script>
 <style>
 .tabpanel-item {

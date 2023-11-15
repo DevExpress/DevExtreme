@@ -66,13 +66,12 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import TabPanelItem from './TabPanelItem.vue';
-
 import {
   tabsPositionsSelectBoxLabel,
   tabsPositions,
@@ -84,31 +83,10 @@ import {
   dataSource,
 } from './data.js';
 
-export default {
-  components: {
-    DxTabPanel,
-    DxSelectBox,
-    DxCheckBox,
-    TabPanelItem,
-  },
-
-  data() {
-    return {
-      tabsPositionsSelectBoxLabel,
-      tabsPositions,
-      tabsPosition: tabsPositions[0],
-      stylingModesSelectBoxLabel,
-      stylingModes,
-      stylingMode: stylingModes[0],
-      iconPositionsSelectBoxLabel,
-      iconPositions,
-      iconPosition: iconPositions[0],
-      navButtonsCheckBoxLabel,
-      dataSource,
-      showNavButtons: true,
-    };
-  },
-};
+const tabsPosition = ref(tabsPositions[0]);
+const stylingMode = ref(stylingModes[0]);
+const iconPosition = ref(iconPositions[0]);
+const showNavButtons = ref(true);
 </script>
 
 <style>

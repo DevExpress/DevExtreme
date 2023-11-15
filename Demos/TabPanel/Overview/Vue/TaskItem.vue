@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="['task-item', `task-item-priority-${task.priority}`]">
     <span class="task-item-text">
       {{ task.text }}
     </span>
@@ -12,25 +12,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'TaskItem',
-
-  props: {
-    task: {
-      type: Object,
-      default: () => {},
-    },
-  },
-
-  computed: {
-    className() {
-      const { priority } = this.task;
-
-      return `task-item task-item-priority-${priority}`;
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  task?: Record<string, any>
+}>(), {
+  task: () => ({}),
+});
 </script>
 
 <style>

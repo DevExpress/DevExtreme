@@ -63,27 +63,16 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxMultiView from 'devextreme-vue/multi-view';
-
 import { multiViewItems } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxMultiView,
-  },
-  data() {
-    return {
-      selectedIndex: 0,
-      loop: false,
-      animationEnabled: true,
-      companies: multiViewItems,
-    };
-  },
-};
+const selectedIndex = ref(0);
+const loop = ref(false);
+const animationEnabled = ref(true);
+const companies = multiViewItems;
 </script>
 <style>
 #multiview {

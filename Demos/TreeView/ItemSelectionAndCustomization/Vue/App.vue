@@ -4,7 +4,7 @@
       <h4>Employees</h4>
       <DxTreeView
         id="treeview"
-        :ref="treeViewRef"
+        ref="treeViewRef"
         :width="340"
         :height="320"
         :items="employees"
@@ -82,78 +82,50 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import { employees } from './data.js';
 
-const treeViewRef = 'treeView';
+const selectionModes = ['multiple', 'single'];
+const showCheckBoxesModes = ['normal', 'selectAll', 'none'];
+const selectedEmployees = ref([]);
+const showCheckBoxesModeValue = ref(showCheckBoxesModes[0]);
+const selectionModeValue = ref(selectionModes[0]);
+const isSelectionModeDisabled = ref(false);
+const isRecursiveDisabled = ref(false);
+const selectNodesRecursiveValue = ref(true);
+const selectByClickValue = ref(false);
+const treeViewRef = ref();
 
-export default {
-  components: {
-    DxTreeView,
-    DxList,
-    DxSelectBox,
-    DxCheckBox,
-  },
-  data() {
-    const selectionModes = ['multiple', 'single'];
-    const showCheckBoxesModes = ['normal', 'selectAll', 'none'];
-    return {
-      employees,
-      selectedEmployees: [],
-      showCheckBoxesModes,
-      selectionModes,
-      showCheckBoxesModeValue: showCheckBoxesModes[0],
-      selectionModeValue: selectionModes[0],
-      isSelectionModeDisabled: false,
-      isRecursiveDisabled: false,
-      selectNodesRecursiveValue: true,
-      selectByClickValue: false,
-      treeViewRef,
-    };
-  },
-  computed: {
-    treeView() {
-      return this.$refs[treeViewRef].instance;
-    },
-  },
-  methods: {
-    treeViewSelectionChanged(e) {
-      this.syncSelection(e.component);
-    },
-
-    treeViewContentReady(e) {
-      this.syncSelection(e.component);
-    },
-
-    syncSelection(treeView) {
-      const selectedEmployees = treeView.getSelectedNodes()
-        .map((node) => node.itemData);
-
-      this.selectedEmployees = selectedEmployees;
-    },
-
-    showCheckBoxesModeValueChanged(e) {
-      if (e.value === 'selectAll') {
-        this.selectionModeValue = 'multiple';
-        this.isRecursiveDisabled = false;
-      }
-      this.isSelectionModeDisabled = e.value === 'selectAll';
-    },
-
-    selectionModeValueChanged(e) {
-      if (e.value === 'single') {
-        this.selectNodesRecursiveValue = false;
-        this.treeView.unselectAll();
-      }
-      this.isRecursiveDisabled = e.value === 'single';
-    },
-  },
-};
+function treeViewSelectionChanged() {
+  syncSelection();
+}
+function treeViewContentReady() {
+  syncSelection();
+}
+function syncSelection() {
+  selectedEmployees.value = treeViewRef.value.instance
+    .getSelectedNodes()
+    .map((node) => node.itemData);
+}
+function showCheckBoxesModeValueChanged(e) {
+  if (e.value === 'selectAll') {
+    selectionModeValue.value = 'multiple';
+    isRecursiveDisabled.value = false;
+  }
+  isSelectionModeDisabled.value = e.value === 'selectAll';
+}
+function selectionModeValueChanged(e) {
+  if (e.value === 'single') {
+    selectNodesRecursiveValue.value = false;
+    treeViewRef.value.instance.unselectAll();
+  }
+  isRecursiveDisabled.value = e.value === 'single';
+}
 </script>
 <style scoped>
 .form > h4 {

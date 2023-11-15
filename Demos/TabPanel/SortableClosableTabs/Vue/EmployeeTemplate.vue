@@ -3,12 +3,12 @@
     <div class="employeeInfo">
       <img
         class="employeePhoto"
-        :alt="FirstName + ' ' + LastName"
-        :src="picture"
+        :alt="employee.FirstName + ' ' + employee.LastName"
+        :src="employee.Picture"
       >
-      <p class="employeeNotes"><b>Position: {{ position }}</b><br>{{ notes }}</p>
+      <p class="employeeNotes"><b>Position: {{ employee.Position }}</b><br>{{ employee.Notes }}</p>
     </div>
-    <div class="caption">{{ detailInfo }}</div>
+    <div class="caption">{{ employee.FirstName }} {{ employee.LastName }}'s Tasks: </div>
     <div class="task-list">
       <DxList
         :data-source="dataSource"
@@ -26,37 +26,20 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxList from 'devextreme-vue/list';
 import service from './data.js';
 
+const props = withDefaults(defineProps<{
+  employee?: Record<string, any>
+}>(), {
+  employee: () => ({}),
+});
+
 const tasks = service.getTasks();
-
-export default {
-  components: { DxList },
-  props: {
-    templateData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    const {
-      FirstName, LastName, Picture, Position, Notes,
-    } = this.templateData;
-    const employeeTasks = tasks.filter((task) => task.EmployeeID === this.templateData.ID);
-
-    return {
-      dataSource: employeeTasks,
-      completedTasks: employeeTasks.filter((task) => task.Status === 'Completed'),
-      detailInfo: `${FirstName} ${LastName}'s Tasks:`,
-      picture: Picture,
-      position: Position,
-      notes: Notes,
-    };
-  },
-};
+const employeeTasks = tasks.filter(({ EmployeeID }) => EmployeeID === props.employee.ID);
+const dataSource = employeeTasks;
+const completedTasks = employeeTasks.filter(({ Status }) => Status === 'Completed');
 </script>
 <style>
 .caption {

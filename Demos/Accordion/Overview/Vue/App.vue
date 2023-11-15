@@ -57,31 +57,21 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxAccordion from 'devextreme-vue/accordion';
 import DxTagBox from 'devextreme-vue/tag-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSlider, { DxTooltip, DxLabel } from 'devextreme-vue/slider';
 import CustomTitle from './CustomTitle.vue';
 import CustomItem from './CustomItem.vue';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxAccordion, DxTagBox, DxCheckBox, DxSlider, DxTooltip, DxLabel, CustomTitle, CustomItem,
-  },
-  data() {
-    const companies = service.getCompanies();
-    return {
-      companies,
-      selectedItems: [companies[0]],
-      multiple: false,
-      collapsible: false,
-      animationDuration: 300,
-    };
-  },
-};
+const companies = service.getCompanies();
+const selectedItems = ref([companies[0]]);
+const multiple = ref(false);
+const collapsible = ref(false);
+const animationDuration = ref(300);
 </script>
 <style scoped>
 #accordion {

@@ -8,23 +8,14 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import TaskItem from './TaskItem.vue';
 
-export default {
-  name: 'TabPanelItem',
-
-  components: {
-    TaskItem,
-  },
-
-  props: {
-    tasks: {
-      type: Array,
-      default: () => [],
-    },
-  },
-};
+withDefaults(defineProps<{
+  tasks?: Record<string, any>[]
+}>(), {
+  tasks: () => [],
+});
 </script>
 
 <style>

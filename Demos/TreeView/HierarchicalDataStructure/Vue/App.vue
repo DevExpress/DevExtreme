@@ -16,28 +16,18 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxTreeView,
-  },
-  data() {
-    const products = service.getProducts();
-    return {
-      products,
-      currentItem: products[0],
-    };
-  },
-  methods: {
-    selectItem(e) {
-      this.currentItem = e.itemData;
-    },
-  },
-};
+const products = service.getProducts();
+const currentItem = ref(products[0]);
+
+function selectItem({ itemData }) {
+  currentItem.value = itemData;
+}
+
 </script>
 <style scoped>
 #simple-treeview,

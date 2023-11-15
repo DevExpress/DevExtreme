@@ -9,18 +9,7 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxList } from 'devextreme-vue/list';
 import { navigation } from './data.js';
-
-export default {
-  components: {
-    DxList,
-  },
-  data() {
-    return {
-      navigation,
-    };
-  },
-};
 </script>

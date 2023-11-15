@@ -78,12 +78,11 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxTabs from 'devextreme-vue/tabs';
-
 import {
   orientations,
   stylingModes,
@@ -93,44 +92,17 @@ import {
   tabsWithIcon,
 } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxSelectBox,
-    DxTabs,
-  },
+const fullWidth = ref(false);
+const rtlEnabled = ref(false);
+const scrollByContent = ref(false);
+const showNavButtons = ref(false);
+const orientation = ref(orientations[0]);
+const iconPosition = ref(iconPositions[0]);
+const stylingMode = ref(stylingModes[1]);
 
-  data() {
-    return {
-      orientations,
-      stylingModes,
-      iconPositions,
-      fullWidth: false,
-      rtlEnabled: false,
-      scrollByContent: false,
-      showNavButtons: false,
-      orientation: orientations[0],
-      iconPosition: iconPositions[0],
-      stylingMode: stylingModes[1],
-    };
-  },
-
-  computed: {
-    widgetWrapperClasses() {
-      const { orientation } = this;
-
-      return `widget-wrapper widget-wrapper-${orientation}`;
-    },
-    tabsWidth() {
-      const { fullWidth } = this;
-
-      return fullWidth ? '100%' : 'auto';
-    },
-    dataSources() {
-      return [tabsWithText, tabsWithIconAndText, tabsWithIcon];
-    },
-  },
-};
+const dataSources = [tabsWithText, tabsWithIconAndText, tabsWithIcon];
+const widgetWrapperClasses = computed(() => `widget-wrapper widget-wrapper-${orientation.value}`);
+const tabsWidth = computed(() => (fullWidth.value ? '100%' : 'auto'));
 </script>
 <style>
 #tabs-demo {

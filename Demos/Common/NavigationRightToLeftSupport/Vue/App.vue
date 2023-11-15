@@ -65,39 +65,23 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxMenu from 'devextreme-vue/menu';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxAccordion from 'devextreme-vue/accordion';
 import { continents, europeCountries } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxMenu,
-    DxTreeView,
-    DxAccordion,
-  },
-  data() {
-    return {
-      continents,
-      europeCountries,
-      languages: [
-        'Arabic: Right-to-Left direction',
-        'English: Left-to-Right direction',
-      ],
-      rtlEnabled: false,
+const languages = [
+  'Arabic: Right-to-Left direction',
+  'English: Left-to-Right direction',
+];
+const rtlEnabled = ref(false);
 
-    };
-  },
-  methods: {
-    selectLanguage(e) {
-      this.rtlEnabled = e.value === this.languages[0];
-    },
-  },
-};
+function selectLanguage(e) {
+  rtlEnabled.value = e.value === languages[0];
+}
 </script>
 <style scoped>
   sup {
