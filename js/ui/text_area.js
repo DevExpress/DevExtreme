@@ -99,6 +99,14 @@ const TextArea = TextBox.inherit({
         return $input;
     },
 
+    _getDefaultAttributes: function() {
+        const defaultAttributes = {
+            autocomplete: 'off'
+        };
+
+        return defaultAttributes;
+    },
+
     _setInputMinHeight: noop,
 
     _renderScrollHandler: function() {
