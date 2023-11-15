@@ -314,8 +314,13 @@ const TextEditorBase = Editor.inherit({
         const inputAttributes = extend(this._getDefaultAttributes(), customAttributes);
         $input
             .attr(inputAttributes)
-            .addClass(TEXTEDITOR_INPUT_CLASS)
-            .css('minHeight', this.option('height') ? '0' : '');
+            .addClass(TEXTEDITOR_INPUT_CLASS);
+
+        this._setInputMinHeight($input);
+    },
+
+    _setInputMinHeight: function($input) {
+        $input.css('minHeight', this.option('height') ? '0' : '');
     },
 
     _getDefaultAttributes: function() {
