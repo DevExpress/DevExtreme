@@ -120,7 +120,7 @@ test('Tabs wrapper width changing must update tab item width', async (t) => {
   })();
 
   await ClientFunction(() => {
-    const tabs = $('#tabs')('instance');
+    const tabs = ($('#tabs') as any).dxTabs('instance');
 
     tabs.option({ scrollByContent: true, width: '100%' });
   })();
@@ -132,7 +132,7 @@ test('Tabs wrapper width changing must update tab item width', async (t) => {
   })();
 
   await ClientFunction(() => {
-    const tabs = $('#tabs')('instance');
+    const tabs = ($('#tabs') as any).dxTabs('instance');
 
     tabs.option({ scrollByContent: false });
   })();
