@@ -54,8 +54,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -69,36 +68,8 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { weatherData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxPane,
-    DxValueAxis,
-    DxExport,
-    DxLegend,
-    DxLabel,
-    DxTitle,
-    DxGrid,
-  },
-
-  data() {
-    return {
-      weatherData,
-    };
-  },
-
-  methods: {
-    temperatureCustomizeText({ valueText }) {
-      return `${valueText} °C`;
-    },
-
-    precipitationCustomizeText({ valueText }) {
-      return `${valueText} mm`;
-    },
-  },
-};
+const temperatureCustomizeText = ({ valueText }) => `${valueText} °C`;
+const precipitationCustomizeText = ({ valueText }) => `${valueText} mm`;
 </script>
 <style>
 #chart {

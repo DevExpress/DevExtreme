@@ -43,7 +43,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -52,39 +52,20 @@ import DxChart, {
   DxValueAxis,
   DxLegend,
   DxExport,
+  DxChartTypes,
 } from 'devextreme-vue/chart';
 import { exportData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxLabel,
-    DxFormat,
-    DxValueAxis,
-    DxLegend,
-    DxExport,
-  },
-  data() {
-    return {
-      exportData,
-    };
-  },
-  methods: {
-    onPointClick({ target: point }) {
-      point.select();
-    },
-
-    onLegendClick({ target: series }) {
-      if (series.isVisible()) {
-        series.hide();
-      } else {
-        series.show();
-      }
-    },
-  },
-};
+function onPointClick({ target: point }: DxChartTypes.PointClickEvent) {
+  point.select();
+}
+function onLegendClick({ target: series }: DxChartTypes.LegendClickEvent) {
+  if (series.isVisible()) {
+    series.hide();
+  } else {
+    series.show();
+  }
+}
 </script>
 <style>
 #chart {

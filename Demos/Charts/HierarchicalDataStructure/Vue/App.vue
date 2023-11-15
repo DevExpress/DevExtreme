@@ -12,33 +12,16 @@
   </DxTreeMap>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxTreeMap, { DxTooltip } from 'devextreme-vue/tree-map';
 import { citiesPopulation } from './data.js';
 
-export default {
-  components: {
-    DxTreeMap,
-    DxTooltip,
-  },
-  data() {
-    return {
-      citiesPopulation,
-    };
-  },
-  methods: {
-    customizeTooltip(arg) {
-      const { data } = arg.node;
-
-      return {
-        text: arg.node.isLeaf()
-          ? `<span class="city">${data.name}</span> (${data.country})<br/>Population: ${arg.valueText}`
-          : null,
-      };
-    },
-  },
-};
+const customizeTooltip = ({ node, node: { data: { name, country } }, valueText }) => (
+  {
+    text: node.isLeaf()
+      ? `<span class="city">${name}</span> (${country})<br/>Population: ${valueText}`
+      : null,
+  });
 </script>
 
 <style>

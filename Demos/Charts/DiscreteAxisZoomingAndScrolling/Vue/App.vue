@@ -56,7 +56,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxValueAxis,
@@ -79,65 +80,37 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxValueAxis,
-    DxArgumentAxis,
-    DxLabel,
-    DxLegend,
-    DxBorder,
-    DxRangeSelector,
-    DxSize,
-    DxMargin,
-    DxScale,
-    DxRsChart,
-    DxBehavior,
-    DxCommonSeriesSettings,
-    DxCommonSeriesSettingsOptions,
-    DxSeries,
-    DxRsChartSeries,
-  },
-  data() {
-    return {
-      dataSource,
-      range: [],
-      series: [{
-        name: 'Si',
-        valueField: 'Si',
-      }, {
-        name: 'Fe',
-        valueField: 'Fe',
-      }, {
-        name: 'Ni',
-        valueField: 'Ni',
-      }, {
-        name: 'S',
-        valueField: 'S',
-      }, {
-        name: 'O',
-        valueField: 'O',
-      }, {
-        name: 'Mg',
-        valueField: 'Mg',
-      }, {
-        name: 'Al',
-        valueField: 'Al',
-      }, {
-        name: 'K',
-        valueField: 'K',
-      }, {
-        name: 'Na',
-        valueField: 'Na',
-      }],
-    };
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText}%`;
-    },
-  },
-};
+const range = ref([]);
+const series = [{
+  name: 'Si',
+  valueField: 'Si',
+}, {
+  name: 'Fe',
+  valueField: 'Fe',
+}, {
+  name: 'Ni',
+  valueField: 'Ni',
+}, {
+  name: 'S',
+  valueField: 'S',
+}, {
+  name: 'O',
+  valueField: 'O',
+}, {
+  name: 'Mg',
+  valueField: 'Mg',
+}, {
+  name: 'Al',
+  valueField: 'Al',
+}, {
+  name: 'K',
+  valueField: 'K',
+}, {
+  name: 'Na',
+  valueField: 'Na',
+}];
+
+const customizeText = ({ valueText }) => `${valueText}%`;
 </script>
 <style scoped>
 #zoomedChart {

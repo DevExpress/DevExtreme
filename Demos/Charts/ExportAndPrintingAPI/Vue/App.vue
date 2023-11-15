@@ -39,7 +39,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxSeries,
   DxLegend,
@@ -52,45 +53,19 @@ import DxChart, {
 import DxButton from 'devextreme-vue/button';
 import { mountains } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxLegend,
-    DxTooltip,
-    DxArgumentAxis,
-    DxLabel,
-    DxValueAxis,
-    DxVisualRange,
-    DxButton,
-  },
-  data() {
-    return {
-      mountains,
-    };
-  },
-  methods: {
-    printChart() {
-      this.$refs.chart.instance.print();
-    },
-
-    exportChart() {
-      this.$refs.chart.instance.exportTo('Example', 'png');
-    },
-
-    customizeTooltipText(pointInfo) {
-      return {
-        text: `<span class='title'>${pointInfo.argumentText
-        }</span><br />&nbsp;<br />System: ${pointInfo.point.data.system
-        }<br />Height: ${pointInfo.valueText} m`,
-      };
-    },
-
-    customizeLabelText({ value }) {
-      return `${value} m`;
-    },
-  },
-};
+const chart = ref();
+const customizeTooltipText = ({ argumentText, point, valueText }) => ({
+  text: `<span class='title'>${argumentText
+  }</span><br />&nbsp;<br />System: ${point.data.system
+  }<br />Height: ${valueText} m`,
+});
+const customizeLabelText = ({ value }) => `${value} m`;
+function printChart() {
+  chart.value.instance.print();
+}
+function exportChart() {
+  chart.value.instance.exportTo('Example', 'png');
+}
 </script>
 <style>
 #chart {

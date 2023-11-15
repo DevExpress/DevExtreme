@@ -58,67 +58,47 @@
 
 </template>
 
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
   DxCommonSeriesSettings,
   DxLegend,
-  DxExport,
   DxTitle,
 } from 'devextreme-vue/chart';
-
 import { exportFromMarkup } from 'devextreme/viz/export';
 import DxButton from 'devextreme-vue/button';
-import toCanvas from 'canvg';
+import * as toCanvas from 'canvg';
 import { dataSource } from './data.js';
 import Form from './Form.vue';
 
-function prepareMarkup(chartSVG, markup) {
-  return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px">'
-  + `${markup}<g transform="translate(305,12)">${chartSVG}</g></svg>`;
-}
+const form = ref();
+const chart = ref();
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxLegend,
-    DxExport,
-    DxTitle,
-    Form,
-    DxButton,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    onClick() {
-      const chartSVG = this.$refs.chart.instance.svg();
-      const formContent = this.$refs.form.getMarkup();
+const prepareMarkup = (chartSVG, markup) => `
+   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="820px" height="420px">${markup}<g transform="translate(305,12)">${chartSVG}</g></svg>`;
 
-      exportFromMarkup(prepareMarkup(chartSVG, formContent), {
-        width: 820,
-        height: 420,
-        margin: 0,
-        format: 'png',
-        svgToCanvas(svg, canvas) {
-          return new Promise((resolve) => {
-            toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
-              ignoreDimensions: true,
-              ignoreClear: true,
-              renderCallback: resolve,
-            });
-          });
-        },
+function onClick() {
+  const chartSVG = chart.value.instance.svg();
+  const formContent = form.value.getMarkup();
+
+  exportFromMarkup(prepareMarkup(chartSVG, formContent), {
+    width: 820,
+    height: 420,
+    margin: 0,
+    format: 'png',
+    svgToCanvas(svg, canvas) {
+      return new Promise((resolve) => {
+        toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
+          ignoreDimensions: true,
+          ignoreClear: true,
+          renderCallback: resolve,
+        });
       });
     },
-  },
-};
+  });
+}
 </script>
 <style>
 #chart-demo {

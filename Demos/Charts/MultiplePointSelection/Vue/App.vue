@@ -29,7 +29,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSelectionStyle,
@@ -40,32 +40,13 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { medalSources, medalStatistics } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSelectionStyle,
-    DxHatching,
-    DxSeries,
-    DxLegend,
-    DxExport,
-  },
-  data() {
-    return {
-      medalSources,
-      medalStatistics,
-    };
-  },
-  methods: {
-    onPointClick({ target: point }) {
-      if (point.isSelected()) {
-        point.clearSelection();
-      } else {
-        point.select();
-      }
-    },
-  },
-};
+function onPointClick({ target: point }) {
+  if (point.isSelected()) {
+    point.clearSelection();
+  } else {
+    point.select();
+  }
+}
 </script>
 <style>
 #chart {

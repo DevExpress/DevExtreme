@@ -26,7 +26,8 @@
     </DxRangeSelector>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxCommonSeriesSettings,
@@ -44,32 +45,12 @@ import {
 } from 'devextreme-vue/range-selector';
 import { zoomingData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxPoint,
-    DxLegend,
-    DxArgumentAxis,
-    DxRangeSelector,
-    DxSize,
-    DxMargin,
-    DxScale,
-    DxRsChart,
-    DxBehavior,
-  },
-  data() {
-    return {
-      zoomingData,
-      range: [],
-      series: [{
-        valueField: 'y1',
-      }, {
-        valueField: 'y2',
-      }, {
-        valueField: 'y3',
-      }],
-    };
-  },
-};
+const range = ref([]);
+const series = [{
+  valueField: 'y1',
+}, {
+  valueField: 'y2',
+}, {
+  valueField: 'y3',
+}];
 </script>

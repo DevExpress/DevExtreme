@@ -60,8 +60,7 @@
     <DxTitle text="Weather in Los Angeles, California"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -78,39 +77,13 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { weatherData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxValueErrorBar,
-    DxPane,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxExport,
-    DxLegend,
-    DxLabel,
-    DxTitle,
-    DxTooltip,
-    DxGrid,
+const customizeTooltip = (
+  {
+    seriesName, value, lowErrorValue, highErrorValue,
   },
-
-  data() {
-    return {
-      weatherData,
-    };
-  },
-
-  methods: {
-    customizeTooltip(pointInfo) {
-      return {
-        text: `${pointInfo.seriesName}: ${pointInfo.value
-        } (range: ${pointInfo.lowErrorValue
-        } - ${pointInfo.highErrorValue})`,
-      };
-    },
-  },
-};
+) => (
+  { text: `${seriesName}: ${value} (range: ${lowErrorValue} - ${highErrorValue})` }
+);
 </script>
 <style>
 #chart {

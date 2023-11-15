@@ -29,51 +29,35 @@
   </div>
 </template>
 
-<script>
-
-import DxTreeMap, { DxSize, DxTitle, DxColorizer } from 'devextreme-vue/tree-map';
+<script setup lang="ts">
+import { ref } from 'vue';
+import DxTreeMap, {
+  DxSize, DxTitle, DxColorizer, DxTreeMapTypes,
+} from 'devextreme-vue/tree-map';
 import { citiesPopulation } from './data.js';
 
-export default {
-  components: {
-    DxTreeMap,
-    DxSize,
-    DxTitle,
-    DxColorizer,
-  },
-  data() {
-    return {
-      drillInfo: [],
-      citiesPopulation,
-    };
-  },
-  methods: {
-    nodeClick(e) {
-      e.node.drillDown();
-    },
+const drillInfo = ref([]);
 
-    drill(e) {
-      this.drillInfo = [];
-      for (let node = e.node.getParent(); node; node = node.getParent()) {
-        this.drillInfo.unshift({
-          text: node.label() || 'All Continents',
-          node,
-        });
-      }
-      if (this.drillInfo.length) {
-        this.drillInfo.push({
-          text: e.node.label(),
-        });
-      }
-    },
-
-    drillInfoClick(node) {
-      if (node) {
-        node.drillDown();
-      }
-    },
-  },
-};
+function nodeClick({ node }: DxTreeMapTypes.ClickEvent) {
+  node.drillDown();
+}
+function drill(e: DxTreeMapTypes.DrillEvent) {
+  drillInfo.value = [];
+  for (let node = e.node.getParent(); node; node = node.getParent()) {
+    drillInfo.value.unshift({
+      text: node.label() || 'All Continents',
+      node,
+    });
+  }
+  if (drillInfo.value.length) {
+    drillInfo.value.push({
+      text: e.node.label(),
+    });
+  }
+}
+function drillInfoClick(node) {
+  node?.drillDown();
+}
 </script>
 
 <style>

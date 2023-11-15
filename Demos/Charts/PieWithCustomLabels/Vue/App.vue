@@ -32,8 +32,7 @@
   </DxPieChart>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxSeries,
   DxLegend,
@@ -42,30 +41,9 @@ import DxPieChart, {
   DxFont,
   DxExport,
 } from 'devextreme-vue/pie-chart';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSeries,
-    DxLegend,
-    DxLabel,
-    DxConnector,
-    DxFont,
-    DxExport,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    formatLabel(pointInfo) {
-      return `${pointInfo.valueText} (${pointInfo.percentText})`;
-    },
-  },
-};
+const formatLabel = ({ valueText, percentText }) => `${valueText} (${percentText})`;
 </script>
 
 <style>

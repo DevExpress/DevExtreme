@@ -26,8 +26,7 @@
   </DxFunnel>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxFunnel, {
   DxTitle,
   DxMargin,
@@ -37,31 +36,9 @@ import DxFunnel, {
   DxBorder,
   DxLabel,
 } from 'devextreme-vue/funnel';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxFunnel,
-    DxTitle,
-    DxMargin,
-    DxExport,
-    DxTooltip,
-    DxItem,
-    DxBorder,
-    DxLabel,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    formatLabel(arg) {
-      return `<span class="label">${arg.percentText}</span><br/>${arg.item.argument}`;
-    },
-  },
-};
+const formatLabel = ({ percentText, item: { argument } }) => `<span class="label">${percentText}</span><br/>${argument}`;
 </script>
 
 <style>

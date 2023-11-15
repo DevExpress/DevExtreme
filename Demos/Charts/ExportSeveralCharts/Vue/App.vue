@@ -24,7 +24,7 @@
         ref="pieChart"
         :data-source="allMedals"
         palette="Harmony Light"
-        title="Total Olympic Medals\n in 2008"
+        :title="'Total Olympic Medals\n in 2008'"
       >
         <DxPieSeries
           argument-field="country"
@@ -49,7 +49,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxSeries,
   DxLabel,
@@ -64,36 +65,18 @@ import { exportWidgets } from 'devextreme/viz/export';
 import DxButton from 'devextreme-vue/button';
 import { allMedals, goldMedals } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxLabel,
-    DxLegend,
-    DxPieChart,
-    DxPieSeries,
-    DxPieLabel,
-    DxConnector,
-    DxButton,
-  },
-  data() {
-    return {
-      allMedals,
-      goldMedals,
-    };
-  },
-  methods: {
-    onClick() {
-      const chartInstance = this.$refs.chart.instance;
-      const pieChartInstance = this.$refs.pieChart.instance;
+const chart = ref();
+const pieChart = ref();
 
-      exportWidgets([[chartInstance, pieChartInstance]], {
-        fileName: 'chart',
-        format: 'PNG',
-      });
-    },
-  },
-};
+function onClick() {
+  const chartInstance = chart.value.instance;
+  const pieChartInstance = pieChart.value.instance;
+
+  exportWidgets([[chartInstance, pieChartInstance]], {
+    fileName: 'chart',
+    format: 'PNG',
+  });
+}
 </script>
 <style>
 #chart-demo {

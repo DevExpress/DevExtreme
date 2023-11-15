@@ -49,36 +49,21 @@
   </tr>
 </template>
 
-<script>
+<script setup lang="ts">
 import DxSparkline, {
   DxTooltip,
 } from 'devextreme-vue/sparkline';
-
 import {
   copperCosts,
   nickelCosts,
   palladiumCosts,
 } from './data.js';
 
-export default {
-  components: {
-    DxSparkline,
-    DxTooltip,
-  },
-  props: {
-    year: {
-      type: String,
-      default() {},
-    },
-  },
-  data() {
-    return {
-      copperCosts,
-      nickelCosts,
-      palladiumCosts,
-    };
-  },
-};
+withDefaults(defineProps<{
+  year?: string
+}>(), {
+  year: '',
+});
 </script>
 
 <style>

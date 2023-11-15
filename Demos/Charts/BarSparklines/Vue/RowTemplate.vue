@@ -47,34 +47,20 @@
   </tr>
 </template>
 
-<script>
+<script setup lang="ts">
 import DxSparkline, {
   DxTooltip,
 } from 'devextreme-vue/sparkline';
 
-export default {
-  components: {
-    DxSparkline,
-    DxTooltip,
-  },
+const props = withDefaults(defineProps<{
+  year?: string
+  source?: object
+}>(), {
+  year: '',
+  source: () => ({}),
+});
 
-  props: {
-    year: {
-      type: String,
-      default() {},
-    },
-    source: {
-      type: Object,
-      default() {},
-    },
-  },
-
-  methods: {
-    getValueField(name) {
-      return name + this.year;
-    },
-  },
-};
+const getValueField = (name) => name + props.year;
 </script>
 <style>
 .rows-content td {

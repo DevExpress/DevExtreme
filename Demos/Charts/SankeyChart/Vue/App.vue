@@ -19,36 +19,17 @@
 
   </DxSankey>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxSankey, {
   DxTooltip,
   DxNode,
   DxLink,
 } from 'devextreme-vue/sankey';
-
 import { data } from './data.js';
 
-export default {
-  components: {
-    DxSankey,
-    DxTooltip,
-    DxNode,
-    DxLink,
-  },
-  data() {
-    return {
-      data,
-    };
-  },
-  methods: {
-    customizeLinkTooltip(info) {
-      return {
-        html: `<b>From:</b> ${info.source}<br/><b>To:</b> ${info.target}<br/><b>Weight:</b> ${info.weight}`,
-      };
-    },
-  },
-};
+const customizeLinkTooltip = ({ source, target, weight }) => (
+  { html: `<b>From:</b> ${source}<br/><b>To:</b> ${target}<br/><b>Weight:</b> ${weight}` }
+);
 </script>
 <style>
 #sankey {

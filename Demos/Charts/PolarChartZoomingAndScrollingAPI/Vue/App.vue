@@ -57,7 +57,8 @@
     </DxRangeSelector>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxPolarChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -67,7 +68,6 @@ import DxPolarChart, {
   DxExport,
   DxLegend,
 } from 'devextreme-vue/polar-chart';
-
 import DxRangeSelector, {
   DxSize,
   DxMargin,
@@ -75,36 +75,12 @@ import DxRangeSelector, {
   DxMinorTick,
   DxBehavior,
 } from 'devextreme-vue/range-selector';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxPolarChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxPoint,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxExport,
-    DxLegend,
-    DxRangeSelector,
-    DxSize,
-    DxMargin,
-    DxScale,
-    DxMinorTick,
-    DxBehavior,
-  },
-  data() {
-    return {
-      dataSource,
-      visualRange: {
-        startValue: 0,
-        endValue: 8,
-      },
-    };
-  },
-};
+const visualRange = ref({
+  startValue: 0,
+  endValue: 8,
+});
 </script>
 <style>
 #zoomedChart {

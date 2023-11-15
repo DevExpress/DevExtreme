@@ -21,15 +21,16 @@
           :data-source="colorizationOptions"
           :width="200"
           :input-attr="{ 'aria-label': 'Colorization Type' }"
-          v-model:value="typeOptions"
+          v-model:value="selectedType"
           display-expr="name"
-          value-expr="options"
+          value-expr="name"
         />
       </div>
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxTreeMap,
 {
   DxTooltip,
@@ -37,29 +38,17 @@ import DxTreeMap,
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { salesAmount, colorizationOptions } from './data.js';
 
-export default {
-  components: {
-    DxTreeMap,
-    DxTooltip,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      salesAmount,
-      colorizationOptions,
-      typeOptions: colorizationOptions[2].options,
-    };
-  },
-  methods: {
-    customizeTooltip(arg) {
-      const { data } = arg.node;
-
-      return {
-        text: arg.node.isLeaf() ? `<span class='product'>${data.name}</span><br/>Sales Amount: ${arg.valueText}` : null,
-      };
-    },
-  },
-};
+const selectedType = ref(colorizationOptions[2].name);
+const typeOptions = computed(
+  () => colorizationOptions.find(({ name }) => name === selectedType.value).options,
+);
+const customizeTooltip = ({ node, node: { data: { name } }, valueText }) => (
+  {
+    text: node.isLeaf()
+      ? `<span class='product'>${name}</span><br/>Sales Amount: ${valueText}`
+      : null,
+  }
+);
 </script>
 <style scoped>
 .product {

@@ -17,19 +17,14 @@
     </text>
   </svg>
 </template>
-<script>
+<script setup lang="ts">
+withDefaults(defineProps<{
+  data?: Record<string, any>
+}>(), {
+  data: () => ({}),
+});
 
-export default {
-  props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  methods: {
-    getFilePath: (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`,
-  },
-};
+const getFilePath = (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`;
 </script>
 <style scoped>
 .template-text {

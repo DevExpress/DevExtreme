@@ -19,8 +19,7 @@
     <DxSeriesTemplate name-field="year"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxTitle,
   DxSubtitle,
@@ -28,25 +27,9 @@ import DxChart, {
   DxAggregation,
   DxSeriesTemplate,
 } from 'devextreme-vue/chart';
-
 import { oilProductionData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxTitle,
-    DxSubtitle,
-    DxCommonSeriesSettings,
-    DxAggregation,
-    DxSeriesTemplate,
-  },
-
-  data() {
-    return {
-      dataSource: oilProductionData,
-    };
-  },
-};
+const dataSource = oilProductionData;
 </script>
 <style>
 #chart {

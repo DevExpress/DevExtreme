@@ -30,7 +30,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxTreeMap,
 {
   DxColorizer,
@@ -39,60 +40,35 @@ import DxTreeMap,
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { populationByAge } from './data.js';
 
-export default {
-  components: {
-    DxTreeMap,
-    DxColorizer,
-    DxTooltip,
-    DxSelectBox,
-  },
-  data() {
-    const algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
-    return {
-      populationByAge,
-      algorithms,
-      selectedAlgorithm: algorithms[2],
-    };
-  },
-  computed: {
-    currentAlgorithm() {
-      let currentAlgorithm = this.selectedAlgorithm;
-      if (currentAlgorithm === 'custom') {
-        currentAlgorithm = this.customAlgorithm;
-      }
+const algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
+const selectedAlgorithm = ref(algorithms[2]);
+const currentAlgorithm = computed(() => ((selectedAlgorithm.value === 'custom') ? customAlgorithm : selectedAlgorithm.value));
 
-      return currentAlgorithm;
-    },
-  },
-  methods: {
-    customizeTooltip(arg) {
-      const { data } = arg.node;
-      const parentData = arg.node.getParent().data;
+function customizeTooltip({ node, node: { data: { name, value } }, valueText }) {
+  const parentData = node.getParent().data;
 
-      return {
-        text: arg.node.isLeaf()
-          ? `<span class='country'>${parentData.name}</span><br />${data.name}<br />${arg.valueText}(${((100 * data.value) / parentData.total).toFixed(1)}%)`
-          : `<span class='country'>${data.name}</span>`,
-      };
-    },
-    customAlgorithm(arg) {
-      const totalRect = arg.rect.slice();
-      let totalSum = arg.sum;
-      let side = 0;
+  return {
+    text: node.isLeaf()
+      ? `<span class='country'>${parentData.name}</span><br />${name}<br />${valueText}(${((100 * value) / parentData.total).toFixed(1)}%)`
+      : `<span class='country'>${name}</span>`,
+  };
+}
+function customAlgorithm({ rect, sum, items }) {
+  const totalRect = rect.slice();
+  let totalSum = sum;
+  let side = 0;
 
-      arg.items.forEach((item) => {
-        const size = Math.round(((totalRect[side + 2] - totalRect[side]) * item.value) / totalSum);
-        const rect = totalRect.slice();
+  items.forEach((item) => {
+    const size = Math.round(((totalRect[side + 2] - totalRect[side]) * item.value) / totalSum);
+    const itemRect = totalRect.slice();
 
-        totalSum -= item.value;
-        totalRect[side] += size;
-        rect[side + 2] = totalRect[side];
-        item.rect = rect;
-        side = 1 - side;
-      });
-    },
-  },
-};
+    totalSum -= item.value;
+    totalRect[side] += size;
+    itemRect[side + 2] = totalRect[side];
+    item.rect = itemRect;
+    side = 1 - side;
+  });
+}
 </script>
 <style scoped>
 #treemap {

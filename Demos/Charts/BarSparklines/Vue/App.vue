@@ -37,11 +37,14 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import DxSelectBox from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 import RowTemplate from './RowTemplate.vue';
+
+const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+const years = ['2010', '2011', '2012'];
 
 const source = new DataSource({
   store: new CustomStore({
@@ -54,25 +57,10 @@ const source = new DataSource({
   paginate: false,
 });
 
-export default {
-  components: {
-    RowTemplate,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      months: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-      years: ['2010', '2011', '2012'],
-      source,
-    };
-  },
-  methods: {
-    onValueChanged(e) {
-      this.source.filter(['month', '<=', e.value]);
-      this.source.load();
-    },
-  },
-};
+function onValueChanged({ value }) {
+  source.filter(['month', '<=', value]);
+  source.load();
+}
 </script>
 <style>
 #chart-demo {

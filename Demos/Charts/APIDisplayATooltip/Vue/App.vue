@@ -33,7 +33,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxPieChart, {
   DxSeries,
   DxTooltip,
@@ -43,42 +44,22 @@ import DxPieChart, {
 import DxSelectBox from 'devextreme-vue/select-box';
 import { populationData } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxPieChart,
-    DxSeries,
-    DxTooltip,
-    DxSize,
-    DxLegend,
-  },
+const selectedRegion = ref(null);
+const pieChart = ref();
 
-  data() {
-    return {
-      selectedRegion: null,
-      populationData,
-    };
-  },
-
-  methods: {
-    onPointClick({ target: point }) {
-      point.showTooltip();
-      this.selectedRegion = point.argument;
-    },
-
-    onRegionChanged({ value }) {
-      const pieChartInstance = this.$refs.pieChart.instance;
-      const point = pieChartInstance.getAllSeries()[0].getPointsByArg(value)[0];
-      point.showTooltip();
-    },
-
-    customizeTooltip(pointInfo) {
-      return {
-        text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`,
-      };
-    },
-  },
-};
+const customizeTooltip = ({ argumentText, valueText }) => ({
+  text: `${argumentText}<br/>${valueText}`,
+});
+function onPointClick({ target: point }) {
+  point.showTooltip();
+  selectedRegion.value = point.argument;
+}
+function onRegionChanged({ value }) {
+  pieChart.value.instance
+    .getAllSeries()[0]
+    .getPointsByArg(value)[0]
+    .showTooltip();
+}
 </script>
 <style>
 .controls-pane {

@@ -12,7 +12,7 @@
     <DxLegend :visible="false"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -23,22 +23,7 @@ import {
 } from 'devextreme-vue/chart';
 import { zoomingData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxScrollBar,
-    DxZoomAndPan,
-    DxLegend,
-  },
-  data() {
-    return {
-      zoomingData,
-      initialRange: [300, 500],
-    };
-  },
-};
+const initialRange = [300, 500];
 </script>
 <style scoped>
 #chart {

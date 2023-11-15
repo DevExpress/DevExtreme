@@ -102,8 +102,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -121,77 +121,45 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { weatherData, aggregationFunctions, aggregationIntervals } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxSelectBox,
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxAggregation,
-    DxPoint,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxTitle,
-    DxFont,
-    DxLegend,
-    DxLabel,
-    DxTooltip,
-  },
+const useAggregation = ref(true);
+const currentFunction = ref(aggregationFunctions[0].func);
+const currentInterval = ref(aggregationIntervals[0].interval);
 
-  data() {
-    return {
-      aggregationFunctions,
-      aggregationIntervals,
-      weatherData,
-      useAggregation: true,
-      currentFunction: aggregationFunctions[0].func,
-      currentInterval: aggregationIntervals[0].interval,
-    };
-  },
+function calculateRangeArea({ data, intervalStart, intervalEnd }) {
+  if (!data.length) {
+    return null;
+  }
 
-  methods: {
-    calculateRangeArea(aggregationInfo) {
-      if (!aggregationInfo.data.length) {
-        return null;
-      }
+  const temp = data.map((item) => item.temp);
 
-      const temp = aggregationInfo.data.map((item) => item.temp);
-      return {
-        date: new Date((aggregationInfo.intervalStart.valueOf()
-          + aggregationInfo.intervalEnd.valueOf()) / 2),
-        maxTemp: Math.max.apply(null, temp),
-        minTemp: Math.min.apply(null, temp),
-      };
-    },
+  return {
+    date: new Date((intervalStart.valueOf()
+          + intervalEnd.valueOf()) / 2),
+    maxTemp: Math.max.apply(null, temp),
+    minTemp: Math.min.apply(null, temp),
+  };
+}
+function customizeTooltip(pointInfo) {
+  const { aggregationInfo } = pointInfo.point;
+  const start = aggregationInfo && aggregationInfo.intervalStart;
+  const end = aggregationInfo && aggregationInfo.intervalEnd;
+  const handlers = {
+    'Average temperature': ({ argument, value }) => ({
+      text: `${(!aggregationInfo
+        ? `Date: ${argument.toDateString()}`
+        : `Interval: ${start.toDateString()} - ${end.toDateString()}`)
+      }<br/>Temperature: ${value.toFixed(2)} °C`,
+    }),
+    'Temperature range': ({ rangeValue1, rangeValue2 }) => ({
+      text: `Interval: ${start.toDateString()} - ${end.toDateString()}<br/>Temperature range: ${rangeValue1} - ${rangeValue2} °C`,
+    }),
+    Precipitation: ({ argument, valueText }) => ({
+      text: `Date: ${argument.toDateString()}<br/>Precipitation: ${valueText} mm`,
+    }),
+  };
 
-    customizeTooltip(pointInfo) {
-      const { aggregationInfo } = pointInfo.point;
-      const start = aggregationInfo && aggregationInfo.intervalStart;
-      const end = aggregationInfo && aggregationInfo.intervalEnd;
-      const handlers = {
-        'Average temperature': (arg) => ({
-          text: `${(!aggregationInfo
-            ? `Date: ${arg.argument.toDateString()}`
-            : `Interval: ${start.toDateString()} - ${end.toDateString()}`)
-          }<br/>Temperature: ${arg.value.toFixed(2)} °C`,
-        }),
-        'Temperature range': (arg) => ({
-          text: `Interval: ${start.toDateString()
-          } - ${end.toDateString()
-          }<br/>Temperature range: ${arg.rangeValue1
-          } - ${arg.rangeValue2} °C`,
-        }),
-        Precipitation: (arg) => ({
-          text: `Date: ${arg.argument.toDateString()
-          }<br/>Precipitation: ${arg.valueText} mm`,
-        }),
-      };
-
-      return handlers[pointInfo.seriesName](pointInfo);
-    },
-  },
-};
+  return handlers[pointInfo.seriesName](pointInfo);
+}
 </script>
 <style>
 #chart-demo {

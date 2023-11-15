@@ -50,8 +50,8 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxArgumentAxis,
   DxValueAxis,
@@ -65,45 +65,17 @@ import DxChart, {
   DxLegend,
   DxBorder,
 } from 'devextreme-vue/chart';
-
 import DxButton from 'devextreme-vue/button';
-
 import { birthLife } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxButton,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxCommonSeriesSettings,
-    DxSeriesTemplate,
-    DxPoint,
-    DxTooltip,
-    DxLabel,
-    DxLegend,
-    DxZoomAndPan,
-    DxCrosshair,
-    DxBorder,
-  },
-  data() {
-    return {
-      birthLife,
-    };
-  },
-  methods: {
-    resetZoom() {
-      this.$refs.chart.instance.resetVisualRange();
-    },
+const chart = ref();
 
-    customizeTooltip({ point }) {
-      const { data } = point;
-      return {
-        text: `${data.country} ${data.year}`,
-      };
-    },
-  },
-};
+const customizeTooltip = ({ point: { data: { country, year } } }) => ({
+  text: `${country} ${year}`,
+});
+function resetZoom() {
+  chart.value.instance.resetVisualRange();
+}
 </script>
 <style>
 #chart {

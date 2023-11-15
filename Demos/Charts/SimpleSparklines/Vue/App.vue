@@ -20,20 +20,10 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import RowTemplate from './RowTemplate.vue';
 
-export default {
-  components: {
-    RowTemplate,
-  },
-
-  data() {
-    return {
-      years: ['2010', '2011', '2012'],
-    };
-  },
-};
+const years = ['2010', '2011', '2012'];
 </script>
 <style>
 #chart-demo {

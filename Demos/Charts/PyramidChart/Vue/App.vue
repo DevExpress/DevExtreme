@@ -27,8 +27,7 @@
   </DxFunnel>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxFunnel, {
   DxTitle,
   DxMargin,
@@ -39,27 +38,7 @@ import DxFunnel, {
   DxLabel,
   DxFont,
 } from 'devextreme-vue/funnel';
-
 import { dataSource } from './data.js';
-
-export default {
-  components: {
-    DxFunnel,
-    DxTitle,
-    DxMargin,
-    DxTooltip,
-    DxItem,
-    DxBorder,
-    DxLegend,
-    DxLabel,
-    DxFont,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>
 
 <style>

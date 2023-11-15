@@ -18,24 +18,17 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+withDefaults(defineProps<{
+  info?: Record<string, any>
+}>(), {
+  info: () => ({}),
+});
 
-export default {
-  props: {
-    info: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  methods: {
-    getImagePath(point) {
-      return `../../../../images/flags/${point.data.name.replace(/\s/, '')}.svg`;
-    },
-    formatNumber: new Intl.NumberFormat('en-US', {
-      maximumFractionDigits: 0,
-    }).format,
-  },
-};
+const getImagePath = ({ data }) => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
+const formatNumber = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 0,
+}).format;
 </script>
 <style>
 .state-tooltip {

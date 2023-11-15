@@ -51,8 +51,7 @@
     <DxTitle text="Evolution of Population by Continent"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -66,48 +65,24 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { continentSources, populationData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxValueAxis,
-    DxExport,
-    DxLegend,
-    DxTooltip,
-    DxTitle,
-    DxGrid,
-    DxFormat,
-  },
+function customizeTooltip(pointInfo) {
+  const items = pointInfo.valueText.split('\n');
+  const color = pointInfo.point.getColor();
 
-  data() {
-    return {
-      continentSources,
-      populationData,
-    };
-  },
+  items.forEach((item, index) => {
+    if (item.indexOf(pointInfo.seriesName) === 0) {
+      const element = document.createElement('span');
 
-  methods: {
-    customizeTooltip(pointInfo) {
-      const items = pointInfo.valueText.split('\n');
-      const color = pointInfo.point.getColor();
+      element.textContent = item;
+      element.style.color = color;
+      element.className = 'active';
 
-      items.forEach((item, index) => {
-        if (item.indexOf(pointInfo.seriesName) === 0) {
-          const element = document.createElement('span');
+      items[index] = element.outerHTML;
+    }
+  });
 
-          element.textContent = item;
-          element.style.color = color;
-          element.className = 'active';
-
-          items[index] = element.outerHTML;
-        }
-      });
-
-      return { text: items.join('\n') };
-    },
-  },
-};
+  return { text: items.join('\n') };
+}
 </script>
 <style>
 #chart {

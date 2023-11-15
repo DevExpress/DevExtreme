@@ -43,7 +43,8 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -55,66 +56,31 @@ import {
   DxExport,
   DxFont,
 } from 'devextreme-vue/chart';
-
 import { temperaturesData, highAverage, lowAverage } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxStrip,
-    DxStripStyle,
-    DxValueAxis,
-    DxLabel,
-    DxLegend,
-    DxExport,
-    DxFont,
-  },
+const highAverageColor = ref('#ff9b52');
+const lowAverageColor = ref('#6199e6');
+const dataSource = temperaturesData;
 
-  data() {
-    return {
-      highAverage,
-      lowAverage,
-      highAverageColor: '#ff9b52',
-      lowAverageColor: '#6199e6',
-      dataSource: temperaturesData,
-    };
-  },
+const customizePoint = ({ value }) => {
+  if (value > highAverage) {
+    return { color: highAverageColor.value };
+  }
 
-  methods: {
-    customizePoint(arg) {
-      if (arg.value > this.highAverage) {
-        return { color: this.highAverageColor };
-      }
-      if (arg.value < this.lowAverage) {
-        return { color: this.lowAverageColor };
-      }
-      return null;
-    },
-
-    customizeLabel(arg) {
-      if (arg.value > this.highAverage) {
-        return this.getLabelsSettings(this.highAverageColor);
-      }
-      if (arg.value < this.lowAverage) {
-        return this.getLabelsSettings(this.lowAverageColor);
-      }
-      return null;
-    },
-
-    getLabelsSettings(backgroundColor) {
-      return {
-        visible: true,
-        backgroundColor,
-        customizeText: this.customizeText,
-      };
-    },
-
-    customizeText(arg) {
-      return `${arg.valueText}&#176F`;
-    },
-  },
+  return (value < lowAverage) ? { color: lowAverageColor.value } : null;
 };
+const customizeLabel = ({ value }) => {
+  if (value > highAverage) {
+    return getLabelsSettings(highAverageColor.value);
+  }
+  return (value < lowAverage) ? getLabelsSettings(lowAverageColor.value) : null;
+};
+const getLabelsSettings = (backgroundColor) => ({
+  visible: true,
+  backgroundColor,
+  customizeText,
+});
+const customizeText = ({ valueText }) => `${valueText}&#176F`;
 </script>
 <style>
 #chart {

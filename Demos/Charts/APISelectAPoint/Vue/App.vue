@@ -24,7 +24,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSelectionStyle,
@@ -32,38 +32,20 @@ import DxChart, {
   DxSeries,
   DxLegend,
   DxExport,
+  DxChartTypes,
 } from 'devextreme-vue/chart';
 import { catBreedsData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSelectionStyle,
-    DxHatching,
-    DxSeries,
-    DxLegend,
-    DxExport,
-  },
-  data() {
-    return {
-      catBreedsData,
-    };
-  },
-  methods: {
-    onDone({ component }) {
-      component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
-    },
-
-    onPointClick({ target: point }) {
-      if (point.isSelected()) {
-        point.clearSelection();
-      } else {
-        point.select();
-      }
-    },
-  },
-};
+function onDone({ component }) {
+  component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
+}
+function onPointClick({ target: point }: DxChartTypes.PointClickEvent) {
+  if (point.isSelected()) {
+    point.clearSelection();
+  } else {
+    point.select();
+  }
+}
 </script>
 <style>
 #chart {

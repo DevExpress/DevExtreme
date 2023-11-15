@@ -32,7 +32,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -46,35 +46,13 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { versionSources, statisticsData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxCommonAxisSettings,
-    DxArgumentAxis,
-    DxValueAxis,
-    DxLabel,
-    DxFormat,
-    DxLegend,
-    DxExport,
-  },
-  data() {
-    return {
-      versionSources,
-      statisticsData,
-    };
-  },
-  methods: {
-    onSeriesClick({ target: series }) {
-      if (series.isSelected()) {
-        series.clearSelection();
-      } else {
-        series.select();
-      }
-    },
-  },
-};
+function onSeriesClick({ target: series }) {
+  if (series.isSelected()) {
+    series.clearSelection();
+  } else {
+    series.select();
+  }
+}
 </script>
 <style>
 #chart {

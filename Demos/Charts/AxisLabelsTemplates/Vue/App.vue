@@ -33,28 +33,12 @@
     </template>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart, DxSeries, DxCommonSeriesSettings, DxLabel, DxArgumentAxis,
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 import LabelTemplate from './LabelTemplate.vue';
-
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxLabel,
-    DxArgumentAxis,
-    LabelTemplate,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>
 <style>
 #chart {
