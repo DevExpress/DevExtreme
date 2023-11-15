@@ -2165,6 +2165,25 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
             value: ' y'
         });
     });
+
+    QUnit.test('caret is shifted after input if maskChar is set to an empty string (T1197442)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '00',
+            maskChar: ''
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        caretWorkaround($input);
+
+        const keyboard = keyboardMock($input, true);
+        keyboard.caret(0);
+
+        keyboard
+            .type('1');
+
+        assert.strictEqual(keyboard.caret().start, 1, 'caret is on correct position');
+    });
 });
 
 QUnit.module('escape built-in rules', {}, () => {

@@ -72,11 +72,8 @@ export default class MaskStrategy {
             }
 
             this._clearSelectedText();
-
             this._autoFillHandler(originalEvent);
-
             this._editorCaret(currentCaret);
-
             this._handleInsertTextInputEvent(originalEvent.data);
         }
 
