@@ -39,7 +39,7 @@
     "core-js": "^2.6.12",
     "del": "^2.2.2",
     "gulp": "^4.0.2",
-    "gulp-header": "^1.8.12",
+    "gulp-header": "^2.0.0",
     "gulp-replace": "^0.6.1",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^3.2.4",

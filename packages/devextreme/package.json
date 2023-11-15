@@ -105,7 +105,7 @@
     "gulp-file": "0.4.0",
     "gulp-flatmap": "1.0.2",
     "gulp-footer": "2.1.0",
-    "gulp-header": "1.8.12",
+    "gulp-header": "2.0.9",
     "gulp-if": "3.0.0",
     "gulp-jsbeautifier": "2.1.2",
     "gulp-json-editor": "2.5.6",
