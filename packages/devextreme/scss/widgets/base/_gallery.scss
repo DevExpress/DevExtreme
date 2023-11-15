@@ -4,6 +4,13 @@
 .dx-gallery {
   width: 100%;
   height: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+
+  &.dx-gallery-indicator-visible {
+    border-width: 0;
+  }
 
   @include user-select(none);
 

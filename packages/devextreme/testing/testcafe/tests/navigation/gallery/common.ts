@@ -1,3 +1,4 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Gallery from '../../../model/gallery';
@@ -21,3 +22,27 @@ test('click on indicator item should change selected item', async (t) => {
   showIndicator: true,
   items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
 }));
+
+[true, false].forEach((showIndicator) => {
+  test(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    await t
+      .expect(await takeScreenshot(`Gallery. showIndicator=${showIndicator}.png`))
+      .ok();
+
+    await t
+      .click('#container');
+
+    await t
+      .expect(await takeScreenshot(`Focused gallery. showIndicator=${showIndicator}.png`))
+      .ok();
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxGallery', {
+    height: 300,
+    showIndicator,
+    items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
+  }));
+});
