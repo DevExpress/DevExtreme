@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -25,7 +26,7 @@ test('click on indicator item should change selected item', async (t) => {
 }));
 
 [true, false].forEach((showIndicator) => {
-  test(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
+  safeSizeTest(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
@@ -38,7 +39,7 @@ test('click on indicator item should change selected item', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxGallery', {
+  }, [110, 110]).before(async () => createWidget('dxGallery', {
     height: 110,
     showIndicator,
     items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
