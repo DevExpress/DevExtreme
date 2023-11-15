@@ -506,7 +506,7 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedIndex', function(assert) {
-        assert.expect(2);
+        assert.expect(3);
 
         const $tabs = $('#tabs').dxTabs({
             items: [
@@ -518,24 +518,30 @@ QUnit.module('Tab select action', () => {
         });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        $tabs.focusin();
 
-        tabsItemFirst.trigger('dxclick');
+        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0)[0];
+        let focusedElement = tabs.option('focusedElement')[0];
 
-        const $focusedElementFirst = tabs.option('focusedElement');
+        assert.strictEqual(focusedElement, tabsItemFirst);
 
-        assert.strictEqual($focusedElementFirst, tabsItemFirst[0]);
+        $tabs.focusout();
+
+        focusedElement = tabs.option('focusedElement');
+
+        assert.strictEqual(focusedElement, null);
 
         tabs.option({ selectedIndex: 1 });
+        $tabs.focusin();
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
-        const $focusedElementSecond = tabs.option('focusedElement');
+        const tabsItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
+        focusedElement = tabs.option('focusedElement')[0];
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual(focusedElement, tabsItemSecond);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
-        assert.expect(2);
+        assert.expect(3);
 
         const $tabs = $('#tabs').dxTabs({
             items: [
@@ -547,24 +553,30 @@ QUnit.module('Tab select action', () => {
         });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        $tabs.focusin();
 
-        tabsItemFirst.trigger('dxclick');
+        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0)[0];
+        let focusedElement = tabs.option('focusedElement')[0];
 
-        const $focusedElementFirst = tabs.option('focusedElement');
+        assert.strictEqual(focusedElement, tabsItemFirst);
 
-        assert.strictEqual($focusedElementFirst, tabsItemFirst[0]);
+        $tabs.focusout();
+
+        focusedElement = tabs.option('focusedElement');
+
+        assert.strictEqual(focusedElement, null);
 
         tabs.option({ selectedItem: tabs.option('items[1]') });
+        $tabs.focusin();
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
-        const $focusedElementSecond = tabs.option('focusedElement');
+        const tabsItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
+        focusedElement = tabs.option('focusedElement')[0];
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual(focusedElement, tabsItemSecond);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
-        assert.expect(2);
+        assert.expect(3);
 
         const items = [
             { text: '0' },
@@ -574,20 +586,26 @@ QUnit.module('Tab select action', () => {
         const $tabs = $('#tabs').dxTabs({ items, focusStateEnabled: true });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        $tabs.focusin();
 
-        tabItemFirst.trigger('dxclick');
+        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0)[0];
+        let focusedElement = tabs.option('focusedElement')[0];
 
-        const $focusedElementFirst = tabs.option('focusedElement');
+        assert.strictEqual(focusedElement, tabsItemFirst);
 
-        assert.strictEqual($focusedElementFirst, tabItemFirst[0]);
+        $tabs.focusout();
+
+        focusedElement = tabs.option('focusedElement');
+
+        assert.strictEqual(focusedElement, null);
 
         tabs.option({ selectedItems: [items[1], items[2]] });
+        $tabs.focusin();
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
-        const $focusedElementSecond = tabs.option('focusedElement');
+        const tabsItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1)[0];
+        focusedElement = tabs.option('focusedElement')[0];
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual(focusedElement, tabsItemSecond);
     });
 });
 
@@ -838,7 +856,7 @@ QUnit.module('Horizontal scrolling', () => {
     });
 
     QUnit.test('selected item should be visible after selectedIndex was changed', function(assert) {
-        assert.expect(2);
+        assert.expect(1);
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
             width: 100,
