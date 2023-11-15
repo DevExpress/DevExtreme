@@ -21,59 +21,41 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
   DxValueAxis,
   DxLegend,
 } from 'devextreme-vue/chart';
-
 import { DxButton } from 'devextreme-vue/button';
-
 import service from './data.js';
 
+const isFirstLevel = ref(true);
+const dataSource = ref(service.filterData(''));
 const colors = ['#6babac', '#e55253'];
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxValueAxis,
-    DxLegend,
-    DxButton,
-  },
-
-  data() {
-    return {
-      isFirstLevel: true,
-      dataSource: service.filterData(''),
-    };
-  },
-
-  methods: {
-    customizePoint() {
-      return {
-        color: colors[Number(this.isFirstLevel)],
-        hoverStyle: !this.isFirstLevel ? {
-          hatching: 'none',
-        } : {},
-      };
-    },
-    onPointClick({ target }) {
-      if (this.isFirstLevel) {
-        this.isFirstLevel = false;
-        this.dataSource = service.filterData(target.originalArgument);
-      }
-    },
-    onButtonClick() {
-      if (!this.isFirstLevel) {
-        this.isFirstLevel = true;
-        this.dataSource = service.filterData('');
-      }
-    },
-  },
-};
+function customizePoint() {
+  return {
+    color: colors[Number(isFirstLevel.value)],
+    hoverStyle: !isFirstLevel.value ? {
+      hatching: 'none',
+    } : {},
+  };
+}
+function onPointClick({ target }) {
+  if (isFirstLevel.value) {
+    isFirstLevel.value = false;
+    dataSource.value = service.filterData(target.originalArgument);
+  }
+}
+function onButtonClick() {
+  if (!isFirstLevel.value) {
+    isFirstLevel.value = true;
+    dataSource.value = service.filterData('');
+  }
+}
 </script>
 <style>
 #chart {

@@ -34,8 +34,7 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxValueAxis,
   DxLabel,
@@ -45,63 +44,38 @@ import DxChart, {
   DxSize,
   DxLoadingIndicator,
 } from 'devextreme-vue/chart';
-
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 
+const temperature = [2, 4, 6, 8, 9, 10, 11];
 const palette = ['#c3a2cc', '#b7b5e0', '#e48cba'];
+let paletteIndex = 0;
 
-export default {
-  components: {
-    DxChart,
-    DxValueAxis,
-    DxLabel,
-    DxLegend,
-    DxExport,
-    DxLoadingIndicator,
-    DxSeries,
-    DxSize,
+const monthWeather = new DataSource({
+  store: new CustomStore({
+    load: () => fetch('../../../../data/monthWeather.json')
+      .then((e) => e.json())
+      .catch(() => { throw new Error('Data Loading Error'); }),
+    loadMode: 'raw',
+  }),
+  filter: ['t', '>', '2'],
+  paginate: false,
+});
 
-    DxSelectBox,
-  },
-  data() {
-    const paletteIndex = 0;
+const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
 
-    const monthWeather = new DataSource({
-      store: new CustomStore({
-        load: () => fetch('../../../../data/monthWeather.json')
-          .then((e) => e.json())
-          .catch(() => { throw new Error('Data Loading Error'); }),
-        loadMode: 'raw',
-      }),
-      filter: ['t', '>', '2'],
-      paginate: false,
-    });
+function changeTemperature({ value }) {
+  monthWeather.filter(['t', '>', value]);
+  monthWeather.load();
+}
 
-    return {
-      temperature: [2, 4, 6, 8, 9, 10, 11],
-      monthWeather,
-      paletteIndex,
-    };
-  },
-  methods: {
-    changeTemperature({ value }) {
-      this.monthWeather.filter(['t', '>', value]);
-      this.monthWeather.load();
-    },
-    customizeLabelText({ valueText }) {
-      return `${valueText}${'&#176C'}`;
-    },
-    customizePoint() {
-      const color = palette[this.paletteIndex];
-      this.paletteIndex = this.paletteIndex === 2 ? 0 : this.paletteIndex + 1;
+function customizePoint() {
+  const color = palette[paletteIndex];
+  paletteIndex = paletteIndex === 2 ? 0 : paletteIndex + 1;
 
-      return { color };
-    },
-  },
-};
+  return { color };
+}
 </script>
 <style>
 .action {

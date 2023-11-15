@@ -33,23 +33,12 @@
     </DxChart>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings,
 } from 'devextreme-vue/chart';
 import { populationData } from './data.js';
 import AnnotationTemplate from './AnnotationTemplate.vue';
-
-export default {
-  components: {
-    DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings, AnnotationTemplate,
-  },
-  data() {
-    return {
-      populationData,
-    };
-  },
-};
 </script>
 <style scoped>
 #chart {

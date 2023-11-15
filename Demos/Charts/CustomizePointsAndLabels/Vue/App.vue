@@ -37,7 +37,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -48,60 +48,23 @@ import {
   DxLegend,
   DxExport,
 } from 'devextreme-vue/chart';
-
 import { temperaturesData } from './data.js';
 
-export default {
-
-  components: {
-    DxChart,
-    DxSeries,
-    DxValueAxis,
-    DxVisualRange,
-    DxLabel,
-    DxConstantLine,
-    DxLegend,
-    DxExport,
-  },
-
-  data() {
-    return {
-      highAverage: 77,
-      lowAverage: 58,
-      dataSource: temperaturesData,
-    };
-  },
-
-  methods: {
-
-    customizePoint({ value }) {
-      if (value > this.highAverage) {
-        return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
-      }
-      if (value < this.lowAverage) {
-        return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
-      }
-      return null;
-    },
-
-    customizeLabel({ value }) {
-      if (value > this.highAverage) {
-        return {
-          visible: true,
-          backgroundColor: '#ff7c7c',
-          customizeText({ valueText }) {
-            return `${valueText}&#176F`;
-          },
-        };
-      }
-      return null;
-    },
-
-    customizeText({ valueText }) {
-      return `${valueText}&#176F`;
-    },
-  },
+const highAverage = 77;
+const lowAverage = 58;
+const dataSource = temperaturesData;
+const customizeText = ({ valueText }) => `${valueText}&#176F`;
+const customizePoint = ({ value }) => {
+  if (value > highAverage) {
+    return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
+  }
+  return (value < lowAverage) ? { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } } : null;
 };
+const customizeLabel = ({ value }) => ((value > highAverage) ? {
+  visible: true,
+  backgroundColor: '#ff7c7c',
+  customizeText: ({ valueText }) => `${valueText}&#176F`,
+} : null);
 </script>
 <style>
 #chart {

@@ -33,8 +33,7 @@
 
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxArgumentAxis,
   DxExport,
@@ -45,23 +44,7 @@ import DxChart, {
   DxTick,
 } from 'devextreme-vue/chart';
 
-export default {
-  components: {
-    DxChart,
-    DxArgumentAxis,
-    DxExport,
-    DxSeries,
-    DxValueAxis,
-    DxLabel,
-    DxLegend,
-    DxTick,
-  },
-  methods: {
-    customizeLabelText({ valueText }) {
-      return `Day ${valueText}`;
-    },
-  },
-};
+const customizeLabelText = ({ valueText }) => `Day ${valueText}`;
 </script>
 <style>
 #chart {

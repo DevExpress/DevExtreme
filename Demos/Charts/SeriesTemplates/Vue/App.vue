@@ -23,8 +23,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxLegend,
   DxSeriesTemplate,
@@ -33,30 +32,11 @@ import DxChart, {
   DxCommonSeriesSettings,
   DxExport,
 } from 'devextreme-vue/chart';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxLegend,
-    DxSeriesTemplate,
-    DxTitle,
-    DxSubtitle,
-    DxCommonSeriesSettings,
-    DxExport,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    customizeSeries(seriesName) {
-      return seriesName === 2009 ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
-    },
-  },
-};
+const customizeSeries = (seriesName) => ((seriesName === 2009)
+  ? { type: 'line', label: { visible: true }, color: '#ff3f7a' }
+  : {});
 </script>
 <style>
 #chart {

@@ -14,7 +14,7 @@
       height="40"
     />
     <text
-      :style="{fontSize: 18, fill:&quot;#494949&quot;}"
+      :style="{fontSize: 18, fill: '#494949'}"
       text-anchor="middle"
       x="100"
       y="120"
@@ -27,35 +27,29 @@
     </text>
   </svg>
 </template>
-<script>
+<script setup lang="ts">
+
+const props = withDefaults(defineProps<{
+  pieChart?: Record<string, any>
+}>(), {
+  pieChart: () => ({}),
+});
+
+const country = props.pieChart
+  .getAllSeries()[0]
+  .getVisiblePoints()[0]
+  .data
+  .country;
+
+const getImagePath = (countryName) => `../../../../images/flags/${countryName.replace(/\s/, '').toLowerCase()}.svg`;
+const calculateTotal = (pieChart) => formatNumber(
+  pieChart
+    .getAllSeries()[0]
+    .getVisiblePoints()
+    .reduce((s, p) => s + p.originalValue, 0),
+);
 
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
-
-export default {
-  props: {
-    pieChart: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  data() {
-    return {
-      country: this.pieChart.getAllSeries()[0].getVisiblePoints()[0].data.country,
-    };
-  },
-  methods: {
-    getImagePath(country) {
-      return `../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg`;
-    },
-
-    calculateTotal(pieChart) {
-      return formatNumber(pieChart
-        .getAllSeries()[0]
-        .getVisiblePoints()
-        .reduce((s, p) => s + p.originalValue, 0));
-    },
-  },
-};
 </script>

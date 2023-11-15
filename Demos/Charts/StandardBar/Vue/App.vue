@@ -12,21 +12,9 @@
     />
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import { DxChart, DxSeries } from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
-
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>
 <style>
 #chart {

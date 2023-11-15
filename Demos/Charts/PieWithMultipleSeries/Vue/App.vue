@@ -31,7 +31,7 @@
     />
   </DxPieChart>
 </template>
-<script>
+<script setup lang="ts">
 import DxPieChart, {
   DxCommonSeriesSettings,
   DxLegend,
@@ -42,40 +42,11 @@ import DxPieChart, {
   DxTooltip,
   DxSubtitle,
 } from 'devextreme-vue/pie-chart';
-
 import { exportImportData } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxCommonSeriesSettings,
-    DxLegend,
-    DxSeries,
-    DxExport,
-    DxLabel,
-    DxTitle,
-    DxTooltip,
-    DxSubtitle,
-  },
-  data() {
-    return {
-      exportImportData,
-    };
-  },
-  methods: {
-    customizeTooltip(pointInfo) {
-      return {
-        text:
-          `${pointInfo.argumentText
-          }<br>${
-            pointInfo.seriesName
-          }: ${
-            pointInfo.valueText
-          }B`,
-      };
-    },
-  },
-};
+const customizeTooltip = ({ argumentText, seriesName, valueText }) => ({
+  text: `${argumentText}<br>${seriesName}: ${valueText}B`,
+});
 </script>
 <style>
 #pie {

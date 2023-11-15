@@ -32,42 +32,18 @@
     />
   </DxPieChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxSmallValuesGrouping,
   DxLegend,
   DxSeries,
-  DxFormat,
   DxLabel,
   DxConnector,
   DxExport,
 } from 'devextreme-vue/pie-chart';
-
 import { internetLanguages } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSmallValuesGrouping,
-    DxLegend,
-    DxSeries,
-    DxFormat,
-    DxLabel,
-    DxConnector,
-    DxExport,
-  },
-  data() {
-    return {
-      internetLanguages,
-    };
-  },
-  methods: {
-    customizeLabel(pointInfo) {
-      return `${pointInfo.argumentText}: ${pointInfo.valueText}%`;
-    },
-  },
-};
+const customizeLabel = ({ argumentText, valueText }) => `${argumentText}: ${valueText}%`;
 </script>
 <style>
 #pie {

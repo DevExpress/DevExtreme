@@ -53,8 +53,7 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxValueAxis,
   DxArgumentAxis,
@@ -69,72 +68,32 @@ import DxChart, {
   DxExport,
   DxLoadingIndicator,
 } from 'devextreme-vue/chart';
-
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import DataSource from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
-
 import { months } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxValueAxis,
-    DxArgumentAxis,
-    DxCommonPaneSettings,
-    DxGrid,
-    DxSeries,
-    DxLegend,
-    DxSize,
-    DxBorder,
-    DxLabel,
-    DxTooltip,
-    DxExport,
-    DxLoadingIndicator,
-
-    DxSelectBox,
+const chartDataSource = new DataSource({
+  store: {
+    type: 'odata',
+    version: 2,
+    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
   },
-
-  data() {
-    const chartDataSource = new DataSource({
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
-      },
-      postProcess(results) {
-        return results[0].DayItems;
-      },
-      expand: 'DayItems',
-      filter: ['Id', '=', 1],
-      paginate: false,
-    });
-
-    return {
-      temperature: [6, 7, 8, 9, 10, 11, 12],
-      months,
-      chartDataSource,
-    };
+  postProcess(results) {
+    return results[0].DayItems;
   },
-
-  methods: {
-    onValueChanged({ value }) {
-      this.chartDataSource.filter(['Id', '=', value]);
-      this.chartDataSource.load();
-    },
-
-    customizeLabelText({ valueText }) {
-      return `${valueText}${'&#176C'}`;
-    },
-
-    customizeTooltip({ valueText }) {
-      return {
-        text: `${valueText}${'&#176C'}`,
-      };
-    },
-  },
-};
+  expand: 'DayItems',
+  filter: ['Id', '=', 1],
+  paginate: false,
+});
+const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
+const customizeTooltip = ({ valueText }) => ({
+  text: `${valueText}${'&#176C'}`,
+});
+function onValueChanged({ value }) {
+  chartDataSource.filter(['Id', '=', value]);
+  chartDataSource.load();
+}
 </script>
 <style>
 .action {

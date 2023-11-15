@@ -60,8 +60,7 @@
     />
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxArgumentAxis,
   DxCommonSeriesSettings,
@@ -72,63 +71,36 @@ import DxChart, {
   DxValueAxis,
   DxConstantLine,
 } from 'devextreme-vue/chart';
-
 import { complaintsData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxArgumentAxis,
-    DxCommonSeriesSettings,
-    DxLabel,
-    DxLegend,
-    DxSeries,
-    DxTooltip,
-    DxValueAxis,
-    DxConstantLine,
-  },
+function customizeTooltip(pointInfo) {
+  return {
+    html: `<div><div class='tooltip-header'>${
+      pointInfo.argumentText
+    }</div><div class='tooltip-body'><div class='series-name'><span class='top-series-name'>${
+      pointInfo.points[0].seriesName
+    }</span>: </div><div class='value-text'><span class='top-series-value'>${
+      pointInfo.points[0].valueText
+    }</span></div><div class='series-name'><span class='bottom-series-name'>${
+      pointInfo.points[1].seriesName
+    }</span>: </div><div class='value-text'><span class='bottom-series-value'>${
+      pointInfo.points[1].valueText
+    }</span>% </div></div></div>`,
+  };
+}
+const customizePercentageText = ({ valueText }) => `${valueText}%`;
+const data = complaintsData.sort((a, b) => b.count - a.count);
+const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
 
-  data() {
-    const data = complaintsData.sort((a, b) => b.count - a.count);
-    const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
-    let cumulativeCount = 0;
-
-    const dataSource = data.map((item) => {
-      cumulativeCount += item.count;
-      return {
-        complaint: item.complaint,
-        count: item.count,
-        cumulativePercentage: Math.round((cumulativeCount * 100) / totalCount),
-      };
-    });
-
-    return {
-      dataSource,
-    };
-  },
-
-  methods: {
-    customizeTooltip(pointInfo) {
-      return {
-        html: `<div><div class='tooltip-header'>${
-          pointInfo.argumentText
-        }</div><div class='tooltip-body'><div class='series-name'><span class='top-series-name'>${
-          pointInfo.points[0].seriesName
-        }</span>: </div><div class='value-text'><span class='top-series-value'>${
-          pointInfo.points[0].valueText
-        }</span></div><div class='series-name'><span class='bottom-series-name'>${
-          pointInfo.points[1].seriesName
-        }</span>: </div><div class='value-text'><span class='bottom-series-value'>${
-          pointInfo.points[1].valueText
-        }</span>% </div></div></div>`,
-      };
-    },
-
-    customizePercentageText({ valueText }) {
-      return `${valueText}%`;
-    },
-  },
-};
+let cumulativeCount = 0;
+const dataSource = data.map((item) => {
+  cumulativeCount += item.count;
+  return {
+    complaint: item.complaint,
+    count: item.count,
+    cumulativePercentage: Math.round((cumulativeCount * 100) / totalCount),
+  };
+});
 </script>
 <style>
 #chart {

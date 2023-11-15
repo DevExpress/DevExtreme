@@ -49,7 +49,7 @@
     />
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -58,31 +58,11 @@ import {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxLegend,
-    DxExport,
-    DxTooltip,
-  },
-  data() {
-    return {
-      dataSource: service.getMaleAgeData(),
-    };
-  },
-  methods: {
-    customizeTooltip({ percentText, valueText }) {
-      return {
-        text: `${percentText} - ${valueText}`,
-      };
-    },
-  },
-};
+const dataSource = service.getMaleAgeData();
+
+const customizeTooltip = ({ percentText, valueText }) => ({ text: `${percentText} - ${valueText}` });
 </script>
 <style>
 #chart {

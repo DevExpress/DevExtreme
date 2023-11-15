@@ -34,8 +34,7 @@
     />
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxCommonSeriesSettings,
   DxValueAxis,
@@ -44,33 +43,10 @@ import DxChart, {
   DxSeries,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxCommonSeriesSettings,
-    DxValueAxis,
-    DxLabel,
-    DxLegend,
-    DxSeries,
-    DxTooltip,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    customizeTooltip({ valueText }) {
-      return { text: Math.abs(valueText) };
-    },
-    customizeLabel({ value }) {
-      return `${Math.abs(value)}%`;
-    },
-  },
-};
+const customizeTooltip = ({ valueText }) => ({ text: Math.abs(valueText) });
+const customizeLabel = ({ value }) => `${Math.abs(value)}%`;
 </script>
 <style>
 #chart {

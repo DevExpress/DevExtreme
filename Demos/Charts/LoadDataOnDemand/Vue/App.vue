@@ -39,8 +39,8 @@
     <DxLegend :visible="false"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxChart, {
   DxZoomAndPan,
   DxScrollBar,
@@ -54,132 +54,103 @@ import DxChart, {
   DxLoadingIndicator,
   DxLegend,
 } from 'devextreme-vue/chart';
-
 import DataSource from 'devextreme/data/data_source';
 import 'whatwg-fetch';
 
-let packetsLock = 0;
 const HALFDAY = 43200000;
+const chart = ref();
+const visualRange = ref({
+  startValue: new Date(2017, 3, 1),
+  endValue: new Date(2017, 3, 15),
+});
+const chartDataSource = ref(new DataSource({
+  store: [],
+  sort: 'date',
+  paginate: false,
+}));
+const bounds = ref({
+  startValue: new Date(2017, 0, 1),
+  endValue: new Date(2017, 11, 31),
+});
 
-export default {
-  components: {
-    DxChart,
-    DxZoomAndPan,
-    DxScrollBar,
-    DxArgumentAxis,
-    DxSeries,
-    DxValueAxis,
-    DxTitle,
-    DxLabel,
-    DxFont,
-    DxAnimation,
-    DxLoadingIndicator,
-    DxLegend,
+let packetsLock = 0;
+const currentVisualRange = computed({
+  get() {
+    return visualRange.value;
   },
-
-  data() {
-    return {
-      visualRange: {
-        startValue: new Date(2017, 3, 1),
-        endValue: new Date(2017, 3, 15),
-      },
-      chartDataSource: new DataSource({
-        store: [],
-        sort: 'date',
-        paginate: false,
-      }),
-      bounds: {
-        startValue: new Date(2017, 0, 1),
-        endValue: new Date(2017, 11, 31),
-      },
-    };
+  set(newRange) {
+    const stateStart = visualRange.value.startValue;
+    const currentStart = newRange.startValue;
+    if (stateStart.valueOf() !== currentStart.valueOf()) {
+      visualRange.value = newRange;
+    }
+    onVisualRangeChanged();
   },
+});
 
-  computed: {
-    currentVisualRange: {
-      get() {
-        return this.visualRange;
-      },
-      set(newRange) {
-        const stateStart = this.visualRange.startValue;
-        const currentStart = newRange.startValue;
-        if (stateStart.valueOf() !== currentStart.valueOf()) {
-          this.visualRange = newRange;
-        }
-        this.onVisualRangeChanged();
-      },
-    },
-  },
+function onVisualRangeChanged() {
+  const component = chart.value.instance;
+  const items = component.getDataSource().items();
+  if (!items.length
+    || items[0].date - visualRange.value.startValue >= HALFDAY
+    || visualRange.value.endValue - items[items.length - 1].date >= HALFDAY) {
+    uploadDataByVisualRange(visualRange.value, component);
+  }
+}
+function uploadDataByVisualRange({ startValue, endValue }, component) {
+  const dataSource = component.getDataSource();
+  const storage = dataSource.items();
+  const ajaxArgs = {
+    startVisible: getDateString(startValue),
+    endVisible: getDateString(endValue),
+    startBound: getDateString(storage.length ? storage[0].date : null),
+    endBound: getDateString(storage.length
+      ? storage[storage.length - 1].date : null),
+  };
 
-  methods: {
-    onVisualRangeChanged() {
-      const component = this.$refs.chart.instance;
-      const items = component.getDataSource().items();
-      if (!items.length
-        || items[0].date - this.visualRange.startValue >= HALFDAY
-        || this.visualRange.endValue - items[items.length - 1].date >= HALFDAY) {
-        this.uploadDataByVisualRange(this.visualRange, component);
-      }
-    },
-
-    uploadDataByVisualRange(visualRange, component) {
-      const dataSource = component.getDataSource();
-      const storage = dataSource.items();
-      const ajaxArgs = {
-        startVisible: this.getDateString(visualRange.startValue),
-        endVisible: this.getDateString(visualRange.endValue),
-        startBound: this.getDateString(storage.length ? storage[0].date : null),
-        endBound: this.getDateString(storage.length
-          ? storage[storage.length - 1].date : null),
-      };
-
-      if (ajaxArgs.startVisible !== ajaxArgs.startBound
+  if (ajaxArgs.startVisible !== ajaxArgs.startBound
         && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
-        packetsLock += 1;
-        component.showLoadingIndicator();
+    packetsLock += 1;
+    component.showLoadingIndicator();
 
-        this.getDataFrame(ajaxArgs)
-          .then((dataFrame) => {
-            packetsLock -= 1;
+    getDataFrame(ajaxArgs)
+      .then((dataFrame) => {
+        packetsLock -= 1;
 
-            const componentStorage = dataSource.store();
+        const componentStorage = dataSource.store();
 
-            dataFrame
-              .map((i) => ({
-                date: new Date(i.Date),
-                minTemp: i.MinTemp,
-                maxTemp: i.MaxTemp,
-              }))
-              .forEach((item) => componentStorage.insert(item));
+        dataFrame
+          .map((i) => ({
+            date: new Date(i.Date),
+            minTemp: i.MinTemp,
+            maxTemp: i.MaxTemp,
+          }))
+          .forEach((item) => componentStorage.insert(item));
 
-            dataSource.reload();
+        dataSource.reload();
 
-            this.onVisualRangeChanged();
-          })
-          .catch(() => {
-            packetsLock -= 1;
-            dataSource.reload();
-          });
-      }
-    },
+        onVisualRangeChanged();
+      })
+      .catch(() => {
+        packetsLock -= 1;
+        dataSource.reload();
+      });
+  }
+}
+function getDataFrame(args) {
+  let params = '?';
 
-    getDataFrame(args) {
-      let params = '?';
-
-      params += `startVisible=${args.startVisible}
+  params += `startVisible=${args.startVisible}
         &endVisible=${args.endVisible}
         &startBound=${args.startBound}
         &endBound=${args.endBound}`;
 
-      return fetch(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`)
-        .then((response) => response.json());
-    },
-
-    getDateString(dateTime) {
-      return dateTime ? dateTime.toLocaleDateString('en-US') : '';
-    },
-  },
-};
+  return fetch(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`)
+    .then((response) => response.json());
+}
+function getDateString(dateTime) {
+  return dateTime ? dateTime.toLocaleDateString('en-US') : '';
+}
 </script>
 <style>
 #chart {

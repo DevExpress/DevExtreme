@@ -3,7 +3,7 @@
     <DxChart
       id="chart"
       :data-source="dataSource"
-      title="Relative Masses of the Heaviest\n Solar System Objects"
+      :title="'Relative Masses of the Heaviest\n Solar System Objects'"
     >
       <DxSeries
         value-field="mass"
@@ -52,8 +52,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxLegend,
   DxSeries,
@@ -61,36 +61,15 @@ import DxChart, {
   DxValueAxis,
   DxBreakStyle,
 } from 'devextreme-vue/chart';
-
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxLegend,
-    DxSeries,
-    DxTooltip,
-    DxValueAxis,
-    DxBreakStyle,
-    DxSelectBox,
-    DxCheckBox,
-  },
-  data() {
-    const lineStyles = ['waved', 'straight'];
-
-    return {
-      dataSource,
-      autoBreaksEnabledValue: true,
-      lineStyles,
-      breaksCount: [1, 2, 3, 4],
-      lineStyleValue: lineStyles[0],
-      breaksCountValue: 3,
-    };
-  },
-};
+const lineStyles = ['waved', 'straight'];
+const autoBreaksEnabledValue = ref(true);
+const breaksCount = ref([1, 2, 3, 4]);
+const lineStyleValue = ref(lineStyles[0]);
+const breaksCountValue = ref(3);
 </script>
 <style>
 #chart {

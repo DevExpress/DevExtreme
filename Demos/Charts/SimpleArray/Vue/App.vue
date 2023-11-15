@@ -11,31 +11,14 @@
     <DxLegend :visible="false"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxArgumentAxis,
   DxLegend,
   DxLabel,
   DxSeries,
 } from 'devextreme-vue/chart';
-
 import { populationData } from './data.js';
-
-export default {
-  components: {
-    DxChart,
-    DxArgumentAxis,
-    DxLabel,
-    DxLegend,
-    DxSeries,
-  },
-  data() {
-    return {
-      populationData,
-    };
-  },
-};
 </script>
 <style>
 #chart {

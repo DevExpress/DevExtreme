@@ -35,8 +35,7 @@
     />
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxArgumentAxis,
   DxSeries,
@@ -46,26 +45,7 @@ import DxChart, {
   DxBorder,
   DxExport,
 } from 'devextreme-vue/chart';
-
 import { dataSource } from './data.js';
-
-export default {
-  components: {
-    DxChart,
-    DxArgumentAxis,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxLabel,
-    DxLegend,
-    DxBorder,
-    DxExport,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>
 <style>
 #chart {

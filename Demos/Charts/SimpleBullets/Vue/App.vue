@@ -34,29 +34,14 @@
     </table>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxBullet, { DxTooltip } from 'devextreme-vue/bullet';
 import { service } from './data.js';
 
-export default {
-  components: {
-    DxBullet,
-    DxTooltip,
-  },
-  computed: {
-    getWeeksData() {
-      return service.getWeeksData();
-    },
-  },
-  methods: {
-    customizeTooltip({ value, target }) {
-      return {
-        text: `Current t&#176: ${value}&#176C<br>Average t&#176: ${target}&#176C`,
-      };
-    },
-  },
-};
+const getWeeksData = service.getWeeksData();
+const customizeTooltip = ({ value, target }) => ({
+  text: `Current t&#176: ${value}&#176C<br>Average t&#176: ${target}&#176C`,
+});
 </script>
 <style>
 #chart-demo {

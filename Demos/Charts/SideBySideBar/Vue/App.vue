@@ -37,7 +37,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -49,27 +49,11 @@ import {
 } from 'devextreme-vue/chart';
 import { grossProductData } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxLabel,
-    DxFormat,
-    DxLegend,
-    DxExport,
-  },
-  data() {
-    return {
-      dataSource: grossProductData,
-    };
-  },
-  methods: {
-    onPointClick({ target }) {
-      target.select();
-    },
-  },
-};
+const dataSource = grossProductData;
+
+function onPointClick({ target }) {
+  target.select();
+}
 </script>
 <style>
 #chart {

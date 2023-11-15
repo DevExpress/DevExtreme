@@ -30,8 +30,7 @@
     </DxTooltip>
   </DxPieChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxLegend,
   DxSeries,
@@ -41,33 +40,11 @@ import DxPieChart, {
   DxConnector,
   DxExport,
 } from 'devextreme-vue/pie-chart';
-
 import { populationByRegions } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxLegend,
-    DxSeries,
-    DxTooltip,
-    DxFormat,
-    DxLabel,
-    DxConnector,
-    DxExport,
-  },
-  data() {
-    return {
-      populationByRegions,
-    };
-  },
-  methods: {
-    customizeTooltip({ valueText, percent }) {
-      return {
-        text: `${valueText} - ${(percent * 100).toFixed(2)}%`,
-      };
-    },
-  },
-};
+const customizeTooltip = ({ valueText, percent }) => ({
+  text: `${valueText} - ${(percent * 100).toFixed(2)}%`,
+});
 </script>
 <style>
 #pie {

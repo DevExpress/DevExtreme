@@ -43,29 +43,18 @@
     </text>
   </svg>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 
-export default {
-  props: {
-    annotation: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  data() {
-    return {
-      data: this.annotation.data,
-    };
-  },
-  methods: {
-    getImagePath() {
-      return `../../../../images/flags/${this.data.name.replace(/\s/, '')}.svg`;
-    },
-    formatNumber: new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0,
-    }).format,
-  },
-};
+const props = withDefaults(defineProps<{
+  annotation?: Record<string, any>
+}>(), {
+  annotation: () => ({}),
+});
+
+const data = ref(props.annotation.data);
+const getImagePath = () => `../../../../images/flags/${data.value.name.replace(/\s/, '')}.svg`;
+const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
 </script>
 <style>
 .annotation {

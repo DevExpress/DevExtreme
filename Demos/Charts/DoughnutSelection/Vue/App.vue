@@ -21,35 +21,18 @@
     />
   </DxPieChart>
 </template>
-<script>
+<script setup lang="ts">
 import DxPieChart, {
   DxLegend,
   DxSeries,
   DxExport,
   DxHoverStyle,
 } from 'devextreme-vue/pie-chart';
-
 import { olympicMedals } from './data.js';
 
-export default {
-  components: {
-    DxPieChart,
-    DxLegend,
-    DxSeries,
-    DxExport,
-    DxHoverStyle,
-  },
-  data() {
-    return {
-      olympicMedals,
-    };
-  },
-  methods: {
-    pointClickHandler({ target }) {
-      target.select();
-    },
-  },
-};
+function pointClickHandler({ target }) {
+  target.select();
+}
 </script>
 <style>
 #pie {

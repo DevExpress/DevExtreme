@@ -30,8 +30,7 @@
     <DxExport :enabled="true"/>
   </DxChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxChart, {
   DxArgumentAxis,
   DxLabel,
@@ -41,26 +40,7 @@ import DxChart, {
   DxExport,
   DxPoint,
 } from 'devextreme-vue/chart';
-
 import { medalsInfo } from './data.js';
-
-export default {
-  components: {
-    DxChart,
-    DxArgumentAxis,
-    DxLabel,
-    DxLegend,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxExport,
-    DxPoint,
-  },
-  data() {
-    return {
-      medalsInfo,
-    };
-  },
-};
 </script>
 <style>
 #chart {

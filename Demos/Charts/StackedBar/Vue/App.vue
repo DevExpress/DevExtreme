@@ -36,7 +36,7 @@
     />
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -47,33 +47,11 @@ import {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxValueAxis,
-    DxTitle,
-    DxLegend,
-    DxExport,
-    DxTooltip,
-  },
-  data() {
-    return {
-      dataSource: service.getMaleAgeData(),
-    };
-  },
-  methods: {
-    customizeTooltip(pointInfo) {
-      return {
-        text: `${pointInfo.seriesName} years: ${pointInfo.valueText}`,
-      };
-    },
-  },
-};
+const dataSource = service.getMaleAgeData();
+
+const customizeTooltip = ({ seriesName, valueText }) => ({ text: `${seriesName} years: ${valueText}` });
 </script>
 <style>
 #chart {

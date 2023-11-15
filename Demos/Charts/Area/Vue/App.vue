@@ -42,7 +42,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -52,32 +53,11 @@ import {
   DxLegend,
   DxMargin,
 } from 'devextreme-vue/chart';
-
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxCommonSeriesSettings,
-    DxExport,
-    DxLegend,
-    DxMargin,
-  },
-  data() {
-    const types = ['area', 'stackedarea', 'fullstackedarea'];
-
-    return {
-      dataSource,
-      types,
-      type: types[0],
-    };
-  },
-};
+const types = ['area', 'stackedarea', 'fullstackedarea'];
+const type = ref(types[0]);
 </script>
 <style>
 .options {

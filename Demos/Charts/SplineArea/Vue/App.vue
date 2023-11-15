@@ -38,7 +38,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -48,31 +49,11 @@ import {
   DxExport,
   DxLegend,
 } from 'devextreme-vue/chart';
-
 import DxSelectBox from 'devextreme-vue/select-box';
 import { dataSource } from './data.js';
 
 const types = ['splinearea', 'stackedsplinearea', 'fullstackedsplinearea'];
-
-export default {
-  components: {
-    DxSelectBox,
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxCommonSeriesSettings,
-    DxMargin,
-    DxExport,
-    DxLegend,
-  },
-  data() {
-    return {
-      dataSource,
-      types,
-      type: types[0],
-    };
-  },
-};
+const type = ref(types[0]);
 </script>
 <style>
 .options {

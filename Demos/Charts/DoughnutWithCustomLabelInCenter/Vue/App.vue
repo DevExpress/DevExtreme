@@ -34,32 +34,16 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
-  DxPieChart, DxSeries, DxExport, DxTooltip, DxLegend, DxLabel, DxConnector,
+  DxPieChart, DxSeries, DxLegend, DxLabel, DxConnector,
 } from 'devextreme-vue/pie-chart';
 import { data } from './data.js';
 import CenterTemplate from './CenterTemplate.vue';
 
-export default {
-  components: {
-    DxPieChart, DxSeries, DxExport, DxTooltip, DxLegend, DxLabel, DxConnector, CenterTemplate,
-  },
-  data() {
-    return {
-      data,
-      countries: Array.from(new Set(data.map((item) => item.country))),
-    };
-  },
-  methods: {
-    customizeLabel({ argumentText, valueText }) {
-      return `${argumentText}\n${valueText}`;
-    },
-    getData(country) {
-      return data.filter((i) => i.country === country);
-    },
-  },
-};
+const countries = Array.from(new Set(data.map(({ country }) => country)));
+const customizeLabel = ({ argumentText, valueText }) => `${argumentText}\n${valueText}`;
+const getData = (country) => data.filter((i) => i.country === country);
 </script>
 <style scoped>
 .pies-container {

@@ -53,7 +53,7 @@
     <DxTooltip :enabled="true"/>
   </DxChart>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxChart,
   DxSeries,
@@ -65,38 +65,19 @@ import {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/chart';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxCommonSeriesSettings,
-    DxValueAxis,
-    DxTitle,
-    DxLegend,
-    DxBorder,
-    DxExport,
-    DxTooltip,
-  },
-  data() {
-    return {
-      dataSource: service.getMaleAgeData(),
-    };
-  },
-  methods: {
-    customizeItems(items) {
-      const sortedItems = [];
+const dataSource = service.getMaleAgeData();
 
-      items.forEach((item) => {
-        const startIndex = item.series.stack === 'male' ? 0 : 3;
-        sortedItems.splice(startIndex, 0, item);
-      });
-      return sortedItems;
-    },
-  },
-};
+function customizeItems(items) {
+  const sortedItems = [];
+
+  items.forEach((item) => {
+    const startIndex = item.series.stack === 'male' ? 0 : 3;
+    sortedItems.splice(startIndex, 0, item);
+  });
+  return sortedItems;
+}
 </script>
 <style>
 #chart {
