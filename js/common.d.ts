@@ -343,6 +343,9 @@ export type GlobalConfig = {
    * @public
    */
   oDataFilterToLower?: boolean;
+  /**
+   * @deprecated
+   */
   pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
   /**
    * @docid
