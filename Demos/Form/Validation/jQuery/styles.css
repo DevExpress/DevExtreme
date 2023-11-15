@@ -7,14 +7,21 @@ form {
   margin-bottom: 10px;
 }
 
-.last-group .dx-box-item-content {
-  justify-content: center !important;
+.last-group .dx-item-content {
+  align-items: start;
+  justify-content: center;
 }
 
-.buttons-group .dx-box-flex {
-  align-items: flex-end !important;
+.last-group .dx-field-item {
+  padding: 0 !important;
 }
 
-.buttons-group .dx-box-flex .dx-field-button-item {
-  padding: 5px;
+.buttons-group {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+.buttons-group .dx-item-content {
+  gap: 10px;
 }

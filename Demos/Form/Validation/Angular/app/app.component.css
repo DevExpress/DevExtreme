@@ -7,14 +7,21 @@
   margin-bottom: 10px;
 }
 
-::ng-deep .last-group .dx-box-item-content {
-  justify-content: center !important;
+::ng-deep .last-group .dx-item-content {
+  align-items: start;
+  justify-content: center;
 }
 
-::ng-deep .buttons-group .dx-box-flex {
-  align-items: flex-end !important;
+::ng-deep .last-group .dx-field-item {
+  padding: 0 !important;
 }
 
-::ng-deep .buttons-group .dx-box-flex .dx-field-button-item {
-  padding: 5px;
+::ng-deep .buttons-group {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+::ng-deep .buttons-group .dx-item-content {
+  gap: 10px;
 }
