@@ -59,10 +59,8 @@
     />
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-
 import {
   DxVectorMap,
   DxLabel,
@@ -71,63 +69,32 @@ import {
   DxSource,
   DxTooltip,
 } from 'devextreme-vue/vector-map';
-
 import { populations, markers } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLabel,
-    DxLayer,
-    DxLegend,
-    DxSource,
-    DxTooltip,
-  },
-  data() {
-    return {
-      markers,
-      populations,
-      colorGroups: [0, 0.5, 0.8, 1, 2, 3, 100],
-      mapsWorld: mapsData.world,
-      bounds: [-180, 85, 180, -75],
-      sizeGroups: [0, 8000, 10000, 50000],
-    };
-  },
-  methods: {
-    customizeText(itemInfo) {
-      if (itemInfo.index === 0) {
-        return '< 0.5%';
-      } if (itemInfo.index === 5) {
-        return '> 3%';
-      }
-      return `${itemInfo.start}% to ${itemInfo.end}%`;
-    },
+const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
+const mapsWorld = mapsData.world;
+const bounds = [-180, 85, 180, -75];
+const sizeGroups = [0, 8000, 10000, 50000];
+const customizeTooltip = (info) => ({ text: info.attribute('text') });
+const customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+const customizeItems = (items) => items.reverse();
 
-    customizeTooltip(info) {
-      return {
-        text: info.attribute('text'),
-      };
-    },
+function customizeText({ index, start, end }) {
+  if (index === 0) {
+    return '< 0.5%';
+  }
 
-    customizeMarkers({ index }) {
-      return ['< 8000K', '8000K to 10000K', '> 10000K'][index];
-    },
-
-    customizeItems(items) {
-      return items.reverse();
-    },
-
-    customizeLayer(elements) {
-      elements.forEach((element) => {
-        const name = element.attribute('name');
-        const population = this.populations[name];
-        if (population) {
-          element.attribute('population', population);
-        }
-      });
-    },
-  },
-};
+  return (index === 5) ? '> 3%' : `${start}% to ${end}%`;
+}
+function customizeLayer(elements) {
+  elements.forEach((element) => {
+    const name = element.attribute('name');
+    const population = populations[name];
+    if (population) {
+      element.attribute('population', population);
+    }
+  });
+}
 </script>
 <style>
 #vector-map {

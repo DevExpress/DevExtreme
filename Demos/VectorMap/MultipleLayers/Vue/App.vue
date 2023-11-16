@@ -32,10 +32,8 @@
     <DxExport :enabled="true"/>
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-
 import {
   DxVectorMap,
   DxExport,
@@ -44,36 +42,13 @@ import {
   DxSource,
   DxFont,
 } from 'devextreme-vue/vector-map';
-
 import { streamsData } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxExport,
-    DxLayer,
-    DxLegend,
-    DxSource,
-    DxFont,
-  },
-  data() {
-    return {
-      streamsData,
-      mapsWorld: mapsData.world,
-      bounds: [-180, 85, 180, -75],
-      colorGroups: [0, 1, 2],
-      streamsPalette: ['#3c20c8', '#d82020'],
-    };
-  },
-  methods: {
-    customizeText({ color }) {
-      if (color === '#3c20c8') {
-        return 'Cold';
-      }
-      return 'Warm';
-    },
-  },
-};
+const mapsWorld = mapsData.world;
+const bounds = [-180, 85, 180, -75];
+const colorGroups = [0, 1, 2];
+const streamsPalette = ['#3c20c8', '#d82020'];
+const customizeText = ({ color }) => ((color === '#3c20c8') ? 'Cold' : 'Warm');
 </script>
 <style>
 #vector-map {

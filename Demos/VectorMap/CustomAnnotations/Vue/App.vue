@@ -23,36 +23,20 @@
     </template>
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
-
 import {
   DxVectorMap,
   DxLayer,
   DxAnnotation,
   DxCommonAnnotationSettings,
 } from 'devextreme-vue/vector-map';
-
 import { statesData } from './data.js';
 import AnnotationTemplate from './AnnotationTemplate.vue';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLayer,
-    DxAnnotation,
-    DxCommonAnnotationSettings,
-    AnnotationTemplate,
-  },
-  data() {
-    return {
-      statesData,
-      usa: mapsData.usa,
-      bounds: [-118, 55, -80, 23],
-    };
-  },
-};
+const usa = ref(mapsData.usa);
+const bounds = ref([-118, 55, -80, 23]);
 </script>
 <style>
 #vector-map {

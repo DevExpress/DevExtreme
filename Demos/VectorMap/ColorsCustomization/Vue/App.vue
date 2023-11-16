@@ -17,69 +17,48 @@
     </DxTooltip>
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-
 import {
   DxVectorMap,
   DxLayer,
-  DxSource,
   DxTooltip,
   DxBorder,
   DxFont,
 } from 'devextreme-vue/vector-map';
-
 import { countries } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLayer,
-    DxSource,
-    DxTooltip,
-    DxBorder,
-    DxFont,
-  },
-  data() {
+const worldData = mapsData.world;
+const bounds = [-180, 85, 180, -60];
+
+function customizeTooltip(info) {
+  const name = info.attribute('name');
+  const country = countries[name];
+  if (country) {
     return {
-      worldData: mapsData.world,
-      bounds: [-180, 85, 180, -60],
+      text: `${name}: ${country.totalArea}M km&#178`,
+      color: country.color,
     };
-  },
-  methods: {
-    customizeTooltip(info) {
-      const name = info.attribute('name');
-      const country = countries[name];
-      if (country) {
-        return {
-          text: `${name}: ${country.totalArea}M km&#178`,
-          color: country.color,
-        };
-      }
-      return null;
-    },
-
-    click({ target }) {
-      if (target && countries[target.attribute('name')]) {
-        target.selected(!target.selected());
-      }
-    },
-
-    customizeLayer(elements) {
-      elements.forEach((element) => {
-        const country = countries[element.attribute('name')];
-        if (country) {
-          element.applySettings({
-            color: country.color,
-            hoveredColor: '#e0e000',
-            selectedColor: '#008f00',
-          });
-        }
+  }
+  return null;
+}
+function click({ target }) {
+  if (target && countries[target.attribute('name')]) {
+    target.selected(!target.selected());
+  }
+}
+function customizeLayer(elements) {
+  elements.forEach((element) => {
+    const country = countries[element.attribute('name')];
+    if (country) {
+      element.applySettings({
+        color: country.color,
+        hoveredColor: '#e0e000',
+        selectedColor: '#008f00',
       });
-    },
-  },
-};
+    }
+  });
+}
 </script>
 <style>
 #vector-map {

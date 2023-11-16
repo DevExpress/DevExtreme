@@ -24,8 +24,7 @@
     />
   </DxPieChart>
 </template>
-<script>
-
+<script setup lang="ts">
 import DxPieChart, {
   DxSeries,
   DxLabel,
@@ -34,27 +33,11 @@ import DxPieChart, {
   DxSize,
 } from 'devextreme-vue/pie-chart';
 
-export default {
-  components: {
-    DxPieChart,
-    DxSeries,
-    DxLabel,
-    DxLegend,
-    DxConnector,
-    DxSize,
-  },
-  props: {
-    data: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  methods: {
-    customizeText(pointInfo) {
-      return `${pointInfo.argument[0].toUpperCase()}${
-        pointInfo.argument.slice(1)
-      }: $${pointInfo.value}M`;
-    },
-  },
-};
+withDefaults(defineProps<{
+  data?: unknown[]
+}>(), {
+  data: () => [],
+});
+
+const customizeText = ({ argument, value }) => `${argument[0].toUpperCase()}${argument.slice(1)}: $${value}M`;
 </script>

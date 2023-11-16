@@ -4,7 +4,7 @@
       :zoom="11"
       :height="440"
       :controls="true"
-      v-model:markers="markersData"
+      v-model:markers="markers"
       v-model:marker-icon-src="markersIcon"
       width="100%"
       provider="bing"
@@ -28,44 +28,31 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxButton from 'devextreme-vue/button';
 import { markersData } from './data.js';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
-
-export default {
-  components: {
-    DxMap,
-    DxCheckBox,
-    DxButton,
-  },
-  data() {
-    return {
-      markersData,
-      markersIcon: markerUrl,
-      apiKey: {
-        bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
-      },
-    };
-  },
-  methods: {
-    useCustomMarkers(data) {
-      this.markersIcon = data.value ? markerUrl : null;
-      this.markersData = markersData;
-    },
-    showTooltips() {
-      this.markersData = this.markersData.map((item) => {
-        const newItem = JSON.parse(JSON.stringify(item));
-        newItem.tooltip.isShown = true;
-        return newItem;
-      });
-    },
-  },
+const markersIcon = ref(markerUrl);
+const apiKey = {
+  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
+const markers = ref(markersData);
+function useCustomMarkers(data) {
+  markersIcon.value = data.value ? markerUrl : null;
+  markers.value = markersData;
+}
+function showTooltips() {
+  markers.value = markersData.map((item) => {
+    const newItem = JSON.parse(JSON.stringify(item));
+    newItem.tooltip.isShown = true;
+    return newItem;
+  });
+}
+
 </script>
 <style>
 .options {

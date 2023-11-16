@@ -21,7 +21,7 @@
         <div className="column">
           <div class="option">
             <span>Continent </span>
-            <SelectBox
+            <DxSelectBox
               :data-source="viewportCoordinates"
               :value="viewportCoordinates[0].coordinates"
               :on-value-changed="continentChanged"
@@ -33,8 +33,8 @@
           </div>
           <div class="option">
             <span>Zoom factor </span>
-            <TextBox
-              :value="zoomFactor"
+            <DxTextBox
+              :value="currentZoomFactor"
               :input-attr="{ 'aria-label': 'Zoom' }"
               :read-only="true"
               :width="210"
@@ -42,8 +42,8 @@
           </div>
           <div class="option">
             <span>Center </span>
-            <TextBox
-              :value="center"
+            <DxTextBox
+              :value="currentCenter"
               :input-attr="{ 'aria-label': 'Center' }"
               :read-only="true"
               :width="210"
@@ -53,64 +53,48 @@
         <div className="column">
           <div class="option">
             <span>Pan control</span>
-            <Switch v-model:value="panVisible"/>
+            <DxSwitch v-model:value="panVisible"/>
           </div>
           <div class="option">
             <span>Zoom bar</span>
-            <Switch v-model:value="zoomVisible"/>
+            <DxSwitch v-model:value="zoomVisible"/>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxVectorMap,
   DxLayer,
   DxControlBar,
 } from 'devextreme-vue/vector-map';
 
-import TextBox from 'devextreme-vue/text-box';
-import SelectBox from 'devextreme-vue/select-box';
-import Switch from 'devextreme-vue/switch';
-
+import DxTextBox from 'devextreme-vue/text-box';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxSwitch from 'devextreme-vue/switch';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { viewportCoordinates } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLayer,
-    TextBox,
-    SelectBox,
-    Switch,
-    DxControlBar,
-  },
-  data() {
-    return {
-      viewportCoordinates,
-      world: mapsData.world,
-      bounds: [-180, 85, 180, -60],
-      center: '0.000, 46.036',
-      zoomFactor: '1.00',
-      panVisible: true,
-      zoomVisible: true,
-    };
-  },
-  methods: {
-    continentChanged({ value }) {
-      this.$refs.map.instance.viewport(value);
-    },
-    centerChanged({ center }) {
-      this.center = `${center[0].toFixed(3)}, ${center[1].toFixed(3)}`;
-    },
-    zoomFactorChanged({ zoomFactor }) {
-      this.zoomFactor = zoomFactor.toFixed(2);
-    },
-  },
-};
+const world = mapsData.world;
+const bounds = [-180, 85, 180, -60];
+const currentCenter = ref('0.000, 46.036');
+const currentZoomFactor = ref('1.00');
+const panVisible = ref(true);
+const zoomVisible = ref(true);
+const map = ref();
+
+function continentChanged({ value }) {
+  map.value.instance.viewport(value);
+}
+function centerChanged({ center }) {
+  currentCenter.value = `${center[0].toFixed(3)}, ${center[1].toFixed(3)}`;
+}
+function zoomFactorChanged({ zoomFactor }) {
+  currentZoomFactor.value = zoomFactor.toFixed(2);
+}
 </script>
 <style>
 #vector-map {

@@ -26,44 +26,23 @@
     />
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxVectorMap,
   DxLayer,
   DxLabel,
   DxTooltip,
 } from 'devextreme-vue/vector-map';
-
 import { roomsData, buildingData } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLayer,
-    DxLabel,
-    DxTooltip,
-  },
-  data() {
-    return {
-      roomsData,
-      buildingData,
-      projection: {
-        to: ([l, lt]) => [l / 100, lt / 100],
-        from: ([x, y]) => [x * 100, y * 100],
-      },
-    };
-  },
-
-  methods: {
-    customizeTooltip(info) {
-      if (info.layer.name === 'rooms') {
-        return { text: `Square: ${info.attribute('square')} ft&#178` };
-      }
-      return null;
-    },
-  },
+const projection = {
+  to: ([l, lt]) => [l / 100, lt / 100],
+  from: ([x, y]) => [x * 100, y * 100],
 };
+
+const customizeTooltip = (info) => (info.layer.name === 'rooms'
+  ? { text: `Square: ${info.attribute('square')} ft&#178` }
+  : null);
 </script>
 <style>
 #vector-map {

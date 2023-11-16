@@ -24,27 +24,16 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { mapTypes } from './data.js';
 
-export default {
-  components: {
-    DxMap,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      apiKey: {
-        bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
-      },
-      mapTypes,
-      mapTypeValue: mapTypes[0].key,
-    };
-  },
+const apiKey = {
+  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
+const mapTypeValue = ref(mapTypes[0].key);
 </script>
 <style>
 .options {

@@ -13,43 +13,30 @@
     <div v-else>No economic development data</div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import { countriesGDP } from './data.js';
 import PieChart from './PieChart.vue';
 
-export default {
-  components: { PieChart },
-  props: {
-    info: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    const name = this.info.attribute('name');
-    const countryGDPData = countriesGDP[name];
-    const totalGDP = countryGDPData && countryGDPData.total;
-    return {
-      name,
-      countryGDPData,
-      totalGDP,
-      pieData: countryGDPData ? [
-        { name: 'industry', value: countryGDPData.industry },
-        { name: 'services', value: countryGDPData.services },
-        { name: 'agriculture', value: countryGDPData.agriculture },
-      ] : null,
-    };
-  },
-  methods: {
-    format: new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0,
-    }).format,
-    getTotalGDPText() {
-      return `Nominal GDP: $${this.format(this.totalGDP)}M`;
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  info?: Record<string, any>
+}>(), {
+  info: () => ({}),
+});
+const name = props.info.attribute('name');
+const countryGDPData = countriesGDP[name];
+const pieData = ref(countryGDPData ? [
+  { name: 'industry', value: countryGDPData.industry },
+  { name: 'services', value: countryGDPData.services },
+  { name: 'agriculture', value: countryGDPData.agriculture },
+] : null);
+const totalGDP = countryGDPData && countryGDPData.total;
+
+const format = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 0,
+}).format;
+
+const getTotalGDPText = () => `Nominal GDP: $${format(totalGDP)}M`;
 </script>
 <style>
 h4 {

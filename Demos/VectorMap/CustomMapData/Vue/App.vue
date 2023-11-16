@@ -26,8 +26,7 @@
     <DxExport :enabled="true"/>
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxVectorMap,
   DxLabel,
@@ -35,38 +34,20 @@ import {
   DxExport,
   DxTitle,
 } from 'devextreme-vue/vector-map';
-
 import { pangaeaBorders, pangaeaContinents } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLabel,
-    DxLayer,
-    DxExport,
-    DxTitle,
-  },
-  data() {
-    return {
-      pangaeaBorders,
-      pangaeaContinents,
-      projection: {
-        to: ([l, lt]) => [l / 100, lt / 100],
-        from: ([x, y]) => [x * 100, y * 100],
-      },
-    };
-  },
-  methods: {
-    customizeLayer(elements) {
-      elements.forEach((element) => {
-        element.applySettings({
-          color: element.attribute('color'),
-        });
-      });
-    },
-
-  },
+const projection = {
+  to: ([l, lt]) => [l / 100, lt / 100],
+  from: ([x, y]) => [x * 100, y * 100],
 };
+
+function customizeLayer(elements) {
+  elements.forEach((element) => {
+    element.applySettings({
+      color: element.attribute('color'),
+    });
+  });
+}
 </script>
 <style>
 #vector-map {

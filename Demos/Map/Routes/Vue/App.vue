@@ -5,7 +5,7 @@
       :height="440"
       :controls="true"
       :markers="markersData"
-      v-model:routes="routesData"
+      v-model:routes="routes"
       width="100%"
       provider="bing"
       :api-key="apiKey"
@@ -33,43 +33,31 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { markersData, routesData } from './data.js';
 
-export default {
-  components: {
-    DxMap,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      markersData,
-      routesData,
-      routeModes: ['driving', 'walking'],
-      routeColors: ['blue', 'green', 'red'],
-      apiKey: {
-        bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
-      },
-    };
-  },
-  methods: {
-    updateRoutesMode({ value: mode }) {
-      this.routesData = this.routesData.map((item) => {
-        item.mode = mode;
-        return item;
-      });
-    },
-    updateRoutesColor({ value: color }) {
-      this.routesData = this.routesData.map((item) => {
-        item.color = color;
-        return item;
-      });
-    },
-  },
+const routes = ref(routesData);
+const routeModes = ['driving', 'walking'];
+const routeColors = ['blue', 'green', 'red'];
+const apiKey = {
+  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
+
+function updateRoutesMode({ value: mode }) {
+  routes.value = routesData.map((item) => {
+    item.mode = mode;
+    return item;
+  });
+}
+function updateRoutesColor({ value: color }) {
+  routes.value = routesData.map((item) => {
+    item.color = color;
+    return item;
+  });
+}
 </script>
 <style>
 .options {

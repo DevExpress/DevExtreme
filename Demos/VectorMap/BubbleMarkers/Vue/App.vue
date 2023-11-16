@@ -35,55 +35,28 @@
     />
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-
 import {
   DxVectorMap,
-  DxLabel,
   DxLayer,
   DxLegend,
   DxSource,
   DxTooltip,
 } from 'devextreme-vue/vector-map';
-
 import { markers } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLabel,
-    DxLayer,
-    DxLegend,
-    DxSource,
-    DxTooltip,
-  },
-  data() {
-    return {
-      markers,
-      mapsWorld: mapsData.world,
-      bounds: [-180, 85, 180, -60],
-      sizeGroups: [0, 8000, 10000, 50000],
-    };
-  },
-  methods: {
-    customizeTooltip(info) {
-      if (info.layer.type === 'marker') {
-        return { text: info.attribute('tooltip') };
-      }
-      return null;
-    },
-
-    customizeText({ index }) {
-      return ['< 8000K', '8000K to 10000K', '> 10000K'][index];
-    },
-
-    customizeItems(items) {
-      return items.reverse();
-    },
-  },
-};
+const mapsWorld = mapsData.world;
+const bounds = [-180, 85, 180, -60];
+const sizeGroups = [0, 8000, 10000, 50000];
+const customizeText = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+const customizeItems = (items: unknown[]) => items.reverse();
+function customizeTooltip(info) {
+  if (info.layer.type === 'marker') {
+    return { text: info.attribute('tooltip') };
+  }
+  return null;
+}
 </script>
 <style>
 #vector-map {

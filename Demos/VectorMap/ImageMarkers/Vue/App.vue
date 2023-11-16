@@ -24,34 +24,18 @@
     <dx-loading-indicator :show="true"/>
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
-
 import {
   DxVectorMap,
   DxLabel,
   DxLayer,
   DxFont,
 } from 'devextreme-vue/vector-map';
-
 import { weatherData } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLabel,
-    DxLayer,
-    DxFont,
-  },
-  data() {
-    return {
-      weatherData,
-      usa: mapsData.usa,
-      bounds: [-118, 52, -80, 20],
-    };
-  },
-};
+const usa = mapsData.usa;
+const bounds = [-118, 52, -80, 20];
 </script>
 <style>
 #vector-map {

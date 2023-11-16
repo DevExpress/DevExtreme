@@ -27,52 +27,21 @@
     />
   </DxVectorMap>
 </template>
-<script>
-
+<script setup lang="ts">
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-
 import {
   DxVectorMap,
-  DxLabel,
   DxLayer,
   DxLegend,
   DxSource,
   DxTooltip,
 } from 'devextreme-vue/vector-map';
-
 import { markers, names } from './data.js';
 
-export default {
-  components: {
-    DxVectorMap,
-    DxLabel,
-    DxLayer,
-    DxLegend,
-    DxSource,
-    DxTooltip,
-  },
-  data() {
-    return {
-      markers,
-      mapsWorld: mapsData.world,
-      bounds: [-180, 85, 180, -60],
-    };
-  },
-  methods: {
-    customizeTooltip(info) {
-      if (info.layer.type === 'marker') {
-        return {
-          text: info.attribute('tooltip'),
-        };
-      }
-      return null;
-    },
-
-    customizeText({ index }) {
-      return names[index];
-    },
-  },
-};
+const mapsWorld = mapsData.world;
+const bounds = [-180, 85, 180, -60];
+const customizeTooltip = (info) => ((info.layer.type === 'marker') ? { text: info.attribute('tooltip') } : null);
+const customizeText = ({ index }) => names[index];
 </script>
 <style>
 #vector-map {
