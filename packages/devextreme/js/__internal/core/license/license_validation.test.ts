@@ -19,6 +19,7 @@ jest.mock('./key', () => ({
       72, 62, 186, 243, 199, 73,
     ]),
   },
+  INTERNAL_USAGE_ID: 'aYC7EHibp0yxtXTihJERkA',
 }));
 
 describe('license token', () => {
@@ -234,5 +235,40 @@ describe('license check', () => {
   ])('W0021 error should be logged if license is corrupted/invalid [%#]', ({ token, version }) => {
     validateLicense(token, version);
     expect(errors.log).toHaveBeenCalledWith('W0021');
+  });
+});
+
+describe('internal license check', () => {
+  beforeEach(() => {
+    jest.spyOn(errors, 'log').mockImplementation(() => {});
+    setLicenseCheckSkipCondition(false);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('valid internal usage token (correct)', () => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
+    validateLicense(token, '1.2.3');
+    expect(errors.log).not.toHaveBeenCalled();
+  });
+
+  test('valid internal usage token (correct, pre-release)', () => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
+    validateLicense(token, '1.2.1');
+    expect(errors.log).not.toHaveBeenCalled();
+  });
+
+  test('internal usage token (incorrect)', () => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
+    validateLicense(token, '1.2.3');
+    expect(errors.log).toHaveBeenCalledWith('W0020');
+  });
+
+  test('internal usage token (incorrect, pre-release)', () => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
+    validateLicense(token, '1.2.1');
+    expect(errors.log).toHaveBeenCalledWith('W0022');
   });
 });
