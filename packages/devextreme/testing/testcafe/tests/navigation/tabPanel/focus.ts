@@ -213,7 +213,7 @@ test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', asyn
     .expect(tabPanel.tabs.getItem(0).isFocused)
     .ok()
     .expect(tabPanel.multiView.getItem(0).isFocused)
-    .ok();
+    .notOk();
 
   await t
     .pressKey('tab')
