@@ -684,7 +684,10 @@ const Tabs = CollectionWidget.inherit({
     _focusOutHandler(e) {
         this.callBase(e);
 
-        if(e.target === this.$element()) {
+        const element = this.$element().get(0);
+        const target = e.target;
+
+        if(target === element) {
             this.option({ focusedElement: null });
         }
     },
