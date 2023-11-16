@@ -336,7 +336,7 @@ const Tabs = CollectionWidget.inherit({
             return false;
         }
 
-        const isItemsWidthExceeded = tabItemsWidth + 5 > elementWidth;
+        const isItemsWidthExceeded = tabItemsWidth > elementWidth;
 
         return isItemsWidthExceeded;
     },
