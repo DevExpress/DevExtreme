@@ -34,6 +34,7 @@ const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
 const TABS_ITEM_CLASS = 'dx-tab';
 const TABS_ITEM_SELECTED_CLASS = 'dx-tab-selected';
+const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
 
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
@@ -193,11 +194,12 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _init() {
-        const { orientation, stylingMode } = this.option();
+        const { orientation, stylingMode, scrollingEnabled } = this.option();
         const indicatorPosition = this._getIndicatorPosition();
 
         this.callBase();
         this.$element().addClass(TABS_CLASS);
+        this._toggleScrollingEnabledClass(scrollingEnabled);
         this._toggleOrientationClass(orientation);
         this._toggleIndicatorPositionClass(indicatorPosition);
         this._toggleIconPositionClass();
@@ -336,7 +338,7 @@ const Tabs = CollectionWidget.inherit({
             return false;
         }
 
-        const isItemsWidthExceeded = tabItemsWidth >= elementWidth;
+        const isItemsWidthExceeded = tabItemsWidth > elementWidth;
 
         return isItemsWidthExceeded;
     },
@@ -606,6 +608,10 @@ const Tabs = CollectionWidget.inherit({
         const newClass = this._getIndicatorPositionClass(indicatorPosition);
 
         this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
+    },
+
+    _toggleScrollingEnabledClass(scrollingEnabled) {
+        this.$element().toggleClass(TABS_SCROLLING_ENABLED_CLASS, scrollingEnabled);
     },
 
     _toggleOrientationClass(orientation) {

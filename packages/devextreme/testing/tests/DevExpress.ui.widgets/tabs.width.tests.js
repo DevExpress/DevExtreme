@@ -21,7 +21,7 @@ QUnit.module('Width', () => {
         _initializeTabs(width) {
             this.$tabs.appendTo(this.$container);
 
-            this.tabs = this.$tabs.dxTabs({
+            const options = {
                 items: [
                     { text: 'text 1' },
                     { text: 'long text example' }
@@ -29,7 +29,9 @@ QUnit.module('Width', () => {
                 scrollingEnabled: this.scrollingEnabled,
                 showNavButtons: true,
                 width: this._isOptionApproach() ? width : undefined
-            }).dxTabs('instance');
+            };
+
+            this.tabs = this.$tabs.dxTabs(options).dxTabs('instance');
 
             this.$container.appendTo('#qunit-fixture');
             addShadowDomStyles($('#qunit-fixture'));

@@ -69,6 +69,10 @@
   min-width: max-content;
 }
 
+.dx-tabs:not(.dx-tabs-scrolling-enabled) .dx-tab {
+  min-width: 0;
+}
+
 .dx-tab {
   position: relative;
   display: inline-flex;
