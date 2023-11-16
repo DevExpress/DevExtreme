@@ -12,7 +12,7 @@ const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage, stringSrc, packageDirInternal, packageDistDirInternal } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
@@ -147,4 +147,23 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass'));
+const sourcesInternal = (src, dist) => (() => merge(
+    gulp
+        .src([
+            `${src}/**/*`,
+            `!${src}/package.json`,
+        ])
+        .pipe(gulp.dest(dist)),
+
+    gulp
+        .src(`${src}/package.json`)
+        .pipe(replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'))
+        .pipe(gulp.dest(dist))
+));
+
+gulp.task('npm-internal', gulp.parallel(
+    sourcesInternal(packagePath, `${resultPath}/${packageDirInternal}`),
+    sourcesInternal(`${resultPath}/${packageDistDir}`, `${resultPath}/${packageDistDirInternal}`)
+));
+
+gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass', 'npm-internal'));
