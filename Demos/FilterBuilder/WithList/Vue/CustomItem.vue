@@ -7,7 +7,12 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+withDefaults(defineProps<{
+  item?: Record<string, any>
+}>(), {
+  item: () => ({}),
+});
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -16,19 +21,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-export default {
-  props: {
-    item: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  methods: {
-    currency(data) {
-      return currencyFormatter.format(data);
-    },
-  },
-};
+const currency = (data) => currencyFormatter.format(data);
 </script>
 <style scoped>
 .product {

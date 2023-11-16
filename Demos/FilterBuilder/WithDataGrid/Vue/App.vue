@@ -3,7 +3,7 @@
     <div class="filter-container">
       <DxFilterBuilder
         :fields="fields"
-        v-model:value="filter"
+        v-model:value="filterValue"
       />
       <DxButton
         text="Apply Filter"
@@ -21,7 +21,8 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
 import DxDataGrid from 'devextreme-vue/data-grid';
@@ -29,44 +30,31 @@ import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { filter, fields } from './data.js';
 
-export default {
-  components: {
-    DxFilterBuilder,
-    DxButton,
-    DxDataGrid,
-  },
-  data() {
-    return {
-      filter,
-      fields,
-      gridFilterValue: filter,
-      dataSource: new DataSource({
-        store: new ODataStore({
-          version: 2,
-          fieldTypes: {
-            Product_Cost: 'Decimal',
-            Product_Sale_Price: 'Decimal',
-            Product_Retail_Price: 'Decimal',
-          },
-          url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-        }),
-        select: [
-          'Product_ID',
-          'Product_Name',
-          'Product_Cost',
-          'Product_Sale_Price',
-          'Product_Retail_Price',
-          'Product_Current_Inventory',
-        ],
-      }),
-    };
-  },
-  methods: {
-    buttonClick() {
-      this.gridFilterValue = this.filter;
+const filterValue = ref(filter);
+const gridFilterValue = ref(filter);
+const dataSource = new DataSource({
+  store: new ODataStore({
+    version: 2,
+    fieldTypes: {
+      Product_Cost: 'Decimal',
+      Product_Sale_Price: 'Decimal',
+      Product_Retail_Price: 'Decimal',
     },
-  },
-};
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+  }),
+  select: [
+    'Product_ID',
+    'Product_Name',
+    'Product_Cost',
+    'Product_Sale_Price',
+    'Product_Retail_Price',
+    'Product_Current_Inventory',
+  ],
+});
+
+function buttonClick() {
+  gridFilterValue.value = filterValue.value;
+}
 </script>
 <style scoped>
 .filter-container {

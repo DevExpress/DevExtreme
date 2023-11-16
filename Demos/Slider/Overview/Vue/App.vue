@@ -98,7 +98,6 @@
             v-model:value="sliderValue"
             :min="0"
             :max="100"
-            :value="10"
             :show-spin-buttons="true"
             :input-attr="{ 'aria-label': 'Slider Value' }"
           />
@@ -107,33 +106,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxSlider } from 'devextreme-vue/slider';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 
+const sliderValue = ref(10);
 const format = (value) => `${value}%`;
 
-export default {
-  components: {
-    DxSlider,
-    DxNumberBox,
-  },
-  data() {
-    return {
-      sliderValue: 10,
-      label: {
-        visible: true,
-        position: 'top',
-        format,
-      },
-      tooltip: {
-        enabled: true,
-        showMode: 'always',
-        position: 'bottom',
-        format,
-      },
-    };
-  },
+const label = {
+  visible: true,
+  position: 'top',
+  format,
+};
+
+const tooltip = {
+  enabled: true,
+  showMode: 'always',
+  position: 'bottom',
+  format,
 };
 </script>
 <style scoped>

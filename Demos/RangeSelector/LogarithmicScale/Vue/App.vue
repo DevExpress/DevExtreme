@@ -41,7 +41,8 @@
     </DxRangeSelector>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxChart,
   DxSeries,
@@ -62,30 +63,7 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxChart,
-    DxSeries,
-    DxArgumentAxis,
-    DxGrid,
-    DxMinorGrid,
-    DxLegend,
-    DxLabel,
-    DxRangeSelector,
-    DxScale,
-    DxSliderMarker,
-    DxBehavior,
-    DxRsLabel,
-    DxRsChart,
-    DxRsSeries,
-  },
-  data() {
-    return {
-      dataSource,
-      range: [],
-    };
-  },
-};
+const range = ref([]);
 </script>
 <style scoped>
 #zoomed-chart {

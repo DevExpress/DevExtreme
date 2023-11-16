@@ -23,7 +23,8 @@
     <DxScale value-type="numeric"/>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -34,22 +35,7 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeries,
-    DxScale,
-  },
-  data() {
-    return {
-      dataSource,
-      range: ['1', '2'],
-    };
-  },
-};
+const range = ref(['1', '2']);
 </script>
 <style scoped>
 #range-selector {

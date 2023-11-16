@@ -32,7 +32,8 @@
     </DxChart>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -45,29 +46,9 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxScale,
-    DxLabel,
-    DxSliderMarker,
-    DxBackground,
-    DxChart,
-    DxSeries,
-  },
-  data() {
-    return {
-      dataSource,
-      range: [0, 5],
-    };
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} s`;
-    },
-  },
-};
+const range = ref([0, 5]);
+
+const customizeText = ({ valueText }) => `${valueText} s`;
 </script>
 <style scoped>
 #range-selector {

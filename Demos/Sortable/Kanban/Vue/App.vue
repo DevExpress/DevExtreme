@@ -45,57 +45,38 @@
     </DxScrollView>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { reactive } from 'vue';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSortable } from 'devextreme-vue/sortable';
 import { tasks, employees } from './data.js';
 
 const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
+const employeesMap = {};
+employees.forEach((employee) => {
+  employeesMap[employee.ID] = employee.Name;
+});
+const lists = reactive([]);
+statuses.forEach((status) => {
+  lists.push(tasks.filter((task) => task.Task_Status === status));
+});
+function onListReorder(e) {
+  const list = lists.splice(e.fromIndex, 1)[0];
+  lists.splice(e.toIndex, 0, list);
 
-export default {
-  components: {
-    DxScrollView,
-    DxSortable,
-  },
-  data() {
-    const employeesMap = {};
-
-    employees.forEach((employee) => {
-      employeesMap[employee.ID] = employee.Name;
-    });
-
-    const lists = [];
-
-    statuses.forEach((status) => {
-      lists.push(tasks.filter((task) => task.Task_Status === status));
-    });
-
-    return {
-      statuses,
-      lists,
-      employeesMap,
-    };
-  },
-  methods: {
-    onListReorder(e) {
-      const list = this.lists.splice(e.fromIndex, 1)[0];
-      this.lists.splice(e.toIndex, 0, list);
-
-      const status = this.statuses.splice(e.fromIndex, 1)[0];
-      this.statuses.splice(e.toIndex, 0, status);
-    },
-    onTaskDragStart(e) {
-      e.itemData = e.fromData[e.fromIndex];
-    },
-    onTaskDrop(e) {
-      e.fromData.splice(e.fromIndex, 1);
-      e.toData.splice(e.toIndex, 0, e.itemData);
-    },
-    getPriorityClass(task) {
-      return `priority-${task.Task_Priority}`;
-    },
-  },
-};
+  const status = statuses.splice(e.fromIndex, 1)[0];
+  statuses.splice(e.toIndex, 0, status);
+}
+function onTaskDragStart(e) {
+  e.itemData = e.fromData[e.fromIndex];
+}
+function onTaskDrop(e) {
+  e.fromData.splice(e.fromIndex, 1);
+  e.toData.splice(e.toIndex, 0, e.itemData);
+}
+function getPriorityClass(task) {
+  return `priority-${task.Task_Priority}`;
+}
 </script>
 <style>
 #kanban {

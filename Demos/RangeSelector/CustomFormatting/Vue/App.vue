@@ -28,7 +28,7 @@
     <DxBehavior :snap-to-ticks="false"/>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxRangeSelector,
   DxMargin,
@@ -39,22 +39,7 @@ import {
   DxBehavior,
 } from 'devextreme-vue/range-selector';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxScale,
-    DxLabel,
-    DxSliderMarker,
-    DxFormat,
-    DxBehavior,
-  },
-  methods: {
-    customizeText({ valueText }) {
-      return `${valueText} mg/L`;
-    },
-  },
-};
+const customizeText = ({ valueText }) => `${valueText} mg/L`;
 </script>
 <style scoped>
 #range-selector {

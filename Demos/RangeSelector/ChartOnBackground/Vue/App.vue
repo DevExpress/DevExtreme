@@ -23,7 +23,8 @@
     </DxChart>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
+import { reactive } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -36,24 +37,7 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxScale,
-    DxTickInterval,
-    DxMinorTickInterval,
-    DxChart,
-    DxSeries,
-    DxValueAxis,
-  },
-  data() {
-    return {
-      dataSource,
-      range: [new Date(2011, 11, 25), new Date(2012, 0, 1)],
-    };
-  },
-};
+const range = reactive([new Date(2011, 11, 25), new Date(2012, 0, 1)]);
 </script>
 <style scoped>
 #range-selector {

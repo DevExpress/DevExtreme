@@ -61,73 +61,63 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { longText } from './data.js';
 
-export default {
-  components: {
-    DxScrollView,
-    DxSelectBox,
-    DxCheckBox,
+const content = ref(longText);
+const pullDown = ref(false);
+const showScrollbarModes = ref([
+  {
+    text: 'On Scroll',
+    value: 'onScroll',
   },
-  data() {
-    return {
-      content: longText,
-      pullDown: false,
-      showScrollbarModes: [
-        {
-          text: 'On Scroll',
-          value: 'onScroll',
-        },
-        {
-          text: 'On Hover',
-          value: 'onHover',
-        },
-        {
-          text: 'Always',
-          value: 'always',
-        },
-        {
-          text: 'Never',
-          value: 'never',
-        },
-      ],
-      showScrollbar: 'onScroll',
-      scrollByContent: true,
-      scrollByThumb: true,
-    };
+  {
+    text: 'On Hover',
+    value: 'onHover',
   },
-  created() {},
-  methods: {
-    updateContent(args, eventName) {
-      const updateContentText = `<br /><div>Content has been updated on the ${
-        eventName
-      } event.</div><br />`;
-      if (this.updateContentTimer) clearTimeout(this.updateContentTimer);
-      this.updateContentTimer = setTimeout(() => {
-        this.content = eventName === 'PullDown'
-          ? updateContentText + this.content
-          : this.content + updateContentText;
-        args.component.release();
-      }, 500);
-    },
-    updateBottomContent(e) {
-      this.updateContent(e, 'ReachBottom');
-    },
-    updateTopContent(e) {
-      this.updateContent(e, 'PullDown');
-    },
-    onValueChanged(args) {
-      this.$refs.scrollViewWidget.instance.option(
-        'onReachBottom',
-        args.value ? this.updateBottomContent : null,
-      );
-    },
+  {
+    text: 'Always',
+    value: 'always',
   },
-};
+  {
+    text: 'Never',
+    value: 'never',
+  },
+]);
+const showScrollbar = ref('onScroll');
+const scrollByContent = ref(true);
+const scrollByThumb = ref(true);
+const scrollViewWidget = ref();
+
+let updateContentTimer;
+function updateContent(args, eventName) {
+  const updateContentText = `<br /><div>Content has been updated on the ${
+    eventName
+  } event.</div><br />`;
+  if (updateContentTimer) clearTimeout(updateContentTimer);
+  updateContentTimer = setTimeout(() => {
+    content.value = eventName === 'PullDown'
+      ? updateContentText + content.value
+      : content.value + updateContentText;
+    args.component.release();
+  }, 500);
+}
+function updateBottomContent(e) {
+  updateContent(e, 'ReachBottom');
+}
+function updateTopContent(e) {
+  updateContent(e, 'PullDown');
+}
+function onValueChanged(args) {
+  scrollViewWidget.value.instance.option(
+    'onReachBottom',
+    args.value ? updateBottomContent : null,
+  );
+}
 </script>
 <style scoped>
 #scrollview-demo {

@@ -17,7 +17,8 @@
     <DxSliderMarker format="currency"/>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -27,21 +28,7 @@ import {
   DxSliderMarker,
 } from 'devextreme-vue/range-selector';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxScale,
-    DxMinorTick,
-    DxLabel,
-    DxSliderMarker,
-  },
-  data() {
-    return {
-      range: [40000, 80000],
-    };
-  },
-};
+const range = ref([40000, 80000]);
 </script>
 <style scoped>
 #range-selector {

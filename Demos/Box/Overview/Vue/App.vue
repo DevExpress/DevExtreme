@@ -138,15 +138,8 @@
     </DxBox>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxBox, DxItem } from 'devextreme-vue/box';
-
-export default {
-  components: {
-    DxBox,
-    DxItem,
-  },
-};
 </script>
 <style>
 .rect {

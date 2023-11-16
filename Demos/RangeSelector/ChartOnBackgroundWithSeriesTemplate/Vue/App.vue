@@ -23,7 +23,7 @@
     </DxScale>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxRangeSelector,
   DxMargin,
@@ -36,28 +36,7 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxChart,
-    DxCommonSeriesSettings,
-    DxSeriesTemplate,
-    DxScale,
-    DxFormat,
-    DxLabel,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-  methods: {
-    customizeSeries(seriesName) {
-      return seriesName === 'USA' ? { color: 'red' } : {};
-    },
-  },
-};
+const customizeSeries = (seriesName: string) => (seriesName === 'USA' ? { color: 'red' } : {});
 </script>
 <style scoped>
 #range-selector {

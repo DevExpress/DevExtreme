@@ -162,7 +162,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxForm, {
   DxGroupItem,
   DxSimpleItem,
@@ -177,14 +178,174 @@ import DxForm, {
   DxAsyncRule,
   DxCustomRule,
 } from 'devextreme-vue/form';
-import DxAutocomplete from 'devextreme-vue/autocomplete';
+// eslint-disable-next-line
+import DxAutocomplete from 'devextreme-vue/autocomplete'; // for editor-type=dxAutocomplete
 import 'devextreme-vue/date-range-box';
-
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
-
 import service from './data.js';
 
+const formInstance = ref(null);
+const customer = ref(service.getCustomer());
+const registerButtonOptions = ref({
+  text: 'Register',
+  type: 'default',
+  width: '120px',
+  useSubmitBehavior: true,
+});
+const resetButtonOptions = ref({
+  icon: 'refresh',
+  text: 'Reset',
+  disabled: true,
+  width: '120px',
+  onClick: () => {
+    formInstance.value.reset();
+  },
+});
+const colCountByScreen = ref({
+  xs: 2,
+  sm: 2,
+  md: 2,
+  lg: 2,
+});
+const passwordEditorOptions = ref({
+  mode: 'password',
+  valueChangeEvent: 'keyup',
+  onValueChanged: () => {
+    const editor = formInstance.value.getEditor('ConfirmPassword');
+    if (editor.option('value')) {
+      const instance = Validator.getInstance(editor.element()) as Validator;
+      instance.validate();
+    }
+  },
+  buttons: [
+    {
+      name: 'password',
+      location: 'after',
+      options: {
+        icon: 'eyeopen',
+        stylingMode: 'text',
+        onClick: () => changePasswordMode('Password'),
+      },
+    },
+  ],
+});
+const confirmPasswordEditorOptions = ref({
+  mode: 'password',
+  valueChangeEvent: 'keyup',
+  buttons: [
+    {
+      name: 'password',
+      location: 'after',
+      options: {
+        icon: 'eyeopen',
+        stylingMode: 'text',
+        onClick: () => changePasswordMode('ConfirmPassword'),
+      },
+    },
+  ],
+});
+const emailEditorOptions = ref({
+  valueChangeEvent: 'keyup',
+});
+const nameEditorOptions = ref({
+  valueChangeEvent: 'keyup',
+});
+const addressEditorOptions = ref({
+  valueChangeEvent: 'keyup',
+});
+const dateBoxOptions = ref({
+  placeholder: 'Birth Date',
+  acceptCustomValue: false,
+  openOnFieldClick: true,
+});
+const dateRangeBoxOptions = ref({
+  endDatePlaceholder: 'End Date',
+  startDatePlaceholder: 'Start Date',
+  acceptCustomValue: false,
+});
+const checkBoxOptions = ref({
+  text: 'I agree to the Terms and Conditions',
+  width: 270,
+  value: false,
+});
+const phoneEditorOptions = ref({
+  mask: '+1 (X00) 000-0000',
+  valueChangeEvent: 'keyup',
+  maskRules: {
+    X: /[02-9]/,
+  },
+  maskInvalidMessage: 'The phone must have a correct USA phone format',
+});
+const cityEditorOptions = ref({
+  dataSource: service.getCities(),
+  valueChangeEvent: 'keyup',
+  minSearchLength: 2,
+});
+const countryEditorOptions = ref({
+  dataSource: service.getCountries(),
+});
+const maxDate = ref(new Date().setFullYear(new Date().getFullYear() - 21));
+const namePattern = ref(/^[^0-9]+$/);
+const cityPattern = ref(/^[^0-9]+$/);
+const phonePattern = ref(/^[02-9]\d{9}$/);
+
+function onOptionChanged(e) {
+  if (e.name === 'isDirty') {
+    const resetButton = formInstance.value.getButton('Reset');
+    resetButton.option('disabled', !e.value);
+  }
+}
+function saveFormInstance(e) {
+  formInstance.value = e.component;
+}
+function changePasswordMode(name) {
+  const editor = formInstance.value.getEditor(name);
+  editor.option(
+    'mode',
+    editor.option('mode') === 'text' ? 'password' : 'text',
+  );
+}
+function passwordComparison() {
+  return customer.value.Password;
+}
+function checkComparison() {
+  return true;
+}
+function asyncValidation(params) {
+  return sendRequest(params.value);
+}
+function validateVacationDatesRange({ value }) {
+  const [startDate, endDate] = value;
+
+  if (startDate === null || endDate === null) {
+    return true;
+  }
+
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
+
+  return daysDifference < 25;
+}
+function validateVacationDatesPresence({ value }) {
+  const [startDate, endDate] = value;
+
+  if (startDate === null && endDate === null) {
+    return true;
+  }
+
+  return startDate !== null && endDate !== null;
+}
+function handleSubmit(e) {
+  notify({
+    message: 'You have submitted the form',
+    position: {
+      my: 'center top',
+      at: 'center top',
+    },
+  }, 'success', 3000);
+  e.preventDefault();
+}
 const sendRequest = function(value) {
   const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
@@ -192,192 +353,6 @@ const sendRequest = function(value) {
       resolve(value !== invalidEmail);
     }, 1000);
   });
-};
-
-export default {
-  components: {
-    DxGroupItem,
-    DxSimpleItem,
-    DxButtonItem,
-    DxLabel,
-    DxRequiredRule,
-    DxCompareRule,
-    DxPatternRule,
-    DxRangeRule,
-    DxEmailRule,
-    DxStringLengthRule,
-    DxForm,
-    DxAutocomplete,
-    DxAsyncRule,
-    DxCustomRule,
-    notify,
-  },
-  data() {
-    return {
-      formInstance: null,
-      customer: service.getCustomer(),
-      registerButtonOptions: {
-        text: 'Register',
-        type: 'default',
-        width: '120px',
-        useSubmitBehavior: true,
-      },
-      resetButtonOptions: {
-        icon: 'refresh',
-        text: 'Reset',
-        disabled: true,
-        width: '120px',
-        onClick: () => {
-          this.formInstance.reset();
-        },
-      },
-      colCountByScreen: {
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-      },
-      passwordEditorOptions: {
-        mode: 'password',
-        valueChangeEvent: 'keyup',
-        onValueChanged: () => {
-          const editor = this.formInstance.getEditor('ConfirmPassword');
-          if (editor.option('value')) {
-            const instance = Validator.getInstance(editor.element());
-            instance.validate();
-          }
-        },
-        buttons: [
-          {
-            name: 'password',
-            location: 'after',
-            options: {
-              icon: 'eyeopen',
-              stylingMode: 'text',
-              onClick: () => this.changePasswordMode('Password'),
-            },
-          },
-        ],
-      },
-      confirmPasswordEditorOptions: {
-        mode: 'password',
-        valueChangeEvent: 'keyup',
-        buttons: [
-          {
-            name: 'password',
-            location: 'after',
-            options: {
-              icon: 'eyeopen',
-              stylingMode: 'text',
-              onClick: () => this.changePasswordMode('ConfirmPassword'),
-            },
-          },
-        ],
-      },
-      emailEditorOptions: {
-        valueChangeEvent: 'keyup',
-      },
-      nameEditorOptions: {
-        valueChangeEvent: 'keyup',
-      },
-      addressEditorOptions: {
-        valueChangeEvent: 'keyup',
-      },
-      dateBoxOptions: {
-        placeholder: 'Birth Date',
-        acceptCustomValue: false,
-        openOnFieldClick: true,
-      },
-      dateRangeBoxOptions: {
-        endDatePlaceholder: 'End Date',
-        startDatePlaceholder: 'Start Date',
-        acceptCustomValue: false,
-      },
-      checkBoxOptions: {
-        text: 'I agree to the Terms and Conditions',
-        width: 270,
-        value: false,
-      },
-      phoneEditorOptions: {
-        mask: '+1 (X00) 000-0000',
-        valueChangeEvent: 'keyup',
-        maskRules: {
-          X: /[02-9]/,
-        },
-        maskInvalidMessage: 'The phone must have a correct USA phone format',
-      },
-      cityEditorOptions: {
-        dataSource: service.getCities(),
-        valueChangeEvent: 'keyup',
-        minSearchLength: 2,
-      },
-      countryEditorOptions: {
-        dataSource: service.getCountries(),
-      },
-      maxDate: new Date().setFullYear(new Date().getFullYear() - 21),
-      namePattern: /^[^0-9]+$/,
-      cityPattern: /^[^0-9]+$/,
-      phonePattern: /^[02-9]\d{9}$/,
-    };
-  },
-  methods: {
-    onOptionChanged(e) {
-      if (e.name === 'isDirty') {
-        const resetButton = this.formInstance.getButton('Reset');
-        resetButton.option('disabled', !e.value);
-      }
-    },
-    saveFormInstance(e) {
-      this.formInstance = e.component;
-    },
-    changePasswordMode(name) {
-      const editor = this.formInstance.getEditor(name);
-      editor.option(
-        'mode',
-        editor.option('mode') === 'text' ? 'password' : 'text',
-      );
-    },
-    passwordComparison() {
-      return this.customer.Password;
-    },
-    checkComparison() {
-      return true;
-    },
-    asyncValidation(params) {
-      return sendRequest(params.value);
-    },
-    validateVacationDatesRange({ value }) {
-      const [startDate, endDate] = value;
-
-      if (startDate === null || endDate === null) {
-        return true;
-      }
-
-      const millisecondsPerDay = 24 * 60 * 60 * 1000;
-      const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
-
-      return daysDifference < 25;
-    },
-    validateVacationDatesPresence({ value }) {
-      const [startDate, endDate] = value;
-
-      if (startDate === null && endDate === null) {
-        return true;
-      }
-
-      return startDate !== null && endDate !== null;
-    },
-    handleSubmit(e) {
-      notify({
-        message: 'You have submitted the form',
-        position: {
-          my: 'center top',
-          at: 'center top',
-        },
-      }, 'success', 3000);
-      e.preventDefault();
-    },
-  },
 };
 </script>
 <style scoped>

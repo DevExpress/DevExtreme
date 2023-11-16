@@ -54,40 +54,28 @@
     </DxGroupItem>
   </DxForm>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxForm,
   DxSimpleItem,
   DxGroupItem,
   DxLabel,
 } from 'devextreme-vue/form';
-import { DxTextArea } from 'devextreme-vue/text-area';
+// eslint-disable-next-line
+import { DxTextArea } from 'devextreme-vue/text-area'; // needs for editor-type="dxTextArea"
 import { employee, positions, states } from './data.js';
 
-export default {
-  components: {
-    DxForm,
-    DxTextArea,
-    DxGroupItem,
-    DxSimpleItem,
-    DxLabel,
-  },
-  data() {
-    return {
-      formData: employee,
-      birthDateOptions: { width: '100%' },
-      positionOptions: {
-        items: positions,
-        value: '',
-      },
-      stateOptions: {
-        items: states,
-      },
-      phoneOptions: { mask: '+1 (000) 000-0000' },
-      notesOptions: { height: 140 },
-    };
-  },
+const formData = employee;
+const birthDateOptions = { width: '100%' };
+const positionOptions = {
+  items: positions,
+  value: '',
 };
+const stateOptions = {
+  items: states,
+};
+const phoneOptions = { mask: '+1 (000) 000-0000' };
+const notesOptions = { height: 140 };
 </script>
 <style>
 .form-group {

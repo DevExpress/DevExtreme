@@ -30,38 +30,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxFilterBuilder, { DxCustomOperation } from 'devextreme-vue/filter-builder';
 import { filter, fields } from './data.js';
 import { formatValue } from './helpers.js';
 import EditorComponent from './EditorComponent.vue';
 
-export default {
-  components: {
-    DxFilterBuilder,
-    DxCustomOperation,
-    EditorComponent,
-  },
-  data() {
-    return {
-      fields,
-      filter,
-      filterText: '',
-      groupOperations: ['and', 'or'],
-      dataSourceText: '',
-    };
-  },
-  methods: {
-    updateTexts(e) {
-      this.filterText = formatValue(e.component.option('value'));
-      this.dataSourceText = formatValue(e.component.getFilterExpression());
-    },
-    calculateFilterExpression(filterValue, field) {
-      return filterValue && filterValue.length
-        && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
-    },
-  },
-};
+const filterText = ref('');
+const groupOperations = ['and', 'or'];
+const dataSourceText = ref('');
+
+function updateTexts(e) {
+  filterText.value = formatValue(e.component.option('value'));
+  dataSourceText.value = formatValue(e.component.getFilterExpression());
+}
+function calculateFilterExpression(filterValue, field) {
+  return filterValue && filterValue.length
+    && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
+}
 </script>
 <style scoped>
 .results {

@@ -54,7 +54,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxForm,
   DxSimpleItem,
@@ -64,69 +65,51 @@ import {
 } from 'devextreme-vue/form';
 import service from './data.js';
 
-export default {
-  components: {
-    DxForm,
-    DxSimpleItem,
-    DxGroupItem,
-    DxButtonItem,
-    DxLabel,
-  },
-  data() {
-    const employee = service.getEmployee();
-    const isHomeAddressVisible = true;
+const employee = service.getEmployee();
+const phoneOptions = ref(getPhonesOptions(employee.Phones));
+let isHomeAddressVisible = true;
 
-    const phoneOptions = this.getPhonesOptions(employee.Phones);
-
-    return {
-      employee,
-      isHomeAddressVisible,
-      phoneOptions,
-      checkBoxOptions: {
-        text: 'Show Address',
-        value: true,
-        onValueChanged: (e) => {
-          this.isHomeAddressVisible = e.component.option('value');
-        },
-      },
-      addPhoneButtonOptions: {
-        icon: 'add',
-        text: 'Add phone',
-        onClick: () => {
-          this.employee.Phones.push('');
-          this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-        },
-      },
-    };
-  },
-  methods: {
-    getPhonesOptions(phones) {
-      const options = [];
-      for (let i = 0; i < phones.length; i += 1) {
-        options.push(this.generateNewPhoneOptions(i));
-      }
-      return options;
-    },
-    generateNewPhoneOptions(index) {
-      return {
-        mask: '+1 (X00) 000-0000',
-        maskRules: { X: /[01-9]/ },
-        buttons: [{
-          name: 'trash',
-          location: 'after',
-          options: {
-            stylingMode: 'text',
-            icon: 'trash',
-            onClick: () => {
-              this.employee.Phones.splice(index, 1);
-              this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-            },
-          },
-        }],
-      };
-    },
+const checkBoxOptions = {
+  text: 'Show Address',
+  value: true,
+  onValueChanged: (e) => {
+    isHomeAddressVisible = e.component.option('value');
   },
 };
+const addPhoneButtonOptions = {
+  icon: 'add',
+  text: 'Add phone',
+  onClick: () => {
+    employee.Phones.push('');
+    phoneOptions.value = getPhonesOptions(employee.Phones);
+  },
+};
+
+function getPhonesOptions(phones) {
+  const options = [];
+  for (let i = 0; i < phones.length; i += 1) {
+    options.push(generateNewPhoneOptions(i));
+  }
+  return options;
+}
+function generateNewPhoneOptions(index) {
+  return {
+    mask: '+1 (X00) 000-0000',
+    maskRules: { X: /[01-9]/ },
+    buttons: [{
+      name: 'trash',
+      location: 'after',
+      options: {
+        stylingMode: 'text',
+        icon: 'trash',
+        onClick: () => {
+          employee.Phones.splice(index, 1);
+          phoneOptions.value = getPhonesOptions(employee.Phones);
+        },
+      },
+    }],
+  };
+}
 </script>
 <style scoped>
 #form-container {

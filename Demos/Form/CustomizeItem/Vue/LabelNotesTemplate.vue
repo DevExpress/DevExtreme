@@ -19,20 +19,14 @@
     </DxTooltip>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxTooltip } from 'devextreme-vue/tooltip';
 
-export default {
-  components: {
-    DxTooltip,
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+withDefaults(defineProps<{
+  data?: Record<string, any>
+}>(), {
+  data: () => ({}),
+});
 </script>
 <style scoped>
 #helpedInfo {

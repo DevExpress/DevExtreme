@@ -126,34 +126,24 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxRangeSlider from 'devextreme-vue/range-slider';
 import DxNumberBox from 'devextreme-vue/number-box';
 
+const start = ref(10);
+const end = ref(90);
 const format = (value) => `${value}%`;
-
-export default {
-  components: {
-    DxRangeSlider,
-    DxNumberBox,
-  },
-  data() {
-    return {
-      label: {
-        visible: true,
-        format,
-        position: 'top',
-      },
-      tooltip: {
-        enabled: true,
-        format,
-        showMode: 'always',
-        position: 'bottom',
-      },
-      start: 10,
-      end: 90,
-    };
-  },
+const label = {
+  visible: true,
+  format,
+  position: 'top',
+};
+const tooltip = {
+  enabled: true,
+  format,
+  showMode: 'always',
+  position: 'bottom',
 };
 </script>
 

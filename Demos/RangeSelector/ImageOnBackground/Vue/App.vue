@@ -33,7 +33,8 @@
     </DxScale>
   </DxRangeSelector>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -47,27 +48,9 @@ import {
   DxLabel,
 } from 'devextreme-vue/range-selector';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxBackground,
-    DxImage,
-    DxIndent,
-    DxSliderMarker,
-    DxScale,
-    DxTickInterval,
-    DxMinorTickInterval,
-    DxLabel,
-  },
-  data() {
-    return {
-      startValue: new Date(2012, 8, 29, 0, 0, 0),
-      endValue: new Date(2012, 8, 29, 24, 0, 0),
-      range: [new Date(2012, 8, 29, 11, 0, 0), new Date(2012, 8, 29, 17, 0, 0)],
-    };
-  },
-};
+const startValue = ref(new Date(2012, 8, 29, 0, 0, 0));
+const endValue = ref(new Date(2012, 8, 29, 24, 0, 0));
+const range = ref([new Date(2012, 8, 29, 11, 0, 0), new Date(2012, 8, 29, 17, 0, 0)]);
 </script>
 <style scoped>
 #range-selector {

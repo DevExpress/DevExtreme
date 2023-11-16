@@ -35,27 +35,14 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxButtonGroup from 'devextreme-vue/button-group';
 import notify from 'devextreme/ui/notify';
 import { alignments, fontStyles } from './data.js';
 
-export default {
-  components: {
-    DxButtonGroup,
-  },
-  data() {
-    return {
-      alignments,
-      fontStyles,
-    };
-  },
-  methods: {
-    itemClick(e) {
-      notify({ message: `The "${e.itemData.hint}" button was clicked`, width: 320 }, 'success', 1000);
-    },
-  },
-};
+function itemClick(e) {
+  notify({ message: `The "${e.itemData.hint}" button was clicked`, width: 320 }, 'success', 1000);
+}
 </script>
 <style scoped>
   .buttongroups-container {

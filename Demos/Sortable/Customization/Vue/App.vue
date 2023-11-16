@@ -103,7 +103,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxScrollView from 'devextreme-vue/scroll-view';
 import DxSortable from 'devextreme-vue/sortable';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -111,57 +112,34 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { tasks } from './data.js';
 
-export default {
-  components: {
-    DxScrollView,
-    DxSortable,
-    DxSelectBox,
-    DxCheckBox,
-    DxNumberBox,
-  },
-  data() {
-    return {
-      items: tasks,
-      dropFeedbackMode: 'push',
-      itemOrientation: 'vertical',
-      dragDirection: 'both',
-      scrollSpeed: 30,
-      scrollSensitivity: 60,
-      handle: '',
-      dragTemplate: '',
-    };
-  },
-  computed: {
-    dragDirections() {
-      return this.itemOrientation === 'vertical' ? ['both', 'vertical'] : ['both', 'horizontal'];
-    },
-    cursorOffset() {
-      return this.dragTemplate ? { x: 10, y: 20 } : null;
-    },
-  },
-  methods: {
-    onDragStart(e) {
-      e.itemData = this.items[e.fromIndex];
-    },
+const items = ref(tasks);
+const dropFeedbackMode = ref('push');
+const itemOrientation = ref('vertical');
+const dragDirection = ref('both');
+const scrollSpeed = ref(30);
+const scrollSensitivity = ref(60);
+const handle = ref('');
+const dragTemplate = ref('');
 
-    onReorder(e) {
-      this.items.splice(e.fromIndex, 1);
-      this.items.splice(e.toIndex, 0, e.itemData);
-    },
+const dragDirections = computed(() => (itemOrientation.value === 'vertical' ? ['both', 'vertical'] : ['both', 'horizontal']));
+const cursorOffset = computed(() => (dragTemplate.value ? { x: 10, y: 20 } : null));
 
-    onItemOrientationChanged() {
-      this.dragDirection = 'both';
-    },
-
-    onHandleChanged(e) {
-      this.handle = e.value ? '.handle' : '';
-    },
-
-    onDragTemplateChanged(e) {
-      this.dragTemplate = e.value ? 'drag' : '';
-    },
-  },
-};
+function onDragStart(e) {
+  e.itemData = items.value[e.fromIndex];
+}
+function onReorder(e) {
+  items.value.splice(e.fromIndex, 1);
+  items.value.splice(e.toIndex, 0, e.itemData);
+}
+function onItemOrientationChanged() {
+  dragDirection.value = 'both';
+}
+function onHandleChanged(e) {
+  handle.value = e.value ? '.handle' : '';
+}
+function onDragTemplateChanged(e) {
+  dragTemplate.value = e.value ? 'drag' : '';
+}
 </script>
 <style scoped>
 .widget-container {

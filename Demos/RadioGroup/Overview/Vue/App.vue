@@ -69,33 +69,20 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import { priorities, priorityEntities, tasks } from './data.js';
 
-export default {
-  components: {
-    DxRadioGroup,
-  },
-  data() {
-    return {
-      priorities,
-      tasks,
-      priorityEntities,
-      colorPriority: priorities[2],
-      selectionPriority: priorityEntities[0].id,
-    };
-  },
-  computed: {
-    selectedTasks() {
-      return tasks.filter((task) => task.priority === this.selectionPriority);
-    },
-  },
-  methods: {
-    changeSelectionPriority(e) {
-      this.selectionPriority = e.value;
-    },
-  },
-};
+const colorPriority = ref(priorities[2]);
+const selectionPriority = ref(priorityEntities[0].id);
+
+const selectedTasks = computed(
+  () => tasks.filter((task) => task.priority === selectionPriority.value),
+);
+
+function changeSelectionPriority(e) {
+  selectionPriority.value = e.value;
+}
 </script>
 

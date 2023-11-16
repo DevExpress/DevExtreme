@@ -20,38 +20,22 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxForm from 'devextreme-vue/form';
 import employee from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxForm,
-  },
-  data() {
-    return {
-      employee,
-      calculateColCountAutomatically: false,
-    };
-  },
-  computed: {
-    colCountByScreen() {
-      return this.calculateColCountAutomatically
-        ? null
-        : {
-          sm: 2,
-          md: 4,
-        };
-    },
-  },
-  methods: {
-    screenByWidth(width) {
-      return width < 720 ? 'sm' : 'md';
-    },
-  },
-};
+const calculateColCountAutomatically = ref(false);
+
+const colCountByScreen = computed(() => (calculateColCountAutomatically.value
+  ? null
+  : {
+    sm: 2,
+    md: 4,
+  }));
+
+const screenByWidth = (width) => (width < 720 ? 'sm' : 'md');
 </script>
 <style scoped>
 #form {

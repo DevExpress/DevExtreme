@@ -111,53 +111,33 @@
     </template>
   </DxForm>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxForm, DxItem, DxLabel, DxGroupItem,
 } from 'devextreme-vue/form';
-import { DxTooltip } from 'devextreme-vue/tooltip';
 import service from './data.js';
 import 'devextreme-vue/text-area';
-
 import LabelTemplate from './LabelTemplate.vue';
 import LabelNotesTemplate from './LabelNotesTemplate.vue';
 
-export default {
-  components: {
-    DxForm,
-    DxItem,
-    DxLabel,
-    DxTooltip,
-    DxGroupItem,
-    LabelTemplate,
-    LabelNotesTemplate,
-  },
-  data() {
-    const employee = service.getEmployee();
-    const positions = service.getPositions();
-    return {
-      employee,
-      positions,
-      validationRules: {
-        position: [
-          { type: 'required', message: 'Position is required.' },
-        ],
-        hireDate: [
-          { type: 'required', message: 'Hire Date is required.' },
-        ],
-      },
-      nameEditorOptions: { disabled: true },
-      positionEditorOptions: { items: positions, searchEnabled: true, value: '' },
-      hireDateEditorOptions: { width: '100%', value: null },
-      birthDateEditorOptions: { width: '100%', disabled: true },
-      notesEditorOptions: { height: 90, maxLength: 200 },
-      phoneEditorOptions: { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } },
-    };
-  },
-  methods: {
-    validateForm(e) {
-      e.component.validate();
-    },
-  },
+const employee = service.getEmployee();
+const positions = service.getPositions();
+const validationRules = {
+  position: [
+    { type: 'required', message: 'Position is required.' },
+  ],
+  hireDate: [
+    { type: 'required', message: 'Hire Date is required.' },
+  ],
 };
+const nameEditorOptions = { disabled: true };
+const positionEditorOptions = { items: positions, searchEnabled: true, value: '' };
+const hireDateEditorOptions = { width: '100%', value: null };
+const birthDateEditorOptions = { width: '100%', disabled: true };
+const notesEditorOptions = { height: 90, maxLength: 200 };
+const phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
+
+function validateForm(e) {
+  e.component.validate();
+}
 </script>

@@ -90,29 +90,14 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxForm, DxSimpleItem, DxGroupItem, DxTabbedItem, DxTabPanelOptions, DxTab,
 } from 'devextreme-vue/form';
 import service from './data.js';
 import 'devextreme-vue/text-area';
 
-export default {
-  components: {
-    DxForm,
-    DxSimpleItem,
-    DxGroupItem,
-    DxTabbedItem,
-    DxTabPanelOptions,
-    DxTab,
-  },
-  data() {
-    const employee = service.getEmployee();
-    return {
-      employee,
-    };
-  },
-};
+const employee = service.getEmployee();
 </script>
 <style scoped>
 #form-container {

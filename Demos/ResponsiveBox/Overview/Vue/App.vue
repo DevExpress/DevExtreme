@@ -98,27 +98,12 @@
   </div>
 
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow,
 } from 'devextreme-vue/responsive-box';
 
-export default {
-  components: {
-    DxResponsiveBox,
-    DxItem,
-    DxLocation,
-    DxCol,
-    DxRow,
-  },
-  data() {
-    return {
-      screen(width) {
-        return (width < 700) ? 'sm' : 'lg';
-      },
-    };
-  },
-};
+const screen = (width) => ((width < 700) ? 'sm' : 'lg');
 </script>
 <style>
 .demo-container,

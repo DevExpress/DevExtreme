@@ -27,7 +27,8 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -39,34 +40,12 @@ import {
 import { DxDataGrid } from 'devextreme-vue/data-grid';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxRangeSelector,
-    DxMargin,
-    DxScale,
-    DxLabel,
-    DxFormat,
-    DxBehavior,
-  },
-  data() {
-    return {
-      employees,
-      range: [],
-      columns: ['FirstName', 'LastName', 'BirthYear', 'City', 'Title'],
-      format: {
-        type: 'decimal',
-      },
-    };
-  },
-  computed: {
-    selectedEmployees() {
-      return employees
-        .filter((employee) => (employee.BirthYear >= this.range[0]
-          && employee.BirthYear <= this.range[1]) || !this.range.length);
-    },
-  },
-};
+const range = ref([]);
+const columns = ref(['FirstName', 'LastName', 'BirthYear', 'City', 'Title']);
+
+const selectedEmployees = computed(() => employees
+  .filter((employee) => (employee.BirthYear >= range.value[0]
+      && employee.BirthYear <= range.value[1]) || !range.value.length));
 </script>
 <style scoped>
 #range-selector {

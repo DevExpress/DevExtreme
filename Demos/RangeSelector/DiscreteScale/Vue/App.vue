@@ -17,7 +17,8 @@
     <h2>Total: {{ format(totalProduction) }} tons</h2>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import {
   DxRangeSelector,
   DxChart,
@@ -25,42 +26,29 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxChart,
-    DxSeries,
-  },
-  data() {
-    return {
-      dataSource,
-      range: [],
-    };
-  },
-  computed: {
-    totalProduction() {
-      let startIndex = 0;
-      let endIndex = dataSource.length;
+const range = ref([]);
 
-      dataSource.forEach((item, index) => {
-        if (item.country === this.range[0]) {
-          startIndex = index;
-        }
-        if (item.country === this.range[1]) {
-          endIndex = index + 1;
-        }
-      });
-      return dataSource
-        .slice(startIndex, endIndex)
-        .reduce((total, item) => total + item.copper, 0);
-    },
-  },
-  methods: {
-    format: new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0,
-    }).format,
-  },
-};
+const totalProduction = computed(() => {
+  let startIndex = 0;
+  let endIndex = dataSource.length;
+
+  dataSource.forEach((item, index) => {
+    if (item.country === range.value[0]) {
+      startIndex = index;
+    }
+    if (item.country === range.value[1]) {
+      endIndex = index + 1;
+    }
+  });
+  return dataSource
+    .slice(startIndex, endIndex)
+    .reduce((total, item) => total + item.copper, 0);
+});
+
+const format = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 0,
+}).format;
+
 </script>
 <style scoped>
 #range-selector-demo {

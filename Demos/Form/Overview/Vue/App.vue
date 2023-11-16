@@ -7,8 +7,9 @@
         :label-mode="companySelectorLabelMode"
         :input-attr="{ 'aria-label': 'Company' }"
         label="Select company"
-        v-model:value="company"
+        v-model:value="companyName"
         display-expr="Name"
+        value-expr="Name"
       />
       <DxForm
         id="form"
@@ -79,7 +80,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxNumberBox from 'devextreme-vue/number-box';
@@ -91,40 +93,23 @@ const labelLocations = ['left', 'top'];
 const columnsCounts = ['auto', 1, 2, 3];
 const minColumnWidths = [150, 200, 300];
 const companies = service.getCompanies();
+const labelMode = ref('floating');
+const labelLocation = ref('left');
+const readOnly = ref(false);
+const showColon = ref(true);
+const minColWidth = ref(300);
+const colCount = ref(2);
+const companyName = ref(companies[0].Name);
+const width = ref(null);
 
-export default {
-  components: {
-    DxCheckBox,
-    DxSelectBox,
-    DxNumberBox,
-    DxForm,
-  },
-  data() {
-    return {
-      labelMode: 'floating',
-      labelLocation: 'left',
-      readOnly: false,
-      showColon: true,
-      minColWidth: 300,
-      colCount: 2,
-      companies,
-      company: companies[0],
-      width: null,
-      labelModes,
-      labelLocations,
-      columnsCounts,
-      minColumnWidths,
-    };
-  },
-  computed: {
-    companySelectorLabelMode() {
-      if (this.labelMode === 'outside') {
-        return 'hidden';
-      }
-      return this.labelMode;
-    },
-  },
-};
+const company = computed(() => companies.find(({ Name }) => Name === companyName.value));
+
+const companySelectorLabelMode = computed(() => {
+  if (labelMode.value === 'outside') {
+    return 'hidden';
+  }
+  return labelMode.value;
+});
 </script>
 <style scoped>
 .widget-container {

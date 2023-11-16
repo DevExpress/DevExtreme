@@ -2,7 +2,7 @@
   <div>
     <div class="filter-container">
       <DxFilterBuilder
-        :ref="filterBuilderRefName"
+        ref="filterBuilderRef"
         :fields="fields"
         v-model:value="filter"
       />
@@ -24,43 +24,28 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
 import DxList from 'devextreme-vue/list';
 import DataSource from 'devextreme/data/data_source';
-import { filter, fields, products } from './data.js';
 import CustomItem from './CustomItem.vue';
+import { filter, fields, products } from './data.js';
 
-export default {
-  components: {
-    DxFilterBuilder,
-    DxButton,
-    DxList,
-    CustomItem,
-  },
-  data() {
-    return {
-      filter,
-      fields,
-      filterBuilderRefName: 'filterBuilder',
-      filterBuilderInstance: null,
-      dataSource: new DataSource({
-        store: products,
-      }),
-    };
-  },
-  mounted() {
-    this.filterBuilderInstance = this.$refs[this.filterBuilderRefName].instance;
-    this.refreshDataSource();
-  },
-  methods: {
-    refreshDataSource() {
-      this.dataSource.filter(this.filterBuilderInstance.getFilterExpression());
-      this.dataSource.load();
-    },
-  },
-};
+const filterBuilderRef = ref(null);
+const dataSource = new DataSource({
+  store: products,
+});
+
+onMounted(() => {
+  refreshDataSource();
+});
+
+function refreshDataSource() {
+  dataSource.filter(filterBuilderRef.value.instance.getFilterExpression());
+  dataSource.load();
+}
 </script>
 <style scoped>
 .filter-container {

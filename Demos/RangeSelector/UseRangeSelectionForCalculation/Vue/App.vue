@@ -36,7 +36,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import {
   DxRangeSelector,
   DxMargin,
@@ -49,44 +50,25 @@ import {
 } from 'devextreme-vue/range-selector';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 
-export default {
-  components: {
-    DxRangeSelector,
-    DxMargin,
-    DxScale,
-    DxMinorTick,
-    DxMarker,
-    DxLabel,
-    DxBehavior,
-    DxSliderMarker,
-    DxSelectBox,
-  },
-  data() {
-    const range = [new Date(2011, 0, 1), new Date(2011, 11, 31)];
-    const behaviorModes = ['onHandleMove', 'onHandleRelease'];
-    return {
-      startValue: range[0],
-      endValue: range[1],
-      range,
-      behaviorModes,
-      currentBehaviorMode: behaviorModes[0],
-    };
-  },
-  computed: {
-    workingDaysCount() {
-      const currentDate = new Date(this.range[0]);
-      let workingDaysCount = 0;
+const range = ref([new Date(2011, 0, 1), new Date(2011, 11, 31)]);
+const behaviorModes = ['onHandleMove', 'onHandleRelease'];
 
-      while (currentDate <= this.range[1]) {
-        if (currentDate.getDay() > 0 && currentDate.getDay() < 6) {
-          workingDaysCount += 1;
-        }
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      return workingDaysCount;
-    },
-  },
-};
+const startValue = ref(range.value[0]);
+const endValue = ref(range.value[1]);
+const currentBehaviorMode = ref(behaviorModes[0]);
+
+const workingDaysCount = computed(() => {
+  const currentDate = new Date(range.value[0]);
+  let workingDaysCounter = 0;
+
+  while (currentDate <= range.value[1]) {
+    if (currentDate.getDay() > 0 && currentDate.getDay() < 6) {
+      workingDaysCounter += 1;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return workingDaysCounter;
+});
 </script>
 <style scoped>
 #range-selector {

@@ -8,29 +8,17 @@
   />
 </template>
 
-<script>
+<script setup lang="ts">
 import DxTagBox from 'devextreme-vue/tag-box';
 import { categories } from './data.js';
 
-export default {
-  components: {
-    DxTagBox,
-  },
-  props: {
-    conditionInfo: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      categories,
-    };
-  },
-  methods: {
-    onValueChanged(e) {
-      this.conditionInfo.setValue(e.value && e.value.length ? e.value : null);
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  conditionInfo?: Record<string, any>
+}>(), {
+  conditionInfo: () => ({}),
+});
+
+function onValueChanged(e) {
+  props.conditionInfo.setValue(e.value && e.value.length ? e.value : null);
+}
 </script>
