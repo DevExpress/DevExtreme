@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Gallery from '../../../model/gallery';
+import { setAttribute } from '../../../helpers/domUtils';
 
 const YELLOW_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXYzi8wA8AA9sBsq0bEHsAAAAASUVORK5CYII=';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1hSWg4AA1EBkakDs38AAAAASUVORK5CYII=';
@@ -26,8 +26,10 @@ test('click on indicator item should change selected item', async (t) => {
 }));
 
 [true, false].forEach((showIndicator) => {
-  safeSizeTest(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
+  test(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await setAttribute('#container', 'style', 'width: 120px; height: 120px;');
 
     await testScreenshot(t, takeScreenshot, `Gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
 
@@ -39,7 +41,7 @@ test('click on indicator item should change selected item', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [150, 110]).before(async () => createWidget('dxGallery', {
+  }).before(async () => createWidget('dxGallery', {
     height: 110,
     showIndicator,
     items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
