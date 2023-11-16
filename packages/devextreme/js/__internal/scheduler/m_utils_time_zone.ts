@@ -1,4 +1,6 @@
 /* globals Intl */
+import { dateUtilsTs } from '@ts/core/utils/date';
+
 import dateUtils from '../../core/utils/date';
 import DateAdapter from './m_date_adapter';
 import timeZoneDataUtils from './timezones/m_utils_timezones_data';
@@ -189,6 +191,22 @@ const setOffsetsToDate = (targetDate, offsetsArray) => {
   return new Date(newDateMs);
 };
 
+const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
+  const newDate = dateUtilsTs.addOffsets(date, offsets);
+  const daylightShift = getDaylightOffsetInMs(date, newDate);
+
+  if (!daylightShift) {
+    return newDate;
+  }
+
+  const correctLocalDate = dateUtilsTs.addOffsets(newDate, [-daylightShift]);
+  const daylightSecondShift = getDaylightOffsetInMs(newDate, correctLocalDate);
+
+  return !daylightSecondShift
+    ? correctLocalDate
+    : newDate;
+};
+
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -213,6 +231,7 @@ const utils = {
   getTimeZones,
 
   setOffsetsToDate,
+  addOffsetsWithoutDST,
 };
 
 export default utils;

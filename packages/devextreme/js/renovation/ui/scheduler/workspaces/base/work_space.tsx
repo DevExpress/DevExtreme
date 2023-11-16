@@ -591,6 +591,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       currentDate,
       type,
       hoursInterval,
+      viewOffset,
     } = this.props;
 
     return this.timePanelDataGenerator.getCompleteTimePanelMap(
@@ -604,6 +605,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         currentDate,
         viewType: type,
         hoursInterval,
+        viewOffset,
       },
       this.completeViewDataMap,
     );
