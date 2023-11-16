@@ -22,6 +22,6 @@ export class Service {
   }
 
   getPaletteExtensionModes(): string[] {
-    return ['Alternate', 'Blend', 'Extrapolate'];
+    return ['alternate', 'blend', 'extrapolate'];
   }
 }

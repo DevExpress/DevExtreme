@@ -1,12 +1,12 @@
 import React from 'react';
 
 interface LogoProps {
-  text: any;
-  width: any;
-  height: any;
-  color: any;
-  transform: any;
-  border: any;
+  text: string;
+  width: number;
+  height: number;
+  color: string;
+  transform: string;
+  border: boolean;
 }
 
 class Logo extends React.PureComponent<LogoProps> {

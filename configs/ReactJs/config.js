@@ -21,6 +21,9 @@ window.config = {
     'devextreme-aspnet-data-nojquery': {
       'esModule': true,
     },
+    'devextreme/viz/palette.js': {
+      'esModule': true,
+    },
     /**/
     /** vectormap */
     'devextreme-dist/js/vectormap-data/*': {
