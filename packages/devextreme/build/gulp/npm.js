@@ -158,10 +158,17 @@ const sourcesInternal = (src, dist) => (() => merge(
     gulp
         .src(`${src}/package.json`)
         .pipe(replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'))
-        .pipe(gulp.dest(dist))
+        .pipe(gulp.dest(dist)),
+
+    gulp
+        .src([
+            `${dist}/**/component.js`
+        ])
+        .pipe(replace(/[^;\s]+\.validateLicense\(\w*(\([\d\s\w.,_]*\)){1,2}\.licenseKey\);?/, ''))
+        .pipe(gulp.dest(dist)),
 ));
 
-gulp.task('npm-internal', gulp.parallel(
+gulp.task('npm-internal', gulp.series(
     sourcesInternal(packagePath, `${resultPath}/${packageDirInternal}`),
     sourcesInternal(`${resultPath}/${packageDistDir}`, `${resultPath}/${packageDistDirInternal}`)
 ));
