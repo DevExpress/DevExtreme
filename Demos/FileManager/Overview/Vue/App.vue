@@ -31,40 +31,25 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
 import { DxPopup } from 'devextreme-vue/popup';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
+const popupVisible = ref(false);
+const imageItemToDisplay = ref({} as Record<string, any>);
+
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images',
 });
-
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-    DxPopup,
-  },
-
-  data() {
-    return {
-      remoteProvider,
-      popupVisible: false,
-      imageItemToDisplay: {},
-    };
-  },
-
-  methods: {
-    displayImagePopup(e) {
-      this.imageItemToDisplay = {
-        name: e.file.name,
-        url: e.file.dataItem.url,
-      };
-      this.popupVisible = true;
-    },
-  },
-};
+function displayImagePopup(e) {
+  imageItemToDisplay.value = {
+    name: e.file.name,
+    url: e.file.dataItem.url,
+  };
+  popupVisible.value = true;
+}
 </script>
 
 <style>

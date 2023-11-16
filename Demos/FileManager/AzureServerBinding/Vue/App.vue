@@ -38,43 +38,27 @@
   </div>
 </template>
 
-<script>
-import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
+<script setup lang="ts">
+import { ref } from 'vue';
+/* import DxPermissions if you using <dx-permissions  */
+import { DxFileManager /* DxPermissions */ } from 'devextreme-vue/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
 
+fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
+  .then((response) => response.json())
+  .then((result) => {
+    wrapperClassName.value = result.active ? 'show-widget' : 'show-message';
+    loadPanelVisible.value = false;
+  });
+
+const loadPanelPosition = { of: '#file-manager' };
+const loadPanelVisible = ref(true);
+const wrapperClassName = ref('');
 const fileSystemProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-azure',
 });
-
 const allowedFileExtensions = [];
-
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-    DxLoadPanel,
-  },
-
-  data() {
-    return {
-      fileSystemProvider,
-      allowedFileExtensions,
-      loadPanelPosition: { of: '#file-manager' },
-      loadPanelVisible: true,
-      wrapperClassName: '',
-    };
-  },
-
-  created() {
-    fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .then((response) => response.json())
-      .then((result) => {
-        this.wrapperClassName = result.active ? 'show-widget' : 'show-message';
-        this.loadPanelVisible = false;
-      });
-  },
-};
 </script>
 <style>
 #wrapper #file-manager {

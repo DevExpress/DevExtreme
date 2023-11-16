@@ -110,164 +110,142 @@
   </DxFileManager>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
   DxFileSelectionItem, DxItemView, DxDetails, DxColumn,
 } from 'devextreme-vue/file-manager';
 import { fileItems } from './data.js';
 
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-    DxToolbar,
-    DxContextMenu,
-    DxItem,
-    DxFileSelectionItem,
-    DxItemView,
-    DxDetails,
-    DxColumn,
-  },
+const newFileMenuOptions = getNewFileMenuOptions();
+const changeCategoryMenuOptions = getChangeCategoryMenuOptions();
+const fileManager = ref();
 
-  data() {
-    return {
-      fileItems,
-      newFileMenuOptions: this.getNewFileMenuOptions(),
-      changeCategoryMenuOptions: this.getChangeCategoryMenuOptions(),
-    };
-  },
-  methods: {
-    onItemClick({ itemData, viewArea, fileSystemItem }) {
-      let updated = false;
-      const extension = itemData.options ? itemData.options.extension : undefined;
-      const category = itemData.options ? itemData.options.category : undefined;
+function onItemClick({ itemData, viewArea, fileSystemItem }) {
+  let updated = false;
+  const extension = itemData.options ? itemData.options.extension : undefined;
+  const category = itemData.options ? itemData.options.category : undefined;
 
-      if (extension) {
-        updated = this.createFile(extension, fileSystemItem);
-      } else if (category !== undefined) {
-        updated = this.updateCategory(category, fileSystemItem, viewArea);
-      }
+  if (extension) {
+    updated = createFile(extension, fileSystemItem);
+  } else if (category !== undefined) {
+    updated = updateCategory(category, fileSystemItem, viewArea);
+  }
 
-      if (updated) {
-        this.$refs.fileManager.instance.refresh();
-      }
-    },
+  if (updated) {
+    fileManager.value.instance.refresh();
+  }
+}
+function createFile(fileExtension, directory = fileManager.value.instance.getCurrentDirectory()) {
+  const newItem = {
+    __KEY__: Date.now(),
+    name: `New file${fileExtension}`,
+    isDirectory: false,
+    size: 0,
+  };
 
-    createFile(fileExtension, directory = this.$refs.fileManager.instance.getCurrentDirectory()) {
-      const newItem = {
-        __KEY__: Date.now(),
-        name: `New file${fileExtension}`,
-        isDirectory: false,
-        size: 0,
-      };
+  if (!directory.isDirectory) {
+    return false;
+  }
 
-      if (!directory.isDirectory) {
-        return false;
-      }
+  let array = null;
+  if (!directory.dataItem) {
+    array = fileItems;
+  } else {
+    array = directory.dataItem.items;
+    if (!array) {
+      array = [];
+      directory.dataItem.items = array;
+    }
+  }
 
-      let array = null;
-      if (!directory.dataItem) {
-        array = this.fileItems;
-      } else {
-        array = directory.dataItem.items;
-        if (!array) {
-          array = [];
-          directory.dataItem.items = array;
-        }
-      }
+  array.push(newItem);
+  return true;
+}
+function updateCategory(newCategory, directory, viewArea) {
+  let items = null;
 
-      array.push(newItem);
-      return true;
-    },
+  if (viewArea === 'navPane') {
+    items = [directory];
+  } else {
+    items = fileManager.value.instance.getSelectedItems();
+  }
 
-    updateCategory(newCategory, directory, viewArea) {
-      let items = null;
+  items.forEach((item) => {
+    if (item.dataItem) {
+      item.dataItem.category = newCategory;
+    }
+  });
 
-      if (viewArea === 'navPane') {
-        items = [directory];
-      } else {
-        items = this.$refs.fileManager.instance.getSelectedItems();
-      }
-
-      items.forEach((item) => {
-        if (item.dataItem) {
-          item.dataItem.category = newCategory;
-        }
-      });
-
-      return items.length > 0;
-    },
-
-    getNewFileMenuOptions() {
-      return {
+  return items.length > 0;
+}
+function getNewFileMenuOptions() {
+  return {
+    items: [
+      {
+        text: 'Create new file',
+        icon: 'plus',
         items: [
           {
-            text: 'Create new file',
-            icon: 'plus',
-            items: [
-              {
-                text: 'Text Document',
-                options: {
-                  extension: '.txt',
-                },
-              },
-              {
-                text: 'RTF Document',
-                options: {
-                  extension: '.rtf',
-                },
-              },
-              {
-                text: 'Spreadsheet',
-                options: {
-                  extension: '.xls',
-                },
-              },
-            ],
+            text: 'Text Document',
+            options: {
+              extension: '.txt',
+            },
+          },
+          {
+            text: 'RTF Document',
+            options: {
+              extension: '.rtf',
+            },
+          },
+          {
+            text: 'Spreadsheet',
+            options: {
+              extension: '.xls',
+            },
           },
         ],
-        onItemClick: this.onItemClick,
-      };
-    },
-
-    getChangeCategoryMenuOptions() {
-      return {
+      },
+    ],
+    onItemClick,
+  };
+}
+function getChangeCategoryMenuOptions() {
+  return {
+    items: [
+      {
+        text: 'Category',
+        icon: 'tags',
         items: [
           {
-            text: 'Category',
-            icon: 'tags',
-            items: [
-              {
-                text: 'Work',
-                options: {
-                  category: 'Work',
-                },
-              },
-              {
-                text: 'Important',
-                options: {
-                  category: 'Important',
-                },
-              },
-              {
-                text: 'Home',
-                options: {
-                  category: 'Home',
-                },
-              },
-              {
-                text: 'None',
-                options: {
-                  category: '',
-                },
-              },
-            ],
+            text: 'Work',
+            options: {
+              category: 'Work',
+            },
+          },
+          {
+            text: 'Important',
+            options: {
+              category: 'Important',
+            },
+          },
+          {
+            text: 'Home',
+            options: {
+              category: 'Home',
+            },
+          },
+          {
+            text: 'None',
+            options: {
+              category: '',
+            },
           },
         ],
-        onItemClick: this.onItemClick,
-      };
-    },
-  },
-};
+      },
+    ],
+    onItemClick,
+  };
+}
 </script>

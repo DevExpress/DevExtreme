@@ -29,14 +29,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxFileUploader from 'devextreme-vue/file-uploader';
-
-export default {
-  components: {
-    DxFileUploader,
-  },
-};
 </script>
 <style>
 .file-uploader-block {

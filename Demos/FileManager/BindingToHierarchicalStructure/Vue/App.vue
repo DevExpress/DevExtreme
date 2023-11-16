@@ -15,20 +15,7 @@
   </DxFileManager>
 </template>
 
-<script>
+<script setup lang="ts">
 import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
 import { fileItems } from './data.js';
-
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-  },
-
-  data() {
-    return {
-      fileItems,
-    };
-  },
-};
 </script>

@@ -63,90 +63,70 @@
   </div>
 </template>
 
-<script>
-import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
+<script setup lang="ts">
+import { ref } from 'vue';
+/* import DxPermissions if you using <dx-permissions  */
+import { DxFileManager /* DxPermissions */ } from 'devextreme-vue/file-manager';
 import CustomFileSystemProvider from 'devextreme/file_management/custom_provider';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-import { AzureGateway, AzureFileSystem } from './azure.file.system.js'; // eslint-disable-line import/no-unresolved
+import { AzureGateway, AzureFileSystem } from './azure.file.system.js';
 
+const fileSystemProvider = ref(new CustomFileSystemProvider({
+  getItems,
+  createDirectory,
+  renameItem,
+  deleteItem,
+  copyItem,
+  moveItem,
+  uploadFileChunk,
+  downloadItems,
+}));
+const allowedFileExtensions = [];
+const loadPanelPosition = { of: '#file-manager' };
+const loadPanelVisible = ref(true);
+const wrapperClassName = ref('');
+const requests = ref([]);
+// eslint-disable-line import/no-unresolved
 const endpointUrl = 'https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-access';
-
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-    DxLoadPanel,
-  },
-
-  data() {
-    return {
-      fileSystemProvider: new CustomFileSystemProvider({
-        getItems,
-        createDirectory,
-        renameItem,
-        deleteItem,
-        copyItem,
-        moveItem,
-        uploadFileChunk,
-        downloadItems,
-      }),
-      allowedFileExtensions: [],
-      loadPanelPosition: { of: '#file-manager' },
-      loadPanelVisible: true,
-      wrapperClassName: '',
-      requests: [],
-    };
-  },
-
-  created() {
-    const onRequestExecuted = ({ method, urlPath, queryString }) => {
-      const request = { method, urlPath, queryString };
-      this.requests.unshift(request);
-    };
-    gateway = new AzureGateway(endpointUrl, onRequestExecuted);
-    azure = new AzureFileSystem(gateway);
-
-    fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .then((response) => response.json())
-      .then((result) => {
-        this.wrapperClassName = result.active ? 'show-widget' : 'show-message';
-        this.loadPanelVisible = false;
-      });
-  },
+const onRequestExecuted = ({ method, urlPath, queryString }) => {
+  const request = { method, urlPath, queryString };
+  requests.value.unshift(request);
 };
+const gateway = new AzureGateway(endpointUrl, onRequestExecuted);
+const azure = new AzureFileSystem(gateway);
 
+fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
+  .then((response) => response.json())
+  .then((result) => {
+    wrapperClassName.value = result.active ? 'show-widget' : 'show-message';
+    loadPanelVisible.value = false;
+  });
 function getItems(parentDirectory) {
   return azure.getItems(parentDirectory.path);
 }
-
 function createDirectory(parentDirectory, name) {
   return azure.createDirectory(parentDirectory.path, name);
 }
-
 function renameItem(item, name) {
   return item.isDirectory
     ? azure.renameDirectory(item.path, name)
     : azure.renameFile(item.path, name);
 }
-
 function deleteItem(item) {
   return item.isDirectory ? azure.deleteDirectory(item.path) : azure.deleteFile(item.path);
 }
-
 function copyItem(item, destinationDirectory) {
   const destinationPath = destinationDirectory.path ? `${destinationDirectory.path}/${item.name}` : item.name;
   return item.isDirectory
     ? azure.copyDirectory(item.path, destinationPath)
     : azure.copyFile(item.path, destinationPath);
 }
-
 function moveItem(item, destinationDirectory) {
   const destinationPath = destinationDirectory.path ? `${destinationDirectory.path}/${item.name}` : item.name;
   return item.isDirectory
     ? azure.moveDirectory(item.path, destinationPath)
     : azure.moveFile(item.path, destinationPath);
 }
-
 function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
   let promise = null;
 
@@ -176,13 +156,9 @@ function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
 
   return promise;
 }
-
 function downloadItems(items) {
   azure.downloadFile(items[0].path);
 }
-
-let gateway = null;
-let azure = null;
 </script>
 <style>
 #widget-area {

@@ -58,31 +58,21 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxFileUploader } from 'devextreme-vue/file-uploader';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 
-export default {
-  components: {
-    DxFileUploader,
-    DxSelectBox,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      multiple: false,
-      accept: '*',
-      uploadMode: 'instantly',
-      fileTypesSource: [
-        { name: 'All types', value: '*' },
-        { name: 'Images', value: 'image/*' },
-        { name: 'Videos', value: 'video/*' },
-      ],
-      files: [],
-    };
-  },
-};
+const multiple = ref(false);
+const accept = ref('*');
+const uploadMode = ref('instantly');
+const fileTypesSource = [
+  { name: 'All types', value: '*' },
+  { name: 'Images', value: 'image/*' },
+  { name: 'Videos', value: 'video/*' },
+];
+const files = ref([]);
 </script>
 <style>
 .widget-container {

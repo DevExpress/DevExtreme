@@ -53,76 +53,58 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
 import { DxFileUploader } from 'devextreme-vue/file-uploader';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-import { AzureGateway } from './azure.file.system.js'; // eslint-disable-line import/no-unresolved
+import { AzureGateway } from './azure.file.system.js';
 
 const endpointUrl = 'https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-access';
-
-export default {
-  components: {
-    DxFileUploader,
-    DxLoadPanel,
-  },
-
-  data() {
-    return {
-      loadPanelPosition: { of: '#file-uploader' },
-      loadPanelVisible: true,
-      wrapperClassName: '',
-      requests: [],
-    };
-  },
-
-  created() {
-    const onRequestExecuted = ({ method, urlPath, queryString }) => {
-      const request = { method, urlPath, queryString };
-      this.requests.unshift(request);
-    };
-    gateway = new AzureGateway(endpointUrl, onRequestExecuted);
-
-    fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .then((response) => response.json())
-      .then((result) => {
-        this.wrapperClassName = result.active ? 'show-widget' : 'show-message';
-        this.loadPanelVisible = false;
-      });
-  },
-
-  methods: {
-    uploadChunk(file, uploadInfo) {
-      let promise = null;
-
-      if (uploadInfo.chunkIndex === 0) {
-        // eslint-disable-next-line spellcheck/spell-checker
-        promise = gateway.getUploadAccessUrl(file.name).then((accessUrls) => {
-          // eslint-disable-next-line spellcheck/spell-checker
-          uploadInfo.customData.accessUrl = accessUrls.url1;
-        });
-      } else {
-        promise = Promise.resolve();
-      }
-
-      promise = promise.then(() => gateway.putBlock(
-        uploadInfo.customData.accessUrl,
-        uploadInfo.chunkIndex,
-        uploadInfo.chunkBlob,
-      ));
-
-      if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
-        promise = promise.then(() => gateway.putBlockList(
-          uploadInfo.customData.accessUrl,
-          uploadInfo.chunkCount,
-        ));
-      }
-
-      return promise;
-    },
-  },
+const loadPanelPosition = { of: '#file-uploader' };
+const loadPanelVisible = ref(true);
+const wrapperClassName = ref('');
+const requests = reactive<Record<string, unknown>[]>([]);
+const onRequestExecuted = ({ method, urlPath, queryString }) => {
+  const request = { method, urlPath, queryString };
+  requests.unshift(request);
 };
+const gateway = new AzureGateway(endpointUrl, onRequestExecuted);
 
-let gateway = null;
+function uploadChunk(file, uploadInfo) {
+  let promise;
+
+  if (uploadInfo.chunkIndex === 0) {
+    // eslint-disable-next-line spellcheck/spell-checker
+    promise = gateway.getUploadAccessUrl(file.name).then((accessUrls) => {
+      // eslint-disable-next-line spellcheck/spell-checker
+      uploadInfo.customData.accessUrl = accessUrls.url1;
+    });
+  } else {
+    promise = Promise.resolve();
+  }
+
+  promise = promise.then(() => gateway.putBlock(
+    uploadInfo.customData.accessUrl,
+    uploadInfo.chunkIndex,
+    uploadInfo.chunkBlob,
+  ));
+
+  if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
+    promise = promise.then(() => gateway.putBlockList(
+      uploadInfo.customData.accessUrl,
+      uploadInfo.chunkCount,
+    ));
+  }
+
+  return promise;
+}
+
+fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
+  .then((response) => response.json())
+  .then((result) => {
+    wrapperClassName.value = result.active ? 'show-widget' : 'show-message';
+    loadPanelVisible.value = false;
+  });
 </script>
 <style>
 #widget-area {

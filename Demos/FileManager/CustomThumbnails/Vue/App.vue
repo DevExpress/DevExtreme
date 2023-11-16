@@ -17,40 +17,26 @@
   </DxFileManager>
 </template>
 
-<script>
+<script setup lang="ts">
 import { DxFileManager, DxPermissions, DxItemView } from 'devextreme-vue/file-manager';
 import { fileItems } from './data.js';
 
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-    DxItemView,
-  },
+function customizeIcon(fileSystemItem) {
+  if (fileSystemItem.isDirectory) {
+    return '../../../../images/thumbnails/folder.svg';
+  }
 
-  data() {
-    return {
-      fileItems,
-    };
-  },
-  methods: {
-    customizeIcon(fileSystemItem) {
-      if (fileSystemItem.isDirectory) {
-        return '../../../../images/thumbnails/folder.svg';
-      }
+  const fileExtension = fileSystemItem.getFileExtension();
 
-      const fileExtension = fileSystemItem.getFileExtension();
-      switch (fileExtension) {
-        case '.txt':
-          return '../../../../images/thumbnails/doc-txt.svg';
-        case '.rtf':
-          return '../../../../images/thumbnails/doc-rtf.svg';
-        case '.xml':
-          return '../../../../images/thumbnails/doc-xml.svg';
-        default:
-          return '../../../../images/thumbnails/doc-txt.svg';
-      }
-    },
-  },
-};
+  switch (fileExtension) {
+    case '.txt':
+      return '../../../../images/thumbnails/doc-txt.svg';
+    case '.rtf':
+      return '../../../../images/thumbnails/doc-rtf.svg';
+    case '.xml':
+      return '../../../../images/thumbnails/doc-xml.svg';
+    default:
+      return '../../../../images/thumbnails/doc-txt.svg';
+  }
+}
 </script>

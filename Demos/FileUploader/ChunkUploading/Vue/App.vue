@@ -31,31 +31,21 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxFileUploader from 'devextreme-vue/file-uploader';
 
-export default {
-  components: {
-    DxFileUploader,
-  },
-  data() {
-    return {
-      chunks: [],
-    };
-  },
-  methods: {
-    getValueInKb(value) {
-      return `${(value / 1024).toFixed(0)}kb`;
-    },
-    onUploadProgress(e) {
-      this.chunks.push({
-        segmentSize: e.segmentSize,
-        bytesLoaded: e.bytesLoaded,
-        bytesTotal: e.bytesTotal,
-      });
-    },
-  },
-};
+const chunks = ref([]);
+
+const getValueInKb = (value) => `${(value / 1024).toFixed(0)}kb`;
+
+function onUploadProgress(e) {
+  chunks.value.push({
+    segmentSize: e.segmentSize,
+    bytesLoaded: e.bytesLoaded,
+    bytesTotal: e.bytesTotal,
+  });
+}
 </script>
 <style>
 .chunk-panel {

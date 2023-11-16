@@ -16,27 +16,13 @@
   </DxFileManager>
 </template>
 
-<script>
-import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
+<script setup lang="ts">
+/* import DxPermissions if you using <dx-permissions  */
+import { DxFileManager /* DxPermissions */ } from 'devextreme-vue/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-scripts',
 });
-
 const allowedFileExtensions = ['.js', '.json', '.css'];
-
-export default {
-  components: {
-    DxFileManager,
-    DxPermissions,
-  },
-
-  data() {
-    return {
-      remoteProvider,
-      allowedFileExtensions,
-    };
-  },
-};
 </script>

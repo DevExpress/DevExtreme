@@ -1,7 +1,7 @@
 <template>
   <form
     id="form"
-    :ref="formRefName"
+    ref="formRef"
     method="post"
     action=""
     enctype="multipart/form-data"
@@ -43,31 +43,20 @@
     />
   </form>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxFileUploader } from 'devextreme-vue/file-uploader';
 import { DxTextBox } from 'devextreme-vue/text-box';
 import { DxButton } from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
 
-export default {
-  components: {
-    DxFileUploader,
-    DxTextBox,
-    DxButton,
-  },
-  data() {
-    return {
-      formRefName: 'tree-view',
-    };
-  },
-  methods: {
-    onButtonClick() {
-      notify('Uncomment the line to enable sending a form to the server.');
-      // const form = this.$refs[this.formRefName];
-      // form.submit();
-    },
-  },
-};
+const formRef = ref();
+
+function onButtonClick() {
+  notify('Uncomment the line to enable sending a form to the server.');
+  // const form = this.$refs[this.formRefName];
+  // form.submit();
+}
 </script>
 <style>
 #form {

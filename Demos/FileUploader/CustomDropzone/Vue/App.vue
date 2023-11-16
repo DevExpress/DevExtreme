@@ -49,57 +49,48 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxFileUploader } from 'devextreme-vue/file-uploader';
 import { DxProgressBar } from 'devextreme-vue/progress-bar';
 
-export default {
-  components: {
-    DxFileUploader,
-    DxProgressBar,
-  },
-  data() {
-    return {
-      isDropZoneActive: false,
-      imageSource: '',
-      textVisible: true,
-      progressVisible: false,
-      progressValue: 0,
-      allowedFileExtensions: ['.jpg', '.jpeg', '.gif', '.png'],
-    };
-  },
-  methods: {
-    onDropZoneEnter(e) {
-      if (e.dropZoneElement.id === 'dropzone-external') {
-        this.isDropZoneActive = true;
-      }
-    },
-    onDropZoneLeave(e) {
-      if (e.dropZoneElement.id === 'dropzone-external') {
-        this.isDropZoneActive = false;
-      }
-    },
-    onUploaded(e) {
-      const { file } = e;
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        this.isDropZoneActive = false;
-        this.imageSource = fileReader.result;
-      };
-      fileReader.readAsDataURL(file);
-      this.textVisible = false;
-      this.progressVisible = false;
-      this.progressValue = 0;
-    },
-    onProgress(e) {
-      this.progressValue = (e.bytesLoaded / e.bytesTotal) * 100;
-    },
-    onUploadStarted() {
-      this.imageSource = '';
-      this.progressVisible = true;
-    },
-  },
-};
+const isDropZoneActive = ref(false);
+const imageSource = ref('');
+const textVisible = ref(true);
+const progressVisible = ref(false);
+const progressValue = ref(0);
+const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
+
+function onDropZoneEnter(e) {
+  if (e.dropZoneElement.id === 'dropzone-external') {
+    isDropZoneActive.value = true;
+  }
+}
+function onDropZoneLeave(e) {
+  if (e.dropZoneElement.id === 'dropzone-external') {
+    isDropZoneActive.value = false;
+  }
+}
+function onUploaded({ file }) {
+  const fileReader = new FileReader();
+
+  fileReader.onload = () => {
+    isDropZoneActive.value = false;
+    imageSource.value = fileReader.result as string;
+  };
+
+  fileReader.readAsDataURL(file);
+  textVisible.value = false;
+  progressVisible.value = false;
+  progressValue.value = 0;
+}
+function onProgress(e) {
+  progressValue.value = (e.bytesLoaded / e.bytesTotal) * 100;
+}
+function onUploadStarted() {
+  imageSource.value = '';
+  progressVisible.value = true;
+}
 </script>
 <style>
 #dropzone-external {
