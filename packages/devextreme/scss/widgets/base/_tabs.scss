@@ -31,6 +31,7 @@
 }
 
 .dx-tabs-scrollable {
+  width: 100%;
   overflow: hidden;
 
   .dx-tabs-wrapper {
@@ -62,6 +63,10 @@
     flex-grow: 1;
     min-width: 0;
   }
+}
+
+.dx-tabs-scrollable .dx-tab {
+  flex-basis: 100%;
 }
 
 .dx-tab {
