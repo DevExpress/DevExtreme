@@ -18,33 +18,21 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxToast } from 'devextreme-vue/toast';
 import { products } from './data.js';
 import ProductItem from './ProductItem.vue';
 
-export default {
-  components: {
-    ProductItem,
-    DxToast,
-  },
+const isVisible = ref(false);
+const message = ref('');
+const type = ref('info');
 
-  data() {
-    return {
-      products,
-      isVisible: false,
-      message: '',
-      type: 'info',
-    };
-  },
-  methods: {
-    checkAvailability(e, product) {
-      this.type = e.value ? 'success' : 'error';
-      this.message = product.Name + (e.value ? ' is available' : ' is not available');
-      this.isVisible = true;
-    },
-  },
-};
+function checkAvailability(e, product) {
+  type.value = e.value ? 'success' : 'error';
+  message.value = product.Name + (e.value ? ' is available' : ' is not available');
+  isVisible.value = true;
+}
 </script>
 <style>
 .header {

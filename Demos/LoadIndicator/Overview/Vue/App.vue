@@ -46,33 +46,23 @@
     </DxButton>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxButton } from 'devextreme-vue/button';
 import { DxLoadIndicator } from 'devextreme-vue/load-indicator';
 
-export default {
-  components: {
-    DxButton,
-    DxLoadIndicator,
-  },
-  data() {
-    return {
-      loadIndicatorVisible: false,
-      buttonText: 'Send',
-    };
-  },
-  methods: {
-    handleClick() {
-      this.loadIndicatorVisible = true;
-      this.buttonText = 'Sending';
+const loadIndicatorVisible = ref(false);
+const buttonText = ref('Send');
 
-      setTimeout(() => {
-        this.loadIndicatorVisible = false;
-        this.buttonText = 'Send';
-      }, 2000);
-    },
-  },
-};
+function handleClick() {
+  loadIndicatorVisible.value = true;
+  buttonText.value = 'Sending';
+
+  setTimeout(() => {
+    loadIndicatorVisible.value = false;
+    buttonText.value = 'Send';
+  }, 2000);
+}
 </script>
 <style>
 .form {

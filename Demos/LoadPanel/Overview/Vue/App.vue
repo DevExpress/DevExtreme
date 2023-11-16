@@ -66,46 +66,33 @@
 
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxButton } from 'devextreme-vue/button';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
 import { employee } from './data.js';
 
-export default {
-  components: {
-    DxButton,
-    DxCheckBox,
-    DxLoadPanel,
-  },
+const employeeInfo = ref<typeof employee>({});
+const loadingVisible = ref(false);
+const position = { of: '#employee' };
+const showIndicator = ref(true);
+const shading = ref(true);
+const showPane = ref(true);
+const hideOnOutsideClick = ref(false);
 
-  data() {
-    return {
-      employeeInfo: {},
-      loadingVisible: false,
-      position: { of: '#employee' },
-      showIndicator: true,
-      shading: true,
-      showPane: true,
-      hideOnOutsideClick: false,
-    };
-  },
-
-  methods: {
-    showLoadPanel() {
-      this.employeeInfo = {};
-      this.loadingVisible = true;
-    },
-    onShown() {
-      setTimeout(() => {
-        this.loadingVisible = false;
-      }, 3000);
-    },
-    onHidden() {
-      this.employeeInfo = employee;
-    },
-  },
-};
+function showLoadPanel() {
+  employeeInfo.value = {};
+  loadingVisible.value = true;
+}
+function onShown() {
+  setTimeout(() => {
+    loadingVisible.value = false;
+  }, 3000);
+}
+function onHidden() {
+  employeeInfo.value = employee;
+}
 </script>
 <style>
 .header {

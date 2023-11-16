@@ -13,31 +13,21 @@
     />
   </li>
 </template>
-<script>
+<script setup lang="ts">
 import { DxButton } from 'devextreme-vue/button';
+import { employees } from './data.js';
 
-export default {
-  components: {
-    DxButton,
-  },
+type Employee = typeof employees[0];
 
-  props: {
-    employee: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
-    showInfo: {
-      type: Function,
-      required: true,
-      default: () => {},
-    },
-  },
+const props = withDefaults(defineProps<{
+  employee?: Employee,
+  showInfo?: Function
+}>(), {
+  employee: () => ({}),
+  showInfo: () => {},
+});
 
-  methods: {
-    showEmployeeInfo() {
-      this.showInfo(this.employee);
-    },
-  },
-};
+function showEmployeeInfo() {
+  props.showInfo(props.employee);
+}
 </script>

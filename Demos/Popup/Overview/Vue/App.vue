@@ -67,73 +67,60 @@
 
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup';
 import notify from 'devextreme/ui/notify';
 import EmployeeItem from './EmployeeItem.vue';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxPopup,
-    DxPosition,
-    DxToolbarItem,
-    EmployeeItem,
-  },
+type Employee = typeof employees[0];
 
-  data() {
-    return {
-      employees,
-      currentEmployee: {},
-      popupVisible: false,
-      positionOf: '',
-      moreInfoButtonOptions: {
-        text: 'More info',
-        onClick: () => {
-          const message = `More info about ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
-          notify({
-            message,
-            position: {
-              my: 'center top',
-              at: 'center top',
-            },
-          }, 'success', 3000);
-        },
-      },
-      emailButtonOptions: {
-        icon: 'email',
-        stylingMode: 'contained',
-        text: 'Send',
-        onClick: () => {
-          const message = `Email is sent to ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
-          notify({
-            message,
-            position: {
-              my: 'center top',
-              at: 'center top',
-            },
-          }, 'success', 3000);
-        },
-      },
-      closeButtonOptions: {
-        text: 'Close',
-        stylingMode: 'outlined',
-        type: 'normal',
-        onClick: () => {
-          this.popupVisible = false;
-        },
-      },
-    };
-  },
-
-  methods: {
-    showInfo(employee) {
-      this.currentEmployee = employee;
-      this.positionOf = `#image${employee.ID}`;
-      this.popupVisible = true;
-    },
+const currentEmployee = ref<Employee>({});
+const popupVisible = ref(false);
+const positionOf = ref('');
+const closeButtonOptions = {
+  text: 'Close',
+  stylingMode: 'outlined',
+  type: 'normal',
+  onClick: () => {
+    popupVisible.value = false;
   },
 };
+const moreInfoButtonOptions = {
+  text: 'More info',
+  onClick: () => {
+    const message = `More info about ${currentEmployee.value.FirstName} ${currentEmployee.value.LastName}`;
+    notify({
+      message,
+      position: {
+        my: 'center top',
+        at: 'center top',
+      },
+    }, 'success', 3000);
+  },
+};
+const emailButtonOptions = {
+  icon: 'email',
+  stylingMode: 'contained',
+  text: 'Send',
+  onClick: () => {
+    const message = `Email is sent to ${currentEmployee.value.FirstName} ${currentEmployee.value.LastName}`;
+    notify({
+      message,
+      position: {
+        my: 'center top',
+        at: 'center top',
+      },
+    }, 'success', 3000);
+  },
+};
+
+function showInfo(employee) {
+  currentEmployee.value = employee;
+  positionOf.value = `#image${employee.ID}`;
+  popupVisible.value = true;
+}
 </script>
 <style>
 .header {

@@ -12,24 +12,21 @@
     />
   </li>
 </template>
-<script>
+<script setup lang="ts">
 import { DxCheckBox } from 'devextreme-vue/check-box';
+import { products } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-  },
-  props: {
-    product: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-  },
-  methods: {
-    onValueChanged(e) {
-      this.$emit('checked', e, this.product);
-    },
-  },
-};
+type Product = typeof products[0];
+
+const props = withDefaults(defineProps<{
+  product: Product,
+}>(), {
+  product: () => ({}),
+});
+
+const emit = defineEmits(['checked']);
+
+function onValueChanged(e) {
+  emit('checked', e, props.product);
+}
 </script>

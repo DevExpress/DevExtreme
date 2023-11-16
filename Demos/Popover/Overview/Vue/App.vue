@@ -109,32 +109,23 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxPopover } from 'devextreme-vue/popover';
 
-export default {
-  components: {
-    DxPopover,
+const animationConfig = {
+  show: {
+    type: 'pop',
+    from: {
+      scale: 0,
+    },
+    to: {
+      scale: 1,
+    },
   },
-  data() {
-    return {
-      animationConfig: {
-        show: {
-          type: 'pop',
-          from: {
-            scale: 0,
-          },
-          to: {
-            scale: 1,
-          },
-        },
-        hide: {
-          type: 'fade',
-          from: 1,
-          to: 0,
-        },
-      },
-    };
+  hide: {
+    type: 'fade',
+    from: 1,
+    to: 0,
   },
 };
 </script>

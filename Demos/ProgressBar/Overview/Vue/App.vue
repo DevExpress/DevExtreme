@@ -21,68 +21,45 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import { DxButton } from 'devextreme-vue/button';
 import { DxProgressBar } from 'devextreme-vue/progress-bar';
 
 const maxValue = 10;
+const seconds = ref(maxValue);
+const buttonText = ref('Start progress');
+const inProgress = ref(false);
+const progressValue = computed(() => maxValue - seconds.value);
+const statusFormat = (ratio) => `Loading: ${ratio * 100}%`;
+const time = (value) => `00:00:${(`0${value}`).slice(-2)}`;
+let intervalId;
 
-function statusFormat(ratio) {
-  return `Loading: ${ratio * 100}%`;
+function onButtonClick() {
+  if (inProgress.value) {
+    buttonText.value = 'Continue progress';
+    clearInterval(intervalId);
+  } else {
+    buttonText.value = 'Stop progress';
+
+    if (seconds.value === 0) {
+      seconds.value = maxValue;
+    }
+
+    intervalId = setInterval(() => timer(), 1000);
+  }
+
+  inProgress.value = !inProgress.value;
 }
+function timer() {
+  seconds.value -= 1;
 
-export default {
-  components: {
-    DxButton,
-    DxProgressBar,
-  },
-  data() {
-    return {
-      maxValue,
-      seconds: maxValue,
-      buttonText: 'Start progress',
-      inProgress: false,
-      statusFormat,
-    };
-  },
-  computed: {
-    progressValue() {
-      return maxValue - this.seconds;
-    },
-  },
-  methods: {
-    time(value) {
-      return `00:00:${(`0${value}`).slice(-2)}`;
-    },
-    onButtonClick() {
-      if (this.inProgress) {
-        this.buttonText = 'Continue progress';
-        clearInterval(this.intervalId);
-      } else {
-        this.buttonText = 'Stop progress';
-
-        if (this.seconds === 0) {
-          this.seconds = maxValue;
-        }
-
-        this.intervalId = setInterval(() => this.timer(), 1000);
-      }
-
-      this.inProgress = !this.inProgress;
-    },
-
-    timer() {
-      this.seconds -= 1;
-
-      if (this.seconds === 0) {
-        this.buttonText = 'Restart progress';
-        this.inProgress = !this.inProgress;
-        clearInterval(this.intervalId);
-      }
-    },
-  },
-};
+  if (seconds.value === 0) {
+    buttonText.value = 'Restart progress';
+    inProgress.value = !inProgress.value;
+    clearInterval(intervalId);
+  }
+}
 </script>
 <style>
 .form {

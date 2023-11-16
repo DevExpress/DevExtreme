@@ -75,7 +75,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -83,69 +84,54 @@ import DxNumberBox from 'devextreme-vue/number-box';
 import notify from 'devextreme/ui/notify';
 import hideToasts from 'devextreme/ui/toast/hide_toasts';
 
-export default {
-  components: {
-    DxButton,
-    DxRadioGroup,
-    DxSelectBox,
-    DxNumberBox,
-  },
-  data() {
-    return {
-      types: ['error', 'info', 'success', 'warning'],
-      positions: [
-        'top left', 'top center', 'top right',
-        'bottom left', 'bottom center', 'bottom right',
-        'left center', 'center', 'right center',
-      ],
-      directions: [
-        'down-push', 'down-stack', 'up-push', 'up-stack',
-        'left-push', 'left-stack', 'right-push', 'right-stack',
-      ],
-      id: 1,
-      isPredefined: true,
-      predefinedPosition: 'bottom center',
-      coordinatePosition: {
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined,
+const types = ['error', 'info', 'success', 'warning'];
+const positions = [
+  'top left', 'top center', 'top right',
+  'bottom left', 'bottom center', 'bottom right',
+  'left center', 'center', 'right center',
+] as const;
+const directions = [
+  'down-push', 'down-stack', 'up-push', 'up-stack',
+  'left-push', 'left-stack', 'right-push', 'right-stack',
+] as const;
+let id = 1;
+const isPredefined = ref(true);
+const predefinedPosition = ref<typeof positions[number]>('bottom center');
+const coordinatePosition = ref({
+  top: undefined,
+  bottom: undefined,
+  left: undefined,
+  right: undefined,
+});
+const direction = ref<typeof directions[number]>('up-push');
+
+function show() {
+  const newPosition = isPredefined.value ? predefinedPosition.value : coordinatePosition.value;
+  const newDirection = direction.value;
+
+  notify({
+    message: `Toast ${id}`,
+    height: 45,
+    width: 150,
+    minWidth: 150,
+    type: types[Math.floor(Math.random() * 4)],
+    displayTime: 3500,
+    animation: {
+      show: {
+        type: 'fade', duration: 400, from: 0, to: 1,
       },
-      direction: 'up-push',
-    };
-  },
-  methods: {
-    show() {
-      const position = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
-      const direction = this.direction;
-
-      notify({
-        message: `Toast ${this.id}`,
-        height: 45,
-        width: 150,
-        minWidth: 150,
-        type: this.types[Math.floor(Math.random() * 4)],
-        displayTime: 3500,
-        animation: {
-          show: {
-            type: 'fade', duration: 400, from: 0, to: 1,
-          },
-          hide: { type: 'fade', duration: 40, to: 0 },
-        },
-      },
-      { position, direction });
-      this.id += 1;
-    },
-
-    hideAll() {
-      hideToasts();
-    },
-
-    radioGroupValueChanged({ value }) {
-      this.isPredefined = value === 'predefined';
+      hide: { type: 'fade', duration: 40, to: 0 },
     },
   },
-};
+  { position: newPosition, direction: newDirection });
+  id += 1;
+}
+function hideAll() {
+  hideToasts();
+}
+function radioGroupValueChanged({ value }) {
+  isPredefined.value = value === 'predefined';
+}
 </script>
 <style>
 .options {

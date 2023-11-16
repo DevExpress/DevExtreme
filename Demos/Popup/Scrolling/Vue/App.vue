@@ -6,7 +6,7 @@
           :width="300"
           text="Show Popup"
           type="default"
-          @click="showPopup($event)"
+          @click="showPopup()"
         />
         <div class="label"> A native scrollable container </div>
       </div>
@@ -15,7 +15,7 @@
         <DxButton
           :width="300"
           text="Show Popup"
-          @click="showPopupWithScrollView($event)"
+          @click="showPopupWithScrollView()"
         />
         <div class="label"> The ScrollView </div>
       </div>
@@ -68,7 +68,6 @@
       v-model:visible="popupWithScrollViewVisible"
       :width="360"
       :height="320"
-      :visible="false"
       :hide-on-outside-click="true"
       :show-close-button="true"
       title="Downtown Inn"
@@ -113,43 +112,31 @@
     </DxPopup>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxButton } from 'devextreme-vue/button';
 import { DxPopup, DxToolbarItem } from 'devextreme-vue/popup';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 
-export default {
-  components: {
-    DxButton,
-    DxPopup,
-    DxToolbarItem,
-    DxScrollView,
-  },
-  data() {
-    return {
-      popupVisible: false,
-      popupWithScrollViewVisible: false,
-      bookButtonOptions: {
-        width: 300,
-        text: 'Book',
-        type: 'default',
-        stylingMode: 'contained',
-        onClick: () => {
-          this.popupVisible = false;
-          this.popupWithScrollViewVisible = false;
-        },
-      },
-    };
-  },
-  methods: {
-    showPopup() {
-      this.popupVisible = true;
-    },
-    showPopupWithScrollView() {
-      this.popupWithScrollViewVisible = true;
-    },
+const popupVisible = ref(false);
+const popupWithScrollViewVisible = ref(false);
+const bookButtonOptions = {
+  width: 300,
+  text: 'Book',
+  type: 'default',
+  stylingMode: 'contained',
+  onClick: () => {
+    popupVisible.value = false;
+    popupWithScrollViewVisible.value = false;
   },
 };
+
+function showPopup() {
+  popupVisible.value = true;
+}
+function showPopupWithScrollView() {
+  popupWithScrollViewVisible.value = true;
+}
 </script>
 <style>
 .label {

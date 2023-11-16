@@ -93,15 +93,29 @@
   </div>
 
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import DxPopup from 'devextreme-vue/popup';
 import DxPopover from 'devextreme-vue/popover';
-
 import notify from 'devextreme/ui/notify';
-
 import { housesSource } from './data.js';
+
+const ADD_TO_FAVORITES = 'Add to Favorites';
+const REMOVE_FROM_FAVORITES = 'Remove from Favorites';
+const houses = ref(housesSource);
+const currentHouse = ref(housesSource[0]);
+const popupVisible = ref(false);
+const position = {
+  offset: '0, 2',
+  at: 'bottom',
+  my: 'top',
+  collision: 'fit flip',
+};
+
+const favoriteText = computed(
+  () => (currentHouse.value.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES),
+);
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -109,54 +123,22 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
-
-const
-  ADD_TO_FAVORITES = 'Add to Favorites';
-const REMOVE_FROM_FAVORITES = 'Remove from Favorites';
-
-export default {
-  components: {
-    DxButton, DxPopup, DxPopover,
+const currency = (val) => currencyFormatter.format(val);
+function showHouse(house) {
+  currentHouse.value = house;
+  popupVisible.value = true;
+}
+function changeFavoriteState() {
+  const favoriteState = !currentHouse.value.Favorite;
+  const message = `This item has been ${
+    favoriteState ? 'added to' : 'removed from'
+  } the Favorites list!`;
+  currentHouse.value.Favorite = favoriteState;
+  notify({
+    message,
+    width: 450,
   },
-  data() {
-    return {
-      houses: housesSource,
-      currentHouse: housesSource[0],
-      popupVisible: false,
-      position: {
-        offset: '0, 2',
-        at: 'bottom',
-        my: 'top',
-        collision: 'fit flip',
-      },
-    };
-  },
-  computed: {
-    favoriteText() {
-      return this.currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES;
-    },
-  },
-  methods: {
-    currency(val) {
-      return currencyFormatter.format(val);
-    },
-    showHouse(house) {
-      this.currentHouse = house;
-      this.popupVisible = true;
-    },
-    changeFavoriteState() {
-      const favoriteState = !this.currentHouse.Favorite;
-      const message = `This item has been ${
-        favoriteState ? 'added to' : 'removed from'
-      } the Favorites list!`;
-      this.currentHouse.Favorite = favoriteState;
-      notify({
-        message,
-        width: 450,
-      },
-      favoriteState ? 'success' : 'error', 2000);
-    },
-  },
-};
+  favoriteState ? 'success' : 'error', 2000);
+}
 </script>
 <style src="./styles.css"></style>
