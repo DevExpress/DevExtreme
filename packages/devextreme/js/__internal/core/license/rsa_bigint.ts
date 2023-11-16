@@ -24,7 +24,7 @@ export function compareSignatures(args: Args): boolean {
         e >>= one; // eslint-disable-line no-bitwise
       }
 
-      return result % modulus;
+      return result;
     };
 
     const bigIntFromBytes = (bytes: Uint8Array): bigint => bytes.reduce(
