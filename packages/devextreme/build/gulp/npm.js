@@ -147,26 +147,27 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-const sourcesInternal = (src, dist) => (() => merge(
-    gulp
+const sourcesInternal = (src, dist) => gulp.series(
+    () => gulp
         .src([
             `${src}/**/*`,
             `!${src}/package.json`,
         ])
         .pipe(gulp.dest(dist)),
 
-    gulp
+    () => gulp
         .src(`${src}/package.json`)
         .pipe(replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'))
         .pipe(gulp.dest(dist)),
 
-    gulp
+    () => gulp
         .src([
-            `${dist}/**/component.js`
+            `${dist}/**/component.js`,
+            `${dist}/**/*.all.js`
         ])
         .pipe(replace(/[^;\s]+\.validateLicense\(\w*(\([\d\s\w.,_]*\)){1,2}\.licenseKey\);?/, ''))
         .pipe(gulp.dest(dist)),
-));
+);
 
 gulp.task('npm-internal', gulp.series(
     sourcesInternal(packagePath, `${resultPath}/${packageDirInternal}`),
