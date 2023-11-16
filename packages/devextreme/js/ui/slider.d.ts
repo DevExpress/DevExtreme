@@ -93,7 +93,14 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSlider extends dxTrackBar<dxSliderOptions> { }
+export default class dxSlider extends dxTrackBar<dxSliderOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: number): void;
+}
 
 /**
  * @docid
