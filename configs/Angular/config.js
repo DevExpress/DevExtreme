@@ -29,6 +29,9 @@ window.config = {
     'devextreme/localization.js': {
       'esModule': true,
     },
+    'devextreme/viz/palette.js': {
+      'esModule': true,
+    },
     /** exceljs&file-saver */
     'exceljs': {
       'esModule': true,

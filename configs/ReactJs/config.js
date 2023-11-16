@@ -17,11 +17,11 @@ window.config = {
     'devextreme/localization.js': {
       'esModule': true,
     },
-    /** devextreme-aspnet-data-nojquery */
-    'devextreme-aspnet-data-nojquery': {
+    'devextreme/viz/palette.js': {
       'esModule': true,
     },
-    'devextreme/viz/palette.js': {
+    /** devextreme-aspnet-data-nojquery */
+    'devextreme-aspnet-data-nojquery': {
       'esModule': true,
     },
     /**/

@@ -5,7 +5,7 @@
         id="pie"
         :data-source="dataSource"
         :palette="palette"
-        :palette-extension-mode="paletteExtensionMode.toLowerCase()"
+        :palette-extension-mode="paletteExtensionMode"
       >
         <DxLegend :visible="false"/>
         <DxSeries/>

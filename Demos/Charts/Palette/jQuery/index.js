@@ -36,7 +36,7 @@ $(() => {
 
   $('#extension-mode').dxSelectBox({
     items: paletteExtensionModes,
-    value: 'Blend',
+    value: 'blend',
     inputAttr: { 'aria-label': 'Palette Extension Mode' },
     onValueChanged(e) {
       $('#pie').dxPieChart({

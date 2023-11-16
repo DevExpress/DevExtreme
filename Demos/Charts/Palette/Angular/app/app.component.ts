@@ -33,7 +33,7 @@ export class AppComponent {
     this.paletteExtensionModes = service.getPaletteExtensionModes();
     this.paletteCollection = service.getPaletteCollection();
     this.palette = this.paletteCollection[0];
-    this.paletteExtensionMode = 'Blend';
+    this.paletteExtensionMode = 'blend';
   }
 
   get baseColors() {
