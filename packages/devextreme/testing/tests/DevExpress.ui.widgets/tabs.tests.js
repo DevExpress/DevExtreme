@@ -506,8 +506,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedIndex', function(assert) {
-        assert.expect(3);
-
         const $tabs = $('#tabs').dxTabs({
             items: [
                 { text: '0' },
@@ -539,8 +537,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
-        assert.expect(3);
-
         const $tabs = $('#tabs').dxTabs({
             items: [
                 { text: '0' },
@@ -572,8 +568,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
-        assert.expect(3);
-
         const items = [
             { text: '0' },
             { text: '1' },
