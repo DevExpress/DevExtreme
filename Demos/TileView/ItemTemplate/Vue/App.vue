@@ -8,7 +8,7 @@
   >
     <template #item="{ data }">
       <div class="dx-tile-content">
-        <div class="price">{{ formatCurrency(data.Price) }}</div>
+        <div class="price">{{ currencyFormatter.format(data.Price) }}</div>
         <div
           :style="{ backgroundImage: 'url(' + data.ImageSrc + ')' }"
           class="image"
@@ -17,29 +17,16 @@
     </template>
   </DxTileView>
 </template>
-<script>
+<script setup lang="ts">
 import DxTileView from 'devextreme-vue/tile-view';
 import { homes } from './data.js';
 
-export default {
-  components: {
-    DxTileView,
-  },
-  data() {
-    return {
-      dataSource: homes,
-    };
-  },
-  methods: {
-    formatCurrency(value) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(value);
-    },
-  },
-};
+const dataSource = homes;
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
 </script>
 

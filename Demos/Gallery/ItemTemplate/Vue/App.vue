@@ -18,29 +18,18 @@
     </template>
   </DxGallery>
 </template>
-<script>
+<script setup lang="ts">
 import DxGallery from 'devextreme-vue/gallery';
 import { gallery } from './data.js';
 
-export default {
-  components: {
-    DxGallery,
-  },
-  data() {
-    return {
-      dataSource: gallery,
-    };
-  },
-  methods: {
-    formatCurrency(value) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(value);
-    },
-  },
-};
+const dataSource = gallery;
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+const formatCurrency = (value) => currencyFormatter.format(value);
 </script>
 

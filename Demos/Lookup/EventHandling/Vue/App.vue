@@ -38,33 +38,20 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxLookup,
-    DxDropDownOptions,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      items: employees,
-      selectedValue: null,
-      applyValueModes: ['instantly', 'useButtons'],
-      applyValueMode: 'instantly',
-    };
-  },
-  methods: {
-    getDisplayExpr(item) {
-      return item ? `${item.FirstName} ${item.LastName}` : '';
-    },
-    setSelectedValue(e) {
-      this.selectedValue = e.value;
-    },
-  },
-};
+const items = employees;
+const selectedValue = ref(null);
+const applyValueModes = ref(['instantly', 'useButtons']);
+const applyValueMode = ref('instantly');
+
+const getDisplayExpr = ({ FirstName = '', LastName = '' } = {}) => `${FirstName} ${LastName}`.trim();
+function setSelectedValue(e) {
+  selectedValue.value = e.value;
+}
 </script>
 

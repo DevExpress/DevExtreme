@@ -19,36 +19,22 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxActionSheet from 'devextreme-vue/action-sheet';
 import DxList from 'devextreme-vue/list';
 import notify from 'devextreme/ui/notify';
-
 import { actionSheetItems, contacts } from './data.js';
 import ContactItem from './ContactItem.vue';
 
-export default {
-  components: {
-    DxActionSheet,
-    DxList,
-    ContactItem,
-  },
-  data() {
-    return {
-      actionSheetItems,
-      contacts,
-      isActionSheetVisible: false,
-      actionSheetTarget: '',
-    };
-  },
-  methods: {
-    showActionSheet(e) {
-      this.actionSheetTarget = e.itemElement;
-      this.isActionSheetVisible = true;
-    },
-    showClickNotification(buttonName) {
-      notify(`The "${buttonName}" button is clicked.`);
-    },
-  },
-};
+const isActionSheetVisible = ref(false);
+const actionSheetTarget = ref('');
+
+function showActionSheet(e) {
+  actionSheetTarget.value = e.itemElement;
+  isActionSheetVisible.value = true;
+}
+function showClickNotification(buttonName) {
+  notify(`The "${buttonName}" button is clicked.`);
+}
 </script>

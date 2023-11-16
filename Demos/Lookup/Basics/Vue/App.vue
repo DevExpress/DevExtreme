@@ -16,7 +16,7 @@
       <div class="dx-fieldset-header">Grouped lookup</div>
       <div class="dx-field">
         <DxLookup
-          :data-source="employeesTasks"
+          :data-source="dataSource"
           :grouped="true"
           :input-attr="{ 'aria-label': 'Grouped lookup' }"
           display-expr="Subject"
@@ -30,26 +30,15 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
 import DataSource from 'devextreme/data/data_source';
 import { employeesList, employeesTasks } from './data.js';
 
-export default {
-  components: {
-    DxLookup,
-    DxDropDownOptions,
-  },
-  data() {
-    return {
-      employeesList,
-      employeesTasks: new DataSource({
-        store: employeesTasks,
-        key: 'ID',
-        group: 'Assigned',
-      }),
-    };
-  },
-};
+const dataSource = new DataSource({
+  store: employeesTasks,
+  key: 'ID',
+  group: 'Assigned',
+});
 </script>
 

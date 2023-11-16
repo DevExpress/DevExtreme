@@ -10,23 +10,12 @@
     </DxList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxList from 'devextreme-vue/list';
 import ProductInfo from './ProductInfo.vue';
-
 import { products } from './data.js';
 
-export default {
-  components: {
-    DxList,
-    ProductInfo,
-  },
-  data() {
-    return {
-      dataSource: products,
-    };
-  },
-};
+const dataSource = products;
 </script>
 <style>
 .list-container {

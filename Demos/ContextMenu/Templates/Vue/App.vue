@@ -6,7 +6,7 @@
     <img
       id="image"
       alt="product"
-      src="../../../../images/products/5.png"
+      :src="'../../../../images/products/5.png'"
     >
     <DxContextMenu
       :data-source="items"
@@ -30,30 +30,16 @@
     </DxContextMenu>
   </div>
 </template>
-<script>
-
-import DxContextMenu from 'devextreme-vue/context-menu';
+<script setup lang="ts">
+import DxContextMenu, { DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import notify from 'devextreme/ui/notify';
-
 import { contextMenuItems as items } from './data.js';
 
-export default {
-  components: {
-    DxContextMenu,
-  },
-  data() {
-    return {
-      items,
-    };
-  },
-  methods: {
-    itemClick(e) {
-      if (!e.itemData.items) {
-        notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
-      }
-    },
-  },
-};
+function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
+  if (!itemData.items) {
+    notify(`The "${itemData.text}" item was clicked`, 'success', 1500);
+  }
+}
 </script>
 <style>
 .item-template-container {

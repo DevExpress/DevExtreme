@@ -44,36 +44,22 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import ArrayStore from 'devextreme/data/array_store';
-
 import { tasks } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxList,
-    DxCheckBox,
-
-  },
-  data() {
-    return {
-      dataSource: new ArrayStore({
-        key: 'id',
-        data: tasks,
-      }),
-      selectedItemKeys: [],
-      selectionMode: 'all',
-      selectAllMode: 'page',
-      selectByClick: false,
-    };
-  },
-};
+const dataSource = new ArrayStore({
+  key: 'id',
+  data: tasks,
+});
+const selectedItemKeys = ref([]);
+const selectionMode = ref('all');
+const selectAllMode = ref('page');
+const selectByClick = ref(false);
 </script>
 <style>
 .selected-data,

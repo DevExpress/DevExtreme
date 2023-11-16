@@ -70,45 +70,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxDataGrid, { DxPaging, DxScrolling, DxColumn } from 'devextreme-vue/data-grid';
 import DxResizable from 'devextreme-vue/resizable';
 import DxTagBox from 'devextreme-vue/tag-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import service from './data.js';
 
 const handleValues = ['left', 'top', 'right', 'bottom'];
+const handles = ref(handleValues);
+const keepAspectRatio = ref(true);
+const orders = ref(service.getOrders());
 
-export default {
-  components: {
-    DxDataGrid,
-    DxResizable,
-    DxTagBox,
-    DxCheckBox,
-    DxPaging,
-    DxScrolling,
-    DxColumn,
-  },
-  data() {
-    return {
-      handleValues,
-      handles: handleValues,
-      keepAspectRatio: true,
-      orders: service.getOrders(),
-    };
-  },
-  computed: {
-    resizableClasses() {
-      return {
-        'dx-resizable': true,
-        'no-left-handle': !this.handles.includes('left'),
-        'no-right-handle': !this.handles.includes('right'),
-        'no-top-handle': !this.handles.includes('top'),
-        'no-bottom-handle': !this.handles.includes('bottom'),
-      };
-    },
-  },
-};
+const resizableClasses = computed(() => ({
+  'dx-resizable': true,
+  'no-left-handle': !handles.value.includes('left'),
+  'no-right-handle': !handles.value.includes('right'),
+  'no-top-handle': !handles.value.includes('top'),
+  'no-bottom-handle': !handles.value.includes('bottom'),
+}));
 </script>
 <style src="./styles.css"></style>

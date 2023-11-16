@@ -10,21 +10,9 @@
     </template>
   </DxTileView>
 </template>
-<script>
+<script setup lang="ts">
 import DxTileView from 'devextreme-vue/tile-view';
-
 import { homes } from './data.js';
-
-export default {
-  components: {
-    DxTileView,
-  },
-  data() {
-    return {
-      homes,
-    };
-  },
-};
 </script>
 <style>
 .dx-tile-image {

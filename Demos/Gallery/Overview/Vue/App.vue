@@ -41,30 +41,20 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxGallery from 'devextreme-vue/gallery';
 import { gallery } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxGallery,
-  },
-  data() {
-    return {
-      dataSource: gallery,
-      loop: true,
-      slideshowDelay: 2000,
-      showNavButtons: true,
-      showIndicator: true,
-    };
-  },
-  methods: {
-    setSlideshowDelay(e) {
-      this.slideshowDelay = e.value ? 2000 : 0;
-    },
-  },
-};
+const dataSource = gallery;
+const loop = ref(true);
+const slideshowDelay = ref(2000);
+const showNavButtons = ref(true);
+const showIndicator = ref(true);
+
+function setSlideshowDelay(e) {
+  slideshowDelay.value = e.value ? 2000 : 0;
+}
 </script>
 

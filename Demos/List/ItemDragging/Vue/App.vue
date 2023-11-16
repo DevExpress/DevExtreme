@@ -32,43 +32,31 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxList, { DxItemDragging } from 'devextreme-vue/list';
+import * as data from './data.js';
 
-import { doingTasks, plannedTasks } from './data.js';
-
-export default {
-  components: {
-    DxList,
-    DxItemDragging,
-  },
-  data() {
-    return {
-      doingTasks,
-      plannedTasks,
-    };
-  },
-  methods: {
-    onDragStart(e) {
-      e.itemData = this[e.fromData][e.fromIndex];
-    },
-    onAdd(e) {
-      const data = [...this[e.toData]];
-      data.splice(e.toIndex, 0, e.itemData);
-      this[e.toData] = data;
-    },
-    onRemove(e) {
-      const data = [...this[e.fromData]];
-      data.splice(e.fromIndex, 1);
-      this[e.fromData] = data;
-    },
-    onReorder(e) {
-      this.onRemove(e);
-      this.onAdd(e);
-    },
-  },
-};
+const doingTasks = ref(data.doingTasks);
+const plannedTasks = ref(data.plannedTasks);
+const tasks = { doingTasks, plannedTasks };
+function onDragStart(e) {
+  e.itemData = tasks[e.fromData].value[e.fromIndex];
+}
+function onAdd(e) {
+  const newData = [...tasks[e.toData].value];
+  newData.splice(e.toIndex, 0, e.itemData);
+  tasks[e.toData].value = newData;
+}
+function onRemove(e) {
+  const newData = [...tasks[e.fromData].value];
+  newData.splice(e.fromIndex, 1);
+  tasks[e.fromData].value = newData;
+}
+function onReorder(e) {
+  onRemove(e);
+  onAdd(e);
+}
 </script>
 <style>
 .widget-container {

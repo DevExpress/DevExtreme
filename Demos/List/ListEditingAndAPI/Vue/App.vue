@@ -28,28 +28,15 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxList from 'devextreme-vue/list';
-
 import { tasks } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxCheckBox,
-    DxList,
-  },
-  data() {
-    return {
-      tasks,
-      allowDeletion: false,
-      itemDeleteMode: 'toggle',
-    };
-  },
-};
+const allowDeletion = ref(false);
+const itemDeleteMode = ref('toggle');
 </script>
 <style>
 .options {

@@ -29,35 +29,24 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxActionSheet from 'devextreme-vue/action-sheet';
 import DxSwitch from 'devextreme-vue/switch';
 import DxButton from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
 import { actionSheetItems } from './data.js';
 
-export default {
-  components: {
-    DxActionSheet,
-    DxButton,
-    DxSwitch,
-  },
-  data() {
-    return {
-      dataSource: actionSheetItems,
-      isActionSheetVisible: false,
-      showTitle: true,
-      showCancelButton: true,
-    };
-  },
-  methods: {
-    showActionSheet() {
-      this.isActionSheetVisible = true;
-    },
-    showClickNotification(buttonName) {
-      notify(`The "${buttonName}" button is clicked.`);
-    },
-  },
-};
+const dataSource = actionSheetItems;
+const isActionSheetVisible = ref(false);
+const showTitle = ref(true);
+const showCancelButton = ref(true);
+
+function showActionSheet() {
+  isActionSheetVisible.value = true;
+}
+function showClickNotification(buttonName) {
+  notify(`The "${buttonName}" button is clicked.`);
+}
 </script>
 

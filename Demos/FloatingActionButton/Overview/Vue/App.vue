@@ -2,7 +2,7 @@
   <div>
     <DxDataGrid
       id="grid"
-      :ref="gridRefName"
+      ref="gridRef"
       :data-source="employees"
       :selection="{ mode: 'single' }"
       :show-borders="true"
@@ -71,11 +71,10 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
-
 import {
   DxDataGrid,
   DxColumn,
@@ -83,67 +82,41 @@ import {
   DxEditing,
   DxTexts,
 } from 'devextreme-vue/data-grid';
-
 import DxSpeedDialAction from 'devextreme-vue/speed-dial-action';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { employees, states, directions } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxEditing,
-    DxTexts,
-    DxSpeedDialAction,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      employees,
-      gridRefName: 'grid',
-      lookup: {
-        dataSource: states,
-        displayExpr: 'Name',
-        valueExpr: 'ID',
-      },
-      selectedRowIndex: -1,
-    };
-  },
-  computed: {
-    grid() {
-      return this.$refs[this.gridRefName].instance;
-    },
-  },
-  methods: {
-    selectedChanged(e) {
-      this.selectedRowIndex = e.component.getRowIndexByKey(e.selectedRowKeys[0]);
-    },
-
-    directionChanged(e) {
-      config({
-        floatingActionButtonConfig: directions[e.selectedItem],
-      });
-
-      repaintFloatingActionButton();
-    },
-
-    addRow() {
-      this.grid.addRow();
-      this.grid.deselectAll();
-    },
-
-    deleteRow() {
-      this.grid.deleteRow(this.selectedRowIndex);
-      this.grid.deselectAll();
-    },
-
-    editRow() {
-      this.grid.editRow(this.selectedRowIndex);
-      this.grid.deselectAll();
-    },
-  },
+const gridRef = ref();
+const lookup = {
+  dataSource: states,
+  displayExpr: 'Name',
+  valueExpr: 'ID',
 };
+const selectedRowIndex = ref(-1);
+const grid = computed(() => gridRef.value.instance);
+
+function selectedChanged(e) {
+  selectedRowIndex.value = e.component.getRowIndexByKey(e.selectedRowKeys[0]);
+}
+function directionChanged(e: DxSelectBoxTypes.SelectionChangedEvent) {
+  config({
+    floatingActionButtonConfig: directions[e.selectedItem],
+  });
+
+  repaintFloatingActionButton();
+}
+function addRow() {
+  grid.value.addRow();
+  grid.value.deselectAll();
+}
+function deleteRow() {
+  grid.value.deleteRow(selectedRowIndex.value);
+  grid.value.deselectAll();
+}
+function editRow() {
+  grid.value.editRow(selectedRowIndex.value);
+  grid.value.deselectAll();
+}
 </script>
 
 <style>

@@ -81,109 +81,96 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxToolbar from 'devextreme-vue/toolbar';
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxDropDownButton,
-    DxToolbar,
-  },
-  data() {
-    const data = service.getData();
-
-    return {
-      data,
-      alignment: 'left',
-      color: null,
-      fontSize: '14px',
-      lineHeight: 1.35,
-      toolbarItems: [
-        {
-          location: 'before',
-          widget: 'dxDropDownButton',
-          options: {
-            displayExpr: 'name',
-            keyExpr: 'id',
-            selectedItemKey: 3,
-            width: 125,
-            stylingMode: 'text',
-            useSelectMode: true,
-            onSelectionChanged: (e) => {
-              this.alignment = e.item.name.toLowerCase();
-            },
-            items: data.alignments,
-          },
-        },
-        {
-          location: 'before',
-          widget: 'dxDropDownButton',
-          options: {
-            items: data.colors,
-            onInitialized: ({ component }) => {
-              this.colorPicker = component;
-            },
-            icon: 'square',
-            stylingMode: 'text',
-            dropDownOptions: { width: 'auto' },
-            dropDownContentTemplate: 'colorpicker',
-          },
-        },
-        {
-          location: 'before',
-          widget: 'dxDropDownButton',
-          options: {
-            stylingMode: 'text',
-            displayExpr: 'text',
-            keyExpr: 'size',
-            useSelectMode: true,
-            items: data.fontSizes,
-            selectedItemKey: 14,
-            onSelectionChanged: (e) => {
-              this.fontSize = `${e.item.size}px`;
-            },
-            itemTemplate: 'fontItem',
-          },
-        },
-        {
-          location: 'before',
-          widget: 'dxDropDownButton',
-          options: {
-            stylingMode: 'text',
-            icon: 'indent',
-            displayExpr: 'text',
-            keyExpr: 'lineHeight',
-            useSelectMode: true,
-            items: data.lineHeights,
-            selectedItemKey: 1.35,
-            onSelectionChanged: (e) => {
-              this.lineHeight = e.item.lineHeight;
-            },
-          },
-        },
-      ],
-    };
-  },
-  methods: {
-    onButtonClick(e) {
-      notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
-    },
-
-    onItemClick(e) {
-      notify(e.itemData.name || e.itemData, 'success', 600);
-    },
-
-    onColorClick(color) {
-      this.color = color;
-      this.colorPicker.element().getElementsByClassName('dx-icon-square')[0].style.color = color;
-      this.colorPicker.close();
+const alignment = ref('left');
+const color = ref(null);
+const fontSize = ref('14px');
+const lineHeight = ref(1.35);
+let colorPicker;
+const data = service.getData();
+const toolbarItems = [
+  {
+    location: 'before',
+    widget: 'dxDropDownButton',
+    options: {
+      displayExpr: 'name',
+      keyExpr: 'id',
+      selectedItemKey: 3,
+      width: 125,
+      stylingMode: 'text',
+      useSelectMode: true,
+      onSelectionChanged: (e) => {
+        alignment.value = e.item.name.toLowerCase();
+      },
+      items: data.alignments,
     },
   },
-};
+  {
+    location: 'before',
+    widget: 'dxDropDownButton',
+    options: {
+      items: data.colors,
+      onInitialized: ({ component }) => {
+        colorPicker = component;
+      },
+      icon: 'square',
+      stylingMode: 'text',
+      dropDownOptions: { width: 'auto' },
+      dropDownContentTemplate: 'colorpicker',
+    },
+  },
+  {
+    location: 'before',
+    widget: 'dxDropDownButton',
+    options: {
+      stylingMode: 'text',
+      displayExpr: 'text',
+      keyExpr: 'size',
+      useSelectMode: true,
+      items: data.fontSizes,
+      selectedItemKey: 14,
+      onSelectionChanged: (e) => {
+        fontSize.value = `${e.item.size}px`;
+      },
+      itemTemplate: 'fontItem',
+    },
+  },
+  {
+    location: 'before',
+    widget: 'dxDropDownButton',
+    options: {
+      stylingMode: 'text',
+      icon: 'indent',
+      displayExpr: 'text',
+      keyExpr: 'lineHeight',
+      useSelectMode: true,
+      items: data.lineHeights,
+      selectedItemKey: 1.35,
+      onSelectionChanged: (e) => {
+        lineHeight.value = e.item.lineHeight;
+      },
+    },
+  },
+];
+
+function onButtonClick(e) {
+  notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+}
+function onItemClick(e) {
+  notify(e.itemData.name || e.itemData, 'success', 600);
+}
+function onColorClick(clickedColor) {
+  color.value = clickedColor;
+  colorPicker.element().getElementsByClassName('dx-icon-square')[0].style.color = clickedColor;
+  colorPicker.close();
+}
 </script>
 <style scoped>
   .demo-container .dx-fieldset:first-child {

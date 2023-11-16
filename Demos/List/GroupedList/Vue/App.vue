@@ -12,21 +12,11 @@
     </DxList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxList from 'devextreme-vue/list';
-
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxList,
-  },
-  data() {
-    return {
-      dataSource: employees,
-    };
-  },
-};
+const dataSource = employees;
 </script>
 <style>
 .list-container {

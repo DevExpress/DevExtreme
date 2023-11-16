@@ -4,15 +4,12 @@
     class="dx-tile-image"
   />
 </template>
-<script>
-export default {
-  props: {
-    itemData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  itemData?: object
+}>(), {
+  itemData: () => {},
+});
 </script>
 <style scoped>
   .dx-tile-image {

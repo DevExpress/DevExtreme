@@ -136,24 +136,15 @@
     </div>
   </div>
 </template>
-<script>
-import DxButton from 'devextreme-vue/button';
+<script setup lang="ts">
+import DxButton, { DxButtonTypes } from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
 
-export default {
-  components: {
-    DxButton,
-  },
-  methods: {
-    onClick(e) {
-      const buttonText = e.component.option('text');
-      notify(`The ${this.capitalize(buttonText)} button was clicked`);
-    },
-    capitalize(text) {
-      return text.charAt(0).toUpperCase() + text.slice(1);
-    },
-  },
-};
+const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+function onClick(e: DxButtonTypes.ClickEvent) {
+  const buttonText = e.component.option('text');
+  notify(`The ${capitalize(buttonText)} button was clicked`);
+}
 </script>
 <style scoped>
 #app {

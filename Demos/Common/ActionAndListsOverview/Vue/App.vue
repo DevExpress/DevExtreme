@@ -67,12 +67,23 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTileView from 'devextreme-vue/tile-view';
 import DxList from 'devextreme-vue/list';
 import ArrayStore from 'devextreme/data/array_store';
 import { data } from './data.js';
+
+const currentHotel = ref(data[0]);
+
+const dataSource = {
+  store: new ArrayStore({
+    data,
+    key: 'Id',
+  }),
+  group: 'City',
+  searchExpr: ['Hotel_Name', 'City', 'Address'],
+};
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -80,32 +91,10 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
+const currency = (d) => currencyFormatter.format(d);
 
-export default {
-  components: {
-    DxTileView, DxList,
-  },
-  data() {
-    return {
-      currentHotel: data[0],
-      dataSource: {
-        store: new ArrayStore({
-          data,
-          key: 'Id',
-        }),
-        group: 'City',
-        searchExpr: ['Hotel_Name', 'City', 'Address'],
-      },
-    };
-  },
-  methods: {
-    currency(d) {
-      return currencyFormatter.format(d);
-    },
-    listSelectionChanged(e) {
-      this.currentHotel = e.addedItems[0];
-    },
-  },
-};
+function listSelectionChanged(e) {
+  currentHotel.value = e.addedItems[0];
+}
 </script>
 <style src="./styles.css"></style>

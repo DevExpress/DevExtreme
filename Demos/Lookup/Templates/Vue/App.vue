@@ -40,31 +40,16 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
 import FieldItem from './FieldItem.vue';
 import ListItem from './ListItem.vue';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxLookup,
-    DxDropDownOptions,
-    FieldItem,
-    ListItem,
-  },
-  data() {
-    return {
-      lookupValue: employees[0].ID,
-      employees,
-    };
-  },
-  methods: {
-    getDisplayExpr(item) {
-      return item ? `${item.FirstName} ${item.LastName}` : '';
-    },
-  },
-};
+const lookupValue = ref(employees[0].ID);
+
+const getDisplayExpr = ({ FirstName = '', LastName = '' } = {}) => `${FirstName} ${LastName}`.trim();
 </script>
 <style scoped>
   .field-customization {

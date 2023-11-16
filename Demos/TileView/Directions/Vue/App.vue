@@ -26,32 +26,20 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTileView from 'devextreme-vue/tile-view';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import HomeItem from './HomeItem.vue';
 import { homes } from './data.js';
 
-export default {
-  components: {
-    DxTileView,
-    DxSelectBox,
-    HomeItem,
-  },
-  data() {
-    return {
-      homes,
-      directions: ['horizontal', 'vertical'],
-      direction: 'horizontal',
-      height: 390,
-      baseItemHeight: 120,
-      baseItemWidth: 185,
-      width: '100%',
-      itemMargin: 10,
-    };
-  },
-};
+const directions = ['horizontal', 'vertical'];
+const direction = ref('horizontal');
+const height = 390;
+const baseItemHeight = 120;
+const baseItemWidth = 185;
+const width = '100%';
+const itemMargin = 10;
 </script>
 <style>
 .dx-selectbox {

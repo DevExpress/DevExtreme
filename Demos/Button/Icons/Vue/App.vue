@@ -99,32 +99,25 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxButton from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
 
-export default {
-  components: {
-    DxButton,
-  },
-  methods: {
-    weatherClick() {
-      notify('The Weather button was clicked');
-    },
-    doneClick() {
-      notify('The Done button was clicked');
-    },
-    sendClick() {
-      notify('The Send button was clicked');
-    },
-    plusClick() {
-      notify('The button was clicked');
-    },
-    backClick() {
-      notify('The button was clicked');
-    },
-  },
-};
+function weatherClick() {
+  notify('The Weather button was clicked');
+}
+function doneClick() {
+  notify('The Done button was clicked');
+}
+function sendClick() {
+  notify('The Send button was clicked');
+}
+function plusClick() {
+  notify('The button was clicked');
+}
+function backClick() {
+  notify('The button was clicked');
+}
 </script>
 <style scoped>
 #back,

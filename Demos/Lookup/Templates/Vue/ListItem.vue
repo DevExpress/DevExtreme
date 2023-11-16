@@ -7,15 +7,12 @@
       {{ itemData.FirstName }} {{ itemData.LastName }}</div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    itemData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  itemData?: Record<string, any>
+}>(), {
+  itemData: () => ({}),
+});
 </script>
 <style scoped>
   .custom-item > img {

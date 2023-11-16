@@ -15,9 +15,8 @@
     </DxList>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxList from 'devextreme-vue/list';
-
 import DataSource from 'devextreme/data/data_source';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import ProductInfo from './ProductInfo.vue';
@@ -33,16 +32,4 @@ const dataSource = new DataSource({
   pageSize: 1,
   filter: ['UnitPrice', '>', 15],
 });
-
-export default {
-  components: {
-    DxList,
-    ProductInfo,
-  },
-  data() {
-    return {
-      dataSource,
-    };
-  },
-};
 </script>

@@ -28,24 +28,13 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
-
 import { products } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxList,
-  },
-  data() {
-    return {
-      products,
-      searchMode: 'contains',
-    };
-  },
-};
+const searchMode = ref('contains');
 </script>
 <style>
 .dx-list-item-content > div {
