@@ -54,7 +54,7 @@
     "rxjs": "^6.6.7",
     "stream-browserify": "^3.0.0",
     "typescript": "~4.2.3",
-    "webpack": "^5.88.2",
+    "webpack": "^5.76.0",
     "yargs": "^6.6.0",
     "zone.js": "^0.11.8"
   },
