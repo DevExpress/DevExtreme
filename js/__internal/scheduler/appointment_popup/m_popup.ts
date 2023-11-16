@@ -35,6 +35,7 @@ const POPUP_CONFIG = {
       },
     },
   ],
+  _ignorePreventScrollEventsDeprecation: true,
 };
 
 export const ACTION_TO_APPOINTMENT = {
