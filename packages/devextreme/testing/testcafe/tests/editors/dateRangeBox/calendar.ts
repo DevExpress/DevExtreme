@@ -9,6 +9,8 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
 import DateRangeBox from '../../../model/dateRangeBox';
 
+const STATE_HOVER_CLASS = 'dx-state-hover';
+
 fixture.disablePageReloads`DateRangeBox range selection`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
@@ -695,6 +697,29 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
     disableOutOfRangeSelection: true,
   }, '#dateRangeBox');
 });
+
+test(`Hovered cell should have "${STATE_HOVER_CLASS}" class after one date selected (disableOutOfRangeSelection=true)`, async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  const calendar = dateRangeBox.getCalendar();
+
+  await t
+    .click(calendar.getCellByDate('2020/02/20'));
+
+  const targetCell = calendar.getView().getCellByDate(new Date('2020/02/22'));
+  await t
+    .hover(targetCell)
+    .expect(targetCell.hasClass(STATE_HOVER_CLASS))
+    .eql(true);
+}).before(async () => createWidget('dxDateRangeBox', {
+  disableOutOfRangeSelection: true,
+  calendarOptions: {
+    currentDate: new Date('2020/02/20'),
+  },
+}, '#container'));
 
 test('Dates selection with focusStateEnabled=false', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
