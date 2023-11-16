@@ -52,6 +52,7 @@
 
 .dx-tabs-expanded {
   .dx-tab {
+    flex-basis: 100%;
     flex-grow: 0;
   }
 }
@@ -60,8 +61,12 @@
   .dx-tab {
     flex-basis: unset;
     flex-grow: 1;
-    min-width: 0;
   }
+}
+
+.dx-tabs .dx-tabs-scrollable .dx-tab {
+  flex-basis: 100%;
+  min-width: max-content;
 }
 
 .dx-tab {
@@ -69,7 +74,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-basis: 100%;
+  min-width: max-content;
   cursor: pointer;
 
   @include dx-tabs-link();

@@ -336,7 +336,7 @@ const Tabs = CollectionWidget.inherit({
             return false;
         }
 
-        const isItemsWidthExceeded = tabItemsWidth > elementWidth;
+        const isItemsWidthExceeded = tabItemsWidth >= elementWidth;
 
         return isItemsWidthExceeded;
     },
@@ -359,7 +359,8 @@ const Tabs = CollectionWidget.inherit({
         });
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);
-        const needStretchItems = maxTabWidth > elementWidth / $visibleItems.length;
+        const requiredWidth = elementWidth / $visibleItems.length;
+        const needStretchItems = maxTabWidth > requiredWidth;
 
         return needStretchItems;
     },
@@ -700,12 +701,7 @@ const Tabs = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'scrollByContent':
-                if(this._scrollable) {
-                    this._scrollable.option(args.name, args.value);
-                }
-                if(!this._isServerSide()) {
-                    this._renderScrolling();
-                }
+                this._scrollable && this._scrollable.option(args.name, args.value);
                 break;
             case 'width':
             case 'height':
