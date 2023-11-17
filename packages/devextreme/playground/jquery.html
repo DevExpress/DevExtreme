@@ -193,6 +193,7 @@
                         icon: 'user',
                     }
                 ],
+                selectedIndex: 0,
                 scrollingEnabled: false,
                 showNavButtons: true,
                 iconPosition: 'start',
@@ -201,7 +202,9 @@
             }
 
             $(function () {
-                $("#button").dxTabs(testOptions);
+                const instance = $("#button").dxTabs(testOptions).dxTabs('instance');
+
+                // instance.option({ scrollingEnabled: true, scrollByContent: true });
             });
 
 

@@ -611,7 +611,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _toggleScrollingEnabledClass(scrollingEnabled) {
-        this.$element().toggleClass(TABS_SCROLLING_ENABLED_CLASS, scrollingEnabled);
+        this.$element().toggleClass(TABS_SCROLLING_ENABLED_CLASS, Boolean(scrollingEnabled));
     },
 
     _toggleOrientationClass(orientation) {
