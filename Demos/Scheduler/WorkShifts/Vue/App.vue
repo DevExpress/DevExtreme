@@ -21,22 +21,25 @@
     current-view="week"
     :start-day-hour="0"
     :end-day-hour="8"
-    :height="600"
+    :offset="currentOffset"
+    :cell-duration="60"
     :show-all-day-panel="false"
   />
 </template>
 <script setup lang="ts">
-
+import { ref } from 'vue';
 import DxScheduler from 'devextreme-vue/scheduler';
 import DxRadioGroup, { DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import { appointments, shifts } from './data.ts';
 
 const views = ['day', 'week'];
 const currentDate = new Date(2021, 2, 30);
+const currentOffset = ref(shifts[0].offset);
 
-// eslint-disable-next-line no-unused-vars
 function onShiftChanged(e: DxRadioGroupTypes.ValueChangedEvent) {
+  currentOffset.value = e.value.offset as number;
 }
+
 </script>
 
 <style scoped>

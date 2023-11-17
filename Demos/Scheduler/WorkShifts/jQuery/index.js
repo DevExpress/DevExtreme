@@ -7,8 +7,8 @@ $(() => {
     currentDate: new Date(2021, 2, 30),
     startDayHour: 0,
     endDayHour: 8,
-    // offset: 0,
-    height: 600,
+    offset: shifts[0].offset,
+    cellDuration: 60,
     showAllDayPanel: false,
   }).dxScheduler('instance');
 

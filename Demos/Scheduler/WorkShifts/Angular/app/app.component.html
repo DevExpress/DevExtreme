@@ -4,9 +4,8 @@
     <div class="value">
       <dx-radio-group
         [items]="shifts"
-        [value]="shifts[0]"
+        [(value)]="currentShift"
         layout="horizontal"
-        (onValueChanged)="onShiftChanged($event)"
       >
       </dx-radio-group>
     </div>
@@ -21,7 +20,8 @@
   [currentDate]="currentDate"
   [startDayHour]="0"
   [endDayHour]="8"
-  [height]="600"
+  [cellDuration]="60"
+  [offset]="currentShift.offset"
   [showAllDayPanel]="false"
 >
 </dx-scheduler>

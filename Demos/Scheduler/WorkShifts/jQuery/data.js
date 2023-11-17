@@ -1,12 +1,12 @@
 const shifts = [{
   text: 'First shift',
-  offset: 0,
+  offset: -120,
 }, {
   text: 'Second shift',
-  offset: 480,
+  offset: 360,
 }, {
   text: 'Third shift',
-  offset: 960,
+  offset: 840,
 }];
 
 const data = [{

@@ -14,13 +14,13 @@ export type Appointment = {
 
 export const shifts: Shift[] = [{
   text: 'First shift',
-  offset: 0,
+  offset: -120,
 }, {
   text: 'Second shift',
-  offset: 480,
+  offset: 360,
 }, {
   text: 'Third shift',
-  offset: 960,
+  offset: 840,
 }];
 
 export const appointments: Appointment[] = [{

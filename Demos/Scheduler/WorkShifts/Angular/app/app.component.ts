@@ -21,16 +21,14 @@ export class AppComponent {
 
   currentDate: Date = new Date(2021, 2, 30);
 
-  offset = 0;
+  currentShift:Shift;
 
   constructor(service: Service) {
     this.appointments = service.getAppointments();
     this.shifts = service.getShifts();
-  }
 
-  onShiftChanged = (e) => {
-    // TODO this.offset = e.value;
-  };
+    this.currentShift = this.shifts[0];
+  }
 }
 
 @NgModule({
