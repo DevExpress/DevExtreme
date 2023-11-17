@@ -270,7 +270,7 @@ describe('Widget\'s container manipulations', () => {
   it('component\'s root is widget\'s container after render in detached container', () => {
     const $container = $('#component');
     const parent = $container.parent('');
-    $container.remove($container);
+    $container.remove();
     $container.dxTestWidget({ text: 'test' });
 
     $container.appendTo(parent);
@@ -282,7 +282,7 @@ describe('Widget\'s container manipulations', () => {
   it('component\'s root is widget\'s container after render in detached container and repaint', () => {
     const $container = $('#component');
     const parent = $container.parent('');
-    $container.remove($container);
+    $container.remove();
     $container.dxTestWidget({ text: 'test' });
 
     $container.appendTo(parent);
@@ -295,7 +295,7 @@ describe('Widget\'s container manipulations', () => {
   it('html tree is correct after repaint detached component', () => {
     const $container = $('#component');
     const parent = $container.parent('');
-    $container.remove($container);
+    $container.remove();
     $container.dxTestWidget({ text: 'test' });
 
     $container.appendTo(parent);
