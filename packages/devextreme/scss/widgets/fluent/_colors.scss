@@ -115,6 +115,8 @@ $scrollview-pulldown-path: null !default;
     $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
     $base-success: rgba(16, 124, 16, 1) !default; // #107c10
     $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
+    $base-text-color: rgba(36, 36, 36, 1) !default; // #242424;
+    $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
 
     $base-typography-bg: #FAFAFA !default; // #FAFAFA
   }
@@ -123,6 +125,8 @@ $scrollview-pulldown-path: null !default;
     $base-accent: #3C82F5 !default; // #3C82F5
     $base-success: #19914B !default; // #19914B
     $base-danger: #DC2828 !default; // #DC2828
+    $base-text-color: #1E293B !default;
+    $base-border-color: #E2E8F0 !default; // #E2E8F0
   
     $base-typography-bg: #F8FAFC !default; // #F8FAFC
   }
@@ -132,7 +136,7 @@ $scrollview-pulldown-path: null !default;
   $base-accent-active: darken(desaturate(adjust-hue($base-accent, -1), 4.65), 9.61) !default; // #0f548c
   $base-accent-selected: darken(desaturate($base-accent-active, 2.02), 4.71) !default; // #0E4775
   
-  $base-text-color: rgba(36, 36, 36, 1) !default; // #242424;
+  // $base-text-color: rgba(36, 36, 36, 1) !default; // #242424;
   $base-neutral-foreground2: lighten($base-text-color, 11.76) !default; // #424242;
   $base-neutral-foreground3: lighten($base-text-color, 23.92) !default; // #616161;
   $base-neutral-foreground4: lighten($base-text-color, 29.80) !default; // #707070
@@ -148,7 +152,7 @@ $scrollview-pulldown-path: null !default;
 
   $base-typography-bg: darken($base-bg, 2) !default; // #FAFAFA
 
-  $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
+  // $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
   $base-border-color-hover: darken($base-border-color, 9.8) !default; // #c7c7c7
   $base-border-color-focused: darken($base-border-color, 17.65) !default; // #b3b3b3
   $base-border-color-accessible: darken($base-border-color, 49.8) !default; // #616161
@@ -182,6 +186,7 @@ $scrollview-pulldown-path: null !default;
     $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
     $base-success: #54B054 !default; // #54B054
     $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
+    $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
 
     $base-typography-bg: #1F1F1F !default; // #1F1F1F
   }
@@ -190,6 +195,7 @@ $scrollview-pulldown-path: null !default;
     $base-accent: #5492F6 !default; // #5492F6
     $base-success: #2DC36B !default; // #2DC36B
     $base-danger: #FF6464 !default; // #FF6464
+    $base-border-color: #414B5F !default; // #414B5F
   
     $base-typography-bg: #141E28 !default; // #141E28
   }
@@ -215,7 +221,7 @@ $scrollview-pulldown-path: null !default;
 
   // $base-typography-bg: $base-bg-active !default; // #1F1F1F
 
-  $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
+  // $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
   $base-border-color-hover: lighten($base-border-color, 7.84) !default; // #757575
   $base-border-color-focused: lighten($base-border-color, 3.92) !default; // #6b6b6b
   $base-border-color-accessible: lighten($base-border-color, 29.8) !default; // #adadad
