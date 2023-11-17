@@ -25,11 +25,10 @@ fixture.disablePageReloads`AppointmentForm screenshot tests`
         await createWidget('dxScheduler', {
           dataSource: [{
             text: 'Long Long Long Long Long Long Long Long Long Description',
-            startDate: new Date('2021-01-01T01:30:00.000Z'),
-            endDate: new Date('2021-01-01T03:00:00.000Z'),
+            startDate: new Date(2021, 0, 1, 1, 30),
+            endDate: new Date(2021, 0, 1, 3, 0),
             recurrenceRule: 'FREQ=DAILY;COUNT=30',
           }],
-          timeZone: 'Etc/UTC',
           currentDate: new Date(2021, 0, 4),
           height: 600,
           currentView,
