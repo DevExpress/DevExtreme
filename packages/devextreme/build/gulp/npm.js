@@ -144,14 +144,14 @@ gulp.task('npm-sources', gulp.series(
     () => gulp
         .src(`${resultPath}/${packageDir}/package.json`)
         .pipe(gulpIf(isBuildInternal, gulp.dest(packagePath))),
+    () => gulp
+        .src(`${resultPath}/${packageDistDir}/package.json`)
+        .pipe(gulpIf(isBuildInternal, gulp.dest(distPath))),
     sources(srcGlobs, packagePath, distGlobs))
 );
 
 gulp.task('npm-dist', () => gulp
-    .src([
-        `${packagePath}/dist/**/*`,
-        'build/package.json'
-    ])
+    .src(`${packagePath}/dist/**/*`)
     .pipe(gulpIf(isBuildInternal, updatePackageName()))
     .pipe(gulp.dest(distPath))
 );
