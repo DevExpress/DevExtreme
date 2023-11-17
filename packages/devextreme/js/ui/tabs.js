@@ -702,6 +702,9 @@ const Tabs = CollectionWidget.inherit({
         switch(args.name) {
             case 'useInkRipple':
             case 'scrollingEnabled':
+                this._toggleScrollingEnabledClass(args.value);
+                this._invalidate();
+                break;
             case 'showNavButtons':
                 this._invalidate();
                 break;

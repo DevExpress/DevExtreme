@@ -69,8 +69,8 @@
   min-width: max-content;
 }
 
-.dx-tabs:not(.dx-tabs-scrolling-enabled) .dx-tab {
-  min-width: 0;
+.dx-tabs:not(.dx-tabs-scrolling-enabled) {
+  min-width: min-content;
 }
 
 .dx-tab {
@@ -102,8 +102,6 @@
   align-items: center;
   justify-content: center;
   -webkit-user-drag: none;
-
-  @include dx-overflow();
 }
 
 .dx-tabs-nav-button {
@@ -123,6 +121,10 @@
   display: inline-flex;
   flex-direction: column;
   width: auto;
+
+  .dx-tab {
+    min-width: 0;
+  }
 
   .dx-tabs-wrapper {
     flex-direction: column;
@@ -148,9 +150,11 @@
 }
 
 .dx-tabs-icon-position-top .dx-tab-text {
+  text-align: center;
   flex-direction: column;
 }
 
 .dx-tabs-icon-position-bottom .dx-tab-text {
+  text-align: center;
   flex-direction: column-reverse;
 }
