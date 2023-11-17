@@ -71,6 +71,7 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
@@ -268,6 +269,19 @@ QUnit.module('General', () => {
         keyboard.press('right');
 
         assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
+    });
+
+    QUnit.test('Scrolling enabled class on the tabs element must depends on the scrollingEnabled option', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+        });
+        const instance = $element.dxTabs('instance');
+
+        assert.ok($element.hasClass(TABS_SCROLLING_ENABLED_CLASS));
+
+        instance.option({ scrollingEnabled: false });
+
+        assert.notOk($element.hasClass(TABS_SCROLLING_ENABLED_CLASS));
     });
 
     QUnit.test('the tabs element must have a horizontal class by default', function(assert) {
