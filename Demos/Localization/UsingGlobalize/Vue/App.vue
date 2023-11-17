@@ -57,78 +57,64 @@
 
   </div>
 </template>
-<script>
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/no-webpack-loader-syntax */
+<script setup lang="ts">
+import { onBeforeMount, ref } from 'vue';
 import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
-import DxSelectBox from 'devextreme-vue/select-box';
-
+import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import 'devextreme/localization/globalize/number';
 import 'devextreme/localization/globalize/date';
 import 'devextreme/localization/globalize/currency';
 import 'devextreme/localization/globalize/message';
-
-import deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
-
-import deCldrData from 'npm:devextreme-cldr-data/de.json!json';
-import ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
-import supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
-
-import Globalize from 'globalize';
-
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-webpack-loader-syntax */
+import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
+import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+import * as deCldrData from 'npm:devextreme-cldr-data/de.json!json';
+import * as ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
+import * as supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
+import * as Globalize from 'globalize';
 import service from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxFilterRow,
-  },
-  data() {
-    return {
-      locale: null,
-      locales: service.getLocales(),
-      payments: service.getPayments(),
-      editPopupOptions: { width: 700, height: 345 },
-      amountEditorOptions: { format: 'currency', showClearButton: true },
-      selectBoxInputAttr: { id: 'selectInput' },
-    };
-  },
-  created() {
-    this.locale = this.getLocale();
-    this.initGlobalize();
-  },
-  methods: {
-    getLocale() {
-      const locale = sessionStorage.getItem('locale');
-      return locale != null ? locale : 'en';
-    },
-    setLocale(locale) {
-      sessionStorage.setItem('locale', locale);
-    },
-    initGlobalize() {
-      Globalize.load(
-        deCldrData,
-        ruCldrData,
-        supplementalCldrData,
-      );
-      Globalize.loadMessages(deMessages);
-      Globalize.loadMessages(ruMessages);
-      Globalize.loadMessages(service.getDictionary());
-      Globalize.locale(this.locale);
-    },
-    changeLocale(e) {
-      this.setLocale(e.value);
-      document.location.reload();
-    },
-    formatMessage: Globalize.formatMessage.bind(Globalize),
-  },
-};
+type Locale = string;
+const locales: { name: string, value: Locale } = service.getLocales();
+const payments: Record<string, string | number>[] = service.getPayments();
+const locale: Locale = getLocale();
+const editPopupOptions = { width: 700, height: 345 };
+const amountEditorOptions = { format: 'currency', showClearButton: true };
+const selectBoxInputAttr = { id: 'selectInput' };
+const formatMessage = ref((msg) => msg);
+
+onBeforeMount(() => {
+  initGlobalize();
+});
+function getLocale(): Locale {
+  const savedLocale = sessionStorage.getItem('locale');
+  return savedLocale != null ? savedLocale : 'en';
+}
+function setLocale(newLocale: Locale) {
+  sessionStorage.setItem('locale', newLocale);
+}
+function initGlobalize() {
+  Globalize.load(
+    deCldrData,
+    ruCldrData,
+    supplementalCldrData,
+  );
+
+  Globalize.loadMessages(deMessages);
+  Globalize.loadMessages(ruMessages);
+  Globalize.loadMessages(service.getDictionary());
+  Globalize.locale(locale);
+
+  formatMessage.value = Globalize.formatMessage.bind(Globalize);
+}
+
+function changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent) {
+  setLocale(value);
+  document.location.reload();
+}
 </script>
 <style scoped>
 

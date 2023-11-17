@@ -57,64 +57,51 @@
 
   </div>
 </template>
-<script>
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/no-webpack-loader-syntax */
+<script setup lang="ts">
+import { onBeforeMount, ref } from 'vue';
 import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
-import DxSelectBox from 'devextreme-vue/select-box';
-
-import deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
-
-import { locale, loadMessages, formatMessage } from 'devextreme/localization';
-
+import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-webpack-loader-syntax */
+import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
+import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme/localization';
 import service from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxFilterRow,
-  },
-  data() {
-    return {
-      locale: null,
-      locales: service.getLocales(),
-      payments: service.getPayments(),
-      editPopupOptions: { width: 700, height: 345 },
-      amountEditorOptions: { format: 'currency', showClearButton: true },
-      selectBoxInputAttr: { id: 'selectInput' },
-    };
-  },
-  created() {
-    this.locale = this.getLocale();
-    this.initMessages();
-    locale(this.locale);
-  },
-  methods: {
-    getLocale() {
-      const storageLocale = sessionStorage.getItem('locale');
-      return storageLocale != null ? storageLocale : 'en';
-    },
-    setLocale(savingLocale) {
-      sessionStorage.setItem('locale', savingLocale);
-    },
-    initMessages() {
-      loadMessages(deMessages);
-      loadMessages(ruMessages);
-      loadMessages(service.getDictionary());
-    },
-    changeLocale(e) {
-      this.setLocale(e.value);
-      document.location.reload();
-    },
-    formatMessage,
-  },
-};
+type Locale = string;
+
+const locales: { name: string, value: Locale } = service.getLocales();
+const payments: Record<string, string | number>[] = service.getPayments();
+const locale: Locale = getLocale();
+const editPopupOptions = { width: 700, height: 345 };
+const amountEditorOptions = { format: 'currency', showClearButton: true };
+const selectBoxInputAttr = { id: 'selectInput' };
+const formatMessage = ref((msg) => msg);
+
+onBeforeMount(() => {
+  dxLocale(locale);
+  initMessages();
+});
+
+function getLocale(): Locale {
+  const storageLocale = sessionStorage.getItem('locale');
+  return storageLocale != null ? storageLocale : 'en';
+}
+function setLocale(savingLocale: Locale) {
+  sessionStorage.setItem('locale', savingLocale);
+}
+function initMessages() {
+  loadMessages(deMessages);
+  loadMessages(ruMessages);
+  loadMessages(service.getDictionary());
+  formatMessage.value = dxFormatMessage;
+}
+function changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent) {
+  setLocale(value);
+  document.location.reload();
+}
 </script>
 <style scoped>
 
