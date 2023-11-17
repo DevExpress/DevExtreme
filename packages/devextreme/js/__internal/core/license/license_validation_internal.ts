@@ -10,13 +10,9 @@ export function parseLicenseKey(): Token {
   };
 }
 
-export function validateLicense(): void {
+export function validateLicense(): void {}
 
-}
-
-export function setLicenseCheckSkipCondition(): void {
-
-}
+export function setLicenseCheckSkipCondition(): void {}
 
 export default {
   validateLicense,
