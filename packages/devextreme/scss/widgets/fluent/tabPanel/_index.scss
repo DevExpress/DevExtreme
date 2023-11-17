@@ -9,7 +9,13 @@
 
 .dx-tabpanel {
   .dx-tabpanel-tab {
+    flex-basis: unset;
     flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .dx-tabs-scrollable .dx-tab {
+    flex-basis: auto;
   }
 
   .dx-tabs-nav-button {

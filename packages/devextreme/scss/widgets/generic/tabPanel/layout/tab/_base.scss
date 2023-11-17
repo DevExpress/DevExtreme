@@ -6,6 +6,7 @@
 @use "../../../tabs/variables/borders" as *;
 @use "../../../tabs/variables/sizes" as *;
 @use "../../../tabs/mixins" as *;
+@use "../../../tabs/layout/tab/base" as *;
 @use "../../../tabs" as *;
 @use "../../../../base/tabPanel";
 @use "../../variables/borders" as *;
@@ -14,7 +15,6 @@
 
 
 .dx-tabpanel-tab {
-  width: $generic-tabpanel-tabs-item-width;
   padding: $generic-tabpanel-tabs-item-padding;
 
   &.dx-state-focused::after {
@@ -28,10 +28,17 @@
   }
 }
 
+.dx-tabpanel-tabs .dx-tabs:not(.dx-tabs-vertical) {
+  .dx-tabpanel-tab {
+    max-width: $generic-tabpanel-tabs-item-width;
+  }
+}
+
 .dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
   .dx-tabpanel-tab {
-    min-width: max-content;
-  
+    width: $generic-tabpanel-tabs-item-width;
+    max-width: unset;
+
     &:last-child {
       &.dx-tab-selected::after {
         right: 0;

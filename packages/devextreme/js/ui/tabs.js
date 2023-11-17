@@ -347,8 +347,9 @@ const Tabs = CollectionWidget.inherit({
         const $visibleItems = this._getVisibleItems();
         const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
         const elementHeight = getHeight(this.$element());
+        const isItemsHeightExceeded = itemsHeight - 1 > elementHeight;
 
-        return itemsHeight - 1 > elementHeight;
+        return isItemsHeightExceeded;
     },
 
     _needStretchItems() {
