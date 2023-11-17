@@ -1350,6 +1350,7 @@ const Calendar = Editor.inherit({
     },
 
     _restoreViewsMinMaxOptions: function() {
+        this._resetActiveState();
         this.option({
             _rangeMin: null,
             _rangeMax: null,
