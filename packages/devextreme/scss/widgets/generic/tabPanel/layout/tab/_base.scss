@@ -27,14 +27,16 @@
   }
 }
 
-.dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
+.dx-tabs:not(.dx-tabs-vertical) {
   .dx-tabpanel-tab {
     min-width: 140px;
+  }
+}
 
-    &:last-child {
-      &.dx-tab-selected::after {
-        right: 0;
-      }
+.dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
+  .dx-tabpanel-tab:last-child {
+    &.dx-tab-selected::after {
+      right: 0;
     }
   }
 }
