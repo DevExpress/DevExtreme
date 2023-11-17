@@ -40,8 +40,6 @@ export class AppComponent {
 
   isDrawerOpen = true;
 
-  elementAttr: any;
-
   constructor(service: Service) {
     this.text = service.getContent();
     this.navigation = service.getNavigationList();

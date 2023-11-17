@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <DxToolbar :items="toolbarContent"/>
+  <div class="flex-container">
+    <DxToolbar
+      :items="toolbarContent"
+      id="toolbar"
+      class="dx-theme-background-color"
+    />
     <DxDrawer
       :opened-state-mode="selectedOpenMode"
       :position="selectedPosition"
@@ -78,30 +82,25 @@ const toolbarContent = [{
 }];
 </script>
 <style scoped>
-    .dx-toolbar {
+    .flex-container {
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dx-drawer-content {
+      display: flex;
+    }
+
+    #toolbar {
       box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       padding: 5px 10px;
-      margin-bottom: 5px;
-    }
-
-    .dx-list-item-icon-container,
-    .dx-toolbar-before {
-      width: 36px;
-      padding-right: 0 !important;
-      text-align: center;
-    }
-
-    .dx-list-item-content {
-      padding-left: 10px !important;
-    }
-
-    .dx-button {
-      background-color: rgba(191, 191, 191, -0.15);
-      border: none;
+      z-index: 10000;
     }
 
     .panel-list {
       height: 400px;
+      padding-top: 12px;
     }
 
     .dx-drawer-expand.dx-drawer-right .panel-list {

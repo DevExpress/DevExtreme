@@ -1,5 +1,4 @@
 import React from 'react';
-
 import List from 'devextreme-react/list';
 import { navigation } from './data.ts';
 
@@ -11,7 +10,7 @@ function NavigationList() {
         hoverStateEnabled={false}
         activeStateEnabled={false}
         focusStateEnabled={false}
-        className="panel-list" />
+        className="panel-list dx-theme-typography-background-color" />
     </div>
   );
 }

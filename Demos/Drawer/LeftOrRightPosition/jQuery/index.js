@@ -6,7 +6,7 @@ $(() => {
     height: 400,
     closeOnOutsideClick: true,
     template() {
-      const $list = $('<div>').width(200).addClass('panel-list');
+      const $list = $('<div>').width(200).addClass('panel-list dx-theme-typography-background-color');
 
       return $list.dxList({
         dataSource: navigation,
@@ -18,6 +18,9 @@ $(() => {
   }).dxDrawer('instance');
 
   $('#toolbar').dxToolbar({
+    elementAttr: {
+      class: 'dx-theme-background-color',
+    },
     items: [{
       widget: 'dxButton',
       location: 'before',
