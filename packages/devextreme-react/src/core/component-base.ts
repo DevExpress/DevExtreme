@@ -1,13 +1,13 @@
 import * as events from 'devextreme/events';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { requestAnimationFrame } from 'devextreme/animation/frame';
+import { deferUpdate } from 'devextreme/core/utils/common';
 
 import { TemplateManager } from './template-manager';
-
-import { OptionsManager, unscheduleGuards } from './options-manager';
+import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { ITemplateMeta } from './template';
 import { elementPropNames, getClassName } from './widget-config';
-
 import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
@@ -71,6 +71,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected useDeferUpdateForTemplates = false;
 
+  protected guardsUpdateScheduled = false;
+
   constructor(props: P) {
     super(props);
 
@@ -99,11 +101,9 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._updateCssClasses(prevProps, this.props);
 
     const config = this._getConfig();
-    const templateOptions = this._optionsManager.getTemplateOptions(config);
-    const dxTemplates = this._createDXTemplates?.(templateOptions) || {};
 
-    this._optionsManager.update(config, dxTemplates);
-    unscheduleGuards();
+    this._optionsManager.update(config);
+    this._scheduleTemplatesUpdate();
   }
 
   public componentWillUnmount(): void {
@@ -155,6 +155,28 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     this._optionsManager.setInstance(this._instance, config, this.subscribableOptions, this.independentEvents);
     this._instance.on('optionChanged', this._optionsManager.onOptionChanged);
+  }
+
+  private _scheduleTemplatesUpdate() {
+    if (this.guardsUpdateScheduled) {
+      return;
+    }
+
+    this.guardsUpdateScheduled = true;
+
+    const updateFunc = this.useDeferUpdateForTemplates ? deferUpdate : requestAnimationFrame;
+
+    updateFunc(() => {
+      this.guardsUpdateScheduled = false;
+
+      const config = this._getConfig();
+      const templateOptions = this._optionsManager.getTemplateOptions(config);
+      const dxTemplates = this._createDXTemplates?.(templateOptions, () => scheduleGuards()) || {};
+
+      this._optionsManager.updateTemplates(dxTemplates);
+    });
+
+    unscheduleGuards();
   }
 
   private _getConfig(): IConfigNode {

@@ -1,4 +1,3 @@
-import GlobalConfig from '../core/config';
 import * as support from '../core/utils/support';
 import { each } from '../core/utils/iterator';
 import devices from '../core/devices';
@@ -64,13 +63,8 @@ import MouseAndTouchStrategy from './pointer/mouse_and_touch';
   * @module events/pointer
 */
 
-const getStrategy = (support, { tablet, phone }) => {
-    const pointerEventStrategy = getStrategyFromGlobalConfig();
-
-    if(pointerEventStrategy) {
-        return pointerEventStrategy;
-    }
-
+const getStrategy = (support, device) => {
+    const { tablet, phone } = device;
     if(support.touch && !(tablet || phone)) {
         return MouseAndTouchStrategy;
     }
@@ -98,16 +92,6 @@ const pointer = {
     over: 'dxpointerover',
     out: 'dxpointerout'
 };
-
-function getStrategyFromGlobalConfig() {
-    const eventStrategyName = GlobalConfig().pointerEventStrategy;
-
-    return {
-        'mouse-and-touch': MouseAndTouchStrategy,
-        'touch': TouchStrategy,
-        'mouse': MouseStrategy,
-    }[eventStrategyName];
-}
 
 ///#DEBUG
 pointer.getStrategy = getStrategy;

@@ -10,7 +10,6 @@ module.exports = {
   testPathIgnorePatterns: [
     "component.test.tsx",
     "nested-option.test.tsx",
-    "props-updating.test.tsx",
     "template.test.tsx",
   ],
 };

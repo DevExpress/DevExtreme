@@ -89,7 +89,7 @@ export class GroupedDataMapProvider {
     return cellData?.startDate as Date ?? null;
   }
 
-  findCellPositionInMap(cellInfo) {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): any {
     const {
       groupIndex, startDate, isAllDay, index,
     } = cellInfo;
@@ -97,6 +97,7 @@ export class GroupedDataMapProvider {
       allDayPanelGroupedMap,
       dateTableGroupedMap,
     } = this.groupedDataMap;
+    const { viewOffset } = this._viewOptions;
 
     const rows = isAllDay && !this._viewOptions.isVerticalGrouping
       ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : []
@@ -107,7 +108,16 @@ export class GroupedDataMapProvider {
 
       for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
         const cell = row[columnIndex];
-        const { cellData } = cell;
+        // NOTE: If this is appointment's render call
+        // we should shift the real cellData dates by viewOffset
+        // to find correct cell indexes.
+        const cellData = isAppointmentRender
+          ? {
+            ...cell.cellData,
+            startDate: dateUtilsTs.addOffsets(cell.cellData.startDate, [-viewOffset]),
+            endDate: dateUtilsTs.addOffsets(cell.cellData.endDate, [-viewOffset]),
+          }
+          : cell.cellData;
 
         if (this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
           if (this.isStartDateInCell(startDate, isAllDay, cellData)) {
@@ -120,18 +130,21 @@ export class GroupedDataMapProvider {
     return undefined;
   }
 
-  private isStartDateInCell(startDate, inAllDayRow, cellData): boolean {
-    const { viewType, viewOffset } = this._viewOptions;
-    const cellStartDate = dateUtilsTs.addOffsets(cellData.startDate, [-viewOffset]);
-    const cellEndDate = dateUtilsTs.addOffsets(cellData.endDate, [-viewOffset]);
+  private isStartDateInCell(
+    startDate: Date,
+    inAllDayRow: boolean,
+    {
+      startDate: cellStartDate,
+      endDate: cellEndDate,
+      allDay: cellAllDay,
+    }: any,
+  ): boolean {
+    const { viewType } = this._viewOptions;
 
     switch (true) {
       case !isDateAndTimeView(viewType):
-      case inAllDayRow && cellData.allDay:
-        return dateUtils.sameDate(
-          dateUtilsTs.addOffsets(startDate, [0]),
-          cellStartDate,
-        );
+      case inAllDayRow && cellAllDay:
+        return dateUtils.sameDate(startDate, cellStartDate);
       case !inAllDayRow:
         return startDate >= cellStartDate && startDate < cellEndDate;
       default:

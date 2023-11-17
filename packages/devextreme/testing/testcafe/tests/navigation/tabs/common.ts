@@ -37,6 +37,29 @@ test('Tabs nav buttons', async (t) => {
   return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
 });
 
+test('Tab item width in secondary stylingMode', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Tab item width in secondary stylingMode.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'display: flex; width: 800px; height: 600px;');
+
+  const dataSource = [
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
+});
+
 [true, false].forEach((rtlEnabled) => {
   ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
     test('Tabs icon position', async (t) => {

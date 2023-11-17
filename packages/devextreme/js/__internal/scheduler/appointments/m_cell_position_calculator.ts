@@ -95,8 +95,12 @@ class BaseStrategy {
   getCoordinatesByDate(date, groupIndex, inAllDayRow) {
     const validGroupIndex = groupIndex || 0;
 
-    const cellInfo = { groupIndex: validGroupIndex, startDate: date, isAllDay: inAllDayRow };
-    const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
+    const cellInfo = {
+      groupIndex: validGroupIndex,
+      startDate: date,
+      isAllDay: inAllDayRow,
+    };
+    const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo, true);
     if (!positionByMap) {
       return undefined;
     }
