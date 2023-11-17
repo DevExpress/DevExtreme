@@ -167,9 +167,9 @@ $fluent-editor-border-width: 1px;
   border-radius: 0;
 
   &::after {
-    border-width: 1px;
-    border-style: solid;
-    border-color: $texteditor-border-bottom-color;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: $texteditor-border-bottom-color;
   }
 
   &.dx-state-hover {
