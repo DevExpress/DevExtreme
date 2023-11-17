@@ -68,14 +68,6 @@
   @include dx-dropdowneditor-button-icon-styling(eventall);
 }
 
-.dx-datebox-calendar {
-  &.dx-dropdowneditor-active {
-    &.dx-editor-filled {
-      background: $texteditor-hover-bg;
-    }
-  }
-}
-
 .dx-datebox-wrapper-calendar {
   .dx-popup-content {
     padding: 0;

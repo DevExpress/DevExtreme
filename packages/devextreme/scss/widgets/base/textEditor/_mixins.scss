@@ -12,7 +12,7 @@
   $label-font-size,
   $label-offset-y,
   $label-height,
-  $base-bg
+  $label-backdrop-bg
 ) {
   .dx-label {
     border-top-width: 0;
@@ -27,7 +27,7 @@
     }
 
     &::before {
-      background-color: $base-bg;
+      background-color: $label-backdrop-bg;
     }
   }
 
@@ -139,7 +139,7 @@
   $label-backdrop-offset-y,
   $label-before-min-width,
   $label-after-min-width,
-  $base-bg,
+  $label-backdrop-bg,
   $texteditor-border,
   $texteditor-border-color,
   $texteditor-border-bottom-color,
@@ -238,6 +238,7 @@
             height: 3px;
             top: -$label-backdrop-offset-y;
             margin-inline-start: -2px;
+            background-color: $label-backdrop-bg;
           }
         }
       }
@@ -247,12 +248,6 @@
     &.dx-texteditor-with-floating-label {
       outline: none;
       margin-top: $label-offset-y;
-  
-      .dx-label {
-        &::before {
-          background-color: $base-bg;
-        }
-      }
   
       &.dx-texteditor:not(.dx-daterangebox) {
         border: $texteditor-border;
@@ -353,7 +348,7 @@
             $texteditor-label-font-size,
             $label-offset-y,
             $label-active-height,
-            $base-bg
+            $label-backdrop-bg
           );
         }
   
