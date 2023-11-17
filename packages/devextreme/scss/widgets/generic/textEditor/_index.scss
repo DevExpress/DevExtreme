@@ -241,8 +241,8 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 @include dx-editor-outlined(
   $texteditor-input-border-radius,
   $generic-texteditor-label-size,
-  1px,
-  1px,
+  $generic-base-border-width,
+  $generic-base-border-width,
   dashed,
   $generic-base-inline-block-height,
   $generic-base-inline-block-height,

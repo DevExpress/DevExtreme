@@ -5,10 +5,15 @@
 // adduse
 
 /**
-* $name 10. Load indicator color
+* $name 10. Foreground color
 * $type color
 */
 $load-indicator-segment-bg-color: $base-accent !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $load-indicator-inner-segment-border-color: null !default;
 
 @if $mode == "light" {

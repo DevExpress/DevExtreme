@@ -56,7 +56,7 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-focused-border-color;
+      border-bottom: 2px solid $texteditor-indicator-border-color;
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
