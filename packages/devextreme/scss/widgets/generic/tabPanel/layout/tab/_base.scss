@@ -14,6 +14,7 @@
 
 
 .dx-tabpanel-tab {
+  width: $generic-tabpanel-tabs-item-width;
   padding: $generic-tabpanel-tabs-item-padding;
 
   &.dx-state-focused::after {
@@ -29,7 +30,7 @@
 
 .dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
   .dx-tabpanel-tab {
-    min-width: 140px;
+    min-width: max-content;
   
     &:last-child {
       &.dx-tab-selected::after {
