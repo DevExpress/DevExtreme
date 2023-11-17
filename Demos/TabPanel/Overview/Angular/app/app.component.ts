@@ -54,7 +54,7 @@ export class AppComponent {
     this.dataSource = service.getItems();
   }
 
-  getTaskClassName(priority: string) {
+  getTaskItemClasses(priority: string) {
     return `task-item task-item-priority-${priority}`;
   }
 }

@@ -16,7 +16,7 @@
         <div class="tabpanel-item">
           <div
             *ngFor="let task of tabPanelItem.tasks"
-            [className]="getTaskClassName(task.priority)"
+            [class]="getTaskItemClasses(task.priority)"
           >
             <span class="task-item-text">
               {{ task.text }}

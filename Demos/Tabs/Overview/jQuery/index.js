@@ -33,7 +33,6 @@ $(() => {
   }).dxTabs('instance');
 
   $('#orientation').dxSelectBox({
-    showNavButtons: false,
     items: orientations,
     value: orientations[0],
     inputAttr: { 'aria-label': 'Orientation' },
@@ -65,21 +64,31 @@ $(() => {
     },
   });
 
-  $('#show-navigation-buttons').dxCheckBox({
+  const showNavButtonsCheckBox = $('#show-navigation-buttons').dxCheckBox({
     text: 'Show navigation buttons',
     value: false,
     onValueChanged(data) {
+      const $widgetWrapper = $('.widget-wrapper');
+      const shouldRestrictWidth = data.value || scrollContentCheckBox.option('value');
+
+      $widgetWrapper.toggleClass('strict-width', shouldRestrictWidth);
+
       setTabsOption('showNavButtons', data.value);
     },
-  });
+  }).dxCheckBox('instance');
 
-  $('#scroll-content').dxCheckBox({
+  const scrollContentCheckBox = $('#scroll-content').dxCheckBox({
     text: 'Scroll content',
     value: false,
     onValueChanged(data) {
+      const $widgetWrapper = $('.widget-wrapper');
+      const shouldRestrictWidth = data.value || showNavButtonsCheckBox.option('value');
+
+      $widgetWrapper.toggleClass('strict-width', shouldRestrictWidth);
+
       setTabsOption('scrollByContent', data.value);
     },
-  });
+  }).dxCheckBox('instance');
 
   $('#full-width').dxCheckBox({
     text: 'Full width',

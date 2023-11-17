@@ -8,11 +8,11 @@
         item-template="tabPanelItem"
         :animation-enabled="true"
         :swipe-enabled="true"
-        v-model:tabs-position="tabsPosition"
-        v-model:styling-mode="stylingMode"
-        v-model:icon-position="iconPosition"
-        v-model:show-nav-buttons="showNavButtons"
         :data-source="dataSource"
+        :tabs-position="tabsPosition"
+        :styling-mode="stylingMode"
+        :icon-position="iconPosition"
+        :show-nav-buttons="showNavButtons"
       >
         <template #tabPanelItem="{ data }">
           <TabPanelItem
@@ -93,7 +93,6 @@ const showNavButtons = ref(true);
 .tabpanel-demo {
   display: flex;
   height: 100%;
-  min-height: 450px;
 }
 
 .widget-container {

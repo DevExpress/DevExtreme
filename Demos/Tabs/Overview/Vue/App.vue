@@ -1,5 +1,5 @@
 <template>
-  <div id="tabs-demo">
+  <div class="tabs-demo">
     <div class="widget-container">
       <div :class="widgetWrapperClasses">
         <DxTabs
@@ -79,7 +79,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxTabs from 'devextreme-vue/tabs';
@@ -96,18 +96,43 @@ const fullWidth = ref(false);
 const rtlEnabled = ref(false);
 const scrollByContent = ref(false);
 const showNavButtons = ref(false);
+const shouldRestrictWidth = ref(false);
 const orientation = ref(orientations[0]);
 const iconPosition = ref(iconPositions[0]);
 const stylingMode = ref(stylingModes[1]);
 
-const dataSources = [tabsWithText, tabsWithIconAndText, tabsWithIcon];
-const widgetWrapperClasses = computed(() => `widget-wrapper widget-wrapper-${orientation.value}`);
+const widgetWrapperClasses = computed(() => [
+  'widget-wrapper',
+  `widget-wrapper-${orientation.value}`,
+  shouldRestrictWidth.value && 'strict-width',
+]);
+
 const tabsWidth = computed(() => (fullWidth.value ? '100%' : 'auto'));
+
+const dataSources = computed(() => [
+  tabsWithText,
+  tabsWithIconAndText,
+  tabsWithIcon,
+]);
+
+const enforceWidthConstraint = (value) => {
+  shouldRestrictWidth.value = value || scrollByContent.value || showNavButtons.value;
+};
+
+watch(showNavButtons, enforceWidthConstraint);
+watch(scrollByContent, enforceWidthConstraint);
 </script>
 <style>
-#tabs-demo {
+.tabs-demo {
   display: flex;
-  min-height: 450px;
+}
+
+.strict-width {
+  max-width: 340px;
+}
+
+.dx-theme-generic .strict-width {
+  max-width: 250px;
 }
 
 .widget-container {
@@ -115,7 +140,7 @@ const tabsWidth = computed(() => (fullWidth.value ? '100%' : 'auto'));
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  max-width: calc(100% - 300px);
+  width: 100%;
   min-width: 200px;
   padding: 16px 32px;
   overflow: clip;
@@ -124,10 +149,10 @@ const tabsWidth = computed(() => (fullWidth.value ? '100%' : 'auto'));
 .widget-wrapper {
   display: inline-flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   gap: 80px;
-  max-width: 100%;
+  width: 100%;
 }
 
 .widget-wrapper-vertical {

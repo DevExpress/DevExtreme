@@ -1,9 +1,9 @@
-<div id="tabs-demo">
+<div class="tabs-demo">
   <div class="widget-container">
-    <div [class]="widgetWrapperClasses">
+    <div [ngClass]="widgetWrapperClasses">
       <dx-tabs
         #withText
-        width="auto"
+        [width]="width"
         [selectedIndex]="0"
         [rtlEnabled]="rtlEnabled"
         [scrollByContent]="scrollByContent"
@@ -16,7 +16,7 @@
 
       <dx-tabs
         #withIconAndText
-        width="auto"
+        [width]="width"
         [selectedIndex]="0"
         [rtlEnabled]="rtlEnabled"
         [scrollByContent]="scrollByContent"
@@ -29,7 +29,7 @@
 
       <dx-tabs
         #withIcon
-        width="auto"
+        [width]="width"
         [selectedIndex]="0"
         [rtlEnabled]="rtlEnabled"
         [scrollByContent]="scrollByContent"
@@ -49,7 +49,7 @@
       <dx-select-box
         [inputAttr]="{ 'aria-label': 'Orientation' }"
         [items]="orientations"
-        [value]="orientation"
+        [(value)]="orientation"
         (onValueChanged)="onOrientationChanged($event)"
       ></dx-select-box>
     </div>
@@ -77,6 +77,7 @@
         id="show-navigation-buttons"
         text="Show navigation buttons"
         [(value)]="showNavButtons"
+        (onValueChanged)="toggleStrictWidthClass($event)"
       ></dx-check-box>
     </div>
 
@@ -84,6 +85,7 @@
       <dx-check-box
         text="Scroll content"
         [(value)]="scrollByContent"
+        (onValueChanged)="toggleStrictWidthClass($event)"
       ></dx-check-box>
     </div>
 

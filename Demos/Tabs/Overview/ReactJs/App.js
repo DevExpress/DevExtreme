@@ -14,6 +14,7 @@ import {
   orientationLabel,
 } from './data.js';
 
+const STRICT_WIDTH_CLASS = 'strict-width';
 function OptionWrapper(props) {
   return (
     <div className="option">
@@ -29,9 +30,24 @@ const App = () => {
   const [showNavigation, setShowNavigation] = React.useState(false);
   const [scrollContent, setScrollContent] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(false);
+  const [width, setWidth] = React.useState('auto');
   const [rtlEnabled, setRtlEnabled] = React.useState(false);
   const [widgetWrapperClasses, setWidgetWrapperClasses] = React.useState(
     'widget-wrapper widget-wrapper-horizontal',
+  );
+  const enforceWidthConstraint = React.useCallback(
+    (shouldRestrictWidth) => {
+      const callback = (prevClasses) => {
+        const restClasses = prevClasses
+          .split(' ')
+          .filter((className) => className !== STRICT_WIDTH_CLASS)
+          .join(' ');
+        const strictWidthClass = shouldRestrictWidth ? STRICT_WIDTH_CLASS : '';
+        return `${restClasses} ${strictWidthClass}`;
+      };
+      setWidgetWrapperClasses(callback);
+    },
+    [setWidgetWrapperClasses],
   );
   const stylingModeChanged = React.useCallback(
     (e) => {
@@ -54,21 +70,26 @@ const App = () => {
   );
   const showNavigationChanged = React.useCallback(
     (e) => {
+      const shouldRestrictWidth = e.value || scrollContent;
+      enforceWidthConstraint(shouldRestrictWidth);
       setShowNavigation(e.value);
     },
-    [setShowNavigation],
+    [scrollContent, setShowNavigation, enforceWidthConstraint],
   );
   const scrollContentChanged = React.useCallback(
     (e) => {
+      const shouldRestrictWidth = e.value || showNavigation;
+      enforceWidthConstraint(shouldRestrictWidth);
       setScrollContent(e.value);
     },
-    [setScrollContent],
+    [showNavigation, setScrollContent, enforceWidthConstraint],
   );
   const fullWidthChanged = React.useCallback(
     (e) => {
       setFullWidth(e.value);
+      setWidth(e.value ? '100%' : 'auto');
     },
-    [setFullWidth],
+    [setFullWidth, setWidth],
   );
   const rtlEnabledChanged = React.useCallback(
     (e) => {
@@ -77,13 +98,13 @@ const App = () => {
     [setRtlEnabled],
   );
   return (
-    <div id="tabs-demo">
+    <div className="tabs-demo">
       <div className="widget-container">
         <div className={widgetWrapperClasses}>
           <Tabs
             id="withText"
-            width="auto"
-            selectedIndex={0}
+            width={width}
+            defaultSelectedIndex={0}
             rtlEnabled={rtlEnabled}
             dataSource={tabsText}
             scrollByContent={scrollContent}
@@ -95,8 +116,8 @@ const App = () => {
 
           <Tabs
             id="withIconAndText"
-            width="auto"
-            selectedIndex={0}
+            width={width}
+            defaultSelectedIndex={0}
             rtlEnabled={rtlEnabled}
             dataSource={tabsIconAndText}
             scrollByContent={scrollContent}
@@ -108,8 +129,8 @@ const App = () => {
 
           <Tabs
             id="withIcon"
-            width="auto"
-            selectedIndex={0}
+            width={width}
+            defaultSelectedIndex={0}
             rtlEnabled={rtlEnabled}
             dataSource={tabsIcon}
             scrollByContent={scrollContent}

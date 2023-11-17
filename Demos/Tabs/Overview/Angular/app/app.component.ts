@@ -39,6 +39,8 @@ export class AppComponent {
 
   iconPositions: string[] = ['top', 'start', 'end', 'bottom'];
 
+  width = 'auto';
+
   orientation: string;
 
   stylingMode: string;
@@ -51,7 +53,14 @@ export class AppComponent {
 
   rtlEnabled = false;
 
-  widgetWrapperClasses = 'widget-wrapper widget-wrapper-horizontal';
+  shouldRestrictWidth = false;
+
+  widgetWrapperClasses = {
+    'widget-wrapper': true,
+    'widget-wrapper-horizontal': true,
+    'widget-wrapper-vertical': false,
+    'strict-width': false,
+  };
 
   constructor(service: Service) {
     this.tabsWithText = service.getTabsWithText();
@@ -63,18 +72,21 @@ export class AppComponent {
   }
 
   onOrientationChanged(e) {
-    this.widgetWrapperClasses = `widget-wrapper widget-wrapper-${e.value}`;
-    this.setTabsOption('orientation', e.value);
+    if (e.value === 'vertical') {
+      this.widgetWrapperClasses['widget-wrapper-vertical'] = true;
+      this.widgetWrapperClasses['widget-wrapper-horizontal'] = false;
+    } else {
+      this.widgetWrapperClasses['widget-wrapper-horizontal'] = true;
+      this.widgetWrapperClasses['widget-wrapper-vertical'] = false;
+    }
+  }
+
+  toggleStrictWidthClass(e) {
+    this.widgetWrapperClasses['strict-width'] = e.value || this.scrollByContent || this.showNavButtons;
   }
 
   onFullWidthChanged(e) {
-    this.setTabsOption('width', e.value ? '100%' : 'auto');
-  }
-
-  setTabsOption(option, value) {
-    this.withText.instance.option(option, value);
-    this.withIconAndText.instance.option(option, value);
-    this.withIcon.instance.option(option, value);
+    this.width = e.value ? '100%' : 'auto';
   }
 }
 
