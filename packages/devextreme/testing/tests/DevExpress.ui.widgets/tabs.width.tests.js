@@ -57,7 +57,7 @@ QUnit.module('Width', () => {
 
         createFixedTabs() {
             this._initializeTabs(400);
-            // this.checkFixedTabs();
+            this.checkFixedTabs();
         }
 
         checkFixedTabs() {
@@ -91,7 +91,7 @@ QUnit.module('Width', () => {
         checkNavigationButtonsTabs() {
             const { scrollingEnabled } = this;
 
-            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()), scrollingEnabled === false ? 100 : 183);
+            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()), scrollingEnabled === true ? 100 : 183);
 
             const firstItemWidth = this._getTabItem(0).outerWidth();
             const secondItemWidth = this._getTabItem(1).outerWidth();
@@ -172,11 +172,11 @@ QUnit.module('Width', () => {
         });
     });
 
-    QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', function(assert) {
+    QUnit.test('Does not render navbuttons: dx-tabs { max-width: 413px; } .dx-tab{ width: 100px; min-width: 0; }', function(assert) {
         const styles = `
             <style nonce="qunit-test">
                 .dx-tabs { max-width: 413px; }
-                .dx-tab { width: 100px; }
+                .dx-tab { width: 100px; min-width: 0; }
             </style>
         `;
 
