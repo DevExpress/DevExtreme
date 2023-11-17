@@ -91,7 +91,7 @@ QUnit.module('Width', () => {
         checkNavigationButtonsTabs() {
             const { scrollingEnabled } = this;
 
-            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()) <= scrollingEnabled === true ? 100 : 183, true);
+            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()) <= (scrollingEnabled === true ? 100 : 183), true);
 
             const firstItemWidth = this._getTabItem(0).outerWidth();
             const secondItemWidth = this._getTabItem(1).outerWidth();
