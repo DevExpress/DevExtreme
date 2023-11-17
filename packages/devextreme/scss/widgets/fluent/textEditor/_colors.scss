@@ -22,19 +22,7 @@ $texteditor-label-color-focused: $base-accent;
 * $name 30. Outlined background color
 * $type color
 */
-$texteditor-outlined-bg: $base-bg !default;
-
-/**
-* $name 31. Outlined hovered background color
-* $type color
-*/
-$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
-
-/**
-* $name 32. Outlined focused background color
-* $type color
-*/
-$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
+$texteditor-outlined-bg: null !default;
 
 /**
 * $name 40. Filled background color
@@ -95,10 +83,12 @@ $texteditor-label-transition:
 
 @if $mode == "light" {
   @if $color == 'blue' {
+    $texteditor-outlined-bg: $base-bg !default;
     $texteditor-filled-bg: darken($base-bg, 3.9) !default;
   }
   
   @if $color == 'modern' {
+    $texteditor-outlined-bg: $base-bg !default;
     $texteditor-filled-bg: #F1F5F9 !default;
   }
   $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default; // #c7c7c7
@@ -108,15 +98,33 @@ $texteditor-label-transition:
 }
 
 @if $mode == "dark" {
+  @if $color == 'blue' {
+    $texteditor-outlined-bg: $base-bg !default;
+    $texteditor-filled-bg: darken($base-bg, 8.2) !default;
+  }
+
   @if $color == 'modern' {
+    $texteditor-outlined-bg: #141e28 !default;
     $texteditor-filled-bg: #323C4B !default;
   }
-  $texteditor-filled-bg: darken($base-bg, 8.2) !default;
+
   $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default; // #757575
   $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default; // #6b6b6b
   $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default; // #bdbdbd
   $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default; // #b3b3b3
 }
+
+/**
+* $name 31. Outlined hovered background color
+* $type color
+*/
+$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
+
+/**
+* $name 32. Outlined focused background color
+* $type color
+*/
+$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
 
 /**
 * $name 41. Filled hovered background color
@@ -129,4 +137,5 @@ $texteditor-filled-bg-hover: $texteditor-filled-bg !default;
 * $type color
 */
 $texteditor-filled-bg-focused: $texteditor-filled-bg !default;
+
   
