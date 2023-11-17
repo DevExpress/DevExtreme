@@ -285,12 +285,12 @@ $button-accent-foreground-color: null !default;
   $button-success-outlined-active-bg: darken(saturate($base-success, 39), 33.1) !default; // #0B500B
   $button-success-outlined-selected-bg: darken(saturate($base-success, 40.1), 35.7) !default; // #094509
 
-  $button-default-color: $typography-bg !default;
-  $button-default-selected-color: $typography-bg !default;
-  $button-danger-color: $typography-bg !default;
-  $button-danger-selected-color: $typography-bg !default;
-  $button-success-color: $typography-bg !default;
-  $button-success-selected-color: $typography-bg !default;
+  $button-default-color: $base-typography-bg !default;
+  $button-default-selected-color: $base-typography-bg !default;
+  $button-danger-color: $base-typography-bg !default;
+  $button-danger-selected-color: $base-typography-bg !default;
+  $button-success-color: $base-typography-bg !default;
+  $button-success-selected-color: $base-typography-bg !default;
   $button-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
 }
