@@ -104,10 +104,30 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-accent-modificator: "blue" !default;
 }
 
+@if $color == "modern" {
+  $fluent-color-accent-modificator: "modern" !default;
+}
+
 @if $mode == "light" {
   $fluent-color-theme-modificator: "light" !default;
 
-  $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
+  @if $color == "blue" {
+    $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
+    $base-success: rgba(16, 124, 16, 1) !default; // #107c10
+    $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
+
+    $base-typography-bg: #FAFAFA !default; // #FAFAFA
+  }
+
+  @if $color == "modern" {
+    $base-accent: #3C82F5 !default; // #3C82F5
+    $base-success: #19914B !default; // #19914B
+    $base-danger: #DC2828 !default; // #DC2828
+  
+    $base-typography-bg: #F8FAFC !default; // #F8FAFC
+  }
+
+  // $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
   $base-accent-hover: darken(desaturate($base-accent, 4.18), 4.71) !default; // #115ea3
   $base-accent-active: darken(desaturate(adjust-hue($base-accent, -1), 4.65), 9.61) !default; // #0f548c
   $base-accent-selected: darken(desaturate($base-accent-active, 2.02), 4.71) !default; // #0E4775
@@ -142,12 +162,12 @@ $scrollview-pulldown-path: null !default;
   $base-shadow-color: $base-inverted-bg !default;
   $base-inverted-text-color: #fff !default;
 
-  $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
+  // $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
   $base-danger-hover: darken(desaturate($base-danger, 3.05), 5.10) !default; // #bc2f32
   $base-danger-active: darken(desaturate($base-danger, 3.56), 35.69) !default; // #3f1011
   $base-danger-selected: darken(desaturate($base-danger, 2.78), 22.55) !default; // #751D1F
 
-  $base-success: rgba(16, 124, 16, 1) !default; // #107c10
+  // $base-success: rgba(16, 124, 16, 1) !default; // #107c10
   $base-success-hover: darken(saturate($base-success, 0.63), 2.75) !default; // #0e700e
   $base-success-active: darken(desaturate($base-success, 0.95), 19.22) !default; // #052505
   $base-success-selected: darken(desaturate($base-success, 0.22), 12.16) !default; // #094509
@@ -158,7 +178,23 @@ $scrollview-pulldown-path: null !default;
 @if $mode == "dark" {
   $fluent-color-theme-modificator: "dark" !default;
 
-  $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
+  @if $color == "blue" {
+    $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
+    $base-success: #54B054 !default; // #54B054
+    $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
+
+    $base-typography-bg: #1F1F1F !default; // #1F1F1F
+  }
+
+  @if $color == "modern" {
+    $base-accent: #5492F6 !default; // #5492F6
+    $base-success: #2DC36B !default; // #2DC36B
+    $base-danger: #FF6464 !default; // #FF6464
+  
+    $base-typography-bg: #141E28 !default; // #141E28
+  }
+
+  // $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
   $base-accent-hover: lighten(desaturate($base-accent, 1.67), 5.29) !default; // #62ABF5
   $base-accent-active: darken(desaturate(adjust-hue($base-accent, -1), 16.30), 10.59) !default; // #2886DE
   $base-accent-selected: darken(desaturate(adjust-hue($base-accent, -3), 9.05), 31.57) !default; // #0f548c
@@ -177,7 +213,7 @@ $scrollview-pulldown-path: null !default;
   $base-bg-active: darken($base-bg, 3.9) !default; // #1F1F1F
   $base-background-disabled: darken($base-bg, 8.2) !default; // #141414
 
-  $base-typography-bg: $base-bg-active !default; // #1F1F1F
+  // $base-typography-bg: $base-bg-active !default; // #1F1F1F
 
   $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
   $base-border-color-hover: lighten($base-border-color, 7.84) !default; // #757575
@@ -193,12 +229,12 @@ $scrollview-pulldown-path: null !default;
   $base-shadow-color: #000 !default;
   $base-inverted-text-color: #000 !default;
 
-  $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
+  // $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
   $base-danger-hover: lighten(saturate($base-danger, 0.44), 7.45) !default; // #EA9C9E
   $base-danger-active: lighten(desaturate(adjust-hue($base-danger, 1.8), 0.9), 28.8) !default; // #FDF6F6
   $base-danger-selected: lighten(saturate(adjust-hue($base-danger, 0.7), 1.3), 14.9); // #F1BBBC
 
-  $base-success: #54B054 !default; // #54B054
+  // $base-success: #54B054 !default; // #54B054
   $base-success-hover: lighten(saturate($base-success, 5.4), 22.5) !default; // #9FD89F
   $base-success-active: lighten(saturate($base-success, 10.6), 45.3) !default; // #F1FAF1
   $base-success-selected: lighten(saturate($base-success, 5.3), 34.1) !default; // #C9E9C9

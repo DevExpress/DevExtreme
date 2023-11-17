@@ -94,15 +94,23 @@ $texteditor-label-transition:
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
-  $texteditor-filled-bg: darken($base-bg, 3.9) !default;
+  @if $color == 'blue' {
+    $texteditor-filled-bg: darken($base-bg, 3.9) !default;
+  }
+  
+  @if $color == 'modern' {
+    $texteditor-filled-bg: #F1F5F9 !default;
+  }
   $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default; // #c7c7c7
   $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default; // #b3b3b3
   $texteditor-border-bottom-color-hover: darken($texteditor-border-bottom-color, 3.92) !default; // #575757
   $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default; // #4d4d4d
 }
 
-
 @if $mode == "dark" {
+  @if $color == 'modern' {
+    $texteditor-filled-bg: #323C4B !default;
+  }
   $texteditor-filled-bg: darken($base-bg, 8.2) !default;
   $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default; // #757575
   $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default; // #6b6b6b
