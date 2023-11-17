@@ -183,6 +183,7 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-theme-modificator: "dark" !default;
 
   @if $color == "blue" {
+    $base-bg: rgba(41, 41, 41, 1) !default; // #292929
     $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
     $base-success: #54B054 !default; // #54B054
     $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
@@ -192,6 +193,7 @@ $scrollview-pulldown-path: null !default;
   }
 
   @if $color == "modern" {
+    $base-bg: rgba(30, 40, 50, 1) !default; // #1e2832
     $base-accent: #5492F6 !default; // #5492F6
     $base-success: #2DC36B !default; // #2DC36B
     $base-danger: #FF6464 !default; // #FF6464
