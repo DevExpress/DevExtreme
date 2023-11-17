@@ -103,6 +103,7 @@
     "gulp-eol": "0.2.0",
     "gulp-eslint-new": "1.7.2",
     "gulp-file": "0.4.0",
+    "gulp-filter": "7.0.0",
     "gulp-flatmap": "1.0.2",
     "gulp-footer": "2.1.0",
     "gulp-header": "2.0.9",
