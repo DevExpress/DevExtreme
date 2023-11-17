@@ -1,26 +1,13 @@
-export interface License {
-  readonly [k: string]: unknown;
-  readonly customerId: string;
-  readonly maxVersionAllowed: number;
-}
+import { Token, TokenKind } from './types';
 
-const enum TokenKind {
-  corrupted = 'corrupted',
-  verified = 'verified',
-}
-
-export type Token = {
-  readonly kind: TokenKind.verified;
-  readonly payload: License;
-} | {
-  readonly kind: TokenKind.corrupted;
-  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
-};
-
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022';
-
-export function parseLicenseKey(): void {
-
+export function parseLicenseKey(): Token {
+  return {
+    kind: TokenKind.verified,
+    payload: {
+      customerId: '',
+      maxVersionAllowed: 0,
+    },
+  };
 }
 
 export function validateLicense(): void {
