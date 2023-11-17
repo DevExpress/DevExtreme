@@ -87,7 +87,7 @@ export interface dxElementWrapper {
 
   prop(propertyName: string, value: string | number | boolean): this;
 
-  remove(element: Element | dxElementWrapper): this;
+  remove(): this;
 
   removeAttr(attributeName: string): this;
 
