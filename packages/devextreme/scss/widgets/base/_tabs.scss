@@ -28,6 +28,10 @@
   &.dx-overflow-hidden {
     overflow: hidden;
   }
+
+  &.dx-tabs-vertical .dx-tabs-wrapper .dx-tab-text {
+    white-space: normal;
+  }
 }
 
 .dx-tabs-scrollable {
@@ -64,7 +68,7 @@
   }
 }
 
-.dx-tabs .dx-tabs-scrollable .dx-tab {
+.dx-tabs:not(.dx-tabs-vertical) .dx-tabs-scrollable .dx-tab {
   flex-basis: 100%;
   min-width: max-content;
 }
