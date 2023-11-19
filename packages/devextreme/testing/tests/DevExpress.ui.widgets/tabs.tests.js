@@ -16,7 +16,6 @@ QUnit.testStart(function() {
     const markup =
         `<style nonce="qunit-test">
             #scrollableTabs .dx-tab {
-                display: table-cell;
                 padding: 35px;
             }
 

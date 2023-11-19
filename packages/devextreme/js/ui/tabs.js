@@ -346,12 +346,7 @@ const Tabs = CollectionWidget.inherit({
     _isItemsHeightExceeded() {
         const $visibleItems = this._getVisibleItems();
         const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
-
-        const scrollable = this._scrollable?.$element?.();
-
-        const element = scrollable ?? this.$element();
-
-        const elementHeight = getHeight(element);
+        const elementHeight = getHeight(this.$element());
         const isItemsHeightExceeded = itemsHeight - 1 > elementHeight;
 
         return isItemsHeightExceeded;
