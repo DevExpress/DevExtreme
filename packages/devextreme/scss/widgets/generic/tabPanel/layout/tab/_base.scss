@@ -28,18 +28,9 @@
   }
 }
 
-.dx-tabpanel-tabs .dx-tabs {
-  &:not(.dx-tabs-vertical) {
-    .dx-tabpanel-tab {
-      max-width: $generic-tabpanel-tabs-item-width;
-      width: $generic-tabpanel-tabs-item-width;
-    }
-
-    &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
-      .dx-tabpanel-tab {
-        width: max-content;
-      }
-    }
+.dx-tabpanel-tabs .dx-tabs:not(.dx-tabs-vertical) {
+  .dx-tabpanel-tab {
+    max-width: $generic-tabpanel-tabs-item-width;
   }
 }
 
