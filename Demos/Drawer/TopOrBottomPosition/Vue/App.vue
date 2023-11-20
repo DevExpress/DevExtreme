@@ -116,7 +116,6 @@ const toolbarContent = [{
 
     .panel-list .dx-list-item {
       text-align: center;
-      border-top: 1px solid rgba(221, 221, 221, 0.2);
     }
 
     .options {

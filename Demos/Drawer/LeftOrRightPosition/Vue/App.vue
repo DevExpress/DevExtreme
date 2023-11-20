@@ -111,10 +111,6 @@ const toolbarContent = [{
       float: right;
     }
 
-    .panel-list .dx-list-item {
-      border-top: 1px solid rgba(221, 221, 221, 0.2);
-    }
-
     .options {
       padding: 20px;
       background-color: rgba(191, 191, 191, 0.15);
