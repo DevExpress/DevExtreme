@@ -18,7 +18,7 @@ import DateRangeBox from '../../../model/dateRangeBox';
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
-const HOVER_STATE_CLASS = 'dx-state-focused';
+const HOVER_STATE_CLASS = 'dx-state-hover';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 

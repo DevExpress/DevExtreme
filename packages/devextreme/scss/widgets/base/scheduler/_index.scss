@@ -432,16 +432,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-appointment-recurrence {
-    .dx-scheduler-appointment-content {
-      padding: $scheduler-appointment-recurrence-content-padding;
-
-      .dx-rtl & {
-        padding: $scheduler-appointment-recurrence-content-padding-rtl;
-      }
-    }
-  }
-
   .dx-scheduler-appointment-content {
     padding: $scheduler-appointment-content-padding;
     cursor: pointer;

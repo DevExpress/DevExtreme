@@ -9,12 +9,15 @@ import {
   isFirstCellInMonthWithIntervalCount,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
 
+import timezoneUtils from '../../m_utils_time_zone';
 // eslint-disable-next-line import/no-cycle
 import { calculateAlignedWeeksBetweenDates } from './m_utils';
 import { ViewDataGenerator } from './m_view_data_generator';
 
-const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
+const toMs = dateUtils.dateToMilliseconds;
+
 const DAYS_IN_WEEK = 7;
+
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
   _minVisibleDate: any;
 
@@ -28,9 +31,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
       indicatorTime,
       timeZoneCalculator,
       intervalCount,
+      viewOffset,
     } = options;
+
     const data = super.getCellData(rowIndex, columnIndex, options, false);
-    const { startDate } = data;
+    const startDate = timezoneUtils.addOffsetsWithoutDST(data.startDate, -viewOffset);
 
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
     data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
@@ -56,8 +61,8 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return setOptionHour(startDate, endDayHour);
   }
 
-  getInterval() {
-    return DAY_IN_MILLISECONDS;
+  getInterval(): number {
+    return toMs('day');
   }
 
   _calculateStartViewDate(options) {
@@ -111,5 +116,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
   setHiddenInterval() {
     this.hiddenInterval = 0;
+  }
+
+  protected getCellEndDate(cellStartDate: Date, options: any): Date {
+    const { startDayHour, endDayHour } = options;
+    const durationMs = (endDayHour - startDayHour) * toMs('hour');
+    return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
   }
 }
