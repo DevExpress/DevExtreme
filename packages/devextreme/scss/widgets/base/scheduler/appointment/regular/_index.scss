@@ -53,7 +53,7 @@ $reduced-icon-offset: null !default;
           background-color: $appointment-active-color;
           border-radius: 4px;
         }
-        
+
         &.dx-scheduler-appointment-has-resource-color:not(.dx-scheduler-appointment-drag-source)::before {
           @include dx-scheduler-appointment-shadow-color-mixin();
         }
@@ -133,13 +133,11 @@ $reduced-icon-offset: null !default;
     top: 3px;
     right: $reduced-icon-offset;
 
-    @include dx-icon(arrowright);
+    @include dx-icon(arrowback);
 
     .dx-rtl & {
       right: auto;
       left: 3px;
-
-      @include dx-icon(arrowleft);
     }
   }
 
