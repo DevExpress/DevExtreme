@@ -45,7 +45,7 @@ function isGroupRow({ rowType, column }) {
     && !column.showWhenGrouped && !column.command;
 }
 
-function watch({
+function setWatcher({
   element, watch, getter, callBack,
 }) {
   if (watch) {
@@ -198,7 +198,7 @@ class RowsView extends ColumnsView {
       if (this.option('rowAlternationEnabled')) {
         this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
 
-        watch({
+        setWatcher({
           element: $row.get(0),
           watch: rowOptions.watch,
           getter: () => this._isAltRow(row),
@@ -210,7 +210,7 @@ class RowsView extends ColumnsView {
 
       this._setAriaRowIndex(rowOptions, $row);
 
-      watch({
+      setWatcher({
         element: $row.get(0),
         watch: rowOptions.watch,
         getter: () => rowOptions.rowIndex,
