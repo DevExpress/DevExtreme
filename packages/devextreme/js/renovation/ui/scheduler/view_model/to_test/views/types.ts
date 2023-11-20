@@ -5,6 +5,7 @@ export interface GetDateForHeaderTextOptions {
   startViewDate: Date;
   cellCountInDay: number;
   interval: number;
+  viewOffset: number;
 }
 
 export type GetDateForHeaderText = (

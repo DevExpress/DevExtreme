@@ -1,23 +1,18 @@
-import timeZoneUtils from '../../../../../../../__internal/scheduler/m_utils_time_zone';
 import { GetDateForHeaderText } from '../types';
-import { getStartViewDateWithoutDST } from './base';
+import { getValidCellDateForLocalTimeFormat } from './base';
 
-export const getDateForHeaderText: GetDateForHeaderText = (index, date, options) => {
-  if (!timeZoneUtils.isTimezoneChangeInDate(date)) {
-    return date;
-  }
-
-  const {
+export const getDateForHeaderText: GetDateForHeaderText = (
+  index,
+  date,
+  {
     startDayHour,
     startViewDate,
     cellCountInDay,
     interval,
-  } = options;
-
-  const result = getStartViewDateWithoutDST(startViewDate, startDayHour);
-
-  const validIndex = index % cellCountInDay;
-  result.setTime(result.getTime() + validIndex * interval);
-
-  return result;
-};
+    viewOffset,
+  }) => getValidCellDateForLocalTimeFormat(date, {
+  startViewDate,
+  startDayHour,
+  cellIndexShift: (index % cellCountInDay) * interval,
+  viewOffset,
+});

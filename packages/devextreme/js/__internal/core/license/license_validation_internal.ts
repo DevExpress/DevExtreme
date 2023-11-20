@@ -2,11 +2,8 @@ import { Token, TokenKind } from './types';
 
 export function parseLicenseKey(): Token {
   return {
-    kind: TokenKind.verified,
-    payload: {
-      customerId: '',
-      maxVersionAllowed: 0,
-    },
+    kind: TokenKind.internal,
+    internalUsageId: 'internal',
   };
 }
 

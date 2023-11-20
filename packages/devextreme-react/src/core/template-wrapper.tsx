@@ -53,7 +53,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   const removalListenerElement = useRef<HTMLElement>();
 
   const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
-    if (args?.isUnmounting || isRemovalLocked) {
+    if (args?.isUnmounting || isRemovalLocked.current) {
       return;
     }
 
@@ -71,12 +71,10 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   useLayoutEffect(() => {
     const el = element.current;
 
-    if (el) {
+    if (el && el.nodeType === Node.ELEMENT_NODE) {
       events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
       events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
-    }
-
-    if (!removalListenerRequired) {
+    } else if (!removalListenerRequired) {
       setRemovalListenerRequired(true);
     } else if (removalListenerElement.current) {
       events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);

@@ -330,7 +330,6 @@ export type GlobalConfig = {
      * @default false
      */
     shading?: boolean;
-    licenseKey?: string;
   };
   /**
    * @docid
@@ -375,6 +374,11 @@ export type GlobalConfig = {
    * @public
    */
   useLegacyVisibleIndex?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  licenseKey?: string;
 };
 
 /**

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { ITemplate } from './configuration/config-node';
 
 interface DXTemplate {
@@ -35,7 +36,7 @@ export interface TemplateWrapperProps {
   onRemoved: () => void;
 }
 
-export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
+export type TemplateFunc = (arg: TemplateArgs) => JSX.Element | ReactNode;
 
 export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>, callback?: () => void) => DXTemplateCollection;
 

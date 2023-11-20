@@ -6,7 +6,9 @@ import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
 import '__internal/scheduler/workspaces/m_work_space_work_week';
 
-const CELL_CLASS = 'dx-scheduler-date-table-cell';
+const CLASSES = {
+    dateTableCell: '.dx-scheduler-date-table-cell'
+};
 
 QUnit.dump.maxDepth = 10;
 
@@ -169,7 +171,7 @@ module('Work Space Week', () => {
                 renovateRender: false,
             });
 
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(8);
+            const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
 
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 2, 17, 5, 30),
@@ -187,7 +189,7 @@ module('Work Space Week', () => {
                 renovateRender: false,
             });
 
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(8);
+            const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
 
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 2, 3, 0, 30),
@@ -246,7 +248,10 @@ module('Work Space Week', () => {
                 groupIndex: 0,
             };
 
-            assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 100, left: 100 }, false), cellData, 'Cell data is OK');
+            assert.deepEqual(this.instance.getCellDataByCoordinates({
+                top: 100,
+                left: 100
+            }, false), cellData, 'Cell data is OK');
         });
 
         test('Cell data should be correct if DST makes sense (T442904)', function(assert) {
@@ -279,7 +284,10 @@ module('Work Space Week', () => {
                 groupIndex: 0,
             };
 
-            assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 51, left: 100 }, true), cellData, 'Cell data is OK');
+            assert.deepEqual(this.instance.getCellDataByCoordinates({
+                top: 51,
+                left: 100
+            }, true), cellData, 'Cell data is OK');
         });
 
         test('Get last view date', function(assert) {
