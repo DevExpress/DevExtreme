@@ -9,6 +9,7 @@ import { getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
+import { removeEvent } from '@js/events/remove';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
@@ -177,15 +178,20 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/m_adaptivi
       };
 
       renderFormTemplate();
-      templateOptions.watch && templateOptions.watch(() => ({
-        isItemEdited: that._isItemEdited(item),
-        value: cellOptions.row.values[columnIndex],
-      }), () => {
-        // @ts-expect-error
-        $container.contents().remove();
-        $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
-        renderFormTemplate();
-      });
+
+      if (templateOptions.watch) {
+        const dispose = templateOptions.watch(() => ({
+          isItemEdited: that._isItemEdited(item),
+          value: cellOptions.row.values[columnIndex],
+        }), () => {
+          // @ts-expect-error
+          $container.contents().remove();
+          $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
+          renderFormTemplate();
+        });
+
+        eventsEngine.on($container, removeEvent, dispose);
+      }
     };
   },
 

@@ -8,6 +8,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
+import { removeEvent } from '@js/events/remove';
 import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
@@ -322,25 +323,30 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
     return (options, container) => {
       const $container = $(container);
+      const { row } = cellOptions;
 
-      cellOptions.row.watch?.(() => column.selector(cellOptions.row.data), () => {
-        let $editorElement: any = $container.find('.dx-widget').first();
-        let validator: any = $editorElement.data('dxValidator');
-        const validatorOptions = validator?.option();
+      if (row?.watch) {
+        const dispose = row.watch(() => column.selector(row.data), () => {
+          let $editorElement: any = $container.find('.dx-widget').first();
+          let validator: any = $editorElement.data('dxValidator');
+          const validatorOptions = validator?.option();
 
-        ($container.contents() as any).remove();
-        cellOptions = this.renderFormEditorTemplate.bind(this)(cellOptions, item, options, $container);
+          ($container.contents() as any).remove();
+          cellOptions = this.renderFormEditorTemplate.bind(this)(cellOptions, item, options, $container);
 
-        $editorElement = $container.find('.dx-widget').first();
-        validator = $editorElement.data('dxValidator');
-        if (validatorOptions && !validator) {
-          $editorElement.dxValidator({
-            validationRules: validatorOptions.validationRules,
-            validationGroup: validatorOptions.validationGroup,
-            dataGetter: validatorOptions.dataGetter,
-          });
-        }
-      });
+          $editorElement = $container.find('.dx-widget').first();
+          validator = $editorElement.data('dxValidator');
+          if (validatorOptions && !validator) {
+            $editorElement.dxValidator({
+              validationRules: validatorOptions.validationRules,
+              validationGroup: validatorOptions.validationGroup,
+              dataGetter: validatorOptions.dataGetter,
+            });
+          }
+        });
+
+        eventsEngine.on($container, removeEvent, dispose);
+      }
 
       cellOptions = this.renderFormEditorTemplate.bind(this)(cellOptions, item, options, $container);
     };
