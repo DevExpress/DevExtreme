@@ -20,6 +20,7 @@ import { createObjectWithChanges } from '@js/data/array_utils';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import pointerEvents from '@js/events/pointer';
+import { removeEvent } from '@js/events/remove';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
@@ -393,16 +394,20 @@ class EditingControllerImpl extends modules.ViewController {
 
         this._renderEditingButtons($container, buttons, options, change);
 
-        options.watch && options.watch(
-          () => buttons.map((button) => ({
-            visible: this._isButtonVisible(button, options),
-            disabled: this._isButtonDisabled(button, options),
-          })),
-          () => {
-            $container.empty();
-            this._renderEditingButtons($container, buttons, options);
-          },
-        );
+        if (options.watch) {
+          const dispose = options.watch(
+            () => buttons.map((button) => ({
+              visible: this._isButtonVisible(button, options),
+              disabled: this._isButtonDisabled(button, options),
+            })),
+            () => {
+              $container.empty();
+              this._renderEditingButtons($container, buttons, options);
+            },
+          );
+
+          eventsEngine.on($container, removeEvent, dispose);
+        }
       } else {
         gridCoreUtils.setEmptyText($container);
       }
