@@ -5,6 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
+import Tabs from '../../../model/tabs';
 
 const TAB_CLASS = 'dx-tab';
 
@@ -35,6 +36,44 @@ test('Tabs nav buttons', async (t) => {
   ] as Item[];
 
   return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
+});
+
+test('Tabs text wrapping with vertical orientation', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const tabs = new Tabs('#tabs');
+
+  await testScreenshot(t, takeScreenshot, 'Tabs text wrapping.png', { element: '#tabs' });
+
+  await tabs.option({ iconPosition: 'top' } as any);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs text wrapping when iconPosition is top.png', { element: '#tabs' });
+
+  await tabs.option({ height: 300 } as any);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs text wrapping when height is limited.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'width: 600px; height: 400px;');
+
+  const dataSource = [
+    { icon: 'user', text: 'John Heart' },
+    { icon: 'user', text: 'Marina Elizabeth Thomas Grace Sophia Alexander Benjamin Olivia Nicholas Victoria Michael Emily' },
+    { icon: 'user', text: 'Robert Reagan' },
+    { icon: 'user', text: 'Greta Sims' },
+  ] as Item[];
+
+  const options = {
+    dataSource,
+    width: 130,
+    showNavButtons: true,
+    orientation: 'vertical',
+  };
+
+  return createWidget('dxTabs', options, '#tabs');
 });
 
 test('Tab item width in secondary stylingMode', async (t) => {
