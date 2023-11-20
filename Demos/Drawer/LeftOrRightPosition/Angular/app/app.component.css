@@ -1,5 +1,8 @@
-::ng-deep .flex-container {
+::ng-deep .demo-container {
   overflow: visible;
+}
+
+::ng-deep .flex-container {
   display: flex;
   flex-direction: column;
 }

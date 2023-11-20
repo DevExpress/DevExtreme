@@ -39,8 +39,6 @@ export class AppComponent {
 
   text: string;
 
-  elementAttr: any;
-
   constructor(service: Service) {
     this.text = service.getContent();
     this.navigation = service.getNavigationList();
@@ -51,6 +49,7 @@ export class AppComponent {
     location: 'before',
     options: {
       icon: 'menu',
+      stylingMode: 'text',
       onClick: () => this.drawer.instance.toggle(),
     },
   }];

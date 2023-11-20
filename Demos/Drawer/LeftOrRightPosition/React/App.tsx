@@ -21,6 +21,7 @@ const App = () => {
     location: 'before',
     options: {
       icon: 'menu',
+      stylingMode: 'text',
       onClick: () => setOpened(!opened),
     },
   }], [opened, setOpened]);

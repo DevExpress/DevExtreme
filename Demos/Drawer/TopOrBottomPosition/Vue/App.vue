@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <DxToolbar :items="toolbarContent"/>
+  <div class="flex-container">
+    <DxToolbar
+      :items="toolbarContent"
+      class="dx-theme-background-color"
+    />
     <DxDrawer
       :opened-state-mode="selectedOpenMode"
       :position="selectedPosition"
@@ -71,31 +74,29 @@ const toolbarContent = [{
   location: 'before',
   options: {
     icon: 'menu',
+    stylingMode: 'text',
     onClick: () => { openState.value = !openState.value; },
   },
 }];
 </script>
 <style scoped>
+    .demo-container {
+      overflow: visible;
+    }
+
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dx-drawer-content {
+      display: flex;
+    }
+
     .dx-toolbar {
       box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       padding: 5px 10px;
-      margin-bottom: 5px;
-    }
-
-    .dx-list-item-icon-container,
-    .dx-toolbar-before {
-      width: 36px;
-      padding-right: 0 !important;
-      text-align: center;
-    }
-
-    .dx-list-item-content {
-      padding-left: 10px !important;
-    }
-
-    .dx-button {
-      background-color: rgba(191, 191, 191, -0.15);
-      border: none;
+      z-index: 10000;
     }
 
     .dx-drawer-shrink #content {
@@ -105,12 +106,12 @@ const toolbarContent = [{
     }
 
     .dx-drawer-shrink.dx-drawer-opened #content {
-      column-width: 300px;
       margin-right: -10px;
     }
 
     .panel-list {
       height: 200px;
+      padding-top: 12px;
     }
 
     .panel-list .dx-list-item {

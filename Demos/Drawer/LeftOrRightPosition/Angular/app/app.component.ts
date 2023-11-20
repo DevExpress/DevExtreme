@@ -50,6 +50,7 @@ export class AppComponent {
     location: 'before',
     options: {
       icon: 'menu',
+      stylingMode: 'text',
       onClick: () => this.isDrawerOpen = !this.isDrawerOpen,
     },
   }];

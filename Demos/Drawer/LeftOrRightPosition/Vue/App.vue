@@ -77,13 +77,17 @@ const toolbarContent = [{
   location: 'before',
   options: {
     icon: 'menu',
+    stylingMode: 'text',
     onClick: () => { openState.value = !openState.value; },
   },
 }];
 </script>
 <style scoped>
-    .flex-container {
+    .demo-container {
       overflow: visible;
+    }
+
+    .flex-container {
       display: flex;
       flex-direction: column;
     }

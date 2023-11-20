@@ -1,23 +1,20 @@
+::ng-deep .demo-container {
+  overflow: visible;
+}
+
+::ng-deep .flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .dx-drawer-content {
+  display: flex;
+}
+
 ::ng-deep .dx-toolbar {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
   padding: 5px 10px;
-  margin-bottom: 5px;
-}
-
-::ng-deep .dx-list-item-icon-container,
-::ng-deep .dx-toolbar-before {
-  width: 36px;
-  padding-right: 0 !important;
-  text-align: center;
-}
-
-::ng-deep .dx-list-item-content {
-  padding-left: 10px !important;
-}
-
-::ng-deep .dx-button {
-  background-color: rgba(191, 191, 191, -0.15);
-  border: none;
+  z-index: 10000;
 }
 
 ::ng-deep .dx-drawer-shrink #content {
@@ -27,12 +24,12 @@
 }
 
 ::ng-deep .dx-drawer-shrink.dx-drawer-opened #content {
-  column-width: 300px;
   margin-right: -10px;
 }
 
 ::ng-deep .panel-list {
   height: 200px;
+  padding-top: 12px;
 }
 
 ::ng-deep .panel-list .dx-list-item {
