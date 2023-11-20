@@ -1951,6 +1951,56 @@ QUnit.module('AdaptiveColumns', {
         assert.ok($summaryElements.eq(0).parent('td').hasClass('dx-datagrid-hidden-column'), 'the first summary item is hidden');
         assert.notOk($summaryElements.eq(1).parent('td').hasClass('dx-datagrid-hidden-column'), 'the last summary item is not hidden');
     });
+
+    // T1196383
+    QUnit.test('Watchers should be destroyed after rows are repainted when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        const disposeFuncs = [];
+        const $testElement = $('#container');
+
+        $('.dx-datagrid').width(200);
+        this.options = { repaintChangesOnly: true };
+        setupDataGrid(this);
+
+        sinon.stub(this.rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        this.rowsView.render($testElement);
+        this.resizingController.updateDimensions();
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 2, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 3, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
+    });
 });
 
 QUnit.module('API', {
