@@ -474,6 +474,7 @@ const VirtualScrollingRowsViewExtender = (function () {
         const $rowElement = $(rowElement);
         // @ts-expect-error
         errorHandlingController && errorHandlingController.removeErrorRow($rowElement.next());
+        // @ts-expect-error
         $rowElement.remove();
       });
     },
