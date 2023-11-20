@@ -836,7 +836,7 @@ QUnit.test('Should show E4024 error when searching or filtering an Int32 field (
 
     function assertFunc(message, operation) {
         assert.equal(message.replace(/\d+_\d+/, '[VERSION]'),
-            `E4024 - String function ${operation} cannot be used with the data field id of type Int32. See:\nhttp://js.devexpress.com/error/[VERSION]/E4024`);
+            `E4024 - String function ${operation} cannot be used with the data field id of type Int32.\n\nFor additional information on this error message, see: http://js.devexpress.com/error/[VERSION]/E4024`);
     }
 
     const promises = [
