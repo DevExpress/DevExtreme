@@ -2,7 +2,7 @@ import sh from 'shelljs';
 import path from 'node:path';
 
 const MONOREPO_ROOT = path.join(__dirname, '..');
-// const INTERNAL_TOOLS_ARTIFACTS = path.join(MONOREPO_ROOT, 'artifacts', 'internal-tools');
+const INTERNAL_TOOLS_ARTIFACTS = path.join(MONOREPO_ROOT, 'artifacts', 'internal-tools');
 
 const OUTPUT_DIR = path.join(MONOREPO_ROOT, 'artifacts');
 const NPM_OUTPUT_DIR = path.join(OUTPUT_DIR, 'npm');
@@ -17,26 +17,26 @@ const packAndCopy = (outputDir: string) => {
     sh.cp('*.tgz', outputDir);
 }
 
-// const monorepoVersion = sh.exec('npm pkg get version', { silent: true }).stdout.replaceAll('"', '');
-// const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
+const monorepoVersion = sh.exec('npm pkg get version', { silent: true }).stdout.replaceAll('"', '');
+const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
-// // Prepare metadata
-// sh.cd(MONOREPO_ROOT);
-// sh.exec('npm run tools:discover-declarations');
-// sh.exec(`npm run tools -- make-aspnet-metadata --version ${MAJOR_VERSION}`);
-//
-// // Inject descriptions
-// const DOCUMENTATION_TEMP_DIR = path.join(OUTPUT_DIR, 'doc_tmp');
-// sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
-//
-// sh.pushd(DOCUMENTATION_TEMP_DIR);
-//     sh.exec('npm i');
-//     sh.exec(`npm run update-topics -- --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
-// sh.popd();
-//
-// sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
-//
-// sh.exec('npm run devextreme:inject-descriptions');
+// Prepare metadata
+sh.cd(MONOREPO_ROOT);
+sh.exec('npm run tools:discover-declarations');
+sh.exec(`npm run tools -- make-aspnet-metadata --version ${MAJOR_VERSION}`);
+
+// Inject descriptions
+const DOCUMENTATION_TEMP_DIR = path.join(OUTPUT_DIR, 'doc_tmp');
+sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
+
+sh.pushd(DOCUMENTATION_TEMP_DIR);
+    sh.exec('npm i');
+    sh.exec(`npm run update-topics -- --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
+sh.popd();
+
+sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
+
+sh.exec('npm run devextreme:inject-descriptions');
 
 sh.exec('npm run build-dist -w devextreme-main');
 sh.exec('npm run build -w devextreme-themebuilder');
