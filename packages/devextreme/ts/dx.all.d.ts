@@ -1508,6 +1508,10 @@ declare module DevExpress.common {
      */
     oDataFilterToLower?: boolean;
     /**
+     * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+     */
+    pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
+    /**
      * [descr:GlobalConfig.rtlEnabled]
      */
     rtlEnabled?: boolean;
