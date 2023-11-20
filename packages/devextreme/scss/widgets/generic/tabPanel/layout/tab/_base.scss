@@ -31,6 +31,7 @@
 .dx-tabpanel-tabs .dx-tabs:not(.dx-tabs-vertical) {
   .dx-tabpanel-tab {
     max-width: $generic-tabpanel-tabs-item-width;
+    width: $generic-tabpanel-tabs-item-width;
   }
 }
 
