@@ -18,21 +18,17 @@ $form-item-help-text-color: $base-label-color !default;
 $form-group-border-color: $base-border-color !default;
 $form-field-required-color: $form-field-item-color !default;
 $form-field-mark-color: $form-field-item-color !default;
-$form-field-group-caption-color: null !default;
 
 @if $mode == "light" {
   @if $color == "blue" {
     $form-field-item-color: $base-text-color !default;
-    $form-field-group-caption-color: $base-text-color !default;
   }
   
   @if $color == "modern" {
     $form-field-item-color: #465569 !default;
-    $form-field-group-caption-color: #334155 !default;
   }
 }
 
 @if $mode == "dark" {
   $form-field-item-color: $base-text-color !default;
-  $form-field-group-caption-color: $base-text-color !default;
 }
