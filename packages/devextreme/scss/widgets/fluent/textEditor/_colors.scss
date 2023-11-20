@@ -8,15 +8,13 @@
 * $name 10. Text color
 * $type color
 */
-$texteditor-color: $base-text-color !default;
+$texteditor-color: null !default;
 
 /**
 * $name 20. Placeholder text color
 * $type color
 */
-$texteditor-placeholder-color: $base-label-color !default;
-$texteditor-label-color: $texteditor-placeholder-color;
-$texteditor-label-color-focused: $base-accent;
+$texteditor-placeholder-color: null !default;
 
 /**
 * $name 30. Outlined background color
@@ -83,12 +81,16 @@ $texteditor-label-transition:
 
 @if $mode == "light" {
   @if $color == 'blue' {
-    $texteditor-outlined-bg: $base-bg !default;
-    $texteditor-filled-bg: darken($base-bg, 3.9) !default;
+    $texteditor-color: $base-text-color !default;
+    $texteditor-placeholder-color: $base-label-color !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
   }
   
   @if $color == 'modern' {
-    $texteditor-outlined-bg: $base-bg !default;
+    $texteditor-color: #465569 !default;
+    $texteditor-placeholder-color: #96A0B4 !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
     $texteditor-filled-bg: #F1F5F9 !default;
   }
   $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default; // #c7c7c7
@@ -99,8 +101,8 @@ $texteditor-label-transition:
 
 @if $mode == "dark" {
   @if $color == 'blue' {
-    $texteditor-outlined-bg: $base-bg !default;
-    $texteditor-filled-bg: darken($base-bg, 8.2) !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: darken($base-element-bg, 8.2) !default;
   }
 
   @if $color == 'modern' {
@@ -108,6 +110,8 @@ $texteditor-label-transition:
     $texteditor-filled-bg: #323C4B !default;
   }
 
+  $texteditor-color: $base-text-color !default;
+  $texteditor-placeholder-color: $base-label-color !default;
   $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default; // #757575
   $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default; // #6b6b6b
   $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default; // #bdbdbd
@@ -137,5 +141,8 @@ $texteditor-filled-bg-hover: $texteditor-filled-bg !default;
 * $type color
 */
 $texteditor-filled-bg-focused: $texteditor-filled-bg !default;
+
+$texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color-focused: $base-accent;
 
   

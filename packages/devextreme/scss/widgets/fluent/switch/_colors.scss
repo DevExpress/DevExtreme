@@ -30,7 +30,7 @@ $switch-on-bg: $base-accent !default;
 * $name 50. Handle 'ON' background color
 * $type color
 */
-$switch-handle-on-bg: $base-bg !default;
+$switch-handle-on-bg: $base-element-bg !default;
 $switch-handle-border-radius: 50% !default;
 $switch-hover-bg: transparent !default;
 $switch-on-disabled-bg: $base-background-disabled !default;

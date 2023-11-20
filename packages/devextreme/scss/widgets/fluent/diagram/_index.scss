@@ -150,7 +150,7 @@ $diagram-toolbox-title-size: 18px;
 
 .dx-diagram-floating-toolbar-container {
   background: $overlay-content-bg;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 1px 8px color.change($base-shadow-color, $alpha: 0.175);
   border-radius: $popup-border-radius;
   padding: 4px;
 
@@ -202,7 +202,7 @@ $diagram-toolbox-title-size: 18px;
 
 .dx-diagram-toolbox-popup {
   & > .dx-overlay-content {
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 1px 8px color.change($base-shadow-color, $alpha: 0.175);
   }
 
   .dx-popup-title {

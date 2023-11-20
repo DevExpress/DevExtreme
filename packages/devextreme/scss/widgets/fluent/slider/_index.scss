@@ -47,7 +47,7 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
   border-width: 1px;
   border-style: solid;
   border-color: $base-border-color;
-  background-color: $base-bg;
+  background-color: $base-element-bg;
 
   &::after {
     position: absolute;
@@ -58,7 +58,7 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
     border-radius: $fluent-slider-radius;
     border-width: 3px;
     border-style: solid;
-    border-color: $base-bg;
+    border-color: $base-element-bg;
   }
 
   &.dx-state-hover {

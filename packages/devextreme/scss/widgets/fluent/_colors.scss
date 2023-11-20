@@ -111,22 +111,32 @@ $scrollview-pulldown-path: null !default;
 @if $mode == "light" {
   $fluent-color-theme-modificator: "light" !default;
 
+  $base-bg: rgba(255, 255, 255, 1) !default; // #FFFFFF
+
   @if $color == "blue" {
+    $base-bg-hover: darken($base-bg, 3.9) !default; // #F5F5F5
+
     $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
     $base-success: rgba(16, 124, 16, 1) !default; // #107c10
     $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
     $base-text-color: rgba(36, 36, 36, 1) !default; // #242424;
     $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
+    $base-border-color-accessible: darken($base-border-color, 49.8) !default; // #616161
+    $base-shadow-color: #000 !default;
 
     $base-typography-bg: #FAFAFA !default; // #FAFAFA
   }
 
   @if $color == "modern" {
+    $base-bg-hover: darken(saturate(adjust-hue($base-bg, 204), 33.33), 2.94) !default; // #F5F8FA
+
     $base-accent: #3C82F5 !default; // #3C82F5
     $base-success: #19914B !default; // #19914B
     $base-danger: #DC2828 !default; // #DC2828
     $base-text-color: #1E293B !default;
     $base-border-color: #E2E8F0 !default; // #E2E8F0
+    $base-border-color-accessible: darken(desaturate(adjust-hue($base-border-color, 11), 17.53), 18.82) !default; // #AFB4C3
+    $base-shadow-color: #32505F !default;
   
     $base-typography-bg: #F8FAFC !default; // #F8FAFC
   }
@@ -144,26 +154,29 @@ $scrollview-pulldown-path: null !default;
 
   $base-accent-bg: $base-accent !default; // #0F6CBD
 
-  $base-bg: rgba(255, 255, 255, 1) !default; // #FFFFFF
-  $base-bg-hover: darken($base-bg, 3.9) !default; // #F5F5F5
-  $base-bg-selected: darken($base-bg, 7.8) !default; // #EBEBEB
-  $base-bg-active: darken($base-bg, 12.2) !default; // #E0E0E0
-  $base-background-disabled: darken($base-bg, 5.9) !default; // f0f0f0
+  // $base-bg: rgba(255, 255, 255, 1) !default; // #FFFFFF
 
-  $base-typography-bg: darken($base-bg, 2) !default; // #FAFAFA
+  // $base-bg-hover: darken($base-bg, 3.9) !default; // #F5F5F5
+  $base-bg-selected: darken($base-bg-hover, 3.92) !default; // #EBEBEB
+  $base-bg-active: darken($base-bg-hover, 8.24) !default; // #E0E0E0
+  $base-background-disabled: darken($base-bg-hover, 1.96) !default; // f0f0f0
+
+  // $base-typography-bg: darken($base-bg, 2) !default; // #FAFAFA
 
   // $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
   $base-border-color-hover: darken($base-border-color, 9.8) !default; // #c7c7c7
   $base-border-color-focused: darken($base-border-color, 17.65) !default; // #b3b3b3
-  $base-border-color-accessible: darken($base-border-color, 49.8) !default; // #616161
+
+  // $base-border-color-accessible: darken($base-border-color, 49.8) !default; // #616161
   $base-border-color-accessible-hover: darken($base-border-color-accessible, 3.92) !default; // #575757
   $base-border-color-accessible-focused: darken($base-border-color-accessible-hover, 3.92) !default; // #4d4d4d
   $base-border-color-disabled: $base-border-color !default; // e0e0e0
 
   $base-separator-color: $base-border-color !default; // #E0E0E0
 
-  $base-inverted-bg: darken($base-bg, 100%) !default; // #EBF3FC
-  $base-shadow-color: $base-inverted-bg !default;
+  $base-inverted-bg: darken($base-bg, 100%) !default; // #000
+  
+  // $base-shadow-color: $base-inverted-bg !default;
   $base-inverted-text-color: #fff !default;
 
   // $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
