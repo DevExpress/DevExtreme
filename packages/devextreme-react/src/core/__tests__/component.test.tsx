@@ -11,9 +11,6 @@ import {
   WidgetClass,
 } from './test-component';
 
-// @ts-ignore: Non-existent module
-import { TemplatesRenderer } from '../templates-renderer';
-
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({
   __esModule: true,
@@ -33,7 +30,7 @@ describe('rendering', () => {
   });
 
   it('renders component without children correctly', () => {
-    const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
+    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
     const { container } = testingLib.render(<TestComponent />);
 
     expect(container.children.length).toBe(1);
@@ -41,11 +38,11 @@ describe('rendering', () => {
     const content = container.firstChild as HTMLElement;
     expect(content.tagName.toLowerCase()).toBe('div');
 
-    expect(templatesRendererRenderFn).toHaveBeenCalledTimes(1);
+    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders component with children correctly', () => {
-    const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
+    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
     const { container } = testingLib.render(
       <TestComponent>
         <span />
@@ -59,7 +56,7 @@ describe('rendering', () => {
     expect(content.children.length).toBe(1);
     expect(content.children[0].tagName.toLowerCase()).toBe('span');
 
-    expect(templatesRendererRenderFn).toHaveBeenCalledTimes(1);
+    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders component with children correctly after unmount', () => {
@@ -83,7 +80,7 @@ describe('rendering', () => {
 
   it('renders portal component without children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
-    const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
+    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
     const { container } = testingLib.render(<TestPortalComponent />);
 
     expect(container.children.length).toBe(1);
@@ -92,12 +89,13 @@ describe('rendering', () => {
     expect(content.tagName.toLowerCase()).toBe('div');
 
     expect(createPortalFn).not.toHaveBeenCalled();
-    expect(templatesRendererRenderFn).toHaveBeenCalledTimes(1);
+    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders portal component with children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
-    const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
+    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
+    const forceUpdateFn = jest.spyOn(TestComponent.prototype as any, 'forceUpdate');
     const { container } = testingLib.render(
       <TestPortalComponent>
         <span />
@@ -119,12 +117,14 @@ describe('rendering', () => {
     expect(portal.children[0].tagName.toLowerCase()).toBe('span');
 
     expect(createPortalFn).toHaveBeenCalledTimes(1);
-    expect(templatesRendererRenderFn).toHaveBeenCalledTimes(2);
+    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
+    expect(forceUpdateFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders portal component with children correctly (IE11)', () => {
     (isIE as jest.Mock).mockImplementation(() => true);
-    const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
+    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
+    const forceUpdateFn = jest.spyOn(TestComponent.prototype as any, 'forceUpdate');
     const { container } = testingLib.render(
       <TestPortalComponent>
         <span />
@@ -148,7 +148,8 @@ describe('rendering', () => {
     expect(portal.children.length).toBe(1);
     expect(portal.children[0].tagName.toLowerCase()).toBe('span');
 
-    expect(templatesRendererRenderFn).toHaveBeenCalledTimes(2);
+    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
+    expect(forceUpdateFn).toHaveBeenCalledTimes(1);
   });
 
   it('create widget on componentDidMount', () => {

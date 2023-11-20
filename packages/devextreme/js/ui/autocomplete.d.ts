@@ -225,7 +225,14 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> { }
+export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: string | null): void;
+}
 
 /** @public */
 export type Properties = dxAutocompleteOptions;

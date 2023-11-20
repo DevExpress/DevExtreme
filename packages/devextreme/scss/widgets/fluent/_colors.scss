@@ -32,7 +32,7 @@ $base-bg-hover: null !default;
 $base-bg-active: null !default;
 $base-bg-selected: null !default;
 
-$typography-bg: null !default;
+$base-typography-bg: null !default;
 
 $base-accent-bg: null !default;
 
@@ -122,7 +122,7 @@ $scrollview-pulldown-path: null !default;
   $base-bg-active: darken($base-bg, 12.2) !default; // #E0E0E0
   $base-background-disabled: darken($base-bg, 5.9) !default; // f0f0f0
 
-  $typography-bg: darken($base-bg, 2) !default; // #FAFAFA
+  $base-typography-bg: darken($base-bg, 2) !default; // #FAFAFA
 
   $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
   $base-border-color-hover: darken($base-border-color, 9.8) !default; // #c7c7c7
@@ -173,7 +173,7 @@ $scrollview-pulldown-path: null !default;
   $base-bg-active: darken($base-bg, 3.9) !default; // #1F1F1F
   $base-background-disabled: darken($base-bg, 8.2) !default; // #141414
 
-  $typography-bg: $base-bg-active !default; // #1F1F1F
+  $base-typography-bg: $base-bg-active !default; // #1F1F1F
 
   $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
   $base-border-color-hover: lighten($base-border-color, 7.84) !default; // #757575
