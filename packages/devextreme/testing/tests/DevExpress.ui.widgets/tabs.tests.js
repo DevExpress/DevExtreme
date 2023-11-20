@@ -747,6 +747,44 @@ QUnit.module('Horizontal scrolling', () => {
         }
     });
 
+    QUnit.test('The width of scrollable and tab elements should increase as the width of the container increases', function(assert) {
+        const CONTAINER_UPDATED_WIDTH = 900;
+        const CONTAINER_INITIAL_WIDTH = 200;
+
+        const $container = $('<div>').css({ width: CONTAINER_INITIAL_WIDTH });
+
+        try {
+            $container.appendTo('#qunit-fixture');
+
+            const dataSource = [
+                { text: 'John Heart' },
+                { text: 'Marina Elizabeth' },
+                { text: 'Robert Reagan' },
+                { text: 'Greta Sims' },
+            ];
+
+            const $element = $('<div>').appendTo($container).dxTabs({
+                dataSource,
+                scrollingEnabled: true,
+                showNavButtons: false,
+            });
+
+            const $scrollable = $element.find(`.${SCROLLABLE_CLASS}`);
+
+            assert.strictEqual($scrollable.outerWidth(), CONTAINER_INITIAL_WIDTH);
+
+            $container.css({ width: CONTAINER_UPDATED_WIDTH });
+
+            assert.strictEqual($scrollable.outerWidth(), CONTAINER_UPDATED_WIDTH);
+
+            const $tab = $element.find(`.${TABS_ITEM_CLASS}`).eq(0);
+
+            assert.strictEqual($tab.outerWidth(), CONTAINER_UPDATED_WIDTH / dataSource.length);
+        } finally {
+            $container.remove();
+        }
+    });
+
     QUnit.test('right nav button should be rendered if showNavButtons=true and possible to scroll right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
