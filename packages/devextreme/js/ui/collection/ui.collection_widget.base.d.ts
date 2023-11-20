@@ -84,61 +84,6 @@ export interface CollectionWidgetOptions<
     noDataText?: string;
     /**
      * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onItemClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & ItemInfo<TItem>) => void) | string;
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onItemContextMenu?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onItemHold?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field addedItems:array<any>
-     * @type_function_param1_field removedItems:array<any>
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TItem>) => void);
-    /**
-     * @docid
      * @default -1
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @public

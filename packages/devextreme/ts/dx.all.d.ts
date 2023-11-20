@@ -7933,52 +7933,6 @@ declare module DevExpress.ui {
      */
     noDataText?: string;
     /**
-     * [descr:CollectionWidgetOptions.onItemClick]
-     */
-    onItemClick?:
-      | ((
-          e: DevExpress.events.NativeEventInfo<
-            TComponent,
-            MouseEvent | PointerEvent
-          > &
-            DevExpress.events.ItemInfo<TItem>
-        ) => void)
-      | string;
-    /**
-     * [descr:CollectionWidgetOptions.onItemContextMenu]
-     */
-    onItemContextMenu?: (
-      e: DevExpress.events.NativeEventInfo<
-        TComponent,
-        MouseEvent | PointerEvent | TouchEvent
-      > &
-        DevExpress.events.ItemInfo<TItem>
-    ) => void;
-    /**
-     * [descr:CollectionWidgetOptions.onItemHold]
-     */
-    onItemHold?: (
-      e: DevExpress.events.NativeEventInfo<
-        TComponent,
-        MouseEvent | PointerEvent | TouchEvent
-      > &
-        DevExpress.events.ItemInfo<TItem>
-    ) => void;
-    /**
-     * [descr:CollectionWidgetOptions.onItemRendered]
-     */
-    onItemRendered?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.events.ItemInfo<TItem>
-    ) => void;
-    /**
-     * [descr:CollectionWidgetOptions.onSelectionChanged]
-     */
-    onSelectionChanged?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>
-    ) => void;
-    /**
      * [descr:CollectionWidgetOptions.selectedIndex]
      */
     selectedIndex?: number;
