@@ -1962,26 +1962,152 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @public
    */
   noDataText?: string;
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onDataErrorOccurred?: ((e: EventInfo<TComponent> & DataErrorOccurredInfo) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onEditCanceled?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onEditCanceling?: ((e: Cancelable & EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onInitNewRow?: ((e: EventInfo<TComponent> & NewRowInfo<TRowData>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent> & KeyDownInfo) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowCollapsed?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowCollapsing?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowExpanded?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowExpanding?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowInserted?: ((e: EventInfo<TComponent> & RowInsertedInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowInserting?: ((e: EventInfo<TComponent> & RowInsertingInfo<TRowData>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowRemoved?: ((e: EventInfo<TComponent> & RowRemovedInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowRemoving?: ((e: EventInfo<TComponent> & RowRemovingInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowUpdated?: ((e: EventInfo<TComponent> & RowUpdatedInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowUpdating?: ((e: EventInfo<TComponent> & RowUpdatingInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onRowValidating?: ((e: EventInfo<TComponent> & RowValidatingInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onSaved?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onSaving?: ((e: EventInfo<TComponent> & SavingInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @hidden
+   */
   onToolbarPreparing?: ((e: EventInfo<TComponent> & ToolbarPreparingInfo) => void);
   /**
    * @docid
