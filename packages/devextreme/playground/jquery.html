@@ -41,12 +41,6 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        .dx-tab {
-            max-width: 100px;
-        }
-    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -55,42 +49,12 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-
         <div id="button"></div>
-
         <script>
             $(function() {
-                const items = [
-                    {
-                        // text: 'Mariya Elizabeth Thomas Grace Sophia',
-                        // title: 'Mariya Elizabeth Thomas Grace Sophia',
-                        text: '1',
-                        title: '1',
-                        icon: 'user',
-                    },
-                    {
-                        text: '2',
-                        title: '2',
-                        icon: 'user',
-                    },
-                    {
-                        text: '3',
-                        disabled: true,
-                        title: '3',
-                        icon: 'user',
-                    },
-                ];
-
-                // const items = [
-                //     'Mariya Elizabeth Thomas Grace Sophia',
-                //     '2',
-                //     '3',
-                // ];
-
-                $("#button").dxTabPanel({
-                    items,
-                    iconPosition: 'top',
-                    // orientation: 'vertical',
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>

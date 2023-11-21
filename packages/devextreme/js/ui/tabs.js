@@ -233,11 +233,11 @@ const Tabs = CollectionWidget.inherit({
         }
     },
 
-    _initTemplates: function() {
+    _initTemplates() {
         this.callBase();
 
         this._templateManager.addDefaultTemplates({
-            item: new BindableTemplate((function($container, data) {
+            item: new BindableTemplate((($container, data) => {
                 this._prepareDefaultItemTemplate(data, $container);
 
                 const $iconElement = getImageContainer(data.icon);

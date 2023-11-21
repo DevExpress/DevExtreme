@@ -168,46 +168,39 @@ const TabPanel = MultiView.inherit({
         this._renderLayout();
     },
 
-    _prepareDefaultItemTemplate(data, $container) {
-        const $iconElement = getImageContainer(data.icon);
+    _prepareTabsItemTemplate(data, $container) {
+        const $iconElement = getImageContainer(data?.icon);
 
         if($iconElement) {
             $container.append($iconElement);
         }
 
-        if(isDefined(data.title) && !isPlainObject(data.title)) {
-            $container.append(domAdapter.createTextNode(data.title));
+        const title = isPlainObject(data) ? data?.title : data;
+
+        if(isDefined(title) && !isPlainObject(title)) {
+            const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
+
+            $tabTextSpan.append(domAdapter.createTextNode(title));
+
+            if(isFluent()) {
+                const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+
+                $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
+                $tabTextSpanPseudo.appendTo($tabTextSpan);
+            }
+
+            $tabTextSpan.appendTo($container);
         }
     },
 
-    _initTemplates: function() {
+    _initTemplates() {
         this.callBase();
 
         this._templateManager.addDefaultTemplates({
             title: new BindableTemplate(($container, data) => {
-                // debugger;
-                if(isPlainObject(data)) {
-                    // this._prepareDefaultItemTemplate(data, $container);
-                    const $iconElement = getImageContainer(data.icon);
+                this._prepareTabsItemTemplate(data, $container);
 
-                    if($iconElement) {
-                        $container.append($iconElement);
-                    }
-
-                    if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append(domAdapter.createTextNode(data.title));
-                    }
-                } else {
-                    if(isDefined(data)) {
-                        $container.text(String(data));
-                    }
-                }
-
-                const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
-
-                // if(data?.title) {
-                //     $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, data.title);
-                // }
+                const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
 
                 $container.wrapInner($tabItem);
             }, ['title', 'icon'], this.option('integrationOptions.watchMethod'))
