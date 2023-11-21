@@ -62,6 +62,7 @@
 
   .dx-tab-text {
     column-gap: $fluent-base-icon-margin;
+    row-gap: $fluent-tabs-item-gap;
 
     .dx-tab-text-span {
       position: relative;
