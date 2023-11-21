@@ -79,7 +79,7 @@ const distGlobs = distGlobsPattern(ctx.RESULT_JS_PATH);
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
-const updatePackageName = lazyPipe()
+const overwriteInternalPackageName = lazyPipe()
     .pipe(() => replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'));
 
 const licenseValidator = isBuildInternal ?
@@ -121,7 +121,7 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(`${dist}/package.json`)
         .pipe(replace(version, ctx.version.package))
-        .pipe(gulpIf(isBuildInternal, updatePackageName()))
+        .pipe(gulpIf(isBuildInternal, overwriteInternalPackageName()))
         .pipe(gulp.dest(dist)),
 
     gulp
@@ -146,7 +146,7 @@ gulp.task('npm-sources', gulp.series(
         .pipe(gulpIf(isBuildInternal, gulp.dest(packagePath))),
     () => gulp
         .src(`${resultPath}/${packageDistDir}/package.json`)
-        .pipe(updatePackageName())
+        .pipe(overwriteInternalPackageName())
         .pipe(gulpIf(isBuildInternal, gulp.dest(distPath))),
     sources(srcGlobs, packagePath, distGlobs))
 );

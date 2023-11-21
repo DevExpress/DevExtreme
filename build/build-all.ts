@@ -79,13 +79,15 @@ sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-angular', 'npm', 'dist', 
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_OUTPUT_DIR);
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_OUTPUT_DIR);
 
-sh.exec('BUILD_INTERNAL_PACKAGE=true npm run build-dist -w devextreme-main');
+if (process.env.BUILD_INTERNAL_PACKAGE === 'true') {
+    sh.exec('BUILD_INTERNAL_PACKAGE=true npm run build-dist -w devextreme-main');
 
-sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
-    sh.exec(`npm pkg set version="${devextremeNpmVersion}"`);
-    packAndCopy(NPM_OUTPUT_DIR);
-sh.popd();
+    sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
+        sh.exec(`npm pkg set version="${devextremeNpmVersion}"`);
+        packAndCopy(NPM_OUTPUT_DIR);
+    sh.popd();
 
-sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist-internal'));
-    packAndCopy(NPM_OUTPUT_DIR);
-sh.popd();
+    sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist-internal'));
+        packAndCopy(NPM_OUTPUT_DIR);
+    sh.popd();
+}
