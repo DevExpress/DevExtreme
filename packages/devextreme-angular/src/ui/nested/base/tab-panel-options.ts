@@ -141,87 +141,87 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('noDataText', value);
     }
 
-    get onContentReady(): ((e: ContentReadyEvent) => void) {
+    get onContentReady(): Function {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: ContentReadyEvent) => void)) {
+    set onContentReady(value: Function) {
         this._setOption('onContentReady', value);
     }
 
-    get onDisposing(): ((e: DisposingEvent) => void) {
+    get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent) => void)) {
+    set onDisposing(value: Function) {
         this._setOption('onDisposing', value);
     }
 
-    get onInitialized(): ((e: InitializedEvent) => void) {
+    get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent) => void)) {
+    set onInitialized(value: Function) {
         this._setOption('onInitialized', value);
     }
 
-    get onItemClick(): ((e: ItemClickEvent) => void) {
+    get onItemClick(): Function {
         return this._getOption('onItemClick');
     }
-    set onItemClick(value: ((e: ItemClickEvent) => void)) {
+    set onItemClick(value: Function) {
         this._setOption('onItemClick', value);
     }
 
-    get onItemContextMenu(): ((e: ItemContextMenuEvent) => void) {
+    get onItemContextMenu(): Function {
         return this._getOption('onItemContextMenu');
     }
-    set onItemContextMenu(value: ((e: ItemContextMenuEvent) => void)) {
+    set onItemContextMenu(value: Function) {
         this._setOption('onItemContextMenu', value);
     }
 
-    get onItemHold(): ((e: ItemHoldEvent) => void) {
+    get onItemHold(): Function {
         return this._getOption('onItemHold');
     }
-    set onItemHold(value: ((e: ItemHoldEvent) => void)) {
+    set onItemHold(value: Function) {
         this._setOption('onItemHold', value);
     }
 
-    get onItemRendered(): ((e: ItemRenderedEvent) => void) {
+    get onItemRendered(): Function {
         return this._getOption('onItemRendered');
     }
-    set onItemRendered(value: ((e: ItemRenderedEvent) => void)) {
+    set onItemRendered(value: Function) {
         this._setOption('onItemRendered', value);
     }
 
-    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
+    get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
+    set onOptionChanged(value: Function) {
         this._setOption('onOptionChanged', value);
     }
 
-    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) {
+    get onSelectionChanged(): Function {
         return this._getOption('onSelectionChanged');
     }
-    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
+    set onSelectionChanged(value: Function) {
         this._setOption('onSelectionChanged', value);
     }
 
-    get onTitleClick(): ((e: TitleClickEvent) => void) {
+    get onTitleClick(): Function {
         return this._getOption('onTitleClick');
     }
-    set onTitleClick(value: ((e: TitleClickEvent) => void)) {
+    set onTitleClick(value: Function) {
         this._setOption('onTitleClick', value);
     }
 
-    get onTitleHold(): ((e: TitleHoldEvent) => void) {
+    get onTitleHold(): Function {
         return this._getOption('onTitleHold');
     }
-    set onTitleHold(value: ((e: TitleHoldEvent) => void)) {
+    set onTitleHold(value: Function) {
         this._setOption('onTitleHold', value);
     }
 
-    get onTitleRendered(): ((e: TitleRenderedEvent) => void) {
+    get onTitleRendered(): Function {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: TitleRenderedEvent) => void)) {
+    set onTitleRendered(value: Function) {
         this._setOption('onTitleRendered', value);
     }
 

@@ -75,38 +75,38 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('icon', value);
     }
 
-    get onClick(): ((e: ClickEvent) => void) {
+    get onClick(): Function {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: ClickEvent) => void)) {
+    set onClick(value: Function) {
         this._setOption('onClick', value);
     }
 
-    get onContentReady(): ((e: ContentReadyEvent) => void) {
+    get onContentReady(): Function {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: ContentReadyEvent) => void)) {
+    set onContentReady(value: Function) {
         this._setOption('onContentReady', value);
     }
 
-    get onDisposing(): ((e: DisposingEvent) => void) {
+    get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent) => void)) {
+    set onDisposing(value: Function) {
         this._setOption('onDisposing', value);
     }
 
-    get onInitialized(): ((e: InitializedEvent) => void) {
+    get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent) => void)) {
+    set onInitialized(value: Function) {
         this._setOption('onInitialized', value);
     }
 
-    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
+    get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
+    set onOptionChanged(value: Function) {
         this._setOption('onOptionChanged', value);
     }
 

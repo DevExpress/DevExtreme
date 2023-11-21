@@ -117,52 +117,52 @@ export abstract class DxoFilterBuilderOptions extends NestedOption {
         this._setOption('maxGroupLevel', value);
     }
 
-    get onContentReady(): ((e: ContentReadyEvent) => void) {
+    get onContentReady(): Function {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: ContentReadyEvent) => void)) {
+    set onContentReady(value: Function) {
         this._setOption('onContentReady', value);
     }
 
-    get onDisposing(): ((e: DisposingEvent) => void) {
+    get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent) => void)) {
+    set onDisposing(value: Function) {
         this._setOption('onDisposing', value);
     }
 
-    get onEditorPrepared(): ((e: EditorPreparedEvent) => void) {
+    get onEditorPrepared(): Function {
         return this._getOption('onEditorPrepared');
     }
-    set onEditorPrepared(value: ((e: EditorPreparedEvent) => void)) {
+    set onEditorPrepared(value: Function) {
         this._setOption('onEditorPrepared', value);
     }
 
-    get onEditorPreparing(): ((e: EditorPreparingEvent) => void) {
+    get onEditorPreparing(): Function {
         return this._getOption('onEditorPreparing');
     }
-    set onEditorPreparing(value: ((e: EditorPreparingEvent) => void)) {
+    set onEditorPreparing(value: Function) {
         this._setOption('onEditorPreparing', value);
     }
 
-    get onInitialized(): ((e: InitializedEvent) => void) {
+    get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent) => void)) {
+    set onInitialized(value: Function) {
         this._setOption('onInitialized', value);
     }
 
-    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
+    get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
+    set onOptionChanged(value: Function) {
         this._setOption('onOptionChanged', value);
     }
 
-    get onValueChanged(): ((e: ValueChangedEvent) => void) {
+    get onValueChanged(): Function {
         return this._getOption('onValueChanged');
     }
-    set onValueChanged(value: ((e: ValueChangedEvent) => void)) {
+    set onValueChanged(value: Function) {
         this._setOption('onValueChanged', value);
     }
 

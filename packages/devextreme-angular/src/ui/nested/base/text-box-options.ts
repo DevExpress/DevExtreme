@@ -160,108 +160,108 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('name', value);
     }
 
-    get onChange(): ((e: ChangeEvent) => void) {
+    get onChange(): Function {
         return this._getOption('onChange');
     }
-    set onChange(value: ((e: ChangeEvent) => void)) {
+    set onChange(value: Function) {
         this._setOption('onChange', value);
     }
 
-    get onContentReady(): ((e: ContentReadyEvent) => void) {
+    get onContentReady(): Function {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: ContentReadyEvent) => void)) {
+    set onContentReady(value: Function) {
         this._setOption('onContentReady', value);
     }
 
-    get onCopy(): ((e: CopyEvent) => void) {
+    get onCopy(): Function {
         return this._getOption('onCopy');
     }
-    set onCopy(value: ((e: CopyEvent) => void)) {
+    set onCopy(value: Function) {
         this._setOption('onCopy', value);
     }
 
-    get onCut(): ((e: CutEvent) => void) {
+    get onCut(): Function {
         return this._getOption('onCut');
     }
-    set onCut(value: ((e: CutEvent) => void)) {
+    set onCut(value: Function) {
         this._setOption('onCut', value);
     }
 
-    get onDisposing(): ((e: DisposingEvent) => void) {
+    get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent) => void)) {
+    set onDisposing(value: Function) {
         this._setOption('onDisposing', value);
     }
 
-    get onEnterKey(): ((e: EnterKeyEvent) => void) {
+    get onEnterKey(): Function {
         return this._getOption('onEnterKey');
     }
-    set onEnterKey(value: ((e: EnterKeyEvent) => void)) {
+    set onEnterKey(value: Function) {
         this._setOption('onEnterKey', value);
     }
 
-    get onFocusIn(): ((e: FocusInEvent) => void) {
+    get onFocusIn(): Function {
         return this._getOption('onFocusIn');
     }
-    set onFocusIn(value: ((e: FocusInEvent) => void)) {
+    set onFocusIn(value: Function) {
         this._setOption('onFocusIn', value);
     }
 
-    get onFocusOut(): ((e: FocusOutEvent) => void) {
+    get onFocusOut(): Function {
         return this._getOption('onFocusOut');
     }
-    set onFocusOut(value: ((e: FocusOutEvent) => void)) {
+    set onFocusOut(value: Function) {
         this._setOption('onFocusOut', value);
     }
 
-    get onInitialized(): ((e: InitializedEvent) => void) {
+    get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent) => void)) {
+    set onInitialized(value: Function) {
         this._setOption('onInitialized', value);
     }
 
-    get onInput(): ((e: InputEvent) => void) {
+    get onInput(): Function {
         return this._getOption('onInput');
     }
-    set onInput(value: ((e: InputEvent) => void)) {
+    set onInput(value: Function) {
         this._setOption('onInput', value);
     }
 
-    get onKeyDown(): ((e: KeyDownEvent) => void) {
+    get onKeyDown(): Function {
         return this._getOption('onKeyDown');
     }
-    set onKeyDown(value: ((e: KeyDownEvent) => void)) {
+    set onKeyDown(value: Function) {
         this._setOption('onKeyDown', value);
     }
 
-    get onKeyUp(): ((e: KeyUpEvent) => void) {
+    get onKeyUp(): Function {
         return this._getOption('onKeyUp');
     }
-    set onKeyUp(value: ((e: KeyUpEvent) => void)) {
+    set onKeyUp(value: Function) {
         this._setOption('onKeyUp', value);
     }
 
-    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
+    get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
+    set onOptionChanged(value: Function) {
         this._setOption('onOptionChanged', value);
     }
 
-    get onPaste(): ((e: PasteEvent) => void) {
+    get onPaste(): Function {
         return this._getOption('onPaste');
     }
-    set onPaste(value: ((e: PasteEvent) => void)) {
+    set onPaste(value: Function) {
         this._setOption('onPaste', value);
     }
 
-    get onValueChanged(): ((e: ValueChangedEvent) => void) {
+    get onValueChanged(): Function {
         return this._getOption('onValueChanged');
     }
-    set onValueChanged(value: ((e: ValueChangedEvent) => void)) {
+    set onValueChanged(value: Function) {
         this._setOption('onValueChanged', value);
     }
 
