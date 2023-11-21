@@ -19,20 +19,49 @@ $texteditor-label-color: $texteditor-placeholder-color;
 $texteditor-label-color-focused: $base-accent;
 
 /**
-* $name 30. Background color
+* $name 30. Outlined background color
 * $type color
 */
-$texteditor-bg: $base-bg !default;
+$texteditor-outlined-bg: $base-bg !default;
+
+/**
+* $name 31. Outlined hovered background color
+* $type color
+*/
+$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
+
+/**
+* $name 32. Outlined focused background color
+* $type color
+*/
+$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
+
+/**
+* $name 40. Filled background color
+* $type color
+*/
 $texteditor-filled-bg: null !default;
 
 /**
-* $name 40. Focused background color
+* $name 50. Underlined background color
 * $type color
 */
-$texteditor-focused-bg: $base-bg !default;
+$texteditor-underlined-bg: transparent !default;
 
 /**
-* $name 50. Border color
+* $name 51. Underlined hovered background color
+* $type color
+*/
+$texteditor-underlined-bg-hover: $texteditor-underlined-bg !default;
+
+/**
+* $name 52. Underlined focused background color
+* $type color
+*/
+$texteditor-underlined-bg-focused: $texteditor-underlined-bg !default;
+
+/**
+* $name 60. Border color
 * $type color
 */
 $texteditor-border-color: $base-border-color !default;
@@ -40,22 +69,19 @@ $texteditor-border-color-hover: $base-border-color-hover !default;
 $texteditor-border-color-focused: $base-border-color-focused !default;
 
 /**
-* $name 60. Hovered border color
+* $name 70. Bottom border color
 * $type color
 */
-$texteditor-hover-border-color: $texteditor-color !default;
+$texteditor-border-bottom-color: $base-border-color-accessible !default;
+$texteditor-border-bottom-color-hover: null !default;
+$texteditor-border-bottom-color-focused: null !default;
 
 /**
-* $name 70. Focused border color
+* $name 80. Focused state indicator color
 * $type color
 */
-$texteditor-focused-border-color: $base-accent !default;
+$texteditor-indicator-border-color: $base-accent !default;
 
-/**
-* $name 40. Hovered background color
-* $type color
-*/
-$texteditor-hover-bg: null !default;
 $texteditor-button-clear-icon-color: $base-neutral-foreground3 !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color-hover !default;
 $texteditor-invalid-faded-border-color: $base-invalid-color !default;
@@ -68,10 +94,31 @@ $texteditor-label-transition:
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
-  $texteditor-filled-bg: darken($texteditor-bg, 3.9) !default;
+  $texteditor-filled-bg: darken($base-bg, 3.9) !default;
+  $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default; // #c7c7c7
+  $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default; // #b3b3b3
+  $texteditor-border-bottom-color-hover: darken($texteditor-border-bottom-color, 3.92) !default; // #575757
+  $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default; // #4d4d4d
 }
 
+
 @if $mode == "dark" {
-  $texteditor-filled-bg: darken($texteditor-bg, 8.2) !default;
+  $texteditor-filled-bg: darken($base-bg, 8.2) !default;
+  $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default; // #757575
+  $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default; // #6b6b6b
+  $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default; // #bdbdbd
+  $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default; // #b3b3b3
 }
+
+/**
+* $name 41. Filled hovered background color
+* $type color
+*/
+$texteditor-filled-bg-hover: $texteditor-filled-bg !default;
+
+/**
+* $name 42. Filled focused background color
+* $type color
+*/
+$texteditor-filled-bg-focused: $texteditor-filled-bg !default;
   

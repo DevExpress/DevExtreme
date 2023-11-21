@@ -27,12 +27,16 @@ $base-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, avenir next, a
 * $name 30. Background color
 * $type color
 */
+$base-typography-bg: null !default;
+
+/**
+* $name 31. Foreground color
+* $type color
+*/
 $base-bg: null !default;
 $base-bg-hover: null !default;
 $base-bg-active: null !default;
 $base-bg-selected: null !default;
-
-$base-typography-bg: null !default;
 
 $base-accent-bg: null !default;
 
@@ -244,7 +248,7 @@ $base-icon-color: $base-neutral-foreground3 !default;
 * $name 50. Spin icon color
 * $type color
 */
-$base-spin-icon-color: $base-neutral-foreground3 !default;
+$base-spin-icon-color: $base-icon-color !default;
 
 /**
 * $name 30. Link color
