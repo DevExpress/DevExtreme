@@ -91,6 +91,8 @@ const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+const HEADER_PANEL_CELL_DATE_CLASS = `${WIDGET_CLASS}-header-panel-cell-date`;
+const HEADER_PANEL_CELL_DATE_CONTAINER_CLASS = `${HEADER_PANEL_CELL_DATE_CLASS}-container`;
 const WIDGET_SMALL_WIDTH = 400;
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
@@ -473,15 +475,18 @@ class Scheduler extends Widget<any> {
           useDropDownViewSwitcher: true,
           dateCellTemplate(data, index, element) {
             const { text } = data;
+            const container = $('<div>')
+              .addClass(HEADER_PANEL_CELL_DATE_CONTAINER_CLASS);
 
             text.split(' ').forEach((text, index) => {
               const span = $('<span>')
                 .text(text)
-                .addClass('dx-scheduler-header-panel-cell-date');
+                .addClass(HEADER_PANEL_CELL_DATE_CLASS);
 
-              $(element).append(span);
-              if (!index) $(element).append(' ' as any);
+              $(container).append(span);
+              if (!index) $(container).append(' ' as any);
             });
+            $(element).append(container);
           },
           _appointmentTooltipButtonsPosition: 'top',
           _appointmentTooltipOpenButtonText: null,

@@ -200,11 +200,13 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   margin-top: 0;
 }
 
-.dx-scheduler-header-panel-cell {
-  font-size: $fluent-scheduler-time-panel-font-size;
-  padding-bottom: 2px;
+.dx-scheduler-header-panel-cell-date-container {
   padding-left: $header-panel-time-cell-padding;
   padding-right: $header-panel-time-cell-padding;
+}
+
+.dx-scheduler-header-panel-cell {
+  font-size: $fluent-scheduler-time-panel-font-size; 
   text-align: left;
   vertical-align: bottom;
 
@@ -289,8 +291,16 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       font-size: $fluent-scheduler-header-panel-day-font-size;
       margin-top: 4px;
       margin-bottom: 4px;
-      margin-left: 8px;
+      margin-left: 2px;
       color: $header-panel-cell-date;
+    }
+  }
+}
+
+.dx-scheduler-header-panel-current-time-cell.dx-scheduler-header-panel-cell {
+  .dx-scheduler-header-panel-cell-date-container {
+    .dx-scheduler-header-panel-cell-date:last-child {
+      margin-left: 0;
     }
   }
 }
