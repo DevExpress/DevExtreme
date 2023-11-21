@@ -33,31 +33,28 @@ QUnit.module('Tabs markup', () => {
         assert.ok($tabsElement.hasClass(TABS_CLASS), 'tabs has correct class');
     });
 
-    QUnit.test('Tabs item should have a correct span element', function(assert) {
-        const $tabs = $('#tabs').dxTabs({
-            items: [{ text: '1' }],
+    [[{ text: '1' }], ['1']].forEach(items => {
+        QUnit.test(`Tabs item should have a correct span element when items are ${items}`, function(assert) {
+            const $tabs = $('#tabs').dxTabs({ items });
+            const $tabsTextSpan = $tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
+
+            assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
         });
 
-        const $tabsTextSpan = $tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
+        QUnit.test(`Tabs item should have the second span element in Fluent when items are ${items}`, function(assert) {
+            const origIsFluent = themes.isFluent;
+            themes.isFluent = function() { return true; };
 
-        assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
-    });
+            try {
+                const $tabs = $('#tabs').dxTabs({ items });
 
-    QUnit.test('Tabs item should have the second span element in Fluent', function(assert) {
-        const origIsFluent = themes.isFluent;
-        themes.isFluent = function() { return true; };
+                const $tabsTextSpanPseudo = $tabs.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
 
-        try {
-            const $tabs = $('#tabs').dxTabs({
-                items: [{ text: '1' }],
-            });
-
-            const $tabsTextSpanPseudo = $tabs.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
-
-            assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
-        } finally {
-            themes.isFluent = origIsFluent;
-        }
+                assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
+            } finally {
+                themes.isFluent = origIsFluent;
+            }
+        });
     });
 
     QUnit.test('tabs should have wrapper with correct class', function(assert) {

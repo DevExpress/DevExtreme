@@ -211,15 +211,17 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _prepareDefaultItemTemplate(data, $container) {
-        if(isDefined(data.text)) {
+        const text = isPlainObject(data) ? data?.text : data;
+
+        if(isDefined(text)) {
             const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
 
-            $tabTextSpan.text(data.text);
+            $tabTextSpan.text(text);
 
             if(isFluent()) {
                 const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
 
-                $tabTextSpanPseudo.text(data.text);
+                $tabTextSpanPseudo.text(text);
                 $tabTextSpanPseudo.appendTo($tabTextSpan);
             }
 
@@ -233,13 +235,10 @@ const Tabs = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
+
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((function($container, data) {
-                if(isPlainObject(data)) {
-                    this._prepareDefaultItemTemplate(data, $container);
-                } else {
-                    $container.text(String(data));
-                }
+                this._prepareDefaultItemTemplate(data, $container);
 
                 const $iconElement = getImageContainer(data.icon);
                 $iconElement && $iconElement.prependTo($container);
