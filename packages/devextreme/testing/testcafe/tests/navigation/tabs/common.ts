@@ -38,19 +38,19 @@ test('Tabs nav buttons', async (t) => {
   return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
 });
 
-test('Tabs text wrapping with vertical orientation', async (t) => {
+test('Tabs text-overflow with vertical orientation', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const tabs = new Tabs('#tabs');
 
-  await testScreenshot(t, takeScreenshot, 'Tabs text wrapping.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow.png', { element: '#tabs' });
 
   await tabs.option({ iconPosition: 'top' } as any);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs text wrapping when iconPosition is top.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow when iconPosition is top.png', { element: '#tabs' });
 
   await tabs.option({ height: 300 } as any);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs text wrapping when height is limited.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow when height is limited.png', { element: '#tabs' });
 
   await t
     .expect(compareResults.isValid())

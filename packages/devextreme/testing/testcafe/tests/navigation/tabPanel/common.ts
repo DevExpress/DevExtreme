@@ -80,14 +80,14 @@ test('TabPanel borders with scrolling', async (t) => {
   return createWidget('dxTabPanel', tabPanelOptions);
 });
 
-test('TabPanel text wrapping with tabsPosition left', async (t) => {
+test('TabPanel text-overflow with tabsPosition left', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TabPanel text wrapping when tabsPosition is left.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TabPanel text-overflow when tabsPosition is left.png', { element: '#container' });
 
   await setAttribute('.dx-tabs-wrapper', 'style', 'max-width: 130px;');
 
-  await testScreenshot(t, takeScreenshot, 'TabPanel text wrapping when tabs wrapper width is limited.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TabPanel text-overflow when tabs wrapper width is limited.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
