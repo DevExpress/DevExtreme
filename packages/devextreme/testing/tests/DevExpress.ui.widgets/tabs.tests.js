@@ -1059,8 +1059,9 @@ QUnit.module('Horizontal scrolling', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }],
             scrollingEnabled: true,
+            showNavButtons: true,
             visible: true,
-            width: 100
+            width: 100,
         });
         const instance = $element.dxTabs('instance');
 
