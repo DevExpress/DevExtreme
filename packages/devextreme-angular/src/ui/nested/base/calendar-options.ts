@@ -145,31 +145,31 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('name', value);
     }
 
-    get onDisposing(): ((e: DisposingEvent) => void) {
+    get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent) => void)) {
+    set onDisposing(value: Function) {
         this._setOption('onDisposing', value);
     }
 
-    get onInitialized(): ((e: InitializedEvent) => void) {
+    get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent) => void)) {
+    set onInitialized(value: Function) {
         this._setOption('onInitialized', value);
     }
 
-    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
+    get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
+    set onOptionChanged(value: Function) {
         this._setOption('onOptionChanged', value);
     }
 
-    get onValueChanged(): ((e: ValueChangedEvent) => void) {
+    get onValueChanged(): Function {
         return this._getOption('onValueChanged');
     }
-    set onValueChanged(value: ((e: ValueChangedEvent) => void)) {
+    set onValueChanged(value: Function) {
         this._setOption('onValueChanged', value);
     }
 

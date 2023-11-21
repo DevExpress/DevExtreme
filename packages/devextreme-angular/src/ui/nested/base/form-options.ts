@@ -146,45 +146,45 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('minColWidth', value);
     }
 
-    get onContentReady(): ((e: ContentReadyEvent) => void) {
+    get onContentReady(): Function {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: ContentReadyEvent) => void)) {
+    set onContentReady(value: Function) {
         this._setOption('onContentReady', value);
     }
 
-    get onDisposing(): ((e: DisposingEvent) => void) {
+    get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent) => void)) {
+    set onDisposing(value: Function) {
         this._setOption('onDisposing', value);
     }
 
-    get onEditorEnterKey(): ((e: EditorEnterKeyEvent) => void) {
+    get onEditorEnterKey(): Function {
         return this._getOption('onEditorEnterKey');
     }
-    set onEditorEnterKey(value: ((e: EditorEnterKeyEvent) => void)) {
+    set onEditorEnterKey(value: Function) {
         this._setOption('onEditorEnterKey', value);
     }
 
-    get onFieldDataChanged(): ((e: FieldDataChangedEvent) => void) {
+    get onFieldDataChanged(): Function {
         return this._getOption('onFieldDataChanged');
     }
-    set onFieldDataChanged(value: ((e: FieldDataChangedEvent) => void)) {
+    set onFieldDataChanged(value: Function) {
         this._setOption('onFieldDataChanged', value);
     }
 
-    get onInitialized(): ((e: InitializedEvent) => void) {
+    get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent) => void)) {
+    set onInitialized(value: Function) {
         this._setOption('onInitialized', value);
     }
 
-    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
+    get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
+    set onOptionChanged(value: Function) {
         this._setOption('onOptionChanged', value);
     }
 

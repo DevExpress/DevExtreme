@@ -63,10 +63,10 @@ export abstract class DxiTextEditorButton extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get onClick(): ((e: ColumnButtonClickEvent) => void) {
+    get onClick(): Function {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
+    set onClick(value: Function) {
         this._setOption('onClick', value);
     }
 
