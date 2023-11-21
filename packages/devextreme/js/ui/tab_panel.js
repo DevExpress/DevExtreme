@@ -21,8 +21,8 @@ const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
-
-const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -168,12 +168,28 @@ const TabPanel = MultiView.inherit({
         this._renderLayout();
     },
 
+    _prepareDefaultItemTemplate(data, $container) {
+        const $iconElement = getImageContainer(data.icon);
+
+        if($iconElement) {
+            $container.append($iconElement);
+        }
+
+        if(isDefined(data.title) && !isPlainObject(data.title)) {
+            $container.append(domAdapter.createTextNode(data.title));
+        }
+    },
+
     _initTemplates: function() {
         this.callBase();
+
         this._templateManager.addDefaultTemplates({
-            title: new BindableTemplate(function($container, data) {
+            title: new BindableTemplate(($container, data) => {
+                // debugger;
                 if(isPlainObject(data)) {
+                    // this._prepareDefaultItemTemplate(data, $container);
                     const $iconElement = getImageContainer(data.icon);
+
                     if($iconElement) {
                         $container.append($iconElement);
                     }
@@ -189,9 +205,9 @@ const TabPanel = MultiView.inherit({
 
                 const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
 
-                if(data?.title) {
-                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, data.title);
-                }
+                // if(data?.title) {
+                //     $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, data.title);
+                // }
 
                 $container.wrapInner($tabItem);
             }, ['title', 'icon'], this.option('integrationOptions.watchMethod'))
