@@ -341,7 +341,7 @@ QUnit.module('general', {}, () => {
         assert.strictEqual(focusStub.callCount, 1, 'FocusIn event has been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
 
-        actionButton.focus();
+        $(actionButton).trigger('click');
         assert.ok($textEditor.hasClass('dx-state-focused'), 'input is still focused');
         assert.strictEqual(focusStub.callCount, 1, 'new FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
