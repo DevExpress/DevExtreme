@@ -132,6 +132,7 @@ class Gantt extends BaseComponent<React.PropsWithChildren<IGanttOptions>> {
   disabled: PropTypes.bool,
   editing: PropTypes.object,
   elementAttr: PropTypes.object,
+  endDateRange: PropTypes.instanceOf(Date),
   filterRow: PropTypes.object,
   firstDayOfWeek: PropTypes.oneOfType([
     PropTypes.number,
@@ -204,6 +205,7 @@ class Gantt extends BaseComponent<React.PropsWithChildren<IGanttOptions>> {
   showResources: PropTypes.bool,
   showRowLines: PropTypes.bool,
   sorting: PropTypes.object,
+  startDateRange: PropTypes.instanceOf(Date),
   stripLines: PropTypes.array,
   tabIndex: PropTypes.number,
   taskListWidth: PropTypes.number,
@@ -450,8 +452,8 @@ class FilterRow extends NestedOption<IFilterRowProps> {
 // Column
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -643,8 +645,8 @@ class Sorting extends NestedOption<ISortingProps> {
 // Gantt
 type IStripLineProps = React.PropsWithChildren<{
   cssClass?: string;
-  end?: any | (() => any | number | string) | number | string;
-  start?: any | (() => any | number | string) | number | string;
+  end?: Date | (() => Date | number | string) | number | string;
+  start?: Date | (() => Date | number | string) | number | string;
   title?: string;
 }>
 class StripLine extends NestedOption<IStripLineProps> {
