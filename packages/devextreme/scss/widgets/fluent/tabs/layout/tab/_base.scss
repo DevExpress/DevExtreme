@@ -46,7 +46,7 @@
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
-    .dx-tab-text-span-pseudo {
+    .dx-tab-text .dx-tab-text-span-pseudo {
       color: $tabs-tab-disabled-color;
     }
 
