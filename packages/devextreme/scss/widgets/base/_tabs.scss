@@ -89,9 +89,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  // min-width: max-content;
-  min-width: 0;
+  min-width: max-content;
   cursor: pointer;
 
   @include dx-tabs-link();
