@@ -8,11 +8,30 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { PositionConfig } from "devextreme/animation/position";
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popup";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
-type IPopupOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+type ReplaceFieldTypes<TSource, TReplacement> = {
+  [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
+}
+
+type IPopupOptionsNarrowedEvents = {
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: DisposingEvent) => void);
+  onHidden?: ((e: HiddenEvent) => void);
+  onHiding?: ((e: HidingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onResize?: ((e: ResizeEvent) => void);
+  onResizeEnd?: ((e: ResizeEndEvent) => void);
+  onResizeStart?: ((e: ResizeStartEvent) => void);
+  onShowing?: ((e: ShowingEvent) => void);
+  onShown?: ((e: ShownEvent) => void);
+  onTitleRendered?: ((e: TitleRenderedEvent) => void);
+}
+
+type IPopupOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPopupOptionsNarrowedEvents> & IHtmlOptions & {
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   contentKeyFn?: (data: any) => string;

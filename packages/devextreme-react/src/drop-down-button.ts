@@ -8,17 +8,13 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent } from "devextreme/ui/drop_down_button";
+import type { ContentReadyEvent as PopupContentReadyEvent, DisposingEvent as PopupDisposingEvent, InitializedEvent as PopupInitializedEvent, HiddenEvent, HidingEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent, ShowingEvent, ShownEvent, TitleRenderedEvent, dxPopupToolbarItem } from "devextreme/ui/popup";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
-import type { event, EventInfo } from "devextreme/events/index";
+import type { event } from "devextreme/events/index";
 import type { template } from "devextreme/core/templates/template";
-import type { Component } from "devextreme/core/component";
 import type { PositionConfig } from "devextreme/animation/position";
-import type { dxPopupToolbarItem } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
-import type dxOverlay from "devextreme/ui/overlay";
-import type DOMComponent from "devextreme/core/dom_component";
-import type dxPopup from "devextreme/ui/popup";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -210,18 +206,18 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   maxWidth?: (() => number | string) | number | string;
   minHeight?: (() => number | string) | number | string;
   minWidth?: (() => number | string) | number | string;
-  onContentReady?: ((e: EventInfo<any>) => void);
-  onDisposing?: ((e: EventInfo<any>) => void);
-  onHidden?: ((e: EventInfo<any>) => void);
-  onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
-  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
-  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onShown?: ((e: EventInfo<any>) => void);
-  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
+  onContentReady?: ((e: PopupContentReadyEvent) => void);
+  onDisposing?: ((e: PopupDisposingEvent) => void);
+  onHidden?: ((e: HiddenEvent) => void);
+  onHiding?: ((e: HidingEvent) => void);
+  onInitialized?: ((e: PopupInitializedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onResize?: ((e: ResizeEvent) => void);
+  onResizeEnd?: ((e: ResizeEndEvent) => void);
+  onResizeStart?: ((e: ResizeStartEvent) => void);
+  onShowing?: ((e: ShowingEvent) => void);
+  onShown?: ((e: ShownEvent) => void);
+  onTitleRendered?: ((e: TitleRenderedEvent) => void);
   position?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
   resizeEnabled?: boolean;
   restorePosition?: boolean;

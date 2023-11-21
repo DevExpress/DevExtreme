@@ -53,46 +53,107 @@ export {
  * @hidden
  */
 export interface TitleRenderedInfo {
+    /** @docid */
     readonly titleElement: DxElement;
 }
 
 /** @public */
 export type ToolbarLocation = 'bottom' | 'top';
 
-/** @public */
+/**
+ * @docid _ui_popup_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+*/
 export type ContentReadyEvent = EventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+*/
 export type DisposingEvent = EventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_HidingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+*/
 export type HidingEvent = Cancelable & EventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_HiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+*/
 export type HiddenEvent = EventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+*/
 export type InitializedEvent = InitializedEventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_ShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+*/
 export type ShownEvent = EventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_ResizeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+*/
 export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_popup_ResizeStartEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+*/
 export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_popup_ResizeEndEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+*/
 export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_popup_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+*/
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_popup_ShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+*/
 export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 
-/** @public */
+/**
+ * @docid _ui_popup_TitleRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,TitleRenderedInfo
+*/
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 /**
@@ -153,9 +214,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/popup:ResizeEvent}
      * @action
      * @public
      */
@@ -163,9 +222,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/popup:ResizeEndEvent}
      * @action
      * @public
      */
@@ -173,9 +230,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/popup:ResizeStartEvent}
      * @action
      * @public
      */
@@ -183,12 +238,11 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:{ui/popup:TitleRenderedEvent}
      * @action
      * @public
      */
-    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @public
@@ -308,3 +362,58 @@ export type Properties = dxPopupOptions<PopupInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onResize' | 'onResizeEnd' | 'onResizeStart' | 'onTitleRendered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @docid dxPopupOptions.onContentReady
+ * @type_function_param1 e:{ui/popup:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @docid dxPopupOptions.onDisposing
+ * @type_function_param1 e:{ui/popup:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @docid dxPopupOptions.onHidden
+ * @type_function_param1 e:{ui/popup:HiddenEvent}
+ */
+onHidden?: ((e: HiddenEvent) => void);
+/**
+ * @docid dxPopupOptions.onHiding
+ * @type_function_param1 e:{ui/popup:HidingEvent}
+ */
+onHiding?: ((e: HidingEvent) => void);
+/**
+ * @docid dxPopupOptions.onInitialized
+ * @type_function_param1 e:{ui/popup:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @docid dxPopupOptions.onOptionChanged
+ * @type_function_param1 e:{ui/popup:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @docid dxPopupOptions.onShowing
+ * @type_function_param1 e:{ui/popup:ShowingEvent}
+ */
+onShowing?: ((e: ShowingEvent) => void);
+/**
+ * @docid dxPopupOptions.onShown
+ * @type_function_param1 e:{ui/popup:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+};
+///#ENDDEBUG

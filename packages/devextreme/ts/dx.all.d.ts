@@ -22724,13 +22724,31 @@ declare module DevExpress.ui {
     TProperties = DevExpress.ui.dxPopup.Properties
   > extends dxOverlay<TProperties> {}
   module dxPopup {
+    /**
+     * [descr:_ui_popup_ContentReadyEvent]
+     */
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_DisposingEvent]
+     */
     export type DisposingEvent = DevExpress.events.EventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_HiddenEvent]
+     */
     export type HiddenEvent = DevExpress.events.EventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_HidingEvent]
+     */
     export type HidingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_InitializedEvent]
+     */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_OptionChangedEvent]
+     */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.events.ChangedOptionInfo;
     /**
@@ -22738,24 +22756,42 @@ declare module DevExpress.ui {
      */
     interface PopupInstance extends dxPopup<Properties> {}
     export type Properties = dxPopupOptions<PopupInstance>;
+    /**
+     * [descr:_ui_popup_ResizeEndEvent]
+     */
     export type ResizeEndEvent = DevExpress.events.NativeEventInfo<
       dxPopup,
       MouseEvent | TouchEvent
     > &
       DevExpress.ui.dxResizable.ResizeInfo;
+    /**
+     * [descr:_ui_popup_ResizeEvent]
+     */
     export type ResizeEvent = DevExpress.events.NativeEventInfo<
       dxPopup,
       MouseEvent | TouchEvent
     > &
       DevExpress.ui.dxResizable.ResizeInfo;
+    /**
+     * [descr:_ui_popup_ResizeStartEvent]
+     */
     export type ResizeStartEvent = DevExpress.events.NativeEventInfo<
       dxPopup,
       MouseEvent | TouchEvent
     > &
       DevExpress.ui.dxResizable.ResizeInfo;
+    /**
+     * [descr:_ui_popup_ShowingEvent]
+     */
     export type ShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_ShownEvent]
+     */
     export type ShownEvent = DevExpress.events.EventInfo<dxPopup>;
+    /**
+     * [descr:_ui_popup_TitleRenderedEvent]
+     */
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       TitleRenderedInfo;
     /**
@@ -22763,6 +22799,9 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface TitleRenderedInfo {
+      /**
+       * [descr:TitleRenderedInfo.titleElement]
+       */
       readonly titleElement: DevExpress.core.DxElement;
     }
     export type ToolbarLocation = 'bottom' | 'top';
@@ -22835,10 +22874,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.onTitleRendered]
      */
-    onTitleRendered?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxPopup.TitleRenderedInfo
-    ) => void;
+    onTitleRendered?: (e: DevExpress.ui.dxPopup.TitleRenderedEvent) => void;
     /**
      * [descr:dxPopupOptions.position]
      */

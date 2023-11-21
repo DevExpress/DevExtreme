@@ -27,7 +27,7 @@ import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
 import { PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { ToolbarLocation } from 'devextreme/ui/popup';
+import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent, ShowingEvent, ShownEvent, TitleRenderedEvent, ToolbarLocation } from 'devextreme/ui/popup';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import DxPopup from 'devextreme/ui/popup';
@@ -591,51 +591,51 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
     
-     * [descr:WidgetOptions.onContentReady]
+     * [descr:dxPopupOptions.onContentReady]
     
     
      */
-    @Output() onContentReady: EventEmitter<any>;
+    @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
     
-     * [descr:DOMComponentOptions.onDisposing]
+     * [descr:dxPopupOptions.onDisposing]
     
     
      */
-    @Output() onDisposing: EventEmitter<any>;
+    @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
     
-     * [descr:dxOverlayOptions.onHidden]
+     * [descr:dxPopupOptions.onHidden]
     
     
      */
-    @Output() onHidden: EventEmitter<any>;
+    @Output() onHidden: EventEmitter<HiddenEvent>;
 
     /**
     
-     * [descr:dxOverlayOptions.onHiding]
+     * [descr:dxPopupOptions.onHiding]
     
     
      */
-    @Output() onHiding: EventEmitter<any>;
+    @Output() onHiding: EventEmitter<HidingEvent>;
 
     /**
     
-     * [descr:ComponentOptions.onInitialized]
+     * [descr:dxPopupOptions.onInitialized]
     
     
      */
-    @Output() onInitialized: EventEmitter<any>;
+    @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
     
-     * [descr:DOMComponentOptions.onOptionChanged]
+     * [descr:dxPopupOptions.onOptionChanged]
     
     
      */
-    @Output() onOptionChanged: EventEmitter<any>;
+    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
     
@@ -643,7 +643,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onResize: EventEmitter<any>;
+    @Output() onResize: EventEmitter<ResizeEvent>;
 
     /**
     
@@ -651,7 +651,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onResizeEnd: EventEmitter<any>;
+    @Output() onResizeEnd: EventEmitter<ResizeEndEvent>;
 
     /**
     
@@ -659,23 +659,23 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onResizeStart: EventEmitter<any>;
+    @Output() onResizeStart: EventEmitter<ResizeStartEvent>;
 
     /**
     
-     * [descr:dxOverlayOptions.onShowing]
+     * [descr:dxPopupOptions.onShowing]
     
     
      */
-    @Output() onShowing: EventEmitter<any>;
+    @Output() onShowing: EventEmitter<ShowingEvent>;
 
     /**
     
-     * [descr:dxOverlayOptions.onShown]
+     * [descr:dxPopupOptions.onShown]
     
     
      */
-    @Output() onShown: EventEmitter<any>;
+    @Output() onShown: EventEmitter<ShownEvent>;
 
     /**
     
@@ -683,7 +683,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onTitleRendered: EventEmitter<any>;
+    @Output() onTitleRendered: EventEmitter<TitleRenderedEvent>;
 
     /**
     
