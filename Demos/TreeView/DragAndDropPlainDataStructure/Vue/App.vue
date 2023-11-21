@@ -218,6 +218,10 @@ function getTopVisibleNode(component) {
   margin-top: 10px;
 }
 
+.dx-treeview-item {
+  box-sizing: border-box;
+}
+
 .drive-header {
   min-height: auto;
   padding: 0;

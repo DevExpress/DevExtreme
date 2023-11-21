@@ -12,6 +12,10 @@
   margin-top: 10px;
 }
 
+::ng-deep .dx-treeview-item {
+  box-sizing: border-box;
+}
+
 ::ng-deep .drive-header {
   min-height: auto;
   padding: 0;
