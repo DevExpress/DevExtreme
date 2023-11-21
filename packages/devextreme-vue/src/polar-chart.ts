@@ -297,7 +297,7 @@ const DxAnnotation = createConfigurationComponent({
   props: {
     allowDragging: Boolean,
     angle: Number,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     border: Object,
@@ -323,7 +323,7 @@ const DxAnnotation = createConfigurationComponent({
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
     type: String,
-    value: {},
+    value: [Date, Number, String],
     width: Number,
     wordWrap: String,
     x: Number,
@@ -607,7 +607,7 @@ const DxCommonAnnotationSettings = createConfigurationComponent({
   props: {
     allowDragging: Boolean,
     angle: Number,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     border: Object,
@@ -632,7 +632,7 @@ const DxCommonAnnotationSettings = createConfigurationComponent({
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
     type: String,
-    value: {},
+    value: [Date, Number, String],
     width: Number,
     wordWrap: String,
     x: Number,
@@ -952,7 +952,7 @@ const DxConstantLine = createConfigurationComponent({
     displayBehindSeries: Boolean,
     extendAxis: Boolean,
     label: Object,
-    value: {},
+    value: [Date, Number, String],
     width: Number
   }
 });
@@ -1775,9 +1775,9 @@ const DxStrip = createConfigurationComponent({
   },
   props: {
     color: String,
-    endValue: {},
+    endValue: [Date, Number, String],
     label: Object,
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxStrip as any).$_optionName = "strips";
@@ -2113,9 +2113,9 @@ const DxVisualRange = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
+    endValue: [Date, Number, String],
     length: [Number, Object, String],
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxVisualRange as any).$_optionName = "visualRange";
@@ -2131,9 +2131,9 @@ const DxWholeRange = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
+    endValue: [Date, Number, String],
     length: [Number, Object, String],
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxWholeRange as any).$_optionName = "wholeRange";
