@@ -7,7 +7,7 @@ import Button from './button';
 import { render } from './widget/utils.ink_ripple';
 import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
-import { isPlainObject, isString, isNumeric } from '../core/utils/type';
+import { isPlainObject, isDefined } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
 import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
@@ -41,12 +41,12 @@ const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
+const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
-
-const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
 
 const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
@@ -210,6 +210,27 @@ const Tabs = CollectionWidget.inherit({
         this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
     },
 
+    _prepareDefaultItemTemplate(data, $container) {
+        if(isDefined(data.text)) {
+            const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
+
+            $tabTextSpan.text(data.text);
+
+            if(isFluent()) {
+                const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+
+                $tabTextSpanPseudo.text(data.text);
+                $tabTextSpanPseudo.appendTo($tabTextSpan);
+            }
+
+            $tabTextSpan.appendTo($container);
+        }
+
+        if(isDefined(data.html)) {
+            $container.html(data.html);
+        }
+    },
+
     _initTemplates: function() {
         this.callBase();
         this._templateManager.addDefaultTemplates({
@@ -223,13 +244,7 @@ const Tabs = CollectionWidget.inherit({
                 const $iconElement = getImageContainer(data.icon);
                 $iconElement && $iconElement.prependTo($container);
 
-                const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
-
-                const text = data?.text ?? data;
-
-                if(isString(text) || isNumeric(text)) {
-                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, text);
-                }
+                const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
 
                 $container.wrapInner($tabItem);
             }).bind(this), ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod'))

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Tabs from 'ui/tabs';
 import windowUtils from 'core/utils/window';
+import themes from 'ui/themes';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 import 'generic_light.css!';
@@ -18,7 +19,8 @@ QUnit.testStart(() => {
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -31,25 +33,31 @@ QUnit.module('Tabs markup', () => {
         assert.ok($tabsElement.hasClass(TABS_CLASS), 'tabs has correct class');
     });
 
-    QUnit.test(`Tabs item should have a correct ${TABS_DATA_DX_TEXT_ATTRIBUTE} attribute`, function(assert) {
+    QUnit.test('Tabs item should have a correct span element', function(assert) {
         const $tabs = $('#tabs').dxTabs({
             items: [{ text: '1' }],
         });
-        const tabs = $tabs.dxTabs('instance');
 
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item text`);
+        const $tabsTextSpan = $tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
 
-        tabs.option({ items: ['1'] });
+        assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
+    });
 
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item when item is string`);
+    QUnit.test('Tabs item should have the second span element in Fluent', function(assert) {
+        const origIsFluent = themes.isFluent;
+        themes.isFluent = function() { return true; };
 
-        tabs.option({ items: [1] });
+        try {
+            const $tabs = $('#tabs').dxTabs({
+                items: [{ text: '1' }],
+            });
 
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item when item is number`);
+            const $tabsTextSpanPseudo = $tabs.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
 
-        tabs.option({ items: [{ title: '1' }] });
-
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), undefined, `${TABS_DATA_DX_TEXT_ATTRIBUTE} is undefined`);
+            assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
+        } finally {
+            themes.isFluent = origIsFluent;
+        }
     });
 
     QUnit.test('tabs should have wrapper with correct class', function(assert) {

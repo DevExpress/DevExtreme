@@ -32,6 +32,13 @@
   &.dx-tabs-vertical .dx-tabs-wrapper .dx-tab-text {
     white-space: normal;
   }
+
+  .dx-tab-text-span,
+  .dx-tab-text-span-pseudo {
+    width: 100%;
+
+    @include dx-overflow();
+  }
 }
 
 .dx-tabs-scrollable {
@@ -82,7 +89,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: max-content;
+
+  // min-width: max-content;
+  min-width: 0;
   cursor: pointer;
 
   @include dx-tabs-link();
@@ -105,6 +114,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   -webkit-user-drag: none;
 }
 

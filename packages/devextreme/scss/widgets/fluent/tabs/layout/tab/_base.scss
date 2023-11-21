@@ -34,10 +34,10 @@
       color: $tabs-tab-icon-selected-color;
     }
 
-    .dx-tab-text {
+    .dx-tab-text .dx-tab-text-span {
       visibility: visible;
 
-      &::after {
+      .dx-tab-text-span-pseudo {
         visibility: hidden;
       }
     }
@@ -46,7 +46,7 @@
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
-    .dx-tab-text::after {
+    .dx-tab-text-span-pseudo {
       color: $tabs-tab-disabled-color;
     }
 
@@ -61,16 +61,22 @@
   }
 
   .dx-tab-text {
-    position: relative;
     column-gap: $fluent-base-icon-margin;
     line-height: $fluent-tab-text-line-height;
-    font-weight: $fluent-tab-font-weight-accent;
-    visibility: hidden;
 
-    &::after {
-      content: string.unquote("attr(DATA-DX_TEXT)");
+    .dx-tab-text-span {
+      position: relative;
+      display: block;
+      font-weight: $fluent-tab-font-weight-accent;
+      visibility: hidden;
+    }
+
+    .dx-tab-text-span-pseudo {
       position: absolute;
-      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       pointer-events: none;
       color: $tabs-tab-color;
       font-weight: $fluent-tab-font-weight-basic;
@@ -106,13 +112,11 @@
 }
 
 .dx-tabs-icon-position-top .dx-tab-text::after {
-  bottom: 0;
   text-align: center;
   vertical-align: bottom;
 }
 
 .dx-tabs-icon-position-bottom .dx-tab-text::after {
-  top: 0;
   text-align: center;
   vertical-align: top;
 }
