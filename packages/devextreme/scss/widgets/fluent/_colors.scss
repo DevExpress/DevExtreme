@@ -1,6 +1,7 @@
 @forward "./variables";
 @use "./variables" as *;
 @use "sass:color";
+@use "./color" as extcolor;
 $color: null !default;
 $mode: null !default;
 
@@ -128,9 +129,15 @@ $scrollview-pulldown-path: null !default;
   }
 
   @if $color == "modern" {
-    $base-bg-hover: darken(saturate(adjust-hue($base-bg, 204), 33.33), 2.94) !default; // #F5F8FA
+
+    // $base-bg-hover: lighten(#3C82F5, 38.1); // #F5F8FA #f5f8fe
+    
+    // $base-bg-hover: darken(saturate(adjust-hue($base-bg, 204), 33.33), 2.94) !default; // #F5F8FA
 
     $base-accent: #3C82F5 !default; // #3C82F5
+
+    $base-bg-hover: lighten($base-accent, 38.1) !default; // #F5F8FA #f5f8fe
+
     $base-success: #19914B !default; // #19914B
     $base-danger: #DC2828 !default; // #DC2828
     $base-text-color: #1E293B !default;
