@@ -1338,12 +1338,12 @@ QUnit.module('Live Update', {
         assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrolling is enabled');
     });
 
-    QUnit.test('Disable scrolling when item is removed', function(assert) {
+    QUnit.test('Scrolling should not be disabled when item is removed', function(assert) {
         this.data = this.data.map(item => `item ${item.text}`);
         this.data.push({
             id: 2,
             text: 'item 2',
-            content: '2 tab content'
+            content: '2 tab content',
         });
 
         const tabs = this.createTabs({}, {
@@ -1351,15 +1351,19 @@ QUnit.module('Live Update', {
             showNavButtons: false,
             width: 120,
         });
+
+        const $element = tabs.$element();
+
+        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrolling is enabled');
+
         const store = tabs.getDataSource().store();
 
         store.push([{
             type: 'remove',
-            key: 2
+            key: 2,
         }]);
 
-        const $element = tabs.$element();
-        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrolling is disabled');
+        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrolling is not disabled');
     });
 });
 

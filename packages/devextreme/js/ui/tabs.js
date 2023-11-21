@@ -331,14 +331,14 @@ const Tabs = CollectionWidget.inherit({
 
     _isItemsWidthExceeded() {
         const $visibleItems = this._getVisibleItems();
-        const tabItemsWidth = this._getSummaryItemsSize('width', $visibleItems, true);
+        const tabItemTotalWidth = this._getSummaryItemsSize('width', $visibleItems, true);
         const elementWidth = getWidth(this.$element());
 
-        if([tabItemsWidth, elementWidth].includes(0)) {
+        if([tabItemTotalWidth, elementWidth].includes(0)) {
             return false;
         }
 
-        const isItemsWidthExceeded = tabItemsWidth > elementWidth;
+        const isItemsWidthExceeded = tabItemTotalWidth > elementWidth - 1;
 
         return isItemsWidthExceeded;
     },
