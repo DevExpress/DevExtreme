@@ -66,19 +66,55 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemReordered
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:DxElement
+            * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 fromIndex:number
+            * @type_function_param1_field8 toIndex:number
+            * @action
             * @hidden
             */
             onItemReordered: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleting
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:DxElement
+            * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 cancel:boolean | Promise<void>
+            * @action
             * @hidden
             */
             onItemDeleting: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleted
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:DxElement
+            * @type_function_param1_field6 itemIndex:number | object
+            * @action
             * @hidden
             */
             onItemDeleted: null
