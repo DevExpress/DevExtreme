@@ -1,11 +1,7 @@
-import { Token, TokenKind } from './types';
+import { Token } from './types';
 
-export function parseLicenseKey(): Token {
-  return {
-    kind: TokenKind.internal,
-    internalUsageId: 'internal',
-  };
-}
+// @ts-expect-error - only for internal usage
+export function parseLicenseKey(): Token {}
 
 export function validateLicense(): void {}
 
