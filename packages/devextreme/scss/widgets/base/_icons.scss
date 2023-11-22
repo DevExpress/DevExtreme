@@ -140,8 +140,8 @@
   $icon-padding: floor(math.div($icon-paddings, 2));
 
   // Geometry
-  width: 1em;
-  height: 1em;
+  width: $container-size;
+  height: $container-size;
 
   // Icon as background sizing
   background-position: $icon-padding $icon-padding;
@@ -153,6 +153,7 @@
   // Icon as font
   font-size: $icon-size;
   text-align: center;
+  line-height: $container-size - $icon-paddings-dirty;
 }
 
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
