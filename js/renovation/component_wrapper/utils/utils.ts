@@ -14,7 +14,10 @@ export const removeDifferentElements = (
       }
     });
     if (!hasComponent && element.parentNode) {
-      element.parentNode.removeChild(element);
+      // @ts-expect-error The renderer's remove() function requires an argument in .d.ts.
+      // We currenlty suppress the error if we don't need the argument (see Grids).
+      // We should change the .d.ts (maybe make the parameter optional).
+      $(newElement).remove();
     }
   });
 };
