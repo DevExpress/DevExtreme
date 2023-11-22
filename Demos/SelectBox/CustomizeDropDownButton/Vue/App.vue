@@ -116,9 +116,9 @@ const deferredProducts = {
   text-align: center;
 }
 
-.dx-theme-material .dx-dropdowneditor-button .dx-button-content .dx-loadindicator {
-  width: 24px;
-  height: 24px;
+.dx-dropdowneditor-button .dx-button-content .dx-loadindicator {
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .custom-icon {
