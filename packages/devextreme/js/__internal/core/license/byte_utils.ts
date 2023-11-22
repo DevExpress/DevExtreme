@@ -54,3 +54,8 @@ export function concatBytes(a: Uint8Array, b: Uint8Array): Uint8Array {
   result.set(b, a.length);
   return result;
 }
+
+export function xorTransform(string: string, key?: string): string {
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  return string.split('').map((s, i) => String.fromCharCode(s.charCodeAt(0) ^ (key?.charCodeAt(i % key.length) || 0))).join('');
+}

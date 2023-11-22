@@ -9,6 +9,7 @@ import {
   stringToBytes,
   wordsToBytes,
   wordsToHex,
+  xorTransform,
 } from './byte_utils';
 
 describe('byte utils', () => {
@@ -95,5 +96,25 @@ describe('byte utils', () => {
     { value1: [6, 111, 114, 101, 109, 32], value2: [105, 112, 115, 117, 109], expected: [6, 111, 114, 101, 109, 32, 105, 112, 115, 117, 109] },
   ])('concatenate byte arrays', ({ value1, value2, expected }) => {
     expect(concatBytes(new Uint8Array(value1), new Uint8Array(value2))).toEqual(new Uint8Array(expected));
+  });
+
+  describe('XOR transfrom', () => {
+    it.each([
+      { value: 'abc', key: 'def' },
+      { value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', key: '6b2c7819e38e496ba0705d7e86ea3227' },
+    ])('encodes with key', ({ value, key }) => {
+      const encoded = xorTransform(value, key);
+      const decoded = xorTransform(encoded, key);
+      expect(encoded).not.toBe(value);
+      expect(decoded).toBe(value);
+    });
+
+    it.each([
+      { value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', key: '' },
+      { value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', key: undefined },
+    ])('does not encode without key', ({ value, key }) => {
+      const encoded = xorTransform(value, key);
+      expect(encoded).toBe(value);
+    });
   });
 });
