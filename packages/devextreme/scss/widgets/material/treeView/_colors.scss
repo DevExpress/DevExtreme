@@ -17,17 +17,14 @@ $treeview-item-hover-color: $base-hover-color !default;
 $treeview-border-color: $base-border-color !default;
 $treeview-item-selected-color: $treeview-color !default;
 $treeview-item-selected-bg: null !default;
-$treeview-item-selected-hover-bg: null !default;
 $treeview-spin-icon-color: $base-spin-icon-color !default;
 
 $checkbox-border-color-focused: $base-focus-bg !default;
 
 @if $mode == "light" {
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.12) !default;
-  $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
 }
 
 @if $mode == "dark" {
   $treeview-item-selected-bg: color.change(#6e6e80, $alpha: 0.5) !default;
-  $treeview-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.4) !default;
 }

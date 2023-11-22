@@ -35,6 +35,8 @@
 }
 
 .dx-accordion-item-opened {
+  margin-block: $fluent-accordion-item-opened-margin;
+
   & > .dx-accordion-item-title {
     &::before {
       content: "\f014";
