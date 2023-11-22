@@ -38,7 +38,12 @@ sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
 
 sh.exec('npm run devextreme:inject-descriptions');
 
-sh.exec('npm run build-dist -w devextreme-main');
+sh.exec('npm run build-dist -w devextreme-main', {
+    env: {
+        ...sh.env,
+        BUILD_INTERNAL_PACKAGE: 'false'
+    }
+});
 sh.exec('npm run build -w devextreme-themebuilder');
 
 // Copy artifacts for DXBuild (Installation)
@@ -79,8 +84,8 @@ sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-angular', 'npm', 'dist', 
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_OUTPUT_DIR);
 sh.cp(path.join(MONOREPO_ROOT, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_OUTPUT_DIR);
 
-if (process.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('BUILD_INTERNAL_PACKAGE=true npm run build-dist -w devextreme-main');
+if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
+    sh.exec('npm run build-dist -w devextreme-main');
 
     sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
         sh.exec(`npm pkg set version="${devextremeNpmVersion}"`);
