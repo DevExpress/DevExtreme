@@ -19,7 +19,6 @@ $material-slider-bg: $base-accent !default;
 $material-slider-active: color.change($base-accent, $alpha: 0.24) !default;
 $material-slider-disabled-bg: color.change($base-text-color, $alpha: 0.24) !default;
 $material-slider-bar-disabled-bg: color.change($base-text-color, $alpha: 0.24) !default;
-$material-slider-tooltip-bg: $base-accent !default;
 
 /**
 * $name 30. Slider tooltip text color

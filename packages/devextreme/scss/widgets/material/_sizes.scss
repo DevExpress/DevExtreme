@@ -14,12 +14,6 @@ $material-base-dropdown-widgets-shadow: null !default;
 $material-html-editor-add-image-dialog-base-padding: 5px !default;
 
 /**
-* $name 50. Item opened margin
-* $type text
-*/
-$material-accordion-item-opened-margin: null !default;
-
-/**
 * $name 11. Button height
 * $type text
 */
@@ -50,7 +44,6 @@ $material-button-icon-margin: null !default;
   $material-base-inline-horizontal-padding: 10px !default;
   $material-base-border-radius: 4px !default;
   $material-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color !default;
-  $material-accordion-item-opened-margin: 16px !default;
   $material-button-height: 36px !default;
   $material-button-icon-size: 18px !default;
   $material-button-icon-margin: 8px !default;
@@ -69,7 +62,6 @@ $material-button-icon-margin: null !default;
   $material-base-inline-horizontal-padding: 8px !default;
   $material-base-border-radius: 2px !default;
   $material-base-dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color !default;
-  $material-accordion-item-opened-margin: 8px !default;
   $material-button-height: 28px !default;
   $material-button-icon-size: 16px !default;
   $material-button-icon-margin: 4px !default;

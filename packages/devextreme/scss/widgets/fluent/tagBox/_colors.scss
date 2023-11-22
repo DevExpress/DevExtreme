@@ -36,9 +36,9 @@ $tagbox-tag-foreground-disabled: $base-foreground-disabled !default;
 $tagbox-tag-disabled: $base-background-disabled !default;
 
 @if $mode == "light" {
-  $switch-bg: darken($base-bg, 5.88) !default;
+  $tagbox-tag-bg: darken($base-element-bg, 5.88) !default;
 }
 
 @if $mode == "dark" {
-  $switch-bg: darken($base-bg, 12.16) !default;
+  $tagbox-tag-bg: darken($base-element-bg, 12.16) !default;
 }
