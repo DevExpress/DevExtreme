@@ -20,7 +20,19 @@ $texteditor-placeholder-color: null !default;
 * $name 30. Outlined background color
 * $type color
 */
-$texteditor-outlined-bg: null !default;
+$texteditor-outlined-bg: $base-element-bg !default;
+
+/**
+* $name 31. Outlined hovered background color
+* $type color
+*/
+$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
+
+/**
+* $name 32. Outlined focused background color
+* $type color
+*/
+$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
 
 /**
 * $name 40. Filled background color
@@ -99,6 +111,7 @@ $texteditor-label-transition:
   $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default; // #4d4d4d
 }
 
+
 @if $mode == "dark" {
   @if $color == 'blue' {
     $texteditor-outlined-bg: $base-element-bg !default;
@@ -117,18 +130,6 @@ $texteditor-label-transition:
   $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default; // #bdbdbd
   $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default; // #b3b3b3
 }
-
-/**
-* $name 31. Outlined hovered background color
-* $type color
-*/
-$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
-
-/**
-* $name 32. Outlined focused background color
-* $type color
-*/
-$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
 
 /**
 * $name 41. Filled hovered background color

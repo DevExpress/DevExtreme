@@ -253,7 +253,7 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0019
     */
-    W0019: 'DevExtreme: Unable to Locate a Valid License Key\n\n' +
+    W0019: 'DevExtreme: Unable to Locate a Valid License Key.\n\n' +
         'If you are using a 30-day trial version of DevExtreme, you must uninstall all copies of DevExtreme once your 30-day trial period expires. For terms and conditions that govern use of DevExtreme UI components/libraries, please refer to the DevExtreme End User License Agreement: https://js.devexpress.com/EULAs/DevExtremeComplete.\n\n' +
         'To use DevExtreme in a commercial project, you must purchase a license. For pricing/licensing options, please visit: https://js.devexpress.com/Buy.\n\n' +
         'If you have licensing-related questions or need help with a purchase, please email clientservices@devexpress.com.\n\n',
