@@ -14,18 +14,17 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxScrolling, DxSorting, DxLoadPanel,
+  DxDataGrid, DxScrolling, DxSorting, DxLoadPanel, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { Column, ContentReadyEvent } from 'devextreme/ui/data_grid';
 import { generateData } from './data.ts';
 
 const dataSource = generateData(100000);
 
-const onContentReady = (e: ContentReadyEvent) => {
+const onContentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
   e.component.option('loadPanel.enabled', false);
 };
 
-const customizeColumns = (columns: Column[]) => {
+const customizeColumns = (columns: DxDataGridTypes.Column[]) => {
   columns[0].width = 70;
 };
 </script>

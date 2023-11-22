@@ -46,17 +46,18 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxEditing, DxLookup,
+  DxDataGrid, DxColumn, DxEditing, DxLookup, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { Column, EditorPreparingEvent } from 'devextreme/ui/data_grid';
 import {
   employees, states, cities, Employee, City,
 } from './data.ts';
 
-function setStateValue(this: Column, newData: Employee, value: number, currentRowData: Employee) {
+function setStateValue(
+  column: DxDataGridTypes.Column, newData: Employee, value: number, currentRowData: Employee,
+) {
   newData.CityID = null;
 
-  this.defaultSetCellValue!(newData, value, currentRowData);
+  column.defaultSetCellValue!(newData, value, currentRowData);
 }
 
 const getFilteredCities = (options: { data: City }) => ({
@@ -64,7 +65,7 @@ const getFilteredCities = (options: { data: City }) => ({
   filter: options.data ? ['StateID', '=', options.data.StateID] : null,
 });
 
-const onEditorPreparing = (e: EditorPreparingEvent<Employee>) => {
+const onEditorPreparing = (e: DxDataGridTypes.EditorPreparingEvent<Employee>) => {
   if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
     const isStateNotSet = e.row!.data.StateID === undefined;
 

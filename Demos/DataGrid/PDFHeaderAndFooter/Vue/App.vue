@@ -56,12 +56,9 @@
 </template>
 
 <script setup lang="ts">
-import DxDataGrid, { DxColumn, DxExport } from 'devextreme-vue/data-grid';
-
+import DxDataGrid, { DxColumn, DxExport, DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-import { ExportingEvent } from 'devextreme/ui/data_grid';
-
 import { countries } from './data.ts';
 
 const gdpFormat = {
@@ -69,7 +66,7 @@ const gdpFormat = {
   precision: 1,
 };
 
-const onExporting = (e: ExportingEvent) => {
+const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   const lastPoint = { x: 0, y: 0 };

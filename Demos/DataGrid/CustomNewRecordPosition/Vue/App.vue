@@ -85,15 +85,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxDataGrid, {
-  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling,
+  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import Guid from 'devextreme/core/guid';
-import {
-  ColumnButtonClickEvent, DataChange, Row, RowInsertedEvent,
-} from 'devextreme/ui/data_grid';
-
 import { dataSource } from './data.ts';
 
 const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
@@ -101,10 +96,10 @@ const scrollingModeOptions = ['standard', 'virtual'];
 
 const newRowPosition = ref('viewportTop');
 const scrollingMode = ref('standard');
-const changes = ref<DataChange[]>([]);
+const changes = ref<DxDataGridTypes.DataChange[]>([]);
 const editRowKey = ref<string | null>(null);
 
-const onAddButtonClick = (e: ColumnButtonClickEvent) => {
+const onAddButtonClick = (e: DxDataGridTypes.ColumnButtonClickEvent) => {
   const key = new Guid().toString();
 
   changes.value = [{
@@ -116,9 +111,9 @@ const onAddButtonClick = (e: ColumnButtonClickEvent) => {
   editRowKey.value = key;
 };
 
-const isAddButtonVisible = (e: { row: Row }) => !e.row.isEditing;
+const isAddButtonVisible = (e: { row: DxDataGridTypes.Row }) => !e.row.isEditing;
 
-const onRowInserted = (e: RowInsertedEvent) => {
+const onRowInserted = (e: DxDataGridTypes.RowInsertedEvent) => {
   e.component.navigateToRow(e.key);
 };
 </script>

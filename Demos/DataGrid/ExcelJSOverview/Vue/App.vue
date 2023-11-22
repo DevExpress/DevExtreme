@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping,
+  DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 
 import { Workbook } from 'exceljs';
@@ -49,11 +49,10 @@ import { Workbook } from 'exceljs';
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
-import { ExportingEvent } from 'devextreme/ui/data_grid';
 
 import { employees } from './data.ts';
 
-const onExporting = (e: ExportingEvent) => {
+const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
   const workbook = new Workbook();
   const worksheet = workbook.addWorksheet('Employees');
 

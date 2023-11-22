@@ -123,8 +123,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-
-import { Properties as TextBoxProperties } from 'devextreme/ui/text_box';
+import { DxTextBoxTypes } from 'devextreme-vue/text-box';
 
 import { employees } from './data.ts';
 
@@ -141,7 +140,7 @@ const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);
 const recursive = ref(true);
-const editorOptions: TextBoxProperties = { placeholder: 'Search column' };
+const editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search column' };
 
 </script>
 <style scoped>

@@ -67,13 +67,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxFilterRow, DxSelection,
+  DxDataGrid, DxColumn, DxFilterRow, DxSelection, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
-
-import DataGrid, { InitializedEvent } from 'devextreme/ui/data_grid';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-
 import query from 'devextreme/data/query';
 import 'devextreme/data/odata/store';
 
@@ -97,7 +94,7 @@ const dataSource: DataSourceOptions = {
   ],
 };
 
-let dataGrid: DataGrid;
+let dataGrid: DxDataGridTypes.DataGrid;
 const selectionFilter = ['Task_Status', '=', 'Completed'];
 
 const taskCount = ref(0);
@@ -121,7 +118,7 @@ const calculateStatistics = async() => {
   avgDuration.value = Math.round(averageDurationInDays) || 0;
 };
 
-const onInitialized = (e: InitializedEvent) => {
+const onInitialized = (e: DxDataGridTypes.InitializedEvent) => {
   dataGrid = e.component!;
 
   calculateStatistics();

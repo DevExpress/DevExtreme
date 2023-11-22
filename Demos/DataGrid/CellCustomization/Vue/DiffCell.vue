@@ -6,12 +6,12 @@
 </template>
 <script setup lang="ts">
 import { formatNumber } from 'devextreme/localization';
-import { Column } from 'devextreme/ui/data_grid';
+import { DxDataGridTypes } from 'devextreme-vue/data-grid';
 
 import { WeekData, DiffValueProperties } from './data.ts';
 
 const props = defineProps<{
-  column: Column,
+  column: DxDataGridTypes.Column,
   rowData: WeekData,
 }>();
 

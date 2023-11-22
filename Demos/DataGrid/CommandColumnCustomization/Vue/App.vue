@@ -69,10 +69,8 @@ import {
   DxButton,
   DxPaging,
   DxLookup,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import {
-  Row, ColumnButtonClickEvent, RowValidatingEvent, EditorPreparingEvent,
-} from 'devextreme/ui/data_grid';
 import {
   employees as defaultEmployees, states, getMaxID, Employee,
 } from './data.ts';
@@ -81,13 +79,13 @@ const employees = ref(defaultEmployees);
 
 const isChief = (position: string) => position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
 
-const isCloneIconVisible = (e: { row: Row }) => !e.row.isEditing;
+const isCloneIconVisible = (e: { row: DxDataGridTypes.Row }) => !e.row.isEditing;
 
-const isCloneIconDisabled = (e: { row: Row }) => isChief(e.row.data.Position);
+const isCloneIconDisabled = (e: { row: DxDataGridTypes.Row }) => isChief(e.row.data.Position);
 
-const isDeleteIconVisible = (e: { row: Row }) => !isChief(e.row.data.Position);
+const isDeleteIconVisible = (e: { row: DxDataGridTypes.Row }) => !isChief(e.row.data.Position);
 
-const onCloneIconClick = (e: ColumnButtonClickEvent<Employee>) => {
+const onCloneIconClick = (e: DxDataGridTypes.ColumnButtonClickEvent<Employee>) => {
   const updatedEmployees = [...employees.value];
   const clonedItem = { ...e.row!.data, ID: getMaxID() };
 
@@ -96,7 +94,7 @@ const onCloneIconClick = (e: ColumnButtonClickEvent<Employee>) => {
   e.event!.preventDefault();
 };
 
-const onRowValidating = (e: RowValidatingEvent<Employee>) => {
+const onRowValidating = (e: DxDataGridTypes.RowValidatingEvent<Employee>) => {
   const position = e.newData.Position!;
 
   if (isChief(position)) {
@@ -105,7 +103,7 @@ const onRowValidating = (e: RowValidatingEvent<Employee>) => {
   }
 };
 
-const onEditorPreparing = (e: EditorPreparingEvent) => {
+const onEditorPreparing = (e: DxDataGridTypes.EditorPreparingEvent) => {
   if (e.parentType === 'dataRow' && e.dataField === 'Position') {
     e.editorOptions.readOnly = isChief(e.value);
   }

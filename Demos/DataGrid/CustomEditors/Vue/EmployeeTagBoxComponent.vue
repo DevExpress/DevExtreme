@@ -16,16 +16,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTagBox from 'devextreme-vue/tag-box';
-
-import DataGrid, { ColumnEditCellTemplateData } from 'devextreme/ui/data_grid';
-import { ValueChangedEvent } from 'devextreme/ui/tag_box';
+import { DxDataGridTypes } from 'devextreme-vue/data-grid';
+import DxTagBox, { DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import CustomStore from 'devextreme/data/custom_store';
 
 const props = defineProps<{
-  cellInfo: ColumnEditCellTemplateData,
+  cellInfo: DxDataGridTypes.ColumnEditCellTemplateData,
   dataSource: CustomStore,
-  dataGridComponent: DataGrid,
+  dataGridComponent: DxDataGridTypes.DataGrid,
 }>();
 
 const currentValue = ref(props.cellInfo.value);
@@ -34,7 +32,7 @@ const onSelectionChanged = () => {
   props.dataGridComponent.updateDimensions();
 };
 
-const onValueChanged = (e: ValueChangedEvent) => {
+const onValueChanged = (e: DxTagBoxTypes.ValueChangedEvent) => {
   props.cellInfo.setValue(e.value);
 };
 </script>

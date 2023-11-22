@@ -57,11 +57,11 @@
 import {
   DxDataGrid, DxHeaderFilter, DxSearch, DxColumn,
 } from 'devextreme-vue/data-grid';
-import { Properties as TextBoxProperties } from 'devextreme/ui/text_box';
+import { DxTextBoxTypes } from 'devextreme-vue/text-box';
 import { employees } from './data.ts';
 
 const searchExpr = ['City', 'State'];
-const editorOptions: TextBoxProperties = { placeholder: 'Search city or state' };
+const editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search city or state' };
 </script>
 <style scoped>
 #employees {

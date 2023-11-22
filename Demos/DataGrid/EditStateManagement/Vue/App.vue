@@ -50,12 +50,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-
-import { DxDataGrid, DxColumn, DxEditing } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes,
+} from 'devextreme-vue/data-grid';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-
-import { SavingEvent, DataChange } from 'devextreme/ui/data_grid';
-
 import { State } from './store.ts';
 
 const loadPanelPosition = { of: '#gridContainer' };
@@ -65,8 +63,8 @@ const store = useStore<State>();
 
 const loadOrders = () => store.dispatch('loadOrders');
 const setEditRowKey = (value: number | null) => store.dispatch('setEditRowKey', value);
-const setChanges = (value: DataChange[]) => store.dispatch('setChanges', value);
-const saveChange = (change: DataChange) => store.dispatch('saveChange', change);
+const setChanges = (value: DxDataGridTypes.DataChange[]) => store.dispatch('setChanges', value);
+const saveChange = (change: DxDataGridTypes.DataChange) => store.dispatch('saveChange', change);
 const orders = computed(() => store.state.orders);
 const isLoading = computed(() => store.state.isLoading);
 
@@ -86,7 +84,7 @@ const changesText = computed(() => JSON.stringify(changes.value.map((change) => 
   data: change.data,
 })), null, ' '));
 
-const onSaving = (e: SavingEvent) => {
+const onSaving = (e: DxDataGridTypes.SavingEvent) => {
   e.cancel = true;
   e.promise = saveChange(e.changes[0]);
 };

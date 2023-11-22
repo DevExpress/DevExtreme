@@ -13,14 +13,13 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxScrolling, DxSorting, DxLoadPanel,
+  DxDataGrid, DxScrolling, DxSorting, DxLoadPanel, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { Column } from 'devextreme/ui/data_grid';
 import { generateData } from './data.ts';
 
 const dataSource = generateData(100000);
 
-const customizeColumns = (columns: Column[]) => {
+const customizeColumns = (columns: DxDataGridTypes.Column[]) => {
   columns[0].width = 70;
 };
 </script>

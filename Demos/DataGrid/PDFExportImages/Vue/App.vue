@@ -42,16 +42,13 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxExport,
+  DxDataGrid, DxColumn, DxExport, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-
-import { ExportingEvent } from 'devextreme/ui/data_grid';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-
 import { employees } from './data.ts';
 
-const onExporting = ({ component }: ExportingEvent) => {
+const onExporting = ({ component }: DxDataGridTypes.ExportingEvent) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 

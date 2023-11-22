@@ -64,10 +64,10 @@ import {
   DxScrolling,
   DxPager,
   DxPaging,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { Column } from 'devextreme/ui/data_grid';
 import { generateData } from './data.ts';
 
 const dataSource = generateData(100000);
@@ -84,7 +84,7 @@ const showNavButtons = ref(true);
 
 const isCompactMode = computed(() => displayMode.value === 'compact');
 
-const customizeColumns = (columns: Column[]) => {
+const customizeColumns = (columns: DxDataGridTypes.Column[]) => {
   columns[0].width = 70;
 };
 </script>

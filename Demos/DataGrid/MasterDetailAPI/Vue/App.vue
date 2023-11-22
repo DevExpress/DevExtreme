@@ -45,19 +45,19 @@
 <script setup lang="ts">
 import DxDataGrid, {
   DxColumn,
+  DxDataGridTypes,
   DxMasterDetail,
   DxSelection,
 } from 'devextreme-vue/data-grid';
-import { ContentReadyEvent, SelectionChangedEvent } from 'devextreme/ui/data_grid';
 import { employees } from './data.ts';
 
-const onContentReady = (e: ContentReadyEvent) => {
+const onContentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
   if (!e.component.getSelectedRowKeys().length) {
     e.component.selectRowsByIndexes(0);
   }
 };
 
-const onSelectionChanged = (e: SelectionChangedEvent) => {
+const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {
   e.component.collapseAll(-1);
   e.component.expandRow(e.currentSelectedRowKeys[0]);
 };

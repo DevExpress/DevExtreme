@@ -71,11 +71,10 @@ import {
   DxSelection,
   DxToolbar,
   DxItem,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
-import DxSelectBox from 'devextreme-vue/select-box';
-import { ValueChangedEvent } from 'devextreme/ui/select_box';
-import { SelectionChangedEvent } from 'devextreme/ui/data_grid';
+import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { employees, Employee } from './data.ts';
 
 const dataGridRef = ref<DxDataGrid | null>(null);
@@ -99,21 +98,21 @@ const clearSelection = () => {
   dataGrid.clearSelection();
 };
 
-const filterSelection = (e: ValueChangedEvent) => {
-  if (!e.value) {
+const filterSelection = ({ value }: DxSelectBoxTypes.ValueChangedEvent) => {
+  if (!value) {
     return;
   }
 
-  selectedPrefix.value = e.value;
+  selectedPrefix.value = value;
 
   selectionChangedBySelectBox = true;
 
-  selectedRowsData.value = e.value === 'All'
+  selectedRowsData.value = value === 'All'
     ? employees
-    : employees.filter((employee) => employee.Prefix === e.value);
+    : employees.filter((employee) => employee.Prefix === value);
 };
 
-const onSelectionChanged = (e: SelectionChangedEvent<Employee>) => {
+const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent<Employee>) => {
   if (!selectionChangedBySelectBox) {
     selectedPrefix.value = null;
   }

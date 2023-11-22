@@ -29,8 +29,9 @@
   </DxDataGrid>
 </template>
 <script setup lang="ts">
-import { DxDataGrid, DxColumn, DxEditing } from 'devextreme-vue/data-grid';
-import DataGrid, { SavingEvent, DataChange } from 'devextreme/ui/data_grid';
+import {
+  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes,
+} from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
@@ -44,7 +45,7 @@ const ordersStore = createStore({
   },
 });
 
-const onSaving = (e: SavingEvent) => {
+const onSaving = (e: DxDataGridTypes.SavingEvent) => {
   e.cancel = true;
 
   if (e.changes.length) {
@@ -52,14 +53,16 @@ const onSaving = (e: SavingEvent) => {
   }
 };
 
-async function processBatchRequest(url: string, changes: DataChange[], component: DataGrid) {
+async function processBatchRequest(
+  url: string, changes: DxDataGridTypes.DataChange[], component: DxDataGridTypes.DataGrid,
+) {
   await sendBatchRequest(url, changes);
   await component.refresh(true);
 
   component.cancelEditData();
 }
 
-async function sendBatchRequest(url: string, changes: DataChange[]) {
+async function sendBatchRequest(url: string, changes: DxDataGridTypes.DataChange[]) {
   const result = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(changes),

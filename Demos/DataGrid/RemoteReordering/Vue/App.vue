@@ -41,10 +41,9 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting,
+  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 
-import { RowDraggingReorderEvent } from 'devextreme/ui/data_grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
 
@@ -69,11 +68,11 @@ const employeesStore: CustomStore<Employee, number> = createStore({
   },
 });
 
-const onReorder = (e: RowDraggingReorderEvent<Task>) => {
+const onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
   e.promise = processReorder(e);
 };
 
-const processReorder = async(e: RowDraggingReorderEvent<Task>) => {
+const processReorder = async(e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
   const visibleRows = e.component.getVisibleRows();
   const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 

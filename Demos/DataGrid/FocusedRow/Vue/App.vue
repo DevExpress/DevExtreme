@@ -79,13 +79,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGrid, DxColumn, DxPaging } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxPaging, DxDataGridTypes,
+} from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { FocusedRowChangedEvent, FocusedRowChangingEvent } from 'devextreme/ui/data_grid';
-
 import 'devextreme/data/odata/store';
 import { Task } from './data.ts';
 
@@ -116,7 +115,7 @@ const dataSource: DataSourceOptions = {
   ],
 };
 
-const onFocusedRowChanging = (e: FocusedRowChangingEvent) => {
+const onFocusedRowChanging = (e: DxDataGridTypes.FocusedRowChangingEvent) => {
   const rowsCount = e.component.getVisibleRows().length;
   const pageCount = e.component.pageCount();
   const pageIndex = e.component.pageIndex();
@@ -135,7 +134,7 @@ const onFocusedRowChanging = (e: FocusedRowChangingEvent) => {
   }
 };
 
-const onFocusedRowChanged = (e: FocusedRowChangedEvent<Task>) => {
+const onFocusedRowChanged = (e: DxDataGridTypes.FocusedRowChangedEvent<Task>) => {
   const data = e.row!.data!;
 
   taskSubject.value = data.Task_Subject;

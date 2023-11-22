@@ -44,16 +44,18 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGrid, DxColumn, DxSelection } from 'devextreme-vue/data-grid';
-import { SelectionChangedEvent } from 'devextreme/ui/data_grid';
-
+import {
+  DxDataGrid, DxColumn, DxSelection, DxDataGridTypes,
+} from 'devextreme-vue/data-grid';
 import { employees, Employee } from './data.ts';
 
 const showEmployeeInfo = ref(false);
 const selectedRowNotes = ref('');
 const selectedRowPicture = ref('');
 
-const onSelectionChanged = ({ selectedRowsData }: SelectionChangedEvent<Employee>) => {
+const onSelectionChanged = (
+  { selectedRowsData }: DxDataGridTypes.SelectionChangedEvent<Employee>,
+) => {
   const data = selectedRowsData[0];
 
   showEmployeeInfo.value = !!data;

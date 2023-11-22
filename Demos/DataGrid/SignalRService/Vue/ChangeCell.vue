@@ -7,9 +7,9 @@
 </template>
 
 <script setup lang="ts">
-import { ColumnCellTemplateData } from 'devextreme/ui/data_grid';
+import { DxDataGridTypes } from 'devextreme-vue/data-grid';
 
 defineProps<{
-  cellData: ColumnCellTemplateData
+  cellData: DxDataGridTypes.ColumnCellTemplateData
 }>();
 </script>

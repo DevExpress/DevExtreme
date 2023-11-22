@@ -75,12 +75,12 @@ import {
   DxLookup,
   DxToolbar,
   DxItem,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-import { SelectionChangedEvent } from 'devextreme/ui/data_grid';
 
 import { Employee, employees, states } from './data.ts';
 
@@ -93,7 +93,7 @@ const dataSource = new DataSource<Employee, number>({
 
 const selectedItemKeys = ref<number[]>([]);
 
-const onSelectionChanged = (e: SelectionChangedEvent<Employee, number>) => {
+const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent<Employee, number>) => {
   selectedItemKeys.value = e.selectedRowKeys;
 };
 

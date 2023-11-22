@@ -100,10 +100,10 @@ import {
   DxSearch,
   DxSearchPanel,
   DxFilterRow,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { Column } from 'devextreme/ui/data_grid';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { orders, Order } from './data.ts';
 
@@ -158,7 +158,7 @@ const clearFilter = () => dataGridRef.value?.instance?.clearFilter();
 const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 
 function calculateFilterExpression(
-  this: Column, value: any, selectedFilterOperations: string | null, target: string,
+  this: DxDataGridTypes.Column, value: any, selectedFilterOperations: string | null, target: string,
 ) {
   const column = this;
 

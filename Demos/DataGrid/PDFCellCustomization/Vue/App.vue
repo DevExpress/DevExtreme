@@ -70,15 +70,13 @@ import {
   DxSummary,
   DxSortByGroupSummaryInfo,
   DxTotalItem,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-import { ExportingEvent } from 'devextreme/ui/data_grid';
-
 import { companies } from './data.ts';
 
-const onExporting = (e: ExportingEvent) => {
+const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 

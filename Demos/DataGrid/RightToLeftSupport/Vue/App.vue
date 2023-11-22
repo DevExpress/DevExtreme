@@ -65,10 +65,7 @@ import {
   DxPaging,
   DxSearchPanel,
 } from 'devextreme-vue/data-grid';
-import DxSelectBox from 'devextreme-vue/select-box';
-
-import { ValueChangedEvent } from 'devextreme/ui/select_box';
-
+import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { europeanUnion } from './data.ts';
 
 const languages = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'];
@@ -76,7 +73,7 @@ const languages = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right d
 const placeholder = ref('Search...');
 const rtlEnabled = ref(false);
 
-const onSelectLanguage = (e: ValueChangedEvent) => {
+const onSelectLanguage = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   rtlEnabled.value = e.value === languages[0];
   placeholder.value = rtlEnabled.value ? 'بحث' : 'Search...';
 };

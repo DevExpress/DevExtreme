@@ -55,9 +55,8 @@ import {
   DxColumn,
   DxDataGrid,
 } from 'devextreme-vue/data-grid';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import 'devextreme/data/odata/store';
-import { ValueChangedEvent } from 'devextreme/ui/select_box';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 const dataSource: DataSourceOptions = {
@@ -79,7 +78,7 @@ const dataSource: DataSourceOptions = {
 const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
 const dataGridRef = ref<DxDataGrid | null>(null);
 
-const onValueChanged = ({ value }: ValueChangedEvent) => {
+const onValueChanged = ({ value }: DxSelectBoxTypes.ValueChangedEvent) => {
   const dataGrid = dataGridRef.value!.instance!;
 
   if (value === 'All') {

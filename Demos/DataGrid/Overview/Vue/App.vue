@@ -76,12 +76,10 @@ import {
   DxPager,
   DxPaging,
   DxSearchPanel,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DataSource from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
-
-import { ContentReadyEvent } from 'devextreme/ui/data_grid';
-
 import DiscountCell from './DiscountCell.vue';
 
 const dataSource = new DataSource({
@@ -102,7 +100,7 @@ const pageSizes = [10, 25, 50, 100];
 
 let collapsed = false;
 
-const onContentReady = (e: ContentReadyEvent) => {
+const onContentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
   if (!collapsed) {
     e.component.expandRow(['EnviroCare']);
     collapsed = true;

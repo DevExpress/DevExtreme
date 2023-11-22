@@ -15,9 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { DxForm } from 'devextreme-vue/form';
-import { SimpleItem } from 'devextreme/ui/form';
-
+import { DxForm, DxFormTypes } from 'devextreme-vue/form';
 import { Supplier } from './data.ts';
 
 defineProps<{
@@ -26,7 +24,7 @@ defineProps<{
 
 const items = ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'];
 
-const customizeItem = (item: SimpleItem) => {
+const customizeItem = (item: DxFormTypes.SimpleItem) => {
   item.template = 'form-item';
 };
 </script>

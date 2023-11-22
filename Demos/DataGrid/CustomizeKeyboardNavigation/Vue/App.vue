@@ -88,12 +88,10 @@ import {
   DxPaging,
   DxEditing,
   DxLookup,
+  DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-
-import { FocusedCellChangingEvent } from 'devextreme/ui/data_grid';
-
 import { employees, states } from './data.ts';
 
 const enterKeyActions = ['startEdit', 'moveFocus'];
@@ -103,7 +101,7 @@ const editOnKeyPress = ref(true);
 const enterKeyDirection = ref('column');
 const enterKeyAction = ref('moveFocus');
 
-const onFocusedCellChanging = (e: FocusedCellChangingEvent) => {
+const onFocusedCellChanging = (e: DxDataGridTypes.FocusedCellChangingEvent) => {
   e.isHighlighted = true;
 };
 </script>

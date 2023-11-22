@@ -93,12 +93,9 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/data-grid';
-import { DxSelectBox } from 'devextreme-vue/select-box';
+import { DxSelectBox, DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { DxButton } from 'devextreme-vue/button';
-
 import query from 'devextreme/data/query';
-import { ValueChangedEvent } from 'devextreme/ui/select_box';
-
 import { orders } from './data.ts';
 
 const getGroupCount = (groupField: string) => query(orders)
@@ -117,7 +114,7 @@ const groupingValues = [{
   text: 'Grouping by Employee',
 }];
 
-const toggleGroupColumn = (e: ValueChangedEvent) => {
+const toggleGroupColumn = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   dataGridRef.value!.instance!.clearGrouping();
   dataGridRef.value!.instance!.columnOption(e.value, 'groupIndex', 0);
 
