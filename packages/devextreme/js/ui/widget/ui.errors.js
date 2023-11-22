@@ -234,7 +234,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1058
     */
-    E1058: 'The "startDayHour" must be earlier than the "endDayHour"',
+    E1058: 'The "startDayHour" and "endDayHour" options must be integers in the [0, 24] range, with "endDayHour" being greater than "startDayHour".',
 
     /**
     * @name ErrorsUIWidgets.E1059
@@ -245,6 +245,16 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsUIWidgets.E1060
     */
     E1060: 'All editable columns must have names',
+
+    /**
+     * @name ErrorsUIWidgets.E1061
+     */
+    E1061: 'The "offset" option must be an integer in the [-1440, 1440] range, divisible by 5 without a remainder.',
+
+    /**
+     * @name ErrorsUIWidgets.E1062
+     */
+    E1062: 'The "cellDuration" must be a positive integer, evenly dividing the ("endDayHour" - "startDayHour") interval into minutes.',
 
     /**
     * @name ErrorsUIWidgets.W1001
@@ -310,11 +320,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsUIWidgets.W1014
     */
     W1014: 'The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config.',
-
-    /**
-    * @name ErrorsUIWidgets.W1015
-    */
-    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals',
 
     /**
     * @name ErrorsUIWidgets.W1016
