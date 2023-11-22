@@ -194,7 +194,7 @@ gulp.task('test-ts', gulp.series(
                     'ES2020.BigInt',
                     'DOM'
                 ],
-                'baseUrl': `${TS_TESTS_PATH}/`,
+                'baseUrl': `${TS_TESTS_PATH}`,
                 'paths': {
                     '@js/*': ['../../js/*'],
                     '@ts/*': ['../../js/__internal/*'],
