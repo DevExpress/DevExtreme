@@ -4,7 +4,7 @@ import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../.
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Offset: Markup Day`
+fixture.disablePageReloads`Offset: Markup recurrent appointments`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
@@ -66,6 +66,23 @@ const getScreenshotNameForEdgeCase = (
   endDayHour: number,
 ) => `view_markup_recurrent-appts_${edgeCaseName}_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}.png`;
 
+const getViewWithCorrectCellDuration = (
+  view: { type: string; cellDuration?: number },
+  startDayHour: number,
+  endDayHour: number,
+): { type: string; cellDuration?: number } => {
+  switch (view.type) {
+    case 'timelineWeek':
+    case 'timelineWorkWeek':
+      return {
+        ...view,
+        cellDuration: (endDayHour - startDayHour) * 60,
+      };
+    default:
+      return view;
+  }
+};
+
 [
   { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
@@ -73,11 +90,11 @@ const getScreenshotNameForEdgeCase = (
   { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
-  { views: [{ type: 'timelineWeek', cellDuration: 1440, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
+  { views: [{ type: 'timelineWeek', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
   // NOTE: The timelineWorkWeek view has some existing issues
   // Therefore some screenshots is invalid :(
-  { views: [{ type: 'timelineWorkWeek', cellDuration: 1440, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
-  { views: [{ type: 'timelineWorkWeek', cellDuration: 1440, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS_TIMELINE },
+  { views: [{ type: 'timelineWorkWeek', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS_TIMELINE },
+  { views: [{ type: 'timelineWorkWeek', firstDayOfWeek: 3 }], dataSource: APPOINTMENTS_TIMELINE },
   { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
 ].forEach(({ views, dataSource }) => {
   [
@@ -115,14 +132,20 @@ first day: ${views[0].firstDayOfWeek}
           .ok(compareResults.errorMessages());
       })
         .before(async () => {
+          const view = getViewWithCorrectCellDuration(
+            views[0],
+            startDayHour,
+            endDayHour,
+          );
+
           await insertStylesheetRulesToPage(REDUCE_CELLS_CSS);
           await createWidget('dxScheduler', {
             currentDate: '2023-09-07',
             height: 800,
             maxAppointmentsPerCell: 'unlimited',
             dataSource,
-            views,
-            currentView: views[0].type,
+            views: [view],
+            currentView: view.type,
             offset,
             startDayHour,
             endDayHour,

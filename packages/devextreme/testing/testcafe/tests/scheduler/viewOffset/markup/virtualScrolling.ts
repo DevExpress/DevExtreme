@@ -4,7 +4,7 @@ import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../.
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Offset: Virtual scrolling`
+fixture.disablePageReloads`Offset: Markup virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
