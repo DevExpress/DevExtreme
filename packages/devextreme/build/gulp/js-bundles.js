@@ -14,6 +14,7 @@ const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const webpackConfig = require('../../webpack.config.js');
+const env = require('./env-variables.js');
 
 const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
@@ -28,10 +29,19 @@ const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
+const getWebpackConfig = () => env.BUILD_INTERNAL_PACKAGE ?
+    Object.assign({
+        plugins: [
+            new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {
+                resource.request = resource.request.replace('license_validation', 'license_validation_internal');
+            })
+        ]
+    }, webpackConfig) :
+    webpackConfig;
 
 const bundleProdPipe = lazyPipe()
     .pipe(named)
-    .pipe(() => webpackStream(webpackConfig, webpack, muteWebPack))
+    .pipe(() => webpackStream(getWebpackConfig(), webpack, muteWebPack))
     .pipe(headerPipes.useStrict)
     .pipe(headerPipes.bangLicense)
     .pipe(compressionPipes.minify);
@@ -49,14 +59,14 @@ gulp.task('js-bundles-prod',
 );
 
 function prepareDebugMeta(watch) {
-    const debugConfig = Object.assign({ watch }, webpackConfig);
+    const debugConfig = Object.assign({ watch }, getWebpackConfig());
     const bundlesPath = ctx.TRANSPILED_PROD_RENOVATION_PATH;
 
     const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);
 
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
-    debugConfig.mode = watch ? "development" : "production";
+    debugConfig.mode = watch ? 'development' : 'production';
     debugConfig.optimization.minimize = false;
 
     if(!ctx.uglify) {
