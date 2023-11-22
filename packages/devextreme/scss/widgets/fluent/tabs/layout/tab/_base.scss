@@ -9,6 +9,7 @@
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
 @use "../../mixins" as *;
+@use "../../../common/sizes" as *;
 
 // adduse
 @use "../../../scrollable";
@@ -89,6 +90,10 @@
     visibility: visible;
 
     @include dx-icon-sizing($fluent-tabs-icon-size);
+
+    width: 1em;
+    height: 1em;
+    line-height: $fluent-line-height;
   }
 
   .dx-tabs-item-badge {
