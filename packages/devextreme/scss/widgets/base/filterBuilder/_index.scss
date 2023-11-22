@@ -93,8 +93,10 @@ $filterbuilder-menu-icon-color: null !default;
   .dx-treeview-item {
     .dx-icon {
       color: $filterbuilder-menu-icon-color;
-
-      @include dx-icon-sizing(14px);
     }
+  }
+
+  .dx-treeview-expander-icon-stub {
+    display: none;
   }
 }
