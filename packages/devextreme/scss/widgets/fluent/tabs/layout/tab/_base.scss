@@ -64,12 +64,12 @@
   .dx-tab-text {
     column-gap: $fluent-base-icon-margin;
     row-gap: $fluent-tabs-item-gap;
+    line-height: $fluent-line-height;
 
     .dx-tab-text-span {
       position: relative;
       display: block;
       font-weight: $fluent-tab-font-weight-accent;
-      line-height: $fluent-line-height;
       visibility: hidden;
     }
 
@@ -82,7 +82,6 @@
       pointer-events: none;
       color: $tabs-tab-color;
       font-weight: $fluent-tab-font-weight-basic;
-      line-height: $fluent-line-height;
       visibility: visible;
     }
   }

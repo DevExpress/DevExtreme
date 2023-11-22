@@ -49,12 +49,9 @@
 
   .dx-tab-text {
     column-gap: $material-base-icon-margin;
-
-    .dx-tab-text-span {
-      font-weight: 500;
-      line-height: $material-tab-text-line-height;
-      text-transform: uppercase;
-    }
+    line-height: $material-tab-text-line-height;
+    font-weight: 500;
+    text-transform: uppercase;
   }
 
   .dx-icon {
