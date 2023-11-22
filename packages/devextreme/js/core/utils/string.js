@@ -1,5 +1,7 @@
 import { isFunction, isString } from './type';
 
+export { xorTransform } from '../../__internal/core/license/byte_utils';
+
 export const encodeHtml = (function() {
     const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
 
