@@ -189,10 +189,17 @@ gulp.task('test-ts', gulp.series(
                 'skipLibCheck': true,
                 'typeRoots': [],
                 'target': 'es2015',
-                'baseUrl': `${TS_TESTS_PATH}`,
+                'lib': [
+                    'ES2017',
+                    'ES2020.BigInt',
+                    'DOM'
+                ],
+                'baseUrl': `${TS_TESTS_PATH}/`,
                 'paths': {
-                    '*': ['node_modules/*']
-                },
+                    '@js/*': ['../../js/*'],
+                    '@ts/*': ['../../js/__internal/*'],
+                    '*': ['node_modules/*'],
+                }
             }));
     }
 ));
