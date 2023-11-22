@@ -9,11 +9,11 @@ $filterbuilder-treeview-item-horizontal-padding: 15px !default;
 
 @if $size == "default" {
   $filterbuilder-item-margin-bottom: 9px !default;
-  $filterbuilder-treeview-item-padding: 5px $filterbuilder-treeview-item-horizontal-padding 5px 0 !default;
+  $filterbuilder-treeview-item-padding: 5px $filterbuilder-treeview-item-horizontal-padding !default;
 }
 
 @else if $size == "compact" {
   $filterbuilder-item-margin-bottom: 5px !default;
-  $filterbuilder-treeview-item-padding: 3px $filterbuilder-treeview-item-horizontal-padding 3px 0 !default;
+  $filterbuilder-treeview-item-padding: 3px $filterbuilder-treeview-item-horizontal-padding !default;
 }
 
