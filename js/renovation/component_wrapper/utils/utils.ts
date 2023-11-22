@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../../core/renderer';
+import $, { dxElementWrapper } from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 
 export const removeDifferentElements = (
