@@ -83,14 +83,6 @@
   }
 
   .dx-treeview-node {
-    > .dx-treeview-item {
-      padding-left: $material-filterbuilder-treeview-item-left-padding * 2;
-    }
-
-    &.dx-treeview-node-is-leaf > .dx-treeview-item {
-      padding-left: $material-filterbuilder-treeview-item-left-padding;
-    }
-
     .dx-treeview-node-container-opened {
       margin-left: $material-filterbuilder-treeview-item-left-padding;
     }
@@ -106,7 +98,6 @@
   }
 
   .dx-treeview-toggle-item-visibility {
-    height: $material-filterbuilder-treeview-item-min-heigth;
     left: $material-filterbuilder-treeview-toggle-left;
   }
 
