@@ -69,6 +69,7 @@
       position: relative;
       display: block;
       font-weight: $fluent-tab-font-weight-accent;
+      line-height: $fluent-line-height;
       visibility: hidden;
     }
 
@@ -81,6 +82,7 @@
       pointer-events: none;
       color: $tabs-tab-color;
       font-weight: $fluent-tab-font-weight-basic;
+      line-height: $fluent-line-height;
       visibility: visible;
     }
   }
