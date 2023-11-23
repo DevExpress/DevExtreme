@@ -593,10 +593,10 @@ QUnit.module('keyboard navigation', {
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
 
-        assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.equal(isRenderer(this.tabs.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.equal(multiViewFocusedIndex, 1, 'second multiView element has been focused');
-        assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
+        assert.strictEqual(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(this.tabs.option('focusedElement')), false, 'focusedElement is correct');
+        assert.strictEqual(multiViewFocusedIndex, 1, 'second multiView element has been focused');
+        assert.strictEqual(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
     });
 
     QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', function(assert) {
