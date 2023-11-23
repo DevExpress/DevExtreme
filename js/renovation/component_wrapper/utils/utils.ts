@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../../core/renderer';
+import $, { dxElementWrapper } from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 
 export const removeDifferentElements = (
@@ -14,7 +14,10 @@ export const removeDifferentElements = (
       }
     });
     if (!hasComponent && element.parentNode) {
-      element.parentNode.removeChild(element);
+      // @ts-expect-error The renderer's remove() function requires an argument in .d.ts.
+      // We currenlty suppress the error if we don't need the argument (see Grids).
+      // We should change the .d.ts (maybe make the parameter optional).
+      $(element).remove();
     }
   });
 };
