@@ -218,12 +218,10 @@ const Tabs = CollectionWidget.inherit({
 
             $tabTextSpan.text(text);
 
-            if(isFluent()) {
-                const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+            const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
 
-                $tabTextSpanPseudo.text(text);
-                $tabTextSpanPseudo.appendTo($tabTextSpan);
-            }
+            $tabTextSpanPseudo.text(text);
+            $tabTextSpanPseudo.appendTo($tabTextSpan);
 
             $tabTextSpan.appendTo($container);
         }
