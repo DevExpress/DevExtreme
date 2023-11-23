@@ -60,6 +60,11 @@ $base-selected-bg: null !default;
 $base-border-color: null !default;
 $base-border-color-hover: null !default;
 $base-border-color-focused: null !default;
+
+/**
+* $name 41. Border color accessible
+* $type color
+*/
 $base-border-color-accessible: null !default;
 $base-border-color-accessible-hover: null !default;
 $base-border-color-accessible-focused: null !default;
