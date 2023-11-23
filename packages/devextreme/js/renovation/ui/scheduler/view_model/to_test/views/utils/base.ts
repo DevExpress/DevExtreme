@@ -1,5 +1,4 @@
 import { dateUtilsTs } from '../../../../../../../__internal/core/utils/date';
-import errors from '../../../../../../../ui/widget/ui.errors';
 import dateUtils from '../../../../../../../core/utils/date';
 import { isDefined } from '../../../../../../../core/utils/type';
 import dateLocalization from '../../../../../../../localization/date';
@@ -90,12 +89,6 @@ export const getHeaderCellText = (
 ): string => {
   const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
   return dateLocalization.format(validDate, headerCellTextFormat) as string;
-};
-
-export const validateDayHours = (startDayHour: number, endDayHour: number): void => {
-  if (startDayHour >= endDayHour) {
-    throw errors.Error('E1058');
-  }
 };
 
 export const getStartViewDateTimeOffset = (startViewDate: Date, startDayHour: number): number => {

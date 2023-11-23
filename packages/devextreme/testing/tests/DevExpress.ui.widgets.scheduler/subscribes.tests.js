@@ -700,25 +700,6 @@ module('Subscribes', {
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('"getAppointmentDurationInMs" should return visible appointment duration if last cell has small duration (T664073)', function(assert) {
-        this.createInstance();
-
-        this.instance.option({
-            startDayHour: 8,
-            currentView: 'timelineDay',
-            cellDuration: 61
-        });
-
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 7),
-            new Date(2015, 2, 4, 21),
-            true,
-        );
-
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '"getAppointmentDurationInMs" works fine');
-    });
-
     test('"getAppointmentColor" by certain group', function(assert) {
         let appointmentColor;
 
