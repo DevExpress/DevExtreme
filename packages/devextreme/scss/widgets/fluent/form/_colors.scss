@@ -25,7 +25,7 @@ $form-field-mark-color: $form-field-item-color !default;
   }
   
   @if $color == "modern" {
-    $form-field-item-color: #465569 !default;
+    $form-field-item-color: $base-label-color !default;
   }
 }
 
