@@ -41,7 +41,7 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
 
   &.dx-menu-item-has-text {
     .dx-icon {
-      margin-right: -$generic-base-icon-size;
+      margin-inline-end: -$generic-base-icon-size;
     }
   }
 }
@@ -82,40 +82,15 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
     padding: $generic-menu-item-padding-reduced $generic-menu-item-padding-base $generic-menu-item-padding-increased;
 
     .dx-menu-item-text {
-      padding: $generic-menu-item-padding-top-base $generic-menu-padding-big $generic-menu-item-padding-base $generic-menu-item-padding-base + $generic-base-icon-size;
+      padding-top: $generic-menu-item-padding-top-base;
+      padding-inline-end: $generic-menu-padding-big;
+      padding-bottom: $generic-menu-item-padding-base;
+      padding-inline-start: $generic-menu-item-padding-base + $generic-base-icon-size;
     }
 
     .dx-menu-item-popout {
       min-width: $generic-menu-arrow-image-size;
       min-height: $generic-menu-arrow-image-size;
-    }
-  }
-
-  &.dx-rtl {
-    .dx-menu-item-content {
-      .dx-menu-item-text {
-        padding: $generic-menu-item-padding-top-base $generic-menu-item-padding-base + $generic-base-icon-size $generic-menu-item-padding-base $generic-menu-padding-big;
-      }
-
-      .dx-icon {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .dx-menu-item-popout-container {
-        margin-left: 0;
-        margin-right: auto;
-
-        .dx-menu-item-popout {
-          @include flip-horizontally();
-        }
-      }
-    }
-
-    .dx-menu-item-has-text {
-      .dx-icon {
-        margin-left: -$generic-base-icon-size;
-      }
     }
   }
 }

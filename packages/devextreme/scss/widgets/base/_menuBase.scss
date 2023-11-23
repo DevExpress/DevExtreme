@@ -5,8 +5,7 @@
   @include user-select(none);
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  text-align: left;
-
+  text-align: start;
 
   .dx-menu-items-container,
   .dx-menu-item-wrapper {
@@ -73,7 +72,7 @@
       .dx-menu-item-popout-container {
         position: absolute;
         top: 0;
-        right: 0;
+        inset-inline-end: 0;
         bottom: 0;
         width: 2em;
 
@@ -85,11 +84,10 @@
   }
 
   &.dx-rtl {
-    text-align: right;
-
-    .dx-menu-item-popout-container {
-      left: 0;
-      right: auto;
+    .dx-menu-item-content {
+      .dx-menu-item-popout {
+        @include flip-horizontally();
+      }
     }
   }
 }

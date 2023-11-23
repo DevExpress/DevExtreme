@@ -10,15 +10,11 @@
 
 // adduse
 
-$fluent-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-
 @include dx-radiobutton-icon-mixin(
   $fluent-radiobutton-size,
   $fluent-radiobutton-border-width,
   $fluent-radiobutton-dot-size,
   true,
-  $fluent-radiobutton-ripple-size,
-  $fluent-radiobutton-ripple-transition,
 );
 @include dx-radiobutton-states-mixin(
   $radiogroup-bg,
@@ -33,9 +29,13 @@ $fluent-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   $radiobutton-invalid-color-focused,
   1,
   true,
-  $radiobutton-focused-ripple-bg,
-  $radiobutton-invalid-focused-ripple-bg,
 );
+
+.dx-radiobutton-icon {
+  &::after {
+    content: none;
+  }
+}
 
 .dx-radio-value-container {
   padding-inline-end: $fluent-radio-value-container-padding;

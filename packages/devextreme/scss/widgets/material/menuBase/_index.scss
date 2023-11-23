@@ -67,22 +67,4 @@ $material-menu-arrow-image-size: 7px;
       }
     }
   }
-
-  &.dx-rtl {
-    .dx-menu-item-content {
-      .dx-icon {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .dx-menu-item-popout-container {
-        margin-left: 0;
-        margin-right: auto;
-
-        .dx-menu-item-popout {
-          @include flip-horizontally();
-        }
-      }
-    }
-  }
 }

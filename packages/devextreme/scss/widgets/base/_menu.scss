@@ -17,7 +17,7 @@
 
   .dx-menu-separator {
     display: inline-block;
-    margin: 0 15px 0 0;
+    margin-inline-end: 15px;
   }
 }
 
@@ -29,12 +29,8 @@
   }
 
   .dx-menu-separator {
-    margin: 0 0 15px 0;
+    margin-bottom: 15px;
   }
-}
-
-.dx-rtl.dx-menu {
-  text-align: right;
 }
 
 .dx-context-menu-container-border {
