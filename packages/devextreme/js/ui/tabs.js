@@ -369,8 +369,7 @@ const Tabs = CollectionWidget.inherit({
 
         const maxTabItemWidth = Math.max.apply(null, itemsWidth);
         const requireWidth = elementWidth / $visibleItems.length;
-        // const needStretchItems = maxTabItemWidth > requireWidth + 1;
-        const needStretchItems = maxTabItemWidth > requireWidth;
+        const needStretchItems = maxTabItemWidth > requireWidth + 1;
 
         return needStretchItems;
     },
