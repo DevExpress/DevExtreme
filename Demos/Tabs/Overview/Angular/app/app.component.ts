@@ -81,8 +81,8 @@ export class AppComponent {
     }
   }
 
-  toggleStrictWidthClass(e) {
-    this.widgetWrapperClasses['strict-width'] = e.value || this.scrollByContent || this.showNavButtons;
+  toggleStrictWidthClass() {
+    this.widgetWrapperClasses['strict-width'] = this.scrollByContent || this.showNavButtons;
   }
 
   onFullWidthChanged(e) {

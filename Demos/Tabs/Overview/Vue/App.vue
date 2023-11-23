@@ -115,8 +115,8 @@ const dataSources = computed(() => [
   tabsWithIcon,
 ]);
 
-const enforceWidthConstraint = (value) => {
-  shouldRestrictWidth.value = value || scrollByContent.value || showNavButtons.value;
+const enforceWidthConstraint = () => {
+  shouldRestrictWidth.value = scrollByContent.value || showNavButtons.value;
 };
 
 watch(showNavButtons, enforceWidthConstraint);

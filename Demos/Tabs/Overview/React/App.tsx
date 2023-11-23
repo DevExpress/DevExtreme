@@ -59,7 +59,19 @@ const App = () => {
   }, [setIconPosition]);
 
   const orientationChanged = React.useCallback((e) => {
-    setWidgetWrapperClasses(`widget-wrapper widget-wrapper-${e.value}`);
+    const isVertical = e.value === 'vertical';
+
+    const callback = (prevClasses: string) => {
+      const restClasses = prevClasses
+        .split(' ')
+        .filter((className) => (className !== (isVertical ? 'widget-wrapper-horizontal' : 'widget-wrapper-vertical')))
+        .join(' ');
+
+      return `${restClasses} widget-wrapper-${e.value}`;
+    };
+
+    setWidgetWrapperClasses(callback);
+
     setOrientation(e.value);
   }, [setOrientation, setWidgetWrapperClasses]);
 
