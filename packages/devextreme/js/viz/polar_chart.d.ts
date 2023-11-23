@@ -4,7 +4,6 @@ import {
 } from '../core/element';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -442,11 +441,12 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
+     * @type_function_param1 e:{viz/polar_chart:ArgumentAxisClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart; element?: DxElement; model?: any; event?: DxEvent; argument?: Date | number | string }) => void) | string;
+    onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string;
     /**
      * @docid
      * @default null

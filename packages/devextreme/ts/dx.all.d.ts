@@ -12587,19 +12587,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.onRendered]
      */
-    onRendered?: (e: {
-      component?: dxDeferRendering;
-      element?: DevExpress.core.DxElement;
-      model?: any;
-    }) => void;
+    onRendered?: (e: DevExpress.ui.dxDeferRendering.RenderedEvent) => void;
     /**
      * [descr:dxDeferRenderingOptions.onShown]
      */
-    onShown?: (e: {
-      component?: dxDeferRendering;
-      element?: DevExpress.core.DxElement;
-      model?: any;
-    }) => void;
+    onShown?: (e: DevExpress.ui.dxDeferRendering.ShownEvent) => void;
     /**
      * [descr:dxDeferRenderingOptions.renderWhen]
      */
@@ -38522,13 +38514,7 @@ declare module DevExpress.viz {
      * [descr:dxPolarChartOptions.onArgumentAxisClick]
      */
     onArgumentAxisClick?:
-      | ((e: {
-          component?: dxPolarChart;
-          element?: DevExpress.core.DxElement;
-          model?: any;
-          event?: DevExpress.events.DxEvent;
-          argument?: Date | number | string;
-        }) => void)
+      | ((e: DevExpress.viz.dxPolarChart.ArgumentAxisClickEvent) => void)
       | string;
     /**
      * [descr:dxPolarChartOptions.onLegendClick]

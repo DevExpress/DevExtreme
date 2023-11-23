@@ -7,7 +7,7 @@ import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeries } from "devextreme/viz/polar_chart";
+import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeries } from "devextreme/viz/polar_chart";
 import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 import type { BaseChartLegendItem } from "devextreme/viz/chart_components/base_chart";
@@ -20,6 +20,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IPolarChartOptionsNarrowedEvents = {
+  onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onDone?: ((e: DoneEvent) => void);
   onDrawn?: ((e: DrawnEvent) => void);
