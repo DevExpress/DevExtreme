@@ -55,8 +55,8 @@ $calendar-week-number-border-radius: 0 !default;
 }
 
 @if $mode == "dark" {
-  $calendar-hover-bg: $base-accent-bg !default;
-  $calendar-cell-hover-border-color: $base-accent-bg !default;
+  $calendar-hover-bg: darken(desaturate(adjust-hue($base-accent, 358.4), 8.6), 26.7) !default;
+  $calendar-cell-hover-border-color: $calendar-hover-bg !default;
   $calendar-cell-active-bg: $base-accent-selected !default;
   $calendar-cell-other-color: darken($calendar-color, 32.16) !default;
   $calendar-week-number-cell-color: darken($calendar-color, 32.16) !default;

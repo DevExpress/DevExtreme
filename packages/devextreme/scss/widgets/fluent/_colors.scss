@@ -42,12 +42,6 @@ $base-bg: null !default;
 $base-hover-bg: null !default;
 
 /**
-* $name 110. Focused state background color
-* $type color
-*/
-$base-focus-bg: null !default; // $base-bg-selected !default;
-
-/**
 * $name 120. Active state background color
 * $type color
 */
@@ -58,8 +52,6 @@ $base-active-bg: null !default;
 * $type color
 */
 $base-selected-bg: null !default;
-
-$base-accent-bg: null !default;
 
 /**
 * $name 40. Border color
@@ -146,8 +138,6 @@ $scrollview-pulldown-path: null !default;
   $base-icon-color: lighten($base-text-color, 23.92) !default; // #616161;
   $base-foreground-disabled: lighten($base-text-color, 60) !default; // #bdbdbd
 
-  $base-accent-bg: $base-accent !default; // #0F6CBD
-
   $base-bg: rgba(255, 255, 255, 1) !default; // #FFFFFF
   $base-hover-bg: darken($base-bg, 3.9) !default; // #F5F5F5
   $base-selected-bg: darken($base-bg, 7.8) !default; // #EBEBEB
@@ -196,8 +186,6 @@ $scrollview-pulldown-path: null !default;
   $base-icon-color: darken($base-text-color, 32.16) !default; // #adadad;
   $base-foreground-disabled: darken($base-text-color, 63.9) !default; // #5c5c5c
 
-  $base-accent-bg: darken(desaturate(adjust-hue($base-accent, 358.4), 8.6), 26.7) !default; // #115EA3
-
   $base-bg: rgba(41, 41, 41, 1) !default; // #292929
   $base-hover-bg: lighten($base-bg, 7.8) !default; // #3D3D3D
   $base-selected-bg: lighten($base-bg, 5.9) !default; // #383838
@@ -245,6 +233,12 @@ $base-hover-color: $base-text-color !default;
 * $type color
 */
 $base-focus-color: $base-inverted-text-color !default;
+
+/**
+* $name 110. Focused state background color
+* $type color
+*/
+$base-focus-bg: $base-hover-bg !default;
 
 /**
 * $name 50. Spin icon color

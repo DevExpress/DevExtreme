@@ -12,12 +12,6 @@
 $list-normal-color: null !default;
 
 /**
-* $name 10. Group header text color
-* $type color
-*/
-$list-group-color: $base-text-color !default;
-
-/**
 * $name 20. Group border color
 * $type color
 */
@@ -30,12 +24,6 @@ $list-border-color: $base-border-color !default;
 $list-group-header-bg: transparent !default;
 
 /**
-* $name 25. Expanded group header text color
-* $type color
-*/
-$list-expanded-group-color: $base-text-color !default;
-
-/**
 * $name 30. Hovered item background color
 * $type color
 */
@@ -46,7 +34,7 @@ $list-item-hover-bg: $base-hover-bg !default;
 * $type color
 */
 $list-item-selected-bg: $base-selected-bg !default;
-$list-item-selected-hover-bg: $base-hover-bg !default;
+$list-item-selected-hover-bg: $list-item-hover-bg !default;
 $list-item-focused-selected-bg: $base-active-bg !default;
 $list-item-hover-color: $base-hover-color !default;
 $list-header-indicator-color: $base-icon-color !default;
@@ -65,7 +53,6 @@ $list-menu-button-delete-bg: $base-danger !default;
 $list-item-ghost-bg: $base-bg !default;
 $list-item-ghost-color: $base-label-color !default;
 $list-item-ghost-border-color: $base-accent !default;
-$list-item-ghost-shadow-color: $base-shadow-color !default;
 $list-icon-color: $base-icon-color !default;
 
 $base-select-all-separator-color: $base-separator-color !default;
@@ -78,4 +65,15 @@ $base-select-all-separator-color: $base-separator-color !default;
   $list-normal-color: darken($base-text-color, 16.08) !default;
 }
 
+/**
+* $name 10. Group header text color
+* $type color
+*/
+$list-group-color: $list-normal-color !default;
+
+/**
+* $name 25. Expanded group header text color
+* $type color
+*/
+$list-expanded-group-color: $list-group-color !default;
 $list-item-selected-color: $list-normal-color !default;
