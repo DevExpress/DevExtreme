@@ -21,7 +21,8 @@ import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 import { isReachedLeft, isReachedRight, isReachedTop, isReachedBottom } from '../renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
-import { getWindow } from '../core/utils/window';
+// eslint-disable-next-line no-unused-vars
+import { getWindow, hasWindow } from '../core/utils/window';
 
 // STYLE tabs
 
@@ -315,9 +316,13 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _isServerSide() {
-        const window = getWindow();
+        // const window = getWindow();
 
-        return window.isWindowMock || !window;
+        // return window.isWindowMock || !window;
+
+        const hasWindowResult = hasWindow();
+
+        return hasWindowResult;
     },
 
     _isItemsSizeExceeded() {
