@@ -1,6 +1,6 @@
 {
   "name": "devextreme-monorepo",
-  "version": "23.2.2",
+  "version": "23.2.3",
   "license": "MIT",
   "scripts": {
     "devextreme:inject-descriptions-to-bundle": "dx-tools inject-descriptions --target-path ./packages/devextreme/ts/dx.all.d.ts --artifacts ./artifacts/internal-tools",
