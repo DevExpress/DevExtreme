@@ -1,3 +1,0 @@
-The FileUploader component supports direct-upload to blob storages. This demo illustrates how to configure the [uploadChunk](/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#uploadChunk) property to upload a large file directly to Azure Blob Storage without using a user's web server. All APIs that implement access to Azure Blob Storage on the client are stored in the azure.file.system.js file (app.service.ts - for Angular framework).
-
-To implement file upload logic, use the [uploadChunk](/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#uploadChunk) property to specify how to process a connection request to the storage.

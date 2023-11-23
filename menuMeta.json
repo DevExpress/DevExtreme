@@ -4885,35 +4885,6 @@
                 ]
               },
               {
-                "Title": "Azure Server-Side Binding",
-                "Name": "AzureServerBinding",
-                "DocUrl": "",
-                "Widget": "FileManager",
-                "DemoType": "Web",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/FileManagerAzureProviderApiController.cs",
-                  "/Models/FileManagement/AzureBlobFileProvider.cs"
-                ],
-                "BackendFiles": [
-                  "FileManagerAzureProviderApiController.cs",
-                  "AzureBlobFileProvider.cs"
-                ]
-              },
-              {
-                "Title": "Azure Client-Side Binding",
-                "Name": "AzureClientBinding",
-                "DocUrl": "",
-                "Widget": "FileManager",
-                "DemoType": "Web",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/FileManagerAzureAccessApiController.cs",
-                  "/Scripts/utils/azure.file.system.js"
-                ],
-                "BackendFiles": [
-                  "FileManagerAzureAccessApiController.cs"
-                ]
-              },
-              {
                 "Title": "Hierarchical JS Structure",
                 "Name": "BindingToHierarchicalStructure",
                 "DocUrl": "ApiReference/UI_Components/dxFileManager/File_System_Providers/Object/",
@@ -4996,19 +4967,6 @@
             ],
             "BackendFiles": [
               "FileUploaderController.cs"
-            ]
-          },
-          {
-            "Title": "Direct Upload to Azure",
-            "Name": "AzureDirectUploading",
-            "DocUrl": "",
-            "Widget": "FileUploader",
-            "MvcAdditionalFiles": [
-              "/Controllers/ApiControllers/FileUploaderAzureAccessApiController.cs",
-              "/Scripts/utils/azure.file.system.js"
-            ],
-            "BackendFiles": [
-              "FileUploaderAzureAccessApiController.cs"
             ]
           },
           {
