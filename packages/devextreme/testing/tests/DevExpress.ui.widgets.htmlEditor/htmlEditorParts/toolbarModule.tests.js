@@ -392,6 +392,20 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         assert.equal(placeholder, 'Test', 'widget has a custom placeholder');
     });
 
+    test('dxTextBox should be focused on mousedown', function(assert) {
+        this.options.items = [{
+            widget: 'dxTextBox',
+        }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $textBox = $(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $textBox.trigger('mousedown');
+
+        assert.strictEqual(document.activeElement, $textBox[0]);
+    });
+
     test('handle align formatting', function(assert) {
         this.options.items = ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'];
 
