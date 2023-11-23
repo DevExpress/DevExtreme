@@ -6,35 +6,14 @@ import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-
-export interface License {
-  readonly [k: string]: unknown;
-  readonly customerId: string;
-  readonly maxVersionAllowed: number;
-}
+import {
+  License, LicenseVerifyResult, Token, TokenKind,
+} from './types';
 
 interface Payload extends Partial<License> {
   readonly format?: number;
   readonly internalUsageId?: string;
 }
-
-const enum TokenKind {
-  corrupted = 'corrupted',
-  verified = 'verified',
-  internal = 'internal',
-}
-
-export type Token = {
-  readonly kind: TokenKind.verified;
-  readonly payload: License;
-} | {
-  readonly kind: TokenKind.corrupted;
-  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
-} | {
-  readonly kind: TokenKind.internal;
-  readonly internalUsageId: string;
-};
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022';
 
 const SPLITTER = '.';
 const FORMAT = 1;

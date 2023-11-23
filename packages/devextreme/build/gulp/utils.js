@@ -8,7 +8,9 @@ gulp.task('skippedTask', done => done());
 
 const isEsmPackage = env.BUILD_ESM_PACKAGE;
 const packageDir = 'devextreme';
+const packageDirInternal = 'devextreme-internal';
 const packageDistDir = 'devextreme-dist';
+const packageDistDirInternal = 'devextreme-dist-internal';
 
 const runTaskByCondition = (condition, task) => {
     if(condition) {
@@ -34,7 +36,9 @@ const stringSrc = (filename, str) => {
 
 module.exports = {
     packageDir,
+    packageDirInternal,
     packageDistDir,
+    packageDistDirInternal,
     stringSrc,
     isEsmPackage,
     runTaskByCondition,

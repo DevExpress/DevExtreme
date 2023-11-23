@@ -80,6 +80,7 @@ $material-slider-tooltip-width-without-paddings: $material-slider-tooltip-width 
 
       .dx-popup-content {
         line-height: normal;
+        color: $material-slider-tooltip-color;
         padding: $material-slider-tooltip-popup-content-padding;
 
         .dx-slider-tooltip-position-top & {
