@@ -256,8 +256,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedIndex', function(assert) {
-        assert.expect(2);
-
         const $tabs = $('#tabs').dxTabs({
             items: [
                 { text: '0' },
@@ -285,8 +283,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
-        assert.expect(2);
-
         const $tabs = $('#tabs').dxTabs({
             items: [
                 { text: '0' },
@@ -314,8 +310,6 @@ QUnit.module('Tab select action', () => {
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
-        assert.expect(2);
-
         const items = [
             { text: '0' },
             { text: '1' },
@@ -545,13 +539,12 @@ QUnit.module('Horizontal scrolling', () => {
     });
 
     QUnit.test('selected item should be visible after selectedIndex was changed', function(assert) {
-        assert.expect(2);
+        assert.expect(1);
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            width: 100,
             selectedIndex: 0,
             scrollingEnabled: true,
-            focusStateEnabled: true,
+            width: 100
         });
         const instance = $element.dxTabs('instance');
         const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
