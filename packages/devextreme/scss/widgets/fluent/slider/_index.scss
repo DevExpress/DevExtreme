@@ -173,11 +173,3 @@ $fluent-slider-disabled-tooltip-top-margin: 5px;
     background: $fluent-slider-disabled-bg;
   }
 }
-
-.dx-rtl {
-  &.dx-state-disabled {
-    .dx-overlay-content {
-      margin-left: -13px;
-    }
-  }
-}

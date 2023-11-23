@@ -10,7 +10,7 @@
 * $name 10. Text color
 * $type color
 */
-$tooltip-color: null !default;
+$tooltip-color: $base-text-color !default;
 
 /**
 * $name 20. Background color
@@ -18,16 +18,13 @@ $tooltip-color: null !default;
 */
 $tooltip-bg: null !default;
 
-$tooltip-shadow-color: null !default;
 $tooltip-border-radius: $base-border-radius !default;
 
 @if $mode == "light" {
-  $tooltip-color: $base-text-color !default;
   $tooltip-bg: $base-bg !default;
 }
 
 @if $mode == "dark" {
-  $tooltip-color: $base-text-color !default;
-  $tooltip-bg: $base-bg-hover !default;
+  $tooltip-bg: $base-hover-bg !default;
 }
 

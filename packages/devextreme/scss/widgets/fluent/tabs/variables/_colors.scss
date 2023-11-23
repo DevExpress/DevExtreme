@@ -74,10 +74,10 @@ $tabs-hovered-tab-bg-color: transparent !default;
 * $name 110. Focused tab background color
 * $type color
 */
-$tabs-focused-tab-bg-color: $base-bg-hover !default;
-$tabs-tab-bg-color-hover-primary: $base-bg-hover !default;
-$tabs-tab-bg-color-focus-primary: $base-bg-hover !default;
-$tabs-tab-bg-color-active-primary: $base-bg-selected !default;
+$tabs-focused-tab-bg-color: $base-hover-bg !default;
+$tabs-tab-bg-color-hover-primary: $base-hover-bg !default;
+$tabs-tab-bg-color-focus-primary: $base-hover-bg !default;
+$tabs-tab-bg-color-active-primary: $base-selected-bg !default;
 
 /**
 * $name 120. Active tab background color

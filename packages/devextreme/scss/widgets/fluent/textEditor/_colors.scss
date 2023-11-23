@@ -80,7 +80,7 @@ $texteditor-border-bottom-color-focused: null !default;
 */
 $texteditor-indicator-border-color: $base-accent !default;
 
-$texteditor-button-clear-icon-color: $base-neutral-foreground3 !default;
+$texteditor-button-clear-icon-color: $base-icon-color !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color-hover !default;
 $texteditor-invalid-faded-border-color: $base-invalid-color !default;
 $texteditor-border-color-disabled: $base-border-color-disabled !default;
@@ -103,7 +103,7 @@ $texteditor-label-transition:
     $texteditor-color: #465569 !default;
     $texteditor-placeholder-color: #96A0B4 !default;
     $texteditor-outlined-bg: $base-element-bg !default;
-    $texteditor-filled-bg: #F1F5F9 !default;
+    $texteditor-filled-bg: #F3F5F8 !default;
   }
   $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default; // #c7c7c7
   $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default; // #b3b3b3
