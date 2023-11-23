@@ -392,7 +392,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         assert.equal(placeholder, 'Test', 'widget has a custom placeholder');
     });
 
-    QUnit.testInActiveWindow('textbox should be focused on mousedown (T1196805)', function(assert) {
+    QUnit.skipInShadowDomMode('textbox should be focused on mousedown (T1196805)', function(assert) {
         this.options.items = [{
             widget: 'dxTextBox',
         }];
