@@ -392,7 +392,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         assert.equal(placeholder, 'Test', 'widget has a custom placeholder');
     });
 
-    test('dxTextBox should be focused on mousedown', function(assert) {
+    test('dxTextBox should be focused on mousedown (T1196805)', function(assert) {
         this.options.items = [{
             widget: 'dxTextBox',
         }];
