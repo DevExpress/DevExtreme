@@ -36,7 +36,6 @@ import { excludeFromRecurrence } from '@js/renovation/ui/scheduler/utils/recurre
 import {
   isDateAndTimeView,
   isTimelineView,
-  validateDayHours,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
@@ -61,6 +60,7 @@ import { getRecurrenceProcessor } from './m_recurrence';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils from './m_utils_time_zone';
+import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './options_validator/index';
 import { AgendaResourceProcessor } from './resources/m_agenda_resource_processor';
 import {
   createExpressions,
@@ -84,7 +84,6 @@ import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const MINUTES_IN_HOUR = 60;
 const DEFAULT_AGENDA_DURATION = 7;
 
 const WIDGET_CLASS = 'dx-scheduler';
@@ -214,6 +213,10 @@ class Scheduler extends Widget<any> {
   _options: any;
 
   _editAppointmentData: any;
+
+  private _optionsValidator!: SchedulerOptionsValidator;
+
+  private _optionsValidatorErrorHandler!: SchedulerOptionsValidatorErrorsHandler;
 
   _getDefaultOptions() {
     // @ts-expect-error
@@ -526,6 +529,8 @@ class Scheduler extends Widget<any> {
   }
 
   _optionChanged(args) {
+    this.validateOptions();
+
     let { value } = args;
     const { name } = args;
 
@@ -577,10 +582,6 @@ class Scheduler extends Widget<any> {
         this._header?.option(name, value);
         break;
       case 'currentView':
-        this._validateDayHours();
-
-        this._validateCellDuration();
-
         this._appointments.option({
           items: [],
           allowDrag: this._allowDragging(),
@@ -629,7 +630,6 @@ class Scheduler extends Widget<any> {
         break;
       case 'startDayHour':
       case 'endDayHour':
-        this._validateDayHours();
 
         this.updateInstances();
 
@@ -642,7 +642,6 @@ class Scheduler extends Widget<any> {
         break;
         // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
       case 'offset':
-        this._validateDayHours();
 
         this.updateInstances();
 
@@ -696,7 +695,6 @@ class Scheduler extends Widget<any> {
         });
         break;
       case 'cellDuration':
-        this._validateCellDuration();
         this._updateOption('workSpace', name, value);
         this._appointments.option('items', []);
         if (this._readyToRenderAppointments) {
@@ -1046,6 +1044,10 @@ class Scheduler extends Widget<any> {
     this._subscribes = subscribes;
 
     this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
+
+    this._optionsValidator = new SchedulerOptionsValidator();
+
+    this._optionsValidatorErrorHandler = new SchedulerOptionsValidatorErrorsHandler();
   }
 
   createAppointmentDataProvider() {
@@ -1321,9 +1323,6 @@ class Scheduler extends Widget<any> {
   _initMarkup() {
     // @ts-expect-error
     super._initMarkup();
-
-    this._validateDayHours();
-    this._validateCellDuration();
 
     this._renderMainContainer();
 
@@ -2611,23 +2610,6 @@ class Scheduler extends Widget<any> {
     }
   }
 
-  _validateCellDuration() {
-    const endDayHour = this._getCurrentViewOption('endDayHour');
-    const startDayHour = this._getCurrentViewOption('startDayHour');
-    const cellDuration = this._getCurrentViewOption('cellDuration');
-
-    if ((endDayHour - startDayHour) * MINUTES_IN_HOUR % cellDuration !== 0) {
-      errors.log('W1015');
-    }
-  }
-
-  _validateDayHours() {
-    const startDayHour = this._getCurrentViewOption('startDayHour');
-    const endDayHour = this._getCurrentViewOption('endDayHour');
-
-    validateDayHours(startDayHour, endDayHour);
-  }
-
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
   }
@@ -2644,6 +2626,23 @@ class Scheduler extends Widget<any> {
     }
 
     return viewOffset * toMs('minute');
+  }
+
+  private validateOptions(): void {
+    const currentViewOptions = {
+      ...this.option(),
+      // TODO: Check it before 24.1 release
+      // NOTE: We override this.option values here
+      // because the old validation logic checked only current view options.
+      // Changing it and validate all views configuration will be a BC.
+      startDayHour: this._getCurrentViewOption('startDayHour'),
+      endDayHour: this._getCurrentViewOption('endDayHour'),
+      offset: this._getCurrentViewOption('offset'),
+      cellDuration: this._getCurrentViewOption('cellDuration'),
+    };
+
+    const validationResult = this._optionsValidator.validate(currentViewOptions);
+    this._optionsValidatorErrorHandler.handleValidationResult(validationResult);
   }
 }
 
