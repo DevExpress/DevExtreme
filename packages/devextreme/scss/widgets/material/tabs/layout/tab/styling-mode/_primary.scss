@@ -15,6 +15,11 @@
 
 
 .dx-tabs-styling-mode-primary {
+  &.dx-tabs:not(.dx-tabs-vertical) .dx-tabs-scrollable .dx-tab {
+    flex-basis: auto;
+    min-width: $material-tab-min-width;
+  }
+
   &.dx-tab-indicator-position-top {
     @include dx-tabs-indicator-primary-base(top);
   }

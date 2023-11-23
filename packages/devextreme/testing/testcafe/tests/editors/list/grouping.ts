@@ -17,6 +17,10 @@ test('Grouped list appearance', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Grouped list appearance.png', { element: '#container' });
 
+  await list.option('collapsibleGroups', false);
+
+  await testScreenshot(t, takeScreenshot, 'Grouped list appearance,collapsibleGroups=false.png', { element: '#container' });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -34,6 +38,47 @@ test('Grouped list appearance', async (t) => {
     key: 'group_3',
     items: ['item_3_1', 'item_3_2', 'item_3_3'],
     expanded: false,
+  }],
+  collapsibleGroups: true,
+  grouped: true,
+}));
+
+test('Grouped list appearance with template', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const list = new List('#container');
+
+  await t.click(list.getGroup(0).header);
+  await t.click(list.getGroup(2).header);
+
+  await testScreenshot(t, takeScreenshot, 'Grouped list appearance with template.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+  width: 300,
+  height: 500,
+  groupTemplate(data) {
+    const wrapper = $('<div>');
+
+    $(`<span>${data.key}</span>`)
+      .appendTo(wrapper);
+
+    $('<div>second row</div>')
+      .appendTo(wrapper);
+
+    return wrapper;
+  },
+  dataSource: [{
+    key: 'One',
+    items: ['1_1', '1_2', '1_3'],
+  }, {
+    key: 'Two',
+    items: ['2_1', '2_2', '2_3'],
+  }, {
+    key: 'Three',
+    items: ['3_1', '3_2', '3_3'],
   }],
   collapsibleGroups: true,
   grouped: true,

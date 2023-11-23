@@ -36,7 +36,6 @@ import {
   getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
-  validateDayHours,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
@@ -789,6 +788,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       focusedCell: this.cellsSelectionState.focusedCell,
       headerCellTextFormat: this._getFormat(),
       getDateForHeaderText: (_, date) => date,
+      viewOffset: this.option('viewOffset'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
       cellDuration: this.getCellDuration(),
@@ -2211,6 +2211,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       firstDayOfWeek: undefined,
       startDayHour: 0,
       endDayHour: 24,
+      viewOffset: 0,
       hoursInterval: 0.5,
       activeStateEnabled: true,
       hoverStateEnabled: true,
@@ -2251,13 +2252,8 @@ class SchedulerWorkSpace extends WidgetObserver {
   _optionChanged(args) {
     switch (args.name) {
       case 'startDayHour':
-        validateDayHours(args.value, this.option('endDayHour')!);
-        this._cleanWorkSpace();
-        break;
       case 'endDayHour':
-        validateDayHours(this.option('startDayHour')!, args.value);
-        this._cleanWorkSpace();
-        break;
+      case 'viewOffset':
       case 'dateCellTemplate':
       case 'resourceCellTemplate':
       case 'dataCellTemplate':

@@ -326,6 +326,12 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
       .dx-popup-content {
         padding: $generic-grid-base-column-chooser-paddings;
       }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $generic-grid-base-treeview-select-all-item-offset;
+        }
+      }
     }
 
     .dx-overlay-content {

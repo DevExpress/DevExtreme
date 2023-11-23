@@ -882,8 +882,8 @@ QUnit.module('Options', {
                     scheduler.instance.option('startDayHour', dayHours.startDayHour);
                     scheduler.instance.option('endDayHour', dayHours.endDayHour);
                 },
-                e => /E1058/.test(e.message),
-                'E1058 Error message'
+                e => /E1058/.test(e.message) || /E1062/.test(e.message),
+                'E1058 or E1062 Error message'
             );
         });
 
@@ -905,8 +905,8 @@ QUnit.module('Options', {
                     instance.option('views[0].startDayHour', dayHours.startDayHour);
                     instance.option('views[0].endDayHour', dayHours.endDayHour);
                 },
-                e => /E1058/.test(e.message),
-                'E1058 Error message'
+                e => /E1058/.test(e.message) || /E1062/.test(e.message),
+                'E1058 or E1062 Error message'
             );
         });
 
@@ -938,61 +938,9 @@ QUnit.module('Options', {
                 () => {
                     scheduler.instance.option('currentView', 'week');
                 },
-                e => /E1058/.test(e.message),
-                'E1058 Error message'
+                e => /E1058/.test(e.message) || /E1062/.test(e.message),
+                'E1058 or E1062 Error message'
             );
-        });
-    });
-
-    [
-        { startDayHour: 0, endDayHour: 24, cellDuration: 95 },
-        { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
-    ].forEach(config => {
-        QUnit.test(`Options changing, generate warning if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            const scheduler = createWrapper({
-                currentDate: new Date(2015, 4, 24),
-                views: ['day'],
-                currentView: 'day',
-                startDayHour: 8,
-                endDayHour: 12
-            });
-            scheduler.instance.option({
-                startDayHour: config.startDayHour,
-                endDayHour: config.endDayHour,
-                cellDuration: config.cellDuration
-            });
-
-            assert.equal(errors.log.callCount, 1, 'warning has been called once');
-            assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
-        });
-    });
-
-    [
-        { currentView: 'WEEK1' },
-        { currentView: 'WEEK2' }
-    ].forEach(view => {
-        QUnit.test(`View changing, generate warning if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            const scheduler = createWrapper({
-                currentDate: new Date(2015, 4, 24),
-                views: ['day',
-                    {
-                        type: 'week',
-                        name: 'WEEK1',
-                        cellDuration: 7
-                    },
-                    {
-                        type: 'week',
-                        name: 'WEEK2',
-                        cellDuration: 95
-                    }],
-                currentView: 'day',
-                startDayHour: 8,
-                endDayHour: 24
-            });
-            scheduler.instance.option('currentView', view.currentView);
-
-            assert.equal(errors.log.callCount, 1, 'warning has been called once');
-            assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
         });
     });
 

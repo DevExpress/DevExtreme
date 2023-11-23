@@ -171,7 +171,14 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> { }
+export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: string): void;
+}
 
 interface TextBoxInstance extends dxTextBox<Properties> { }
 

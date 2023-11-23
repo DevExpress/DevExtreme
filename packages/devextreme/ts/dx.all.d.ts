@@ -1497,7 +1497,6 @@ declare module DevExpress.common {
        * [descr:GlobalConfig.floatingActionButtonConfig.shading]
        */
       shading?: boolean;
-      licenseKey?: string;
     };
     /**
      * [descr:GlobalConfig.forceIsoDateParsing]
@@ -1507,6 +1506,10 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.oDataFilterToLower]
      */
     oDataFilterToLower?: boolean;
+    /**
+     * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+     */
+    pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
     /**
      * [descr:GlobalConfig.rtlEnabled]
      */
@@ -1528,6 +1531,10 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.useLegacyVisibleIndex]
      */
     useLegacyVisibleIndex?: boolean;
+    /**
+     * [descr:GlobalConfig.licenseKey]
+     */
+    licenseKey?: string;
   };
   /**
    * [descr:GroupItem]
@@ -6327,7 +6334,6 @@ declare module DevExpress.data {
   export function query(url: string, queryOptions: any): Query;
   /**
    * [descr:Query]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface Query {
     /**
@@ -8182,7 +8188,10 @@ declare module DevExpress.ui {
     (new (
       element: DevExpress.core.UserDefinedElement,
       options?: DevExpress.ui.dxDateRangeBox.Properties
-    ) => Omit<DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties>, 'field'>);
+    ) => Omit<
+      DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties>,
+      'field' | 'reset'
+    >);
   /**
    * [descr:DraggableBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8682,7 +8691,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxAutocomplete]
    */
-  export class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> {}
+  export class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> {
+    /**
+     * [descr:dxAutocomplete.reset(value)]
+     */
+    reset(value?: string | null): void;
+  }
   module dxAutocomplete {
     /**
      * [descr:_ui_autocomplete_ChangeEvent]
@@ -8954,7 +8968,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxItem.baseSize]
      */
-    baseSize?: number | DevExpress.common.Mode;
+    baseSize?: number | string;
     /**
      * [descr:dxBoxItem.box]
      */
@@ -9218,7 +9232,14 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCalendar]
    */
-  export class dxCalendar extends Editor<dxCalendarOptions> {}
+  export class dxCalendar extends Editor<dxCalendarOptions> {
+    /**
+     * [descr:dxCalendar.reset(value)]
+     */
+    reset(
+      value?: Date | number | string | Array<Date | number | string> | null
+    ): void;
+  }
   module dxCalendar {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
@@ -9368,6 +9389,10 @@ declare module DevExpress.ui {
      * [descr:dxCheckBox.blur()]
      */
     blur(): void;
+    /**
+     * [descr:dxCheckBox.reset(value)]
+     */
+    reset(value?: boolean | null | undefined): void;
   }
   module dxCheckBox {
     /**
@@ -9440,7 +9465,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxColorBox]
    */
-  export class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {}
+  export class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
+    /**
+     * [descr:dxColorBox.reset(value)]
+     */
+    reset(value?: string | null): void;
+  }
   module dxColorBox {
     /**
      * [descr:_ui_color_box_ChangeEvent]
@@ -9590,7 +9620,6 @@ declare module DevExpress.ui {
      * [descr:dxColorBoxOptions.value]
      */
     value?: string;
-
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
      */
@@ -12102,7 +12131,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateBox]
    */
-  export class dxDateBox extends DateBoxBase<DevExpress.ui.dxDateBox.Properties> {}
+  export class dxDateBox extends DateBoxBase<DevExpress.ui.dxDateBox.Properties> {
+    /**
+     * [descr:dxDateBox.reset(value)]
+     */
+    reset(value?: Date | number | string | null): void;
+  }
   module dxDateBox {
     /**
      * [descr:_ui_date_box_ChangeEvent]
@@ -12301,6 +12335,10 @@ declare module DevExpress.ui {
      * [descr:dxDateRangeBox.startDateField()]
      */
     startDateField(): DevExpress.core.DxElement;
+    /**
+     * [descr:dxDateRangeBox.reset(value)]
+     */
+    reset(value?: Array<Date | number | string | null>): void;
   }
   module dxDateRangeBox {
     /**
@@ -15825,6 +15863,10 @@ declare module DevExpress.ui {
      * [descr:dxFileUploader.removeFile(file)]
      */
     removeFile(file: File): void;
+    /**
+     * [descr:dxFileUploader.reset(value)]
+     */
+    reset(value?: Array<File>): void;
   }
   module dxFileUploader {
     /**
@@ -19248,7 +19290,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorMention.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<string> | null;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<any> | null;
     /**
      * [descr:dxHtmlEditorMention.displayExpr]
      */
@@ -21280,7 +21322,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxNumberBox]
    */
-  export class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {}
+  export class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {
+    /**
+     * [descr:dxNumberBox.reset(value)]
+     */
+    reset(value?: number): void;
+  }
   module dxNumberBox {
     /**
      * [descr:_ui_number_box_ChangeEvent]
@@ -22832,7 +22879,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxProgressBar]
    */
-  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {}
+  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
+    /**
+     * [descr:dxProgressBar.reset(value)]
+     */
+    reset(value?: Number | false): void;
+  }
   module dxProgressBar {
     /**
      * [descr:_ui_progress_bar_CompleteEvent]
@@ -22961,7 +23013,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxRangeSlider]
    */
-  export class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {}
+  export class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
+    /**
+     * [descr:dxRangeSlider.reset(value)]
+     */
+    reset(value?: Array<number>): void;
+  }
   module dxRangeSlider {
     /**
      * [descr:_ui_range_slider_ContentReadyEvent]
@@ -23358,7 +23415,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.cols.baseSize]
        */
-      baseSize?: number | DevExpress.common.Mode;
+      baseSize?: number | string;
       /**
        * [descr:dxResponsiveBoxOptions.cols.ratio]
        */
@@ -23391,7 +23448,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.rows.baseSize]
        */
-      baseSize?: number | DevExpress.common.Mode;
+      baseSize?: number | string;
       /**
        * [descr:dxResponsiveBoxOptions.rows.ratio]
        */
@@ -24311,6 +24368,10 @@ declare module DevExpress.ui {
      */
     allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
     /**
+     * [descr:dxSchedulerOptions.offset]
+     */
+    offset?: number;
+    /**
      * [descr:dxSchedulerOptions.views]
      */
     views?: Array<
@@ -24466,6 +24527,10 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
           allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
+          /**
+           * [descr:dxSchedulerOptions.views.offset]
+           */
+          offset?: number;
         }
     >;
   }
@@ -24921,7 +24986,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxSlider]
    */
-  export class dxSlider extends dxTrackBar<dxSliderOptions> {}
+  export class dxSlider extends dxTrackBar<dxSliderOptions> {
+    /**
+     * [descr:dxSlider.reset(value)]
+     */
+    reset(value?: number): void;
+  }
   module dxSlider {
     /**
      * [descr:_ui_slider_ContentReadyEvent]
@@ -25534,7 +25604,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxSwitch]
    */
-  export class dxSwitch extends Editor<dxSwitchOptions> {}
+  export class dxSwitch extends Editor<dxSwitchOptions> {
+    /**
+     * [descr:dxSwitch.reset(value)]
+     */
+    reset(value?: boolean): void;
+  }
   module dxSwitch {
     /**
      * [descr:_ui_switch_ContentReadyEvent]
@@ -26417,7 +26492,12 @@ declare module DevExpress.ui {
    */
   export class dxTextBox<
     TProperties = DevExpress.ui.dxTextBox.Properties
-  > extends dxTextEditor<TProperties> {}
+  > extends dxTextEditor<TProperties> {
+    /**
+     * [descr:dxTextBox.reset(value)]
+     */
+    reset(value?: string): void;
+  }
   module dxTextBox {
     /**
      * [descr:_ui_text_box_ChangeEvent]

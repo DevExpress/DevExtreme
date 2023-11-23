@@ -5689,6 +5689,50 @@ QUnit.module('Rows view with real dataController and columnController', {
             clock.restore();
         });
     });
+
+    // T1196383
+    QUnit.test('Watchers should be destroyed after rows are repainted when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        const disposeFuncs = [];
+        const clock = sinon.useFakeTimers();
+        const $testElement = $('#container');
+
+        this.options.repaintChangesOnly = true;
+        this.options.rowAlternationEnabled = true;
+        this.setupDataGridModules();
+
+        sinon.stub(this.rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = commonUtils.noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 14, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        this.rowsView.render($testElement);
+        clock.tick(10);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
+        clock.restore();
+    });
 });
 
 QUnit.module('Virtual scrolling', {

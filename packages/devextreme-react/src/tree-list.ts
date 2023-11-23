@@ -753,9 +753,9 @@ class CursorOffset extends NestedOption<ICursorOffsetProps> {
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -887,11 +887,11 @@ class EmailRule extends NestedOption<IEmailRuleProps> {
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
   dataField?: string;
   dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
   format?: LocalizationTypes.Format;
@@ -1251,8 +1251,8 @@ class Form extends NestedOption<IFormProps> {
 // Field
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1587,7 +1587,7 @@ class Paging extends NestedOption<IPagingProps> {
 type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  pattern?: any | string;
+  pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
 class PatternRule extends NestedOption<IPatternRuleProps> {
@@ -1734,9 +1734,9 @@ class Position extends NestedOption<IPositionProps> {
 // Column
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
-  max?: any | number;
+  max?: Date | number;
   message?: string;
-  min?: any | number;
+  min?: Date | number;
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
@@ -2117,13 +2117,13 @@ type IValidationRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   ignoreEmptyValue?: boolean;
-  max?: any | number;
-  min?: any | number;
+  max?: Date | number;
+  min?: Date | number;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
-  pattern?: any | string;
+  pattern?: RegExp | string;
 }>
 class ValidationRule extends NestedOption<IValidationRuleProps> {
   public static OptionName = "validationRules";

@@ -358,6 +358,15 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
+  apiClearFilter(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).clearFilter(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
     const { getInstance } = this;
 
@@ -536,6 +545,16 @@ export default class DataGrid extends Widget {
           getInstance,
         },
       },
+    )();
+  }
+
+  apiRefresh(): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        (getInstance() as DataGridInstance).refresh().catch(() => {});
+      },
+      { dependencies: { getInstance } },
     )();
   }
 

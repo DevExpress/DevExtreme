@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
@@ -13,8 +12,6 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
-import TemplatesManager from '../templates-manager';
-import { TemplatesStore } from '../templates-store';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
@@ -32,7 +29,7 @@ interface IControlledComponentProps {
   complexOption?: Record<string, unknown>;
 }
 
-class ControlledComponent extends TestComponent<IControlledComponentProps> {
+class ControlledComponent extends TestComponent<IControlledComponentProps & React.PropsWithChildren> {
   protected _defaults = {
     defaultControlledOption: 'controlledOption',
   };
@@ -47,7 +44,7 @@ class NestedComponent extends ConfigurationComponent<{
   complexValue?: Record<string, unknown>;
   value?: number;
   onValueChange?: (value: number) => void;
-}> {
+} & React.PropsWithChildren> {
   public static DefaultsProps = {
     defaultC: 'c',
   };
@@ -58,7 +55,7 @@ class NestedComponent extends ConfigurationComponent<{
 class CollectionNestedComponent extends ConfigurationComponent<{
   a?: number;
   onAChange?: (value: number) => void;
-}> {}
+} & React.PropsWithChildren> {}
 (CollectionNestedComponent as any).OptionName = 'items';
 (CollectionNestedComponent as any).IsCollectionItem = true;
 (CollectionNestedComponent as any).ExpectedChildren = {
@@ -623,9 +620,7 @@ describe('cfg-component option control', () => {
 
   // T1106899
   it('apply cfg-component option value if value has changes', () => {
-    const optionsManager = new OptionsManagerModule.OptionsManager(
-      new TemplatesManager(new TemplatesStore(() => {})),
-    );
+    const optionsManager = new OptionsManagerModule.OptionsManager();
     const config = {
       fullName: '',
       predefinedOptions: {},
@@ -896,7 +891,7 @@ describe('onXXXChange', () => {
     });
 
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isOptionSubscribable: () => boolean }, 'isOptionSubscribable'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean },
         'isOptionSubscribable',
@@ -1132,7 +1127,7 @@ describe('onXXXChange', () => {
 
   describe('non-subscribable options', () => {
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isOptionSubscribable: () => boolean }, 'isOptionSubscribable'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean },
         'isOptionSubscribable',
@@ -1173,7 +1168,7 @@ describe('onXXXChange', () => {
 
   describe('independent events', () => {
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isIndependentEvent: () => boolean }, 'isIndependentEvent'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
         'isIndependentEvent',
@@ -1230,7 +1225,7 @@ describe('onXXXChange', () => {
 
   describe('dependent events', () => {
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isIndependentEvent: () => boolean }, 'isIndependentEvent'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
         'isIndependentEvent',

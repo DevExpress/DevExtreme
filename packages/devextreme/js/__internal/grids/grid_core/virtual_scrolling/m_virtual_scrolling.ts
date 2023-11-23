@@ -485,8 +485,6 @@ const VirtualScrollingRowsViewExtender = (function () {
       const changeType = change && change.changeType;
       const d: any = Deferred();
 
-      this.throwHeightWarningIfNeed();
-
       const contentTable = contentElement.children().first();
       if (changeType === 'append' || changeType === 'prepend') {
         this.waitAsyncTemplates().done(() => {
@@ -749,7 +747,13 @@ const VirtualScrollingRowsViewExtender = (function () {
       this.callBase.call(this, isLoading, messageText);
     },
 
+    // NOTE: warning won't be thrown if height was specified and then removed,
+    // because for some reason `_hasHeight` is not updated properly in this case
     throwHeightWarningIfNeed() {
+      if (this._hasHeight === undefined) {
+        return;
+      }
+
       const needToThrow = !this._hasHeight && isVirtualPaging(this);
       if (needToThrow && !this._heightWarningIsThrown) {
         this._heightWarningIsThrown = true;
@@ -762,6 +766,8 @@ const VirtualScrollingRowsViewExtender = (function () {
       const $element = that.element();
 
       that.callBase();
+
+      this.throwHeightWarningIfNeed();
 
       if (that.component.$element() && !that._windowScroll && isElementInDom($element)) {
         that._windowScroll = subscribeToExternalScrollers($element, (scrollPos) => {
@@ -1212,7 +1218,7 @@ export const virtualScrollingModule = {
 
             return delta < 0 ? 0 : delta;
           },
-          getRowIndexOffset(byLoadedRows) {
+          getRowIndexOffset(byLoadedRows, needGroupOffset) {
             let offset = 0;
             const dataSource = this.dataSource();
             const rowsScrollController = this._rowsScrollController;
@@ -1232,7 +1238,13 @@ export const virtualScrollingModule = {
                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
               }
             } else if (virtualPaging && newMode && dataSource) {
-              offset = dataSource.lastLoadOptions().skip ?? 0;
+              const lastLoadOptions = dataSource.lastLoadOptions();
+
+              if (needGroupOffset && lastLoadOptions.skips?.length) {
+                offset = lastLoadOptions.skips.reduce((res: number, skip: number) => res + skip, 0);
+              } else {
+                offset = lastLoadOptions.skip ?? 0;
+              }
             } else if (isVirtualMode(this) && dataSource) {
               offset = dataSource.beginPageIndex() * dataSource.pageSize();
             }
@@ -1241,7 +1253,7 @@ export const virtualScrollingModule = {
           },
           getDataIndex() {
             if (this.option(LEGACY_SCROLLING_MODE) === false) {
-              return this.getRowIndexOffset(true);
+              return this.getRowIndexOffset(true, true);
             }
 
             return this.callBase.apply(this, arguments);

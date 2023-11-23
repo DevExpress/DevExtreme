@@ -257,7 +257,7 @@ const TextEditorMask = TextEditorBase.inherit({
         });
 
         return isDefined(ruleConfig)
-            ? new MaskRule(extend({ maskChar: this.option('maskChar') }, ruleConfig))
+            ? new MaskRule(extend({ maskChar: this.option('maskChar') || ' ' }, ruleConfig))
             : new StubMaskRule({ maskChar: pattern });
     },
 

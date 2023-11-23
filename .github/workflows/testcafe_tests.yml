@@ -28,7 +28,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20.9.0'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -70,6 +70,7 @@ jobs:
           { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
           { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
           { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "pivotGrid", name: "pivotGrid - fluent", theme: 'fluent.blue.light', concurrency: 1 },
           { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
           { componentFolder: "scheduler", name: "scheduler (2/5)", indices: "2/5" },
           { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
@@ -109,7 +110,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20.9.0'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3

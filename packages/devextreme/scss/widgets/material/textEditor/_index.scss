@@ -359,7 +359,7 @@ $material-editor-custom-button-margin: 5px;
 @include dx-editor-outlined(
   $texteditor-input-border-radius,
   $material-texteditor-label-font-size,
-  1px,
+  $material-base-border-width,
   2px,
   solid,
   $material-texteditor-label-font-size + 2,
@@ -386,7 +386,6 @@ $material-editor-custom-button-margin: 5px;
   0,
   $material-texteditor-label-outside-font-size,
   $material-texteditor-label-outside-height,
-  $material-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

@@ -2,11 +2,10 @@ import dateUtils from '../../../../../../../core/utils/date';
 import dateLocalization from '../../../../../../../localization/date';
 import {
   getCalculatedFirstDayOfWeek,
-  getStartViewDateTimeOffset,
+  getValidCellDateForLocalTimeFormat,
   getViewStartByOptions,
   setOptionHour,
 } from './base';
-import timeZoneUtils from '../../../../../../../__internal/scheduler/m_utils_time_zone';
 import { CalculateStartViewDate } from '../types';
 
 export const getIntervalDuration = (
@@ -49,29 +48,6 @@ export const calculateViewStartDate = (
   return dateUtils.getFirstWeekDate(startDateOption, validFirstDayOfWeek);
 };
 
-const getTimeCellDate = (
-  rowIndex: number,
-  date: Date,
-  startViewDate: Date,
-  cellDuration: number,
-  startDayHour: number,
-): Date => {
-  if (!timeZoneUtils.isTimezoneChangeInDate(date)) {
-    return date;
-  }
-
-  const startViewDateWithoutDST = timeZoneUtils.getDateWithoutTimezoneChange(startViewDate);
-  const result = new Date(startViewDateWithoutDST);
-  const timeCellDuration = Math.round(cellDuration);
-
-  const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
-  result.setMilliseconds(
-    result.getMilliseconds() + timeCellDuration * rowIndex - startViewDateOffset,
-  );
-
-  return result;
-};
-
 // T410490: incorrectly displaying time slots on Linux
 export const getTimePanelCellText = (
   rowIndex: number,
@@ -79,10 +55,18 @@ export const getTimePanelCellText = (
   startViewDate: Date,
   cellDuration: number,
   startDayHour: number,
+  viewOffset: number,
 ): string => {
-  if (rowIndex % 2 === 0) {
-    const validDate = getTimeCellDate(rowIndex, date, startViewDate, cellDuration, startDayHour);
-    return dateLocalization.format(validDate, 'shorttime') as string;
+  if (rowIndex % 2 !== 0) {
+    return '';
   }
-  return '';
+
+  const validTimeDate = getValidCellDateForLocalTimeFormat(date, {
+    startViewDate,
+    startDayHour,
+    cellIndexShift: Math.round(cellDuration) * rowIndex,
+    viewOffset,
+  });
+
+  return dateLocalization.format(validTimeDate, 'shorttime') as string;
 };

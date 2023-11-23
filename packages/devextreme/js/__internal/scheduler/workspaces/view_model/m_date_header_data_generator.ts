@@ -5,8 +5,11 @@ import {
   getHeaderCellText,
   getHorizontalGroupCount,
   getTotalCellCountByCompleteData,
+  isTimelineView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { VIEWS } from '@ts/scheduler/m_constants';
 
+import timeZoneUtils from '../../m_utils_time_zone';
 import { getGroupCount } from '../../resources/m_utils';
 
 export class DateHeaderDataGenerator {
@@ -42,6 +45,7 @@ export class DateHeaderDataGenerator {
       hoursInterval,
       isHorizontalGrouping,
       intervalCount,
+      viewOffset,
     } = options;
 
     const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -61,11 +65,12 @@ export class DateHeaderDataGenerator {
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
       const cell = completeViewDataMap[index][dayIndex * colSpan];
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(cell.startDate, -viewOffset);
 
       weekDaysRow.push({
         ...cell,
         colSpan,
-        text: formatWeekdayAndDay(cell.startDate),
+        text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
         isLastGroupCell: false,
       });
@@ -90,12 +95,14 @@ export class DateHeaderDataGenerator {
       intervalCount,
       currentDate,
       viewType,
+      viewOffset,
     } = options;
 
     const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
     const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
     const isVerticalGrouping = groupOrientation === 'vertical';
+
     const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
       intervalCount,
       currentDate,
@@ -110,6 +117,9 @@ export class DateHeaderDataGenerator {
       ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
       : completeViewDataMap[index];
 
+    // NOTE: Should leave dates as is when creating time row in timelines.
+    const shouldShiftDates = !isTimelineView(viewType) || viewType === VIEWS.TIMELINE_MONTH;
+
     return slicedByColumnsData.map(({
       startDate,
       endDate,
@@ -117,9 +127,13 @@ export class DateHeaderDataGenerator {
       isLastGroupCell,
       ...restProps
     }, index) => {
+      const shiftedStartDate = shouldShiftDates
+        ? timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset)
+        : startDate;
+
       const text = getHeaderCellText(
         index % cellCountInGroupRow,
-        startDate,
+        shiftedStartDate,
         headerCellTextFormat,
         getDateForHeaderText,
         {
@@ -127,6 +141,7 @@ export class DateHeaderDataGenerator {
           startViewDate,
           startDayHour,
           cellCountInDay,
+          viewOffset,
         },
       );
 

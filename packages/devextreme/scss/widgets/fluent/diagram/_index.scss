@@ -150,7 +150,7 @@ $diagram-toolbox-title-size: 18px;
 
 .dx-diagram-floating-toolbar-container {
   background: $overlay-content-bg;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 1px 8px color.change($base-shadow-color, $alpha: 0.175);
   border-radius: $popup-border-radius;
   padding: 4px;
 
@@ -202,7 +202,7 @@ $diagram-toolbox-title-size: 18px;
 
 .dx-diagram-toolbox-popup {
   & > .dx-overlay-content {
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 1px 8px color.change($base-shadow-color, $alpha: 0.175);
   }
 
   .dx-popup-title {
@@ -233,7 +233,7 @@ $diagram-toolbox-title-size: 18px;
   }
 
   .dx-diagram-toolbox-input-container {
-    border-bottom: 1px solid $accordion-item-border-color;
+    border-bottom: 1px solid transparent;
   }
 
   .dx-diagram-toolbox-input {
@@ -281,7 +281,7 @@ $diagram-toolbox-title-size: 18px;
       padding-top: $diagram-toolbox-mobile-padding;
 
       .dx-diagram-toolbox-input-container {
-        border-top: 1px solid $accordion-item-border-color;
+        border-top: 1px solid transparent;
       }
     }
   }
@@ -294,7 +294,7 @@ $diagram-toolbox-title-size: 18px;
     .dx-accordion-item {
       border-left: none;
       border-right: none;
-      border-bottom: 1px solid $accordion-item-border-color;
+      border-bottom: 1px solid transparent;
       border-top: none;
       box-shadow: none;
     }

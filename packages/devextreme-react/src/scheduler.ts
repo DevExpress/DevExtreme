@@ -66,9 +66,9 @@ type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
   timeCellKeyFn?: (data: any) => string;
-  defaultCurrentDate?: any | number | string;
+  defaultCurrentDate?: Date | number | string;
   defaultCurrentView?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
-  onCurrentDateChange?: (value: any | number | string) => void;
+  onCurrentDateChange?: (value: Date | number | string) => void;
   onCurrentViewChange?: (value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") => void;
 }>
 
@@ -153,6 +153,11 @@ class Scheduler extends BaseComponent<React.PropsWithChildren<ISchedulerOptions>
   appointmentDragging: PropTypes.object,
   cellDuration: PropTypes.number,
   crossScrollingEnabled: PropTypes.bool,
+  currentDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
+  ]),
   currentView: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.oneOf([
@@ -199,6 +204,11 @@ class Scheduler extends BaseComponent<React.PropsWithChildren<ISchedulerOptions>
   ]),
   hint: PropTypes.string,
   indicatorUpdateInterval: PropTypes.number,
+  max: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
+  ]),
   maxAppointmentsPerCell: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.oneOfType([
@@ -208,7 +218,13 @@ class Scheduler extends BaseComponent<React.PropsWithChildren<ISchedulerOptions>
       "unlimited"])
   ])
   ]),
+  min: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
+  ]),
   noDataText: PropTypes.string,
+  offset: PropTypes.number,
   onAppointmentAdded: PropTypes.func,
   onAppointmentAdding: PropTypes.func,
   onAppointmentClick: PropTypes.func,
@@ -340,9 +356,10 @@ type IViewProps = React.PropsWithChildren<{
   intervalCount?: number;
   maxAppointmentsPerCell?: number | "auto" | "unlimited";
   name?: string;
+  offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   scrolling?: dxSchedulerScrolling;
-  startDate?: any | number | string;
+  startDate?: Date | number | string;
   startDayHour?: number;
   timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";

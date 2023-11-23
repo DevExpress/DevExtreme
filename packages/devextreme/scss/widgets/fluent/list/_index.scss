@@ -95,9 +95,17 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   row-gap: $fluent-list-item-gap;
 }
 
-.dx-list-collapsible-groups .dx-list-group-header {
-  &::before {
-    content: none;
+.dx-list {
+  .dx-list-group-header-indicator {
+    display: none;
+  }
+}
+
+.dx-list-collapsible-groups {
+  .dx-list-group-header {
+    &::before {
+      content: none;
+    }
   }
 }
 
@@ -275,10 +283,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;
-      display: flex;
-      align-items: center;
-
+     
       .dx-list-collapsible-groups & {
+        display: flex;
+        align-items: center;
+        
         @include dx-icon(chevrondown);
         @include dx-icon-sizing($fluent-base-icon-size);
       }

@@ -1155,7 +1155,6 @@ QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek 
             currentView: 'timelineWeek',
             height: 530,
             dataSource: items,
-            startDayHour: 1,
             cellDuration: 1440,
             recurrenceRuleExpr: 'RecurrenceRule'
         }
@@ -1228,7 +1227,7 @@ QUnit.test('Dates of allDay appointment should be changed when resize is finishe
         allDay: true
     };
     const updatedItem = $.extend({}, item, {
-        endDate: new Date(2015, 1, 10, 10)
+        endDate: new Date(2015, 1, 10, 0)
     });
 
     this.createInstance(

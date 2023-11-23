@@ -91,7 +91,7 @@ configs.forEach(config => {
             focusStateEnabled: true,
             scrollDirection: 'both',
             height: 150,
-            width: 150
+            width: 170
         });
 
         const $nodes = wrapper.getElement().find(`.${NODE_CLASS}`);
@@ -254,9 +254,9 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
     const clock = sinon.useFakeTimers();
 
     try {
-        scrollable.scrollTo({ y: 106 });
+        scrollable.scrollTo({ y: 99 });
         $lastItem.trigger('dxpointerdown');
-        assert.equal(scrollable.scrollTop(), 106, 'scroll top position');
+        assert.equal(scrollable.scrollTop(), 99, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');

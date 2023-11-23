@@ -209,18 +209,22 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     background: $list-group-header-bg;
     color: $list-expanded-group-color;
     border-top: $material-list-item-border;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-top-color: transparent;
     font-size: $material-list-main-font-size;
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;
+      order: 1;
+      position: absolute;
+      inset-inline-end: $material-list-item-horizontal-padding;
 
       .dx-list-collapsible-groups & {
         @include dx-icon(chevronup);
 
         font-size: $material-base-icon-size;
-        float: right;
-        margin-top: -2px;
       }
     }
 

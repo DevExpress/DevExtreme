@@ -49,8 +49,6 @@
 }
 
 .dx-menu-base {
-  @include dx-base-typography();
-
   &.dx-state-focused {
     outline: none;
   }
@@ -62,24 +60,6 @@
   .dx-menu-item {
     .dx-menu-item-content {
       line-height: $fluent-menu-item-line-height;
-    }
-  }
-
-  &.dx-rtl {
-    .dx-menu-item-content {
-      .dx-icon {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .dx-menu-item-popout-container {
-        margin-left: 0;
-        margin-right: auto;
-
-        .dx-menu-item-popout {
-          @include flip-horizontally();
-        }
-      }
     }
   }
 }

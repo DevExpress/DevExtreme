@@ -61,7 +61,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
           currentView: view,
           currentDate: '2023-01-01T00:00:00',
           height: 800,
-          cellDuration: 320,
+          cellDuration: 360,
           maxAppointmentsPerCell: 2,
           ...setViewOptions(startDayHour, endDayHour),
         },

@@ -287,8 +287,8 @@ const DxBreak = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
-    startValue: {}
+    endValue: [Date, Number, String],
+    startValue: [Date, Number, String]
   }
 });
 (DxBreak as any).$_optionName = "breaks";
@@ -1209,7 +1209,7 @@ const DxScale = createConfigurationComponent({
     categories: Array,
     discreteAxisDivisionMode: String,
     endOnTick: Boolean,
-    endValue: {},
+    endValue: [Date, Number, String],
     holidays: Array,
     label: Object,
     linearThreshold: Number,
@@ -1223,7 +1223,7 @@ const DxScale = createConfigurationComponent({
     placeholderHeight: Number,
     showCustomBoundaryTicks: Boolean,
     singleWorkdays: Array,
-    startValue: {},
+    startValue: [Date, Number, String],
     tick: Object,
     tickInterval: [Number, Object, String],
     type: String,
@@ -1605,9 +1605,9 @@ const DxValue = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
+    endValue: [Date, Number, String],
     length: [Number, Object, String],
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxValue as any).$_optionName = "value";

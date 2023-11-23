@@ -5,7 +5,21 @@
 // adduse
 
 /**
-* $name 10. Load indicator color
+* $name 10. Foreground color
 * $type color
 */
 $load-indicator-segment-bg-color: $base-accent !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
+$load-indicator-inner-segment-border-color: null !default;
+
+@if $mode == "light" {
+  $load-indicator-inner-segment-border-color: lighten(saturate(adjust-hue($base-accent, 2.9), 2.2), 44.3) !default; // #B4D6FA
+}
+
+@if $mode == "dark" {
+  $load-indicator-inner-segment-border-color: $base-accent-selected !default; 
+}

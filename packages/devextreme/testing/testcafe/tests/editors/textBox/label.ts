@@ -101,45 +101,78 @@ stylingModes.forEach((stylingMode) => {
       }
     }
   });
-});
 
-test('Textbox with buttons container', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  ['floating', 'static', 'outside'].forEach((labelMode) => {
+    test(`Textbox with buttons container, stylingMode=${stylingMode}, labelMode=${labelMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${TEXTBOX_CLASS} { width: 220px; margin: 2px; }`);
+      await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-  await testScreenshot(t, takeScreenshot, 'Textbox render with buttons container.png', { shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `Textbox with buttons container,stMode=${stylingMode},lMode=${labelMode}.png`, { shouldTestInCompact: true });
 
-  await removeStylesheetRulesFromPage();
+      await removeStylesheetRulesFromPage();
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  for (const isValid of [true, false]) {
-    for (const stylingMode of stylingModes) {
-      for (const buttons of [
-        ['clear'],
-        ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
-        [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
-        ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
-        [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear'],
-      ]) {
-        for (const rtlEnabled of [true, false]) {
-          const id = `${`dx${new Guid()}`}`;
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      for (const isValid of [true, false]) {
+        for (const buttons of [
+          ['clear'],
+          ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
+          [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
+          ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
+          [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear'],
+        ]) {
+          for (const rtlEnabled of [true, false]) {
+            const id = `${`dx${new Guid()}`}`;
 
-          await appendElementTo('#container', 'div', id, { });
+            await appendElementTo('#container', 'div', id, { });
 
-          await createWidget('dxTextBox', {
-            value: 'Text',
-            stylingMode,
-            rtlEnabled,
-            buttons,
-            showClearButton: true,
-            isValid,
-          }, `#${id}`);
+            await createWidget('dxTextBox', {
+              width: 300,
+              value: 'Text',
+              stylingMode,
+              labelMode,
+              label: 'Label Text',
+              rtlEnabled,
+              buttons,
+              showClearButton: true,
+              isValid,
+            }, `#${id}`);
+          }
         }
       }
-    }
-  }
+    });
+  });
+
+  test(`TextBox should not be hovered after hover of outside label, stylingMode=${stylingMode}`, async (t) => {
+    const textBox = new TextBox('#container');
+
+    await t
+      .hover(textBox.getLabel())
+      .expect(textBox.isHovered)
+      .notOk();
+  }).before(async () => createWidget('dxTextBox', {
+    value: 'text',
+    label: 'Label text',
+    labelMode: 'outside',
+    stylingMode,
+    width: 500,
+  }));
+
+  test(`TextBox should be focused after click on outside label, stylingMode=${stylingMode}`, async (t) => {
+    const textBox = new TextBox('#container');
+
+    await t
+      .click(textBox.getLabel())
+      .expect(textBox.isFocused)
+      .ok();
+  }).before(async () => createWidget('dxTextBox', {
+    value: 'text',
+    label: 'Label text',
+    labelMode: 'outside',
+    stylingMode,
+    width: 500,
+  }));
 });

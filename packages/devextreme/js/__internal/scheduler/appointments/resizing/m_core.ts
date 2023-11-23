@@ -1,8 +1,3 @@
-import {
-  normalizeEndDate,
-  normalizeStartDate,
-} from './m_utils';
-
 const getAppointmentLeftCell = (options) => {
   const {
     cellHeight,
@@ -40,21 +35,15 @@ const getDateRangeHorizontal = (options) => {
   const appointmentCellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
   const appointmentLastCellIndex = appointmentFirstCell.index + (appointmentCellsAmount - 1);
 
-  const {
-    allDay,
-    sourceAppointment,
-  } = appointmentSettings.info;
+  const { sourceAppointment } = appointmentSettings.info;
+  const { allDay } = appointmentSettings.info.appointment;
 
   if (handles.left) {
-    const startDate = normalizeStartDate(
-      options,
-      appointmentFirstCell.startDate,
-      sourceAppointment.startDate,
-    );
-
     return {
-      startDate,
-      endDate: sourceAppointment.endDate,
+      startDate: appointmentFirstCell.startDate,
+      endDate: appointmentFirstCell.startDate > sourceAppointment.endDate
+        ? appointmentFirstCell.startDate
+        : sourceAppointment.endDate,
     };
   }
 
@@ -66,17 +55,14 @@ const getDateRangeHorizontal = (options) => {
     allDay,
   );
 
-  let endDate = !options.considerTime
+  const endDate = !options.considerTime
     ? appointmentLastCell.endDate
     : appointmentLastCell.startDate;
-  endDate = normalizeEndDate(
-    options,
-    endDate,
-    sourceAppointment.endDate,
-  );
 
   return {
-    startDate: sourceAppointment.startDate,
+    startDate: endDate < sourceAppointment.startDate
+      ? endDate
+      : sourceAppointment.startDate,
     endDate,
   };
 };
@@ -93,10 +79,8 @@ const getDateRangeHorizontalRTL = (options) => {
 
   const appointmentLastCell = getAppointmentLeftCell(options);
 
-  const {
-    allDay,
-    sourceAppointment,
-  } = appointmentSettings.info;
+  const { sourceAppointment } = appointmentSettings.info;
+  const { allDay } = appointmentSettings.info.appointment;
 
   if (handles.right) {
     const appointmentLastCellIndex = appointmentLastCell.index;
@@ -110,29 +94,22 @@ const getDateRangeHorizontalRTL = (options) => {
       true,
     );
 
-    const startDate = normalizeStartDate(
-      options,
-      appointmentFirstCell.startDate,
-      sourceAppointment.endDate,
-    );
-
     return {
-      startDate,
-      endDate: sourceAppointment.endDate,
+      startDate: appointmentFirstCell.startDate,
+      endDate: appointmentFirstCell.startDate > sourceAppointment.endDate
+        ? appointmentFirstCell.startDate
+        : sourceAppointment.endDate,
     };
   }
 
-  let endDate = !options.considerTime
+  const endDate = !options.considerTime
     ? appointmentLastCell.endDate
     : appointmentLastCell.startDate;
-  endDate = normalizeEndDate(
-    options,
-    endDate,
-    sourceAppointment.endDate,
-  );
 
   return {
-    startDate: sourceAppointment.startDate,
+    startDate: endDate < sourceAppointment.startDate
+      ? endDate
+      : sourceAppointment.startDate,
     endDate,
   };
 };

@@ -62,7 +62,7 @@
         {
             "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
             "matchStrings": [
-                "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)+)['\"]?(\\s|$)"
+                "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)*)['\"]?(\\s|$)"
             ],
             "depNameTemplate": "node",
             "versioningTemplate": "node",

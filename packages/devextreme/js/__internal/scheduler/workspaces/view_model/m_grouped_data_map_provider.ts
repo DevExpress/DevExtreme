@@ -1,5 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 export class GroupedDataMapProvider {
   groupedDataMap: any;
@@ -14,14 +15,10 @@ export class GroupedDataMapProvider {
     this._viewOptions = viewOptions;
   }
 
-  getGroupStartDate(groupIndex) {
+  getGroupStartDate(groupIndex: number): Date | null {
     const firstRow = this.getFirstGroupRow(groupIndex);
 
-    if (firstRow) {
-      const { startDate } = firstRow[0].cellData;
-
-      return startDate;
-    }
+    return firstRow?.[0]?.cellData?.startDate as Date ?? null;
   }
 
   getGroupEndDate(groupIndex) {
@@ -86,54 +83,44 @@ export class GroupedDataMapProvider {
       : startDateVerticalSearch;
   }
 
-  findAllDayGroupCellStartDate(groupIndex, startDate) {
-    const groupStartDate = this.getGroupStartDate(groupIndex);
-
-    return groupStartDate > startDate
-      ? groupStartDate
-      : startDate;
+  findAllDayGroupCellStartDate(groupIndex: number): Date | null {
+    const groupedData = this.getGroupFromDateTableGroupMap(groupIndex);
+    const cellData = groupedData?.[0]?.[0]?.cellData;
+    return cellData?.startDate as Date ?? null;
   }
 
-  findCellPositionInMap(cellInfo) {
+  findCellPositionInMap(cellInfo: any, isAppointmentRender: boolean): any {
     const {
       groupIndex, startDate, isAllDay, index,
     } = cellInfo;
-
-    const startTime = isAllDay
-      ? dateUtils.trimTime(startDate).getTime()
-      : startDate.getTime();
-
-    const isStartDateInCell = (cellData) => {
-      if (!isDateAndTimeView(this._viewOptions.viewType)) {
-        return dateUtils.sameDate(startDate, cellData.startDate);
-      }
-
-      const cellStartTime = cellData.startDate.getTime();
-      const cellEndTime = cellData.endDate.getTime();
-
-      return isAllDay
-        ? cellData.allDay && startTime >= cellStartTime && startTime <= cellEndTime
-        : startTime >= cellStartTime && startTime < cellEndTime;
-    };
-
     const {
       allDayPanelGroupedMap,
       dateTableGroupedMap,
     } = this.groupedDataMap;
+    const { viewOffset } = this._viewOptions;
 
     const rows = isAllDay && !this._viewOptions.isVerticalGrouping
       ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : []
       : dateTableGroupedMap[groupIndex] || [];
 
-    for (let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
       const row = rows[rowIndex];
 
-      for (let columnIndex = 0; columnIndex < row.length; ++columnIndex) {
+      for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
         const cell = row[columnIndex];
-        const { cellData } = cell;
+        // NOTE: If this is appointment's render call
+        // we should shift the real cellData dates by viewOffset
+        // to find correct cell indexes.
+        const cellData = isAppointmentRender
+          ? {
+            ...cell.cellData,
+            startDate: dateUtilsTs.addOffsets(cell.cellData.startDate, [-viewOffset]),
+            endDate: dateUtilsTs.addOffsets(cell.cellData.endDate, [-viewOffset]),
+          }
+          : cell.cellData;
 
         if (this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
-          if (isStartDateInCell(cellData)) {
+          if (this.isStartDateInCell(startDate, isAllDay, cellData)) {
             return cell.position;
           }
         }
@@ -141,6 +128,28 @@ export class GroupedDataMapProvider {
     }
 
     return undefined;
+  }
+
+  private isStartDateInCell(
+    startDate: Date,
+    inAllDayRow: boolean,
+    {
+      startDate: cellStartDate,
+      endDate: cellEndDate,
+      allDay: cellAllDay,
+    }: any,
+  ): boolean {
+    const { viewType } = this._viewOptions;
+
+    switch (true) {
+      case !isDateAndTimeView(viewType):
+      case inAllDayRow && cellAllDay:
+        return dateUtils.sameDate(startDate, cellStartDate);
+      case !inAllDayRow:
+        return startDate >= cellStartDate && startDate < cellEndDate;
+      default:
+        return false;
+    }
   }
 
   _isSameGroupIndexAndIndex(cellData, groupIndex, index) {

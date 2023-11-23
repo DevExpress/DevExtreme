@@ -91,7 +91,7 @@ const DxGantt = createComponent({
     disabled: Boolean,
     editing: Object,
     elementAttr: Object,
-    endDateRange: {},
+    endDateRange: Date,
     filterRow: Object,
     firstDayOfWeek: {
       type: Number,
@@ -151,7 +151,7 @@ const DxGantt = createComponent({
     showResources: Boolean,
     showRowLines: Boolean,
     sorting: Object,
-    startDateRange: {},
+    startDateRange: Date,
     stripLines: Array,
     tabIndex: Number,
     taskContentTemplate: {},
@@ -794,8 +794,8 @@ const DxStripLine = createConfigurationComponent({
   },
   props: {
     cssClass: String,
-    end: {},
-    start: {},
+    end: [Date, Function, Number, String],
+    start: [Date, Function, Number, String],
     title: String
   }
 });

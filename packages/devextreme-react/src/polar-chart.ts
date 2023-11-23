@@ -241,7 +241,7 @@ class Animation extends NestedOption<IAnimationProps> {
 type IAnnotationProps = React.PropsWithChildren<{
   allowDragging?: boolean;
   angle?: number;
-  argument?: any | number | string;
+  argument?: Date | number | string;
   arrowLength?: number;
   arrowWidth?: number;
   border?: Record<string, any> | {
@@ -284,7 +284,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
-  value?: any | number | string;
+  value?: Date | number | string;
   width?: number;
   wordWrap?: "normal" | "breakWord" | "none";
   x?: number;
@@ -340,7 +340,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   allowDecimals?: boolean;
   argumentType?: "datetime" | "numeric" | "string";
   axisDivisionFactor?: number;
-  categories?: Array<any | number | string>;
+  categories?: Array<Date | number | string>;
   color?: string;
   constantLines?: Array<Record<string, any>> | {
     color?: string;
@@ -352,7 +352,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
       text?: string;
       visible?: boolean;
     };
-    value?: any | number | string;
+    value?: Date | number | string;
     width?: number;
   }[];
   constantLineStyle?: Record<string, any> | {
@@ -376,8 +376,8 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   hoverMode?: "allArgumentPoints" | "none";
   inverted?: boolean;
   label?: Record<string, any> | {
-    customizeHint?: ((argument: { value: any | number | string, valueText: string }) => string);
-    customizeText?: ((argument: { value: any | number | string, valueText: string }) => string);
+    customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
+    customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
     format?: LocalizationTypes.Format;
     indentFromAxis?: number;
@@ -418,12 +418,12 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   startAngle?: number;
   strips?: Array<Record<string, any>> | {
     color?: string;
-    endValue?: any | number | string;
+    endValue?: Date | number | string;
     label?: Record<string, any> | {
       font?: ChartsFont;
       text?: string;
     };
-    startValue?: any | number | string;
+    startValue?: Date | number | string;
   }[];
   stripStyle?: Record<string, any> | {
     label?: Record<string, any> | {
@@ -506,8 +506,8 @@ class ArgumentAxisTick extends NestedOption<IArgumentAxisTickProps> {
 // Tooltip
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -520,8 +520,8 @@ class ArgumentFormat extends NestedOption<IArgumentFormatProps> {
 // ArgumentAxis
 // ValueAxis
 type IAxisLabelProps = React.PropsWithChildren<{
-  customizeHint?: ((argument: { value: any | number | string, valueText: string }) => string);
-  customizeText?: ((argument: { value: any | number | string, valueText: string }) => string);
+  customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
+  customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
   format?: LocalizationTypes.Format;
   indentFromAxis?: number;
@@ -575,7 +575,7 @@ class Color extends NestedOption<IColorProps> {
 type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   allowDragging?: boolean;
   angle?: number;
-  argument?: any | number | string;
+  argument?: Date | number | string;
   arrowLength?: number;
   arrowWidth?: number;
   border?: Record<string, any> | {
@@ -617,7 +617,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: "text" | "image" | "custom";
-  value?: any | number | string;
+  value?: Date | number | string;
   width?: number;
   wordWrap?: "normal" | "breakWord" | "none";
   x?: number;
@@ -1031,7 +1031,7 @@ type IConstantLineProps = React.PropsWithChildren<{
     text?: string;
     visible?: boolean;
   };
-  value?: any | number | string;
+  value?: Date | number | string;
   width?: number;
 }>
 class ConstantLine extends NestedOption<IConstantLineProps> {
@@ -1085,7 +1085,7 @@ class ConstantLineStyleLabel extends NestedOption<IConstantLineStyleLabelProps> 
 type IDataPrepareSettingsProps = React.PropsWithChildren<{
   checkTypeForAllData?: boolean;
   convertToAxisDataType?: boolean;
-  sortingMethod?: boolean | ((a: { arg: any | number | string, val: any | number | string }, b: { arg: any | number | string, val: any | number | string }) => number);
+  sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number);
 }>
 class DataPrepareSettings extends NestedOption<IDataPrepareSettingsProps> {
   public static OptionName = "dataPrepareSettings";
@@ -1137,8 +1137,8 @@ class Font extends NestedOption<IFontProps> {
 // Label
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1225,8 +1225,8 @@ type ILabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
   text?: string;
   visible?: boolean;
-  customizeHint?: ((argument: { value: any | number | string, valueText: string }) => string);
-  customizeText?: ((argument: { value: any | number | string, valueText: string }) => string);
+  customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
+  customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
   format?: LocalizationTypes.Format;
   indentFromAxis?: number;
   overlappingBehavior?: "hide" | "none";
@@ -1865,12 +1865,12 @@ class Size extends NestedOption<ISizeProps> {
 // ValueAxis
 type IStripProps = React.PropsWithChildren<{
   color?: string;
-  endValue?: any | number | string;
+  endValue?: Date | number | string;
   label?: Record<string, any> | {
     font?: ChartsFont;
     text?: string;
   };
-  startValue?: any | number | string;
+  startValue?: Date | number | string;
 }>
 class Strip extends NestedOption<IStripProps> {
   public static OptionName = "strips";
@@ -2062,7 +2062,7 @@ class TooltipBorder extends NestedOption<ITooltipBorderProps> {
 type IValueAxisProps = React.PropsWithChildren<{
   allowDecimals?: boolean;
   axisDivisionFactor?: number;
-  categories?: Array<any | number | string>;
+  categories?: Array<Date | number | string>;
   color?: string;
   constantLines?: Array<Record<string, any>> | {
     color?: string;
@@ -2074,7 +2074,7 @@ type IValueAxisProps = React.PropsWithChildren<{
       text?: string;
       visible?: boolean;
     };
-    value?: any | number | string;
+    value?: Date | number | string;
     width?: number;
   }[];
   constantLineStyle?: Record<string, any> | {
@@ -2096,8 +2096,8 @@ type IValueAxisProps = React.PropsWithChildren<{
   };
   inverted?: boolean;
   label?: Record<string, any> | {
-    customizeHint?: ((axisValue: { value: any | number | string, valueText: string }) => string);
-    customizeText?: ((axisValue: { value: any | number | string, valueText: string }) => string);
+    customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string);
+    customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
     format?: LocalizationTypes.Format;
     indentFromAxis?: number;
@@ -2148,12 +2148,12 @@ type IValueAxisProps = React.PropsWithChildren<{
   showZero?: boolean;
   strips?: Array<Record<string, any>> | {
     color?: string;
-    endValue?: any | number | string;
+    endValue?: Date | number | string;
     label?: Record<string, any> | {
       font?: ChartsFont;
       text?: string;
     };
-    startValue?: any | number | string;
+    startValue?: Date | number | string;
   }[];
   stripStyle?: Record<string, any> | {
     label?: Record<string, any> | {
@@ -2182,12 +2182,12 @@ type IValueAxisProps = React.PropsWithChildren<{
   valueMarginsEnabled?: boolean;
   valueType?: "datetime" | "numeric" | "string";
   visible?: boolean;
-  visualRange?: Array<any | number | string> | CommonChartTypes.VisualRange;
+  visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
   visualRangeUpdateMode?: "auto" | "keep" | "reset";
-  wholeRange?: Array<any | number | string> | CommonChartTypes.VisualRange;
+  wholeRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
   width?: number;
-  defaultVisualRange?: Array<any | number | string> | CommonChartTypes.VisualRange;
-  onVisualRangeChange?: (value: Array<any | number | string> | CommonChartTypes.VisualRange) => void;
+  defaultVisualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
+  onVisualRangeChange?: (value: Array<Date | number | string> | CommonChartTypes.VisualRange) => void;
 }>
 class ValueAxis extends NestedOption<IValueAxisProps> {
   public static OptionName = "valueAxis";
@@ -2229,7 +2229,7 @@ class ValueErrorBar extends NestedOption<IValueErrorBarProps> {
 // owners:
 // ValueAxis
 type IVisualRangeProps = React.PropsWithChildren<{
-  endValue?: any | number | string;
+  endValue?: Date | number | string;
   length?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
     days?: number;
     hours?: number;
@@ -2241,11 +2241,11 @@ type IVisualRangeProps = React.PropsWithChildren<{
     weeks?: number;
     years?: number;
   };
-  startValue?: any | number | string;
-  defaultEndValue?: any | number | string;
-  onEndValueChange?: (value: any | number | string) => void;
-  defaultStartValue?: any | number | string;
-  onStartValueChange?: (value: any | number | string) => void;
+  startValue?: Date | number | string;
+  defaultEndValue?: Date | number | string;
+  onEndValueChange?: (value: Date | number | string) => void;
+  defaultStartValue?: Date | number | string;
+  onStartValueChange?: (value: Date | number | string) => void;
 }>
 class VisualRange extends NestedOption<IVisualRangeProps> {
   public static OptionName = "visualRange";
@@ -2261,7 +2261,7 @@ class VisualRange extends NestedOption<IVisualRangeProps> {
 // owners:
 // ValueAxis
 type IWholeRangeProps = React.PropsWithChildren<{
-  endValue?: any | number | string;
+  endValue?: Date | number | string;
   length?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
     days?: number;
     hours?: number;
@@ -2273,11 +2273,11 @@ type IWholeRangeProps = React.PropsWithChildren<{
     weeks?: number;
     years?: number;
   };
-  startValue?: any | number | string;
-  defaultEndValue?: any | number | string;
-  onEndValueChange?: (value: any | number | string) => void;
-  defaultStartValue?: any | number | string;
-  onStartValueChange?: (value: any | number | string) => void;
+  startValue?: Date | number | string;
+  defaultEndValue?: Date | number | string;
+  onEndValueChange?: (value: Date | number | string) => void;
+  defaultStartValue?: Date | number | string;
+  onStartValueChange?: (value: Date | number | string) => void;
 }>
 class WholeRange extends NestedOption<IWholeRangeProps> {
   public static OptionName = "wholeRange";

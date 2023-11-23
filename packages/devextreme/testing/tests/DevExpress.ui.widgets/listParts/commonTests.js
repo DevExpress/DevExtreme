@@ -320,18 +320,6 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         themes.isMaterialBased = origIsMaterialBased;
     });
 
-    QUnit.test('no group header collapsed indicator element for the Generic theme', function(assert) {
-        const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['0'] }],
-            grouped: true,
-            collapsibleGroups: true
-        });
-
-        const $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + ' ' + toSelector(LIST_GROUP_HEADER_CLASS));
-
-        assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, 'group header should not have collapsed indicator element for the Generic theme');
-    });
-
     QUnit.test('group collapsing is animated', function(assert) {
         try {
             const animateSpy = sinon.spy(fx, 'animate');
@@ -1626,22 +1614,6 @@ QUnit.module('options changed', moduleSetup, () => {
         const keyboard = getListKeyboard($list);
         keyboard.keyDown('del');
         assert.deepEqual(list.option('items'), [1, 2, 3, 4], 'item is not deleted');
-    });
-
-    QUnit.test('allowItemDeleting option changed from false to true', function(assert) {
-        const $list = $('#list').dxList({
-            items: [1, 2, 3, 4],
-            allowItemDeleting: false,
-            focusStateEnabled: true
-        });
-        const list = $list.dxList('instance');
-
-        list.option('allowItemDeleting', true);
-        list.focus();
-        const keyboard = getListKeyboard($list);
-        keyboard.keyDown('del');
-
-        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
     });
 
     QUnit.test('allowItemDeleting option changed twice', function(assert) {
@@ -3977,6 +3949,24 @@ QUnit.module('keyboard navigation', {
         instance.option('onKeyboardHandled', () => true);
         $itemContainer.trigger($.Event('keydown', { key: 'Enter' }));
         assert.equal(handler.callCount, 1);
+    });
+
+    QUnit.test('allow delete item using keyboard after set allowItemDeleting option from false to true', function(assert) {
+        const $list = $('#list').dxList({
+            items: [1, 2, 3, 4],
+            allowItemDeleting: false,
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+
+        list.option('allowItemDeleting', true);
+        list.focus();
+
+        const $itemContainer = $list.find(`.${LIST_ITEMS_CLASS}`).eq(0).parent();
+
+        $itemContainer.trigger($.Event('keydown', { key: 'Delete' }));
+
+        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
     });
 });
 

@@ -39,6 +39,7 @@ type AccessibleOptions = Pick<Properties,
   "maxAppointmentsPerCell" |
   "min" |
   "noDataText" |
+  "offset" |
   "onAppointmentAdded" |
   "onAppointmentAdding" |
   "onAppointmentClick" |
@@ -97,7 +98,7 @@ const DxScheduler = createComponent({
     appointmentTooltipTemplate: {},
     cellDuration: Number,
     crossScrollingEnabled: Boolean,
-    currentDate: {},
+    currentDate: [Date, Number, String],
     currentView: String,
     customizeDateNavigatorText: Function,
     dataCellTemplate: {},
@@ -130,10 +131,11 @@ const DxScheduler = createComponent({
     height: [Function, Number, String],
     hint: String,
     indicatorUpdateInterval: Number,
-    max: {},
+    max: [Date, Number, String],
     maxAppointmentsPerCell: [Number, String],
-    min: {},
+    min: [Date, Number, String],
     noDataText: String,
+    offset: Number,
     onAppointmentAdded: Function,
     onAppointmentAdding: Function,
     onAppointmentClick: Function,
@@ -215,6 +217,7 @@ const DxScheduler = createComponent({
     "update:maxAppointmentsPerCell": null,
     "update:min": null,
     "update:noDataText": null,
+    "update:offset": null,
     "update:onAppointmentAdded": null,
     "update:onAppointmentAdding": null,
     "update:onAppointmentClick": null,
@@ -383,6 +386,7 @@ const DxView = createConfigurationComponent({
     "update:intervalCount": null,
     "update:maxAppointmentsPerCell": null,
     "update:name": null,
+    "update:offset": null,
     "update:resourceCellTemplate": null,
     "update:scrolling": null,
     "update:startDate": null,
@@ -419,9 +423,10 @@ const DxView = createConfigurationComponent({
     intervalCount: Number,
     maxAppointmentsPerCell: [Number, String],
     name: String,
+    offset: Number,
     resourceCellTemplate: {},
     scrolling: Object,
-    startDate: {},
+    startDate: [Date, Number, String],
     startDayHour: Number,
     timeCellTemplate: {},
     type: String

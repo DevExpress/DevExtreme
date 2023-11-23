@@ -620,10 +620,10 @@ QUnit.module('keyboard navigation', {
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
 
-        assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.equal(isRenderer(this.tabs.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.equal(multiViewFocusedIndex, 1, 'second multiView element has been focused');
-        assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
+        assert.strictEqual(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(this.tabs.option('focusedElement')), false, 'focusedElement is correct');
+        assert.strictEqual(multiViewFocusedIndex, 1, 'second multiView element has been focused');
+        assert.strictEqual(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
     });
 
     QUnit.test('click on available tab removed specific tab classes if previous item is disabled', function(assert) {
@@ -811,6 +811,21 @@ QUnit.module('Tabs Indicator position', () => {
 
         assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
         assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+
+        tabPanel.option({ tabsPosition: 'bottom' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+
+        tabPanel.option({ tabsPosition: 'right' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+
+        tabPanel.option({ tabsPosition: 'top' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
     });
 
     QUnit.test('The tabs element must have the correct indicator position class when _tabsIndicatorPosition was changed', function(assert) {

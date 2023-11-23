@@ -5,7 +5,6 @@
 
 // adduse
 
-$loadpanel-border-color: null !default;
 $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
 /**
@@ -13,12 +12,3 @@ $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) 
 * $type color
 */
 $loadpanel-content-bg: $overlay-content-bg !default;
-
-@if $mode == "light" {
-  $loadpanel-border-color: $overlay-border-color !default;
-}
-
-@if $mode == "dark" {
-  $loadpanel-border-color: rgba(0, 0, 0, 0.2) !default;
-}
-
