@@ -2,8 +2,8 @@ $(() => {
   const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
-    views: ['day', 'week'],
-    currentView: 'week',
+    views: ['day', 'workWeek'],
+    currentView: 'workWeek',
     currentDate: new Date(2021, 2, 30),
     startDayHour: 0,
     endDayHour: 8,

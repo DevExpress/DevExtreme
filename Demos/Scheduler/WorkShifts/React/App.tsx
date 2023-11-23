@@ -6,7 +6,7 @@ import RadioGroup from 'devextreme-react/radio-group';
 import { data, shifts } from './data.ts';
 
 const currentDate = new Date(2021, 2, 30);
-const views: SchedulerTypes.ViewType[] = ['day', 'week'];
+const views: SchedulerTypes.ViewType[] = ['day', 'workWeek'];
 
 const App = () => {
   const [currentShift, setCurrentShift] = React.useState(shifts[0]);
@@ -30,7 +30,7 @@ const App = () => {
       timeZone= 'America/Los_Angeles'
       dataSource={data}
       views={views}
-      defaultCurrentView='week'
+      defaultCurrentView='workWeek'
       currentDate={currentDate}
       startDayHour= {0}
       endDayHour= {8}

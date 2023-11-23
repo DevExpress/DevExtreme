@@ -18,7 +18,7 @@
     :data-source="appointments"
     :current-date="currentDate"
     :views="views"
-    current-view="week"
+    current-view="workWeek"
     :start-day-hour="0"
     :end-day-hour="8"
     :offset="currentOffset"
@@ -32,7 +32,7 @@ import DxScheduler from 'devextreme-vue/scheduler';
 import DxRadioGroup, { DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import { appointments, shifts } from './data.ts';
 
-const views = ['day', 'week'];
+const views = ['day', 'workWeek'];
 const currentDate = new Date(2021, 2, 30);
 const currentOffset = ref(shifts[0].offset);
 

@@ -4,7 +4,7 @@ import RadioGroup from 'devextreme-react/radio-group';
 import { data, shifts } from './data.js';
 
 const currentDate = new Date(2021, 2, 30);
-const views = ['day', 'week'];
+const views = ['day', 'workWeek'];
 const App = () => {
   const [currentShift, setCurrentShift] = React.useState(shifts[0]);
   return (
@@ -27,7 +27,7 @@ const App = () => {
         timeZone="America/Los_Angeles"
         dataSource={data}
         views={views}
-        defaultCurrentView="week"
+        defaultCurrentView="workWeek"
         currentDate={currentDate}
         startDayHour={0}
         endDayHour={8}
