@@ -21,8 +21,7 @@ import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 import { isReachedLeft, isReachedRight, isReachedTop, isReachedBottom } from '../renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
-// eslint-disable-next-line no-unused-vars
-import { getWindow, hasWindow } from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 
 // STYLE tabs
 
@@ -313,16 +312,6 @@ const Tabs = CollectionWidget.inherit({
 
     _isVertical() {
         return this.option('orientation') === ORIENTATION.vertical;
-    },
-
-    _isServerSide() {
-        // const window = getWindow();
-
-        // return window.isWindowMock || !window;
-
-        const isServerSide = !hasWindow();
-
-        return isServerSide;
     },
 
     _isItemsSizeExceeded() {
@@ -735,21 +724,22 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleOrientationClass(args.value);
                 const indicatorPosition = this._getIndicatorPosition();
                 this._toggleIndicatorPositionClass(indicatorPosition);
-                if(!this._isServerSide()) {
+
+                if(hasWindow()) {
                     this._updateScrollable();
                 }
                 break;
             }
             case 'iconPosition': {
                 this._toggleIconPositionClass();
-                if(!this._isServerSide()) {
+                if(hasWindow()) {
                     this._dimensionChanged();
                 }
                 break;
             }
             case 'stylingMode': {
                 this._toggleStylingModeClass(args.value);
-                if(!this._isServerSide()) {
+                if(hasWindow()) {
                     this._dimensionChanged();
                 }
                 break;
