@@ -320,9 +320,9 @@ const Tabs = CollectionWidget.inherit({
 
         // return window.isWindowMock || !window;
 
-        const hasWindowResult = hasWindow();
+        const isServerSide = !hasWindow();
 
-        return hasWindowResult;
+        return isServerSide;
     },
 
     _isItemsSizeExceeded() {
