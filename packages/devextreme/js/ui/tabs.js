@@ -724,7 +724,6 @@ const Tabs = CollectionWidget.inherit({
                 this._toggleOrientationClass(args.value);
                 const indicatorPosition = this._getIndicatorPosition();
                 this._toggleIndicatorPositionClass(indicatorPosition);
-
                 if(hasWindow()) {
                     this._updateScrollable();
                 }
