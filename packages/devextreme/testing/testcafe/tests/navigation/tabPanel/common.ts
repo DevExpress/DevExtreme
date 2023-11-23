@@ -8,6 +8,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { Item } from '../../../../../js/ui/tab_panel.d';
+import { setAttribute } from '../../../helpers/domUtils';
 
 // const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 // const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
@@ -77,6 +78,37 @@ test('TabPanel borders with scrolling', async (t) => {
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
+});
+
+test('TabPanel text-overflow with tabsPosition left', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel text-overflow when tabsPosition is left.png', { element: '#container' });
+
+  await setAttribute('.dx-tabs-wrapper', 'style', 'max-width: 130px;');
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel text-overflow when tabs wrapper width is limited.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    { icon: 'user', text: 'John Heart', title: 'John Heart' },
+    { icon: 'user', text: 'Marina Elizabeth Thomas Grace Sophia', title: 'Mariya Elizabeth Thomas Grace Sophia' },
+    { icon: 'user', text: 'Robert Reagan', title: 'Robert Reagan' },
+    { icon: 'user', text: 'Greta Sims', title: 'Greta Sims' },
+  ] as Item[];
+
+  const options = {
+    dataSource,
+    width: 600,
+    height: 250,
+    tabsPosition: 'left',
+    showNavButtons: true,
+  };
+
+  return createWidget('dxTabPanel', options);
 });
 
 test('TabPanel focus borders after change selectedIndex in runtime', async (t) => {

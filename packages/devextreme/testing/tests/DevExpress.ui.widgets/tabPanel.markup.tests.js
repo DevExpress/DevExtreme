@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
+import themes from 'ui/themes';
 
 QUnit.testStart(() => {
     const markup =
@@ -25,7 +26,8 @@ const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const TABS_ITEM_CLASS = 'dx-tab';
 const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -39,18 +41,27 @@ QUnit.module('TabPanel markup', () => {
         assert.ok($tabPanel.hasClass(TABPANEL_CLASS), 'widget class added');
     });
 
-    QUnit.test(`TabPanel tab item should have a correct ${TABS_DATA_DX_TEXT_ATTRIBUTE} attribute`, function(assert) {
-        const $tabPanel = $('<div>').appendTo('#qunit-fixture');
+    [[{ title: '1' }], [1]].forEach(items => {
+        QUnit.test(`TabPanel tab item should have a correct span element when items is ${items}`, function(assert) {
+            const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({ items });
+            const $tabsTextSpan = $tabPanel.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
 
-        const tabPanel = $tabPanel.dxTabPanel({
-            items: [{ title: '1' }],
-        }).dxTabPanel('instance');
+            assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
+        });
 
-        assert.strictEqual($tabPanel.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item title`);
+        QUnit.test(`TabPanel tab item should have a correct span element in Fluent when items is ${items}`, function(assert) {
+            const origIsFluent = themes.isFluent;
+            themes.isFluent = function() { return true; };
 
-        tabPanel.option({ items: [1] });
+            try {
+                const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({ items });
+                const $tabsTextSpanPseudo = $tabPanel.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
 
-        assert.strictEqual($tabPanel.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), undefined, `${TABS_DATA_DX_TEXT_ATTRIBUTE} is undefined`);
+                assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
+            } finally {
+                themes.isFluent = origIsFluent;
+            }
+        });
     });
 
     QUnit.test('rendering tabs widget test', function(assert) {
