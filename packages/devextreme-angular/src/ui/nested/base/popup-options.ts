@@ -10,7 +10,7 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { Position, PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { ToolbarLocation } from 'devextreme/ui/popup';
+import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent, ShowingEvent, ShownEvent, TitleRenderedEvent, ToolbarLocation } from 'devextreme/ui/popup';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 @Component({
