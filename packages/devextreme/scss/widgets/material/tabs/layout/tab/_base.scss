@@ -63,6 +63,10 @@
 
     @include dx-icon-sizing($material-tabs-icon-size);
   }
+
+  .dx-tabs-item-badge {
+    align-self: center;
+  }
 }
 
 .dx-tabs.dx-state-focused {
