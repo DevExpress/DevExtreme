@@ -32,25 +32,25 @@ $button-normal-bg: $base-element-bg !default;
 * $name 30. Hovered state background color
 * $type color
 */
-$button-normal-hover-bg: $base-bg-hover !default;
+$button-normal-hover-bg: $base-hover-bg !default;
 
 /**
 * $name 40. Focused state background color
 * $type color
 */
-$button-normal-focused-bg: $base-bg-hover !default;
+$button-normal-focused-bg: $base-hover-bg !default;
 
 /**
 * $name 50. Active state background color
 * $type color
 */
-$button-normal-active-bg: $base-bg-active !default;
+$button-normal-active-bg: $base-active-bg !default;
 
 /**
 * $name 20. Selected item background color
 * $type color
 */
-$button-normal-selected-bg: $base-bg-selected !default;
+$button-normal-selected-bg: $base-selected-bg !default;
 $button-normal-bg-inverted: null !default;
 
 /**

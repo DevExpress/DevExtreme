@@ -11,7 +11,7 @@ $badge-invalid-bg: $base-invalid-color;
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(
-      $typography-color,
+      $base-text-color,
       $fluent-base-font-size,
       $base-font-family,
       $fluent-line-height
