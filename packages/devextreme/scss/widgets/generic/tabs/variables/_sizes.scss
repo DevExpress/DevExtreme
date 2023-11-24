@@ -18,7 +18,7 @@ $generic-badge-min-size: null !default;
 
 @if $size == "default" {
   $generic-tabs-item-gap: 4px !default;
-  $generic-tabs-item-padding: 10px 7px !default;
+  $generic-tabs-item-padding: 8px 9px !default;
   $generic-tabs-item-padding-disabled-focused: 10px !default;
   $generic-tabs-nav-button-width: 25px !default;
   $generic-tab-text-line-height: 1.285715 !default;
@@ -29,7 +29,7 @@ $generic-badge-min-size: null !default;
 
 @else if $size == "compact" {
   $generic-tabs-item-gap: 2px !default;
-  $generic-tabs-item-padding: 5px 2px !default;
+  $generic-tabs-item-padding: 4px 4px !default;
   $generic-tabs-item-padding-disabled-focused: 5px !default;
   $generic-tabs-nav-button-width: 25px !default;
   $generic-tab-text-line-height: 1.75 !default;
