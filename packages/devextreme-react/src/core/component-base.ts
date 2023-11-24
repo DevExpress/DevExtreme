@@ -12,7 +12,14 @@ import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
-import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument, UpdateLocker } from './types';
+
+import {
+  DXRemoveCustomArgs,
+  DXTemplateCreator,
+  InitArgument,
+  UpdateLocker
+} from './types';
+
 import { RemovalLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';
@@ -245,7 +252,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   private _setTemplateManagerHooks({
     getDXTemplates,
     clearInstantiationModels,
-    updateTemplates
+    updateTemplates,
   }: InitArgument) {
     this._getDXTemplates = getDXTemplates;
     this._clearInstantiationModels = clearInstantiationModels;

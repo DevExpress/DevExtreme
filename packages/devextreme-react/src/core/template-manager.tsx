@@ -124,12 +124,12 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
     function getDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
-        .reduce((res, [key, template]) => (
+        .reduce<Record<string, TemplateFunc>>((res, [key, template]) => (
           {
             ...res,
             [key]: getTemplateFunction(template),
           }
-        ), {} as Record<string, TemplateFunc>);
+        ), {});
 
       templateFactories.current = factories;
 

@@ -41,14 +41,14 @@ export type TemplateFunc = (arg: TemplateArgs) => JSX.Element | ReactNode;
 export type UpdateTemplateFunc = (callback: () => void) => void;
 
 export interface InitArgument {
-  getDXTemplates: DXTemplateCreator,
-  clearInstantiationModels: () => void,
-  updateTemplates: UpdateTemplateFunc
- };
+  getDXTemplates: DXTemplateCreator;
+  clearInstantiationModels: () => void;
+  updateTemplates: UpdateTemplateFunc;
+}
 
-export interface TemplateManagerCallbackInfo { 
-  callback: () => void
-};
+export interface TemplateManagerCallbackInfo {
+  callback: () => void;
+}
 
 export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
 
