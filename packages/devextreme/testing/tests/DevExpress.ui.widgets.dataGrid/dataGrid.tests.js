@@ -856,7 +856,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('Raise error if key field is missed', function(assert) {
         // act
-        const errorUrl = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/E1046';
+        const errorUrl = 'https://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/E1046';
         const dataGrid = createDataGrid({
             columns: ['field1'],
             keyExpr: 'ID',
@@ -875,7 +875,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('Raise error if key field is missed and one of columns is named \'key\'', function(assert) {
         // act
-        const errorUrl = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/E1046';
+        const errorUrl = 'https://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/E1046';
         const dataGrid = createDataGrid({
             columns: ['key'],
             keyExpr: 'ID',
