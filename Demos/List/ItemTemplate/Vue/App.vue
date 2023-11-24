@@ -18,11 +18,11 @@ import { products } from './data.js';
 const dataSource = products;
 </script>
 <style>
+#app {
+  height: 450px;
+}
+
 .list-container {
-  min-height: 440px;
-  height: auto;
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  height: 100%;
 }
 </style>

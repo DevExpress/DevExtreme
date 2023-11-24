@@ -1,9 +1,9 @@
+::ng-deep .demo-container {
+  height: 450px;
+}
+
 ::ng-deep .list-container {
-  min-height: 440px;
-  height: auto;
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  height: 100%;
 }
 
 ::ng-deep .product {
