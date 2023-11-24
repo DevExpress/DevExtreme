@@ -152,7 +152,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       setComponentCallbackInfo({ callback });
     }
 
-    init(getDXTemplates, clearInstantiationModels, updateTemplates);
+    init({ getDXTemplates, clearInstantiationModels, updateTemplates });
   }, [init, getRenderFunc]);
 
   useEffect(() => {

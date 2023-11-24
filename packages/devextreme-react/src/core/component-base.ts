@@ -12,7 +12,7 @@ import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
-import { DXRemoveCustomArgs, DXTemplateCreator, InitFunc, UpdateLocker } from './types';
+import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument, UpdateLocker } from './types';
 import { RemovalLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';
@@ -59,7 +59,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected readonly independentEvents: string[];
 
-  private _createDXTemplates: DXTemplateCreator | undefined;
+  private _getDXTemplates: DXTemplateCreator | undefined;
 
   private _clearInstantiationModels: (() => void) | undefined;
 
@@ -104,7 +104,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     const config = this._getConfig();
     const templateOptions = this._optionsManager.getTemplateOptions(config);
-    const dxTemplates = this._createDXTemplates?.(templateOptions) || {};
+    const dxTemplates = this._getDXTemplates?.(templateOptions) || {};
 
     this._optionsManager.update(config, dxTemplates);
     this._scheduleTemplatesUpdate();
@@ -136,7 +136,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     };
 
     const templateOptions = this._optionsManager.getTemplateOptions(config);
-    const dxTemplates = this._createDXTemplates?.(templateOptions);
+    const dxTemplates = this._getDXTemplates?.(templateOptions);
 
     if (dxTemplates && Object.keys(dxTemplates).length) {
       options = {
@@ -242,8 +242,12 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this.context?.unlock();
   }
 
-  private _setTemplateManagerHooks: InitFunc = (createDXTemplates, clearInstantiationModels, updateTemplates) => {
-    this._createDXTemplates = createDXTemplates;
+  private _setTemplateManagerHooks({
+    getDXTemplates,
+    clearInstantiationModels,
+    updateTemplates
+  }: InitArgument) {
+    this._getDXTemplates = getDXTemplates;
     this._clearInstantiationModels = clearInstantiationModels;
     this._updateTemplates = updateTemplates;
   }
