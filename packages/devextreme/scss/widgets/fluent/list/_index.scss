@@ -435,6 +435,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     &.dx-list-static-delete-button-container {
       width: $item-horizontal-padding + $fluent-button-icon-size;
+      padding: 0;
     }
 
     .dx-list-reorder-handle {
@@ -473,6 +474,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-static-delete-button {
+    padding: 0;
+
     &.dx-button {
       box-shadow: none;
       background-color: transparent;
