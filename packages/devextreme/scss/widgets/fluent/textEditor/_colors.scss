@@ -8,15 +8,13 @@
 * $name 10. Text color
 * $type color
 */
-$texteditor-color: $base-text-color !default;
+$texteditor-color: null !default;
 
 /**
 * $name 20. Placeholder text color
 * $type color
 */
-$texteditor-placeholder-color: $base-label-color !default;
-$texteditor-label-color: $texteditor-placeholder-color;
-$texteditor-label-color-focused: $base-accent;
+$texteditor-placeholder-color: null !default;
 
 /**
 * $name 30. Outlined background color
@@ -94,20 +92,44 @@ $texteditor-label-transition:
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
-  $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
-  $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default; // #c7c7c7
-  $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default; // #b3b3b3
-  $texteditor-border-bottom-color-hover: darken($texteditor-border-bottom-color, 3.92) !default; // #575757
-  $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default; // #4d4d4d
+  @if $color == "blue" {
+    $texteditor-color: $base-text-color !default;
+    $texteditor-placeholder-color: $base-label-color !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
+  }
+  
+  @if $color == "saas" {
+    $texteditor-color: rgba(66, 81, 118, 1) !default;
+    $texteditor-placeholder-color: rgba(144, 158, 192, 1) !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: rgba(243, 245, 248, 1) !default;
+  }
+
+  $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default;
+  $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default;
+  $texteditor-border-bottom-color-hover: darken($texteditor-border-bottom-color, 3.92) !default;
+  $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default;
 }
 
 
 @if $mode == "dark" {
-  $texteditor-filled-bg: darken($base-element-bg, 8.2) !default;
-  $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default; // #757575
-  $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default; // #6b6b6b
-  $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default; // #bdbdbd
-  $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default; // #b3b3b3
+  @if $color == "blue" {
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: darken($base-element-bg, 8.2) !default;
+  }
+
+  @if $color == "saas" {
+    $texteditor-outlined-bg: rgba(20, 30, 40, 1) !default;
+    $texteditor-filled-bg: rgba(50, 60, 75, 1) !default;
+  }
+
+  $texteditor-color: $base-text-color !default;
+  $texteditor-placeholder-color: $base-label-color !default;
+  $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default;
+  $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default;
+  $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default;
+  $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default;
 }
 
 /**
@@ -121,4 +143,8 @@ $texteditor-filled-bg-hover: $texteditor-filled-bg !default;
 * $type color
 */
 $texteditor-filled-bg-focused: $texteditor-filled-bg !default;
+
+$texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color-focused: $base-accent;
+
   
