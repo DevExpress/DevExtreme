@@ -17,7 +17,7 @@ import {
   DXRemoveCustomArgs,
   DXTemplateCreator,
   InitArgument,
-  UpdateLocker
+  UpdateLocker,
 } from './types';
 
 import { RemovalLockerContext } from './helpers';
