@@ -291,11 +291,14 @@ describe('Template Manager', () => {
     expect(renderTemplateRendered).toBeTruthy();
   });
 
-  it('rerenders for new templateOptions', () => {
+  it('update callback re-renderers template manager', () => {
     let createDXTemplates;
+    let updateTemplates;
 
-    const init = (createDXTemplatesFn) => {
+
+    const init = (createDXTemplatesFn, _, updateTemplatesFn) => {
       createDXTemplates = createDXTemplatesFn;
+      updateTemplates = updateTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'render' }]);
@@ -331,10 +334,16 @@ describe('Template Manager', () => {
       },
     };
 
-    act(() => { dxTemplates = createDXTemplates(newTemplateOptions); });
+    let callbackCalled = false;
+
+    act(() => {
+      dxTemplates = createDXTemplates(newTemplateOptions);
+      updateTemplates(() => { callbackCalled = true; });
+    });
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
       .toBe('<div class="new-render-template">Render template text</div><div style="display: none;"></div>');
+    expect(callbackCalled).toBeTruthy();
   });
 
   it('replaces templates with matching keys, adds templates with new keys', () => {

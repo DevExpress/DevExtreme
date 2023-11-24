@@ -38,10 +38,22 @@ export interface TemplateWrapperProps {
 
 export type TemplateFunc = (arg: TemplateArgs) => JSX.Element | ReactNode;
 
-export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>, callback?: () => void) => DXTemplateCollection;
+export type UpdateTemplateFunc = (callback: () => void) => void;
+
+export type InitFunc = (
+  getDXTemplates: DXTemplateCreator,
+  clearInstantiationModels: () => void,
+  updateTemplates: UpdateTemplateFunc
+) => void;
+
+export interface TemplateManagerCallbackInfo { 
+  callback: () => void
+};
+
+export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
 
 export interface TemplateManagerProps {
-  init: (getDXTemplates: DXTemplateCreator, clearInstantiationModels: () => void) => void;
+  init: InitFunc
 }
 
 export interface TemplateInstantiationModel {
