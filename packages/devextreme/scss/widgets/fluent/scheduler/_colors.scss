@@ -35,7 +35,7 @@ $scheduler-appointment-focus-color: null !default;
 $scheduler-appointment-base-color: null !default;
 
 /**
-* $name 50. Start appointment color
+* $name 50. Appointment start color
 * $type color
 */
 $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;

@@ -17,13 +17,13 @@ $pivotgrid-field-area-box-background-color: null !default;
 $pivotgrid-data-area-color: $base-text-color !default;
 
 /**
-* $name 20. Totals background color
+* $name 20. Total background color
 * $type color
 */
 $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 13.3%), $alpha: 0.2) !default;
 
 /**
-* $name 30. Grand totals background color
+* $name 30. Grand total background color
 * $type color
 */
 $pivotgrid-grandtotalcolor: $base-hover-bg !default;

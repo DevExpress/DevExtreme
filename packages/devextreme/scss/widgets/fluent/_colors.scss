@@ -25,19 +25,19 @@ $fluent-color-theme-modificator: null !default;
 $base-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
-* $name 30. Background color
+* $name 30. Page background color
 * $type color
 */
 $base-typography-bg: null !default;
 
 /**
-* $name 31. Foreground color
+* $name 31. Component background color
 * $type color
 */
 $base-bg: null !default;
 
 /**
-* $name 90. Hovered state background color
+* $name 90. Hover state background color
 * $type color
 */
 $base-hover-bg: null !default;
@@ -258,7 +258,7 @@ $scrollview-pulldown-path: null !default;
 
 
 /**
-* $name 80. Hovered state text color
+* $name 80. Hover state text color
 * $type color
 */
 $base-hover-color: $base-text-color !default;
