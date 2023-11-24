@@ -7,11 +7,14 @@ const themeList = [
     {
         group: 'Fluent',
         list: [
-            { theme: 'fluent.modern.light' },
             { theme: 'fluent.blue.light' },
             { theme: 'fluent.blue.light.compact' },
             { theme: 'fluent.blue.dark' },
             { theme: 'fluent.blue.dark.compact' },
+            { theme: 'fluent.saas.light' },
+            { theme: 'fluent.saas.light.compact' },
+            { theme: 'fluent.saas.dark' },
+            { theme: 'fluent.saas.dark.compact' },
         ]
     },
 
