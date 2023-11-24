@@ -15,7 +15,7 @@ const CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'];
 
 const dummyTranslator = {
     to(value) {
-        const coord = this._canvasOptions.startPoint + (this._options.conversionValue ? value : Math.round(value));
+        const coord = this._canvasOptions.startPoint + (value);
         return coord > this._canvasOptions.endPoint ? this._canvasOptions.endPoint : coord;
     },
     from(value) {
