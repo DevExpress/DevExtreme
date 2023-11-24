@@ -4,10 +4,6 @@
     ],
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
-    "baseBranches": [
-        "23_2",
-        "23_1"
-    ],
     "labels": [
         "dependencies"
     ],
