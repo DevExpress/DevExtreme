@@ -94,10 +94,11 @@
 
     width: 1em;
     height: 1em;
-    line-height: $fluent-line-height;
+    line-height: 1;
   }
 
   .dx-tabs-item-badge {
+    align-self: center;
     min-width: $fluent-badge-min-size;
     min-height: $fluent-badge-min-size;
   }

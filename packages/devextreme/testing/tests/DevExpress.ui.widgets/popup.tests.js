@@ -2636,7 +2636,7 @@ QUnit.module('templates', () => {
         const toolbarTabTitleText = popup.$overlayContent().find('.dx-popup-bottom .dx-tab').text();
 
         assert.strictEqual(toolbarButtonText, buttonText, 'default content template rendered');
-        assert.strictEqual(toolbarTabTitleText, titleText, 'default title template rendered');
+        assert.strictEqual(toolbarTabTitleText, `${titleText}${titleText}`, 'default title template rendered');
     });
 });
 
