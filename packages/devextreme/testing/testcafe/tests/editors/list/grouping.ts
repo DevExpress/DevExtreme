@@ -26,7 +26,7 @@ test('Grouped list appearance', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxList', {
   width: 300,
-  height: 500,
+  height: 800,
   dataSource: [{
     key: 'group_1',
     items: ['item_1_1', 'item_1_2', 'item_1_3'],
