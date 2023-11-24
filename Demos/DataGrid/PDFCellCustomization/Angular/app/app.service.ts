@@ -29,7 +29,7 @@ const companies: Company[] = [{
   Zipcode: 72716,
   Phone: '8005552797',
   Fax: '(800) 555-2171',
-  Website: 'http://nowebsitesupermart.com',
+  Website: 'http://nowebsitesupermart.dx',
 }, {
   ID: 2,
   Name: 'Electronics Depot',
@@ -39,7 +39,7 @@ const companies: Company[] = [{
   Zipcode: 30339,
   Phone: '8005953232',
   Fax: '(800) 595-3231',
-  Website: 'http://nowebsitedepot.com',
+  Website: 'http://nowebsitedepot.dx',
 }, {
   ID: 3,
   Name: 'K&S Music',
@@ -49,7 +49,7 @@ const companies: Company[] = [{
   Zipcode: 55403,
   Phone: '6123046073',
   Fax: '(612) 304-6074',
-  Website: 'http://nowebsitemusic.com',
+  Website: 'http://nowebsitemusic.dx',
 }, {
   ID: 4,
   Name: "Tom's Club",
@@ -59,7 +59,7 @@ const companies: Company[] = [{
   Zipcode: 98027,
   Phone: '8009552292',
   Fax: '(800) 955-2293',
-  Website: 'http://nowebsitetomsclub.com',
+  Website: 'http://nowebsitetomsclub.dx',
 }, {
   ID: 5,
   Name: 'E-Mart',
@@ -69,7 +69,7 @@ const companies: Company[] = [{
   Zipcode: 60179,
   Phone: '8472862500',
   Fax: '(847) 286-2501',
-  Website: 'http://nowebsiteemart.com',
+  Website: 'http://nowebsiteemart.dx',
 }, {
   ID: 6,
   Name: 'Walters',
@@ -79,7 +79,7 @@ const companies: Company[] = [{
   Zipcode: 60015,
   Phone: '8479402500',
   Fax: '(847) 940-2501',
-  Website: 'http://nowebsitewalters.com',
+  Website: 'http://nowebsitewalters.dx',
 }, {
   ID: 7,
   Name: 'StereoShack',
@@ -89,7 +89,7 @@ const companies: Company[] = [{
   Zipcode: 76102,
   Phone: '8178200741',
   Fax: '(817) 820-0742',
-  Website: 'http://nowebsiteshack.com',
+  Website: 'http://nowebsiteshack.dx',
 }, {
   ID: 8,
   Name: 'Circuit Town',
@@ -99,7 +99,7 @@ const companies: Company[] = [{
   Zipcode: 60523,
   Phone: '8009552929',
   Fax: '(800) 955-9392',
-  Website: 'http://nowebsitecircuittown.com',
+  Website: 'http://nowebsitecircuittown.dx',
 }, {
   ID: 9,
   Name: 'Premier Buy',
@@ -109,7 +109,7 @@ const companies: Company[] = [{
   Zipcode: 55423,
   Phone: '6122911000',
   Fax: '(612) 291-2001',
-  Website: 'http://nowebsitepremierbuy.com',
+  Website: 'http://nowebsitepremierbuy.dx',
 }, {
   ID: 10,
   Name: 'ElectrixMax',
@@ -119,7 +119,7 @@ const companies: Company[] = [{
   Zipcode: 60563,
   Phone: '6304387800',
   Fax: '(630) 438-7801',
-  Website: 'http://nowebsiteelectrixmax.com',
+  Website: 'http://nowebsiteelectrixmax.dx',
 }, {
   ID: 11,
   Name: 'Video Emporium',
@@ -129,7 +129,7 @@ const companies: Company[] = [{
   Zipcode: 75270,
   Phone: '2148543000',
   Fax: '(214) 854-3001',
-  Website: 'http://nowebsitevideoemporium.com',
+  Website: 'http://nowebsitevideoemporium.dx',
 }, {
   ID: 12,
   Name: 'Screen Shop',
@@ -139,7 +139,7 @@ const companies: Company[] = [{
   Zipcode: 28117,
   Phone: '8004456937',
   Fax: '(800) 445-6938',
-  Website: 'http://nowebsitescreenshop.com',
+  Website: 'http://nowebsitescreenshop.dx',
 }];
 
 @Injectable()

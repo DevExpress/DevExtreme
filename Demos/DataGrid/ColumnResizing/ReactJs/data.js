@@ -8,7 +8,6 @@ export const orders = [
     Zipcode: 72716,
     Phone: '(800) 555-2797',
     Fax: '(800) 555-2171',
-    Website: 'http://www.nowebsitesupermart.com',
   },
   {
     ID: 2,
@@ -19,7 +18,6 @@ export const orders = [
     Zipcode: 30339,
     Phone: '(800) 595-3232',
     Fax: '(800) 595-3231',
-    Website: 'http://www.nowebsitedepot.com',
   },
   {
     ID: 3,
@@ -30,7 +28,6 @@ export const orders = [
     Zipcode: 55403,
     Phone: '(612) 304-6073',
     Fax: '(612) 304-6074',
-    Website: 'http://www.nowebsitemusic.com',
   },
   {
     ID: 4,
@@ -41,7 +38,6 @@ export const orders = [
     Zipcode: 98027,
     Phone: '(800) 955-2292',
     Fax: '(800) 955-2293',
-    Website: 'http://www.nowebsitetomsclub.com',
   },
   {
     ID: 5,
@@ -52,7 +48,6 @@ export const orders = [
     Zipcode: 60179,
     Phone: '(847) 286-2500',
     Fax: '(847) 286-2501',
-    Website: 'http://www.nowebsiteemart.com',
   },
   {
     ID: 6,
@@ -63,7 +58,6 @@ export const orders = [
     Zipcode: 60015,
     Phone: '(847) 940-2500',
     Fax: '(847) 940-2501',
-    Website: 'http://www.nowebsitewalters.com',
   },
   {
     ID: 7,
@@ -74,7 +68,6 @@ export const orders = [
     Zipcode: 76102,
     Phone: '(817) 820-0741',
     Fax: '(817) 820-0742',
-    Website: 'http://www.nowebsiteshack.com',
   },
   {
     ID: 8,
@@ -85,7 +78,6 @@ export const orders = [
     Zipcode: 60523,
     Phone: '(800) 955-2929',
     Fax: '(800) 955-9392',
-    Website: 'http://www.nowebsitecircuittown.com',
   },
   {
     ID: 9,
@@ -96,7 +88,6 @@ export const orders = [
     Zipcode: 55423,
     Phone: '(612) 291-1000',
     Fax: '(612) 291-2001',
-    Website: 'http://www.nowebsitepremierbuy.com',
   },
   {
     ID: 10,
@@ -107,7 +98,6 @@ export const orders = [
     Zipcode: 60563,
     Phone: '(630) 438-7800',
     Fax: '(630) 438-7801',
-    Website: 'http://www.nowebsiteelectrixmax.com',
   },
   {
     ID: 11,
@@ -118,7 +108,6 @@ export const orders = [
     Zipcode: 75270,
     Phone: '(214) 854-3000',
     Fax: '(214) 854-3001',
-    Website: 'http://www.nowebsitevideoemporium.com',
   },
   {
     ID: 12,
@@ -129,6 +118,5 @@ export const orders = [
     Zipcode: 28117,
     Phone: '(800) 445-6937',
     Fax: '(800) 445-6938',
-    Website: 'http://www.nowebsitescreenshop.com',
   },
 ];
