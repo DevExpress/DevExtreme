@@ -184,7 +184,7 @@ _Translator2d.prototype = {
         });
         that._oldMethods = Object.keys(script);
         extend(that, script);
-        that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
+        that._conversionValue = function(value) { return value; };
 
         that.sc = {};
         that._checkingMethodsAboutBreaks = [
