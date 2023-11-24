@@ -10,8 +10,7 @@ const stockLabel = { 'aria-label': 'Stock' };
 
 const keyDown = (e: NumberBoxTypes.KeyDownEvent) => {
   const { event } = e;
-  // eslint-disable-next-line deprecation/deprecation
-  const str = event.key || String.fromCharCode(event.which);
+  const str = event.key;
   if (/^[.,e]$/.test(str)) {
     event.preventDefault();
   }

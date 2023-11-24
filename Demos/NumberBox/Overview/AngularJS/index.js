@@ -35,7 +35,7 @@ DemoApp.controller('DemoController', ($scope) => {
     },
     onKeyDown(e) {
       const { event } = e;
-      const str = event.key || String.fromCharCode(event.which);
+      const str = event.key;
       if (/^[.,e]$/.test(str)) {
         event.preventDefault();
       }

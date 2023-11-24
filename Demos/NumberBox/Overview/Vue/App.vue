@@ -82,7 +82,7 @@ const max = 30;
 
 function keyDown(e) {
   const { event } = e;
-  const str = event.key || String.fromCharCode(event.which);
+  const str = event.key;
   if (/^[.,e]$/.test(str)) {
     event.preventDefault();
   }
