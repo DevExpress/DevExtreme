@@ -14,6 +14,7 @@ import { grep, noop } from './utils/common';
 import { isString, isDefined, isFunction } from './utils/type';
 import { hasWindow } from '../core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
+import license from '../__internal/core/license/license_validation';
 
 const { abstract } = Component;
 
@@ -48,6 +49,7 @@ const DOMComponent = Component.inherit({
         attachInstanceToElement(this._$element, this, this._dispose);
 
         this.callBase(options);
+        license.validateLicense(config().licenseKey);
     },
 
     _createElement(element) {
