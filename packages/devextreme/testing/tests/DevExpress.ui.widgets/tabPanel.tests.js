@@ -99,8 +99,8 @@ QUnit.module('rendering', {
         const $contents = $tabPanel.find('.dx-multiview-item-content');
 
         assert.equal($tabTexts.length, 2, 'two tabs are rendered');
-        assert.equal($tabTexts.eq(0).text(), 'Test1', 'first tab text');
-        assert.equal($tabTexts.eq(0).text(), 'Test1', 'secon tab text');
+        assert.equal($tabTexts.eq(0).text(), 'Test1Test1', 'first tab text');
+        assert.equal($tabTexts.eq(1).text(), 'Test2Test2', 'secon tab text');
 
         assert.equal($contents.length, 1, 'one content is rendered');
         assert.equal($contents.eq(0).text(), 'Test1', 'first item content is rendered');

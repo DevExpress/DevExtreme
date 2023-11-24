@@ -87,8 +87,9 @@
 .dx-tab {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  flex-basis: 100%;
   min-width: max-content;
   cursor: pointer;
 

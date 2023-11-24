@@ -17,9 +17,15 @@ export class TestTabsWrapper {
     }
 
     _checkTabsContent($tabs) {
-        const items = this._tabs.option('items');
-        $tabs.toArray().forEach((tabElement, index) =>
-            QUnit.assert.equal($(tabElement).text(), items[index].text, `text of the ${index} tab`)
+        const { items, itemTemplate } = this._tabs.option();
+
+        $tabs.toArray().forEach((tabElement, index) => {
+            const expectedValue = itemTemplate === 'item'
+                ? `${items[index].text}${items[index].text}`
+                : items[index].text;
+
+            QUnit.assert.strictEqual($(tabElement).text(), expectedValue, `text of the ${index} tab`);
+        }
         );
     }
 

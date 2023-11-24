@@ -182,12 +182,10 @@ const TabPanel = MultiView.inherit({
 
             $tabTextSpan.append(domAdapter.createTextNode(title));
 
-            if(isFluent()) {
-                const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+            const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
 
-                $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
-                $tabTextSpanPseudo.appendTo($tabTextSpan);
-            }
+            $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
+            $tabTextSpanPseudo.appendTo($tabTextSpan);
 
             $tabTextSpan.appendTo($container);
         }
