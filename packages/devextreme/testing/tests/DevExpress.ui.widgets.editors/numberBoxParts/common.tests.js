@@ -6,6 +6,7 @@ import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { normalizeKeyName } from 'events/utils/index';
+import errors from 'core/errors';
 
 import 'ui/number_box';
 import 'ui/validator';
@@ -805,6 +806,8 @@ QUnit.module('submit element', {}, () => {
     });
 
     QUnit.test('the hidden input should use the decimal separator specified in DevExpress.config', function(assert) {
+        sinon.stub(errors, 'log');
+
         const originalConfig = config();
         try {
             config({ serverDecimalSeparator: '|' });
