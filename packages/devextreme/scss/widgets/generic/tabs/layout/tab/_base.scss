@@ -80,7 +80,7 @@
 
   &.dx-state-focused.dx-state-disabled {
     &::after {
-      z-index: 2;
+      z-index: 4;
     }
   }
 
@@ -110,21 +110,31 @@
 .dx-tabs.dx-state-focused {
   .dx-tab {
     &.dx-state-focused {
-      @include dx-tabs-border-mixin(
-        $generic-tabs-border-focused-top,
-        $generic-tabs-border-focused-right,
-        $generic-tabs-border-focused-bottom,
-        $generic-tabs-border-focused-left,
-      );
+      &::after {
+        border: none;
+        outline: $generic-tabs-border-width solid $tabs-focused-border-color;
+        inset: 0;
+        z-index: 3;
+      }
     }
 
     &.dx-state-focused.dx-state-disabled {
-      @include dx-tabs-border-mixin(
-        $generic-tabs-border-focused-disabled-top,
-        $generic-tabs-border-focused-disabled-right,
-        $generic-tabs-border-focused-disabled-bottom,
-        $generic-tabs-border-focused-disabled-left,
-      );
+      &::after {
+        border: none;
+        outline: $generic-tabs-border-width solid $tabs-focused-disabled-border-color;
+      }
+    }
+
+    &:last-child {
+      &.dx-state-focused::after {
+        inset-inline-end: $generic-tabs-border-width;
+      }
+    }
+
+    &:first-child {
+      &.dx-state-focused::after {
+        inset-inline-start: $generic-tabs-border-width;
+      }
     }
 
     &.dx-focused-disabled-next-tab {

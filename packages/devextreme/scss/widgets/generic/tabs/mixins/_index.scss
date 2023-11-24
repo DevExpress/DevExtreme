@@ -11,20 +11,17 @@
     content: "";
     pointer-events: none;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
+    inset: 0;
     z-index: 1;
 
     @if $is-expanded-vertical {
-      top: -$generic-tabs-border-width;
-      bottom: -$generic-tabs-border-width;
+      inset-block-start: -$generic-tabs-border-width;
+      inset-block-end: -$generic-tabs-border-width;
     }
 
     @if $is-expanded-horizontal {
-      right: -$generic-tabs-border-width;
-      left: -$generic-tabs-border-width;
+      inset-inline-end: -$generic-tabs-border-width;
+      inset-inline-start: -$generic-tabs-border-width;
     }
   }
 }

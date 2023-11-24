@@ -47,6 +47,7 @@
       );
     }
 
+    //
     &.dx-state-focused.dx-state-disabled {
       @include dx-tabs-border-mixin(
         $generic-tabs-vertical-border-focused-disabled-top,
@@ -59,6 +60,7 @@
 
   &.dx-state-focused {
     .dx-tab {
+      //
       &.dx-state-focused {
         @include dx-tabs-border-mixin(
           $generic-tabs-vertical-border-focused-top,
