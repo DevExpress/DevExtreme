@@ -31,8 +31,8 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
     'fluent.blue.light',
     'fluent.blue.light.compact',
     'fluent.blue.dark',
-    'fluent.sass.light',
-    'fluent.sass.dark',
+    'fluent.saas.light',
+    'fluent.saas.dark',
 ];
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
