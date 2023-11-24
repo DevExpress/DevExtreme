@@ -490,7 +490,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
 
       if (options.lookup && this.option('syncLookupFilterValues')) {
         filterRowController.setCurrentColumnForFiltering(options);
-        const filter = this.getController('data').getCombinedFilter() || null;
+        const filter = this.getController('data').getCombinedFilter();
         filterRowController.setCurrentColumnForFiltering(null);
 
         const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
@@ -716,7 +716,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
 
           const editorDataSource = editor.option('dataSource');
           const shouldUpdateFilter = !filterChanged
-                        || !equalByValue(editorDataSource.__dataGridSourceFilter, filter);
+                        || !equalByValue(editorDataSource.__dataGridSourceFilter || null, filter);
 
           if (shouldUpdateFilter) {
             const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
