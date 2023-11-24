@@ -56,8 +56,7 @@ if (!isMaterialBased()) {
 
 test('DateBox with datetime and root element as container (T1193495)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'DateBox with datetime and root element as container', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'DateBox with datetime and root element as container.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
