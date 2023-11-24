@@ -84,7 +84,7 @@ test('TabPanel borders with scrolling', async (t) => {
   test(`Tab item width in a bounded container, stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Tab item width in a bounded container, stylingMode=${stylingMode}.png`, { element: '#tabs' });
+    await testScreenshot(t, takeScreenshot, `Tab item width in a bounded container, stylingMode=${stylingMode}.png`, { element: '#tabpanel' });
 
     await t
       .expect(compareResults.isValid())
@@ -94,13 +94,13 @@ test('TabPanel borders with scrolling', async (t) => {
     await setAttribute('#container', 'style', 'width: 200px;');
 
     const dataSource = [
-      { text: 'John Heart' },
-      { text: 'Marina Thomas' },
-      { text: 'Robert Reagan' },
-      { text: 'Olivia Peyton' },
-      { text: 'Ed Holmes' },
-      { text: 'Wally Hobbs' },
-      { text: 'Brad Jameson' },
+      { title: 'John Heart', text: 'John Heart' },
+      { title: 'Marina Thomas', text: 'Marina Thomas' },
+      { title: 'Robert Reagan', text: 'Robert Reagan' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+      { title: 'Ed Holmes', text: 'Ed Holmes' },
+      { title: 'Wally Hobbs', text: 'Wally Hobbs' },
+      { title: 'Brad Jameson', text: 'Brad Jameson' },
     ] as Item[];
 
     const options = {
