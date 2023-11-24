@@ -14,6 +14,9 @@ window.config = {
     'typescript': {
       'exports': 'ts',
     },
+    'devextreme/time_zone_utils.js': {
+      'esModule': true,
+    },
     'devextreme/localization.js': {
       'esModule': true,
     },
@@ -46,6 +49,7 @@ window.config = {
     'react': 'npm:react/umd/react.development.js',
     'react-dom': 'npm:react-dom/umd/react-dom.development.js',
     'prop-types': 'npm:prop-types/prop-types.js',
+    'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs',
@@ -130,6 +134,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+    'devextreme-cldr-data': 'npm:devextreme-cldr-data',
 
     // SystemJS plugins
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
@@ -149,9 +154,17 @@ window.config = {
     'devextreme/events/utils': {
       main: 'index',
     },
+    'devextreme/localization/messages': {
+      format: 'json',
+      defaultExtension: '',
+    },
     'devextreme/events': {
       main: 'index',
-    }/** globalize--vue&react */,
+    }/** globalize */,
+    'devextreme-cldr-data': {
+      format: 'json',
+      defaultExtension: '',
+    }/**//** globalize--vue&react */,
     'globalize': {
       main: '../globalize.js',
       defaultExtension: 'js',

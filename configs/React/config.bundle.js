@@ -26,6 +26,7 @@ const bundleConfig = {
   },
   map: {
     'devextreme.react.systemjs.js': '../../../../../bundles/devextreme.react.systemjs.js',
+    'devextreme/localization/messages': 'npm:devextreme/localization/messages',
   },
   packages: {
     'react': {
@@ -35,6 +36,14 @@ const bundleConfig = {
     'react-dom': {
       defaultExtension: 'js',
       main: 'umd/react-dom.development.js',
+    },
+    'devextreme/localization/messages': {
+      format: 'json',
+      defaultExtension: '',
+    },
+    'devextreme-cldr-data': {
+      format: 'json',
+      defaultExtension: '',
     },
   },
 };
