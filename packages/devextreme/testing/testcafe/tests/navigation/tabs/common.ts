@@ -76,27 +76,29 @@ test('Tabs text-overflow with vertical orientation', async (t) => {
   return createWidget('dxTabs', options, '#tabs');
 });
 
-test('Tab item width in secondary stylingMode', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[800, 130].forEach((width) => {
+  test(`Tab item width in secondary stylingMode, width=${width}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tab item width in secondary stylingMode.png', { element: '#tabs' });
+    await testScreenshot(t, takeScreenshot, `Tab item width in secondary stylingMode width=${width}.png`, { element: '#tabs' });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'display: flex; width: 800px; height: 600px;');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await appendElementTo('#container', 'div', 'tabs');
+    await setAttribute('#container', 'style', `display: flex; width: ${width}px; height: 600px;`);
 
-  const dataSource = [
-    { text: 'user' },
-    { text: 'user' },
-    { text: 'user' },
-    { text: 'user' },
-    { text: 'user' },
-  ] as Item[];
+    const dataSource = [
+      { text: 'user' },
+      { text: 'user' },
+      { text: 'user' },
+      { text: 'user' },
+      { text: 'user' },
+    ] as Item[];
 
-  return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
+    return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
+  });
 });
 
 [true, false].forEach((rtlEnabled) => {
