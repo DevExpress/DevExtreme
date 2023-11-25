@@ -32,7 +32,7 @@ function getCellCssClass({ date, view }) {
   return cssClass;
 }
 
-function CustomCell(cell) {
+function CustomCell({ data: cell }) {
   const { text } = cell;
 
   const className = getCellCssClass(cell);
