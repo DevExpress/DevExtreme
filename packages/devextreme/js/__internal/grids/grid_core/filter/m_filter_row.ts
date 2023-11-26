@@ -673,10 +673,13 @@ const ColumnHeadersViewFilterRowExtender = (function () {
     },
 
     _handleDataChanged(e) {
+      const dataSource = this._dataController?.dataSource?.();
+      const lastLoadOptions = dataSource?.lastLoadOptions?.();
+
       this.callBase.apply(this, arguments);
 
       if (e.operationTypes?.filtering || e.operationTypes?.fullReload) {
-        this.updateLookupDataSource(e.operationTypes?.filtering);
+        this.updateLookupDataSource(e.operationTypes?.filtering || lastLoadOptions?.filter);
       }
     },
 
@@ -713,7 +716,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
 
           const editorDataSource = editor.option('dataSource');
           const shouldUpdateFilter = !filterChanged
-                        || !equalByValue(editorDataSource.__dataGridSourceFilter, filter);
+                        || !equalByValue(editorDataSource.__dataGridSourceFilter || null, filter);
 
           if (shouldUpdateFilter) {
             const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
