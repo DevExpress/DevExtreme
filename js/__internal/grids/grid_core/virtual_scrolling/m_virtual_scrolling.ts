@@ -1592,9 +1592,10 @@ export const virtualScrollingModule = {
             this._allItems = null;
             this.callBase.apply(this, arguments);
           },
-          _applyFilter() {
+          _applyFilter(): Promise<void> {
             this._dataSource?.loadPageCount(1);
-            this.callBase.apply(this, arguments);
+
+            return this.callBase.apply(this, arguments);
           },
         };
 

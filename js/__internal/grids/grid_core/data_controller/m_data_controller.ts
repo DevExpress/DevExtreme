@@ -483,7 +483,7 @@ export class DataController extends ControllerWithDataMixin {
         }
       }
     }
-    if (!filterApplied && changeTypes.filtering) {
+    if (!filterApplied && changeTypes.filtering && !this._needApplyFilter) {
       that.reload();
     }
   }
@@ -1165,7 +1165,7 @@ export class DataController extends ControllerWithDataMixin {
     return null;
   }
 
-  _applyFilter() {
+  _applyFilter(): Promise<void> {
     const dataSource = this._dataSource;
 
     if (dataSource) {
@@ -1178,6 +1178,9 @@ export class DataController extends ControllerWithDataMixin {
         }
       });
     }
+
+    // @ts-expect-error
+    return new Deferred().resolve();
   }
 
   resetFilterApplying() {

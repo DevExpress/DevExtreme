@@ -1,3 +1,4 @@
+import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import {
   addItem, filterHasField,
@@ -165,7 +166,7 @@ const FilterSyncController = modules.Controller.inherit((function () {
       if (!this.option('filterValue')) {
         const filteringColumns = this.getController('columns').getFilteringColumns();
         const filterValue = this.getFilterValueFromColumns(filteringColumns);
-        this.option('filterValue', filterValue);
+        this._silentOption('filterValue', filterValue);
       }
       this.syncFilterValue();
 
@@ -331,6 +332,17 @@ const DataControllerFilterSyncExtender = {
       default:
         this.callBase(args);
     }
+  },
+
+  _applyFilter(): Promise<void> {
+    const filterSyncController = this.getController('filterSync');
+
+    if (filterSyncController._skipSyncColumnOptions) {
+      // @ts-expect-error
+      return new Deferred().resolve();
+    }
+
+    return this.callBase.apply(this, arguments);
   },
 };
 
