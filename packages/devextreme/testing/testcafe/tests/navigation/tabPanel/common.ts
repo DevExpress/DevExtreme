@@ -8,7 +8,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { Item } from '../../../../../js/ui/tab_panel.d';
-import { setAttribute } from '../../../helpers/domUtils';
+import { setAttribute, appendElementTo } from '../../../helpers/domUtils';
 
 // const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 // const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
@@ -78,6 +78,38 @@ test('TabPanel borders with scrolling', async (t) => {
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
+});
+
+['primary', 'secondary'].forEach((stylingMode) => {
+  test(`Tab item width in a bounded container, stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Tab item width in a bounded container, stylingMode=${stylingMode}.png`, { element: '#tabpanel' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await appendElementTo('#container', 'div', 'tabpanel');
+    await setAttribute('#container', 'style', 'width: 200px;');
+
+    const dataSource = [
+      { title: 'John Heart', text: 'John Heart' },
+      { title: 'Marina Thomas', text: 'Marina Thomas' },
+      { title: 'Robert Reagan', text: 'Robert Reagan' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+      { title: 'Ed Holmes', text: 'Ed Holmes' },
+      { title: 'Wally Hobbs', text: 'Wally Hobbs' },
+      { title: 'Brad Jameson', text: 'Brad Jameson' },
+    ] as Item[];
+
+    const options = {
+      dataSource,
+      height: 250,
+    };
+
+    return createWidget('dxTabPanel', options, '#tabpanel');
+  });
 });
 
 test('TabPanel text-overflow with tabsPosition left', async (t) => {
