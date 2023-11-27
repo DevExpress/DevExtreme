@@ -37,7 +37,7 @@ const App = () => {
 
   const onColorClick = React.useCallback((selectedColor) => {
     setColor(selectedColor);
-    const squareIcon = colorPicker.getElementsByClassName('dx-icon-square')[0];
+    const squareIcon = colorPicker.element().getElementsByClassName('dx-icon-square')[0];
     squareIcon.style.color = selectedColor;
     colorPicker.close();
   }, [colorPicker]);
