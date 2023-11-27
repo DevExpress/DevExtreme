@@ -75,7 +75,7 @@ const getScrollableBottomPadding = function (that) {
   return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
 };
 
-class RowsView extends ColumnsView {
+export class RowsView extends ColumnsView {
   _loadPanel: any;
 
   _editorFactoryController!: any;
