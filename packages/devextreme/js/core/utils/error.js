@@ -4,7 +4,7 @@ import { logger } from './console';
 import { format } from './string';
 import { version } from '../version';
 
-const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
+const ERROR_URL = 'https://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 
 export default function(baseErrors, errors) {
 
