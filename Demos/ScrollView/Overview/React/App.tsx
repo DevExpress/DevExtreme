@@ -1,6 +1,6 @@
 import React from 'react';
 import ScrollView, { ScrollViewTypes } from 'devextreme-react/scroll-view';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox from 'devextreme-react/select-box';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import service from './data.ts';
 
@@ -16,10 +16,6 @@ const App = () => {
   const [content, setContent] = React.useState(service.getContent());
 
   const scrollViewRef = React.useRef(null);
-
-  const getInstance = (ref: { instance: any; }) => {
-    scrollViewRef.current = ref.instance;
-  };
 
   const updateContent = React.useCallback((args: UpdateContentArgs, eventName: string) => {
     const updateContentText = `\n Content has been updated on the ${eventName} event.\n\n`;
@@ -45,26 +41,14 @@ const App = () => {
   }, [setPullDown]);
 
   const reachBottomValueChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    scrollViewRef.current.option('onReachBottom', args.value ? updateBottomContent : null);
+    scrollViewRef.current.instance.option('onReachBottom', args.value ? updateBottomContent : null);
   }, [updateBottomContent]);
-
-  const scrollbarModelValueChanged = React.useCallback((args: SelectBoxTypes.ValueChangedEvent) => {
-    setShowScrollBarMode(args.value);
-  }, [setShowScrollBarMode]);
-
-  const scrollByContentValueChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    setScrollByContent(args.value);
-  }, [setScrollByContent]);
-
-  const scrollByThumbValueChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    setScrollByThumb(args.value);
-  }, [setScrollByThumb]);
 
   return (
     <div id="scrollview-demo">
       <ScrollView
         id="scrollview"
-        ref={getInstance}
+        ref={scrollViewRef}
         reachBottomText="Updating..."
         scrollByContent={scrollByContent}
         bounceEnabled={pullDown}
@@ -85,7 +69,7 @@ const App = () => {
             inputAttr={showScrollBarModeLabel}
             displayExpr="text"
             value={showScrollBarMode}
-            onValueChanged={scrollbarModelValueChanged}
+            onValueChange={setShowScrollBarMode}
           />
         </div>
         <div className="option">
@@ -106,14 +90,14 @@ const App = () => {
           <CheckBox
             text="Scroll by content"
             value={scrollByContent}
-            onValueChanged={scrollByContentValueChanged}
+            onValueChange={setScrollByContent}
           />
         </div>
         <div className="option">
           <CheckBox
             text="Scroll by thumb"
             value={scrollByThumb}
-            onValueChanged={scrollByThumbValueChanged}
+            onValueChange={setScrollByThumb}
           />
         </div>
       </div>

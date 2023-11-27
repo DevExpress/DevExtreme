@@ -13,9 +13,6 @@ const App = () => {
   const [scrollByThumb, setScrollByThumb] = React.useState(true);
   const [content, setContent] = React.useState(service.getContent());
   const scrollViewRef = React.useRef(null);
-  const getInstance = (ref) => {
-    scrollViewRef.current = ref.instance;
-  };
   const updateContent = React.useCallback(
     (args, eventName) => {
       const updateContentText = `\n Content has been updated on the ${eventName} event.\n\n`;
@@ -51,33 +48,18 @@ const App = () => {
   );
   const reachBottomValueChanged = React.useCallback(
     (args) => {
-      scrollViewRef.current.option('onReachBottom', args.value ? updateBottomContent : null);
+      scrollViewRef.current.instance.option(
+        'onReachBottom',
+        args.value ? updateBottomContent : null,
+      );
     },
     [updateBottomContent],
-  );
-  const scrollbarModelValueChanged = React.useCallback(
-    (args) => {
-      setShowScrollBarMode(args.value);
-    },
-    [setShowScrollBarMode],
-  );
-  const scrollByContentValueChanged = React.useCallback(
-    (args) => {
-      setScrollByContent(args.value);
-    },
-    [setScrollByContent],
-  );
-  const scrollByThumbValueChanged = React.useCallback(
-    (args) => {
-      setScrollByThumb(args.value);
-    },
-    [setScrollByThumb],
   );
   return (
     <div id="scrollview-demo">
       <ScrollView
         id="scrollview"
-        ref={getInstance}
+        ref={scrollViewRef}
         reachBottomText="Updating..."
         scrollByContent={scrollByContent}
         bounceEnabled={pullDown}
@@ -98,7 +80,7 @@ const App = () => {
             inputAttr={showScrollBarModeLabel}
             displayExpr="text"
             value={showScrollBarMode}
-            onValueChanged={scrollbarModelValueChanged}
+            onValueChange={setShowScrollBarMode}
           />
         </div>
         <div className="option">
@@ -119,14 +101,14 @@ const App = () => {
           <CheckBox
             text="Scroll by content"
             value={scrollByContent}
-            onValueChanged={scrollByContentValueChanged}
+            onValueChange={setScrollByContent}
           />
         </div>
         <div className="option">
           <CheckBox
             text="Scroll by thumb"
             value={scrollByThumb}
-            onValueChanged={scrollByThumbValueChanged}
+            onValueChange={setScrollByThumb}
           />
         </div>
       </div>
