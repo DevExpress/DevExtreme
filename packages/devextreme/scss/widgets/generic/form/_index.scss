@@ -19,6 +19,12 @@
   .dx-field-item:not(.dx-last-col) {
     padding-inline-end: 15px;
   }
+
+  &.dx-layout-manager-one-col {
+    .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
+      padding-top: $generic-form-default-padding;
+    }
+  }
 }
 
 .dx-form-group-caption {
