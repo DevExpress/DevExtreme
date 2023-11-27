@@ -86,6 +86,7 @@
 
   .dx-tab-text {
     column-gap: $generic-tabs-icon-margin;
+    row-gap: $generic-tabs-item-gap;
     color: $tabs-tab-color;
     line-height: $generic-tab-text-line-height;
 
