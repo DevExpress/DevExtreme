@@ -146,6 +146,7 @@ if(Quill) {
             this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
             eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this.editorInstance.NAME), (e) => {
+                e.target.focus();
                 e.preventDefault();
             });
 
