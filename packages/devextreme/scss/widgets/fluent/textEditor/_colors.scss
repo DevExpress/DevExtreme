@@ -94,7 +94,7 @@ $texteditor-label-transition:
 @if $mode == "light" {
   @if $color == "blue" {
     $texteditor-color: $base-text-color !default;
-    $texteditor-placeholder-color: $base-label-color !default;
+    $texteditor-placeholder-color: lighten($base-text-color, 29.80) !default;
     $texteditor-outlined-bg: $base-element-bg !default;
     $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
   }
@@ -125,7 +125,7 @@ $texteditor-label-transition:
   }
 
   $texteditor-color: $base-text-color !default;
-  $texteditor-placeholder-color: $base-label-color !default;
+  $texteditor-placeholder-color: darken($base-text-color, 40.00) !default;
   $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default;
   $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default;
   $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default;
