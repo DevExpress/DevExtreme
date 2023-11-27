@@ -29,7 +29,7 @@ test('Field dropdown popup', async (t) => {
 test('operation dropdown popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const filterBuilder = new FilterBuilder('#container');
-  await t.click(filterBuilder.getField(0, 'groupOperation').element);
+  await t.click(filterBuilder.getField(0, 'itemOperation').element);
 
   await testScreenshot(t, takeScreenshot, 'operation-dropdown', { element: filterBuilder.element });
 
