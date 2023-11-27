@@ -27,6 +27,12 @@ const CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
 
 const INVALID_MESSAGE_POPUP_CONTENT_SELECTOR = '.dx-invalid-message .dx-overlay-content';
 
+export function executeActionWithSuppressErrors(action) {
+    const logErrorsStub = sinon.stub(errors, 'log');
+    action();
+    logErrorsStub.restore();
+}
+
 QUnit.module('basics', {}, () => {
     QUnit.test('markup init', function(assert) {
         const element = $('#numberbox').dxNumberBox();
@@ -806,8 +812,6 @@ QUnit.module('submit element', {}, () => {
     });
 
     QUnit.test('the hidden input should use the decimal separator specified in DevExpress.config', function(assert) {
-        sinon.stub(errors, 'log');
-
         const originalConfig = config();
         try {
             config({ serverDecimalSeparator: '|' });
@@ -820,7 +824,7 @@ QUnit.module('submit element', {}, () => {
 
             assert.equal($hiddenInput.val(), '12|25', 'the correct decimal separator is used');
         } finally {
-            config(originalConfig);
+            executeActionWithSuppressErrors(() => config(originalConfig));
         }
     });
 });
