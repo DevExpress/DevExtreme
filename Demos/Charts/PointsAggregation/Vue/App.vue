@@ -119,7 +119,7 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { weatherData, aggregationFunctions, aggregationIntervals } from './data.js';
+import { weatherData, aggregationFunctions, aggregationIntervals } from './data.ts';
 
 const useAggregation = ref(true);
 const currentFunction = ref(aggregationFunctions[0].func);

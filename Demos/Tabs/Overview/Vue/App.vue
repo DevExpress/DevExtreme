@@ -90,7 +90,7 @@ import {
   tabsWithText,
   tabsWithIconAndText,
   tabsWithIcon,
-} from './data.js';
+} from './data.ts';
 
 const fullWidth = ref(false);
 const rtlEnabled = ref(false);

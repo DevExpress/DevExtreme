@@ -71,7 +71,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import DxMenu from 'devextreme-vue/menu';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxAccordion from 'devextreme-vue/accordion';
-import { continents, europeCountries } from './data.js';
+import { continents, europeCountries } from './data.ts';
 
 const languages = [
   'Arabic: Right-to-Left direction',

@@ -42,7 +42,7 @@ import {
   DxSource,
   DxFont,
 } from 'devextreme-vue/vector-map';
-import { streamsData } from './data.js';
+import { streamsData } from './data.ts';
 
 const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -75];

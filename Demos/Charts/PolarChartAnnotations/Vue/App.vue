@@ -100,7 +100,7 @@ import {
   DxStrip,
   DxLegend,
 } from 'devextreme-vue/polar-chart';
-import { dataSource, maxDay, minNight } from './data.js';
+import { dataSource, maxDay, minNight } from './data.ts';
 
 const maxTempText = `Highest temperature: ${maxDay.day} °C`;
 const minTempText = `Lowest temperature: ${minNight.night} °C`;

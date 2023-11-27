@@ -69,7 +69,7 @@ import {
 } from 'devextreme-vue/diagram';
 import notify from 'devextreme/ui/notify';
 import ArrayStore from 'devextreme/data/array_store';
-import service from './data.js';
+import service from './data.ts';
 
 const orgItemsDataSource = new ArrayStore({
   key: 'ID',

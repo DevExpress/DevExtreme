@@ -60,7 +60,7 @@ import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTabs from 'devextreme-vue/tabs';
 import DxMultiView from 'devextreme-vue/multi-view';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const selectedItemId = ref(employees[0].id);
 </script>

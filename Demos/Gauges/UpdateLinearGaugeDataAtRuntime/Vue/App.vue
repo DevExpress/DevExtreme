@@ -137,7 +137,7 @@ import {
   DxLabel,
 } from 'devextreme-vue/linear-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { cities } from './data.js';
+import { cities } from './data.ts';
 
 const selected = ref(cities[0].name);
 const customTicks = [900, 1000, 1020, 1100];

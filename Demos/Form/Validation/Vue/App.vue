@@ -183,7 +183,7 @@ import DxAutocomplete from 'devextreme-vue/autocomplete'; // for editor-type=dxA
 import 'devextreme-vue/date-range-box';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
-import service from './data.js';
+import service from './data.ts';
 
 const formInstance = ref(null);
 const customer = ref(service.getCustomer());

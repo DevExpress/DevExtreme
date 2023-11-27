@@ -45,7 +45,7 @@
 import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxGallery from 'devextreme-vue/gallery';
-import { gallery } from './data.js';
+import { gallery } from './data.ts';
 
 const dataSource = gallery;
 const loop = ref(true);

@@ -24,7 +24,7 @@ import { ref } from 'vue';
 import DxActionSheet from 'devextreme-vue/action-sheet';
 import DxList from 'devextreme-vue/list';
 import notify from 'devextreme/ui/notify';
-import { actionSheetItems, contacts } from './data.js';
+import { actionSheetItems, contacts } from './data.ts';
 import ContactItem from './ContactItem.vue';
 
 const isActionSheetVisible = ref(false);

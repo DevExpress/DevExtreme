@@ -42,7 +42,7 @@
 import { ref } from 'vue';
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const items = employees;
 const selectedValue = ref(null);

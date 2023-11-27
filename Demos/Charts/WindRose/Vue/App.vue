@@ -50,7 +50,7 @@ import {
   DxExport,
 } from 'devextreme-vue/polar-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { windSources, windRoseData } from './data.js';
+import { windSources, windRoseData } from './data.ts';
 
 const selectedPeriod = ref(windRoseData[0].period);
 const periodValues = computed(

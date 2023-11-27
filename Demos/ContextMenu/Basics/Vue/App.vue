@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import DxContextMenu, { DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import notify from 'devextreme/ui/notify';
-import { contextMenuItems as items } from './data.js';
+import { contextMenuItems as items } from './data.ts';
 
 function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
   if (!itemData.items) {

@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { DxFileManager, DxPermissions, DxItemView } from 'devextreme-vue/file-manager';
-import { fileItems } from './data.js';
+import { fileItems } from './data.ts';
 
 function customizeIcon(fileSystemItem) {
   if (fileSystemItem.isDirectory) {

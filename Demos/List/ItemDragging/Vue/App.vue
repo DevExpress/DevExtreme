@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxList, { DxItemDragging } from 'devextreme-vue/list';
-import * as data from './data.js';
+import * as data from './data.ts';
 
 const doingTasks = ref(data.doingTasks);
 const plannedTasks = ref(data.plannedTasks);

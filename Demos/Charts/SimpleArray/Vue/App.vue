@@ -18,7 +18,7 @@ import DxChart, {
   DxLabel,
   DxSeries,
 } from 'devextreme-vue/chart';
-import { populationData } from './data.js';
+import { populationData } from './data.ts';
 </script>
 <style>
 #chart {

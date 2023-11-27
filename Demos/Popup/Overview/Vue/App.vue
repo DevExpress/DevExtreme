@@ -72,7 +72,7 @@ import { ref } from 'vue';
 import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup';
 import notify from 'devextreme/ui/notify';
 import EmployeeItem from './EmployeeItem.vue';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 type Employee = typeof employees[0];
 

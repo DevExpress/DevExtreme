@@ -75,7 +75,7 @@ import DxRangeSelector, {
   DxMinorTick,
   DxBehavior,
 } from 'devextreme-vue/range-selector';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const visualRange = ref({
   startValue: 0,

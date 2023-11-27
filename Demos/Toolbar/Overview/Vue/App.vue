@@ -57,7 +57,7 @@ import DxList from 'devextreme-vue/list';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
-import { productTypes, products } from './data.js';
+import { productTypes, products } from './data.ts';
 
 const productsStore = new DataSource(products);
 const backButtonOptions = {

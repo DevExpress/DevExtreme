@@ -44,7 +44,7 @@ import {
   DxChart,
   DxSeries,
 } from 'devextreme-vue/range-selector';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const range = ref([0, 5]);
 

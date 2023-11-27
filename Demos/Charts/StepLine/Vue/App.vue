@@ -41,7 +41,7 @@ import {
   DxLabel,
   DxFormat,
 } from 'devextreme-vue/chart';
-import { medalSources, olympicAchievements } from './data.js';
+import { medalSources, olympicAchievements } from './data.ts';
 </script>
 <style>
 #container {

@@ -69,7 +69,7 @@ import {
   DxTooltip,
   DxExport,
 } from 'devextreme-vue/chart';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
 const customizeText = (e) => `${e.value}M`;

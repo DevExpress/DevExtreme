@@ -116,7 +116,7 @@ import {
   DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
   DxFileSelectionItem, DxItemView, DxDetails, DxColumn,
 } from 'devextreme-vue/file-manager';
-import { fileItems } from './data.js';
+import { fileItems } from './data.ts';
 
 const newFileMenuOptions = getNewFileMenuOptions();
 const changeCategoryMenuOptions = getChangeCategoryMenuOptions();

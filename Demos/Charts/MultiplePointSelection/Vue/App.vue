@@ -38,7 +38,7 @@ import DxChart, {
   DxLegend,
   DxExport,
 } from 'devextreme-vue/chart';
-import { medalSources, medalStatistics } from './data.js';
+import { medalSources, medalStatistics } from './data.ts';
 
 function onPointClick({ target: point }) {
   if (point.isSelected()) {

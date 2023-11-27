@@ -75,7 +75,7 @@ import * as deCldrData from 'npm:devextreme-cldr-data/de.json!json';
 import * as ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
 import * as supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
 import * as Globalize from 'globalize';
-import service from './data.js';
+import service from './data.ts';
 
 type Locale = string;
 const locales: { name: string, value: Locale } = service.getLocales();

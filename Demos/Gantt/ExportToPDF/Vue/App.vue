@@ -172,7 +172,7 @@ import {
   formats,
   exportModes,
   dateRanges,
-} from './data.js';
+} from './data.ts';
 
 const ganttRef = ref();
 

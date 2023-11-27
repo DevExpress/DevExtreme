@@ -51,7 +51,7 @@ import DxChart, {
   DxVisualRange,
 } from 'devextreme-vue/chart';
 import DxButton from 'devextreme-vue/button';
-import { mountains } from './data.js';
+import { mountains } from './data.ts';
 
 const chart = ref();
 const customizeTooltipText = ({ argumentText, point, valueText }) => ({

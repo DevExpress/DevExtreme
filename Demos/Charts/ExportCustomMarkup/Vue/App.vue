@@ -70,7 +70,7 @@ import {
 import { exportFromMarkup } from 'devextreme/viz/export';
 import DxButton from 'devextreme-vue/button';
 import * as toCanvas from 'canvg';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 import Form from './Form.vue';
 
 const form = ref();

@@ -48,7 +48,7 @@ import {
   DxLinearGauge, DxScale, DxLabel, DxTooltip, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/linear-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const selected = ref(dataSource[0].name);
 const value = computed(() => dataSource.find((item) => item.name === selected.value));

@@ -27,7 +27,7 @@ import DxChart, {
   DxAggregation,
   DxSeriesTemplate,
 } from 'devextreme-vue/chart';
-import { oilProductionData } from './data.js';
+import { oilProductionData } from './data.ts';
 
 const dataSource = oilProductionData;
 </script>

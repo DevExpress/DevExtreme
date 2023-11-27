@@ -47,7 +47,7 @@ import DxChart, {
   DxLegend,
   DxTooltip,
 } from 'devextreme-vue/chart';
-import { oilPrices } from './data.js';
+import { oilPrices } from './data.ts';
 </script>
 <style>
 #chart {

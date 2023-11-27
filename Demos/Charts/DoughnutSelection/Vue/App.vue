@@ -28,7 +28,7 @@ import DxPieChart, {
   DxExport,
   DxHoverStyle,
 } from 'devextreme-vue/pie-chart';
-import { olympicMedals } from './data.js';
+import { olympicMedals } from './data.ts';
 
 function pointClickHandler({ target }) {
   target.select();

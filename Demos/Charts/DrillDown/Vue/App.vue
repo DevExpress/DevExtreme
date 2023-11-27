@@ -34,7 +34,7 @@ import { ref } from 'vue';
 import DxTreeMap, {
   DxSize, DxTitle, DxColorizer, DxTreeMapTypes,
 } from 'devextreme-vue/tree-map';
-import { citiesPopulation } from './data.js';
+import { citiesPopulation } from './data.ts';
 
 const drillInfo = ref([]);
 

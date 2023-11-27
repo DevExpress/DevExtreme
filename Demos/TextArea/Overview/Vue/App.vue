@@ -64,7 +64,7 @@ import { ref } from 'vue';
 import DxTextArea from 'devextreme-vue/text-area';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import service from './data.js';
+import service from './data.ts';
 
 const eventValue = ref(service.valueChangeEvents[0].name);
 const maxLength = ref(null);

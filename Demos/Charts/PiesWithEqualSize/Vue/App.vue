@@ -34,7 +34,7 @@ import DxPieChart, {
   DxLabel,
   DxLegend,
 } from 'devextreme-vue/pie-chart';
-import { countries, waterLandRatio } from './data.js';
+import { countries, waterLandRatio } from './data.ts';
 
 const pieCharts = [{
   title: 'Area of Countries',

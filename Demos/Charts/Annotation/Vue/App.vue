@@ -60,7 +60,7 @@ import {
   DxImage,
   DxAnnotation,
 } from 'devextreme-vue/chart';
-import { dataSource, annotationSources } from './data.js';
+import { dataSource, annotationSources } from './data.ts';
 
 const customizeTooltip = ({ description }) => ({ html: `<div class='tooltip'>${description}</div>` });
 </script>

@@ -24,7 +24,7 @@
 import { ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { products } from './data.js';
+import { products } from './data.ts';
 
 const options = ['contains', 'startswith', 'equals'];
 const searchMode = ref('contains');

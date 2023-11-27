@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import DxBullet, { DxTooltip } from 'devextreme-vue/bullet';
-import { service } from './data.js';
+import { service } from './data.ts';
 
 const getWeeksData = service.getWeeksData();
 const customizeTooltip = ({ value, target }) => ({

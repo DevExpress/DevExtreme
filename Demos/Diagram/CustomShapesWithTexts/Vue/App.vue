@@ -26,7 +26,7 @@ import { watch, ref } from 'vue';
 import {
   DxDiagram, DxGroup, DxToolbox, DxCustomShape,
 } from 'devextreme-vue/diagram';
-import service from './data.js';
+import service from './data.ts';
 import 'whatwg-fetch';
 
 const employees = service.getEmployees();

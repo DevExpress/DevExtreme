@@ -15,7 +15,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { countriesGDP } from './data.js';
+import { countriesGDP } from './data.ts';
 import PieChart from './PieChart.vue';
 
 const props = withDefaults(defineProps<{

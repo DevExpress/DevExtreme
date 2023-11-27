@@ -67,7 +67,7 @@
 import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxMultiView from 'devextreme-vue/multi-view';
-import { multiViewItems } from './data.js';
+import { multiViewItems } from './data.ts';
 
 const selectedIndex = ref(0);
 const loop = ref(false);

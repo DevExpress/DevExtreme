@@ -40,7 +40,7 @@ import DxChart, {
   DxExport,
   DxPoint,
 } from 'devextreme-vue/chart';
-import { medalsInfo } from './data.js';
+import { medalsInfo } from './data.ts';
 </script>
 <style>
 #chart {

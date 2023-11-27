@@ -26,7 +26,7 @@ import {
   DxBorder,
   DxFont,
 } from 'devextreme-vue/vector-map';
-import { countries } from './data.js';
+import { countries } from './data.ts';
 
 const worldData = mapsData.world;
 const bounds = [-180, 85, 180, -60];

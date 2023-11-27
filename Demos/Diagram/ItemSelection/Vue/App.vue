@@ -33,7 +33,7 @@ import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
-import service from './data.js';
+import service from './data.ts';
 
 const dataSource = new ArrayStore({
   key: 'ID',

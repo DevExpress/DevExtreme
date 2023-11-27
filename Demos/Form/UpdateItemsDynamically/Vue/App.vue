@@ -63,7 +63,7 @@ import {
   DxButtonItem,
   DxLabel,
 } from 'devextreme-vue/form';
-import service from './data.js';
+import service from './data.ts';
 
 const employee = service.getEmployee();
 const phoneOptions = ref(getPhonesOptions(employee.Phones));

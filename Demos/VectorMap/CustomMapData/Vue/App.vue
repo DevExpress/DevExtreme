@@ -34,7 +34,7 @@ import {
   DxExport,
   DxTitle,
 } from 'devextreme-vue/vector-map';
-import { pangaeaBorders, pangaeaContinents } from './data.js';
+import { pangaeaBorders, pangaeaContinents } from './data.ts';
 
 const projection = {
   to: ([l, lt]) => [l / 100, lt / 100],

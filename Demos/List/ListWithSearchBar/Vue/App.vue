@@ -32,7 +32,7 @@
 import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
-import { products } from './data.js';
+import { products } from './data.ts';
 
 const searchMode = ref('contains');
 </script>

@@ -65,7 +65,7 @@ import {
   DxFormat,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { architectureSources, sharingStatisticsInfo } from './data.js';
+import { architectureSources, sharingStatisticsInfo } from './data.ts';
 
 const types = ['spline', 'stackedspline', 'fullstackedspline'];
 const type = ref('spline');

@@ -69,7 +69,7 @@ import {
   dependencies,
   resources,
   resourceAssignments,
-} from './data.js';
+} from './data.ts';
 
 const getTaskColor = (taskId) => `custom-task-color-${taskId % 6}`;
 function getImagePath(taskId) {

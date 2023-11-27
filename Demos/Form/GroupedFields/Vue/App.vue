@@ -94,7 +94,7 @@
 import {
   DxForm, DxSimpleItem, DxGroupItem, DxTabbedItem, DxTabPanelOptions, DxTab,
 } from 'devextreme-vue/form';
-import service from './data.js';
+import service from './data.ts';
 import 'devextreme-vue/text-area';
 
 const employee = service.getEmployee();

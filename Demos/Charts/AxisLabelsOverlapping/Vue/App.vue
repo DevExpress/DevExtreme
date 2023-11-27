@@ -37,7 +37,7 @@ import {
   DxLabel,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { overlappingModes, population } from './data.js';
+import { overlappingModes, population } from './data.ts';
 
 const currentMode = ref(overlappingModes[0]);
 </script>

@@ -49,7 +49,7 @@
 import { reactive } from 'vue';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSortable } from 'devextreme-vue/sortable';
-import { tasks, employees } from './data.js';
+import { tasks, employees } from './data.ts';
 
 const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 const employeesMap = {};

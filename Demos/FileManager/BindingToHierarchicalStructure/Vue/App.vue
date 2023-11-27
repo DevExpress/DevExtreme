@@ -17,5 +17,5 @@
 
 <script setup lang="ts">
 import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
-import { fileItems } from './data.js';
+import { fileItems } from './data.ts';
 </script>

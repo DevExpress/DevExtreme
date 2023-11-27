@@ -38,7 +38,7 @@ import {
   DxBehavior,
 } from 'devextreme-vue/range-selector';
 import { DxDataGrid } from 'devextreme-vue/data-grid';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const range = ref([]);
 const columns = ref(['FirstName', 'LastName', 'BirthYear', 'City', 'Title']);

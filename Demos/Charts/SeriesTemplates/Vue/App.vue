@@ -32,7 +32,7 @@ import DxChart, {
   DxCommonSeriesSettings,
   DxExport,
 } from 'devextreme-vue/chart';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const customizeSeries = (seriesName) => ((seriesName === 2009)
   ? { type: 'line', label: { visible: true }, color: '#ff3f7a' }

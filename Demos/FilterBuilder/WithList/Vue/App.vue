@@ -31,7 +31,7 @@ import DxButton from 'devextreme-vue/button';
 import DxList from 'devextreme-vue/list';
 import DataSource from 'devextreme/data/data_source';
 import CustomItem from './CustomItem.vue';
-import { filter, fields, products } from './data.js';
+import { filter, fields, products } from './data.ts';
 
 const filterBuilderRef = ref(null);
 const dataSource = new DataSource({

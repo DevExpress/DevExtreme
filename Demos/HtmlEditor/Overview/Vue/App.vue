@@ -99,7 +99,7 @@ import {
 import {
   DxSelectBox,
 } from 'devextreme-vue/select-box';
-import { markup, tabs } from './data.js';
+import { markup, tabs } from './data.ts';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];

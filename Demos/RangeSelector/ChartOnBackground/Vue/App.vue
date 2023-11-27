@@ -35,7 +35,7 @@ import {
   DxSeries,
   DxValueAxis,
 } from 'devextreme-vue/range-selector';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const range = reactive([new Date(2011, 11, 25), new Date(2012, 0, 1)]);
 </script>

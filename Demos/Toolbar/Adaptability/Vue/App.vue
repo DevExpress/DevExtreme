@@ -321,7 +321,7 @@ import {
   textAlignItems,
   textAlignItemsExtended,
   listTypes,
-} from './data.js';
+} from './data.ts';
 import 'devextreme/ui/select_box';
 
 const lineHeightDefault = lineHeights[1].lineHeight;

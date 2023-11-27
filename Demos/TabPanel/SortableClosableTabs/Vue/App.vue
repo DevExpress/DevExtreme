@@ -53,7 +53,7 @@ import DxSortable from 'devextreme-vue/sortable';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import EmployeeTemplate from './EmployeeTemplate.vue';
-import service from './data.js';
+import service from './data.ts';
 
 const allEmployees = service.getEmployees();
 const employees = ref(allEmployees.slice(0, 3));

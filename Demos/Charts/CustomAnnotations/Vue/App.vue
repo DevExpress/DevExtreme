@@ -37,7 +37,7 @@
 import {
   DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings,
 } from 'devextreme-vue/chart';
-import { populationData } from './data.js';
+import { populationData } from './data.ts';
 import AnnotationTemplate from './AnnotationTemplate.vue';
 </script>
 <style scoped>

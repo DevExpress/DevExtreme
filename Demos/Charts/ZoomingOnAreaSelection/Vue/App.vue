@@ -66,7 +66,7 @@ import DxChart, {
   DxBorder,
 } from 'devextreme-vue/chart';
 import DxButton from 'devextreme-vue/button';
-import { birthLife } from './data.js';
+import { birthLife } from './data.ts';
 
 const chart = ref();
 

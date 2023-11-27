@@ -54,7 +54,7 @@ import DxChart, {
   DxExport,
   DxChartTypes,
 } from 'devextreme-vue/chart';
-import { exportData } from './data.js';
+import { exportData } from './data.ts';
 
 function onPointClick({ target: point }: DxChartTypes.PointClickEvent) {
   point.select();

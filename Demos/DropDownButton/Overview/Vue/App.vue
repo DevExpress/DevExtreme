@@ -86,7 +86,7 @@ import { ref } from 'vue';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxToolbar from 'devextreme-vue/toolbar';
 import notify from 'devextreme/ui/notify';
-import service from './data.js';
+import service from './data.ts';
 import 'whatwg-fetch';
 
 const alignment = ref('left');

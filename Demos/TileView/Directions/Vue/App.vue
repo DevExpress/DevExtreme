@@ -31,7 +31,7 @@ import { ref } from 'vue';
 import DxTileView from 'devextreme-vue/tile-view';
 import DxSelectBox from 'devextreme-vue/select-box';
 import HomeItem from './HomeItem.vue';
-import { homes } from './data.js';
+import { homes } from './data.ts';
 
 const directions = ['horizontal', 'vertical'];
 const direction = ref('horizontal');

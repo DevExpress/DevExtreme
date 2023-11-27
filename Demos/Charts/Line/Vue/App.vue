@@ -62,7 +62,7 @@ import {
   DxTooltip,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import service from './data.js';
+import service from './data.ts';
 
 const dataSource = service.getCountriesInfo();
 const energySources = service.getEnergySources();

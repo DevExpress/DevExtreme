@@ -61,7 +61,7 @@ import {
   DxChart as DxRsChart,
   DxSeries as DxRsSeries,
 } from 'devextreme-vue/range-selector';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const range = ref([]);
 </script>

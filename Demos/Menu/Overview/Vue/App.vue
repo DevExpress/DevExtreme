@@ -53,7 +53,7 @@ import { computed, ref } from 'vue';
 import DxMenu from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import service from './data.js';
+import service from './data.ts';
 
 const showSubmenuModes = [{
   name: 'onHover',

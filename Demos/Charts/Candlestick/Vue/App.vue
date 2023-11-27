@@ -52,7 +52,7 @@ import DxChart, {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/chart';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const customizeTooltip = ({
   openValue, closeValue, highValue, lowValue,

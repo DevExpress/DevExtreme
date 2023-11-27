@@ -49,7 +49,7 @@
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
 import Group from './Group.vue';
-import { ungroupedData, pregroupedData } from './data.js';
+import { ungroupedData, pregroupedData } from './data.ts';
 
 const fromUngroupedData = new DataSource({
   store: {

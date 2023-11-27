@@ -43,7 +43,7 @@ import {
   DxChart as DxRsChart,
   DxBehavior,
 } from 'devextreme-vue/range-selector';
-import { zoomingData } from './data.js';
+import { zoomingData } from './data.ts';
 
 const range = ref([]);
 const series = [{

@@ -146,7 +146,7 @@ import {
   DxRequiredRule,
 } from 'devextreme-vue/validator';
 import notify from 'devextreme/ui/notify';
-import { states } from './data.js';
+import { states } from './data.ts';
 
 const birthDate = ref(new Date(1981, 5, 3));
 const stylingMode = ref('outlined');

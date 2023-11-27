@@ -57,7 +57,7 @@ import {
   DxItem,
 } from 'devextreme-vue/html-editor';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { markup } from './data.js';
+import { markup } from './data.ts';
 
 const allowResizing = ref(true);
 const contextMenuEnabled = ref(true);

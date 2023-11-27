@@ -69,7 +69,7 @@ import {
   DxSource,
   DxTooltip,
 } from 'devextreme-vue/vector-map';
-import { populations, markers } from './data.js';
+import { populations, markers } from './data.ts';
 
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 const mapsWorld = mapsData.world;

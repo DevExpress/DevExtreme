@@ -91,7 +91,7 @@ import { ref } from 'vue';
 import {
   DxHtmlEditor,
 } from 'devextreme-vue/html-editor';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const mentions = ref([{
   dataSource: employees,

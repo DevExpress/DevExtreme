@@ -21,7 +21,7 @@ import {
   DxZoomAndPan,
   DxLegend,
 } from 'devextreme-vue/chart';
-import { zoomingData } from './data.js';
+import { zoomingData } from './data.ts';
 
 const initialRange = [300, 500];
 </script>

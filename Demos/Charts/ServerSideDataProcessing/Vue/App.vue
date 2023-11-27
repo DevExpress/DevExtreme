@@ -71,7 +71,7 @@ import DxChart, {
 import DxSelectBox from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
-import { months } from './data.js';
+import { months } from './data.ts';
 
 const chartDataSource = new DataSource({
   store: {

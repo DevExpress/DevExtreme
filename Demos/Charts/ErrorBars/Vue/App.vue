@@ -75,7 +75,7 @@ import DxChart, {
   DxTooltip,
   DxGrid,
 } from 'devextreme-vue/chart';
-import { weatherData } from './data.js';
+import { weatherData } from './data.ts';
 
 const customizeTooltip = (
   {

@@ -72,7 +72,7 @@ import { ref } from 'vue';
 import DxTileView from 'devextreme-vue/tile-view';
 import DxList from 'devextreme-vue/list';
 import ArrayStore from 'devextreme/data/array_store';
-import { data } from './data.js';
+import { data } from './data.ts';
 
 const currentHotel = ref(data[0]);
 

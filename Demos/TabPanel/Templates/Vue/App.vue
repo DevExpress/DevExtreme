@@ -74,7 +74,7 @@
 import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxTabPanel from 'devextreme-vue/tab-panel';
-import { multiViewItems } from './data.js';
+import { multiViewItems } from './data.ts';
 
 const companies = multiViewItems;
 const selectedIndex = ref(0);

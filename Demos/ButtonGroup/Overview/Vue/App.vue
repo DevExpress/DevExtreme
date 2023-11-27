@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import DxButtonGroup from 'devextreme-vue/button-group';
 import notify from 'devextreme/ui/notify';
-import { alignments, fontStyles } from './data.js';
+import { alignments, fontStyles } from './data.ts';
 
 function itemClick(e) {
   notify({ message: `The "${e.itemData.hint}" button was clicked`, width: 320 }, 'success', 1000);

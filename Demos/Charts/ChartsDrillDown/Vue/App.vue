@@ -30,7 +30,7 @@ import {
   DxLegend,
 } from 'devextreme-vue/chart';
 import { DxButton } from 'devextreme-vue/button';
-import service from './data.js';
+import service from './data.ts';
 
 const isFirstLevel = ref(true);
 const dataSource = ref(service.filterData(''));

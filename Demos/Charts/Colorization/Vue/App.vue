@@ -36,7 +36,7 @@ import DxTreeMap,
   DxTooltip,
 } from 'devextreme-vue/tree-map';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { salesAmount, colorizationOptions } from './data.js';
+import { salesAmount, colorizationOptions } from './data.ts';
 
 const selectedType = ref(colorizationOptions[2].name);
 const typeOptions = computed(

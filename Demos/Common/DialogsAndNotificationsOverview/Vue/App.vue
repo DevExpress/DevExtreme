@@ -99,7 +99,7 @@ import DxButton from 'devextreme-vue/button';
 import DxPopup from 'devextreme-vue/popup';
 import DxPopover from 'devextreme-vue/popover';
 import notify from 'devextreme/ui/notify';
-import { housesSource } from './data.js';
+import { housesSource } from './data.ts';
 
 const ADD_TO_FAVORITES = 'Add to Favorites';
 const REMOVE_FROM_FAVORITES = 'Remove from Favorites';

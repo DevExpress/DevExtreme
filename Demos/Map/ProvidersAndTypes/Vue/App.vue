@@ -28,7 +28,7 @@
 import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { mapTypes } from './data.js';
+import { mapTypes } from './data.ts';
 
 const apiKey = {
   bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',

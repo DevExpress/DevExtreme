@@ -54,7 +54,7 @@ import {
   DxTooltip,
 } from 'devextreme-vue/vector-map';
 import TooltipTemplate from './TooltipTemplate.vue';
-import { countriesGDP } from './data.js';
+import { countriesGDP } from './data.ts';
 
 const colorGroups = [0, 10000, 50000, 100000, 500000, 1000000, 10000000, 50000000];
 const mapsWorld = mapsData.world;

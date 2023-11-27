@@ -36,7 +36,7 @@
 import { computed, ref } from 'vue';
 import { DxBarGauge, DxLabel } from 'devextreme-vue/bar-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { colors } from './data.js';
+import { colors } from './data.ts';
 
 const palette = ['#ff0000', '#00ff00', '#0000ff'];
 const value = ref(colors[0].code);

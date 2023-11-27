@@ -11,5 +11,5 @@
 </template>
 <script setup lang="ts">
 import { DxList } from 'devextreme-vue/list';
-import { navigation } from './data.js';
+import { navigation } from './data.ts';
 </script>

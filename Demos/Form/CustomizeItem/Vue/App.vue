@@ -115,7 +115,7 @@
 import {
   DxForm, DxItem, DxLabel, DxGroupItem,
 } from 'devextreme-vue/form';
-import service from './data.js';
+import service from './data.ts';
 import 'devextreme-vue/text-area';
 import LabelTemplate from './LabelTemplate.vue';
 import LabelNotesTemplate from './LabelNotesTemplate.vue';

@@ -45,7 +45,7 @@ import { ref } from 'vue';
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
 import FieldItem from './FieldItem.vue';
 import ListItem from './ListItem.vue';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const lookupValue = ref(employees[0].ID);
 

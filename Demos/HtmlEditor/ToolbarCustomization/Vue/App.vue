@@ -46,7 +46,7 @@ import {
   DxItem,
 } from 'devextreme-vue/html-editor';
 import { DxPopup } from 'devextreme-vue/popup';
-import { markup } from './data.js';
+import { markup } from './data.ts';
 
 const value = ref(markup);
 const popupVisible = ref(false);

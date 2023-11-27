@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import DxTagBox from 'devextreme-vue/tag-box';
-import { categories } from './data.js';
+import { categories } from './data.ts';
 
 const props = withDefaults(defineProps<{
   conditionInfo?: Record<string, any>

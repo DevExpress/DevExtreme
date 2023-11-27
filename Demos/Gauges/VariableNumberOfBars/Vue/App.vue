@@ -31,7 +31,7 @@
 import { ref, watch } from 'vue';
 import { DxBarGauge, DxLabel } from 'devextreme-vue/bar-gauge';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { products } from './data.js';
+import { products } from './data.ts';
 
 const productsRef = ref(products);
 const getActiveItems = () => products.filter((p) => p.active).map((p) => p.count);

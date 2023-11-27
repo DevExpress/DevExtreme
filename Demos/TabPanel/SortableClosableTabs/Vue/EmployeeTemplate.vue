@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import DxList from 'devextreme-vue/list';
-import service from './data.js';
+import service from './data.ts';
 
 const props = withDefaults(defineProps<{
   employee?: Record<string, any>

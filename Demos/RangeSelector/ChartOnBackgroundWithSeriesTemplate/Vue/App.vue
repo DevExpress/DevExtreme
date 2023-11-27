@@ -34,7 +34,7 @@ import {
   DxFormat,
   DxLabel,
 } from 'devextreme-vue/range-selector';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const customizeSeries = (seriesName: string) => (seriesName === 'USA' ? { color: 'red' } : {});
 </script>

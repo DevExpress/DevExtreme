@@ -54,7 +54,7 @@ import {
   DxMargin,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const types = ['area', 'stackedarea', 'fullstackedarea'];
 const type = ref(types[0]);

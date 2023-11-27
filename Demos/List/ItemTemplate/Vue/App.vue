@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import DxList from 'devextreme-vue/list';
 import ProductInfo from './ProductInfo.vue';
-import { products } from './data.js';
+import { products } from './data.ts';
 
 const dataSource = products;
 </script>

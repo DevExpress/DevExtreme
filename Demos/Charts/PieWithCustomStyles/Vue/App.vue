@@ -32,7 +32,7 @@ import {
   getRadialGradient,
   getPatternImage,
 } from './utils.js';
-import { data } from './data.js';
+import { data } from './data.ts';
 
 function customizePoint(point) {
   const color = point.series.getPointsByArg(point.argument)[0].getColor();

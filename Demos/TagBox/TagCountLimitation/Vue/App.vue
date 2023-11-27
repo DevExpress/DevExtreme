@@ -56,7 +56,7 @@
 </template>
 <script setup lang="ts">
 import DxTagBox from 'devextreme-vue/tag-box';
-import { products } from './data.js';
+import { products } from './data.ts';
 
 const items = products.slice(0, 5);
 

@@ -72,7 +72,7 @@ import DxPieChart, {
   DxTooltip,
   DxLegend,
 } from 'devextreme-vue/pie-chart';
-import { dataSource, getAnnotationSources } from './data.js';
+import { dataSource, getAnnotationSources } from './data.ts';
 import TooltipTemplate from './TooltipTemplate.vue';
 
 const annotations = getAnnotationSources();

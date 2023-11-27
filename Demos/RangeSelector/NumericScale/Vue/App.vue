@@ -33,7 +33,7 @@ import {
   DxSeries,
   DxScale,
 } from 'devextreme-vue/range-selector';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const range = ref(['1', '2']);
 </script>

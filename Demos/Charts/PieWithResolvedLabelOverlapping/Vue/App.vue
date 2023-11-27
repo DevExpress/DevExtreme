@@ -45,7 +45,7 @@ import DxPieChart, {
   DxAnimation,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const resolveModes = ['shift', 'hide', 'none'];
 const resolveMode = ref('shift');

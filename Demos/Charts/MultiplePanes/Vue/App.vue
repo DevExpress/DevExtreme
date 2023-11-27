@@ -66,7 +66,7 @@ import DxChart, {
   DxTitle,
   DxGrid,
 } from 'devextreme-vue/chart';
-import { weatherData } from './data.js';
+import { weatherData } from './data.ts';
 
 const temperatureCustomizeText = ({ valueText }) => `${valueText} °C`;
 const precipitationCustomizeText = ({ valueText }) => `${valueText} mm`;

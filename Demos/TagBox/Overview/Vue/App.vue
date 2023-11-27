@@ -122,7 +122,7 @@ import { ref } from 'vue';
 import DxTagBox from 'devextreme-vue/tag-box';
 import Item from './Item.vue';
 import Tag from './Tag.vue';
-import { simpleProducts, products } from './data.js';
+import { simpleProducts, products } from './data.ts';
 
 const editableProducts = ref(simpleProducts.slice());
 

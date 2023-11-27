@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxToast } from 'devextreme-vue/toast';
-import { products } from './data.js';
+import { products } from './data.ts';
 import ProductItem from './ProductItem.vue';
 
 const isVisible = ref(false);

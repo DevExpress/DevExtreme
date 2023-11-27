@@ -67,7 +67,7 @@ import {
   DxSubtitle,
   DxTooltip,
 } from 'devextreme-vue/chart';
-import { energySources, countriesInfo } from './data.js';
+import { energySources, countriesInfo } from './data.ts';
 </script>
 <style>
 #chart {

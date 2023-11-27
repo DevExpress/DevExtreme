@@ -110,7 +110,7 @@ import DxSortable from 'devextreme-vue/sortable';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxNumberBox from 'devextreme-vue/number-box';
-import { tasks } from './data.js';
+import { tasks } from './data.ts';
 
 const items = ref(tasks);
 const dropFeedbackMode = ref('push');

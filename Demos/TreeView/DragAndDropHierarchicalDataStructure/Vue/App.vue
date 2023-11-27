@@ -60,7 +60,7 @@
 import { nextTick, ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxSortable from 'devextreme-vue/sortable';
-import service from './data.js';
+import service from './data.ts';
 
 const itemsDriveC = ref(service.getItemsDriveC());
 const itemsDriveD = ref(service.getItemsDriveD());

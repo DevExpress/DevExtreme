@@ -56,7 +56,7 @@ import {
   DxExport,
   DxFont,
 } from 'devextreme-vue/chart';
-import { temperaturesData, highAverage, lowAverage } from './data.js';
+import { temperaturesData, highAverage, lowAverage } from './data.ts';
 
 const highAverageColor = ref('#ff9b52');
 const lowAverageColor = ref('#6199e6');

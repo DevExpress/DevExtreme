@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { DxTagBox } from 'devextreme-vue/tag-box';
 import Group from './Group.vue';
-import productsData from './data.js';
+import productsData from './data.ts';
 
 const products = {
   store: productsData,

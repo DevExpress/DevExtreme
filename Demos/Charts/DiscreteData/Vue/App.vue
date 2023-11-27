@@ -46,7 +46,7 @@ import {
   DxMargin,
 } from 'devextreme-vue/polar-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { types, dataSource } from './data.js';
+import { types, dataSource } from './data.ts';
 
 const currentType = ref(types[0]);
 </script>

@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import DxRadioGroup from 'devextreme-vue/radio-group';
-import { priorities, priorityEntities, tasks } from './data.js';
+import { priorities, priorityEntities, tasks } from './data.ts';
 
 const colorPriority = ref(priorities[2]);
 const selectionPriority = ref(priorityEntities[0].id);

@@ -42,7 +42,7 @@ import DxPieChart, {
   DxLegend,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { populationData } from './data.js';
+import { populationData } from './data.ts';
 
 const selectedRegion = ref(null);
 const pieChart = ref();

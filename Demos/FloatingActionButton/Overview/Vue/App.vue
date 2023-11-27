@@ -84,7 +84,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxSpeedDialAction from 'devextreme-vue/speed-dial-action';
 import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import { employees, states, directions } from './data.js';
+import { employees, states, directions } from './data.ts';
 
 const gridRef = ref();
 const lookup = {

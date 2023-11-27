@@ -85,7 +85,7 @@ import {
   DxLegend,
 } from 'devextreme-vue/chart';
 import DxNumberBox from 'devextreme-vue/number-box';
-import { generateDataSource } from './data.js';
+import { generateDataSource } from './data.ts';
 
 const argumentPosition = ref(0);
 const argumentOffset = ref(0);

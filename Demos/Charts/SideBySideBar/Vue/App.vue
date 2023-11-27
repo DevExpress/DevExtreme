@@ -47,7 +47,7 @@ import {
   DxLegend,
   DxExport,
 } from 'devextreme-vue/chart';
-import { grossProductData } from './data.js';
+import { grossProductData } from './data.ts';
 
 const dataSource = grossProductData;
 

@@ -83,7 +83,7 @@
 import { ref } from 'vue';
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import DxTreeView from 'devextreme-vue/tree-view';
-import { continents } from './data.js';
+import { continents } from './data.ts';
 
 const tabPanelIndex = ref(0);
 const countryData = ref(continents[0].items[0]);

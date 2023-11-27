@@ -71,7 +71,7 @@ import DxChart, {
   DxValueAxis,
   DxConstantLine,
 } from 'devextreme-vue/chart';
-import { complaintsData } from './data.js';
+import { complaintsData } from './data.ts';
 
 function customizeTooltip({ argumentText, points }) {
   return {

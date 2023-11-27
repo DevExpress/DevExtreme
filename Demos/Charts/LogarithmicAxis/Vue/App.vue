@@ -46,7 +46,7 @@ import {
   DxBorder,
   DxPoint,
 } from 'devextreme-vue/chart';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 function customizePoint({ data: { type } }) {
   let color;

@@ -35,7 +35,7 @@ import {
   DxLegend,
   DxPoint,
 } from 'devextreme-vue/chart';
-import { yearSources, grossProductData } from './data.js';
+import { yearSources, grossProductData } from './data.ts';
 </script>
 <style>
 #chart {

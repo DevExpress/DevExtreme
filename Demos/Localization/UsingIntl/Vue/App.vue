@@ -68,7 +68,7 @@ import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
 import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
 import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme/localization';
-import service from './data.js';
+import service from './data.ts';
 
 type Locale = string;
 

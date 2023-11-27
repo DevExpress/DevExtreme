@@ -105,7 +105,7 @@ import ArrayStore from 'devextreme/data/array_store';
 import notify from 'devextreme/ui/notify';
 import Field from './Field.vue';
 import Item from './Item.vue';
-import service from './data.js';
+import service from './data.ts';
 
 const products = service.getProducts();
 const simpleProducts = service.getSimpleProducts();

@@ -24,7 +24,7 @@
 import { computed, ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxForm from 'devextreme-vue/form';
-import employee from './data.js';
+import employee from './data.ts';
 
 const calculateColCountAutomatically = ref(false);
 

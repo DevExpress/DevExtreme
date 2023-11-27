@@ -32,7 +32,7 @@ import {
   DxLayer,
   DxFont,
 } from 'devextreme-vue/vector-map';
-import { weatherData } from './data.js';
+import { weatherData } from './data.ts';
 
 const usa = mapsData.usa;
 const bounds = [-118, 52, -80, 20];

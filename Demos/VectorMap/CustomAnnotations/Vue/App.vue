@@ -32,7 +32,7 @@ import {
   DxAnnotation,
   DxCommonAnnotationSettings,
 } from 'devextreme-vue/vector-map';
-import { statesData } from './data.js';
+import { statesData } from './data.ts';
 import AnnotationTemplate from './AnnotationTemplate.vue';
 
 const usa = ref(mapsData.usa);

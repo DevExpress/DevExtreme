@@ -60,7 +60,7 @@ import {
 } from 'devextreme-vue/button-group';
 import * as prettier from 'prettier/standalone';
 import * as parserHtml from 'prettier/parser-html';
-import { markup } from './data.js';
+import { markup } from './data.ts';
 import 'devextreme/ui/html_editor/converters/markdown';
 
 const valueContent = ref(markup);

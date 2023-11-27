@@ -60,7 +60,7 @@ import DxDrawer from 'devextreme-vue/drawer';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import DxToolbar from 'devextreme-vue/toolbar';
 import NavigationList from './NavigationList.vue';
-import { text } from './data.js';
+import { text } from './data.ts';
 
 const showModes = ['push', 'shrink', 'overlap'];
 const positionModes = ['top', 'bottom'];

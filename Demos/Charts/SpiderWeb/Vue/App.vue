@@ -24,7 +24,7 @@ import {
   DxExport,
   DxTooltip,
 } from 'devextreme-vue/polar-chart';
-import { fruitSources, productionData } from './data.js';
+import { fruitSources, productionData } from './data.ts';
 </script>
 <style>
 #chart {

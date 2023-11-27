@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import DxDateBox from 'devextreme-vue/date-box';
-import service from './data.js';
+import service from './data.ts';
 
 const value = ref(new Date(1981, 3, 27));
 const now = new Date();

@@ -33,7 +33,7 @@ import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxButton from 'devextreme-vue/button';
-import { markersData } from './data.js';
+import { markersData } from './data.ts';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 const markersIcon = ref(markerUrl);

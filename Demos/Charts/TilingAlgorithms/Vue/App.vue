@@ -38,7 +38,7 @@ import DxTreeMap,
   DxTooltip,
 } from 'devextreme-vue/tree-map';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { populationByAge } from './data.js';
+import { populationByAge } from './data.ts';
 
 const algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
 const selectedAlgorithm = ref(algorithms[2]);

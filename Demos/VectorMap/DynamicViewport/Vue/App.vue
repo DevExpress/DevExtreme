@@ -76,7 +76,7 @@ import DxTextBox from 'devextreme-vue/text-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxSwitch from 'devextreme-vue/switch';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { viewportCoordinates } from './data.js';
+import { viewportCoordinates } from './data.ts';
 
 const world = mapsData.world;
 const bounds = [-180, 85, 180, -60];

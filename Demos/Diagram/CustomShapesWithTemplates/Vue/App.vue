@@ -58,7 +58,7 @@ import {
 import { DxPopup } from 'devextreme-vue/popup';
 import ArrayStore from 'devextreme/data/array_store';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
-import service from './data.js';
+import service from './data.ts';
 
 const employees = service.getEmployees();
 const dataSource = new ArrayStore({

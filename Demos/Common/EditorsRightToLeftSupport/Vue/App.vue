@@ -122,7 +122,7 @@ import DxTextArea from 'devextreme-vue/text-area';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxTagBox from 'devextreme-vue/tag-box';
-import { europeanUnion as europeanUnionData } from './data.js';
+import { europeanUnion as europeanUnionData } from './data.ts';
 
 const languages = [
   'Arabic: Right-to-Left direction',

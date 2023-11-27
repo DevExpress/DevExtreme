@@ -71,7 +71,7 @@ import { ref } from 'vue';
 import { DxButton } from 'devextreme-vue/button';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-import { employee } from './data.js';
+import { employee } from './data.ts';
 
 const employeeInfo = ref<typeof employee>({});
 const loadingVisible = ref(false);

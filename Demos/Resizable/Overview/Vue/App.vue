@@ -76,7 +76,7 @@ import DxDataGrid, { DxPaging, DxScrolling, DxColumn } from 'devextreme-vue/data
 import DxResizable from 'devextreme-vue/resizable';
 import DxTagBox from 'devextreme-vue/tag-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import service from './data.js';
+import service from './data.ts';
 
 const handleValues = ['left', 'top', 'right', 'bottom'];
 const handles = ref(handleValues);

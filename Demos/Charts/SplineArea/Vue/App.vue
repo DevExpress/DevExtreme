@@ -50,7 +50,7 @@ import {
   DxLegend,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { dataSource } from './data.js';
+import { dataSource } from './data.ts';
 
 const types = ['splinearea', 'stackedsplinearea', 'fullstackedsplinearea'];
 const type = ref(types[0]);

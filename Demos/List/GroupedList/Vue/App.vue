@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import DxList from 'devextreme-vue/list';
-import { employees } from './data.js';
+import { employees } from './data.ts';
 
 const dataSource = employees;
 </script>

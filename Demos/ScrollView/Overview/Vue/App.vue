@@ -66,7 +66,7 @@ import { ref } from 'vue';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { longText } from './data.js';
+import { longText } from './data.ts';
 
 const content = ref(longText);
 const pullDown = ref(false);

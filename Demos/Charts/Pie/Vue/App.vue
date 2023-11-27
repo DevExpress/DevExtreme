@@ -32,7 +32,7 @@ import DxPieChart, {
   DxExport,
   DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
-import { areas } from './data.js';
+import { areas } from './data.ts';
 
 function pointClickHandler(e: DxPieChartTypes.PointClickEvent) {
   toggleVisibility(e.target);

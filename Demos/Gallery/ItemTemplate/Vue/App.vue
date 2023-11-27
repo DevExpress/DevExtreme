@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import DxGallery from 'devextreme-vue/gallery';
-import { gallery } from './data.js';
+import { gallery } from './data.ts';
 
 const dataSource = gallery;
 const currencyFormatter = new Intl.NumberFormat('en-US', {

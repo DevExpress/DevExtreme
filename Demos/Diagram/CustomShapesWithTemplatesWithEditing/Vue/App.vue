@@ -170,7 +170,7 @@ import DxButton from 'devextreme-vue/button';
 import ArrayStore from 'devextreme/data/array_store';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.vue';
-import service from './data.js';
+import service from './data.ts';
 
 let generatedID = 100;
 const dataSource = new ArrayStore({

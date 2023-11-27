@@ -37,7 +37,7 @@
 import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { markersData, routesData } from './data.js';
+import { markersData, routesData } from './data.ts';
 
 const routes = ref(routesData);
 const routeModes = ['driving', 'walking'];
