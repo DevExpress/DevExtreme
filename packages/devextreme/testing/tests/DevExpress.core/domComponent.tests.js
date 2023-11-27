@@ -1200,4 +1200,30 @@ QUnit.module('License check', {
             config({ licenseKey: null });
         }
     });
+
+    QUnit.test('license should be removed from config after validateLicense() executed', function(assert) {
+        try {
+            const licenseKey = 'license key';
+            config({ licenseKey });
+            new this.TestComponent('#component');
+
+            assert.strictEqual(config().licenseKey, '');
+        } finally {
+            config({ licenseKey: null });
+        }
+    });
+
+    QUnit.test('license should be removed from config once', function(assert) {
+        try {
+            const licenseKey = 'license key';
+
+            new this.TestComponent('#component');
+            config({ licenseKey });
+            new this.TestComponent('#component');
+
+            assert.strictEqual(config().licenseKey, licenseKey);
+        } finally {
+            config({ licenseKey: null });
+        }
+    });
 });
