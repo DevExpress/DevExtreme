@@ -51,7 +51,6 @@
     padding-bottom: $material-form-default-padding;
     font-size: $material-form-label-font-size;
 
-
     .dx-field-item {
       &.dx-last-row {
         padding-bottom: 0;
@@ -65,6 +64,11 @@
     .dx-field-item.dx-last-row:not(.dx-last-col) {
       padding-bottom: $material-form-default-padding;
     }
+
+    .dx-form-group .dx-single-column-item-content > .dx-first-row.dx-col-0.dx-field-item {
+      padding-top: 0;
+    }
+
     .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
       padding-top: $material-form-default-padding;
     }
