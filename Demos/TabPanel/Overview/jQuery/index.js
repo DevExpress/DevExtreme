@@ -33,7 +33,6 @@ $(() => {
     height: 418,
     animationEnabled: true,
     swipeEnabled: true,
-    showNavButtons: true,
     tabsPosition: tabsPositions[0],
     stylingMode: stylingModes[0],
     iconPosition: iconPositions[0],

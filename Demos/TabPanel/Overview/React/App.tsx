@@ -39,7 +39,6 @@ const App = () => {
           height={418}
           animationEnabled={true}
           swipeEnabled={true}
-          showNavButtons={true}
           dataSource={dataSource}
           tabsPosition={tabsPosition}
           stylingMode={stylingMode}

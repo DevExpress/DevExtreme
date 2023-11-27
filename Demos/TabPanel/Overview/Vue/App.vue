@@ -12,7 +12,6 @@
         :tabs-position="tabsPosition"
         :styling-mode="stylingMode"
         :icon-position="iconPosition"
-        :show-nav-buttons="true"
       >
         <template #tabPanelItem="{ data }">
           <TabPanelItem
