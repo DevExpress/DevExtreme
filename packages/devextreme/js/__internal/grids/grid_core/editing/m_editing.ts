@@ -1017,7 +1017,6 @@ class EditingControllerImpl extends modules.ViewController {
     d.done(() => {
       this._rowsView?.waitAsyncTemplates(true).done(() => {
         this._showAddedRow(rowIndex);
-        // @ts-expect-error
         this._afterInsertRow(change.key);
       });
     });
@@ -1054,7 +1053,7 @@ class EditingControllerImpl extends modules.ViewController {
     return options.cancel;
   }
 
-  _beforeUpdateItems(): any {}
+  _beforeUpdateItems(rowIndices, rowIndex): any {}
 
   _getVisibleEditColumnIndex() {
     const editColumnName = this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME);
@@ -2264,7 +2263,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   highlightDataCell($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); }
 
-  _afterInsertRow(): any {}
+  _afterInsertRow(key): any {}
 
   // @ts-expect-error
   _beforeSaveEditData(change?) {
