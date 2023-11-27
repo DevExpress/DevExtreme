@@ -33,11 +33,20 @@
         .dx-menu-item-popout {
           display: flex;
           align-items: center;
-          color: $base-icon-color;
 
           @include dx-icon(spinright);
           @include dx-icon-sizing($fluent-button-icon-size);
         }
+      }
+    }
+
+    .dx-menu-item-popout {
+      color: $base-icon-color;
+    }
+
+    &.dx-state-disabled {
+      .dx-menu-item-popout {
+        color: $base-foreground-disabled;
       }
     }
 
