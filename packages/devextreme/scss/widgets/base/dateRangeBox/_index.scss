@@ -13,6 +13,7 @@
       &.dx-editor-outlined {
         border: 0;
         box-shadow: none;
+        background-color: transparent;
 
         &.dx-texteditor-with-label,
         &.dx-texteditor-with-floating-label {
@@ -34,6 +35,7 @@
 
     &.dx-editor-underlined {
       border-bottom: 0;
+      background-color: transparent;
 
       &::before {
         margin-left: 0;
