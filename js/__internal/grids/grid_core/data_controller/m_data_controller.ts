@@ -11,6 +11,7 @@ import CustomStore from '@js/data/custom_store';
 import DataHelperMixin from '@js/data_helper';
 import errors from '@js/ui/widget/ui.errors';
 
+import type { AdaptivityDataControllerExtension } from '../adaptivity/m_adaptivity';
 import modules from '../m_modules';
 import type {
   Controller as ControllerType,
@@ -60,7 +61,7 @@ interface HandleDataChangedArguments {
 type UserData = Record<string, unknown>;
 
 interface Item {
-  rowType: 'data' | 'group' | 'groupFooter';
+  rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
   data: UserData;
   dataIndex?: number;
   values?: unknown[];
@@ -74,6 +75,8 @@ interface Item {
   isSelected?: boolean;
 }
 
+export type Filter = any;
+
 interface DataHelperMixinType {
   _refreshDataSource(): any;
   _initDataSource(): any;
@@ -81,7 +84,9 @@ interface DataHelperMixinType {
 
 type DataControllerBaseType = ModuleType<ControllerType
 & DataHelperMixinType
-& SearchDataControllerExtension>;
+& SearchDataControllerExtension
+& AdaptivityDataControllerExtension
+>;
 
 const ControllerWithDataMixin: DataControllerBaseType = modules.Controller.inherit(DataHelperMixin);
 
@@ -139,12 +144,6 @@ export class DataController extends ControllerWithDataMixin {
   loadingChanged: any;
 
   dataSourceChanged: any;
-
-  _adaptiveExpandedKey: any;
-
-  adaptiveExpandedKey: any;
-
-  toggleExpandAdaptiveDetailRow: any;
 
   _lastRenderingPageIndex: any;
 
@@ -1161,7 +1160,7 @@ export class DataController extends ControllerWithDataMixin {
     this.loadingChanged.fire(this.isLoading(), this._loadingText);
   }
 
-  _calculateAdditionalFilter(): any {
+  _calculateAdditionalFilter(): Filter {
     return null;
   }
 

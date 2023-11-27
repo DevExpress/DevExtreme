@@ -1,4 +1,5 @@
 /* eslint-disable prefer-destructuring */
+import type { ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
@@ -76,6 +77,10 @@ import {
   updateIndexes,
   updateSerializers,
 } from './m_columns_controller_utils';
+
+export interface Column extends ColumnBase {
+  parseValue: (text: string) => unknown;
+}
 
 export class ColumnsController extends modules.Controller {
   _skipProcessingColumnsChange: any;
