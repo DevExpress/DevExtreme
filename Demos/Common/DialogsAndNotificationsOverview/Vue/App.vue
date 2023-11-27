@@ -20,7 +20,7 @@
               <div :id="'house' + house.ID">
                 <img
                   alt="Listing agent"
-                  src="../../../../images/icon-agent.svg"
+                  :src="'../../../../images/icon-agent.svg'"
                 >
                 Listing agent
               </div>
