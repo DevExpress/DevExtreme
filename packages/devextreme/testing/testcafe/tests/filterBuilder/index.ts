@@ -7,7 +7,7 @@ import { fields, filter } from './data';
 import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture`Editing events`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 test('Field dropdown popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
