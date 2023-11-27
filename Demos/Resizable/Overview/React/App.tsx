@@ -77,7 +77,7 @@ const App = () => {
         <div className='option'>
           <CheckBox
             text='Keep aspect ratio'
-            value={true}
+            value={keepAspectRatio}
             onValueChange={keepAspectRatioValueChange}
           />
         </div>
