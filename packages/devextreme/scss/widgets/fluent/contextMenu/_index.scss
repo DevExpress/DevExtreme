@@ -16,9 +16,9 @@
 
 
 .dx-context-menu {
-  .dx-menu-item {
-    color: $menu-color;
+  color: $menu-color;
 
+  .dx-menu-item {
     .dx-menu-item-content {
       display: flex;
       align-items: center;
