@@ -32,9 +32,9 @@ $progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $p
 $progressbar-label-color: $base-text-color !default;
 
 @if $mode == "light" {
-  $progressbar-bg: darken($base-element-bg, 9.80) !default;
+  $progressbar-bg: darken($base-typography-bg, 7.84) !default;
 }
 
 @if $mode == "dark" {
-  $progressbar-bg: lighten($base-element-bg, 3.92) !default;
+  $progressbar-bg: lighten($base-typography-bg, 7.84) !default;
 }

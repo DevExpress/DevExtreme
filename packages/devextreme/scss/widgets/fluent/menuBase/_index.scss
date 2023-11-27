@@ -19,6 +19,10 @@
     color: $typography-link-color;
   }
 
+  &.dx-state-disabled {
+    color: $menu-item-color-disabled;
+  }
+
   &.dx-state-hover {
     background-color: $menu-item-hover-bg;
   }

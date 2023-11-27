@@ -21,6 +21,10 @@ $material-menu-arrow-image-size: 7px;
     color: $typography-link-color;
   }
 
+  &.dx-state-disabled {
+    opacity: 0.5;
+  }
+
   &.dx-state-hover {
     background-color: $menu-item-hover-bg;
   }
