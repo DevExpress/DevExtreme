@@ -48,8 +48,6 @@ export class AppComponent {
 
   iconPosition: string = this.iconPositions[0];
 
-  showNavButtons = true;
-
   constructor(service: Service) {
     this.dataSource = service.getItems();
   }

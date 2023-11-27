@@ -1,6 +1,5 @@
 import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
-import CheckBox from 'devextreme-react/check-box';
 import TabPanel from 'devextreme-react/tab-panel';
 import TabPanelItem from './TabPanelItem.js';
 import {
@@ -10,7 +9,6 @@ import {
   stylingModes,
   iconPositionsSelectBoxLabel,
   iconPositions,
-  navButtonsCheckBoxLabel,
   dataSource,
 } from './data.js';
 
@@ -18,7 +16,6 @@ const App = () => {
   const [tabsPosition, setTabsPosition] = React.useState(tabsPositions[0]);
   const [stylingMode, setStylingMode] = React.useState(stylingModes[0]);
   const [iconPosition, setIconPosition] = React.useState(iconPositions[0]);
-  const [showNavButtons, setShowNavButtons] = React.useState(true);
   const onTabsPositionChanged = React.useCallback(
     (args) => {
       setTabsPosition(args.value);
@@ -37,12 +34,6 @@ const App = () => {
     },
     [setIconPosition],
   );
-  const onShowNavButtonsChanged = React.useCallback(
-    (args) => {
-      setShowNavButtons(args.value);
-    },
-    [setShowNavButtons],
-  );
   return (
     <div className="tabpanel-demo">
       <div className="widget-container">
@@ -52,11 +43,11 @@ const App = () => {
           height={418}
           animationEnabled={true}
           swipeEnabled={true}
+          showNavButtons={true}
           dataSource={dataSource}
           tabsPosition={tabsPosition}
           stylingMode={stylingMode}
           iconPosition={iconPosition}
-          showNavButtons={showNavButtons}
           itemComponent={TabPanelItem}
         />
       </div>
@@ -94,15 +85,6 @@ const App = () => {
             items={iconPositions}
             value={iconPosition}
             onValueChanged={onIconPositionChanged}
-          />
-        </div>
-
-        <div className="option">
-          <CheckBox
-            text="Show navigation buttons"
-            elementAttr={navButtonsCheckBoxLabel}
-            value={showNavButtons}
-            onValueChanged={onShowNavButtonsChanged}
           />
         </div>
       </div>

@@ -66,13 +66,4 @@ $(() => {
       tabPanel.option({ iconPosition: value });
     },
   });
-
-  $('#show-nav-buttons-checkbox').dxCheckBox({
-    text: 'Show navigation buttons',
-    elementAttr: navButtonsCheckBoxLabel,
-    value: true,
-    onValueChanged({ value }) {
-      tabPanel.option({ showNavButtons: value });
-    },
-  });
 });

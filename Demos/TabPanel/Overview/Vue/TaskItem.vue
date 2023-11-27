@@ -66,7 +66,7 @@ withDefaults(defineProps<{
 
 .task-item-info {
   font-size: 12px;
-  opacity: 0.38;
+  opacity: 0.6;
 }
 
 .task-item-pseudo-button {

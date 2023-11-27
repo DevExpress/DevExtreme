@@ -4,7 +4,6 @@ export const stylingModesSelectBoxLabel = { 'aria-label': 'Styling mode' };
 export const stylingModes = ['secondary', 'primary'];
 export const iconPositionsSelectBoxLabel = { 'aria-label': 'Icon positions' };
 export const iconPositions = ['top', 'start', 'end', 'bottom'];
-export const navButtonsCheckBoxLabel = { 'aria-label': 'Show navigation buttons' };
 const tasks = [
   {
     status: 'Not Started',

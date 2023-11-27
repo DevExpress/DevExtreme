@@ -23,8 +23,6 @@ const iconPositions = [
   'bottom',
 ];
 
-const navButtonsCheckBoxLabel = { 'aria-label': 'Show navigation buttons' };
-
 const tasks = [
   {
     status: 'Not Started',

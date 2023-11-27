@@ -12,7 +12,7 @@
         :tabs-position="tabsPosition"
         :styling-mode="stylingMode"
         :icon-position="iconPosition"
-        :show-nav-buttons="showNavButtons"
+        :show-nav-buttons="true"
       >
         <template #tabPanelItem="{ data }">
           <TabPanelItem
@@ -54,14 +54,6 @@
           :items="iconPositions"
         />
       </div>
-
-      <div class="option">
-        <DxCheckBox
-          text="Show navigation buttons"
-          v-model:value="showNavButtons"
-          :element-attr="navButtonsCheckBoxLabel"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -70,7 +62,6 @@
 import { ref } from 'vue';
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import DxSelectBox from 'devextreme-vue/select-box';
-import DxCheckBox from 'devextreme-vue/check-box';
 import TabPanelItem from './TabPanelItem.vue';
 import {
   tabsPositionsSelectBoxLabel,
@@ -79,14 +70,12 @@ import {
   stylingModes,
   iconPositionsSelectBoxLabel,
   iconPositions,
-  navButtonsCheckBoxLabel,
   dataSource,
 } from './data.js';
 
 const tabsPosition = ref(tabsPositions[0]);
 const stylingMode = ref(stylingModes[0]);
 const iconPosition = ref(iconPositions[0]);
-const showNavButtons = ref(true);
 </script>
 
 <style>
@@ -126,6 +115,7 @@ const showNavButtons = ref(true);
   flex-direction: column;
   flex-shrink: 0;
   box-sizing: border-box;
+  width: 272px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
 }

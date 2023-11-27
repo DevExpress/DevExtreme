@@ -34,6 +34,7 @@
   flex-direction: column;
   flex-shrink: 0;
   box-sizing: border-box;
+  width: 272px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
 }
@@ -99,7 +100,7 @@
 
 ::ng-deep .task-item-info {
   font-size: 12px;
-  opacity: 0.38;
+  opacity: 0.6;
 }
 
 ::ng-deep .task-item-pseudo-button {
