@@ -2668,7 +2668,7 @@ QUnit.module('Supported editors', () => {
         const errorMessage = consoleErrorStub.getCall(0).args[0];
         assert.equal(consoleErrorStub.callCount, 1, 'error was raised for item without dataField and editorType');
         assert.equal(errorMessage.indexOf('E1035 - The editor cannot be created'), 0);
-        assert.ok(errorMessage.indexOf('\n\nFor additional information on this error message, see: http://js.devexpress.com/error/') > 0);
+        assert.ok(errorMessage.indexOf('\n\nFor additional information on this error message, see: https://js.devexpress.com/error/') > 0);
         consoleErrorStub.restore();
     });
 
