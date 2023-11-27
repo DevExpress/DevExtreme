@@ -17,8 +17,25 @@ const favButtonAttrs = {
   class: 'favorites',
 };
 export default function App() {
+  const [houses, setHouses] = React.useState(housesSource);
   const [currentHouse, setCurrentHouse] = React.useState(housesSource[0]);
   const [popupVisible, setPopupVisible] = React.useState(false);
+  const changeFavoriteState = React.useCallback(() => {
+    const updatedHouses = [...houses];
+    const updatedCurrentHouse = updatedHouses.find((house) => house === currentHouse);
+    updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
+    setHouses(updatedHouses);
+    notify(
+      {
+        message: `This item has been ${
+          updatedCurrentHouse.Favorite ? 'added to' : 'removed from'
+        } the Favorites list!`,
+        width: 450,
+      },
+      updatedCurrentHouse.Favorite ? 'success' : 'error',
+      2000,
+    );
+  }, [houses, currentHouse, setHouses]);
   const renderPopup = React.useCallback(
     () => (
       <div className="popup-property-details">
@@ -47,7 +64,7 @@ export default function App() {
         <div>{currentHouse.Features}</div>
       </div>
     ),
-    [currentHouse],
+    [currentHouse, changeFavoriteState],
   );
   const showHouse = React.useCallback(
     (house) => {
@@ -59,24 +76,9 @@ export default function App() {
   const handlePopupHidden = React.useCallback(() => {
     setPopupVisible(false);
   }, [setPopupVisible]);
-  const changeFavoriteState = React.useCallback(() => {
-    const updatedHouse = { ...currentHouse };
-    updatedHouse.Favorite = !updatedHouse.Favorite;
-    setCurrentHouse(updatedHouse);
-    notify(
-      {
-        message: `This item has been ${
-          updatedHouse.Favorite ? 'added to' : 'removed from'
-        } the Favorites list!`,
-        width: 450,
-      },
-      updatedHouse.Favorite ? 'success' : 'error',
-      2000,
-    );
-  }, [currentHouse, setCurrentHouse]);
   return (
     <div className="images">
-      {housesSource.map((h) => (
+      {houses.map((h) => (
         <House
           house={h}
           show={showHouse}
