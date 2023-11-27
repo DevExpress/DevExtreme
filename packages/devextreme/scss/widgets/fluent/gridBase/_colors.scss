@@ -8,7 +8,7 @@
 $datagrid-base-color: $base-text-color !default;
 
 /**
-* $name 60. Background color
+* $name 15. Background color
 * $type color
 */
 $datagrid-base-background-color: $base-bg !default;
@@ -41,13 +41,13 @@ $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
 
 /**
-* $name 55. Selected row background color
+* $name 51. Selected row background color
 * $type color
 */
 $datagrid-selection-bg: $button-default-outlined-hover-bg !default;
 
 /**
-* $name 60. Selected row border color
+* $name 52. Selected row border color
 * $type color
 */
 $datagrid-row-selected-border-color: $datagrid-border-color !default;
@@ -150,7 +150,7 @@ $datagrid-columnchooser-bg: $base-element-bg !default;
 $datagrid-columnchooser-item-bg: null !default;
 
 /**
-* $name 85. Row alternation background color
+* $name 85. Alternate row background color
 * $type color
 */
 $datagrid-row-alternation-bg: null !default;
