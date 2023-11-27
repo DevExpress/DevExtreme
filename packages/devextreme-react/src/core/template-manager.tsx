@@ -15,7 +15,7 @@ import {
   GetRenderFuncFn,
   DXTemplateCollection,
   TemplateFunc,
-  TemplateManagerCallbackInfo,
+  TemplateManagerUpdateContext,
 } from './types';
 
 import { TemplateWrapper } from './template-wrapper';
@@ -38,7 +38,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [instantiationModels, setInstantiationModels] = useState(new TemplateInstantiationModels());
-  const [componentCallbackInfo, setComponentCallbackInfo] = useState<TemplateManagerCallbackInfo>();
+  const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
   const widgetId = useRef('');
   const templateFactories = useRef<Record<string, TemplateFunc>>({});
 
@@ -122,7 +122,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       }
     }
 
-    function getDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
+    function createDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
         .reduce<Record<string, TemplateFunc>>((res, [key, template]) => (
         {
@@ -148,18 +148,18 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       setInstantiationModels(new TemplateInstantiationModels());
     }
 
-    function updateTemplates(callback: () => void): void {
-      setComponentCallbackInfo({ callback });
+    function updateTemplates(onUpdated: () => void): void {
+      setUpdateContext({ onUpdated });
     }
 
-    init({ getDXTemplates, clearInstantiationModels, updateTemplates });
+    init({ createDXTemplates, clearInstantiationModels, updateTemplates });
   }, [init, getRenderFunc]);
 
   useEffect(() => {
-    if (componentCallbackInfo) {
-      componentCallbackInfo.callback();
+    if (updateContext) {
+      updateContext.onUpdated();
     }
-  }, [componentCallbackInfo]);
+  }, [updateContext]);
 
   if (instantiationModels.empty) {
     return null;

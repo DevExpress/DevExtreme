@@ -63,8 +63,8 @@ describe('Template Manager', () => {
 
     let createDXTemplates;
 
-    const init = ({ getDXTemplates }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'children' }, { type: 'render' }, { type: 'component' }]);
@@ -90,8 +90,8 @@ describe('Template Manager', () => {
   it('dxtemplate creator generates correct templates', () => {
     let createDXTemplates;
 
-    const init = ({ getDXTemplates }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'children' }, { type: 'render' }, { type: 'component' }]);
@@ -150,8 +150,8 @@ describe('Template Manager', () => {
 
     let createDXTemplates;
 
-    const init = ({ getDXTemplates }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'render', effect: () => functionTemplateRenderCount++ }, { type: 'component' }]);
@@ -199,8 +199,8 @@ describe('Template Manager', () => {
 
     let createDXTemplates;
 
-    const init = ({ getDXTemplates }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'component' }, { type: 'render', content: (data) => <div className='render-template'>{data.dxkey}</div> }])
@@ -246,10 +246,10 @@ describe('Template Manager', () => {
     let emulateWidgetRecreationOnRender = true;
 
     const init = ({
-      getDXTemplates,
+      createDXTemplates: createDXTemplatesFn,
       clearInstantiationModels: clearInstantiationModelsFn
     }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+      createDXTemplates = createDXTemplatesFn;
       clearInstantiationModels = clearInstantiationModelsFn
     };
 
@@ -301,10 +301,10 @@ describe('Template Manager', () => {
 
 
     const init = ({
-      getDXTemplates,
+      createDXTemplates: createDXTemplatesFn,
       updateTemplates: updateTemplatesFn
     }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+      createDXTemplates = createDXTemplatesFn;
       updateTemplates = updateTemplatesFn;
     };
 
@@ -356,8 +356,8 @@ describe('Template Manager', () => {
   it('replaces templates with matching keys, adds templates with new keys', () => {
     let createDXTemplates;
 
-    const init = ({ getDXTemplates }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'render' }]);
@@ -432,8 +432,8 @@ describe('Template Manager', () => {
     let createDXTemplates;
     let removeContainerDuringRender = true;
 
-    const init = ({ getDXTemplates }: InitArgument) => {
-      createDXTemplates = getDXTemplates;
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
     };
 
     const templateOptions = getTemplateOptions([{ type: 'render', effect: () => {

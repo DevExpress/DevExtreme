@@ -66,7 +66,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected readonly independentEvents: string[];
 
-  private _getDXTemplates: DXTemplateCreator | undefined;
+  private _createDXTemplates: DXTemplateCreator | undefined;
 
   private _clearInstantiationModels: (() => void) | undefined;
 
@@ -111,7 +111,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     const config = this._getConfig();
     const templateOptions = this._optionsManager.getTemplateOptions(config);
-    const dxTemplates = this._getDXTemplates?.(templateOptions) || {};
+    const dxTemplates = this._createDXTemplates?.(templateOptions) || {};
 
     this._optionsManager.update(config, dxTemplates);
     this._scheduleTemplatesUpdate();
@@ -143,7 +143,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     };
 
     const templateOptions = this._optionsManager.getTemplateOptions(config);
-    const dxTemplates = this._getDXTemplates?.(templateOptions);
+    const dxTemplates = this._createDXTemplates?.(templateOptions);
 
     if (dxTemplates && Object.keys(dxTemplates).length) {
       options = {
@@ -250,11 +250,11 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   private _setTemplateManagerHooks({
-    getDXTemplates,
+    createDXTemplates,
     clearInstantiationModels,
     updateTemplates,
   }: InitArgument) {
-    this._getDXTemplates = getDXTemplates;
+    this._createDXTemplates = createDXTemplates;
     this._clearInstantiationModels = clearInstantiationModels;
     this._updateTemplates = updateTemplates;
   }
