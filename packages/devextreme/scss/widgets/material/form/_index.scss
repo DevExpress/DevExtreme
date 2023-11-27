@@ -65,7 +65,7 @@
     .dx-field-item.dx-last-row:not(.dx-last-col) {
       padding-bottom: $material-form-default-padding;
     }
-    &:not(:first-child) .dx-single-column-item-content > .dx-field-item {
+    .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
       padding-top: $material-form-default-padding;
     }
   }
