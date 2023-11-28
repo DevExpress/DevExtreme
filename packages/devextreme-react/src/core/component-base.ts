@@ -12,7 +12,14 @@ import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
-import { DXRemoveCustomArgs, DXTemplateCreator, UpdateLocker } from './types';
+
+import {
+  DXRemoveCustomArgs,
+  DXTemplateCreator,
+  InitArgument,
+  UpdateLocker,
+} from './types';
+
 import { RemovalLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';
@@ -63,6 +70,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   private _clearInstantiationModels: (() => void) | undefined;
 
+  private _updateTemplates: ((callback: () => void) => void) | undefined;
+
   private _childNodes: Node[] = [];
 
   private readonly _optionsManager: OptionsManager;
@@ -101,8 +110,10 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._updateCssClasses(prevProps, this.props);
 
     const config = this._getConfig();
+    const templateOptions = this._optionsManager.getTemplateOptions(config);
+    const dxTemplates = this._createDXTemplates?.(templateOptions) || {};
 
-    this._optionsManager.update(config);
+    this._optionsManager.update(config, dxTemplates);
     this._scheduleTemplatesUpdate();
   }
 
@@ -169,11 +180,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     updateFunc(() => {
       this.guardsUpdateScheduled = false;
 
-      const config = this._getConfig();
-      const templateOptions = this._optionsManager.getTemplateOptions(config);
-      const dxTemplates = this._createDXTemplates?.(templateOptions, () => scheduleGuards()) || {};
-
-      this._optionsManager.updateTemplates(dxTemplates);
+      this._updateTemplates?.(() => scheduleGuards());
     });
 
     unscheduleGuards();
@@ -242,9 +249,14 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this.context?.unlock();
   }
 
-  private _setTemplateManagerHooks(createDXTemplates: DXTemplateCreator, clearInstantiationModels: () => void) {
+  private _setTemplateManagerHooks({
+    createDXTemplates,
+    clearInstantiationModels,
+    updateTemplates,
+  }: InitArgument) {
     this._createDXTemplates = createDXTemplates;
     this._clearInstantiationModels = clearInstantiationModels;
+    this._updateTemplates = updateTemplates;
   }
 
   protected renderChildren(): React.ReactNode {

@@ -937,12 +937,12 @@ describe('component/render in nested options', () => {
 
     const updatedOptions = Widget.option.mock.calls;
 
-    expect(updatedOptions[0][0]).toBe('collection');
-    expect(updatedOptions[0][1].length).toBe(2);
-    expect(updatedOptions[0][1][0].template).toBe('collection[0].template');
-    expect(updatedOptions[0][1][1].template).toBe('collection[1].template');
-    expect(updatedOptions[1][0]).toBe('integrationOptions');
-    expect(Object.keys(updatedOptions[1][1].templates)).toEqual([
+    expect(updatedOptions[1][0]).toBe('collection');
+    expect(updatedOptions[1][1].length).toBe(2);
+    expect(updatedOptions[1][1][0].template).toBe('collection[0].template');
+    expect(updatedOptions[1][1][1].template).toBe('collection[1].template');
+    expect(updatedOptions[0][0]).toBe('integrationOptions');
+    expect(Object.keys(updatedOptions[0][1].templates)).toEqual([
       'collection[0].template',
       'collection[1].template',
     ]);
@@ -970,9 +970,9 @@ describe('component/render in nested options', () => {
 
     const updatedOptions = Widget.option.mock.calls;
 
-    expect(updatedOptions[0][0]).toBe('collection');
-    expect(updatedOptions[0][1].length).toBe(1);
-    expect(updatedOptions[0][1][0].template).toBe('collection[0].template');
+    expect(updatedOptions[1][0]).toBe('collection');
+    expect(updatedOptions[1][1].length).toBe(1);
+    expect(updatedOptions[1][1][0].template).toBe('collection[0].template');
   });
 
   xit('removes deleted tempalates from integrationOptions', () => {

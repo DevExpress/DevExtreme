@@ -15,6 +15,7 @@ import {
   GetRenderFuncFn,
   DXTemplateCollection,
   TemplateFunc,
+  TemplateManagerUpdateContext,
 } from './types';
 
 import { TemplateWrapper } from './template-wrapper';
@@ -37,9 +38,9 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [instantiationModels, setInstantiationModels] = useState(new TemplateInstantiationModels());
-  const [templateFactories, setTemplateFactories] = useState<Record<string, TemplateFunc>>({});
-  const [componentCallback, setComponentCallback] = useState<() => void>();
+  const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
   const widgetId = useRef('');
+  const templateFactories = useRef<Record<string, TemplateFunc>>({});
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
     if (container.nodeType === Node.ELEMENT_NODE) {
@@ -121,17 +122,16 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       }
     }
 
-    function getDXTemplates(templateOptions: Record<string, ITemplate>, callback?: () => void): DXTemplateCollection {
+    function createDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
-        .reduce((res, [key, template]) => (
-          {
-            ...res,
-            [key]: getTemplateFunction(template),
-          }
-        ), {});
+        .reduce<Record<string, TemplateFunc>>((res, [key, template]) => (
+        {
+          ...res,
+          [key]: getTemplateFunction(template),
+        }
+      ), {});
 
-      setTemplateFactories(factories);
-      setComponentCallback(callback);
+      templateFactories.current = factories;
 
       const dxTemplates = Object.keys(factories)
         .reduce<DXTemplateCollection>((templates, templateKey) => {
@@ -148,14 +148,18 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       setInstantiationModels(new TemplateInstantiationModels());
     }
 
-    init(getDXTemplates, clearInstantiationModels);
+    function updateTemplates(onUpdated: () => void): void {
+      setUpdateContext({ onUpdated });
+    }
+
+    init({ createDXTemplates, clearInstantiationModels, updateTemplates });
   }, [init, getRenderFunc]);
 
   useEffect(() => {
-    if (componentCallback) {
-      componentCallback();
+    if (updateContext) {
+      updateContext.onUpdated();
     }
-  }, []);
+  }, [updateContext]);
 
   if (instantiationModels.empty) {
     return null;
@@ -175,7 +179,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
           return <TemplateWrapper
             key={componentKey}
-            templateFactory={templateFactories[templateKey]}
+            templateFactory={templateFactories.current[templateKey]}
             data={data}
             index={index}
             container={container}

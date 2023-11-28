@@ -673,7 +673,7 @@ describe('cfg-component option control', () => {
     expect(OptionsManagerModule.scheduleGuards).toBeCalled();
     const updatedConfig = { ...config, options: { value: 2 } };
     // value changed and options manager set value and remove scheduled guard
-    optionsManager.update(updatedConfig);
+    optionsManager.update(updatedConfig, {});
     expect((optionsManager as any).setValue).toBeCalled();
     jest.runAllTimers();
     expect((optionsManager as any).setValue).toHaveBeenCalledTimes(1);
