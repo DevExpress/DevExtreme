@@ -51,6 +51,7 @@ export default function App() {
       <Popup
         maxHeight={600}
         hideOnOutsideClick={true}
+        showCloseButton={true}
         title={imageItemToDisplay.name}
         visible={popupVisible}
         onHiding={hideImagePopup}

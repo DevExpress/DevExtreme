@@ -65,6 +65,7 @@ export default function App() {
         title="Markup"
         visible={popupVisible}
         onHiding={popupHiding}
+        showCloseButton={true}
       >
         {value}
       </Popup>

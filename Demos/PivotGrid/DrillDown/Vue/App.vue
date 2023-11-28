@@ -18,6 +18,7 @@
       :title="popupTitle"
       v-model:visible="popupVisible"
       @shown="onShown"
+      :show-close-button="true"
     >
       <DxDataGrid
         :ref="dataGridRef"

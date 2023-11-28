@@ -29,6 +29,7 @@ $(() => {
   popupInstance = $('#popup').dxPopup({
     showTitle: true,
     title: 'Markup',
+    showCloseButton: true,
     onShowing() {
       $('.value-content').text(editorInstance.option('value'));
     },

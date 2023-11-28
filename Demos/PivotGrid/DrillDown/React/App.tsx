@@ -50,6 +50,7 @@ const App = () => {
         title={popupTitle}
         onHiding={() => setPopupVisible(false)}
         onShown={() => dataGridRef.current.instance.updateDimensions()}
+        showCloseButton={true}
       >
         <DataGrid
           width={560}

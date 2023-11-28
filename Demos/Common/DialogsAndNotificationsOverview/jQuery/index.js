@@ -28,6 +28,7 @@ $(() => {
     visible: false,
     dragEnabled: false,
     hideOnOutsideClick: true,
+    showCloseButton: true,
   };
 
   const buttonOptions = {

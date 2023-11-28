@@ -59,6 +59,7 @@
       :drag-enabled="false"
       :hide-on-outside-click="true"
       v-model:visible="popupVisible"
+      :show-close-button="true"
     >
       <template #content="{ data }">
         <div class="popup-property-details">

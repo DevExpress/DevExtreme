@@ -23,6 +23,11 @@
   </dxo-toolbar>
 </dx-html-editor>
 
-<dx-popup [showTitle]="true" title="Markup" [(visible)]="popupVisible">
+<dx-popup
+  [showTitle]="true"
+  title="Markup"
+  [(visible)]="popupVisible"
+  [showCloseButton]="true"
+>
   <div>{{ editorValue }}</div>
 </dx-popup>

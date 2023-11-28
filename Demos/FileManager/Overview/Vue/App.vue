@@ -18,6 +18,7 @@
 
     <DxPopup
       :hide-on-outside-click="true"
+      :show-close-button="true"
       v-model:visible="popupVisible"
       v-model:title="imageItemToDisplay.name"
       max-height="600"

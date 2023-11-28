@@ -95,6 +95,7 @@ export default function App() {
         visible={popupVisible}
         onHiding={handlePopupHidden}
         contentRender={renderPopup}
+        showCloseButton={true}
       />
     </div>
   );

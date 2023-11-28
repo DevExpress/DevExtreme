@@ -22,6 +22,7 @@
   [hideOnOutsideClick]="true"
   [(title)]="imageItemToDisplay.name"
   [(visible)]="popupVisible"
+  [showCloseButton]="true"
 >
   <div *dxTemplate="let data of 'content'" class="photo-popup-content">
     <img

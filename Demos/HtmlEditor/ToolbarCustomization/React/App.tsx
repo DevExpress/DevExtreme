@@ -50,7 +50,7 @@ export default function App() {
           <Item widget="dxButton" options={getToolbarButtonOptions()} />
         </Toolbar>
       </HtmlEditor>
-      <Popup showTitle={true} title="Markup" visible={popupVisible} onHiding={popupHiding}>
+      <Popup showTitle={true} title="Markup" visible={popupVisible} onHiding={popupHiding} showCloseButton={true}>
         {value}
       </Popup>
     </div>

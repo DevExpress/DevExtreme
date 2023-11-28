@@ -29,6 +29,7 @@ $(() => {
   $('#photo-popup').dxPopup({
     maxHeight: 600,
     hideOnOutsideClick: true,
+    showCloseButton: true,
     onContentReady(e) {
       const $contentElement = e.component.content();
       $contentElement.addClass('photo-popup-content');

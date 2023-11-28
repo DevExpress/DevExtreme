@@ -17,6 +17,7 @@
   [width]="600"
   [height]="400"
   (onShown)="onPopupShown()"
+  [showCloseButton]="true"
 >
   <div *dxTemplate="let data of 'content'">
     <dx-data-grid

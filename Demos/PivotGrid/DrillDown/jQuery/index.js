@@ -52,6 +52,7 @@ $(() => {
   const salesPopup = $('#sales-popup').dxPopup({
     width: 600,
     height: 400,
+    showCloseButton: true,
     contentTemplate(contentElement) {
       $('<div />')
         .addClass('drill-down')

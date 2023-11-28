@@ -33,6 +33,7 @@
       :show-title="true"
       v-model:visible="popupVisible"
       title="Markup"
+      :show-close-button="true"
     >
       {{ value }}
     </DxPopup>
