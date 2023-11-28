@@ -992,10 +992,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
-  waitAsyncTemplates(forceWaiting = false, change?) {
+  waitAsyncTemplates(forceWaiting = false) {
     // @ts-expect-error
     const result = new Deferred();
-    const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates() && change?.changeType !== 'update';
+    const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
     if (!needWaitAsyncTemplates) {
       return result.resolve();

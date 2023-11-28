@@ -336,7 +336,7 @@ class RowsView extends ColumnsView {
     this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.waitAsyncTemplates(false, change).done(() => {
+    return this.waitAsyncTemplates().done(() => {
       const contentChanges = this._contentChanges;
 
       this._contentChanges = [];
