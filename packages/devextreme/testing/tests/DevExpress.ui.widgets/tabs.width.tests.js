@@ -172,11 +172,11 @@ QUnit.module('Width', () => {
         });
     });
 
-    QUnit.test('Does not render navbuttons: dx-tabs { max-width: 413px; } .dx-tab{ width: 100px; min-width: 0; }', function(assert) {
+    QUnit.test('Does not render navbuttons: dx-tabs { max-width: 413px; } .dx-tab{ width: 100px; min-width: 0 !important; }', function(assert) {
         const styles = `
             <style nonce="qunit-test">
                 .dx-tabs { max-width: 413px; }
-                .dx-tab { width: 100px; min-width: 0; }
+                .dx-tab { width: 100px; min-width: 0 !important; }
             </style>
         `;
 

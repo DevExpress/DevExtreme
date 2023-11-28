@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import Tabs from 'ui/tabs';
 import windowUtils from 'core/utils/window';
-import themes from 'ui/themes';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 import 'generic_light.css!';
@@ -34,26 +33,15 @@ QUnit.module('Tabs markup', () => {
     });
 
     [[{ text: '1' }], ['1']].forEach(items => {
-        QUnit.test(`Tabs item should have a correct span element when items are ${items}`, function(assert) {
+        QUnit.test(`Tabs item should have a correct span elements when items are ${items}`, function(assert) {
             const $tabs = $('#tabs').dxTabs({ items });
             const $tabsTextSpan = $tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
 
             assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
-        });
 
-        QUnit.test(`Tabs item should have the second span element in Fluent when items are ${items}`, function(assert) {
-            const origIsFluent = themes.isFluent;
-            themes.isFluent = function() { return true; };
+            const $tabsTextSpanPseudo = $tabs.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
 
-            try {
-                const $tabs = $('#tabs').dxTabs({ items });
-
-                const $tabsTextSpanPseudo = $tabs.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
-
-                assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
-            } finally {
-                themes.isFluent = origIsFluent;
-            }
+            assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
         });
     });
 
@@ -79,7 +67,7 @@ QUnit.module('Tabs markup', () => {
 
         assert.equal(tabsInstance.option('selectedIndex'), -1);
 
-        assert.equal($.trim(tabsElement.text()), '012');
+        assert.strictEqual($.trim(tabsElement.text()), '001122');
 
         assert.equal(tabElements.find('.dx-icon-custom').length, 1);
 
@@ -238,25 +226,25 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with text', function(assert) {
         const $content = this.prepareItemTest('custom');
 
-        assert.equal($content.text(), 'custom');
+        assert.strictEqual($content.text(), 'customcustom');
     });
 
     QUnit.test('template should be rendered correctly with boolean', function(assert) {
         const $content = this.prepareItemTest(true);
 
-        assert.equal($.trim($content.text()), 'true');
+        assert.strictEqual($.trim($content.text()), 'truetrue');
     });
 
     QUnit.test('template should be rendered correctly with number', function(assert) {
         const $content = this.prepareItemTest(1);
 
-        assert.equal($.trim($content.text()), '1');
+        assert.strictEqual($.trim($content.text()), '11');
     });
 
     QUnit.test('template should be rendered correctly with object that contains the "text" property', function(assert) {
         const $content = this.prepareItemTest({ text: 'custom' });
 
-        assert.equal($.trim($content.text()), 'custom');
+        assert.strictEqual($.trim($content.text()), 'customcustom');
     });
 
     QUnit.test('template should be rendered correctly with html', function(assert) {
@@ -270,7 +258,7 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with htmlstring', function(assert) {
         const $content = this.prepareItemTest('<span>test</span>');
 
-        assert.equal($content.text(), '<span>test</span>');
+        assert.strictEqual($content.text(), '<span>test</span><span>test</span>');
     });
 
     QUnit.test('template should be rendered correctly with html & text', function(assert) {
@@ -285,13 +273,13 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with tab text wrapper for data with text field', function(assert) {
         const $content = this.prepareItemTest({ text: 'test' });
 
-        assert.equal($content.filter('.' + TABS_ITEM_TEXT_CLASS).text(), 'test');
+        assert.strictEqual($content.filter(`.${TABS_ITEM_TEXT_CLASS}`).text(), 'testtest');
     });
 
     QUnit.test('template should be rendered correctly with tab text wrapper for string data', function(assert) {
         const $content = this.prepareItemTest('test');
 
-        assert.equal($content.filter('.' + TABS_ITEM_TEXT_CLASS).text(), 'test');
+        assert.strictEqual($content.filter(`.${TABS_ITEM_TEXT_CLASS}`).text(), 'testtest');
     });
 
     QUnit.test('template should be rendered correctly with icon', function(assert) {

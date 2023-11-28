@@ -138,7 +138,11 @@ class FormTestWrapper {
     }
 
     checkTabTitle(tabSelector, expectedTitle) {
-        QUnit.assert.strictEqual(this._form.$element().find(`${tabSelector} .dx-tab-text`).text(), expectedTitle, 'caption of tab');
+        QUnit.assert.strictEqual(
+            this._form.$element().find(`${tabSelector} .dx-tab-text`).text(),
+            `${expectedTitle}${expectedTitle}`,
+            'caption of tab',
+        );
     }
 
     checkLabelsWidthInGroup({ columnIndex, groupColumnIndex = 0, etalonLabelText }) {

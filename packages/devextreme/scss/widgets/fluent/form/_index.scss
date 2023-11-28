@@ -6,7 +6,6 @@
 @use "../sizes" as *;
 @use "../../base/form";
 @use "../../base/icons" as *;
-@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../scrollable";
@@ -69,10 +68,6 @@
 
   .dx-switch {
     vertical-align: middle;
-  }
-
-  .dx-toggle-controls-paddings {
-    padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
   }
 }
 

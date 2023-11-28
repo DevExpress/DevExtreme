@@ -18,16 +18,16 @@ $pivotgrid-field-area-box-font-weight: 400 !default;
 $pivotgrid-data-area-color: $base-text-color !default;
 
 /**
-* $name 20. Totals background color
+* $name 20. Total background color
 * $type color
 */
 $pivotgrid-totalcolor: $base-bg !default;
 
 /**
-* $name 30. Grand totals background color
+* $name 30. Grand total background color
 * $type color
 */
-$pivotgrid-grandtotalcolor: $base-hover-bg !default;
+$pivotgrid-grandtotalcolor: null !default;
 
 /**
 * $name 40. Field area text color
@@ -42,7 +42,15 @@ $pivotgrid-position-indicator-color: gray !default;
 $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
 
 @if $mode == "light" {
-  $pivotgrid-field-area-box-background-color: darken($base-bg, 5.88) !default;
+  @if $color == "blue"{
+    $pivotgrid-grandtotalcolor: $base-hover-bg !default;
+    $pivotgrid-field-area-box-background-color: darken($base-bg, 5.88) !default;
+  }
+  
+  @if $color == "saas" {
+    $pivotgrid-grandtotalcolor: color.change($base-hover-bg, $alpha: 0.4) !default;
+    $pivotgrid-field-area-box-background-color: color.change($base-hover-bg, $alpha: 0.4) !default;
+  } 
 }
 
 @if $mode == "dark" {

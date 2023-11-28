@@ -49,11 +49,6 @@
 
   .dx-button-content {
     position: relative;
-
-    .dx-inkripple {
-      overflow: hidden;
-      display: block;
-    }
   }
 
   @include dx-button-styling(

@@ -218,12 +218,10 @@ const Tabs = CollectionWidget.inherit({
 
             $tabTextSpan.text(text);
 
-            if(isFluent()) {
-                const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+            const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
 
-                $tabTextSpanPseudo.text(text);
-                $tabTextSpanPseudo.appendTo($tabTextSpan);
-            }
+            $tabTextSpanPseudo.text(text);
+            $tabTextSpanPseudo.appendTo($tabTextSpan);
 
             $tabTextSpan.appendTo($container);
         }
@@ -369,9 +367,9 @@ const Tabs = CollectionWidget.inherit({
             itemsWidth.push(getOuterWidth(item, true));
         });
 
-        const maxTabWidth = Math.max.apply(null, itemsWidth);
+        const maxTabItemWidth = Math.max.apply(null, itemsWidth);
         const requireWidth = elementWidth / $visibleItems.length;
-        const needStretchItems = maxTabWidth > requireWidth;
+        const needStretchItems = maxTabItemWidth > requireWidth + 1;
 
         return needStretchItems;
     },

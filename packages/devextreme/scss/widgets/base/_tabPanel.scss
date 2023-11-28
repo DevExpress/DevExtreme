@@ -16,6 +16,10 @@
   }
 }
 
+.dx-tabpanel-tab {
+  flex-basis: unset;
+}
+
 .dx-tabpanel-tabs-position-right {
   flex-direction: row-reverse;
   
