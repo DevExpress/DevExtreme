@@ -63,7 +63,7 @@ test('Grouped list appearance', async (t) => {
       .click(list.getGroup(0).header)
       .click(list.getGroup(2).header);
 
-    await testScreenshot(t, takeScreenshot, 'Grouped list appearance with template.png', { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Grouped list appearance with template. rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
