@@ -635,16 +635,16 @@ QUnit.module('Dummy translator, range is empty', environment);
 QUnit.test('Horizontal translator. Translate', function(assert) {
     const translator = this.createTranslator({}, { width: 1000, left: 100, right: 200, height: 20, top: 2, bottom: 4 });
 
-    assert.equal(translator.translate(100.4), 200.4);
-    assert.equal(translator.translate(200.6), 300.6);
+    assert.equal(translator.translate(100.4), 200);
+    assert.equal(translator.translate(200.6), 301);
     assert.equal(translator.translate(1000), 800);
 });
 
 QUnit.test('Vertical translator. Translate', function(assert) {
     const translator = this.createTranslator({}, { height: 1000, top: 100, bottom: 200, width: 20, left: 2, right: 4 }, { isHorizontal: false });
 
-    assert.equal(translator.translate(100.4), 200.4);
-    assert.equal(translator.translate(200.6), 300.6);
+    assert.equal(translator.translate(100.4), 200);
+    assert.equal(translator.translate(200.6), 301);
     assert.equal(translator.translate(1000), 800);
 });
 
