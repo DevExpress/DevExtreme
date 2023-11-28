@@ -146,10 +146,19 @@ const RowDraggingExtender = {
 
   _updateSortable() {
     const offset = this._dataController.getRowIndexOffset();
+    const offsetDiff = offset - this._previousOffset;
+
     [this._sortable, this._sortableFixed].forEach((sortable) => {
+      const toIndex = sortable?.option('toIndex');
+
+      if (toIndex && this._previousOffset) {
+        sortable?.option('toIndex', toIndex - offsetDiff);
+      }
       sortable?.option('offset', offset);
       sortable?.update();
     });
+
+    this._previousOffset = offset;
   },
 
   _resizeCore() {
