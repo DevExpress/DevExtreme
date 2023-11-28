@@ -107,6 +107,6 @@ import { employees, states } from './data.ts';
 </script>
 <style>
 #data-grid-demo {
-  min-height: 700px;
+  height: 805px;
 }
 </style>
