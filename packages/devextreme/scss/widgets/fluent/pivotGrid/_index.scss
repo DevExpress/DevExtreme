@@ -123,10 +123,6 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   .dx-area-description-cell {
     .dx-pivotgrid-toolbar {
       padding-left: 8px;
-
-      .dx-button {
-        @include dx-button-flat-color-styling($base-text-color, $base-text-color, $base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
-      }
     }
   }
 
@@ -134,15 +130,6 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   .dx-grandtotal {
     &.dx-last-cell {
       padding-left: $fluent-pivotgrid-total-text-left-padding;
-    }
-  }
-
-  .dx-column-header,
-  .dx-filter-header {
-    .dx-pivotgrid-toolbar {
-      .dx-button {
-        @include dx-button-flat-color-styling($base-text-color, $base-text-color, $base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
-      }
     }
   }
 

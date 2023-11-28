@@ -91,10 +91,17 @@ $agenda-appointment-text-color: $base-text-color !default;
 $header-panel-cell-date: null !default;
 
 @if $mode == "light" {
-  $scheduler-appointment-base-color: lighten($base-accent, 48%) !default;
   $scheduler-appointment-text-color: #000 !default;
   $scheduler-panel-text-color: #707070;
   $header-panel-cell-date: #424242;
+  
+  @if $color == "blue"{
+    $scheduler-appointment-base-color: lighten($base-accent, 48%) !default;
+  }
+  
+  @if $color == "saas" {
+    $scheduler-appointment-base-color: lighten($base-accent, 30%) !default;
+  } 
 }
 
 @if $mode == "dark" {
