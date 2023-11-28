@@ -163,7 +163,7 @@ $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !defaul
 $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 26%) !default;
 $datagrid-summary-bg: $datagrid-base-background-color !default;
 $datagrid-column-separator-bg: $base-accent !default;
-$datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
+$datagrid-filter-row-background-color: null !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
@@ -172,7 +172,15 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
-  $datagrid-row-focused-bg: #d0e5fb !default;
+  @if $color == "blue"{
+    $datagrid-row-focused-bg: lighten(desaturate(adjust-hue($base-accent, 3), 0.98), 50.00) !default; // #d0e5fb
+    $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
+  }
+  
+  @if $color == "saas" {
+    $datagrid-row-focused-bg: lighten(adjust-hue($base-accent, -1), 26.47) !default; // #dbe6ff
+    $datagrid-filter-row-background-color: $base-typography-bg !default;
+  } 
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
