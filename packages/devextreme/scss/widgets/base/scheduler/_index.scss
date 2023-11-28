@@ -409,18 +409,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-appointment-recurrence-icon {
-    position: absolute;
-    background-repeat: no-repeat;
-    top: 3px;
-    right: $scheduler-reduced-icon-offset;
-    display: block;
-
-    &.dx-icon-repeat {
-      font-size: 18px;
-    }
-  }
-
   .dx-scheduler-all-day-appointment .dx-scheduler-appointment-reduced-icon {
     position: absolute;
     top: 15%;
