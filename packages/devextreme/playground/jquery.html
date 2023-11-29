@@ -1,63 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <title>DevExtreme jQuery Example</title>
+  <style>
+    table {
+      width: 100%;
+      border: none;
+      border-top: 1px solid #EEEEEE;
+      /* font-family: arial, sans-serif; */
+      border-collapse: collapse;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    td,
+    th {
+      border: 1px solid #EEEEEE;
+      border-top: none;
+      text-align: left;
+      padding: 8px;
+      color: #363D41;
+      font-size: 14px;
+    }
 
-    <script type="text/javascript">
-        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+    tr {
+      background-color: #fff;
+      border: none;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      justify-content: flex-start;
+    }
 
-        const link = document.createElement("link");
-        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
-        link.type = "text/css";
-        link.rel = "stylesheet";
+    tr:first-child:hover {
+      cursor: default;
+      background-color: #fff;
+    }
 
-        document.getElementsByTagName("head")[0].appendChild(link);
-    </script>
+    tr:hover {
+      background-color: #EEF4FD;
+    }
 
-    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
-    <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    .expanded-row-content {
+      border-top: none;
+      display: grid;
+      grid-column: 1/-1;
+      /* justify-content: flex-start; */
+      color: #AEB1B3;
+      /* font-size: 13px; */
+      background-color: #fff;
+    }
 
-    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
-    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
-    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
-    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
-
-    <!--
-    <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
-    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
-    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
-    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
-    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
-    -->
-
-    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./themeSelector.js"></script>
-    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    .hide-row {
+      display: none;
+    }
+  </style>
 </head>
-<body class="dx-surface">
-    <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
-        <div id="button"></div>
-        <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
-            });
-        </script>
-    </div>
+<body>
+
+  <h2> Expendable table </h2>
+
+  <table>
+    <tr>
+      <th></th>
+      <th>Contact</th>
+      <th>Country</th>
+      <th>Country</th>
+      <th>Country</th>
+    </tr>
+    <tr onClick='toggleRow(this)'>
+      <td>Alfreds Futterkiste</td>
+      <td>Maria Anders</td>
+      <td>Germany</td>
+
+      <td>Mexico</td>
+      <td>Mexico</td>
+      <td class='expanded-row-content hide-row'><table>
+        <tr>
+          <th></th>
+          <th>Contact</th>
+          <th>Country</th>
+          <th>Country</th>
+          <th>Country</th>
+        </tr>
+        <tr onClick='toggleRow(this)'>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Germany</td>
+    
+          <td>Mexico</td>
+          <td>Mexico</td>
+          <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+            the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+            like Aldus PageMaker including versions of Lorem Ipsum.</td>
+        </tr>
+        <tr onClick='toggleRow(this)'>
+          <td>Centro comercial Moctezuma</td>
+          <td>Francisco Chang</td>
+          <td>Mexico</td>
+          <td>Mexico</td>
+          <td>Mexico</td>
+          <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+            the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+            like Aldus PageMaker including versions of Lorem Ipsum.</td>
+        </tr>
+        <tr onClick='toggleRow(this)'>
+          <td>Ernst Handel</td>
+          <td>Roland Mendel</td>
+          <td>Austria</td>
+          <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+            the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+            like Aldus PageMaker including versions of Lorem Ipsum.</td>
+        </tr>
+        <tr onClick='toggleRow(this)'>
+            <td>Ernst Handel</td>
+            <td>Roland Mendel</td>
+            <td>Austria</td>
+            <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+              galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+              the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+              release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+              like Aldus PageMaker including versions of Lorem Ipsum.</td>
+          </tr>
+          <tr onClick='toggleRow(this)'>
+            <td>Ernst Handel</td>
+            <td>Roland Mendel</td>
+            <td>Austria</td>
+            <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+              galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+              the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+              release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+              like Aldus PageMaker including versions of Lorem Ipsum.</td>
+          </tr>
+    
+      </table></td>
+    </tr>
+    <tr onClick='toggleRow(this)'>
+      <td>Centro comercial Moctezuma</td>
+      <td>Francisco Chang</td>
+      <td>Mexico</td>
+      <td>Mexico</td>
+      <td>Mexico</td>
+      <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+        galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+        the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+        release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+        like Aldus PageMaker including versions of Lorem Ipsum.</td>
+    </tr>
+    <tr onClick='toggleRow(this)'>
+      <td>Ernst Handel</td>
+      <td>Roland Mendel</td>
+      <td>Austria</td>
+      <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+        galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+        the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+        release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+        like Aldus PageMaker including versions of Lorem Ipsum.</td>
+    </tr>
+    <tr onClick='toggleRow(this)'>
+        <td>Ernst Handel</td>
+        <td>Roland Mendel</td>
+        <td>Austria</td>
+        <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+          galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+          the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+          release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+          like Aldus PageMaker including versions of Lorem Ipsum.</td>
+      </tr>
+      <tr onClick='toggleRow(this)'>
+        <td>Ernst Handel</td>
+        <td>Roland Mendel</td>
+        <td>Austria</td>
+        <td class='expanded-row-content hide-row'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+          galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+          the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+          release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+          like Aldus PageMaker including versions of Lorem Ipsum.</td>
+      </tr>
+
+  </table>
+
+  <script>
+    const toggleRow = (element) => {
+      element.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
+      console.log(event);
+    }
+  </script>
+
 </body>
+
 </html>
