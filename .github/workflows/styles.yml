@@ -73,7 +73,7 @@ jobs:
         done
 
     - name: Display sizes
-      run: cat package_sizes.csv
+      run: cat package_folder_sizes.csv
 
     - name: Run tests
       run: npx nx test-styles devextreme-main
