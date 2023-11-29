@@ -613,18 +613,9 @@ QUnit.module('markup', {
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'));
     });
 
-    QUnit.test('TreeView icon image should have alt attribute with item text if it specified', function(assert) {
+    QUnit.test('TreeView icon image should have alt attribute with "dxTreeView item icon" text', function(assert) {
         const $treeView = initTree({
             items: [{ text: 'Item text', icon: 'some_icon.jpg' }]
-        });
-        const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
-
-        assert.strictEqual($icon.attr('alt'), 'Item text');
-    });
-
-    QUnit.test('TreeView icon image should have alt attribute with "dxTreeView item icon" if item text is not specified', function(assert) {
-        const $treeView = initTree({
-            items: [{ icon: 'some_icon.jpg' }]
         });
         const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
 
