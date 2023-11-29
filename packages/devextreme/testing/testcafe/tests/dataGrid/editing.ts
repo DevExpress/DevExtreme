@@ -32,7 +32,6 @@ test('The E0110 should not occur when editing a column with setCellValue in form
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   // act
-  await dataGrid.apiEditRow(0);
   await t
     .typeText(dataGrid.getFormItemEditor(0), 'new')
     .click(dataGrid.getEditForm().saveButton);
@@ -52,6 +51,7 @@ test('The E0110 should not occur when editing a column with setCellValue in form
   editing: {
     mode: 'form',
     allowUpdating: true,
+    editRowKey: 1,
   },
   columns: [{
     dataField: 'Name',
