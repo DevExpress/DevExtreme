@@ -62,10 +62,9 @@ jobs:
         versions="${{ steps.npm-versions.outputs.versions }}"
         echo "version,date,size" > package_folder_sizes.csv
         npm install $package_name@20.1.5
-        cd node_modules
-        cd devextreme
+        cd node_modules/devextreme
         ls
-        folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
+        # folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
         publish_date=$(npm view $package_name@$version time.modified)
         echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
         # for version in $(echo "${versions}" | jq -r '.[]'); do
