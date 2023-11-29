@@ -39,11 +39,41 @@ jobs:
       working-directory: ./packages/devextreme
       run: npm run build-themes
 
+    - name: Fetch npm package versions
+        id: npm-versions
+        run: |
+          package_name="devextreme"
+          versions=$(npm show $package_name versions --json)
+          echo "::set-output name=versions::$(echo $versions)"
+
     - name: Check package size
       run: |
+        FOLDER_PATH="packages/devextreme/artifacts/css/dx.light.css"
+        FOLDER_SIZE=$(ls -nl "${FOLDER_PATH}" | awk '{print $5}')
         FILE_PATH="packages/devextreme/artifacts/css/dx.light.css"
         FILE_SIZE=$(ls -nl "${FILE_PATH}" | awk '{print $5}')
+        echo "Folder size of ${FOLDER_PATH}: ${FOLDER_SIZE} bytes"
         echo "File size of ${FILE_PATH}: ${FILE_SIZE} bytes"
+
+    - name: Get folder size for each version
+      id: folder-sizes
+      run: |
+        package_name="devextreme"
+        versions="${{ steps.npm-versions.outputs.versions }}"
+        echo "version,date,size" > package_folder_sizes.csv
+        for version in $(echo "${versions}" | jq -r '.[]'); do
+          # Extract the package
+          npm install $package_name@$version
+          # Measure the size of the internal folder
+          folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
+          publish_date=$(npm view $package_name@$version time.modified)
+          echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
+          # Clean up the extracted package
+          rm -rf node_modules
+        done
+
+    - name: Display sizes
+      run: cat package_sizes.csv
 
     - name: Run tests
       run: npx nx test-styles devextreme-main
