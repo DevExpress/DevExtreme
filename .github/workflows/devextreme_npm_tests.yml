@@ -204,6 +204,7 @@ jobs:
         npm i testcafe@2.5.0
         npm run test-testcafe
 
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
