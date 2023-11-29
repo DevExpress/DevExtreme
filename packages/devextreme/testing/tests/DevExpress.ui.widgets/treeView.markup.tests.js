@@ -21,6 +21,8 @@ const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
 const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
@@ -33,15 +35,17 @@ const initTree = (options) => $('#treeView').dxTreeView(options);
 
 QUnit.module('aria accessibility', {
     beforeEach: function() {
+        this.items = [{
+            id: 1,
+            text: 'Item 1',
+            selected: true,
+            expanded: true,
+            items: [{ id: 3, text: 'Item 11' }, { id: 4, text: 'Item 12' }]
+        }, { id: 2, text: 'Item 2', expanded: false }];
+
         this.$element = initTree({
             animationEnabled: false,
-            items: [{
-                id: 1,
-                text: 'Item 1',
-                selected: true,
-                expanded: true,
-                items: [{ id: 3, text: 'Item 11' }, { id: 4, text: 'Item 12' }]
-            }, { id: 2, text: 'Item 2', expanded: false }],
+            items: this.items,
             selectNodesRecursive: true,
             showCheckBoxesMode: 'normal'
         });
@@ -52,16 +56,17 @@ QUnit.module('aria accessibility', {
     afterEach: function() {
         this.$treeView = undefined;
         this.instance = undefined;
+        this.items = null;
     }
 }, () => {
     QUnit.test('aria role', function(assert) {
         assert.equal(this.$element.attr('role'), 'tree', 'role is correct');
     });
 
-    QUnit.test('scrollable should have role treeitem attribute', function(assert) {
-        const $scrollable = this.$element.find('.' + SCROLLABLE_CLASS);
+    QUnit.test('scrollable should not have role attribute', function(assert) {
+        const $scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`);
 
-        assert.equal($scrollable.attr('role'), 'treeitem', 'role is correct');
+        assert.strictEqual($scrollable.attr('role'), undefined, 'role is undefined');
     });
 
     QUnit.test('aria role for items', function(assert) {
@@ -100,6 +105,26 @@ QUnit.module('aria accessibility', {
         const $node = this.$element.find('.' + NODE_CLASS).eq(0);
 
         assert.equal($node.attr('aria-selected'), 'true', 'item is selected');
+    });
+
+    QUnit.test('empty message element should have role treeitem when items are empty', function(assert) {
+        this.instance.option({ items: [] });
+
+        assert.strictEqual(this.$element.find(`.${EMPTY_MESSAGE_CLASS}`).eq(0).attr('role'), 'treeitem', 'role is correct');
+
+        this.instance.option({ items: this.items });
+
+        assert.strictEqual(this.$element.find(`.${EMPTY_MESSAGE_CLASS}`).length, 0, 'element is undefined');
+    });
+
+    QUnit.test('treeview node container should have correct role when items are empty and noDataText is empty string', function(assert) {
+        this.instance.option({ items: [], noDataText: '' });
+
+        assert.strictEqual(this.$element.find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).eq(0).attr('role'), 'treeitem', 'role is correct');
+
+        this.instance.option({ items: this.items });
+
+        assert.strictEqual(this.$element.find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).eq(0).attr('role'), 'group', 'role is correct');
     });
 });
 

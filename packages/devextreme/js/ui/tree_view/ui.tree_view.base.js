@@ -297,7 +297,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const attrs = { role: 'treeitem' };
 
-        if(items.length) {
+        if(items?.length) {
             attrs.role = $emptyMessage.length ? null : 'group';
         }
 
