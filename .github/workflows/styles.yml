@@ -36,6 +36,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build themes
+      working-directory: ./packages/devextreme
       run: npm run build-themes
 
     - name: Check package size
