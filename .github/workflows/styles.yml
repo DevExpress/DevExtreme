@@ -63,7 +63,7 @@ jobs:
         echo "version,date,size" > package_folder_sizes.csv
         npm install $package_name@20.1.5
         cd node_modules/devextreme
-        ls
+        ls -l
         # folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
         publish_date=$(npm view $package_name@$version time.modified)
         echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
@@ -76,7 +76,7 @@ jobs:
         # echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
         # Clean up the extracted package
         # rm -rf node_modules
-        done
+        # done
 
     - name: Display sizes
       run: cat package_folder_sizes.csv
