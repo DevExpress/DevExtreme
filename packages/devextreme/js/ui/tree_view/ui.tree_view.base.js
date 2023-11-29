@@ -285,6 +285,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
+    _toggleAriaBusy() {
+        const { items } = this.option();
+
+        const attrs = {
+            busy: !items.length,
+        };
+
+        this.setAria(attrs, this.$element());
+    },
+
     _optionChanged: function(args) {
         const { name, value, previousValue } = args;
 
@@ -307,11 +317,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'items':
                 delete this._$selectAllItem;
                 this.callBase(args);
+                this._toggleAriaBusy();
                 break;
             case 'dataSource':
                 this.callBase(args);
                 this._initDataAdapter();
                 this._filter = {};
+                this._toggleAriaBusy();
                 break;
             case 'hasItemsExpr':
                 this._initAccessors();
@@ -413,6 +425,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.callBase();
 
         this._initStoreChangeHandlers();
+        this._toggleAriaBusy();
     },
 
     _dataSourceChangedHandler: function(newItems) {
@@ -635,8 +648,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             direction: this.option('scrollDirection'),
             useKeyboard: false
         });
-
-        this.setAria('role', 'treeitem', this._scrollable.$element());
     },
 
     _renderNodeContainer: function($parent) {
