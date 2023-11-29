@@ -41,9 +41,9 @@ jobs:
 
     - name: Check package size
       run: |
-        # Run commands to get the size of the installed package
-        package_size=$(du -sh node_modules/devextreme)
-        echo "Package size: $package_size"
+        FILE_PATH="artifacts/css/dx.light.css"
+        FILE_SIZE=$(ls -nl "${FILE_PATH}" | awk '{print $5}')
+        echo "File size of ${FILE_PATH}: ${FILE_SIZE} bytes"
 
     - name: Run tests
       run: npx nx test-styles devextreme-main
