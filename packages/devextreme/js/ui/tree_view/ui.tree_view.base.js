@@ -59,6 +59,8 @@ const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
 const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
 const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
+const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
@@ -285,14 +287,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _toggleAriaBusy() {
+    _toggleTreeItemRole() {
         const { items } = this.option();
 
-        const attrs = {
-            busy: !items.length,
-        };
+        const $emptyMessage = this.$element().find(`.${EMPTY_MESSAGE_CLASS}`).eq(0);
+        const $treeViewNodeContainer = this.$element().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).eq(0);
 
-        this.setAria(attrs, this.$element());
+        const $element = $emptyMessage.length ? $emptyMessage : $treeViewNodeContainer;
+
+        const attrs = { role: 'treeitem' };
+
+        if(items.length) {
+            attrs.role = $emptyMessage.length ? null : 'group';
+        }
+
+        this.setAria(attrs, $element);
     },
 
     _optionChanged: function(args) {
@@ -317,13 +326,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'items':
                 delete this._$selectAllItem;
                 this.callBase(args);
-                this._toggleAriaBusy();
+                this._toggleTreeItemRole();
                 break;
             case 'dataSource':
                 this.callBase(args);
                 this._initDataAdapter();
                 this._filter = {};
-                this._toggleAriaBusy();
+                this._toggleTreeItemRole();
                 break;
             case 'hasItemsExpr':
                 this._initAccessors();
@@ -425,7 +434,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.callBase();
 
         this._initStoreChangeHandlers();
-        this._toggleAriaBusy();
     },
 
     _dataSourceChangedHandler: function(newItems) {
@@ -595,6 +603,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._renderEmptyMessage(this._dataAdapter.getRootNodes());
         this.callBase();
         this.setAria('role', 'tree');
+        this._toggleTreeItemRole();
     },
 
     _renderContentImpl: function() {
