@@ -35,10 +35,13 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Build themes
+      run: npm run build-themes
+
     - name: Check package size
       run: |
         # Run commands to get the size of the installed package
-        package_size=$(du -sh node_modules/your_package_name)
+        package_size=$(du -sh node_modules/devextreme)
         echo "Package size: $package_size"
 
     - name: Run tests
