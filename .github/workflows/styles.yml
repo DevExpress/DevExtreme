@@ -40,11 +40,11 @@ jobs:
       run: npm run build-themes
 
     - name: Fetch npm package versions
-        id: npm-versions
-        run: |
-          package_name="devextreme"
-          versions=$(npm show $package_name versions --json)
-          echo "::set-output name=versions::$(echo $versions)"
+      id: npm-versions
+      run: |
+        package_name="devextreme"
+        versions=$(npm show $package_name versions --json)
+        echo "::set-output name=versions::$(echo $versions)"
 
     - name: Check package size
       run: |
