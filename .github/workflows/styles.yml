@@ -48,7 +48,7 @@ jobs:
 
     - name: Check package size
       run: |
-        FOLDER_PATH="packages/devextreme/artifacts/css/dx.light.css"
+        FOLDER_PATH="packages/devextreme/artifacts/css"
         FOLDER_SIZE=$(ls -nl "${FOLDER_PATH}" | awk '{print $5}')
         FILE_PATH="packages/devextreme/artifacts/css/dx.light.css"
         FILE_SIZE=$(ls -nl "${FILE_PATH}" | awk '{print $5}')
@@ -61,15 +61,19 @@ jobs:
         package_name="devextreme"
         versions="${{ steps.npm-versions.outputs.versions }}"
         echo "version,date,size" > package_folder_sizes.csv
-        for version in $(echo "${versions}" | jq -r '.[]'); do
-          # Extract the package
-          npm install $package_name@$version
-          # Measure the size of the internal folder
-          folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
-          publish_date=$(npm view $package_name@$version time.modified)
-          echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
-          # Clean up the extracted package
-          rm -rf node_modules
+        npm install $package_name@20.1.5
+        folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
+        publish_date=$(npm view $package_name@$version time.modified)
+        echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
+        # for version in $(echo "${versions}" | jq -r '.[]'); do
+        # Extract the package
+        # npm install $package_name@$version
+        # Measure the size of the internal folder
+        # folder_size=$(du -sh node_modules/$package_name/dist/css | cut -f1)
+        # publish_date=$(npm view $package_name@$version time.modified)
+        # echo "\"$version\",\"$publish_date\",\"$folder_size\"" >> package_folder_sizes.csv
+        # Clean up the extracted package
+        # rm -rf node_modules
         done
 
     - name: Display sizes
