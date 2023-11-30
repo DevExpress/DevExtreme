@@ -330,6 +330,7 @@ test('The collapse icon should update if repaintChangesOnly option is enabled (T
       field1: '3', field2: 'test2', field3: 'test13',
     },
   ],
+  repaintChangesOnly: true,
   columns: [
     { dataField: 'field1', groupIndex: 0 },
     'field2',
