@@ -1,0 +1,48 @@
+name: Publishing to GitHub Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      pattern:
+        type: string
+        description: Package file pattern
+        required: false
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+  
+      - name: Set up nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          always-auth: true
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build npm packages
+        env:
+          BUILD_INTERNAL_PACKAGE: true
+        run: npm run all:build
+
+      - name: Publish to npm.pkg.github.com
+        working-directory: artifacts/npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ls *.tgz | grep --extended-regexp --ignore-case '${{ inputs.pattern }}' |
+          while read filename; do
+            tar -xzf ${filename};
+            pushd package;
+            sed -i '/\"repository\"/,/}/ d; /^$/d' package.json;
+            npm init -y --scope ${{ github.repository_owner }};
+            npm publish --dry-run --quiet --registry https://npm.pkg.github.com;
+            popd;
+            rm -r package;
+          done
