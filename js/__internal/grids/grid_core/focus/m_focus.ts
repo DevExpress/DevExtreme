@@ -469,15 +469,18 @@ export const focusModule = {
           this.option('focusedColumnIndex', columnIndex);
         },
 
-        _escapeKeyHandler(eventArgs, isEditing) {
+        _escapeKeyHandler(eventArgs, isEditing): boolean {
           if (isEditing || !this.option('focusedRowEnabled')) {
-            this.callBase(eventArgs, isEditing);
-            return;
+            return this.callBase(eventArgs, isEditing);
           }
           if (this.isCellFocusType()) {
             this.setRowFocusType();
             this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
+
+            return true;
           }
+
+          return false;
         },
 
         _updateFocusedCellPosition($cell, direction) {
