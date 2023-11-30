@@ -1,7 +1,7 @@
 <template>
   <div class="options">
     <div class="option">
-      <div class="label">Work Hours</div>
+      <div class="label">Work Hours:</div>
       <div class="value">
         <DxRadioGroup
           :items="shifts"

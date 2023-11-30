@@ -11,7 +11,7 @@ const App = () => {
     <React.Fragment>
       <div className="options">
         <div className="option">
-          <div className="label">Work Hours</div>
+          <div className="label">Work Hours:</div>
           <div className="value">
             <RadioGroup
               defaultValue={shifts[0]}

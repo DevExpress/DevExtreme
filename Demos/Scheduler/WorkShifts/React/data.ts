@@ -23,7 +23,7 @@ export const data: SchedulerTypes.Appointment[] = [{
 }, {
   text: 'Approve Personal Computer Upgrade Plan',
   startDate: '2021-03-31T01:30:00.000Z',
-  endDate: '2021-03-31T02:00:00.000Z',
+  endDate: '2021-03-31T03:00:00.000Z',
 }, {
   text: 'Final Budget Review',
   startDate: '2021-03-30T16:30:00.000Z',
@@ -39,7 +39,7 @@ export const data: SchedulerTypes.Appointment[] = [{
 }, {
   text: 'Prepare 2021 Marketing Plan',
   startDate: '2021-04-01T16:30:00.000Z',
-  endDate: '2021-04-01T17:30:00.000Z',
+  endDate: '2021-04-01T18:00:00.000Z',
 }, {
   text: 'Brochure Design Review',
   startDate: '2021-04-02T17:30:00.000Z',
@@ -55,7 +55,7 @@ export const data: SchedulerTypes.Appointment[] = [{
 }, {
   text: 'Launch New Website',
   startDate: '2021-04-01T01:30:00.000Z',
-  endDate: '2021-04-01T02:30:00.000Z',
+  endDate: '2021-04-01T03:00:00.000Z',
   recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE;INTERVAL=2',
 }, {
   text: 'Install New Router in Dev Room',

@@ -21,7 +21,7 @@ export const data = [
   {
     text: 'Approve Personal Computer Upgrade Plan',
     startDate: '2021-03-31T01:30:00.000Z',
-    endDate: '2021-03-31T02:00:00.000Z',
+    endDate: '2021-03-31T03:00:00.000Z',
   },
   {
     text: 'Final Budget Review',
@@ -41,7 +41,7 @@ export const data = [
   {
     text: 'Prepare 2021 Marketing Plan',
     startDate: '2021-04-01T16:30:00.000Z',
-    endDate: '2021-04-01T17:30:00.000Z',
+    endDate: '2021-04-01T18:00:00.000Z',
   },
   {
     text: 'Brochure Design Review',
@@ -61,7 +61,7 @@ export const data = [
   {
     text: 'Launch New Website',
     startDate: '2021-04-01T01:30:00.000Z',
-    endDate: '2021-04-01T02:30:00.000Z',
+    endDate: '2021-04-01T03:00:00.000Z',
     recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE;INTERVAL=2',
   },
   {
