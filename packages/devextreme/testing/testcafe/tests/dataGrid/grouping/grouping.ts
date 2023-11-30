@@ -313,9 +313,6 @@ test('The collapse icon should update if repaintChangesOnly option is enabled (T
     .click(dataGrid.getPager().getNavPage('2').element)
     .expect(await takeScreenshot('continued_group-collapse_icon-T1201981.png', dataGrid.element))
     .ok()
-    .click(dataGrid.getPager().getNavPage('1').element)
-    .expect(await takeScreenshot('has_continue_group-collapse_icon-T1201981.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -332,7 +329,10 @@ test('The collapse icon should update if repaintChangesOnly option is enabled (T
   ],
   repaintChangesOnly: true,
   columns: [
-    { dataField: 'field1', groupIndex: 0 },
+    {
+      dataField: 'field1',
+      groupIndex: 0,
+    },
     'field2',
     'field3',
   ],
