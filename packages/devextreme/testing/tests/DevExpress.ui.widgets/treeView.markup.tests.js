@@ -19,6 +19,7 @@ const ICON_CLASS = 'dx-icon';
 const SELECTED_STATE_CLASS = 'dx-state-selected';
 const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
+const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 
@@ -102,24 +103,20 @@ QUnit.module('aria accessibility', {
         assert.equal($node.attr('aria-selected'), 'true', 'item is selected');
     });
 
-    QUnit.test('empty message element should have role treeitem when items are empty', function(assert) {
+    QUnit.test('scrollable content should have correct attrs when items are empty and searchEnabled true', function(assert) {
+        this.instance.option({ searchEnabled: true });
+
+        let $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.attr('role'), 'tree', 'role is correct');
+        assert.strictEqual($scrollableContent.attr('tabindex'), '0', 'tabindex is correct');
+
         this.instance.option({ items: [] });
 
-        assert.strictEqual(this.$element.find(`.${EMPTY_MESSAGE_CLASS}`).eq(0).attr('role'), 'treeitem', 'role is correct');
+        $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-        this.instance.option({ items: this.items });
-
-        assert.strictEqual(this.$element.find(`.${EMPTY_MESSAGE_CLASS}`).length, 0, 'element is undefined');
-    });
-
-    QUnit.test('treeview node container should have correct role when items are empty and noDataText is empty string', function(assert) {
-        this.instance.option({ items: [], noDataText: '' });
-
-        assert.strictEqual(this.$element.find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).eq(0).attr('role'), 'treeitem', 'role is correct');
-
-        this.instance.option({ items: this.items });
-
-        assert.strictEqual(this.$element.find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).eq(0).attr('role'), 'group', 'role is correct');
+        assert.strictEqual($scrollableContent.attr('role'), undefined, 'role is not set');
+        assert.strictEqual($scrollableContent.attr('tabindex'), undefined, 'tabindex is not set');
     });
 });
 
