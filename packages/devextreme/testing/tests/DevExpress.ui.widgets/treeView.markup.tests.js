@@ -21,8 +21,6 @@ const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
-const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
-const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
 const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
@@ -35,17 +33,15 @@ const initTree = (options) => $('#treeView').dxTreeView(options);
 
 QUnit.module('aria accessibility', {
     beforeEach: function() {
-        this.items = [{
-            id: 1,
-            text: 'Item 1',
-            selected: true,
-            expanded: true,
-            items: [{ id: 3, text: 'Item 11' }, { id: 4, text: 'Item 12' }]
-        }, { id: 2, text: 'Item 2', expanded: false }];
-
         this.$element = initTree({
             animationEnabled: false,
-            items: this.items,
+            items: [{
+                id: 1,
+                text: 'Item 1',
+                selected: true,
+                expanded: true,
+                items: [{ id: 3, text: 'Item 11' }, { id: 4, text: 'Item 12' }]
+            }, { id: 2, text: 'Item 2', expanded: false }],
             selectNodesRecursive: true,
             showCheckBoxesMode: 'normal'
         });
@@ -56,7 +52,6 @@ QUnit.module('aria accessibility', {
     afterEach: function() {
         this.$treeView = undefined;
         this.instance = undefined;
-        this.items = null;
     }
 }, () => {
     QUnit.test('aria role', function(assert) {

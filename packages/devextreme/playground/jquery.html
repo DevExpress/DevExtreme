@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,22 +43,110 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
+        <select id="theme-selector" aria-label="theme selector" style="display: block;">
         </select>
         <br />
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(function () {
+                const employees = [{
+                    id: 1,
+                    fullName: 'John Heart',
+                    prefix: 'Dr.',
+                    position: 'CEO',
+                    expanded: true,
+                    items: [{
+                        id: 2,
+                        fullName: 'Samantha Bright',
+                        prefix: 'Dr.',
+                        position: 'COO',
+                        expanded: true,
+                        items: [{
+                            id: 3,
+                            fullName: 'Kevin Carter',
+                            prefix: 'Mr.',
+                            position: 'Shipping Manager',
+                        }, {
+                            id: 14,
+                            fullName: 'Victor Norris',
+                            prefix: 'Mr.',
+                            selected: true,
+                            position: 'Shipping Assistant',
+                        }],
+                    }, {
+                        id: 4,
+                        fullName: 'Brett Wade',
+                        prefix: 'Mr.',
+                        position: 'IT Manager',
+                        expanded: true,
+                        items: [{
+                            id: 5,
+                            fullName: 'Amelia Harper',
+                            prefix: 'Mrs.',
+                            position: 'Network Admin',
+                        }, {
+                            id: 6,
+                            fullName: 'Wally Hobbs',
+                            prefix: 'Mr.',
+                            position: 'Programmer',
+                        }, {
+                            id: 7,
+                            fullName: 'Brad Jameson',
+                            prefix: 'Mr.',
+                            position: 'Programmer',
+                        }, {
+                            id: 8,
+                            fullName: 'Violet Bailey',
+                            prefix: 'Ms.',
+                            position: 'Jr Graphic Designer',
+                        }],
+                    }, {
+                        id: 9,
+                        fullName: 'Barb Banks',
+                        prefix: 'Mrs.',
+                        position: 'Support Manager',
+                        expanded: true,
+                        items: [{
+                            id: 10,
+                            fullName: 'Kelly Rodriguez',
+                            prefix: 'Ms.',
+                            position: 'Support Assistant',
+                        }, {
+                            id: 11,
+                            fullName: 'James Anderson',
+                            prefix: 'Mr.',
+                            position: 'Support Assistant',
+                        }],
+                    }],
+                }];
+
+                const items = [];
+                // const items = employees;
+                const searchEnabled = true;
+                // const searchEnabled = false;
+                const showCheckBoxesMode = 'none';
+                // const showCheckBoxesMode = 'normal';
+                // const showCheckBoxesMode = 'selectAll';
+                // const noDataText = null;
+                const noDataText = 'no data text';
+
+                const instance = $("#button").dxTreeView({
+                    searchEnabled,
+                    showCheckBoxesMode,
+                    noDataText,
+                    items,
+                    displayExpr: 'fullName',
+                }).dxTreeView('instance');
+
+                instance.option({ items: employees });
             });
         </script>
     </div>
 </body>
+
 </html>

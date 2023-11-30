@@ -36,6 +36,7 @@ const TREEVIEW_SELECTOR = '#container';
               showCheckBoxesMode,
               noDataText,
               items,
+              displayExpr: 'fullName',
             });
           }).after(async () => {
             await changeTheme('generic.light');
