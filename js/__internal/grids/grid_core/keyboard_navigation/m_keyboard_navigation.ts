@@ -467,8 +467,7 @@ export class KeyboardNavigationController extends modules.ViewController {
           break;
 
         case 'escape':
-          this._escapeKeyHandler(e, isEditing);
-          isHandled = true;
+          isHandled = this._escapeKeyHandler(e, isEditing);
           break;
 
         case 'F':
@@ -1048,7 +1047,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _escapeKeyHandler(eventArgs, isEditing) {
+  _escapeKeyHandler(eventArgs, isEditing): boolean {
     const $cell = this._getCellElementFromTarget(
       eventArgs.originalEvent.target,
     );
@@ -1069,7 +1068,11 @@ export class KeyboardNavigationController extends modules.ViewController {
         }
       }
       eventArgs.originalEvent.preventDefault();
+
+      return true;
     }
+
+    return false;
   }
 
   _ctrlFKeyHandler(eventArgs) {
