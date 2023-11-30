@@ -26,7 +26,7 @@ const TREEVIEW_SELECTOR = '#container';
     [true, false].forEach((searchEnabled) => {
       ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
         [null, 'no data text'].forEach((noDataText) => {
-          test(`Treeview ${items ? 'full items' : 'empty items'} searchEnabled=${searchEnabled} showCheckBoxesMode=${showCheckBoxesMode} noDataText=${noDataText} in ${theme}`, async (t) => {
+          test(`Treeview ${items.length ? 'full items' : 'empty items'} searchEnabled=${searchEnabled} showCheckBoxesMode=${showCheckBoxesMode} noDataText=${noDataText} in ${theme}`, async (t) => {
             await a11yCheck(t, a11yCheckConfig, TREEVIEW_SELECTOR);
           }).before(async () => {
             await changeTheme(theme);
