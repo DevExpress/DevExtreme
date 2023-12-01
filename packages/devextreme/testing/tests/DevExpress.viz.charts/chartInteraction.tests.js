@@ -813,3 +813,87 @@ QUnit.module('Deprecated options', {
             ]);
     });
 });
+
+QUnit.module('Series translation', {
+    createChart(options) {
+        const hiddenAxisOptions = {
+            visible: false,
+            grid: {
+                visible: false
+            },
+            label: {
+                visible: false
+            },
+            tick: {
+                visible: false
+            }
+        };
+        const defaultOptions = {
+            series: {},
+            legend: {
+                visible: false
+            },
+            size: {
+                width: 300,
+                height: 300
+            },
+            valueAxis: {
+                visualRange: [1, 1000],
+                ...hiddenAxisOptions
+            },
+            argumentAxis: {
+
+                visualRange: [1, 1000],
+                ...hiddenAxisOptions
+            },
+            dataSource: [{
+                arg: 1,
+                val: 500
+            }, {
+                arg: 1.05,
+                val: 500.01
+            }]
+        };
+
+        return $('#chart').dxChart($.extend(true, {}, defaultOptions, options)).dxChart('instance');
+    }
+}, () => {
+
+    function getMarkerCoords(element) {
+        const transformAttribute = element.getAttribute('transform');
+
+        const coordsStr = transformAttribute
+            .replace('translate(', '')
+            .replace(')', '');
+
+        return coordsStr
+            .split(',')
+            .map((coord) => parseFloat(coord));
+    }
+
+    QUnit.test('Coords of points should be different when distance of values too small', function(assert) {
+        const chart = this.createChart({});
+
+        const pointsMarkers = $(chart.element()).find('.dxc-series circle');
+        const firstPointCoords = getMarkerCoords(pointsMarkers[0]);
+        const secondPointCoords = getMarkerCoords(pointsMarkers[1]);
+
+        assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
+        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0);
+        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0);
+    });
+
+    QUnit.test('Coords of points should be different when distance of values too small.  Rotated = true', function(assert) {
+        const chart = this.createChart({
+            rotated: true
+        });
+
+        const pointsMarkers = $(chart.element()).find('.dxc-series circle');
+        const firstPointCoords = getMarkerCoords(pointsMarkers[0]);
+        const secondPointCoords = getMarkerCoords(pointsMarkers[1]);
+
+        assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
+        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0);
+        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0);
+    });
+});
