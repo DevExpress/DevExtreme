@@ -6,6 +6,7 @@ const expandedRowKeys = [1];
 
 const App = () => (
   <TreeList
+    id="employees"
     dataSource={employees}
     showRowLines={true}
     showBorders={true}

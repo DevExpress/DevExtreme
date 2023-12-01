@@ -2,6 +2,10 @@
   min-height: 700px;
 }
 
+#employees {
+  max-height: 640px;
+}
+
 .options {
   margin-top: 20px;
   padding: 20px;

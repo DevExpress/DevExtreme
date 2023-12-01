@@ -108,4 +108,8 @@ function allowDeleting(e) {
 #tree-list-demo {
   min-height: 700px;
 }
+
+#employees {
+  max-height: 640px;
+}
 </style>

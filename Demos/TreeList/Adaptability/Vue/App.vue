@@ -49,5 +49,6 @@ const expandedRowKeys = [1];
 <style scoped>
 #employees {
   padding: 10px;
+  max-height: 440px;
 }
 </style>
