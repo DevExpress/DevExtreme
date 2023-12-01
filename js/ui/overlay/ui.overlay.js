@@ -159,6 +159,7 @@ const Overlay = Widget.inherit({
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
+            _hideOnParentScrollTarget: undefined,
             _fixWrapperPosition: false
         });
     },
@@ -761,9 +762,10 @@ const Overlay = Widget.inherit({
 
         eventsEngine.off(prevTargets, scrollEvent, handler);
 
-        const closeOnScroll = this.option('hideOnParentScroll');
-        if(needSubscribe && closeOnScroll) {
-            let $parents = this._hideOnParentScrollTarget().parents();
+        const hideOnScroll = this.option('hideOnParentScroll');
+
+        if(needSubscribe && hideOnScroll) {
+            let $parents = this._getHideOnParentScrollTarget().parents();
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
@@ -773,18 +775,24 @@ const Overlay = Widget.inherit({
     },
 
     _hideOnParentsScrollHandler: function(e) {
-        let closeHandled = false;
-        const closeOnScroll = this.option('hideOnParentScroll');
-        if(isFunction(closeOnScroll)) {
-            closeHandled = closeOnScroll(e);
+        let hideHandled = false;
+        const hideOnScroll = this.option('hideOnParentScroll');
+        if(isFunction(hideOnScroll)) {
+            hideHandled = hideOnScroll(e);
         }
 
-        if(!closeHandled && !this._showAnimationProcessing) {
+        if(!hideHandled && !this._showAnimationProcessing) {
             this.hide();
         }
     },
 
-    _hideOnParentScrollTarget: function() {
+    _getHideOnParentScrollTarget: function() {
+        const $hideOnParentScrollTarget = $(this.option('_hideOnParentScrollTarget'));
+
+        if($hideOnParentScrollTarget.length) {
+            return $hideOnParentScrollTarget;
+        }
+
         return this._$wrapper;
     },
 
@@ -1190,6 +1198,7 @@ const Overlay = Widget.inherit({
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
             case 'hideOnParentScroll':
+            case '_hideOnParentScrollTarget':
                 this._toggleHideOnParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
