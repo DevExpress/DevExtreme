@@ -824,7 +824,22 @@ QUnit.module('submit element', {}, () => {
 
             assert.equal($hiddenInput.val(), '12|25', 'the correct decimal separator is used');
         } finally {
-            executeActionWithSuppressErrors(() => config(originalConfig));
+            config(originalConfig);
+        }
+    });
+
+    QUnit.test('deprecated separator warning should be logged on config change', function(assert) {
+        const originalConfig = config();
+        const logErrorsStub = sinon.stub(errors, 'log');
+
+        try {
+            config({ decimalSeparator: ',' });
+
+            const message = 'Now, the decimalSeparator is selected based on the specified locale.';
+            assert.ok(logErrorsStub.calledWith('W0003', 'config', 'decimalSeparator', '19.2', message), 'Message was logged correctly');
+        } finally {
+            config(originalConfig);
+            logErrorsStub.restore();
         }
     });
 });
