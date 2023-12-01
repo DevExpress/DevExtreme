@@ -1734,7 +1734,6 @@ QUnit.test('[T684665] Chart - zooming-out with multiple value axes leads to wron
 
     // act
     const $root = $(chart._renderer.root.element);
-
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 100 }, { pointerId: 2, pageX: 150, pageY: 150 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 100 }, { pointerId: 2, pageX: 200, pageY: 200 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
