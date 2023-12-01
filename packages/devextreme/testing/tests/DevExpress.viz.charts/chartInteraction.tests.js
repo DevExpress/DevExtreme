@@ -6,6 +6,8 @@ import errors from 'core/errors';
 import 'viz/chart';
 import 'viz/polar_chart';
 
+const SERIES_POINT_MARKER_SELECTOR = '.dxc-series circle';
+
 QUnit.testStart(function() {
     const markup =
         '<div class="tooltipInteraction">\
@@ -874,26 +876,26 @@ QUnit.module('Series translation', {
     QUnit.test('Coords of points should be different when distance of values too small', function(assert) {
         const chart = this.createChart({});
 
-        const pointsMarkers = $(chart.element()).find('.dxc-series circle');
+        const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
         const firstPointCoords = getMarkerCoords(pointsMarkers[0]);
         const secondPointCoords = getMarkerCoords(pointsMarkers[1]);
 
         assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
-        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0);
-        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0);
+        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0, 'points should have different x coords');
+        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0, 'points should have different y coords');
     });
 
-    QUnit.test('Coords of points should be different when distance of values too small.  Rotated = true', function(assert) {
+    QUnit.test('Coords of points should be different when distance of values too small. Rotated = true', function(assert) {
         const chart = this.createChart({
             rotated: true
         });
 
-        const pointsMarkers = $(chart.element()).find('.dxc-series circle');
+        const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
         const firstPointCoords = getMarkerCoords(pointsMarkers[0]);
         const secondPointCoords = getMarkerCoords(pointsMarkers[1]);
 
         assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
-        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0);
-        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0);
+        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0, 'points should have different x coords');
+        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0, 'points should have different y coords');
     });
 });
