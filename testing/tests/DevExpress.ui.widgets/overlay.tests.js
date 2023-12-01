@@ -2635,35 +2635,6 @@ testModule('close on target scroll', moduleConfig, () => {
         $('#parentContainer').triggerHandler('scroll');
         assert.strictEqual($overlay1.dxOverlay('option', 'visible'), false, 'overlay1 closed');
     });
-
-    testModule('_hideOnParentScrollTarget', moduleConfig, () => {
-        test('overlay should be hidden on parent scroll, set _hideOnParentScrollTarget on init', function(assert) {
-            const overlay = $('#overlay').dxOverlay({
-                hideOnParentScroll: true,
-                _hideOnParentScrollTarget: $('#overlay2'),
-                visible: true
-            }).dxOverlay('instance');
-
-            $('#parentContainer').triggerHandler('scroll');
-            assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
-        });
-
-        test('overlay should be hidden on parent scroll, set _hideOnParentScrollTarget on runtime', function(assert) {
-            const overlay = $('#overlay').dxOverlay({
-                hideOnParentScroll: true,
-                visible: true
-            }).dxOverlay('instance');
-
-            $('#parentContainer').triggerHandler('scroll');
-
-            assert.strictEqual(overlay.option('visible'), true, 'overlay is visible');
-
-            overlay.option('_hideOnParentScrollTarget', $('#overlay2'));
-            $('#parentContainer').triggerHandler('scroll');
-
-            assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
-        });
-    });
 });
 
 
