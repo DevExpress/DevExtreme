@@ -860,41 +860,41 @@ QUnit.module('Series translation', {
         return $('#chart').dxChart($.extend(true, {}, defaultOptions, options)).dxChart('instance');
     }
 }, () => {
-    function getMarkerCoords(element) {
+    function getMarkerCoordinates(element) {
         const transformAttribute = element.getAttribute('transform');
 
-        const coordsStr = transformAttribute
+        const coordinatesFromAttribute = transformAttribute
             .replace('translate(', '')
             .replace(')', '');
 
-        return coordsStr
+        return coordinatesFromAttribute
             .split(',')
             .map((coord) => parseFloat(coord));
     }
 
-    QUnit.test('Coords of points should be different when distance of values too small', function(assert) {
+    QUnit.test('Coordinates of points should be different when distance between values is too small.(T1195064)', function(assert) {
         const chart = this.createChart({});
 
         const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
-        const firstPointCoords = getMarkerCoords(pointsMarkers[0]);
-        const secondPointCoords = getMarkerCoords(pointsMarkers[1]);
+        const firstPointCoordinates = getMarkerCoordinates(pointsMarkers[0]);
+        const secondPointCoordinates = getMarkerCoordinates(pointsMarkers[1]);
 
         assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
-        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0, 'points should have different x coords');
-        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0, 'points should have different y coords');
+        assert.ok((firstPointCoordinates[0] - secondPointCoordinates[0]) < 0, 'points should have different x coordinates');
+        assert.ok((secondPointCoordinates[1] - firstPointCoordinates[1]) < 0, 'points should have different y coordinates');
     });
 
-    QUnit.test('Coords of points should be different when distance of values too small. Rotated = true', function(assert) {
+    QUnit.test('Coordinates of points should be different when distance between values is too small. Rotated = true.(T1195064)', function(assert) {
         const chart = this.createChart({
             rotated: true
         });
 
         const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
-        const firstPointCoords = getMarkerCoords(pointsMarkers[0]);
-        const secondPointCoords = getMarkerCoords(pointsMarkers[1]);
+        const firstPointCoordinates = getMarkerCoordinates(pointsMarkers[0]);
+        const secondPointCoordinates = getMarkerCoordinates(pointsMarkers[1]);
 
         assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
-        assert.ok((firstPointCoords[0] - secondPointCoords[0]) < 0, 'points should have different x coords');
-        assert.ok((secondPointCoords[1] - firstPointCoords[1]) < 0, 'points should have different y coords');
+        assert.ok((firstPointCoordinates[0] - secondPointCoordinates[0]) < 0, 'points should have different x coordinates');
+        assert.ok((secondPointCoordinates[1] - firstPointCoordinates[1]) < 0, 'points should have different y coordinates');
     });
 });

@@ -151,6 +151,7 @@ _Translator2d.prototype = {
         const canvasOptions = that._prepareCanvasOptions();
         const visibleCategories = getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories;
         const categoriesLength = visibleCategories.length;
+        const conditionRound = (value, skipRound) => skipRound ? value : Math.round(value);
 
         if(range.isEmpty()) {
             script = dummyTranslator;
@@ -184,9 +185,10 @@ _Translator2d.prototype = {
         });
         that._oldMethods = Object.keys(script);
         extend(that, script);
-        that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value, skipRound) {
-            return skipRound ? value : Math.round(value);
-        };
+
+        that._conversionValue = options.conversionValue
+            ? (value) => value
+            : conditionRound;
 
         that.sc = {};
         that._checkingMethodsAboutBreaks = [
