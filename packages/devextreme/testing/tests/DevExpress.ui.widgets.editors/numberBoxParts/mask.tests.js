@@ -2335,7 +2335,7 @@ QUnit.module('drag text', moduleConfig, () => {
     });
 });
 
-QUnit.module('format:', moduleConfig, () => {
+QUnit.module('format: "," as a decimal separator', moduleConfig, () => {
     function executeActionWithSuppressErrors(action) {
         const logErrorsStub = sinon.stub(errors, 'log');
         action();
