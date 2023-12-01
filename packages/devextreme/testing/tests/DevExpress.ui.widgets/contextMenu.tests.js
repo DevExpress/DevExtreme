@@ -257,19 +257,9 @@ QUnit.module('Rendering', moduleConfig, () => {
         assert.notOk(instance._keyboardListenerId);
     });
 
-    QUnit.test('ContextMenu icon image should have alt attribute with item text if it specified', function(assert) {
+    QUnit.test('ContextMenu icon image should have alt attribute with "dxContextMenu item icon" text', function(assert) {
         const instance = new ContextMenu(this.$element, {
-            items: [{ text: 'Item text', icon: 'some_icon.jpg' }],
-            visible: true,
-        });
-        const $icon = $(instance.itemsContainer()).find(`.${DX_MENU_ITEM_CLASS} .${DX_ICON_CLASS}`);
-
-        assert.strictEqual($icon.attr('alt'), 'Item text');
-    });
-
-    QUnit.test('ContextMenu icon image should have alt attribute with "dxContextMenu item icon" if item text is not specified', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            items: [{ icon: 'some_icon.jpg' }],
+            items: [{ text: 'Item text', icon: 'some_icon.jpg', }],
             visible: true,
         });
         const $icon = instance.itemsContainer().find(`.${DX_MENU_ITEM_CLASS} .${DX_ICON_CLASS}`);

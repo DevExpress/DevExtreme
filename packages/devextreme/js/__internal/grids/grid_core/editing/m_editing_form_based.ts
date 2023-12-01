@@ -563,6 +563,18 @@ export const editingFormBasedModule = {
             this.callBase($cell, parameters);
           }
         },
+        _updateContent() {
+          const editingController = this._editingController;
+          const oldEditForm = editingController.getEditForm();
+          const validationGroup = oldEditForm?.option('validationGroup');
+          const deferred = this.callBase.apply(this, arguments);
+          return deferred.done(() => {
+            const newEditForm = editingController.getEditForm();
+            if (validationGroup && newEditForm && newEditForm !== oldEditForm) {
+              newEditForm.option('validationGroup', validationGroup);
+            }
+          });
+        },
       },
     },
   },
