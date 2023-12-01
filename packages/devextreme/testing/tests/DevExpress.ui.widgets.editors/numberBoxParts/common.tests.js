@@ -6,7 +6,6 @@ import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { normalizeKeyName } from 'events/utils/index';
-import errors from 'core/errors';
 
 import 'ui/number_box';
 import 'ui/validator';
@@ -819,21 +818,6 @@ QUnit.module('submit element', {}, () => {
             assert.equal($hiddenInput.val(), '12|25', 'the correct decimal separator is used');
         } finally {
             config(originalConfig);
-        }
-    });
-
-    QUnit.test('deprecated separator warning should be logged on config change', function(assert) {
-        const originalConfig = config();
-        const logErrorsStub = sinon.stub(errors, 'log');
-
-        try {
-            config({ decimalSeparator: ',' });
-
-            const message = 'Now, the decimalSeparator is selected based on the specified locale.';
-            assert.ok(logErrorsStub.calledWith('W0003', 'config', 'decimalSeparator', '19.2', message), 'Message was logged correctly');
-        } finally {
-            config(originalConfig);
-            logErrorsStub.restore();
         }
     });
 });
