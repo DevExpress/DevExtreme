@@ -3,6 +3,8 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'viz/chart';
 
+const CHART_CLASS = 'svg.dxc.dxc-chart';
+
 const dataSource = (() => {
     const arr = [];
     for(let i = 0; i < 11; i++) {
@@ -820,6 +822,70 @@ QUnit.test('Multiaxes, zoom axes only in one pane', function(assert) {
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis2);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 1.8, endValue: 8.4 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 }, 'axis 2 onZoomEnd range');
+});
+
+QUnit.test('tooltip should be shown after hovering over the zoomed chart (T1197697)', function(assert) {
+    $('#chart').dxChart({
+        title: 'Chart',
+        zoomAndPan: {
+            allowMouseWheel: true,
+            dragToZoom: true,
+            argumentAxis: 'both'
+        },
+        crosshair: { enabled: true, horizontalLine: true },
+        tooltip: { enabled: true, shared: true, location: 'center' },
+        commonAxisSettings: { grid: { visible: true } },
+        panes: [{ name: 'pane1', height: 500.0 }],
+        commonSeriesSettings: {
+            type: 'stepline',
+            argumentField: 'Argument',
+            point: { visible: true, size: 100 }
+        },
+        series: [
+            {
+                name: 'series1',
+                valueField: 'Value1',
+                color: 'rgb(255,0,0)',
+                pane: 'pane1',
+            },
+            {
+                name: 'series2',
+                valueField: 'Value2',
+                color: 'rgb(0,0,255)',
+                pane: 'pane1',
+            }
+        ],
+        dataSource: [
+            {
+                Argument: new Date(2023, 9, 26, 15, 17, 22, 753),
+                Value1: 24.866858415709277,
+                Value2: 1.1074397718102855,
+                Value3: 0.46701067987224587
+            },
+            {
+                Argument: new Date(2023, 9, 26, 15, 32, 22, 753),
+                Value1: 77.16041220219824,
+                Value2: 6.575188937864819,
+                Value3: 0.43278260130099144
+            },
+            {
+                Argument: new Date(2023, 9, 26, 15, 47, 22, 753),
+                Value1: 35.408376360036605,
+                Value2: 9.438622761256351,
+                Value3: 0.10126645355544353
+            },
+        ],
+    }).dxChart('instance');
+
+    const $chartElement = $(CHART_CLASS);
+    const pointer = pointerMock($chartElement[0]).start();
+
+    pointer.start({ x: 100, y: 200 }).wheel(150);
+    $chartElement.trigger($.Event('dxpointermove', { pointerType: 'mouse', pageX: 54, pageY: 541 }));
+
+    const tooltip = $('.dxc-tooltip')[0];
+
+    assert.ok(tooltip);
 });
 
 QUnit.test('Multiaxes, zoom axes only in one pane. Rotated', function(assert) {
@@ -1667,7 +1733,8 @@ QUnit.test('[T684665] Chart - zooming-out with multiple value axes leads to wron
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
+
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 100 }, { pointerId: 2, pageX: 150, pageY: 150 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 100 }, { pointerId: 2, pageX: 200, pageY: 200 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -1778,7 +1845,7 @@ QUnit.test('Reject pinch zoom-in both axes', function(assert) {
     const valVisualRange = valueAxis.visualRange();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -1825,7 +1892,7 @@ QUnit.test('Pinch zoom-in both axes', function(assert) {
     const valueAxis = chart.getValueAxis();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -1876,7 +1943,7 @@ QUnit.test('Pinch zoom-out both axes', function(assert) {
     const valueAxis = chart.getValueAxis();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -1919,7 +1986,7 @@ QUnit.test('Pinch zoom-in argument axis from some point', function(assert) {
     const argumentAxis = chart.getArgumentAxis();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -1954,7 +2021,7 @@ QUnit.test('Pinch zoom-in/zoom-out argument axis from some point (discrete axis)
     const argumentAxis = chart.getArgumentAxis();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 150, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -2004,7 +2071,7 @@ QUnit.test('Scrollbar pans only argument axis', function(assert) {
     const argumentAxis = chart.getArgumentAxis();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxc-scroll-start', { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }] }));
     $root.trigger(new $.Event('dxc-scroll-move', { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }] }));
     $root.trigger(new $.Event('dxc-scroll-end'));
@@ -2050,7 +2117,7 @@ QUnit.test('Scrollbar does not pan argument axis if it can not be panned', funct
     const scrollBarOffset = scrollBarElement.offset();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxc-scroll-start', { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }] }));
     $root.trigger(new $.Event('dxc-scroll-move', { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }] }));
     $root.trigger(new $.Event('dxc-scroll-end'));
@@ -2335,7 +2402,7 @@ QUnit.test('Pinch zoom. Small chart rendering time on start and big time in the 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
     const valueAxis2 = chart.getValueAxis('v2');
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
 
     // act
     // pinch start
@@ -2451,7 +2518,7 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
     const valueAxis2 = chart.getValueAxis('v2');
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
 
     chart._lastRenderingTime = 1000;
     // act
@@ -2591,7 +2658,7 @@ QUnit.test('Do nothing if no actions allowed', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     // drag
     this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
     // wheel
@@ -2807,7 +2874,7 @@ QUnit.test('On pan', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxdragstart', { pageX: 100, pageY: 250, preventDefault: preventDefault }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdragend', { preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -2859,7 +2926,7 @@ QUnit.test('Pan action in pane without zoom if another pane has a zoom', functio
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxmousewheel', { d: 10, pageX: 0, pageY: 350, preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
     assert.equal(preventDefault.callCount, 0);
@@ -2886,7 +2953,7 @@ QUnit.test('Default behavior - no prevent. On panning by drag (goes to the edge)
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 100, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: -100, y: 50 } }));
     $root.trigger(new $.Event('dxdragend', { pointerType: 'touch' }));
@@ -2901,7 +2968,7 @@ QUnit.test('Do not cancel panning if pan took place early. Pan X', function(asse
     const stopPropagation = sinon.spy();
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -2918,7 +2985,7 @@ QUnit.test('Do not cancel panning if pan took place early. Pan X', function(asse
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
 
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: 10, y: 0 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -2935,7 +3002,7 @@ QUnit.test('Do not cancel panning if pan took place early. Pan Y', function(asse
     const stopPropagation = sinon.spy();
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -2959,7 +3026,7 @@ QUnit.test('Do not cancel panning if pan took place early. Pan Y', function(asse
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
 
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: 0, y: 10 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -2975,7 +3042,7 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
     const stopPropagation = sinon.spy();
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -2991,7 +3058,7 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 200, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdragend', { pointerType: 'touch', preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -3007,7 +3074,7 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
 QUnit.test('On mouse wheel', function(assert) {
     const preventDefault = sinon.spy();
     const stopPropagation = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -3021,7 +3088,7 @@ QUnit.test('On mouse wheel', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxmousewheel', { d: 10, pageX: 0, pageY: 0, preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
     assert.equal(preventDefault.callCount, 1);
@@ -3032,7 +3099,7 @@ QUnit.test('On mouse wheel', function(assert) {
 QUnit.test('Default behavior - no prevent. On mouse wheel', function(assert) {
     const preventDefault = sinon.spy();
     const stopPropagation = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         valueAxis: {
             visualRange: {
                 startValue: 0,
@@ -3046,7 +3113,7 @@ QUnit.test('Default behavior - no prevent. On mouse wheel', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxmousewheel', { d: 10, pageX: 0, pageY: 0, preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
     assert.equal(preventDefault.callCount, 0);
@@ -3057,7 +3124,7 @@ QUnit.test('Default behavior - no prevent. On mouse wheel', function(assert) {
 QUnit.test('On pinch zoom', function(assert) {
     const preventDefault = sinon.spy();
     const stopPropagation = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -3072,7 +3139,7 @@ QUnit.test('On pinch zoom', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -3085,7 +3152,7 @@ QUnit.test('On pinch zoom', function(assert) {
 QUnit.test('Prevent default behavior for pinch-in zoom', function(assert) {
     const preventDefault = sinon.spy();
     const stopPropagation = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 0,
@@ -3106,7 +3173,7 @@ QUnit.test('Prevent default behavior for pinch-in zoom', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -3121,7 +3188,7 @@ QUnit.test('Default behavior - no prevent. On pinch-out zoom', function(assert) 
     const stopPropagation = sinon.spy();
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 1,
@@ -3137,7 +3204,7 @@ QUnit.test('Default behavior - no prevent. On pinch-out zoom', function(assert) 
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -3154,7 +3221,7 @@ QUnit.test('Default behavior - no prevent. On panning by drag (full visualRange)
     const stopPropagation = sinon.spy();
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 0.01,
@@ -3177,7 +3244,7 @@ QUnit.test('Default behavior - no prevent. On panning by drag (full visualRange)
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
 
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -3193,7 +3260,7 @@ QUnit.test('Default behavior - no prevent. On panning by drag (full visualRange)
 QUnit.test('On ScrollBar', function(assert) {
     const preventDefault = sinon.spy();
     const stopPropagation = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -3207,7 +3274,7 @@ QUnit.test('On ScrollBar', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger(new $.Event('dxc-scroll-start', { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxc-scroll-move', { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxc-scroll-end', { preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -3220,7 +3287,7 @@ QUnit.test('On ScrollBar', function(assert) {
 QUnit.test('Do not prevent and stop if no actions allowed', function(assert) {
     const preventDefault = sinon.spy();
     const stopPropagation = sinon.spy();
-    const chart = this.createChart({
+    this.createChart({
         argumentAxis: {
             visualRange: {
                 startValue: 3,
@@ -3236,7 +3303,7 @@ QUnit.test('Do not prevent and stop if no actions allowed', function(assert) {
     });
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     // drag
     $root.trigger(new $.Event('dxdragstart', { pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -3497,7 +3564,7 @@ QUnit.test('Axes zooming - pinch', function(assert) {
     const valueAxis = chart.getValueAxis();
 
     // act
-    const $root = $(chart._renderer.root.element);
+    const $root = $(CHART_CLASS);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 20, pageY: 20 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 10, pageY: 10 }, { pointerId: 2, pageX: 60, pageY: 60 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
