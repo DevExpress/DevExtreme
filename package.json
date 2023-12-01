@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/shelljs": "0.8.15",
-    "cheerio": "1.0.0-rc.10",
+    "cheerio": "1.0.0-rc.12",
     "codelyzer": "^6.0.2",
     "devextreme-internal-tools": "12.0.0-beta.11",
     "eslint": "8.47.0",
