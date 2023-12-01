@@ -4,7 +4,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import numberLocalization from 'localization/number';
-import { executeActionWithSuppressErrors } from './common.tests.js';
+import errors from 'core/errors';
 
 import 'ui/text_box/ui.text_editor';
 
@@ -517,22 +517,6 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
         this.keyboard.caret({ start: 0, end: 6 }).type('12345678').change();
         assert.equal(this.input.val(), '678.00', 'input value is right');
         assert.equal(this.instance.option('value'), 678, 'value option is right');
-    });
-
-    QUnit.test('value option should have right value after inserting when format is enabled and decimalSeparator is \',\' (T829935)', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
-
-        this.instance.option('format', '000.00');
-
-        try {
-            this.keyboard.caret({ start: 0, end: 6 }).type('12345678').change();
-            assert.equal(this.input.val(), '678,00', 'input value is right');
-            assert.equal(this.instance.option('value'), 678, 'value option is right');
-        } finally {
-            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
-        }
     });
 
     QUnit.test('extra decimal points should be ignored', function(assert) {
@@ -1367,23 +1351,6 @@ QUnit.module('format: percent format', moduleConfig, () => {
         assert.equal(this.input.val(), '450%', 'text is correct');
     });
 
-    QUnit.test('dot should not be ignored in percent format when the value has been parsed correctly', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
-
-        try {
-            this.instance.option('format', '#0.00%');
-            this.instance.option('value', 0.256);
-
-            this.keyboard.caret(2).type('.5');
-
-            assert.equal(this.input.val(), '25,56%', 'text is correct');
-        } finally {
-            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
-        }
-    });
-
     [
         { text: '14.55', value: 0.1455 },
         { text: '20.2', value: 0.202 },
@@ -1710,45 +1677,6 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.equal(this.input.val(), '12 kg', 'decimal separator has been removed');
     });
 
-    QUnit.test('removing decimal separator if decimal separator is not default', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
-
-        try {
-            this.instance.option({
-                format: '#0.00',
-                value: 1
-            });
-
-            this.keyboard.caret(2).press('backspace');
-
-            assert.equal(this.input.val(), '1,00', 'text is correct');
-            assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is moved');
-        } finally {
-            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
-        }
-    });
-
-    QUnit.test('caret should be moved to the float part by \'.\' even when decimal separator is not \'.\'', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
-
-        try {
-            this.instance.option({
-                format: '#0.00',
-                value: null
-            });
-
-            this.keyboard.type('123.45');
-
-            assert.equal(this.input.val(), '123,45', 'text is correct');
-        } finally {
-            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
-        }
-    });
-
     [',', '.'].forEach((separator) => {
         QUnit.test(`caret should be moved to the float part by "${separator}"`, function(assert) {
             this.instance.option({
@@ -1766,27 +1694,6 @@ QUnit.module('format: removing', moduleConfig, () => {
 
             assert.strictEqual(this.instance.option('value'), 0.45, 'Value is correct');
         });
-    });
-
-    QUnit.test('should parse float numbers with the \',\' separator', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-        const input = this.input;
-
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
-
-        this.instance.option({ format: '#.##' });
-
-        try {
-            this.keyboard.type('2,333');
-            assert.strictEqual(input.val(), '2,33');
-
-            this.keyboard.caret({ start: 0, end: 4 }).press('backspace');
-
-            this.keyboard.type('2,666');
-            assert.strictEqual(input.val(), '2,66');
-        } finally {
-            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
-        }
     });
 
     QUnit.test('removing a stub in the end or begin of the text should lead to remove minus sign', function(assert) {
@@ -2425,5 +2332,106 @@ QUnit.module('drag text', moduleConfig, () => {
         this.input.trigger(event);
 
         assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
+    });
+});
+
+QUnit.module('format:', moduleConfig, () => {
+    function executeActionWithSuppressErrors(action) {
+        const logErrorsStub = sinon.stub(errors, 'log');
+        action();
+        logErrorsStub.restore();
+    }
+
+    QUnit.test('value option should have right value after inserting when format is enabled and decimalSeparator is \',\' (T829935)', function(assert) {
+        const oldDecimalSeparator = config().decimalSeparator;
+
+        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+
+        this.instance.option('format', '000.00');
+
+        try {
+            this.keyboard.caret({ start: 0, end: 6 }).type('12345678').change();
+            assert.equal(this.input.val(), '678,00', 'input value is right');
+            assert.equal(this.instance.option('value'), 678, 'value option is right');
+        } finally {
+            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
+        }
+    });
+
+    QUnit.test('dot should not be ignored in percent format when the value has been parsed correctly', function(assert) {
+        const oldDecimalSeparator = config().decimalSeparator;
+
+        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+
+        try {
+            this.instance.option('format', '#0.00%');
+            this.instance.option('value', 0.256);
+
+            this.keyboard.caret(2).type('.5');
+
+            assert.equal(this.input.val(), '25,56%', 'text is correct');
+        } finally {
+            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
+        }
+    });
+
+    QUnit.test('removing decimal separator if decimal separator is not default', function(assert) {
+        const oldDecimalSeparator = config().decimalSeparator;
+
+        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+
+        try {
+            this.instance.option({
+                format: '#0.00',
+                value: 1
+            });
+
+            this.keyboard.caret(2).press('backspace');
+
+            assert.equal(this.input.val(), '1,00', 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is moved');
+        } finally {
+            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
+        }
+    });
+
+    QUnit.test('caret should be moved to the float part by \'.\' even when decimal separator is not \'.\'', function(assert) {
+        const oldDecimalSeparator = config().decimalSeparator;
+
+        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+
+        try {
+            this.instance.option({
+                format: '#0.00',
+                value: null
+            });
+
+            this.keyboard.type('123.45');
+
+            assert.equal(this.input.val(), '123,45', 'text is correct');
+        } finally {
+            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
+        }
+    });
+
+    QUnit.test('should parse float numbers with the \',\' separator', function(assert) {
+        const oldDecimalSeparator = config().decimalSeparator;
+        const input = this.input;
+
+        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+
+        this.instance.option({ format: '#.##' });
+
+        try {
+            this.keyboard.type('2,333');
+            assert.strictEqual(input.val(), '2,33');
+
+            this.keyboard.caret({ start: 0, end: 4 }).press('backspace');
+
+            this.keyboard.type('2,666');
+            assert.strictEqual(input.val(), '2,66');
+        } finally {
+            executeActionWithSuppressErrors(() => config({ decimalSeparator: oldDecimalSeparator }));
+        }
     });
 });
