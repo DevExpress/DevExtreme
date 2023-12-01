@@ -112,7 +112,7 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
         const $imageContainer = getImageContainer(itemData.icon);
 
         if($imageContainer.is('img')) {
-            $imageContainer.attr('alt', itemData.text ?? `${this.NAME} item icon`);
+            $imageContainer.attr('alt', `${this.NAME} item icon`);
         }
 
         return $imageContainer;
