@@ -860,7 +860,6 @@ QUnit.module('Series translation', {
         return $('#chart').dxChart($.extend(true, {}, defaultOptions, options)).dxChart('instance');
     }
 }, () => {
-
     function getMarkerCoords(element) {
         const transformAttribute = element.getAttribute('transform');
 
