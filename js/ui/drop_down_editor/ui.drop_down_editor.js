@@ -615,6 +615,7 @@ const DropDownEditor = TextBox.inherit({
             onPositioned: this._popupPositionedHandler.bind(this),
             fullScreen: false,
             contentTemplate: null,
+            _hideOnParentScrollTarget: this.$element(),
             _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
             _ignorePreventScrollEventsDeprecation: true,
         };
