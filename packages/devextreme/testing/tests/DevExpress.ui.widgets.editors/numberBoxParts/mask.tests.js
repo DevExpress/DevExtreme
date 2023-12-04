@@ -14,12 +14,6 @@ const CARET_TIMEOUT_DURATION = 0;
 
 const DROP_EVENT_NAME = 'drop';
 
-function executeActionWithSuppressErrors(action) {
-    const logErrorsStub = sinon.stub(errors, 'log');
-    action();
-    logErrorsStub.restore();
-}
-
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#numberbox').dxNumberBox({
@@ -2342,7 +2336,12 @@ QUnit.module('drag text', moduleConfig, () => {
 });
 
 QUnit.module('format: "," as a decimal separator', {
-    beforeEach: function(t) {
+    executeActionWithSuppressErrors: function(action) {
+        const logErrorsStub = sinon.stub(errors, 'log');
+        action();
+        logErrorsStub.restore();
+    },
+    beforeEach: function(data) {
         this.$element = $('#numberbox').dxNumberBox({
             format: '#0.##',
             value: '',
@@ -2352,13 +2351,12 @@ QUnit.module('format: "," as a decimal separator', {
         this.instance = this.$element.dxNumberBox('instance');
         this.keyboard = keyboardMock(this.input, true);
 
-        t.oldDecimalSeparator = config().decimalSeparator;
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+        data.oldDecimalSeparator = config().decimalSeparator;
+        this.executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
     },
-
-    afterEach: function(t) {
-        executeActionWithSuppressErrors(() => config({ decimalSeparator: t.oldDecimalSeparator }));
-    }
+    afterEach: function(data) {
+        this.executeActionWithSuppressErrors(() => config({ decimalSeparator: data.oldDecimalSeparator }));
+    },
 }, () => {
     QUnit.test('value option should have right value after inserting when format is enabled and decimalSeparator is \',\' (T829935)', function(assert) {
         this.instance.option('format', '000.00');
