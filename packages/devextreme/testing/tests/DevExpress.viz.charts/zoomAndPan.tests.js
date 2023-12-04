@@ -833,9 +833,7 @@ QUnit.test('tooltip should be shown after hovering over the zoomed chart (T11976
             dragToZoom: true,
             argumentAxis: 'both'
         },
-        crosshair: { enabled: true, horizontalLine: true },
         tooltip: { enabled: true, shared: true, location: 'center' },
-        commonAxisSettings: { grid: { visible: true } },
         panes: [{ name: 'pane1', height: 500.0 }],
         commonSeriesSettings: {
             type: 'stepline',
