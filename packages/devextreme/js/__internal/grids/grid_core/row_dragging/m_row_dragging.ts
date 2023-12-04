@@ -2,6 +2,7 @@ import $ from '@js/core/../core/renderer';
 import { extend } from '@js/core/../core/utils/extend';
 import { deferUpdate } from '@js/core/utils/common';
 import { getWidth, setWidth } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
 
 import gridCoreUtils from '../m_utils';
@@ -151,7 +152,7 @@ const RowDraggingExtender = {
     [this._sortable, this._sortableFixed].forEach((sortable) => {
       const toIndex = sortable?.option('toIndex');
 
-      if (toIndex && this._previousOffset) {
+      if (isDefined(toIndex) && isDefined(this._previousOffset)) {
         sortable?.option('toIndex', toIndex - offsetDiff);
       }
       sortable?.option('offset', offset);
