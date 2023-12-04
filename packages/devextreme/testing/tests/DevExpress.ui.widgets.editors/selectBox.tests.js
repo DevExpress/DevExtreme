@@ -5909,7 +5909,7 @@ QUnit.module('focus policy', {
         assert.strictEqual(focusStub.callCount, 1, 'FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
 
-        actionButton.focus();
+        $(actionButton.element()).trigger('click');
         assert.strictEqual(focusStub.callCount, 1, 'new FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
