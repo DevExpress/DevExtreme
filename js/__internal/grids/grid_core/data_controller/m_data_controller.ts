@@ -868,8 +868,15 @@ export class DataController extends ControllerWithDataMixin {
           }
         }
       }
-      if (newItem.rowType === 'group' && newItem.isExpanded === oldItem.isExpanded && oldItem.cells) {
-        columnIndices = oldItem.cells.map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1)).filter((index) => index >= 0);
+
+      if (newItem.rowType === 'group' && oldItem.cells) {
+        const isRowStateEquals = newItem.isExpanded === oldItem.isExpanded
+        && newItem.data.isContinuation === oldItem.data.isContinuation
+        && newItem.data.isContinuationOnNextPage === oldItem.data.isContinuationOnNextPage;
+
+        if (isRowStateEquals) {
+          columnIndices = oldItem.cells.map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1)).filter((index) => index >= 0);
+        }
       }
     }
     return columnIndices;
