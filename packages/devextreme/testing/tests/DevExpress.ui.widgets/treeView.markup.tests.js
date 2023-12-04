@@ -104,7 +104,7 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('scrollable content should have correct attrs when items are empty and searchEnabled true', function(assert) {
-        this.instance.option({ searchEnabled: true });
+        this.instance.option({ searchEnabled: true, focusStateEnabled: true });
 
         let $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
