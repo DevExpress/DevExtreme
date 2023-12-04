@@ -119,10 +119,22 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
     padding-right: $generic-dropdowneditor-invalid-badge-size;
   }
 
+  .dx-timeview {
+    .dx-texteditor-input {
+      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+    }
+  }
+
   &.dx-rtl {
     .dx-texteditor-input {
       padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
       padding-left: $generic-dropdowneditor-invalid-badge-size;
+    }
+
+    .dx-timeview {
+      .dx-texteditor-input {
+        padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
+      }
     }
   }
 }
