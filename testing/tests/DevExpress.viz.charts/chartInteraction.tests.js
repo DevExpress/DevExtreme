@@ -5,6 +5,8 @@ import { DataSource } from 'data/data_source/data_source';
 import 'viz/chart';
 import 'viz/polar_chart';
 
+const SERIES_POINT_MARKER_SELECTOR = '.dxc-series circle';
+
 QUnit.testStart(function() {
     const markup =
         '<div class="tooltipInteraction">\
@@ -760,5 +762,88 @@ QUnit.module('Resizing (T1156890)', {
                 assert.strictEqual(drawnHandler.callCount, 0);
             });
         });
+    });
+});
+
+QUnit.module('Series translation', {
+    createChart(options) {
+        const hiddenAxisOptions = {
+            visible: false,
+            grid: {
+                visible: false
+            },
+            label: {
+                visible: false
+            },
+            tick: {
+                visible: false
+            }
+        };
+        const defaultOptions = {
+            series: {},
+            legend: {
+                visible: false
+            },
+            size: {
+                width: 300,
+                height: 300
+            },
+            valueAxis: {
+                visualRange: [1, 1000],
+                ...hiddenAxisOptions
+            },
+            argumentAxis: {
+
+                visualRange: [1, 1000],
+                ...hiddenAxisOptions
+            },
+            dataSource: [{
+                arg: 1,
+                val: 500
+            }, {
+                arg: 1.05,
+                val: 500.01
+            }]
+        };
+
+        return $('#chart').dxChart($.extend(true, {}, defaultOptions, options)).dxChart('instance');
+    }
+}, () => {
+    function getMarkerCoordinates(element) {
+        const transformAttribute = element.getAttribute('transform');
+
+        const coordinatesFromAttribute = transformAttribute
+            .replace('translate(', '')
+            .replace(')', '');
+
+        return coordinatesFromAttribute
+            .split(',')
+            .map((coord) => parseFloat(coord));
+    }
+
+    QUnit.test('Coordinates of points should be different when distance between values is too small.(T1195064)', function(assert) {
+        const chart = this.createChart({});
+
+        const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
+        const firstPointCoordinates = getMarkerCoordinates(pointsMarkers[0]);
+        const secondPointCoordinates = getMarkerCoordinates(pointsMarkers[1]);
+
+        assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
+        assert.ok((firstPointCoordinates[0] - secondPointCoordinates[0]) < 0, 'points should have different x coordinates');
+        assert.ok((secondPointCoordinates[1] - firstPointCoordinates[1]) < 0, 'points should have different y coordinates');
+    });
+
+    QUnit.test('Coordinates of points should be different when distance between values is too small. Rotated = true.(T1195064)', function(assert) {
+        const chart = this.createChart({
+            rotated: true
+        });
+
+        const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
+        const firstPointCoordinates = getMarkerCoordinates(pointsMarkers[0]);
+        const secondPointCoordinates = getMarkerCoordinates(pointsMarkers[1]);
+
+        assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
+        assert.ok((firstPointCoordinates[0] - secondPointCoordinates[0]) < 0, 'points should have different x coordinates');
+        assert.ok((secondPointCoordinates[1] - firstPointCoordinates[1]) < 0, 'points should have different y coordinates');
     });
 });
