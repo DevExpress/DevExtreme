@@ -1,8 +1,7 @@
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { a11yCheck } from '../../../helpers/accessibilityUtils';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { isMaterialBased } from '../../../helpers/themeUtils';
 import { employees } from './data';
 
 fixture`TreeView: Common tests with axe`
@@ -10,38 +9,23 @@ fixture`TreeView: Common tests with axe`
 
 const TREEVIEW_SELECTOR = '#container';
 
-[
-  Themes.genericLight,
-  Themes.genericDark,
-  Themes.materialBlue,
-  Themes.materialBlueDark,
-  Themes.fluentBlue,
-  Themes.fluentBlueDark,
-].forEach((theme) => {
-  const a11yCheckConfig = theme === Themes.genericLight ? {} : {
-    runOnly: 'color-contrast',
-  };
+[[], employees].forEach((items) => {
+  [true, false].forEach((searchEnabled) => {
+    ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+      [null, 'no data text'].forEach((noDataText) => {
+        test(`Treeview ${items.length ? 'full items' : 'empty items'} searchEnabled=${searchEnabled} showCheckBoxesMode=${showCheckBoxesMode} noDataText=${noDataText}`, async (t) => {
+          const a11yCheckConfig = isMaterialBased() ? {
+            runOnly: 'color-contrast',
+          } : {};
 
-  [[], employees].forEach((items) => {
-    [true, false].forEach((searchEnabled) => {
-      ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
-        [null, 'no data text'].forEach((noDataText) => {
-          test(`Treeview ${items.length ? 'full items' : 'empty items'} searchEnabled=${searchEnabled} showCheckBoxesMode=${showCheckBoxesMode} noDataText=${noDataText} in ${theme}`, async (t) => {
-            await a11yCheck(t, a11yCheckConfig, TREEVIEW_SELECTOR);
-          }).before(async () => {
-            await changeTheme(theme);
-
-            return createWidget('dxTreeView', {
-              searchEnabled,
-              showCheckBoxesMode,
-              noDataText,
-              items,
-              displayExpr: 'fullName',
-            });
-          }).after(async () => {
-            await changeTheme('generic.light');
-          });
-        });
+          await a11yCheck(t, a11yCheckConfig, TREEVIEW_SELECTOR);
+        }).before(async () => createWidget('dxTreeView', {
+          searchEnabled,
+          showCheckBoxesMode,
+          noDataText,
+          items,
+          displayExpr: 'fullName',
+        }));
       });
     });
   });
