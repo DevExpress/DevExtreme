@@ -11,13 +11,6 @@
       current-view="workWeek"
     >
       <DxResource
-        :data-source="assignees"
-        :use-color-as-default="currentResource === 'Assignee'"
-        field-expr="assigneeId"
-        label="Assignee"
-        :allow-multiple="true"
-      />
-      <DxResource
         :data-source="rooms"
         :use-color-as-default="currentResource === 'Room'"
         field-expr="roomId"
@@ -28,6 +21,13 @@
         :use-color-as-default="currentResource === 'Priority'"
         field-expr="priorityId"
         label="Priority"
+      />
+      <DxResource
+        :data-source="assignees"
+        :use-color-as-default="currentResource === 'Assignee'"
+        field-expr="assigneeId"
+        label="Assignee"
+        :allow-multiple="true"
       />
     </DxScheduler>
     <div class="options">
