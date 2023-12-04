@@ -261,3 +261,43 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
     },
   });
 });
+
+test('The collapse icon should update if repaintChangesOnly option is enabled (T1201981)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getPager().getNavPage('2').element)
+    .expect(await takeScreenshot('continued_group-collapse_icon-T1201981.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      field1: '1', field2: 'test1', field3: 'test11',
+    },
+    {
+      field1: '2', field2: 'test1', field3: 'test12',
+    },
+    {
+      field1: '3', field2: 'test2', field3: 'test13',
+    },
+  ],
+  repaintChangesOnly: true,
+  columns: [
+    {
+      dataField: 'field1',
+      groupIndex: 0,
+    },
+    'field2',
+    'field3',
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  paging: {
+    pageSize: 3,
+  },
+  showBorders: true,
+}));
