@@ -427,6 +427,10 @@ const NumberBoxMask = NumberBoxBase.inherit({
             return undefined;
         }
 
+        if(isTextSelected && parsedValue === null && editedText === decimalSeparator) {
+            return 0;
+        }
+
         const value = parsedValue === null ? this._parsedValue : parsedValue;
         parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
