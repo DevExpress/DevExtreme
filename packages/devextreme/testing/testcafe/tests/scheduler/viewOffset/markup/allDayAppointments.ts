@@ -144,7 +144,7 @@ first day: ${views[0].firstDayOfWeek}
           await createWidget('dxScheduler', {
             currentDate: '2023-09-07',
             height: 800,
-            maxAppointmentsPerCell: 'unlimited',
+            maxAppointmentsPerCell: 'unlimited!',
             dataSource,
             views,
             currentView: views[0].type,
