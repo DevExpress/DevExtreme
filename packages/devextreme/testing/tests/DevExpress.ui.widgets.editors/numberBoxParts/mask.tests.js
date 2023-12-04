@@ -2414,7 +2414,9 @@ QUnit.module('format: "," as a decimal separator', {
 
         assert.strictEqual(this.input.val(), '2,66');
     });
+});
 
+QUnit.module('deprecation error logging', () => {
     QUnit.test('deprecated separator warning should be logged on config change', function(assert) {
         const originalConfig = config();
         const logErrorsStub = sinon.stub(errors, 'log');
