@@ -3,7 +3,8 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'viz/chart';
 
-const CHART_CLASS = 'svg.dxc.dxc-chart';
+const CHART_SVG_SELECTOR = 'svg.dxc.dxc-chart';
+const TOOLTIP_CLASS = 'dxc-tooltip';
 
 const dataSource = (() => {
     const arr = [];
@@ -877,13 +878,13 @@ QUnit.test('tooltip should be shown after hovering over the zoomed chart (T11976
         ],
     }).dxChart('instance');
 
-    const $chartElement = $(chart.$element().find(CHART_CLASS));
+    const $chartElement = $(chart.$element().find(CHART_SVG_SELECTOR));
     const pointer = pointerMock($chartElement[0]).start();
 
     pointer.start({ x: 100, y: 200 }).wheel(150);
     $chartElement.trigger($.Event('dxpointermove', { pointerType: 'mouse', pageX: 54, pageY: 541 }));
 
-    const tooltip = $('.dxc-tooltip')[0];
+    const tooltip = $(`.${TOOLTIP_CLASS}`)[0];
 
     assert.ok(tooltip);
 });

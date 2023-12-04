@@ -68,10 +68,10 @@ export {
 };
 
 export const areCanvasesDifferent = function(canvas1, canvas2) {
-    const size_changing_threshold = 1;
+    const sizeChangingThreshold = 1;
 
     const sizeLessThreshold = ['width', 'height']
-        .every((key) => Math.abs(canvas1[key] - canvas2[key]) < size_changing_threshold);
+        .every((key) => Math.abs(canvas1[key] - canvas2[key]) < sizeChangingThreshold);
 
     const canvasCoordsIsEqual = ['left', 'right', 'top', 'bottom'].every((key) => canvas1[key] === canvas2[key]);
 
