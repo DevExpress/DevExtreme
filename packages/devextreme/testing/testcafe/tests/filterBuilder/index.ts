@@ -14,7 +14,7 @@ test('Field dropdown popup', async (t) => {
   const filterBuilder = new FilterBuilder('#container');
   await t.click(filterBuilder.getField(0, 'item').element);
 
-  await testScreenshot(t, takeScreenshot, 'field-dropdown', { element: filterBuilder.element });
+  await testScreenshot(t, takeScreenshot, 'field-dropdown.png', { element: filterBuilder.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
