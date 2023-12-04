@@ -1690,7 +1690,7 @@ QUnit.module('Point visibility', {
                 translate: { 'null': 0, 1: 11 }
             }),
             val: new MockTranslator({
-                translate: { 'null': 0, 1: 22 }
+                translate: { 'null': 0, 1: 22, 0: 10 }
             })
         };
         this.groups = {
@@ -1705,6 +1705,19 @@ QUnit.module('Point visibility', {
         };
     },
     afterEach: environment.afterEach
+});
+
+QUnit.test('Point should be visibile when minValue < minVisible but value > minVisible (T1198830)', function(assert) {
+    this.options.type = 'rangebar';
+    this.options.rotated = true;
+    this.series._visibleArea = { minX: 15, maxX: 100, minY: 0, maxY: 210 };
+    const point = createPoint(this.series, { argument: 1, value: 1, minValue: 0 }, this.options);
+
+    point.height = 5;
+
+    point.translate();
+
+    assert.ok(point.isInVisibleArea());
 });
 
 QUnit.test('Clear marker', function(assert) {
