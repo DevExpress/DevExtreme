@@ -5,7 +5,7 @@ import { Themes } from '../../../helpers/themes';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { employees } from './data';
 
-fixture.disablePageReloads`TreeView: Common tests with axe`
+fixture`TreeView: Common tests with axe`
   .page(url(__dirname, '../../container.html'));
 
 const TREEVIEW_SELECTOR = '#container';
