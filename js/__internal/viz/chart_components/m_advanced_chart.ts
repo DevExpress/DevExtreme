@@ -10,6 +10,8 @@ import {
 } from '@js/viz/core/utils';
 import rangeDataCalculator from '@js/viz/series/helpers/range_data_calculator';
 import { Range } from '@js/viz/translators/range';
+// @ts-expect-error
+import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
 
 import { BaseChart } from './m_base_chart';
 
@@ -166,8 +168,13 @@ export const AdvancedChart = BaseChart.inherit({
     return this.panes.findIndex((pane) => pane.name === name);
   },
 
-  _updateSize() {
+  _updateSize(forceUpdateCanvas: boolean) {
     this.callBase();
+
+    if (forceUpdateCanvas && areCanvasesDifferent(this.__currentCanvas, this._canvas)) {
+      this.__currentCanvas = floorCanvasDimensions(this._canvas);
+    }
+
     setCanvasValues(this._canvas);
   },
 

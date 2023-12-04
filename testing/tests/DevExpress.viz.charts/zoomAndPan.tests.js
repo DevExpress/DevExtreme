@@ -3,6 +3,9 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'viz/chart';
 
+const CHART_SVG_SELECTOR = 'svg.dxc.dxc-chart';
+const TOOLTIP_CLASS = 'dxc-tooltip';
+
 const dataSource = (() => {
     const arr = [];
     for(let i = 0; i < 11; i++) {
@@ -820,6 +823,68 @@ QUnit.test('Multiaxes, zoom axes only in one pane', function(assert) {
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis2);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 1.8, endValue: 8.4 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 }, 'axis 2 onZoomEnd range');
+});
+
+QUnit.test('tooltip should be shown after hovering over the zoomed chart (T1197697)', function(assert) {
+    const chart = $('#chart').dxChart({
+        title: 'Chart',
+        zoomAndPan: {
+            allowMouseWheel: true,
+            dragToZoom: true,
+            argumentAxis: 'both'
+        },
+        tooltip: { enabled: true, shared: true, location: 'center' },
+        panes: [{ name: 'pane1', height: 500.0 }],
+        commonSeriesSettings: {
+            type: 'stepline',
+            argumentField: 'Argument',
+            point: { visible: true, size: 100 }
+        },
+        series: [
+            {
+                name: 'series1',
+                valueField: 'Value1',
+                color: 'rgb(255,0,0)',
+                pane: 'pane1',
+            },
+            {
+                name: 'series2',
+                valueField: 'Value2',
+                color: 'rgb(0,0,255)',
+                pane: 'pane1',
+            }
+        ],
+        dataSource: [
+            {
+                Argument: new Date(2023, 9, 26, 15, 17, 22, 753),
+                Value1: 24.866858415709277,
+                Value2: 1.1074397718102855,
+                Value3: 0.46701067987224587
+            },
+            {
+                Argument: new Date(2023, 9, 26, 15, 32, 22, 753),
+                Value1: 77.16041220219824,
+                Value2: 6.575188937864819,
+                Value3: 0.43278260130099144
+            },
+            {
+                Argument: new Date(2023, 9, 26, 15, 47, 22, 753),
+                Value1: 35.408376360036605,
+                Value2: 9.438622761256351,
+                Value3: 0.10126645355544353
+            },
+        ],
+    }).dxChart('instance');
+
+    const $chartElement = $(chart.$element().find(CHART_SVG_SELECTOR));
+    const pointer = pointerMock($chartElement[0]).start();
+
+    pointer.start({ x: 100, y: 200 }).wheel(150);
+    $chartElement.trigger($.Event('dxpointermove', { pointerType: 'mouse', pageX: 54, pageY: 541 }));
+
+    const tooltip = $(`.${TOOLTIP_CLASS}`)[0];
+
+    assert.ok(tooltip);
 });
 
 QUnit.test('Multiaxes, zoom axes only in one pane. Rotated', function(assert) {
