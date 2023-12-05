@@ -368,7 +368,8 @@ export class BaseChart<TProperties> extends BaseWidget<TProperties> {
 }
 
 /**
- * @docid
+ * @public
+ * @docid BaseChartLegendItem
  * @type object
  * @inherits BaseLegendItem
  * @namespace DevExpress.viz
