@@ -94,6 +94,9 @@ jobs:
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "fileManager", name: "fileManager" },
+          { componentFolder: "fileManager", name: "fileManager - material", theme: 'material.blue.light' },
+          { componentFolder: "fileManager", name: "fileManager - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
