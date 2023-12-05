@@ -81,7 +81,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '116.0.5845.110'
+        chrome-version: '117.0.5938.92'
 
     - name: Create directory link
       run: cd ../ && ln -s DevExtreme devextreme
