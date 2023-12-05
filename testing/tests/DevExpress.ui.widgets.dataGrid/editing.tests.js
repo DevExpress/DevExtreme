@@ -2705,12 +2705,45 @@ QUnit.module('Editing', {
         sinon.spy(that.editingController, 'closeEditCell');
 
         // act
+        $testElement.find('td').eq(1).trigger('dxpointerdown');
         $testElement.find('td').eq(1).trigger('dxclick');
         that.clock.tick(10);
 
         // assert
         assert.strictEqual(that.editingController.closeEditCell.callCount, 1, 'count call closeEditCell');
         assert.strictEqual(getInputElements($testElement).length, 0, 'hasn\'t input');
+    });
+
+    // T1203250
+    QUnit.test('Batch mode with startEditAction is \'dblClick\' - Editing cell should not be closed when mouse pointer is dragged to copy data to other cells of the current row', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        $.extend(this.options.editing, {
+            allowUpdating: true,
+            mode: 'batch',
+            startEditAction: 'dblClick'
+        });
+        sinon.spy(this.editingController, 'closeEditCell');
+
+        rowsView.render($testElement);
+
+        // act
+        $(this.getCellElement(0, 0)).trigger('dxdblclick');
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual($(this.getCellElement(0, 0)).find('input').length, 1, 'has input');
+
+        // act
+        $(this.getCellElement(0, 0)).trigger('dxpointerdown');
+        $(this.getCellElement(0, 1)).trigger('dxclick');
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(this.editingController.closeEditCell.callCount, 0, 'count call closeEditCell');
+        assert.strictEqual($(this.getCellElement(0, 0)).find('input').length, 1, 'has input');
     });
 
     QUnit.test('Batch mode - Clicking on the edited cell should not close it when startEditAction is \'dblClick\'', function(assert) {
