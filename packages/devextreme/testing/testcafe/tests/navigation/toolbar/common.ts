@@ -51,7 +51,7 @@ const supportedWidgets = [
         .ok(compareResults.errorMessages());
     }).before(async () => {
       await appendElementTo('#container', 'div', 'toolbar');
-      await setAttribute('#container', 'style', 'width: 1184px;');
+      await setAttribute('#container', 'style', 'width: 1284px;');
 
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
@@ -95,6 +95,8 @@ const supportedWidgets = [
   });
 
   test(`Toolbar with dropDownButton,items[].locateInMenu=${locateInMenu}`, async (t) => {
+    await t.resizeWindow(1500, 800);
+
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const toolbar = new Toolbar('#toolbar');
@@ -126,7 +128,7 @@ const supportedWidgets = [
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await appendElementTo('#container', 'div', 'toolbar');
-    await setAttribute('#container', 'style', 'width: 1184px;');
+    await setAttribute('#container', 'style', 'width: 1284px;');
 
     const toolbarItems = [
       {
