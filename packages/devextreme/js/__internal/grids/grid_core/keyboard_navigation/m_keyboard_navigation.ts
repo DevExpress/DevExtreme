@@ -2195,10 +2195,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       cancel: false,
     };
 
+    const loadingOperations = loadingOperationTypes.sorting || loadingOperationTypes.grouping || loadingOperationTypes.filtering || loadingOperationTypes.paging;
     if (
       !this._dataController
-      || (this._dataController.isLoading()
-        && (loadingOperationTypes.reload || loadingOperationTypes.paging))
+      || (this._dataController.isLoading() && loadingOperations)
     ) {
       args.cancel = true;
       return args;
