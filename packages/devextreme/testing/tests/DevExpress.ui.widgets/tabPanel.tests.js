@@ -42,6 +42,7 @@ const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
+const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -157,6 +158,25 @@ QUnit.module('rendering', {
                 : textRect.left - iconRect.left - iconRect.width;
             assert.strictEqual(horizontalMargin, 8, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
+    });
+
+    QUnit.test('TabPanel container has correct height', function(assert) {
+        const items = [
+            {
+                title: 1,
+                text: 'Mariya Elizabeth Thomas Grace Sophia Rose Alexandra Victoria Isabella Natalie Olivia Emily Jennifer Margaret Stephanie',
+            },
+        ];
+
+        const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({
+            items,
+            width: 100,
+            height: 100,
+        });
+
+        const $tabPanelContainer = $tabPanel.find(`.${TABPANEL_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tabPanelContainer.get(0).clientHeight, 62);
     });
 });
 
@@ -681,7 +701,6 @@ QUnit.module('keyboard navigation', {
     }
 });
 
-
 QUnit.module('Disabled items', {
     beforeEach() {
         const items = [
@@ -745,7 +764,6 @@ QUnit.module('Disabled items', {
         assert.strictEqual($(this.$element).hasClass(DISABLED_FOCUSED_TAB_CLASS), false, 'class not set');
     });
 });
-
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('active tab should have aria-controls attribute pointing to active multiview item', function(assert) {
