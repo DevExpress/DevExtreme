@@ -2062,6 +2062,24 @@ QUnit.module('Keyboard keys', {
         assert.ok(!this.editingController.hasEditData(), 'grid hasn\'t unsaved data');
     });
 
+    // T1202731
+    QUnit.testInActiveWindow('Escape should bubble up when any grid action was not executed', function(assert) {
+        // arrange
+        const $container = $('#container');
+
+        setupModules(this);
+
+        this.gridView.render($container);
+        this.focusFirstCell();
+
+        const e = $.Event('keydown', { key: 'escape' });
+        $($container.find('.dx-datagrid-rowsview')).trigger(e);
+        this.clock.tick(10);
+
+        // assert
+        assert.ok(!e.isPropagationStopped(), 'propagation is not stopped');
+    });
+
     QUnit.testInActiveWindow('Editing by enter key is not worked when editing is disabled', function(assert) {
         // arrange
         const $container = $('#container');
