@@ -21,6 +21,14 @@ $appointment-dragging-shadow: null !default;
 
 $reduced-icon-offset: null !default;
 
+@mixin dx-appointment-icon($name) {
+  @include dx-icon($name);
+
+  top: 3px;
+  font-size: 18px;
+  position: absolute;
+  right: $reduced-icon-offset;
+}
 
 @mixin dx-scheduler-appointment-focused-mixin() {
   &.dx-state-focused,
@@ -128,12 +136,12 @@ $reduced-icon-offset: null !default;
     left: -1px;
   }
 
-  .dx-scheduler-appointment-reduced-icon {
-    position: absolute;
-    top: 3px;
-    right: $reduced-icon-offset;
+  .dx-scheduler-appointment-recurrence-icon {
+    @include dx-appointment-icon(repeat);
+  }
 
-    @include dx-icon(arrowback);
+  .dx-scheduler-appointment-reduced-icon {
+    @include dx-appointment-icon(arrowback);
 
     .dx-rtl & {
       right: auto;

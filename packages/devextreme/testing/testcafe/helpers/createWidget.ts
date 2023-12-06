@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import type { Properties as DataGridProperties } from '../../../js/ui/data_grid';
+import type { Properties as FilterBuilderProperties } from '../../../js/ui/filter_builder';
 
 export type WidgetName =
 'dxAccordion'
@@ -56,6 +57,7 @@ export type WidgetName =
 
 interface WidgetOptions {
   dxDataGrid: DataGridProperties;
+  dxFilterBuilder: FilterBuilderProperties;
   // todo write other widgets
 }
 
