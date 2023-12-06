@@ -88,7 +88,7 @@
     "devextreme-screenshot-comparer": "2.0.15",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.7",
-    "exceljs": "4.3.0",
+    "exceljs": "4.4.0",
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",
     "glob": "10.3.10",
