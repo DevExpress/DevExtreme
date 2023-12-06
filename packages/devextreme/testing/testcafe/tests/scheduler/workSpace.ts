@@ -169,7 +169,7 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
     await scheduler.scrollTo(new Date(2019, 5, 8, 0, 0));
 
     await t
-      .expect(await takeScreenshot(`scrollable-month-workspace-${theme}.png`, scheduler.element))
+      .expect(await takeScreenshot(`scrollable-month-workspace-${theme}.png`, scheduler.workSpace))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
