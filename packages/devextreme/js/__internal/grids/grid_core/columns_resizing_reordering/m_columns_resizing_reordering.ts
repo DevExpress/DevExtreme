@@ -1222,31 +1222,11 @@ class DraggingHeaderViewController extends modules.ViewController {
 
   private _columnChooserView: any;
 
-  private isCustomGroupColumnPosition?: boolean;
-
   _generatePointsByColumns(options) {
     const that = this;
 
-    this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
     const points = gridCoreUtils.getPointsByColumns(options.columnElements, (point) => that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn), options.isVerticalOrientation, options.startColumnIndex);
     return points;
-  }
-
-  private checkIsCustomGroupColumnPosition(options): boolean {
-    let wasOnlyCommandColumns = true;
-
-    for (let i = 0; i < options.columns.length; i += 1) {
-      const col = options.columns[i];
-      if (col.command === 'expand' && !wasOnlyCommandColumns) {
-        return true;
-      }
-
-      if (!col.command) {
-        wasOnlyCommandColumns = false;
-      }
-    }
-
-    return false;
   }
 
   /**
@@ -1261,33 +1241,24 @@ class DraggingHeaderViewController extends modules.ViewController {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
 
-    const isColumnAfterExpandColumn = prevColumn?.command === 'expand';
-    const isFirstExpandColumn = targetColumn?.command === 'expand' && prevColumn?.command !== 'expand';
-
-    const sourceColumnReorderingDisabled = sourceColumn && !sourceColumn.allowReordering;
-    const otherColumnsReorderingDisabled = !targetColumn?.allowReordering && !prevColumn?.allowReordering;
-
     switch (location) {
       case 'columnChooser':
         return true;
       case 'headers':
-        if (sourceColumnReorderingDisabled) {
+        if (sourceColumn && !sourceColumn.allowReordering) {
           return true;
         }
 
-        if (!isFirstExpandColumn) {
-          return isColumnAfterExpandColumn || otherColumnsReorderingDisabled;
+        if (targetColumn?.type === 'groupExpand') {
+          return prevColumn?.type === 'groupExpand';
         }
 
-        if (this.isCustomGroupColumnPosition) {
-          return false;
+        if (prevColumn?.type === 'groupExpand' && !this._columnsController.isCustomCommandColumn(prevColumn)) {
+          return true;
         }
 
-        while (columns[point.columnIndex]?.command === 'expand') {
-          point.columnIndex += 1;
-        }
+        return !targetColumn?.allowReordering && !prevColumn?.allowReordering;
 
-        return false;
       default:
         return columns.length === 0;
     }

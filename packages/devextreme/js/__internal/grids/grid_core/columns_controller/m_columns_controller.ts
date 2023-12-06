@@ -1785,6 +1785,10 @@ export class ColumnsController extends modules.Controller {
 
     return columnAlignment;
   }
+
+  isCustomCommandColumn(column) {
+    return isCustomCommandColumn(this, column);
+  }
 }
 
 export const columnsControllerModule: Module = {
