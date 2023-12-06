@@ -679,6 +679,19 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
 
         assert.strictEqual(this.instance.option('text'), '4.65');
     });
+
+    QUnit.test('pressing "." should clear selected text if it contains a decimal separator (T1199553)', function(assert) {
+        this.instance.option({
+            format: '0#.00',
+            value: 123.45
+        });
+
+        this.keyboard
+            .caret({ start: 0, end: 6 })
+            .type('.');
+
+        assert.strictEqual(this.input.val(), '0.00', 'mask value is cleared');
+    });
 });
 
 QUnit.module('format: minimum and maximum', moduleConfig, () => {

@@ -404,13 +404,20 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _tryParse: function(text, selection, char) {
+        const isTextSelected = selection.start !== selection.end;
+        const isWholeTextSelected = isTextSelected && selection.start === 0 && selection.end === text.length;
+        const decimalSeparator = number.getDecimalSeparator();
+
+        if(isWholeTextSelected && char === decimalSeparator) {
+            return 0;
+        }
+
         const editedText = this._replaceSelectedText(text, selection, char);
         const format = this._getFormatPattern();
-        const isTextSelected = selection.start !== selection.end;
+
         let parsedValue = this._getParsedValue(editedText, format);
         const maxPrecision = !format.parser && this._getPrecisionLimits(editedText).max;
         const isValueChanged = parsedValue !== this._parsedValue;
-        const decimalSeparator = number.getDecimalSeparator();
 
         const isDecimalPointRestricted = char === decimalSeparator && maxPrecision === 0;
         const isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText) && this._isStub(char);
@@ -425,10 +432,6 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
         if(isNaN(parsedValue)) {
             return undefined;
-        }
-
-        if(isTextSelected && parsedValue === null && editedText === decimalSeparator) {
-            return 0;
         }
 
         const value = parsedValue === null ? this._parsedValue : parsedValue;
