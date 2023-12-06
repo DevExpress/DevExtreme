@@ -1137,7 +1137,7 @@ QUnit.test('in default output message with url in logger. without arguments', fu
     this.triggerIncident('E100');
 
     assert.ok(this.error.calledOnce);
-    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/E100');
+    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: {0}, Templated text 2: {1}.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/0_1/E100');
 });
 
 QUnit.test('default incidentOccurred show warning', function(assert) {
@@ -1146,7 +1146,7 @@ QUnit.test('default incidentOccurred show warning', function(assert) {
     this.triggerIncident('W100');
 
     assert.ok(this.warn.calledOnce);
-    assert.equal(this.warn.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'W100 - Warning: Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/W100');
+    assert.equal(this.warn.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'W100 - Warning: Templated text 1: {0}, Templated text 2: {1}.\n\nFor additional information on this warning message, see: https://js.devexpress.com/error/0_1/W100');
 });
 
 QUnit.test('in default output message with url in logger', function(assert) {
@@ -1155,7 +1155,7 @@ QUnit.test('in default output message with url in logger', function(assert) {
     this.triggerIncident('E100', ['argument1', 'argument2']);
 
     assert.ok(this.error.calledOnce);
-    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: argument1, Templated text 2: argument2. See:\nhttp://js.devexpress.com/error/0_1/E100');
+    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: argument1, Templated text 2: argument2.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/0_1/E100');
 });
 
 QUnit.module('drawn', $.extend({}, environment, {

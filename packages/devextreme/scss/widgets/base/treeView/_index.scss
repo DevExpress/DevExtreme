@@ -58,6 +58,7 @@
   .dx-state-selected {
     > .dx-treeview-item {
       color: $item-selected-color;
+      border-radius: $border-radius;
     }
   }
 

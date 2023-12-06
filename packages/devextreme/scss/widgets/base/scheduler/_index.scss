@@ -350,7 +350,8 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
-    .dx-scheduler-appointment-recurrence-icon {
+    .dx-scheduler-appointment-recurrence-icon,
+    .dx-scheduler-appointment-reduced-icon {
       top: 0;
     }
   }
@@ -409,18 +410,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-appointment-recurrence-icon {
-    position: absolute;
-    background-repeat: no-repeat;
-    top: 3px;
-    right: $scheduler-reduced-icon-offset;
-    display: block;
-
-    &.dx-icon-repeat {
-      font-size: 18px;
-    }
-  }
-
   .dx-scheduler-all-day-appointment .dx-scheduler-appointment-reduced-icon {
     position: absolute;
     top: 15%;
@@ -429,16 +418,6 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-appointment-reduced.dx-scheduler-appointment-head {
     .dx-scheduler-appointment-recurrence-icon {
       right: $scheduler-recurrence-icon-offset;
-    }
-  }
-
-  .dx-scheduler-appointment-recurrence {
-    .dx-scheduler-appointment-content {
-      padding: $scheduler-appointment-recurrence-content-padding;
-
-      .dx-rtl & {
-        padding: $scheduler-appointment-recurrence-content-padding-rtl;
-      }
     }
   }
 

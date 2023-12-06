@@ -219,7 +219,7 @@ QUnit.module('Events', {
         const appointments = scheduler.instance.getAppointmentsInstance();
         const initialItems = appointments.option('items');
 
-        scheduler.instance.option('cellDuration', 100);
+        scheduler.instance.option('cellDuration', 120);
         this.clock.tick(10);
 
         const changedItems = appointments.option('items');

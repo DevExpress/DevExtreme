@@ -330,7 +330,6 @@ export type GlobalConfig = {
      * @default false
      */
     shading?: boolean;
-    licenseKey?: string;
   };
   /**
    * @docid
@@ -344,6 +343,10 @@ export type GlobalConfig = {
    * @public
    */
   oDataFilterToLower?: boolean;
+  /**
+   * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+   */
+  pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
   /**
    * @docid
    * @default false
@@ -375,6 +378,11 @@ export type GlobalConfig = {
    * @public
    */
   useLegacyVisibleIndex?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  licenseKey?: string;
 };
 
 /**

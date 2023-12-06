@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { ITemplate } from './configuration/config-node';
 
 interface DXTemplate {
@@ -35,12 +36,24 @@ export interface TemplateWrapperProps {
   onRemoved: () => void;
 }
 
-export type TemplateFunc = (arg: TemplateArgs) => JSX.Element;
+export type TemplateFunc = (arg: TemplateArgs) => JSX.Element | ReactNode;
 
-export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>, callback?: () => void) => DXTemplateCollection;
+export type UpdateTemplateFunc = (onUpdated: () => void) => void;
+
+export interface InitArgument {
+  createDXTemplates: DXTemplateCreator;
+  clearInstantiationModels: () => void;
+  updateTemplates: UpdateTemplateFunc;
+}
+
+export interface TemplateManagerUpdateContext {
+  onUpdated: () => void;
+}
+
+export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
 
 export interface TemplateManagerProps {
-  init: (getDXTemplates: DXTemplateCreator, clearInstantiationModels: () => void) => void;
+  init: (args: InitArgument) => void;
 }
 
 export interface TemplateInstantiationModel {

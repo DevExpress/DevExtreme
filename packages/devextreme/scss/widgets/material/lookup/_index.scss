@@ -111,12 +111,9 @@
   "\f001",
   $material-base-icon-size,
   $lookup-icon-color,
+  $lookup-icon-color-active,
   $material-base-icon-size,
 );
-
-.dx-state-readonly .dx-lookup-field::before {
-  opacity: 0.5;
-}
 
 .dx-lookup-popup-wrapper {
   .dx-list-item {

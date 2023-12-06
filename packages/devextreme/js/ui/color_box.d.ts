@@ -213,7 +213,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @public
      */
     value?: string;
-
     /**
      * @docid
      * @type dxPopupOptions
@@ -227,7 +226,14 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> { }
+export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: string | null): void;
+}
 
 /** @public */
 export type Properties = dxColorBoxOptions;

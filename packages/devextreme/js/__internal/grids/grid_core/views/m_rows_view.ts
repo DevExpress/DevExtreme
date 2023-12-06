@@ -45,6 +45,16 @@ function isGroupRow({ rowType, column }) {
     && !column.showWhenGrouped && !column.command;
 }
 
+function setWatcher({
+  element, watch, getter, callBack,
+}) {
+  if (watch) {
+    const dispose = watch(getter, callBack);
+
+    eventsEngine.on(element, removeEvent, dispose);
+  }
+}
+
 const defaultCellTemplate = function ($container, options) {
   const isDataTextEmpty = isEmpty(options.text) && options.rowType === 'data';
   const { text } = options;
@@ -65,7 +75,7 @@ const getScrollableBottomPadding = function (that) {
   return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
 };
 
-class RowsView extends ColumnsView {
+export class RowsView extends ColumnsView {
   _loadPanel: any;
 
   _editorFactoryController!: any;
@@ -187,13 +197,25 @@ class RowsView extends ColumnsView {
     if (rowOptions.rowType === 'data') {
       if (this.option('rowAlternationEnabled')) {
         this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
-        rowOptions.watch && rowOptions.watch(() => this._isAltRow(row), (value) => {
-          $row.toggleClass(ROW_ALTERNATION_CLASS, value);
+
+        setWatcher({
+          element: $row.get(0),
+          watch: rowOptions.watch,
+          getter: () => this._isAltRow(row),
+          callBack: (value) => {
+            $row.toggleClass(ROW_ALTERNATION_CLASS, value);
+          },
         });
       }
 
       this._setAriaRowIndex(rowOptions, $row);
-      rowOptions.watch && rowOptions.watch(() => rowOptions.rowIndex, () => this._setAriaRowIndex(rowOptions, $row));
+
+      setWatcher({
+        element: $row.get(0),
+        watch: rowOptions.watch,
+        getter: () => rowOptions.rowIndex,
+        callBack: () => this._setAriaRowIndex(rowOptions, $row),
+      });
     }
 
     super._rowPrepared.apply(this, arguments as any);

@@ -2141,7 +2141,7 @@ const DxPatternRule = createConfigurationComponent({
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    pattern: {},
+    pattern: [RegExp, String],
     type: String
   }
 });
@@ -2304,9 +2304,9 @@ const DxRangeRule = createConfigurationComponent({
   },
   props: {
     ignoreEmptyValue: Boolean,
-    max: {},
+    max: [Date, Number],
     message: String,
-    min: {},
+    min: [Date, Number],
     reevaluate: Boolean,
     type: String
   }
@@ -2881,10 +2881,10 @@ const DxValidationRule = createConfigurationComponent({
     comparisonTarget: Function,
     comparisonType: String,
     ignoreEmptyValue: Boolean,
-    max: {},
+    max: [Date, Number],
     message: String,
-    min: {},
-    pattern: {},
+    min: [Date, Number],
+    pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
     type: String,

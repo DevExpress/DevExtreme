@@ -323,7 +323,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  onClick?: ((e: ItemClickEvent | { component: dxDropDownButton, element: any, event: event, itemData: Record<string, any>, itemElement: any, model: any }) => void);
+  onClick?: ((e: ItemClickEvent) => void);
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;

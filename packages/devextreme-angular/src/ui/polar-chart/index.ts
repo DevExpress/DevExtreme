@@ -30,7 +30,7 @@ import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { DisposingEvent, DoneEvent, DrawnEvent, dxPolarChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ValueAxisVisualRangeUpdateMode, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/polar_chart';
+import { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, dxPolarChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ValueAxisVisualRangeUpdateMode, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/polar_chart';
 
 import DxPolarChart from 'devextreme/viz/polar_chart';
 
@@ -617,7 +617,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onArgumentAxisClick: EventEmitter<any>;
+    @Output() onArgumentAxisClick: EventEmitter<ArgumentAxisClickEvent>;
 
     /**
     

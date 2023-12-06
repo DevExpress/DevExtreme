@@ -616,7 +616,7 @@ const isNextColumnResizingMode = function (that) {
   return that.option('columnResizingMode') !== 'widget';
 };
 
-class ColumnsResizerViewController extends modules.ViewController {
+export class ColumnsResizerViewController extends modules.ViewController {
   private _columnHeadersView: any;
 
   private _$parentContainer: any;
@@ -1203,7 +1203,7 @@ class TablePositionViewController extends modules.ViewController {
   }
 }
 
-class DraggingHeaderViewController extends modules.ViewController {
+export class DraggingHeaderViewController extends modules.ViewController {
   private _columnsController: any;
 
   private _columnsSeparatorView: any;
@@ -1237,7 +1237,7 @@ class DraggingHeaderViewController extends modules.ViewController {
    * @param sourceColumn Column that is dragging
    * @returns whether to filter current point (true - remove point, false - keep it)
    */
-  private _pointCreated(point, columns, location, sourceColumn): boolean {
+  protected _pointCreated(point, columns, location, sourceColumn): boolean {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
 

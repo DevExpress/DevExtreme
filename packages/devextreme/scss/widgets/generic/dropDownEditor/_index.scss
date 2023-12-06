@@ -96,6 +96,12 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
   .dx-texteditor-input {
     padding-inline-end: $generic-dropdowneditor-invalid-badge-size;
   }
+
+  .dx-timeview {
+    .dx-texteditor-input {
+      padding-inline-end: 0;
+    }
+  }
 }
 
 .dx-invalid,

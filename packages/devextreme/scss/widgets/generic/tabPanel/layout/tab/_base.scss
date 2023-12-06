@@ -6,6 +6,7 @@
 @use "../../../tabs/variables/borders" as *;
 @use "../../../tabs/variables/sizes" as *;
 @use "../../../tabs/mixins" as *;
+@use "../../../tabs/layout/tab/base" as *;
 @use "../../../tabs" as *;
 @use "../../../../base/tabPanel";
 @use "../../variables/borders" as *;
@@ -27,13 +28,16 @@
   }
 }
 
-.dx-tabs:not(.dx-tabs-vertical) .dx-tabpanel-tab {
-  max-width: 140px;
+.dx-tabpanel-tabs .dx-tabs:not(.dx-tabs-vertical) {
+  .dx-tabpanel-tab {
+    max-width: $generic-tabpanel-tabs-item-width;
+  }
 }
 
 .dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
   .dx-tabpanel-tab {
-    min-width: 140px;
+    width: $generic-tabpanel-tabs-item-width;
+    max-width: unset;
 
     &:last-child {
       &.dx-tab-selected::after {

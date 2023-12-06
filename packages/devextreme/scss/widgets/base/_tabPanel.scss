@@ -16,6 +16,10 @@
   }
 }
 
+.dx-tabpanel-tab {
+  flex-basis: unset;
+}
+
 .dx-tabpanel-tabs-position-right {
   flex-direction: row-reverse;
   
@@ -36,15 +40,9 @@
   }
 }
 
-.dx-tabpanel-tabs {
+.dx-tabpanel .dx-tabpanel-tabs {
   .dx-tabs {
     height: 100%;
-  }
-
-  .dx-tab {
-    flex-basis: unset;
-    flex-grow: 1;
-    flex-shrink: 1;
   }
 }
 

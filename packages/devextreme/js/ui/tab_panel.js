@@ -21,8 +21,8 @@ const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
-
-const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -168,30 +168,37 @@ const TabPanel = MultiView.inherit({
         this._renderLayout();
     },
 
-    _initTemplates: function() {
+    _prepareTabsItemTemplate(data, $container) {
+        const $iconElement = getImageContainer(data?.icon);
+
+        if($iconElement) {
+            $container.append($iconElement);
+        }
+
+        const title = isPlainObject(data) ? data?.title : data;
+
+        if(isDefined(title) && !isPlainObject(title)) {
+            const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
+
+            $tabTextSpan.append(domAdapter.createTextNode(title));
+
+            const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+
+            $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
+            $tabTextSpanPseudo.appendTo($tabTextSpan);
+
+            $tabTextSpan.appendTo($container);
+        }
+    },
+
+    _initTemplates() {
         this.callBase();
+
         this._templateManager.addDefaultTemplates({
-            title: new BindableTemplate(function($container, data) {
-                if(isPlainObject(data)) {
-                    const $iconElement = getImageContainer(data.icon);
-                    if($iconElement) {
-                        $container.append($iconElement);
-                    }
+            title: new BindableTemplate(($container, data) => {
+                this._prepareTabsItemTemplate(data, $container);
 
-                    if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append(domAdapter.createTextNode(data.title));
-                    }
-                } else {
-                    if(isDefined(data)) {
-                        $container.text(String(data));
-                    }
-                }
-
-                const $tabItem = $('<span>').addClass(TABS_ITEM_TEXT_CLASS);
-
-                if(data?.title) {
-                    $tabItem.attr(TABS_DATA_DX_TEXT_ATTRIBUTE, data.title);
-                }
+                const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
 
                 $container.wrapInner($tabItem);
             }, ['title', 'icon'], this.option('integrationOptions.watchMethod'))

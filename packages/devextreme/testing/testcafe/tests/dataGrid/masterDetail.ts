@@ -253,7 +253,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         dataGrid._getTemplate = () => ({
           render(options) {
             setTimeout(() => {
-              if ($(options.container).closest(document).length) {
+              if ($(options.container).closest(document as any).length) {
                 $(options.container).append($('<div/>').html(`
                     <p>${options.model.data.id}</p>
                     <p>${options.model.data.text}</p>

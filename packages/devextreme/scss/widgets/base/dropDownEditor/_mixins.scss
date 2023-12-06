@@ -16,6 +16,12 @@
           padding-inline-end: $texteditor-underlined-input-horizontal-padding;
         }
       }
+
+      .dx-timeview {
+        .dx-texteditor-input {
+          padding-inline-end: 0;
+        }
+      }
     }
 
     &.dx-editor-filled,
@@ -27,6 +33,12 @@
       .dx-start-datebox {
         .dx-texteditor-input {
           padding-inline-end: $texteditor-filled-input-horizontal-padding;
+        }
+      }
+
+      .dx-timeview {
+        .dx-texteditor-input {
+          padding-inline-end: 0;
         }
       }
     }

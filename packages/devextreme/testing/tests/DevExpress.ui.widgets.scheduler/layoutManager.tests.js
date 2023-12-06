@@ -1155,7 +1155,6 @@ QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek 
             currentView: 'timelineWeek',
             height: 530,
             dataSource: items,
-            startDayHour: 1,
             cellDuration: 1440,
             recurrenceRuleExpr: 'RecurrenceRule'
         }

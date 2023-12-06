@@ -21,7 +21,7 @@ QUnit.module('Width', () => {
         _initializeTabs(width) {
             this.$tabs.appendTo(this.$container);
 
-            this.tabs = this.$tabs.dxTabs({
+            const options = {
                 items: [
                     { text: 'text 1' },
                     { text: 'long text example' }
@@ -29,7 +29,9 @@ QUnit.module('Width', () => {
                 scrollingEnabled: this.scrollingEnabled,
                 showNavButtons: true,
                 width: this._isOptionApproach() ? width : undefined
-            }).dxTabs('instance');
+            };
+
+            this.tabs = this.$tabs.dxTabs(options).dxTabs('instance');
 
             this.$container.appendTo('#qunit-fixture');
             addShadowDomStyles($('#qunit-fixture'));
@@ -87,21 +89,21 @@ QUnit.module('Width', () => {
         }
 
         checkNavigationButtonsTabs() {
-            this.assert.equal(this.tabs.option('width'), this._isOptionApproach() ? 100 : undefined);
+            const { scrollingEnabled } = this;
 
-            this.assert.equal(this.$tabs.outerWidth(), 100);
+            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()) <= (scrollingEnabled === true ? 100 : 183), true);
 
             const firstItemWidth = this._getTabItem(0).outerWidth();
             const secondItemWidth = this._getTabItem(1).outerWidth();
 
-            if(this.scrollingEnabled) {
+            if(scrollingEnabled) {
                 this.assert.ok(firstItemWidth < 70, this._getTabItem().outerWidth() + ' < 70');
                 this.assert.ok(secondItemWidth > 100, this._getTabItem().outerWidth() + ' > 100');
-                this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
+                this.assert.strictEqual(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                this.assert.ok(Math.floor(firstItemWidth) <= 33, Math.floor(firstItemWidth) + ' = 33');
-                this.assert.ok(Math.floor(secondItemWidth) <= 66, Math.floor(secondItemWidth) + ' = 66');
-                this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
+                this.assert.ok(Math.floor(firstItemWidth) <= 54, Math.floor(firstItemWidth) + ' = 54');
+                this.assert.ok(Math.floor(secondItemWidth) <= 130, Math.floor(secondItemWidth) + ' = 130');
+                this.assert.strictEqual(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
             }
         }
 
@@ -170,11 +172,11 @@ QUnit.module('Width', () => {
         });
     });
 
-    QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', function(assert) {
+    QUnit.test('Does not render navbuttons: dx-tabs { max-width: 413px; } .dx-tab{ width: 100px; min-width: 0 !important; }', function(assert) {
         const styles = `
             <style nonce="qunit-test">
                 .dx-tabs { max-width: 413px; }
-                .dx-tab { width: 100px; }
+                .dx-tab { width: 100px; min-width: 0 !important; }
             </style>
         `;
 

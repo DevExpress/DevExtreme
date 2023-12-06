@@ -2,34 +2,18 @@ import errors from '@js/core/errors';
 import { version as packageVersion } from '@js/core/version';
 
 import { base64ToBytes } from './byte_utils';
-import { PUBLIC_KEY } from './key';
+import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-
-export interface License {
-  readonly [k: string]: unknown;
-  readonly customerId: string;
-  readonly maxVersionAllowed: number;
-}
+import {
+  License, LicenseVerifyResult, Token, TokenKind,
+} from './types';
 
 interface Payload extends Partial<License> {
   readonly format?: number;
+  readonly internalUsageId?: string;
 }
-
-const enum TokenKind {
-  corrupted = 'corrupted',
-  verified = 'verified',
-}
-
-export type Token = {
-  readonly kind: TokenKind.verified;
-  readonly payload: License;
-} | {
-  readonly kind: TokenKind.corrupted;
-  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version';
-};
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022';
 
 const SPLITTER = '.';
 const FORMAT = 1;
@@ -86,8 +70,15 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
   }
 
   const {
-    customerId, maxVersionAllowed, format, ...rest
+    customerId, maxVersionAllowed, format, internalUsageId, ...rest
   } = payload;
+
+  if (internalUsageId !== undefined) {
+    return {
+      kind: TokenKind.internal,
+      internalUsageId,
+    };
+  }
 
   if (customerId === undefined || maxVersionAllowed === undefined || format === undefined) {
     return PAYLOAD_ERROR;
@@ -107,51 +98,68 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
   };
 }
 
+function getLicenseCheckParams({ licenseKey, version }: {
+  licenseKey: string | undefined;
+  version: string;
+}): {
+    preview: boolean;
+    internal?: true;
+    error: LicenseVerifyResult | undefined;
+  } {
+  let preview = false;
+
+  try {
+    const [major, minor, patch] = version.split('.').map(Number);
+    preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+
+    if (!licenseKey) {
+      return { preview, error: 'W0019' };
+    }
+
+    const license = parseLicenseKey(licenseKey);
+
+    if (license.kind === TokenKind.corrupted) {
+      return { preview, error: 'W0021' };
+    }
+
+    if (license.kind === TokenKind.internal) {
+      return { preview, internal: true, error: license.internalUsageId === INTERNAL_USAGE_ID ? undefined : 'W0020' };
+    }
+
+    if (!(major && minor)) {
+      return { preview, error: 'W0021' };
+    }
+
+    if (major * 10 + minor > license.payload.maxVersionAllowed) {
+      return { preview, error: 'W0020' };
+    }
+
+    return { preview, error: undefined };
+  } catch {
+    return { preview, error: 'W0021' };
+  }
+}
+
 export function validateLicense(licenseKey: string, version: string = packageVersion): void {
   if (validationPerformed) {
     return;
   }
   validationPerformed = true;
 
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let warning: LicenseVerifyResult | undefined;
+  const { preview, internal, error } = getLicenseCheckParams({ licenseKey, version });
 
-  try {
-    const [major, minor, patch] = version.split('.').map(Number);
-    const preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
-
-    if (preview) {
-      warning = 'W0022';
-      return;
-    }
-
-    if (!licenseKey) {
-      warning = 'W0019';
-      return;
-    }
-
-    const license = parseLicenseKey(licenseKey);
-
-    if (license.kind === TokenKind.corrupted) {
-      warning = 'W0021';
-      return;
-    }
-
-    if (!(major && minor)) {
-      warning = 'W0021';
-      return;
-    }
-
-    if (major * 10 + minor > license.payload.maxVersionAllowed) {
-      warning = 'W0020';
-    }
-  } catch (e) {
-    warning = 'W0021';
-  } finally {
-    if (warning) {
-      errors.log(warning);
-    }
+  if (error) {
+    errors.log(preview ? 'W0022' : error);
+    return;
   }
+
+  if (preview && !internal) {
+    errors.log('W0022');
+  }
+}
+
+export function peekValidationPerformed(): boolean {
+  return validationPerformed;
 }
 
 export function setLicenseCheckSkipCondition(value = true): void {

@@ -1,4 +1,4 @@
-import errors from '../../../../../../../ui/widget/ui.errors';
+import { dateUtilsTs } from '../../../../../../../__internal/core/utils/date';
 import dateUtils from '../../../../../../../core/utils/date';
 import { isDefined } from '../../../../../../../core/utils/type';
 import dateLocalization from '../../../../../../../localization/date';
@@ -89,12 +89,6 @@ export const getHeaderCellText = (
 ): string => {
   const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
   return dateLocalization.format(validDate, headerCellTextFormat) as string;
-};
-
-export const validateDayHours = (startDayHour: number, endDayHour: number): void => {
-  if (startDayHour >= endDayHour) {
-    throw errors.Error('E1058');
-  }
 };
 
 export const getStartViewDateTimeOffset = (startViewDate: Date, startDayHour: number): number => {
@@ -207,4 +201,41 @@ export const getCellDuration = (
     default:
       return 3600000 * hoursInterval;
   }
+};
+
+export const getValidCellDateForLocalTimeFormat = (
+  date: Date,
+  {
+    startViewDate,
+    startDayHour,
+    cellIndexShift,
+    viewOffset,
+  }: {
+    startViewDate: Date;
+    startDayHour: number;
+    cellIndexShift: number;
+    viewOffset: number;
+  },
+): Date => {
+  const originDate = dateUtilsTs.addOffsets(date, [-viewOffset]);
+  const localTimeZoneChangedInOriginDate = timeZoneUtils.isTimezoneChangeInDate(originDate);
+
+  if (!localTimeZoneChangedInOriginDate) {
+    return date;
+  }
+
+  // NOTE: Shift the startViewDate by two days ahead because
+  // we can have viewOffset equals -1/+1 day.
+  // This strange method of changing date used here because
+  // +2 days from DST date not affected by DST.
+  const startViewDateWithoutDST = new Date(
+    new Date(startViewDate)
+      .setDate(startViewDate.getDate() + 2),
+  );
+
+  const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
+  return dateUtilsTs.addOffsets(
+    startViewDateWithoutDST,
+    [viewOffset, cellIndexShift, -startViewDateOffset],
+  );
 };

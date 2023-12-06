@@ -12,7 +12,13 @@
 .dx-tabpanel {
   .dx-tabpanel-tab {
     min-width: 72px;
+    flex-basis: unset;
     flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .dx-tabs-scrollable .dx-tab {
+    flex-basis: auto;
   }
 
   .dx-tabs-nav-button {

@@ -40,13 +40,15 @@
 
   .dx-menu-item-has-icon.dx-menu-item-has-submenu {
     .dx-icon {
-      margin: 0 $generic-menu-padding-small 0 $generic-menu-item-padding-reduced;
+      margin-inline-end: $generic-menu-padding-small;
+      margin-inline-start: $generic-menu-item-padding-reduced;
     }
   }
 
   .dx-menu-item-has-text {
     .dx-menu-item-text {
-      padding: $generic-menu-item-padding-top-base $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-item-padding-base;
+      padding: $generic-menu-item-padding-base;
+      padding-top: $generic-menu-item-padding-top-base;
     }
 
     &.dx-menu-item-has-icon {
@@ -57,7 +59,8 @@
 
     &.dx-menu-item-has-submenu {
       .dx-menu-item-text {
-        padding: $generic-menu-item-padding-top-base $generic-menu-padding-small $generic-menu-item-padding-base $generic-menu-item-padding-base;
+        padding-inline-end: $generic-menu-padding-small;
+        padding-inline-start: $generic-menu-item-padding-base;
       }
     }
   }
@@ -73,26 +76,6 @@
     .dx-menu-item-popout {
       @include dx-icon(spinright);
       @include dx-icon-font-centered-sizing($generic-base-icon-size);
-    }
-  }
-
-  &.dx-rtl {
-    .dx-menu-item-has-icon.dx-menu-item-has-submenu {
-      .dx-icon {
-        margin: 0 $generic-menu-item-padding-reduced 0 $generic-menu-padding-small;
-      }
-    }
-
-    .dx-menu-item-has-text {
-      .dx-menu-item-text {
-        padding: $generic-menu-item-padding-top-base $generic-menu-item-padding-base $generic-menu-item-padding-base 0;
-      }
-
-      &.dx-menu-item-has-submenu {
-        .dx-menu-item-text {
-          padding: $generic-menu-item-padding-top-base $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-padding-small;
-        }
-      }
     }
   }
 }

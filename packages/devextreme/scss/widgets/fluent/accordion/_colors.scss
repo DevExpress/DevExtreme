@@ -18,16 +18,8 @@ $accordion-title-color: inherit !default;
 */
 $fluent-accordion-title-font-size: $fluent-base-font-size !default;
 
-/**
-* $name 30. Item border color
-* $type color
-*/
-$accordion-item-border-color: transparent !default;
-
-$accordion-item-shadow: none !default;
 $accordion-background-color: transparent !default;
 $accordion-title-active-color: $accordion-color !default;
-$accordion-title-bg-hover: $base-bg-hover !default;
-$accordion-title-bg-active: $base-bg-hover !default;
-$accordion-title-hover-border-color: transparent !default;
+$accordion-title-bg-hover: $base-hover-bg !default;
+$accordion-title-bg-active: $base-hover-bg !default;
 $accordion-disabled-color: $base-foreground-disabled !default;

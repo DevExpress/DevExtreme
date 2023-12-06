@@ -7,7 +7,6 @@ import Guid from '../core/guid';
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
 import { isPlainObject } from '../core/utils/type';
-import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { getWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
@@ -87,26 +86,7 @@ export const custom = function(options) {
 
     const popupToolbarItems = [];
 
-    each(options.buttons || [DEFAULT_BUTTON], function() {
-        const action = new Action(this.onClick, {
-            context: popupInstance
-        });
-
-        popupToolbarItems.push({
-            toolbar: 'bottom',
-            location: devices.current().android ? 'after' : 'center',
-            widget: 'dxButton',
-            options: extend({}, this, {
-                onClick: function() {
-                    const result = action.execute(...arguments);
-                    hide(result);
-                }
-            })
-        });
-    });
-
-    // eslint-disable-next-line no-var
-    var popupInstance = new Popup($element, extend({
+    const popupInstance = new Popup($element, extend({
         title: options.title ?? '',
         showTitle: ensureDefined(options.showTitle, true),
         dragEnabled: ensureDefined(options.dragEnabled, true),
@@ -149,7 +129,6 @@ export const custom = function(options) {
         onHidden: function({ element }) {
             $(element).remove();
         },
-        toolbarItems: popupToolbarItems,
         animation: {
             show: {
                 type: 'pop',
@@ -173,6 +152,28 @@ export const custom = function(options) {
             boundaryOffset: { h: 10, v: 0 }
         }
     }, options.popupOptions));
+
+    const buttonOptions = options.buttons || [DEFAULT_BUTTON];
+
+    buttonOptions.forEach((options) => {
+        const action = new Action(options.onClick, {
+            context: popupInstance,
+        });
+
+        popupToolbarItems.push({
+            toolbar: 'bottom',
+            location: devices.current().android ? 'after' : 'center',
+            widget: 'dxButton',
+            options: Object.assign({}, options, {
+                onClick: function() {
+                    const result = action.execute(...arguments);
+                    hide(result);
+                },
+            }),
+        });
+    });
+
+    popupInstance.option('toolbarItems', popupToolbarItems);
 
     popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 

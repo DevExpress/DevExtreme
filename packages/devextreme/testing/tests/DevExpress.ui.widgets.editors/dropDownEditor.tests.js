@@ -364,6 +364,18 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         assert.ok($field.hasClass('dx-texteditor-input'), 'field has class dx-texteditor-input');
         assert.ok($field.hasClass('dx-texteditor-input'), 'field has class dx-texteditor-input');
     });
+
+    QUnit.test('Popup should be closed on root parent scroll (T1195950)', function(assert) {
+        const $parent = $('#dropDownEditorLazy');
+        const $element = $('<div>').appendTo($parent);
+        const instance = $element.dxDropDownEditor({
+            opened: true,
+        }).dxDropDownEditor('instance');
+
+        $parent.trigger('scroll');
+
+        assert.strictEqual(instance.option('opened'), false, 'popup is hidden');
+    });
 });
 
 QUnit.module('focus policy', () => {

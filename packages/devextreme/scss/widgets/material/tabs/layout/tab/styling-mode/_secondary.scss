@@ -15,10 +15,14 @@
 
 
 .dx-tabs-styling-mode-secondary {
+  &.dx-tabs-horizontal .dx-tabs-scrollable .dx-tab {
+    flex-basis: auto;
+  }
+
   .dx-tab {
     min-width: 0;
 
-    .dx-tab-text {
+    .dx-tab-text .dx-tab-text-span {
       text-transform: none;
     }
   }

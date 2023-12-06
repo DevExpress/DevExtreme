@@ -9,6 +9,7 @@
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
 @use "../../mixins" as *;
+@use "../../../common/sizes" as *;
 
 // adduse
 @use "../../../scrollable";
@@ -20,7 +21,6 @@
 .dx-tab {
   gap: $fluent-tabs-item-gap;
   padding: $fluent-tabs-item-padding;
-  min-width: 0;
   background-color: $tabs-tab-background;
   color: $tabs-tab-color;
 
@@ -35,23 +35,19 @@
       color: $tabs-tab-icon-selected-color;
     }
 
-    .dx-tab-text {
+    .dx-tab-text .dx-tab-text-span {
       visibility: visible;
 
-      &::after {
+      .dx-tab-text-span-pseudo {
         visibility: hidden;
       }
     }
   }
 
-  &.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
-  }
-
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
-    .dx-tab-text::after {
+    .dx-tab-text .dx-tab-text-span-pseudo {
       color: $tabs-tab-disabled-color;
     }
 
@@ -60,22 +56,28 @@
     }
   }
 
-  &.dx-state-active,
-  &.dx-state-active .dx-inkripple-wave {
+  &.dx-state-active {
     background-color: $tabs-active-tab-bg-color;
   }
 
   .dx-tab-text {
-    position: relative;
     column-gap: $fluent-base-icon-margin;
-    line-height: $fluent-tab-text-line-height;
-    font-weight: $fluent-tab-font-weight-accent;
-    visibility: hidden;
+    row-gap: $fluent-tabs-item-gap;
+    line-height: $fluent-line-height;
 
-    &::after {
-      content: string.unquote("attr(DATA-DX_TEXT)");
+    .dx-tab-text-span {
+      position: relative;
+      display: block;
+      font-weight: $fluent-tab-font-weight-accent;
+      visibility: hidden;
+    }
+
+    .dx-tab-text-span-pseudo {
       position: absolute;
-      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       pointer-events: none;
       color: $tabs-tab-color;
       font-weight: $fluent-tab-font-weight-basic;
@@ -88,11 +90,22 @@
     visibility: visible;
 
     @include dx-icon-sizing($fluent-tabs-icon-size);
+
+    width: 1em;
+    height: 1em;
+    line-height: 1;
   }
 
   .dx-tabs-item-badge {
+    align-self: center;
     min-width: $fluent-badge-min-size;
     min-height: $fluent-badge-min-size;
+  }
+}
+
+.dx-tabs.dx-state-focused {
+  .dx-tab.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
   }
 }
 
@@ -105,13 +118,11 @@
 }
 
 .dx-tabs-icon-position-top .dx-tab-text::after {
-  bottom: 0;
   text-align: center;
   vertical-align: bottom;
 }
 
 .dx-tabs-icon-position-bottom .dx-tab-text::after {
-  top: 0;
   text-align: center;
   vertical-align: top;
 }

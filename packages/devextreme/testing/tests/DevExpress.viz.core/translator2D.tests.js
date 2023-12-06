@@ -933,6 +933,12 @@ QUnit.test('getRangeByMinZoomValue', function(assert) {
     assert.deepEqual(translator.getRangeByMinZoomValue(100, { minVisible: 650, maxVisible: 690 }), [590, 690]);
 });
 
+QUnit.test('value is not rounded when skipRound=true', function(assert) {
+    const translator = this.createTranslator({ min: 200, max: 300 }, { width: 10, height: 10, left: 500, top: 500, right: 500, bottom: 500 });
+
+    assert.strictEqual(translator.translate(201, undefined, true), 490.1);
+});
+
 QUnit.module('Datetime translator', {
     beforeEach: function() {
         this.createTranslator = function(range, _, options) {

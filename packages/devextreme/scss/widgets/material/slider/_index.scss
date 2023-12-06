@@ -75,11 +75,13 @@ $material-slider-tooltip-width-without-paddings: $material-slider-tooltip-width 
     }
 
     .dx-overlay-content {
-      border: none;
+      border: 1px solid transparent;
       opacity: 0.6;
 
       .dx-popup-content {
         line-height: normal;
+        color: $material-slider-tooltip-color;
+        padding: $material-slider-tooltip-popup-content-padding;
 
         .dx-slider-tooltip-position-top & {
           padding-top: 6px;

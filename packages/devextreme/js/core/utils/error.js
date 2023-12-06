@@ -4,7 +4,7 @@ import { logger } from './console';
 import { format } from './string';
 import { version } from '../version';
 
-const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
+const ERROR_URL = 'https://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 
 export default function(baseErrors, errors) {
 
@@ -41,7 +41,8 @@ export default function(baseErrors, errors) {
     }
 
     function formatMessage(id, details) {
-        return format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
+        const kind = id?.startsWith('W') ? 'warning' : 'error';
+        return format.apply(this, ['{0} - {1}.\n\nFor additional information on this {2} message, see: {3}', id, details, kind, getErrorUrl(id)]);
     }
 
     function makeError(args) {

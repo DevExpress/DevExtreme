@@ -16,9 +16,9 @@
 
 
 .dx-context-menu {
-  .dx-menu-item {
-    color: $base-text-color;
+  color: $menu-color;
 
+  .dx-menu-item {
     .dx-menu-item-content {
       display: flex;
       align-items: center;
@@ -33,11 +33,20 @@
         .dx-menu-item-popout {
           display: flex;
           align-items: center;
-          color: $base-icon-color;
 
           @include dx-icon(spinright);
           @include dx-icon-sizing($fluent-button-icon-size);
         }
+      }
+    }
+
+    .dx-menu-item-popout {
+      color: $base-icon-color;
+    }
+
+    &.dx-state-disabled {
+      .dx-menu-item-popout {
+        color: $base-foreground-disabled;
       }
     }
 

@@ -19,7 +19,6 @@
 .dx-tab {
   gap: $material-tabs-item-gap;
   padding: $material-tabs-item-padding;
-  min-width: $material-tab-min-width;
   background-color: $tabs-tab-background;
   color: $tabs-tab-color;
 
@@ -34,11 +33,6 @@
       color: $tabs-tab-icon-selected-color;
     }
   }
-
-  &.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
-  }
-
 
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
@@ -55,14 +49,28 @@
 
   .dx-tab-text {
     column-gap: $material-base-icon-margin;
-    text-transform: uppercase;
     line-height: $material-tab-text-line-height;
     font-weight: 500;
+    text-transform: uppercase;
+
+    .dx-tab-text-span-pseudo {
+      display: none;
+    }
   }
 
   .dx-icon {
     color: $tabs-tab-icon-color;
 
     @include dx-icon-sizing($material-tabs-icon-size);
+  }
+
+  .dx-tabs-item-badge {
+    align-self: center;
+  }
+}
+
+.dx-tabs.dx-state-focused {
+  .dx-tab.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
   }
 }

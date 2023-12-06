@@ -3,6 +3,7 @@
 // adduse
 
 $generic-tabpanel-tabs-item-padding: null !default;
+$generic-tabpanel-tabs-item-width: 140px !default;
 
 @if $size == "default" {
   $generic-tabpanel-tabs-item-padding: 9px !default;

@@ -7,9 +7,9 @@ import {
   getTotalCellCountByCompleteData,
   isTimelineView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { dateUtilsTs } from '@ts/core/utils/date';
 import { VIEWS } from '@ts/scheduler/m_constants';
 
+import timeZoneUtils from '../../m_utils_time_zone';
 import { getGroupCount } from '../../resources/m_utils';
 
 export class DateHeaderDataGenerator {
@@ -65,7 +65,7 @@ export class DateHeaderDataGenerator {
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
       const cell = completeViewDataMap[index][dayIndex * colSpan];
-      const shiftedStartDate = dateUtilsTs.addOffsets(cell.startDate, [-viewOffset]);
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(cell.startDate, -viewOffset);
 
       weekDaysRow.push({
         ...cell,
@@ -128,7 +128,7 @@ export class DateHeaderDataGenerator {
       ...restProps
     }, index) => {
       const shiftedStartDate = shouldShiftDates
-        ? dateUtilsTs.addOffsets(startDate, [-viewOffset])
+        ? timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset)
         : startDate;
 
       const text = getHeaderCellText(
@@ -141,6 +141,7 @@ export class DateHeaderDataGenerator {
           startViewDate,
           startDayHour,
           cellCountInDay,
+          viewOffset,
         },
       );
 

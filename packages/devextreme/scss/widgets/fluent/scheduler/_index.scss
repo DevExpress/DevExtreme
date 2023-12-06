@@ -150,12 +150,32 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   padding: $fluent-scheduler-appointment-content-padding;
 }
 
+.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+  padding: $fluent-scheduler-recurring-appointment-content-padding;
+}
+
+.dx-rtl .dx-scheduler-appointment-content {
+  padding: $fluent-scheduler-appointment-content-padding-rtl;
+}
+
+.dx-rtl .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+  padding: $fluent-scheduler-recurring-appointment-content-padding-rtl;
+}
+
 .dx-scheduler-appointment-title {
   font-size: 12px;
 }
 
 .dx-scheduler-appointment-content-details {
   font-size: 10px;
+}
+
+.dx-rtl .dx-scheduler-work-space-day {
+  .dx-scheduler-all-day-appointment {
+    .dx-scheduler-appointment-content {
+      padding: $fluent-scheduler-appointment-content-padding-rtl;
+    }
+  }
 }
 
 .dx-scheduler-work-space-week,
@@ -304,6 +324,16 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
+.dx-rtl .dx-scheduler-work-space.dx-scheduler-work-space-month {
+  .dx-scheduler-appointment-content {
+    padding: 4px 12px 0 8px;
+  }
+
+  .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+    padding: 4px 12px 0 20px;
+  }
+}
+
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
   .dx-scheduler-header-panel-cell-date:last-child {
     color: $header-panel-cell-date;
@@ -314,6 +344,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-appointment-content {
     padding: 4px 8px 0 12px;
     font-size: $fluent-scheduler-appointment-month-text-size;
+  }
+
+  .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+    padding: 4px 20px 0 12px;
   }
 
   .dx-scheduler-date-table-first-of-month {
@@ -652,6 +686,18 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     width: 6px;
     height: 100%;
     background-color: $base-accent;
+  }
+}
+
+.dx-rtl.dx-scheduler-appointment:not(.dx-scheduler-appointment-has-resource-color) {
+  .dx-scheduler-appointment-strip {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+}
+
+.dx-scheduler-appointment:not(.dx-scheduler-appointment-has-resource-color):not(.dx-rtl) {
+  .dx-scheduler-appointment-strip {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
   }
