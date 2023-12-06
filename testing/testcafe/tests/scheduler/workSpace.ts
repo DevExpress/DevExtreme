@@ -4,6 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
+import { changeTheme } from '../../helpers/changeTheme';
 
 fixture.disablePageReloads`Scheduler: Workspace`
   .page(url(__dirname, '../container.html'));
@@ -159,3 +160,28 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
     endDate: new Date('2021-04-03T19:00:00.000Z'),
   }],
 }));
+
+['generic.light', 'material.blue.light'].forEach((theme) => {
+  test(`Month workspace should be scrollable to the last row (T1203250) in ${theme}`, async (t) => {
+    const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await scheduler.scrollTo(new Date(2019, 5, 8, 0, 0));
+
+    await t
+      .expect(await takeScreenshot(`scrollable-month-workspace-${theme}.png`, scheduler.workSpace))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+    await createWidget('dxScheduler', {
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2019, 4, 1),
+      height: 250,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+});
