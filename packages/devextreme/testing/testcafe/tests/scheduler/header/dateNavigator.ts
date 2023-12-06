@@ -127,9 +127,9 @@ test('Current date in navigator should be updated if scheduler currentDate is ch
   await scheduler.option('currentDate', new Date(2022, 2, 28));
 
   await t
-    .click(scheduler.toolbar.navigator.calendar.element);
+    .click(scheduler.toolbar.navigator.caption);
 
-  await takeScreenshot('navigator-state-after-change-currentDate-option.png');
+  await takeScreenshot('navigator-state-after-change-currentDate-option.png', scheduler.toolbar.navigator.calendar.element);
 
   await t
     .expect(compareResults.isValid())
