@@ -12,6 +12,38 @@ const CLASS = ClassNames;
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
+test('Next cell should be focused immediately on a single Enter key press if showEditorAlways is enabled in cell mode (T1196539)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .typeText(dataGrid.getDataCell(0, 0).element, 'test')
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { name: 'Alex', phone: '555555', room: 1 },
+    { name: 'Dan', phone: '553355', room: 2 },
+  ],
+  columns: [{
+    dataField: 'name',
+    showEditorAlways: true,
+  }, 'phone', 'room'],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    selectTextOnEditStart: true,
+  },
+  keyboardNavigation: {
+    enterKeyAction: 'startEdit',
+    enterKeyDirection: 'column',
+  },
+  repaintChangesOnly: true,
+}));
+
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
 
