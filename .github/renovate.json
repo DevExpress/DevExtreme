@@ -49,9 +49,7 @@
         {
             "matchPackagePatterns": [ "*" ],
             "matchUpdateTypes": [ "minor", "patch" ],
-            "automerge": true
-        },
-        {
+            "automerge": true,
             "matchDatasources": [ "npm" ],
             "minimumReleaseAge": "7 days"
         }
