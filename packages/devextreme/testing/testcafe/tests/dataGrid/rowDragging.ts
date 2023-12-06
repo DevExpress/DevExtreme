@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
+import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
@@ -542,6 +543,46 @@ test('The draggable element should be displayed correctly after horizontal scrol
       allowReordering: true,
       showDragIcons: false,
     },
+  });
+});
+
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.scrollBy({ top: 10000 });
+  await t.expect(dataGrid.isReady()).ok();
+
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.01 });
+
+  await t.wait(300); // wait for scroll on drag
+  await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    dataSource: [...new Array(100)].map((_, i) => ({
+      value1: i,
+      value2: 1000 + i,
+    })),
+    keyExpr: 'value1',
+    height: 300,
+    scrolling: {
+      mode: 'virtual',
+    },
+    rowDragging: {
+      allowDropInsideItem: true,
+      allowReordering: true,
+      onDragChange(e) {
+        const row = e.component.getVisibleRows()[e.toIndex];
+        if (row.key < 95) {
+          e.cancel = true;
+        }
+      },
+    },
+
   });
 });
 
