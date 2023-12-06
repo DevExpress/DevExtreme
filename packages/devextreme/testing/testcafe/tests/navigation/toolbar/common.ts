@@ -10,7 +10,7 @@ fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
 const supportedWidgets = [
-  'dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxSwitch', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton',
+  'dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton',
 ];
 
 ['never', 'always', 'auto'].forEach((locateInMenu) => {
@@ -51,7 +51,7 @@ const supportedWidgets = [
         .ok(compareResults.errorMessages());
     }).before(async () => {
       await appendElementTo('#container', 'div', 'toolbar');
-      await setAttribute('#container', 'style', 'width: 1284px;');
+      await setAttribute('#container', 'style', 'width: 1184px;');
 
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
@@ -95,8 +95,6 @@ const supportedWidgets = [
   });
 
   test(`Toolbar with dropDownButton,items[].locateInMenu=${locateInMenu}`, async (t) => {
-    await t.resizeWindow(1500, 800);
-
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const toolbar = new Toolbar('#toolbar');
@@ -128,7 +126,7 @@ const supportedWidgets = [
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await appendElementTo('#container', 'div', 'toolbar');
-    await setAttribute('#container', 'style', 'width: 1284px;');
+    await setAttribute('#container', 'style', 'width: 1184px;');
 
     const toolbarItems = [
       {
@@ -161,6 +159,15 @@ const supportedWidgets = [
         location: 'before',
         locateInMenu,
         widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'contained',
+          text: 'opts.stylingMode: contained',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu,
+        widget: 'dxSwitch',
         options: {
           stylingMode: 'contained',
           text: 'opts.stylingMode: contained',
