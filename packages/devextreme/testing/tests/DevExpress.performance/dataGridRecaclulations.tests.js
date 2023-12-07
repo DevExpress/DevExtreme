@@ -157,5 +157,5 @@ QUnit.performanceTest('refresh with virtual scrolling', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('refresh');
 
-    assert.measureStyleRecalculation(measureFunction, 3);
+    assert.measureStyleRecalculation(measureFunction, 1);
 });
