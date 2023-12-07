@@ -585,7 +585,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _initMarkup() {
         this._renderScrollableContainer();
         this._renderEmptyMessage(this._dataAdapter.getRootNodes());
+
         this.callBase();
+
         this._setAriaRoleToElement();
         this._setTabIndexToFirstNodeContainer();
     },
@@ -607,7 +609,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _setAriaRoleToElement() {
-        this.setAria('role', 'tree');
+        const { items } = this.option();
+
+        if(items?.length) {
+            this.setAria({ role: 'tree' });
+        }
     },
 
     _renderContentImpl: function() {

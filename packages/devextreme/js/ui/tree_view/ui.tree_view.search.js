@@ -86,24 +86,6 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         return this._itemContainer(this.option('searchEnabled'));
     },
 
-    _setAriaRoleToElement() {
-        const { items } = this.option();
-
-        if(items?.length) {
-            this.setAria({ role: 'tree' });
-        }
-    },
-
-    _renderFocusTarget() {
-        const { items, tabIndex } = this.option();
-
-        if(items?.length) {
-            const focusTarget = this._focusTarget();
-
-            focusTarget.attr({ tabindex: tabIndex });
-        }
-    },
-
     _cleanItemContainer: function() {
         this.$element().empty();
     },
