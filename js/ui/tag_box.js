@@ -832,11 +832,11 @@ const TagBox = SelectBox.inherit({
 
             if(isValueExprSpecified && !isDefined(currentItem)) {
                 loadItemPromises.push(this._loadItem(value, cache).always((item) => {
-                    const newItem = this._createTagData(items, item, value, index);
+                    const newItem = this._createTagData(item, value);
                     items.splice(index, 0, newItem);
                 }));
             } else {
-                const newItem = this._createTagData(items, currentItem, value, index);
+                const newItem = this._createTagData(currentItem, value);
                 items.splice(index, 0, newItem);
             }
         });
@@ -849,7 +849,7 @@ const TagBox = SelectBox.inherit({
         return d.promise();
     },
 
-    _createTagData: function(items, item, value, valueIndex) {
+    _createTagData: function(item, value) {
         if(isDefined(item)) {
             this._selectedItems.push(item);
             return item;
@@ -1198,6 +1198,7 @@ const TagBox = SelectBox.inherit({
         const value = this._getValue().slice();
         this._removeTag(value, itemValue);
         this.option('value', value);
+        this.option('selectedItem', null);
 
         if(value.length === 0) {
             this._clearTagFocus();
