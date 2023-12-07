@@ -19,7 +19,6 @@ const ICON_CLASS = 'dx-icon';
 const SELECTED_STATE_CLASS = 'dx-state-selected';
 const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 
@@ -56,7 +55,11 @@ QUnit.module('aria accessibility', {
     }
 }, () => {
     QUnit.test('aria role', function(assert) {
-        assert.equal(this.$element.attr('role'), 'tree', 'role is correct');
+        assert.strictEqual(this.$element.attr('role'), 'tree', 'role is correct');
+
+        this.instance.option({ items: [] });
+
+        assert.strictEqual(this.$element.attr('role'), undefined, 'role is not set');
     });
 
     QUnit.test('scrollable should not have role attribute', function(assert) {
@@ -101,22 +104,6 @@ QUnit.module('aria accessibility', {
         const $node = this.$element.find('.' + NODE_CLASS).eq(0);
 
         assert.equal($node.attr('aria-selected'), 'true', 'item is selected');
-    });
-
-    QUnit.test('scrollable content should have correct attrs when items are empty and searchEnabled true', function(assert) {
-        this.instance.option({ searchEnabled: true, focusStateEnabled: true });
-
-        let $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-
-        assert.strictEqual($scrollableContent.attr('role'), 'tree', 'role is correct');
-        assert.strictEqual($scrollableContent.attr('tabindex'), '0', 'tabindex is correct');
-
-        this.instance.option({ items: [] });
-
-        $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-
-        assert.strictEqual($scrollableContent.attr('role'), undefined, 'role is not set');
-        assert.strictEqual($scrollableContent.attr('tabindex'), undefined, 'tabindex is not set');
     });
 });
 

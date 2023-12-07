@@ -353,6 +353,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'collapseIcon':
                 this.repaint();
                 break;
+            case 'height':
+                this.callBase(args);
+                this._setTabIndexToFirstNodeContainer();
+                break;
             default:
                 this.callBase(args);
         }
@@ -596,7 +600,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $scrollableContainer = this.$element().find(`.${SCROLLABLE_CONTAINER_CLASS}`);
         const $scrollableContent = this.$element().find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-        const isContentHeightExceeded = getHeight($scrollableContent) > getHeight($scrollableContainer);
+        const scrollableContentHeight = getHeight($scrollableContent);
+        const scrollableContainerHeight = getHeight($scrollableContainer);
+
+        const isContentHeightExceeded = scrollableContentHeight > scrollableContainerHeight;
 
         if(!isContentHeightExceeded) {
             return;
