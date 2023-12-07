@@ -1485,6 +1485,10 @@ const TagBox = SelectBox.inherit({
         return existedItems.concat(newItems);
     },
 
+    _isCustomItemSelected() {
+        return this.option('acceptCustomValue');
+    },
+
     _getListValues: function() {
         if(!this._list) {
             return [];

@@ -4770,6 +4770,39 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
         assert.strictEqual($tags.length, 2, 'only two tags are added');
         assert.deepEqual(tagBoxInstance.option('selectedItems'), ['custom', 1], 'selected items are correct');
     });
+
+    QUnit.test('The editor must have the actual value after this value has been entered following its deletion(T1197444)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            acceptCustomValue: true,
+            searchEnabled: false,
+            openOnFieldClick: false,
+            onCustomItemCreating: function(args) {
+                const newValue = args.text;
+                const component = args.component;
+                const currentItems = component.option('items');
+                currentItems.unshift(newValue);
+                component.option('items', currentItems);
+                args.customItem = newValue;
+            }
+        });
+
+        const tagBoxInstance = $tagBox.dxTagBox('instance');
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        $input.trigger('change');
+
+        $('.dx-tag-remove-button')
+            .last()
+            .trigger('dxclick');
+
+        keyboard.type('1');
+        $input.trigger('change');
+
+        assert.deepEqual(tagBoxInstance.option('value'), ['1']);
+    });
 });
 
 QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
