@@ -570,6 +570,7 @@ module('Expanded items', {
 
         treeView.on('contentReady', () => {
             itemCollapsedSpy.reset();
+            assert.ok(false, 'from contentReady');
             treeView
                 .collapseItem(11)
                 .done(()=> {
