@@ -48,3 +48,20 @@
   $material-treeview-container-padding,
   $material-treeview-load-indicator-size,
 );
+
+
+.dx-treeview-item-with-checkbox {
+  &.dx-state-focused {
+    >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
+      border: 3px solid red; // this is just for a test
+    }
+  }
+
+  .dx-treeview-item .dx-checkbox {
+    &.dx-state-hover:not(.dx-state-focused) {
+      .dx-checkbox-icon {
+        border: 3px solid green; // this is just for a test
+      }
+    }
+  } 
+}
