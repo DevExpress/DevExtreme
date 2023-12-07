@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -41,22 +42,172 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        .form>h4 {
+            margin-bottom: 20px;
+        }
+
+        .form>div,
+        #treeview {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .selected-container {
+            padding: 20px;
+            margin-left: 20px;
+            background-color: rgba(191, 191, 191, 0.15);
+            font-size: 115%;
+            font-weight: bold;
+        }
+
+        #selected-employees {
+            margin-top: 20px;
+        }
+
+        .dx-list-item-content {
+            padding-left: 0;
+        }
+
+        .options {
+            padding: 20px;
+            background-color: rgba(191, 191, 191, 0.15);
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+
+        .caption {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .option {
+            width: 24%;
+            margin-top: 10px;
+            margin-right: 9px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+
+        .editor-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .editor-container>* {
+            width: 100%;
+        }
+
+        .option:last-of-type {
+            margin-right: 0;
+        }
+    </style>
 </head>
+
 <body class="dx-surface">
     <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+        <!-- <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
         <select id="theme-selector" style="display: block;">
         </select>
-        <br />
-        <div id="button"></div>
+        <br /> -->
+
+        <div id="treeview"></div>
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(() => {
+                const treeView = $('#treeview').dxTreeView({
+                    searchEnabled: true,
+                    items: [],
+                    // height: undefined,
+                    height: 384,
+                    showCheckBoxesMode: 'normal',
+                    itemTemplate(item) {
+                        return `<div>${item.fullName} (${item.position})</div>`;
+                    },
+                }).dxTreeView('instance');
             });
+
+            const employees = [{
+                id: 1,
+                fullName: 'John Heart',
+                prefix: 'Dr.',
+                position: 'CEO',
+                expanded: true,
+                items: [{
+                    id: 2,
+                    fullName: 'Samantha Bright',
+                    prefix: 'Dr.',
+                    position: 'COO',
+                    expanded: true,
+                    items: [{
+                        id: 3,
+                        fullName: 'Kevin Carter',
+                        prefix: 'Mr.',
+                        position: 'Shipping Manager',
+                    }, {
+                        id: 14,
+                        fullName: 'Victor Norris',
+                        prefix: 'Mr.',
+                        selected: true,
+                        position: 'Shipping Assistant',
+                    }],
+                }, {
+                    id: 4,
+                    fullName: 'Brett Wade',
+                    prefix: 'Mr.',
+                    position: 'IT Manager',
+                    expanded: true,
+                    items: [{
+                        id: 5,
+                        fullName: 'Amelia Harper',
+                        prefix: 'Mrs.',
+                        position: 'Network Admin',
+                    }, {
+                        id: 6,
+                        fullName: 'Wally Hobbs',
+                        prefix: 'Mr.',
+                        position: 'Programmer',
+                    }, {
+                        id: 7,
+                        fullName: 'Brad Jameson',
+                        prefix: 'Mr.',
+                        position: 'Programmer',
+                    }, {
+                        id: 8,
+                        fullName: 'Violet Bailey',
+                        prefix: 'Ms.',
+                        position: 'Jr Graphic Designer',
+                    }],
+                }, {
+                    id: 9,
+                    fullName: 'Barb Banks',
+                    prefix: 'Mrs.',
+                    position: 'Support Manager',
+                    expanded: true,
+                    items: [{
+                        id: 10,
+                        fullName: 'Kelly Rodriguez',
+                        prefix: 'Ms.',
+                        position: 'Support Assistant',
+                    }, {
+                        id: 11,
+                        fullName: 'James Anderson',
+                        prefix: 'Mr.',
+                        position: 'Support Assistant',
+                    }],
+                }],
+            }];
         </script>
     </div>
 </body>

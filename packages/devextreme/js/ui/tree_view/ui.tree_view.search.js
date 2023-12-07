@@ -98,7 +98,9 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         const { items, tabIndex } = this.option();
 
         if(items?.length) {
-            this._focusTarget().attr({ tabindex: tabIndex });
+            const focusTarget = this._focusTarget();
+
+            focusTarget.attr({ tabindex: tabIndex });
         }
     },
 

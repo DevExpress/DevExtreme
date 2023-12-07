@@ -9,23 +9,26 @@ fixture`TreeView: Common tests with axe`
 
 const TREEVIEW_SELECTOR = '#container';
 
-[[], employees].forEach((items) => {
-  [true, false].forEach((searchEnabled) => {
-    ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
-      [null, 'no data text'].forEach((noDataText) => {
-        test(`Treeview ${items.length ? 'full items' : 'empty items'} searchEnabled=${searchEnabled} showCheckBoxesMode=${showCheckBoxesMode} noDataText=${noDataText}`, async (t) => {
-          const a11yCheckConfig = isMaterialBased() ? {
-            runOnly: 'color-contrast',
-          } : {};
+[undefined, 320].forEach((height) => {
+  [[], employees].forEach((items) => {
+    [true, false].forEach((searchEnabled) => {
+      ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+        [null, 'no data text'].forEach((noDataText) => {
+          test(`Treeview ${items.length ? 'full items' : 'empty items'} searchEnabled=${searchEnabled} showCheckBoxesMode=${showCheckBoxesMode} noDataText=${noDataText}`, async (t) => {
+            const a11yCheckConfig = isMaterialBased() ? {
+              runOnly: 'color-contrast',
+            } : {};
 
-          await a11yCheck(t, a11yCheckConfig, TREEVIEW_SELECTOR);
-        }).before(async () => createWidget('dxTreeView', {
-          searchEnabled,
-          showCheckBoxesMode,
-          noDataText,
-          items,
-          displayExpr: 'fullName',
-        }));
+            await a11yCheck(t, a11yCheckConfig, TREEVIEW_SELECTOR);
+          }).before(async () => createWidget('dxTreeView', {
+            height,
+            searchEnabled,
+            showCheckBoxesMode,
+            noDataText,
+            items,
+            displayExpr: 'fullName',
+          }));
+        });
       });
     });
   });
