@@ -564,7 +564,8 @@ module('Expanded items', {
 
         const treeView = initTree({
             items: items,
-            onItemCollapsed: itemCollapsedSpy
+            onItemCollapsed: itemCollapsedSpy,
+            animationEnabled: false
         }).dxTreeView('instance');
 
         treeView.on('contentReady', () => {
