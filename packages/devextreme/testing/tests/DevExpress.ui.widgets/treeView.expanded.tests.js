@@ -577,11 +577,7 @@ module('Expanded items', {
                 });
         });
 
-        treeView
-            .collapseItem(11)
-            .done(() => {
-                treeView.expandAll();
-            });
+        treeView.expandAll();
     });
 
     test('expand childless item in recursive case', function(assert) {
