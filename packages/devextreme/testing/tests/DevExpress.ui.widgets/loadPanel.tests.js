@@ -176,6 +176,26 @@ QUnit.module('init', {
         }).dxLoadPanel('instance');
     });
 
+    [true, false].forEach((shading) => {
+        QUnit.test(`dxpointerdown event should ${shading ? 'not' : ''} be propagated when shading=${shading}`, function(assert) {
+            const loadPanel1 = $('#loadPanel').dxLoadPanel({
+                visible: true,
+                hideOnOutsideClick: true,
+                shading: false
+            }).dxLoadPanel('instance');
+
+            const loadPanel2 = $('#loadPanel2').dxLoadPanel({
+                visible: true,
+                hideOnOutsideClick: false,
+                shading,
+            }).dxLoadPanel('instance');
+
+            $(loadPanel2.$wrapper()).trigger('dxpointerdown');
+
+            assert.strictEqual(loadPanel1.option('visible'), shading, `first loadPanel is ${shading ? 'visible' : 'closed'}`);
+        });
+    });
+
     QUnit.module('Breaking change t1123711 - warning W1021', () => {
         QUnit.test('should be logged if container is invalid', function(assert) {
             sinon.spy(uiErrors, 'log');

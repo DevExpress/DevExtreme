@@ -122,6 +122,13 @@ const LoadPanel = Overlay.inherit({
         this._setWrapperAria();
     },
 
+    _documentDownHandler: function(e) {
+        this.callBase(e);
+        const { propagateOutsideClick, shading } = this.option();
+
+        return propagateOutsideClick && !shading;
+    },
+
     _setWrapperAria() {
         const { message } = this.option();
 
