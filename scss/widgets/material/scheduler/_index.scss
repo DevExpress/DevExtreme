@@ -289,6 +289,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     border-bottom: none;
   }
 
+  .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+    min-height: 600px;
+  }
+
   .dx-scheduler-date-table-cell {
     font-size: $material-scheduler-month-date-text-size;
     text-align: left;
