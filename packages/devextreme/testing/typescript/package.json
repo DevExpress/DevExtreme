@@ -8,6 +8,6 @@
   },
   "devDependencies": {
     "jquery": "3.7.1",
-    "@types/jquery": "3.5.22"
+    "@types/jquery": "3.5.29"
   }
 }
