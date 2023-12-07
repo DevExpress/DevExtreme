@@ -545,6 +545,45 @@ module('Expanded items', {
         assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 111');
     });
 
+    QUnit.test('onItemCollapsed event should be rised when collapseItem called after expandAll(T1202248)', function(assert) {
+        const itemCollapsedSpy = sinon.spy();
+        const done = assert.async();
+        assert.expect(1);
+        const items = [{
+            text: '1',
+            id: 1,
+            items: [{
+                text: '11',
+                id: 11,
+                items: [{
+                    text: '111',
+                    id: 111
+                }]
+            }]
+        }];
+
+        const treeView = initTree({
+            items: items,
+            onItemCollapsed: itemCollapsedSpy
+        }).dxTreeView('instance');
+
+        treeView.on('contentReady', () => {
+            itemCollapsedSpy.reset();
+            treeView
+                .collapseItem(11)
+                .done(()=> {
+                    assert.strictEqual(itemCollapsedSpy.callCount, 1);
+                    done();
+                });
+        });
+
+        treeView
+            .collapseItem(11)
+            .done(() => {
+                treeView.expandAll();
+            });
+    });
+
     test('expand childless item in recursive case', function(assert) {
         const items = [{ text: '1', id: 1, items: [{ text: '11', id: 11 }] }];
         const $treeView = initTree({
