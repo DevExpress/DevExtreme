@@ -22,12 +22,12 @@ import { changes, replaceInherit } from '@js/viz/core/helpers';
 import _Layout from '@js/viz/core/layout';
 import { Renderer } from '@js/viz/core/renderers/renderer';
 import { parseScalar as _parseScalar } from '@js/viz/core/utils';
+// @ts-expect-error
+import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
 
 import graphicObject from '../../common/m_charts';
 
-const { floor } = Math;
 const { log } = warnings;
-const SIZE_CHANGING_THRESHOLD = 1;
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
 
@@ -41,15 +41,6 @@ function getTrue(): boolean {
 
 function getFalse(): boolean {
   return false;
-}
-
-function areCanvasesDifferent(canvas1, canvas2): boolean {
-  const sizeLessThreshold = ['width', 'height']
-    .every((key) => Math.abs(canvas1[key] - canvas2[key]) < SIZE_CHANGING_THRESHOLD);
-
-  const canvasCoordsIsEqual = ['left', 'right', 'top', 'bottom'].every((key) => canvas1[key] === canvas2[key]);
-
-  return !(sizeLessThreshold && canvasCoordsIsEqual);
 }
 
 function defaultOnIncidentOccurred(e): void {
@@ -116,14 +107,6 @@ const getEmptyComponent = function () {
 
 function callForEach(functions): void {
   functions.forEach((c) => c());
-}
-
-function floorCanvasDimensions(canvas) {
-  return {
-    ...canvas,
-    height: floor(canvas.height),
-    width: floor(canvas.width),
-  };
 }
 
 const isServerSide = !hasWindow();
