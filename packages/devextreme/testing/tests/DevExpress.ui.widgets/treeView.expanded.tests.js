@@ -570,7 +570,6 @@ module('Expanded items', {
 
         treeView.on('contentReady', () => {
             itemCollapsedSpy.reset();
-            assert.ok(false, 'from contentReady');
             treeView
                 .collapseItem(11)
                 .done(()=> {
@@ -781,7 +780,8 @@ module('Expanded items', {
     });
 
     test('Content ready event is thrown once when the expandAll is called', function(assert) {
-        const contentReadyStub = sinon.stub();
+        const done = assert.async();
+        assert.expect(1);
         const $treeView = initTree({
             items: [{
                 text: '1',
@@ -795,13 +795,15 @@ module('Expanded items', {
                     }]
                 }]
             }],
-            onContentReady: contentReadyStub
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        treeView.expandAll();
+        treeView.on('contentReady', () =>{
+            assert.ok(true, 'event is thrown once');
+            done();
+        });
 
-        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
+        treeView.expandAll();
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source', function(assert) {
