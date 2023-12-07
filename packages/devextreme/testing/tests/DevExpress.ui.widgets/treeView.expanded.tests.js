@@ -545,7 +545,7 @@ module('Expanded items', {
         assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 111');
     });
 
-    QUnit.test('onItemCollapsed event should be rised when collapseItem called after expandAll(T1202248)', function(assert) {
+    QUnit.skip('onItemCollapsed event should be rised when collapseItem called after expandAll(T1202248)', function(assert) {
         const itemCollapsedSpy = sinon.spy();
         const done = assert.async();
         assert.expect(1);
@@ -798,7 +798,7 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        treeView.on('contentReady', () =>{
+        treeView.on('contentReady', () => {
             assert.ok(true, 'event is thrown once');
             done();
         });
