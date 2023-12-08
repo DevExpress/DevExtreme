@@ -1253,6 +1253,7 @@ const TagBox = SelectBox.inherit({
         const value = this._getValue().slice();
         this._removeTag(value, itemValue);
         this.option('value', value);
+        this.option('selectedItem', null);
 
         if(value.length === 0) {
             this._clearTagFocus();
@@ -1483,10 +1484,6 @@ const TagBox = SelectBox.inherit({
         const newItems = existedItems.length ? removeDuplicates(listValues, currentValue) : listValues;
 
         return existedItems.concat(newItems);
-    },
-
-    _isCustomItemSelected() {
-        return this.option('acceptCustomValue');
     },
 
     _getListValues: function() {
