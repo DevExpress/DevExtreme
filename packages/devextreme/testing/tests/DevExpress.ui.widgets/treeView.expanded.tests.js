@@ -804,6 +804,7 @@ module('Expanded items', {
         });
 
         treeView.expandAll();
+        this.clock.tick(400);
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source', function(assert) {
