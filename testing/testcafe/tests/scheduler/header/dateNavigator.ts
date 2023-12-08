@@ -120,6 +120,29 @@ test('Current date in Navigator should be respond on Current date of Calendar', 
   height: 400,
 }));
 
+test('Current date in navigator should be updated if scheduler currentDate is changed', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const scheduler = new Scheduler('#container');
+
+  await scheduler.option('currentDate', new Date(2022, 2, 28));
+
+  await t
+    .click(scheduler.toolbar.navigator.caption);
+
+  await takeScreenshot('navigator-state-after-change-currentDate-option.png', scheduler.toolbar.navigator.calendar.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 28),
+  width: 600,
+  height: 400,
+}));
+
 test('Calendar should be have right appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const { toolbar } = new Scheduler('#container');
