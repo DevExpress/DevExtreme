@@ -2570,7 +2570,7 @@ export const editingModule = {
             return isShowEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
           }
 
-          if (eventName === 'click' && startEditAction === 'dblClick') {
+          if (eventName === 'click' && startEditAction === 'dblClick' && this._pointerDownTarget === $targetElement.get(0)) {
             const isError = false;
             const withoutSaveEditData = row?.isNewRow;
             editingController.closeEditCell(isError, withoutSaveEditData);
@@ -2581,6 +2581,7 @@ export const editingModule = {
           }
         },
         _rowPointerDown(e) {
+          this._pointerDownTarget = e.event.target;
           this._pointerDownTimeout = setTimeout(() => {
             this._editCellByClick(e, 'down');
           });
