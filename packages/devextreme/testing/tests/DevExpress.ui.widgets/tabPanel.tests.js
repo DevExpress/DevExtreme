@@ -160,23 +160,30 @@ QUnit.module('rendering', {
         });
     });
 
-    QUnit.test('TabPanel container has correct height', function(assert) {
-        const items = [
-            {
-                title: 1,
-                text: 'Mariya Elizabeth Thomas Grace Sophia Rose Alexandra Victoria Isabella Natalie Olivia Emily Jennifer Margaret Stephanie',
-            },
-        ];
+    ['top', 'right', 'left', 'bottom'].forEach(tabsPosition => {
+        QUnit.test(`TabPanel container has correct height when tabsPosition=${tabsPosition}`, function(assert) {
+            const items = [
+                {
+                    title: 1,
+                    text: 'Mariya Elizabeth Thomas Grace Sophia Rose Alexandra Victoria Isabella Natalie Olivia Emily Jennifer Margaret Stephanie',
+                },
+            ];
 
-        const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({
-            items,
-            width: 100,
-            height: 100,
+            const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({
+                items,
+                width: 100,
+                height: 100,
+                tabsPosition,
+            });
+
+            const $tabPanelContainer = $tabPanel.find(`.${TABPANEL_CONTAINER_CLASS}`);
+
+            if(tabsPosition === 'top' || tabsPosition === 'bottom') {
+                assert.strictEqual($tabPanelContainer.get(0).clientHeight, 62);
+            } else {
+                assert.strictEqual($tabPanelContainer.get(0).clientWidth, 72);
+            }
         });
-
-        const $tabPanelContainer = $tabPanel.find(`.${TABPANEL_CONTAINER_CLASS}`);
-
-        assert.strictEqual($tabPanelContainer.get(0).clientHeight, 62);
     });
 });
 

@@ -48,5 +48,6 @@
 
 .dx-tabpanel-container {
   flex-grow: 1;
-  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
 }
