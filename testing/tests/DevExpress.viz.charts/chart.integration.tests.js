@@ -2057,6 +2057,60 @@ QUnit.test('Chart with large scale break. No ticks in break', function(assert) {
     }
 });
 
+QUnit.test('negative values should be displayed after multiple axes are synchronized to zero(T1193670)', function(assert) {
+    const chart = this.createChart({
+        commonSeriesSettings: {
+            argumentField: 'arg',
+            type: 'bar',
+        },
+        series: [{
+            type: 'bar',
+            valueField: 'val1',
+        }, {
+            type: 'spline',
+            valueField: 'val2',
+            axis: 'secondAxis',
+        }],
+        valueAxis: [{
+            synchronizedValue: 0,
+            name: 'firstAxis',
+        }, {
+            name: 'secondAxis',
+            position: 'right',
+            synchronizedValue: 0
+        }],
+        dataSource: [{
+            arg: 'a',
+            val1: 1,
+            val2: 1
+        }, {
+            arg: 'b',
+            val1: 2,
+            val2: 2
+        }, {
+            arg: 'c',
+            val1: 1,
+            val2: -1
+        }, {
+            arg: 'd',
+            val1: 3,
+            val2: 3
+        }, {
+            arg: 'e',
+            val1: 1,
+            val2: 1
+        }],
+    });
+
+    const firstAxis = chart.getValueAxis('firstAxis').visualRange();
+    const secondAxis = chart.getValueAxis('secondAxis').visualRange();
+
+    assert.strictEqual(firstAxis.startValue, -1.5);
+    assert.strictEqual(firstAxis.endValue, 3.5);
+    assert.strictEqual(secondAxis.startValue, -1.5);
+    assert.strictEqual(secondAxis.endValue, 3.5);
+});
+
 QUnit.test('Dispose unused axes (T1042940)', function(assert) {
     this.$container.css({ width: '1000px', height: '600px' });
 

@@ -364,7 +364,28 @@ function updateMinorTicks(axesInfo) {
     });
 }
 
+function allAxesValuesOnSameSideFromZero(axesInfo) {
+    let allPositive = true;
+    let allNegative = true;
+
+    axesInfo.forEach((axis) => {
+        if(axis.oldMinValue > 0 || axis.oldMaxValue > 0) {
+            allNegative = false;
+        }
+
+        if(axis.oldMinValue < 0 || axis.oldMaxValue < 0) {
+            allPositive = false;
+        }
+    });
+
+    return allPositive || allNegative;
+}
+
 function correctPaddings(axesInfo, paddings) {
+    if(!allAxesValuesOnSameSideFromZero(axesInfo)) {
+        return paddings;
+    }
+
     return axesInfo.reduce((prev, info) => {
         const inverted = info.inverted;
         const { start, end } = info.axis.getCorrectedValuesToZero(info.minValue, info.maxValue);
