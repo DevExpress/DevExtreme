@@ -10,6 +10,8 @@ import { getHeight, getWidth, setWidth, getOffset } from 'core/utils/size';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
+import { name as clickEventName } from 'events/click';
+import { name as dblClickEventName } from 'events/dblclick';
 import { triggerResizeEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -2694,7 +2696,7 @@ QUnit.module('Editing', {
         rowsView.render($testElement);
 
         // act
-        $testElement.find('td').first().trigger('dxdblclick');
+        $testElement.find('td').first().trigger(dblClickEventName);
 
         // assert
         assert.strictEqual(that.editingController.editCell.callCount, 1, 'count call editCell');
@@ -2705,8 +2707,8 @@ QUnit.module('Editing', {
         sinon.spy(that.editingController, 'closeEditCell');
 
         // act
-        $testElement.find('td').eq(1).trigger('dxpointerdown');
-        $testElement.find('td').eq(1).trigger('dxclick');
+        $testElement.find('td').eq(1).trigger(pointerEvents.down);
+        $testElement.find('td').eq(1).trigger(clickEventName);
         that.clock.tick(10);
 
         // assert
@@ -2730,15 +2732,15 @@ QUnit.module('Editing', {
         rowsView.render($testElement);
 
         // act
-        $(this.getCellElement(0, 0)).trigger('dxdblclick');
+        $(this.getCellElement(0, 0)).trigger(dblClickEventName);
         this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.getCellElement(0, 0)).find('input').length, 1, 'has input');
 
         // act
-        $(this.getCellElement(0, 0)).trigger('dxpointerdown');
-        $(this.getCellElement(0, 1)).trigger('dxclick');
+        $(this.getCellElement(0, 0)).trigger(pointerEvents.down);
+        $(this.getCellElement(0, 1)).trigger(clickEventName);
         this.clock.tick(10);
 
         // assert
