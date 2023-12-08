@@ -527,7 +527,7 @@ module('Expanded items', {
         assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 111');
     });
 
-    QUnit.skip('onItemCollapsed event should be rised when collapseItem called after expandAll(T1202248)', function(assert) {
+    test('onItemCollapsed event should be rised when collapseItem called after expandAll(T1202248)', function(assert) {
         const itemCollapsedSpy = sinon.spy();
         const done = assert.async();
         assert.expect(1);
@@ -547,7 +547,6 @@ module('Expanded items', {
         const treeView = initTree({
             items: items,
             onItemCollapsed: itemCollapsedSpy,
-            animationEnabled: false
         }).dxTreeView('instance');
 
         treeView.on('contentReady', () => {
@@ -871,12 +870,38 @@ module('Expanded items', {
         treeView.expandAll();
     });
 
+    module('Expanded items. Fake timer', {
+        beforeEach() {
+            fx.off = true;
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach() {
+            fx.off = false;
+            this.clock.restore();
+        }
+    }, () => {
+        test('ui expand and collapse work correctly', function(assert) {
+            const data = $.extend(true, [], DATA[5]);
+            data[0].items[1].expanded = true;
+            const $treeView = initTree({
+                items: data
+            });
+            const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
+
+            $toggleExpandIcon.trigger('dxclick');
+            assert.ok(!$toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
+
+            $toggleExpandIcon.trigger('dxclick');
+            this.clock.tick(100);
+            assert.ok($toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
+        });
+    });
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
         [false, true].forEach((virtualModeEnabled) => {
-            QUnit.module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
+            module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
                 [false, true].forEach((expanded) => {
-                    QUnit.test('Initialization', function(assert) {
+                    test('Initialization', function(assert) {
                         const options = createOptions(
                             { virtualModeEnabled, dataSourceOption },
                             [{ id: 1, text: 'item1', parentId: 2, expanded }, { id: 2, text: 'item1_1', parentId: 1, expanded }]
@@ -910,18 +935,18 @@ module('Expanded items', {
                 }
 
                 [false, true].forEach((isExpanded) => {
-                    QUnit.test('expandItem($node)', function(assert) {
+                    test('expandItem($node)', function(assert) {
                         runExpandItemTest(assert, isExpanded, $parent => $parent);
                     });
-                    QUnit.test('expandItem(DOMElement)', function(assert) {
+                    test('expandItem(DOMElement)', function(assert) {
                         runExpandItemTest(assert, isExpanded, $parent => $parent.get(0));
                     });
-                    QUnit.test('expandItem(Key)', function(assert) {
+                    test('expandItem(Key)', function(assert) {
                         runExpandItemTest(assert, isExpanded, _ => 2);
                     });
                 });
 
-                QUnit.test('ExpandAll', function(assert) {
+                test('ExpandAll', function(assert) {
                     const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: false },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: false }]);
@@ -955,18 +980,18 @@ module('Expanded items', {
                 }
 
                 [false, true].forEach((expanded) => {
-                    QUnit.test('collapseItem($node)', function(assert) {
+                    test('collapseItem($node)', function(assert) {
                         runCollapseItemTest(assert, expanded, $parent => $parent);
                     });
-                    QUnit.test('collapseItem(DOMElement)', function(assert) {
+                    test('collapseItem(DOMElement)', function(assert) {
                         runCollapseItemTest(assert, expanded, $parent => $parent.get(0));
                     });
-                    QUnit.test('collapseItem(Key)', function(assert) {
+                    test('collapseItem(Key)', function(assert) {
                         runCollapseItemTest(assert, expanded, _ => 2);
                     });
                 });
 
-                QUnit.test('CollapseAll', function(assert) {
+                test('CollapseAll', function(assert) {
                     const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: true },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: true }]);
@@ -981,7 +1006,7 @@ module('Expanded items', {
                 });
             });
 
-            QUnit.test(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. ExpandItem(1) -> CollapseItem(1) -> repaint() -> expandItem(1) //T920415`, function(assert) {
+            test(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. ExpandItem(1) -> CollapseItem(1) -> repaint() -> expandItem(1) //T920415`, function(assert) {
                 const options = createOptions(
                     { virtualModeEnabled, dataSourceOption, rootValue: 0 },
                     [{ id: 1, text: 'item1', parentId: 0 }, { id: 2, text: 'item1_1', parentId: 1 }]
