@@ -140,11 +140,6 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
           }
 
           .dx-checkbox {
-            .dx-checkbox-icon::after {
-              background-color: color.change($checkbox-border-color, $alpha: 0.1);
-              transform: scale(1);
-            }
-
             &.dx-checkbox-checked,
             &.dx-checkbox-indeterminate {
               .dx-checkbox-icon::after {
