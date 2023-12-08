@@ -1,7 +1,6 @@
 $scheduler-base-border: null !default;
 $scheduler-base-border-color: null !default;
 $scheduler-workspace-accent-color: null !default;
-$scheduler-month-workspace-date-table-height: null !default;
 $scheduler-workspace-date-table-cell-height: null !default;
 $scheduler-month-date-text-size: null !default;
 $scheduler-workspace-month-text-color: null !default;
@@ -25,10 +24,6 @@ $scheduler-first-month-cell-background-color: null !default;
   .dx-scheduler-date-table-cell,
   .dx-scheduler-header-panel-cell {
     border-right: none;
-  }
-
-  .dx-scheduler-date-table-scrollable .dx-scrollable-content {
-    min-height: $scheduler-month-workspace-date-table-height;
   }
 
   &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-vertical-grouped) {
