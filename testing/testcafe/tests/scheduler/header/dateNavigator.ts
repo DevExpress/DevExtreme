@@ -142,4 +142,3 @@ test('Current date in navigator should be updated if scheduler currentDate is ch
   width: 600,
   height: 400,
 }));
-
