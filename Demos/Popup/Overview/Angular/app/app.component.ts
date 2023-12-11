@@ -33,12 +33,11 @@ export class AppComponent {
   positionOf: string;
 
   constructor(service: Service) {
-    const that = this;
     this.employees = service.getEmployees();
     this.moreInfoButtonOptions = {
       text: 'More info',
-      onClick(e) {
-        const message = `More info about ${that.currentEmployee.FirstName} ${that.currentEmployee.LastName}`;
+      onClick: () => {
+        const message = `More info about ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
         notify({
           message,
           position: {
@@ -52,8 +51,8 @@ export class AppComponent {
       icon: 'email',
       stylingMode: 'contained',
       text: 'Send',
-      onClick(e) {
-        const message = `Email is sent to ${that.currentEmployee.FirstName} ${that.currentEmployee.LastName}`;
+      onClick: () => {
+        const message = `Email is sent to ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
         notify({
           message,
           position: {
@@ -67,8 +66,8 @@ export class AppComponent {
       text: 'Close',
       stylingMode: 'outlined',
       type: 'normal',
-      onClick(e) {
-        that.popupVisible = false;
+      onClick: () => {
+        this.popupVisible = false;
       },
     };
   }
