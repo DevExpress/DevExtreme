@@ -51,3 +51,29 @@
   $fluent-treeview-container-padding,
   $fluent-treeview-load-indicator-size,
 );
+
+.dx-treeview-item-with-checkbox {
+  &.dx-state-focused {
+    >.dx-treeview-item {
+      .dx-checkbox {
+        .dx-checkbox-icon {
+          border-color: $checkbox-accent-color-focused;
+        }
+  
+        &.dx-checkbox-checked {
+          .dx-checkbox-icon {
+            background-color: $checkbox-accent-color-focused;
+          }
+        }
+  
+        &.dx-checkbox-indeterminate {
+          .dx-checkbox-icon {
+            &::before {
+              background-color: $checkbox-accent-color-focused;
+            }
+          }
+        }
+      }
+    }
+  }
+}

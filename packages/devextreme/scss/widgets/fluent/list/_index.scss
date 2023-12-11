@@ -198,27 +198,29 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
             border-color: $radiogroup-accent-color-active;
           }
 
-          .dx-checkbox-icon {
-            border-color: $checkbox-accent-color-focused;
+          .dx-checkbox {
+            .dx-checkbox-icon {
+              border-color: $checkbox-accent-color-focused;
+            }
+      
+            &.dx-checkbox-checked {
+              .dx-checkbox-icon {
+                background-color: $checkbox-accent-color-focused;
+              }
+            }
+      
+            &.dx-checkbox-indeterminate {
+              .dx-checkbox-icon {
+                &::before {
+                  background-color: $checkbox-accent-color-focused;
+                }
+              }
+            }
           }
 
           .dx-radiobutton-checked {
             .dx-radiobutton-icon-dot {
               background-color: $radiogroup-accent-color-active;
-            }
-          }
-
-          .dx-checkbox-checked {
-            .dx-checkbox-icon {
-              background-color: $checkbox-accent-color-focused;
-            }
-          }
-
-          .dx-checkbox-indeterminate {
-            .dx-checkbox-icon {
-              &::before {
-                background-color: $checkbox-accent-color-focused;
-              }
             }
           }
         }
