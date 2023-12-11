@@ -1392,6 +1392,9 @@ export const BaseChart = BaseWidget.inherit({
   },
 
   _stopCurrentHandling() {
+    if (this._disposed) {
+      return;
+    }
     this._tracker.stopCurrentHandling();
   },
 });
