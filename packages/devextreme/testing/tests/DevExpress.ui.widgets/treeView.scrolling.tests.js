@@ -5,12 +5,9 @@ import {
     SCROLLABLE_SIMULATED_CLASS,
     SCROLLABLE_NATIVE_CLASS
 } from './scrollableParts/scrollable.constants.js';
-import devices from 'core/devices';
 import 'ui/tree_view';
 
 import 'generic_light.css!';
-
-const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 
 const { testStart } = QUnit;
 
@@ -228,30 +225,6 @@ QUnit.module('useNativeScrolling', () => {
 
         assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
         assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
-    });
-
-    QUnit.test('tabindex for first node container', function(assert) {
-        const wrapper = new TreeViewTestWrapper({
-            items: [
-                { id: 'item1' },
-                { id: 'item2' },
-                { id: 'item3' },
-            ],
-            useNativeScrolling: true,
-        });
-        const $treeView = wrapper.getElement();
-
-        let $nodeContainer = $treeView.find(`.${NODE_CONTAINER_CLASS}`).first();
-
-        const isIOS = devices.real().ios;
-
-        assert.strictEqual($nodeContainer.attr('tabindex'), isIOS ? '0' : undefined);
-
-        wrapper.instance.option({ height: 100 });
-
-        $nodeContainer = $treeView.find(`.${NODE_CONTAINER_CLASS}`).first();
-
-        assert.strictEqual($nodeContainer.attr('tabindex'), isIOS ? '0' : undefined);
     });
 });
 

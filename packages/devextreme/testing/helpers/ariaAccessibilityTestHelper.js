@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import { isDefined } from 'core/utils/type';
 import CheckBox from 'ui/check_box';
-import devices from 'core/devices';
 
 const { assert } = QUnit;
 
@@ -125,17 +124,9 @@ class ariaAccessibilityTestHelper {
     }
 
     _checkGroupNodeAttributes(index) {
-        const isIOS = devices.real().ios;
-        const attrs = { role: 'group' };
-
         const $nodeContainer = this.getItems().eq(index).closest('.dx-treeview-node-container').eq(0);
-        const $firstNodeContainer = this.$widget.find('.dx-treeview-node-container').first();
 
-        if(isIOS && $nodeContainer.get(0) === $firstNodeContainer.get(0)) {
-            attrs.tabindex = '0';
-        }
-
-        this.checkAttributes($nodeContainer, attrs, `nodeContainer[${index}]`);
+        this.checkAttributes($nodeContainer, { role: 'group' }, `nodeContainer[${index}]`);
     }
 
     _checkAttribute(options, index, defaultValue) {

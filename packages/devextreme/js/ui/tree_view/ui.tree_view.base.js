@@ -21,12 +21,7 @@ import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
 import { nativeScrolling } from '../../core/utils/support';
 import { getRelativeOffset } from '../../renovation/ui/scroll_view/utils/get_relative_offset';
-import {
-    SCROLLABLE_CONTAINER_CLASS,
-    SCROLLABLE_CONTENT_CLASS,
-    DIRECTION_HORIZONTAL,
-    DIRECTION_VERTICAL,
-} from '../../renovation/ui/scroll_view/common/consts';
+import { SCROLLABLE_CONTENT_CLASS, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
 import { getImageContainer } from '../../core/utils/icon';
 
 const WIDGET_CLASS = 'dx-treeview';
@@ -353,10 +348,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'collapseIcon':
                 this.repaint();
                 break;
-            case 'height':
-                this.callBase(args);
-                this._setTabIndexToFirstNodeContainer();
-                break;
             default:
                 this.callBase(args);
         }
@@ -593,26 +584,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.callBase();
 
         this._setAriaRoleToElement();
-        this._setTabIndexToFirstNodeContainer();
-    },
-
-    _setTabIndexToFirstNodeContainer() {
-        const $scrollableContainer = this.$element().find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-        const $scrollableContent = this.$element().find(`.${SCROLLABLE_CONTENT_CLASS}`);
-
-        const scrollableContentHeight = getHeight($scrollableContent);
-        const scrollableContainerHeight = getHeight($scrollableContainer);
-
-        const isContentHeightExceeded = scrollableContentHeight > scrollableContainerHeight;
-
-        if(!isContentHeightExceeded) {
-            return;
-        }
-
-        const { tabIndex } = this.option();
-        const $nodeContainer = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
-
-        $nodeContainer.attr({ tabindex: tabIndex });
     },
 
     _setAriaRoleToElement() {
