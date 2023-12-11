@@ -570,6 +570,11 @@ const TextEditorMask = TextEditorBase.inherit({
         }
     },
 
+    _dispose: function() {
+        clearTimeout(this._caretTimeout);
+        this.callBase();
+    },
+
     clear: function() {
         if(this._maskRulesChain) {
             this._maskRulesChain.clear(this._normalizeChainArguments());
