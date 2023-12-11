@@ -2353,4 +2353,22 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsItemName(0), newFileName, '1st file is still in the initial dir');
         assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
     });
+
+    test('create folder in items area (T1202022)', function(assert) {
+        fx.off = false;
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+
+        $('.dx-overlay-shader').trigger('dxpointerdown');
+        this.clock.tick(50); // kinda quick click
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNode = this.wrapper.getFolderNode(4);
+        assert.equal($folderNode.find('span').text(), 'Untitled directory', 'folder created');
+        assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        fx.off = true;
+    });
 });
