@@ -1613,6 +1613,24 @@ const environment = {
         }
     });
 
+    QUnit.test('There is no error when _stopCurrentHandling is called after dispose (T1200461)', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+
+        const chart = this.createChart({
+            series: [{ type: 'line' }]
+        });
+
+        this.$container.remove();
+
+        try {
+            chart._stopCurrentHandling({});
+
+            assert.ok(true, 'should be no exceptions');
+        } catch(e) {
+            assert.ok(false, 'Exception rised');
+        }
+    });
+
     // T1063025
     QUnit.test('mousedown handling when chart disposed', function(assert) {
         $(domAdapter.getDocument()).on('dxpointerdown', () => {
