@@ -33,10 +33,6 @@
       height: $fluent-toolbar-height;
     }
   }
-
-  .dx-toolbar-item .dx-item-content {
-    display: flex;
-  }
 }
 
 .dx-toolbar-after {
@@ -173,5 +169,10 @@
     .dx-button {
       @include dx-button-onlyicon-sizing();
     }
+  }
+
+  .dx-switch {
+    display: block;
+    line-height: 0;
   }
 }
