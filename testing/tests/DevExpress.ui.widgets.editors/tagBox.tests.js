@@ -4685,6 +4685,39 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
         assert.strictEqual($tags.length, 2, 'only two tags are added');
         assert.deepEqual(tagBoxInstance.option('selectedItems'), ['custom', 1], 'selected items are correct');
     });
+
+    QUnit.test('The editor must have the actual value after this value has been entered following its deletion(T1197444)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            acceptCustomValue: true,
+            searchEnabled: false,
+            openOnFieldClick: false,
+            onCustomItemCreating: function(args) {
+                const newValue = args.text;
+                const component = args.component;
+                const currentItems = component.option('items');
+                currentItems.unshift(newValue);
+                component.option('items', currentItems);
+                args.customItem = newValue;
+            }
+        });
+
+        const tagBoxInstance = $tagBox.dxTagBox('instance');
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        $input.trigger('change');
+
+        $(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)
+            .last()
+            .trigger('dxclick');
+
+        keyboard.type('1');
+        $input.trigger('change');
+
+        assert.deepEqual(tagBoxInstance.option('value'), ['1']);
+    });
 });
 
 QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
@@ -4784,7 +4817,7 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         $(`.${LIST_CHECKBOX_CLASS}`).first().trigger('dxclick');
-        $('.dx-tag-remove-button').last().trigger('dxclick');
+        $(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).last().trigger('dxclick');
 
         $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
@@ -4921,7 +4954,7 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
             onSelectionChanged: spy
         }).dxTagBox('instance');
 
-        const $removeButtons = tagBox.$element().find('.dx-tag-remove-button');
+        const $removeButtons = tagBox.$element().find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`);
 
         $($removeButtons.eq(2)).trigger('dxclick');
 
@@ -6693,7 +6726,7 @@ QUnit.module('performance', () => {
         let filter = load.lastCall.args[0].filter;
         assert.deepEqual(filter, [['!', ['id', 1]]], 'filter is correct');
 
-        $($tagBox.find('.dx-tag-remove-button').eq(0)).trigger('dxclick');
+        $($tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
 
         filter = load.lastCall.args[0].filter;
         assert.deepEqual(filter, null, 'filter is correct');
