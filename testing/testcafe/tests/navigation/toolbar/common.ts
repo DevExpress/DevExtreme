@@ -9,7 +9,9 @@ import Toolbar from '../../../model/toolbar/toolbar';
 fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
-const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+const supportedWidgets = [
+  'dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton',
+];
 
 ['never', 'always', 'auto'].forEach((locateInMenu) => {
   [true, false].forEach((rtlEnabled) => {
@@ -152,6 +154,15 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
         location: 'before',
         locateInMenu,
         widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'contained',
+          text: 'opts.stylingMode: contained',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu,
+        widget: 'dxSwitch',
         options: {
           stylingMode: 'contained',
           text: 'opts.stylingMode: contained',
