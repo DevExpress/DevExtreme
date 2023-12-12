@@ -79,7 +79,7 @@ export default function App() {
     [onZoomLevelChange],
   );
   return (
-    <div id="container">
+    <div id="calendar-demo">
       <div className="calendar-container">
         <Calendar
           value={currentValue}

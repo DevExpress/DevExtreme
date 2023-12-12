@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div id="calendar-demo">
     <div class="calendar-container">
       <DxCalendar
         v-model:value="currentValue"
@@ -134,7 +134,7 @@ function getCellCssClass({ date, view }) {
 }
 </script>
 <style scoped>
-#container {
+#calendar-demo {
   display: flex;
 }
 

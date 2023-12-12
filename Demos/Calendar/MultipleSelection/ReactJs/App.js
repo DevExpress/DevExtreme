@@ -55,7 +55,7 @@ export default function App() {
     calendar.current.instance.clear();
   }, []);
   return (
-    <div id="container">
+    <div id="calendar-demo">
       <div className="calendar-container">
         <Calendar
           ref={calendar}

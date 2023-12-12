@@ -53,7 +53,7 @@ export default function App() {
   }, []);
 
   return (
-    <div id="container">
+    <div id="calendar-demo">
       <div className="calendar-container">
         <Calendar
           ref={calendar}

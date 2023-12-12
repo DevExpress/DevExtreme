@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div id="calendar-demo">
     <div class="calendar-container">
       <DxCalendar
         ref="calendarRef"
@@ -106,7 +106,7 @@ function clearValue() {
 
 </script>
 <style scoped>
-#container {
+#calendar-demo {
   display: flex;
 }
 
