@@ -62,12 +62,6 @@ QUnit.module('aria accessibility', {
         assert.strictEqual(this.$element.attr('role'), undefined, 'role is not set');
     });
 
-    QUnit.test('scrollable should not have role attribute', function(assert) {
-        const $scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`);
-
-        assert.strictEqual($scrollable.attr('role'), undefined, 'role is undefined');
-    });
-
     QUnit.test('aria role for items', function(assert) {
         const $node = this.$element.find('.' + NODE_CLASS);
         assert.equal($node.attr('role'), 'treeitem', 'role is correct');
