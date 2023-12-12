@@ -49,7 +49,7 @@ class FileManagerDialogBase extends Widget {
             onInitialized: ({ component }) => {
                 component.registerKeyHandler('enter', this._applyDialogChanges.bind(this));
             },
-            onHidden: this._onPopupHidden.bind(this),
+            onHiding: this._onPopupHiding.bind(this),
             onShown: this._onPopupShown.bind(this),
             _wrapperClassExternal: `${FILE_MANAGER_DIALOG_POPUP} ${options.popupCssClass ?? ''}`
         };
@@ -104,7 +104,7 @@ class FileManagerDialogBase extends Widget {
         this._popup.hide();
     }
 
-    _onPopupHidden() {
+    _onPopupHiding() {
         this._onClosedAction({ dialogResult: this._dialogResult });
     }
 
