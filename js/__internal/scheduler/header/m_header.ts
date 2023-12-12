@@ -83,7 +83,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
         }]],
         ['items', [this.repaint.bind(this)]],
         ['views', [validateViews]],
-        ['currentDate', [this._getCalendarOptionUpdater('date')]],
+        ['currentDate', [this._getCalendarOptionUpdater('value')]],
         ['min', [this._getCalendarOptionUpdater('min')]],
         ['max', [this._getCalendarOptionUpdater('max')]],
         ['tabIndex', [this.repaint.bind(this)]],
