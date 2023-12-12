@@ -6,6 +6,7 @@ import caretWorkaround from './caretWorkaround.js';
 import 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -1781,6 +1782,41 @@ QUnit.module('clear button', () => {
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('Input should has empty class when mask with values set', function(assert) {
+        const $element = $('#texteditor').dxTextEditor({
+            mask: '43#.###',
+            showClearButton: true
+        });
+
+        assert.ok($element.hasClass(EMPTY_INPUT_CLASS));
+    });
+
+    QUnit.test('Input should has valid value after input text & focusout', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '43#.###',
+            showClearButton: true
+        });
+
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        $input.triggerHandler('focus');
+
+        caretWorkaround($input);
+        keyboard.caret(0);
+
+        keyboard.type('9');
+
+        const $clearButton = $textEditor.find('.dx-clear-button-area');
+
+        $clearButton.trigger('dxclick');
+        $input.trigger('focusout');
+
+        assert.strictEqual(textEditor.option('value'), '');
     });
 });
 

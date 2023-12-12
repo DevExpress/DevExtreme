@@ -179,6 +179,14 @@ const TextEditorMask = TextEditorBase.inherit({
         this._$hiddenElement && this._$hiddenElement.remove();
     },
 
+    _toggleEmptinessEventHandler() {
+        const text = this._input().val();
+        const maskText = this._sourceMaskText;
+        const isEmpty = (text === '' || text === null || text === maskText) && this._isValueValid();
+
+        this._toggleEmptiness(isEmpty);
+    },
+
     _renderMask: function() {
         this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
@@ -212,6 +220,7 @@ const TextEditorMask = TextEditorBase.inherit({
     _parseMask: function() {
         this._maskRules = extend({}, buildInMaskRules, this.option('maskRules'));
         this._maskRulesChain = this._parseMaskRule(0);
+        this._sourceMaskText = this._maskRulesChain.text();
     },
 
     _parseMaskRule: function(index) {
@@ -346,8 +355,7 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _handleChain: function(args) {
         const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
-        this._value = this._maskRulesChain.value();
-        this._textValue = this._maskRulesChain.text();
+        this._updateMaskInfo();
         return handledCount;
     },
 
@@ -492,6 +500,11 @@ const TextEditorMask = TextEditorBase.inherit({
         return this._direction() === FORWARD_DIRECTION;
     },
 
+    _updateMaskInfo() {
+        this._textValue = this._maskRulesChain.text();
+        this._value = this._maskRulesChain.value();
+    },
+
     _clean: function() {
         this._maskStrategy && this._maskStrategy.clean();
         this.callBase();
@@ -578,6 +591,7 @@ const TextEditorMask = TextEditorBase.inherit({
     clear: function() {
         if(this._maskRulesChain) {
             this._maskRulesChain.clear(this._normalizeChainArguments());
+            this._updateMaskInfo();
             const caret = this._maskRulesChain.first();
             this._caretTimeout = setTimeout(() => {
                 this._caret({ start: caret, end: caret });
