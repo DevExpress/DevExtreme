@@ -170,4 +170,9 @@
       @include dx-button-onlyicon-sizing();
     }
   }
+
+  .dx-switch {
+    display: block;
+    line-height: 0;
+  }
 }

@@ -33,6 +33,10 @@
       height: $material-toolbar-height;
     }
   }
+
+  .dx-toolbar-item .dx-item-content {
+    display: flex;
+  }
 }
 
 .dx-toolbar-after {
