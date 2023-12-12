@@ -5183,6 +5183,13 @@ declare module DevExpress.data {
      */
     loadMode?: 'processed' | 'raw';
     /**
+     * [descr:CustomStoreOptions.onLoaded]
+     */
+    onLoaded?: (
+      result: DevExpress.common.LoadResult<TItem>,
+      loadOptions: LoadOptions<TItem>
+    ) => void;
+    /**
      * [descr:CustomStoreOptions.remove]
      */
     remove?: (key: TKey) => PromiseLike<void>;
