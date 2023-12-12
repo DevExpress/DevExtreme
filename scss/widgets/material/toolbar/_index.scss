@@ -37,10 +37,6 @@
       height: $material-toolbar-height;
     }
   }
-
-  .dx-toolbar-item .dx-item-content {
-    display: flex;
-  }
 }
 
 .dx-toolbar-after {
@@ -194,6 +190,11 @@
         background-color: $button-normal-focused-bg;
       }
     }
+  }
+
+  .dx-switch {
+    display: block;
+    line-height: 0;
   }
 }
 
