@@ -179,14 +179,6 @@ const TextEditorMask = TextEditorBase.inherit({
         this._$hiddenElement && this._$hiddenElement.remove();
     },
 
-    _toggleEmptinessEventHandler() {
-        const text = this._input().val();
-        const maskText = this._sourceMaskText;
-        const isEmpty = (text === '' || text === null || text === maskText) && this._isValueValid();
-
-        this._toggleEmptiness(isEmpty);
-    },
-
     _renderMask: function() {
         this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
@@ -220,7 +212,6 @@ const TextEditorMask = TextEditorBase.inherit({
     _parseMask: function() {
         this._maskRules = extend({}, buildInMaskRules, this.option('maskRules'));
         this._maskRulesChain = this._parseMaskRule(0);
-        this._sourceMaskText = this._maskRulesChain.text();
     },
 
     _parseMaskRule: function(index) {

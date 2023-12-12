@@ -6,7 +6,6 @@ import caretWorkaround from './caretWorkaround.js';
 import 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -1782,15 +1781,6 @@ QUnit.module('clear button', () => {
         } finally {
             clock.restore();
         }
-    });
-
-    QUnit.test('Input should has empty class when mask with values set', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({
-            mask: '43#.###',
-            showClearButton: true
-        });
-
-        assert.ok($element.hasClass(EMPTY_INPUT_CLASS));
     });
 
     QUnit.test('Input should has valid value after input text & focusout', function(assert) {
