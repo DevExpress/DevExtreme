@@ -16,7 +16,6 @@ export type WidgetName =
 | 'dxTabPanel'
 | 'dxForm'
 | 'dxFilterBuilder'
-| 'dxTabPanel'
 | 'dxSelectBox'
 | 'dxScrollable'
 | 'dxScrollView'
@@ -36,13 +35,11 @@ export type WidgetName =
 | 'dxMenu'
 | 'dxPopup'
 | 'dxPopover'
-| 'dxSelectBox'
 | 'dxSpeedDialAction'
 | 'dxSortable'
 | 'dxButton'
 | 'dxTextBox'
 | 'dxTextArea'
-| 'dxTagBox'
 | 'dxToolbar'
 | 'dxTreeView'
 | 'dxDateBox'
@@ -53,10 +50,10 @@ export type WidgetName =
 | 'dxHtmlEditor'
 | 'dxNumberBox'
 | 'dxValidator'
-| 'dxHtmlEditor'
 | 'dxFileUploader'
 | 'dxSlider'
-| 'dxDropDownBox';
+| 'dxDropDownBox'
+| 'dxFileManager';
 
 interface WidgetOptions {
   dxDataGrid: DataGridProperties;
