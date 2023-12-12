@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
-import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
+import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -10,7 +10,7 @@ import { dataOptions } from './virtualDataOptions.js';
 import PivotGrid from '../../model/pivotGrid';
 
 const testFixture = () => {
-  if (isMaterial()) {
+  if (isMaterialBased()) {
     return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;
