@@ -135,7 +135,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '120.0.6099.71'
+        chrome-version: '120.0.6099.109'
 
     - name: Use Node.js
       uses: actions/setup-node@v3
