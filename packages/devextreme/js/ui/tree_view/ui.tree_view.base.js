@@ -577,11 +577,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         };
     },
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderScrollableContainer();
         this._renderEmptyMessage(this._dataAdapter.getRootNodes());
+
         this.callBase();
-        this.setAria('role', 'tree');
+
+        this._setAriaRole();
+    },
+
+    _setAriaRole() {
+        const { items } = this.option();
+
+        if(items?.length) {
+            this.setAria({ role: 'tree' });
+        }
     },
 
     _renderContentImpl: function() {
@@ -635,8 +645,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             direction: this.option('scrollDirection'),
             useKeyboard: false
         });
-
-        this.setAria('role', 'treeitem', this._scrollable.$element());
     },
 
     _renderNodeContainer: function($parent) {

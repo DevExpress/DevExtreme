@@ -55,13 +55,11 @@ QUnit.module('aria accessibility', {
     }
 }, () => {
     QUnit.test('aria role', function(assert) {
-        assert.equal(this.$element.attr('role'), 'tree', 'role is correct');
-    });
+        assert.strictEqual(this.$element.attr('role'), 'tree', 'role is correct');
 
-    QUnit.test('scrollable should have role treeitem attribute', function(assert) {
-        const $scrollable = this.$element.find('.' + SCROLLABLE_CLASS);
+        this.instance.option({ items: [] });
 
-        assert.equal($scrollable.attr('role'), 'treeitem', 'role is correct');
+        assert.strictEqual(this.$element.attr('role'), undefined, 'role is not set');
     });
 
     QUnit.test('aria role for items', function(assert) {
