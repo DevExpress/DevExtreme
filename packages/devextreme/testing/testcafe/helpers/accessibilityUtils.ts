@@ -2,15 +2,17 @@
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import { ElementContext, RunOptions } from 'axe-core';
 
+export { ElementContext };
+
+export interface A11yCheckOptions extends RunOptions {
+  runOnly?: any;
+}
+
 const defaultOptions = {
   rules: {
     'color-contrast': { enabled: false },
   },
 };
-
-interface A11yCheckOptions extends RunOptions {
-  runOnly?: any;
-}
 
 export const a11yCheck = async (
   t: TestController,

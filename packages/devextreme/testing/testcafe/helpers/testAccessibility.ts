@@ -1,13 +1,16 @@
 import createWidget, { WidgetName } from './createWidget';
-import { a11yCheck } from './accessibilityUtils';
+import { a11yCheck, A11yCheckOptions, ElementContext } from './accessibilityUtils';
 
-interface Options {
+export interface Options {
   [key: string]: any[] | string;
 }
 
 interface Configuration {
+  testName: string;
   component: WidgetName;
   options?: Options;
+  a11yCheckConfig?: A11yCheckOptions;
+  selector?: ElementContext;
   before?: (optionConfiguration: any) => Promise<void>;
   after?: (optionConfiguration: any) => Promise<void>;
 }
@@ -15,15 +18,6 @@ interface Configuration {
 const defaultOptions = {};
 const defaultBefore = async () => {};
 const defaultAfter = async () => {};
-
-const exampleOptions: Options = {
-  height: [undefined, 320],
-  items: [[], [{ title: 1 }, { title: 2 }]],
-  searchEnabled: [true, false],
-  showCheckBoxesMode: ['none', 'normal', 'selectAll'],
-  noDataText: [null, 'no data text'],
-  displayExpr: 'fullName',
-};
 
 const generateConfigurations = (
   options: Options,
@@ -75,8 +69,11 @@ const getOptionConfigurations = (options: Options | undefined) => {
 
 export const testAccessibility = (configuration: Configuration): void => {
   const {
+    testName,
     component,
     options,
+    a11yCheckConfig,
+    selector,
     before = defaultBefore,
     after = defaultAfter,
   } = configuration;
@@ -84,8 +81,8 @@ export const testAccessibility = (configuration: Configuration): void => {
   const optionConfigurations = getOptionConfigurations(options);
 
   optionConfigurations.forEach((optionConfiguration: Options) => {
-    test('testAccessibility', async (t) => {
-      await a11yCheck(t);
+    test(`${testName} ${String(optionConfiguration)}`, async (t) => {
+      await a11yCheck(t, a11yCheckConfig, selector);
     }).before(async () => {
       await createWidget(
         component,
@@ -96,8 +93,3 @@ export const testAccessibility = (configuration: Configuration): void => {
     }).after(async () => { await after(optionConfiguration); });
   });
 };
-
-testAccessibility({
-  component: 'dxTreeView',
-  options: exampleOptions,
-});
