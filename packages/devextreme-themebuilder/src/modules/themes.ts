@@ -127,6 +127,18 @@ const themes: Theme[] = [
   {
     themeId: 54, name: 'fluent', colorScheme: 'blue-dark-compact', text: 'Blue Dark Compact', group: 'Fluent Design (Compact)',
   },
+  {
+    themeId: 55, name: 'fluent', colorScheme: 'saas-light', text: 'SaaS Light', group: 'Fluent Design',
+  },
+  {
+    themeId: 56, name: 'fluent', colorScheme: 'saas-dark', text: 'SaaS Dark', group: 'Fluent Design',
+  },
+  {
+    themeId: 57, name: 'fluent', colorScheme: 'saas-light-compact', text: 'SaaS Light Compact', group: 'Fluent Design (Compact)',
+  },
+  {
+    themeId: 58, name: 'fluent', colorScheme: 'saas-dark-compact', text: 'SaaS Dark Compact', group: 'Fluent Design (Compact)',
+  },
 ];
 
 export default themes;

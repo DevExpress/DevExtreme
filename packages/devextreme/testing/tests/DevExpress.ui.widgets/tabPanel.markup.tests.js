@@ -105,8 +105,8 @@ QUnit.module('TabPanel items', () => {
 
         tabPanel.option('items[0].title', 'test');
 
-        assert.equal($tabPanel.find(toSelector(TABS_ITEM_CLASS)).eq(0).text(),
-            'test', 'option <items> of nested tabs widget successfully changed - tabs were rerendered');
+        assert.strictEqual($tabPanel.find(toSelector(TABS_ITEM_CLASS)).eq(0).text(),
+            'testtest', 'option <items> of nested tabs widget successfully changed - tabs were rerendered');
     });
 
     QUnit.test('itemTitleTemplate rendering test', function(assert) {
@@ -154,14 +154,14 @@ QUnit.module('TabPanel items', () => {
     });
 
     [
-        { title: 'text', expected: 'text' },
-        { title: 'text<i>text</i>', expected: 'text<i>text</i>' },
+        { title: 'text', expected: 'texttext' },
+        { title: 'text<i>text</i>', expected: 'text<i>text</i>text<i>text</i>' },
         { title: null, expected: '' },
         { title: undefined, expected: '' },
         { title: '', expected: '' },
-        { title: 0, expected: '0' },
-        { title: 1, expected: '1' },
-        { title: new Date(2019, 10, 13), expected: String(new Date(2019, 10, 13)) },
+        { title: 0, expected: '00' },
+        { title: 1, expected: '11' },
+        { title: new Date(2019, 10, 13), expected: `${new Date(2019, 10, 13)}${new Date(2019, 10, 13)}` },
         { title: { value: 'title' }, expected: '' }
     ].forEach((value) => {
         QUnit.test(`DefaultTemplate: title template property - ${value.title}`, function(assert) {

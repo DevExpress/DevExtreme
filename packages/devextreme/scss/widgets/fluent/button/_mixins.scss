@@ -99,10 +99,6 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
       color: $text-color-active;
     }
   }
-
-  .dx-inkripple-wave {
-    background-color: color.change($text-color, $alpha: 0.2);
-  }
 }
 
 @mixin dx-button-styling(

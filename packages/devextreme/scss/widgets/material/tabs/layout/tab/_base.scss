@@ -52,12 +52,20 @@
     line-height: $material-tab-text-line-height;
     font-weight: 500;
     text-transform: uppercase;
+
+    .dx-tab-text-span-pseudo {
+      display: none;
+    }
   }
 
   .dx-icon {
     color: $tabs-tab-icon-color;
 
     @include dx-icon-sizing($material-tabs-icon-size);
+  }
+
+  .dx-tabs-item-badge {
+    align-self: center;
   }
 }
 

@@ -77,11 +77,11 @@ QUnit.module('render', {
         });
 
         const items = this.element.find('.' + TOOLBAR_ITEM_CLASS);
-        assert.equal(items.length, 3);
+        assert.strictEqual(items.length, 3);
 
-        assert.equal(items.eq(0).text(), 'Before Button');
-        assert.equal(items.eq(1).text(), 'Tab 1Tab 2Tab 3');
-        assert.equal(items.eq(2).text(), 'After Button');
+        assert.strictEqual(items.eq(0).text(), 'Before Button');
+        assert.strictEqual(items.eq(1).text(), 'Tab 1Tab 1Tab 2Tab 2Tab 3Tab 3');
+        assert.strictEqual(items.eq(2).text(), 'After Button');
 
     });
 
@@ -417,9 +417,9 @@ QUnit.module('default template', () => {
 
         const tabs = $content.filter('.dx-tabs');
 
-        assert.equal(tabs.length, 1);
-        assert.equal(tabs.find('.dx-tab').length, 1);
-        assert.equal($.trim(tabs.text()), 'test');
+        assert.strictEqual(tabs.length, 1);
+        assert.strictEqual(tabs.find('.dx-tab').length, 1);
+        assert.strictEqual($.trim(tabs.text()), 'testtest');
     });
 
     test('template should be rendered correctly with tabs', function(assert) {
@@ -427,8 +427,8 @@ QUnit.module('default template', () => {
 
         const tabs = $content.filter('.dx-tabs');
 
-        assert.equal(tabs.length, 1);
-        assert.equal(tabs.find('.dx-tab').length, 1);
-        assert.equal($.trim(tabs.text()), 'test');
+        assert.strictEqual(tabs.length, 1);
+        assert.strictEqual(tabs.find('.dx-tab').length, 1);
+        assert.strictEqual($.trim(tabs.text()), 'testtest');
     });
 });

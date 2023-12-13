@@ -158,6 +158,10 @@ export function validateLicense(licenseKey: string, version: string = packageVer
   }
 }
 
+export function peekValidationPerformed(): boolean {
+  return validationPerformed;
+}
+
 export function setLicenseCheckSkipCondition(value = true): void {
   /// #DEBUG
   validationPerformed = value;

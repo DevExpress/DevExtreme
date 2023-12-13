@@ -86,8 +86,13 @@
 
   .dx-tab-text {
     column-gap: $generic-tabs-icon-margin;
+    row-gap: $generic-tabs-item-gap;
     color: $tabs-tab-color;
     line-height: $generic-tab-text-line-height;
+
+    .dx-tab-text-span-pseudo {
+      display: none;
+    }
   }
 
   .dx-icon {
@@ -97,6 +102,7 @@
   }
 
   .dx-tabs-item-badge {
+    align-self: center;
     min-width: $generic-badge-min-size;
     min-height: $generic-badge-min-size;
   }

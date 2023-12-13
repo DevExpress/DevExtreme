@@ -140,9 +140,9 @@
 }
 
 .dx-state-disabled {
-  color: $base-foreground-disabled;
-  
   .dx-radiobutton {
+    color: $base-foreground-disabled;
+
     .dx-radiobutton-icon {
       border-color: $base-foreground-disabled;
     }

@@ -620,9 +620,10 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok($scrollable.find('.' + TABS_ITEM_CLASS).length, 'items wrapped into scrollable');
     });
 
-    QUnit.test('tabs should not be wrapped into scrollable after orientation runtime changing if component width more than total tabs width', function(assert) {
+    QUnit.test('tabs should be wrapped into scrollable after orientation runtime changing', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }],
+            showNavButtons: false,
             scrollingEnabled: true,
             orientation: 'vertical',
             width: 500,
@@ -634,7 +635,7 @@ QUnit.module('Horizontal scrolling', () => {
 
         instance.option({ orientation: 'horizontal' });
 
-        assert.strictEqual($element.children(`.${SCROLLABLE_CLASS}`).length, 0, 'scroll was removed');
+        assert.strictEqual($element.children(`.${SCROLLABLE_CLASS}`).length, 1, 'scroll was not removed');
     });
 
     QUnit.test('tabs should be wrapped into scrollable for some disabled items', function(assert) {
@@ -649,13 +650,17 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok($scrollable.find('.' + TABS_ITEM_CLASS).length, 'items wrapped into scrollable');
     });
 
-    QUnit.test('tabs should not be wrapped into scrollable for some invisible items', function(assert) {
+    QUnit.test('scrollable width is equal to component width if there are invisible items there', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
+            showNavButtons: false,
+            scrollingEnabled: true,
             items: [{ text: 'item 1' }, { text: 'item 2', visible: false }, { text: 'item 3', visible: false }, { text: 'item 4', visible: false }],
-            width: 200
+            width: 200,
         });
 
-        assert.notOk(!!$element.children('.' + SCROLLABLE_CLASS).length, 'no scroll for invisible items');
+        const scrollableWidth = $element.children(`.${SCROLLABLE_CLASS}`).width();
+
+        assert.strictEqual(scrollableWidth, 200);
     });
 
     QUnit.test('scrollable should have correct option scrollByContent', function(assert) {
@@ -906,15 +911,16 @@ QUnit.module('Horizontal scrolling', () => {
         instance.option('selectedIndex', 3);
     });
 
-    QUnit.test('tabs should not be wrapped into scrollable if all items are visible', function(assert) {
+    QUnit.test('tabs should be wrapped into scrollable if all items are visible', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }],
             scrollingEnabled: true,
-            width: 250
+            showNavButtons: false,
+            width: 250,
         });
-        const $scrollable = $element.children('.' + SCROLLABLE_CLASS);
+        const $scrollable = $element.children(`.${SCROLLABLE_CLASS}`);
 
-        assert.equal($scrollable.length, 0, 'scroll was not created');
+        assert.strictEqual($scrollable.length, 1, 'scroll was created');
     });
 
     QUnit.test('left button should be disabled if scrollPosition == 0', function(assert) {
