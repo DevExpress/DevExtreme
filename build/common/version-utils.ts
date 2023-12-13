@@ -18,19 +18,25 @@ export function updateVersion(version: string | undefined): void {
   sh.exec('npm i');
 }
 
-export function formatVersion(version: string| undefined): string | undefined {
+export function formatVersion(version: string | undefined): string | undefined {
   return version?.match(/(\d+\.\d+\.\d+)(\D|$)/)?.[1];
 }
 
+const MSECS_IN_MIN = 1000 * 60;
+const MINS_IN_DAY = 60 * 24;
+
 function getDayNumber(date: Date): number {
+  const start = new Date(date.getFullYear(), 0, 0);
   return Math.floor(
-    (date.getTime() - new Date(date.getFullYear(), 0, 0).getTime() - 1) / 1000 / 60 / 60 / 24,
+    ((date.getTime() - start.getTime()) + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 1000 * 60) / MSECS_IN_MIN / MINS_IN_DAY,
   );
 }
 
 export function makeTimestampVersion(baseVersion: string | undefined, date: Date): string | undefined {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
-  const timestampVersion = `${baseVersion}-build-${date.getFullYear() % 100}${getDayNumber(date)}-${hours}${minutes}`;
+  const year = (date.getFullYear() % 100).toString().padStart(2, '0');
+  const day = getDayNumber(date).toString().padStart(3, '0');
+  const timestampVersion = `${baseVersion}-build-${year}${day}-${hours}${minutes}`;
   return timestampVersion;
 }
