@@ -3,7 +3,7 @@ import { testAccessibility, Options } from '../../../helpers/testAccessibility';
 import { isMaterialBased } from '../../../helpers/themeUtils';
 import { employees } from './data';
 
-fixture`TreeView: Common tests with axe`
+fixture`TreeView`
   .page(url(__dirname, '../../container.html'));
 
 const options: Options = {
@@ -23,7 +23,7 @@ const a11yCheckConfig = isMaterialBased() ? {
 } : {};
 
 testAccessibility({
-  testName: 'TreeView a11y:',
+  testName: 'Testing with axe',
   component: 'dxTreeView',
   options,
   a11yCheckConfig,

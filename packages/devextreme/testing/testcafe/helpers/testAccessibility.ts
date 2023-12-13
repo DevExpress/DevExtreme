@@ -77,7 +77,7 @@ export const testAccessibility = (configuration: Configuration): void => {
   const optionConfigurations = getOptionConfigurations(options);
 
   optionConfigurations.forEach((optionConfiguration: Options) => {
-    test(`${testName} ${String(optionConfiguration)}`, async (t) => {
+    test(`${testName}: ${JSON.stringify(optionConfiguration)}`, async (t) => {
       await a11yCheck(t, a11yCheckConfig, selector);
     }).before(async () => {
       await createWidget(
