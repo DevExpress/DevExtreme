@@ -1,11 +1,8 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/prefer-for-of */
 import createWidget, { WidgetName } from './createWidget';
 import { a11yCheck } from './accessibilityUtils';
 
 interface Options {
   [key: string]: any[] | string;
-  // [key: string]: any[];
 }
 
 interface Configuration {
@@ -75,10 +72,6 @@ const getOptionConfigurations = (options: Options | undefined) => {
 
   return configurations;
 };
-
-/**
- * Use this util like a hook to check accessibility with AXE.
- */
 
 export const testAccessibility = (configuration: Configuration): void => {
   const {
