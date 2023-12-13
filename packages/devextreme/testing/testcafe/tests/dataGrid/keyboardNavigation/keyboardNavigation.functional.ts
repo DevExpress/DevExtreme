@@ -14,19 +14,31 @@ fixture.disablePageReloads`Keyboard Navigation - common`
 
 test('Next cell should be focused immediately on a single Enter key press if showEditorAlways is enabled in cell mode (T1196539)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
     .click(dataGrid.getDataCell(0, 0).element)
-    .expect(dataGrid.getDataCell(0, 0).isFocused)
-    .ok()
     .typeText(dataGrid.getDataCell(0, 0).element, 'test')
-    .pressKey('enter')
-    .expect(dataGrid.getDataCell(1, 0).isFocused)
-    .ok();
+    .pressKey('enter');
+
+  await takeScreenshot('cell-focus-showEditorAlways-T1196539-1.png', dataGrid.element);
+
+  await t.pressKey('enter');
+
+  await takeScreenshot('cell-focus-showEditorAlways-T1196539-2.png', dataGrid.element);
+
+  await t.pressKey('enter');
+
+  await takeScreenshot('cell-focus-showEditorAlways-T1196539-3.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { name: 'Alex', phone: '555555', room: 1 },
     { name: 'Dan', phone: '553355', room: 2 },
+    { name: 'Joe', phone: '335533', room: 3 },
   ],
   columns: [{
     dataField: 'name',
