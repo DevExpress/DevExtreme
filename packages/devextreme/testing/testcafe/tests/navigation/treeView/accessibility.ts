@@ -15,7 +15,7 @@ const options: Options = {
   searchEnabled: [true, false],
   showCheckBoxesMode: ['none', 'normal', 'selectAll'],
   noDataText: [null, 'no data text'],
-  displayExpr: 'fullName',
+  displayExpr: ['fullName'],
 };
 
 const a11yCheckConfig = isMaterialBased() ? {

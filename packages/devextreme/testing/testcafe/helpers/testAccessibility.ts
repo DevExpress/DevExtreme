@@ -2,7 +2,7 @@ import createWidget, { WidgetName } from './createWidget';
 import { a11yCheck, A11yCheckOptions, ElementContext } from './accessibilityUtils';
 
 export interface Options {
-  [key: string]: any[] | string;
+  [key: string]: any[];
 }
 
 interface Configuration {
@@ -34,10 +34,6 @@ const generateConfigurations = (
   const values = options[key];
 
   let configurations: object[] = [];
-
-  if (typeof values === 'string') {
-    return [Object.assign({}, ...prevConfigurations, { [key]: values })];
-  }
 
   values.forEach((value) => {
     const currentConfigurations = [
