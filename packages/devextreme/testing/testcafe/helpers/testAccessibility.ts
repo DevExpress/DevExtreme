@@ -11,8 +11,8 @@ interface Configuration {
   options?: Options;
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
-  before?: (optionConfiguration: any) => Promise<void>;
-  after?: (optionConfiguration: any) => Promise<void>;
+  before?: (optionConfiguration: Options) => Promise<void>;
+  after?: (optionConfiguration: Options) => Promise<void>;
 }
 
 const defaultOptions = {};
@@ -22,7 +22,7 @@ const defaultAfter = async () => {};
 const generateConfigurations = (
   options: Options,
   index = 0,
-  prevConfigurations: any[] = [],
+  prevConfigurations: Options[] = [],
 ) => {
   const keys = Object.keys(options);
 
