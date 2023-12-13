@@ -11,13 +11,13 @@ interface Configuration {
   options?: Options;
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
-  // before?: (optionConfiguration: Options) => Promise<void>;
-  // after?: (optionConfiguration: Options) => Promise<void>;
+  before?: (optionConfiguration: Options) => Promise<void>;
+  after?: (optionConfiguration: Options) => Promise<void>;
 }
 
 const defaultOptions = {};
-// const defaultBefore = async () => {};
-// const defaultAfter = async () => {};
+const defaultBefore = async () => {};
+const defaultAfter = async () => {};
 
 const generateConfigurations = (
   options: Options,
@@ -70,8 +70,8 @@ export const testAccessibility = (configuration: Configuration): void => {
     options,
     a11yCheckConfig,
     selector,
-    // before = defaultBefore,
-    // after = defaultAfter,
+    before = defaultBefore,
+    after = defaultAfter,
   } = configuration;
 
   const optionConfigurations = getOptionConfigurations(options);
@@ -85,8 +85,7 @@ export const testAccessibility = (configuration: Configuration): void => {
         optionConfiguration,
       );
 
-      // await before(optionConfiguration);
-    });
-    // .after(async () => { await after(optionConfiguration); });
+      await before(optionConfiguration);
+    }).after(async () => { await after(optionConfiguration); });
   });
 };

@@ -11,10 +11,7 @@ const options: Options = {
     undefined,
     // 320, // NOTE: False positive axe report 'Scrollable region must have keyboard access'
   ],
-  items: [
-    // [],
-    employees,
-  ],
+  items: [[], employees],
   searchEnabled: [true, false],
   showCheckBoxesMode: ['none', 'normal', 'selectAll'],
   noDataText: [null, 'no data text'],
