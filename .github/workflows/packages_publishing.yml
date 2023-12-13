@@ -1,6 +1,8 @@
 name: Publishing to GitHub Packages
 
 on:
+  schedule:
+    - cron: '0 0 * * 2,5'
   workflow_dispatch:
     inputs:
       filter:
