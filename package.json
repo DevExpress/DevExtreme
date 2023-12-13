@@ -51,7 +51,7 @@
     "eslint-plugin-testcafe": "0.2.1",
     "husky": "^8.0.3",
     "lint-staged": "14.0.1",
-    "nx": "16.5.5",
+    "nx": "16.10.0",
     "nx-cloud": "^16.0.5",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
