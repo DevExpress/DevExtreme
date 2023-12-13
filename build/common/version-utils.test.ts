@@ -28,7 +28,7 @@ describe('version utils', () => {
     { baseVersion: '1234.5', date: new Date(2023, 5, 5, 12, 30), expected: '1234.5-build-23156-1230' },
     { baseVersion: '123456', date: new Date(2023, 5, 5, 12, 30), expected: '123456-build-23156-1230' },
     { baseVersion: 'abcdef', date: new Date(2023, 5, 5, 12, 30), expected: 'abcdef-build-23156-1230' },
-  ])('formatVersion [%#]', ({ baseVersion, date, expected }) => {
+  ])('makeTimestampVersion [%#]', ({ baseVersion, date, expected }) => {
     expect(makeTimestampVersion(baseVersion, date)).toBe(expected);
   })
 });
