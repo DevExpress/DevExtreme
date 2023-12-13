@@ -1442,6 +1442,8 @@ export class KeyboardNavigationController extends modules.ViewController {
             const isFocusedElementDefined = isElementDefined(
               $focusedElementInsideCell,
             );
+            const columnIndex = this._rowsView.getCellIndex($cell);
+            const column = this.getController('columns').getVisibleColumns()[columnIndex];
             if (
               (isRenderView || !isCommandCell)
               && this._editorFactory.focus()
@@ -1460,7 +1462,7 @@ export class KeyboardNavigationController extends modules.ViewController {
             ) {
               this._focus($cell, this._isHiddenFocus);
             }
-            if (isEditing) {
+            if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
             }
           } else {
