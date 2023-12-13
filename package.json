@@ -44,7 +44,7 @@
     "eslint-plugin-no-only-tests": "3.1.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-qunit": "7.3.4",
-    "eslint-plugin-react": "7.32.2",
+    "eslint-plugin-react": "7.33.2",
     "eslint-plugin-rulesdir": "0.2.2",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-spellcheck": "0.0.20",
