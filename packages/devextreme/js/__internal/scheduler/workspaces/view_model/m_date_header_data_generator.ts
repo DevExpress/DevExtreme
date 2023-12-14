@@ -118,7 +118,8 @@ export class DateHeaderDataGenerator {
       : completeViewDataMap[index];
 
     // NOTE: Should leave dates as is when creating time row in timelines.
-    const shouldShiftDates = !isTimelineView(viewType) || viewType === VIEWS.TIMELINE_MONTH;
+    const shouldShiftDatesForHeaderText = !isTimelineView(viewType)
+      || viewType === VIEWS.TIMELINE_MONTH;
 
     return slicedByColumnsData.map(({
       startDate,
@@ -126,14 +127,15 @@ export class DateHeaderDataGenerator {
       isFirstGroupCell,
       isLastGroupCell,
       ...restProps
-    }, index) => {
-      const shiftedStartDate = shouldShiftDates
-        ? timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset)
+    }, idx: number) => {
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
+        ? shiftedStartDate
         : startDate;
 
       const text = getHeaderCellText(
-        index % cellCountInGroupRow,
-        shiftedStartDate,
+        idx % cellCountInGroupRow,
+        shiftedStartDateForHeaderText,
         headerCellTextFormat,
         getDateForHeaderText,
         {
@@ -149,7 +151,7 @@ export class DateHeaderDataGenerator {
         ...restProps,
         startDate,
         text,
-        today: dateUtils.sameDate(startDate, today),
+        today: dateUtils.sameDate(shiftedStartDate, today),
         colSpan,
         isFirstGroupCell: isGroupedByDate || (isFirstGroupCell && !isVerticalGrouping),
         isLastGroupCell: isGroupedByDate || (isLastGroupCell && !isVerticalGrouping),
