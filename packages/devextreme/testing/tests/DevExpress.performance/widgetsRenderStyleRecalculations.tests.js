@@ -47,25 +47,25 @@ const components = [
     { name: 'dxDateRangeBox' },
 ];
 
-components.forEach((componentName) => {
-    QUnit.performanceTest(`${componentName} relayouts on creation`, function(assert) {
+components.forEach((component) => {
+    QUnit.performanceTest(`${component.name} relayouts on creation`, function(assert) {
         const measureFunction = function() {
             const $element = $('<div>');
             $element.appendTo('#qunit-fixture');
 
-            $element[componentName]({});
+            $element[component.name]({});
         };
 
         assert.measureStyleRecalculation(measureFunction, 0);
     });
 
     LABEL_MODES.forEach((labelMode) => {
-        QUnit.performanceTest(`${componentName} relayouts on creation with label when labelMode is ${labelMode}`, function(assert) {
+        QUnit.performanceTest(`${component.name} relayouts on creation with label when labelMode is ${labelMode}`, function(assert) {
             const measureFunction = function() {
                 const $element = $('<div>');
                 $element.appendTo('#qunit-fixture');
 
-                $element[componentName]({
+                $element[component.name]({
                     labelMode,
                     label: 'Label',
                 });
