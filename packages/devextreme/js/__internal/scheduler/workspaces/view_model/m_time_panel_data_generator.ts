@@ -212,10 +212,6 @@ export class TimePanelDataGenerator {
     const realTodayTimeMs = this.getLocalDateTimeInMs(realToday);
     const [startMs, endMs] = this.getHighlightedInterval(cellData);
 
-    const hours = (t: number) => t / (60 * 60 * 1000);
-
-    console.log(hours(realTodayTimeMs), hours(startMs), hours(endMs), cellData.index, cellData.isFirst, cellData.isLast);
-
     return startMs < endMs
       ? realTodayTimeMs >= startMs && realTodayTimeMs < endMs
       : (realTodayTimeMs >= startMs && realTodayTimeMs < toMs('day'))
