@@ -6,8 +6,7 @@ export interface Options {
   [key: string]: any[];
 }
 
-interface Configuration {
-  testName: string;
+export interface Configuration {
   component: WidgetName;
   options?: Options;
   a11yCheckConfig?: A11yCheckOptions;
@@ -63,14 +62,13 @@ const getOptionConfigurations = (options: Options | undefined) => {
     return [defaultOptions];
   }
 
-  const configurations: object[] = generateConfigurations(options);
+  const configurations: Options[] = generateConfigurations(options);
 
   return configurations;
 };
 
 export const testAccessibility = (configuration: Configuration): void => {
   const {
-    testName,
     component,
     options,
     selector = defaultSelector,
@@ -82,7 +80,7 @@ export const testAccessibility = (configuration: Configuration): void => {
   const optionConfigurations: Options[] = getOptionConfigurations(options);
 
   optionConfigurations.forEach((optionConfiguration, index) => {
-    test(`${testName} #${index}`, async (t) => {
+    test(`${component}: test with axe #${index}`, async (t) => {
       await a11yCheck(t, a11yCheckConfig, selector);
     }).before(async () => {
       await createWidget(

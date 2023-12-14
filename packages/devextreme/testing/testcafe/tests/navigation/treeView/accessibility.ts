@@ -1,9 +1,5 @@
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Options } from '../../../helpers/testAccessibility';
+import { Options, Configuration } from '../../../helpers/testAccessibility';
 import { employees } from './data';
-
-fixture`TreeView`
-  .page(url(__dirname, '../../container.html'));
 
 const options: Options = {
   height: [
@@ -17,8 +13,7 @@ const options: Options = {
   displayExpr: ['fullName'],
 };
 
-testAccessibility({
-  testName: 'Testing with axe',
+export const configuration: Configuration = {
   component: 'dxTreeView',
   options,
-});
+};
