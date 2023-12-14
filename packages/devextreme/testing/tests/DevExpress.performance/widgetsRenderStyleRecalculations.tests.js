@@ -96,7 +96,7 @@ const components = [
     { name: 'dxLookup', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
     { name: 'dxLookup', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 2 },
 
-    { name: 'dxNumberBox', config: {}, expectedRecalculations: 0 },
+    { name: 'dxNumberBox', config: {}, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { labelMode: 'static' }, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
@@ -193,7 +193,7 @@ components.forEach(({ name, config, expectedRecalculations }) => {
             const $element = $('<div>');
             $element.appendTo('#qunit-fixture');
 
-            $element[name]({ config });
+            $element[name](config);
         };
 
         assert.measureStyleRecalculation(measureFunction, expectedRecalculations);
