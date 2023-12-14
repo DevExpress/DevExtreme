@@ -39,7 +39,10 @@ jobs:
       working-directory: ./packages/devextreme
       run: npx gulp localization
 
-    - name: Jest test
+    - name: Jest tests for build scripts
+      run: npx nx test-scripts
+
+    - name: Jest tests
       run: npx nx test-jest devextreme-main
 
   notify:

@@ -2,6 +2,7 @@
   "name": "devextreme-monorepo",
   "version": "23.2.3",
   "license": "MIT",
+  "author": "Developer Express Inc.",
   "scripts": {
     "devextreme:inject-descriptions-to-bundle": "dx-tools inject-descriptions --target-path ./packages/devextreme/ts/dx.all.d.ts --artifacts ./artifacts/internal-tools",
     "devextreme:inject-descriptions-to-modules": "dx-tools inject-descriptions --collapse-tags --sources ./packages/devextreme/js --artifacts ./artifacts/internal-tools",
@@ -21,6 +22,8 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
+    "ts-script": "ts-node",
+    "test-scripts": "jest --config build/jest.config.js",
     "all:update-version": "ts-node build/update-version.ts",
     "all:build": "ts-node build/build-all.ts"
   },
@@ -51,7 +54,7 @@
     "eslint-plugin-testcafe": "0.2.1",
     "husky": "^8.0.3",
     "lint-staged": "14.0.1",
-    "nx": "16.5.5",
+    "nx": "16.10.0",
     "nx-cloud": "^16.0.5",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
