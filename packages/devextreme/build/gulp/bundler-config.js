@@ -9,7 +9,8 @@ const eol = require('gulp-eol');
 
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
-const { packageDir } = require('./utils');
+const { packageDir, packageDirInternal } = require('./utils');
+const env = require('./env-variables.js');
 
 const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',
@@ -33,7 +34,7 @@ gulp.task('bundler-config', function() {
         .pipe(gulp.dest('js/bundles'))
         .pipe(rename('dx.custom.config.js'))
         .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
-        .pipe(gulp.dest(`${context.RESULT_NPM_PATH}/${packageDir}/bundles`));
+        .pipe(gulp.dest(`${context.RESULT_NPM_PATH}/${env.BUILD_INTERNAL_PACKAGE ? packageDirInternal : packageDir}/bundles`));
 });
 
 gulp.task('bundler-config-watch', function() {
