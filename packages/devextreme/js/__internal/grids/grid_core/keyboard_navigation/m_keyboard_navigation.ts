@@ -2,6 +2,7 @@ import { noop } from '@js/core//utils/common';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import $, { dxElementWrapper } from '@js/core/renderer';
+import browser from '@js/core/utils/browser';
 import { Deferred, when } from '@js/core/utils/deferred';
 import {
   getHeight,
@@ -62,6 +63,7 @@ import {
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
   REVERT_BUTTON_CLASS,
   ROWS_VIEW_CLASS,
+  WIDGET_CLASS,
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
 import {
@@ -2025,6 +2027,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       type: 'keydown',
       target: $inputElement,
     });
+    const keyPressEvent = createEvent(eventArgs, {
+      type: 'keypress',
+      target: $inputElement,
+    });
     const inputEvent = createEvent(eventArgs, {
       type: 'input',
       target: $inputElement,
@@ -2039,6 +2045,34 @@ export class KeyboardNavigationController extends modules.ViewController {
     ($inputElement as HTMLInputElement).select?.();
     // @ts-expect-error
     eventsEngine.trigger($input, keyDownEvent);
+
+    if (!keyDownEvent.isDefaultPrevented()) {
+      // @ts-expect-error
+      eventsEngine.trigger($input, keyPressEvent);
+      if (!keyPressEvent.isDefaultPrevented()) {
+        const timeout = browser.mozilla ? 25 : 0; // T882996
+        setTimeout(() => {
+          let inputValue = editorValue;
+          // @ts-expect-error
+          if (editorValue === '-' && $input.val() === '-0') { // T1203026
+            inputValue = '-0';
+          }
+
+          $input.val(inputValue);
+
+          const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
+          // @ts-expect-error
+          eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
+          // @ts-expect-error
+          eventsEngine.one($widgetContainer, 'focusout', () => {
+            // @ts-expect-error
+            eventsEngine.trigger($input, 'change');
+          });
+          // @ts-expect-error
+          eventsEngine.trigger($input, inputEvent);
+        }, timeout);
+      }
+    }
   }
 
   // #endregion Editing
