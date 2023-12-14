@@ -798,6 +798,7 @@ class Scheduler extends Widget<any> {
         this._updateOption('workSpace', args.fullName, value);
         break;
       case 'allDayPanelMode':
+        this.updateInstances();
         this._updateOption('workSpace', args.fullName, value);
         break;
       case 'renovateRender':
