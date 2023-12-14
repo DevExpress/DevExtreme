@@ -1251,9 +1251,9 @@ QUnit.module('files rendering', moduleConfig, () => {
         ];
         const filesSize = [
             '1 bytes',
-            '1 kb',
-            '1 Mb',
-            '1 Gb'
+            '1 KB',
+            '1 MB',
+            '1 GB'
         ];
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: true
