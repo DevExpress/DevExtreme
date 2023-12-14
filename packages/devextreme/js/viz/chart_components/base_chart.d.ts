@@ -27,7 +27,6 @@ import {
 
 import {
     BaseLegend,
-    BaseLegendItem,
 } from '../common';
 
 import BaseWidget, {
@@ -37,11 +36,12 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    AnimationEaseMode,
-    SeriesLabel,
-    SeriesPoint,
-    Palette,
-    PaletteExtensionMode,
+  AnimationEaseMode,
+  LegendItem,
+  SeriesLabel,
+  SeriesPoint,
+  Palette,
+  PaletteExtensionMode,
 } from '../../common/charts';
 
 import {
@@ -261,14 +261,14 @@ export interface BaseChartLegend extends BaseLegend {
      * @docid BaseChartOptions.legend.customizeItems
      * @public
      */
-    customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid BaseChartOptions.legend.markerTemplate
      * @default undefined
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
 /**
  * @hidden
@@ -365,21 +365,6 @@ export class BaseChart<TProperties> extends BaseWidget<TProperties> {
      * @public
      */
     render(renderOptions: any): void;
-}
-
-/**
- * @public
- * @docid
- * @type object
- * @inherits BaseLegendItem
- * @namespace DevExpress.viz
- */
-export interface BaseChartLegendItem extends BaseLegendItem {
-    /**
-     * @docid
-     * @public
-     */
-    series?: baseSeriesObject;
 }
 
 /**
