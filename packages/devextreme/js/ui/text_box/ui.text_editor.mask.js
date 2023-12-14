@@ -580,15 +580,11 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     clear: function() {
-        if(this._maskRulesChain) {
-            this._maskRulesChain.clear(this._normalizeChainArguments());
-            this._updateMaskInfo();
-            const caret = this._maskRulesChain.first();
-            this._caretTimeout = setTimeout(() => {
-                this._caret({ start: caret, end: caret });
-            }, 0);
+        const { value: defaultValue } = this._getDefaultOptions();
+        if(this.option('value') === defaultValue) {
+            this._renderMaskedValue();
         }
-        return this.callBase();
+        this.callBase();
     }
 });
 
