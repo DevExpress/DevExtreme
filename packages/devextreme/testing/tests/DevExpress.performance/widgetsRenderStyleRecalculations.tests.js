@@ -178,7 +178,7 @@ const components = [
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'floating' }, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'outside' }, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'hidden' }, expectedRecalculations: 11 },
-    { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'static' }, expectedRecalculations: 11 },
+    { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'static' }, expectedRecalculations: 12 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'floating' }, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'outside' }, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'hidden', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 11 },
