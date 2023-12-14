@@ -5,7 +5,7 @@ require('generic_light.css!');
 
 const $ = require('jquery');
 require('ui/switch');
-require('ui/checkbox');
+require('ui/check_box');
 require('ui/slider');
 require('ui/select_box');
 require('ui/range_slider');
