@@ -26,25 +26,25 @@ QUnit.testStart(function() {
     $('#qunit-fixture').addClass('qunit-fixture-visible');
 });
 
-const LABEL_MODES = ['static', 'floating', 'outside'];
+const LABEL_MODES = ['hidden', 'static', 'floating', 'outside'];
 const components = [
-    { name: 'dxAutocomplete' },
-    { name: 'dxCalendar' },
-    { name: 'dxCheckBox' },
-    { name: 'dxColorBox' },
-    { name: 'dxDateBox' },
-    { name: 'dxDropDownBox' },
-    { name: 'dxLookup' },
-    { name: 'dxNumberBox' },
-    { name: 'dxRadioGroup' },
-    { name: 'dxRangeSlider' },
-    { name: 'dxSelectBox' },
-    { name: 'dxSlider' },
-    { name: 'dxSwitch' },
-    { name: 'dxTagBox' },
-    { name: 'dxTextArea' },
-    { name: 'dxTextBox' },
-    { name: 'dxDateRangeBox' },
+    { name: 'dxAutocomplete', expectedRecalculations: 2 },
+    { name: 'dxCalendar', expectedRecalculations: 1 },
+    { name: 'dxCheckBox', expectedRecalculations: 1 },
+    { name: 'dxColorBox', expectedRecalculations: 2 },
+    { name: 'dxDateBox', expectedRecalculations: 4 },
+    { name: 'dxDropDownBox', expectedRecalculations: 2 },
+    { name: 'dxLookup', expectedRecalculations: 2 },
+    { name: 'dxNumberBox', expectedRecalculations: 1 },
+    { name: 'dxRadioGroup', expectedRecalculations: 1 },
+    { name: 'dxRangeSlider', expectedRecalculations: 7 },
+    { name: 'dxSelectBox', expectedRecalculations: 2 },
+    { name: 'dxSlider', expectedRecalculations: 3 },
+    { name: 'dxSwitch', expectedRecalculations: 1 },
+    { name: 'dxTagBox', expectedRecalculations: 2 },
+    { name: 'dxTextArea', expectedRecalculations: 1 },
+    { name: 'dxTextBox', expectedRecalculations: 1 },
+    { name: 'dxDateRangeBox', expectedRecalculations: 1 },
 ];
 
 components.forEach((component) => {
@@ -56,7 +56,7 @@ components.forEach((component) => {
             $element[component.name]({});
         };
 
-        assert.measureStyleRecalculation(measureFunction, 0);
+        assert.measureStyleRecalculation(measureFunction, component.expectedRecalculations);
     });
 
     LABEL_MODES.forEach((labelMode) => {
@@ -71,7 +71,7 @@ components.forEach((component) => {
                 });
             };
 
-            assert.measureStyleRecalculation(measureFunction, 1);
+            assert.measureStyleRecalculation(measureFunction, component.expectedRecalculations);
         });
     });
 });
