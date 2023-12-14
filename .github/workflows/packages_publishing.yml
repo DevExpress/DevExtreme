@@ -60,6 +60,7 @@ jobs:
         with:
           name: packages
           path: artifacts/npm/*.tgz
+          retention-days: 2
 
       - name: Filter packages
         id: filter
