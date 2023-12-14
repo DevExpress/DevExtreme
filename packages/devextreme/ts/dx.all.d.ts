@@ -5027,22 +5027,21 @@ declare module DevExpress.data {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type EventName =
-      | 'loaded'
-      | 'loading'
-      | 'inserted'
-      | 'inserting'
-      | 'updated'
-      | 'updating'
-      | 'push'
-      | 'removed'
-      | 'removing'
-      | 'modified'
-      | 'modifying';
+    export type Options<TItem = any, TKey = any> = AbstractStoreOptions<
+      TItem,
+      TKey
+    >;
+  }
+  /**
+   * @deprecated Use Options instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface AbstractStoreOptions<TItem = any, TKey = any>
+    extends Options<TItem, TKey> {
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:Options.onLoaded]
      */
-    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
+    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
   }
   /**
    * [descr:Utils.applyChanges(data, changes, options)]
@@ -5154,7 +5153,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
+    extends Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -5553,6 +5552,21 @@ declare module DevExpress.data {
    */
   export function errorHandler(e: Error): void;
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type EventName =
+    | 'loaded'
+    | 'loading'
+    | 'inserted'
+    | 'inserting'
+    | 'updated'
+    | 'updating'
+    | 'push'
+    | 'removed'
+    | 'removing'
+    | 'modified'
+    | 'modifying';
+  /**
    * [descr:FilterDescriptor]
    */
   export type FilterDescriptor = any;
@@ -5918,10 +5932,6 @@ declare module DevExpress.data {
       | 'Decimal'
       | any;
     /**
-     * [descr:ODataStoreOptions.onLoading]
-     */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
-    /**
      * [descr:ODataStoreOptions.url]
      */
     url?: string;
@@ -5934,6 +5944,10 @@ declare module DevExpress.data {
      */
     withCredentials?: boolean;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6482,7 +6496,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
-    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
+    constructor(options?: Options<TItem, TKey>);
     /**
      * [descr:Store.insert(values)]
      */
@@ -6498,27 +6512,19 @@ declare module DevExpress.data {
     /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: DevExpress.data.AbstractStore.EventName): this;
+    off(eventName: EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
-    off(
-      eventName: DevExpress.data.AbstractStore.EventName,
-      eventHandler: Function
-    ): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
-    on(
-      eventName: DevExpress.data.AbstractStore.EventName,
-      eventHandler: Function
-    ): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(
-      events: { [key in DevExpress.data.AbstractStore.EventName]?: Function }
-    ): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * [descr:Store.push(changes)]
      */
@@ -6571,10 +6577,6 @@ declare module DevExpress.data {
      * [descr:StoreOptions.onInserting]
      */
     onInserting?: (values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onLoaded]
-     */
-    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:StoreOptions.onLoading]
      */
