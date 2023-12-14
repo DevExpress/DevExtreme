@@ -16,7 +16,7 @@ const ctx = require('./context.js');
 const env = require('./env-variables.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc, packageDirInternal, packageDistDirInternal } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDir, devextremeDistDir } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
@@ -136,16 +136,16 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/`))
 ));
 
-const packagePath = isBuildInternal ? `${resultPath}/${packageDirInternal}` : `${resultPath}/${packageDir}`;
-const distPath = isBuildInternal ? `${resultPath}/${packageDistDirInternal}` : `${resultPath}/${packageDistDir}`;
+const packagePath = `${resultPath}/${packageDir}`;
+const distPath = `${resultPath}/${packageDistDir}`;
 
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     () => gulp
-        .src(`${resultPath}/${packageDir}/package.json`)
+        .src(`${resultPath}/${devextremeDir}/package.json`)
         .pipe(gulpIf(isBuildInternal, gulp.dest(packagePath))),
     () => gulp
-        .src(`${resultPath}/${packageDistDir}/package.json`)
+        .src(`${resultPath}/${devextremeDistDir}/package.json`)
         .pipe(overwriteInternalPackageName())
         .pipe(gulpIf(isBuildInternal, gulp.dest(distPath))),
     sources(srcGlobs, packagePath, distGlobs))

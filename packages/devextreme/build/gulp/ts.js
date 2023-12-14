@@ -12,8 +12,7 @@ const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
 const MODULES = require('./modules_metadata.json');
-const { packageDir, packageDirInternal } = require('./utils');
-const env = require('./env-variables.js');
+const { packageDir } = require('./utils');
 
 const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
@@ -36,11 +35,8 @@ function compileTS(settings) {
     })(ts.reporter.fullReporter());
 }
 
-const packagePath = env.BUILD_INTERNAL_PACKAGE ?
-    `${context.RESULT_NPM_PATH}/${packageDirInternal}` :
-    `${context.RESULT_NPM_PATH}/${packageDir}`;
+const packagePath = `${context.RESULT_NPM_PATH}/${packageDir}`;
 const packageBundlesPath = path.join(packagePath, 'bundles');
-
 
 gulp.task('ts-copy-vendor', function() {
     return gulp.src('./ts/vendor/*')
@@ -139,8 +135,7 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
     let content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
-        const packageDirName = env.BUILD_INTERNAL_PACKAGE ? packageDirInternal : packageDir;
-        const modulePath = `'./npm/${packageDirName}/${moduleMeta.name}'`;
+        const modulePath = `'./npm/${packageDir}/${moduleMeta.name}'`;
         if(!moduleMeta.exports) {
             return `import ${modulePath};`;
         }

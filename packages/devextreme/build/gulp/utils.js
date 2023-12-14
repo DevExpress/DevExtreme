@@ -7,10 +7,10 @@ const env = require('./env-variables');
 gulp.task('skippedTask', done => done());
 
 const isEsmPackage = env.BUILD_ESM_PACKAGE;
-const packageDir = 'devextreme';
-const packageDirInternal = 'devextreme-internal';
-const packageDistDir = 'devextreme-dist';
-const packageDistDirInternal = 'devextreme-dist-internal';
+const devextremeDir = 'devextreme';
+const devextremeDistDir = 'devextreme-dist';
+const packageDir = env.BUILD_INTERNAL_PACKAGE ? 'devextreme-internal' : devextremeDir;
+const packageDistDir = env.BUILD_INTERNAL_PACKAGE ? 'devextreme-dist-internal' : devextremeDistDir;
 
 const runTaskByCondition = (condition, task) => {
     if(condition) {
@@ -35,10 +35,10 @@ const stringSrc = (filename, str) => {
 };
 
 module.exports = {
+    devextremeDir,
+    devextremeDistDir,
     packageDir,
-    packageDirInternal,
     packageDistDir,
-    packageDistDirInternal,
     stringSrc,
     isEsmPackage,
     runTaskByCondition,
