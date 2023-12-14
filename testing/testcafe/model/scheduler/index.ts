@@ -19,6 +19,7 @@ export const CLASS = {
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
   allDayTitle: 'dx-scheduler-all-day-title',
   allDayRow: 'dx-scheduler-all-day-table-row',
+  allDayCollapsed: 'dx-scheduler-work-space-all-day-collapsed',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
   droppableCell: 'dx-scheduler-date-table-droppable-cell',
@@ -202,5 +203,9 @@ export default class Scheduler extends Widget {
 
   checkViewType(type: string): Promise<boolean> {
     return this.workSpace.hasClass(ViewTypeClassesMap[type]);
+  }
+
+  isAllDayPanelCollapsed(): Promise<boolean> {
+    return this.workSpace.hasClass(CLASS.allDayCollapsed);
   }
 }
