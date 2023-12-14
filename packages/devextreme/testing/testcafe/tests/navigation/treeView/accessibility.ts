@@ -1,6 +1,5 @@
 import url from '../../../helpers/getPageUrl';
 import { testAccessibility, Options } from '../../../helpers/testAccessibility';
-import { isMaterialBased } from '../../../helpers/themeUtils';
 import { employees } from './data';
 
 fixture`TreeView`
@@ -18,14 +17,8 @@ const options: Options = {
   displayExpr: ['fullName'],
 };
 
-const a11yCheckConfig = isMaterialBased() ? {
-  runOnly: 'color-contrast',
-} : {};
-
 testAccessibility({
   testName: 'Testing with axe',
   component: 'dxTreeView',
   options,
-  a11yCheckConfig,
-  selector: '#container',
 });

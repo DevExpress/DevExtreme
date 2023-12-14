@@ -1,5 +1,6 @@
 import createWidget, { WidgetName } from './createWidget';
 import { a11yCheck, A11yCheckOptions, ElementContext } from './accessibilityUtils';
+import { isMaterialBased } from './themeUtils';
 
 export interface Options {
   [key: string]: any[];
@@ -15,9 +16,13 @@ interface Configuration {
   after?: (optionConfiguration: Options) => Promise<void>;
 }
 
+const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultBefore = async () => {};
 const defaultAfter = async () => {};
+const defaultA11yCheckConfig = isMaterialBased() ? {
+  runOnly: 'color-contrast',
+} : {};
 
 const generateConfigurations = (
   options: Options,
@@ -68,15 +73,15 @@ export const testAccessibility = (configuration: Configuration): void => {
     testName,
     component,
     options,
-    a11yCheckConfig,
-    selector,
+    selector = defaultSelector,
+    a11yCheckConfig = defaultA11yCheckConfig,
     before = defaultBefore,
     after = defaultAfter,
   } = configuration;
 
-  const optionConfigurations = getOptionConfigurations(options);
+  const optionConfigurations: Options[] = getOptionConfigurations(options);
 
-  optionConfigurations.forEach((optionConfiguration: Options, index) => {
+  optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${testName} #${index}`, async (t) => {
       await a11yCheck(t, a11yCheckConfig, selector);
     }).before(async () => {
