@@ -10,7 +10,6 @@ const eol = require('gulp-eol');
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const { packageDir } = require('./utils');
-const env = require('./env-variables.js');
 
 const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',

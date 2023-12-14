@@ -20,7 +20,6 @@ const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDir, deve
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
-const isBuildInternal = env.BUILD_INTERNAL_PACKAGE;
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
@@ -82,7 +81,7 @@ const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 const overwriteInternalPackageName = lazyPipe()
     .pipe(() => replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'));
 
-const licenseValidator = isBuildInternal ?
+const licenseValidator = env.BUILD_INTERNAL_PACKAGE ?
     lazyPipe()
         .pipe(() => gulpFilter(['**', '!**/license/license_validation.js']))
         .pipe(() => gulpRename(path => {
@@ -121,7 +120,7 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(`${dist}/package.json`)
         .pipe(replace(version, ctx.version.package))
-        .pipe(gulpIf(isBuildInternal, overwriteInternalPackageName()))
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, overwriteInternalPackageName()))
         .pipe(gulp.dest(dist)),
 
     gulp
@@ -143,11 +142,11 @@ gulp.task('npm-sources', gulp.series(
     'ts-sources',
     () => gulp
         .src(`${resultPath}/${devextremeDir}/package.json`)
-        .pipe(gulpIf(isBuildInternal, gulp.dest(packagePath))),
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(packagePath))),
     () => gulp
         .src(`${resultPath}/${devextremeDistDir}/package.json`)
         .pipe(overwriteInternalPackageName())
-        .pipe(gulpIf(isBuildInternal, gulp.dest(distPath))),
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(distPath))),
     sources(srcGlobs, packagePath, distGlobs))
 );
 
