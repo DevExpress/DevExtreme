@@ -71,7 +71,7 @@ jobs:
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
-        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*)$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
 
   publish:
@@ -99,7 +99,7 @@ jobs:
         # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'
         # Should be removed.
         run: |
-          tar -xzf $PACKAGE
+          tar -xzf $PACKAGE.tgz
           cd package
           npm init -y --scope $AUTHOR
           npm pkg delete repository
