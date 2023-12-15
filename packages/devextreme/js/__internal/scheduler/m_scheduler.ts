@@ -1672,7 +1672,7 @@ class Scheduler extends Widget<any> {
     this._workSpaceRecalculation = new Deferred();
     this._waitAsyncTemplate(() => {
       triggerResizeEvent(this._workSpace.$element());
-      this._workSpace._refreshDateTimeIndication();
+      this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
 
