@@ -1204,8 +1204,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _clickTargetCellHandler(event, $cell) {
-    const columnIndex = this._rowsView.getCellIndex($cell);
-    const column = this._columnsController.getVisibleColumns()[columnIndex];
+    const column = this._rowsView._getColumnByCellElement($cell);
     const isCellEditMode = this._isCellEditMode();
 
     this.setCellFocusType();
@@ -1442,8 +1441,7 @@ export class KeyboardNavigationController extends modules.ViewController {
             const isFocusedElementDefined = isElementDefined(
               $focusedElementInsideCell,
             );
-            const columnIndex = this._rowsView.getCellIndex($cell);
-            const column = this.getController('columns').getVisibleColumns()[columnIndex];
+            const column = this._rowsView._getColumnByCellElement($cell);
             if (
               (isRenderView || !isCommandCell)
               && this._editorFactory.focus()
@@ -2517,6 +2515,10 @@ export const keyboardNavigationModule: import('../m_types').Module = {
 
           this._keyboardController = this.getController('keyboardNavigation');
         },
+        _getColumnByCellElement($cell) {
+          const columnIndex = this.getCellIndex($cell);
+          return this.getController('columns').getVisibleColumns()[columnIndex];
+        },
 
         _rowClick(e) {
           const editRowIndex = this.getController('editing').getEditRowIndex();
@@ -2537,8 +2539,7 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           const { originalEvent } = e.event;
           if (originalEvent) {
             const $cell = $(originalEvent.target);
-            const columnIndex = this.getCellIndex($cell);
-            const column = this.getController('columns').getVisibleColumns()[columnIndex];
+            const column = this._getColumnByCellElement($cell);
             const row = this.getController('data').items()[e.rowIndex];
 
             if (this._keyboardController._isAllowEditing(row, column) || force) {
