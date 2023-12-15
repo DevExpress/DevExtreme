@@ -101,6 +101,8 @@ $header-panel-cell-date: null !default;
   
   @if $color == "saas" {
     $scheduler-appointment-base-color: lighten($base-accent, 30%) !default;
+    $scheduler-cell-hover-bg: rgba(229, 237, 255, 0.25);
+    $scheduler-cell-active-bg: rgba(229, 237, 255, 0.4);
   } 
 }
 

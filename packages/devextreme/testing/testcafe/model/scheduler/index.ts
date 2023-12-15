@@ -22,6 +22,8 @@ export const CLASS = {
   allDayCollapsed: 'dx-scheduler-work-space-all-day-collapsed',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
+  hoverCell: 'dx-state-hover',
+  activeCell: 'dx-state-active',
   droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
