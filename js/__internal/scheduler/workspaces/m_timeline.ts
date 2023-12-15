@@ -369,21 +369,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
-  _setCurrentTimeCells() {
-    const timePanelCells = this._getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
-    });
-  }
-
-  _cleanCurrentTimeCells() {
-    (this.$element() as any)
-      .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
-      .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
-  }
-
   _getTimePanelCells() {
     return (this.$element() as any)
       .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
@@ -513,6 +498,24 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       this._getTotalRowCount(this._getGroupCount()),
       groupByDate,
     );
+  }
+
+  // Old render methods.
+  // TODO Old render: delete these methods with the old render.
+
+  _setCurrentTimeCells(): void {
+    const timePanelCells = this._getTimePanelCells();
+    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+    currentTimeCellIndices.forEach((timePanelCellIndex) => {
+      timePanelCells.eq(timePanelCellIndex)
+        .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
+    });
+  }
+
+  _cleanCurrentTimeCells(): void {
+    (this.$element() as any)
+      .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
+      .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
   }
 }
 
