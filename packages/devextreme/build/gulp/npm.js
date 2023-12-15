@@ -16,11 +16,10 @@ const ctx = require('./context.js');
 const env = require('./env-variables.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc, packageDirInternal, packageDistDirInternal } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDir, devextremeDistDir } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
-const isBuildInternal = env.BUILD_INTERNAL_PACKAGE;
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
@@ -82,7 +81,7 @@ const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 const overwriteInternalPackageName = lazyPipe()
     .pipe(() => replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'));
 
-const licenseValidator = isBuildInternal ?
+const licenseValidator = env.BUILD_INTERNAL_PACKAGE ?
     lazyPipe()
         .pipe(() => gulpFilter(['**', '!**/license/license_validation.js']))
         .pipe(() => gulpRename(path => {
@@ -121,7 +120,7 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(`${dist}/package.json`)
         .pipe(replace(version, ctx.version.package))
-        .pipe(gulpIf(isBuildInternal, overwriteInternalPackageName()))
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, overwriteInternalPackageName()))
         .pipe(gulp.dest(dist)),
 
     gulp
@@ -136,18 +135,18 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/`))
 ));
 
-const packagePath = isBuildInternal ? `${resultPath}/${packageDirInternal}` : `${resultPath}/${packageDir}`;
-const distPath = isBuildInternal ? `${resultPath}/${packageDistDirInternal}` : `${resultPath}/${packageDistDir}`;
+const packagePath = `${resultPath}/${packageDir}`;
+const distPath = `${resultPath}/${packageDistDir}`;
 
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     () => gulp
-        .src(`${resultPath}/${packageDir}/package.json`)
-        .pipe(gulpIf(isBuildInternal, gulp.dest(packagePath))),
+        .src(`${resultPath}/${devextremeDir}/package.json`)
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(packagePath))),
     () => gulp
-        .src(`${resultPath}/${packageDistDir}/package.json`)
+        .src(`${resultPath}/${devextremeDistDir}/package.json`)
         .pipe(overwriteInternalPackageName())
-        .pipe(gulpIf(isBuildInternal, gulp.dest(distPath))),
+        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(distPath))),
     sources(srcGlobs, packagePath, distGlobs))
 );
 
