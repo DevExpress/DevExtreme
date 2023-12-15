@@ -2052,7 +2052,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       if (!keyPressEvent.isDefaultPrevented()) {
         const timeout = browser.mozilla ? 25 : 0; // T882996
         setTimeout(() => {
-          $input.val(editorValue);
+          const inputValue = this._getKeyPressInputValue($input, editorValue);
+          $input.val(inputValue);
 
           const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
           // @ts-expect-error
@@ -2067,6 +2068,24 @@ export class KeyboardNavigationController extends modules.ViewController {
         }, timeout);
       }
     }
+  }
+
+  /*
+  * NOTE: See the T1203026 ticket.
+  * The method is created for cases where the editor in the column is formatted according to the 'decimal' type.
+  * After the native event 'keydown', the '-' sign is formatted by the editor into '-0'.
+  * Subsequent assignment of '-' to the editor's value is treated as a text change, causing the inversion of the value from '-0' to '0'.
+  * To prevent this inversion, it is necessary to assign to the value the same content as in the editor: '-0'.
+  */
+  _getKeyPressInputValue(
+    $input: dxElementWrapper,
+    editorValue: any,
+  ): any {
+    const inputCurrentValue: any = $input.val();
+
+    return editorValue === '-' && inputCurrentValue === '-0'
+      ? '-0'
+      : editorValue;
   }
 
   // #endregion Editing
