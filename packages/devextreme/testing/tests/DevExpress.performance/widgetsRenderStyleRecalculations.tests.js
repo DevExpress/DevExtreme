@@ -151,7 +151,7 @@ const components = [
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
-    { name: 'dxTextArea', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 2 },
+    { name: 'dxTextArea', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
 
     { name: 'dxTextBox', config: {}, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search' }, expectedRecalculations: 1 },
@@ -162,7 +162,7 @@ const components = [
     { name: 'dxTextBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxTextBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
-    { name: 'dxTextBox', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 2 },
+    { name: 'dxTextBox', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
