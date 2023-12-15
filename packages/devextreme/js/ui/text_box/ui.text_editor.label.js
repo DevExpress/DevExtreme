@@ -139,9 +139,11 @@ class TextEditorLabel {
     }
 
     _updateBeforeWidth() {
-        this._$before.css({ width: this._props.beforeWidth });
+        if(this._isVisible()) {
+            this._$before.css({ width: this._props.beforeWidth ?? this._props.getBeforeWidth() });
 
-        this._updateLabelTransform();
+            this._updateLabelTransform();
+        }
     }
 
     _updateLabelTransform(offset = 0) {
@@ -157,7 +159,9 @@ class TextEditorLabel {
     }
 
     _updateMaxWidth() {
-        this._$label.css({ maxWidth: this._props.containerWidth });
+        if(this._isVisible() && !this._isOutsideMode()) {
+            this._$label.css({ maxWidth: this._props.containerWidth ?? this._props.getContainerWidth() });
+        }
     }
 
     $element() {
@@ -175,13 +179,16 @@ class TextEditorLabel {
     updateMode(mode) {
         this._props.mode = mode;
         this._toggleMarkupVisibility();
-        this._updateLabelTransform();
+        this._updateBeforeWidth();
+        this._updateMaxWidth();
     }
 
     updateText(text) {
         this._props.text = text;
         this._updateText();
         this._toggleMarkupVisibility();
+        this._updateBeforeWidth();
+        this._updateMaxWidth();
     }
 
     updateMark(mark) {
