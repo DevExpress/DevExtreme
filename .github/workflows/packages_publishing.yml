@@ -9,21 +9,27 @@ on:
         type: string
         description: Package file filter pattern
         required: false
-      set-timestamp-version:
+      timestamp-version:
         type: boolean
         description: Set timestamp version
         required: false
         default: true
-      move-next-tag:
+      next-tag:
         type: boolean
         description: Move 'next' tag
         required: false
         default: true
-      move-stable-tag:
+      stable-tag:
         type: boolean
         description: Move 'stable' tag
         required: false
         default: false
+
+env:
+  FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
+  SET_TIMESTAMP_VERSION: ${{ (github.event_name == 'workflow_dispatch' && inputs.timestamp-version) || (github.event_name != 'workflow_dispatch' && true) }}
+  MOVE_NEXT_TAG: ${{ (github.event_name == 'workflow_dispatch' && inputs.next-tag) || (github.event_name != 'workflow_dispatch' && true) }}
+  MOVE_STABLE_TAG: ${{ (github.event_name == 'workflow_dispatch' && inputs.stable-tag) || (github.event_name != 'workflow_dispatch' && false) }}
 
 jobs:
 
@@ -45,7 +51,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Set timestamp version 
-        if: ${{ inputs.set-timestamp-version }}
+        if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
         run: npm run ts-script build/set-timestamp-version
 
       - name: Build npm packages
@@ -60,11 +66,12 @@ jobs:
         with:
           name: packages
           path: artifacts/npm/*.tgz
+          retention-days: 2
 
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
-        run: ls *.tgz | grep -E -i '${{ inputs.filter }}' | sed -r 's/^(.*)$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*)$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
 
   publish:
@@ -103,7 +110,7 @@ jobs:
           npm pkg get version --workspaces=false | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT"
 
       - name: Move 'next' tag
-        if: ${{ inputs.move-next-tag }}
+        if: ${{ env.MOVE_NEXT_TAG == 'true' }}
         env:
           PACKAGE_NAME: ${{ steps.publish.outputs.name }}
           PACKAGE_VERSION: ${{ steps.publish.outputs.version }}
@@ -114,7 +121,7 @@ jobs:
           npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-next
         
       - name: Move 'stable' tag
-        if: ${{ inputs.move-stable-tag }}
+        if: ${{ env.MOVE_STABLE_TAG == 'true' }}
         env:
           PACKAGE_NAME: ${{ steps.publish.outputs.name }}
           PACKAGE_VERSION: ${{ steps.publish.outputs.version }}
