@@ -344,11 +344,27 @@ const Calendar = Editor.inherit({
         }
 
         if(this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
-            this._waitRenderView(offset > 0 ? 1 : -1);
+            const direction = offset > 0 ? 1 : -1;
+            const isViewDisabled = direction === 1 ? this._isNextViewDisabled() : this._isPrevViewDisabled();
+
+            if(!isViewDisabled) {
+                this._waitRenderView(direction);
+            } else {
+                this._moveToClosestAvailableDate(currentDate);
+            }
+
         } else {
             this._skipNavigate = true;
             this.option('currentDate', currentDate);
         }
+    },
+
+    _isNextViewDisabled() {
+        return this._navigator._nextButton.option('disabled');
+    },
+
+    _isPrevViewDisabled() {
+        return this._navigator._prevButton.option('disabled');
     },
 
     _areDatesInSameView(zoomLevel, date1, date2) {
