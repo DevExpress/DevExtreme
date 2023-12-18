@@ -6,6 +6,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inputType } from '../../core/utils/support';
 import devices from '../../core/devices';
+import browser from '../../core/utils/browser';
 import config from '../../core/config';
 import dateUtils from '../../core/utils/date';
 import uiDateUtils from './ui.date_utils';
@@ -88,7 +89,7 @@ const DateBox = DropDownEditor.inherit({
 
             disabledDates: null,
 
-            pickerType: PICKER_TYPE['calendar'],
+            pickerType: PICKER_TYPE.calendar,
 
             invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
 
@@ -149,7 +150,9 @@ const DateBox = DropDownEditor.inherit({
 
     _updatePickerOptions: function() {
         let pickerType = this.option('pickerType');
+        const platform = devices.real().platform;
         const type = this.option('type');
+        let showDropDownButtonValue;
 
         if(pickerType === PICKER_TYPE.list && (type === TYPE.datetime || type === TYPE.date)) {
             pickerType = PICKER_TYPE.calendar;
@@ -159,7 +162,16 @@ const DateBox = DropDownEditor.inherit({
             pickerType = PICKER_TYPE.list;
         }
 
-        this.option('showDropDownButton', devices.real().platform !== 'generic' || pickerType !== PICKER_TYPE['native']);
+        const isMozillaOnAndroid = platform === 'android' && browser.mozilla;
+        const isNativePickerType = pickerType === PICKER_TYPE.native;
+        if(isNativePickerType && isMozillaOnAndroid) {
+            showDropDownButtonValue = false;
+        } else {
+            showDropDownButtonValue = platform !== 'generic' || !isNativePickerType;
+        }
+
+        this.option('showDropDownButton', showDropDownButtonValue);
+
         this._pickerType = pickerType;
     },
 
@@ -622,7 +634,7 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _isNativeType: function() {
-        return this._pickerType === PICKER_TYPE['native'];
+        return this._pickerType === PICKER_TYPE.native;
     },
 
     _updatePopupTitle: function() {
