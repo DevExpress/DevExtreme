@@ -6297,12 +6297,11 @@ QUnit.module('validation', {
 
 QUnit.module('Device specific tests', {
     beforeEach: function() {
-        this._savedDevice = devices.current();
+        this._savedDevice = devices.real();
         devices.real({ platform: 'android', deviceType: 'phone', version: [4, 4, 2], android: true });
-        devices.current({ platform: 'android' });
     },
     afterEach: function() {
-        devices.current(this._savedDevice);
+        devices.real(this._savedDevice);
     },
 }, () => {
     QUnit.test('DateBox should not render dropDownButton in Mozilla on android(T1197922)', function(assert) {
