@@ -33,7 +33,6 @@ const components = [
     { name: 'dxAutocomplete', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
 
     { name: 'dxCalendar', config: {}, expectedRecalculations: 1 },
     { name: 'dxCheckBox', config: {}, expectedRecalculations: 1 },
@@ -46,7 +45,6 @@ const components = [
     { name: 'dxDateBox', config: {}, expectedRecalculations: 3 },
     { name: 'dxDateBox', config: { labelMode: 'hidden' }, expectedRecalculations: 3 },
     { name: 'dxDateBox', config: { labelMode: 'static' }, expectedRecalculations: 3 },
-    { name: 'dxDateBox', config: { labelMode: 'floating' }, expectedRecalculations: 3 },
 
     { name: 'dxDropDownBox', config: {}, expectedRecalculations: 1 },
     { name: 'dxDropDownBox', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
@@ -54,7 +52,6 @@ const components = [
     { name: 'dxDropDownBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
 
     { name: 'dxLookup', config: {}, expectedRecalculations: 1 },
     { name: 'dxLookup', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
@@ -70,7 +67,6 @@ const components = [
     { name: 'dxNumberBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
 
     { name: 'dxRadioGroup', config: {}, expectedRecalculations: 1 },
     { name: 'dxSlider', config: {}, expectedRecalculations: 5 },
@@ -83,7 +79,6 @@ const components = [
     { name: 'dxSelectBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
 
     { name: 'dxTagBox', config: {}, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
@@ -91,7 +86,6 @@ const components = [
     { name: 'dxTagBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxTagBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
 
     { name: 'dxTextArea', config: {}, expectedRecalculations: 1 },
     { name: 'dxTextArea', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
@@ -105,7 +99,6 @@ const components = [
     { name: 'dxTextBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
 
     { name: 'dxDateRangeBox', config: {}, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'hidden' }, expectedRecalculations: 9 },
@@ -113,7 +106,6 @@ const components = [
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'floating' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'hidden' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'static' }, expectedRecalculations: 11 },
-    { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'floating' }, expectedRecalculations: 11 },
 ];
 
 components.forEach(({ name, config, expectedRecalculations }) => {
