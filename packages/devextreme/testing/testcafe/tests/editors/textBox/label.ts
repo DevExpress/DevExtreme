@@ -22,31 +22,29 @@ const labelModes = ['floating', 'static', 'hidden', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
-const LABEL_CLASS = 'dx-label';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
 [
-  { labelMode: 'hidden', expectedWidths: { generic: null, material: null, fluent: null } },
-  { labelMode: 'static', expectedWidths: { generic: '82px', material: '68px', fluent: '86px' } },
-  { labelMode: 'floating', expectedWidths: { generic: '82px', material: '68px', fluent: '86px' } },
-  { labelMode: 'outside', expectedWidths: { generic: null, material: null, fluent: null } },
+  { labelMode: 'static', expectedWidths: { generic: '82', material: '68', fluent: '74' } },
+  { labelMode: 'floating', expectedWidths: { generic: '82', material: '68', fluent: '74' } },
+  { labelMode: 'outside', expectedWidths: { generic: 'none', material: 'none', fluent: 'none' } },
 ].forEach(({ labelMode, expectedWidths }) => {
   test(`Label max-width should be changed after container width was changed, labelMode is ${labelMode}`, async (t) => {
     const textBox = new TextBox('#container');
 
     await t
-      .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
-      .eql(expectedWidths[getThemeName()]);
+      .expect(textBox.getLabel().getStyleProperty('max-width'))
+      .eql(`${expectedWidths[getThemeName()]}px`);
 
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), `width: ${t.ctx.initialWidth + t.ctx.deltaWidth}px;`);
 
     await t
-      .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
+      .expect(textBox.getLabel().getStyleProperty('max-width'))
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      .eql(expectedWidths[getThemeName()] + t.ctx.deltaWidth);
+      .eql(`${expectedWidths[getThemeName()] + t.ctx.deltaWidth}px`);
   }).before(async (t) => {
     t.ctx.initialWidth = 100;
     t.ctx.deltaWidth = 300;

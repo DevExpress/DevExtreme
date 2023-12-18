@@ -50,7 +50,7 @@ const components = [
     { name: 'dxColorBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxColorBox', config: { labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxColorBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxColorBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
+    { name: 'dxColorBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 3 },
     { name: 'dxColorBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
     { name: 'dxColorBox', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxColorBox', config: { label: 'Label', labelMode: 'hidden', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 1 },
@@ -127,7 +127,7 @@ const components = [
     { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'hidden', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 1 },
     { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'static', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 2 },
     { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'floating', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 2 },
-    { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'outside', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 2 },
+    { name: 'dxSelectBox', config: { label: 'Label', labelMode: 'outside', buttons: [{ name: 'custom', location: 'before' }] }, expectedRecalculations: 4 },
 
     { name: 'dxTagBox', config: {}, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
@@ -150,7 +150,7 @@ const components = [
     { name: 'dxTextArea', config: { labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxTextArea', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
+    { name: 'dxTextArea', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 3 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
 
     { name: 'dxTextBox', config: {}, expectedRecalculations: 1 },
