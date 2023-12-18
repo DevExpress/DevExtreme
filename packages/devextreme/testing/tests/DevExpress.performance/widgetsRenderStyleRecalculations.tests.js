@@ -23,7 +23,7 @@ require('ui/tag_box');
 require('ui/date_range_box');
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').addClass('qunit-fixture-visible');
+    $('<div id=\'container\'>').appendTo('#qunit-fixture');
 });
 
 const components = [
@@ -149,7 +149,7 @@ const components = [
     { name: 'dxTextArea', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxTextArea', config: { labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxTextArea', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 3 },
+    { name: 'dxTextArea', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
     { name: 'dxTextArea', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
 
@@ -190,10 +190,7 @@ const components = [
 components.forEach(({ name, config, expectedRecalculations }) => {
     QUnit.performanceTest(`${name} relayouts on creation, config: ${JSON.stringify(config)}`, function(assert) {
         const measureFunction = function() {
-            const $element = $('<div>');
-            $element.appendTo('#qunit-fixture');
-
-            $element[name](config);
+            $('#container')[name](config);
         };
 
         assert.measureStyleRecalculation(measureFunction, expectedRecalculations);
