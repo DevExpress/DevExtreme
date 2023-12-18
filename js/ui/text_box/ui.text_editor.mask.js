@@ -14,7 +14,11 @@ import { EmptyMaskRule, StubMaskRule, MaskRule } from './ui.text_editor.mask.rul
 import TextEditorBase from './ui.text_editor.base';
 import MaskStrategy from './ui.text_editor.mask.strategy';
 
-const caret = caretUtils;
+const stubCaret = function() {
+    return {};
+};
+
+let caret = caretUtils;
 
 const EMPTY_CHAR = ' ';
 const ESCAPED_CHAR = '\\';
@@ -194,6 +198,15 @@ const TextEditorMask = TextEditorBase.inherit({
         this._maskStrategy.attachEvents();
         this._parseMask();
         this._renderMaskedValue();
+    },
+
+    _suppressCaretChanging: function(callback, args) {
+        caret = stubCaret;
+        try {
+            callback.apply(this, args);
+        } finally {
+            caret = caretUtils;
+        }
     },
 
     _changeHandler: function(e) {
@@ -574,7 +587,7 @@ const TextEditorMask = TextEditorBase.inherit({
         }
     },
 
-    clear: function() {
+    reset: function() {
         const { value: defaultValue } = this._getDefaultOptions();
         if(this.option('value') === defaultValue) {
             this._renderMaskedValue();
