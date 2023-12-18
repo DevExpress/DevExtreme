@@ -4720,4 +4720,40 @@ QUnit.module('reset', () => {
 
         assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
     });
+
+    QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
+        let screen = 'lg';
+
+        const value = 'VINET';
+        const text = 'Vins et alcools Chevalier (France)';
+        const $form = $('#form').dxForm({
+            formData: { CustomerID: value },
+            screenByWidth: function() { return screen; },
+            colCountByScreen: {
+                sm: 1,
+                lg: 2
+            },
+            items: [
+                {
+                    itemType: 'simple',
+                    cssClass: 'test-ddbox',
+                    dataField: 'CustomerID',
+                    editorOptions: {
+                        displayExpr: 'Text',
+                        valueExpr: 'Value',
+                        showClearButton: true,
+                        dataSource: [{ Value: value, Text: text }],
+                    },
+                    editorType: 'dxDropDownBox',
+                },
+            ]
+        });
+        const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
+
+        screen = 'sm';
+        $input.focus();
+        resizeCallbacks.fire();
+
+        assert.strictEqual($input.val(), text, 'ddBox contain correct value');
+    });
 });
