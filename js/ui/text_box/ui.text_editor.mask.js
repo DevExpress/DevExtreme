@@ -16,11 +16,7 @@ import TextEditorBase from './ui.text_editor.base';
 import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
 import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
 
-const stubCaret = function() {
-    return {};
-};
-
-let caret = caretUtils;
+const caret = caretUtils;
 
 const EMPTY_CHAR = ' ';
 const ESCAPED_CHAR = '\\';
@@ -206,15 +202,6 @@ const TextEditorMask = TextEditorBase.inherit({
         this._renderMaskedValue();
     },
 
-    _suppressCaretChanging: function(callback, args) {
-        caret = stubCaret;
-        try {
-            callback.apply(this, args);
-        } finally {
-            caret = caretUtils;
-        }
-    },
-
     _changeHandler: function(e) {
         const $input = this._input();
         const inputValue = $input.val();
@@ -365,8 +352,7 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _handleChain: function(args) {
         const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
-        this._value = this._maskRulesChain.value();
-        this._textValue = this._maskRulesChain.text();
+        this._updateMaskInfo();
         return handledCount;
     },
 
@@ -513,6 +499,11 @@ const TextEditorMask = TextEditorBase.inherit({
         return this._direction() === FORWARD_DIRECTION;
     },
 
+    _updateMaskInfo() {
+        this._textValue = this._maskRulesChain.text();
+        this._value = this._maskRulesChain.value();
+    },
+
     _clean: function() {
         this._maskStrategy && this._maskStrategy.clean();
         this.callBase();
@@ -589,8 +580,15 @@ const TextEditorMask = TextEditorBase.inherit({
             default:
                 this.callBase(args);
         }
-    }
+    },
 
+    clear: function() {
+        const { value: defaultValue } = this._getDefaultOptions();
+        if(this.option('value') === defaultValue) {
+            this._renderMaskedValue();
+        }
+        this.callBase();
+    }
 });
 
 export default TextEditorMask;

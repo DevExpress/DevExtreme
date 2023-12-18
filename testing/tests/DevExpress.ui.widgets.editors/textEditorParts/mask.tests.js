@@ -7,6 +7,7 @@ import caretWorkaround from './caretWorkaround.js';
 import 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const CLEAR_BUTTON_CLASS = '.dx-clear-button-area';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -1407,7 +1408,7 @@ QUnit.module('clear button', () => {
 
             const instance = $textEditor.dxTextEditor('instance');
             const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const $clearButton = $textEditor.find('.dx-clear-button-area');
+            const $clearButton = $textEditor.find(CLEAR_BUTTON_CLASS);
 
             caretWorkaround($input);
 
@@ -1433,7 +1434,7 @@ QUnit.module('clear button', () => {
             });
 
             $textEditor
-                .find('.dx-clear-button-area')
+                .find(CLEAR_BUTTON_CLASS)
                 .trigger('dxclick');
 
             clock.tick(10);
@@ -1442,6 +1443,54 @@ QUnit.module('clear button', () => {
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('Input text should be cleared after click on a clear button even if value is not changed yet (T1193735)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '43#.###',
+            showClearButton: true
+        });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        $input.triggerHandler('focus');
+
+        caretWorkaround($input);
+        keyboard.caret(0);
+
+        keyboard.type('9');
+
+        const $clearButton = $textEditor.find(CLEAR_BUTTON_CLASS);
+
+        $clearButton.trigger('dxclick');
+
+        assert.strictEqual($input.val(), '43_.___');
+    });
+
+    QUnit.test('Cleared text should not be restored on focusout', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '43#.###',
+            showClearButton: true
+        });
+
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        $input.triggerHandler('focus');
+
+        caretWorkaround($input);
+        keyboard.caret(0);
+
+        keyboard.type('9');
+
+        const $clearButton = $textEditor.find(CLEAR_BUTTON_CLASS);
+
+        $clearButton.trigger('dxclick');
+        $input.trigger('focusout');
+
+        assert.strictEqual(textEditor.option('value'), '');
     });
 });
 
