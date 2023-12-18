@@ -53,7 +53,6 @@ window.config = {
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
-    'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs/index.js',
