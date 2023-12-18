@@ -25,9 +25,10 @@ const options: Options = {
 
 };
 
-// eslint-disable-next-line max-len
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/return-await
-const created = async (t: any): Promise<void> => await t.pressKey('tab');
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const created = async (t: any): Promise<void> => {
+  await t.pressKey('tab');
+};
 
 export const configuration: Configuration = {
   component: 'dxTabs',
