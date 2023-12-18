@@ -154,7 +154,7 @@ const DateBox = DropDownEditor.inherit({
         let pickerType = this.option('pickerType');
         const platform = devices.real().platform;
         const type = this.option('type');
-        let showDropDownButtonValue;
+        let showDropDownButton;
 
         if(pickerType === PICKER_TYPE.list && (type === TYPE.datetime || type === TYPE.date)) {
             pickerType = PICKER_TYPE.calendar;
@@ -167,12 +167,12 @@ const DateBox = DropDownEditor.inherit({
         const isMozillaOnAndroid = platform === 'android' && browser.mozilla;
         const isNativePickerType = pickerType === PICKER_TYPE.native;
         if(isNativePickerType && isMozillaOnAndroid) {
-            showDropDownButtonValue = false;
+            showDropDownButton = false;
         } else {
-            showDropDownButtonValue = platform !== 'generic' || !isNativePickerType;
+            showDropDownButton = platform !== 'generic' || !isNativePickerType;
         }
 
-        this.option('showDropDownButton', showDropDownButtonValue);
+        this.option({ showDropDownButton });
 
         this._pickerType = pickerType;
     },

@@ -6439,7 +6439,6 @@ QUnit.module('Device specific tests', {
 
         const $dropDownButton = $dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`);
 
-        assert.strictEqual($dropDownButton.length, isMozilla ? 0 : 1, 'dropDownButton');
+        assert.strictEqual($dropDownButton.length, isMozilla ? 0 : 1, `dropDownButton is ${isMozilla ? 'not' : ''} rendered`);
     });
-}
-);
+});
