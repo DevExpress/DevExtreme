@@ -27,16 +27,18 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
 [
-  { labelMode: 'static', expectedWidths: { generic: '82', material: '68', fluent: '74' } },
-  { labelMode: 'floating', expectedWidths: { generic: '82', material: '68', fluent: '74' } },
+  { labelMode: 'static', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
+  { labelMode: 'floating', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
   { labelMode: 'outside', expectedWidths: { generic: 'none', material: 'none', fluent: 'none' } },
 ].forEach(({ labelMode, expectedWidths }) => {
   test(`Label max-width should be changed after container width was changed, labelMode is ${labelMode}`, async (t) => {
     const textBox = new TextBox('#container');
 
+    const expectedWidth = expectedWidths[getThemeName()];
+
     await t
       .expect(textBox.getLabel().getStyleProperty('max-width'))
-      .eql(`${expectedWidths[getThemeName()]}px`);
+      .eql(expectedWidth === 'none' ? 'none' : `${expectedWidth}px`);
 
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), `width: ${t.ctx.initialWidth + t.ctx.deltaWidth}px;`);
@@ -44,7 +46,7 @@ const INVALID_STATE_CLASS = 'dx-invalid';
     await t
       .expect(textBox.getLabel().getStyleProperty('max-width'))
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      .eql(`${expectedWidths[getThemeName()] + t.ctx.deltaWidth}px`);
+      .eql(expectedWidth === 'none' ? 'none' : `${expectedWidth + t.ctx.deltaWidth}px`);
   }).before(async (t) => {
     t.ctx.initialWidth = 100;
     t.ctx.deltaWidth = 300;
