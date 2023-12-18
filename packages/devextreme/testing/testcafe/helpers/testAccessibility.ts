@@ -11,13 +11,13 @@ export interface Configuration {
   options?: Options;
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
-  before?: (optionConfiguration: Options) => Promise<void>;
-  after?: (optionConfiguration: Options) => Promise<void>;
+  created?: (t?: any, optionConfiguration?: Options) => Promise<void>;
+  after?: (t?: any, optionConfiguration?: Options) => Promise<void>;
 }
 
 const defaultSelector = '#container';
 const defaultOptions = {};
-const defaultBefore = async () => {};
+const defaultCreated = async () => {};
 const defaultAfter = async () => {};
 const defaultA11yCheckConfig = isMaterialBased() ? {
   runOnly: 'color-contrast',
@@ -58,7 +58,7 @@ const generateConfigurations = (
 };
 
 const getOptionConfigurations = (options: Options | undefined) => {
-  if (!options) {
+  if (!(options && Object.keys(options).length)) {
     return [defaultOptions];
   }
 
@@ -73,7 +73,7 @@ export const testAccessibility = (configuration: Configuration): void => {
     options,
     selector = defaultSelector,
     a11yCheckConfig = defaultA11yCheckConfig,
-    before = defaultBefore,
+    created = defaultCreated,
     after = defaultAfter,
   } = configuration;
 
@@ -82,13 +82,13 @@ export const testAccessibility = (configuration: Configuration): void => {
   optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
       await a11yCheck(t, a11yCheckConfig, selector);
-    }).before(async () => {
+    }).before(async (t) => {
       await createWidget(
         component,
         optionConfiguration,
       );
 
-      await before(optionConfiguration);
-    }).after(async () => { await after(optionConfiguration); });
+      await created(t, optionConfiguration);
+    }).after(async (t) => { await after(t, optionConfiguration); });
   });
 };
