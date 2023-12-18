@@ -92,7 +92,11 @@ class TextEditorLabel {
     }
 
     _updateBeforeWidth() {
-        this._$before.css({ width: this._props.beforeWidth });
+        if(this._isVisible()) {
+            const width = this._props.beforeWidth ?? this._props.getBeforeWidth();
+
+            this._$before.css({ width });
+        }
     }
 
     _updateMaxWidth() {
@@ -102,7 +106,6 @@ class TextEditorLabel {
             this._$label.css({ maxWidth });
         }
     }
-
 
     $element() {
         return this._$root;
