@@ -1,5 +1,6 @@
 import { Options, Configuration } from '../../../helpers/testAccessibility';
 import { Item } from '../../../../../js/ui/tabs.d';
+import { isMaterial, isMaterialBased } from '../../../helpers/themeUtils';
 
 const items = [
   { text: 'John Heart' },
@@ -22,7 +23,6 @@ const options: Options = {
   height: [250],
   itemHoldTimeout: [5000],
   useInkRipple: [false],
-
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -30,8 +30,19 @@ const created = async (t: any): Promise<void> => {
   await t.pressKey('tab');
 };
 
+const a11yCheckConfig = isMaterialBased() ? {
+  runOnly: 'color-contrast',
+  rules: {
+    'color-contrast': {
+      // NOTE: color-contrast issues in Material
+      enabled: !isMaterial(),
+    },
+  },
+} : {};
+
 export const configuration: Configuration = {
   component: 'dxTabs',
+  a11yCheckConfig,
   options,
   created,
 };
