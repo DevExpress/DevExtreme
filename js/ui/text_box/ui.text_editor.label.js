@@ -108,7 +108,11 @@ class TextEditorLabel {
     }
 
     _updateMaxWidth() {
-        this._$label.css({ maxWidth: this._props.containerWidth });
+        if(this._isVisible() && !this._isOutsideMode()) {
+            const maxWidth = this._props.containerWidth ?? this._props.getContainerWidth();
+
+            this._$label.css({ maxWidth });
+        }
     }
 
 
@@ -127,12 +131,16 @@ class TextEditorLabel {
     updateMode(mode) {
         this._props.mode = mode;
         this._toggleMarkupVisibility();
+        this._updateBeforeWidth();
+        this._updateMaxWidth();
     }
 
     updateText(text) {
         this._props.text = text;
         this._updateText();
         this._toggleMarkupVisibility();
+        this._updateBeforeWidth();
+        this._updateMaxWidth();
     }
 
     updateMark(mark) {
