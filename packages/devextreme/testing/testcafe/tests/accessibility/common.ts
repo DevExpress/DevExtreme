@@ -41,6 +41,7 @@ const importConfigurations = (directory: string) => {
 const rootPath = path.join(__dirname, '..');
 const configurations: Configuration[] = importConfigurations(rootPath);
 
-fixture`Accessibility`.page(url(__dirname, '../container.html'));
+fixture`Accessibility`
+  .page(url(__dirname, '../container.html'));
 
 configurations.forEach((configuration) => testAccessibility(configuration));
