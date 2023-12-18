@@ -1789,9 +1789,6 @@ QUnit.module('clear button', () => {
             mask: '43#.###',
             showClearButton: true
         });
-
-        const textEditor = $textEditor.dxTextEditor('instance');
-
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
@@ -1806,10 +1803,10 @@ QUnit.module('clear button', () => {
 
         $clearButton.trigger('dxclick');
 
-        assert.strictEqual(textEditor.option('value'), '');
+        assert.strictEqual($input.val(), '43_.___');
     });
 
-    QUnit.test('Cleared text should not be restored on focusout (T1193735)', function(assert) {
+    QUnit.test('Cleared text should not be restored on focusout', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '43#.###',
             showClearButton: true

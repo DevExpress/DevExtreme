@@ -574,11 +574,6 @@ const TextEditorMask = TextEditorBase.inherit({
         }
     },
 
-    _dispose: function() {
-        clearTimeout(this._caretTimeout);
-        this.callBase();
-    },
-
     clear: function() {
         const { value: defaultValue } = this._getDefaultOptions();
         if(this.option('value') === defaultValue) {
