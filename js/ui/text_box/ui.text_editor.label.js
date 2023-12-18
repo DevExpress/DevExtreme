@@ -11,20 +11,8 @@ const LABEL_CLASS = 'dx-label';
 const LABEL_AFTER_CLASS = 'dx-label-after';
 
 class TextEditorLabel {
-    constructor({
-        $editor,
-        text, mode, mark,
-        containsButtonsBefore,
-        containerWidth,
-        beforeWidth
-    }) {
-        this._props = {
-            $editor,
-            text, mode, mark,
-            containsButtonsBefore,
-            containerWidth,
-            beforeWidth
-        };
+    constructor(props) {
+        this._props = props;
 
         this._id = `${TEXTEDITOR_LABEL_CLASS}-${new Guid()}`;
 
