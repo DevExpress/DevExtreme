@@ -576,10 +576,9 @@ QUnit.module('label integration', {
         });
 
         QUnit.test('editor should not initiate taking of width for label if labelMode is hidden (T1192938)', function(assert) {
-            const originalWidth = implementationsMap.getWidth;
+            const originalGetWidth = implementationsMap.getWidth;
 
             try {
-
                 implementationsMap.getWidth = sinon.spy();
 
                 this.init({
@@ -589,16 +588,15 @@ QUnit.module('label integration', {
 
                 assert.strictEqual(implementationsMap.getWidth.callCount, 0);
             } finally {
-                implementationsMap.getWidth = originalWidth;
+                implementationsMap.getWidth = originalGetWidth;
             }
         });
 
         LABEL_MODES.forEach((labelMode) => {
             QUnit.test(`editor initiate taking of width for label if labelMode is ${labelMode} (T1192938)`, function(assert) {
-                const originalWidth = implementationsMap.getWidth;
+                const originalGetWidth = implementationsMap.getWidth;
 
                 try {
-
                     implementationsMap.getWidth = sinon.spy();
 
                     this.init({
@@ -608,7 +606,7 @@ QUnit.module('label integration', {
 
                     assert.strictEqual(implementationsMap.getWidth.callCount, 1);
                 } finally {
-                    implementationsMap.getWidth = originalWidth;
+                    implementationsMap.getWidth = originalGetWidth;
                 }
             });
         });

@@ -140,7 +140,9 @@ class TextEditorLabel {
 
     _updateBeforeWidth() {
         if(this._isVisible()) {
-            this._$before.css({ width: this._props.beforeWidth ?? this._props.getBeforeWidth() });
+            const width = this._props.beforeWidth ?? this._props.getBeforeWidth();
+
+            this._$before.css({ width });
 
             this._updateLabelTransform();
         }
@@ -160,7 +162,9 @@ class TextEditorLabel {
 
     _updateMaxWidth() {
         if(this._isVisible() && !this._isOutsideMode()) {
-            this._$label.css({ maxWidth: this._props.containerWidth ?? this._props.getContainerWidth() });
+            const maxWidth = this._props.containerWidth ?? this._props.getContainerWidth();
+
+            this._$label.css({ maxWidth });
         }
     }
 
