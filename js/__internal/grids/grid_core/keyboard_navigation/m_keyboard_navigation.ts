@@ -2604,7 +2604,11 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           const { operationTypes, repaintChangesOnly } = change ?? {};
           const { fullReload, pageSize } = operationTypes ?? {};
 
-          if (!change || !repaintChangesOnly || fullReload || pageSize) {
+          const hasInsertsOrRemoves = !!change?.changeTypes?.find(
+            (changeType) => changeType === 'insert' || changeType === 'remove',
+          );
+
+          if (!change || !repaintChangesOnly || fullReload || pageSize || hasInsertsOrRemoves) {
             const preventScroll = shouldPreventScroll(this);
             this.renderFocusState({
               preventScroll,
