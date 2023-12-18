@@ -18,6 +18,12 @@ const createScheduler = async (options = {}): Promise<void> => {
   }));
 };
 
+const disposeScheduler = ClientFunction(() => {
+  const scheduler = ($('#container') as any).dxScheduler('instance');
+
+  scheduler?.dispose();
+});
+
 test('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {
   const scheduler = new Scheduler('#container');
 
@@ -231,6 +237,7 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       height: 500,
     });
   }).after(async () => {
+    await disposeScheduler();
     await changeTheme(Themes.genericLight);
   });
 
@@ -272,6 +279,32 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       height: 500,
     });
   }).after(async () => {
+    await disposeScheduler();
+    await changeTheme(Themes.genericLight);
+  });
+
+  test(`Check header panel cells when the scheduler is small in ${theme}`, async (t) => {
+    // arrange
+    const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    // assert
+    await t
+      .expect(await takeScreenshot(`scheduler-header-panel-cells-${theme}.png`, scheduler.workSpace))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+    await createWidget('dxScheduler', {
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2019, 4, 1),
+      height: 500,
+      width: 300,
+    });
+  }).after(async () => {
+    await disposeScheduler();
     await changeTheme(Themes.genericLight);
   });
 });
