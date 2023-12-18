@@ -562,16 +562,15 @@ QUnit.module('label integration', {
         QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
             this.init();
             const inputWidth = getWidth(this.$input);
-            const borderWidth = 2;
 
-            assert.strictEqual(this.getProps().containerWidth + borderWidth, inputWidth);
+            assert.strictEqual(this.getProps().getContainerWidth(), inputWidth);
         });
 
         QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
             this.init();
             const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
 
-            assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
+            assert.strictEqual(this.getProps().getBeforeWidth(), beforeButtonsContainerWidth);
         });
     });
 

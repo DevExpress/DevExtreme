@@ -377,7 +377,7 @@ QUnit.module('label integration', {
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
 
-        assert.strictEqual(this.labelArgs.beforeWidth, expectedBeforeWidth);
+        assert.strictEqual(this.labelArgs.getBeforeWidth(), expectedBeforeWidth);
     });
 
     QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
@@ -393,9 +393,8 @@ QUnit.module('label integration', {
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
-        const borderWidth = 2;
 
-        assert.strictEqual(this.labelArgs.containerWidth + borderWidth, expectedContainerWidth);
+        assert.strictEqual(this.labelArgs.getContainerWidth(), expectedContainerWidth);
     });
 
     QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {

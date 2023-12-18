@@ -7734,10 +7734,9 @@ QUnit.module('label integration', () => {
                 label: 'some'
             });
 
-            const borderWidth = 2;
             const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
             const tagContainerWidth = getWidth($tagContainer);
-            assert.strictEqual(this.labelArgs.containerWidth + borderWidth, tagContainerWidth);
+            assert.strictEqual(this.labelArgs.getContainerWidth(), tagContainerWidth);
         } finally {
             TagBox.restoreTextEditorLabel();
         }
