@@ -9,7 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
-import { getWidth } from 'core/utils/size';
+import { getWidth, implementationsMap } from 'core/utils/size';
 
 import TextEditor from 'ui/text_box/ui.text_editor';
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
@@ -32,6 +32,8 @@ const EVENTS = [
     'KeyDown', 'KeyUp',
     'Change', 'Cut', 'Copy', 'Paste', 'Input'
 ];
+
+const LABEL_MODES = ['outside', 'static', 'floating'];
 
 const moduleConfig = {
     beforeEach: function() {
@@ -571,6 +573,44 @@ QUnit.module('label integration', {
             const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
 
             assert.strictEqual(this.getProps().getBeforeWidth(), beforeButtonsContainerWidth);
+        });
+
+        QUnit.test('editor should not initiate taking of width for label if labelMode is hidden (T1192938)', function(assert) {
+            const originalWidth = implementationsMap.getWidth;
+
+            try {
+
+                implementationsMap.getWidth = sinon.spy();
+
+                this.init({
+                    label: 'Label',
+                    labelMode: 'hidden',
+                });
+
+                assert.strictEqual(implementationsMap.getWidth.callCount, 0);
+            } finally {
+                implementationsMap.getWidth = originalWidth;
+            }
+        });
+
+        LABEL_MODES.forEach((labelMode) => {
+            QUnit.test(`editor initiate taking of width for label if labelMode is ${labelMode} (T1192938)`, function(assert) {
+                const originalWidth = implementationsMap.getWidth;
+
+                try {
+
+                    implementationsMap.getWidth = sinon.spy();
+
+                    this.init({
+                        label: 'Label',
+                        labelMode,
+                    });
+
+                    assert.strictEqual(implementationsMap.getWidth.callCount, 1);
+                } finally {
+                    implementationsMap.getWidth = originalWidth;
+                }
+            });
         });
     });
 
