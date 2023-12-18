@@ -528,8 +528,12 @@ const TextEditorBase = Editor.inherit({
             mode: labelMode,
             rtlEnabled,
             containsButtonsBefore: !!this._$beforeButtonsContainer,
-            containerWidth: this._getLabelContainerWidth(),
-            beforeWidth: this._getLabelBeforeWidth()
+            getContainerWidth: () => {
+                return this._getLabelContainerWidth();
+            },
+            getBeforeWidth: () => {
+                return this._getLabelBeforeWidth();
+            }
         };
 
         this._label = new TextEditorLabelCreator(labelConfig);

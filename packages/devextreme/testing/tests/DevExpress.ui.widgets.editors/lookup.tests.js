@@ -1465,10 +1465,8 @@ QUnit.module('label integration', () => {
                 label: 'some'
             });
 
-            const borderWidth = 2;
-
             const fieldWidth = getWidth($(`.${LOOKUP_FIELD_CLASS}`));
-            assert.strictEqual(this.labelArgs.containerWidth + borderWidth, fieldWidth);
+            assert.strictEqual(this.labelArgs.getContainerWidth(), fieldWidth);
         } finally {
             Lookup.restoreTextEditorLabel();
         }
