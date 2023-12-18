@@ -876,3 +876,38 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
 }).after(async () => {
   await clearLocalStorage();
 });
+
+test('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataRow(0).element);
+
+  await ClientFunction(() => {
+    const grid = ($('#container') as any).dxDataGrid('instance');
+    grid.getDataSource().store().push([{
+      type: 'insert',
+      data: { value: 2 },
+    }]);
+  })();
+
+  await t.click(dataGrid.getDataRow(0).element);
+
+  await t.expect(dataGrid.getDataRow(0).isFocusedRow).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: {
+    store: {
+      type: 'array',
+      data: [{ value: 1 }],
+    },
+    reshapeOnPush: true,
+  },
+  keyExpr: 'value',
+  repaintChangesOnly: true,
+  focusedRowEnabled: true,
+  columns: [
+    {
+      dataField: 'value',
+      sortOrder: 'desc',
+    },
+  ],
+}));
