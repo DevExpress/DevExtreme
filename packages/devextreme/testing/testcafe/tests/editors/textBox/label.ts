@@ -163,7 +163,7 @@ stylingModes.forEach((stylingMode) => {
     const textBox = new TextBox('#container');
 
     await t
-      .hover(textBox.getLabel())
+      .hover(textBox.getLabelSpan())
       .expect(textBox.isHovered)
       .notOk();
   }).before(async () => createWidget('dxTextBox', {
@@ -178,7 +178,7 @@ stylingModes.forEach((stylingMode) => {
     const textBox = new TextBox('#container');
 
     await t
-      .click(textBox.getLabel())
+      .click(textBox.getLabelSpan())
       .expect(textBox.isFocused)
       .ok();
   }).before(async () => createWidget('dxTextBox', {

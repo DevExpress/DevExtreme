@@ -35,6 +35,10 @@ export default class TextBox extends Widget {
   }
 
   getLabel(): Selector {
-    return this.element.find(`.${CLASS.label} span`);
+    return this.element.find(`.${CLASS.label}`);
+  }
+
+  getLabelSpan(): Selector {
+    return this.getLabel().find('span');
   }
 }
