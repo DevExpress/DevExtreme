@@ -4,9 +4,9 @@ import { isMaterialBased } from '../themeUtils';
 import { a11yCheck, A11yCheckOptions } from './utils';
 import { generateOptionMatrix, Options } from '../generateOptionMatrix';
 
-export interface Configuration {
+export interface Configuration<TComponentOptions=unknown> {
   component: WidgetName;
-  options?: Options;
+  options?: Options<TComponentOptions>;
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
   created?: (t: TestController, optionConfiguration?: Options) => Promise<void>;
@@ -29,7 +29,9 @@ const getOptionConfigurations = (options: Options | undefined) => {
   return configurations;
 };
 
-export const testAccessibility = (configuration: Configuration): void => {
+export const testAccessibility = <TComponentOptions=unknown>(
+  configuration: Configuration<TComponentOptions>,
+): void => {
   const {
     component,
     options,

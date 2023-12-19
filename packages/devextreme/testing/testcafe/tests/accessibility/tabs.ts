@@ -2,7 +2,7 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Item } from '../../../../js/ui/tabs.d';
+import { Item, Properties } from '../../../../js/ui/tabs.d';
 import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Accessibility`
@@ -20,10 +20,11 @@ const items: Item[] = [
   { text: 'Brad Jameson' },
 ];
 
-const options: Options = {
+const options: Options<Properties> = {
   dataSource: [items],
   rtlEnabled: [true, false],
   orientation: ['horizontal', 'vertical'],
+  // @ts-expect-error private option
   selectOnFocus: [true, false],
   showNavButtons: [true, false],
   width: [450],

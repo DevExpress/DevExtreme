@@ -1,6 +1,6 @@
-export interface Options {
-  [key: string]: any[];
-}
+export type Options<TComponentOptions = unknown> = {
+  [TProperty in keyof TComponentOptions]: TComponentOptions[TProperty][]
+};
 
 export const generateOptionMatrix = (
   options: Options,
