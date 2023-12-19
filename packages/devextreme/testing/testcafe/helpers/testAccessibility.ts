@@ -11,14 +11,12 @@ export interface Configuration {
   options?: Options;
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
-  created?: (t?: any, optionConfiguration?: Options) => Promise<void>;
-  after?: (t?: any, optionConfiguration?: Options) => Promise<void>;
+  created?: (t: TestController, optionConfiguration?: Options) => Promise<void>;
 }
 
 const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
-const defaultAfter = async () => {};
 const defaultA11yCheckConfig = isMaterialBased() ? {
   runOnly: 'color-contrast',
 } : {};
@@ -74,7 +72,6 @@ export const testAccessibility = (configuration: Configuration): void => {
     selector = defaultSelector,
     a11yCheckConfig = defaultA11yCheckConfig,
     created = defaultCreated,
-    after = defaultAfter,
   } = configuration;
 
   const optionConfigurations: Options[] = getOptionConfigurations(options);
@@ -89,6 +86,6 @@ export const testAccessibility = (configuration: Configuration): void => {
       );
 
       await created(t, optionConfiguration);
-    }).after(async (t) => { await after(t, optionConfiguration); });
+    });
   });
 };

@@ -1,6 +1,12 @@
-import { Options, Configuration } from '../../../helpers/testAccessibility';
-import { Item } from '../../../../../js/ui/tabs.d';
-import { isMaterial, isMaterialBased } from '../../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import { clearTestPage } from '../../helpers/clearPage';
+import { testAccessibility, Options, Configuration } from '../../helpers/testAccessibility';
+import { Item } from '../../../../js/ui/tabs.d';
+import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
+
+fixture.disablePageReloads`Accessibility`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => clearTestPage());
 
 const items = [
   { text: 'John Heart' },
@@ -41,9 +47,11 @@ const a11yCheckConfig = isMaterialBased() ? {
   },
 } : {};
 
-export const configuration: Configuration = {
+const configuration: Configuration = {
   component: 'dxTabs',
   a11yCheckConfig,
   options,
   created,
 };
+
+testAccessibility(configuration);
