@@ -1,4 +1,4 @@
-import { a11yCheck } from '../../../helpers/accessibilityUtils';
+import { a11yCheck } from '../../../helpers/accessibility/accessibilityUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';

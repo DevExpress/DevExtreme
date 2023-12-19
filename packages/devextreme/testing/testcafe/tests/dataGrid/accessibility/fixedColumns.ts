@@ -2,7 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
-import { a11yCheck } from '../../../helpers/accessibilityUtils';
+import { a11yCheck } from '../../../helpers/accessibility/accessibilityUtils';
 import type { Properties } from '../../../../../js/ui/data_grid';
 
 fixture`Fixed columns tests with axe`

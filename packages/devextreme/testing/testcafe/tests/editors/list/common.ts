@@ -3,7 +3,7 @@ import { isMaterialBased, isFluent } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibilityUtils';
+import { a11yCheck } from '../../../helpers/accessibility/accessibilityUtils';
 
 fixture`List`
   .page(url(__dirname, '../../container.html'));
