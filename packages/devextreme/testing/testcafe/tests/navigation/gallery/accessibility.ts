@@ -2,9 +2,11 @@
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { a11yCheck } from '../../../helpers/accessibility/accessibilityUtils';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Gallery`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => clearTestPage());
 
 interface GalleryItem {
   ID: string;
