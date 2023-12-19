@@ -332,7 +332,7 @@ const DropDownBox = DropDownEditor.inherit({
             default:
                 this.callBase(args);
         }
-    }
+    },
 }).include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);
