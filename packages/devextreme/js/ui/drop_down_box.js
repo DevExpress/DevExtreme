@@ -333,10 +333,6 @@ const DropDownBox = DropDownEditor.inherit({
                 this.callBase(args);
         }
     },
-
-    _valueChangeEventHandler: function() {
-        // stop event processing (T1196835)
-    }
 }).include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);

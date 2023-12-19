@@ -1139,8 +1139,8 @@ const Form = Widget.inherit({
     },
 
     _refresh: function() {
-        const editorSelector = `.${FOCUSED_STATE_CLASS} .dx-texteditor:not(.dx-dropdownbox) input,`
-            + ` .${FOCUSED_STATE_CLASS} .dx-texteditor:not(.dx-dropdownbox) textarea`;
+        const editorSelector = `.${FOCUSED_STATE_CLASS} > :not(.dx-dropdowneditor-input-wrapper) input,`
+            + ` .${FOCUSED_STATE_CLASS} textarea`;
 
         eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
