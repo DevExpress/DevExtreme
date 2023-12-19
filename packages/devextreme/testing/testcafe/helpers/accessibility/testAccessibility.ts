@@ -1,6 +1,6 @@
-import createWidget, { WidgetName } from './createWidget';
-import { a11yCheck, A11yCheckOptions, ElementContext } from './accessibilityUtils';
-import { isMaterialBased } from './themeUtils';
+import createWidget, { WidgetName } from '../createWidget';
+import { a11yCheck, A11yCheckOptions, ElementContext } from '../accessibilityUtils';
+import { isMaterialBased } from '../themeUtils';
 
 export interface Options {
   [key: string]: any[];

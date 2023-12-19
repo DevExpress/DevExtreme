@@ -1,6 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { testAccessibility, Options, Configuration } from '../../helpers/testAccessibility';
+import { testAccessibility, Options, Configuration } from '../../helpers/accessibility/testAccessibility';
 import { employees } from '../navigation/treeView/data';
 
 fixture.disablePageReloads`Accessibility`

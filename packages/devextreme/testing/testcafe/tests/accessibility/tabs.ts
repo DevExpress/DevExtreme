@@ -1,6 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { testAccessibility, Options, Configuration } from '../../helpers/testAccessibility';
+import { testAccessibility, Options, Configuration } from '../../helpers/accessibility/testAccessibility';
 import { Item } from '../../../../js/ui/tabs.d';
 import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 
