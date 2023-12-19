@@ -7,45 +7,45 @@ import {
 } from './index';
 
 export type Options<
-    TItem = any,
-    TKey = any,
-> = AbstractStoreOptions<TItem, TKey>;
+  TItem = any,
+  TKey = any,
+  > = AbstractStoreOptions<TItem, TKey>;
 
 interface AbstractStoreOptions<
-    TItem = any,
-    TKey = any,
-> extends StoreOptions<TItem, TKey> {
-    /**
-     * @docid StoreOptions.onLoaded
-     * @type_function_param2 loadOptions:LoadOptions
-     * @action
-     * @public
-     */
-    onLoaded?: ((result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void);
+  TItem = any,
+  TKey = any,
+  > extends StoreOptions<TItem, TKey> {
+  /**
+   * @docid StoreOptions.onLoaded
+   * @type_function_param2 loadOptions:LoadOptions
+   * @action
+   * @public
+   */
+  onLoaded?: ((result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void);
 }
 
+/**
+ * @namespace DevExpress.data
+ */
+export default class AbstractStore<
+  TItem = any,
+  TKey = any,
+  > extends Store<TItem, TKey> {
+  constructor(options?: Options<TItem, TKey>);
   /**
-   * @namespace DevExpress.data
+   * @docid Store.load()
+   * @publicName load()
+   * @return Promise<any>
+   * @public
    */
-  export default class AbstractStore<
-    TItem = any,
-    TKey = any,
-    > extends Store<TItem, TKey> {
-    constructor(options?: Options<TItem, TKey>);
-    /**
-     * @docid Store.load()
-     * @publicName load()
-     * @return Promise<any>
-     * @public
-     */
-    load(): DxExtendedPromise<Array<TItem>>;
+  load(): DxExtendedPromise<Array<TItem>>;
 
-    /**
-     * @docid Store.load(options)
-     * @publicName load(options)
-     * @param1 options:LoadOptions
-     * @return Promise<any>
-     * @public
-     */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
-  }
+  /**
+   * @docid Store.load(options)
+   * @publicName load(options)
+   * @param1 options:LoadOptions
+   * @return Promise<any>
+   * @public
+   */
+  load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
+}
