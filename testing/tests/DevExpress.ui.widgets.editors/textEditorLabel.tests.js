@@ -25,8 +25,8 @@ QUnit.module('textEditorLabel', {
             text: 'Label',
             mark: '*',
             mode: 'static',
-            beforeWidth: 7,
-            containerWidth: 180,
+            getBeforeWidth: () => 7,
+            getContainerWidth: () => 180,
             containsButtonsBefore: false
         };
         this.init = (options) => {
@@ -70,13 +70,13 @@ QUnit.module('textEditorLabel', {
         QUnit.test('label before element should have width equal to beforeWidth prop', function(assert) {
             const beforeWidth = getWidth(this.getBeforeElement());
 
-            assert.strictEqual(beforeWidth, this.labelInitialConfig.beforeWidth, 'before element width is correct');
+            assert.strictEqual(beforeWidth, this.labelInitialConfig.getBeforeWidth(), 'before element width is correct');
         });
 
         QUnit.test('label internal element should have max-width equal to containerWidth prop', function(assert) {
             const labelWidth = Number.parseInt(this.getLabelElement().css('maxWidth'), 10);
 
-            assert.strictEqual(labelWidth, this.labelInitialConfig.containerWidth, 'label internal element width is correct');
+            assert.strictEqual(labelWidth, this.labelInitialConfig.getContainerWidth(), 'label internal element width is correct');
         });
 
         QUnit.module('markup visibility', function(assert) {
