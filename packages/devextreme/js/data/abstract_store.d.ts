@@ -11,11 +11,7 @@ export type Options<
     TKey = any,
 > = AbstractStoreOptions<TItem, TKey>;
 
-/**
- * @namespace DevExpress.data
- * @deprecated Use Options instead
- */
-export interface AbstractStoreOptions<
+interface AbstractStoreOptions<
     TItem = any,
     TKey = any,
 > extends StoreOptions<TItem, TKey> {

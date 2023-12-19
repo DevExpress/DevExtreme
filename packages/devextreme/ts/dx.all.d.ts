@@ -5027,21 +5027,23 @@ declare module DevExpress.data {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
+    interface AbstractStoreOptions<TItem = any, TKey = any>
+      extends Options<TItem, TKey> {
+      /**
+       * [descr:Options.onLoaded]
+       */
+      onLoaded?: (
+        result: Array<TItem>,
+        loadOptions: LoadOptions<TItem>
+      ) => void;
+    }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type Options<TItem = any, TKey = any> = AbstractStoreOptions<
       TItem,
       TKey
     >;
-  }
-  /**
-   * @deprecated Use Options instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface AbstractStoreOptions<TItem = any, TKey = any>
-    extends Options<TItem, TKey> {
-    /**
-     * [descr:Options.onLoaded]
-     */
-    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
   }
   /**
    * [descr:Utils.applyChanges(data, changes, options)]
