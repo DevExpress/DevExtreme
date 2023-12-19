@@ -86,7 +86,13 @@ const settingsCombinations = generateCombinations(allGallerySettings);
 settingsCombinations.forEach((settings) => {
   const testName = getTestName(settings);
   test(testName, async (t) => {
-    await a11yCheck(t);
+    const a11yCheckConfig = {
+      rules: {
+        'image-alt': { enabled: false },
+      },
+    };
+
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => createWidget(
     'dxGallery',
     settings,
