@@ -150,9 +150,7 @@ const DateBox = DropDownEditor.inherit({
 
     _updatePickerOptions: function() {
         let pickerType = this.option('pickerType');
-        const platform = devices.real().platform;
         const type = this.option('type');
-        let showDropDownButton;
 
         if(pickerType === PICKER_TYPE.list && (type === TYPE.datetime || type === TYPE.date)) {
             pickerType = PICKER_TYPE.calendar;
@@ -162,17 +160,22 @@ const DateBox = DropDownEditor.inherit({
             pickerType = PICKER_TYPE.list;
         }
 
+        this._pickerType = pickerType;
+
+        this._setShowDropDownButtonOption();
+    },
+
+    _setShowDropDownButtonOption() {
+        const platform = devices.real().platform;
         const isMozillaOnAndroid = platform === 'android' && browser.mozilla;
-        const isNativePickerType = pickerType === PICKER_TYPE.native;
-        if(isNativePickerType && isMozillaOnAndroid) {
+        const isNativePickerType = this._isNativeType();
+        let showDropDownButton = platform !== 'generic' || !isNativePickerType;
+
+        if(isNativePickerType && isMozillaOnAndroid) { // T1197922
             showDropDownButton = false;
-        } else {
-            showDropDownButton = platform !== 'generic' || !isNativePickerType;
         }
 
         this.option({ showDropDownButton });
-
-        this._pickerType = pickerType;
     },
 
     _init: function() {
