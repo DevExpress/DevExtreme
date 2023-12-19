@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-syntax */
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import { a11yCheck } from '../../../helpers/accessibilityUtils';
 
-fixture.disablePageReloads`Gallery`
+fixture`Gallery`
   .page(url(__dirname, '../../container.html'));
 
 interface GalleryItem {
