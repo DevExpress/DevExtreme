@@ -19,17 +19,17 @@ test('Next cell should be focused immediately on a single Enter key press if sho
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'test')
-    .pressKey('enter');
-
-  await takeScreenshot('cell-focus-showEditorAlways-T1196539-1.png', dataGrid.element);
-
-  await t.pressKey('enter');
-
-  await takeScreenshot('cell-focus-showEditorAlways-T1196539-2.png', dataGrid.element);
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
 
   await t.pressKey('enter');
 
-  await takeScreenshot('cell-focus-showEditorAlways-T1196539-3.png', dataGrid.element);
+  await takeScreenshot('cell-focus-showEditorAlways-T1196539.png', dataGrid.element);
+
+  await t.pressKey('enter')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
 
   await t
     .expect(compareResults.isValid())
