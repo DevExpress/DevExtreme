@@ -106,7 +106,7 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
  * @docid Store
  * @namespace DevExpress.data
  * @hidden
- * @options StoreOptions
+ * @options Options
  */
 export class Store<
     TItem = any,
