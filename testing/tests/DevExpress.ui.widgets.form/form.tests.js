@@ -4384,7 +4384,7 @@ QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', f
             },
         ]
     });
-    const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
+    const $input = $form.find('.test-ddbox .dx-texteditor-input');
 
     screen = 'sm';
     $input.focus();
