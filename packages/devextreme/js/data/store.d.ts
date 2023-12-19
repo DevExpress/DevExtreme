@@ -9,33 +9,27 @@ import {
   LoadOptions,
 } from './index';
 
+/**
+ * @docid StoreOptions
+ * @namespace DevExpress.data
+ * @hidden
+ */
 export type Options<
     TItem = any,
     TKey = any,
-> = StoreOptions<TItem, TKey>;
-
-/**
- * @docid
- * @namespace DevExpress.data
- * @deprecated Use Options instead
- * @hidden
- */
-export interface StoreOptions<
-    TItem = any,
-    TKey = any,
-> {
+> = {
     /**
-     * @docid
+     * @docid StoreOptions.errorHandler
      * @public
      */
     errorHandler?: Function;
     /**
-     * @docid
+     * @docid StoreOptions.key
      * @public
      */
     key?: string | Array<string>;
     /**
-     * @docid
+     * @docid StoreOptions.onInserted
      * @type_function_param1 values:object
      * @type_function_param2 key:object|string|number
      * @action
@@ -43,53 +37,53 @@ export interface StoreOptions<
      */
     onInserted?: ((values: TItem, key: TKey) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onInserting
      * @type_function_param1 values:object
      * @action
      * @public
      */
     onInserting?: ((values: TItem) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onLoading
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
     onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onModified
      * @action
      * @public
      */
     onModified?: Function;
     /**
-     * @docid
+     * @docid StoreOptions.onModifying
      * @action
      * @public
      */
     onModifying?: Function;
     /**
-     * @docid
+     * @docid StoreOptions.onPush
      * @action
      * @public
      */
     onPush?: ((changes: Array<TItem>) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onRemoved
      * @type_function_param1 key:object|string|number
      * @action
      * @public
      */
     onRemoved?: ((key: TKey) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onRemoving
      * @type_function_param1 key:object|string|number
      * @action
      * @public
      */
     onRemoving?: ((key: TKey) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onUpdated
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
@@ -97,14 +91,14 @@ export interface StoreOptions<
      */
     onUpdated?: ((key: TKey, values: TItem) => void);
     /**
-     * @docid
+     * @docid StoreOptions.onUpdating
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
      * @public
      */
     onUpdating?: ((key: TKey, values: TItem) => void);
-}
+};
 
 type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 

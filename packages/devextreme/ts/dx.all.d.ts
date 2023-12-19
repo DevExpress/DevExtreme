@@ -5945,9 +5945,59 @@ declare module DevExpress.data {
     withCredentials?: boolean;
   }
   /**
+   * [descr:StoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
+  export type Options<TItem = any, TKey = any> = {
+    /**
+     * [descr:StoreOptions.errorHandler]
+     */
+    errorHandler?: Function;
+    /**
+     * [descr:StoreOptions.key]
+     */
+    key?: string | Array<string>;
+    /**
+     * [descr:StoreOptions.onInserted]
+     */
+    onInserted?: (values: TItem, key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onInserting]
+     */
+    onInserting?: (values: TItem) => void;
+    /**
+     * [descr:StoreOptions.onLoading]
+     */
+    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onModified]
+     */
+    onModified?: Function;
+    /**
+     * [descr:StoreOptions.onModifying]
+     */
+    onModifying?: Function;
+    /**
+     * [descr:StoreOptions.onPush]
+     */
+    onPush?: (changes: Array<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onRemoved]
+     */
+    onRemoved?: (key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onRemoving]
+     */
+    onRemoving?: (key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onUpdated]
+     */
+    onUpdated?: (key: TKey, values: TItem) => void;
+    /**
+     * [descr:StoreOptions.onUpdating]
+     */
+    onUpdating?: (key: TKey, values: TItem) => void;
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6554,61 +6604,6 @@ declare module DevExpress.data {
       key: TKey,
       values: DevExpress.core.DeepPartial<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
-  }
-  /**
-   * [descr:StoreOptions]
-   * @deprecated [depNote:StoreOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface StoreOptions<TItem = any, TKey = any> {
-    /**
-     * [descr:StoreOptions.errorHandler]
-     */
-    errorHandler?: Function;
-    /**
-     * [descr:StoreOptions.key]
-     */
-    key?: string | Array<string>;
-    /**
-     * [descr:StoreOptions.onInserted]
-     */
-    onInserted?: (values: TItem, key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onInserting]
-     */
-    onInserting?: (values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onLoading]
-     */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onModified]
-     */
-    onModified?: Function;
-    /**
-     * [descr:StoreOptions.onModifying]
-     */
-    onModifying?: Function;
-    /**
-     * [descr:StoreOptions.onPush]
-     */
-    onPush?: (changes: Array<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onRemoved]
-     */
-    onRemoved?: (key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onRemoving]
-     */
-    onRemoving?: (key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onUpdated]
-     */
-    onUpdated?: (key: TKey, values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onUpdating]
-     */
-    onUpdating?: (key: TKey, values: TItem) => void;
   }
   /**
    * [descr:SummaryDescriptor]
