@@ -1,6 +1,7 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { testAccessibility, Options, Configuration } from '../../helpers/accessibility/testAccessibility';
+import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 import { Item } from '../../../../js/ui/tabs.d';
 import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 
@@ -8,7 +9,7 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
-const items = [
+const items: Item[] = [
   { text: 'John Heart' },
   { text: 'Marina Thomas', disabled: true },
   { text: 'Robert Reagan' },
@@ -17,7 +18,7 @@ const items = [
   { text: 'Ed Holmes' },
   { text: 'Wally Hobbs' },
   { text: 'Brad Jameson' },
-] as Item[];
+];
 
 const options: Options = {
   dataSource: [items],
@@ -31,8 +32,7 @@ const options: Options = {
   useInkRipple: [false],
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const created = async (t: any): Promise<void> => {
+const created = async (t: TestController): Promise<void> => {
   await t.pressKey('tab');
 };
 

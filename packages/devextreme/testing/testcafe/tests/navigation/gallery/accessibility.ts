@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibility/accessibilityUtils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture`Gallery`
   .page(url(__dirname, '../../container.html'));

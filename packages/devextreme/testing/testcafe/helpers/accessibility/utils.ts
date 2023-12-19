@@ -2,8 +2,6 @@
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import { ElementContext, RunOptions } from 'axe-core';
 
-export { ElementContext };
-
 export interface A11yCheckOptions extends RunOptions {
   runOnly?: any;
 }

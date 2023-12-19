@@ -1,10 +1,8 @@
+import { ElementContext } from 'axe-core';
 import createWidget, { WidgetName } from '../createWidget';
-import { a11yCheck, A11yCheckOptions, ElementContext } from './accessibilityUtils';
 import { isMaterialBased } from '../themeUtils';
-
-export interface Options {
-  [key: string]: any[];
-}
+import { a11yCheck, A11yCheckOptions } from './utils';
+import { generateOptionMatrix, Options } from '../generateOptionMatrix';
 
 export interface Configuration {
   component: WidgetName;
@@ -21,46 +19,12 @@ const defaultA11yCheckConfig = isMaterialBased() ? {
   runOnly: 'color-contrast',
 } : {};
 
-const generateConfigurations = (
-  options: Options,
-  index = 0,
-  prevConfigurations: Options[] = [],
-) => {
-  const keys = Object.keys(options);
-
-  if (index >= keys.length) {
-    return [Object.assign({}, ...prevConfigurations)];
-  }
-
-  const key = keys[index];
-  const values = options[key];
-
-  let configurations: object[] = [];
-
-  values.forEach((value) => {
-    const currentConfigurations = [
-      ...prevConfigurations,
-      { [key]: value },
-    ];
-
-    const generatedConfigurations = generateConfigurations(
-      options,
-      index + 1,
-      currentConfigurations,
-    );
-
-    configurations = configurations.concat(generatedConfigurations);
-  });
-
-  return configurations;
-};
-
 const getOptionConfigurations = (options: Options | undefined) => {
   if (!(options && Object.keys(options).length)) {
     return [defaultOptions];
   }
 
-  const configurations: Options[] = generateConfigurations(options);
+  const configurations: Options[] = generateOptionMatrix(options);
 
   return configurations;
 };
