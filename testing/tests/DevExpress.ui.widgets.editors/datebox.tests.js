@@ -21,6 +21,7 @@ import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
+import browser from 'core/utils/browser';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -6237,5 +6238,28 @@ QUnit.module('validation', {
         this.keyboard.press('enter');
 
         assert.strictEqual(validationCallbackStub.getCall(0).args[0].value, value, 'validation callback value parameter is correct');
+    });
+});
+
+QUnit.module('Device specific tests', {
+    beforeEach: function() {
+        this._savedDevice = devices.real();
+        devices.real({ platform: 'android', deviceType: 'phone', version: [4, 4, 2], android: true });
+    },
+    afterEach: function() {
+        devices.real(this._savedDevice);
+    },
+}, () => {
+    QUnit.test('DateBox should not render dropDownButton in Mozilla on android(T1197922)', function(assert) {
+        const dateValue = new Date(2016, 6, 15, 14, 30);
+        const isMozilla = browser.mozilla;
+        const $dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'native',
+            value: dateValue
+        });
+
+        const $dropDownButton = $dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`);
+
+        assert.strictEqual($dropDownButton.length, isMozilla ? 0 : 1, `dropDownButton is ${isMozilla ? 'not' : ''} rendered`);
     });
 });
