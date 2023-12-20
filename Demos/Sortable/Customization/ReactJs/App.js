@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
 import SelectBox from 'devextreme-react/select-box';
@@ -20,22 +20,22 @@ const itemOrientations = ['vertical', 'horizontal'];
 const verticalDragDirections = ['both', 'vertical'];
 const horizontalDragDirections = ['both', 'horizontal'];
 const App = () => {
-  const [items, setItems] = React.useState(tasks);
-  const [dropFeedbackMode, setDropFeedbackMode] = React.useState('push');
-  const [itemOrientation, setItemOrientation] = React.useState('vertical');
-  const [dragDirection, setDragDirection] = React.useState('both');
-  const [scrollSpeed, setScrollSpeed] = React.useState(30);
-  const [scrollSensitivity, setScrollSensitivity] = React.useState(60);
-  const [handle, setHandle] = React.useState('');
-  const [dragComponent, setDragComponent] = React.useState(null);
-  const [cursorOffset, setCursorOffset] = React.useState(null);
-  const onDragStart = React.useCallback(
+  const [items, setItems] = useState(tasks);
+  const [dropFeedbackMode, setDropFeedbackMode] = useState('push');
+  const [itemOrientation, setItemOrientation] = useState('vertical');
+  const [dragDirection, setDragDirection] = useState('both');
+  const [scrollSpeed, setScrollSpeed] = useState(30);
+  const [scrollSensitivity, setScrollSensitivity] = useState(60);
+  const [handle, setHandle] = useState('');
+  const [dragComponent, setDragComponent] = useState(null);
+  const [cursorOffset, setCursorOffset] = useState(null);
+  const onDragStart = useCallback(
     (e) => {
       e.itemData = items[e.fromIndex];
     },
     [items],
   );
-  const onReorder = React.useCallback(
+  const onReorder = useCallback(
     (e) => {
       let updatedItems = [...items.slice(0, e.fromIndex), ...items.slice(e.fromIndex + 1)];
       updatedItems = [
@@ -47,44 +47,44 @@ const App = () => {
     },
     [items, setItems],
   );
-  const onDropFeedbackModeChanged = React.useCallback(
+  const onDropFeedbackModeChanged = useCallback(
     (e) => {
       setDropFeedbackMode(e.value);
     },
     [setDropFeedbackMode],
   );
-  const onItemOrientationChanged = React.useCallback(
+  const onItemOrientationChanged = useCallback(
     (e) => {
       setItemOrientation(e.value);
       setDragDirection('both');
     },
     [setItemOrientation, setDragDirection],
   );
-  const onDragDirectionChanged = React.useCallback(
+  const onDragDirectionChanged = useCallback(
     (e) => {
       setDragDirection(e.value);
     },
     [setDragDirection],
   );
-  const onScrollSpeedChanged = React.useCallback(
+  const onScrollSpeedChanged = useCallback(
     (e) => {
       setScrollSpeed(e.value);
     },
     [setScrollSpeed],
   );
-  const onScrollSensitivityChanged = React.useCallback(
+  const onScrollSensitivityChanged = useCallback(
     (e) => {
       setScrollSensitivity(e.value);
     },
     [setScrollSensitivity],
   );
-  const onHandleChanged = React.useCallback(
+  const onHandleChanged = useCallback(
     (e) => {
       setHandle(e.value ? '.handle' : '');
     },
     [setHandle],
   );
-  const onDragTemplateChanged = React.useCallback(
+  const onDragTemplateChanged = useCallback(
     (e) => {
       setDragComponent(e.value ? DragItem : null);
       setCursorOffset(e.value ? { x: 10, y: 20 } : null);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import { orders } from './data.js';
@@ -7,8 +7,8 @@ const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 const resizingModes = ['nextColumn', 'widget'];
 const columnResizingModeLabel = { 'aria-label': 'Column Resizing Mode' };
 const App = () => {
-  const [mode, setMode] = React.useState(resizingModes[0]);
-  const changeResizingMode = React.useCallback((data) => {
+  const [mode, setMode] = useState(resizingModes[0]);
+  const changeResizingMode = useCallback((data) => {
     setMode(data.value);
   }, []);
   return (

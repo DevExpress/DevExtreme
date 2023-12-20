@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import List, { IItemDraggingProps, ItemDragging } from 'devextreme-react/list';
 import { plannedTasks, doingTasks } from './data.ts';
 
 const App = () => {
-  const [plannedTasksState, setPlannedTasksState] = React.useState(plannedTasks);
-  const [doingTasksState, setDoingTasksState] = React.useState(doingTasks);
+  const [plannedTasksState, setPlannedTasksState] = useState(plannedTasks);
+  const [doingTasksState, setDoingTasksState] = useState(doingTasks);
 
-  const onDragStart = React.useCallback<IItemDraggingProps['onDragStart']>((e) => {
+  const onDragStart = useCallback<IItemDraggingProps['onDragStart']>((e) => {
     e.itemData = e.fromData === 'plannedTasks' ? plannedTasksState[e.fromIndex] : doingTasksState[e.fromIndex];
   }, [plannedTasksState, doingTasksState]);
 
-  const onAdd = React.useCallback<IItemDraggingProps['onAdd']>((e) => {
+  const onAdd = useCallback<IItemDraggingProps['onAdd']>((e) => {
     const tasks = e.toData === 'plannedTasks' ? plannedTasksState : doingTasksState;
     const updatedTasks = [...tasks.slice(0, e.toIndex), e.itemData, ...tasks.slice(e.toIndex)];
 
@@ -21,7 +21,7 @@ const App = () => {
     }
   }, [setPlannedTasksState, setDoingTasksState, plannedTasksState, doingTasksState]);
 
-  const onRemove = React.useCallback<IItemDraggingProps['onRemove']>((e) => {
+  const onRemove = useCallback<IItemDraggingProps['onRemove']>((e) => {
     const tasks = e.fromData === 'plannedTasks' ? plannedTasksState : doingTasksState;
     const updatedTasks = [...tasks.slice(0, e.fromIndex), ...tasks.slice(e.fromIndex + 1)];
 
@@ -32,7 +32,7 @@ const App = () => {
     }
   }, [setPlannedTasksState, setDoingTasksState, plannedTasksState, doingTasksState]);
 
-  const onReorder = React.useCallback((e) => {
+  const onReorder = useCallback((e) => {
     onRemove(e);
     onAdd(e);
   }, [onAdd, onRemove]);

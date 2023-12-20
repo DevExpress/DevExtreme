@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import DataGrid, {
   Column, FilterRow, HeaderFilter, Search, SearchPanel,
 } from 'devextreme-react/data-grid';
@@ -68,26 +68,26 @@ const orderHeaderFilter = (data) => {
 };
 
 const App = () => {
-  const [showFilterRow, setShowFilterRow] = React.useState(true);
-  const [showHeaderFilter, setShowHeaderFilter] = React.useState(true);
-  const [currentFilter, setCurrentFilter] = React.useState(applyFilterTypes[0].key);
-  const dataGridRef = React.useRef(null);
+  const [showFilterRow, setShowFilterRow] = useState(true);
+  const [showHeaderFilter, setShowHeaderFilter] = useState(true);
+  const [currentFilter, setCurrentFilter] = useState(applyFilterTypes[0].key);
+  const dataGridRef = useRef(null);
 
-  const clearFilter = React.useCallback(() => {
+  const clearFilter = useCallback(() => {
     dataGridRef.current.instance.clearFilter();
   }, []);
 
-  const onShowFilterRowChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onShowFilterRowChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowFilterRow(e.value);
     clearFilter();
   }, [clearFilter]);
 
-  const onShowHeaderFilterChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onShowHeaderFilterChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowHeaderFilter(e.value);
     clearFilter();
   }, [clearFilter]);
 
-  const onCurrentFilterChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onCurrentFilterChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setCurrentFilter(e.value);
   }, []);
 

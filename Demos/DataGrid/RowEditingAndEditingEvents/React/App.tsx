@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import DataGrid, {
   Column, Editing, Paging, Lookup,
@@ -7,13 +7,13 @@ import DataGrid, {
 import { employees, states } from './data.ts';
 
 const App = () => {
-  const [events, setEvents] = React.useState([]);
+  const [events, setEvents] = useState([]);
 
-  const logEvent = React.useCallback((eventName: string) => {
+  const logEvent = useCallback((eventName: string) => {
     setEvents((previousEvents) => [eventName, ...previousEvents]);
   }, []);
 
-  const clearEvents = React.useCallback(() => {
+  const clearEvents = useCallback(() => {
     setEvents([]);
   }, []);
 

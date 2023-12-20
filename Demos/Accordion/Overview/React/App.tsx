@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Accordion, { AccordionTypes } from 'devextreme-react/accordion';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import TagBox, { TagBoxTypes } from 'devextreme-react/tag-box';
@@ -12,12 +12,12 @@ const companyLabel = { 'aria-label': 'Company' };
 const companies = service.getCompanies();
 
 const App = () => {
-  const [selectedItems, setSelectedItems] = React.useState([companies[0]]);
-  const [multiple, setMultiple] = React.useState(false);
-  const [collapsible, setCollapsible] = React.useState(false);
-  const [animationDuration, setAnimationDuration] = React.useState(300);
+  const [selectedItems, setSelectedItems] = useState([companies[0]]);
+  const [multiple, setMultiple] = useState(false);
+  const [collapsible, setCollapsible] = useState(false);
+  const [animationDuration, setAnimationDuration] = useState(300);
 
-  const selectionChanged = React.useCallback((e: AccordionTypes.SelectionChangedEvent) => {
+  const selectionChanged = useCallback((e: AccordionTypes.SelectionChangedEvent) => {
     let newItems = [...selectedItems];
     e.removedItems.forEach((item) => {
       const index = newItems.indexOf(item);
@@ -31,19 +31,19 @@ const App = () => {
     setSelectedItems(newItems);
   }, [selectedItems, setSelectedItems]);
 
-  const selectedItemsChanged = React.useCallback((e: TagBoxTypes.ValueChangedEvent) => {
+  const selectedItemsChanged = useCallback((e: TagBoxTypes.ValueChangedEvent) => {
     setSelectedItems(e.value);
   }, [setSelectedItems]);
 
-  const multipleChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const multipleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setMultiple(e.value);
   }, [setMultiple]);
 
-  const collapsibleChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const collapsibleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setCollapsible(e.value);
   }, [setCollapsible]);
 
-  const animationDurationChanged = React.useCallback((e: SliderTypes.ValueChangedEvent) => {
+  const animationDurationChanged = useCallback((e: SliderTypes.ValueChangedEvent) => {
     setAnimationDuration(e.value);
   }, [setAnimationDuration]);
 

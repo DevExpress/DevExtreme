@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   DataGrid,
   Column,
@@ -24,25 +24,25 @@ const columnChooserModes = [
 const searchEditorOptions = { placeholder: 'Search column' };
 const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
 const App = () => {
-  const [mode, setMode] = React.useState(columnChooserModes[1].key);
-  const [searchEnabled, setSearchEnabled] = React.useState(true);
-  const [allowSelectAll, setAllowSelectAll] = React.useState(true);
-  const [selectByClick, setSelectByClick] = React.useState(true);
-  const [recursive, setRecursive] = React.useState(true);
+  const [mode, setMode] = useState(columnChooserModes[1].key);
+  const [searchEnabled, setSearchEnabled] = useState(true);
+  const [allowSelectAll, setAllowSelectAll] = useState(true);
+  const [selectByClick, setSelectByClick] = useState(true);
+  const [recursive, setRecursive] = useState(true);
   const isDragMode = mode === columnChooserModes[0].key;
-  const onModeValueChanged = React.useCallback((e) => {
+  const onModeValueChanged = useCallback((e) => {
     setMode(e.value);
   }, []);
-  const onSearchEnabledValueChanged = React.useCallback((e) => {
+  const onSearchEnabledValueChanged = useCallback((e) => {
     setSearchEnabled(e.value);
   }, []);
-  const onAllowSelectAllValueChanged = React.useCallback((e) => {
+  const onAllowSelectAllValueChanged = useCallback((e) => {
     setAllowSelectAll(e.value);
   }, []);
-  const onSelectByClickValueChanged = React.useCallback((e) => {
+  const onSelectByClickValueChanged = useCallback((e) => {
     setSelectByClick(e.value);
   }, []);
-  const onRecursiveValueChanged = React.useCallback((e) => {
+  const onRecursiveValueChanged = useCallback((e) => {
     setRecursive(e.value);
   }, []);
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, DataGridTypes, FilterRow, Selection,
 } from 'devextreme-react/data-grid';
@@ -28,12 +28,12 @@ const selectionFilter = ['Task_Status', '=', 'Completed'];
 let dataGrid;
 
 const App = () => {
-  const [taskCount, setTaskCount] = React.useState(0);
-  const [peopleCount, setPeopleCount] = React.useState(0);
-  const [avgDuration, setAvgDuration] = React.useState(0);
+  const [taskCount, setTaskCount] = useState(0);
+  const [peopleCount, setPeopleCount] = useState(0);
+  const [avgDuration, setAvgDuration] = useState(0);
 
   // eslint-disable-next-line space-before-function-paren
-  const calculateStatistics = React.useCallback(async () => {
+  const calculateStatistics = useCallback(async () => {
     const selectedItems = await dataGrid.getSelectedRowsData();
 
     const totalDuration = selectedItems.reduce((currentValue: number, item: { Task_Due_Date: number; Task_Start_Date: number; }) => {
@@ -52,7 +52,7 @@ const App = () => {
     setAvgDuration(Math.round(averageDurationInDays) || 0);
   }, []);
 
-  const onInitialized = React.useCallback((e: DataGridTypes.InitializedEvent) => {
+  const onInitialized = useCallback((e: DataGridTypes.InitializedEvent) => {
     dataGrid = e.component;
 
     calculateStatistics();

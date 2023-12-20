@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import Chart, { Series, Label, Legend } from 'devextreme-react/chart';
 import PieChart, {
   Series as PieSeries,
@@ -10,9 +10,9 @@ import { exportWidgets } from 'devextreme/viz/export';
 import { allMedals, goldMedals } from './data.js';
 
 function App() {
-  const chartRef = React.useRef(null);
-  const pieChartRef = React.useRef(null);
-  const onClick = React.useCallback(() => {
+  const chartRef = useRef(null);
+  const pieChartRef = useRef(null);
+  const onClick = useCallback(() => {
     exportWidgets([[chartRef.current.instance, pieChartRef.current.instance]], {
       fileName: 'chart',
       format: 'PNG',

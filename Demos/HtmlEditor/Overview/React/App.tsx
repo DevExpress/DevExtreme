@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import HtmlEditor, {
   Toolbar,
   MediaResizing,
@@ -38,14 +38,14 @@ const headerOptions = {
 };
 
 export default function App() {
-  const [isMultiline, setIsMultiline] = React.useState(true);
-  const [currentTab, setCurrentTab] = React.useState(tabs[2].value);
+  const [isMultiline, setIsMultiline] = useState(true);
+  const [currentTab, setCurrentTab] = useState(tabs[2].value);
 
-  const multilineChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const multilineChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setIsMultiline(e.value);
   }, [setIsMultiline]);
 
-  const currentTabChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const currentTabChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setCurrentTab(e.value);
   }, [setCurrentTab]);
 

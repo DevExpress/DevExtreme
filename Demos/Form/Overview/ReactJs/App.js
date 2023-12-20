@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import NumberBox from 'devextreme-react/number-box';
@@ -17,57 +17,57 @@ const columnCountLabel = { 'aria-label': 'Column Count' };
 const minCountWidthLabel = { 'aria-label': 'Min Count Width' };
 const App = () => {
   const companies = service.getCompanies();
-  const [labelMode, setLabelMode] = React.useState('floating');
-  const [labelLocation, setLabelLocation] = React.useState('left');
-  const [readOnly, setReadOnly] = React.useState(false);
-  const [showColon, setShowColon] = React.useState(true);
-  const [minColWidth, setMinColWidth] = React.useState(300);
-  const [colCount, setColCount] = React.useState(2);
-  const [company, setCompany] = React.useState(companies[0]);
-  const [width, setWidth] = React.useState();
-  const onCompanyChanged = React.useCallback(
+  const [labelMode, setLabelMode] = useState('floating');
+  const [labelLocation, setLabelLocation] = useState('left');
+  const [readOnly, setReadOnly] = useState(false);
+  const [showColon, setShowColon] = useState(true);
+  const [minColWidth, setMinColWidth] = useState(300);
+  const [colCount, setColCount] = useState(2);
+  const [company, setCompany] = useState(companies[0]);
+  const [width, setWidth] = useState();
+  const onCompanyChanged = useCallback(
     (e) => {
       setCompany(e.value);
     },
     [setCompany],
   );
-  const onLabelModeChanged = React.useCallback(
+  const onLabelModeChanged = useCallback(
     (e) => {
       setLabelMode(e.value);
     },
     [setLabelMode],
   );
-  const onLabelLocationChanged = React.useCallback(
+  const onLabelLocationChanged = useCallback(
     (e) => {
       setLabelLocation(e.value);
     },
     [setLabelLocation],
   );
-  const onReadOnlyChanged = React.useCallback(
+  const onReadOnlyChanged = useCallback(
     (e) => {
       setReadOnly(e.value);
     },
     [setReadOnly],
   );
-  const onShowColonChanged = React.useCallback(
+  const onShowColonChanged = useCallback(
     (e) => {
       setShowColon(e.value);
     },
     [setShowColon],
   );
-  const onMinColWidthChanged = React.useCallback(
+  const onMinColWidthChanged = useCallback(
     (e) => {
       setMinColWidth(e.value);
     },
     [setMinColWidth],
   );
-  const onColumnsCountChanged = React.useCallback(
+  const onColumnsCountChanged = useCallback(
     (e) => {
       setColCount(e.value);
     },
     [setColCount],
   );
-  const onFormWidthChanged = React.useCallback(
+  const onFormWidthChanged = useCallback(
     (e) => {
       setWidth(e.value);
     },

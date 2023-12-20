@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TagBox from 'devextreme-react/tag-box';
 import Popover from 'devextreme-react/popover';
 import ArrayStore from 'devextreme/data/array_store';
@@ -13,10 +13,10 @@ const dataSource = new ArrayStore({
   key: 'Id',
 });
 function App() {
-  const [editableProducts, setEditableProducts] = React.useState([...simpleProducts]);
-  const [target, setTarget] = React.useState(null);
-  const [product, setProduct] = React.useState({});
-  const onCustomItemCreating = React.useCallback(
+  const [editableProducts, setEditableProducts] = useState([...simpleProducts]);
+  const [target, setTarget] = useState(null);
+  const [product, setProduct] = useState({});
+  const onCustomItemCreating = useCallback(
     (args) => {
       const newValue = args.text;
       const isItemInDataSource = editableProducts.some((item) => item === newValue);
@@ -27,7 +27,7 @@ function App() {
     },
     [editableProducts],
   );
-  const onMouseEnter = React.useCallback((e, newProduct) => {
+  const onMouseEnter = useCallback((e, newProduct) => {
     setTarget(e.currentTarget);
     setProduct(newProduct);
   }, []);

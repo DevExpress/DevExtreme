@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import Toolbar from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
@@ -11,18 +11,18 @@ const buttonDropDownOptions = { width: 230 };
 const data = service.getData();
 const itemTemplateRender = (item) => <div style={{ fontSize: `${item.size}px` }}>{item.text}</div>;
 const App = () => {
-  const [alignment, setAlignment] = React.useState('left');
-  const [color, setColor] = React.useState(null);
-  const [fontSize, setFontSize] = React.useState(14);
-  const [lineHeight, setLineHeight] = React.useState(1.35);
-  const [colorPicker, setColorPicker] = React.useState(null);
-  const onButtonClick = React.useCallback((e) => {
+  const [alignment, setAlignment] = useState('left');
+  const [color, setColor] = useState(null);
+  const [fontSize, setFontSize] = useState(14);
+  const [lineHeight, setLineHeight] = useState(1.35);
+  const [colorPicker, setColorPicker] = useState(null);
+  const onButtonClick = useCallback((e) => {
     notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
   }, []);
-  const onItemClick = React.useCallback((e) => {
+  const onItemClick = useCallback((e) => {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }, []);
-  const onColorClick = React.useCallback(
+  const onColorClick = useCallback(
     (selectedColor) => {
       setColor(selectedColor);
       const squareIcon = colorPicker.element().getElementsByClassName('dx-icon-square')[0];
@@ -31,13 +31,13 @@ const App = () => {
     },
     [colorPicker],
   );
-  const onInitialized = React.useCallback(
+  const onInitialized = useCallback(
     (e) => {
       setColorPicker(e.component);
     },
     [setColorPicker],
   );
-  const toolbarItems = React.useMemo(
+  const toolbarItems = useMemo(
     () => [
       {
         location: 'before',

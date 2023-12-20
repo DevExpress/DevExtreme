@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import { TextBox, Button as TextBoxButton, TextBoxTypes } from 'devextreme-react/text-box';
@@ -59,13 +61,13 @@ function App() {
   const currentDate = new Date();
   const maxDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21));
 
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
-  const [passwordMode, setPasswordMode] = React.useState<TextBoxTypes.TextBoxType>('password');
-  const [confirmPasswordMode, setConfirmPasswordMode] = React.useState<TextBoxTypes.TextBoxType>('password');
-  const validatorRef = React.useRef(null);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMode, setPasswordMode] = useState<TextBoxTypes.TextBoxType>('password');
+  const [confirmPasswordMode, setConfirmPasswordMode] = useState<TextBoxTypes.TextBoxType>('password');
+  const validatorRef = useRef(null);
 
-  const passwordButton = React.useMemo<ButtonTypes.Properties>(
+  const passwordButton = useMemo<ButtonTypes.Properties>(
     () => ({
       icon: 'eyeopen',
       stylingMode: 'text',
@@ -76,7 +78,7 @@ function App() {
     [passwordMode, setPasswordMode],
   );
 
-  const confirmPasswordButton = React.useMemo<ButtonTypes.Properties>(
+  const confirmPasswordButton = useMemo<ButtonTypes.Properties>(
     () => ({
       icon: 'eyeopen',
       stylingMode: 'text',
@@ -87,9 +89,9 @@ function App() {
     [confirmPasswordMode, setConfirmPasswordMode],
   );
 
-  const passwordComparison = React.useCallback<any>(() => password, [password]);
+  const passwordComparison = useCallback<any>(() => password, [password]);
 
-  const onPasswordChanged = React.useCallback(
+  const onPasswordChanged = useCallback(
     (e: TextBoxTypes.ValueChangedEvent) => {
       setPassword(e.value);
       if (confirmPassword) {
@@ -99,7 +101,7 @@ function App() {
     [confirmPassword, setPassword],
   );
 
-  const onConfirmPasswordChanged = React.useCallback((e: TextBoxTypes.ValueChangedEvent) => {
+  const onConfirmPasswordChanged = useCallback((e: TextBoxTypes.ValueChangedEvent) => {
     setConfirmPassword(e.value);
   }, []);
 

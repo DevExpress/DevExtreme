@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, IGanttOptions,
 } from 'devextreme-react/gantt';
@@ -30,7 +30,7 @@ const initialGanttConfig = {
 };
 
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState(initialGanttConfig);
+  const [ganttConfig, setGanttConfig] = useState(initialGanttConfig);
   const updateGanttConfig = (value: Partial<typeof initialGanttConfig>) => setGanttConfig({
     ...ganttConfig,
     ...value,

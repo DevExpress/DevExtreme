@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RangeSelector, {
   Chart as RsChart,
   Series as RsSeries,
@@ -18,8 +18,8 @@ import Chart, {
 import { dataSource } from './data.js';
 
 const App = () => {
-  const [range, setRange] = React.useState([]);
-  const updateRange = React.useCallback(
+  const [range, setRange] = useState([]);
+  const updateRange = useCallback(
     (data) => {
       setRange(data.value);
     },

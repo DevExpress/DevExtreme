@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import HtmlEditor, { Toolbar, Item, HtmlEditorTypes } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
 import { markup } from './data.ts';
@@ -7,24 +7,24 @@ const headerValues = [false, 1, 2, 3, 4, 5];
 const headerOptions = { inputAttr: { 'aria-label': 'Header' } };
 
 export default function App() {
-  const [value, setValue] = React.useState(markup);
-  const [popupVisible, setPopupVisible] = React.useState(false);
+  const [value, setValue] = useState(markup);
+  const [popupVisible, setPopupVisible] = useState(false);
 
-  const customButtonClick = React.useCallback(() => {
+  const customButtonClick = useCallback(() => {
     setPopupVisible(true);
   }, [setPopupVisible]);
 
-  const getToolbarButtonOptions = React.useCallback(() => ({
+  const getToolbarButtonOptions = useCallback(() => ({
     text: 'Show markup',
     stylingMode: 'text',
     onClick: customButtonClick,
   }), [customButtonClick]);
 
-  const valueChanged = React.useCallback((e: HtmlEditorTypes.ValueChangedEvent) => {
+  const valueChanged = useCallback((e: HtmlEditorTypes.ValueChangedEvent) => {
     setValue(e.value);
   }, [setValue]);
 
-  const popupHiding = React.useCallback(() => {
+  const popupHiding = useCallback(() => {
     setPopupVisible(false);
   }, [setPopupVisible]);
 

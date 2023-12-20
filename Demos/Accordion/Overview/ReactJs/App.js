@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Accordion from 'devextreme-react/accordion';
 import CheckBox from 'devextreme-react/check-box';
 import TagBox from 'devextreme-react/tag-box';
@@ -10,11 +10,11 @@ import CustomItem from './CustomItem.js';
 const companyLabel = { 'aria-label': 'Company' };
 const companies = service.getCompanies();
 const App = () => {
-  const [selectedItems, setSelectedItems] = React.useState([companies[0]]);
-  const [multiple, setMultiple] = React.useState(false);
-  const [collapsible, setCollapsible] = React.useState(false);
-  const [animationDuration, setAnimationDuration] = React.useState(300);
-  const selectionChanged = React.useCallback(
+  const [selectedItems, setSelectedItems] = useState([companies[0]]);
+  const [multiple, setMultiple] = useState(false);
+  const [collapsible, setCollapsible] = useState(false);
+  const [animationDuration, setAnimationDuration] = useState(300);
+  const selectionChanged = useCallback(
     (e) => {
       let newItems = [...selectedItems];
       e.removedItems.forEach((item) => {
@@ -30,25 +30,25 @@ const App = () => {
     },
     [selectedItems, setSelectedItems],
   );
-  const selectedItemsChanged = React.useCallback(
+  const selectedItemsChanged = useCallback(
     (e) => {
       setSelectedItems(e.value);
     },
     [setSelectedItems],
   );
-  const multipleChanged = React.useCallback(
+  const multipleChanged = useCallback(
     (e) => {
       setMultiple(e.value);
     },
     [setMultiple],
   );
-  const collapsibleChanged = React.useCallback(
+  const collapsibleChanged = useCallback(
     (e) => {
       setCollapsible(e.value);
     },
     [setCollapsible],
   );
-  const animationDurationChanged = React.useCallback(
+  const animationDurationChanged = useCallback(
     (e) => {
       setAnimationDuration(e.value);
     },

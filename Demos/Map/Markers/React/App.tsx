@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
@@ -11,15 +11,15 @@ const apiKey = {
 };
 
 const App = () => {
-  const [currentMarkersData, setCurrentMarkersData] = React.useState(markersData);
-  const [currentMarkerUrl, setCurrentMarkerUrl] = React.useState(markerUrl);
+  const [currentMarkersData, setCurrentMarkersData] = useState(markersData);
+  const [currentMarkerUrl, setCurrentMarkerUrl] = useState(markerUrl);
 
-  const onCustomMarkersChange = React.useCallback((value) => {
+  const onCustomMarkersChange = useCallback((value) => {
     setCurrentMarkerUrl(value ? currentMarkerUrl : null);
     setCurrentMarkersData(markersData);
   }, [currentMarkerUrl, setCurrentMarkerUrl, setCurrentMarkersData]);
 
-  const showTooltips = React.useCallback(() => {
+  const showTooltips = useCallback(() => {
     setCurrentMarkersData(currentMarkersData.map((item) => {
       const newItem = JSON.parse(JSON.stringify(item));
       newItem.tooltip.isShown = true;

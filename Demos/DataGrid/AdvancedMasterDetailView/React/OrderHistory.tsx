@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Column, DataGrid, Paging, Summary, TotalItem, ValueFormat,
@@ -12,9 +12,9 @@ interface OrderHistoryProps {
 }
 
 const OrderHistory = ({ productId }: OrderHistoryProps) => {
-  const [orderHistoryStore, setOrderHistoryStore] = React.useState(null);
+  const [orderHistoryStore, setOrderHistoryStore] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (productId) {
       const newOrderHistoryStore = createStore({
         key: 'OrderID',

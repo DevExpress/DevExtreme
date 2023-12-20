@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Button from 'devextreme-react/button';
 import ButtonGroup from 'devextreme-react/button-group';
@@ -32,66 +32,66 @@ function onSelectionChanged(name) {
   notify(`The "${name}" value has been changed`);
 }
 function App() {
-  const [lineHeight, setLineHeight] = React.useState(lineHeightDefault);
-  const [textAlign, setTextAlign] = React.useState(textAlignDefault);
-  const [fontSize, setFontSize] = React.useState(fontSizeDefault);
-  const [heading, setHeading] = React.useState(headingDefault);
-  const [multiline, setMultiline] = React.useState(true);
-  const onFontFamilyClick = React.useCallback(() => {
+  const [lineHeight, setLineHeight] = useState(lineHeightDefault);
+  const [textAlign, setTextAlign] = useState(textAlignDefault);
+  const [fontSize, setFontSize] = useState(fontSizeDefault);
+  const [heading, setHeading] = useState(headingDefault);
+  const [multiline, setMultiline] = useState(true);
+  const onFontFamilyClick = useCallback(() => {
     notify('The "Font Family" value has been changed');
   }, []);
-  const onUndoButtonClick = React.useCallback(() => {
+  const onUndoButtonClick = useCallback(() => {
     onButtonClick('Undo');
   }, []);
-  const onButtonGroupClick = React.useCallback((e) => {
+  const onButtonGroupClick = useCallback((e) => {
     onButtonClick(e.itemData.hint);
   }, []);
-  const onRedoButtonClick = React.useCallback(() => {
+  const onRedoButtonClick = useCallback(() => {
     onButtonClick('Redo');
   }, []);
-  const onLinkButtonClick = React.useCallback(() => {
+  const onLinkButtonClick = useCallback(() => {
     onButtonClick('Link');
   }, []);
-  const onAddImageButtonClick = React.useCallback(() => {
+  const onAddImageButtonClick = useCallback(() => {
     onButtonClick('Add Image');
   }, []);
-  const onClearButtonClick = React.useCallback(() => {
+  const onClearButtonClick = useCallback(() => {
     onButtonClick('Clear Formating');
   }, []);
-  const onCodeBlockButtonClick = React.useCallback(() => {
+  const onCodeBlockButtonClick = useCallback(() => {
     onButtonClick('Code Block');
   }, []);
-  const onQuoteButtonClick = React.useCallback(() => {
+  const onQuoteButtonClick = useCallback(() => {
     onButtonClick('Blockquote');
   }, []);
-  const onAttachButtonClick = React.useCallback(() => {
+  const onAttachButtonClick = useCallback(() => {
     onButtonClick('Attach');
   }, []);
-  const onAboutButtonClick = React.useCallback(() => {
+  const onAboutButtonClick = useCallback(() => {
     onButtonClick('Attach');
   }, []);
-  const onHeadingClick = React.useCallback(
+  const onHeadingClick = useCallback(
     (e) => {
       setHeading(e.itemData.text);
       notify('The "Heading" value has been changed');
     },
     [setHeading],
   );
-  const onLineHeightChanged = React.useCallback(
+  const onLineHeightChanged = useCallback(
     (e) => {
       setLineHeight(e.item.lineHeight);
       onSelectionChanged('Line Height');
     },
     [setLineHeight],
   );
-  const onFontSizeChange = React.useCallback(
+  const onFontSizeChange = useCallback(
     (e) => {
       setFontSize(e.item.size);
       onSelectionChanged('Font Size');
     },
     [setFontSize],
   );
-  const onTextAlignChanged = React.useCallback(
+  const onTextAlignChanged = useCallback(
     (e) => {
       const { alignment, hint } = e.itemData;
       setTextAlign([alignment]);
@@ -99,17 +99,17 @@ function App() {
     },
     [setTextAlign],
   );
-  const onToolbarLineModeChanged = React.useCallback(
+  const onToolbarLineModeChanged = useCallback(
     ({ value }) => {
       setMultiline(value);
     },
     [setMultiline],
   );
-  const renderFontSize = React.useCallback(
+  const renderFontSize = useCallback(
     (itemData) => <div style={{ fontSize: `${itemData.size}px` }}>{itemData.text}</div>,
     [],
   );
-  const renderTextAlign = React.useCallback(
+  const renderTextAlign = useCallback(
     () => (
       <ButtonGroup
         keyExpr="alignment"
@@ -121,7 +121,7 @@ function App() {
     ),
     [textAlign, onTextAlignChanged],
   );
-  const renderTextAlignMenu = React.useCallback(
+  const renderTextAlignMenu = useCallback(
     () => (
       <ButtonGroup
         keyExpr="alignment"
@@ -133,10 +133,7 @@ function App() {
     ),
     [textAlign, onTextAlignChanged],
   );
-  const renderMenuSeparator = React.useCallback(
-    () => <div className="toolbar-menu-separator"></div>,
-    [],
-  );
+  const renderMenuSeparator = useCallback(() => <div className="toolbar-menu-separator"></div>, []);
   return (
     <React.Fragment>
       <div className="widget-container">

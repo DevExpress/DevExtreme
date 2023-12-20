@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
@@ -18,44 +18,44 @@ const minCountWidthLabel = { 'aria-label': 'Min Count Width' };
 
 const App = () => {
   const companies = service.getCompanies();
-  const [labelMode, setLabelMode] = React.useState<FormTypes.Properties['labelMode']>('floating');
-  const [labelLocation, setLabelLocation] = React.useState<FormTypes.Properties['labelLocation']>('left');
-  const [readOnly, setReadOnly] = React.useState(false);
-  const [showColon, setShowColon] = React.useState(true);
-  const [minColWidth, setMinColWidth] = React.useState(300);
-  const [colCount, setColCount] = React.useState(2);
-  const [company, setCompany] = React.useState(companies[0]);
-  const [width, setWidth] = React.useState();
+  const [labelMode, setLabelMode] = useState<FormTypes.Properties['labelMode']>('floating');
+  const [labelLocation, setLabelLocation] = useState<FormTypes.Properties['labelLocation']>('left');
+  const [readOnly, setReadOnly] = useState(false);
+  const [showColon, setShowColon] = useState(true);
+  const [minColWidth, setMinColWidth] = useState(300);
+  const [colCount, setColCount] = useState(2);
+  const [company, setCompany] = useState(companies[0]);
+  const [width, setWidth] = useState();
 
-  const onCompanyChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onCompanyChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setCompany(e.value);
   }, [setCompany]);
 
-  const onLabelModeChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onLabelModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setLabelMode(e.value);
   }, [setLabelMode]);
 
-  const onLabelLocationChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onLabelLocationChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setLabelLocation(e.value);
   }, [setLabelLocation]);
 
-  const onReadOnlyChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onReadOnlyChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setReadOnly(e.value);
   }, [setReadOnly]);
 
-  const onShowColonChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onShowColonChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowColon(e.value);
   }, [setShowColon]);
 
-  const onMinColWidthChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onMinColWidthChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setMinColWidth(e.value);
   }, [setMinColWidth]);
 
-  const onColumnsCountChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onColumnsCountChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setColCount(e.value);
   }, [setColCount]);
 
-  const onFormWidthChanged = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const onFormWidthChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setWidth(e.value);
   }, [setWidth]);
 

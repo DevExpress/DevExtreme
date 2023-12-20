@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import Sortable, { SortableTypes } from 'devextreme-react/sortable';
 import TabPanel, { TabPanelTypes } from 'devextreme-react/tab-panel';
@@ -10,10 +10,10 @@ import EmployeeTemplate from './EmployeeTemplate.tsx';
 const allEmployees = service.getEmployees();
 
 function App() {
-  const [employees, setEmployees] = React.useState(allEmployees.slice(0, 3));
-  const [selectedItem, setSelectedItem] = React.useState(allEmployees[0]);
+  const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
+  const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
 
-  const addButtonHandler = React.useCallback(() => {
+  const addButtonHandler = useCallback(() => {
     const newItem = allEmployees
       .filter((employee) => employees.indexOf(employee) === -1)[0];
 
@@ -25,7 +25,7 @@ function App() {
     return employees.length === allEmployees.length;
   }
 
-  const closeButtonHandler = React.useCallback((item) => {
+  const closeButtonHandler = useCallback((item) => {
     const newEmployees = [...employees];
     const index = newEmployees.indexOf(item);
 
@@ -37,7 +37,7 @@ function App() {
     }
   }, [employees, setEmployees, setSelectedItem]);
 
-  const renderTitle = React.useCallback((data) => (
+  const renderTitle = useCallback((data) => (
     <React.Fragment>
       <div>
         <span>
@@ -48,15 +48,15 @@ function App() {
     </React.Fragment>
   ), [employees, closeButtonHandler]);
 
-  const onSelectionChanged = React.useCallback((args: TabPanelTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback((args: TabPanelTypes.SelectionChangedEvent) => {
     setSelectedItem(args.addedItems[0]);
   }, [setSelectedItem]);
 
-  const onTabDragStart = React.useCallback((e: SortableTypes.DragStartEvent) => {
+  const onTabDragStart = useCallback((e: SortableTypes.DragStartEvent) => {
     e.itemData = e.fromData[e.fromIndex];
   }, []);
 
-  const onTabDrop = React.useCallback((e: SortableTypes.ReorderEvent) => {
+  const onTabDrop = useCallback((e: SortableTypes.ReorderEvent) => {
     const newEmployees = [...employees];
 
     newEmployees.splice(e.fromIndex, 1);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataGrid, {
   Column,
 } from 'devextreme-react/data-grid';
@@ -9,10 +9,10 @@ import PriceCell from './PriceCell.tsx';
 import ChangeCell from './ChangeCell.tsx';
 
 const App = () => {
-  const [connectionStarted, setConnectionStarted] = React.useState(false);
-  const [dataSource, setDataSource] = React.useState(null);
+  const [connectionStarted, setConnectionStarted] = useState(false);
+  const [dataSource, setDataSource] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
         skipNegotiation: true,

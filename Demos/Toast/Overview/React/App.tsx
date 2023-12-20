@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Toast } from 'devextreme-react/toast';
 
 import { ProductItem } from './ProductItem.tsx';
 import { products } from './data.ts';
 
 function App() {
-  const [toastConfig, setToastConfig] = React.useState({
+  const [toastConfig, setToastConfig] = useState({
     isVisible: false,
     type: 'info',
     message: '',
@@ -15,7 +15,7 @@ function App() {
     message: string,
   });
 
-  const checkAvailability = React.useCallback((e: { value: any; }, product: { Name: string | number; }) => {
+  const checkAvailability = useCallback((e: { value: any; }, product: { Name: string | number; }) => {
     const type = e.value ? 'success' : 'error';
     const message = product.Name + (e.value ? ' is available' : ' is not available');
 
@@ -27,7 +27,7 @@ function App() {
     });
   }, [toastConfig, setToastConfig]);
 
-  const onHiding = React.useCallback(() => {
+  const onHiding = useCallback(() => {
     setToastConfig({
       ...toastConfig,
       isVisible: false,

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, { Column, DataGridTypes, Selection } from 'devextreme-react/data-grid';
 import { employees } from './data.ts';
 
 const App = () => {
-  const [showEmployeeInfo, setShowEmployeeInfo] = React.useState(false);
-  const [selectedRowPicture, setSelectedRowPicture] = React.useState('');
-  const [selectedRowNotes, setSelectedRowNotes] = React.useState('');
+  const [showEmployeeInfo, setShowEmployeeInfo] = useState(false);
+  const [selectedRowPicture, setSelectedRowPicture] = useState('');
+  const [selectedRowNotes, setSelectedRowNotes] = useState('');
 
-  const onSelectionChanged = React.useCallback(({ selectedRowsData }: DataGridTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback(({ selectedRowsData }: DataGridTypes.SelectionChangedEvent) => {
     const data = selectedRowsData[0];
 
     setShowEmployeeInfo(!!data);

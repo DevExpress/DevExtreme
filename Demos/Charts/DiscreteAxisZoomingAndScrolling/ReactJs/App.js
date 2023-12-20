@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Chart, {
   ValueAxis,
   Label,
@@ -37,11 +37,11 @@ function formatValueAxisLabel(e) {
   return `${e.valueText}%`;
 }
 function App() {
-  const [visualRange, setVisualRange] = React.useState({
+  const [visualRange, setVisualRange] = useState({
     startValue: 'Inner Core',
     endValue: 'Upper Crust',
   });
-  const updateVisualRange = React.useCallback(
+  const updateVisualRange = useCallback(
     (e) => {
       setVisualRange(e.value);
     },

@@ -1,32 +1,32 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Gallery from 'devextreme-react/gallery';
 import CheckBox from 'devextreme-react/check-box';
 import { gallery } from './data.js';
 
 const App = () => {
-  const [loop, setLoop] = React.useState(true);
-  const [slideShow, setSlideShow] = React.useState(true);
-  const [showNavButtons, setShowNavButtons] = React.useState(true);
-  const [showIndicator, setShowIndicator] = React.useState(true);
-  const onLoopChanged = React.useCallback(
+  const [loop, setLoop] = useState(true);
+  const [slideShow, setSlideShow] = useState(true);
+  const [showNavButtons, setShowNavButtons] = useState(true);
+  const [showIndicator, setShowIndicator] = useState(true);
+  const onLoopChanged = useCallback(
     (data) => {
       setLoop(data.value);
     },
     [setLoop],
   );
-  const onSlideShowChanged = React.useCallback(
+  const onSlideShowChanged = useCallback(
     (data) => {
       setSlideShow(data.value);
     },
     [setSlideShow],
   );
-  const onShowNavButtonsChanged = React.useCallback(
+  const onShowNavButtonsChanged = useCallback(
     (data) => {
       setShowNavButtons(data.value);
     },
     [setShowNavButtons],
   );
-  const onShowIndicatorChanged = React.useCallback(
+  const onShowIndicatorChanged = useCallback(
     (data) => {
       setShowIndicator(data.value);
     },

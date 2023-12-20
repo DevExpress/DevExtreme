@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Column, Validation, Editing,
 } from 'devextreme-react/gantt';
@@ -6,7 +6,7 @@ import CheckBox, { ICheckBoxOptions } from 'devextreme-react/check-box';
 import { tasks, dependencies } from './data.ts';
 
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState({
+  const [ganttConfig, setGanttConfig] = useState({
     autoUpdateParentTasks: true,
     validateDependencies: true,
     enablePredecessorGap: true,

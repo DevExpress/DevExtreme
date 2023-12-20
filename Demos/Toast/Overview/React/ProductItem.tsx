@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { CheckBox } from 'devextreme-react/check-box';
 
@@ -8,7 +8,7 @@ interface ProductItemProps {
 }
 
 export function ProductItem(props: ProductItemProps) {
-  const onValueChanged = React.useCallback((e) => {
+  const onValueChanged = useCallback((e) => {
     props.checkAvailability(e, props.product);
   }, [props]);
 

@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 /* global RequestInit */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem, DataGridTypes,
 } from 'devextreme-react/data-grid';
@@ -17,7 +17,7 @@ const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 const REFRESH_MODES = ['full', 'reshape', 'repaint'];
 
 const App = () => {
-  const [ordersData] = React.useState(new CustomStore({
+  const [ordersData] = useState(new CustomStore({
     key: 'OrderID',
     load: () => sendRequest(`${URL}/Orders`),
     insert: (values) => sendRequest(`${URL}/InsertOrder`, 'POST', {
@@ -31,29 +31,29 @@ const App = () => {
       key,
     }),
   }));
-  const [customersData] = React.useState(new CustomStore({
+  const [customersData] = useState(new CustomStore({
     key: 'Value',
     loadMode: 'raw',
     load: () => sendRequest(`${URL}/CustomersLookup`),
   }));
-  const [shippersData] = React.useState(new CustomStore({
+  const [shippersData] = useState(new CustomStore({
     key: 'Value',
     loadMode: 'raw',
     load: () => sendRequest(`${URL}/ShippersLookup`),
   }));
 
-  const [requests, setRequests] = React.useState([]);
-  const [refreshMode, setRefreshMode] = React.useState<DataGridTypes.GridsEditRefreshMode>('reshape');
+  const [requests, setRequests] = useState([]);
+  const [refreshMode, setRefreshMode] = useState<DataGridTypes.GridsEditRefreshMode>('reshape');
 
-  const handleRefreshModeChange = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handleRefreshModeChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setRefreshMode(e.value);
   }, []);
 
-  const clearRequests = React.useCallback(() => {
+  const clearRequests = useCallback(() => {
     setRequests([]);
   }, []);
 
-  const logRequest = React.useCallback((method, url: string, data: Record<string, any>) => {
+  const logRequest = useCallback((method, url: string, data: Record<string, any>) => {
     const args = Object.keys(data || {}).map((key) => `${key}=${data[key]}`).join(' ');
 
     const time = formatDate(new Date(), 'HH:mm:ss');
@@ -63,7 +63,7 @@ const App = () => {
   }, []);
 
   // eslint-disable-next-line consistent-return, space-before-function-paren
-  const sendRequest = React.useCallback(async (url: string, method = 'GET', data = {}) => {
+  const sendRequest = useCallback(async (url: string, method = 'GET', data = {}) => {
     logRequest(method, url, data);
 
     const request: RequestInit = {

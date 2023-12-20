@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   DataGrid, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection, Position,
 } from 'devextreme-react/data-grid';
@@ -21,31 +21,31 @@ const searchEditorOptions = { placeholder: 'Search column' };
 const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
 
 const App = () => {
-  const [mode, setMode] = React.useState(columnChooserModes[1].key);
-  const [searchEnabled, setSearchEnabled] = React.useState(true);
-  const [allowSelectAll, setAllowSelectAll] = React.useState(true);
-  const [selectByClick, setSelectByClick] = React.useState(true);
-  const [recursive, setRecursive] = React.useState(true);
+  const [mode, setMode] = useState(columnChooserModes[1].key);
+  const [searchEnabled, setSearchEnabled] = useState(true);
+  const [allowSelectAll, setAllowSelectAll] = useState(true);
+  const [selectByClick, setSelectByClick] = useState(true);
+  const [recursive, setRecursive] = useState(true);
 
   const isDragMode = mode === columnChooserModes[0].key;
 
-  const onModeValueChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onModeValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setMode(e.value);
   }, []);
 
-  const onSearchEnabledValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onSearchEnabledValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setSearchEnabled(e.value);
   }, []);
 
-  const onAllowSelectAllValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onAllowSelectAllValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setAllowSelectAll(e.value);
   }, []);
 
-  const onSelectByClickValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onSelectByClickValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setSelectByClick(e.value);
   }, []);
 
-  const onRecursiveValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onRecursiveValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setRecursive(e.value);
   }, []);
 

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import sales from './data.js';
 
 const App = () => {
-  const [showTotalsPrior, setShowTotalsPrior] = React.useState(false);
-  const [dataFieldArea, setDataFieldArea] = React.useState(false);
-  const [rowHeaderLayout, setRowHeaderLayout] = React.useState(true);
+  const [showTotalsPrior, setShowTotalsPrior] = useState(false);
+  const [dataFieldArea, setDataFieldArea] = useState(false);
+  const [rowHeaderLayout, setRowHeaderLayout] = useState(true);
   return (
     <React.Fragment>
       <PivotGrid

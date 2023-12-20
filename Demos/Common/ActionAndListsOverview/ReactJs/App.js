@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ArrayStore from 'devextreme/data/array_store';
 import List from 'devextreme-react/list';
 import TileView from 'devextreme-react/tile-view';
@@ -47,9 +47,9 @@ const renderTile = (item) => (
   />
 );
 const App = () => {
-  const [currentHotel, setCurrentHotel] = React.useState(data[0]);
-  const [selectedItemKeys, setSelectedItemKeys] = React.useState([data[0].Id]);
-  const handleListSelectionChange = React.useCallback(
+  const [currentHotel, setCurrentHotel] = useState(data[0]);
+  const [selectedItemKeys, setSelectedItemKeys] = useState([data[0].Id]);
+  const handleListSelectionChange = useCallback(
     (e) => {
       const hotel = e.addedItems[0];
       setCurrentHotel(hotel);

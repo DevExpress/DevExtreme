@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
 
 const simpleLabel = { 'aria-label': 'Simple' };
@@ -17,10 +17,10 @@ const keyDown = (e: NumberBoxTypes.KeyDownEvent) => {
 };
 
 function App() {
-  const [value, setValue] = React.useState(16);
-  const [max] = React.useState(30);
+  const [value, setValue] = useState(16);
+  const [max] = useState(30);
 
-  const valueChanged = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const valueChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setValue(e.value);
   }, []);
 

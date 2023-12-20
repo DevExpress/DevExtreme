@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
 import ContextMenu, { ContextMenuTypes } from 'devextreme-react/context-menu';
 import { data, resourcesData, Resource as ResourceItem } from './data.ts';
@@ -17,15 +17,15 @@ const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent) => {
 };
 
 const App = () => {
-  const schedulerRef = React.useRef<Scheduler>(null);
-  const [currentDate, setCurrentDate] = React.useState(new Date(2020, 10, 25));
-  const [contextMenuItems, setContextMenuItems] = React.useState<ContextMenuItem[]>([]);
-  const [target, setTarget] = React.useState(appointmentClassName);
-  const [disabled, setDisabled] = React.useState(true);
-  const [groups, setGroups] = React.useState<string[] | undefined>(undefined);
-  const [crossScrollingEnabled, setCrossScrollingEnabled] = React.useState(false);
+  const schedulerRef = useRef<Scheduler>(null);
+  const [currentDate, setCurrentDate] = useState(new Date(2020, 10, 25));
+  const [contextMenuItems, setContextMenuItems] = useState<ContextMenuItem[]>([]);
+  const [target, setTarget] = useState(appointmentClassName);
+  const [disabled, setDisabled] = useState(true);
+  const [groups, setGroups] = useState<string[] | undefined>(undefined);
+  const [crossScrollingEnabled, setCrossScrollingEnabled] = useState(false);
 
-  const onAppointmentContextMenu = React.useCallback((event: SchedulerTypes.AppointmentContextMenuEvent) => {
+  const onAppointmentContextMenu = useCallback((event: SchedulerTypes.AppointmentContextMenuEvent) => {
     const { appointmentData, targetedAppointmentData } = event;
     const scheduler = schedulerRef.current?.instance;
 
@@ -66,7 +66,7 @@ const App = () => {
   }
   , []);
 
-  const onCellContextMenu = React.useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
+  const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
     const scheduler = schedulerRef.current?.instance;
 
     setTarget(cellClassName);

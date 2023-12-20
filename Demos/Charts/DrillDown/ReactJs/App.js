@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeMap, { Size, Title, Colorizer } from 'devextreme-react/tree-map';
 import { citiesPopulation } from './data.js';
 import TreeMapBreadcrumbs from './TreeMapBreadcrumbs.js';
@@ -12,8 +12,8 @@ function nodeClick(e) {
   e.node.drillDown();
 }
 function App() {
-  const [drillInfo, setDrillInfo] = React.useState([]);
-  const drill = React.useCallback(
+  const [drillInfo, setDrillInfo] = useState([]);
+  const drill = useCallback(
     (e) => {
       const newDrillInfo = [];
       for (let node = e.node.getParent(); node; node = node.getParent()) {

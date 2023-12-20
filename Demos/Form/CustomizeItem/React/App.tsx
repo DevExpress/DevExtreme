@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import 'devextreme-react/text-area';
 
 import Form, {
@@ -31,7 +31,7 @@ const notesEditorOptions = { height: 90, maxLength: 200 };
 const phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
 
 const App = () => {
-  const validateForm = React.useCallback((e: FormTypes.ContentReadyEvent) => {
+  const validateForm = useCallback((e: FormTypes.ContentReadyEvent) => {
     e.component.validate();
   }, []);
 

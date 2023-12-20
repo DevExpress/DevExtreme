@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, Paging, Scrolling, Selection,
 } from 'devextreme-react/data-grid';
@@ -7,14 +7,14 @@ import DropDownBox from 'devextreme-react/drop-down-box';
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 const EmployeeDropDownBoxComponent = (props) => {
-  const [selectedRowKeys, setSelectedRowKeys] = React.useState([props.data.value]);
-  const [isDropDownOpened, setDropDownOpened] = React.useState(false);
-  const boxOptionChanged = React.useCallback((e) => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([props.data.value]);
+  const [isDropDownOpened, setDropDownOpened] = useState(false);
+  const boxOptionChanged = useCallback((e) => {
     if (e.name === 'opened') {
       setDropDownOpened(e.value);
     }
   }, []);
-  const contentRender = React.useCallback(() => {
+  const contentRender = useCallback(() => {
     const onSelectionChanged = (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);

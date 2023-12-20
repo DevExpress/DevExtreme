@@ -1,5 +1,5 @@
 /* eslint-disable func-style */
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import Scheduler, { SchedulerTypes } from 'devextreme-react/scheduler';
 import notify from 'devextreme/ui/notify';
@@ -54,15 +54,15 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
 };
 
 const App = () => {
-  const [currentView, setCurrentView] = React.useState<SchedulerTypes.ViewType>(views[0]);
+  const [currentView, setCurrentView] = useState<SchedulerTypes.ViewType>(views[0]);
 
-  const DataCellComponent = React.useMemo(() => (
+  const DataCellComponent = useMemo(() => (
     currentView === 'month' ? DataCellMonth : DataCell
   ), [currentView]);
 
-  const onCurrentViewChange = React.useCallback((value) => setCurrentView(value), [setCurrentView]);
+  const onCurrentViewChange = useCallback((value) => setCurrentView(value), [setCurrentView]);
 
-  const renderDateCell = React.useCallback((itemData) => (
+  const renderDateCell = useCallback((itemData) => (
     <DateCell itemData={itemData} currentView={currentView} />
   ), []);
 

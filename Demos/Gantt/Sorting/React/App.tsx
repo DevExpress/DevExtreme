@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Sorting, ISortingProps,
 } from 'devextreme-react/gantt';
@@ -11,7 +11,7 @@ import {
 const sortingModeValues: ISortingProps['mode'][] = ['single', 'multiple', 'none'];
 const sortingMode: ISortingProps['mode'] = 'single';
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState({
+  const [ganttConfig, setGanttConfig] = useState({
     sortingMode,
     showSortIndexes: false,
     showSortIndexesDisabled: true,

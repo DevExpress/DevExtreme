@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   CircularGauge, Scale, Label, RangeContainer, Range, Tooltip, Title, Font,
 } from 'devextreme-react/circular-gauge';
@@ -10,10 +10,10 @@ function customizeText({ valueText }) {
 }
 
 function App() {
-  const [value, setValue] = React.useState(dataSource[0].mean);
-  const [subvalues, setSubvalues] = React.useState([dataSource[0].min, dataSource[0].max]);
+  const [value, setValue] = useState(dataSource[0].mean);
+  const [subvalues, setSubvalues] = useState([dataSource[0].min, dataSource[0].max]);
 
-  const onSelectionChanged = React.useCallback(({ selectedItem }) => {
+  const onSelectionChanged = useCallback(({ selectedItem }) => {
     setValue(selectedItem.mean);
     setSubvalues([selectedItem.min, selectedItem.max]);
   }, [setValue, setSubvalues]);

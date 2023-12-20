@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   PivotGrid,
   HeaderFilter,
@@ -34,8 +34,8 @@ const dataSource = new PivotGridDataSource({
   }),
 });
 const App = () => {
-  const [searchEnabled, setSearchEnabled] = React.useState(true);
-  const [showRelevantValues, setShowRelevantValues] = React.useState(true);
+  const [searchEnabled, setSearchEnabled] = useState(true);
+  const [showRelevantValues, setShowRelevantValues] = useState(true);
   return (
     <div>
       <PivotGrid

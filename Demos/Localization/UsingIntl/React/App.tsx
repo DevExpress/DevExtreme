@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
-import React from 'react';
+import React, { useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 
@@ -29,7 +29,7 @@ loadMessages(ruMessages);
 loadMessages(service.getDictionary());
 
 const App = () => {
-  const [localeState, setLocaleState] = React.useState(sessionStorage.getItem('locale') || 'en');
+  const [localeState, setLocaleState] = useState(sessionStorage.getItem('locale') || 'en');
   const locales = service.getLocales();
   const payments = service.getPayments();
 

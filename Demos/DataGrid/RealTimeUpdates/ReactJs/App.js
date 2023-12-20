@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataGrid, {
   Column,
   Summary,
@@ -79,8 +79,8 @@ const detailRender = (detail) => (
   </DataGrid>
 );
 const App = () => {
-  const [updateFrequency, setUpdateFrequency] = React.useState(100);
-  React.useEffect(() => {
+  const [updateFrequency, setUpdateFrequency] = useState(100);
+  useEffect(() => {
     const interval = setInterval(() => {
       if (getOrderCount() > 500000) {
         return;

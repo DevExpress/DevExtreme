@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import MultiView, { MultiViewTypes } from 'devextreme-react/multi-view';
 import { multiViewItems as companies } from './data.ts';
 import CompanyItem from './CompanyItem.tsx';
 
 const App = () => {
-  const [animationEnabled, setAnimationEnabled] = React.useState(true);
-  const [loop, setLoop] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [animationEnabled, setAnimationEnabled] = useState(true);
+  const [loop, setLoop] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const onSelectionChanged = React.useCallback((args: MultiViewTypes.OptionChangedEvent) => {
+  const onSelectionChanged = useCallback((args: MultiViewTypes.OptionChangedEvent) => {
     if (args.name === 'selectedIndex') {
       setSelectedIndex(args.value);
     }
   }, [setSelectedIndex]);
 
-  const onLoopChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
+  const onLoopChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
     setLoop(args.value);
   }, [setLoop]);
 
-  const onAnimationEnabledChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
+  const onAnimationEnabledChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
     setAnimationEnabled(args.value);
   }, [setAnimationEnabled]);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TreeList, Column, SearchPanel, TreeListTypes,
 } from 'devextreme-react/tree-list';
@@ -8,7 +8,7 @@ import { employees, filterLabel } from './data.ts';
 const filterModes = ['matchOnly', 'withAncestors', 'fullBranch'];
 
 const App = () => {
-  const [filterMode, setFilterMode] = React.useState<TreeListTypes.TreeListFilterMode>('matchOnly');
+  const [filterMode, setFilterMode] = useState<TreeListTypes.TreeListFilterMode>('matchOnly');
 
   return (
     <React.Fragment>

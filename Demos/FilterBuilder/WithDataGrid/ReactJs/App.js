@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FilterBuilder from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
@@ -26,15 +26,15 @@ const dataSource = new DataSource({
   ],
 });
 const App = () => {
-  const [value, setValue] = React.useState(filter);
-  const [gridFilterValue, setGridFilterValue] = React.useState(filter);
-  const onValueChanged = React.useCallback(
+  const [value, setValue] = useState(filter);
+  const [gridFilterValue, setGridFilterValue] = useState(filter);
+  const onValueChanged = useCallback(
     (e) => {
       setValue(e.value);
     },
     [setValue],
   );
-  const buttonClick = React.useCallback(() => {
+  const buttonClick = useCallback(() => {
     setGridFilterValue(value);
   }, [value, setGridFilterValue]);
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CircularGauge, {
   Geometry,
   Scale as CircularScale,
@@ -42,8 +42,8 @@ function CenterTemplate(gauge) {
   );
 }
 function App() {
-  const [speedValue, setSpeedValue] = React.useState(40);
-  const handleSpeedChange = React.useCallback(
+  const [speedValue, setSpeedValue] = useState(40);
+  const handleSpeedChange = useCallback(
     ({ value }) => {
       setSpeedValue(value);
     },

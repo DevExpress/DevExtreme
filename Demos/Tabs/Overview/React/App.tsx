@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Tabs from 'devextreme-react/tabs';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -27,17 +27,17 @@ function OptionWrapper(props) {
 }
 
 const App = () => {
-  const [orientation, setOrientation] = React.useState(orientations[0]);
-  const [stylingMode, setStylingMode] = React.useState(stylingModes[1]);
-  const [iconPosition, setIconPosition] = React.useState(iconPositions[0]);
-  const [showNavigation, setShowNavigation] = React.useState(false);
-  const [scrollContent, setScrollContent] = React.useState(false);
-  const [fullWidth, setFullWidth] = React.useState(false);
-  const [width, setWidth] = React.useState('auto');
-  const [rtlEnabled, setRtlEnabled] = React.useState(false);
-  const [widgetWrapperClasses, setWidgetWrapperClasses] = React.useState('widget-wrapper widget-wrapper-horizontal');
+  const [orientation, setOrientation] = useState(orientations[0]);
+  const [stylingMode, setStylingMode] = useState(stylingModes[1]);
+  const [iconPosition, setIconPosition] = useState(iconPositions[0]);
+  const [showNavigation, setShowNavigation] = useState(false);
+  const [scrollContent, setScrollContent] = useState(false);
+  const [fullWidth, setFullWidth] = useState(false);
+  const [width, setWidth] = useState('auto');
+  const [rtlEnabled, setRtlEnabled] = useState(false);
+  const [widgetWrapperClasses, setWidgetWrapperClasses] = useState('widget-wrapper widget-wrapper-horizontal');
 
-  const enforceWidthConstraint = React.useCallback(
+  const enforceWidthConstraint = useCallback(
     (shouldRestrictWidth) => {
       const callback = (prevClasses: string) => {
         const restClasses = prevClasses.split(' ').filter((className) => className !== STRICT_WIDTH_CLASS).join(' ');
@@ -50,15 +50,15 @@ const App = () => {
     }, [setWidgetWrapperClasses],
   );
 
-  const stylingModeChanged = React.useCallback((e) => {
+  const stylingModeChanged = useCallback((e) => {
     setStylingMode(e.value);
   }, [setStylingMode]);
 
-  const iconPositionChanged = React.useCallback((e) => {
+  const iconPositionChanged = useCallback((e) => {
     setIconPosition(e.value);
   }, [setIconPosition]);
 
-  const orientationChanged = React.useCallback((e) => {
+  const orientationChanged = useCallback((e) => {
     const isVertical = e.value === 'vertical';
 
     const callback = (prevClasses: string) => {
@@ -75,26 +75,26 @@ const App = () => {
     setOrientation(e.value);
   }, [setOrientation, setWidgetWrapperClasses]);
 
-  const showNavigationChanged = React.useCallback((e) => {
+  const showNavigationChanged = useCallback((e) => {
     const shouldRestrictWidth = e.value || scrollContent;
 
     enforceWidthConstraint(shouldRestrictWidth);
     setShowNavigation(e.value);
   }, [scrollContent, setShowNavigation, enforceWidthConstraint]);
 
-  const scrollContentChanged = React.useCallback((e) => {
+  const scrollContentChanged = useCallback((e) => {
     const shouldRestrictWidth = e.value || showNavigation;
 
     enforceWidthConstraint(shouldRestrictWidth);
     setScrollContent(e.value);
   }, [showNavigation, setScrollContent, enforceWidthConstraint]);
 
-  const fullWidthChanged = React.useCallback((e) => {
+  const fullWidthChanged = useCallback((e) => {
     setFullWidth(e.value);
     setWidth(e.value ? '100%' : 'auto');
   }, [setFullWidth, setWidth]);
 
-  const rtlEnabledChanged = React.useCallback((e) => {
+  const rtlEnabledChanged = useCallback((e) => {
     setRtlEnabled(e.value);
   }, [setRtlEnabled]);
 

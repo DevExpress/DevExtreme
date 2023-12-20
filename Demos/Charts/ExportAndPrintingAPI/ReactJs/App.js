@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import Chart, {
   Series,
   Legend,
@@ -20,11 +20,11 @@ function customizeLabelText({ value }) {
   return `${value} m`;
 }
 function App() {
-  const chartRef = React.useRef(null);
-  const printChart = React.useCallback(() => {
+  const chartRef = useRef(null);
+  const printChart = useCallback(() => {
     chartRef.current.instance.print();
   }, []);
-  const exportChart = React.useCallback(() => {
+  const exportChart = useCallback(() => {
     chartRef.current.instance.exportTo('Example', 'png');
   }, []);
   return (

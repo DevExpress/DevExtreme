@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import {
   CircularGauge, Scale, Label, Tooltip, Title, Font,
 } from 'devextreme-react/circular-gauge';
@@ -14,12 +16,12 @@ function customizeText({ valueText }) {
 }
 
 function App() {
-  const [mainGeneratorValue, setMainGeneratorValue] = React.useState(34);
-  const [additionalGenerator1Value, setAdditionalGenerator1Value] = React.useState(12);
-  const [additionalGenerator2Value, setAdditionalGenerator2Value] = React.useState(23);
-  const gaugeRef = React.useRef(null);
+  const [mainGeneratorValue, setMainGeneratorValue] = useState(34);
+  const [additionalGenerator1Value, setAdditionalGenerator1Value] = useState(12);
+  const [additionalGenerator2Value, setAdditionalGenerator2Value] = useState(23);
+  const gaugeRef = useRef(null);
 
-  const updateValues = React.useCallback(() => {
+  const updateValues = useCallback(() => {
     const gauge = gaugeRef.current.instance;
     gauge.value(mainGeneratorValue);
     gauge.subvalues([additionalGenerator1Value, additionalGenerator2Value]);
@@ -30,7 +32,7 @@ function App() {
     additionalGenerator2Value,
   ]);
 
-  const defaultSubvalues = React.useMemo(
+  const defaultSubvalues = useMemo(
     () => [additionalGenerator1Value, additionalGenerator2Value],
     [additionalGenerator1Value, additionalGenerator2Value],
   );

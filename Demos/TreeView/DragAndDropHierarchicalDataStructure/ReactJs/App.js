@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import Sortable from 'devextreme-react/sortable';
 import service from './data.js';
@@ -69,18 +69,18 @@ const getTopVisibleNode = (component) => {
   return null;
 };
 const App = () => {
-  const treeViewDriveCRef = React.useRef(null);
-  const treeViewDriveDRef = React.useRef(null);
-  const [itemsDriveC, setItemsDriveC] = React.useState(service.getItemsDriveC());
-  const [itemsDriveD, setItemsDriveD] = React.useState(service.getItemsDriveD());
-  const getTreeView = React.useCallback(
+  const treeViewDriveCRef = useRef(null);
+  const treeViewDriveDRef = useRef(null);
+  const [itemsDriveC, setItemsDriveC] = useState(service.getItemsDriveC());
+  const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
+  const getTreeView = useCallback(
     (driveName) =>
       (driveName === 'driveC'
         ? treeViewDriveCRef.current.instance
         : treeViewDriveDRef.current.instance),
     [],
   );
-  const onDragChange = React.useCallback(
+  const onDragChange = useCallback(
     (e) => {
       if (e.fromComponent === e.toComponent) {
         const fromNode = findNode(getTreeView(e.fromData), e.fromIndex);
@@ -92,11 +92,11 @@ const App = () => {
     },
     [getTreeView],
   );
-  const getStateFieldItems = React.useCallback(
+  const getStateFieldItems = useCallback(
     (driveName) => (driveName === 'driveC' ? itemsDriveC : itemsDriveD),
     [itemsDriveC, itemsDriveD],
   );
-  const onDragEnd = React.useCallback(
+  const onDragEnd = useCallback(
     (e) => {
       if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
         return;

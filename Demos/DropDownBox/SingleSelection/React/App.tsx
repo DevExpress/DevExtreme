@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import DropDownBox, { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
 import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
 import DataGrid, {
@@ -26,36 +26,36 @@ const gridBoxDisplayExpr = (item: { CompanyName: any; Phone: any }) =>
   item && `${item.CompanyName} <${item.Phone}>`;
 
 function App() {
-  const treeViewRef = React.useRef(null);
-  const [treeBoxValue, setTreeBoxValue] = React.useState('1_1');
-  const [gridBoxValue, setGridBoxValue] = React.useState([3]);
-  const [isGridBoxOpened, setIsGridBoxOpened] = React.useState(false);
-  const [isTreeBoxOpened, setIsTreeBoxOpened] = React.useState(false);
+  const treeViewRef = useRef(null);
+  const [treeBoxValue, setTreeBoxValue] = useState('1_1');
+  const [gridBoxValue, setGridBoxValue] = useState([3]);
+  const [isGridBoxOpened, setIsGridBoxOpened] = useState(false);
+  const [isTreeBoxOpened, setIsTreeBoxOpened] = useState(false);
 
-  const treeViewItemSelectionChanged = React.useCallback(
+  const treeViewItemSelectionChanged = useCallback(
     (e: { component: { getSelectedNodeKeys: () => any } }) => {
       setTreeBoxValue(e.component.getSelectedNodeKeys());
     },
     [],
   );
 
-  const dataGridOnSelectionChanged = React.useCallback((e: { selectedRowKeys: any }) => {
+  const dataGridOnSelectionChanged = useCallback((e: { selectedRowKeys: any }) => {
     setGridBoxValue(e.selectedRowKeys);
     setIsGridBoxOpened(false);
   }, []);
 
-  const treeViewOnContentReady = React.useCallback(
+  const treeViewOnContentReady = useCallback(
     (e: TreeViewTypes.ContentReadyEvent) => {
       e.component.selectItem(treeBoxValue);
     },
     [treeBoxValue],
   );
 
-  const onTreeItemClick = React.useCallback(() => {
+  const onTreeItemClick = useCallback(() => {
     setIsTreeBoxOpened(false);
   }, []);
 
-  const treeViewRender = React.useCallback(
+  const treeViewRender = useCallback(
     () => (
       <TreeView
         dataSource={treeDataSource}
@@ -74,7 +74,7 @@ function App() {
     [treeViewRef, treeViewOnContentReady, onTreeItemClick, treeViewItemSelectionChanged],
   );
 
-  const dataGridRender = React.useCallback(
+  const dataGridRender = useCallback(
     () => (
       <DataGrid
         dataSource={gridDataSource}
@@ -97,7 +97,7 @@ function App() {
     [gridBoxValue, dataGridOnSelectionChanged],
   );
 
-  const syncTreeViewSelection = React.useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
+  const syncTreeViewSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
     setTreeBoxValue(e.value);
     if (!treeViewRef.current) return;
 
@@ -108,17 +108,17 @@ function App() {
     }
   }, []);
 
-  const syncDataGridSelection = React.useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
+  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
     setGridBoxValue(e.value);
   }, []);
 
-  const onGridBoxOpened = React.useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+  const onGridBoxOpened = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
     if (e.name === 'opened') {
       setIsGridBoxOpened(e.value);
     }
   }, []);
 
-  const onTreeBoxOpened = React.useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+  const onTreeBoxOpened = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
     if (e.name === 'opened') {
       setIsTreeBoxOpened(e.value);
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ActionSheet, { ActionSheetTypes } from 'devextreme-react/action-sheet';
 import List, { ListTypes } from 'devextreme-react/list';
 
@@ -8,20 +8,20 @@ import RenderContactItem from './ContactItem.tsx';
 import { actionSheetItems, contacts } from './data.ts';
 
 const App = () => {
-  const [isActionSheetVisible, setIsActionSheetVisible] = React.useState(false);
-  const [actionSheetTarget, setActionSheetTarget] = React.useState<HTMLElement | string>('');
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false);
+  const [actionSheetTarget, setActionSheetTarget] = useState<HTMLElement | string>('');
 
-  const onListItemClick = React.useCallback((e: ListTypes.ItemClickEvent) => {
+  const onListItemClick = useCallback((e: ListTypes.ItemClickEvent) => {
     setIsActionSheetVisible(true);
     setActionSheetTarget(e.itemElement);
   }, [setIsActionSheetVisible, setActionSheetTarget]);
 
-  const onActionSheetItemClick = React.useCallback((e: ActionSheetTypes.ItemClickEvent) => {
+  const onActionSheetItemClick = useCallback((e: ActionSheetTypes.ItemClickEvent) => {
     setIsActionSheetVisible(false);
     notify(`The "${e.itemData.text}" button is clicked.`);
   }, [setIsActionSheetVisible]);
 
-  const onVisibleChange = React.useCallback((isVisible: boolean) => {
+  const onVisibleChange = useCallback((isVisible: boolean) => {
     if (isVisible !== isActionSheetVisible) {
       setIsActionSheetVisible(isVisible);
     }

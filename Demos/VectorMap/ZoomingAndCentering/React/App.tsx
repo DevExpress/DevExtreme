@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import VectorMap, {
   ITooltipProps,
   Layer,
@@ -26,9 +26,9 @@ const markerClick = ({ target, component }) => {
 };
 
 const App = () => {
-  const vectorMapRef = React.useRef(null);
+  const vectorMapRef = useRef(null);
 
-  const reset = React.useCallback(() => {
+  const reset = useCallback(() => {
     vectorMapRef.current.instance.center(null);
     vectorMapRef.current.instance.zoomFactor(null);
   }, [vectorMapRef]);

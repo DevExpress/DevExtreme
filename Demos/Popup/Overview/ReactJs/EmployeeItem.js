@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from 'devextreme-react/button';
 
 export function EmployeeItem(props) {
-  const showInfo = React.useCallback(() => {
+  const showInfo = useCallback(() => {
     props.showInfo(props.employee);
   }, [props]);
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from 'devextreme-react/button';
 
 export interface EmployeeItemProps {
@@ -7,7 +7,7 @@ export interface EmployeeItemProps {
 }
 
 export function EmployeeItem(props: EmployeeItemProps) {
-  const showInfo = React.useCallback(() => {
+  const showInfo = useCallback(() => {
     props.showInfo(props.employee);
   }, [props]);
 

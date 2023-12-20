@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Popover from 'devextreme-react/popover';
 
 const formatCurrency = new Intl.NumberFormat('en-US', {
@@ -14,7 +14,7 @@ const position = {
   collision: 'fit flip',
 };
 export function House(props) {
-  const renderAgentDetails = React.useCallback(() => {
+  const renderAgentDetails = useCallback(() => {
     const agent = props.house.Agent;
     return (
       <div className="agent-details">
@@ -29,7 +29,7 @@ export function House(props) {
       </div>
     );
   }, [props.house.Agent]);
-  const show = React.useCallback(() => {
+  const show = useCallback(() => {
     props.show(props.house);
   }, [props]);
   return (

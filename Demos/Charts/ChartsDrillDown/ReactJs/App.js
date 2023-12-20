@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Chart, Series, Legend, ValueAxis,
 } from 'devextreme-react/chart';
@@ -7,9 +7,9 @@ import service from './data.js';
 
 const colors = ['#6babac', '#e55253'];
 function App() {
-  const [isFirstLevel, setIsFirstLevel] = React.useState(true);
-  const [data, setData] = React.useState(service.filterData(''));
-  const customizePoint = React.useCallback(
+  const [isFirstLevel, setIsFirstLevel] = useState(true);
+  const [data, setData] = useState(service.filterData(''));
+  const customizePoint = useCallback(
     () => ({
       color: colors[Number(isFirstLevel)],
       hoverStyle: !isFirstLevel
@@ -20,7 +20,7 @@ function App() {
     }),
     [isFirstLevel],
   );
-  const onPointClick = React.useCallback(
+  const onPointClick = useCallback(
     (e) => {
       if (isFirstLevel) {
         setIsFirstLevel(false);
@@ -29,7 +29,7 @@ function App() {
     },
     [isFirstLevel, setData, setIsFirstLevel],
   );
-  const onButtonClick = React.useCallback(() => {
+  const onButtonClick = useCallback(() => {
     if (!isFirstLevel) {
       setIsFirstLevel(true);
       setData(service.filterData(''));

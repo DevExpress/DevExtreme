@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TileView, { TileViewTypes } from 'devextreme-react/tile-view';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import RenderHomeItem from './HomeItem.tsx';
@@ -7,9 +7,9 @@ import { homes, directionLabel } from './data.ts';
 const directions = ['horizontal', 'vertical'];
 
 const App = () => {
-  const [direction, setDirection] = React.useState<TileViewTypes.Properties['direction']>('horizontal');
+  const [direction, setDirection] = useState<TileViewTypes.Properties['direction']>('horizontal');
 
-  const directionChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const directionChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setDirection(e.value);
   }, [setDirection]);
 

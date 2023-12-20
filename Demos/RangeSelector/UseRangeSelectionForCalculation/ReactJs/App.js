@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RangeSelector, {
   Margin,
   Scale,
@@ -15,17 +15,17 @@ const endValue = new Date(2011, 11, 31);
 const behaviorModes = ['onHandleMove', 'onHandleRelease'];
 const valueChangeModeLabel = { 'aria-label': 'Value Change Mode' };
 function App() {
-  const [workingDaysCount, setWorkingDaysCount] = React.useState(
+  const [workingDaysCount, setWorkingDaysCount] = useState(
     calculateWorkdays([startValue, endValue]),
   );
-  const [behaviorMode, setBehaviorMode] = React.useState(behaviorModes[0]);
-  const processRange = React.useCallback(
+  const [behaviorMode, setBehaviorMode] = useState(behaviorModes[0]);
+  const processRange = useCallback(
     (e) => {
       setWorkingDaysCount(calculateWorkdays(e.value));
     },
     [setWorkingDaysCount],
   );
-  const setBehavior = React.useCallback(
+  const setBehavior = useCallback(
     (data) => {
       setBehaviorMode(data.value);
     },

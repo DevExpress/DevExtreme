@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Scheduler, { AppointmentDragging, SchedulerTypes } from 'devextreme-react/scheduler';
 import Draggable, { DraggableTypes } from 'devextreme-react/draggable';
@@ -25,11 +25,11 @@ const onItemDragEnd = (e: DraggableTypes.DragEndEvent) => {
 };
 
 const App = () => {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     tasks: defaultTasks, appointments: defaultAppointments,
   });
 
-  const onAppointmentRemove = React.useCallback((e: SchedulerTypes.AppointmentDraggingRemoveEvent) => {
+  const onAppointmentRemove = useCallback((e: SchedulerTypes.AppointmentDraggingRemoveEvent) => {
     setState((currentState: { appointments: SchedulerTypes.Appointment[]; tasks: Task[]; }) => {
       const { appointments, tasks } = currentState;
 
@@ -44,7 +44,7 @@ const App = () => {
     });
   }, []);
 
-  const onAppointmentAdd = React.useCallback((e: SchedulerTypes.AppointmentDraggingAddEvent) => {
+  const onAppointmentAdd = useCallback((e: SchedulerTypes.AppointmentDraggingAddEvent) => {
     setState((currentState: { appointments: SchedulerTypes.Appointment[]; tasks: Task[]; }) => {
       const { appointments, tasks } = currentState;
 

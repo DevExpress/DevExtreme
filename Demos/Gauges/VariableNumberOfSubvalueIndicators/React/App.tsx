@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   LinearGauge, Scale, Label, Tooltip, Export, Title, Font,
 } from 'devextreme-react/linear-gauge';
@@ -22,10 +22,10 @@ function customizeTooltip(arg: { valueText: string; index?: number; }) {
 }
 
 function App() {
-  const [value, setValue] = React.useState(dataSource[0].primary);
-  const [subvalues, setSubvalues] = React.useState(dataSource[0].secondary);
+  const [value, setValue] = useState(dataSource[0].primary);
+  const [subvalues, setSubvalues] = useState(dataSource[0].secondary);
 
-  const onValueChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setValue(e.value.primary);
     setSubvalues(e.value.secondary);
   }, [setValue, setSubvalues]);

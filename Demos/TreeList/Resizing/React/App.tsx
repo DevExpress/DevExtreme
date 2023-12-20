@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TreeList, Column, TreeListTypes } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
 import { employees, columnResizingModeLabel } from './data.ts';
@@ -7,7 +7,7 @@ const resizingModes = ['nextColumn', 'widget'];
 const expandedRowKeys = [1, 3, 6];
 
 const App = () => {
-  const [columnResizingMode, setColumnResizingMode] = React.useState<TreeListTypes.ColumnResizeMode>('nextColumn');
+  const [columnResizingMode, setColumnResizingMode] = useState<TreeListTypes.ColumnResizeMode>('nextColumn');
 
   return (
     <div>

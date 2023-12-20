@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import DataGrid, {
   Column,
   Selection,
@@ -14,17 +14,17 @@ const getEmployeeName = (row: Employee) => `${row.FirstName} ${row.LastName}`;
 const getEmployeeNames = (selectedRowsData: Employee[]) => (selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected');
 
 const App = () => {
-  const [prefix, setPrefix] = React.useState('');
-  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
-  const [selectedEmployeeNames, setSelectedEmployeeNames] = React.useState('Nobody has been selected');
+  const [prefix, setPrefix] = useState('');
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedEmployeeNames, setSelectedEmployeeNames] = useState('Nobody has been selected');
 
-  const dataGridRef = React.useRef<DataGrid>(null);
+  const dataGridRef = useRef<DataGrid>(null);
 
-  const onClearButtonClicked = React.useCallback(() => {
+  const onClearButtonClicked = useCallback(() => {
     dataGridRef.current.instance.clearSelection();
   }, []);
 
-  const onSelectionChanged = React.useCallback(
+  const onSelectionChanged = useCallback(
     ({ selectedRowKeys: changedRowKeys, selectedRowsData }) => {
       setPrefix(null);
       setSelectedRowKeys(changedRowKeys);
@@ -32,7 +32,7 @@ const App = () => {
     }, [],
   );
 
-  const onSelectionFilterChanged = React.useCallback(({ value }) => {
+  const onSelectionFilterChanged = useCallback(({ value }) => {
     const newPrefix = value;
 
     if (newPrefix) {

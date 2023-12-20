@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
@@ -10,25 +10,25 @@ import {
 } from './data.ts';
 
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState({
+  const [ganttConfig, setGanttConfig] = useState({
     popupVisible: false,
   });
 
-  const aboutButtonClick = React.useCallback(() => {
+  const aboutButtonClick = useCallback(() => {
     setGanttConfig({
       ...ganttConfig,
       popupVisible: true,
     });
   }, [ganttConfig]);
 
-  const getAboutButtonOptions = React.useCallback(() => ({
+  const getAboutButtonOptions = useCallback(() => ({
     text: 'About',
     icon: 'info',
     stylingMode: 'text',
     onClick: () => { aboutButtonClick(); },
   }), [aboutButtonClick]);
 
-  const onHiding = React.useCallback(() => {
+  const onHiding = useCallback(() => {
     setGanttConfig({
       ...ganttConfig,
       popupVisible: false,

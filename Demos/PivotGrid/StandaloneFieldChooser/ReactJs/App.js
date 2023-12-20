@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { PivotGrid, FieldChooser } from 'devextreme-react/pivot-grid';
 import { PivotGridFieldChooser, Texts } from 'devextreme-react/pivot-grid-field-chooser';
 import { SelectBox } from 'devextreme-react/select-box';
@@ -11,9 +11,9 @@ const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
 const applyChangesModes = ['instantly', 'onDemand'];
 const layouts = service.getLayouts();
 const App = () => {
-  const [applyChangesMode, setApplyChangesMode] = React.useState('instantly');
-  const [layout, setLayout] = React.useState(0);
-  const fieldChooserRef = React.useRef(null);
+  const [applyChangesMode, setApplyChangesMode] = useState('instantly');
+  const [layout, setLayout] = useState(0);
+  const fieldChooserRef = useRef(null);
   return (
     <React.Fragment>
       <PivotGrid

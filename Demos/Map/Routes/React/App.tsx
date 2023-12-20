@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 import {
@@ -13,16 +13,16 @@ const apiKey = {
 };
 
 export default function App() {
-  const [routes, setRoutes] = React.useState(routesData);
+  const [routes, setRoutes] = useState(routesData);
 
-  const routeModeChange = React.useCallback((value) => {
+  const routeModeChange = useCallback((value) => {
     setRoutes(routes.map((item) => {
       item.mode = value;
       return item;
     }));
   }, [routes, setRoutes]);
 
-  const routeColorChange = React.useCallback((value) => {
+  const routeColorChange = useCallback((value) => {
     setRoutes(routes.map((item) => {
       item.color = value;
       return item;

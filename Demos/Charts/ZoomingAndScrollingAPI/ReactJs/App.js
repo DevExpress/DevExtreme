@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Chart, {
   Series,
   Legend,
@@ -16,8 +16,8 @@ import RangeSelector, {
 import { zoomingData } from './data.js';
 
 function App() {
-  const [visualRange, setVisualRange] = React.useState({ startValue: 10, endValue: 880 });
-  const updateVisualRange = React.useCallback(
+  const [visualRange, setVisualRange] = useState({ startValue: 10, endValue: 880 });
+  const updateVisualRange = useCallback(
     (e) => {
       setVisualRange(e.value);
     },

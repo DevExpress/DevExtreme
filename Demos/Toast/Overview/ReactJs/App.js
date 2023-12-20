@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Toast } from 'devextreme-react/toast';
 import { ProductItem } from './ProductItem.js';
 import { products } from './data.js';
 
 function App() {
-  const [toastConfig, setToastConfig] = React.useState({
+  const [toastConfig, setToastConfig] = useState({
     isVisible: false,
     type: 'info',
     message: '',
   });
-  const checkAvailability = React.useCallback(
+  const checkAvailability = useCallback(
     (e, product) => {
       const type = e.value ? 'success' : 'error';
       const message = product.Name + (e.value ? ' is available' : ' is not available');
@@ -22,7 +22,7 @@ function App() {
     },
     [toastConfig, setToastConfig],
   );
-  const onHiding = React.useCallback(() => {
+  const onHiding = useCallback(() => {
     setToastConfig({
       ...toastConfig,
       isVisible: false,

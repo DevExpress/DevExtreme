@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   PivotGrid,
   FieldChooser,
@@ -12,12 +12,12 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { sales } from './data.ts';
 
 const App = () => {
-  const [popupTitle, setPopupTitle] = React.useState('');
-  const [drillDownDataSource, setDrillDownDataSource] = React.useState<DataSource>(null);
-  const [popupVisible, setPopupVisible] = React.useState(false);
-  const dataGridRef = React.useRef<DataGrid>(null);
+  const [popupTitle, setPopupTitle] = useState('');
+  const [drillDownDataSource, setDrillDownDataSource] = useState<DataSource>(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const dataGridRef = useRef<DataGrid>(null);
 
-  const onCellClick = React.useCallback((e: PivotGridTypes.CellClickEvent) => {
+  const onCellClick = useCallback((e: PivotGridTypes.CellClickEvent) => {
     if (e.area === 'data') {
       const pivotGridDataSource = e.component.getDataSource();
       const rowPathLength = e.cell.rowPath.length;

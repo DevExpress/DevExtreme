@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataGrid, {
   Column, Summary, TotalItem, MasterDetail, Paging, DataGridTypes,
 } from 'devextreme-react/data-grid';
@@ -60,9 +60,9 @@ const detailRender = (detail: DataGridTypes.MasterDetailTemplateData) => (
 );
 
 const App = () => {
-  const [updateFrequency, setUpdateFrequency] = React.useState(100);
+  const [updateFrequency, setUpdateFrequency] = useState(100);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       if (getOrderCount() > 500000) {
         return;

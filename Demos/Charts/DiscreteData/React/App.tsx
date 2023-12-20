@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   PolarChart,
@@ -9,9 +9,9 @@ import {
 import { types, dataSource, seriesTypeLabel } from './data.ts';
 
 function App() {
-  const [currentType, setCurrentType] = React.useState(types[0]);
+  const [currentType, setCurrentType] = useState(types[0]);
 
-  const handleChange = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handleChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setCurrentType(e.value);
   }, [setCurrentType]);
 

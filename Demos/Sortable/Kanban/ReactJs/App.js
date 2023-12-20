@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
 import { tasks as taskList, employees } from './data.js';
@@ -71,13 +71,13 @@ const List = ({
   </div>
 );
 function App() {
-  const [statuses, setStatuses] = React.useState(taskStatuses);
-  const [lists, setLists] = React.useState(getLists(taskStatuses, taskList));
-  const onListReorder = React.useCallback(({ fromIndex, toIndex }) => {
+  const [statuses, setStatuses] = useState(taskStatuses);
+  const [lists, setLists] = useState(getLists(taskStatuses, taskList));
+  const onListReorder = useCallback(({ fromIndex, toIndex }) => {
     setLists((state) => reorderItem(state, fromIndex, toIndex));
     setStatuses((state) => reorderItem(state, fromIndex, toIndex));
   }, []);
-  const onTaskDrop = React.useCallback(
+  const onTaskDrop = useCallback(
     ({
       fromData, toData, fromIndex, toIndex,
     }) => {

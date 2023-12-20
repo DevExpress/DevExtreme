@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
 import DataGrid, {
@@ -12,29 +12,29 @@ import {
 
 const optionDirections = ['auto', 'up', 'down'];
 const App = () => {
-  const [selectedRowIndex, setSelectedRowIndex] = React.useState(-1);
-  const gridRef = React.useRef(null);
-  const selectedChanged = React.useCallback(
+  const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
+  const gridRef = useRef(null);
+  const selectedChanged = useCallback(
     (e) => {
       setSelectedRowIndex(e.component.getRowIndexByKey(e.selectedRowKeys[0]));
     },
     [setSelectedRowIndex],
   );
-  const directionChanged = React.useCallback((e) => {
+  const directionChanged = useCallback((e) => {
     config({
       floatingActionButtonConfig: directions[e.selectedItem],
     });
     repaintFloatingActionButton();
   }, []);
-  const editRow = React.useCallback(() => {
+  const editRow = useCallback(() => {
     gridRef.current.instance.editRow(selectedRowIndex);
     gridRef.current.instance.deselectAll();
   }, [gridRef, selectedRowIndex]);
-  const deleteRow = React.useCallback(() => {
+  const deleteRow = useCallback(() => {
     gridRef.current.instance.deleteRow(selectedRowIndex);
     gridRef.current.instance.deselectAll();
   }, [gridRef, selectedRowIndex]);
-  const addRow = React.useCallback(() => {
+  const addRow = useCallback(() => {
     gridRef.current.instance.addRow();
     gridRef.current.instance.deselectAll();
   }, [gridRef]);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RangeSelector, {
   Margin, Scale, MinorTick, Marker, Label, Behavior, SliderMarker, RangeSelectorTypes, IBehaviorProps,
 } from 'devextreme-react/range-selector';
@@ -11,16 +11,16 @@ const behaviorModes: (IBehaviorProps['valueChangeMode'])[] = ['onHandleMove', 'o
 const valueChangeModeLabel = { 'aria-label': 'Value Change Mode' };
 
 function App() {
-  const [workingDaysCount, setWorkingDaysCount] = React.useState(
+  const [workingDaysCount, setWorkingDaysCount] = useState(
     calculateWorkdays([startValue, endValue]),
   );
-  const [behaviorMode, setBehaviorMode] = React.useState(behaviorModes[0]);
+  const [behaviorMode, setBehaviorMode] = useState(behaviorModes[0]);
 
-  const processRange = React.useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
+  const processRange = useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
     setWorkingDaysCount(calculateWorkdays(e.value));
   }, [setWorkingDaysCount]);
 
-  const setBehavior = React.useCallback((data) => {
+  const setBehavior = useCallback((data) => {
     setBehaviorMode(data.value);
   }, [setBehaviorMode]);
 

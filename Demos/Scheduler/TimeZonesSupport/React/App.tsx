@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler, { Editing, SchedulerTypes } from 'devextreme-react/scheduler';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 
@@ -35,14 +35,14 @@ const onAppointmentFormOpening = (e: SchedulerTypes.AppointmentFormOpeningEvent)
 };
 
 const App = () => {
-  const [currentTimeZone, setCurrentTimeZone] = React.useState(defaultTimeZones[0].id);
-  const [timeZones, setTimeZones] = React.useState(defaultTimeZones);
+  const [currentTimeZone, setCurrentTimeZone] = useState(defaultTimeZones[0].id);
+  const [timeZones, setTimeZones] = useState(defaultTimeZones);
 
-  const onValueChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setCurrentTimeZone(e.value);
   }, []);
 
-  const onOptionChanged = React.useCallback((e: SchedulerTypes.OptionChangedEvent) => {
+  const onOptionChanged = useCallback((e: SchedulerTypes.OptionChangedEvent) => {
     if (e.name === 'currentDate') {
       setTimeZones(getTimeZones(e.value));
     }

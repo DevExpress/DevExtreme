@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 function Breadcrumb(props) {
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     props.onClick(props.info.node);
   }, [props]);
   return (

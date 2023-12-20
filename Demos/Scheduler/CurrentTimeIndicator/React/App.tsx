@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
 import { Switch, SwitchTypes } from 'devextreme-react/switch';
 import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
@@ -24,19 +24,19 @@ const onAppointmentDblClick = (e: SchedulerTypes.AppointmentDblClickEvent) => {
 };
 
 const App = () => {
-  const [showCurrentTimeIndicator, setShowCurrentTimeIndicator] = React.useState(true);
-  const [shadeUntilCurrentTime, setShadeUntilCurrentTime] = React.useState(true);
-  const [updateInterval, setUpdateInterval] = React.useState(10);
+  const [showCurrentTimeIndicator, setShowCurrentTimeIndicator] = useState(true);
+  const [shadeUntilCurrentTime, setShadeUntilCurrentTime] = useState(true);
+  const [updateInterval, setUpdateInterval] = useState(10);
 
-  const onShowCurrentTimeIndicatorChanged = React.useCallback((e: SwitchTypes.ValueChangedEvent) => {
+  const onShowCurrentTimeIndicatorChanged = useCallback((e: SwitchTypes.ValueChangedEvent) => {
     setShowCurrentTimeIndicator(e.value);
   }, []);
 
-  const onShadeUntilCurrentTimeChanged = React.useCallback((e: SwitchTypes.ValueChangedEvent) => {
+  const onShadeUntilCurrentTimeChanged = useCallback((e: SwitchTypes.ValueChangedEvent) => {
     setShadeUntilCurrentTime(e.value);
   }, []);
 
-  const onUpdateIntervalChanged = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const onUpdateIntervalChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setUpdateInterval(e.value);
   }, []);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Menu, { MenuTypes } from 'devextreme-react/menu';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
@@ -28,26 +28,26 @@ const showSubmenuModes: showSubmenuModesType[] = [
 ];
 
 const App = () => {
-  const [showFirstSubmenuModes, setShowFirstSubmenuModes] = React.useState(showSubmenuModes[1]);
-  const [orientation, setOrientation] = React.useState<MenuTypes.Orientation>('horizontal');
-  const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = React.useState(false);
-  const [currentProduct, setCurrentProduct] = React.useState(null);
+  const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
+  const [orientation, setOrientation] = useState<MenuTypes.Orientation>('horizontal');
+  const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
 
-  const itemClick = React.useCallback((e: MenuTypes.ItemClickEvent & { itemData: ProductItemType }) => {
+  const itemClick = useCallback((e: MenuTypes.ItemClickEvent & { itemData: ProductItemType }) => {
     if (e.itemData.price) {
       setCurrentProduct(e.itemData);
     }
   }, [setCurrentProduct]);
 
-  const showSubmenuModeChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const showSubmenuModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setShowFirstSubmenuModes(e.value);
   }, [setShowFirstSubmenuModes]);
 
-  const orientationChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const orientationChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setOrientation(e.value);
   }, [setOrientation]);
 
-  const hideSubmenuOnMouseLeaveChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const hideSubmenuOnMouseLeaveChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setHideSubmenuOnMouseLeave(e.value);
   }, [setHideSubmenuOnMouseLeave]);
 

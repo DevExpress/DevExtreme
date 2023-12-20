@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { NumberBox } from 'devextreme-react/number-box';
 import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
@@ -22,11 +22,11 @@ const languages = ['Arabic: Right-to-Left direction', 'English: Left-to-Right di
 const tagBoxDefaultValue = [europeanUnion[0].id];
 
 function App() {
-  const [rtlEnabled, setRtlEnabled] = React.useState(false);
-  const [displayExpr, setDisplayExpr] = React.useState('nameEn');
-  const [textValue, setTextValue] = React.useState('text');
+  const [rtlEnabled, setRtlEnabled] = useState(false);
+  const [displayExpr, setDisplayExpr] = useState('nameEn');
+  const [textValue, setTextValue] = useState('text');
 
-  const onLanguageChanged = React.useCallback((args: SelectBoxTypes.ValueChangedEvent) => {
+  const onLanguageChanged = useCallback((args: SelectBoxTypes.ValueChangedEvent) => {
     const isRTL = args.value === languages[0];
 
     setDisplayExpr(isRTL ? 'nameAr' : 'nameEn');

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { DrillInfo } from './data';
 
 interface BreadcrumbProps {
@@ -11,7 +11,7 @@ interface BreadcrumbProps {
 }
 
 function Breadcrumb(props: BreadcrumbProps) {
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     props.onClick(props.info.node);
   }, [props]);
 

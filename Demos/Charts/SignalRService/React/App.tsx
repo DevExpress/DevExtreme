@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import Chart, {
   ArgumentAxis,
   ValueAxis,
@@ -24,10 +26,10 @@ const minVisualRangeLength = { minutes: 10 };
 const defaultVisualRange: VisualRange = { length: 'hour' };
 
 function App() {
-  const [dataSource, setDataSource] = React.useState(null);
-  const chartRef = React.useRef(null);
+  const [dataSource, setDataSource] = useState(null);
+  const chartRef = useRef(null);
 
-  const customizePoint = React.useCallback((arg) => {
+  const customizePoint = useCallback((arg) => {
     if (arg.seriesName === 'Volume') {
       const point = chartRef.current.instance.getAllSeries()[0]
         .getPointsByArg(arg.argument)[0].data;
@@ -38,7 +40,7 @@ function App() {
     return null;
   }, []);
 
-  const calculateCandle = React.useCallback<IAggregationProps['calculate']>((e) => {
+  const calculateCandle = useCallback<IAggregationProps['calculate']>((e) => {
     const prices = e.data.map((d) => d.price);
     if (prices.length) {
       return {
@@ -52,7 +54,7 @@ function App() {
     return null;
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
         skipNegotiation: true,

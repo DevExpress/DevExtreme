@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 
 import { Template } from 'devextreme-react/core/template';
@@ -15,10 +15,10 @@ import ConditionalIcon from './conditionalIcon.tsx';
 import Item from './item.tsx';
 
 function App() {
-  const [selectedItem, setSelectedItem] = React.useState(products[0]);
-  const [isLoaded, setIsLoaded] = React.useState(true);
+  const [selectedItem, setSelectedItem] = useState(products[0]);
+  const [isLoaded, setIsLoaded] = useState(true);
 
-  const deferredProducts = React.useMemo<any>(
+  const deferredProducts = useMemo<any>(
     () => ({
       loadMode: 'raw',
       load: () => {
@@ -36,17 +36,17 @@ function App() {
     [setIsLoaded],
   );
 
-  const renderLoadIndicator = React.useCallback(
+  const renderLoadIndicator = useCallback(
     () => <IndicatorIcon isLoaded={isLoaded} />,
     [isLoaded],
   );
 
-  const renderConditionalIcon = React.useCallback(
+  const renderConditionalIcon = useCallback(
     () => <ConditionalIcon value={selectedItem} />,
     [selectedItem],
   );
 
-  const selectionChanged = React.useCallback((event: { selectedItem: any }) => {
+  const selectionChanged = useCallback((event: { selectedItem: any }) => {
     setSelectedItem(event.selectedItem);
   }, []);
 

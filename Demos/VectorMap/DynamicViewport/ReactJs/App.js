@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import VectorMap, { Layer, ControlBar } from 'devextreme-react/vector-map';
 import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
@@ -10,39 +10,39 @@ import {
 
 const bounds = [-180, 85, 180, -60];
 const App = () => {
-  const [coordinates, setCoordinates] = React.useState(viewportCoordinates[0].coordinates);
-  const [zoomFactor, setZoomFactor] = React.useState('1.00');
-  const [center, setCenter] = React.useState('0.000, 46.036');
-  const [panVisible, setPanVisible] = React.useState(true);
-  const [zoomVisible, setZoomVisible] = React.useState(true);
-  const mapRef = React.useRef(null);
-  const continentChanged = React.useCallback(
+  const [coordinates, setCoordinates] = useState(viewportCoordinates[0].coordinates);
+  const [zoomFactor, setZoomFactor] = useState('1.00');
+  const [center, setCenter] = useState('0.000, 46.036');
+  const [panVisible, setPanVisible] = useState(true);
+  const [zoomVisible, setZoomVisible] = useState(true);
+  const mapRef = useRef(null);
+  const continentChanged = useCallback(
     ({ value }) => {
       setCoordinates(value);
       mapRef.current.instance.viewport(value);
     },
     [setCoordinates],
   );
-  const zoomFactorChanged = React.useCallback(
+  const zoomFactorChanged = useCallback(
     (e) => {
       setZoomFactor(e.zoomFactor.toFixed(2));
     },
     [setZoomFactor],
   );
-  const centerChanged = React.useCallback(
+  const centerChanged = useCallback(
     (e) => {
       const value = `${e.center[0].toFixed(3)}, ${e.center[1].toFixed(3)}`;
       setCenter(value);
     },
     [setCenter],
   );
-  const panVisibleChange = React.useCallback(
+  const panVisibleChange = useCallback(
     (value) => {
       setPanVisible(value);
     },
     [setPanVisible],
   );
-  const zoomVisibleChange = React.useCallback(
+  const zoomVisibleChange = useCallback(
     (value) => {
       setZoomVisible(value);
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Scrolling, Sorting, LoadPanel, DataGridTypes,
 } from 'devextreme-react/data-grid';
@@ -10,9 +10,9 @@ const customizeColumns = (columns: DataGridTypes.Column[]) => {
   columns[0].width = 70;
 };
 const App = () => {
-  const [loadPanelEnabled, setLoadPanelEnabled] = React.useState(true);
+  const [loadPanelEnabled, setLoadPanelEnabled] = useState(true);
 
-  const onContentReady = React.useCallback(() => {
+  const onContentReady = useCallback(() => {
     setLoadPanelEnabled(false);
   }, []);
 

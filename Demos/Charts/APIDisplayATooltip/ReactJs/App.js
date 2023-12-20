@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PieChart, {
   Series, Tooltip, Size, Legend,
 } from 'devextreme-react/pie-chart';
@@ -9,22 +9,22 @@ const customizeTooltip = (pointInfo) => ({
   text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`,
 });
 function App() {
-  const [selectedRegion, setSelectedRegion] = React.useState(null);
-  const pieChartRef = React.useRef(null);
-  const showTooltip = React.useCallback(
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const pieChartRef = useRef(null);
+  const showTooltip = useCallback(
     (point) => {
       point.showTooltip();
       setSelectedRegion(point.argument);
     },
     [setSelectedRegion],
   );
-  const onPointClick = React.useCallback(
+  const onPointClick = useCallback(
     ({ target: point }) => {
       showTooltip(point);
     },
     [showTooltip],
   );
-  const onRegionChanged = React.useCallback(
+  const onRegionChanged = useCallback(
     ({ value }) => {
       const point = pieChartRef.current.instance.getAllSeries()[0].getPointsByArg(value)[0];
       showTooltip(point);

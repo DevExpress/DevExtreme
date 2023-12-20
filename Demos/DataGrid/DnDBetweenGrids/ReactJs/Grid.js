@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, RowDragging, Scrolling, Lookup,
 } from 'devextreme-react/data-grid';
@@ -22,12 +22,12 @@ const priorities = [
   },
 ];
 const Grid = ({ tasksStore, status }) => {
-  const [filterExpr] = React.useState(['Status', '=', status]);
-  const [dataSource] = React.useState({
+  const [filterExpr] = useState(['Status', '=', status]);
+  const [dataSource] = useState({
     store: tasksStore,
     reshapeOnPush: true,
   });
-  const onAdd = React.useCallback(
+  const onAdd = useCallback(
     (e) => {
       const key = e.itemData.ID;
       const values = { Status: e.toData };

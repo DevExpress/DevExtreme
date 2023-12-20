@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeMap, { Tooltip, ITooltipProps } from 'devextreme-react/tree-map';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import { salesAmount, colorizationOptions, colorizationTypeLabel } from './data.ts';
@@ -12,9 +12,9 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
 };
 
 function App() {
-  const [typeOptions, setTypeOptions] = React.useState(colorizationOptions[2].options);
+  const [typeOptions, setTypeOptions] = useState(colorizationOptions[2].options);
 
-  const setType = React.useCallback((data: SelectBoxTypes.ValueChangedEvent) => {
+  const setType = useCallback((data: SelectBoxTypes.ValueChangedEvent) => {
     setTypeOptions(data.value);
   }, [setTypeOptions]);
 

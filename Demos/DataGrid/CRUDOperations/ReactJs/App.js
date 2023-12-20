@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 /* global RequestInit */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   DataGrid,
   Column,
@@ -20,7 +20,7 @@ const refreshModeLabel = { 'aria-label': 'Refresh Mode' };
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 const REFRESH_MODES = ['full', 'reshape', 'repaint'];
 const App = () => {
-  const [ordersData] = React.useState(
+  const [ordersData] = useState(
     new CustomStore({
       key: 'OrderID',
       load: () => sendRequest(`${URL}/Orders`),
@@ -39,29 +39,29 @@ const App = () => {
         }),
     }),
   );
-  const [customersData] = React.useState(
+  const [customersData] = useState(
     new CustomStore({
       key: 'Value',
       loadMode: 'raw',
       load: () => sendRequest(`${URL}/CustomersLookup`),
     }),
   );
-  const [shippersData] = React.useState(
+  const [shippersData] = useState(
     new CustomStore({
       key: 'Value',
       loadMode: 'raw',
       load: () => sendRequest(`${URL}/ShippersLookup`),
     }),
   );
-  const [requests, setRequests] = React.useState([]);
-  const [refreshMode, setRefreshMode] = React.useState('reshape');
-  const handleRefreshModeChange = React.useCallback((e) => {
+  const [requests, setRequests] = useState([]);
+  const [refreshMode, setRefreshMode] = useState('reshape');
+  const handleRefreshModeChange = useCallback((e) => {
     setRefreshMode(e.value);
   }, []);
-  const clearRequests = React.useCallback(() => {
+  const clearRequests = useCallback(() => {
     setRequests([]);
   }, []);
-  const logRequest = React.useCallback((method, url, data) => {
+  const logRequest = useCallback((method, url, data) => {
     const args = Object.keys(data || {})
       .map((key) => `${key}=${data[key]}`)
       .join(' ');
@@ -70,7 +70,7 @@ const App = () => {
     setRequests((prevRequests) => [request].concat(prevRequests));
   }, []);
   // eslint-disable-next-line consistent-return, space-before-function-paren
-  const sendRequest = React.useCallback(
+  const sendRequest = useCallback(
     async(url, method = 'GET', data = {}) => {
       logRequest(method, url, data);
       const request = {

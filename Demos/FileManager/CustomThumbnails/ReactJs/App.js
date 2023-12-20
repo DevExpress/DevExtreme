@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileManager, { Permissions, ItemView } from 'devextreme-react/file-manager';
 import { fileItems } from './data.js';
 
 export default function App() {
-  const [itemViewMode, setItemViewMode] = React.useState('thumbnails');
-  const onOptionChanged = React.useCallback(
+  const [itemViewMode, setItemViewMode] = useState('thumbnails');
+  const onOptionChanged = useCallback(
     (e) => {
       if (e.fullName === 'itemView.mode') {
         setItemViewMode(e.value);
@@ -12,7 +12,7 @@ export default function App() {
     },
     [setItemViewMode],
   );
-  const customizeIcon = React.useCallback((fileSystemItem) => {
+  const customizeIcon = useCallback((fileSystemItem) => {
     if (fileSystemItem.isDirectory) {
       return '../../../../images/thumbnails/folder.svg';
     }

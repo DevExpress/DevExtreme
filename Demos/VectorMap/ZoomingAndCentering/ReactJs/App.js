@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import VectorMap, { Layer, Tooltip } from 'devextreme-react/vector-map';
 import Button from 'devextreme-react/button';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
@@ -17,8 +17,8 @@ const markerClick = ({ target, component }) => {
   }
 };
 const App = () => {
-  const vectorMapRef = React.useRef(null);
-  const reset = React.useCallback(() => {
+  const vectorMapRef = useRef(null);
+  const reset = useCallback(() => {
     vectorMapRef.current.instance.center(null);
     vectorMapRef.current.instance.zoomFactor(null);
   }, [vectorMapRef]);

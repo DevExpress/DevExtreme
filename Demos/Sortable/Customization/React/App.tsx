@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable, { SortableTypes } from 'devextreme-react/sortable';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
@@ -22,21 +22,21 @@ const verticalDragDirections: DragDirection[] = ['both', 'vertical'];
 const horizontalDragDirections: DragDirection[] = ['both', 'horizontal'];
 
 const App = () => {
-  const [items, setItems] = React.useState(tasks);
-  const [dropFeedbackMode, setDropFeedbackMode] = React.useState<DragHighlight>('push');
-  const [itemOrientation, setItemOrientation] = React.useState<Orientation>('vertical');
-  const [dragDirection, setDragDirection] = React.useState<DragDirection>('both');
-  const [scrollSpeed, setScrollSpeed] = React.useState(30);
-  const [scrollSensitivity, setScrollSensitivity] = React.useState(60);
-  const [handle, setHandle] = React.useState('');
-  const [dragComponent, setDragComponent] = React.useState(null);
-  const [cursorOffset, setCursorOffset] = React.useState(null);
+  const [items, setItems] = useState(tasks);
+  const [dropFeedbackMode, setDropFeedbackMode] = useState<DragHighlight>('push');
+  const [itemOrientation, setItemOrientation] = useState<Orientation>('vertical');
+  const [dragDirection, setDragDirection] = useState<DragDirection>('both');
+  const [scrollSpeed, setScrollSpeed] = useState(30);
+  const [scrollSensitivity, setScrollSensitivity] = useState(60);
+  const [handle, setHandle] = useState('');
+  const [dragComponent, setDragComponent] = useState(null);
+  const [cursorOffset, setCursorOffset] = useState(null);
 
-  const onDragStart = React.useCallback((e: SortableTypes.DragStartEvent) => {
+  const onDragStart = useCallback((e: SortableTypes.DragStartEvent) => {
     e.itemData = items[e.fromIndex];
   }, [items]);
 
-  const onReorder = React.useCallback((e: SortableTypes.ReorderEvent) => {
+  const onReorder = useCallback((e: SortableTypes.ReorderEvent) => {
     let updatedItems = [...items.slice(0, e.fromIndex), ...items.slice(e.fromIndex + 1)];
     updatedItems = [
       ...updatedItems.slice(0, e.toIndex),
@@ -47,32 +47,32 @@ const App = () => {
     setItems(updatedItems);
   }, [items, setItems]);
 
-  const onDropFeedbackModeChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onDropFeedbackModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setDropFeedbackMode(e.value);
   }, [setDropFeedbackMode]);
 
-  const onItemOrientationChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onItemOrientationChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setItemOrientation(e.value);
     setDragDirection('both');
   }, [setItemOrientation, setDragDirection]);
 
-  const onDragDirectionChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onDragDirectionChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setDragDirection(e.value);
   }, [setDragDirection]);
 
-  const onScrollSpeedChanged = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const onScrollSpeedChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setScrollSpeed(e.value);
   }, [setScrollSpeed]);
 
-  const onScrollSensitivityChanged = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const onScrollSensitivityChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setScrollSensitivity(e.value);
   }, [setScrollSensitivity]);
 
-  const onHandleChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onHandleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setHandle(e.value ? '.handle' : '');
   }, [setHandle]);
 
-  const onDragTemplateChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onDragTemplateChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setDragComponent(e.value ? DragItem : null);
     setCursorOffset(e.value ? { x: 10, y: 20 } : null);
   }, [setDragComponent, setCursorOffset]);

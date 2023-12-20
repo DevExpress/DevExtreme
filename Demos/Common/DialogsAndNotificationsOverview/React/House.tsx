@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Popover, { IPositionProps } from 'devextreme-react/popover';
 
@@ -43,7 +43,7 @@ interface HouseProps {
 }
 
 export function House(props: HouseProps) {
-  const renderAgentDetails = React.useCallback(() => {
+  const renderAgentDetails = useCallback(() => {
     const agent = props.house.Agent;
     return (
       <div className="agent-details">
@@ -56,7 +56,7 @@ export function House(props: HouseProps) {
     );
   }, [props.house.Agent]);
 
-  const show = React.useCallback(() => {
+  const show = useCallback(() => {
     props.show(props.house);
   }, [props]);
 

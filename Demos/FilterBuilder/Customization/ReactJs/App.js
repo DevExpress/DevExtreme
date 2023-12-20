@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FilterBuilder, { CustomOperation } from 'devextreme-react/filter-builder';
 import { filter, fields, groupOperations } from './data.js';
 import { formatValue } from './helpers.js';
 import { EditorComponent } from './EditorComponent.js';
 
 function App() {
-  const [value, setValue] = React.useState(filter);
-  const [filterText, setFilterText] = React.useState('');
-  const [dataSourceText, setDataSourceText] = React.useState('');
-  const updateTexts = React.useCallback(
+  const [value, setValue] = useState(filter);
+  const [filterText, setFilterText] = useState('');
+  const [dataSourceText, setDataSourceText] = useState('');
+  const updateTexts = useCallback(
     (e) => {
       setFilterText(formatValue(e.component.option('value')));
       setDataSourceText(formatValue(e.component.getFilterExpression()));
     },
     [setFilterText, setDataSourceText],
   );
-  const onValueChanged = React.useCallback(
+  const onValueChanged = useCallback(
     (e) => {
       setValue(e.value);
       updateTexts(e);
     },
     [updateTexts, setValue],
   );
-  const calculateFilterExpression = React.useCallback(
+  const calculateFilterExpression = useCallback(
     (filterValue, field) =>
       filterValue
       && filterValue.length

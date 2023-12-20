@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import MultiView from 'devextreme-react/multi-view';
 import { multiViewItems as companies } from './data.js';
 import CompanyItem from './CompanyItem.js';
 
 const App = () => {
-  const [animationEnabled, setAnimationEnabled] = React.useState(true);
-  const [loop, setLoop] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const onSelectionChanged = React.useCallback(
+  const [animationEnabled, setAnimationEnabled] = useState(true);
+  const [loop, setLoop] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const onSelectionChanged = useCallback(
     (args) => {
       if (args.name === 'selectedIndex') {
         setSelectedIndex(args.value);
@@ -16,13 +16,13 @@ const App = () => {
     },
     [setSelectedIndex],
   );
-  const onLoopChanged = React.useCallback(
+  const onLoopChanged = useCallback(
     (args) => {
       setLoop(args.value);
     },
     [setLoop],
   );
-  const onAnimationEnabledChanged = React.useCallback(
+  const onAnimationEnabledChanged = useCallback(
     (args) => {
       setAnimationEnabled(args.value);
     },

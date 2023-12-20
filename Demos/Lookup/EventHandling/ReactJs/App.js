@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 import { SelectBox } from 'devextreme-react';
 import { employees, applyValueModeLabel, lookupLabel } from './data.js';
@@ -6,15 +6,15 @@ import { employees, applyValueModeLabel, lookupLabel } from './data.js';
 const applyValueModes = ['instantly', 'useButtons'];
 const getDisplayExpr = (item) => (item ? `${item.FirstName} ${item.LastName}` : '');
 function App() {
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const [applyValueMode, setApplyValueMode] = React.useState('instantly');
-  const onValueChanged = React.useCallback(
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [applyValueMode, setApplyValueMode] = useState('instantly');
+  const onValueChanged = useCallback(
     (e) => {
       setSelectedValue(e.value);
     },
     [setSelectedValue],
   );
-  const changeApplyValueMode = React.useCallback(
+  const changeApplyValueMode = useCallback(
     (e) => {
       setApplyValueMode(e.value);
     },

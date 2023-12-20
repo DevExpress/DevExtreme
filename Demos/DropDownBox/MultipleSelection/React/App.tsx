@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import DropDownBox, { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
 import TreeView from 'devextreme-react/tree-view';
 import DataGrid, {
@@ -27,11 +27,11 @@ const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridDataSource = makeAsyncDataSource('customers.json');
 
 function App() {
-  const [treeBoxValue, setTreeBoxValue] = React.useState(['1_1']);
-  const [gridBoxValue, setGridBoxValue] = React.useState([3]);
-  const treeViewRef = React.useRef<TreeView<any>>();
+  const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
+  const [gridBoxValue, setGridBoxValue] = useState([3]);
+  const treeViewRef = useRef<TreeView<any>>();
 
-  const treeViewRender = React.useCallback(
+  const treeViewRender = useCallback(
     () => (
       <TreeView
         dataSource={treeDataSource}
@@ -51,7 +51,7 @@ function App() {
     [treeDataSource],
   );
 
-  const dataGridRender = React.useCallback(
+  const dataGridRender = useCallback(
     () => (
       <DataGrid
         height={345}
@@ -73,7 +73,7 @@ function App() {
     [gridDataSource, gridBoxValue],
   );
 
-  const syncTreeViewSelection = React.useCallback(
+  const syncTreeViewSelection = useCallback(
     (e: DropDownBoxTypes.ValueChangedEvent | any) => {
       const treeView = (e.component.selectItem && e.component)
         || (treeViewRef.current && treeViewRef.current.instance);
@@ -96,18 +96,18 @@ function App() {
     [treeBoxValue],
   );
 
-  const syncDataGridSelection = React.useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
+  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
     setGridBoxValue(e.value || []);
   }, []);
 
-  const treeViewItemSelectionChanged = React.useCallback(
+  const treeViewItemSelectionChanged = useCallback(
     (e: { component: { getSelectedNodeKeys: () => any } }) => {
       setTreeBoxValue(e.component.getSelectedNodeKeys());
     },
     [],
   );
 
-  const dataGridOnSelectionChanged = React.useCallback((e: DataGridTypes.SelectionChangedEvent) => {
+  const dataGridOnSelectionChanged = useCallback((e: DataGridTypes.SelectionChangedEvent) => {
     setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
   }, []);
 

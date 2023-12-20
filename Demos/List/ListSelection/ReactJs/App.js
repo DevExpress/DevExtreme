@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import List from 'devextreme-react/list';
 import CheckBox from 'devextreme-react/check-box';
@@ -14,11 +14,11 @@ const dataSource = new ArrayStore({
 const selectionModes = ['none', 'single', 'multiple', 'all'];
 const selectAllModes = ['page', 'allPages'];
 export default function App() {
-  const [selectionMode, setSelectionMode] = React.useState('all');
-  const [selectAllMode, setSelectAllMode] = React.useState('page');
-  const [selectByClick, setSelectByClick] = React.useState(false);
-  const [selectedItemKeys, setSelectedItemKeys] = React.useState([]);
-  const onSelectedItemKeysChange = React.useCallback(
+  const [selectionMode, setSelectionMode] = useState('all');
+  const [selectAllMode, setSelectAllMode] = useState('page');
+  const [selectByClick, setSelectByClick] = useState(false);
+  const [selectedItemKeys, setSelectedItemKeys] = useState([]);
+  const onSelectedItemKeysChange = useCallback(
     ({ name, value }) => {
       if (name === 'selectedItemKeys') {
         if (selectionMode !== 'none' || selectedItemKeys.length !== 0) {
@@ -28,19 +28,19 @@ export default function App() {
     },
     [selectionMode, selectedItemKeys, setSelectedItemKeys],
   );
-  const onSelectionModeChange = React.useCallback(
+  const onSelectionModeChange = useCallback(
     (value) => {
       setSelectionMode(value);
     },
     [setSelectionMode],
   );
-  const onSelectAllModeChange = React.useCallback(
+  const onSelectAllModeChange = useCallback(
     (value) => {
       setSelectAllMode(value);
     },
     [setSelectAllMode],
   );
-  const onSelectByClickChange = React.useCallback(
+  const onSelectByClickChange = useCallback(
     (value) => {
       setSelectByClick(value);
     },

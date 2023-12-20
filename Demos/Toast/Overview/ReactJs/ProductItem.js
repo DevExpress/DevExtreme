@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { CheckBox } from 'devextreme-react/check-box';
 
 export function ProductItem(props) {
-  const onValueChanged = React.useCallback(
+  const onValueChanged = useCallback(
     (e) => {
       props.checkAvailability(e, props.product);
     },

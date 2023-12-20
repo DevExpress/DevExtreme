@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   Chart,
@@ -16,9 +16,9 @@ import { dataSource, seriesTypeLabel } from './data.ts';
 const types: ChartTypes.SeriesType[] = ['area', 'stackedarea', 'fullstackedarea'];
 
 function App() {
-  const [type, setType] = React.useState<ChartTypes.SeriesType>(types[0]);
+  const [type, setType] = useState<ChartTypes.SeriesType>(types[0]);
 
-  const handleChange = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handleChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setType(e.value);
   }, [setType]);
 

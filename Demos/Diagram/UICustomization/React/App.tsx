@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Diagram, {
   ContextMenu,
   ContextToolbox,
@@ -32,9 +32,9 @@ function onCustomCommand(e: DiagramTypes.CustomCommandEvent) {
 }
 
 export default function App() {
-  const diagramRef = React.useRef(null);
+  const diagramRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const diagram = diagramRef.current.instance;
     fetch('../../../../data/diagram-flow.json')
       .then((response) => response.json())

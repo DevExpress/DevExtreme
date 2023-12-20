@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FilterBuilder, { CustomOperation, FilterBuilderTypes, ICustomOperationProps } from 'devextreme-react/filter-builder';
 import { filter, fields, groupOperations } from './data.ts';
 import { formatValue } from './helpers.ts';
 import { EditorComponent } from './EditorComponent.tsx';
 
 function App() {
-  const [value, setValue] = React.useState(filter);
-  const [filterText, setFilterText] = React.useState('');
-  const [dataSourceText, setDataSourceText] = React.useState('');
+  const [value, setValue] = useState(filter);
+  const [filterText, setFilterText] = useState('');
+  const [dataSourceText, setDataSourceText] = useState('');
 
-  const updateTexts = React.useCallback((e: FilterBuilderTypes.InitializedEvent) => {
+  const updateTexts = useCallback((e: FilterBuilderTypes.InitializedEvent) => {
     setFilterText(formatValue(e.component.option('value')));
     setDataSourceText(formatValue(e.component.getFilterExpression()));
   }, [setFilterText, setDataSourceText]);
 
-  const onValueChanged = React.useCallback((e: FilterBuilderTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: FilterBuilderTypes.ValueChangedEvent) => {
     setValue(e.value);
     updateTexts(e);
   }, [updateTexts, setValue]);
 
-  const calculateFilterExpression: ICustomOperationProps['calculateFilterExpression'] = React.useCallback((filterValue, field) => (
+  const calculateFilterExpression: ICustomOperationProps['calculateFilterExpression'] = useCallback((filterValue, field) => (
     filterValue
       && filterValue.length
       && Array.prototype.concat

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import Form from 'devextreme-react/form';
 import employee from './data.ts';
@@ -9,9 +9,9 @@ const colCountByScreen = {
 };
 
 const App = () => {
-  const [calculateColCountAutomatically, setCalculateColCountAutomatically] = React.useState(false);
+  const [calculateColCountAutomatically, setCalculateColCountAutomatically] = useState(false);
 
-  const onCalculateColCountAutomaticallyChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onCalculateColCountAutomaticallyChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setCalculateColCountAutomatically(e.value);
   }, [setCalculateColCountAutomatically]);
 

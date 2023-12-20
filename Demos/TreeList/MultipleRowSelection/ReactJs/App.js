@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
 import { CheckBox } from 'devextreme-react/check-box';
 import { SelectBox } from 'devextreme-react/select-box';
@@ -8,17 +8,17 @@ const expandedRowKeys = [1, 2, 10];
 const emptySelectedText = 'Nobody has been selected';
 const selectionModes = ['all', 'excludeRecursive', 'leavesOnly'];
 const App = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
-  const [recursive, setRecursive] = React.useState(false);
-  const [selectionMode, setSelectionMode] = React.useState('all');
-  const [selectedEmployeeNames, setSelectedEmployeeNames] = React.useState(emptySelectedText);
-  const getEmployeeNames = React.useCallback((employeeList) => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [recursive, setRecursive] = useState(false);
+  const [selectionMode, setSelectionMode] = useState('all');
+  const [selectedEmployeeNames, setSelectedEmployeeNames] = useState(emptySelectedText);
+  const getEmployeeNames = useCallback((employeeList) => {
     if (employeeList.length > 0) {
       return employeeList.map((employee) => employee.Full_Name).join(', ');
     }
     return emptySelectedText;
   }, []);
-  const onSelectionChanged = React.useCallback(
+  const onSelectionChanged = useCallback(
     (e) => {
       const selectedData = e.component.getSelectedRowsData(selectionMode);
       setSelectedRowKeys(e.selectedRowKeys);
@@ -26,12 +26,12 @@ const App = () => {
     },
     [selectionMode, getEmployeeNames],
   );
-  const onRecursiveChanged = React.useCallback((e) => {
+  const onRecursiveChanged = useCallback((e) => {
     setRecursive(e.value);
     setSelectedRowKeys([]);
     setSelectedEmployeeNames(emptySelectedText);
   }, []);
-  const onSelectionModeChanged = React.useCallback((e) => {
+  const onSelectionModeChanged = useCallback((e) => {
     setSelectionMode(e.value);
     setSelectedRowKeys([]);
     setSelectedEmployeeNames(emptySelectedText);

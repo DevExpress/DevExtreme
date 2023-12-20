@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import TabPanel from 'devextreme-react/tab-panel';
 import { continents } from './data.js';
@@ -44,10 +44,10 @@ const renderPanelItem = (city) => (
   </React.Fragment>
 );
 function App() {
-  const [tabPanelIndex, setTabPanelIndex] = React.useState(0);
-  const [countryData, setCountryData] = React.useState(continents[0].items[0]);
-  const [citiesData, setCitiesData] = React.useState(continents[0].items[0].cities);
-  const handleTreeViewSelectionChange = React.useCallback(
+  const [tabPanelIndex, setTabPanelIndex] = useState(0);
+  const [countryData, setCountryData] = useState(continents[0].items[0]);
+  const [citiesData, setCitiesData] = useState(continents[0].items[0].cities);
+  const handleTreeViewSelectionChange = useCallback(
     (e) => {
       const selectedCountryData = e.itemData;
       if (selectedCountryData.cities) {
@@ -58,7 +58,7 @@ function App() {
     },
     [setTabPanelIndex, setCountryData, setCitiesData],
   );
-  const handleTabPanelSelectionChange = React.useCallback(
+  const handleTabPanelSelectionChange = useCallback(
     (e) => {
       setTabPanelIndex(e.value);
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import DropDownButton, { DropDownButtonTypes } from 'devextreme-react/drop-down-button';
 import Toolbar from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
@@ -21,32 +21,32 @@ const itemTemplateRender = (item) => (
 );
 
 const App = () => {
-  const [alignment, setAlignment] = React.useState<TextAlign>('left');
-  const [color, setColor] = React.useState(null);
-  const [fontSize, setFontSize] = React.useState(14);
-  const [lineHeight, setLineHeight] = React.useState(1.35);
-  const [colorPicker, setColorPicker] = React.useState(null);
+  const [alignment, setAlignment] = useState<TextAlign>('left');
+  const [color, setColor] = useState(null);
+  const [fontSize, setFontSize] = useState(14);
+  const [lineHeight, setLineHeight] = useState(1.35);
+  const [colorPicker, setColorPicker] = useState(null);
 
-  const onButtonClick = React.useCallback((e: ButtonTypes.ClickEvent) => {
+  const onButtonClick = useCallback((e: ButtonTypes.ClickEvent) => {
     notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
   }, []);
 
-  const onItemClick = React.useCallback((e: DropDownButtonTypes.ItemClickEvent) => {
+  const onItemClick = useCallback((e: DropDownButtonTypes.ItemClickEvent) => {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }, []);
 
-  const onColorClick = React.useCallback((selectedColor) => {
+  const onColorClick = useCallback((selectedColor) => {
     setColor(selectedColor);
     const squareIcon = colorPicker.element().getElementsByClassName('dx-icon-square')[0];
     squareIcon.style.color = selectedColor;
     colorPicker.close();
   }, [colorPicker]);
 
-  const onInitialized = React.useCallback((e: DropDownButtonTypes.InitializedEvent) => {
+  const onInitialized = useCallback((e: DropDownButtonTypes.InitializedEvent) => {
     setColorPicker(e.component);
   }, [setColorPicker]);
 
-  const toolbarItems = React.useMemo(() => [
+  const toolbarItems = useMemo(() => [
     {
       location: 'before',
       widget: 'dxDropDownButton',

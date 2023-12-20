@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PieChart, { Series, Legend } from 'devextreme-react/pie-chart';
 import SelectBox from 'devextreme-react/select-box';
 import { getPalette } from 'devextreme/viz/palette';
@@ -11,15 +11,15 @@ import {
 } from './data.js';
 
 function App() {
-  const [palette, setPalette] = React.useState(paletteCollection[0]);
-  const [extensionMode, setExtensionMode] = React.useState(paletteExtensionModes[1]);
-  const handlePaletteChange = React.useCallback(
+  const [palette, setPalette] = useState(paletteCollection[0]);
+  const [extensionMode, setExtensionMode] = useState(paletteExtensionModes[1]);
+  const handlePaletteChange = useCallback(
     (e) => {
       setPalette(e.value);
     },
     [setPalette],
   );
-  const handleExtensionModeChange = React.useCallback(
+  const handleExtensionModeChange = useCallback(
     (e) => {
       setExtensionMode(e.value);
     },

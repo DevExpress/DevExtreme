@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeMap, {
   Size, Title, Colorizer, TreeMapTypes,
 } from 'devextreme-react/tree-map';
@@ -18,9 +18,9 @@ function nodeClick(e: TreeMapTypes.ClickEvent) {
 }
 
 function App() {
-  const [drillInfo, setDrillInfo] = React.useState<DrillInfo[]>([]);
+  const [drillInfo, setDrillInfo] = useState<DrillInfo[]>([]);
 
-  const drill = React.useCallback((e: TreeMapTypes.DrillEvent) => {
+  const drill = useCallback((e: TreeMapTypes.DrillEvent) => {
     const newDrillInfo = [];
     for (let node = e.node.getParent(); node; node = node.getParent()) {
       newDrillInfo.unshift({

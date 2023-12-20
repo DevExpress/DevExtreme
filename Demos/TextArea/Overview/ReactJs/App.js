@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import TextArea from 'devextreme-react/text-area';
@@ -9,25 +9,25 @@ const { valueChangeEvents } = service;
 const notesLabel = { 'aria-label': 'Notes' };
 const eventLabel = { 'aria-label': 'Event' };
 function App() {
-  const [value, setValue] = React.useState(content);
-  const [valueForEditableTestArea, setValueForEditableTestArea] = React.useState(content);
-  const [maxLength, setMaxLength] = React.useState(null);
-  const [eventValue, setEventValue] = React.useState(valueChangeEvents[0].name);
-  const [autoResizeEnabled, setAutoResizeEnabled] = React.useState(false);
-  const [height, setHeight] = React.useState(90);
-  const onCheckboxValueChanged = React.useCallback((e) => {
+  const [value, setValue] = useState(content);
+  const [valueForEditableTestArea, setValueForEditableTestArea] = useState(content);
+  const [maxLength, setMaxLength] = useState(null);
+  const [eventValue, setEventValue] = useState(valueChangeEvents[0].name);
+  const [autoResizeEnabled, setAutoResizeEnabled] = useState(false);
+  const [height, setHeight] = useState(90);
+  const onCheckboxValueChanged = useCallback((e) => {
     const str = content;
     setValue(e.value ? str.substring(0, 100) : str);
     setMaxLength(e.value ? 100 : null);
   }, []);
-  const onAutoResizeChanged = React.useCallback((e) => {
+  const onAutoResizeChanged = useCallback((e) => {
     setAutoResizeEnabled(e.value);
     setHeight(e.value ? undefined : 90);
   }, []);
-  const onSelectBoxValueChanged = React.useCallback((e) => {
+  const onSelectBoxValueChanged = useCallback((e) => {
     setEventValue(e.value);
   }, []);
-  const onTextAreaValueChanged = React.useCallback((e) => {
+  const onTextAreaValueChanged = useCallback((e) => {
     setValueForEditableTestArea(e.value);
   }, []);
   return (

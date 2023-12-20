@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import PolarChart, {
   CommonSeriesSettings,
@@ -23,9 +23,9 @@ import { VisualRange } from 'devextreme-react/common/charts';
 import { dataSource } from './data.ts';
 
 function App() {
-  const [visualRange, setVisualRange] = React.useState<VisualRange>({ startValue: 0, endValue: 8 });
+  const [visualRange, setVisualRange] = useState<VisualRange>({ startValue: 0, endValue: 8 });
 
-  const updateVisualRange = React.useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
+  const updateVisualRange = useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
     setVisualRange(e.value);
   }, [setVisualRange]);
 

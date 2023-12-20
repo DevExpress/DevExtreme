@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler, { AppointmentDragging } from 'devextreme-react/scheduler';
 import Draggable from 'devextreme-react/draggable';
 import ScrollView from 'devextreme-react/scroll-view';
@@ -19,11 +19,11 @@ const onItemDragEnd = (e) => {
   }
 };
 const App = () => {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     tasks: defaultTasks,
     appointments: defaultAppointments,
   });
-  const onAppointmentRemove = React.useCallback((e) => {
+  const onAppointmentRemove = useCallback((e) => {
     setState((currentState) => {
       const { appointments, tasks } = currentState;
       const index = appointments.indexOf(e.itemData);
@@ -34,7 +34,7 @@ const App = () => {
       return { appointments: [...appointments], tasks: [...tasks] };
     });
   }, []);
-  const onAppointmentAdd = React.useCallback((e) => {
+  const onAppointmentAdd = useCallback((e) => {
     setState((currentState) => {
       const { appointments, tasks } = currentState;
       const index = tasks.indexOf(e.fromData);

@@ -1,29 +1,29 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileUploader, { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import ProgressBar from 'devextreme-react/progress-bar';
 
 const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
 export default function App() {
-  const [isDropZoneActive, setIsDropZoneActive] = React.useState(false);
-  const [imageSource, setImageSource] = React.useState<string>('');
-  const [textVisible, setTextVisible] = React.useState(true);
-  const [progressVisible, setProgressVisible] = React.useState(false);
-  const [progressValue, setProgressValue] = React.useState(0);
+  const [isDropZoneActive, setIsDropZoneActive] = useState(false);
+  const [imageSource, setImageSource] = useState<string>('');
+  const [textVisible, setTextVisible] = useState(true);
+  const [progressVisible, setProgressVisible] = useState(false);
+  const [progressValue, setProgressValue] = useState(0);
 
-  const onDropZoneEnter = React.useCallback((e: FileUploaderTypes.DropZoneEnterEvent) => {
+  const onDropZoneEnter = useCallback((e: FileUploaderTypes.DropZoneEnterEvent) => {
     if (e.dropZoneElement.id === 'dropzone-external') {
       setIsDropZoneActive(true);
     }
   }, [setIsDropZoneActive]);
 
-  const onDropZoneLeave = React.useCallback((e: FileUploaderTypes.DropZoneLeaveEvent) => {
+  const onDropZoneLeave = useCallback((e: FileUploaderTypes.DropZoneLeaveEvent) => {
     if (e.dropZoneElement.id === 'dropzone-external') {
       setIsDropZoneActive(false);
     }
   }, [setIsDropZoneActive]);
 
-  const onUploaded = React.useCallback((e: FileUploaderTypes.UploadedEvent) => {
+  const onUploaded = useCallback((e: FileUploaderTypes.UploadedEvent) => {
     const { file } = e;
     const fileReader = new FileReader();
     fileReader.onload = () => {
@@ -36,11 +36,11 @@ export default function App() {
     setProgressValue(0);
   }, [setImageSource, setIsDropZoneActive, setTextVisible, setProgressVisible, setProgressValue]);
 
-  const onProgress = React.useCallback((e: { bytesLoaded: number; bytesTotal: number; }) => {
+  const onProgress = useCallback((e: { bytesLoaded: number; bytesTotal: number; }) => {
     setProgressValue((e.bytesLoaded / e.bytesTotal) * 100);
   }, [setProgressValue]);
 
-  const onUploadStarted = React.useCallback(() => {
+  const onUploadStarted = useCallback(() => {
     setImageSource('');
     setProgressVisible(true);
   }, [setImageSource, setProgressVisible]);

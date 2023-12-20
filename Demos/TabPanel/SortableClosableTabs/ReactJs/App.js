@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import Sortable from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
@@ -8,9 +8,9 @@ import EmployeeTemplate from './EmployeeTemplate.js';
 
 const allEmployees = service.getEmployees();
 function App() {
-  const [employees, setEmployees] = React.useState(allEmployees.slice(0, 3));
-  const [selectedItem, setSelectedItem] = React.useState(allEmployees[0]);
-  const addButtonHandler = React.useCallback(() => {
+  const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
+  const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
+  const addButtonHandler = useCallback(() => {
     const newItem = allEmployees.filter((employee) => employees.indexOf(employee) === -1)[0];
     setEmployees([...employees, newItem]);
     setSelectedItem(newItem);
@@ -18,7 +18,7 @@ function App() {
   function disableButton() {
     return employees.length === allEmployees.length;
   }
-  const closeButtonHandler = React.useCallback(
+  const closeButtonHandler = useCallback(
     (item) => {
       const newEmployees = [...employees];
       const index = newEmployees.indexOf(item);
@@ -30,7 +30,7 @@ function App() {
     },
     [employees, setEmployees, setSelectedItem],
   );
-  const renderTitle = React.useCallback(
+  const renderTitle = useCallback(
     (data) => (
       <React.Fragment>
         <div>
@@ -50,16 +50,16 @@ function App() {
     ),
     [employees, closeButtonHandler],
   );
-  const onSelectionChanged = React.useCallback(
+  const onSelectionChanged = useCallback(
     (args) => {
       setSelectedItem(args.addedItems[0]);
     },
     [setSelectedItem],
   );
-  const onTabDragStart = React.useCallback((e) => {
+  const onTabDragStart = useCallback((e) => {
     e.itemData = e.fromData[e.fromIndex];
   }, []);
-  const onTabDrop = React.useCallback(
+  const onTabDrop = useCallback(
     (e) => {
       const newEmployees = [...employees];
       newEmployees.splice(e.fromIndex, 1);

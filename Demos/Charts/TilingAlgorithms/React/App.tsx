@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeMap, {
   Colorizer, Tooltip, ITreeMapOptions, ITooltipProps,
 } from 'devextreme-react/tree-map';
@@ -9,13 +9,13 @@ import { populationByAge, algorithmLabel } from './data.ts';
 const algorithms: (TreeMapLayoutAlgorithm | 'custom')[] = ['sliceanddice', 'squarified', 'strip', 'custom'];
 
 function App() {
-  const [selectedAlgorithm, setSelectedAlgorithm] = React.useState(algorithms[2]);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[2]);
   const [
     currentAlgorithm,
     setCurrentAlgorithm,
-  ] = React.useState<ITreeMapOptions['layoutAlgorithm']>(getCurrentAlgorithm(algorithms[2]));
+  ] = useState<ITreeMapOptions['layoutAlgorithm']>(getCurrentAlgorithm(algorithms[2]));
 
-  const setAlgorithm = React.useCallback((data: SelectBoxTypes.ValueChangedEvent) => {
+  const setAlgorithm = useCallback((data: SelectBoxTypes.ValueChangedEvent) => {
     setSelectedAlgorithm(data.value);
     setCurrentAlgorithm(() => getCurrentAlgorithm(data.value));
   }, [setSelectedAlgorithm, setCurrentAlgorithm]);

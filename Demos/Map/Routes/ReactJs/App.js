@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 import {
@@ -11,8 +11,8 @@ const apiKey = {
   bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
 export default function App() {
-  const [routes, setRoutes] = React.useState(routesData);
-  const routeModeChange = React.useCallback(
+  const [routes, setRoutes] = useState(routesData);
+  const routeModeChange = useCallback(
     (value) => {
       setRoutes(
         routes.map((item) => {
@@ -23,7 +23,7 @@ export default function App() {
     },
     [routes, setRoutes],
   );
-  const routeColorChange = React.useCallback(
+  const routeColorChange = useCallback(
     (value) => {
       setRoutes(
         routes.map((item) => {

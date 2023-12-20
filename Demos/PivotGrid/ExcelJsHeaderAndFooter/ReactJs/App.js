@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PivotGrid, { FieldChooser, FieldPanel, Export } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -48,11 +48,11 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 const App = () => {
-  const [exportDataFieldHeaders, setExportDataFieldHeaders] = React.useState(false);
-  const [exportRowFieldHeaders, setExportRowFieldHeaders] = React.useState(false);
-  const [exportColumnFieldHeaders, setExportColumnFieldHeaders] = React.useState(false);
-  const [exportFilterFieldHeaders, setExportFilterFieldHeaders] = React.useState(false);
-  const onExporting = React.useCallback(
+  const [exportDataFieldHeaders, setExportDataFieldHeaders] = useState(false);
+  const [exportRowFieldHeaders, setExportRowFieldHeaders] = useState(false);
+  const [exportColumnFieldHeaders, setExportColumnFieldHeaders] = useState(false);
+  const [exportFilterFieldHeaders, setExportFilterFieldHeaders] = useState(false);
+  const onExporting = useCallback(
     (e) => {
       const workbook = new Workbook();
       const worksheet = workbook.addWorksheet('Sales');

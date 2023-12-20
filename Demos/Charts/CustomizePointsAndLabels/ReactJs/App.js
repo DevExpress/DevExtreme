@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Chart,
   Series,
@@ -17,7 +17,7 @@ function customizeText(arg) {
   return `${arg.valueText}&#176F`;
 }
 function App() {
-  const customizePoint = React.useCallback((arg) => {
+  const customizePoint = useCallback((arg) => {
     if (arg.value > highAverage) {
       return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
     }
@@ -26,7 +26,7 @@ function App() {
     }
     return null;
   }, []);
-  const customizeLabel = React.useCallback((arg) => {
+  const customizeLabel = useCallback((arg) => {
     if (arg.value > highAverage) {
       return {
         visible: true,

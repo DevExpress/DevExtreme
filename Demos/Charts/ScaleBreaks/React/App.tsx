@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Chart, {
   Legend,
   Series,
@@ -14,19 +14,19 @@ const lineStyles: ('straight' | 'waved')[] = ['waved', 'straight'];
 const breaksCount = [1, 2, 3, 4];
 
 function App() {
-  const [autoBreaksEnabledValue, setAutoBreaksEnabledValue] = React.useState(true);
-  const [breaksCountValue, setBreaksCountValue] = React.useState(3);
-  const [lineStyleValue, setLineStyleValue] = React.useState(lineStyles[0]);
+  const [autoBreaksEnabledValue, setAutoBreaksEnabledValue] = useState(true);
+  const [breaksCountValue, setBreaksCountValue] = useState(3);
+  const [lineStyleValue, setLineStyleValue] = useState(lineStyles[0]);
 
-  const changeBreaksCount = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const changeBreaksCount = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setBreaksCountValue(e.value);
   }, [setBreaksCountValue]);
 
-  const changeStyle = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const changeStyle = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setLineStyleValue(e.value);
   }, [setLineStyleValue]);
 
-  const changeBreaksEnabledState = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const changeBreaksEnabledState = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setAutoBreaksEnabledValue(e.value);
   }, [setAutoBreaksEnabledValue]);
 

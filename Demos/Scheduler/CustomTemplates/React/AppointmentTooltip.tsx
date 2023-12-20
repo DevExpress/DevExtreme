@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Query from 'devextreme/data/query';
 import { SchedulerTypes } from 'devextreme-react/scheduler';
 
@@ -13,7 +13,7 @@ type AppointmentProps = {
 const AppointmentTooltip = (props: AppointmentProps) => {
   const { movieId } = props.data.appointmentData;
 
-  const movieData = React.useMemo(() => getMovieById(movieId), [movieId]);
+  const movieData = useMemo(() => getMovieById(movieId), [movieId]);
 
   return (
     <div className="movie-tooltip">

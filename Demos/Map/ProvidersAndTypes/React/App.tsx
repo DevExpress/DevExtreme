@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
@@ -10,9 +10,9 @@ const apiKey = {
 };
 
 const App = () => {
-  const [mapTypeValue, setMapTypeValue] = React.useState(mapTypes[0].key);
+  const [mapTypeValue, setMapTypeValue] = useState(mapTypes[0].key);
 
-  const onMapTypeChange = React.useCallback((value) => {
+  const onMapTypeChange = useCallback((value) => {
     setMapTypeValue(value);
   }, [setMapTypeValue]);
 

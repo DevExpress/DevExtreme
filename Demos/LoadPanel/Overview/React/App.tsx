@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button } from 'devextreme-react/button';
 import { CheckBox, ICheckBoxOptions } from 'devextreme-react/check-box';
 import { LoadPanel } from 'devextreme-react/load-panel';
@@ -7,37 +7,37 @@ import { employee } from './data.ts';
 const position = { of: '#employee' };
 const defaultEmployeeInfo: Partial<typeof employee> = {};
 export default function App() {
-  const [employeeInfo, setEmployeeInfo] = React.useState(defaultEmployeeInfo);
-  const [loadPanelVisible, setLoadPanelVisible] = React.useState(false);
-  const [showIndicator, setShowIndicator] = React.useState(true);
-  const [shading, setShading] = React.useState(true);
-  const [showPane, setShowPane] = React.useState(true);
-  const [hideOnOutsideClick, setHideOnOutsideClick] = React.useState(false);
+  const [employeeInfo, setEmployeeInfo] = useState(defaultEmployeeInfo);
+  const [loadPanelVisible, setLoadPanelVisible] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(true);
+  const [shading, setShading] = useState(true);
+  const [showPane, setShowPane] = useState(true);
+  const [hideOnOutsideClick, setHideOnOutsideClick] = useState(false);
 
-  const hideLoadPanel = React.useCallback(() => {
+  const hideLoadPanel = useCallback(() => {
     setLoadPanelVisible(false);
     setEmployeeInfo(employee);
   }, [setLoadPanelVisible, setEmployeeInfo]);
 
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     setEmployeeInfo({});
     setLoadPanelVisible(true);
     setTimeout(hideLoadPanel, 3000);
   }, [setEmployeeInfo, setLoadPanelVisible]);
 
-  const onShowIndicatorChange = React.useCallback((e: { value: any; }) => {
+  const onShowIndicatorChange = useCallback((e: { value: any; }) => {
     setShowIndicator(e.value);
   }, [setShowIndicator]) as ICheckBoxOptions['onValueChanged'];
 
-  const onShadingChange = React.useCallback((e: { value: any; }) => {
+  const onShadingChange = useCallback((e: { value: any; }) => {
     setShading(e.value);
   }, [setShading]) as ICheckBoxOptions['onValueChanged'];
 
-  const onShowPaneChange = React.useCallback((e: { value: any; }) => {
+  const onShowPaneChange = useCallback((e: { value: any; }) => {
     setShowPane(e.value);
   }, [setShowPane]) as ICheckBoxOptions['onValueChanged'];
 
-  const onHideOnOutsideClickChange = React.useCallback((e: { value: any; }) => {
+  const onHideOnOutsideClickChange = useCallback((e: { value: any; }) => {
     setHideOnOutsideClick(e.value);
   }, [setHideOnOutsideClick]) as ICheckBoxOptions['onValueChanged'];
 

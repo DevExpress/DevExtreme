@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileUploader, { FileUploaderTypes } from 'devextreme-react/file-uploader';
 
 function getValueInKb(value: number) {
@@ -6,9 +6,9 @@ function getValueInKb(value: number) {
 }
 
 export default function App() {
-  const [chunks, setChunks] = React.useState([]);
+  const [chunks, setChunks] = useState([]);
 
-  const onUploadProgress = React.useCallback((e: FileUploaderTypes.ProgressEvent) => {
+  const onUploadProgress = useCallback((e: FileUploaderTypes.ProgressEvent) => {
     const chunk = {
       segmentSize: e.segmentSize,
       bytesLoaded: e.bytesLoaded,
@@ -17,7 +17,7 @@ export default function App() {
     setChunks([...chunks, chunk]);
   }, [chunks, setChunks]);
 
-  const onUploadStarted = React.useCallback(() => {
+  const onUploadStarted = useCallback(() => {
     setChunks([]);
   }, [setChunks]);
 

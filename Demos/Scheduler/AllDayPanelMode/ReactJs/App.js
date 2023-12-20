@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler from 'devextreme-react/scheduler';
 import RadioGroup from 'devextreme-react/radio-group';
 import { data } from './data.js';
@@ -14,8 +14,8 @@ const views = [
 ];
 const allDayPanelItems = ['all', 'allDay', 'hidden'];
 const App = () => {
-  const [allDayPanelMode, setAllDayPanelMode] = React.useState('allDay');
-  const onChangeAllDayPanelMode = React.useCallback(
+  const [allDayPanelMode, setAllDayPanelMode] = useState('allDay');
+  const onChangeAllDayPanelMode = useCallback(
     (e) => {
       setAllDayPanelMode(e.value);
     },

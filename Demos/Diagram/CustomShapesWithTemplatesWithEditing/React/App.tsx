@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Diagram, {
   CustomShape, ContextToolbox, PropertiesPanel, Group, Tab, Toolbox, Nodes, AutoLayout, DiagramTypes,
 } from 'devextreme-react/diagram';
@@ -78,17 +78,17 @@ function itemCustomDataExpr(obj: Employee, value: Employee) {
 }
 
 export default function App() {
-  const [currentEmployee, setCurrentEmployee] = React.useState<Partial<Employee>>({});
-  const [popupVisible, setPopupVisible] = React.useState(false);
+  const [currentEmployee, setCurrentEmployee] = useState<Partial<Employee>>({});
+  const [popupVisible, setPopupVisible] = useState(false);
 
-  const diagramRef = React.useRef<Diagram>(null);
+  const diagramRef = useRef<Diagram>(null);
 
-  const editEmployee = React.useCallback((employee) => {
+  const editEmployee = useCallback((employee) => {
     setCurrentEmployee({ ...employee });
     setPopupVisible(true);
   }, []);
 
-  const updateEmployee = React.useCallback(() => {
+  const updateEmployee = useCallback(() => {
     dataSource.push([{
       type: 'update',
       key: currentEmployee.ID,
@@ -106,54 +106,54 @@ export default function App() {
     setPopupVisible(false);
   }, [currentEmployee, setCurrentEmployee, setPopupVisible]);
 
-  const customShapeTemplate = React.useCallback((item) => (CustomShapeTemplate(item.dataItem,
+  const customShapeTemplate = useCallback((item) => (CustomShapeTemplate(item.dataItem,
     () => { editEmployee(item.dataItem); },
     () => { deleteEmployee(item.dataItem); })
   ), [editEmployee]);
 
-  const customShapeToolboxTemplate = React.useCallback(() => CustomShapeToolboxTemplate(), []);
+  const customShapeToolboxTemplate = useCallback(() => CustomShapeToolboxTemplate(), []);
 
-  const cancelEditEmployee = React.useCallback(() => {
+  const cancelEditEmployee = useCallback(() => {
     setCurrentEmployee({});
     setPopupVisible(false);
   }, [setCurrentEmployee, setPopupVisible]);
 
-  const handleChange = React.useCallback((field, value) => {
+  const handleChange = useCallback((field, value) => {
     setCurrentEmployee((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   }, [setCurrentEmployee]);
 
-  const handleNameChange = React.useCallback((e: { value: any; }) => {
+  const handleNameChange = useCallback((e: { value: any; }) => {
     handleChange('Full_Name', e.value);
   }, [handleChange]);
 
-  const handleTitleChange = React.useCallback((e: { value: any; }) => {
+  const handleTitleChange = useCallback((e: { value: any; }) => {
     handleChange('Title', e.value);
   }, [handleChange]);
 
-  const handleCityChange = React.useCallback((e: { value: any; }) => {
+  const handleCityChange = useCallback((e: { value: any; }) => {
     handleChange('City', e.value);
   }, [handleChange]);
 
-  const handleStateChange = React.useCallback((e: { value: any; }) => {
+  const handleStateChange = useCallback((e: { value: any; }) => {
     handleChange('State', e.value);
   }, [handleChange]);
 
-  const handleEmailChange = React.useCallback((e: { value: any; }) => {
+  const handleEmailChange = useCallback((e: { value: any; }) => {
     handleChange('Email', e.value);
   }, [handleChange]);
 
-  const handleSkypeChange = React.useCallback((e: { value: any; }) => {
+  const handleSkypeChange = useCallback((e: { value: any; }) => {
     handleChange('Skype', e.value);
   }, [handleChange]);
 
-  const handlePhoneChange = React.useCallback((e: { value: any; }) => {
+  const handlePhoneChange = useCallback((e: { value: any; }) => {
     handleChange('Mobile_Phone', e.value);
   }, [handleChange]);
 
-  const popupContentRender = React.useCallback(() => (
+  const popupContentRender = useCallback(() => (
     <PopupContentFunc
       currentEmployee={currentEmployee}
       handleNameChange={handleNameChange}

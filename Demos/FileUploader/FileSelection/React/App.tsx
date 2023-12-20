@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 import Button from 'devextreme-react/button';
 import TextBox from 'devextreme-react/text-box';
@@ -8,9 +8,9 @@ const firstNameLabel = { 'aria-label': 'First Name' };
 const lastNameLabel = { 'aria-label': 'Last Name' };
 
 export default function App() {
-  const formElement = React.useRef(null);
+  const formElement = useRef(null);
 
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     notify('Uncomment the line to enable sending a form to the server.');
     // formElement.current.submit();
   }, []);

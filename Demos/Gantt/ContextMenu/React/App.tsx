@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, ContextMenu, IContextMenuProps,
 } from 'devextreme-react/gantt';
@@ -8,7 +8,7 @@ import {
 } from './data.ts';
 
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState({
+  const [ganttConfig, setGanttConfig] = useState({
     showResources: true,
     disableContextMenu: false,
     contextMenuItems: getContextMenuItems(),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { SelectBox } from 'devextreme-react/select-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
@@ -53,28 +53,28 @@ const customItemCreating = (args) => {
     });
 };
 function App() {
-  const [editBoxValue, setEditBoxValue] = React.useState(simpleProducts[0]);
-  const [searchModeOption, setSearchModeOption] = React.useState('contains');
-  const [searchExprOption, setSearchExprOption] = React.useState('Name');
-  const [searchTimeoutOption, setSearchTimeoutOption] = React.useState(200);
-  const [minSearchLengthOption, setMinSearchLengthOption] = React.useState(0);
-  const [showDataBeforeSearchOption, setShowDataBeforeSearchOption] = React.useState(false);
-  const editBoxValueChanged = React.useCallback(({ component }) => {
+  const [editBoxValue, setEditBoxValue] = useState(simpleProducts[0]);
+  const [searchModeOption, setSearchModeOption] = useState('contains');
+  const [searchExprOption, setSearchExprOption] = useState('Name');
+  const [searchTimeoutOption, setSearchTimeoutOption] = useState(200);
+  const [minSearchLengthOption, setMinSearchLengthOption] = useState(0);
+  const [showDataBeforeSearchOption, setShowDataBeforeSearchOption] = useState(false);
+  const editBoxValueChanged = useCallback(({ component }) => {
     setEditBoxValue(component.option('selectedItem'));
   }, []);
-  const searchModeOptionChanged = React.useCallback(({ value }) => {
+  const searchModeOptionChanged = useCallback(({ value }) => {
     setSearchModeOption(value);
   }, []);
-  const searchExprOptionChanged = React.useCallback(({ value }) => {
+  const searchExprOptionChanged = useCallback(({ value }) => {
     setSearchExprOption(value);
   }, []);
-  const searchTimeoutOptionChanged = React.useCallback(({ value }) => {
+  const searchTimeoutOptionChanged = useCallback(({ value }) => {
     setSearchTimeoutOption(value);
   }, []);
-  const minSearchLengthOptionChanged = React.useCallback(({ value }) => {
+  const minSearchLengthOptionChanged = useCallback(({ value }) => {
     setMinSearchLengthOption(value);
   }, []);
-  const showDataBeforeSearchOptionChanged = React.useCallback(({ value }) => {
+  const showDataBeforeSearchOptionChanged = useCallback(({ value }) => {
     setShowDataBeforeSearchOption(value);
   }, []);
   return (

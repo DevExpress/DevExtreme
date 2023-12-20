@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, { Column, Paging, SearchPanel } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import { europeanUnion } from './data.js';
@@ -8,16 +8,16 @@ const areaFormat = { type: 'fixedPoint', precision: 0 };
 const languageLabel = { 'aria-label': 'Language' };
 const languages = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'];
 const App = () => {
-  const [placeholder, setPlaceholder] = React.useState('Search...');
-  const [rtlEnabled, setRtlEnabled] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(languages[1]);
-  const onSelectLanguage = React.useCallback((e) => {
+  const [placeholder, setPlaceholder] = useState('Search...');
+  const [rtlEnabled, setRtlEnabled] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(languages[1]);
+  const onSelectLanguage = useCallback((e) => {
     const newRtlEnabled = e.value === languages[0];
     setRtlEnabled(newRtlEnabled);
     setPlaceholder(newRtlEnabled ? 'بحث' : 'Search...');
     setSelectedValue(e.value);
   }, []);
-  const headerCellRender = React.useCallback(
+  const headerCellRender = useCallback(
     () => (
       <div>
         {rtlEnabled ? (

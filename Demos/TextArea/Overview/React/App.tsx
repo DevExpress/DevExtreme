@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import TextArea, { TextAreaTypes } from 'devextreme-react/text-area';
@@ -11,29 +11,29 @@ const notesLabel = { 'aria-label': 'Notes' };
 const eventLabel = { 'aria-label': 'Event' };
 
 function App() {
-  const [value, setValue] = React.useState(content);
-  const [valueForEditableTestArea, setValueForEditableTestArea] = React.useState(content);
-  const [maxLength, setMaxLength] = React.useState(null);
-  const [eventValue, setEventValue] = React.useState(valueChangeEvents[0].name);
-  const [autoResizeEnabled, setAutoResizeEnabled] = React.useState(false);
-  const [height, setHeight] = React.useState(90);
+  const [value, setValue] = useState(content);
+  const [valueForEditableTestArea, setValueForEditableTestArea] = useState(content);
+  const [maxLength, setMaxLength] = useState(null);
+  const [eventValue, setEventValue] = useState(valueChangeEvents[0].name);
+  const [autoResizeEnabled, setAutoResizeEnabled] = useState(false);
+  const [height, setHeight] = useState(90);
 
-  const onCheckboxValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onCheckboxValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     const str = content;
     setValue(e.value ? str.substring(0, 100) : str);
     setMaxLength(e.value ? 100 : null);
   }, []);
 
-  const onAutoResizeChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onAutoResizeChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setAutoResizeEnabled(e.value);
     setHeight(e.value ? undefined : 90);
   }, []);
 
-  const onSelectBoxValueChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onSelectBoxValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setEventValue(e.value);
   }, []);
 
-  const onTextAreaValueChanged = React.useCallback((e: TextAreaTypes.ValueChangedEvent) => {
+  const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent) => {
     setValueForEditableTestArea(e.value);
   }, []);
 

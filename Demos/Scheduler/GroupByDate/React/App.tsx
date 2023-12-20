@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Switch, { SwitchTypes } from 'devextreme-react/switch';
 import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
@@ -9,9 +9,9 @@ const currentDate = new Date(2021, 3, 21);
 const groups = ['priorityId'];
 
 const App = () => {
-  const [groupByDate, setGroupByDate] = React.useState(true);
+  const [groupByDate, setGroupByDate] = useState(true);
 
-  const onGroupByDateChanged = React.useCallback((args: SwitchTypes.ValueChangedEvent) => {
+  const onGroupByDateChanged = useCallback((args: SwitchTypes.ValueChangedEvent) => {
     setGroupByDate(args.value);
   }, []);
 

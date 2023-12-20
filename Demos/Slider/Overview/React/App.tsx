@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Slider, Label, Tooltip } from 'devextreme-react/slider';
 import { NumberBox } from 'devextreme-react/number-box';
 
@@ -7,9 +7,9 @@ const sliderValueLabel = { 'aria-label': 'Slider Value' };
 const format = (value) => `${value}%`;
 
 function App() {
-  const [sliderValue, setSliderValue] = React.useState(10);
+  const [sliderValue, setSliderValue] = useState(10);
 
-  const onValueChanged = React.useCallback((e: { value?: any; }) => {
+  const onValueChanged = useCallback((e: { value?: any; }) => {
     setSliderValue(e.value);
   }, [setSliderValue]);
 

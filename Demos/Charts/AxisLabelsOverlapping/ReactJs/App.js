@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart, Series, ArgumentAxis, Legend, Label,
@@ -6,8 +6,8 @@ import {
 import { overlappingModes, population, seriesTypeLabel } from './data.js';
 
 function App() {
-  const [currentMode, setCurrentMode] = React.useState(overlappingModes[0]);
-  const handleChange = React.useCallback(
+  const [currentMode, setCurrentMode] = useState(overlappingModes[0]);
+  const handleChange = useCallback(
     (e) => {
       setCurrentMode(e.value);
     },

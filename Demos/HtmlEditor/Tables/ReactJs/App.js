@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import HtmlEditor, {
   TableContextMenu,
   TableResizing,
@@ -9,15 +9,15 @@ import { CheckBox } from 'devextreme-react/check-box';
 import { markup } from './data.js';
 
 export default function App() {
-  const [allowResizing, setAllowResizing] = React.useState(true);
-  const [contextMenuEnabled, setContextMenuEnabled] = React.useState(true);
-  const tableResizingChanged = React.useCallback(
+  const [allowResizing, setAllowResizing] = useState(true);
+  const [contextMenuEnabled, setContextMenuEnabled] = useState(true);
+  const tableResizingChanged = useCallback(
     (e) => {
       setAllowResizing(e.value);
     },
     [setAllowResizing],
   );
-  const tableContextMenuChanged = React.useCallback(
+  const tableContextMenuChanged = useCallback(
     (e) => {
       setContextMenuEnabled(e.value);
     },

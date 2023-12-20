@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import TagBox from 'devextreme-react/tag-box';
 import { categories, categoryLabel } from './data.js';
 // eslint-disable-next-line no-unused-vars
 export const EditorComponent = (props) => {
-  const onValueChanged = React.useCallback(
+  const onValueChanged = useCallback(
     (e) => {
       props.data.setValue(e.value && e.value.length ? e.value : null);
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import List from 'devextreme-react/list';
@@ -6,15 +6,15 @@ import { tasks, deleteModeLabel } from './data.js';
 
 const itemDeleteModes = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
 const App = () => {
-  const [allowDeletion, setAllowDeletion] = React.useState(false);
-  const [itemDeleteMode, setItemDeleteMode] = React.useState('toggle');
-  const onAllowDeletionChange = React.useCallback(
+  const [allowDeletion, setAllowDeletion] = useState(false);
+  const [itemDeleteMode, setItemDeleteMode] = useState('toggle');
+  const onAllowDeletionChange = useCallback(
     (args) => {
       setAllowDeletion(args.value);
     },
     [setAllowDeletion],
   );
-  const onItemDeleteModeChange = React.useCallback(
+  const onItemDeleteModeChange = useCallback(
     (args) => {
       setItemDeleteMode(args.value);
     },

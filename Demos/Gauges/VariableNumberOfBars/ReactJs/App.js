@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { BarGauge, Label } from 'devextreme-react/bar-gauge';
 import { CheckBox } from 'devextreme-react/check-box';
 import { products } from './data.js';
@@ -8,9 +8,9 @@ const format = {
   precision: 0,
 };
 function App() {
-  const [productsActivity, setProductsActivity] = React.useState(products.map((p) => p.active));
-  const [values, setValues] = React.useState(products.map((p) => p.count));
-  const getValueChangedHandler = React.useCallback(
+  const [productsActivity, setProductsActivity] = useState(products.map((p) => p.active));
+  const [values, setValues] = useState(products.map((p) => p.count));
+  const getValueChangedHandler = useCallback(
     (productIndex) => (e) => {
       const updatedProductsActivity = [...productsActivity];
       updatedProductsActivity[productIndex] = e.value;

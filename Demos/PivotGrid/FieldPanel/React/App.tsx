@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PivotGrid, {
   FieldChooser,
@@ -65,10 +65,10 @@ const onContextMenuPreparing = (e) => {
 };
 
 const App = () => {
-  const [showColumnFields, setShowColumnFields] = React.useState(true);
-  const [showDataFields, setShowDataFields] = React.useState(true);
-  const [showFilterFields, setShowFilterFields] = React.useState(true);
-  const [showRowFields, setShowRowFields] = React.useState(true);
+  const [showColumnFields, setShowColumnFields] = useState(true);
+  const [showDataFields, setShowDataFields] = useState(true);
+  const [showFilterFields, setShowFilterFields] = useState(true);
+  const [showRowFields, setShowRowFields] = useState(true);
 
   return (
     <React.Fragment>

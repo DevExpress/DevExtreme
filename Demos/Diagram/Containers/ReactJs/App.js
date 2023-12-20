@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Diagram, { Group, Toolbox } from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
 export default function App() {
-  const diagramRef = React.useRef();
-  React.useEffect(() => {
+  const diagramRef = useRef();
+  useEffect(() => {
     const diagram = diagramRef.current.instance;
     fetch('../../../../data/diagram-structure.json')
       .then((response) => response.json())

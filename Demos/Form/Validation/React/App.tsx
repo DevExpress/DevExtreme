@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Form, {
   ButtonItem,
   GroupItem,
@@ -130,9 +130,9 @@ const registerButtonOptions = {
 };
 
 function App() {
-  const formRef = React.useRef<Form>(null);
+  const formRef = useRef<Form>(null);
 
-  const [resetButtonOptions, setResetButtonOptions] = React.useState({
+  const [resetButtonOptions, setResetButtonOptions] = useState({
     disabled: true,
     icon: 'refresh',
     text: 'Reset',
@@ -142,12 +142,12 @@ function App() {
     },
   });
 
-  const changePasswordMode = React.useCallback((name) => {
+  const changePasswordMode = useCallback((name) => {
     const editor = formRef.current.instance.getEditor(name);
     editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
   }, []);
 
-  const getPasswordOptions = React.useCallback(() => ({
+  const getPasswordOptions = useCallback(() => ({
     mode: 'password',
     valueChangeEvent: 'keyup',
     onValueChanged: () => {
@@ -170,7 +170,7 @@ function App() {
     ],
   }), [changePasswordMode]);
 
-  const getConfirmOptions = React.useCallback(() => ({
+  const getConfirmOptions = useCallback(() => ({
     mode: 'password',
     valueChangeEvent: 'keyup',
     buttons: [
@@ -186,7 +186,7 @@ function App() {
     ],
   }), [changePasswordMode]);
 
-  const handleSubmit = React.useCallback((e: { preventDefault: () => void; }) => {
+  const handleSubmit = useCallback((e: { preventDefault: () => void; }) => {
     notify({
       message: 'You have submitted the form',
       position: {
@@ -197,7 +197,7 @@ function App() {
     e.preventDefault();
   }, []);
 
-  const onOptionChanged = React.useCallback((e: FormTypes.OptionChangedEvent) => {
+  const onOptionChanged = useCallback((e: FormTypes.OptionChangedEvent) => {
     if (e.name === 'isDirty') {
       setResetButtonOptions({ ...resetButtonOptions, disabled: !e.value });
     }

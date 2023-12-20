@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
   PivotGrid,
@@ -34,9 +34,9 @@ const applyChangesModes = ['instantly', 'onDemand'];
 const layouts = service.getLayouts();
 
 const App = () => {
-  const [applyChangesMode, setApplyChangesMode] = React.useState<ApplyChangesMode>('instantly');
-  const [layout, setLayout] = React.useState<FieldChooserLayout>(0);
-  const fieldChooserRef = React.useRef<PivotGridFieldChooser>(null);
+  const [applyChangesMode, setApplyChangesMode] = useState<ApplyChangesMode>('instantly');
+  const [layout, setLayout] = useState<FieldChooserLayout>(0);
+  const fieldChooserRef = useRef<PivotGridFieldChooser>(null);
 
   return (
     <React.Fragment>

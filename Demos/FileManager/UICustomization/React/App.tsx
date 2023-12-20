@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import FileManager, {
   Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column,
 } from 'devextreme-react/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 
 export default function App() {
-  const fileManagerRef = React.useRef<FileManager>(null);
+  const fileManagerRef = useRef<FileManager>(null);
 
-  const createFile = React.useCallback((
+  const createFile = useCallback((
     fileExtension,
     directory = fileManagerRef.current.instance.getCurrentDirectory(),
   ) => {
@@ -37,7 +37,7 @@ export default function App() {
     return true;
   }, []);
 
-  const updateCategory = React.useCallback((newCategory, directory, viewArea: string) => {
+  const updateCategory = useCallback((newCategory, directory, viewArea: string) => {
     let items = null;
 
     if (viewArea === 'navPane') {
@@ -55,7 +55,7 @@ export default function App() {
     return items.length > 0;
   }, []);
 
-  const onItemClick = React.useCallback(({ itemData, viewArea, fileSystemItem }) => {
+  const onItemClick = useCallback(({ itemData, viewArea, fileSystemItem }) => {
     let updated = false;
     const { extension, category } = getItemInfo(itemData.text);
 
@@ -70,7 +70,7 @@ export default function App() {
     }
   }, [createFile, updateCategory]);
 
-  const getNewFileMenuOptions = React.useCallback(() => ({
+  const getNewFileMenuOptions = useCallback(() => ({
     items: [
       {
         text: 'Create new file',
@@ -94,7 +94,7 @@ export default function App() {
     onItemClick,
   }), [onItemClick]);
 
-  const getChangeCategoryMenuOptions = React.useCallback(() => ({
+  const getChangeCategoryMenuOptions = useCallback(() => ({
     items: [
       {
         text: 'Category',

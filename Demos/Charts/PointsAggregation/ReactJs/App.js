@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -46,28 +46,28 @@ const customizeTooltip = (pointInfo) => {
   return handlers[pointInfo.seriesName](pointInfo);
 };
 function App() {
-  const [useAggregation, setUseAggregation] = React.useState(true);
-  const [currentFunction, setCurrentFunction] = React.useState(aggregationFunctions[0].func);
-  const [currentInterval, setCurrentInterval] = React.useState(aggregationIntervals[0].interval);
-  const updateAggregationUsage = React.useCallback(
+  const [useAggregation, setUseAggregation] = useState(true);
+  const [currentFunction, setCurrentFunction] = useState(aggregationFunctions[0].func);
+  const [currentInterval, setCurrentInterval] = useState(aggregationIntervals[0].interval);
+  const updateAggregationUsage = useCallback(
     ({ value }) => {
       setUseAggregation(value);
     },
     [setUseAggregation],
   );
-  const updateInterval = React.useCallback(
+  const updateInterval = useCallback(
     ({ value }) => {
       setCurrentInterval(value);
     },
     [setCurrentInterval],
   );
-  const updateMethod = React.useCallback(
+  const updateMethod = useCallback(
     ({ value }) => {
       setCurrentFunction(value);
     },
     [setCurrentFunction],
   );
-  const calculateRangeArea = React.useCallback((aggregationInfo) => {
+  const calculateRangeArea = useCallback((aggregationInfo) => {
     if (!aggregationInfo.data.length) {
       return null;
     }

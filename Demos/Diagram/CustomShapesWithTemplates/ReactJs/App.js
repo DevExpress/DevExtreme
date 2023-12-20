@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Diagram, { CustomShape, Nodes, AutoLayout } from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
 import ArrayStore from 'devextreme/data/array_store';
@@ -14,20 +14,20 @@ function itemTypeExpr(obj) {
   return `employee${obj.ID}`;
 }
 export default function App() {
-  const [currentEmployee, setCurrentEmployee] = React.useState({});
-  const [popupVisible, setPopupVisible] = React.useState(false);
-  const showInfo = React.useCallback(
+  const [currentEmployee, setCurrentEmployee] = useState({});
+  const [popupVisible, setPopupVisible] = useState(false);
+  const showInfo = useCallback(
     (employee) => {
       setCurrentEmployee(employee);
       setPopupVisible(true);
     },
     [setCurrentEmployee, setPopupVisible],
   );
-  const hideInfo = React.useCallback(() => {
+  const hideInfo = useCallback(() => {
     setCurrentEmployee({});
     setPopupVisible(false);
   }, [setCurrentEmployee, setPopupVisible]);
-  const customShapeTemplate = React.useCallback(
+  const customShapeTemplate = useCallback(
     (item) =>
       CustomShapeTemplate(item.dataItem, () => {
         showInfo(item.dataItem);

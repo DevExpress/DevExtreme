@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   DataGrid, Column, Paging, DataGridTypes,
 } from 'devextreme-react/data-grid';
@@ -28,21 +28,21 @@ const dataSourceOptions = {
 };
 
 const App = () => {
-  const [taskSubject, setTaskSubject] = React.useState('');
-  const [taskDetails, setTaskDetails] = React.useState('');
-  const [taskStatus, setTaskStatus] = React.useState('');
-  const [taskProgress, setTaskProgress] = React.useState('');
-  const [focusedRowKey, setFocusedRowKey] = React.useState(117);
-  const [autoNavigateToFocusedRow, setAutoNavigateToFocusedRow] = React.useState(true);
+  const [taskSubject, setTaskSubject] = useState('');
+  const [taskDetails, setTaskDetails] = useState('');
+  const [taskStatus, setTaskStatus] = useState('');
+  const [taskProgress, setTaskProgress] = useState('');
+  const [focusedRowKey, setFocusedRowKey] = useState(117);
+  const [autoNavigateToFocusedRow, setAutoNavigateToFocusedRow] = useState(true);
 
-  const onTaskIdChanged = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const onTaskIdChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     if (e.event && e.value > 0) {
       setFocusedRowKey(e.value);
     }
   }, []);
 
   // eslint-disable-next-line @typescript-eslint/space-before-function-paren
-  const onFocusedRowChanging = React.useCallback(async(e: DataGridTypes.FocusedRowChangingEvent) => {
+  const onFocusedRowChanging = useCallback(async(e: DataGridTypes.FocusedRowChangingEvent) => {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();
     const pageIndex = e.component.pageIndex();
@@ -60,7 +60,7 @@ const App = () => {
     }
   }, []);
 
-  const onFocusedRowChanged = React.useCallback((e: DataGridTypes.FocusedRowChangedEvent) => {
+  const onFocusedRowChanged = useCallback((e: DataGridTypes.FocusedRowChangedEvent) => {
     const data = e.row.data;
     const progress = data.Task_Completion ? `${data.Task_Completion}%` : '';
 
@@ -71,7 +71,7 @@ const App = () => {
     setFocusedRowKey(e.component.option('focusedRowKey'));
   }, []);
 
-  const onAutoNavigateToFocusedRowChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onAutoNavigateToFocusedRowChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setAutoNavigateToFocusedRow(e.value);
   }, []);
 

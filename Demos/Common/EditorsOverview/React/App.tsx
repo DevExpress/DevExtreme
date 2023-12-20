@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import ColorBox, { ColorBoxTypes } from 'devextreme-react/color-box';
 import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
@@ -36,36 +36,36 @@ const transformations = [
 ];
 
 function App() {
-  const [text, setText] = React.useState('UI Superhero');
-  const [width, setWidth] = React.useState(370);
-  const [height, setHeight] = React.useState(260);
-  const [color, setColor] = React.useState('#f05b41');
-  const [transform, setTransform] = React.useState(noFlipTransform);
-  const [border, setBorder] = React.useState(false);
+  const [text, setText] = useState('UI Superhero');
+  const [width, setWidth] = useState(370);
+  const [height, setHeight] = useState(260);
+  const [color, setColor] = useState('#f05b41');
+  const [transform, setTransform] = useState(noFlipTransform);
+  const [border, setBorder] = useState(false);
 
-  const handleTextChange = React.useCallback((e: TextBoxTypes.ValueChangedEvent) => {
+  const handleTextChange = useCallback((e: TextBoxTypes.ValueChangedEvent) => {
     setText(e.value);
   }, []);
 
-  const handleColorChange = React.useCallback((e: ColorBoxTypes.ValueChangedEvent) => {
+  const handleColorChange = useCallback((e: ColorBoxTypes.ValueChangedEvent) => {
     setColor(e.value);
   }, []);
 
-  const handleHeightChange = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const handleHeightChange = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setWidth((e.value * 37) / 26);
     setHeight(e.value);
   }, []);
 
-  const handleWidthChange = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const handleWidthChange = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setWidth(e.value);
     setHeight((e.value * 26) / 37);
   }, []);
 
-  const handleTransformChange = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handleTransformChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setTransform(e.value);
   }, []);
 
-  const handleBorderChange = React.useCallback((e: SwitchTypes.ValueChangedEvent) => {
+  const handleBorderChange = useCallback((e: SwitchTypes.ValueChangedEvent) => {
     setBorder(e.value);
   }, []);
 

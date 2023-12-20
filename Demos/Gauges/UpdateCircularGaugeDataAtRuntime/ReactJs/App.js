@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   CircularGauge,
   Scale,
@@ -16,9 +16,9 @@ function customizeText({ valueText }) {
   return `${valueText} °C`;
 }
 function App() {
-  const [value, setValue] = React.useState(dataSource[0].mean);
-  const [subvalues, setSubvalues] = React.useState([dataSource[0].min, dataSource[0].max]);
-  const onSelectionChanged = React.useCallback(
+  const [value, setValue] = useState(dataSource[0].mean);
+  const [subvalues, setSubvalues] = useState([dataSource[0].min, dataSource[0].max]);
+  const onSelectionChanged = useCallback(
     ({ selectedItem }) => {
       setValue(selectedItem.mean);
       setSubvalues([selectedItem.min, selectedItem.max]);

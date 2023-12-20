@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
-import React from 'react';
+import React, { useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 
@@ -41,7 +41,7 @@ Globalize.loadMessages(service.getDictionary());
 Globalize.locale(sessionStorage.getItem('locale') || 'en');
 
 const App = () => {
-  const [locale, setLocale] = React.useState(sessionStorage.getItem('locale') || 'en');
+  const [locale, setLocale] = useState(sessionStorage.getItem('locale') || 'en');
   const locales = service.getLocales();
   const payments = service.getPayments();
 

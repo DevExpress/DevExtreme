@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Switch, { SwitchTypes } from 'devextreme-react/switch';
 
 function App() {
-  const [value, setValue] = React.useState(false);
+  const [value, setValue] = useState(false);
 
-  const valueChanged = React.useCallback((e: SwitchTypes.ValueChangedEvent) => {
+  const valueChanged = useCallback((e: SwitchTypes.ValueChangedEvent) => {
     setValue(e.value);
   }, []);
 

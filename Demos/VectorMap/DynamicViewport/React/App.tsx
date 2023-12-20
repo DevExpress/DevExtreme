@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import VectorMap, { Layer, ControlBar, VectorMapTypes } from 'devextreme-react/vector-map';
 import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
@@ -11,32 +11,32 @@ import {
 const bounds = [-180, 85, 180, -60];
 
 const App = () => {
-  const [coordinates, setCoordinates] = React.useState(viewportCoordinates[0].coordinates);
-  const [zoomFactor, setZoomFactor] = React.useState('1.00');
-  const [center, setCenter] = React.useState('0.000, 46.036');
-  const [panVisible, setPanVisible] = React.useState(true);
-  const [zoomVisible, setZoomVisible] = React.useState(true);
-  const mapRef = React.useRef(null);
+  const [coordinates, setCoordinates] = useState(viewportCoordinates[0].coordinates);
+  const [zoomFactor, setZoomFactor] = useState('1.00');
+  const [center, setCenter] = useState('0.000, 46.036');
+  const [panVisible, setPanVisible] = useState(true);
+  const [zoomVisible, setZoomVisible] = useState(true);
+  const mapRef = useRef(null);
 
-  const continentChanged = React.useCallback(({ value }) => {
+  const continentChanged = useCallback(({ value }) => {
     setCoordinates(value);
     mapRef.current.instance.viewport(value);
   }, [setCoordinates]);
 
-  const zoomFactorChanged = React.useCallback((e: VectorMapTypes.ZoomFactorChangedEvent) => {
+  const zoomFactorChanged = useCallback((e: VectorMapTypes.ZoomFactorChangedEvent) => {
     setZoomFactor(e.zoomFactor.toFixed(2));
   }, [setZoomFactor]);
 
-  const centerChanged = React.useCallback((e: VectorMapTypes.CenterChangedEvent) => {
+  const centerChanged = useCallback((e: VectorMapTypes.CenterChangedEvent) => {
     const value = `${e.center[0].toFixed(3)}, ${e.center[1].toFixed(3)}`;
     setCenter(value);
   }, [setCenter]);
 
-  const panVisibleChange = React.useCallback((value) => {
+  const panVisibleChange = useCallback((value) => {
     setPanVisible(value);
   }, [setPanVisible]);
 
-  const zoomVisibleChange = React.useCallback((value) => {
+  const zoomVisibleChange = useCallback((value) => {
     setZoomVisible(value);
   }, [setZoomVisible]);
 

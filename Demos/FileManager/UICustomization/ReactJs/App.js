@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import FileManager, {
   Permissions,
   Toolbar,
@@ -12,8 +12,8 @@ import FileManager, {
 import { fileItems, getItemInfo } from './data.js';
 
 export default function App() {
-  const fileManagerRef = React.useRef(null);
-  const createFile = React.useCallback(
+  const fileManagerRef = useRef(null);
+  const createFile = useCallback(
     (fileExtension, directory = fileManagerRef.current.instance.getCurrentDirectory()) => {
       const newItem = {
         __KEY__: Date.now(),
@@ -39,7 +39,7 @@ export default function App() {
     },
     [],
   );
-  const updateCategory = React.useCallback((newCategory, directory, viewArea) => {
+  const updateCategory = useCallback((newCategory, directory, viewArea) => {
     let items = null;
     if (viewArea === 'navPane') {
       items = [directory];
@@ -53,7 +53,7 @@ export default function App() {
     });
     return items.length > 0;
   }, []);
-  const onItemClick = React.useCallback(
+  const onItemClick = useCallback(
     ({ itemData, viewArea, fileSystemItem }) => {
       let updated = false;
       const { extension, category } = getItemInfo(itemData.text);
@@ -68,7 +68,7 @@ export default function App() {
     },
     [createFile, updateCategory],
   );
-  const getNewFileMenuOptions = React.useCallback(
+  const getNewFileMenuOptions = useCallback(
     () => ({
       items: [
         {
@@ -94,7 +94,7 @@ export default function App() {
     }),
     [onItemClick],
   );
-  const getChangeCategoryMenuOptions = React.useCallback(
+  const getChangeCategoryMenuOptions = useCallback(
     () => ({
       items: [
         {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import Sortable, { SortableTypes } from 'devextreme-react/sortable';
 
@@ -102,17 +102,17 @@ const getTopVisibleNode = (component) => {
 };
 
 const App = () => {
-  const treeViewDriveCRef = React.useRef<TreeView>(null);
-  const treeViewDriveDRef = React.useRef<TreeView>(null);
+  const treeViewDriveCRef = useRef<TreeView>(null);
+  const treeViewDriveDRef = useRef<TreeView>(null);
 
-  const [itemsDriveC, setItemsDriveC] = React.useState(service.getItemsDriveC());
-  const [itemsDriveD, setItemsDriveD] = React.useState(service.getItemsDriveD());
+  const [itemsDriveC, setItemsDriveC] = useState(service.getItemsDriveC());
+  const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
 
-  const getTreeView = React.useCallback((driveName: string) => (driveName === 'driveC'
+  const getTreeView = useCallback((driveName: string) => (driveName === 'driveC'
     ? treeViewDriveCRef.current.instance
     : treeViewDriveDRef.current.instance), []);
 
-  const onDragChange = React.useCallback((e: SortableTypes.DragChangeEvent) => {
+  const onDragChange = useCallback((e: SortableTypes.DragChangeEvent) => {
     if (e.fromComponent === e.toComponent) {
       const fromNode = findNode(getTreeView(e.fromData), e.fromIndex);
       const toNode = findNode(getTreeView(e.toData), calculateToIndex(e));
@@ -122,7 +122,7 @@ const App = () => {
     }
   }, [getTreeView]);
 
-  const onDragEnd = React.useCallback((e: SortableTypes.DragEndEvent) => {
+  const onDragEnd = useCallback((e: SortableTypes.DragEndEvent) => {
     if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
       return;
     }

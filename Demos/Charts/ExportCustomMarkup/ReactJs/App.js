@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Chart,
   CommonSeriesSettings,
@@ -21,9 +21,9 @@ function prepareMarkup(chartSvg, markup) {
   );
 }
 function App() {
-  const childRef = React.useRef(null);
-  const chartRef = React.useRef(null);
-  const onClick = React.useCallback(() => {
+  const childRef = useRef(null);
+  const chartRef = useRef(null);
+  const onClick = useCallback(() => {
     exportFromMarkup(prepareMarkup(chartRef.current.instance.svg(), childRef.current.innerHTML), {
       width: 820,
       height: 420,

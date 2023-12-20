@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import SelectBox from 'devextreme-react/select-box';
 import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
 
 const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
 const App = () => {
-  const [applyChangesMode, setApplyChangesMode] = React.useState('instantly');
+  const [applyChangesMode, setApplyChangesMode] = useState('instantly');
   return (
     <React.Fragment>
       <PivotGrid

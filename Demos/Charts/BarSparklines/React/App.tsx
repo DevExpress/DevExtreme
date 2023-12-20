@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
@@ -20,7 +20,7 @@ const dataSource = new DataSource({
 });
 
 function App() {
-  const onValueChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     dataSource.filter(['month', '<=', e.value]);
     dataSource.load();
   }, []);

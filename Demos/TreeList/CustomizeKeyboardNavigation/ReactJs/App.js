@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TreeList, { Column, Editing, KeyboardNavigation } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -11,9 +11,9 @@ const onFocusedCellChanging = (e) => {
   e.isHighlighted = true;
 };
 const App = () => {
-  const [editOnKeyPress, setEditOnKeyPress] = React.useState(true);
-  const [enterKeyAction, setEnterKeyAction] = React.useState('moveFocus');
-  const [enterKeyDirection, setEnterKeyDirection] = React.useState('column');
+  const [editOnKeyPress, setEditOnKeyPress] = useState(true);
+  const [enterKeyAction, setEnterKeyAction] = useState('moveFocus');
+  const [enterKeyDirection, setEnterKeyDirection] = useState('column');
   return (
     <div id="tree-list-demo">
       <TreeList

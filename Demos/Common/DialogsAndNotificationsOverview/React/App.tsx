@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import notify from 'devextreme/ui/notify';
 import Button from 'devextreme-react/button';
 import Popup from 'devextreme-react/popup';
@@ -20,11 +20,11 @@ const favButtonAttrs = {
 };
 
 export default function App() {
-  const [houses, setHouses] = React.useState(housesSource);
-  const [currentHouse, setCurrentHouse] = React.useState(housesSource[0]);
-  const [popupVisible, setPopupVisible] = React.useState(false);
+  const [houses, setHouses] = useState(housesSource);
+  const [currentHouse, setCurrentHouse] = useState(housesSource[0]);
+  const [popupVisible, setPopupVisible] = useState(false);
 
-  const changeFavoriteState = React.useCallback(() => {
+  const changeFavoriteState = useCallback(() => {
     const updatedHouses = [...houses];
     const updatedCurrentHouse = updatedHouses.find((house) => house === currentHouse);
     updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
@@ -37,7 +37,7 @@ export default function App() {
     updatedCurrentHouse.Favorite ? 'success' : 'error', 2000);
   }, [houses, currentHouse, setHouses]);
 
-  const renderPopup = React.useCallback(() => (
+  const renderPopup = useCallback(() => (
     <div className="popup-property-details">
       <div className="large-text">{formatCurrency(currentHouse.Price)}</div>
       <div className="opacity">{currentHouse.Address}, {currentHouse.City}, {currentHouse.State}</div>
@@ -57,12 +57,12 @@ export default function App() {
     </div>
   ), [currentHouse, changeFavoriteState]);
 
-  const showHouse = React.useCallback((house) => {
+  const showHouse = useCallback((house) => {
     setCurrentHouse(house);
     setPopupVisible(true);
   }, [setCurrentHouse, setPopupVisible]);
 
-  const handlePopupHidden = React.useCallback(() => {
+  const handlePopupHidden = useCallback(() => {
     setPopupVisible(false);
   }, [setPopupVisible]);
 

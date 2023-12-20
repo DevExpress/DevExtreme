@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import Chart, {
   ArgumentAxis,
   ValueAxis,
@@ -22,8 +22,8 @@ function customizeTooltip(pointInfo) {
   };
 }
 function App() {
-  const chartRef = React.useRef(null);
-  const resetZoom = React.useCallback(() => {
+  const chartRef = useRef(null);
+  const resetZoom = useCallback(() => {
     chartRef.current.instance.resetVisualRange();
   }, []);
   return (

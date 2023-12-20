@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeList, { Column, Lookup } from 'devextreme-react/tree-list';
 import { NumberBox } from 'devextreme-react/number-box';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
@@ -18,19 +18,19 @@ const taskEmployees = AspNetData.createStore({
 });
 const focusedRowKeyLabel = { 'aria-label': 'Focused Row Key' };
 const App = () => {
-  const [taskSubject, setTaskSubject] = React.useState('');
-  const [taskAssigned, setTaskAssigned] = React.useState('');
-  const [startDate, setStartDate] = React.useState('');
-  const [taskStatus, setTaskStatus] = React.useState('');
-  const [taskProgress, setTaskProgress] = React.useState('');
-  const [focusedRowKey, setFocusedRowKey] = React.useState(45);
-  const onTaskIdChanged = React.useCallback((e) => {
+  const [taskSubject, setTaskSubject] = useState('');
+  const [taskAssigned, setTaskAssigned] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [taskStatus, setTaskStatus] = useState('');
+  const [taskProgress, setTaskProgress] = useState('');
+  const [focusedRowKey, setFocusedRowKey] = useState(45);
+  const onTaskIdChanged = useCallback((e) => {
     if (e.event && e.value > 0) {
       setFocusedRowKey(e.value);
     }
   }, []);
   // eslint-disable-next-line @typescript-eslint/space-before-function-paren
-  const onFocusedRowChanged = React.useCallback(async(e) => {
+  const onFocusedRowChanged = useCallback(async(e) => {
     const rowData = e.row && e.row.data;
     if (rowData) {
       const progress = rowData.Task_Completion ? `${rowData.Task_Completion}%` : '';

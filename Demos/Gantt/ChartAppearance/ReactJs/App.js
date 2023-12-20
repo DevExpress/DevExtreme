@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gantt, {
   Tasks,
   Dependencies,
@@ -38,7 +38,7 @@ const initialGanttConfig = {
   endDateRange: new Date(2019, 11, 1),
 };
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState(initialGanttConfig);
+  const [ganttConfig, setGanttConfig] = useState(initialGanttConfig);
   const updateGanttConfig = (value) =>
     setGanttConfig({
       ...ganttConfig,

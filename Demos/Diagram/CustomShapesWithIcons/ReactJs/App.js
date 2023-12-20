@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Diagram, {
   CustomShape, ConnectionPoint, Group, Toolbox,
 } from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
 export default function App() {
-  const diagramRef = React.useRef(null);
-  React.useEffect(() => {
+  const diagramRef = useRef(null);
+  useEffect(() => {
     const diagram = diagramRef.current?.instance;
     fetch('../../../../data/diagram-hardware.json')
       .then((response) => response.json())

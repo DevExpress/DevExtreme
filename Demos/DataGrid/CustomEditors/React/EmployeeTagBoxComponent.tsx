@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import TagBox, { TagBoxTypes } from 'devextreme-react/tag-box';
 
 const nameLabel = { 'aria-label': 'Name' };
 
 const EmployeeTagBoxComponent = (props) => {
-  const onValueChanged = React.useCallback((e: TagBoxTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: TagBoxTypes.ValueChangedEvent) => {
     props.data.setValue(e.value);
   }, [props]);
 
-  const onSelectionChanged = React.useCallback(() => {
+  const onSelectionChanged = useCallback(() => {
     props.data.component.updateDimensions();
   }, [props]);
 

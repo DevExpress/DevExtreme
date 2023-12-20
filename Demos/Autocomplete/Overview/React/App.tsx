@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ODataStore from 'devextreme/data/odata/store';
 import { Autocomplete, AutocompleteTypes } from 'devextreme-react/autocomplete';
 import CustomStore from 'devextreme/data/custom_store';
@@ -47,25 +47,25 @@ const renderState = (data) => (
 );
 
 function App() {
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
 
-  const [state, setState] = React.useState('');
-  const [currentClient, setCurrentClient] = React.useState('');
+  const [state, setState] = useState('');
+  const [currentClient, setCurrentClient] = useState('');
 
-  const handleFirstNameChange = React.useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleFirstNameChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
     setFirstName(e.value);
   }, []);
 
-  const handleLastNameChange = React.useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleLastNameChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
     setLastName(e.value);
   }, []);
 
-  const handleStateChange = React.useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleStateChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
     setState(e.value);
   }, []);
 
-  const handleCurrentClientChange = React.useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleCurrentClientChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
     setCurrentClient(e.value);
   }, []);
 

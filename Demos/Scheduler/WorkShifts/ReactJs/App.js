@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Scheduler from 'devextreme-react/scheduler';
 import RadioGroup from 'devextreme-react/radio-group';
 import { data, shifts } from './data.js';
@@ -6,7 +6,7 @@ import { data, shifts } from './data.js';
 const currentDate = new Date(2021, 2, 30);
 const views = ['day', 'workWeek'];
 const App = () => {
-  const [currentShift, setCurrentShift] = React.useState(shifts[0]);
+  const [currentShift, setCurrentShift] = useState(shifts[0]);
   return (
     <React.Fragment>
       <div className="options">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import { Switch } from 'devextreme-react/switch';
 import { NumberBox } from 'devextreme-react/number-box';
@@ -18,16 +18,16 @@ const onAppointmentDblClick = (e) => {
   e.cancel = true;
 };
 const App = () => {
-  const [showCurrentTimeIndicator, setShowCurrentTimeIndicator] = React.useState(true);
-  const [shadeUntilCurrentTime, setShadeUntilCurrentTime] = React.useState(true);
-  const [updateInterval, setUpdateInterval] = React.useState(10);
-  const onShowCurrentTimeIndicatorChanged = React.useCallback((e) => {
+  const [showCurrentTimeIndicator, setShowCurrentTimeIndicator] = useState(true);
+  const [shadeUntilCurrentTime, setShadeUntilCurrentTime] = useState(true);
+  const [updateInterval, setUpdateInterval] = useState(10);
+  const onShowCurrentTimeIndicatorChanged = useCallback((e) => {
     setShowCurrentTimeIndicator(e.value);
   }, []);
-  const onShadeUntilCurrentTimeChanged = React.useCallback((e) => {
+  const onShadeUntilCurrentTimeChanged = useCallback((e) => {
     setShadeUntilCurrentTime(e.value);
   }, []);
-  const onUpdateIntervalChanged = React.useCallback((e) => {
+  const onUpdateIntervalChanged = useCallback((e) => {
     setUpdateInterval(e.value);
   }, []);
   return (

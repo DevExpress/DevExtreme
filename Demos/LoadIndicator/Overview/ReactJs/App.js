@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button } from 'devextreme-react/button';
 import { LoadIndicator } from 'devextreme-react/load-indicator';
 
 export default function App() {
-  const [loadIndicatorVisible, setLoadIndicatorVisible] = React.useState(false);
-  const [buttonText, setButtonText] = React.useState('Send');
-  const handleClick = React.useCallback(() => {
+  const [loadIndicatorVisible, setLoadIndicatorVisible] = useState(false);
+  const [buttonText, setButtonText] = useState('Send');
+  const handleClick = useCallback(() => {
     setLoadIndicatorVisible(true);
     setButtonText('Sending');
     setTimeout(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import Diagram, {
   CustomShape, Nodes, AutoLayout, ContextToolbox, Toolbox, PropertiesPanel, Group, DiagramTypes,
 } from 'devextreme-react/diagram';
@@ -47,9 +47,9 @@ function itemStyleExpr(obj: { Type: string; }) {
 }
 
 export default function App() {
-  const diagramRef = React.useRef(null);
+  const diagramRef = useRef(null);
 
-  const onRequestEditOperation = React.useCallback((e) => {
+  const onRequestEditOperation = useCallback((e) => {
     const diagram = diagramRef.current.instance;
     if (e.operation === 'addShape') {
       if (e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {

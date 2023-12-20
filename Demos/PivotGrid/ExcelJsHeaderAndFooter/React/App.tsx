@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import PivotGrid, {
   FieldChooser,
@@ -50,12 +50,12 @@ const dataSource = new PivotGridDataSource({
 });
 
 const App = () => {
-  const [exportDataFieldHeaders, setExportDataFieldHeaders] = React.useState(false);
-  const [exportRowFieldHeaders, setExportRowFieldHeaders] = React.useState(false);
-  const [exportColumnFieldHeaders, setExportColumnFieldHeaders] = React.useState(false);
-  const [exportFilterFieldHeaders, setExportFilterFieldHeaders] = React.useState(false);
+  const [exportDataFieldHeaders, setExportDataFieldHeaders] = useState(false);
+  const [exportRowFieldHeaders, setExportRowFieldHeaders] = useState(false);
+  const [exportColumnFieldHeaders, setExportColumnFieldHeaders] = useState(false);
+  const [exportFilterFieldHeaders, setExportFilterFieldHeaders] = useState(false);
 
-  const onExporting = React.useCallback((e: PivotGridTypes.ExportingEvent) => {
+  const onExporting = useCallback((e: PivotGridTypes.ExportingEvent) => {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Sales');
 

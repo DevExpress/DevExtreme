@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ColorBox from 'devextreme-react/color-box';
 import NumberBox from 'devextreme-react/number-box';
 import SelectBox from 'devextreme-react/select-box';
@@ -32,30 +32,30 @@ const transformations = [
   },
 ];
 function App() {
-  const [text, setText] = React.useState('UI Superhero');
-  const [width, setWidth] = React.useState(370);
-  const [height, setHeight] = React.useState(260);
-  const [color, setColor] = React.useState('#f05b41');
-  const [transform, setTransform] = React.useState(noFlipTransform);
-  const [border, setBorder] = React.useState(false);
-  const handleTextChange = React.useCallback((e) => {
+  const [text, setText] = useState('UI Superhero');
+  const [width, setWidth] = useState(370);
+  const [height, setHeight] = useState(260);
+  const [color, setColor] = useState('#f05b41');
+  const [transform, setTransform] = useState(noFlipTransform);
+  const [border, setBorder] = useState(false);
+  const handleTextChange = useCallback((e) => {
     setText(e.value);
   }, []);
-  const handleColorChange = React.useCallback((e) => {
+  const handleColorChange = useCallback((e) => {
     setColor(e.value);
   }, []);
-  const handleHeightChange = React.useCallback((e) => {
+  const handleHeightChange = useCallback((e) => {
     setWidth((e.value * 37) / 26);
     setHeight(e.value);
   }, []);
-  const handleWidthChange = React.useCallback((e) => {
+  const handleWidthChange = useCallback((e) => {
     setWidth(e.value);
     setHeight((e.value * 26) / 37);
   }, []);
-  const handleTransformChange = React.useCallback((e) => {
+  const handleTransformChange = useCallback((e) => {
     setTransform(e.value);
   }, []);
-  const handleBorderChange = React.useCallback((e) => {
+  const handleBorderChange = useCallback((e) => {
     setBorder(e.value);
   }, []);
   return (

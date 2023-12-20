@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Chart, {
   Series,
   Aggregation,
@@ -23,9 +23,9 @@ import RangeSelector, {
 import { dataSource } from './data.ts';
 
 function App() {
-  const [visualRange, setVisualRange] = React.useState({});
+  const [visualRange, setVisualRange] = useState({});
 
-  const updateVisualRange = React.useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
+  const updateVisualRange = useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
     setVisualRange(e.value);
   }, [setVisualRange]);
 

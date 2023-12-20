@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useReducer,
+} from 'react';
 import DataGrid, {
   Column, DataGridTypes, Editing,
 } from 'devextreme-react/data-grid';
@@ -20,28 +22,28 @@ const initialState: State = {
 const loadPanelPosition = { of: '#gridContainer' };
 
 const App = () => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const changesText = React.useMemo(() => JSON.stringify(state.changes.map((change) => ({
+  const changesText = useMemo(() => JSON.stringify(state.changes.map((change) => ({
     type: change.type,
     key: change.type !== 'insert' ? change.key : undefined,
     data: change.data,
   })), null, ' '), [state.changes]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadOrders(dispatch);
   }, []);
 
-  const onSaving = React.useCallback((e: DataGridTypes.SavingEvent) => {
+  const onSaving = useCallback((e: DataGridTypes.SavingEvent) => {
     e.cancel = true;
     e.promise = saveChange(dispatch, e.changes[0]);
   }, []);
 
-  const onChangesChange = React.useCallback((changes: DataGridTypes.DataChange[]) => {
+  const onChangesChange = useCallback((changes: DataGridTypes.DataChange[]) => {
     setChanges(dispatch, changes);
   }, []);
 
-  const onEditRowKeyChange = React.useCallback((editRowKey) => {
+  const onEditRowKeyChange = useCallback((editRowKey) => {
     setEditRowKey(dispatch, editRowKey);
   }, []);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart,
@@ -20,8 +20,8 @@ const energySources = service.getEnergySources();
 const types = ['line', 'stackedline', 'fullstackedline'];
 const seriesTypeLabel = { 'aria-label': 'Series Type' };
 function App() {
-  const [type, setType] = React.useState(types[0]);
-  const handleChange = React.useCallback((e) => {
+  const [type, setType] = useState(types[0]);
+  const handleChange = useCallback((e) => {
     setType(e.value);
   }, []);
   return (

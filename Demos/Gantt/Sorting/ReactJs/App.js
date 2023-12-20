@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Gantt, {
   Tasks,
   Dependencies,
@@ -17,7 +17,7 @@ import {
 const sortingModeValues = ['single', 'multiple', 'none'];
 const sortingMode = 'single';
 function App() {
-  const [ganttConfig, setGanttConfig] = React.useState({
+  const [ganttConfig, setGanttConfig] = useState({
     sortingMode,
     showSortIndexes: false,
     showSortIndexesDisabled: true,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import RadioGroup from 'devextreme-react/radio-group';
 import SelectBox from 'devextreme-react/select-box';
@@ -19,33 +19,33 @@ import {
 } from './data.js';
 
 function App() {
-  const [id, setId] = React.useState(1);
-  const [isPredefined, setIsPredefined] = React.useState(true);
-  const [predefinedPosition, setPredefinedPosition] = React.useState('bottom center');
-  const [coordinatePosition, setCoordinatePosition] = React.useState({
+  const [id, setId] = useState(1);
+  const [isPredefined, setIsPredefined] = useState(true);
+  const [predefinedPosition, setPredefinedPosition] = useState('bottom center');
+  const [coordinatePosition, setCoordinatePosition] = useState({
     top: undefined,
     left: undefined,
     bottom: undefined,
     right: undefined,
   });
-  const [direction, setDirection] = React.useState('up-push');
-  const topNumberBoxValueChanged = React.useCallback(
+  const [direction, setDirection] = useState('up-push');
+  const topNumberBoxValueChanged = useCallback(
     (top) => setCoordinatePosition({ ...coordinatePosition, top }),
     [coordinatePosition, setCoordinatePosition],
   );
-  const bottomNumberBoxValueChanged = React.useCallback(
+  const bottomNumberBoxValueChanged = useCallback(
     (bottom) => setCoordinatePosition({ ...coordinatePosition, bottom }),
     [coordinatePosition, setCoordinatePosition],
   );
-  const leftNumberBoxValueChanged = React.useCallback(
+  const leftNumberBoxValueChanged = useCallback(
     (left) => setCoordinatePosition({ ...coordinatePosition, left }),
     [coordinatePosition, setCoordinatePosition],
   );
-  const rightNumberBoxValueChanged = React.useCallback(
+  const rightNumberBoxValueChanged = useCallback(
     (right) => setCoordinatePosition({ ...coordinatePosition, right }),
     [coordinatePosition, setCoordinatePosition],
   );
-  const show = React.useCallback(() => {
+  const show = useCallback(() => {
     const position = isPredefined ? predefinedPosition : coordinatePosition;
     Notify(
       {

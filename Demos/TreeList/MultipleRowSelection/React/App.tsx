@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   TreeList, Selection, Column, TreeListTypes,
 } from 'devextreme-react/tree-list';
@@ -11,31 +11,31 @@ const emptySelectedText = 'Nobody has been selected';
 const selectionModes = ['all', 'excludeRecursive', 'leavesOnly'];
 
 const App = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
-  const [recursive, setRecursive] = React.useState(false);
-  const [selectionMode, setSelectionMode] = React.useState('all');
-  const [selectedEmployeeNames, setSelectedEmployeeNames] = React.useState(emptySelectedText);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [recursive, setRecursive] = useState(false);
+  const [selectionMode, setSelectionMode] = useState('all');
+  const [selectedEmployeeNames, setSelectedEmployeeNames] = useState(emptySelectedText);
 
-  const getEmployeeNames = React.useCallback((employeeList) => {
+  const getEmployeeNames = useCallback((employeeList) => {
     if (employeeList.length > 0) {
       return employeeList.map((employee) => employee.Full_Name).join(', ');
     }
     return emptySelectedText;
   }, []);
 
-  const onSelectionChanged = React.useCallback((e: TreeListTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback((e: TreeListTypes.SelectionChangedEvent) => {
     const selectedData = e.component.getSelectedRowsData(selectionMode);
     setSelectedRowKeys(e.selectedRowKeys);
     setSelectedEmployeeNames(getEmployeeNames(selectedData));
   }, [selectionMode, getEmployeeNames]);
 
-  const onRecursiveChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onRecursiveChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setRecursive(e.value);
     setSelectedRowKeys([]);
     setSelectedEmployeeNames(emptySelectedText);
   }, []);
 
-  const onSelectionModeChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onSelectionModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setSelectionMode(e.value);
     setSelectedRowKeys([]);
     setSelectedEmployeeNames(emptySelectedText);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import DataGrid, {
   Selection,
   FilterRow,
@@ -14,8 +14,8 @@ const onRefreshClick = () => {
   window.location.reload();
 };
 const App = () => {
-  const dataGridRef = React.useRef(null);
-  const onStateResetClick = React.useCallback(() => {
+  const dataGridRef = useRef(null);
+  const onStateResetClick = useCallback(() => {
     dataGridRef.current.instance.state(null);
   }, []);
   return (

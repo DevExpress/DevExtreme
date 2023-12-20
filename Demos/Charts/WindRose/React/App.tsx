@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   PolarChart,
@@ -20,9 +20,9 @@ function onLegendClick({ target: series }) {
 }
 
 function App() {
-  const [periodValues, setPeriodValues] = React.useState(windRoseData[0].values);
+  const [periodValues, setPeriodValues] = useState(windRoseData[0].values);
 
-  const handleChange = React.useCallback(({ value }) => {
+  const handleChange = useCallback(({ value }) => {
     setPeriodValues(value);
   }, [setPeriodValues]);
 

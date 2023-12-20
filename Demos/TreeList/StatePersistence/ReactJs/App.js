@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   TreeList, Selection, FilterRow, StateStoring, Column,
 } from 'devextreme-react/tree-list';
@@ -9,8 +9,8 @@ const reloadPage = () => {
   window.location.reload();
 };
 const App = () => {
-  const treeList = React.useRef(null);
-  const onStateResetClick = React.useCallback(() => {
+  const treeList = useRef(null);
+  const onStateResetClick = useCallback(() => {
     treeList.current.instance.state(null);
   }, []);
   return (

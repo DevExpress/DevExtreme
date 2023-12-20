@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Drawer, { DrawerTypes } from 'devextreme-react/drawer';
 import RadioGroup from 'devextreme-react/radio-group';
 import Toolbar from 'devextreme-react/toolbar';
@@ -11,12 +11,12 @@ const RadioGroupPositionOptions = ['top', 'bottom'];
 const RadioGroupRevealOptions = ['slide', 'expand'];
 
 const App = () => {
-  const [opened, setOpened] = React.useState(false);
-  const [openedStateMode, setOpenedStateMode] = React.useState<DrawerTypes.OpenedStateMode>('shrink');
-  const [revealMode, setRevealMode] = React.useState<DrawerTypes.RevealMode>('expand');
-  const [position, setPosition] = React.useState<DrawerTypes.PanelLocation>('top');
+  const [opened, setOpened] = useState(false);
+  const [openedStateMode, setOpenedStateMode] = useState<DrawerTypes.OpenedStateMode>('shrink');
+  const [revealMode, setRevealMode] = useState<DrawerTypes.RevealMode>('expand');
+  const [position, setPosition] = useState<DrawerTypes.PanelLocation>('top');
 
-  const toolbarItems = React.useMemo(() => [{
+  const toolbarItems = useMemo(() => [{
     widget: 'dxButton',
     location: 'before',
     options: {
@@ -26,19 +26,19 @@ const App = () => {
     },
   }], [opened, setOpened]);
 
-  const onOpenedStateModeChanged = React.useCallback(({ value }) => {
+  const onOpenedStateModeChanged = useCallback(({ value }) => {
     setOpenedStateMode(value);
   }, [setOpenedStateMode]);
 
-  const onRevealModeChanged = React.useCallback(({ value }) => {
+  const onRevealModeChanged = useCallback(({ value }) => {
     setRevealMode(value);
   }, [setRevealMode]);
 
-  const onPositionChanged = React.useCallback(({ value }) => {
+  const onPositionChanged = useCallback(({ value }) => {
     setPosition(value);
   }, [setPosition]);
 
-  const onOutsideClick = React.useCallback(() => {
+  const onOutsideClick = useCallback(() => {
     setOpened(false);
     return false;
   }, [setOpened]);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileManager, { Permissions } from 'devextreme-react/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import { Popup } from 'devextreme-react/popup';
@@ -7,10 +7,10 @@ const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images',
 });
 export default function App() {
-  const [currentPath, setCurrentPath] = React.useState('Widescreen');
-  const [popupVisible, setPopupVisible] = React.useState(false);
-  const [imageItemToDisplay, setImageItemToDisplay] = React.useState({});
-  const displayImagePopup = React.useCallback(
+  const [currentPath, setCurrentPath] = useState('Widescreen');
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [imageItemToDisplay, setImageItemToDisplay] = useState({});
+  const displayImagePopup = useCallback(
     (e) => {
       setPopupVisible(true);
       setImageItemToDisplay({
@@ -20,10 +20,10 @@ export default function App() {
     },
     [setPopupVisible, setImageItemToDisplay],
   );
-  const hideImagePopup = React.useCallback(() => {
+  const hideImagePopup = useCallback(() => {
     setPopupVisible(false);
   }, [setPopupVisible]);
-  const onCurrentDirectoryChanged = React.useCallback(
+  const onCurrentDirectoryChanged = useCallback(
     (e) => {
       setCurrentPath(e.component.option('currentPath'));
     },

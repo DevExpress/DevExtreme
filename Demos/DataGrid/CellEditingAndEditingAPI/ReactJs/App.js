@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   Editing,
@@ -20,15 +20,15 @@ const dataSource = new DataSource({
   }),
 });
 const App = () => {
-  const [selectedItemKeys, setSelectedItemKeys] = React.useState([]);
-  const deleteRecords = React.useCallback(() => {
+  const [selectedItemKeys, setSelectedItemKeys] = useState([]);
+  const deleteRecords = useCallback(() => {
     selectedItemKeys.forEach((key) => {
       dataSource.store().remove(key);
     });
     setSelectedItemKeys([]);
     dataSource.reload();
   }, [selectedItemKeys]);
-  const onSelectionChanged = React.useCallback((data) => {
+  const onSelectionChanged = useCallback((data) => {
     setSelectedItemKeys(data.selectedRowKeys);
   }, []);
   return (

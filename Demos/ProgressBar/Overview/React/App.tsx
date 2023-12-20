@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'devextreme-react/button';
 import { ProgressBar } from 'devextreme-react/progress-bar';
 
@@ -16,11 +16,11 @@ const elementAttr = { 'aria-label': 'Progress Bar' };
 let intervalId;
 
 export default function App() {
-  const [seconds, setSeconds] = React.useState(maxValue);
-  const [buttonText, setButtonText] = React.useState('Start progress');
-  const [inProgress, setInProgress] = React.useState(false);
+  const [seconds, setSeconds] = useState(maxValue);
+  const [buttonText, setButtonText] = useState('Start progress');
+  const [inProgress, setInProgress] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (seconds === 0) {
       setButtonText('Restart progress');
       setInProgress(!inProgress);
@@ -28,7 +28,7 @@ export default function App() {
     }
   }, [seconds]);
 
-  const onButtonClick = React.useCallback(() => {
+  const onButtonClick = useCallback(() => {
     if (inProgress) {
       setButtonText('Continue progress');
       clearInterval(intervalId);

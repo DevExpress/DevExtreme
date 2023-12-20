@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import TabPanel from 'devextreme-react/tab-panel';
 import { multiViewItems as companies } from './data.js';
@@ -6,11 +6,11 @@ import CompanyItem from './CompanyItem.js';
 
 const itemTitleRender = (company) => <span>{company.CompanyName}</span>;
 const App = () => {
-  const [animationEnabled, setAnimationEnabled] = React.useState(true);
-  const [swipeEnabled, setSwipeEnabled] = React.useState(true);
-  const [loop, setLoop] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const onSelectionChanged = React.useCallback(
+  const [animationEnabled, setAnimationEnabled] = useState(true);
+  const [swipeEnabled, setSwipeEnabled] = useState(true);
+  const [loop, setLoop] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const onSelectionChanged = useCallback(
     (args) => {
       if (args.name === 'selectedIndex') {
         setSelectedIndex(args.value);
@@ -18,19 +18,19 @@ const App = () => {
     },
     [setSelectedIndex],
   );
-  const onLoopChanged = React.useCallback(
+  const onLoopChanged = useCallback(
     (args) => {
       setLoop(args.value);
     },
     [setLoop],
   );
-  const onAnimationEnabledChanged = React.useCallback(
+  const onAnimationEnabledChanged = useCallback(
     (args) => {
       setAnimationEnabled(args.value);
     },
     [setAnimationEnabled],
   );
-  const onSwipeEnabledChanged = React.useCallback(
+  const onSwipeEnabledChanged = useCallback(
     (args) => {
       setSwipeEnabled(args.value);
     },

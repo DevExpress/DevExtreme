@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import PieChart, {
   Series,
@@ -15,8 +15,8 @@ function formatText(arg) {
   return `${arg.argumentText} (${arg.percentText})`;
 }
 function App() {
-  const [resolveMode, setResolveMode] = React.useState(resolveModes[0]);
-  const handleResolveModeChange = React.useCallback(
+  const [resolveMode, setResolveMode] = useState(resolveModes[0]);
+  const handleResolveModeChange = useCallback(
     (data) => {
       setResolveMode(data.value);
     },

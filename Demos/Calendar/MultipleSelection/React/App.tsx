@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
@@ -17,38 +17,38 @@ const msInDay = 1000 * 60 * 60 * 24;
 const initialValue = [now, now + msInDay];
 
 export default function App() {
-  const calendar = React.useRef(null);
-  const [selectWeekOnClick, setSelectWeekOnClick] = React.useState(true);
-  const [selectionMode, setSelectionMode] = React.useState<CalendarTypes.CalendarSelectionMode>('multiple');
-  const [minDateValue, setMinDateValue] = React.useState(null);
-  const [maxDateValue, setMaxDateValue] = React.useState(null);
-  const [weekendDisabled, setWeekendDisabled] = React.useState(null);
+  const calendar = useRef(null);
+  const [selectWeekOnClick, setSelectWeekOnClick] = useState(true);
+  const [selectionMode, setSelectionMode] = useState<CalendarTypes.CalendarSelectionMode>('multiple');
+  const [minDateValue, setMinDateValue] = useState(null);
+  const [maxDateValue, setMaxDateValue] = useState(null);
+  const [weekendDisabled, setWeekendDisabled] = useState(null);
 
-  const onSelectWeekOnClickChange = React.useCallback(({ value }) => {
+  const onSelectWeekOnClickChange = useCallback(({ value }) => {
     setSelectWeekOnClick(value);
   }, [setSelectWeekOnClick]);
 
-  const onSelectionModeChange = React.useCallback(({ value }) => {
+  const onSelectionModeChange = useCallback(({ value }) => {
     setSelectionMode(value);
   }, [setSelectionMode]);
 
-  const onMinDateChange = React.useCallback(({ value }) => {
+  const onMinDateChange = useCallback(({ value }) => {
     setMinDateValue(
       value ? new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3) : null,
     );
   }, [setMinDateValue]);
 
-  const onMaxDateChange = React.useCallback(({ value }) => {
+  const onMaxDateChange = useCallback(({ value }) => {
     setMaxDateValue(
       value ? new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3) : null,
     );
   }, [setMaxDateValue]);
 
-  const onDisableWeekendChange = React.useCallback(({ value }) => {
+  const onDisableWeekendChange = useCallback(({ value }) => {
     setWeekendDisabled(value);
   }, [setWeekendDisabled]);
 
-  const onClearButtonClick = React.useCallback(() => {
+  const onClearButtonClick = useCallback(() => {
     calendar.current.instance.clear();
   }, []);
 

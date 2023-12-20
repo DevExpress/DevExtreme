@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataGrid, { DataGridTypes } from 'devextreme-react/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
@@ -16,9 +16,9 @@ const getMasterDetailGridDataSource = (id) => ({
 });
 
 const MasterDetailGrid = (props: DataGridTypes.MasterDetailTemplateData) => {
-  const [dataSource, setDataSource] = React.useState(null);
+  const [dataSource, setDataSource] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const masterDetailDataSource = getMasterDetailGridDataSource(props.data.key);
     setDataSource(masterDetailDataSource);
   }, [props.data.key]);

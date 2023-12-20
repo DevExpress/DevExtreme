@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import 'devextreme-react/text-area';
 import Form, {
   GroupItem, SimpleItem, Label, ButtonItem,
@@ -8,11 +8,11 @@ import service from './data.ts';
 const employee = service.getEmployee();
 
 const App = () => {
-  const [phones, setPhones] = React.useState(employee.Phones);
-  const [isHomeAddressVisible, setIsHomeAddressVisible] = React.useState(true);
-  const formData = React.useMemo(() => ({ ...employee, Phones: phones }), [phones]);
+  const [phones, setPhones] = useState(employee.Phones);
+  const [isHomeAddressVisible, setIsHomeAddressVisible] = useState(true);
+  const formData = useMemo(() => ({ ...employee, Phones: phones }), [phones]);
 
-  const CheckBoxOptions = React.useMemo(() => ({
+  const CheckBoxOptions = useMemo(() => ({
     text: 'Show Address',
     value: isHomeAddressVisible,
     onValueChanged: (e) => {
@@ -20,7 +20,7 @@ const App = () => {
     },
   }), [setIsHomeAddressVisible, isHomeAddressVisible]);
 
-  const generateNewPhoneOptions = React.useCallback((index: number) => ({
+  const generateNewPhoneOptions = useCallback((index: number) => ({
     mask: '+1 (X00) 000-0000',
     maskRules: { X: /[01-9]/ },
     buttons: [{
@@ -37,7 +37,7 @@ const App = () => {
     }],
   }), [phones]);
 
-  const PhoneOptions = React.useMemo(() => {
+  const PhoneOptions = useMemo(() => {
     const options: any[] = [];
     for (let i = 0; i < phones.length; i += 1) {
       options.push(generateNewPhoneOptions(i));
@@ -45,7 +45,7 @@ const App = () => {
     return options;
   }, [phones, generateNewPhoneOptions]);
 
-  const PhoneButtonOptions = React.useMemo(() => ({
+  const PhoneButtonOptions = useMemo(() => ({
     icon: 'add',
     text: 'Add phone',
     onClick: () => {

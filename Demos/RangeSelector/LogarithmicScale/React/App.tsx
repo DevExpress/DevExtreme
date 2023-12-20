@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RangeSelector, {
   Chart as RsChart, Series as RsSeries, Scale, Label as RsLabel, SliderMarker, Behavior,
 } from 'devextreme-react/range-selector';
@@ -8,9 +8,9 @@ import Chart, {
 import { dataSource } from './data.ts';
 
 const App = () => {
-  const [range, setRange] = React.useState([]);
+  const [range, setRange] = useState([]);
 
-  const updateRange = React.useCallback((data: { value: any; }) => {
+  const updateRange = useCallback((data: { value: any; }) => {
     setRange(data.value);
   }, [setRange]);
 

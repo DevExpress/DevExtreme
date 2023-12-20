@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Tabs from 'devextreme-react/tabs';
 import SelectBox from 'devextreme-react/select-box';
@@ -32,9 +32,9 @@ class EmployeeInfo extends React.Component<{
 }
 
 const App = () => {
-  const [selectedItem, setSelectedItem] = React.useState(employees[0]);
+  const [selectedItem, setSelectedItem] = useState(employees[0]);
 
-  const onSelectionChanged = React.useCallback((args) => {
+  const onSelectionChanged = useCallback((args) => {
     setSelectedItem(args.selectedItem || args.addedItems[0]);
   }, [setSelectedItem]);
 

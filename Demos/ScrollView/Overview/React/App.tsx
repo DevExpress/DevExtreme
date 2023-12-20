@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import ScrollView, { ScrollViewTypes } from 'devextreme-react/scroll-view';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
@@ -9,15 +9,15 @@ const showScrollBarModeLabel = { 'aria-label': 'Show Scrollbar Mode' };
 let updateContentTimer;
 
 const App = () => {
-  const [showScrollBarMode, setShowScrollBarMode] = React.useState<ScrollViewTypes.Properties['showScrollbar']>('onScroll');
-  const [pullDown, setPullDown] = React.useState(false);
-  const [scrollByContent, setScrollByContent] = React.useState(true);
-  const [scrollByThumb, setScrollByThumb] = React.useState(true);
-  const [content, setContent] = React.useState(service.getContent());
+  const [showScrollBarMode, setShowScrollBarMode] = useState<ScrollViewTypes.Properties['showScrollbar']>('onScroll');
+  const [pullDown, setPullDown] = useState(false);
+  const [scrollByContent, setScrollByContent] = useState(true);
+  const [scrollByThumb, setScrollByThumb] = useState(true);
+  const [content, setContent] = useState(service.getContent());
 
-  const scrollViewRef = React.useRef(null);
+  const scrollViewRef = useRef(null);
 
-  const updateContent = React.useCallback((args: UpdateContentArgs, eventName: string) => {
+  const updateContent = useCallback((args: UpdateContentArgs, eventName: string) => {
     const updateContentText = `\n Content has been updated on the ${eventName} event.\n\n`;
     if (updateContentTimer) {
       clearTimeout(updateContentTimer);
@@ -28,19 +28,19 @@ const App = () => {
     }, 500);
   }, [content, setContent]);
 
-  const updateTopContent = React.useCallback((args: ScrollViewTypes.PullDownEvent) => {
+  const updateTopContent = useCallback((args: ScrollViewTypes.PullDownEvent) => {
     updateContent(args, 'PullDown');
   }, [updateContent]);
 
-  const updateBottomContent = React.useCallback((args: ScrollViewTypes.ReachBottomEvent) => {
+  const updateBottomContent = useCallback((args: ScrollViewTypes.ReachBottomEvent) => {
     updateContent(args, 'ReachBottom');
   }, [updateContent]);
 
-  const pullDownValueChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
+  const pullDownValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
     setPullDown(args.value);
   }, [setPullDown]);
 
-  const reachBottomValueChanged = React.useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
+  const reachBottomValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
     scrollViewRef.current.instance.option('onReachBottom', args.value ? updateBottomContent : null);
   }, [updateBottomContent]);
 

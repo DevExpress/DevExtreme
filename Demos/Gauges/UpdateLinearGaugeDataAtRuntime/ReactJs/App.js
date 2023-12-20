@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   LinearGauge,
   Title,
@@ -19,11 +19,11 @@ const pressureLabelFormat = {
   type: 'decimal',
 };
 function App() {
-  const [selectBoxValue, setSelectBoxValue] = React.useState(cities[0].data);
-  const [temperature, setTemperature] = React.useState(cities[0].data.temperature);
-  const [humidity, setHumidity] = React.useState(cities[0].data.humidity);
-  const [pressure, setPressure] = React.useState(cities[0].data.pressure);
-  const onSelectionChanged = React.useCallback(
+  const [selectBoxValue, setSelectBoxValue] = useState(cities[0].data);
+  const [temperature, setTemperature] = useState(cities[0].data.temperature);
+  const [humidity, setHumidity] = useState(cities[0].data.humidity);
+  const [pressure, setPressure] = useState(cities[0].data.pressure);
+  const onSelectionChanged = useCallback(
     (e) => {
       const weatherData = e.selectedItem.data;
       setSelectBoxValue(weatherData);

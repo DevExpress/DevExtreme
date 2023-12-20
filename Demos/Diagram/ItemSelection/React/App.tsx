@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Diagram, {
   Nodes, AutoLayout, Toolbox, PropertiesPanel, DiagramTypes,
 } from 'devextreme-react/diagram';
@@ -26,9 +26,9 @@ function onContentReady(e: DiagramTypes.ContentReadyEvent) {
 }
 
 export default function App() {
-  const [selectedItemNames, setSelectedItemNames] = React.useState('Nobody has been selected');
+  const [selectedItemNames, setSelectedItemNames] = useState('Nobody has been selected');
 
-  const onSelectionChanged = React.useCallback(({ items }) => {
+  const onSelectionChanged = useCallback(({ items }) => {
     let selectedItems = 'Nobody has been selected';
     const filteredItems = items
       .filter((item) => item.itemType === 'shape')

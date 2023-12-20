@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Query from 'devextreme/data/query';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];
 const AppointmentTooltip = (props) => {
   const { movieId } = props.data.appointmentData;
-  const movieData = React.useMemo(() => getMovieById(movieId), [movieId]);
+  const movieData = useMemo(() => getMovieById(movieId), [movieId]);
   return (
     <div className="movie-tooltip">
       <img src={movieData.image} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ActionSheet from 'devextreme-react/action-sheet';
 import Button from 'devextreme-react/button';
 import Switch from 'devextreme-react/switch';
@@ -6,35 +6,35 @@ import notify from 'devextreme/ui/notify';
 import { actionSheetItems } from './data.js';
 
 const App = () => {
-  const [isActionSheetVisible, setIsActionSheetVisible] = React.useState(false);
-  const [showTitle, setShowTitle] = React.useState(true);
-  const [showCancelButton, setShowCancelButton] = React.useState(true);
-  const showActionSheet = React.useCallback(() => {
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
+  const [showCancelButton, setShowCancelButton] = useState(true);
+  const showActionSheet = useCallback(() => {
     setIsActionSheetVisible(true);
   }, [setIsActionSheetVisible]);
-  const onActionSheetButtonClick = React.useCallback(
+  const onActionSheetButtonClick = useCallback(
     (buttonName) => {
       setIsActionSheetVisible(false);
       notify(`The "${buttonName}" button is clicked.`);
     },
     [setIsActionSheetVisible],
   );
-  const onActionSheetItemClick = React.useCallback(
+  const onActionSheetItemClick = useCallback(
     (e) => {
       onActionSheetButtonClick(e.itemData.text);
     },
     [onActionSheetButtonClick],
   );
-  const onActionSheetCancelClick = React.useCallback(() => {
+  const onActionSheetCancelClick = useCallback(() => {
     onActionSheetButtonClick('Cancel');
   }, [onActionSheetButtonClick]);
-  const changeTitle = React.useCallback(
+  const changeTitle = useCallback(
     (e) => {
       setShowTitle(e.value);
     },
     [setShowTitle],
   );
-  const changeCancelButton = React.useCallback(
+  const changeCancelButton = useCallback(
     (e) => {
       setShowCancelButton(e.value);
     },

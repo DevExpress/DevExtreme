@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Chart, CommonSeriesSettings, Series, Legend, Title, Subtitle,
 } from 'devextreme-react/chart';
@@ -16,10 +16,10 @@ function prepareMarkup(chartSvg, markup) {
 }
 
 function App() {
-  const childRef = React.useRef(null);
-  const chartRef = React.useRef(null);
+  const childRef = useRef(null);
+  const chartRef = useRef(null);
 
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     exportFromMarkup(
       prepareMarkup(chartRef.current.instance.svg(),
         childRef.current.innerHTML), {

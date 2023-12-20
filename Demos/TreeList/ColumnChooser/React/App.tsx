@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TreeList, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection, Position, TreeListTypes,
 } from 'devextreme-react/tree-list';
@@ -19,11 +19,11 @@ const expandedRowKeys = [1, 5];
 const searchEditorOptions = { placeholder: 'Search column' };
 
 const App = () => {
-  const [mode, setMode] = React.useState<TreeListTypes.ColumnChooserMode>(columnChooserModes[1].key);
-  const [searchEnabled, setSearchEnabled] = React.useState(true);
-  const [allowSelectAll, setAllowSelectAll] = React.useState(true);
-  const [selectByClick, setSelectByClick] = React.useState(true);
-  const [recursive, setRecursive] = React.useState(true);
+  const [mode, setMode] = useState<TreeListTypes.ColumnChooserMode>(columnChooserModes[1].key);
+  const [searchEnabled, setSearchEnabled] = useState(true);
+  const [allowSelectAll, setAllowSelectAll] = useState(true);
+  const [selectByClick, setSelectByClick] = useState(true);
+  const [recursive, setRecursive] = useState(true);
 
   const isDragMode = mode === columnChooserModes[0].key;
 

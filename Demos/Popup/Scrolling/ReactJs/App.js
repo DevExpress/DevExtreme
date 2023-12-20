@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Button } from 'devextreme-react';
 import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import ScrollView from 'devextreme-react/scroll-view';
 
 export default function App() {
-  const [popupVisible, setPopupVisible] = React.useState(false);
-  const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = React.useState(false);
-  const showPopup = React.useCallback(() => {
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = useState(false);
+  const showPopup = useCallback(() => {
     setPopupVisible(true);
   }, [setPopupVisible]);
-  const showPopupWithScrollView = React.useCallback(() => {
+  const showPopupWithScrollView = useCallback(() => {
     setPopupWithScrollViewVisible(true);
   }, [setPopupWithScrollViewVisible]);
-  const hide = React.useCallback(() => {
+  const hide = useCallback(() => {
     setPopupVisible(false);
     setPopupWithScrollViewVisible(false);
   }, [setPopupVisible, setPopupWithScrollViewVisible]);
-  const bookButtonOptions = React.useMemo(
+  const bookButtonOptions = useMemo(
     () => ({
       width: 300,
       text: 'Book',

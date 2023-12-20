@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TagBox } from 'devextreme-react/tag-box';
 import DataSource from 'devextreme/data/data_source';
 import Group from './Group.tsx';
@@ -14,7 +14,7 @@ const defaultValues = {
 const productLabel = { 'aria-label': 'Product' };
 
 function App() {
-  const [products] = React.useState(
+  const [products] = useState(
     new DataSource({
       store: productsData,
       key: 'ID',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, Selection, FilterRow, Paging,
 } from 'devextreme-react/data-grid';
@@ -11,14 +11,14 @@ const showCheckboxesFieldLabel = { 'aria-label': 'Show Checkboxes Mode' };
 const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
 const selectAllModes = ['allPages', 'page'];
 const App = () => {
-  const [allMode, setAllMode] = React.useState('allPages');
-  const [checkBoxesMode, setCheckBoxesMode] = React.useState(
+  const [allMode, setAllMode] = useState('allPages');
+  const [checkBoxesMode, setCheckBoxesMode] = useState(
     themes.current().startsWith('material') ? 'always' : 'onClick',
   );
-  const onCheckBoxesModeChanged = React.useCallback(({ value }) => {
+  const onCheckBoxesModeChanged = useCallback(({ value }) => {
     setCheckBoxesMode(value);
   }, []);
-  const onAllModeChanged = React.useCallback(({ value }) => {
+  const onAllModeChanged = useCallback(({ value }) => {
     setAllMode(value);
   }, []);
   return (

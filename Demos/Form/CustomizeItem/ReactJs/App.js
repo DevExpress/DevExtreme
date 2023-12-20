@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import 'devextreme-react/text-area';
 import Form, { Item, GroupItem, Label } from 'devextreme-react/form';
 import LabelTemplate from './LabelTemplate.js';
@@ -17,7 +17,7 @@ const birthDateEditorOptions = { width: '100%', disabled: true };
 const notesEditorOptions = { height: 90, maxLength: 200 };
 const phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
 const App = () => {
-  const validateForm = React.useCallback((e) => {
+  const validateForm = useCallback((e) => {
     e.component.validate();
   }, []);
   return (

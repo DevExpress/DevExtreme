@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import { data, priorities } from './data.js';
@@ -7,8 +7,8 @@ const views = ['week', 'month'];
 const cellDuration = 30;
 const currentDate = new Date(2021, 2, 25);
 const App = () => {
-  const schedulerRef = React.useRef(null);
-  const showAppointmentPopup = React.useCallback(() => {
+  const schedulerRef = useRef(null);
+  const showAppointmentPopup = useCallback(() => {
     schedulerRef.current?.instance.showAppointmentPopup();
   }, []);
   return (

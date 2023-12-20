@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import service from './data.js';
 
 const products = service.getProducts();
 const App = () => {
-  const [currentItem, setCurrentItem] = React.useState({ ...products[0] });
-  const selectItem = React.useCallback(
+  const [currentItem, setCurrentItem] = useState({ ...products[0] });
+  const selectItem = useCallback(
     (e) => {
       setCurrentItem({ ...e.itemData });
     },

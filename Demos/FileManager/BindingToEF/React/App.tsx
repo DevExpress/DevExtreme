@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileManager, {
   Permissions, ItemView, Details, Column, FileManagerTypes,
 } from 'devextreme-react/file-manager';
@@ -11,9 +11,9 @@ const remoteProvider = new RemoteFileSystemProvider({
 const allowedFileExtensions = [];
 
 export default function App() {
-  const [currentPath, setCurrentPath] = React.useState('Documents/Reports');
+  const [currentPath, setCurrentPath] = useState('Documents/Reports');
 
-  const onCurrentDirectoryChanged = React.useCallback((e: FileManagerTypes.CurrentDirectoryChangedEvent) => {
+  const onCurrentDirectoryChanged = useCallback((e: FileManagerTypes.CurrentDirectoryChangedEvent) => {
     setCurrentPath(e.component.option('currentPath'));
   }, []);
 

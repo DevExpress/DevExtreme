@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button } from 'devextreme-react/button';
 import { CheckBox } from 'devextreme-react/check-box';
 import { LoadPanel } from 'devextreme-react/load-panel';
@@ -7,40 +7,40 @@ import { employee } from './data.js';
 const position = { of: '#employee' };
 const defaultEmployeeInfo = {};
 export default function App() {
-  const [employeeInfo, setEmployeeInfo] = React.useState(defaultEmployeeInfo);
-  const [loadPanelVisible, setLoadPanelVisible] = React.useState(false);
-  const [showIndicator, setShowIndicator] = React.useState(true);
-  const [shading, setShading] = React.useState(true);
-  const [showPane, setShowPane] = React.useState(true);
-  const [hideOnOutsideClick, setHideOnOutsideClick] = React.useState(false);
-  const hideLoadPanel = React.useCallback(() => {
+  const [employeeInfo, setEmployeeInfo] = useState(defaultEmployeeInfo);
+  const [loadPanelVisible, setLoadPanelVisible] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(true);
+  const [shading, setShading] = useState(true);
+  const [showPane, setShowPane] = useState(true);
+  const [hideOnOutsideClick, setHideOnOutsideClick] = useState(false);
+  const hideLoadPanel = useCallback(() => {
     setLoadPanelVisible(false);
     setEmployeeInfo(employee);
   }, [setLoadPanelVisible, setEmployeeInfo]);
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     setEmployeeInfo({});
     setLoadPanelVisible(true);
     setTimeout(hideLoadPanel, 3000);
   }, [setEmployeeInfo, setLoadPanelVisible]);
-  const onShowIndicatorChange = React.useCallback(
+  const onShowIndicatorChange = useCallback(
     (e) => {
       setShowIndicator(e.value);
     },
     [setShowIndicator],
   );
-  const onShadingChange = React.useCallback(
+  const onShadingChange = useCallback(
     (e) => {
       setShading(e.value);
     },
     [setShading],
   );
-  const onShowPaneChange = React.useCallback(
+  const onShowPaneChange = useCallback(
     (e) => {
       setShowPane(e.value);
     },
     [setShowPane],
   );
-  const onHideOnOutsideClickChange = React.useCallback(
+  const onHideOnOutsideClickChange = useCallback(
     (e) => {
       setHideOnOutsideClick(e.value);
     },

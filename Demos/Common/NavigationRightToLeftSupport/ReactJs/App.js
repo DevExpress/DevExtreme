@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import Menu from 'devextreme-react/menu';
 import TreeView from 'devextreme-react/tree-view';
@@ -27,8 +27,8 @@ const renderEnglish = (country) => (
   </div>
 );
 const App = () => {
-  const [rtlEnabled, setRtl] = React.useState(false);
-  const selectLanguage = React.useCallback(
+  const [rtlEnabled, setRtl] = useState(false);
+  const selectLanguage = useCallback(
     ({ value }) => {
       setRtl(value === languages[0]);
     },

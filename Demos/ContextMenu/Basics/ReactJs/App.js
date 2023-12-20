@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ContextMenu from 'devextreme-react/context-menu';
 import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.js';
@@ -9,7 +9,7 @@ function itemClick(e) {
   }
 }
 function App() {
-  React.useEffect(() => {
+  useEffect(() => {
     const image = document.getElementById('image');
     if (image) {
       image.addEventListener('contextmenu', (e) => {

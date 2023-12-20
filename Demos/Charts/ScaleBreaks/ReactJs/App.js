@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Chart, {
   Legend, Series, Tooltip, ValueAxis, BreakStyle,
 } from 'devextreme-react/chart';
@@ -9,22 +9,22 @@ import { dataSource, lineStyleLabel, maxCountLabel } from './data.js';
 const lineStyles = ['waved', 'straight'];
 const breaksCount = [1, 2, 3, 4];
 function App() {
-  const [autoBreaksEnabledValue, setAutoBreaksEnabledValue] = React.useState(true);
-  const [breaksCountValue, setBreaksCountValue] = React.useState(3);
-  const [lineStyleValue, setLineStyleValue] = React.useState(lineStyles[0]);
-  const changeBreaksCount = React.useCallback(
+  const [autoBreaksEnabledValue, setAutoBreaksEnabledValue] = useState(true);
+  const [breaksCountValue, setBreaksCountValue] = useState(3);
+  const [lineStyleValue, setLineStyleValue] = useState(lineStyles[0]);
+  const changeBreaksCount = useCallback(
     (e) => {
       setBreaksCountValue(e.value);
     },
     [setBreaksCountValue],
   );
-  const changeStyle = React.useCallback(
+  const changeStyle = useCallback(
     (e) => {
       setLineStyleValue(e.value);
     },
     [setLineStyleValue],
   );
-  const changeBreaksEnabledState = React.useCallback(
+  const changeBreaksEnabledState = useCallback(
     (e) => {
       setAutoBreaksEnabledValue(e.value);
     },

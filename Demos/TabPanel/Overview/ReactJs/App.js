@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import TabPanel from 'devextreme-react/tab-panel';
 import TabPanelItem from './TabPanelItem.js';
@@ -13,22 +13,22 @@ import {
 } from './data.js';
 
 const App = () => {
-  const [tabsPosition, setTabsPosition] = React.useState(tabsPositions[0]);
-  const [stylingMode, setStylingMode] = React.useState(stylingModes[0]);
-  const [iconPosition, setIconPosition] = React.useState(iconPositions[0]);
-  const onTabsPositionChanged = React.useCallback(
+  const [tabsPosition, setTabsPosition] = useState(tabsPositions[0]);
+  const [stylingMode, setStylingMode] = useState(stylingModes[0]);
+  const [iconPosition, setIconPosition] = useState(iconPositions[0]);
+  const onTabsPositionChanged = useCallback(
     (args) => {
       setTabsPosition(args.value);
     },
     [setTabsPosition],
   );
-  const onStylingModeChanged = React.useCallback(
+  const onStylingModeChanged = useCallback(
     (args) => {
       setStylingMode(args.value);
     },
     [setStylingMode],
   );
-  const onIconPositionChanged = React.useCallback(
+  const onIconPositionChanged = useCallback(
     (args) => {
       setIconPosition(args.value);
     },

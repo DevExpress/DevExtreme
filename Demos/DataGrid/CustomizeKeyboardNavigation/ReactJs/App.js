@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   Editing,
@@ -18,16 +18,16 @@ const onFocusedCellChanging = (e) => {
   e.isHighlighted = true;
 };
 const App = () => {
-  const [editOnKeyPress, setEditOnKeyPress] = React.useState(true);
-  const [enterKeyAction, setEnterKeyAction] = React.useState('moveFocus');
-  const [enterKeyDirection, setEnterKeyDirection] = React.useState('column');
-  const editOnKeyPressChanged = React.useCallback((e) => {
+  const [editOnKeyPress, setEditOnKeyPress] = useState(true);
+  const [enterKeyAction, setEnterKeyAction] = useState('moveFocus');
+  const [enterKeyDirection, setEnterKeyDirection] = useState('column');
+  const editOnKeyPressChanged = useCallback((e) => {
     setEditOnKeyPress(e.value);
   }, []);
-  const enterKeyActionChanged = React.useCallback((e) => {
+  const enterKeyActionChanged = useCallback((e) => {
     setEnterKeyAction(e.value);
   }, []);
-  const enterKeyDirectionChanged = React.useCallback((e) => {
+  const enterKeyDirectionChanged = useCallback((e) => {
     setEnterKeyDirection(e.value);
   }, []);
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   Editing,
@@ -24,19 +24,19 @@ const onFocusedCellChanging = (e: { isHighlighted: boolean; }) => {
 };
 
 const App = () => {
-  const [editOnKeyPress, setEditOnKeyPress] = React.useState(true);
-  const [enterKeyAction, setEnterKeyAction] = React.useState<DataGridTypes.EnterKeyAction>('moveFocus');
-  const [enterKeyDirection, setEnterKeyDirection] = React.useState<DataGridTypes.EnterKeyDirection>('column');
+  const [editOnKeyPress, setEditOnKeyPress] = useState(true);
+  const [enterKeyAction, setEnterKeyAction] = useState<DataGridTypes.EnterKeyAction>('moveFocus');
+  const [enterKeyDirection, setEnterKeyDirection] = useState<DataGridTypes.EnterKeyDirection>('column');
 
-  const editOnKeyPressChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const editOnKeyPressChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setEditOnKeyPress(e.value);
   }, []);
 
-  const enterKeyActionChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const enterKeyActionChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setEnterKeyAction(e.value);
   }, []);
 
-  const enterKeyDirectionChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const enterKeyDirectionChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setEnterKeyDirection(e.value);
   }, []);
 

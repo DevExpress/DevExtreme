@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, Editing, Paging, Lookup,
 } from 'devextreme-react/data-grid';
@@ -9,12 +9,12 @@ import { employees, states } from './data.js';
 const startEditActions = ['click', 'dblClick'];
 const actionLabel = { 'aria-label': 'Action' };
 const App = () => {
-  const [selectTextOnEditStart, setSelectTextOnEditStart] = React.useState(true);
-  const [startEditAction, setStartEditAction] = React.useState('click');
-  const onSelectTextOnEditStartChanged = React.useCallback((args) => {
+  const [selectTextOnEditStart, setSelectTextOnEditStart] = useState(true);
+  const [startEditAction, setStartEditAction] = useState('click');
+  const onSelectTextOnEditStartChanged = useCallback((args) => {
     setSelectTextOnEditStart(args.value);
   }, []);
-  const onStartEditActionChanged = React.useCallback((args) => {
+  const onStartEditActionChanged = useCallback((args) => {
     setStartEditAction(args.value);
   }, []);
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import Diagram, {
   CustomShape,
   Nodes,
@@ -49,8 +49,8 @@ function itemStyleExpr(obj) {
   return { fill: '#bbefcb' };
 }
 export default function App() {
-  const diagramRef = React.useRef(null);
-  const onRequestEditOperation = React.useCallback((e) => {
+  const diagramRef = useRef(null);
+  const onRequestEditOperation = useCallback((e) => {
     const diagram = diagramRef.current.instance;
     if (e.operation === 'addShape') {
       if (e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {

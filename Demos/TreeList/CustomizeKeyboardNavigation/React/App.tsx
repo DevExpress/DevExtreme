@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import TreeList, {
   Column,
@@ -19,9 +19,9 @@ const onFocusedCellChanging = (e: TreeListTypes.FocusedCellChangingEvent) => {
 };
 
 const App = () => {
-  const [editOnKeyPress, setEditOnKeyPress] = React.useState(true);
-  const [enterKeyAction, setEnterKeyAction] = React.useState<TreeListTypes.EnterKeyAction>('moveFocus');
-  const [enterKeyDirection, setEnterKeyDirection] = React.useState<TreeListTypes.EnterKeyDirection>('column');
+  const [editOnKeyPress, setEditOnKeyPress] = useState(true);
+  const [enterKeyAction, setEnterKeyAction] = useState<TreeListTypes.EnterKeyAction>('moveFocus');
+  const [enterKeyDirection, setEnterKeyDirection] = useState<TreeListTypes.EnterKeyDirection>('column');
 
   return (
     <div id="tree-list-demo">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   LinearGauge,
   Scale,
@@ -26,9 +26,9 @@ function customizeTooltip(arg) {
   };
 }
 function App() {
-  const [value, setValue] = React.useState(dataSource[0].primary);
-  const [subvalues, setSubvalues] = React.useState(dataSource[0].secondary);
-  const onValueChanged = React.useCallback(
+  const [value, setValue] = useState(dataSource[0].primary);
+  const [subvalues, setSubvalues] = useState(dataSource[0].secondary);
+  const onValueChanged = useCallback(
     (e) => {
       setValue(e.value.primary);
       setSubvalues(e.value.secondary);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler, { Editing, SchedulerTypes } from 'devextreme-react/scheduler';
 import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
 import notify from 'devextreme/ui/notify';
@@ -25,21 +25,21 @@ const showDeletedToast = (e: SchedulerTypes.AppointmentDeletedEvent) => {
 };
 
 const App = () => {
-  const [allowAdding, setAllowAdding] = React.useState(true);
-  const [allowDeleting, setAllowDeleting] = React.useState(true);
-  const [allowResizing, setAllowResizing] = React.useState(true);
-  const [allowDragging, setAllowDragging] = React.useState(true);
-  const [allowUpdating, setAllowUpdating] = React.useState(true);
+  const [allowAdding, setAllowAdding] = useState(true);
+  const [allowDeleting, setAllowDeleting] = useState(true);
+  const [allowResizing, setAllowResizing] = useState(true);
+  const [allowDragging, setAllowDragging] = useState(true);
+  const [allowUpdating, setAllowUpdating] = useState(true);
 
-  const onAllowAddingChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowAdding(e.value), []);
+  const onAllowAddingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowAdding(e.value), []);
 
-  const onAllowDeletingChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowDeleting(e.value), []);
+  const onAllowDeletingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowDeleting(e.value), []);
 
-  const onAllowResizingChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowResizing(e.value), []);
+  const onAllowResizingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowResizing(e.value), []);
 
-  const onAllowDraggingChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowDragging(e.value), []);
+  const onAllowDraggingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowDragging(e.value), []);
 
-  const onAllowUpdatingChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowUpdating(e.value), []);
+  const onAllowUpdatingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowUpdating(e.value), []);
 
   return (
     <React.Fragment>

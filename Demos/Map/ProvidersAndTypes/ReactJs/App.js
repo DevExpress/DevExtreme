@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 import { mapTypes, mapTypeLabel } from './data.js';
@@ -7,8 +7,8 @@ const apiKey = {
   bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
 const App = () => {
-  const [mapTypeValue, setMapTypeValue] = React.useState(mapTypes[0].key);
-  const onMapTypeChange = React.useCallback(
+  const [mapTypeValue, setMapTypeValue] = useState(mapTypes[0].key);
+  const onMapTypeChange = useCallback(
     (value) => {
       setMapTypeValue(value);
     },

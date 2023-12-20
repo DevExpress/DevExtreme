@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Menu from 'devextreme-react/menu';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -19,11 +19,11 @@ const showSubmenuModes = [
   },
 ];
 const App = () => {
-  const [showFirstSubmenuModes, setShowFirstSubmenuModes] = React.useState(showSubmenuModes[1]);
-  const [orientation, setOrientation] = React.useState('horizontal');
-  const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = React.useState(false);
-  const [currentProduct, setCurrentProduct] = React.useState(null);
-  const itemClick = React.useCallback(
+  const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
+  const [orientation, setOrientation] = useState('horizontal');
+  const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const itemClick = useCallback(
     (e) => {
       if (e.itemData.price) {
         setCurrentProduct(e.itemData);
@@ -31,19 +31,19 @@ const App = () => {
     },
     [setCurrentProduct],
   );
-  const showSubmenuModeChanged = React.useCallback(
+  const showSubmenuModeChanged = useCallback(
     (e) => {
       setShowFirstSubmenuModes(e.value);
     },
     [setShowFirstSubmenuModes],
   );
-  const orientationChanged = React.useCallback(
+  const orientationChanged = useCallback(
     (e) => {
       setOrientation(e.value);
     },
     [setOrientation],
   );
-  const hideSubmenuOnMouseLeaveChanged = React.useCallback(
+  const hideSubmenuOnMouseLeaveChanged = useCallback(
     (e) => {
       setHideSubmenuOnMouseLeave(e.value);
     },

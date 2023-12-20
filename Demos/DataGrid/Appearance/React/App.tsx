@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { employees } from './data.ts';
 
 const App = () => {
-  const [showColumnLines, setShowColumnLines] = React.useState(false);
-  const [showRowLines, setShowRowLines] = React.useState(true);
-  const [showBorders, setShowBorders] = React.useState(true);
-  const [rowAlternationEnabled, setRowAlternationEnabled] = React.useState(true);
+  const [showColumnLines, setShowColumnLines] = useState(false);
+  const [showRowLines, setShowRowLines] = useState(true);
+  const [showBorders, setShowBorders] = useState(true);
+  const [rowAlternationEnabled, setRowAlternationEnabled] = useState(true);
 
-  const onShowColumnLinesValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onShowColumnLinesValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowColumnLines(e.value);
   }, []);
 
-  const onShowRowLinesValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onShowRowLinesValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowRowLines(e.value);
   }, []);
 
-  const onShowBordersValueChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onShowBordersValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowBorders(e.value);
   }, []);
 
-  const onRowAlternationEnabledChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onRowAlternationEnabledChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setRowAlternationEnabled(e.value);
   }, []);
 

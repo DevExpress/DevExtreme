@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -11,7 +11,7 @@ import PivotGrid, {
 const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
 
 const App = () => {
-  const [applyChangesMode, setApplyChangesMode] = React.useState<'instantly' | 'onDemand'>('instantly');
+  const [applyChangesMode, setApplyChangesMode] = useState<'instantly' | 'onDemand'>('instantly');
 
   return (
     <React.Fragment>

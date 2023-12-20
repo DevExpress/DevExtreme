@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart,
@@ -18,8 +18,8 @@ import { architectureSources, sharingStatisticsInfo, seriesTypeLabel } from './d
 
 const types = ['spline', 'stackedspline', 'fullstackedspline'];
 function App() {
-  const [type, setType] = React.useState(types[0]);
-  const handleChange = React.useCallback(
+  const [type, setType] = useState(types[0]);
+  const handleChange = useCallback(
     (e) => {
       setType(e.value);
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileUploader, { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
@@ -13,24 +13,24 @@ const fileTypesSource = [
 ];
 
 export default function App() {
-  const [multiple, setMultiple] = React.useState(false);
-  const [uploadMode, setUploadMode] = React.useState<FileUploaderTypes.Properties['uploadMode']>('instantly');
-  const [accept, setAccept] = React.useState('*');
-  const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [multiple, setMultiple] = useState(false);
+  const [uploadMode, setUploadMode] = useState<FileUploaderTypes.Properties['uploadMode']>('instantly');
+  const [accept, setAccept] = useState('*');
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
-  const onSelectedFilesChanged = React.useCallback((e: FileUploaderTypes.ValueChangedEvent) => {
+  const onSelectedFilesChanged = useCallback((e: FileUploaderTypes.ValueChangedEvent) => {
     setSelectedFiles(e.value);
   }, [setSelectedFiles]);
 
-  const onAcceptChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onAcceptChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setAccept(e.value);
   }, [setAccept]);
 
-  const onUploadModeChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onUploadModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setUploadMode(e.value);
   }, [setUploadMode]);
 
-  const onMultipleChanged = React.useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onMultipleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setMultiple(e.value);
   }, [setMultiple]);
 

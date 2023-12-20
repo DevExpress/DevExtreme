@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -12,29 +12,29 @@ const fileTypesSource = [
   { name: 'Videos', value: 'video/*' },
 ];
 export default function App() {
-  const [multiple, setMultiple] = React.useState(false);
-  const [uploadMode, setUploadMode] = React.useState('instantly');
-  const [accept, setAccept] = React.useState('*');
-  const [selectedFiles, setSelectedFiles] = React.useState([]);
-  const onSelectedFilesChanged = React.useCallback(
+  const [multiple, setMultiple] = useState(false);
+  const [uploadMode, setUploadMode] = useState('instantly');
+  const [accept, setAccept] = useState('*');
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const onSelectedFilesChanged = useCallback(
     (e) => {
       setSelectedFiles(e.value);
     },
     [setSelectedFiles],
   );
-  const onAcceptChanged = React.useCallback(
+  const onAcceptChanged = useCallback(
     (e) => {
       setAccept(e.value);
     },
     [setAccept],
   );
-  const onUploadModeChanged = React.useCallback(
+  const onUploadModeChanged = useCallback(
     (e) => {
       setUploadMode(e.value);
     },
     [setUploadMode],
   );
-  const onMultipleChanged = React.useCallback(
+  const onMultipleChanged = useCallback(
     (e) => {
       setMultiple(e.value);
     },

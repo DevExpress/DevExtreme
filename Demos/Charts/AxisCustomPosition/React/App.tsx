@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
 import {
   Chart,
@@ -15,24 +15,24 @@ const dataSource = generateDataSource();
 const defaultVisualRange = [-20, 20];
 
 function App() {
-  const [argumentCustomPosition, setArgumentCustomPosition] = React.useState(0);
-  const [argumentOffset, setArgumentOffset] = React.useState(0);
-  const [valueCustomPosition, setValueCustomPosition] = React.useState(0);
-  const [valueOffset, setValueOffset] = React.useState(0);
+  const [argumentCustomPosition, setArgumentCustomPosition] = useState(0);
+  const [argumentOffset, setArgumentOffset] = useState(0);
+  const [valueCustomPosition, setValueCustomPosition] = useState(0);
+  const [valueOffset, setValueOffset] = useState(0);
 
-  const changeArgumentPosition = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const changeArgumentPosition = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setArgumentCustomPosition(e.value);
   }, [setArgumentCustomPosition]);
 
-  const changeArgumentOffset = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const changeArgumentOffset = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setArgumentOffset(e.value);
   }, [setArgumentOffset]);
 
-  const changeValuePosition = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const changeValuePosition = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setValueCustomPosition(e.value);
   }, [setValueCustomPosition]);
 
-  const changeValueOffset = React.useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
+  const changeValueOffset = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setValueOffset(e.value);
   }, [setValueOffset]);
 

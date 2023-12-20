@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import { TextBox, Button as TextBoxButton } from 'devextreme-react/text-box';
@@ -54,12 +56,12 @@ const onFormSubmit = (e) => {
 function App() {
   const currentDate = new Date();
   const maxDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21));
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
-  const [passwordMode, setPasswordMode] = React.useState('password');
-  const [confirmPasswordMode, setConfirmPasswordMode] = React.useState('password');
-  const validatorRef = React.useRef(null);
-  const passwordButton = React.useMemo(
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMode, setPasswordMode] = useState('password');
+  const [confirmPasswordMode, setConfirmPasswordMode] = useState('password');
+  const validatorRef = useRef(null);
+  const passwordButton = useMemo(
     () => ({
       icon: 'eyeopen',
       stylingMode: 'text',
@@ -69,7 +71,7 @@ function App() {
     }),
     [passwordMode, setPasswordMode],
   );
-  const confirmPasswordButton = React.useMemo(
+  const confirmPasswordButton = useMemo(
     () => ({
       icon: 'eyeopen',
       stylingMode: 'text',
@@ -79,8 +81,8 @@ function App() {
     }),
     [confirmPasswordMode, setConfirmPasswordMode],
   );
-  const passwordComparison = React.useCallback(() => password, [password]);
-  const onPasswordChanged = React.useCallback(
+  const passwordComparison = useCallback(() => password, [password]);
+  const onPasswordChanged = useCallback(
     (e) => {
       setPassword(e.value);
       if (confirmPassword) {
@@ -89,7 +91,7 @@ function App() {
     },
     [confirmPassword, setPassword],
   );
-  const onConfirmPasswordChanged = React.useCallback((e) => {
+  const onConfirmPasswordChanged = useCallback((e) => {
     setConfirmPassword(e.value);
   }, []);
   return (

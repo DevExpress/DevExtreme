@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
@@ -12,13 +12,13 @@ interface ProductSelectBoxProps {
 }
 
 const ProductSelectBox = (props: ProductSelectBoxProps) => {
-  const [productsData, setProductsData] = React.useState(null);
+  const [productsData, setProductsData] = useState(null);
 
-  const valueChanged = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const valueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     props.onProductChanged(e.value);
   }, [props]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const setDefaultValue = (items: any[]) => {
       const firstItem = items[0];
       if (firstItem && props.productId === null) {

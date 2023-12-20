@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
 import CheckBox from 'devextreme-react/check-box';
 import { employees as employeeList } from './data.js';
@@ -17,11 +17,11 @@ const onDragChange = (e) => {
   }
 };
 const App = () => {
-  const [employees, setEmployees] = React.useState(employeeList);
-  const [allowDropInsideItem, setAllowDropInsideItem] = React.useState(true);
-  const [allowReordering, setAllowReordering] = React.useState(true);
-  const [showDragIcons, setShowDragIcons] = React.useState(true);
-  const onReorder = React.useCallback(
+  const [employees, setEmployees] = useState(employeeList);
+  const [allowDropInsideItem, setAllowDropInsideItem] = useState(true);
+  const [allowReordering, setAllowReordering] = useState(true);
+  const [showDragIcons, setShowDragIcons] = useState(true);
+  const onReorder = useCallback(
     (e) => {
       const visibleRows = e.component.getVisibleRows();
       let sourceData = e.itemData;

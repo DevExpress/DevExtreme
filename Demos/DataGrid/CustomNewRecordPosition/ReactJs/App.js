@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   Editing,
@@ -26,11 +26,11 @@ const onRowInserted = (e) => {
   e.component.navigateToRow(e.key);
 };
 const App = () => {
-  const [newRowPosition, setNewRowPosition] = React.useState('viewportTop');
-  const [scrollingMode, setScrollingMode] = React.useState('standard');
-  const [changes, setChanges] = React.useState([]);
-  const [editRowKey, setEditRowKey] = React.useState(null);
-  const onAddButtonClick = React.useCallback((e) => {
+  const [newRowPosition, setNewRowPosition] = useState('viewportTop');
+  const [scrollingMode, setScrollingMode] = useState('standard');
+  const [changes, setChanges] = useState([]);
+  const [editRowKey, setEditRowKey] = useState(null);
+  const onAddButtonClick = useCallback((e) => {
     const key = new Guid().toString();
     setChanges([
       {

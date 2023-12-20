@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import Chart, {
   AdaptiveLayout, CommonSeriesSettings, Size, Tooltip,
@@ -54,9 +54,9 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 const App = () => {
-  const chartRef = React.useRef(null);
-  const pivotGridRef = React.useRef(null);
-  React.useEffect(() => {
+  const chartRef = useRef(null);
+  const pivotGridRef = useRef(null);
+  useEffect(() => {
     pivotGridRef.current.instance.bindChart(chartRef.current.instance, {
       dataFieldsDisplayMode: 'splitPanes',
       alternateDataFields: false,

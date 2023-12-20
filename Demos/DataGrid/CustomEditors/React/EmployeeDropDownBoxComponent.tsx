@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   DataGridTypes,
@@ -12,16 +12,16 @@ const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 
 const EmployeeDropDownBoxComponent = (props) => {
-  const [selectedRowKeys, setSelectedRowKeys] = React.useState([props.data.value]);
-  const [isDropDownOpened, setDropDownOpened] = React.useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([props.data.value]);
+  const [isDropDownOpened, setDropDownOpened] = useState(false);
 
-  const boxOptionChanged = React.useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+  const boxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
     if (e.name === 'opened') {
       setDropDownOpened(e.value);
     }
   }, []);
 
-  const contentRender = React.useCallback(() => {
+  const contentRender = useCallback(() => {
     const onSelectionChanged = (args: DataGridTypes.SelectionChangedEvent) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);

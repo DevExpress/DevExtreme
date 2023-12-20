@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
 
@@ -12,9 +12,9 @@ const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek'];
 
 const App = () => {
-  const [currentResource, setCurrentResource] = React.useState(resourcesList[0]);
+  const [currentResource, setCurrentResource] = useState(resourcesList[0]);
 
-  const onRadioGroupValueChanged = React.useCallback((e: RadioGroupTypes.ValueChangedEvent) => {
+  const onRadioGroupValueChanged = useCallback((e: RadioGroupTypes.ValueChangedEvent) => {
     setCurrentResource(e.value);
   }, []);
 

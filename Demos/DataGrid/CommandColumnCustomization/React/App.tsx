@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Button, Column, DataGridTypes, Editing, Lookup,
 } from 'devextreme-react/data-grid';
@@ -29,9 +29,9 @@ const onEditorPreparing = (e: DataGridTypes.EditorPreparingEvent) => {
 };
 
 const App = () => {
-  const [employees, setEmployees] = React.useState(defaultEmployees);
+  const [employees, setEmployees] = useState(defaultEmployees);
 
-  const onCloneIconClick = React.useCallback((e) => {
+  const onCloneIconClick = useCallback((e) => {
     const clonedItem = { ...e.row.data, ID: getMaxID() };
 
     setEmployees((prevState) => {

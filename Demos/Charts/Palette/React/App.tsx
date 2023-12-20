@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PieChart, {
   Series,
   Legend,
@@ -10,14 +10,14 @@ import {
 } from './data.ts';
 
 function App() {
-  const [palette, setPalette] = React.useState(paletteCollection[0]);
-  const [extensionMode, setExtensionMode] = React.useState(paletteExtensionModes[1]);
+  const [palette, setPalette] = useState(paletteCollection[0]);
+  const [extensionMode, setExtensionMode] = useState(paletteExtensionModes[1]);
 
-  const handlePaletteChange = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handlePaletteChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setPalette(e.value);
   }, [setPalette]);
 
-  const handleExtensionModeChange = React.useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handleExtensionModeChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setExtensionMode(e.value);
   }, [setExtensionMode]);
 

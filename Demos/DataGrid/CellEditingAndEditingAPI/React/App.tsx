@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, Editing, Paging, Selection, Lookup, Toolbar, Item, DataGridTypes,
 } from 'devextreme-react/data-grid';
@@ -15,9 +15,9 @@ const dataSource = new DataSource({
 });
 
 const App = () => {
-  const [selectedItemKeys, setSelectedItemKeys] = React.useState([]);
+  const [selectedItemKeys, setSelectedItemKeys] = useState([]);
 
-  const deleteRecords = React.useCallback(() => {
+  const deleteRecords = useCallback(() => {
     selectedItemKeys.forEach((key) => {
       dataSource.store().remove(key);
     });
@@ -25,7 +25,7 @@ const App = () => {
     dataSource.reload();
   }, [selectedItemKeys]);
 
-  const onSelectionChanged = React.useCallback((data: DataGridTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback((data: DataGridTypes.SelectionChangedEvent) => {
     setSelectedItemKeys(data.selectedRowKeys);
   }, []);
 

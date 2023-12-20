@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Popup, Position, ToolbarItem } from 'devextreme-react/popup';
 import notify from 'devextreme/ui/notify';
 import { EmployeeItem, EmployeeItemProps } from './EmployeeItem.tsx';
@@ -6,22 +6,22 @@ import { employees } from './data.ts';
 
 const defaultCurrentEmployee: Partial<EmployeeItemProps['employee']> = {};
 export default function App() {
-  const [currentEmployee, setCurrentEmployee] = React.useState(defaultCurrentEmployee);
-  const [popupVisible, setPopupVisible] = React.useState(false);
-  const [positionOf, setPositionOf] = React.useState('');
+  const [currentEmployee, setCurrentEmployee] = useState(defaultCurrentEmployee);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [positionOf, setPositionOf] = useState('');
 
-  const showInfo = React.useCallback((employee: EmployeeItemProps['employee']) => {
+  const showInfo = useCallback((employee: EmployeeItemProps['employee']) => {
     setCurrentEmployee(employee);
     setPositionOf(`#image${employee.ID}`);
     setPopupVisible(true);
   }, [setCurrentEmployee, setPositionOf, setPopupVisible]);
 
-  const hideInfo = React.useCallback(() => {
+  const hideInfo = useCallback(() => {
     setCurrentEmployee({});
     setPopupVisible(false);
   }, [setCurrentEmployee, setPopupVisible]);
 
-  const sendEmail = React.useCallback(() => {
+  const sendEmail = useCallback(() => {
     const message = `Email is sent to ${currentEmployee.FirstName} ${currentEmployee.LastName}`;
     notify(
       {
@@ -36,7 +36,7 @@ export default function App() {
     );
   }, [currentEmployee]);
 
-  const showMoreInfo = React.useCallback(() => {
+  const showMoreInfo = useCallback(() => {
     const message = `More info about ${currentEmployee.FirstName} ${currentEmployee.LastName}`;
     notify(
       {
@@ -51,26 +51,26 @@ export default function App() {
     );
   }, [currentEmployee]);
 
-  const getInfoButtonOptions = React.useCallback(() => ({
+  const getInfoButtonOptions = useCallback(() => ({
     text: 'More info',
     onClick: showMoreInfo,
   }), [showMoreInfo]);
 
-  const getEmailButtonOptions = React.useCallback(() => ({
+  const getEmailButtonOptions = useCallback(() => ({
     icon: 'email',
     stylingMode: 'contained',
     text: 'Send',
     onClick: sendEmail,
   }), [sendEmail]);
 
-  const getCloseButtonOptions = React.useCallback(() => ({
+  const getCloseButtonOptions = useCallback(() => ({
     text: 'Close',
     stylingMode: 'outlined',
     type: 'normal',
     onClick: hideInfo,
   }), [hideInfo]);
 
-  const getItems = React.useCallback(() => employees.map((employee) => (
+  const getItems = useCallback(() => employees.map((employee) => (
     <li key={employee.ID}>
       <EmployeeItem employee={employee} showInfo={showInfo} />
     </li>

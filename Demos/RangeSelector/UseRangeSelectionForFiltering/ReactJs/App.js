@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RangeSelector, {
   Margin,
   Scale,
@@ -11,8 +11,8 @@ import { employees } from './data.js';
 
 const columns = ['FirstName', 'LastName', 'BirthYear', 'City', 'Title'];
 const App = () => {
-  const [selectedEmployees, setSelectedEmployees] = React.useState(employees);
-  const filterEmployees = React.useCallback(
+  const [selectedEmployees, setSelectedEmployees] = useState(employees);
+  const filterEmployees = useCallback(
     ({ value }) => {
       setSelectedEmployees(
         employees.filter(

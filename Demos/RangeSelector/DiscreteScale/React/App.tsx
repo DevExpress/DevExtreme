@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RangeSelector, { Chart, RangeSelectorTypes, Series } from 'devextreme-react/range-selector';
 import { dataSource } from './data.ts';
 
@@ -23,9 +23,9 @@ function calculateTotalProduction(range = []) {
 }
 
 function App() {
-  const [totalProduction, setTotalProduction] = React.useState(calculateTotalProduction());
+  const [totalProduction, setTotalProduction] = useState(calculateTotalProduction());
 
-  const processRange = React.useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
+  const processRange = useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
     setTotalProduction(calculateTotalProduction(e.value));
   }, [setTotalProduction]);
 

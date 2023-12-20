@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import ContextMenu from 'devextreme-react/context-menu';
 import { data, resourcesData } from './data.js';
@@ -11,14 +11,14 @@ const onContextMenuItemClick = (e) => {
   e.itemData.onItemClick?.(e);
 };
 const App = () => {
-  const schedulerRef = React.useRef(null);
-  const [currentDate, setCurrentDate] = React.useState(new Date(2020, 10, 25));
-  const [contextMenuItems, setContextMenuItems] = React.useState([]);
-  const [target, setTarget] = React.useState(appointmentClassName);
-  const [disabled, setDisabled] = React.useState(true);
-  const [groups, setGroups] = React.useState(undefined);
-  const [crossScrollingEnabled, setCrossScrollingEnabled] = React.useState(false);
-  const onAppointmentContextMenu = React.useCallback((event) => {
+  const schedulerRef = useRef(null);
+  const [currentDate, setCurrentDate] = useState(new Date(2020, 10, 25));
+  const [contextMenuItems, setContextMenuItems] = useState([]);
+  const [target, setTarget] = useState(appointmentClassName);
+  const [disabled, setDisabled] = useState(true);
+  const [groups, setGroups] = useState(undefined);
+  const [crossScrollingEnabled, setCrossScrollingEnabled] = useState(false);
+  const onAppointmentContextMenu = useCallback((event) => {
     const { appointmentData, targetedAppointmentData } = event;
     const scheduler = schedulerRef.current?.instance;
     const resourceItems = resourcesData.map((item) => ({
@@ -57,7 +57,7 @@ const App = () => {
       ...resourceItems,
     ]);
   }, []);
-  const onCellContextMenu = React.useCallback(
+  const onCellContextMenu = useCallback(
     (e) => {
       const scheduler = schedulerRef.current?.instance;
       setTarget(cellClassName);

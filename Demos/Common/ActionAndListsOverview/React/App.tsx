@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ArrayStore from 'devextreme/data/array_store';
 import List, { ListTypes } from 'devextreme-react/list';
 import TileView from 'devextreme-react/tile-view';
@@ -50,10 +50,10 @@ const renderTile = (item: { FileName: string; }) => (
 );
 
 const App = () => {
-  const [currentHotel, setCurrentHotel] = React.useState(data[0]);
-  const [selectedItemKeys, setSelectedItemKeys] = React.useState([data[0].Id]);
+  const [currentHotel, setCurrentHotel] = useState(data[0]);
+  const [selectedItemKeys, setSelectedItemKeys] = useState([data[0].Id]);
 
-  const handleListSelectionChange = React.useCallback((e: ListTypes.SelectionChangedEvent) => {
+  const handleListSelectionChange = useCallback((e: ListTypes.SelectionChangedEvent) => {
     const hotel = e.addedItems[0];
     setCurrentHotel(hotel);
     setSelectedItemKeys([hotel.Id]);

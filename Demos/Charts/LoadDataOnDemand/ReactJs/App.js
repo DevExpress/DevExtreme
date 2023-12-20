@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import DataSource from 'devextreme/data/data_source';
 import {
   Chart,
@@ -27,11 +27,11 @@ const wholeRange = {
   endValue: new Date(2017, 11, 31),
 };
 function App() {
-  const [visualRange, setVisualRange] = React.useState({
+  const [visualRange, setVisualRange] = useState({
     startValue: new Date(2017, 3, 1),
     endValue: new Date(2017, 3, 15),
   });
-  const uploadDataByVisualRange = React.useCallback(
+  const uploadDataByVisualRange = useCallback(
     (component) => {
       const dataSource = component.getDataSource();
       const storage = dataSource.items();
@@ -70,7 +70,7 @@ function App() {
     },
     [visualRange],
   );
-  const onVisualRangeChanged = React.useCallback(
+  const onVisualRangeChanged = useCallback(
     (component) => {
       const items = component.getDataSource().items();
       if (
@@ -83,7 +83,7 @@ function App() {
     },
     [visualRange, uploadDataByVisualRange],
   );
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (e) => {
       if (e.fullName === 'argumentAxis.visualRange') {
         const stateStart = visualRange.startValue;

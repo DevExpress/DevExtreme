@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Switch from 'devextreme-react/switch';
 import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 import { data, priorityData } from './data.js';
@@ -6,8 +6,8 @@ import { data, priorityData } from './data.js';
 const currentDate = new Date(2021, 3, 21);
 const groups = ['priorityId'];
 const App = () => {
-  const [groupByDate, setGroupByDate] = React.useState(true);
-  const onGroupByDateChanged = React.useCallback((args) => {
+  const [groupByDate, setGroupByDate] = useState(true);
+  const onGroupByDateChanged = useCallback((args) => {
     setGroupByDate(args.value);
   }, []);
   return (
