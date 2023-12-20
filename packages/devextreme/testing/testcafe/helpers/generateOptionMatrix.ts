@@ -5,12 +5,12 @@ export type Options<TComponentOptions = unknown> = {
 export const generateOptionMatrix = (
   options: Options,
   index = 0,
-  prevConfigurations: Options[] = [],
+  currentConfigurations: Options[] = [],
 ): Options[] => {
   const keys = Object.keys(options);
 
   if (index === keys.length) {
-    return [Object.assign({}, ...prevConfigurations)];
+    return [Object.assign({}, ...currentConfigurations)];
   }
 
   const key = keys[index];
@@ -19,10 +19,7 @@ export const generateOptionMatrix = (
   const configurations: Options[] = [];
 
   values.forEach((value) => {
-    const currentConfigurations = [
-      ...prevConfigurations,
-      { [key]: value },
-    ];
+    currentConfigurations.push({ [key]: value });
 
     const generatedConfigurations = generateOptionMatrix(
       options,
@@ -31,6 +28,8 @@ export const generateOptionMatrix = (
     );
 
     configurations.push(...generatedConfigurations);
+
+    currentConfigurations.pop();
   });
 
   return configurations;
