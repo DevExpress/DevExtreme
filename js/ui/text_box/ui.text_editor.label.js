@@ -11,20 +11,8 @@ const LABEL_CLASS = 'dx-label';
 const LABEL_AFTER_CLASS = 'dx-label-after';
 
 class TextEditorLabel {
-    constructor({
-        $editor,
-        text, mode, mark,
-        containsButtonsBefore,
-        containerWidth,
-        beforeWidth
-    }) {
-        this._props = {
-            $editor,
-            text, mode, mark,
-            containsButtonsBefore,
-            containerWidth,
-            beforeWidth
-        };
+    constructor(props) {
+        this._props = props;
 
         this._id = `${TEXTEDITOR_LABEL_CLASS}-${new Guid()}`;
 
@@ -104,13 +92,20 @@ class TextEditorLabel {
     }
 
     _updateBeforeWidth() {
-        this._$before.css({ width: this._props.beforeWidth });
+        if(this._isVisible()) {
+            const width = this._props.beforeWidth ?? this._props.getBeforeWidth();
+
+            this._$before.css({ width });
+        }
     }
 
     _updateMaxWidth() {
-        this._$label.css({ maxWidth: this._props.containerWidth });
-    }
+        if(this._isVisible()) {
+            const maxWidth = this._props.containerWidth ?? this._props.getContainerWidth();
 
+            this._$label.css({ maxWidth });
+        }
+    }
 
     $element() {
         return this._$root;
@@ -127,12 +122,16 @@ class TextEditorLabel {
     updateMode(mode) {
         this._props.mode = mode;
         this._toggleMarkupVisibility();
+        this._updateBeforeWidth();
+        this._updateMaxWidth();
     }
 
     updateText(text) {
         this._props.text = text;
         this._updateText();
         this._toggleMarkupVisibility();
+        this._updateBeforeWidth();
+        this._updateMaxWidth();
     }
 
     updateMark(mark) {
