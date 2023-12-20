@@ -849,10 +849,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       return false;
     }
 
-    const columnsController = this._columnsController;
-    const cellIndex = this._rowsView.getCellIndex($cell);
-    const columnIndex = cellIndex + columnsController.getColumnIndexOffset();
-    const column = columnsController.getVisibleColumns(null, true)[columnIndex];
+    const column = this._getColumnByCellElement($cell);
     const $row = $cell.parent();
     const rowIndex = this._getRowIndex($row);
     const row = this._dataController.items()[rowIndex] as any;
@@ -1207,8 +1204,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _clickTargetCellHandler(event, $cell) {
-    const columnIndex = this._rowsView.getCellIndex($cell);
-    const column = this._columnsController.getVisibleColumns()[columnIndex];
+    const column = this._getColumnByCellElement($cell);
     const isCellEditMode = this._isCellEditMode();
 
     this.setCellFocusType();
@@ -1445,6 +1441,7 @@ export class KeyboardNavigationController extends modules.ViewController {
             const isFocusedElementDefined = isElementDefined(
               $focusedElementInsideCell,
             );
+            const column = this._getColumnByCellElement($cell);
             if (
               (isRenderView || !isCommandCell)
               && this._editorFactory.focus()
@@ -1463,7 +1460,7 @@ export class KeyboardNavigationController extends modules.ViewController {
             ) {
               this._focus($cell, this._isHiddenFocus);
             }
-            if (isEditing) {
+            if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
             }
           } else {
@@ -1473,6 +1470,12 @@ export class KeyboardNavigationController extends modules.ViewController {
         }
       }
     });
+  }
+
+  _getColumnByCellElement($cell) {
+    const cellIndex = this._rowsView.getCellIndex($cell);
+    const columnIndex = cellIndex + this._columnsController.getColumnIndexOffset();
+    return this._columnsController.getVisibleColumns(null, true)[columnIndex];
   }
 
   private _needFocusEditingCell() {
@@ -1828,9 +1831,8 @@ export class KeyboardNavigationController extends modules.ViewController {
   _isCellValid($cell, isClick?) {
     if (isElementDefined($cell)) {
       const $row = $cell.parent();
-      const columnsController = this._columnsController;
-      const columnIndex = this._rowsView.getCellIndex($cell) + columnsController.getColumnIndexOffset();
-      const column = columnsController.getVisibleColumns(null, true)[columnIndex];
+      const columnIndex = this._rowsView.getCellIndex($cell) + this._columnsController.getColumnIndexOffset();
+      const column = this._getColumnByCellElement($cell);
       const visibleColumnCount = this._getVisibleColumnCount();
       const editingController = this._editingController;
       const isMasterDetailRow = isDetailRow($row);
@@ -2217,10 +2219,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       cancel: false,
     };
 
+    const loadingOperations = loadingOperationTypes.sorting || loadingOperationTypes.grouping || loadingOperationTypes.filtering || loadingOperationTypes.paging;
     if (
       !this._dataController
-      || (this._dataController.isLoading()
-        && (loadingOperationTypes.reload || loadingOperationTypes.paging))
+      || (this._dataController.isLoading() && loadingOperations)
     ) {
       args.cancel = true;
       return args;
