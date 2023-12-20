@@ -40,12 +40,7 @@ const created = async (t: TestController): Promise<void> => {
 const a11yCheckConfig = isMaterialBased() ? {
   // NOTE: color-contrast issues in Material
   runOnly: isMaterial() ? '' : 'color-contrast',
-  rules: {
-    'color-contrast': {
-      // NOTE: color-contrast issues in Material
-      enabled: !isMaterial(),
-    },
-  },
+  rules: { 'color-contrast': { enabled: !isMaterial() } },
 } : {};
 
 const configuration: Configuration = {
