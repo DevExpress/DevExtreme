@@ -25321,29 +25321,16 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.legend.customizeItems]
      */
-    customizeItems?: (
-      items: Array<BaseChartLegendItem>
-    ) => Array<BaseChartLegendItem>;
+    customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
     /**
      * [descr:BaseChartOptions.legend.markerTemplate]
      */
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: BaseChartLegendItem,
+          legendItem: LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-  }
-  /**
-   * [descr:BaseChartLegendItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseChartLegendItem
-    extends DevExpress.common.charts.BaseLegendItem {
-    /**
-     * [descr:BaseChartLegendItem.series]
-     */
-    series?: baseSeriesObject;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36100,6 +36087,15 @@ declare module DevExpress.viz {
    * [descr:viz.getTheme(theme)]
    */
   export function getTheme(theme: string): any;
+  /**
+   * [descr:LegendItem]
+   */
+  export interface LegendItem extends DevExpress.common.charts.BaseLegendItem {
+    /**
+     * [descr:LegendItem.series]
+     */
+    series?: baseSeriesObject;
+  }
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
