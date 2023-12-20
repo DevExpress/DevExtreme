@@ -583,7 +583,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this.callBase();
 
-        this._setAriaRole();
+        // this._setAriaRole();
     },
 
     _setAriaRole() {

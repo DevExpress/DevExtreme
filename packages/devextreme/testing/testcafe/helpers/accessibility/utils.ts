@@ -12,10 +12,21 @@ const defaultOptions = {
   },
 };
 
+const createFullReport = (results, configuration) => {
+  let report = createReport(results.violations);
+
+  if (results.violations.length && configuration) {
+    report += `\n${JSON.stringify(configuration)}\n`;
+  }
+
+  return report;
+};
+
 export const a11yCheck = async (
   t: TestController,
   options: A11yCheckOptions = defaultOptions,
   selector?: ElementContext,
+  configuration = {},
 ):
 Promise<void> => {
   const { error, results } = await axeCheck(t, selector, { rules: {}, ...options });
@@ -24,5 +35,5 @@ Promise<void> => {
     .expect(error)
     .eql(null)
     .expect(results.violations.length === 0)
-    .ok(createReport(results.violations));
+    .ok(createFullReport(results, configuration));
 };

@@ -44,7 +44,7 @@ export const testAccessibility = <TComponentOptions=unknown>(
 
   optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
-      await a11yCheck(t, a11yCheckConfig, selector);
+      await a11yCheck(t, a11yCheckConfig, selector, options);
     }).before(async (t) => {
       await createWidget(
         component,
