@@ -16,7 +16,7 @@ export const generateOptionMatrix = (
   const key = keys[index];
   const values = options[key];
 
-  let configurations: Options[] = [];
+  const configurations: Options[] = [];
 
   values.forEach((value) => {
     const currentConfigurations = [
@@ -30,7 +30,7 @@ export const generateOptionMatrix = (
       currentConfigurations,
     );
 
-    configurations = configurations.concat(generatedConfigurations);
+    configurations.push(...generatedConfigurations);
   });
 
   return configurations;
