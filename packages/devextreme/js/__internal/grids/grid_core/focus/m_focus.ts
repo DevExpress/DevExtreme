@@ -728,7 +728,7 @@ export const focusModule = {
                 const filterOperation = desc ? '>' : '<';
 
                 let sortFilter;
-                if (compare) {
+                if (compare && !isRemoteFiltering) {
                   sortFilter = (data) => {
                     if (filterOperation === '<') {
                       return compare(rawValue, getter(data)) >= 1;
