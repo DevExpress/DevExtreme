@@ -8,9 +8,8 @@ import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, chartPointAggregationInfoObject, chartSeriesObject, dxChartAnnotationConfig, chartPointObject } from "devextreme/viz/chart";
-import type { Font as ChartsFont, ScaleBreak, ChartsColor } from "devextreme/common/charts";
+import type { Font as ChartsFont, ScaleBreak, ChartsColor, LegendItem } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-import type { BaseChartLegendItem } from "devextreme/viz/chart_components/base_chart";
 import type { ChartSeries } from "devextreme/viz/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
@@ -1861,7 +1860,7 @@ type ILegendProps = React.PropsWithChildren<{
   columnCount?: number;
   columnItemSpacing?: number;
   customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string);
-  customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
+  customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
   customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string);
   font?: ChartsFont;
   horizontalAlignment?: "center" | "left" | "right";
@@ -1875,7 +1874,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: BaseChartLegendItem, element: any) => string | any) | template;
+  markerTemplate?: ((legendItem: LegendItem, element: any) => string | any) | template;
   orientation?: "horizontal" | "vertical";
   paddingLeftRight?: number;
   paddingTopBottom?: number;
