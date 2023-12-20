@@ -158,6 +158,7 @@ export const prepareGenerationOptions = (
     hoursInterval,
     type,
     cellDuration,
+    today,
   } = workSpaceProps;
   const {
     headerCellTextFormat,
@@ -188,6 +189,7 @@ export const prepareGenerationOptions = (
     currentDate,
     startDate,
     firstDayOfWeek,
+    today,
 
     isGenerateTimePanelData: isRenderTimePanel,
     isGenerateWeekDaysHeaderData,
@@ -585,6 +587,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       currentDate,
       type,
       hoursInterval,
+      today,
     } = this.props;
 
     return this.timePanelDataGenerator.getCompleteTimePanelMap(
@@ -598,6 +601,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         currentDate,
         viewType: type,
         hoursInterval,
+        today,
       },
       this.completeViewDataMap,
     );
@@ -633,6 +637,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       hoursInterval,
       type,
       cellDuration,
+      today,
     } = this.props;
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
 
@@ -653,6 +658,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         hoursInterval,
         type,
         cellDuration,
+        today,
       },
       this.renderConfig,
       this.isAllDayPanelVisible,
