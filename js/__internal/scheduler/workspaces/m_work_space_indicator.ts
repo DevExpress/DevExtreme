@@ -21,10 +21,10 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
   // @ts-expect-error
   _getToday() {
-    return getToday(this.option('indicatorTime') as any, this.timeZoneCalculator);
+    return getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator);
   }
 
-  isIndicationOnView() {
+  isIndicationOnView(): boolean {
     if (this.option('showCurrentTimeIndicator')) {
       const today = this._getToday();
       const endViewDate = dateUtils.trimTime(this.getEndViewDate());
@@ -56,24 +56,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return dateUtils.dateInRange(today, firstViewDate, endViewDate);
   }
 
-  _renderDateTimeIndication() {
-    if (this.isIndicationAvailable()) {
-      if (this.option('shadeUntilCurrentTime')) {
-        this._shader.render();
-      }
-
-      if (this.isIndicationOnView() && this.isIndicatorVisible()) {
-        const groupCount = this._getGroupCount() || 1;
-        const $container = this._dateTableScrollable.$content();
-        const height = this.getIndicationHeight();
-        const rtlOffset = this._getRtlOffset(this.getCellWidth());
-
-        this._renderIndicator(height, rtlOffset, $container, groupCount);
-        this._setCurrentTimeCells();
-      }
-    }
-  }
-
   _renderIndicator(height, rtlOffset, $container, groupCount) {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
@@ -99,7 +81,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
-  _setIndicationUpdateInterval() {
+  protected _setIndicationUpdateInterval() {
     if (!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
       return;
     }
@@ -107,7 +89,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     this._clearIndicatorUpdateInterval();
 
     this._indicatorInterval = setInterval(() => {
-      this._refreshDateTimeIndication();
+      this.renderCurrentDateTimeIndication();
     }, this.option('indicatorUpdateInterval'));
   }
 
@@ -172,25 +154,27 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     super._dispose.apply(this, arguments as any);
   }
 
-  _refreshDateTimeIndication() {
+  renderCurrentDateTimeIndication(): void {
+    this.renderCurrentDateTimeLineAndShader();
+
+    if (this.isRenovatedRender()) {
+      this.renderWorkSpace({
+        generateNewData: true,
+        renderComponents: {
+          header: true,
+          timePanel: true,
+        },
+      });
+    }
+  }
+
+  renderCurrentDateTimeLineAndShader(): void {
     this._cleanDateTimeIndicator();
-    this._cleanCurrentTimeCells();
-
     this._shader?.clean();
-
     this._renderDateTimeIndication();
   }
 
-  _setCurrentTimeCells() {
-    const timePanelCells = this._getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
-    });
-  }
-
-  _isCurrentTimeHeaderCell(headerIndex) {
+  _isCurrentTimeHeaderCell(headerIndex: number): boolean {
     if (this.isIndicationOnView()) {
       const { completeDateHeaderMap } = this.viewDataProvider;
       const date = completeDateHeaderMap[completeDateHeaderMap.length - 1][headerIndex].startDate;
@@ -220,17 +204,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   _dimensionChanged() {
     super._dimensionChanged();
 
-    this._refreshDateTimeIndication();
+    this.renderCurrentDateTimeLineAndShader();
   }
 
   _cleanDateTimeIndicator() {
     (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
-  }
-
-  _cleanCurrentTimeCells() {
-    (this.$element() as any)
-      .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
-      .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
   }
 
   _cleanWorkSpace() {
@@ -250,19 +228,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         this._setIndicationUpdateInterval();
         break;
       case 'showAllDayPanel':
-        super._optionChanged(args);
-        this._refreshDateTimeIndication();
-        break;
       case 'allDayExpanded':
-        super._optionChanged(args);
-        this._refreshDateTimeIndication();
-        break;
       case 'crossScrollingEnabled':
         super._optionChanged(args);
-        this._refreshDateTimeIndication();
+        this.renderCurrentDateTimeIndication();
         break;
       case 'shadeUntilCurrentTime':
-        this._refreshDateTimeIndication();
+        this.renderCurrentDateTimeIndication();
         break;
       default:
         super._optionChanged(args);
@@ -306,6 +278,49 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         ...currentIndices,
         ...cellIndices.map((cellIndex) => rowCountPerGroup * groupIndex + cellIndex),
       ], []);
+  }
+
+  protected _renderDateTimeIndication(): void {
+    if (!this.isIndicationAvailable()) {
+      return;
+    }
+
+    if (this.option('shadeUntilCurrentTime')) {
+      this._shader.render();
+    }
+
+    if (!this.isIndicationOnView() || !this.isIndicatorVisible()) {
+      return;
+    }
+
+    const groupCount = this._getGroupCount() || 1;
+    const $container = this._dateTableScrollable.$content();
+    const height = this.getIndicationHeight();
+    const rtlOffset = this._getRtlOffset(this.getCellWidth());
+
+    this._renderIndicator(height, rtlOffset, $container, groupCount);
+
+    // TODO Old render: delete this code with the old render.
+    if (!this.isRenovatedRender()) {
+      this._setCurrentTimeCells();
+    }
+  }
+
+  // Temporary new render methods.
+  // TODO Old render: replace base call methods by these after the deleting of the old render.
+  protected _setCurrentTimeCells(): void {
+    const timePanelCells = this._getTimePanelCells();
+    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+    currentTimeCellIndices.forEach((timePanelCellIndex) => {
+      timePanelCells.eq(timePanelCellIndex)
+        .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
+    });
+  }
+
+  protected _cleanCurrentTimeCells(): void {
+    (this.$element() as any)
+      .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
+      .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
   }
 }
 
