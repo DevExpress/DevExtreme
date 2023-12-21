@@ -26,7 +26,6 @@ import {
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, SliderValueChangeMode, VerticalEdge } from 'devextreme/common';
 import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, Palette, PaletteExtensionMode, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
-import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { AxisScale, BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedCallMode, ValueChangedEvent } from 'devextreme/viz/range_selector';
@@ -204,10 +203,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 
@@ -576,7 +575,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>>;
 
     /**
     

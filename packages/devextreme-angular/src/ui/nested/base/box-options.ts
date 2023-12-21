@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
 
@@ -28,10 +27,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('crossAlign', value);
     }
 
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>) {
         this._setOption('dataSource', value);
     }
 

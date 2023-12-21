@@ -27,7 +27,6 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalEdge } from 'devextreme/common';
 import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, LegendHoverMode, Palette, PaletteExtensionMode, TextOverflow, Theme, TimeInterval, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, dxPolarChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ValueAxisVisualRangeUpdateMode, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/polar_chart';
@@ -305,10 +304,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 
@@ -882,7 +881,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>>;
 
     /**
     

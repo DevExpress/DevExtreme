@@ -8,7 +8,6 @@ import {
 import DevExpress from 'devextreme/bundles/dx.all';
 import { DataType, HorizontalAlignment, HorizontalEdge, SearchMode, SortOrder } from 'devextreme/common';
 import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { DataGridCommandColumnType, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
@@ -306,10 +305,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('headerCellTemplate', value);
     }
 
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined }) {
         this._setOption('headerFilter', value);
     }
 
@@ -327,10 +326,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('isBand', value);
     }
 
-    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined } {
+    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined }) {
         this._setOption('lookup', value);
     }
 

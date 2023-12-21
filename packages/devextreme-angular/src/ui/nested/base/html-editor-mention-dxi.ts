@@ -5,17 +5,17 @@ import {
     Component,
 } from '@angular/core';
 
-import { Store } from 'devextreme/data';
+import DevExpress from 'devextreme/bundles/dx.all';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 @Component({
     template: ''
 })
 export abstract class DxiHtmlEditorMention extends CollectionNestedOption {
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 

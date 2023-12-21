@@ -27,7 +27,6 @@ export { ExplicitTypes } from 'devextreme/ui/menu';
 import { AnimationConfig } from 'devextreme/animation/fx';
 import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
-import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuDirection, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
 
@@ -151,10 +150,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxMenuItem> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxMenuItem> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxMenuItem>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxMenuItem>) {
         this._setOption('dataSource', value);
     }
 
@@ -606,7 +605,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxMenuItem>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxMenuItem>>;
 
     /**
     

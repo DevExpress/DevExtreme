@@ -7,7 +7,6 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
-import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
 
@@ -36,10 +35,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('animationEnabled', value);
     }
 
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any>) {
         this._setOption('dataSource', value);
     }
 

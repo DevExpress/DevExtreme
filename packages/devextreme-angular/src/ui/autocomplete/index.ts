@@ -27,7 +27,6 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { EditorStyle, LabelMode, Mode, Position, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/autocomplete';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
@@ -140,10 +139,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -975,7 +974,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>>;
 
     /**
     
