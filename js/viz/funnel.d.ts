@@ -23,12 +23,12 @@ import {
 import {
     BaseLegend,
     BaseLegendItem,
+    Font,
 } from './common';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,

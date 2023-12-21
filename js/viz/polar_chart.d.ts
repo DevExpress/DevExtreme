@@ -38,7 +38,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -68,6 +67,8 @@ import {
     VisualRange,
     ZoomPanAction,
 } from '../common/charts';
+
+import { Font } from './common';
 
 interface SeriesInteractionInfo {
     target: polarChartSeriesObject;

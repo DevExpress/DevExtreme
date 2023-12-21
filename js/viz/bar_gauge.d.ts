@@ -18,15 +18,15 @@ import {
 } from '../localization';
 
 import {
-    BaseLegend,
-    BaseLegendItem,
+  BaseLegend,
+  BaseLegendItem,
+  Font,
 } from './common';
 
 import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,

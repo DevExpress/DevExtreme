@@ -17,12 +17,12 @@ import {
 
 import {
     ChartSeries,
+    Font,
 } from './common';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,

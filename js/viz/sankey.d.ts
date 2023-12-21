@@ -19,7 +19,6 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -35,6 +34,8 @@ import {
     PaletteExtensionMode,
     TextOverflow,
 } from '../common/charts';
+
+import { Font } from './common';
 
 export {
     HatchDirection,

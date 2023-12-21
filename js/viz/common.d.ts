@@ -1,10 +1,7 @@
 import {
-    dxChartSeriesTypesCommonSeries,
+  baseSeriesObject,
+  dxChartSeriesTypesCommonSeries,
 } from './chart';
-
-import {
-    Font,
-} from './core/base_widget';
 
 import {
     HorizontalAlignment,
@@ -32,6 +29,44 @@ export type ScaleBreak = Common.ScaleBreak;
 
 /** @deprecated Use VisualRange from 'devextreme/common/charts' instead */
 export type VisualRange = Common.VisualRange;
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.viz
+ * @hidden
+ */
+export interface Font {
+  /**
+   * @docid
+   * @public
+   */
+  color?: string;
+  /**
+   * @docid
+   * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
+   * @public
+   */
+  family?: string;
+  /**
+   * @docid
+   * @default 1
+   * @public
+   */
+  opacity?: number;
+  /**
+   * @docid
+   * @default 12
+   * @public
+   */
+  size?: string | number;
+  /**
+   * @docid
+   * @default 400
+   * @public
+   */
+  weight?: number;
+}
 
 /**
  * @docid
@@ -316,6 +351,21 @@ export interface BaseLegendItem {
      * @public
      */
     visible?: boolean;
+}
+
+/**
+ * @public
+ * @docid
+ * @type object
+ * @inherits BaseLegendItem
+ * @namespace DevExpress.viz
+ */
+export interface LegendItem extends BaseLegendItem {
+  /**
+   * @docid
+   * @public
+   */
+  series?: baseSeriesObject;
 }
 
 /**

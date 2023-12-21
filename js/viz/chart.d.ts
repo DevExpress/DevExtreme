@@ -31,10 +31,10 @@ import {
 
 import {
     ChartSeries,
+    Font,
 } from './common';
 
 import {
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,

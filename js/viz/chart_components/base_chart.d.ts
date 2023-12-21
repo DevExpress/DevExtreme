@@ -28,7 +28,8 @@ import {
 } from '../chart';
 
 import {
-    BaseLegend,
+  BaseLegend,
+  LegendItem,
 } from '../common';
 
 import BaseWidget, {
@@ -39,7 +40,6 @@ import BaseWidget, {
 
 import {
     AnimationEaseMode,
-    LegendItem,
     Palette,
     PaletteExtensionMode,
 } from '../../common/charts';

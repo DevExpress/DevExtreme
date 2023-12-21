@@ -1,6 +1,3 @@
-import { BaseLegendItem } from '../viz/common';
-import { baseSeriesObject } from '../viz/chart';
-
 /**
  * @public
  * @namespace DevExpress.common.charts
@@ -274,18 +271,3 @@ export type WordWrap = 'normal' | 'breakWord' | 'none';
  * @namespace DevExpress.common.charts
  */
 export type ZoomPanAction = 'zoom' | 'pan';
-
-/**
- * @public
- * @docid
- * @type object
- * @inherits BaseLegendItem
- * @namespace DevExpress.viz
- */
-export interface LegendItem extends BaseLegendItem {
-  /**
-   * @docid
-   * @public
-   */
-  series?: baseSeriesObject;
-}

@@ -34,6 +34,8 @@ import {
     WordWrap,
 } from '../../common/charts';
 
+import { Font } from '../common';
+
 export interface ExportInfo {
   readonly fileName: string;
   readonly format: string;
@@ -604,44 +606,6 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @public
      */
     svg(): string;
-}
-
-/**
- * @docid
- * @type object
- * @namespace DevExpress.viz
- * @hidden
- */
-export interface Font {
-    /**
-     * @docid
-     * @public
-     */
-    color?: string;
-    /**
-     * @docid
-     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
-     * @public
-     */
-    family?: string;
-    /**
-     * @docid
-     * @default 1
-     * @public
-     */
-    opacity?: number;
-    /**
-     * @docid
-     * @default 12
-     * @public
-     */
-    size?: string | number;
-    /**
-     * @docid
-     * @default 400
-     * @public
-     */
-    weight?: number;
 }
 
 /**

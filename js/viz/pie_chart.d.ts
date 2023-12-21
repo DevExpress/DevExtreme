@@ -34,10 +34,10 @@ import {
 
 import {
     BaseLegendItem,
+    Font,
 } from './common';
 
 import {
-    Font,
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,

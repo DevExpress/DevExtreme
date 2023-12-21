@@ -20,7 +20,6 @@ import BaseWidget, {
     BaseWidgetMargin,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
@@ -36,6 +35,8 @@ import {
     TextOverflow,
     WordWrap,
 } from '../common/charts';
+
+import { Font } from './common';
 
 export {
     Palette,
