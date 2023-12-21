@@ -139,7 +139,7 @@ test('The vertical scroll position should not be reset after horizontal scrollin
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.wait(50);
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.scrollTo(t, { y: 5000 });
@@ -166,6 +166,8 @@ test('The vertical scroll position should not be reset after horizontal scrollin
   scrolling: {
     columnRenderingMode: 'virtual',
     mode: 'virtual',
+    // @ts-expect-error private option
+    updateTimeout: 0,
   },
   customizeColumns(columns) {
     columns[0].fixed = true;
