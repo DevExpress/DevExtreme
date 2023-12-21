@@ -3,7 +3,7 @@ import { each } from '../core/utils/iterator';
 import { normalizeEnum } from './core/utils';
 import { current as getCurrentTheme } from '../ui/themes';
 import { isEmptyObject } from '../core/utils/type';
-import lightThemes from '../__internal/viz/core/themes/generic/light';
+import lightThemes from '../__internal/viz/core/themes/generic/light/index';
 import carmineThemes from '../__internal/viz/core/themes/generic/carmine';
 import darkThemes from '../__internal/viz/core/themes/generic/dark';
 import contrastThemes from '../__internal/viz/core/themes/generic/contrast';
