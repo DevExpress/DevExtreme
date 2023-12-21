@@ -149,6 +149,7 @@ test('The vertical scroll position should not be reset after horizontal scrollin
 
   // act
   await dataGrid.scrollTo(t, { x: 1000 });
+  await dataGrid.scrollTo(t, { x: 2000 });
 
   // assert
   await takeScreenshot('T1176160-master-detail-with-virtual-columns-2.png', dataGrid.element);
@@ -164,6 +165,7 @@ test('The vertical scroll position should not be reset after horizontal scrollin
   columnWidth: 100,
   scrolling: {
     columnRenderingMode: 'virtual',
+    mode: 'virtual',
   },
   customizeColumns(columns) {
     columns[0].fixed = true;
