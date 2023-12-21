@@ -457,6 +457,8 @@ declare module DevExpress.viz {
     export type dxChartSeriesTypesCommonSeriesPoint = DevExpress.common.charts.SeriesPoint;
     /** @deprecated Use DevExpress.common.charts.SeriesLabel instead */
     export type dxChartSeriesTypesCommonSeriesLabel = DevExpress.common.charts.SeriesLabel;
+    /** @deprecated Use DevExpress.common.charts.LegendItem instead */
+    export type BaseChartLegendItem = DevExpress.common.charts.LegendItem;
 }
 
 // v23.1
