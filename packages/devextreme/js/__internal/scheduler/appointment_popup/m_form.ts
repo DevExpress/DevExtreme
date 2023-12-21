@@ -509,6 +509,9 @@ export class AppointmentForm {
   }
 
   private normalizeEditorName(name: string): string {
-    return name.replace(/\./g, '_');
+    // NOTE: This ternary operator covers the "recurrenceRuleExpr: null/''" scenarios.
+    return name
+      ? name.replace(/\./g, '_')
+      : name;
   }
 }
