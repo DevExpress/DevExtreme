@@ -890,6 +890,8 @@ test('It is possible to focus row that was added via push method if previously r
     }]);
   })();
 
+  await t.expect(dataGrid.dataRows.count).eql(2);
+
   await t.click(dataGrid.getDataRow(0).element);
 
   await t.expect(dataGrid.getDataRow(0).isFocusedRow).ok();
