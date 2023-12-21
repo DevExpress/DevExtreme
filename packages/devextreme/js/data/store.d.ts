@@ -11,7 +11,7 @@ import {
 
 /**
  * @docid StoreOptions
- * @namespace DevExpress.data
+ * @namespace DevExpress.data.Store
  * @hidden
  */
 export type Options<
