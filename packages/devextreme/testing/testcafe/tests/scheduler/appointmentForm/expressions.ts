@@ -498,10 +498,11 @@ test(
     const appointment = scheduler.getAppointment(TEST_TITLE);
 
     await t.doubleClick(appointment.element);
+    await t.expect(scheduler.appointmentPopup.form.exists).ok();
 
     await takeScreenshot(
       'form_recurrence-editor-first-opening_nested-expr.png',
-      scheduler.appointmentPopup.element,
+      scheduler.appointmentPopup.form,
     );
 
     await t.expect(compareResults.isValid())

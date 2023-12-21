@@ -12,6 +12,7 @@ export const CLASS = {
   fullScreen: 'dx-popup-fullscreen',
   switch: 'dx-switch',
   // e2e
+  form: 'e2e-dx-scheduler-form',
   textEditor: 'e2e-dx-scheduler-form-text',
   descriptionEditor: 'e2e-dx-scheduler-form-description',
   startDateEditor: 'e2e-dx-scheduler-form-start-date',
@@ -34,6 +35,8 @@ export const SELECTORS = {
 
 export default class AppointmentPopup {
   element = this.scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
+
+  form = Selector(`.${CLASS.form}`);
 
   wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 

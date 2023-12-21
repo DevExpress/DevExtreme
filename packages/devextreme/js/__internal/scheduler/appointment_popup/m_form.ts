@@ -30,6 +30,7 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
 // NOTE: These CSS classes allow access the editors
 // from e2e testcafe tests.
 const E2E_TEST_CLASSES = {
+  form: 'e2e-dx-scheduler-form',
   textEditor: 'e2e-dx-scheduler-form-text',
   descriptionEditor: 'e2e-dx-scheduler-form-description',
   startDateEditor: 'e2e-dx-scheduler-form-start-date',
@@ -163,6 +164,9 @@ export class AppointmentForm {
         }
       },
       screenByWidth: (width) => (width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg'),
+      elementAttr: {
+        class: E2E_TEST_CLASSES.form,
+      },
     });
   }
 
