@@ -5013,7 +5013,6 @@ declare module DevExpress.data {
      * [descr:Store.load()]
      */
     load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
-
     /**
      * [descr:Store.load(options)]
      */

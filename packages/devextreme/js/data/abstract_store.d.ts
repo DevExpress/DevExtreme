@@ -45,7 +45,6 @@ export default class AbstractStore<
    * @public
    */
   load(): DxExtendedPromise<Array<TItem>>;
-
   /**
    * @docid Store.load(options)
    * @publicName load(options)
