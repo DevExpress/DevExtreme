@@ -2127,6 +2127,15 @@ declare module DevExpress.common.charts {
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
+  /**
+   * [descr:LegendItem]
+   */
+  export interface LegendItem extends BaseLegendItem {
+    /**
+     * [descr:LegendItem.series]
+     */
+    series?: DevExpress.viz.baseSeriesObject;
+  }
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
   export type Palette =
     | 'Bright'
@@ -30592,14 +30601,16 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.legend.customizeItems]
      */
-    customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+    customizeItems?: (
+      items: Array<DevExpress.common.charts.LegendItem>
+    ) => Array<DevExpress.common.charts.LegendItem>;
     /**
      * [descr:BaseChartOptions.legend.markerTemplate]
      */
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: LegendItem,
+          legendItem: DevExpress.common.charts.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
   }
@@ -41824,15 +41835,6 @@ declare module DevExpress.viz {
    * [descr:viz.getTheme(theme)]
    */
   export function getTheme(theme: string): any;
-  /**
-   * [descr:LegendItem]
-   */
-  export interface LegendItem extends DevExpress.common.charts.BaseLegendItem {
-    /**
-     * [descr:LegendItem.series]
-     */
-    series?: baseSeriesObject;
-  }
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
