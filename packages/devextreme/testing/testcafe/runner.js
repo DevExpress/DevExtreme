@@ -143,7 +143,7 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
-            reporter: [process.env.CI === 'true' ? 'list' : 'minimal'],
+            reporter: [process.env.CI === 'true' ? 'json' : 'minimal'],
             componentFolder: '',
             file: '*',
             cache: true,
