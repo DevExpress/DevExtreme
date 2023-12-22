@@ -39,6 +39,7 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
@@ -158,6 +159,10 @@ export default class DataGrid extends Widget {
 
   getFocusedRow(): Selector {
     return this.dataRows.filter(`.${CLASS.focusedRow}`);
+  }
+
+  getErrorRow(): Selector {
+    return this.element.find(`.${CLASS.errorRow}`);
   }
 
   getFilterPanel(): FilterPanel {
