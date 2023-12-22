@@ -986,7 +986,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       if (key !== undefined && item && item.data && !item.data.isContinuation) {
         (this._dataController as any).changeRowExpand(key);
       }
-    } else {
+    } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
   }

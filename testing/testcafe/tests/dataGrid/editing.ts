@@ -2586,3 +2586,58 @@ test('Component sends unexpected filtering request after inserting a new row if 
     };
   });
 });
+
+// T1201724
+test('An exception should not throw after pressing enter on the save button and onSaving\'s promise is resolved', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataRow = dataGrid.getDataRow(0);
+  const editButton = dataRow.getCommandCell(3).getButton(0);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
+
+  // act
+  await t
+    .click(editButton)
+    .expect(dataRow.isEdited)
+    .ok()
+    .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
+    .pressKey('tab tab tab')
+    .pressKey('enter');
+
+  await resolveOnSavingDeferred();
+
+  // assert
+  await t
+    .expect(dataRow.isEdited)
+    .notOk()
+    .expect(await takeScreenshot('grid-editing-with-onSaving-T1201724.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).deferred = $.Deferred();
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        id: 1, field1: 'value1', field2: 'value2', field3: 'value3',
+      },
+      {
+        id: 2, field1: 'value4', field2: 'value5', field3: 'value6',
+      },
+    ],
+    keyExpr: 'id',
+    showBorders: true,
+    columns: ['field1', 'field2', 'field3'],
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    onSaving(e) {
+      e.promise = (window as any).deferred;
+    },
+  });
+});
