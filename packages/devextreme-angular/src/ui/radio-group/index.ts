@@ -27,6 +27,7 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/radio_group';
 
@@ -108,10 +109,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -499,7 +500,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>>;
 
     /**
     

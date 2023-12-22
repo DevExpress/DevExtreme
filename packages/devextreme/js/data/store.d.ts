@@ -104,7 +104,7 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
 
 /**
  * @docid Store
- * @namespace DevExpress.data.Store
+ * @namespace DevExpress.data
  * @hidden
  * @options Options
  */

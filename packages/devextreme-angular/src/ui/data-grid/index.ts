@@ -29,6 +29,7 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { DragDirection, DragHighlight, HorizontalAlignment, Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
 import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, GroupExpandMode, HeaderFilterSearchConfig, NewRowPosition, PagerDisplayMode, PagerPageSize, SelectionColumnDisplayMode, StartEditAction, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DataGridExportFormat, DataGridScrollMode, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent } from 'devextreme/ui/data_grid';
@@ -362,10 +363,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 
@@ -1564,7 +1565,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<any>>;
 
     /**
     

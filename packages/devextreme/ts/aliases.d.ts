@@ -464,8 +464,6 @@ declare module DevExpress.viz {
 declare namespace DevExpress.data {
     /** @deprecated Use DevExpress.data.Store.Options instead */
     export type StoreOptions = Store.Options;
-    /** @deprecated Use DevExpress.data.Store.Store instead */
-    export type Store = Store.Store;
 }
 
 // v23.1

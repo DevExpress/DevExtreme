@@ -26,6 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/toolbar';
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, LocateInMenuMode, OptionChangedEvent, ShowTextMode } from 'devextreme/ui/toolbar';
 
@@ -70,10 +71,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxToolbarItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxToolbarItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxToolbarItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxToolbarItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -315,7 +316,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxToolbarItem | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxToolbarItem | any>>;
 
     /**
     

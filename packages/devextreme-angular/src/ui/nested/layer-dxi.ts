@@ -12,9 +12,9 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { SingleMultipleOrNone } from 'devextreme/common';
 import { Font, Palette } from 'devextreme/common/charts';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
 
@@ -88,10 +88,10 @@ export class DxiLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataSource(): any | DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
+    get dataSource(): any | DataSource | DataSourceOptions | Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: any | DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
+    set dataSource(value: any | DataSource | DataSourceOptions | Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 

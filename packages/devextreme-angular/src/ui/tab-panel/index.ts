@@ -26,6 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/tab_panel';
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
 
@@ -109,10 +110,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -589,7 +590,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabPanelItem | any>>;
 
     /**
     

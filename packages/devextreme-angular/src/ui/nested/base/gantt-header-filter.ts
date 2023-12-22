@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { SearchMode } from 'devextreme/common';
 import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
@@ -29,10 +29,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('allowSelectAll', value);
     }
 
-    get dataSource(): DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any> {
+    get dataSource(): DataSourceOptions | Store | Function | null | undefined | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any>) {
+    set dataSource(value: DataSourceOptions | Store | Function | null | undefined | Array<any>) {
         this._setOption('dataSource', value);
     }
 

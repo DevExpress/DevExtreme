@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { DataType } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
 import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
@@ -86,10 +86,10 @@ export abstract class DxiFilterBuilderField extends CollectionNestedOption {
         this._setOption('format', value);
     }
 
-    get lookup(): { allowClearing?: boolean, dataSource?: DataSourceOptions | DevExpress.data.Store.Store | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined } {
+    get lookup(): { allowClearing?: boolean, dataSource?: DataSourceOptions | Store | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, dataSource?: DataSourceOptions | DevExpress.data.Store.Store | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, dataSource?: DataSourceOptions | Store | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined }) {
         this._setOption('lookup', value);
     }
 

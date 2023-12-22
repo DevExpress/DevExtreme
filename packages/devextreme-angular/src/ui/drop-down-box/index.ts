@@ -27,6 +27,7 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { EditorStyle, LabelMode, Mode, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/drop_down_box';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
@@ -165,10 +166,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 
@@ -860,7 +861,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<any>>;
 
     /**
     

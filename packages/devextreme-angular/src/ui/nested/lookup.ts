@@ -14,7 +14,7 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
+import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
@@ -47,10 +47,10 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get dataSource(): DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any> {
+    get dataSource(): DataSourceOptions | Store | Function | null | undefined | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSourceOptions | DevExpress.data.Store.Store | Function | null | undefined | Array<any>) {
+    set dataSource(value: DataSourceOptions | Store | Function | null | undefined | Array<any>) {
         this._setOption('dataSource', value);
     }
 

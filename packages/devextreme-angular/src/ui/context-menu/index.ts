@@ -29,6 +29,7 @@ import { PositionConfig } from 'devextreme/animation/position';
 import DevExpress from 'devextreme/bundles/dx.all';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, ContextSubmenuDirection, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
 
@@ -154,10 +155,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxContextMenuItem> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxContextMenuItem> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxContextMenuItem>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxContextMenuItem>) {
         this._setOption('dataSource', value);
     }
 
@@ -630,7 +631,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxContextMenuItem>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxContextMenuItem>>;
 
     /**
     

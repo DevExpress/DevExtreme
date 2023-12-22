@@ -26,6 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/tree_view';
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode, TreeViewExpandEvent } from 'devextreme/ui/tree_view';
@@ -139,10 +140,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxTreeViewItem> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxTreeViewItem> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxTreeViewItem>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxTreeViewItem>) {
         this._setOption('dataSource', value);
     }
 
@@ -836,7 +837,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<DevExpress.ui.dxTreeViewItem>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxTreeViewItem>>;
 
     /**
     

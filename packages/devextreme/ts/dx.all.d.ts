@@ -5006,8 +5006,10 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class AbstractStore<TItem = any, TKey = any> extends DevExpress.data
-    .Store.Store<TItem, TKey> {
+  export class AbstractStore<TItem = any, TKey = any> extends Store<
+    TItem,
+    TKey
+  > {
     constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
     /**
      * [descr:Store.load()]
@@ -5093,8 +5095,7 @@ declare module DevExpress.data {
   /**
    * [descr:CustomStore]
    */
-  export class CustomStore<TItem = any, TKey = any> extends DevExpress.data
-    .Store.Store<TItem, TKey> {
+  export class CustomStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
     constructor(options?: DevExpress.data.CustomStore.Options<TItem, TKey>);
     /**
      * [descr:CustomStore.byKey(key, extraOptions)]
@@ -6485,6 +6486,70 @@ declare module DevExpress.data {
    */
   export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
   /**
+   * [descr:Store]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export class Store<TItem = any, TKey = any> {
+    constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
+    /**
+     * [descr:Store.insert(values)]
+     */
+    insert(values: TItem): DevExpress.core.utils.DxExtendedPromise<TItem>;
+    /**
+     * [descr:Store.key()]
+     */
+    key(): string | Array<string>;
+    /**
+     * [descr:Store.keyOf(obj)]
+     */
+    keyOf(obj: TItem): TKey;
+    /**
+     * [descr:Store.off(eventName)]
+     */
+    off(eventName: EventName): this;
+    /**
+     * [descr:Store.off(eventName, eventHandler)]
+     */
+    off(eventName: EventName, eventHandler: Function): this;
+    /**
+     * [descr:Store.on(eventName, eventHandler)]
+     */
+    on(eventName: EventName, eventHandler: Function): this;
+    /**
+     * [descr:Store.on(events)]
+     */
+    on(events: { [key in EventName]?: Function }): this;
+    /**
+     * [descr:Store.push(changes)]
+     */
+    push(
+      changes: Array<{
+        type: 'insert' | 'update' | 'remove';
+        data?: DevExpress.core.DeepPartial<TItem>;
+        key?: TKey;
+        index?: number;
+      }>
+    ): void;
+    /**
+     * [descr:Store.remove(key)]
+     */
+    remove(key: TKey): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:Store.totalCount(options)]
+     */
+    totalCount(obj: {
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    }): DevExpress.core.utils.DxPromise<number>;
+    /**
+     * [descr:Store.update(key, values)]
+     */
+    update(
+      key: TKey,
+      values: DevExpress.core.DeepPartial<TItem>
+    ): DevExpress.core.utils.DxExtendedPromise<TItem>;
+  }
+  /**
    * [descr:SummaryDescriptor]
    */
   export type SummaryDescriptor<T> =
@@ -6589,70 +6654,6 @@ declare module DevExpress.data.Store {
      */
     onUpdating?: (key: TKey, values: TItem) => void;
   };
-  /**
-   * [descr:Store]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export class Store<TItem = any, TKey = any> {
-    constructor(options?: Options<TItem, TKey>);
-    /**
-     * [descr:Store.insert(values)]
-     */
-    insert(values: TItem): DevExpress.core.utils.DxExtendedPromise<TItem>;
-    /**
-     * [descr:Store.key()]
-     */
-    key(): string | Array<string>;
-    /**
-     * [descr:Store.keyOf(obj)]
-     */
-    keyOf(obj: TItem): TKey;
-    /**
-     * [descr:Store.off(eventName)]
-     */
-    off(eventName: EventName): this;
-    /**
-     * [descr:Store.off(eventName, eventHandler)]
-     */
-    off(eventName: EventName, eventHandler: Function): this;
-    /**
-     * [descr:Store.on(eventName, eventHandler)]
-     */
-    on(eventName: EventName, eventHandler: Function): this;
-    /**
-     * [descr:Store.on(events)]
-     */
-    on(events: { [key in EventName]?: Function }): this;
-    /**
-     * [descr:Store.push(changes)]
-     */
-    push(
-      changes: Array<{
-        type: 'insert' | 'update' | 'remove';
-        data?: DevExpress.core.DeepPartial<TItem>;
-        key?: TKey;
-        index?: number;
-      }>
-    ): void;
-    /**
-     * [descr:Store.remove(key)]
-     */
-    remove(key: TKey): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:Store.totalCount(options)]
-     */
-    totalCount(obj: {
-      filter?: FilterDescriptor | Array<FilterDescriptor>;
-      group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
-    }): DevExpress.core.utils.DxPromise<number>;
-    /**
-     * [descr:Store.update(key, values)]
-     */
-    update(
-      key: TKey,
-      values: DevExpress.core.DeepPartial<TItem>
-    ): DevExpress.core.utils.DxExtendedPromise<TItem>;
-  }
 }
 declare module DevExpress.data.utils {
   /**

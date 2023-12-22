@@ -14,8 +14,8 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation } from 'devextreme/common';
+import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { DiagramDataLayoutType } from 'devextreme/ui/diagram';
 
@@ -73,10 +73,10 @@ export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | DevExpress.data.Store.Store | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 
