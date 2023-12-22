@@ -2,16 +2,16 @@ import sh from 'shelljs';
 import fs from 'fs';
 import { mapOptions } from './shell-utils';
 
+interface PackageOptions {
+  name: string;
+  version: string;
+  license: string;
+  author: string;
+}
+
 export const npm = {
   initEmpty(): void {
     fs.writeFileSync('package.json', JSON.stringify({}));
-  },
-  init(options: { authorName?: string, scope?: string, yes?: boolean }): void {
-    console.log(`"npm init ${mapOptions(options, {
-      authorName: '--init-author-name',
-      scope: '--scope',
-      yes: { kind: 'flag', alias: '-y' },
-    })}"`);
   },
   pack(options: { destination: string }): void {
     sh.exec(`npm pack ${mapOptions(options, {
@@ -22,21 +22,17 @@ export const npm = {
     delete(option: string): void {
       sh.exec(`npm pkg delete ${option}`);
     },
-    set(options: { name: string, version: string, license: string, author: string }): void {
+    set(options: Partial<PackageOptions>): void {
       sh.exec(`npm pkg set ${mapOptions(options, {
         name: 'name',
         version: 'version',
         license: 'license',
         author: 'author'
       })}`);
+    },
+    get(option: keyof PackageOptions): string | undefined {
+      const execResult = sh.exec(`npm pkg get ${option} --workspaces=false`, { silent: true });
+      return JSON.parse(execResult.stdout);
     }
-  },
-  publish(options: { registry: string, ignoreScripts?: boolean, dryRun?: boolean, quiet?: boolean }): void {
-    console.log(`"npm init ${mapOptions(options, {
-      registry: '--registry',
-      ignoreScripts: { kind: 'flag', alias: '--ignore-scripts' },
-      dryRun: { kind: 'flag', alias: '--dry-run' },
-      quiet: { kind: 'flag', alias: '--quiet' },
-    })}"`);
   }
 }

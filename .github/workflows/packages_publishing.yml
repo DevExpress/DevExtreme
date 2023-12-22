@@ -83,6 +83,11 @@ jobs:
       matrix:
         package: ${{ fromJSON(needs.build.outputs.packages) }}
     steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: build
+          sparse-checkout-cone-mode: false
 
       - name: Download Artifacts
         uses: actions/download-artifact@v3
@@ -94,15 +99,13 @@ jobs:
         env:
           PACKAGE: ${{ matrix.package }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AUTHOR: ${{ github.repository_owner }}
         # --ignore-scripts is required for publishing devextreme-angular which fails with error:
         # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'
         # Should be removed.
         run: |
-          tar -xzf $PACKAGE.tgz
-          cd package
-          npm init -y --scope $AUTHOR
-          npm pkg delete repository
+          SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          npm run ts-node build/change-package-scope -- --tgz $PACKAGE.tgz --scope $SCOPE
+          cd "$SCOPE-$PACKAGE"
           npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
           npm publish --quiet --ignore-scripts --registry https://npm.pkg.github.com
           npm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT"
