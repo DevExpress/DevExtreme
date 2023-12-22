@@ -70,6 +70,14 @@ export interface CustomStoreOptions<
     loadMode?: 'processed' | 'raw';
     /**
      * @docid
+     * @type_function_param1 result:LoadResult
+     * @type_function_param2 loadOptions:LoadOptions
+     * @action
+     * @public
+     */
+    onLoaded?: ((result: LoadResult<TItem>, loadOptions: LoadOptions<TItem>) => void);
+    /**
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<void>
      * @public

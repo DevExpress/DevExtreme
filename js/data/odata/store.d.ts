@@ -66,13 +66,6 @@ export interface ODataStoreOptions<
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid
-     * @type_function_param1 loadOptions:LoadOptions
-     * @action
-     * @public
-     */
-    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
-    /**
-     * @docid
      * @public
      */
     url?: string;
