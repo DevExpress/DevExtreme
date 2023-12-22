@@ -1,6 +1,5 @@
 import { DxPromise } from '../../core/utils/deferred';
 import Store, { Options as StoreOptions } from '../abstract_store';
-import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context';
 
