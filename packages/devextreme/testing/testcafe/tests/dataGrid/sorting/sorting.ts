@@ -9,7 +9,8 @@ test('Filter expression should be valid when sortingMethod, remoteOperations, an
   const dataGrid = new DataGrid('#container');
   // assert
   await t
-    .wait(100)
+    .expect(dataGrid.dataRows.count)
+    .eql(6)
     .expect(dataGrid.getErrorRow().exists)
     .eql(false);
 }).before(async () => createWidget('dxDataGrid', () => {
