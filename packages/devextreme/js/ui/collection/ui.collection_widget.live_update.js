@@ -27,9 +27,6 @@ export default CollectionWidget.inherit({
             if(dataController.getDataSource() && !this._dataController.isLoaded()) {
                 this._correctionIndex = 0;
             }
-            if(this._correctionIndex && e.storeLoadOptions) {
-                e.storeLoadOptions.skip += this._correctionIndex;
-            }
         },
 
         this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
