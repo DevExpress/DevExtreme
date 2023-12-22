@@ -122,6 +122,7 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
 .dx-dropdowneditor-overlay {
   &.dx-popup-wrapper {
     .dx-overlay-content {
+      box-shadow: $material-base-dropdown-widgets-shadow;
       overflow: hidden;
     }
   }

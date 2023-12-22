@@ -14,6 +14,7 @@
 @use "../overlay";
 
 $material-popup-toolbar-label-font-size: $material-m-font-size;
+$material-popup-focused-content-shadow: 0 8px 40px 6px rgba(0, 0, 0, 0.4);
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
@@ -28,7 +29,7 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
 
   .dx-state-focused {
     &.dx-overlay-content {
-      box-shadow: 0 8px 40px 6px rgba(0,0,0,0.4);
+      box-shadow: $material-popup-focused-content-shadow;
     }
   }
 }

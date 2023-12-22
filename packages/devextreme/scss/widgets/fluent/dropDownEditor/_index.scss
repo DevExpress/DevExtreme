@@ -122,6 +122,7 @@ $fluent-dropdowneditor-invalid-badge-size: $fluent-invalid-badge-size + $fluent-
 .dx-dropdowneditor-overlay {
   &.dx-popup-wrapper {
     .dx-overlay-content {
+      box-shadow: $fluent-base-dropdown-widgets-shadow;
       overflow: hidden;
     }
   }

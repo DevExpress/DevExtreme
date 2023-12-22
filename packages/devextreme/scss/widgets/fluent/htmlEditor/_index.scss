@@ -13,6 +13,7 @@
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../fileUploader/sizes" as *;
+@use "../popup/sizes" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -296,4 +297,8 @@
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
     background-color: color.change($base-accent, $alpha: 0.5);
   }
+}
+
+.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper .dx-overlay-content {
+  box-shadow: $fluent-popup-focused-content-shadow;
 }
