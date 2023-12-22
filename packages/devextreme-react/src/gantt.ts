@@ -11,7 +11,7 @@ import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, 
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 import type { ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";

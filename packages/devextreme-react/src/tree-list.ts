@@ -16,7 +16,7 @@ import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { event, EventInfo } from "devextreme/events/index";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 import type { PositionConfig } from "devextreme/animation/position";
 import type { dxPopupOptions, dxPopupToolbarItem } from "devextreme/ui/popup";
 import type { Component } from "devextreme/core/component";

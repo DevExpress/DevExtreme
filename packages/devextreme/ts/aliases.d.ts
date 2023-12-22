@@ -461,6 +461,11 @@ declare module DevExpress.viz {
     export type BaseChartLegendItem = DevExpress.common.charts.LegendItem;
 }
 
+declare namespace DevExpress.data {
+    /** @deprecated Use DevExpress.data.Store.Options instead */
+    export type StoreOptions = Store.Options;
+}
+
 // v23.1
 
 declare module DevExpress.ui.dxSlider {
