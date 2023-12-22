@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
 import { Deferred } from 'core/utils/deferred';
 import CustomStore from 'data/custom_store';
 import { DATA, data2 } from './treeViewParts/testData.js';
@@ -326,11 +325,9 @@ QUnit.test('SelectAll checkBox should select all values on enter key when no ite
         items: [ { text: 'item1', items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
         onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
     });
-
     const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
-    const keyboard = keyboardMock($selectAll);
 
-    keyboard.press('enter');
+    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
 
     assert.deepEqual(selectAllValue, true, 'all items selected');
 });
@@ -343,11 +340,9 @@ QUnit.test('SelectAll checkBox should delect all values on enter key when all it
         }],
         onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
     });
-
     const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
-    const keyboard = keyboardMock($selectAll);
 
-    keyboard.press('enter');
+    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
 
     assert.deepEqual(selectAllValue, false, 'all items deselected');
 });
