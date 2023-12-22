@@ -132,6 +132,7 @@ class FormDialog {
                 }
             ],
             _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
+            // _wrapperClassExternal: DIALOG_CLASS,
         }, this._popupUserConfig);
     }
 
