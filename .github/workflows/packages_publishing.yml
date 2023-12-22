@@ -52,7 +52,7 @@ jobs:
 
       - name: Set timestamp version 
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
-        run: npm run ts-script build/set-timestamp-version
+        run: npm run ts-node build/set-timestamp-version
 
       - name: Build npm packages
         env:
@@ -60,7 +60,7 @@ jobs:
         run: npm run all:build
 
       - name: Build artifacts package
-        run: npm run ts-script build/make-artifacts-package
+        run: npm run ts-node build/make-artifacts-package
 
       - uses: actions/upload-artifact@v3
         with:
