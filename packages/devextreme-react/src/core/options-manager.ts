@@ -8,14 +8,18 @@ import { DXTemplateCollection } from './types';
 
 const optionsManagers = new Set<OptionsManager>();
 let guardTimeoutHandler = -1;
+let internalGuardTimeoutHandler = -1;
 
 export function unscheduleGuards(): void {
   clearTimeout(guardTimeoutHandler);
+  clearTimeout(internalGuardTimeoutHandler);
 }
 export function scheduleGuards(): void {
   unscheduleGuards();
   guardTimeoutHandler = window.setTimeout(() => {
-    optionsManagers.forEach((optionManager) => optionManager.execGuards());
+    internalGuardTimeoutHandler = window.setTimeout(() => {
+      optionsManagers.forEach((optionManager) => optionManager.execGuards())
+    });
   });
 }
 

@@ -299,6 +299,22 @@ describe('option control', () => {
     });
   });
 
+  it('rolls back controlled options on second timer (to account for async React 18+ updates)', () => {
+    render(
+      <ControlledComponent everyOption={123} />,
+    );
+
+    fireOptionChange('everyOption', 234);
+    jest.runOnlyPendingTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(0);
+
+    jest.runAllTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 123]);
+  });
+
   it('rolls back controlled complex option', () => {
     render(
       <ControlledComponent complexOption={{ a: 123, b: 234 }} />,
@@ -404,6 +420,25 @@ describe('option control', () => {
     );
 
     fireOptionChange('everyOption', 234);
+    rerender(
+      <ControlledComponent everyOption={234} />,
+    );
+
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 234]);
+  });
+
+  it('applies option change with async React 18+ update', () => {
+    const { rerender } = render(
+      <ControlledComponent everyOption={123} />,
+    );
+
+    fireOptionChange('everyOption', 234);
+
+    jest.runOnlyPendingTimers();
+    expect(Widget.option.mock.calls.length).toBe(0);
+
     rerender(
       <ControlledComponent everyOption={234} />,
     );
