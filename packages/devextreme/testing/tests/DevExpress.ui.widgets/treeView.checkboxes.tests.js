@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import { Deferred } from 'core/utils/deferred';
 import CustomStore from 'data/custom_store';
 import { DATA, data2 } from './treeViewParts/testData.js';
@@ -316,6 +317,39 @@ QUnit.test('checkbox should have aria-label="Check State" attribute', function(a
     const $checkbox = $(`.${CHECKBOX_CLASS}`);
 
     assert.strictEqual($checkbox.attr('aria-label'), 'Check State');
+});
+
+QUnit.test('SelectAll checkBox should select all values on enter key when no items selected', function(assert) {
+    let selectAllValue = null;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { text: 'item1', items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
+        onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
+    });
+
+    const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+    const keyboard = keyboardMock($selectAll);
+
+    keyboard.press('enter');
+
+    assert.deepEqual(selectAllValue, true, 'all items selected');
+});
+
+QUnit.test('SelectAll checkBox should delect all values on enter key when all items selected', function(assert) {
+    let selectAllValue = null;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        items: [{ text: 'item1', selected: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ]
+        }],
+        onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
+    });
+
+    const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+    const keyboard = keyboardMock($selectAll);
+
+    keyboard.press('enter');
+
+    assert.deepEqual(selectAllValue, false, 'all items deselected');
 });
 
 QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
