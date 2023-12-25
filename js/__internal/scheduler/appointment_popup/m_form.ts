@@ -40,8 +40,6 @@ const E2E_TEST_CLASSES = {
   recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch',
 };
 
-const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
-
 const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
