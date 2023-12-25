@@ -11,6 +11,8 @@ test('Map should not raise errors when it is disposed immediately after creating
   await t
     .click($editButton)
     .expect(true).ok();
+
+  await t.eval(() => location.reload());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{
     ID: 1,
