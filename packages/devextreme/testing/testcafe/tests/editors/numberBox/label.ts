@@ -32,7 +32,7 @@ stylingModes.forEach((stylingMode) => {
       stylingMode,
     };
 
-    await insertStylesheetRulesToPage('#container { width: 300px; height: 400px; margin: 8px; }');
+    await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
 
     await appendElementTo('#container', 'div', 'numberBox1', { });
     await appendElementTo('#container', 'div', 'numberBox2', { });
