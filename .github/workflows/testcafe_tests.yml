@@ -62,6 +62,9 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
+          { componentFolder: "accessibility", name: "accessibility" },
+          { componentFolder: "accessibility", name: "accessibility - material", theme: 'material.blue.light' },
+          { componentFolder: "accessibility", name: "accessibility - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "common", name: "common" },
           { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
           { componentFolder: "common", name: "common - fluent", theme: 'fluent.blue.light' },

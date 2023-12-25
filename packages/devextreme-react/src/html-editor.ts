@@ -12,7 +12,7 @@ import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 
 import type UploadInfo from "devextreme/file_management/upload_info";
 import type DataSource from "devextreme/data/data_source";
