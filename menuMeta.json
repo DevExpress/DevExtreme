@@ -1806,8 +1806,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -3857,7 +3856,6 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "TabPanel",
-            "Badge": "New",
             "MvcAdditionalFiles": [
               "/Models/TabPanelItem.cs",
               "/Models/TaskItem.cs",
@@ -3881,7 +3879,6 @@
             "Title": "Templates",
             "Name": "Templates",
             "Widget": "TabPanel",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Models/Company.cs",
               "/Models/SampleData/TabPanelData.cs"
@@ -3897,8 +3894,7 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Tabs",
-            "Badge": "Updated"
+            "Widget": "Tabs"
           },
           {
             "Title": "Selection",
@@ -3908,8 +3904,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -4143,14 +4138,12 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Calendar",
-            "Badge": "Updated"
+            "Widget": "Calendar"
           },
           {
             "Title": "Multiple Selection",
             "Name": "MultipleSelection",
-            "Widget": "Calendar",
-            "Badge": "New"
+            "Widget": "Calendar"
           }
         ]
       },
@@ -4453,7 +4446,6 @@
           {
             "Title": "Editor Appearance Variants",
             "Name": "EditorAppearanceVariants",
-            "Badge": "Updated",
             "DocUrl": "",
             "Widget": "Common",
             "DemoType": "Web"
@@ -4588,7 +4580,6 @@
             "Equivalents": "Submit",
             "Name": "Validation",
             "Widget": "Form",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Views/Form/SuccessValidation.cshtml",
               "/ViewModels/EditorsViewModel.cs",
