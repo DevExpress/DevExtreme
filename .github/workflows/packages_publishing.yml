@@ -62,7 +62,7 @@ jobs:
       - name: Build artifacts package
         run: npm run ts-script build/make-artifacts-package
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: packages
           path: artifacts/npm/*.tgz
