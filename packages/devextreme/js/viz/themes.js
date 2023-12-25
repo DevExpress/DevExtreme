@@ -10,8 +10,8 @@ import darkMoonThemes from '../__internal/viz/core/themes/generic/darkmoon';
 import darkVioletThemes from '../__internal/viz/core/themes/generic/darkviolet';
 import greenMistThemes from '../__internal/viz/core/themes/generic/greenmist';
 import softBlueThemes from '../__internal/viz/core/themes/generic/softblue';
-import materialThemes from '../__internal/viz/core/themes/material';
-import fluentThemes from '../__internal/viz/core/themes/fluent';
+import materialThemes from '../__internal/viz/core/themes/material/index';
+import fluentThemes from '../__internal/viz/core/themes/fluent/index';
 
 const themes = {};
 const themesMapping = {};

@@ -1,4 +1,6 @@
-import chartTheme from './chart';
+import bar_gauge from './bar_gauge';
+import bullet from './bullet';
+import chart from './chart';
 import {
   BLACK, CENTER,
   LIGHT_GREY,
@@ -6,14 +8,14 @@ import {
   RIGHT, SECONDARY_TITLE_COLOR, SOLID, TOP, WHITE,
 } from './contants';
 import funnel from './funnel';
-import gauges from './gauges';
-import map from './map';
-import pieTheme from './pie';
-import polar from './polar';
+import gauge from './gauge';
+import pieChart from './pie_chart';
+import polarChart from './polar_chart';
 import rangeSelector from './range_selector';
 import sankey from './sankey';
-import sparklines from './sparklines';
+import sparkline from './sparkline';
 import treeMap from './tree_map';
+import vectorMap from './vector_map';
 
 export default [{
   theme: {
@@ -162,15 +164,17 @@ export default [{
         textOverflow: 'ellipsis',
       },
     },
-    ...chartTheme,
+    ...chart,
     ...funnel,
-    ...gauges,
-    ...map,
-    ...pieTheme,
-    ...polar,
+    ...gauge,
+    ...bar_gauge,
+    ...vectorMap,
+    ...pieChart,
+    ...polarChart,
     ...rangeSelector,
     ...sankey,
-    ...sparklines,
+    ...sparkline,
+    ...bullet,
     ...treeMap,
   },
   baseThemeName: undefined,
