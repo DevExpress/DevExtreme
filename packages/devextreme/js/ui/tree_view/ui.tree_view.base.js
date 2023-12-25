@@ -1220,16 +1220,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._$selectAllItem = $('<div>').addClass(SELECT_ALL_ITEM_CLASS);
 
         const value = this._dataAdapter.isAllSelected();
-        const selectAllCheckBox = this._createComponent(this._$selectAllItem, CheckBox, {
+        this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             elementAttr: { 'aria-label': 'Select All' },
             text: selectAllText,
             focusStateEnabled,
-            onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
-        });
-
-        selectAllCheckBox.registerKeyHandler('enter', () => {
-            selectAllCheckBox.option('value', !selectAllCheckBox.option('value'));
+            onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this),
+            onInitialized: ({ component }) => {
+                component.registerKeyHandler('enter', () => {
+                    component.option('value', !component.option('value'));
+                });
+            }
         });
 
         this._toggleSelectedClass(this._$selectAllItem, value);
