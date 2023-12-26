@@ -1791,6 +1791,7 @@ declare module DevExpress.common {
     | 'dxAutocomplete'
     | 'dxButton'
     | 'dxCheckBox'
+    | 'dxSwitch'
     | 'dxDateBox'
     | 'dxMenu'
     | 'dxSelectBox'
