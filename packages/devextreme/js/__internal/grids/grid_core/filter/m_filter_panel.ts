@@ -8,7 +8,7 @@ import CheckBox from '@js/ui/check_box';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
-} from '@js/ui/filter_builder/utils';
+} from '@ts/filter_builder/m_utils';
 
 import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';

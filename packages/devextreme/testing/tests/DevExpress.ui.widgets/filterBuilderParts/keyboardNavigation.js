@@ -2,7 +2,7 @@ import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fields from '../../../helpers/filterBuilderTestData.js';
 
-import 'ui/filter_builder/filter_builder';
+import '__internal/filter_builder/m_filter_builder';
 
 import {
     FILTER_BUILDER_ITEM_OPERATION_CLASS,

@@ -1,12 +1,12 @@
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
+import filterUtils from '@js/ui/shared/filtering';
+import errors from '@js/ui/widget/ui.errors';
 import {
   addItem, filterHasField,
   getDefaultOperation, getFilterExpression, getMatchedConditions, getNormalizedFilter,
   removeFieldConditionsFromFilter, syncFilters,
-} from '@js/ui/filter_builder/utils';
-import filterUtils from '@js/ui/shared/filtering';
-import errors from '@js/ui/widget/ui.errors';
+} from '@ts/filter_builder/m_utils';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
