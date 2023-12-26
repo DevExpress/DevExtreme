@@ -349,6 +349,46 @@ QUnit.test('SelectAll checkBox should delect all values on enter key when all it
     assert.deepEqual(selectAllValue, false, 'all items deselected');
 });
 
+['click', 'enter'].forEach((scenario) => {
+    [
+        {
+            initialValue: undefined,
+            newValue: true,
+            items: [{ text: 'item1' }, { text: 'item2', selected: true }],
+        },
+        {
+            initialValue: false,
+            newValue: true,
+            items: [{ text: 'item1' }, { text: 'item2' }],
+        },
+        {
+            initialValue: true,
+            newValue: false,
+            items: [{ text: 'item1', selected: true }, { text: 'item2', selected: true }],
+        },
+    ].forEach(({ initialValue, newValue, items }) => {
+        QUnit.test(`Select all checkbox should change value from ${initialValue} to ${newValue} on ${scenario}`, function(assert) {
+            const wrapper = new TreeViewTestWrapper({
+                showCheckBoxesMode: 'selectAll',
+                focusStateEnabled: true,
+                items,
+            });
+            const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+            const selectAll = $selectAll.dxCheckBox('instance');
+
+            assert.strictEqual(selectAll.option('value'), initialValue, `initital value is ${initialValue}`);
+
+            if(scenario === 'click') {
+                $selectAll.trigger('dxclick');
+            } else {
+                $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+            }
+
+            assert.strictEqual(selectAll.option('value'), newValue, `new value is ${initialValue}`);
+        });
+    });
+});
+
 QUnit.test('SelectAll checkBox should have the same focusStateEnabled as treeView', function(assert) {
     const wrapper = new TreeViewTestWrapper({
         showCheckBoxesMode: 'selectAll',
