@@ -9,6 +9,7 @@ import {
   isPopupFullScreenNeeded,
 } from '@js/renovation/ui/scheduler/appointment_edit_form/popup_config';
 import Popup from '@js/ui/popup/ui.popup';
+import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
@@ -222,13 +223,12 @@ export class AppointmentPopup {
   }
 
   updatePopupFullScreenMode() {
-    if (this.form.dxForm) { // TODO
+    if (this.form.dxForm && this.visible) { // TODO
       const { formData } = this.form;
-      const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
+      const dataAccessors = this.scheduler.getDataAccessors();
+      const isRecurrence = ExpressionUtils.getField(dataAccessors, 'recurrenceRule', formData);
 
-      if (this.visible) {
-        this.changeSize(isRecurrence);
-      }
+      this.changeSize(isRecurrence);
     }
   }
 
