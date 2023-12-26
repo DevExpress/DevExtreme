@@ -75,10 +75,24 @@ const OPERATORS = {
 
 const EditorFactory = Class.inherit(EditorFactoryMixin);
 
-// @ts-expect-error Widged is badly typed
-const FilterBuilder = Widget.inherit({
+class FilterBuilder extends Widget<any> {
+  _disableInvalidateForValue!: boolean;
+
+  _model!: any;
+
+  _customOperations!: any;
+
+  _editorFactory!: any;
+
+  _actions!: any;
+
+  _documentKeyUpHandler!: any;
+
+  _documentClickHandler!: any;
+
   _getDefaultOptions() {
-    return extend(this.callBase(), {
+    // @ts-expect-error
+    return extend(super._getDefaultOptions(), {
       onEditorPreparing: null,
 
       onEditorPrepared: null,
@@ -122,7 +136,7 @@ const FilterBuilder = Widget.inherit({
         isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
       },
     });
-  },
+  }
 
   _optionChanged(args) {
     switch (args.name) {
@@ -161,19 +175,20 @@ const FilterBuilder = Widget.inherit({
         }
         break;
       default:
-        this.callBase(args);
+        // @ts-expect-error
+        super._optionChanged(args);
     }
-  },
+  }
 
   getFilterExpression() {
     const fields = this._getNormalizedFields();
     const value = extend(true, [], this._model);
     return getFilterExpression(getNormalizedFilter(value), fields, this._customOperations, SOURCE);
-  },
+  }
 
   _getNormalizedFields() {
     return getNormalizedFields(this.option('fields'));
-  },
+  }
 
   _updateFilter() {
     this._disableInvalidateForValue = true;
@@ -184,36 +199,38 @@ const FilterBuilder = Widget.inherit({
       this.option('value', normalizedValue);
     }
     this._disableInvalidateForValue = false;
+    // @ts-expect-error
     this._fireContentReadyAction();
-  },
+  }
 
   _init() {
     this._initCustomOperations();
     this._initModel();
     this._initEditorFactory();
     this._initActions();
-    this.callBase();
-  },
+    // @ts-expect-error
+    super._init();
+  }
 
   _initEditorFactory() {
     this._editorFactory = new EditorFactory();
-  },
+  }
 
   _initCustomOperations() {
     this._customOperations = getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
-  },
+  }
 
   _getDefaultGroupOperation() {
     return this.option('groupOperations')?.[0] ?? OPERATORS.and;
-  },
+  }
 
   _getModel(value) {
     return convertToInnerStructure(value, this._customOperations, this._getDefaultGroupOperation());
-  },
+  }
 
   _initModel() {
     this._model = this._getModel(this.option('value'));
-  },
+  }
 
   _initActions() {
     const that = this;
@@ -222,30 +239,33 @@ const FilterBuilder = Widget.inherit({
 
     ACTIONS.forEach((action) => {
       const actionConfig = extend({}, action.config);
+      // @ts-expect-error
       that._actions[action.name] = that._createActionByOption(action.name, actionConfig);
     });
-  },
+  }
 
   executeAction(actionName, options) {
     const action = this._actions[actionName];
 
     return action && action(options);
-  },
+  }
 
   _initMarkup() {
+    // @ts-expect-error
     this.$element().addClass(FILTER_BUILDER_CLASS);
-    this.callBase();
+    // @ts-expect-error
+    super._initMarkup();
     this._createGroupElementByCriteria(this._model)
       .appendTo(this.$element());
-  },
+  }
 
   _createConditionElement(condition, parent) {
     return $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
       .append(this._createConditionItem(condition, parent));
-  },
+  }
 
-  _createGroupElementByCriteria(criteria, parent, groupLevel = 0) {
+  _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
     const $group = this._createGroupElement(criteria, parent, groupLevel);
     const $groupContent = $group.find(`.${FILTER_BUILDER_GROUP_CONTENT_CLASS}`);
     const groupCriteria = getGroupCriteria(criteria);
@@ -261,7 +281,7 @@ const FilterBuilder = Widget.inherit({
       }
     }
     return $group;
-  },
+  }
 
   _createGroupElement(criteria, parent, groupLevel) {
     const $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
@@ -293,11 +313,11 @@ const FilterBuilder = Widget.inherit({
     }, groupLevel).appendTo($groupItem);
 
     return $group;
-  },
+  }
 
-  _createButton(caption) {
+  _createButton(caption?) {
     return $('<div>').text(caption);
-  },
+  }
 
   _createGroupOperationButton(criteria) {
     const groupOperations = this._getGroupOperations(criteria);
@@ -328,13 +348,16 @@ const FilterBuilder = Widget.inherit({
     return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
       .attr('tabindex', 0);
-  },
+  }
 
   _createButtonWithMenu(options) {
     const that = this;
     const removeMenu = function () {
+      // @ts-expect-error
       that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS);
+      // @ts-expect-error
       that.$element().find('.dx-overlay .dx-treeview').remove();
+      // @ts-expect-error
       that.$element().find('.dx-overlay').remove();
     };
     const rtlEnabled = this.option('rtlEnabled');
@@ -394,14 +417,14 @@ const FilterBuilder = Widget.inherit({
       $button.addClass(ACTIVE_CLASS);
     });
     return $button;
-  },
+  }
 
   _hasValueButton(condition) {
     const customOperation = getCustomOperation(this._customOperations, condition[1]);
     return customOperation
       ? customOperation.hasValue !== false
       : condition[2] !== null;
-  },
+  }
 
   _createOperationButtonWithMenu(condition, field) {
     const that = this;
@@ -425,10 +448,12 @@ const FilterBuilder = Widget.inherit({
             const $valueButton = $operationButton.siblings().filter(`.${FILTER_BUILDER_ITEM_VALUE_CLASS}`);
             if (that._hasValueButton(condition)) {
               if ($valueButton.length !== 0) {
+                // @ts-expect-error
                 $valueButton.remove();
               }
               that._createValueButton(condition, field).appendTo($operationButton.parent());
             } else {
+              // @ts-expect-error
               $valueButton.remove();
             }
             $operationButton.html(currentOperation.text);
@@ -442,7 +467,7 @@ const FilterBuilder = Widget.inherit({
       .attr('tabindex', 0);
 
     return $operationButton;
-  },
+  }
 
   _createOperationAndValueButtons(condition, field, $item) {
     this._createOperationButtonWithMenu(condition, field)
@@ -452,7 +477,7 @@ const FilterBuilder = Widget.inherit({
       this._createValueButton(condition, field)
         .appendTo($item);
     }
-  },
+  }
 
   _createFieldButtonWithMenu(fields, condition, field) {
     const that = this;
@@ -477,6 +502,7 @@ const FilterBuilder = Widget.inherit({
             condition[0] = item.name || item.dataField;
             condition[2] = item.dataType === 'object' ? null : '';
             updateConditionByOperation(condition, getDefaultOperation(item), that._customOperations);
+            // @ts-expect-error
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
             that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
@@ -495,7 +521,7 @@ const FilterBuilder = Widget.inherit({
       .attr('tabindex', 0);
 
     return $fieldButton;
-  },
+  }
 
   _createConditionItem(condition, parent) {
     const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
@@ -517,7 +543,7 @@ const FilterBuilder = Widget.inherit({
     this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
     this._createOperationAndValueButtons(condition, field, $item);
     return $item;
-  },
+  }
 
   _getGroupOperations(criteria) {
     let groupOperations = this.option('groupOperations');
@@ -531,7 +557,7 @@ const FilterBuilder = Widget.inherit({
       text: groupOperationDescriptions[operation],
       value: OPERATORS[operation],
     }));
-  },
+  }
 
   _createRemoveButton(handler) {
     const $removeButton = $('<div>')
@@ -541,7 +567,7 @@ const FilterBuilder = Widget.inherit({
       .attr('tabindex', 0);
     this._subscribeOnClickAndEnterKey($removeButton, handler);
     return $removeButton;
-  },
+  }
 
   _createAddButton(addGroupHandler, addConditionHandler, groupLevel) {
     let $button;
@@ -571,7 +597,7 @@ const FilterBuilder = Widget.inherit({
       .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
       .addClass(FILTER_BUILDER_ACTION_CLASS)
       .attr('tabindex', 0);
-  },
+  }
 
   _createValueText(item, field, $container) {
     const that = this;
@@ -601,7 +627,7 @@ const FilterBuilder = Widget.inherit({
     });
 
     return $text;
-  },
+  }
 
   _updateConditionValue(item, value, callback) {
     const areValuesDifferent = item[2] !== value;
@@ -610,7 +636,7 @@ const FilterBuilder = Widget.inherit({
     }
     callback();
     this._updateFilter();
-  },
+  }
 
   _addDocumentKeyUp($editor, handler) {
     let isComposing = false; // IME Composing going on
@@ -647,7 +673,7 @@ const FilterBuilder = Widget.inherit({
     });
 
     this._documentKeyUpHandler = documentKeyUpHandler;
-  },
+  }
 
   _addDocumentClick($editor, closeEditorFunc) {
     const document = domAdapter.getDocument();
@@ -661,24 +687,25 @@ const FilterBuilder = Widget.inherit({
     eventsEngine.on(document, 'dxpointerdown', documentClickHandler);
 
     this._documentClickHandler = documentClickHandler;
-  },
+  }
 
-  _isFocusOnEditorParts($editor, target) {
+  _isFocusOnEditorParts($editor, target?) {
     const activeElement = target || domAdapter.getActiveElement();
     return $(activeElement).closest($editor.children()).length
             || $(activeElement).closest('.dx-dropdowneditor-overlay').length;
-  },
+  }
 
   _removeEvents() {
     const document = domAdapter.getDocument();
     isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, 'keyup', this._documentKeyUpHandler);
     isDefined(this._documentClickHandler) && eventsEngine.off(document, 'dxpointerdown', this._documentClickHandler);
-  },
+  }
 
   _dispose() {
     this._removeEvents();
-    this.callBase();
-  },
+    // @ts-expect-error
+    super._dispose();
+  }
 
   _createValueEditorWithEvents(item, field, $container) {
     let value = item[2];
@@ -738,8 +765,9 @@ const FilterBuilder = Widget.inherit({
         });
       }
     });
+    // @ts-expect-error
     this._fireContentReadyAction();
-  },
+  }
 
   _createValueButton(item, field) {
     const $valueButton = $('<div>')
@@ -748,7 +776,7 @@ const FilterBuilder = Widget.inherit({
 
     this._createValueText(item, field, $valueButton);
     return $valueButton;
-  },
+  }
 
   _createValueEditor($container, field, options) {
     const $editor = $('<div>').attr('tabindex', 0).appendTo($container);
@@ -768,12 +796,13 @@ const FilterBuilder = Widget.inherit({
       }));
     }
     return $editor;
-  },
+  }
 
   _createPopupWithTreeView(options, $container) {
     const that = this;
     const $popup = $('<div>')
       .addClass(options.menu.cssClass).appendTo($container);
+    // @ts-expect-error
     this._createComponent($popup, Popup, {
       onHiding: options.menu.onHiding,
       onHidden: options.menu.onHidden,
@@ -782,6 +811,7 @@ const FilterBuilder = Widget.inherit({
       animation: options.menu.animation,
       contentTemplate(contentElement) {
         const $menuContainer = $('<div>').appendTo(contentElement);
+        // @ts-expect-error
         that._createComponent($menuContainer, TreeView, options.menu);
         // T852701
         this.repaint();
@@ -801,7 +831,7 @@ const FilterBuilder = Widget.inherit({
       showTitle: false,
       _wrapperClassExternal: options.menu.cssClass,
     });
-  },
+  }
 
   _subscribeOnClickAndEnterKey($button, handler) {
     eventsEngine.on($button, 'dxclick', handler);
@@ -810,8 +840,8 @@ const FilterBuilder = Widget.inherit({
         handler(e);
       }
     });
-  },
-});
+  }
+}
 
 registerComponent('dxFilterBuilder', FilterBuilder);
 
