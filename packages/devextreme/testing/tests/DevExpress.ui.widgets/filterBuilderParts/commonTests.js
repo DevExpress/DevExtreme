@@ -5,7 +5,7 @@ import config from 'core/config';
 import renderer from 'core/renderer';
 import fields from '../../../helpers/filterBuilderTestData.js';
 
-import 'ui/filter_builder/filter_builder';
+import '__internal/filter_builder/m_filter_builder';
 import 'ui/drop_down_box';
 import 'ui/button';
 
