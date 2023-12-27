@@ -1,6 +1,6 @@
 /* eslint-disable no-multi-str */
 import { ClientFunction } from 'testcafe';
-import { isMaterial } from '../../../helpers/themeUtils';
+import { isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
@@ -17,7 +17,7 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 fixture`Popup scrolling`
   .page(url(__dirname, '../../container.html'));
 
-if (!isMaterial()) {
+if (!isMaterialBased()) {
   [false, true].forEach((shading) => {
     [false, true].forEach((enableBodyScroll) => {
       [false, true].forEach((fullScreen) => {
