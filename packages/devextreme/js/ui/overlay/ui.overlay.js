@@ -920,7 +920,8 @@ const Overlay = Widget.inherit({
             onPositioned: this._actions.onPositioned,
             onVisualPositionChanged: this._actions.onVisualPositionChanged,
             restorePosition,
-            _fixWrapperPosition
+            _fixWrapperPosition,
+            _skipContentPositioning: undefined
         };
     },
 
