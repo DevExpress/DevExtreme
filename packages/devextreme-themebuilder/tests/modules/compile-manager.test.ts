@@ -52,6 +52,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
   font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  border-radius: 10px;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -70,6 +71,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  border-radius: 10px;
   color: #337ab7;
   background-image: url(base-path/icons/icons.woff2);
 }
@@ -103,6 +105,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  border-radius: 10px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -129,6 +132,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: sans-serif;
+  border-radius: 10px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -153,6 +157,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+  border-radius: 10px;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
