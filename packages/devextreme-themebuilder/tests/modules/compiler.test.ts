@@ -40,7 +40,7 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with one base and one accordion items modified', async () => {
+  test('Compile with base and accordion items modified', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
@@ -52,6 +52,7 @@ describe('compile', () => {
       loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
+      console.log('---------->', data.result.css.toString());
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   font-family: "Segoe UI", helvetica, verdana, sans-serif;
   border-radius: 4px;
