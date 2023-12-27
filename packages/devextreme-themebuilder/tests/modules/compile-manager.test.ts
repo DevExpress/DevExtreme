@@ -130,12 +130,11 @@ describe('Compile manager - integration test on test sass', () => {
     return manager.compile({
       isBootstrap: true,
       bootstrapVersion: 4,
-      data: '$primary: red;$font-family-sans-serif: sans-serif;',
+      data: '$primary: red;$font-family-sans-serif: sans-serif;$border-radius: 3.3px;',
     }).then((result) => {
-      console.log('---------->', result.css.toString());
       expect(result.css).toBe(`.dx-accordion {
   font-family: sans-serif;
-  border-radius: 10.1px;
+  border-radius: 3.3px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -145,7 +144,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-border-radius': '10.1px',
+        '$base-border-radius': '3.3px',
         '$base-font-family': 'sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
