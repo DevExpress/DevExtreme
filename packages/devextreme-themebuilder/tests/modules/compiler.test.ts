@@ -45,7 +45,7 @@ describe('compile', () => {
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
       { key: '$base-font-family', value: '"Segoe UI", helvetica, verdana, sans-serif' },
-      { key: '$base-border-radius', value: '4px' },
+      { key: '$base-border-radius', value: '4.4px' },
       { key: '$base-accent', value: 'red' },
       { key: '$accordion-item-title-opened-bg', value: 'green' },
     ], {
@@ -54,7 +54,7 @@ describe('compile', () => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   font-family: "Segoe UI", helvetica, verdana, sans-serif;
-  border-radius: 4px;
+  border-radius: 4.4px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -65,7 +65,7 @@ describe('compile', () => {
       // collected variables
       expect(data.changedVariables).toEqual({
         '$base-font-family': '"Segoe UI", helvetica, verdana, sans-serif',
-        '$base-border-radius': '4px',
+        '$base-border-radius': '4.4px',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': '#008000',

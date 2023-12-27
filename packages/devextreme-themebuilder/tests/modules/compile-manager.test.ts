@@ -52,7 +52,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
   font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
-  border-radius: 10px;
+  border-radius: 10.1px;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -71,7 +71,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
-  border-radius: 10px;
+  border-radius: 10.1px;
   color: #337ab7;
   background-image: url(base-path/icons/icons.woff2);
 }
@@ -90,7 +90,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        '$base-border-radius': '10px',
+        '$base-border-radius': '10.1px',
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#337ab7',
       });
@@ -106,7 +106,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
-  border-radius: 10px;
+  border-radius: 10.1px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -116,7 +116,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-border-radius': '10px',
+        '$base-border-radius': '10.1px',
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
@@ -135,7 +135,7 @@ describe('Compile manager - integration test on test sass', () => {
       console.log('---------->', result.css.toString());
       expect(result.css).toBe(`.dx-accordion {
   font-family: sans-serif;
-  border-radius: 10px;
+  border-radius: 10.1px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -145,7 +145,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-border-radius': '10px',
+        '$base-border-radius': '10.1px',
         '$base-font-family': 'sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
@@ -161,7 +161,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
   font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
-  border-radius: 10px;
+  border-radius: 10.1px;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
