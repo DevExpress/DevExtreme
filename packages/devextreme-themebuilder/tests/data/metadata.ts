@@ -1,6 +1,9 @@
 export const metadata: ThemesMetadata = {
   generic: [
     {
+      Key: '$base-border-radius', Name: '', Type: 'text',
+    },
+    {
       Key: '$base-font-family', Name: '', Type: 'text',
     },
     {
