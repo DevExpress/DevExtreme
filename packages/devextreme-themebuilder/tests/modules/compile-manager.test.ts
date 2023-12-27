@@ -90,6 +90,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
+        '$base-border-radius': '10px',
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#337ab7',
       });
@@ -115,6 +116,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
+        '$base-border-radius': '10px',
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
@@ -142,6 +144,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
+        '$base-border-radius': '10px',
         '$base-font-family': 'sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
