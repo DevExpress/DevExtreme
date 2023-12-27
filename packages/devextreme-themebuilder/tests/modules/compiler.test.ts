@@ -21,12 +21,12 @@ describe('compile', () => {
   test('Compile with empty modifications (check that items can be undefined)', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
-    return compiler.compile(file, null, {
+    return compiler.compile(file, [], {
       loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+  font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -43,6 +43,7 @@ describe('compile', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
+      { key: '$base-font-family', value: '"Segoe UI", helvetica, verdana, sans-serif' },
       { key: '$base-accent', value: 'red' },
       { key: '$accordion-item-title-opened-bg', value: 'green' },
     ], {
@@ -50,7 +51,7 @@ describe('compile', () => {
     }).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+  font-family: "Segoe UI", helvetica, verdana, sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -60,7 +61,7 @@ describe('compile', () => {
 }`);
       // collected variables
       expect(data.changedVariables).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
+        '$base-font-family': '"Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': '#008000',
@@ -94,7 +95,7 @@ describe('compile', () => {
     ).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(
-        '.dx-accordion{background-color:'
+        '.dx-accordion{font-family:'
         + '"Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;'
         + 'color:#337ab7;background-image:url(icons/icons.woff2)}.dx-accordion '
         + '.from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
