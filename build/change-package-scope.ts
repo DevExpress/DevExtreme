@@ -13,6 +13,7 @@ const args = yargs.strict().version(false).help(false)
   .parseSync();
 
 sh.set('-e');
+sh.config.silent = true;
 
 const dirName = path.basename(args.tgz).replace(/\.tgz$/, '');
 ensureEmptyDir(dirName);
@@ -51,3 +52,5 @@ if(newDirName) {
   }
   fs.renameSync(dirName, newDirName);
 }
+
+console.log(newDirName ?? dirName); // return value, used in GA
