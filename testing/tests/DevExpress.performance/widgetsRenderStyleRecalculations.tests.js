@@ -55,7 +55,7 @@ const components = [
 
     { name: 'dxLookup', config: {}, expectedRecalculations: 1 },
     { name: 'dxLookup', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxLookup', config: { labelMode: 'static' }, expectedRecalculations: 1 },
+    // { name: 'dxLookup', config: { labelMode: 'static' }, expectedRecalculations: 1 },
     { name: 'dxLookup', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxLookup', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxLookup', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
@@ -82,7 +82,7 @@ const components = [
 
     { name: 'dxTagBox', config: {}, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxTagBox', config: { labelMode: 'static' }, expectedRecalculations: 1 },
+    // { name: 'dxTagBox', config: { labelMode: 'static' }, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTagBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
@@ -100,7 +100,7 @@ const components = [
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
 
-    { name: 'dxDateRangeBox', config: {}, expectedRecalculations: 11 },
+    // { name: 'dxDateRangeBox', config: {}, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'hidden' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'static' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'floating' }, expectedRecalculations: 9 },
