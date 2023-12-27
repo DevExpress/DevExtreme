@@ -908,7 +908,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { container, visualContainer, _fixWrapperPosition, restorePosition } = this.option();
+        const { container, visualContainer, _fixWrapperPosition, restorePosition, _skipContentPositioning } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
@@ -921,7 +921,7 @@ const Overlay = Widget.inherit({
             onVisualPositionChanged: this._actions.onVisualPositionChanged,
             restorePosition,
             _fixWrapperPosition,
-            _skipContentPositioning: undefined
+            _skipContentPositioning
         };
     },
 
