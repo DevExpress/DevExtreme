@@ -1790,15 +1790,15 @@ declare module DevExpress.common {
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
     | 'dxButton'
+    | 'dxButtonGroup'
     | 'dxCheckBox'
-    | 'dxSwitch'
     | 'dxDateBox'
+    | 'dxDropDownButton'
     | 'dxMenu'
     | 'dxSelectBox'
+    | 'dxSwitch'
     | 'dxTabs'
-    | 'dxTextBox'
-    | 'dxButtonGroup'
-    | 'dxDropDownButton';
+    | 'dxTextBox';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationCallbackData = {
