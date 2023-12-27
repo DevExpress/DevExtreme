@@ -1,5 +1,5 @@
 $base-font-family: getCustomVar(("$base-font-family")) !default;
-$base-border-radius: getCustomVar(($base-border-radius)) !default;
+$base-border-radius: getCustomVar(("$base-border-radius")) !default;
 $base-accent: getCustomVar(("$base-accent")) !default;
 
 @use "sass:color";
