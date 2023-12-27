@@ -52,7 +52,6 @@ describe('compile', () => {
       loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
-      console.log('---------->', data.result.css.toString());
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   font-family: "Segoe UI", helvetica, verdana, sans-serif;
   border-radius: 4px;

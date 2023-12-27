@@ -132,6 +132,7 @@ describe('Compile manager - integration test on test sass', () => {
       bootstrapVersion: 4,
       data: '$primary: red;$font-family-sans-serif: sans-serif;',
     }).then((result) => {
+      console.log('---------->', result.css.toString());
       expect(result.css).toBe(`.dx-accordion {
   font-family: sans-serif;
   border-radius: 10px;
