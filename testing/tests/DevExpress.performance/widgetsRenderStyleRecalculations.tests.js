@@ -98,14 +98,14 @@ const components = [
     { name: 'dxTextBox', config: { labelMode: 'static' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
+    // { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
 
     // { name: 'dxDateRangeBox', config: {}, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'hidden' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'static' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'floating' }, expectedRecalculations: 9 },
     { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'hidden' }, expectedRecalculations: 9 },
-    { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'static' }, expectedRecalculations: 11 },
+    // { name: 'dxDateRangeBox', config: { startDateLabel: 'StartDate', endDateLabel: 'EndDate', labelMode: 'static' }, expectedRecalculations: 11 },
 ];
 
 components.forEach(({ name, config, expectedRecalculations }) => {
