@@ -18,7 +18,7 @@ export function scheduleGuards(): void {
   unscheduleGuards();
   guardTimeoutHandler = window.setTimeout(() => {
     internalGuardTimeoutHandler = window.setTimeout(() => {
-      optionsManagers.forEach((optionManager) => optionManager.execGuards())
+      optionsManagers.forEach((optionManager) => optionManager.execGuards());
     });
   });
 }
