@@ -747,7 +747,7 @@ export interface SeriesLabel {
  * @docid
  * @type object
  * @inherits BaseLegendItem
- * @namespace DevExpress.common.charts
+ * @namespace DevExpress.viz
  */
 export interface LegendItem extends BaseLegendItem {
   /**

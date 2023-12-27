@@ -26,7 +26,7 @@ import {
 } from '../chart';
 
 import {
-  BaseLegend,
+    BaseLegend,
 } from '../common';
 
 import BaseWidget, {
@@ -366,11 +366,6 @@ export class BaseChart<TProperties> extends BaseWidget<TProperties> {
      */
     render(renderOptions: any): void;
 }
-
-/**
- * @deprecated Use LegendItem from common/charts instead
- */
-export type BaseChartLegendItem = LegendItem;
 
 /**
  * @docid

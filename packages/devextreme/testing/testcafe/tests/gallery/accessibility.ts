@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-syntax */
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
+import { a11yCheck } from '../../helpers/accessibilityUtils';
 
-fixture`Gallery`
+fixture.disablePageReloads`Gallery`
   .page(url(__dirname, '../../container.html'));
 
 interface GalleryItem {
@@ -86,13 +86,7 @@ const settingsCombinations = generateCombinations(allGallerySettings);
 settingsCombinations.forEach((settings) => {
   const testName = getTestName(settings);
   test(testName, async (t) => {
-    const a11yCheckConfig = {
-      rules: {
-        'image-alt': { enabled: false },
-      },
-    };
-
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t);
   }).before(async () => createWidget(
     'dxGallery',
     settings,

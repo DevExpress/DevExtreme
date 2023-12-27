@@ -11,7 +11,7 @@ import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEv
 import type { Font as ChartsFont } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/store";
+import type { Store } from "devextreme/data/abstract_store";
 
 import type DataSource from "devextreme/data/data_source";
 

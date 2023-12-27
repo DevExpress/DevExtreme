@@ -1796,15 +1796,14 @@ declare module DevExpress.common {
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
     | 'dxButton'
-    | 'dxButtonGroup'
     | 'dxCheckBox'
     | 'dxDateBox'
-    | 'dxDropDownButton'
     | 'dxMenu'
     | 'dxSelectBox'
-    | 'dxSwitch'
     | 'dxTabs'
-    | 'dxTextBox';
+    | 'dxTextBox'
+    | 'dxButtonGroup'
+    | 'dxDropDownButton';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationCallbackData = {
@@ -2128,15 +2127,6 @@ declare module DevExpress.common.charts {
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
-  /**
-   * [descr:LegendItem]
-   */
-  export interface LegendItem extends BaseLegendItem {
-    /**
-     * [descr:LegendItem.series]
-     */
-    series?: DevExpress.viz.baseSeriesObject;
-  }
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
   export type Palette =
     | 'Bright'
@@ -5016,6 +5006,7 @@ declare module DevExpress.data {
      * [descr:Store.load()]
      */
     load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+
     /**
      * [descr:Store.load(options)]
      */
@@ -5027,20 +5018,22 @@ declare module DevExpress.data {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export type Options<TItem = any, TKey = any> = AbstractStoreOptions<
-      TItem,
-      TKey
-    >;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  interface AbstractStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    type EventName =
+      | 'loaded'
+      | 'loading'
+      | 'inserted'
+      | 'inserting'
+      | 'updated'
+      | 'updating'
+      | 'push'
+      | 'removed'
+      | 'removing'
+      | 'modified'
+      | 'modifying';
     /**
-     * [descr:StoreOptions.onLoaded]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
+    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
   }
   /**
    * [descr:Utils.applyChanges(data, changes, options)]
@@ -5152,7 +5145,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -5180,13 +5173,6 @@ declare module DevExpress.data {
      * [descr:CustomStoreOptions.loadMode]
      */
     loadMode?: 'processed' | 'raw';
-    /**
-     * [descr:CustomStoreOptions.onLoaded]
-     */
-    onLoaded?: (
-      result: DevExpress.common.LoadResult<TItem>,
-      loadOptions: LoadOptions<TItem>
-    ) => void;
     /**
      * [descr:CustomStoreOptions.remove]
      */
@@ -5550,21 +5536,6 @@ declare module DevExpress.data {
    * @deprecated [depNote:Utils.errorHandler]
    */
   export function errorHandler(e: Error): void;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type EventName =
-    | 'loaded'
-    | 'loading'
-    | 'inserted'
-    | 'inserting'
-    | 'updated'
-    | 'updating'
-    | 'push'
-    | 'removed'
-    | 'removing'
-    | 'modified'
-    | 'modifying';
   /**
    * [descr:FilterDescriptor]
    */
@@ -5930,6 +5901,10 @@ declare module DevExpress.data {
       | 'Single'
       | 'Decimal'
       | any;
+    /**
+     * [descr:ODataStoreOptions.onLoading]
+     */
+    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -6491,7 +6466,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
-    constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
+    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
     /**
      * [descr:Store.insert(values)]
      */
@@ -6507,19 +6482,27 @@ declare module DevExpress.data {
     /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: EventName): this;
+    off(eventName: DevExpress.data.AbstractStore.EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
-    off(eventName: EventName, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.AbstractStore.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
-    on(eventName: EventName, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.AbstractStore.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(events: { [key in EventName]?: Function }): this;
+    on(
+      events: { [key in DevExpress.data.AbstractStore.EventName]?: Function }
+    ): this;
     /**
      * [descr:Store.push(changes)]
      */
@@ -6549,6 +6532,65 @@ declare module DevExpress.data {
       key: TKey,
       values: DevExpress.core.DeepPartial<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
+  }
+  /**
+   * [descr:StoreOptions]
+   * @deprecated [depNote:StoreOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface StoreOptions<TItem = any, TKey = any> {
+    /**
+     * [descr:StoreOptions.errorHandler]
+     */
+    errorHandler?: Function;
+    /**
+     * [descr:StoreOptions.key]
+     */
+    key?: string | Array<string>;
+    /**
+     * [descr:StoreOptions.onInserted]
+     */
+    onInserted?: (values: TItem, key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onInserting]
+     */
+    onInserting?: (values: TItem) => void;
+    /**
+     * [descr:StoreOptions.onLoaded]
+     */
+    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onLoading]
+     */
+    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onModified]
+     */
+    onModified?: Function;
+    /**
+     * [descr:StoreOptions.onModifying]
+     */
+    onModifying?: Function;
+    /**
+     * [descr:StoreOptions.onPush]
+     */
+    onPush?: (changes: Array<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onRemoved]
+     */
+    onRemoved?: (key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onRemoving]
+     */
+    onRemoving?: (key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onUpdated]
+     */
+    onUpdated?: (key: TKey, values: TItem) => void;
+    /**
+     * [descr:StoreOptions.onUpdating]
+     */
+    onUpdating?: (key: TKey, values: TItem) => void;
   }
   /**
    * [descr:SummaryDescriptor]
@@ -6599,62 +6641,6 @@ declare module DevExpress.data.PivotGridDataSource {
    * [descr:PivotGridDataSourceOptions.fields]
    */
   export type Field = PivotGridDataSourceField;
-}
-declare module DevExpress.data.Store {
-  /**
-   * [descr:StoreOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type Options<TItem = any, TKey = any> = {
-    /**
-     * [descr:StoreOptions.errorHandler]
-     */
-    errorHandler?: Function;
-    /**
-     * [descr:StoreOptions.key]
-     */
-    key?: string | Array<string>;
-    /**
-     * [descr:StoreOptions.onInserted]
-     */
-    onInserted?: (values: TItem, key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onInserting]
-     */
-    onInserting?: (values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onLoading]
-     */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onModified]
-     */
-    onModified?: Function;
-    /**
-     * [descr:StoreOptions.onModifying]
-     */
-    onModifying?: Function;
-    /**
-     * [descr:StoreOptions.onPush]
-     */
-    onPush?: (changes: Array<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onRemoved]
-     */
-    onRemoved?: (key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onRemoving]
-     */
-    onRemoving?: (key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onUpdated]
-     */
-    onUpdated?: (key: TKey, values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onUpdating]
-     */
-    onUpdating?: (key: TKey, values: TItem) => void;
-  };
 }
 declare module DevExpress.data.utils {
   /**
@@ -30606,16 +30592,14 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.legend.customizeItems]
      */
-    customizeItems?: (
-      items: Array<DevExpress.common.charts.LegendItem>
-    ) => Array<DevExpress.common.charts.LegendItem>;
+    customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
     /**
      * [descr:BaseChartOptions.legend.markerTemplate]
      */
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: DevExpress.common.charts.LegendItem,
+          legendItem: LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
   }
@@ -41840,6 +41824,15 @@ declare module DevExpress.viz {
    * [descr:viz.getTheme(theme)]
    */
   export function getTheme(theme: string): any;
+  /**
+   * [descr:LegendItem]
+   */
+  export interface LegendItem extends DevExpress.common.charts.BaseLegendItem {
+    /**
+     * [descr:LegendItem.series]
+     */
+    series?: baseSeriesObject;
+  }
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

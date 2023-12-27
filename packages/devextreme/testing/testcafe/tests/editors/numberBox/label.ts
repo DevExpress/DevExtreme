@@ -7,6 +7,7 @@ import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { clearTestPage } from '../../../helpers/clearPage';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
@@ -18,21 +19,19 @@ fixture.disablePageReloads`NumberBox_Label`
   .afterEach(async () => clearTestPage());
 
 stylingModes.forEach((stylingMode) => {
-  test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
+  safeSizeTest(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`);
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [300, 400]).before(async () => {
     const componentOption = {
       label: 'label text',
       stylingMode,
     };
-
-    await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
 
     await appendElementTo('#container', 'div', 'numberBox1', { });
     await appendElementTo('#container', 'div', 'numberBox2', { });

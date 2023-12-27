@@ -122,8 +122,6 @@ test('Form labels should have correct width after render in invisible container'
     const form = new Form('#form');
     const dateRangeBox = new DateRangeBox(`.${DATERANGEBOX_CLASS}`);
 
-    await t.wait(500);
-
     await form.validate();
 
     await testScreenshot(t, takeScreenshot, `The validation message overlay position ${validationMessagePosition} for DateRangeBox before opening.png`, {

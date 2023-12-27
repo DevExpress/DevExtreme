@@ -692,7 +692,6 @@ export const focusModule = {
           const that = this;
           const dateSerializationFormat = that.option('dateSerializationFormat');
           const isRemoteFiltering = that._dataSource.remoteOperations().filtering;
-          const isRemoteSorting = that._dataSource.remoteOperations().sorting;
 
           let filter = that._generateFilterByKey(key, '<');
           let sort = that._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
@@ -729,7 +728,7 @@ export const focusModule = {
                 const filterOperation = desc ? '>' : '<';
 
                 let sortFilter;
-                if (compare && !isRemoteSorting) {
+                if (compare) {
                   sortFilter = (data) => {
                     if (filterOperation === '<') {
                       return compare(rawValue, getter(data)) >= 1;

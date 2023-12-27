@@ -9,9 +9,9 @@ export type Options<
 > = LocalStoreOptions<TItem, TKey>;
 
 /**
- * @docid
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface LocalStoreOptions<
     TItem = any,
@@ -35,7 +35,6 @@ export interface LocalStoreOptions<
      */
     name?: string;
 }
-
 /**
  * @docid
  * @inherits ArrayStore

@@ -998,7 +998,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
 
       this._updateFocusedCellPosition($cell);
-    } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
+    } else {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
   }

@@ -2867,24 +2867,6 @@ QUnit.module('adaptivity: behavior', {
 
         assert.ok($button.is(':hidden'), 'adaptive mode should be disabled');
     });
-
-    QUnit.test('TreeView should be focused after click on hamburger button (T1207839)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
-
-        new Menu(this.$element, {
-            items: this.items,
-            adaptivityEnabled: true
-        });
-
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
-
-        $($button).trigger('dxclick');
-
-        assert.ok($treeview.hasClass(DX_STATE_FOCUSED_CLASS), 'treeview is focused');
-    });
 });
 
 

@@ -359,13 +359,6 @@ testModule('render', moduleConfig, () => {
         }
     });
 
-    test('Overlay content should have overflow clip style', function(assert) {
-        const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
-        const contentOverflowStyle = $(overlay.content()).css('overflow');
-
-        assert.strictEqual(contentOverflowStyle, 'clip');
-    });
-
     QUnit.module('Breaking change t1123711 - warning W1021', () => {
         test('should be logged if container is invalid', function(assert) {
             sinon.spy(uiErrors, 'log');

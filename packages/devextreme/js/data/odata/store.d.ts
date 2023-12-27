@@ -1,5 +1,6 @@
 import { DxPromise } from '../../core/utils/deferred';
 import Store, { Options as StoreOptions } from '../abstract_store';
+import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context';
 
@@ -10,9 +11,9 @@ export type Options<
 > = ODataStoreOptions<TItem, TKey>;
 
 /**
- * @docid
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface ODataStoreOptions<
     TItem = any,
@@ -65,6 +66,13 @@ export interface ODataStoreOptions<
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid
+     * @type_function_param1 loadOptions:LoadOptions
+     * @action
+     * @public
+     */
+    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
+    /**
+     * @docid
      * @public
      */
     url?: string;
@@ -82,7 +90,6 @@ export interface ODataStoreOptions<
      */
     withCredentials?: boolean;
 }
-
 /**
  * @docid
  * @inherits Store
