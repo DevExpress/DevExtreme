@@ -11,9 +11,9 @@ export type Options<
 > = ArrayStoreOptions<TItem, TKey>;
 
 /**
+ * @docid
  * @namespace DevExpress.data
  * @deprecated Use Options instead
- * @docid
  */
 export interface ArrayStoreOptions<
     TItem = any,
@@ -25,6 +25,7 @@ export interface ArrayStoreOptions<
      */
     data?: Array<TItem>;
 }
+
 /**
  * @docid
  * @inherits Store

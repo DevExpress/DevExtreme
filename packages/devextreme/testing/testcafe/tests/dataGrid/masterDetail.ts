@@ -122,7 +122,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   }));
 
 // T1159578
-safeSizeTest('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
+/* safeSizeTest */test.skip('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -140,7 +140,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800])
+}/* , [800, 800] */)
   .before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',

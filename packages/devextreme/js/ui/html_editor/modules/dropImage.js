@@ -46,18 +46,13 @@ if(Quill) {
 
             if(!isHtmlData && hasDataItems) {
                 this._getImage(clipboardData.items, (imageData) => {
-                    if(this._isBrowserSupportImagePaste(browser)) {
+                    if(browser.mozilla) {
                         return;
                     }
 
                     this._addImage(imageData);
                 });
             }
-        }
-
-        _isBrowserSupportImagePaste({ mozilla, chrome, version }) {
-            return mozilla ||
-                chrome && version > 82; // T894297
         }
 
         _isImage(file) {
