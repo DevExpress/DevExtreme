@@ -95,9 +95,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
                     popup.show();
                 };
 
-                const expectedRecalculationsCount = enableBodyScroll
-                    ? shading ? 16 : 15
-                    : 17;
+                const expectedRecalculationsCount = shading ? 16 : 15;
 
                 assert.measureStyleRecalculation(measureFunction, expectedRecalculationsCount);
             } finally {
