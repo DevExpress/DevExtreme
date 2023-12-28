@@ -25,6 +25,12 @@ $overlay-shader-bg: null !default;
 */
 $overlay-content-border-radius: $base-border-radius-large !default;
 
+/**
+* $name 40. Focus border color
+* $type color
+*/
+$overlay-focus-border-color: $base-border-color !default;
+
 @if $color == "carmine" {
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
