@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
+@use "../dropDownEditor/colors" as *;
 @use "../color" as extcolor;
 
 // adduse
@@ -26,7 +27,7 @@ $numberbox-spin-container-border-radius: $base-border-radius !default;
 * $type color
 */
 $numberbox-spin-icon-color: $base-icon-color !default;
-
+$numberbox-spin-icon-border-radius: $dropdowneditor-icon-border-radius !default;
 
 @if $color == "carmine" {
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
