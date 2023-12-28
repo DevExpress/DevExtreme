@@ -1529,6 +1529,143 @@ QUnit.module('options changed callbacks', {
             assert.strictEqual(this.getBodyStyle('paddingRight'), '', 'body padding right style');
         });
 
+        QUnit.test('the styles for body overflow should not be changed if showing is prevented, enableBodyScroll is true', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: false,
+                onShowing(e) {
+                    e.cancel = true;
+                },
+                enableBodyScroll: true,
+            });
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            popup.show();
+
+            assert.strictEqual(popup.option('visible'), false, 'popup is hidden');
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+        });
+
+        QUnit.test('the styles for body overflow should not be changed if hiding is prevented, enableBodyScroll is true', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: true,
+                onHiding(e) {
+                    e.cancel = true;
+                },
+                enableBodyScroll: true,
+            });
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            popup.hide();
+
+            assert.strictEqual(popup.option('visible'), true, 'popup is visible');
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+        });
+
+        QUnit.test('the styles for body overflow should not be changed if showing is prevented, enableBodyScroll is false', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: false,
+                onShowing(e) {
+                    e.cancel = true;
+                },
+                enableBodyScroll: false,
+            });
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            popup.show();
+
+            assert.strictEqual(popup.option('visible'), false, 'popup is hidden');
+            assert.strictEqual(this.getBodyStyleAttr(), '', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), '', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), '', 'body padding right style');
+        });
+
+        QUnit.test('the styles for body overflow should not be changed if hiding is prevented, enableBodyScroll is false', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: true,
+                onHiding(e) {
+                    e.cancel = true;
+                },
+                enableBodyScroll: false,
+            });
+
+            assert.strictEqual(this.getBodyStyleAttr(), this.scrollbarWidth ? `padding-right: ${this.scrollbarWidth}px; overflow: hidden;` : 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
+
+            popup.hide();
+
+            assert.strictEqual(popup.option('visible'), true, 'popup is visible');
+            assert.strictEqual(this.getBodyStyleAttr(), this.scrollbarWidth ? `padding-right: ${this.scrollbarWidth}px; overflow: hidden;` : 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
+        });
+
+        QUnit.test('the styles for body overflow should not be changed if enableBodyScroll is changed in runtime when popup is hidden', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: false,
+                enableBodyScroll: true,
+            });
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            popup.option('enableBodyScroll', false);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+        });
+
+        QUnit.test('the styles for body overflow should be changed if enableBodyScroll is changed in runtime when popup is visible', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: true,
+                enableBodyScroll: false,
+            });
+
+            assert.strictEqual(popup.option('visible'), true, 'popup is visible');
+            assert.strictEqual(this.getBodyStyleAttr(), this.scrollbarWidth ? `padding-right: ${this.scrollbarWidth}px; overflow: hidden;` : 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
+
+            popup.option('enableBodyScroll', true);
+
+            assert.strictEqual(popup.option('visible'), true, 'popup is visible');
+            assert.strictEqual(this.getBodyStyleAttr(), '', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), '', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), '', 'body padding right style');
+
+            popup.option('enableBodyScroll', false);
+
+            assert.strictEqual(popup.option('visible'), true, 'popup is visible');
+            assert.strictEqual(this.getBodyStyleAttr(), this.scrollbarWidth ? `padding-right: ${this.scrollbarWidth}px; overflow: hidden;` : 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
+        });
+
         ['overflow', 'overflowX', 'overflowY'].forEach((overflow) => {
             QUnit.test(`body with ${overflow} inline style should have overflow styles after showing and restore them after hidden, enableBodyScroll is false`, function(assert) {
                 window.scrollTo(200, 200);
