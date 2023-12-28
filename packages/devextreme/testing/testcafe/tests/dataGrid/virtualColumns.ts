@@ -3,7 +3,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
+import DataGrid, { CLASS } from '../../model/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
@@ -134,61 +134,65 @@ test('The updateDimensions method should render the grid if a container was hidd
 });
 
 // T1176160
-test('The vertical scroll position should not be reset after horizontal scrolling when there is a fixed column and a master detail row', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((useNative) => {
+  test(`The vertical scroll position should not be reset after horizontal scrolling when there are a fixed column and a master detail row (useNative = ${useNative})`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(dataGrid.isReady()).ok();
+    await t.expect(dataGrid.isReady()).ok();
 
-  // act
-  await dataGrid.scrollTo(t, { y: 5000 });
+    await dataGrid.apiExpandRow(9);
 
-  // assert
-  await takeScreenshot('T1176160-master-detail-with-virtual-columns-1.png', dataGrid.element);
+    // assert
+    await t
+      .expect(dataGrid.getContainer().find(`.${CLASS.masterDetailRow}`).exists)
+      .ok();
 
-  // act
-  await dataGrid.scrollTo(t, { x: 1000 });
-  await dataGrid.scrollTo(t, { x: 2000 });
+    // act
+    await dataGrid.scrollTo(t, { y: 5000 });
 
-  // assert
-  await takeScreenshot('T1176160-master-detail-with-virtual-columns-2.png', dataGrid.element);
+    // assert
+    await takeScreenshot(`T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-1.png`, dataGrid.element);
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: generateData(10, 50).map((item, index) => ({ ...item, id: index })),
-  keyExpr: 'id',
-  width: 500,
-  height: 500,
-  columnWidth: 100,
-  scrolling: {
-    columnRenderingMode: 'virtual',
-    mode: 'virtual',
-    // @ts-expect-error private option
-    updateTimeout: 0,
-  },
-  customizeColumns(columns) {
-    columns[0].fixed = true;
-  },
-  masterDetail: {
-    enabled: true,
-    template() {
-      return ($('<div style=\'height: 300px;\'>') as any).text('details');
+    // act
+    await dataGrid.scrollTo(t, { x: 1000 });
+    await dataGrid.scrollTo(t, { x: 2000 });
+
+    // assert
+    await takeScreenshot(`T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-2.png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: generateData(10, 50).map((item, index) => ({ ...item, id: index })),
+    keyExpr: 'id',
+    width: 500,
+    height: 500,
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+      mode: 'virtual',
+      useNative,
     },
-  },
-  onContentReady(e) {
-    // @ts-expect-error flag for test
-    // eslint-disable-next-line no-underscore-dangle
-    if (!e.component.__initExpand) {
-      // @ts-expect-error flag for test
-      // eslint-disable-next-line no-underscore-dangle
-      e.component.__initExpand = true;
-      e.component.expandRow(9);
-    }
-  },
-}));
+    customizeColumns(columns) {
+      columns[0].fixed = true;
+    },
+    masterDetail: {
+      enabled: true,
+      template() {
+        return ($('<div style=\'height: 300px;\'>') as any).text('details');
+      },
+    },
+  })).after(async () => {
+    await ClientFunction(() => {
+      const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+      dataGrid?.dispose();
+    })();
+  });
+});
 
 // T1176161
 test('The markup should be correct after horizontal scrolling and collapse of the master detail row', async (t) => {
