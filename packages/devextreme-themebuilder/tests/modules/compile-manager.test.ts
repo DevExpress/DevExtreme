@@ -51,7 +51,7 @@ describe('Compile manager - integration test on test sass', () => {
       outColorScheme: 'test-theme',
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -69,7 +69,7 @@ describe('Compile manager - integration test on test sass', () => {
       assetsBasePath: 'base-path',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(base-path/icons/icons.woff2);
 }
@@ -102,7 +102,7 @@ describe('Compile manager - integration test on test sass', () => {
       data: '@brand-primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -128,7 +128,7 @@ describe('Compile manager - integration test on test sass', () => {
       data: '$primary: red;$font-family-sans-serif: sans-serif;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: sans-serif;
+  font-family: sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -152,7 +152,7 @@ describe('Compile manager - integration test on test sass', () => {
       noClean: true,
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+  font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }

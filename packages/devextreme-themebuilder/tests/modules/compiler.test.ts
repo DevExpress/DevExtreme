@@ -17,6 +17,20 @@ const defaultIndexFileContent = fs.readFileSync(indexFileName, 'utf8');
 const includePaths = [path.join(dataPath, 'scss', 'widgets', 'generic'), path.join(dataPath, 'scss', 'bundles')];
 const file = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
 
+const expectedCss = ({
+                       fontFamily = '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
+                       color = '#337ab7',
+                       bgColor = 'transparent'
+} = {}) => `.dx-accordion {
+  font-family: ${fontFamily};
+  color: ${color};
+  background-image: url(icons/icons.woff2);
+}
+.dx-accordion .from-base {
+  background-color: ${bgColor};
+  color: ${color};
+}`
+
 describe('compile', () => {
   test('Compile with empty modifications (check that items can be undefined)', async () => {
     const compiler = new Compiler();
@@ -25,21 +39,31 @@ describe('compile', () => {
       loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
-      expect(data.result.css.toString()).toBe(`.dx-accordion {
-  font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
-  color: #337ab7;
-  background-image: url(icons/icons.woff2);
-}
-.dx-accordion .from-base {
-  background-color: transparent;
-  color: #337ab7;
-}`);
+      expect(data.result.css.toString()).toBe(expectedCss());
       // collected variables
       expect(data.changedVariables).toEqual(noModificationsMeta);
     });
   });
 
-  test('Compile with one base and one accordion items modified', async () => {
+  test('Compile with base and one accordion items modified (wrong value)', async () => {
+    const compiler = new Compiler();
+    compiler.indexFileContent = defaultIndexFileContent;
+    return compiler.compile(file, [
+      { key: '$base-font-family', value: '' },
+    ], {
+      loadPaths: [...includePaths],
+    }).then((data) => {
+      // compiled css
+      expect(data.result.css.toString()).toBe(expectedCss({ fontFamily: '""' }));
+      // collected variables
+      expect(data.changedVariables).toEqual({
+        ...noModificationsMeta,
+        '$base-font-family': '""',
+      });
+    });
+  });
+
+  test('Compile with base and one accordion items modified', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
@@ -50,15 +74,13 @@ describe('compile', () => {
       loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
-      expect(data.result.css.toString()).toBe(`.dx-accordion {
-  font-family: "Segoe UI", helvetica, verdana, sans-serif;
-  color: red;
-  background-image: url(icons/icons.woff2);
-}
-.dx-accordion .from-base {
-  background-color: green;
-  color: red;
-}`);
+      expect(data.result.css.toString()).toBe(expectedCss(
+          {
+            fontFamily: '"Segoe UI", helvetica, verdana, sans-serif',
+            color: 'red',
+            bgColor: 'green'
+          }
+      ));
       // collected variables
       expect(data.changedVariables).toEqual({
         '$base-font-family': '"Segoe UI", helvetica, verdana, sans-serif',
