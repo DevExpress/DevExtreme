@@ -942,7 +942,9 @@ const Popup = Overlay.inherit({
                 this._updateResizeCallbackSkipCondition();
                 break;
             case 'enableBodyScroll':
-                this._toggleBodyScroll(value);
+                if(this.option('visible')) {
+                    this._toggleBodyScroll(value);
+                }
                 break;
             case 'showTitle':
             case 'title':
