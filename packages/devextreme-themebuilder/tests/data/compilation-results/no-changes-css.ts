@@ -1,6 +1,5 @@
 export default `.dx-accordion {
-  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
-  border-radius: 10.1px;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }

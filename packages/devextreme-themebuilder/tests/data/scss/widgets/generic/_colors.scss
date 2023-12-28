@@ -1,17 +1,14 @@
 $base-font-family: getCustomVar(("$base-font-family")) !default;
-$base-border-radius: getCustomVar(("$base-border-radius")) !default;
 $base-accent: getCustomVar(("$base-accent")) !default;
 
 @use "sass:color";
 $color: null !default;
 
 $base-font-family: null !default;
-$base-border-radius: null !default;
 $base-accent: null !default;
 
 
 @if $color == "light" {
-  $base-border-radius: 10.1px !default;
   $base-font-family: 'Helvetica Neue','Segoe UI',helvetica,verdana,sans-serif !default;
   $base-accent: #337ab7 !default;
 }
@@ -19,7 +16,6 @@ $base-accent: null !default;
 
 $never-used: collector(
 (
-"$base-border-radius": $base-border-radius,
 "$base-font-family": $base-font-family,
 "$base-accent": $base-accent,
 12345: "",

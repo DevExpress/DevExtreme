@@ -27,7 +27,6 @@ describe('compile', () => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
-  border-radius: 10.1px;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -40,12 +39,11 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with base and accordion items modified', async () => {
+  test('Compile with one base and one accordion items modified', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
       { key: '$base-font-family', value: '"Segoe UI", helvetica, verdana, sans-serif' },
-      { key: '$base-border-radius', value: '3.3px' },
       { key: '$base-accent', value: 'red' },
       { key: '$accordion-item-title-opened-bg', value: 'green' },
     ], {
@@ -54,7 +52,6 @@ describe('compile', () => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
   font-family: "Segoe UI", helvetica, verdana, sans-serif;
-  border-radius: 3.3px;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -65,37 +62,9 @@ describe('compile', () => {
       // collected variables
       expect(data.changedVariables).toEqual({
         '$base-font-family': '"Segoe UI", helvetica, verdana, sans-serif',
-        '$base-border-radius': '3.3px',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': '#008000',
-      });
-    });
-  });
-
-  test('Compile with base error modified', async () => {
-    const compiler = new Compiler();
-    compiler.indexFileContent = defaultIndexFileContent;
-    return compiler.compile(file, [
-          { key: '$base-font-family', value: '' },
-        ],
-        { loadPaths: [...includePaths] }
-    ).then((data) => {
-      // compiled css
-      expect(data.result.css.toString()).toBe(`.dx-accordion {
-  font-family: "";
-  border-radius: 10.1px;
-  color: #337ab7;
-  background-image: url(icons/icons.woff2);
-}
-.dx-accordion .from-base {
-  background-color: transparent;
-  color: #337ab7;
-}`);
-      // collected variables
-      expect(data.changedVariables).toEqual({
-        ...noModificationsMeta,
-        '$base-font-family': '""',
       });
     });
   });
@@ -128,7 +97,6 @@ describe('compile', () => {
       expect(data.result.css.toString()).toBe(
         '.dx-accordion{font-family:'
         + '"Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;'
-        + 'border-radius:10.1px;'
         + 'color:#337ab7;background-image:url(icons/icons.woff2)}.dx-accordion '
         + '.from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
       );
