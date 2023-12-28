@@ -318,6 +318,88 @@ QUnit.test('checkbox should have aria-label="Check State" attribute', function(a
     assert.strictEqual($checkbox.attr('aria-label'), 'Check State');
 });
 
+QUnit.test('SelectAll checkBox should select all values on enter key when no items selected', function(assert) {
+    let selectAllValue = null;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        items: [ { text: 'item1', items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
+        onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
+    });
+    const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+
+    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+
+    assert.deepEqual(selectAllValue, true, 'all items selected');
+});
+
+QUnit.test('SelectAll checkBox should delect all values on enter key when all items selected', function(assert) {
+    let selectAllValue = null;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        items: [{ text: 'item1', selected: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ]
+        }],
+        onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
+    });
+    const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+
+    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+
+    assert.deepEqual(selectAllValue, false, 'all items deselected');
+});
+
+['click', 'enter'].forEach((scenario) => {
+    [
+        {
+            initialValue: undefined,
+            newValue: true,
+            items: [{ text: 'item1' }, { text: 'item2', selected: true }],
+        },
+        {
+            initialValue: false,
+            newValue: true,
+            items: [{ text: 'item1' }, { text: 'item2' }],
+        },
+        {
+            initialValue: true,
+            newValue: false,
+            items: [{ text: 'item1', selected: true }, { text: 'item2', selected: true }],
+        },
+    ].forEach(({ initialValue, newValue, items }) => {
+        QUnit.test(`Select all checkbox should change value from ${initialValue} to ${newValue} on ${scenario}`, function(assert) {
+            const wrapper = new TreeViewTestWrapper({
+                showCheckBoxesMode: 'selectAll',
+                focusStateEnabled: true,
+                items,
+            });
+            const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+            const selectAll = $selectAll.dxCheckBox('instance');
+
+            assert.strictEqual(selectAll.option('value'), initialValue, `initital value is ${initialValue}`);
+
+            if(scenario === 'click') {
+                $selectAll.trigger('dxclick');
+            } else {
+                $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+            }
+
+            assert.strictEqual(selectAll.option('value'), newValue, `new value is ${initialValue}`);
+        });
+    });
+});
+
+QUnit.test('SelectAll checkBox should have the same focusStateEnabled as treeView', function(assert) {
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: false,
+        items: [{ text: 'item1' }],
+    });
+    const selectAllCheckBox = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
+
+    assert.deepEqual(selectAllCheckBox.option('focusStateEnabled'), false);
+});
+
 QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
     const selectAllValueChangedLog = [];
     const wrapper = new TreeViewTestWrapper({
