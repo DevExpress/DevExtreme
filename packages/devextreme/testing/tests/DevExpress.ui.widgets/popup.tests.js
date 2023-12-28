@@ -1589,7 +1589,9 @@ QUnit.module('options changed callbacks', {
             popup.show();
 
             assert.strictEqual(popup.option('visible'), false, 'popup is hidden');
-            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+            assert.strictEqual(this.getBodyStyleAttr(), '', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), '', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), '', 'body padding right style');
         });
 
         QUnit.test('the styles for body overflow should not be changed if hiding is prevented, enableBodyScroll is false', function(assert) {

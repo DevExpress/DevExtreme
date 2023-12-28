@@ -486,6 +486,8 @@ const Overlay = Widget.inherit({
             this._showingDeferred.reject();
         } else {
             const show = () => {
+                this._toggleBodyScroll(this.option('enableBodyScroll'));
+
                 this._stopAnimation();
                 this._toggleVisibility(true);
                 this._$content.css('visibility', 'hidden');
@@ -498,6 +500,7 @@ const Overlay = Widget.inherit({
                 this._actions.onShowing(showingArgs);
 
                 const cancelShow = () => {
+                    this._toggleBodyScroll(true);
                     this._toggleVisibility(false);
                     this._$content.css('visibility', '');
                     this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
@@ -510,7 +513,6 @@ const Overlay = Widget.inherit({
                 const applyShow = () => {
                     this._$content.css('visibility', '');
                     this._renderVisibility(true);
-                    this._toggleBodyScroll(this.option('enableBodyScroll'));
                     this._animateShowing();
                 };
 
@@ -588,10 +590,12 @@ const Overlay = Widget.inherit({
             this._actions.onHiding(hidingArgs);
 
             this._toggleSafariScrolling();
+            this._toggleBodyScroll(true);
 
             const cancelHide = () => {
                 this._isHidingActionCanceled = true;
                 this.option('visible', true);
+                this._toggleBodyScroll(this.option('enableBodyScroll'));
                 this._hidingDeferred.resolve();
             };
 
@@ -600,7 +604,6 @@ const Overlay = Widget.inherit({
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
-                this._toggleBodyScroll(true);
                 this._animateHiding();
             };
 
