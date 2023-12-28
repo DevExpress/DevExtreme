@@ -1,7 +1,9 @@
+import browser from '@js/core/utils/browser';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 
+import gridCoreUtils from '../m_utils';
 import { createColumnsInfo } from './m_virtual_columns_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;
@@ -30,9 +32,12 @@ const VirtualScrollingRowsViewExtender = {
     if (e?.virtualColumnsScrolling) {
       const $contentElement = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
+      const useNativeScrolling = this._scrollable?.option('useNative');
 
       if (fixedColumns?.length) {
-        $contentElement.css({ minHeight: getHeight($contentElement) });
+        $contentElement.css({
+          minHeight: useNativeScrolling ? getHeight($contentElement) : gridCoreUtils.getContentHeightLimit(browser),
+        });
 
         const resizeCompletedHandler = () => {
           this.resizeCompleted.remove(resizeCompletedHandler);
