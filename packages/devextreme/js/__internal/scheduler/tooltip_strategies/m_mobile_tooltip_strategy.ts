@@ -65,7 +65,8 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     return false;
   }
 
-  _onShowing() {
+  async _onShowing() {
+    await Promise.all([...this.asyncTemplateDeferredList]);
     const isTabletWidth = getWidth(getWindow()) > 700;
 
     this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
