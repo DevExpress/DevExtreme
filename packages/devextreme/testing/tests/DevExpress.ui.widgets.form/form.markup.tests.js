@@ -1625,7 +1625,6 @@ QUnit.module('Tabs', {
     });
 
     test('Render tabs with groups', function(assert) {
-        const clock = sinon.useFakeTimers();
         const testContainer = $('#form');
 
         testContainer.dxForm({
@@ -1668,7 +1667,7 @@ QUnit.module('Tabs', {
                 }],
         });
 
-        clock.tick();
+        this.clock.tick();
         let $groups = testContainer.find('.dx-item-selected ' + '.' + FORM_GROUP_CLASS);
 
         assert.equal($groups.length, 2);
@@ -1680,7 +1679,7 @@ QUnit.module('Tabs', {
         assert.equal($groups.eq(0).find('.' + FIELD_ITEM_CLASS).length, 2, 'group 1');
 
         assert.notEqual($groups.length, 0);
-        clock.restore();
+        this.clock.restore();
     });
 
     test('tabElement argument of tabTemplate option is correct', function(assert) {
