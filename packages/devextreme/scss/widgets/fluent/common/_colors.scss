@@ -4,6 +4,12 @@
 
 // adduse
 
+:root {
+  --accent-color: #{$base-accent};
+  --success-color: #{$base-success};
+  --danger-color: #{$base-danger};
+}
+
 $base-dropdown-shadow-color1: null !default;
 $base-dropdown-shadow-color2: null !default;
 

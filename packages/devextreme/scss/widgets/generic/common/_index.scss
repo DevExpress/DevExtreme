@@ -5,15 +5,14 @@
 
 // adduse
 
+:root {
+  --accent-color: #{$base-accent};
+  --success-color: #{$base-success};
+  --danger-color: #{$base-danger};
+}
 
 .dx-theme-marker {
   font-family: "dx.generic#{$generic-color-postfix}#{$generic-size-postfix}";
-}
-
-:root {
-  --base-accent-color: #{$base-accent};
-  --base-success-color: #{$base-success};
-  --base-danger-color: #{$base-danger};
 }
 
 // stylelint-disable declaration-no-important

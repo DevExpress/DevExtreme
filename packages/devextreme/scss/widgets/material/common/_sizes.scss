@@ -3,6 +3,10 @@
 
 // adduse
 
+:root {
+  --font-size: #{$material-base-font-size};
+}
+
 $material-line-height: 1.2857 !default;
 
 $material-inline-borderedwidget-inner-size:

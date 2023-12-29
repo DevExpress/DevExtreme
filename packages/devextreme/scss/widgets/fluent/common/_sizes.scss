@@ -4,6 +4,10 @@
 
 // adduse
 
+:root {
+  --font-size: #{$fluent-base-font-size};
+}
+
 $fluent-line-height: null !default;
 
 $fluent-inline-borderedwidget-inner-size:

@@ -4,3 +4,8 @@
 
 // adduse
 
+:root {
+  --accent-color: #{$base-accent};
+  --success-color: #{$base-success};
+  --danger-color: #{$base-danger};
+}
