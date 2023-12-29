@@ -3,6 +3,10 @@
 
 // adduse
 
+:root {
+  --font-size: #{$generic-base-font-size};
+}
+
 $generic-invalid-badge-size: null !default;
 $generic-dropdownlist-min-height: null !default;
 
