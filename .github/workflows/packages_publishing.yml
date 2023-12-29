@@ -52,7 +52,7 @@ jobs:
 
       - name: Set timestamp version
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
-        run: npm run ts-node build/set-timestamp-version
+        run: npx ts-node build/set-timestamp-version
 
       - name: Build npm packages
         env:
@@ -60,7 +60,7 @@ jobs:
         run: npm run all:build
 
       - name: Build artifacts package
-        run: npm run ts-node build/make-artifacts-package
+        run: npx ts-node build/make-artifacts-package
 
       - uses: actions/upload-artifact@v3
         with:
@@ -105,7 +105,7 @@ jobs:
           PACKAGE: ${{ matrix.package }}
         run: |
           SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          PACKAGE_DIR=$(npm run --silent ts-node build/change-package-scope -- --tgz $PACKAGE.tgz --scope $SCOPE)
+          PACKAGE_DIR=$(npx ts-node build/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
           echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
           cd $PACKAGE_DIR;
           npm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
