@@ -487,12 +487,9 @@ module('Keyboard navigation', setupModule, () => {
 
     test('arrows should correctly change hours when the "HH a" format is used', function(assert) {
         this.instance.option({
-            value: new Date('10/10/2012 15:00'),
+            value: new Date('10/10/2012 14:00'),
             displayFormat: 'HH a',
         });
-
-        this.keyboard.press('down');
-        assert.strictEqual(this.$input.val(), '14 PM');
 
         this.keyboard.press('down');
         assert.strictEqual(this.$input.val(), '13 PM');
@@ -506,14 +503,21 @@ module('Keyboard navigation', setupModule, () => {
         this.keyboard.press('up');
         assert.strictEqual(this.$input.val(), '12 PM');
 
-        this.keyboard.press('up');
-        assert.strictEqual(this.$input.val(), '13 PM');
+        this.instance.option('value', new Date('10/10/2012 23:00'));
+
+        assert.strictEqual(this.$input.val(), '23 PM');
 
         this.keyboard.press('up');
-        assert.strictEqual(this.$input.val(), '14 PM');
+        assert.strictEqual(this.$input.val(), '00 AM');
 
         this.keyboard.press('up');
-        assert.strictEqual(this.$input.val(), '15 PM');
+        assert.strictEqual(this.$input.val(), '01 AM');
+
+        this.keyboard.press('down');
+        assert.strictEqual(this.$input.val(), '00 AM');
+
+        this.keyboard.press('down');
+        assert.strictEqual(this.$input.val(), '23 PM');
     });
 
     test('arrows should correctly change hours when the AM/PM format is used (T1206328)', function(assert) {
