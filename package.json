@@ -22,7 +22,6 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "ts-node": "ts-node",
     "test-scripts": "jest --config build/jest.config.js",
     "all:update-version": "ts-node build/update-version.ts",
     "all:build": "ts-node build/build-all.ts"
