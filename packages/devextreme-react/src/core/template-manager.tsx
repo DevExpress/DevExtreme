@@ -180,15 +180,21 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         }]) => {
           subscribeOnRemoval(container, onRemoved);
 
-          return <TemplateWrapper
-            key={componentKey}
-            templateFactory={templateFactories.current[templateKey]}
-            data={data}
-            index={index}
-            container={container}
-            onRemoved={onRemoved}
-            onRendered={onRendered}
-          />;
+          const factory = templateFactories.current[templateKey];
+
+          if (factory) {
+            return <TemplateWrapper
+              key={componentKey}
+              templateFactory={factory}
+              data={data}
+              index={index}
+              container={container}
+              onRemoved={onRemoved}
+              onRendered={onRendered}
+            />;
+          }
+
+          return null;
         })
       }
     </>
