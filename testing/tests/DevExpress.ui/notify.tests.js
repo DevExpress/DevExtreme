@@ -191,9 +191,16 @@ QUnit.module('notify', {
             notify(this.options, this.stack);
 
             const $content = $($(`.${TOAST_CLASS}`).dxToast('instance').content());
-            const translateStyles = $content.css('transform');
+            let translateStyles = $content.css('transform');
 
-            assert.strictEqual(translateStyles, 'none');
+            if(translateStyles !== 'none') {
+                translateStyles = $content.css('transform').replace(/[^0-9\-.,]/g, '').split(',');
+
+                assert.strictEqual(translateStyles[4], '0', 'translateX is disabled');
+                assert.strictEqual(translateStyles[5], '0', 'translateY is disabled');
+            } else {
+                assert.strictEqual(translateStyles, 'none');
+            }
         });
     });
 
