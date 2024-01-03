@@ -6,6 +6,7 @@ import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import disposeWidget from '../../helpers/disposeWidget';
 
 fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../container.html'));
@@ -122,7 +123,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   }));
 
 // T1159578
-/* safeSizeTest */test.skip('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
+safeSizeTest('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -140,7 +141,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}/* , [800, 800] */)
+}, [800, 800])
   .before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',
@@ -153,7 +154,9 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
     scrolling: {
       mode: 'virtual',
     },
-  }));
+  })).after(async () => {
+    await disposeWidget('dxDataGrid');
+  });
 
 [true, false].forEach((useNative) => {
   // T1167889

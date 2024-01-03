@@ -9,6 +9,7 @@ import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
+import disposeWidget from '../../helpers/disposeWidget';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -2079,7 +2080,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   }));
 });
 
-test.skip('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -2201,6 +2202,8 @@ test.skip('Cells should be focused correctly on click when cell editing mode is 
   await ClientFunction(() => {
     delete (window as any).myStore;
   })();
+
+  await disposeWidget('dxDataGrid');
 });
 
 // T1130497

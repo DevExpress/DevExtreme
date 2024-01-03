@@ -5,6 +5,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
+import disposeWidget from '../../helpers/disposeWidget';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -546,7 +547,7 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
-test.skip('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollBy({ top: 10000 });
@@ -584,6 +585,8 @@ test.skip('Dragging with scrolling should be prevented by e.cancel (T1179555)', 
     },
 
   });
+}).after(async () => {
+  await disposeWidget('dxDataGrid');
 });
 
 // T1085143

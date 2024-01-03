@@ -7,6 +7,7 @@ import DataGrid from '../../model/dataGrid';
 import DataCell from '../../model/dataGrid/data/cell';
 import EditForm from '../../model/dataGrid/editForm';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
+import disposeWidget from '../../helpers/disposeWidget';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -407,15 +408,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            const testCase = mode === 'cell'
-            && dataField === 'text'
-            && !repaintChangesOnly
-            && useKeyboard
-            && !useMask
-            && !isAdding
-              ? test.skip : test;
-
-            testCase(`Update cell value ${JSON.stringify({
+            test(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;
@@ -435,7 +428,10 @@ editingModes.forEach((mode) => {
                 isAdding ? dataGrid.getDataCell(2, columnIndex) : cell,
                 newValue,
               );
-            }).before(createDataGrid(options));
+            }).before(createDataGrid(options))
+              .after(async () => {
+                await disposeWidget('dxDataGrid');
+              });
 
             if (isBasicColumn && !isAdding) {
               test(`Edit next cell ${JSON.stringify({

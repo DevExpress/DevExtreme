@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import disposeWidget from '../../helpers/disposeWidget';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -68,7 +69,7 @@ test('The column reordering should work correctly when there is a fixed column w
 }));
 
 // T1038094
-test.skip('The separator should display correctly when dragging column', async (t) => {
+test('The separator should display correctly when dragging column', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveHeader(0, 200, 5, true);
@@ -130,7 +131,9 @@ test.skip('The separator should display correctly when dragging column', async (
   ],
   allowColumnReordering: true,
   allowColumnResizing: true,
-}));
+})).after(async () => {
+  await disposeWidget('dxDataGrid');
+});
 
 test('column separator should work properly with expand columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

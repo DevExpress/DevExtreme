@@ -7,6 +7,7 @@ import DataGrid from '../../model/dataGrid';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
+import disposeWidget from '../../helpers/disposeWidget';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1616,7 +1617,7 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
   });
 });
 
-test.skip('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 
@@ -1628,7 +1629,9 @@ test.skip('Warning should be thrown if scrolling is virtual and height is not sp
   dataSource: [
     { column: 'value' },
   ],
-}));
+})).after(async () => {
+  await disposeWidget('dxDataGrid');
+});
 
 test('Warning should not be thrown if scrolling is virtual and height is specified with option', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();

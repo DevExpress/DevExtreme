@@ -1,3 +1,4 @@
+import disposeWidget from '../../helpers/disposeWidget';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
@@ -62,7 +63,7 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-test.skip('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -83,7 +84,9 @@ test.skip('Recurrence appointments should be deleted by press \'delete\' key', a
 
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(async () => createScheduler(createRecurrenceData()));
+}).before(async () => createScheduler(createRecurrenceData())).after(async () => {
+  await disposeWidget('dxScheduler');
+});
 
 test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
   const scheduler = new Scheduler('#container');
