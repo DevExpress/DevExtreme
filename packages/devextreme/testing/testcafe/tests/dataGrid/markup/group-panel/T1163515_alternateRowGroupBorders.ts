@@ -4,6 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import DataGrid from '../../../../model/dataGrid';
 import { Themes } from '../../../../helpers/themes';
+import disposeWidget from '../../../../helpers/disposeWidget';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
@@ -162,7 +163,10 @@ const markupTest = (matrixOptions) => {
   }).before(async () => {
     await changeTheme(matrixOptions.theme);
     await createDataGrid(matrixOptions);
-  }).after(async () => changeTheme(Themes.genericLight));
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
+    await disposeWidget('dxDataGrid');
+  });
 };
 
 [Themes.materialBlue, Themes.genericLight].forEach((theme) => {

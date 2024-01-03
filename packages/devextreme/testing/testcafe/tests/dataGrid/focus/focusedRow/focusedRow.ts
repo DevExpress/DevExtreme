@@ -2,6 +2,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import DataGrid from '../../../../model/dataGrid';
+import disposeWidget from '../../../../helpers/disposeWidget';
 
 fixture.disablePageReloads`Focused row`
   .page(url(__dirname, '../../../container.html'));
@@ -910,4 +911,6 @@ test('It is possible to focus row that was added via push method if previously r
       sortOrder: 'desc',
     },
   ],
-}));
+})).after(async () => {
+  await disposeWidget('dxDataGrid');
+});

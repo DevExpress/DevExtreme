@@ -4,6 +4,7 @@ import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
 import createWidget from '../../helpers/createWidget';
 import { DateBoxPopup } from '../../model/filterBuilder/dateboxPopup';
+import disposeWidget from '../../helpers/disposeWidget';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
@@ -63,4 +64,6 @@ test('DateBox should not close on click (T1051831)', async (t) => {
     },
   }],
   value: ['datetime', '=', new Date()],
-}));
+})).after(async () => {
+  await disposeWidget('dxFilterBuilder');
+});
