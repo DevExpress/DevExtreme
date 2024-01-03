@@ -161,6 +161,7 @@ const markupTest = (matrixOptions) => {
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await disposeWidget('dxDataGrid');
     await changeTheme(matrixOptions.theme);
     await createDataGrid(matrixOptions);
   }).after(async () => {
