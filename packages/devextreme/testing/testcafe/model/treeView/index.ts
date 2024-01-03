@@ -1,4 +1,4 @@
-import { WidgetName } from '../../helpers/createWidget';
+import { WidgetName } from '../../helpers/widgetName';
 import Widget from '../internal/widget';
 import CheckBox from '../checkBox';
 import TextBox from '../textBox';

@@ -2,7 +2,7 @@ import Widget from './internal/widget';
 import Tabs from './tabs';
 import MultiView from './multiView';
 import TabItem from './tabs/item';
-import { WidgetName } from '../helpers/createWidget';
+import { WidgetName } from '../helpers/widgetName';
 
 const CLASS = {
   tabs: 'dx-tabs',

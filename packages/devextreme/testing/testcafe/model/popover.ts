@@ -1,4 +1,4 @@
-import { WidgetName } from '../helpers/createWidget';
+import { WidgetName } from '../helpers/widgetName';
 import Popup from './popup';
 
 export default class Popover extends Popup {

@@ -1,4 +1,4 @@
-import { WidgetName } from '../helpers/createWidget';
+import { WidgetName } from '../helpers/widgetName';
 import SelectBox from './selectBox';
 
 const CLASS = {
