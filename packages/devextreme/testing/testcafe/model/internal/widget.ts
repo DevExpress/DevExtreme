@@ -1,5 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
-import { WidgetName } from '../../helpers/createWidget';
+import { WidgetName } from '../../helpers/widgetName';
 import type { PlatformType } from '../../helpers/multi-platform-test/platform-type';
 import { getComponentInstance } from '../../helpers/multi-platform-test';
 import { isObject } from '../../../../js/core/utils/type';

@@ -1,4 +1,5 @@
-import jQueryCreateWidget, { WidgetName } from '../createWidget';
+import jQueryCreateWidget from '../createWidget';
+import { WidgetName } from '../widgetName';
 import { updateComponentOptions } from './updateComponentOptions';
 import type { PlatformType } from './platform-type';
 

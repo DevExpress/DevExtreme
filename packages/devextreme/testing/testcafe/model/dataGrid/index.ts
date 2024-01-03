@@ -12,7 +12,7 @@ import DataCell from './data/cell';
 import Headers from './headers';
 import ContextMenu from '../contextMenu';
 
-import { WidgetName } from '../../helpers/createWidget';
+import { WidgetName } from '../../helpers/widgetName';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
