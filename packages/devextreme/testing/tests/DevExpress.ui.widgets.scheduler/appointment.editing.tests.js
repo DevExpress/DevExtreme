@@ -188,6 +188,82 @@ module('Integration: Appointment editing', {
                 }
             });
 
+            test('appointment should be resized correctly if its end hour exceeds the widget\'s end hour (T1134583)', function(assert) {
+                const data = [
+                    {
+                        text: 'Resize me to the left and to the right',
+                        startDate: new Date('2021-03-28T16:30:00.000Z'),
+                        endDate: new Date('2021-03-28T19:30:00.000Z'),
+                    },
+                ];
+
+                const scheduler = this.createInstance({
+                    timeZone: 'America/Los_Angeles',
+                    dataSource: data,
+                    views: [{
+                        type: 'timelineDay',
+                        intervalCount: 3
+                    }],
+                    currentView: 'timelineDay',
+                    currentDate: new Date('2021-03-27'),
+                    cellDuration: 60,
+                    startDayHour: 10,
+                    endDayHour: 12,
+                    height: 600,
+                });
+
+                this.clock.tick(10);
+
+                const hourCellWidth = getOuterWidth(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
+
+                const handle = scheduler.instance.$element().find('.dx-resizable-handle-right').eq(0);
+
+                const pointer = pointerMock(handle).start();
+                pointer.dragStart().drag(hourCellWidth, 0).dragEnd();
+
+                const [{ startDate, endDate }] = scheduler.option('dataSource');
+                assert.deepEqual(startDate, new Date('2021-03-28T16:30:00.000Z'));
+                assert.deepEqual(endDate, new Date('2021-03-29T18:00:00.000Z'));
+            });
+
+            test('appointment should be resized correctly if its start hour exceeds the widget\'s start hour (T1134583)', function(assert) {
+                const data = [
+                    {
+                        text: 'Resize me to the left and to the right',
+                        startDate: new Date('2021-03-28T16:30:00.000Z'),
+                        endDate: new Date('2021-03-28T19:30:00.000Z'),
+                    },
+                ];
+
+                const scheduler = this.createInstance({
+                    timeZone: 'America/Los_Angeles',
+                    dataSource: data,
+                    views: [{
+                        type: 'timelineDay',
+                        intervalCount: 3
+                    }],
+                    currentView: 'timelineDay',
+                    currentDate: new Date('2021-03-27'),
+                    cellDuration: 60,
+                    startDayHour: 10,
+                    endDayHour: 12,
+                    height: 600,
+                });
+
+                this.clock.tick(10);
+
+                const hourCellWidth = getOuterWidth(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
+
+                const handle = scheduler.instance.$element().find('.dx-resizable-handle-left').eq(0);
+
+                const pointer = pointerMock(handle).start();
+                pointer.dragStart().drag(-hourCellWidth, 0).dragEnd();
+
+                const [{ startDate, endDate }] = scheduler.option('dataSource');
+                assert.deepEqual(startDate, new Date('2021-03-27T18:00:00.000Z'));
+                assert.deepEqual(endDate, new Date('2021-03-28T19:30:00.000Z'));
+            });
+
             test('Add new appointment', function(assert) {
                 const data = new DataSource({
                     store: this.tasks
