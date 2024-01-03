@@ -20,6 +20,7 @@ export default async function disposeWidget<TWidgetName extends WidgetName>(
       dependencies: {
         componentName,
         selector,
+        ignoreExceptions,
       },
     },
   )();
