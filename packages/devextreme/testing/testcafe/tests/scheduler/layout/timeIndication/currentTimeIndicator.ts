@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
+import disposeWidget from '../../../../helpers/disposeWidget';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
@@ -50,10 +50,7 @@ test('Current time indicator should be placed correctly when there are many grou
     }],
   });
 }).after(async () => {
-  // TODO Vinogradov: Create a separate "disposeWidget" helper function.
-  await ClientFunction(() => {
-    ($(SCHEDULER_SELECTOR) as any).dxScheduler('dispose');
-  }, { dependencies: { SCHEDULER_SELECTOR } })();
+  await disposeWidget('dxScheduler');
 });
 
 [
@@ -145,10 +142,7 @@ endDayHour: ${endDayHour}
             ...additionalOptions,
           });
         }).after(async () => {
-          // TODO Vinogradov: Create a separate "disposeWidget" helper function.
-          await ClientFunction(() => {
-            ($(SCHEDULER_SELECTOR) as any).dxScheduler('dispose');
-          }, { dependencies: { SCHEDULER_SELECTOR } })();
+          await disposeWidget('dxScheduler');
         });
       });
     });
