@@ -132,7 +132,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme
