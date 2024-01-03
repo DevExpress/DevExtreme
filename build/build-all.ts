@@ -1,6 +1,6 @@
 import sh from 'shelljs';
 import path from 'node:path';
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR } from './common/paths';
+import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
 
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
 
@@ -44,15 +44,13 @@ sh.exec('npm run build -w devextreme-themebuilder');
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
-    sh.cp('-r', 'ts', ARTIFACTS_DIR);
-    sh.cp('-r', 'js', ARTIFACTS_DIR);
-    sh.cp('-r', 'css', ARTIFACTS_DIR);
+    sh.cp('-r', ['ts', 'js', 'css'], ARTIFACTS_DIR);
 sh.popd();
 
 // TODO: maybe we should add bootstrap to vendors
 const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'node_modules', 'bootstrap', 'dist');
-sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], path.join(ARTIFACTS_DIR, 'js'));
-sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], path.join(ARTIFACTS_DIR, 'css'));
+sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], JS_ARTIFACTS);
+sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], CSS_ARTIFACTS);
 
 const { 'devextreme-main': devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
 
