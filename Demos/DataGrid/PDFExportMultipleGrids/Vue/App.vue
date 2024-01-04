@@ -82,7 +82,7 @@
 import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
-import { DxDataGrid, DxColumn, DxDataGridTypes } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { exportDataGrid, DataGridCell, Cell } from 'devextreme/pdf_exporter';
@@ -145,7 +145,7 @@ const exportGrids = () => {
 };
 
 const setAlternatingRowsBackground = (
-  dataGrid: DxDataGridTypes.DataGrid, gridCell: DataGridCell, pdfCell: Cell,
+  dataGrid: DxDataGrid['instance'], gridCell: DataGridCell, pdfCell: Cell,
 ) => {
   if (gridCell.rowType === 'data') {
     const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);

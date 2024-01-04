@@ -54,7 +54,7 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
 };
 
 async function processBatchRequest(
-  url: string, changes: DxDataGridTypes.DataChange[], component: DxDataGridTypes.DataGrid,
+  url: string, changes: DxDataGridTypes.DataChange[], component: DxDataGrid['instance'],
 ) {
   await sendBatchRequest(url, changes);
   await component.refresh(true);

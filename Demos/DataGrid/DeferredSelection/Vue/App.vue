@@ -94,7 +94,7 @@ const dataSource: DataSourceOptions = {
   ],
 };
 
-let dataGrid: DxDataGridTypes.DataGrid;
+let dataGrid: DxDataGrid['instance'];
 const selectionFilter = ['Task_Status', '=', 'Completed'];
 
 const taskCount = ref(0);

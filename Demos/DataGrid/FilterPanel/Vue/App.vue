@@ -60,7 +60,6 @@ import {
   DxScrolling,
 } from 'devextreme-vue/data-grid';
 import { PositionConfig } from 'devextreme/animation/position';
-import { DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 import { orders, Order } from './data.ts';
 
 const filterBuilderPopupPosition: PositionConfig = {
@@ -70,7 +69,7 @@ const filterBuilderPopupPosition: PositionConfig = {
   offset: { y: 10 },
 };
 
-const filterBuilder: DxFilterBuilderTypes.FilterBuilderProperties = {
+const filterBuilder: DxDataGrid['filterBuilder'] = {
   customOperations: [{
     name: 'weekends',
     caption: 'Weekends',

@@ -16,14 +16,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGridTypes } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxDataGridTypes } from 'devextreme-vue/data-grid';
 import DxTagBox, { DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import CustomStore from 'devextreme/data/custom_store';
 
 const props = defineProps<{
   cellInfo: DxDataGridTypes.ColumnEditCellTemplateData,
   dataSource: CustomStore,
-  dataGridComponent: DxDataGridTypes.DataGrid,
+  dataGridComponent: DxDataGrid['instance'],
 }>();
 
 const currentValue = ref(props.cellInfo.value);
