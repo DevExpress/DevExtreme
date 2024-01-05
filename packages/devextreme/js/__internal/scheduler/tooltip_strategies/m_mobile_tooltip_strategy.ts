@@ -65,14 +65,27 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     return false;
   }
 
-  async _onShowing() {
-    await Promise.all([...this.asyncTemplateDeferredList]);
+  private setTooltipConfig(): void {
     const isTabletWidth = getWidth(getWindow()) > 700;
 
-    this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
     const listHeight = getOuterHeight(this._list.$element());
+    this._tooltip.option(
+      isTabletWidth
+        ? createTabletDeviceConfig(listHeight)
+        : createPhoneDeviceConfig(listHeight),
+    );
+  }
 
-    this._tooltip.option(isTabletWidth ? createTabletDeviceConfig(listHeight) : createPhoneDeviceConfig(listHeight));
+  private async _onShowing(): Promise<void> {
+    this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
+    /*
+    NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
+    The first one sets initial sizes, the second updates them after rendering async templates
+    */
+    this.setTooltipConfig();
+
+    await Promise.all([...this.asyncTemplateDeferredList]);
+    this.setTooltipConfig();
   }
 
   _createTooltip(target, dataList) {
