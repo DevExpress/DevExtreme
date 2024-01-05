@@ -84,7 +84,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     */
     this.setTooltipConfig();
 
-    await Promise.all([...this.asyncTemplateDeferredList]);
+    await Promise.all([...this.asyncTemplatePromises]);
     this.setTooltipConfig();
   }
 

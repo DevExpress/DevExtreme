@@ -127,17 +127,19 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
   await t
     .click(scheduler.collectors.find('7').element);
 
-  await ClientFunction(() => {
+  const resolveRenderDeferred = ClientFunction(() => {
     (window as any).deferred.resolve();
-  })();
+  });
+  await resolveRenderDeferred();
 
   await takeScreenshot('tooltip-rendering-with-react.png');
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }, [600, 1000]).before(async () => {
-  await ClientFunction(() => {
+  const prepareRenderDeferred = ClientFunction(() => {
     (window as any).deferred = $.Deferred();
-  })();
+  });
+  await prepareRenderDeferred();
 
   await createWidget('dxScheduler', {
     currentDate: new Date(2017, 4, 25),
@@ -149,7 +151,6 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
         appointmentTooltip: {
           render(args) {
             (window as any).deferred.done(() => {
-              console.log(args);
               args.container.append(
                 $('<div>')
                   .height(50)
@@ -191,4 +192,8 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
       endDate: new Date(2017, 4, 22, 0, 30),
     }],
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferred;
+  })();
 });

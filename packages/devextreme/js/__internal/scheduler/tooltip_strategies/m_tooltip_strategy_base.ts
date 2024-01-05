@@ -14,7 +14,7 @@ const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = `${TOOLTIP_APPOINTMENT_
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button`;
 
 export class TooltipStrategyBase {
-  protected asyncTemplateDeferredList = new Set<Promise<void>>();
+  protected asyncTemplatePromises = new Set<Promise<void>>();
 
   _tooltip: any;
 
@@ -145,7 +145,7 @@ export class TooltipStrategyBase {
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let resolve: () => void;
       const promise = new Promise<void>((r) => { resolve = r; });
-      this.asyncTemplateDeferredList.add(promise);
+      this.asyncTemplatePromises.add(promise);
       return template.render({
         model: isEmptyDropDownAppointmentTemplate ? {
           appointmentData,
@@ -155,7 +155,7 @@ export class TooltipStrategyBase {
         container: options.container,
         index,
         onRendered: () => {
-          this.asyncTemplateDeferredList.delete(promise);
+          this.asyncTemplatePromises.delete(promise);
           resolve();
         },
       });
