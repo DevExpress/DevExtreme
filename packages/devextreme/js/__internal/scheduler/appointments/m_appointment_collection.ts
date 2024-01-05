@@ -807,13 +807,12 @@ class SchedulerAppointments extends CollectionWidget {
 
     const maxDate = new Date(endDate);
     const minDate = new Date(endDate);
+    const correctEndDate = new Date(endDate);
 
     minDate.setHours(startDayHour, 0, 0, 0);
     maxDate.setHours(endDayHour, 0, 0, 0);
 
-    const correctEndDate = new Date(endDate);
-
-    if (correctEndDate.getTime() > maxDate.getTime()) {
+    if (correctEndDate > maxDate) {
       correctEndDate.setHours(endDayHour, 0, 0, 0);
     }
 
@@ -842,13 +841,12 @@ class SchedulerAppointments extends CollectionWidget {
 
     const maxDate = new Date(startDate);
     const minDate = new Date(startDate);
+    const correctStartDate = new Date(startDate);
 
     minDate.setHours(startDayHour, 0, 0, 0);
     maxDate.setHours(endDayHour, 0, 0, 0);
 
-    const correctStartDate = new Date(startDate);
-
-    if (correctStartDate.getTime() < minDate.getTime()) {
+    if (correctStartDate < minDate) {
       correctStartDate.setHours(startDayHour, 0, 0, 0);
     }
 
