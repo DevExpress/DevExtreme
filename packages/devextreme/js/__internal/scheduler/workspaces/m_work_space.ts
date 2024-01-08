@@ -1585,12 +1585,17 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   // NOTE: refactor leftIndex calculation
   getCellIndexByCoordinates(coordinates, allDay) {
-    const cellCount = this._getTotalCellCount(this._getGroupCount());
+    const { horizontalScrollingState } = this.virtualScrollingDispatcher;
+
+    const cellCount = horizontalScrollingState?.itemCount ?? this._getTotalCellCount(this._getGroupCount());
+
     const cellWidth = this.getCellWidth();
     const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
 
+    const leftCoordinateOffset = horizontalScrollingState?.virtualItemSizeBefore ?? 0;
+
     const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
-    let leftIndex = coordinates.left / cellWidth;
+    let leftIndex = (coordinates.left - leftCoordinateOffset) / cellWidth;
     leftIndex = Math.floor(leftIndex + CELL_INDEX_CALCULATION_EPSILON);
 
     if (this._isRTL()) {
