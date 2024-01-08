@@ -376,7 +376,7 @@ class BlockSeparatorView extends SeparatorView {
 class DraggingHeaderView extends modules.View {
   private _isDragging?: boolean;
 
-  private _controller: any;
+  private _controller!: DraggingHeaderViewController;
 
   private _columnsResizerViewController: any;
 
@@ -1228,7 +1228,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const that = this;
 
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
-    return gridCoreUtils.getPointsByColumns(options.columnElements, (point) => that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn), options.isVerticalOrientation, options.startColumnIndex);
+    const points = gridCoreUtils.getPointsByColumns(options.columnElements, (point) => that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn), options.isVerticalOrientation, options.startColumnIndex);
+    return points;
   }
 
   private checkIsCustomGroupColumnPosition(options): boolean {
@@ -1248,7 +1249,15 @@ export class DraggingHeaderViewController extends modules.ViewController {
     return false;
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
+  /**
+   * Function that is used to filter column points, it's called for each point
+   * @param point Point that we are checking
+   * @param columns All columns in the given location
+   * @param location Location where we move column (headers, group, column chooser etc)
+   * @param sourceColumn Column that is dragging
+   * @returns whether to filter current point (true - remove point, false - keep it)
+   */
+  protected _pointCreated(point, columns, location, sourceColumn): boolean {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
 
@@ -1256,14 +1265,18 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const isFirstExpandColumn = targetColumn?.command === 'expand' && prevColumn?.command !== 'expand';
 
     const sourceColumnReorderingDisabled = sourceColumn && !sourceColumn.allowReordering;
-    const otherColumnReorderingDisabled = !targetColumn?.allowReordering && !prevColumn?.allowReordering;
+    const otherColumnsReorderingDisabled = !targetColumn?.allowReordering && !prevColumn?.allowReordering;
 
     switch (location) {
       case 'columnChooser':
         return true;
       case 'headers':
+        if (sourceColumnReorderingDisabled) {
+          return true;
+        }
+
         if (!isFirstExpandColumn) {
-          return isColumnAfterExpandColumn || sourceColumnReorderingDisabled || otherColumnReorderingDisabled;
+          return isColumnAfterExpandColumn || otherColumnsReorderingDisabled;
         }
 
         if (this.isCustomGroupColumnPosition) {
