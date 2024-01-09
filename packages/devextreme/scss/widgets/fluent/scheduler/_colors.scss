@@ -101,8 +101,9 @@ $header-panel-cell-date: null !default;
   
   @if $color == "saas" {
     $scheduler-appointment-base-color: lighten($base-accent, 30%) !default;
-    $scheduler-cell-hover-bg: rgba(229, 237, 255, 0.25);
-    $scheduler-cell-active-bg: rgba(229, 237, 255, 0.4);
+    $scheduler-cell-hover-bg: lighten($base-hover-bg, 4.10);
+    $scheduler-workspace-focused-cell-color: lighten($base-accent, 32.53);
+    $scheduler-cell-active-bg: darken(saturate(adjust-hue($base-bg, 222), 100.00), 2.00);
   } 
 }
 
@@ -111,6 +112,11 @@ $header-panel-cell-date: null !default;
   $scheduler-appointment-text-color: #fff !default;
   $scheduler-panel-text-color: #999;
   $header-panel-cell-date: #adadad;
+
+  @if $color == "saas" {
+    $scheduler-workspace-focused-cell-color: darken(desaturate(adjust-hue($base-accent, -7), 65.00), 41.18);
+    $scheduler-cell-active-bg: lighten($base-bg, 4.31);
+  } 
 }
 
 $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
