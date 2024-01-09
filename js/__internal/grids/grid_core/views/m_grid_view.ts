@@ -215,7 +215,13 @@ const resizingControllerMembers = {
     const $contentElement = this._rowsView._findContentElement();
 
     if (scrollable?.option('useNative') === false) {
-      $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : '' });
+      if (value === true) {
+        this._prevContentMinHeight = $contentElement.get(0).style.minHeight;
+      }
+
+      if (isDefined(this._prevContentMinHeight)) {
+        $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : this._prevContentMinHeight });
+      }
     }
   },
 
@@ -715,13 +721,12 @@ const resizingControllerMembers = {
   },
 
   init() {
-    const that = this;
-
-    that._dataController = that.getController('data');
-    that._columnsController = that.getController('columns');
-    that._columnHeadersView = that.getView('columnHeadersView');
-    that._footerView = that.getView('footerView');
-    that._rowsView = that.getView('rowsView');
+    this._prevContentMinHeight = null;
+    this._dataController = this.getController('data');
+    this._columnsController = this.getController('columns');
+    this._columnHeadersView = this.getView('columnHeadersView');
+    this._footerView = this.getView('footerView');
+    this._rowsView = this.getView('rowsView');
   },
 };
 
