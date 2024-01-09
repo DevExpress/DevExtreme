@@ -65,9 +65,6 @@ gulp.task('ts-copy-bundle', gulp.series(
     },
 
     function writeAngularHack() {
-        return file('dx.all.js', '// This file is required to compile devextreme-angular', { src: true })
-            .pipe(headerPipes.starLicense())
-            .pipe(gulp.dest(packageBundlesPath));
     }
 ));
 
