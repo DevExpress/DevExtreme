@@ -1316,15 +1316,15 @@ QUnit.module('Menu tests', {
             showFirstSubmenuMode: { name: 'onHover', delay: 0 },
         });
 
-        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
+        const $rootMenuItem = menu.element.find('.' + DX_MENU_ITEM_CLASS);
         const $menuItemLink = $rootMenuItem
             .find(`.${ITEM_URL_CLASS}`)
             .get(0);
 
         $menuItemLink.click = clickSpy;
 
-        $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
-        $($rootMenuItem.eq(0)).trigger('dxpointermove');
+        menu.element.trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
+        $rootMenuItem.eq(0).trigger('dxpointermove');
         this.clock.tick(0);
 
         const submenu = getSubMenuInstance($rootMenuItem);
@@ -1334,7 +1334,7 @@ QUnit.module('Menu tests', {
             .find(`.${DX_MENU_ITEM_CLASS}`)
             .eq(0);
 
-        const $coveringElement = $item.find('.dx-context-menu-container-border');
+        const $coveringElement = $item.find(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
 
         $coveringElement.trigger('dxclick');
 
