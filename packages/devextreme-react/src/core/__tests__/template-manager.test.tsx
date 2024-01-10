@@ -144,7 +144,6 @@ describe('Template Manager', () => {
     expect(childrenTemplateRendered && renderTemplateRendered && componentTemplateRendered).toBeTruthy();
   });
 
-
   it('unwraps jquery containers', () => {
     let createDXTemplates;
 
@@ -160,7 +159,6 @@ describe('Template Manager', () => {
         <TemplateManager init={init} />
       </React.Fragment>
     );
-
 
     expect(createDXTemplates).toBeTruthy();
 
