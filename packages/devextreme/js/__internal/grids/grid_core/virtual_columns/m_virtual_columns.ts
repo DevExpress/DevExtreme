@@ -1,7 +1,9 @@
-import { getOuterWidth, getWidth } from '@js/core/utils/size';
+import browser from '@js/core/utils/browser';
+import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 
+import gridCoreUtils from '../m_utils';
 import { createColumnsInfo } from './m_virtual_columns_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;
@@ -26,23 +28,24 @@ const VirtualScrollingRowsViewExtender = {
     that._columnsController.setScrollPosition(left);
   },
 
-  _restoreScrollTop() {
-    const scrollable = this.getScrollable();
-    const scrollTop = scrollable?.scrollTop();
-
-    if (this._scrollTop > 0 && scrollTop !== this._scrollTop) {
-      scrollable.scrollTo({ y: this._scrollTop });
-    }
-  },
-
   _renderCore(e) {
     if (e?.virtualColumnsScrolling) {
-      const resizeCompletedHandler = () => {
-        this.resizeCompleted.remove(resizeCompletedHandler);
-        this._restoreScrollTop();
-      };
+      const $contentElement = this._findContentElement();
+      const fixedColumns = this._columnsController?.getFixedColumns();
+      const useNativeScrolling = this._scrollable?.option('useNative');
 
-      this.resizeCompleted.add(resizeCompletedHandler);
+      if (fixedColumns?.length) {
+        $contentElement.css({
+          minHeight: useNativeScrolling ? getHeight($contentElement) : gridCoreUtils.getContentHeightLimit(browser),
+        });
+
+        const resizeCompletedHandler = () => {
+          this.resizeCompleted.remove(resizeCompletedHandler);
+          $contentElement.css({ minHeight: '' });
+        };
+
+        this.resizeCompleted.add(resizeCompletedHandler);
+      }
     }
 
     return this.callBase.apply(this, arguments);
