@@ -54,9 +54,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     }
   }, []);
 
-  const unwrapElement = useCallback((element: any): HTMLElement => {
-    return element.get ? element.get(0) : element;
-  }, []);
+  const unwrapElement = useCallback((element: any): HTMLElement => (element.get ? element.get(0) : element), []);
 
   const createMapKey = useCallback((key1: any, key2: HTMLElement) => ({ key1, key2 }), []);
 
