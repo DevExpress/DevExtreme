@@ -54,6 +54,10 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     }
   }, []);
 
+  const unwrapElement = useCallback((element: any): HTMLElement => {
+    return element.get ? element.get(0) : element;
+  }, []);
+
   const createMapKey = useCallback((key1: any, key2: HTMLElement) => ({ key1, key2 }), []);
 
   const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
@@ -64,7 +68,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     container,
     onRendered,
   }) => {
-    const key = createMapKey(data, container);
+    const containerElement = unwrapElement(container);
+    const key = createMapKey(data, containerElement);
 
     const onRemoved = (): void => {
       setInstantiationModels((currentInstantiationModels) => {
@@ -88,7 +93,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
         index,
         componentKey: getRandomId(),
         onRendered: () => {
-          unsubscribeOnRemoval(container, onRemoved);
+          unsubscribeOnRemoval(containerElement, onRemoved);
 
           if (hostWidgetId === widgetId.current) {
             onRendered?.();
@@ -100,7 +105,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       return currentInstantiationModels.shallowCopy();
     });
 
-    return container;
+    return containerElement;
   }, [unsubscribeOnRemoval, createMapKey]);
 
   useMemo(() => {
