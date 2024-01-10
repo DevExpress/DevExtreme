@@ -6,17 +6,16 @@ module.exports = {
         await testCafe.ClientFunction(() => {
             const body = document.querySelector('body');
 
-            $('#container').remove();
-            $('#otherContainer').remove();
-
-            const containerElement = document.createElement('div');
-            containerElement.setAttribute('id', 'container');
-
-            const otherContainerElement = document.createElement('div');
-            otherContainerElement.setAttribute('id', 'otherContainer');
-
-            body.prepend(otherContainerElement);
-            body.prepend(containerElement);
+            body.innerHTML = `
+            <div role="main">
+                <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+    
+                <div id="container">
+                </div>
+                <div id="otherContainer">
+                </div>
+            </div>
+            `;
 
             $('#stylesheetRules').remove();
         })();
