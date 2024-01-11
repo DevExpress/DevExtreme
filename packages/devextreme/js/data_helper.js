@@ -142,7 +142,9 @@ const DataHelperMixin = {
                 this._proxiedDataSourceLoadErrorHandler && this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
                 this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
 
-                this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
+                if(this._dataSource._eventsStrategy) {
+                    this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
+                }
             } else {
                 this._dataSource.dispose();
             }

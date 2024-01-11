@@ -1529,7 +1529,7 @@ export class DataController extends ControllerWithDataMixin {
   }
 
   _disposeDataSource() {
-    if (this._dataSource) {
+    if (this._dataSource && this._dataSource._eventsStrategy) {
       this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
     }
     this.setDataSource(null);
