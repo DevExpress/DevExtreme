@@ -184,6 +184,56 @@ describe('Template Manager', () => {
       .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
   });
 
+  it('does not render template instances if the template prop has been removed but instance removal is delayed (T1208518)', () => {
+    let createDXTemplates;
+
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
+    };
+
+    let templateOptions = getTemplateOptions([{ type: 'render' }]);
+
+    render(
+      <React.Fragment>
+        <div className='render-template-container'></div>
+        <div className='component-template-container'></div>
+        <TemplateManager init={init} />
+      </React.Fragment>
+    );
+
+    let dxTemplates;
+
+    act(() => { dxTemplates = createDXTemplates(templateOptions); });
+
+    act(() => dxTemplates.renderKey.render({
+      model: { text: 'Render template text' },
+      index: 2,
+      container: document.querySelector('.render-template-container'),
+      onRendered: () => undefined,
+    }));
+
+    expect(document.querySelector('.render-template-container')?.innerHTML)
+      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+    expect(document.querySelector('.component-template-container')?.innerHTML)
+      .toBe('');
+
+    templateOptions = getTemplateOptions([{ type: 'component' }]);
+
+    act(() => { dxTemplates = createDXTemplates(templateOptions); });
+
+    act(() => dxTemplates.componentKey.render({
+      model: { text: 'Component template text' },
+      index: 3,
+      container: document.querySelector('.component-template-container'),
+      onRendered: () => undefined,
+    }));
+
+    expect(document.querySelector('.render-template-container')?.innerHTML)
+      .toBe('');
+    expect(document.querySelector('.component-template-container')?.innerHTML)
+      .toBe('<div class="component-template">Component template text</div><div style="display: none;"></div>');
+  });
+
   it('template wrappers are memoized', () => {
     let componentTemplateRenderCount = 0;
     let functionTemplateRenderCount = 0;
