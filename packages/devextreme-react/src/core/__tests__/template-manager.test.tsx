@@ -144,6 +144,46 @@ describe('Template Manager', () => {
     expect(childrenTemplateRendered && renderTemplateRendered && componentTemplateRendered).toBeTruthy();
   });
 
+  it('unwraps jquery containers', () => {
+    let createDXTemplates;
+
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
+    };
+
+    const templateOptions = getTemplateOptions([{ type: 'render' }]);
+
+    render(
+      <React.Fragment>
+        <div className='render-template-container'></div>
+        <TemplateManager init={init} />
+      </React.Fragment>
+    );
+
+    expect(createDXTemplates).toBeTruthy();
+
+    let dxTemplates;
+
+    act(() => { dxTemplates = createDXTemplates(templateOptions); });
+
+    act(() => dxTemplates.renderKey.render({
+      model: { text: 'Render template text' },
+      index: 2,
+      container: {
+        get: (idx: number): HTMLElement => {
+          if (idx !== 0)
+            throw new Error('incorrect unwrap');
+
+          return document.querySelector('.render-template-container')!;
+        } 
+      },
+      onRendered: () => undefined,
+    }));
+
+    expect(document.querySelector('.render-template-container')?.innerHTML)
+      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+  });
+
   it('template wrappers are memoized', () => {
     let componentTemplateRenderCount = 0;
     let functionTemplateRenderCount = 0;
