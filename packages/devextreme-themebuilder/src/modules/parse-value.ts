@@ -38,11 +38,21 @@ export const parseString = (str: string): sass.Value => {
   let result: sass.Value;
 
   try {
-    sass.compileString(`$_: ___(${str});`, {
+    sass.compileString(`$_: ___([${str}]);`, {
       functions: {
-        '___($value)': (args) => {
-          // eslint-disable-next-line prefer-destructuring
-          result = args[0];
+        '___($value)': ([listValue]) => {
+          if (listValue.asList.size > 1) {
+            result = new sass.SassList(
+                listValue.asList,
+                {
+                  brackets: false,
+                  separator: listValue.separator,
+                }
+            );
+          } else {
+            result = listValue.get(0);
+          }
+
           return result;
         },
       },
