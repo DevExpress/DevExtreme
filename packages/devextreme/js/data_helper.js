@@ -85,9 +85,10 @@ const DataHelperMixin = {
     },
 
     _addReadyWatcher: function() {
-        this._dataSource.on('loadingChanged', (function(isLoading) {
+        this.readyWatcher = (function(isLoading) {
             this._ready && this._ready(!isLoading);
-        }).bind(this));
+        }).bind(this);
+        this._dataSource.on('loadingChanged', this.readyWatcher);
     },
 
     _addDataSourceChangeHandler: function() {
@@ -140,6 +141,8 @@ const DataHelperMixin = {
                 this._proxiedDataSourceChangedHandler && this._dataSource.off('changed', this._proxiedDataSourceChangedHandler);
                 this._proxiedDataSourceLoadErrorHandler && this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
                 this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
+
+                this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
             } else {
                 this._dataSource.dispose();
             }

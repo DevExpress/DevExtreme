@@ -78,6 +78,8 @@ interface Item {
 export type Filter = any;
 
 interface DataHelperMixinType {
+  postCtor: () => void;
+  readyWatcher: any;
   _refreshDataSource(): any;
   _initDataSource(): any;
 }
@@ -201,6 +203,7 @@ export class DataController extends ControllerWithDataMixin {
     that.dataErrorOccurred.add((error) => that.executeAction('onDataErrorOccurred', { error }));
 
     that._refreshDataSource();
+    this.postCtor();
   }
 
   _getPagingOptionValue(optionName) {
@@ -1526,6 +1529,9 @@ export class DataController extends ControllerWithDataMixin {
   }
 
   _disposeDataSource() {
+    if (this._dataSource) {
+      this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
+    }
     this.setDataSource(null);
   }
 
