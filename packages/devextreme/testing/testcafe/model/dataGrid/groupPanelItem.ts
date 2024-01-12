@@ -1,4 +1,6 @@
-const FILTER_BUTTON_SELECTOR = '.dx-header-filter';
+const CLASS = {
+  filterButton: 'dx-header-filter',
+};
 
 export class GroupPanelItem {
   element: Selector;
@@ -8,6 +10,6 @@ export class GroupPanelItem {
   }
 
   getFilterButton(): Selector {
-    return this.element.find(FILTER_BUTTON_SELECTOR);
+    return this.element.find(`.${CLASS.filterButton}`);
   }
 }
