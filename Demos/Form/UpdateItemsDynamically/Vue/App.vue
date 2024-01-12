@@ -67,13 +67,13 @@ import service from './data.ts';
 
 const employee = service.getEmployee();
 const phoneOptions = ref(getPhonesOptions(employee.Phones));
-let isHomeAddressVisible = true;
+const isHomeAddressVisible = ref(true);
 
 const checkBoxOptions = {
   text: 'Show Address',
   value: true,
   onValueChanged: (e) => {
-    isHomeAddressVisible = e.component.option('value');
+    isHomeAddressVisible.value = e.component.option('value');
   },
 };
 const addPhoneButtonOptions = {
