@@ -1296,6 +1296,51 @@ QUnit.module('Menu tests', {
         assert.notOk(submenu.option('visible'), 'submenu hidden');
     });
 
+    QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked, showSubmenuMode is `onHover` (T1209825)', function(assert) {
+        if(!isDeviceDesktop(assert)) return;
+
+        const clickSpy = sinon.spy();
+
+        const menu = createMenu({
+            items: [{
+                text: 'Item_1',
+                url: 'http://some_url',
+                items: [{
+                    text: 'Item_1_1',
+                    url: 'http://some_url',
+                }, {
+                    text: 'Item_1_2',
+                    url: 'http://some_url',
+                }]
+            }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $rootMenuItem = menu.element.find('.' + DX_MENU_ITEM_CLASS);
+        const $menuItemLink = $rootMenuItem
+            .find(`.${ITEM_URL_CLASS}`)
+            .get(0);
+
+        $menuItemLink.click = clickSpy;
+
+        menu.element.trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
+        $rootMenuItem.eq(0).trigger('dxpointermove');
+        this.clock.tick(0);
+
+        const submenu = getSubMenuInstance($rootMenuItem);
+        assert.strictEqual(submenu.option('visible'), true, 'submenu shown');
+
+        const $item = menu.element
+            .find(`.${DX_MENU_ITEM_CLASS}`)
+            .eq(0);
+
+        const $coveringElement = $item.find(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
+
+        $coveringElement.trigger('dxclick');
+
+        assert.strictEqual(clickSpy.callCount, 1, 'link was clicked');
+    });
+
     QUnit.test('Menu should hide after mouseleave when hideOnMouseLeave = true', function(assert) {
         if(!isDeviceDesktop(assert)) return;
 
