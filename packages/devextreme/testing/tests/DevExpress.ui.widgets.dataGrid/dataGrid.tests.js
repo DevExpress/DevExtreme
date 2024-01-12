@@ -2214,8 +2214,10 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         $('#dataGrid').remove();
         dataSource.load();
 
+        const loadingChangedCallbacks = dataSource._eventsStrategy._events.loadingChanged._list;
+
         // assert
-        assert.ok(!dataSource._eventsStrategy._events.loadingChanged._list.length, 'dataSource is not disposed');
+        assert.ok(!loadingChangedCallbacks.length, 'dataSource loadingChanged callback is not disposed');
     });
 
     QUnit.test('updateDimensions after disposing DataGrid (T847853)', function(assert) {
