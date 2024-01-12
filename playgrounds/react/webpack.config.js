@@ -5,13 +5,13 @@ module.exports = {
   mode: "development",
   entry: "./app.tsx",
   output: {
-    filename: "./public/js/app/bundle.js",
+    filename: "bundle.js",
+    publicPath: "/js/app/"
   },
   devtool: "source-map",
   devServer: {
     port: 9000,
-    open: true,
-    openPage: "public/index.html"
+    open: true
   },
   resolve: {
     extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
