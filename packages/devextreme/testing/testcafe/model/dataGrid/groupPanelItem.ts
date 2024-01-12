@@ -3,7 +3,7 @@ const FILTER_BUTTON_SELECTOR = '.dx-header-filter';
 export class GroupPanelItem {
   element: Selector;
 
-  constructor(private readonly selector: Selector) {
+  constructor(selector: Selector) {
     this.element = selector;
   }
 
