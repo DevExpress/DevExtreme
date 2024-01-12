@@ -137,7 +137,7 @@ test('column separator should work properly with expand columns', async (t) => {
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(dataGrid.getGroupPanel().getHeader(0), 0, 30);
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
   await t
     .expect(await takeScreenshot('column-separator-with-expand-columns.png'))
     .ok()
@@ -180,7 +180,7 @@ test('HeaderRow should be highlighted when dragging column with allowColumnReord
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(dataGrid.getGroupPanel().getHeader(0), 0, 30);
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
   await t
     .expect(await takeScreenshot('headerRow-highlight-on-drag.png'))
     .ok()
@@ -224,7 +224,7 @@ test('Column without allowReordering should have same position after dragging to
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).element, -30, -30);
   await t.expect(dataGrid.getGroupPanel().getHeadersCount()).eql(1);
 
-  await t.drag(dataGrid.getGroupPanel().getHeader(0), 0, 30);
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
 
   const headers = await Promise.all([0, 1, 2, 3].map(
     (i) => dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(i).element.textContent,
