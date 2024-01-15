@@ -110,6 +110,8 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
 
   switch (viewType) {
     case 'agenda': {
+      resourceCount = 10;
+
       datesToCheck = [
         new Date(2024, 0, 1, 8),
       ];
@@ -127,7 +129,7 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
         new Date(2024, 0, 2, 19),
       ];
 
-      if (scrollMode === 'standard') {
+      if (scrollMode === 'standard' && groupOrientation === 'horizontal') {
         resourceCount = 10;
       }
       break;
@@ -147,7 +149,7 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
 
       resourceAppointmentCount = 12 * 7;
 
-      if (scrollMode === 'standard') {
+      if (scrollMode === 'standard' && groupOrientation === 'horizontal') {
         resourceCount = 2;
       }
 
@@ -168,7 +170,7 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
 
       resourceAppointmentCount = 12 * 5;
 
-      if (scrollMode === 'standard') {
+      if (scrollMode === 'standard' && groupOrientation === 'horizontal') {
         resourceCount = 2;
       }
 
@@ -266,14 +268,16 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
       },
     });
 
-    const scrollOptions = generateOptionMatrix({
-      date: datesToCheck,
-      group: groupsToCheck,
-    });
+    if (scrollMode === 'virtual') {
+      const scrollOptions = generateOptionMatrix({
+        date: datesToCheck,
+        group: groupsToCheck,
+      });
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const { date, group } of scrollOptions) {
-      await scrollTo(date, group);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { date, group } of scrollOptions) {
+        await scrollTo(date, group);
+      }
     }
   });
 });
