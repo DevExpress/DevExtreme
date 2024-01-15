@@ -206,8 +206,6 @@ testOptions.forEach(({
     }
     case 'day':
     case 'timelineDay': {
-      resourceCount = 30;
-
       startDate = new Date(2024, 0, 2, 8);
 
       datesToCheck = [
@@ -288,7 +286,7 @@ testOptions.forEach(({
     { groupId: resourceCount - 1 },
   ];
 
-  test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async () => {
+  test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async (t) => {
     const resourceDataSource = Array.from({ length: resourceCount }, (_, index) => ({
       id: index,
       text: `Resource ${index}`,
@@ -361,6 +359,7 @@ testOptions.forEach(({
       // eslint-disable-next-line no-restricted-syntax
       for (const { date, group } of scrollOptions) {
         await scrollTo(date, group);
+        await t.wait(50);
       }
     }
   });
