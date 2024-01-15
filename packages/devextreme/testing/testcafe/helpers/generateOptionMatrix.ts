@@ -30,7 +30,10 @@ const generateOptionMatrixImpl = <T>(
   return generateOptionMatrixImpl(options, keys, index + 1, current);
 };
 
-export const generateOptionMatrix = <T>(options: Options<T>): T[] => {
+export const generateOptionMatrix = <T, U extends Partial<T> = Partial<T>>(
+  options: Options<T>,
+  exclude: U[] = [],
+): T[] => {
   const keys = Object.keys(options) as (keyof T)[];
 
   if (keys.length === 0) {
@@ -50,5 +53,18 @@ export const generateOptionMatrix = <T>(options: Options<T>): T[] => {
     [keys[0]]: value,
   }));
 
-  return generateOptionMatrixImpl(options, keys, 1, current);
+  const result = generateOptionMatrixImpl(options, keys, 1, current);
+
+  if (exclude.length === 0) {
+    return result;
+  }
+
+  return result.filter((item) => {
+    const areItemsEqual = exclude.some((itemToExclude) => {
+      const excludeKeys = Object.keys(itemToExclude);
+      return excludeKeys.every((key) => item[key] === itemToExclude[key]);
+    });
+
+    return !areItemsEqual;
+  });
 };
