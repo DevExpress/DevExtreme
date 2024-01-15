@@ -448,6 +448,7 @@ const HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
           alignment: getDefaultAlignment(that.option('rtlEnabled')),
           filterValues: groupColumn.filterValues,
           allowHeaderFiltering: true,
+          caption: groupColumn.caption,
         },
         showColumnLines: true,
       });
