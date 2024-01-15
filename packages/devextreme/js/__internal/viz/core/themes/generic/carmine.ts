@@ -6,6 +6,7 @@ const TEXT_COLOR = '#707070';
 const BORDER_COLOR = '#dee1e3';
 
 export default [{
+  baseThemeName: 'generic.light',
   theme: {
     name: 'generic.carmine',
     defaultPalette: 'Carmine',
@@ -131,10 +132,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.light',
 }, {
+  baseThemeName: 'generic.carmine',
   theme: {
     name: 'generic.carmine.compact',
   },
-  baseThemeName: 'generic.carmine',
 }];

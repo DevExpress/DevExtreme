@@ -6,6 +6,7 @@ const TEXT_COLOR = '#c7ccd4';
 const BORDER_COLOR = '#596980';
 
 export default [{
+  baseThemeName: 'generic.dark',
   theme: {
     name: 'generic.darkmoon',
     defaultPalette: 'Dark Moon',
@@ -173,10 +174,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.dark',
 }, {
+  baseThemeName: 'generic.darkmoon',
   theme: {
     name: 'generic.darkmoon.compact',
   },
-  baseThemeName: 'generic.darkmoon',
 }];

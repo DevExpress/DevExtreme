@@ -18,6 +18,7 @@ import treeMap from './tree_map';
 import vectorMap from './vector_map';
 
 export default [{
+  baseThemeName: undefined,
   theme: {
     name: 'generic.light',
     isDefault: true,
@@ -177,10 +178,9 @@ export default [{
     ...bullet,
     ...treeMap,
   },
-  baseThemeName: undefined,
 }, {
+  baseThemeName: 'generic.light',
   theme: {
     name: 'generic.light.compact',
   },
-  baseThemeName: 'generic.light',
 }];

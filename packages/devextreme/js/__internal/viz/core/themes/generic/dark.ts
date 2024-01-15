@@ -10,6 +10,7 @@ const POSITIVE_COLOR = '#b8b8b8';
 const BORDER_COLOR = '#494949';
 
 export default [{
+  baseThemeName: 'generic.light',
   theme: {
     name: 'generic.dark',
     font: {
@@ -262,10 +263,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.light',
 }, {
+  baseThemeName: 'generic.dark',
   theme: {
     name: 'generic.dark.compact',
   },
-  baseThemeName: 'generic.dark',
 }];

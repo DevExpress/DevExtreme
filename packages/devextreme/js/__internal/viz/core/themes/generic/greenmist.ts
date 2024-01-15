@@ -6,6 +6,7 @@ const TEXT_COLOR = '#657c80';
 const BORDER_COLOR = '#dedede';
 
 export default [{
+  baseThemeName: 'generic.light',
   theme: {
     name: 'generic.greenmist',
     defaultPalette: 'Green Mist',
@@ -141,10 +142,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.light',
 }, {
+  baseThemeName: 'generic.greenmist',
   theme: {
     name: 'generic.greenmist.compact',
   },
-  baseThemeName: 'generic.greenmist',
 }];

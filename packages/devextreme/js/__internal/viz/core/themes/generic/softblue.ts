@@ -6,6 +6,7 @@ const TEXT_COLOR = '#707070';
 const BORDER_COLOR = '#e8eaeb';
 
 export default [{
+  baseThemeName: 'generic.light',
   theme: {
     name: 'generic.softblue',
     defaultPalette: 'Soft Blue',
@@ -131,10 +132,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.light',
 }, {
+  baseThemeName: 'generic.softblue',
   theme: {
     name: 'generic.softblue.compact',
   },
-  baseThemeName: 'generic.softblue',
 }];

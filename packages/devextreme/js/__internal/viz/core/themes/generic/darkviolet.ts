@@ -6,6 +6,7 @@ const TEXT_COLOR = '#b2b2b6';
 const BORDER_COLOR = '#343840';
 
 export default [{
+  baseThemeName: 'generic.dark',
   theme: {
     name: 'generic.darkviolet',
     defaultPalette: 'Dark Violet',
@@ -156,10 +157,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.dark',
 }, {
+  baseThemeName: 'generic.darkviolet',
   theme: {
     name: 'generic.darkviolet.compact',
   },
-  baseThemeName: 'generic.darkviolet',
 }];

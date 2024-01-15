@@ -18,6 +18,7 @@ const LABEL_BORDER_COLOR = '#494949';
 const BREAK_STYLE_COLOR = '#818181';
 
 const themes: Record<string, string | object>[] = [{
+  baseThemeName: 'generic.light',
   theme: {
     name: 'material',
     defaultPalette: 'Material',
@@ -161,8 +162,8 @@ const themes: Record<string, string | object>[] = [{
       },
     },
   },
-  baseThemeName: 'generic.light',
 }, {
+  baseThemeName: 'material',
   theme: {
     name: 'material.light',
     gridColor: '#e0e0e0',
@@ -192,8 +193,8 @@ const themes: Record<string, string | object>[] = [{
       backgroundColor: '#efefef',
     },
   },
-  baseThemeName: 'material',
 }, {
+  baseThemeName: 'material',
   theme: {
     name: 'material.dark',
     gridColor: '#515159',
@@ -418,7 +419,6 @@ const themes: Record<string, string | object>[] = [{
       },
     },
   },
-  baseThemeName: 'material',
 }];
 
 function getMaterialColorScheme(

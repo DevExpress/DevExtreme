@@ -5,10 +5,10 @@ const MARKER_COLOR = '#f8ca00';
 const AREA_LAYER_COLOR = '#686868';
 
 export default [{
+  baseThemeName: 'generic.light',
   theme: {
     name: 'generic.contrast',
     defaultPalette: 'Bright',
-    // CONTRAST_ACTIVE
     font: {
       color: WHITE,
     },
@@ -337,10 +337,9 @@ export default [{
       },
     },
   },
-  baseThemeName: 'generic.light',
 }, {
+  baseThemeName: 'generic.contrast',
   theme: {
     name: 'generic.contrast.compact',
   },
-  baseThemeName: 'generic.contrast',
 }];
