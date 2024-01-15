@@ -1,8 +1,6 @@
 name: Publishing to GitHub Packages
 
 on:
-  schedule:
-    - cron: '0 0 * * 1-5'
   workflow_dispatch:
     inputs:
       filter:
@@ -35,7 +33,7 @@ jobs:
 
   build:
     name: Build packages
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
@@ -76,7 +74,7 @@ jobs:
 
   publish:
     name: Publish package
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     needs: build
     strategy:
       fail-fast: false
