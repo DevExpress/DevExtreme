@@ -3,7 +3,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   mode: "development",
-  entry: "./app.tsx",
+  entry: "./index.tsx",
   output: {
     filename: "bundle.js",
     publicPath: "/js/app/"
@@ -48,7 +48,7 @@ module.exports = {
       },
       { 
         test: /\.(eot|svg|ttf|woff|woff2)$/, 
-        use: "url-loader?name=[name].[ext]"
+        type: 'asset/inline'
       }
     ]
   }
