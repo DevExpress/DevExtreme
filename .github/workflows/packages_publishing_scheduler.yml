@@ -18,6 +18,10 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            README.md
+          sparse-checkout-cone-mode: false
 
       - name: Publish Packages (${{ matrix.branch }})
         run: |
