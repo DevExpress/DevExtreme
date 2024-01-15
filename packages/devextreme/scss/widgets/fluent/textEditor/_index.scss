@@ -47,15 +47,6 @@ $fluent-editor-border-width: 1px;
     transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
   }
 
-  &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
-  &.dx-texteditor-with-floating-label {
-    .dx-placeholder::before,
-    .dx-texteditor-input {
-      padding-top: $fluent-filled-texteditor-input-top-padding;
-      padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
-    }
-  }
-
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {

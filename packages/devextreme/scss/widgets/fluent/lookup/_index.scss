@@ -24,7 +24,6 @@
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-lookup-field {
-      padding: $fluent-filled-texteditor-input-padding;
       padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
       padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size;
     }
