@@ -219,6 +219,10 @@ module('Cells Selection State', () => {
     test('"setSelectedCells" should work correctly', function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
+            getCellsBetween: () => [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData
+            ],
             getCellsByGroupIndexAndAllDay: () => [[
                 testViewDataMap.horizontalGrouping[1][0].cellData,
                 testViewDataMap.horizontalGrouping[1][1].cellData,
@@ -273,6 +277,10 @@ module('Cells Selection State', () => {
     test('"releaseSelectedAndFocusedCells" should save current values as previous', function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
+            getCellsBetween: () => [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ],
             getCellsByGroupIndexAndAllDay: () => [[
                 testViewDataMap.horizontalGrouping[1][0].cellData,
                 testViewDataMap.horizontalGrouping[1][1].cellData,
@@ -321,6 +329,10 @@ module('Cells Selection State', () => {
     test('"clearSelectedAndFocusedCells" should not save current values as previous', function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
+            getCellsBetween: () => [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ],
             getCellsByGroupIndexAndAllDay: () => [[
                 testViewDataMap.horizontalGrouping[1][0].cellData,
                 testViewDataMap.horizontalGrouping[1][1].cellData,
@@ -369,6 +381,10 @@ module('Cells Selection State', () => {
     test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was saved', function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
+            getCellsBetween: () => [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ],
             getCellsByGroupIndexAndAllDay: () => [[
                 testViewDataMap.horizontalGrouping[1][0].cellData,
                 testViewDataMap.horizontalGrouping[1][1].cellData,
@@ -407,6 +423,10 @@ module('Cells Selection State', () => {
     test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was not saved', function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
+            getCellsBetween: () => [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ],
             getCellsByGroupIndexAndAllDay: () => [[
                 testViewDataMap.horizontalGrouping[1][0].cellData,
                 testViewDataMap.horizontalGrouping[1][1].cellData,
