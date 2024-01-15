@@ -71,10 +71,13 @@ const scrollModes: ScrollMode[] = [
   'virtual',
 ];
 
+const rtlEnabledOptions: boolean[] = [false, true];
+
 const testOptions = generateOptionMatrix({
   viewType: viewTypes,
   groupOrientation: groupOrientations,
   scrollMode: scrollModes,
+  rtlEnabled: rtlEnabledOptions,
 }, [
   // Not supported
   {
@@ -86,9 +89,69 @@ const testOptions = generateOptionMatrix({
     viewType: 'agenda',
     groupOrientation: 'horizontal',
   },
+  {
+    viewType: 'day',
+    groupOrientation: 'vertical',
+    scrollMode: 'standard',
+  },
+  {
+    viewType: 'week',
+    groupOrientation: 'vertical',
+    scrollMode: 'standard',
+  },
+  {
+    viewType: 'workWeek',
+    groupOrientation: 'vertical',
+    scrollMode: 'standard',
+  },
+  {
+    viewType: 'day',
+    groupOrientation: 'horizontal',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'week',
+    groupOrientation: 'horizontal',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'workWeek',
+    groupOrientation: 'horizontal',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'month',
+    groupOrientation: 'horizontal',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'timelineDay',
+    groupOrientation: 'vertical',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'timelineWeek',
+    groupOrientation: 'vertical',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'timelineWorkWeek',
+    groupOrientation: 'vertical',
+    rtlEnabled: true,
+  },
+  {
+    viewType: 'timelineMonth',
+    groupOrientation: 'vertical',
+    rtlEnabled: true,
+  },
 ]);
 
-testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
+testOptions.forEach(({
+  viewType,
+  groupOrientation,
+  scrollMode,
+  rtlEnabled,
+}) => {
   let startDate = new Date(2024, 0, 1, 8);
   const currentDate = new Date(2024, 0, 2);
 
@@ -204,7 +267,7 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
     { groupId: resourceCount - 1 },
   ];
 
-  test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}") (T1205120)`, async () => {
+  test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async () => {
     const resourceDataSource = Array.from({ length: resourceCount }, (_, index) => ({
       id: index,
       text: `Resource ${index}`,
@@ -228,6 +291,7 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
     ), []);
 
     await createWidget('dxScheduler', {
+      rtlEnabled,
       height: 600,
       width: 800,
       currentDate,
