@@ -191,6 +191,10 @@ testOptions.forEach(({
     new Date(2024, 0, 3, 8),
   ];
 
+  if (scrollMode === 'standard') {
+    resourceCount = 10;
+  }
+
   switch (viewType) {
     case 'agenda': {
       resourceCount = 10;
@@ -212,9 +216,6 @@ testOptions.forEach(({
         new Date(2024, 0, 2, 19),
       ];
 
-      if (scrollMode === 'standard' && groupOrientation === 'horizontal') {
-        resourceCount = 10;
-      }
       break;
     }
     case 'week':
