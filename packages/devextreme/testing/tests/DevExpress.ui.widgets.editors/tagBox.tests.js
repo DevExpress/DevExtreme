@@ -7777,19 +7777,21 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
-    QUnit.test('input should have a correct aria-labelledby', function(assert) {
+    QUnit.test('input should have aria-labelledby with a labelId if label specified', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
-        const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const labelId = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`).attr('id');
-        const placeholderId = $tagBox.find(`.${PLACEHOLDER_CLASS}`).attr('id');
 
-        const expectedAria = `${labelId} ${placeholderId}`;
+        const expectedAria = `${labelId}`;
 
         assert.strictEqual($input.attr('aria-labelledby'), expectedAria, 'aria-labelledby was set correctly');
+    });
 
-        tagBox.option('label', null);
-        assert.strictEqual($input.attr('aria-labelledby'), placeholderId, 'aria-labelledby is equal placeholder id');
+    QUnit.test('input should not have aria-labelledby attr if label is not specified', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({ });
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby was set correctly');
     });
 
     QUnit.test('select should have a correct aria-label', function(assert) {

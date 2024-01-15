@@ -1,24 +1,22 @@
 import { extend } from '../core/utils/extend';
-import { each } from '../core/utils/iterator';
 import { normalizeEnum } from './core/utils';
 import { current as getCurrentTheme } from '../ui/themes';
 import { isEmptyObject } from '../core/utils/type';
-import lightThemes from './core/themes/generic.light';
-import carmineThemes from './core/themes/generic.carmine';
-import darkThemes from './core/themes/generic.dark';
-import contrastThemes from './core/themes/generic.contrast';
-import darkMoonThemes from './core/themes/generic.darkmoon';
-import darkVioletThemes from './core/themes/generic.darkviolet';
-import greenMistThemes from './core/themes/generic.greenmist';
-import softBlueThemes from './core/themes/generic.softblue';
-import materialThemes from './core/themes/material';
-import fluentThemes from './core/themes/fluent';
+import lightThemes from '../__internal/viz/core/themes/generic/light/index';
+import carmineThemes from '../__internal/viz/core/themes/generic/carmine';
+import darkThemes from '../__internal/viz/core/themes/generic/dark';
+import contrastThemes from '../__internal/viz/core/themes/generic/contrast';
+import darkMoonThemes from '../__internal/viz/core/themes/generic/darkmoon';
+import darkVioletThemes from '../__internal/viz/core/themes/generic/darkviolet';
+import greenMistThemes from '../__internal/viz/core/themes/generic/greenmist';
+import softBlueThemes from '../__internal/viz/core/themes/generic/softblue';
+import materialThemes from '../__internal/viz/core/themes/material/index';
+import fluentThemes from '../__internal/viz/core/themes/fluent/index';
 
 const themes = {};
 const themesMapping = {};
 const themesSchemeMapping = {};
 const _extend = extend;
-const _each = each;
 let currentThemeName = null;
 let defaultTheme;
 let nextCacheUid = 0;
@@ -30,7 +28,9 @@ export function getTheme(themeName) {
 }
 
 function findThemeNameByName(name, scheme) {
-    return themesMapping[name + '.' + scheme] || themesSchemeMapping[name + '.' + scheme] || themesMapping[name];
+    const fullThemeKey = `${name}.${scheme}`;
+
+    return themesMapping[fullThemeKey] || themesSchemeMapping[fullThemeKey] || themesMapping[name];
 }
 
 function findThemeNameByPlatform(platform, version, scheme) {
@@ -43,7 +43,7 @@ export function currentTheme(themeName, colorScheme) {
     }
 
     const scheme = normalizeEnum(colorScheme);
-    currentThemeName = (themeName && themeName.platform ? findThemeNameByPlatform(normalizeEnum(themeName.platform), themeName.version, scheme) : findThemeNameByName(normalizeEnum(themeName), scheme)) || currentThemeName;
+    currentThemeName = (themeName?.platform ? findThemeNameByPlatform(normalizeEnum(themeName.platform), themeName.version, scheme) : findThemeNameByName(normalizeEnum(themeName), scheme)) || currentThemeName;
     // For chaining only
     return this;
 }
@@ -58,8 +58,10 @@ function registerThemeName(themeName, targetThemeName) {
     const name = themeInfo.name;
     const scheme = themeInfo.scheme;
     if(scheme) {
+        const fullThemeKey = `${name}.${scheme}`;
+
         themesMapping[name] = themesMapping[name] || targetThemeName;
-        themesMapping[name + '.' + scheme] = targetThemeName;
+        themesMapping[fullThemeKey] = targetThemeName;
     } else {
         themesMapping[name] = targetThemeName;
     }
@@ -74,20 +76,19 @@ export function registerTheme(theme, baseThemeName) {
     }
 }
 
-
 export function registerThemeSchemeAlias(from, to) {
     themesSchemeMapping[from] = to;
 }
 
 function mergeScalar(target, field, source, sourceValue) {
-    const _value = source ? source[field] : sourceValue;
+    const _value = source?.[field] ?? sourceValue;
     if(_value !== undefined && target[field] === undefined) {
         target[field] = _value;
     }
 }
 
 function mergeObject(target, field, source, sourceValue) {
-    const _value = source ? source[field] : sourceValue;
+    const _value = source?.[field] ?? sourceValue;
     if(_value !== undefined) {
         target[field] = _extend(true, {}, _value, target[field]);
     }
@@ -126,26 +127,26 @@ function patchTheme(theme) {
     mergeScalar(theme.legend.font, 'color', null, theme.secondaryTitleColor);
     mergeScalar(theme.legend.border, 'color', null, theme.gridColor);
     patchAxes(theme);
-    _each(['chart', 'pie', 'polar', 'gauge', 'barGauge', 'map', 'treeMap', 'funnel', 'rangeSelector', 'sparkline', 'bullet', 'sankey'], function(_, section) {
+    ['chart', 'pie', 'polar', 'gauge', 'barGauge', 'map', 'treeMap', 'funnel', 'rangeSelector', 'sparkline', 'bullet', 'sankey'].forEach((section) => {
         mergeScalar(theme[section], 'redrawOnResize', theme);
         mergeScalar(theme[section], 'containerBackgroundColor', null, theme.backgroundColor);
         mergeObject(theme[section], 'tooltip', theme);
         mergeObject(theme[section], 'export', theme);
     });
-    _each(['chart', 'pie', 'polar', 'gauge', 'barGauge', 'map', 'treeMap', 'funnel', 'rangeSelector', 'sankey'], function(_, section) {
+    ['chart', 'pie', 'polar', 'gauge', 'barGauge', 'map', 'treeMap', 'funnel', 'rangeSelector', 'sankey'].forEach((section) => {
         mergeObject(theme[section], 'loadingIndicator', theme);
         mergeObject(theme[section], 'legend', theme);
         mergeObject(theme[section], 'title', theme);
     });
 
-    _each(['chart', 'pie', 'polar'], function(_, section) {
+    ['chart', 'pie', 'polar'].forEach((section) => {
         mergeObject(theme, section, null, theme['chart:common']);
     });
-    _each(['chart', 'polar'], function(_, section) {
+    ['chart', 'polar'].forEach((section) => {
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAxisSettings', null, theme['chart:common:axis']);
     });
-    _each(['chart', 'polar', 'map', 'pie'], function(_, section) {
+    ['chart', 'polar', 'map', 'pie'].forEach((section) =>{
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAnnotationSettings', null, theme['chart:common:annotation']);
     });
@@ -165,10 +166,10 @@ function patchTheme(theme) {
 function patchAxes(theme) {
     const commonAxisSettings = theme['chart:common:axis'];
     const colorFieldName = 'color';
-    _each([commonAxisSettings.grid, commonAxisSettings.minorGrid], function(_, obj) {
+    [commonAxisSettings.grid, commonAxisSettings.minorGrid].forEach((obj) =>{
         mergeScalar(obj, colorFieldName, null, theme.gridColor);
     });
-    _each([commonAxisSettings, commonAxisSettings.tick, commonAxisSettings.minorTick, commonAxisSettings.label.font], function(_, obj) {
+    [commonAxisSettings, commonAxisSettings.tick, commonAxisSettings.minorTick, commonAxisSettings.label.font].forEach((obj) =>{
         mergeScalar(obj, colorFieldName, null, theme.axisColor);
     });
     mergeScalar(commonAxisSettings.title.font, colorFieldName, null, theme.secondaryTitleColor);
@@ -180,10 +181,10 @@ function patchAxes(theme) {
 
 function patchMapLayers(theme) {
     const map = theme.map;
-    _each(['area', 'line', 'marker'], function(_, section) {
+    ['area', 'line', 'marker'].forEach((section) =>{
         mergeObject(map, 'layer:' + section, null, map.layer);
     });
-    _each(['dot', 'bubble', 'pie', 'image'], function(_, section) {
+    ['dot', 'bubble', 'pie', 'image'].forEach((section) =>{
         mergeObject(map, 'layer:marker:' + section, null, map['layer:marker']);
     });
 }
@@ -199,8 +200,8 @@ export function removeCacheItem(target) {
 }
 
 export function refreshTheme() {
-    _each(widgetsCache, function() {
-        this.refresh();
+    Object.keys(widgetsCache).forEach((key) => {
+        widgetsCache[key].refresh();
     });
     // For chaining only
     return this;
