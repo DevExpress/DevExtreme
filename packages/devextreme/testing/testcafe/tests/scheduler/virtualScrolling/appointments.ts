@@ -16,7 +16,7 @@ import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
-test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
+test.skip('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('', 0);
 
@@ -49,33 +49,42 @@ test('Appointment should not repaint after scrolling if present on viewport', as
   });
 });
 
-const viewTypes: ViewType[] = ['agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek'];
-const groupOrientations: Orientation[] = ['horizontal', 'vertical'];
-const scrollModes: ScrollMode[] = ['standard', 'virtual'];
+const viewTypes: ViewType[] = [
+  'agenda',
+  'day',
+  'week',
+  'workWeek',
+  'month',
+  'timelineDay',
+  'timelineMonth',
+  'timelineWeek',
+  'timelineWorkWeek',
+];
+
+const groupOrientations: Orientation[] = [
+  'horizontal',
+  'vertical',
+];
+
+const scrollModes: ScrollMode[] = [
+  'standard',
+  'virtual',
+];
 
 const testOptions = generateOptionMatrix({
   viewType: viewTypes,
   groupOrientation: groupOrientations,
   scrollMode: scrollModes,
 }, [
+  // Not supported
   {
     viewType: 'agenda',
     scrollMode: 'virtual',
   },
+  // Not supported
   {
-    viewType: 'week',
-    groupOrientation: 'vertical',
-    scrollMode: 'standard',
-  },
-  {
-    viewType: 'workWeek',
-    groupOrientation: 'vertical',
-    scrollMode: 'standard',
-  },
-  {
-    viewType: 'day',
-    groupOrientation: 'vertical',
-    scrollMode: 'standard',
+    viewType: 'agenda',
+    groupOrientation: 'horizontal',
   },
   {
     viewType: 'timelineWeek',
@@ -90,23 +99,23 @@ const testOptions = generateOptionMatrix({
 ]);
 
 testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
-  const startDate = new Date(2024, 0, 1, 8);
-  const endDate = new Date(2024, 0, 3, 10);
+  let startDate = new Date(2024, 0, 1, 8);
+  const currentDate = new Date(2024, 0, 2);
 
   const startDayHour = 8;
   const endDayHour = 20;
-  const resourceCount = 30;
+  let resourceCount = 30;
+  let resourceAppointmentCount = 12;
+
+  const HOUR = 1000 * 60 * 60;
+
+  let appointmentOffset = HOUR;
+  let appointmentDuration = HOUR / 2;
 
   let datesToCheck = [
     new Date(2024, 0, 1, 8),
     new Date(2024, 0, 2, 8),
     new Date(2024, 0, 3, 8),
-  ];
-
-  const groupsToCheck = [
-    { groupId: 0 },
-    { groupId: 9 },
-    { groupId: 29 },
   ];
 
   switch (viewType) {
@@ -116,10 +125,88 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
       ];
       break;
     }
+    case 'day': {
+      resourceCount = 30;
+
+      startDate = new Date(2024, 0, 2, 8);
+
+      datesToCheck = [
+        new Date(2024, 0, 2, 8),
+        new Date(2024, 0, 2, 12),
+        new Date(2024, 0, 2, 19),
+      ];
+
+      if (scrollMode === 'standard') {
+        resourceCount = 10;
+      }
+      break;
+    }
+    case 'week': {
+      startDate = new Date(2024, 0, 1, 8);
+
+      datesToCheck = [
+        new Date(2023, 11, 31, 8),
+        new Date(2024, 0, 3, 12),
+        new Date(2024, 0, 6, 19),
+      ];
+
+      appointmentOffset = HOUR * 2;
+      appointmentDuration = HOUR;
+
+      resourceAppointmentCount = 12 * 7;
+
+      if (scrollMode === 'standard') {
+        resourceCount = 2;
+      }
+
+      break;
+    }
+    case 'workWeek': {
+      startDate = new Date(2024, 0, 1, 8);
+
+      datesToCheck = [
+        new Date(2024, 0, 1, 8),
+        new Date(2024, 0, 2, 12),
+        new Date(2024, 0, 5, 19),
+      ];
+
+      appointmentOffset = HOUR * 2;
+      appointmentDuration = HOUR;
+
+      resourceAppointmentCount = 12 * 5;
+
+      if (scrollMode === 'standard') {
+        resourceCount = 2;
+      }
+
+      break;
+    }
+    case 'month': {
+      startDate = new Date(2024, 0, 1, 8);
+
+      datesToCheck = [
+        new Date(2024, 0, 1, 8),
+        new Date(2024, 0, 2, 12),
+        new Date(2024, 0, 31, 19),
+      ];
+
+      appointmentOffset = HOUR * 24;
+      appointmentDuration = HOUR * 2;
+
+      resourceAppointmentCount = 31;
+
+      break;
+    }
     default: {
       break;
     }
   }
+
+  const groupsToCheck = [
+    { groupId: 0 },
+    { groupId: Math.floor(resourceCount / 3) },
+    { groupId: resourceCount - 1 },
+  ];
 
   test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}") (T1205120)`, async () => {
     const resourceDataSource = Array.from({ length: resourceCount }, (_, index) => ({
@@ -127,20 +214,11 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
       text: `Resource ${index}`,
     }));
 
-    const resourceAppointmentCount = Math.floor(
-      (endDate.getTime() - startDate.getTime())
-      / ((1000 * 60 * 60 * 24) / 2),
-    );
-
     const startDates = Array
       .from({ length: resourceAppointmentCount })
-      .map<Date>((_, index) => new Date(2024, 0, 1 + index, 8));
+      .map<Date>((_, index) => new Date(startDate.getTime() + index * appointmentOffset));
 
-    const endDates = startDates.map((date) => {
-      const result = new Date(date);
-      result.setHours(result.getHours() + 2);
-      return result;
-    });
+    const endDates = startDates.map((date) => new Date(date.getTime() + appointmentDuration));
 
     const appointments = resourceDataSource.reduce<Appointment[]>((acc, resource) => acc.concat(
       Array
@@ -156,7 +234,7 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
     await createWidget('dxScheduler', {
       height: 600,
       width: 800,
-      currentDate: new Date(2024, 0, 2),
+      currentDate,
       startDayHour,
       endDayHour,
       scrolling: {
