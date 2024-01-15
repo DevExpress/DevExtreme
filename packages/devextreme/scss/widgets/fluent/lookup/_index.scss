@@ -80,6 +80,8 @@
 .dx-lookup-field {
   min-height: $lookup-field-height;
   line-height: $fluent-texteditor-line-height;
+  padding-top: $fluent-filled-texteditor-input-top-padding;
+  padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
 
   &::before {
     line-height: normal;

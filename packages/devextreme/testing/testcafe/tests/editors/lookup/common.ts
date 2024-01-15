@@ -12,7 +12,6 @@ import {
 import Guid from '../../../../../js/core/guid';
 import { clearTestPage } from '../../../helpers/clearPage';
 
-const LOOKUP_CLASS = 'dx-lookup';
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -143,7 +142,6 @@ test('Placeholder is visible after items option change when value is not chosen 
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.debug();
   await testScreenshot(t, takeScreenshot, 'Lookup appearance.png', { shouldTestInCompact: true });
 
   for (const id of t.ctx.ids) {
@@ -164,7 +162,7 @@ test('Lookup appearance', async (t) => {
 }).before(async (t) => {
   t.ctx.ids = [];
 
-  await insertStylesheetRulesToPage(`.${LOOKUP_CLASS} { display: inline-block; margin: 5px; }`);
+  await insertStylesheetRulesToPage('#container { display: grid; align-items: end; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 5px; }');
 
   for (const stylingMode of stylingModes) {
     for (const labelMode of labelModes) {
@@ -177,7 +175,6 @@ test('Lookup appearance', async (t) => {
 
           const options: any = {
             items: ['Item_text_1', 'Item_text_2'],
-            width: 220,
             label: 'label text',
             labelMode,
             stylingMode,
