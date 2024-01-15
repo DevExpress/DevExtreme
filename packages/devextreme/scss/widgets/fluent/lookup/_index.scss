@@ -37,8 +37,6 @@
 
   &.dx-editor-underlined {
     .dx-lookup-field {
-      padding-top: $fluent-standard-texteditor-input-top-padding;
-      padding-bottom: $fluent-standard-texteditor-input-top-padding;
       padding-inline-start: $fluent-base-standard-texteditor-input-horizontal-padding;
       padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size + $texteditor-spin-button-horizontal-padding;
     }

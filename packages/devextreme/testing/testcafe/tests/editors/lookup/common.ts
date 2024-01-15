@@ -151,7 +151,7 @@ test('Lookup appearance', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png', { shouldTestInCompact: true });
 
   for (const id of t.ctx.ids) {
-    await setStyleAttribute(Selector(`#${id}`), 'width: 150px;');
+    await setStyleAttribute(Selector(`#${id}`), 'width: 100px;');
   }
 
   await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png', { shouldTestInCompact: true });
