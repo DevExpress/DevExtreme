@@ -1,0 +1,24 @@
+name: Schedule daily publishing to GitHub Packages
+
+on:
+  schedule:
+    - cron: '0 0 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: devextreme-shr2
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      matrix:
+        branch: ['23_2', '24_1']
+
+    name: Run Packages Publishing workflow
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Publish Packages (${{ matrix.branch }})
+        run: |
+          gh workflow run packages_publishing.yml --ref ${{ matrix.branch }}          
