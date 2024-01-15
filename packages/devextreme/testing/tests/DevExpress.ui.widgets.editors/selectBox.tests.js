@@ -5979,7 +5979,6 @@ if(devices.real().deviceType === 'desktop') {
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
-                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
@@ -5996,7 +5995,6 @@ if(devices.real().deviceType === 'desktop') {
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
-                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
 
                 delete inputAttributes.readonly;
 
@@ -6025,7 +6023,6 @@ if(devices.real().deviceType === 'desktop') {
                     'aria-autocomplete': 'list',
                     'aria-expanded': 'false',
                     'aria-haspopup': 'listbox',
-                    'aria-labelledby': helper.widget._$placeholder.attr('id'),
                 };
 
                 if(!searchEnabled) {
@@ -6042,9 +6039,6 @@ if(devices.real().deviceType === 'desktop') {
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-
-                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
-
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
             });
