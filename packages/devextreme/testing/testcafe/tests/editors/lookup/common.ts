@@ -152,6 +152,12 @@ test('Lookup appearance', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png', { shouldTestInCompact: true });
 
+  for (const id of t.ctx.ids) {
+    await setStyleAttribute(Selector(`#${id}`), 'width: 150px;');
+  }
+
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png', { shouldTestInCompact: true });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -163,13 +169,14 @@ test('Lookup appearance', async (t) => {
   for (const stylingMode of stylingModes) {
     for (const labelMode of labelModes) {
       for (const rtlEnabled of [true, false]) {
-        for (const value of [null, 'Choosen value']) {
+        for (const value of [null, 'Item_text_2']) {
           const id = `${`dx${new Guid()}`}`;
 
           t.ctx.ids.push(id);
           await appendElementTo('#container', 'div', id, { });
 
           const options: any = {
+            items: ['Item_text_1', 'Item_text_2'],
             width: 220,
             label: 'label text',
             labelMode,

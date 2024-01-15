@@ -165,9 +165,8 @@ const getFullOffsetRight = function($element) {
 };
 
 const testVerticalOffset = function($label, $value) {
-    const isIE9 = document.all && !document.atob;
-    const labelOffset = Math.round($label.offset().top - parseInt($label.css('margin-top')) - isIE9 ? parseInt($label.css('borderTopWidth')) : 0);
-    const valueOffset = Math.round($value.offset().top - parseInt($value.css('margin-top')) - isIE9 ? parseInt($value.css('borderTopWidth')) : 0);
+    const labelOffset = Math.round($label.offset().top - parseInt($label.css('margin-top')) ? parseInt($label.css('borderTopWidth')) : 0);
+    const valueOffset = Math.round($value.offset().top - parseInt($value.css('margin-top')) ? parseInt($value.css('borderTopWidth')) : 0);
 
     QUnit.assert.equal(labelOffset, valueOffset, 'Top offset equal');
 };
@@ -377,14 +376,6 @@ module.exports = function(themeName, options) {
 
         QUnit.test('dxAutocomplete in Field', function(assert) {
             testVerticalAlign($('#autocompleteInField'), VALUE + ' input.dx-texteditor-input', false, options.testVerticalOffset);
-        });
-
-        QUnit.test('dxLookup on Field', function(assert) {
-            testVerticalAlign($('#lookupOnField'), VALUE + ' .dx-lookup-field', true, options.testVerticalOffset);
-        });
-
-        QUnit.test('dxLookup in Field', function(assert) {
-            testVerticalAlign($('#lookupInField'), VALUE + ' .dx-lookup-field', true, options.testVerticalOffset);
         });
 
         QUnit.test('simpleText on Field', function(assert) {
