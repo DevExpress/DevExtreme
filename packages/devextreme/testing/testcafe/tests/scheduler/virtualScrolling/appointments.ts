@@ -56,9 +56,9 @@ const viewTypes: ViewType[] = [
   'workWeek',
   'month',
   'timelineDay',
-  'timelineMonth',
   'timelineWeek',
   'timelineWorkWeek',
+  'timelineMonth',
 ];
 
 const groupOrientations: Orientation[] = [
@@ -85,16 +85,6 @@ const testOptions = generateOptionMatrix({
   {
     viewType: 'agenda',
     groupOrientation: 'horizontal',
-  },
-  {
-    viewType: 'timelineWeek',
-    groupOrientation: 'vertical',
-    scrollMode: 'virtual',
-  },
-  {
-    viewType: 'timelineWorkWeek',
-    groupOrientation: 'vertical',
-    scrollMode: 'virtual',
   },
 ]);
 
@@ -125,7 +115,8 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
       ];
       break;
     }
-    case 'day': {
+    case 'day':
+    case 'timelineDay': {
       resourceCount = 30;
 
       startDate = new Date(2024, 0, 2, 8);
@@ -141,7 +132,8 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
       }
       break;
     }
-    case 'week': {
+    case 'week':
+    case 'timelineWeek': {
       startDate = new Date(2024, 0, 1, 8);
 
       datesToCheck = [
@@ -161,7 +153,8 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
 
       break;
     }
-    case 'workWeek': {
+    case 'workWeek':
+    case 'timelineWorkWeek': {
       startDate = new Date(2024, 0, 1, 8);
 
       datesToCheck = [
@@ -181,7 +174,8 @@ testOptions.forEach(({ viewType, groupOrientation, scrollMode }) => {
 
       break;
     }
-    case 'month': {
+    case 'month':
+    case 'timelineMonth': {
       startDate = new Date(2024, 0, 1, 8);
 
       datesToCheck = [
