@@ -172,24 +172,15 @@ testOptions.forEach(({
   scrollMode,
   rtlEnabled,
 }) => {
-  let startDate = new Date(2024, 0, 1, 8);
   const currentDate = new Date(2024, 0, 2);
+  const HOUR = 1000 * 60 * 60;
 
   const startDayHour = 8;
   const endDayHour = 20;
+
   let resourceCount = 30;
-  let resourceAppointmentCount = 12;
 
-  const HOUR = 1000 * 60 * 60;
-
-  let appointmentOffset = HOUR;
-  let appointmentDuration = HOUR / 2;
-
-  let datesToCheck = [
-    new Date(2024, 0, 1, 8),
-    new Date(2024, 0, 2, 8),
-    new Date(2024, 0, 3, 8),
-  ];
+  let appointmentDates: Date[];
 
   if (scrollMode === 'standard') {
     resourceCount = 10;
@@ -197,88 +188,87 @@ testOptions.forEach(({
 
   switch (viewType) {
     case 'agenda': {
-      resourceCount = 10;
-
-      datesToCheck = [
-        new Date(2024, 0, 1, 8),
-      ];
-      break;
-    }
-    case 'day':
-    case 'timelineDay': {
-      startDate = new Date(2024, 0, 2, 8);
-
-      datesToCheck = [
-        new Date(2024, 0, 2, 8),
-        new Date(2024, 0, 2, 12),
-        new Date(2024, 0, 2, 19),
-      ];
+      appointmentDates = Array.from(
+        { length: 12 },
+        (_, index) => {
+          const result = new Date(2024, 0, 1, 8);
+          result.setHours(result.getHours() + index);
+          return result;
+        },
+      );
 
       break;
     }
     case 'week':
     case 'timelineWeek': {
-      startDate = new Date(2024, 0, 1, 8);
-
-      datesToCheck = [
-        new Date(2023, 11, 31, 8),
-        new Date(2024, 0, 3, 12),
-        new Date(2024, 0, 6, 19),
-      ];
-
-      appointmentOffset = HOUR * 2;
-      appointmentDuration = HOUR;
-
-      resourceAppointmentCount = 12 * 7;
-
       if (scrollMode === 'standard' && groupOrientation === 'horizontal') {
         resourceCount = 2;
       }
+
+      appointmentDates = Array.from(
+        { length: 12 * 7 },
+        (_, index) => {
+          const result = new Date(2023, 11, 31, 8);
+          result.setDate(result.getDate() + Math.floor(index / 12));
+          result.setHours(result.getHours() + (index % 12));
+          return result;
+        },
+      );
 
       break;
     }
     case 'workWeek':
     case 'timelineWorkWeek': {
-      startDate = new Date(2024, 0, 1, 8);
-
-      datesToCheck = [
-        new Date(2024, 0, 1, 8),
-        new Date(2024, 0, 2, 12),
-        new Date(2024, 0, 5, 19),
-      ];
-
-      appointmentOffset = HOUR * 2;
-      appointmentDuration = HOUR;
-
-      resourceAppointmentCount = 12 * 5;
-
       if (scrollMode === 'standard' && groupOrientation === 'horizontal') {
         resourceCount = 2;
       }
+
+      appointmentDates = Array.from(
+        { length: 12 * 5 },
+        (_, index) => {
+          const result = new Date(2024, 0, 1, 8);
+          result.setDate(result.getDate() + Math.floor(index / 12));
+          result.setHours(result.getHours() + (index % 12));
+          return result;
+        },
+      );
 
       break;
     }
     case 'month':
     case 'timelineMonth': {
-      startDate = new Date(2024, 0, 1, 8);
-
-      datesToCheck = [
-        new Date(2024, 0, 1, 8),
-        new Date(2024, 0, 2, 12),
-        new Date(2024, 0, 31, 19),
-      ];
-
-      appointmentOffset = HOUR * 24;
-      appointmentDuration = HOUR * 2;
-
-      resourceAppointmentCount = 31;
+      appointmentDates = Array.from(
+        { length: 31 },
+        (_, index) => {
+          const result = new Date(2024, 0, 1, 8);
+          result.setDate(result.getDate() + index);
+          return result;
+        },
+      );
 
       break;
     }
+    case 'day':
+    case 'timelineDay':
     default: {
+      appointmentDates = Array.from(
+        { length: 12 },
+        (_, index) => {
+          const result = new Date(2024, 0, 2, 8);
+          result.setHours(result.getHours() + index);
+          return result;
+        },
+      );
+
       break;
     }
   }
+
+  const datesToCheck = [
+    appointmentDates[0],
+    appointmentDates[Math.floor(appointmentDates.length / 3)],
+    appointmentDates[appointmentDates.length - 1],
+  ];
 
   const groupsToCheck = [
     { groupId: 0 },
@@ -292,19 +282,12 @@ testOptions.forEach(({
       text: `Resource ${index}`,
     }));
 
-    const startDates = Array
-      .from({ length: resourceAppointmentCount })
-      .map<Date>((_, index) => new Date(startDate.getTime() + index * appointmentOffset));
-
-    const endDates = startDates.map((date) => new Date(date.getTime() + appointmentDuration));
-
     const appointments = resourceDataSource.reduce<Appointment[]>((acc, resource) => acc.concat(
-      Array
-        .from({ length: resourceAppointmentCount })
-        .map<Appointment>((_, index) => ({
+      appointmentDates
+        .map<Appointment>((date) => ({
         text: resource.text,
-        startDate: startDates[index],
-        endDate: endDates[index],
+        startDate: date,
+        endDate: new Date(date.getTime() + HOUR / 2),
         groupId: resource.id,
       })),
     ), []);
