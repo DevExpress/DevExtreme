@@ -38,4 +38,4 @@ jobs:
 
     - name: Check sources compilation
       working-directory: ./playgrounds/react
-      run: npm start
+      run: npm run build
