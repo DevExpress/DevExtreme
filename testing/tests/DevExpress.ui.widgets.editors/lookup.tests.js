@@ -3380,7 +3380,6 @@ let helper;
 if(devices.real().deviceType === 'desktop') {
     QUnit.module('Aria accessibility', {
         beforeEach: function() {
-            this.isMac = devices.real().mac;
             helper = new ariaAccessibilityTestHelper({
                 createWidget: ($element, options) => new Lookup($element, options)
             });
@@ -3399,9 +3398,6 @@ if(devices.real().deviceType === 'desktop') {
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
-                const $placeholder = helper.widget._popup.$content().find(`.${PLACEHOLDER_CLASS}`);
-
-                const placeholderId = $placeholder.attr('id');
 
                 const listAttributes = {
                     id: helper.widget._listId,
@@ -3443,12 +3439,8 @@ if(devices.real().deviceType === 'desktop') {
                         tabindex: '0',
                         role: 'textbox',
                         'aria-label': 'Search',
-                        'aria-labelledby': placeholderId,
+                        placeholder: 'Search',
                     };
-
-                    if(this.isMac) {
-                        expectedAttributes.placeholder = ' ';
-                    }
 
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
@@ -3486,12 +3478,8 @@ if(devices.real().deviceType === 'desktop') {
                         spellcheck: 'false',
                         role: 'textbox',
                         'aria-label': 'Search',
-                        'aria-labelledby': placeholderId,
+                        placeholder: 'Search',
                     };
-
-                    if(this.isMac) {
-                        expectedAttributes.placeholder = ' ';
-                    }
 
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
