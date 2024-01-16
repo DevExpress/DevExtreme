@@ -9,7 +9,6 @@ import {
   getDateTableWidth,
   getHiddenInterval,
   getRowCountWithAllDayRow,
-  getSelectedCells,
   getTotalCellCount,
   getTotalRowCount,
 } from '../utils';
@@ -540,90 +539,6 @@ describe('Workspace base utils', () => {
         lastIndex: 10,
       }))
         .toBe(false);
-    });
-  });
-
-  describe('getSelectedCells', () => {
-    const cells = [[{
-      startDate: new Date(2021, 10, 20),
-      endDate: new Date(2021, 10, 21),
-      index: 0,
-    }, {
-      startDate: new Date(2021, 10, 21),
-      endDate: new Date(2021, 10, 22),
-      index: 1,
-    }, {
-      startDate: new Date(2021, 10, 22),
-      endDate: new Date(2021, 10, 23),
-      index: 2,
-    }, {
-      startDate: new Date(2021, 10, 23),
-      endDate: new Date(2021, 10, 24),
-      index: 3,
-    }, {
-      startDate: new Date(2021, 10, 24),
-      endDate: new Date(2021, 10, 25),
-      index: 4,
-    }, {
-      startDate: new Date(2021, 10, 25),
-      endDate: new Date(2021, 10, 26),
-      index: 5,
-    }]];
-
-    it('should return correct selected cells', () => {
-      const viewDataProvider: any = {
-        getCellsByGroupIndexAndAllDay: jest.fn(() => cells),
-      };
-      const firstCell: any = cells[0][1];
-      const lastCell: any = cells[0][4];
-
-      expect(getSelectedCells(viewDataProvider, firstCell, lastCell, false))
-        .toEqual([{
-          startDate: new Date(2021, 10, 21),
-          endDate: new Date(2021, 10, 22),
-          index: 1,
-        }, {
-          startDate: new Date(2021, 10, 22),
-          endDate: new Date(2021, 10, 23),
-          index: 2,
-        }, {
-          startDate: new Date(2021, 10, 23),
-          endDate: new Date(2021, 10, 24),
-          index: 3,
-        }, {
-          startDate: new Date(2021, 10, 24),
-          endDate: new Date(2021, 10, 25),
-          index: 4,
-        }]);
-      expect(viewDataProvider.getCellsByGroupIndexAndAllDay)
-        .toHaveBeenCalledWith(0, false);
-    });
-
-    it('should return correct selected cells when first cell is after last cell', () => {
-      const viewDataProvider: any = {
-        getCellsByGroupIndexAndAllDay: jest.fn(() => cells),
-      };
-      const firstCell: any = cells[0][4];
-      const lastCell: any = cells[0][1];
-
-      expect(getSelectedCells(viewDataProvider, firstCell, lastCell, false))
-        .toEqual([{
-          startDate: new Date(2021, 10, 21),
-          endDate: new Date(2021, 10, 22),
-          index: 1,
-        }, {
-          startDate: new Date(2021, 10, 22),
-          endDate: new Date(2021, 10, 23),
-          index: 2,
-        }, {
-          startDate: new Date(2021, 10, 23),
-          endDate: new Date(2021, 10, 24),
-          index: 3,
-        }, {
-          startDate: new Date(2021, 10, 24),
-          endDate: new Date(2021, 10, 25),
-          index: 4,
-        }]);
     });
   });
 });

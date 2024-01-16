@@ -6,7 +6,6 @@ import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
 import {
   Group,
   TableWidthWorkSpaceConfig,
-  ViewCellData,
   ViewDataProviderType,
   VirtualScrollingOptions,
 } from '../types';
@@ -200,81 +199,8 @@ export const compareCellsByDateAndIndex = (daysAndIndexes: {
     return firstDate === date && index >= validFirstIndex && index <= validLastIndex;
   }
   return (date === firstDate && index >= firstIndex)
-          || (date === lastDate && index <= lastIndex)
-          || (firstDate < date && date < lastDate);
-};
-
-const filterCellsByDateAndIndex = (cellsRow: ViewCellData[], filterData: {
-  firstDate: Date;
-  lastDate: Date;
-  firstIndex: number;
-  lastIndex: number;
-}): ViewCellData[] => {
-  const {
-    firstDate, lastDate,
-    firstIndex, lastIndex,
-  } = filterData;
-
-  const firstDay = (dateUtils.trimTime(firstDate) as Date).getTime();
-  const lastDay = (dateUtils.trimTime(lastDate) as Date).getTime();
-
-  return cellsRow.filter((cell) => {
-    const { startDate, index } = cell;
-    const day = (dateUtils.trimTime(startDate) as Date).getTime();
-    const daysAndIndexes = {
-      date: day,
-      index,
-      firstDate: firstDay,
-      firstIndex,
-      lastDate: lastDay,
-      lastIndex,
-    };
-
-    return compareCellsByDateAndIndex(daysAndIndexes);
-  });
-};
-
-export const getSelectedCells = (
-  viewDataProvider: ViewDataProviderType,
-  firstSelectedCell: ViewCellData,
-  lastSelectedCell: ViewCellData,
-  isLastSelectedCellAllDay: boolean,
-): ViewCellData[] => {
-  let firstCell = firstSelectedCell;
-  let lastCell = lastSelectedCell;
-
-  if (firstCell.startDate.getTime() > lastCell.startDate.getTime()) {
-    [firstCell, lastCell] = [lastCell, firstCell];
-  }
-
-  const {
-    startDate: firstStartDate, groupIndex: firstGroupIndex, index: firstCellIndex,
-  } = firstCell;
-  const {
-    startDate: lastStartDate, index: lastCellIndex,
-  } = lastCell;
-
-  const cells = viewDataProvider
-    .getCellsByGroupIndexAndAllDay(firstGroupIndex ?? 0, isLastSelectedCellAllDay);
-
-  const filteredCells = cells.reduce((selectedCells, cellsRow) => {
-    const filterData = {
-      firstDate: firstStartDate,
-      lastDate: lastStartDate,
-      firstIndex: firstCellIndex,
-      lastIndex: lastCellIndex,
-    };
-    const filteredRow = filterCellsByDateAndIndex(cellsRow, filterData);
-    selectedCells.push(...filteredRow);
-
-    return selectedCells;
-  }, []);
-
-  const selectedCells = filteredCells.sort(
-    (firstArg, secondArg) => firstArg.startDate.getTime() - secondArg.startDate.getTime(),
-  );
-
-  return selectedCells;
+    || (date === lastDate && index <= lastIndex)
+    || (firstDate < date && date < lastDate);
 };
 
 export const isCellAllDay = (cell: HTMLElement): boolean => cell.className
