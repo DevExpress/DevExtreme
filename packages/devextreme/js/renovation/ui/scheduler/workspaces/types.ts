@@ -244,6 +244,7 @@ export interface ViewDataProviderType {
   createGroupedDataMapProvider: () => void;
   isSkippedDate: (date: Date) => boolean;
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
+  getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
 }
 
 interface CompleteViewDataGenerationOptions {
