@@ -708,36 +708,31 @@ QUnit.module('aria-labelledby attribute', {
         this.$placeholder = this.$textEditor.find(`.${PLACEHOLDER_CLASS}`);
     }
 }, () => {
-    QUnit.test('aria-labelledby should be equal label and placeholder ids if label and placeholder are specified', function(assert) {
-        const inputAttr = this.$input.attr('aria-labelledby');
-        const labelId = this.$label.attr('id');
-        const placeholderId = this.$placeholder.attr('id');
-
-        assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
-    });
-
-    QUnit.test('aria-labelledby should be equal label id if label is specified and placeholder is not specified', function(assert) {
-        this.textEditor.option({ placeholder: null });
+    QUnit.test('aria-labelledby should not be set if inputAttr containes aria-label', function(assert) {
+        this.textEditor.option({
+            inputAttr: { 'aria-label': 'custom' },
+            label: null,
+        });
 
         const inputAttr = this.$input.attr('aria-labelledby');
-        const labelId = this.$label.attr('id');
 
-        assert.strictEqual(inputAttr, labelId);
-    });
-
-    QUnit.test('aria-labelledby should be equal placeholder id if label is not specified and placeholder is specified', function(assert) {
-        this.textEditor.option({ label: null });
-
-        const inputAttr = this.$input.attr('aria-labelledby');
-        const placeholderId = this.$placeholder.attr('id');
-
-        assert.strictEqual(inputAttr, placeholderId);
+        assert.strictEqual(inputAttr, undefined);
     });
 
     QUnit.test('aria-labelledby should be equal undefined if label and placeholderId are not specified', function(assert) {
         this.textEditor.option({
             label: null,
             placeholder: null,
+        });
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('aria-labelledby should be equal undefined if placeholder is specified and label is not specified', function(assert) {
+        this.textEditor.option({
+            label: null,
+            placeholder: 'placeholder',
         });
         const inputAttr = this.$input.attr('aria-labelledby');
 
@@ -752,6 +747,35 @@ QUnit.module('aria-labelledby attribute', {
         const inputAttr = this.$input.attr('aria-labelledby');
 
         assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('the placeholder attr should be equal custom placeholder', function(assert) {
+        this.textEditor.option({
+            placeholder: 'custom',
+            label: null,
+        });
+
+        const placeholder = this.$input.attr('placeholder');
+
+        assert.strictEqual(placeholder, this.textEditor.option('placeholder'));
+    });
+
+    QUnit.test('the placeholder attr should be equal empty string if placeholder is null in ios or mac', function(assert) {
+        this.textEditor.option({
+            placeholder: null,
+            label: null,
+        });
+
+        const { ios, mac } = devices.real();
+        const placeholder = this.$input.attr('placeholder');
+
+        if(ios || mac) {
+            assert.strictEqual(placeholder, ' ');
+
+            return;
+        }
+
+        assert.strictEqual(placeholder, undefined);
     });
 });
 
