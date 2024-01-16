@@ -496,13 +496,12 @@ const TextEditorBase = Editor.inherit({
         const { 'aria-label': ariaLabel } = this.option('inputAttr');
 
         const labelId = this._label.getId();
-        const placeholderId = this._$placeholder?.attr('id');
 
-        const value = ariaLabel ? undefined : [labelId, placeholderId].filter(Boolean).join(' ');
+        const value = ariaLabel ? undefined : labelId;
 
         if(value || force) {
             const aria = {
-                'labelledby': value || undefined,
+                'labelledby': value,
                 label: ariaLabel,
             };
             this.setAria(aria, this._getFieldElement());
