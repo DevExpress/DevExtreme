@@ -165,6 +165,7 @@ $material-editor-custom-button-margin: 5px;
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-placeholder::before,
+    .dx-lookup-field,
     .dx-texteditor-input {
       padding: $material-filled-texteditor-input-padding;
     }
