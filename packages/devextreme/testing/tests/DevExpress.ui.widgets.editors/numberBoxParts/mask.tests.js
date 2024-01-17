@@ -1287,6 +1287,20 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         assert.equal(this.input.val(), '1.0', 'zero has not been removed');
     });
 
+    QUnit.test('NumberBox shold not accept letters in value when mas is "#0.0#" (T1211093)', function(assert) {
+        this.instance.option({
+            format: '#0.0#',
+            value: '14.30',
+        });
+
+        this.keyboard
+            .caret(4)
+            .press('backspace')
+            .type('b');
+
+        assert.equal(this.input.val(), '14.0', 'value should not contain letter');
+    });
+
     QUnit.test('incomplete values should be reformatted on enter', function(assert) {
         this.keyboard.type('123.').press('enter');
         assert.equal(this.input.val(), '123', 'input was reformatted');
