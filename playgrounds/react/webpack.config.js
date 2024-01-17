@@ -17,7 +17,9 @@ module.exports = {
     extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
     alias: {
       'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom')
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+      '@types/react': path.resolve(__dirname, './node_modules/@types/react'),
+      '@types/react-dom': path.resolve(__dirname, './node_modules/@types/react-dom'),
     },
     plugins: [new TsconfigPathsPlugin({
       configFile: "./tsconfig.json"

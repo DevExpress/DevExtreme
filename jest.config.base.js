@@ -1,10 +1,14 @@
+const tsconfig = require('./tsconfig.json')
+const tsJestUtils = require('ts-jest/utils');
 module.exports = {
   roots: ['<rootDir>'],
   transform: {
     '.*': [
       'ts-jest',
       {
-        diagnostics: false,
+        diagnostics: {
+          exclude: ['**'],
+        },
       },
     ]
   },
@@ -17,5 +21,6 @@ module.exports = {
     "jsx",
     "json",
     "node"
-  ]
+  ],
+  moduleNameMapper: tsJestUtils.pathsToModuleNameMapper(tsconfig.compilerOptions.paths),
 };
