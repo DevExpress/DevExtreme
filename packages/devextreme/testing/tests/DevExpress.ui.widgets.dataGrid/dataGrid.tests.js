@@ -2194,6 +2194,32 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok(!dataSource._disposed, 'dataSource is not disposed');
     });
 
+    // T1185718
+    QUnit.test('loading changed unsubscribed from dataSource when dataGrid is disposed', function(assert) {
+        // arrange, act
+        const dataSource = new DataSource({
+            store: [{ id: 1111 }]
+        });
+
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: dataSource
+        });
+
+        // assert
+        assert.ok(dataSource.isLoaded(), 'dataSource is loaded');
+
+        // act
+        $('#dataGrid').remove();
+        dataSource.load();
+
+        const loadingChangedCallbacks = dataSource._eventsStrategy._events.loadingChanged._list;
+
+        // assert
+        assert.ok(!loadingChangedCallbacks.length, 'dataSource loadingChanged callback is not disposed');
+    });
+
     QUnit.test('updateDimensions after disposing DataGrid (T847853)', function(assert) {
         const dataGrid = createDataGrid({
             columnAutoWidth: true,
