@@ -14,80 +14,73 @@ import { scrollTo } from '../../virtualScrolling/utils';
 fixture.disablePageReloads`Layout:Templates:appointmentTemplate:targetedData`
   .page(url(__dirname, '../../../container.html'));
 
-interface TestOptions {
-  resourceCount: number;
-  appointmentDates: Date[];
-}
-
-const createTestOptions = (
+const getResourceCount = (
   viewType: ViewType,
   scrollMode: ScrollMode,
   groupOrientation: Orientation,
-): TestOptions => {
-  const defaultResourceCount = scrollMode === 'standard' ? 10 : 30;
-
-  if (viewType === 'agenda') {
-    return {
-      resourceCount: defaultResourceCount,
-      appointmentDates: Array.from(
-        { length: 12 },
-        (_, index) => {
-          const result = new Date(2024, 0, 1, 8);
-          result.setHours(result.getHours() + index);
-          return result;
-        },
-      ),
-    };
+): number => {
+  if (
+    (viewType === 'workWeek'
+      || viewType === 'timelineWorkWeek'
+      || viewType === 'week'
+      || viewType === 'timelineWeek')
+    && (scrollMode === 'standard' && groupOrientation === 'horizontal')
+  ) {
+    return 2;
   }
 
+  if (scrollMode === 'standard') {
+    return 10;
+  }
+
+  return 30;
+};
+
+const getGroupAppointmentDates = (viewType: ViewType): Date[] => {
   const isWorkWeek = viewType === 'workWeek' || viewType === 'timelineWorkWeek';
 
   if (isWorkWeek || viewType === 'week' || viewType === 'timelineWeek') {
-    const [dayCount, startDate] = isWorkWeek
+    const [
+      dayCount,
+      startDate,
+    ] = isWorkWeek
       ? [5, new Date(2024, 0, 1, 8)]
       : [7, new Date(2023, 11, 31, 8)];
 
-    return {
-      resourceCount: scrollMode === 'standard' && groupOrientation === 'horizontal'
-        ? 2
-        : defaultResourceCount,
-      appointmentDates: Array.from(
-        { length: 12 * dayCount },
-        (_, index) => {
-          const result = new Date(startDate);
-          result.setDate(result.getDate() + Math.floor(index / 12));
-          result.setHours(result.getHours() + (index % 12));
-          return result;
-        },
-      ),
-    };
+    return Array.from(
+      { length: 12 * dayCount },
+      (_, index) => {
+        const result = new Date(startDate);
+        result.setDate(result.getDate() + Math.floor(index / 12));
+        result.setHours(result.getHours() + (index % 12));
+        return result;
+      },
+    );
   }
 
   if (viewType === 'month' || viewType === 'timelineMonth') {
-    return {
-      resourceCount: defaultResourceCount,
-      appointmentDates: Array.from(
-        { length: 31 },
-        (_, index) => {
-          const result = new Date(2024, 0, 1, 8);
-          result.setDate(result.getDate() + index);
-          return result;
-        },
-      ),
-    };
-  }
-
-  return {
-    resourceCount: defaultResourceCount,
-    appointmentDates: Array.from(
-      { length: 12 },
+    return Array.from(
+      { length: 31 },
       (_, index) => {
-        const result = new Date(2024, 0, 2, 8);
-        result.setHours(result.getHours() + index);
+        const result = new Date(2024, 0, 1, 8);
+        result.setDate(result.getDate() + index);
         return result;
       },
-    ),
-  };
+    );
+  }
+
+  const startDate = viewType === 'agenda'
+    ? new Date(2024, 0, 1, 8)
+    : new Date(2024, 0, 2, 8);
+
+  return Array.from(
+    { length: 12 },
+    (_, index) => {
+      const result = new Date(startDate);
+      result.setHours(result.getHours() + index);
+      return result;
+    },
+  );
 };
 
 const viewTypes: ViewType[] = [
@@ -179,7 +172,7 @@ const testOptions = generateOptionMatrix({
   },
 ]);
 
-// no assertions are present, checking but not throwing an error in a template function
+// NOTE: no assertions are present, checking but not throwing an error in a template function
 testOptions.forEach(({
   viewType,
   groupOrientation,
@@ -189,11 +182,8 @@ testOptions.forEach(({
   test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async (t) => {
     const currentDate = new Date(2024, 0, 2);
     const HOUR = 1000 * 60 * 60;
-
-    const {
-      resourceCount,
-      appointmentDates,
-    } = createTestOptions(viewType, scrollMode, groupOrientation);
+    const resourceCount = getResourceCount(viewType, scrollMode, groupOrientation);
+    const appointmentDates = getGroupAppointmentDates(viewType);
 
     const datesToCheck = [
       appointmentDates[0],
