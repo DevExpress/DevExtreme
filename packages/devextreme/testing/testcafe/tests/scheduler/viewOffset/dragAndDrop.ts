@@ -4,7 +4,7 @@ import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../.
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Offset: Drag-n-drop appointments`
+fixture`Offset: Drag-n-drop appointments`
   .page(url(__dirname, '../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';

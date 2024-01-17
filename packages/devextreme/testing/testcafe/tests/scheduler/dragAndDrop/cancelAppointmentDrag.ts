@@ -3,7 +3,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Cancel appointment Drag-and-Drop`
+fixture`Cancel appointment Drag-and-Drop`
   .page(url(__dirname, '../../container.html'));
 
 const APPOINTMENT_DRAG_SOURCE_CLASS = '.dx-scheduler-appointment-drag-source';

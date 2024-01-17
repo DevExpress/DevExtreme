@@ -18,7 +18,7 @@ const markup = '<div style="display: flex;">\
   <div id="scheduler"></div>\
 </div>';
 
-fixture.disablePageReloads`T1118059`
+fixture`T1118059`
   .page(url(__dirname, '../../container.html'));
 
 const safeEvent = (value) => ClientFunction(() => {

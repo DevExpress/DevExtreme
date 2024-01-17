@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Appointment form: expressions`
+fixture`Appointment form: expressions`
   .page(url(__dirname, '../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';

@@ -6,7 +6,7 @@ import { getData } from '../helpers/generateDataSourceData';
 
 const GRID_SELECTOR = '#container';
 
-fixture.disablePageReloads`Validation`
+fixture`Validation`
   .page(url(__dirname, '../../container.html'));
 
 // TODO: make this test stable

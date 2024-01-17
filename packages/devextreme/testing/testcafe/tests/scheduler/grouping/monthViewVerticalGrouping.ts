@@ -5,7 +5,7 @@ import Scheduler from '../../../model/scheduler';
 
 const SCHEDULER_SELECTOR = '#container';
 
-fixture.disablePageReloads`Month view vertical grouping `
+fixture`Month view vertical grouping `
   .page(url(__dirname, '../../container.html'));
 
 test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {

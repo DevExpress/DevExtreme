@@ -5,7 +5,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 import { generateAppointments } from '../../helpers/generateAppointments';
 
-fixture.disablePageReloads`Offset: Markup usual appointments`
+fixture`Offset: Markup usual appointments`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';

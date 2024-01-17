@@ -3,7 +3,7 @@ import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Scheduler: Layout Customization: Time Panel`
+fixture`Scheduler: Layout Customization: Time Panel`
   .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (

@@ -4,7 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: Layout Customization: Header Panel`
+fixture`Scheduler: Layout Customization: Header Panel`
   .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (

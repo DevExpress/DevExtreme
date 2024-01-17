@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Agenda:API`
+fixture`Agenda:API`
   .page(url(__dirname, '../../container.html'));
 
 test('Html elements should be absent in Agenda view', async (t) => {

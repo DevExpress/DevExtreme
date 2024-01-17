@@ -10,7 +10,7 @@ import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
 
-fixture.disablePageReloads`Editing`
+fixture`Editing`
   .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {

@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Agenda:layout`
+fixture`Agenda:layout`
   .page(url(__dirname, '../../container.html'));
 
 const data = [{

@@ -5,7 +5,7 @@ import Scheduler from '../../../../model/scheduler';
 import AppointmentDialog from '../../../../model/scheduler/appointment/dialog';
 import Appointment from '../../../../model/scheduler/appointment';
 
-fixture.disablePageReloads`Editing recurrent appointment in DST time`
+fixture`Editing recurrent appointment in DST time`
   .page(url(__dirname, '../../../container.html'));
 
 interface ITestResizeOptions {

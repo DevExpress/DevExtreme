@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: SmoothCellLines`
+fixture`Scheduler: SmoothCellLines`
   .page(url(__dirname, '../../container.html'));
 
 const resourcesData = [...Array(20).keys()].map((num: number) => ({

@@ -7,7 +7,7 @@ import DataGrid from '../../../model/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
 
-fixture.disablePageReloads`State Storing`
+fixture`State Storing`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';

@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: View with first day of week`
+fixture`Scheduler: View with first day of week`
   .page(url(__dirname, '../../../container.html'));
 
 test('WorkWeek should generate correct start view date', async (t) => {

@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Agenda:Editing`
+fixture`Agenda:Editing`
   .page(url(__dirname, '../../container.html'));
 
 test('It should be possible to delete an appointment', async (t) => {

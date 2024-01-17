@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Appointments in TimelineMonth`
+fixture`Appointments in TimelineMonth`
   .page(url(__dirname, '../../container.html'));
 
 test('Appointments should have correct order', async (t) => {

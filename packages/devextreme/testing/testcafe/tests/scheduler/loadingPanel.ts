@@ -7,7 +7,7 @@ const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
 
-fixture.disablePageReloads`Scheduler loading panel`
+fixture`Scheduler loading panel`
   .page(url(__dirname, '../container.html'));
 
 test('Save appointment loading panel screenshot', async (t) => {

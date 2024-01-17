@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
+fixture`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../container.html'));
 
 ['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {

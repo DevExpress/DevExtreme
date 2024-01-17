@@ -3,7 +3,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
+fixture`Layout:AppointmentForm:AllDay`
   .page(url(__dirname, '../../../container.html'));
 
 test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {

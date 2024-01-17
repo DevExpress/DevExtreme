@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`ResourceCellTemplate`
+fixture`ResourceCellTemplate`
   .page(url(__dirname, '../../container.html'));
 
 test('resourceCellTemplate layout should be rendered right in the agenda view', async (t) => {

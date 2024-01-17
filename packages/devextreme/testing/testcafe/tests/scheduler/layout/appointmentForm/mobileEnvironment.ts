@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:AppointmentForm:MobileEnvironment`
+fixture`Layout:AppointmentForm:MobileEnvironment`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Appointment form should be display valid layout', async (t) => {

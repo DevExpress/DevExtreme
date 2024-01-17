@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`T1017720`
+fixture`T1017720`
   .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {

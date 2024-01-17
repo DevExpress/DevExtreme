@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import Scheduler from '../../../../model/scheduler';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`DataSource`
+fixture`DataSource`
   .page(url(__dirname, '../../../container.html'));
 
 test('Appointment key should be deleted when removing an appointment from series (T1024213)', async (t) => {

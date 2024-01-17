@@ -6,7 +6,7 @@ import Scheduler from '../../../model/scheduler';
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 
-fixture.disablePageReloads`Recurrence dialog`
+fixture`Recurrence dialog`
   .page(url(__dirname, '../../container.html'));
 
 test('Recurrence edit dialog screenshot', async (t) => {

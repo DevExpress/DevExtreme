@@ -4,7 +4,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.disablePageReloads`Outlook dragging, for case scheduler in container`
+fixture`Outlook dragging, for case scheduler in container`
   .page(url(__dirname, '../../../../container.html'));
 
 test('Dragging should be work right in case dxScheduler placed in dxTabPanel', async (t) => {

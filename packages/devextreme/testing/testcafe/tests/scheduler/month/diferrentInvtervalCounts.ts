@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: different intervalCount option's values`
+fixture`Scheduler: different intervalCount option's values`
   .page(url(__dirname, '../../container.html'));
 
 test('Interval count: 1, February of 2021', async (t) => {

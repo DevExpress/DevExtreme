@@ -4,7 +4,7 @@ import Scheduler from '../../../../../model/scheduler';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:Views:Day:AllDay`
+fixture`Layout:Views:Day:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
 const enableNativeScroll = ClientFunction(() => {

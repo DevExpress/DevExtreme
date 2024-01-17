@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
+fixture`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
