@@ -86,8 +86,13 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
-  protected _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
-    super._focus($cell, disableFocus, skipFocusEvent);
+  protected _focus(
+    $cell: any,
+    disableFocus?: any,
+    skipFocusEvent?: any,
+    preventScroll?: boolean,
+  ): void {
+    super._focus($cell, disableFocus, skipFocusEvent, preventScroll);
 
     this.makeScrollableFocusableIfNeed();
   }

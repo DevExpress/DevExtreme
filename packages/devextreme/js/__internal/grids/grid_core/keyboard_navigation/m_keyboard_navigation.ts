@@ -1354,7 +1354,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     gridCoreUtils.focusAndSelectElement(this, $focusedElement);
   }
 
-  protected _focus($cell, disableFocus?, skipFocusEvent?) {
+  protected _focus($cell, disableFocus?, skipFocusEvent?, preventScroll?: boolean) {
     const $row = $cell && !$cell.hasClass(ROW_CLASS)
       ? $cell.closest(`.${ROW_CLASS}`)
       : $cell;
@@ -1400,8 +1400,16 @@ export class KeyboardNavigationController extends modules.ViewController {
       });
       if (!skipFocusEvent) {
         this._applyTabIndexToElement($focusElement);
-        // @ts-expect-error
-        eventsEngine.trigger($focusElement, 'focus');
+
+        if (!preventScroll) {
+          // @ts-expect-error
+          eventsEngine.trigger($focusElement, 'focus');
+        } else {
+          $focusElement?.focus?.({ preventScroll: true });
+        }
+
+        // // @ts-expect-error
+        // eventsEngine.trigger($focusElement, 'focus');
       }
       if (disableFocus) {
         $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
@@ -1414,7 +1422,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _updateFocus(isRenderView?) {
+  _updateFocus(isRenderView?: boolean) {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
         this._editingController._focusEditingCell();
@@ -1458,7 +1466,7 @@ export class KeyboardNavigationController extends modules.ViewController {
               !isFocusedElementDefined
               && (this._isNeedFocus || this._isHiddenFocus)
             ) {
-              this._focus($cell, this._isHiddenFocus);
+              this._focus($cell, this._isHiddenFocus, false, !!isRenderView);
             }
             if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
