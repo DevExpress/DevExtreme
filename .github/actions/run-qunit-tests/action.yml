@@ -81,7 +81,7 @@ runs:
         node-version: '20'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
