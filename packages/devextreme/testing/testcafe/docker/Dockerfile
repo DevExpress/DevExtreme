@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 
 RUN wget https://dot.net/v1/dotnet-install.sh \
     && chmod +x ./dotnet-install.sh \
