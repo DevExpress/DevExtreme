@@ -43,12 +43,14 @@ const mockSetViewOptions = jest.fn();
 const mockCreateGroupedDataMapProvider = jest.fn();
 const mockGetCellData = jest.fn();
 const mockGetCellsByGroupIndexAndAllDay = jest.fn();
+const mockGetCellsBetween = jest.fn();
 const mockViewDataProvider = {
   getCellCount: () => 7,
   setViewOptions: mockSetViewOptions,
   createGroupedDataMapProvider: mockCreateGroupedDataMapProvider,
   getCellData: mockGetCellData,
   getCellsByGroupIndexAndAllDay: mockGetCellsByGroupIndexAndAllDay,
+  getCellsBetween: mockGetCellsBetween,
 };
 jest.mock('../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
@@ -738,6 +740,10 @@ describe('WorkSpace', () => {
           }]];
 
           mockGetCellData.mockImplementationOnce(() => cells[0][0]);
+          mockGetCellsBetween.mockImplementationOnce(() => {
+            const [result] = cells;
+            return result;
+          });
           mockGetCellsByGroupIndexAndAllDay.mockImplementationOnce(() => cells);
 
           workSpace.onPointerMove(eventMock);

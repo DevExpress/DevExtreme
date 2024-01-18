@@ -1,6 +1,11 @@
 import dateUtils from '@js/core/utils/date';
+import { ViewType } from '@js/renovation/ui/scheduler/types';
 import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
-import { calculateIsGroupedAllDayPanel } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import {
+  calculateIsGroupedAllDayPanel,
+  isHorizontalView,
+} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { ViewCellData } from '@js/renovation/ui/scheduler/workspaces/types';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -34,7 +39,7 @@ export default class ViewDataProvider {
 
   viewDataMapWithSelection: any;
 
-  constructor(viewType) {
+  constructor(private readonly viewType: ViewType) {
     this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
     this.viewData = {};
     this.completeViewDataMap = [];
@@ -490,5 +495,78 @@ export default class ViewDataProvider {
   getViewPortGroupCount() {
     const { dateTableGroupedMap } = this.groupedDataMap;
     return dateTableGroupedMap?.length || 0;
+  }
+
+  getCellsBetween(
+    first: ViewCellData,
+    last: ViewCellData,
+  ): ViewCellData[] {
+    const [firstCell, lastCell] = this.normalizeCellsOrder(first, last);
+    const { index: firstIdx } = firstCell;
+    const { index: lastIdx } = lastCell;
+
+    const cellMatrix = this.getCellsByGroupIndexAndAllDay(
+      firstCell.groupIndex ?? 0,
+      lastCell.allDay ?? false,
+    );
+
+    return isHorizontalView(this.viewType)
+      ? this.getCellsBetweenHorizontalView(cellMatrix, firstIdx, lastIdx)
+      : this.getCellsBetweenVerticalView(cellMatrix, firstIdx, lastIdx);
+  }
+
+  private getCellsBetweenHorizontalView(
+    cellMatrix: ViewCellData[][],
+    firstIdx: number,
+    lastIdx: number,
+  ): ViewCellData[] {
+    return cellMatrix.reduce(
+      (result, row) => result.concat(
+        row.filter(({ index }) => firstIdx <= index && index <= lastIdx),
+      ),
+      [],
+    );
+  }
+
+  private getCellsBetweenVerticalView(
+    cellMatrix: ViewCellData[][],
+    firstIdx: number,
+    lastIdx: number,
+  ): ViewCellData[] {
+    const result: ViewCellData[] = [];
+    const matrixHeight = cellMatrix.length;
+    const matrixWidth = cellMatrix[0]?.length ?? 0;
+    let inSegment = false;
+
+    for (let columnIdx = 0; columnIdx < matrixWidth; columnIdx += 1) {
+      for (let rowIdx = 0; rowIdx < matrixHeight; rowIdx += 1) {
+        const cell = cellMatrix[rowIdx][columnIdx];
+        const { index: cellIdx } = cell;
+
+        if (cellIdx === firstIdx) {
+          inSegment = true;
+        }
+
+        if (inSegment) {
+          result.push(cell);
+        }
+
+        if (cellIdx === lastIdx) {
+          return result;
+        }
+      }
+    }
+
+    // NOTE: It's redundant return, but a function must always have a return statement.
+    return result;
+  }
+
+  private normalizeCellsOrder(
+    firstSelectedCell: ViewCellData,
+    lastSelectedCell: ViewCellData,
+  ): [first: ViewCellData, last: ViewCellData] {
+    return firstSelectedCell.startDate > lastSelectedCell.startDate
+      ? [lastSelectedCell, firstSelectedCell]
+      : [firstSelectedCell, lastSelectedCell];
   }
 }
