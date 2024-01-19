@@ -29,7 +29,7 @@ const App = () => {
   const [scrollSpeed, setScrollSpeed] = useState(30);
   const [scrollSensitivity, setScrollSensitivity] = useState(60);
   const [handle, setHandle] = useState('');
-  const [dragComponent, setDragComponent] = useState(null);
+  const [useDragComponent, setUseDragComponent] = useState(false);
   const [cursorOffset, setCursorOffset] = useState(null);
 
   const onDragStart = useCallback((e: SortableTypes.DragStartEvent) => {
@@ -73,9 +73,9 @@ const App = () => {
   }, [setHandle]);
 
   const onDragTemplateChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
-    setDragComponent(e.value ? DragItem : null);
+    setUseDragComponent(!!e.value);
     setCursorOffset(e.value ? { x: 10, y: 20 } : null);
-  }, [setDragComponent, setCursorOffset]);
+  }, [setUseDragComponent, setCursorOffset]);
 
   return (
     <div id="demo-container">
@@ -94,7 +94,7 @@ const App = () => {
             scrollSpeed={scrollSpeed}
             scrollSensitivity={scrollSensitivity}
             handle={handle}
-            dragComponent={dragComponent}
+            dragComponent={useDragComponent ? DragItem : null}
             cursorOffset={cursorOffset}
             onDragStart={onDragStart}
             onReorder={onReorder}
