@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@types/jest": "22.2.3",
-    "@types/node": "20.8.9",
+    "@types/node": "20.11.0",
     "@vue/compiler-sfc": "3.3.4",
     "@vue/test-utils": "2.0.0-beta.7",
     "css-loader": "2.1.1",
