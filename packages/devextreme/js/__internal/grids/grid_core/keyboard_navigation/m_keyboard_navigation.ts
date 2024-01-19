@@ -1405,7 +1405,9 @@ export class KeyboardNavigationController extends modules.ViewController {
           // @ts-expect-error
           eventsEngine.trigger($focusElement, 'focus');
         } else {
-          $focusElement?.focus?.({ preventScroll: true });
+          const element = $focusElement.get(0);
+          const focusEvent = new FocusEvent('focus', { bubbles: false });
+          element?.dispatchEvent(focusEvent);
         }
 
         // // @ts-expect-error
