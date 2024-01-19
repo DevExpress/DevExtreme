@@ -327,6 +327,17 @@
             }
             return this.__stubs[name];
         };
+        stubPrototype.resetStub = function(name) {
+            const stub = this.__stubs[name];
+
+            if(stub !== undefined) {
+                if(stub.resetHistory) {
+                    stub.resetHistory();
+                } else {
+                    stub.reset();
+                }
+            }
+        };
         function stub() {
             this.__stubs = {};
             this.ctorArgs = $.makeArray(arguments);

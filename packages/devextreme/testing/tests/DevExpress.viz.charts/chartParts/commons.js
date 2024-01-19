@@ -98,14 +98,14 @@ legendModule.Legend = sinon.spy(function(parameters) {
 });
 
 const resetModules = exports.resetModules = function() {
-    trackerModule.ChartTracker.reset();
-    trackerModule.PieTracker.reset();
+    trackerModule.ChartTracker.resetHistory();
+    trackerModule.PieTracker.resetHistory();
 
-    legendModule.Legend.reset();
+    legendModule.Legend.resetHistory();
 
-    rendererModule.Renderer.reset();
-    exportModule.ExportMenu.reset();
-    titleModule.Title.reset();
+    rendererModule.Renderer.resetHistory();
+    exportModule.ExportMenu.resetHistory();
+    titleModule.Title.resetHistory();
 };
 
 // stubs getters
@@ -237,14 +237,14 @@ exports.environment = {
         resetMockFactory();
         this.createThemeManager.reset();
         this.createThemeManager.restore();
-        window.vizMocks.Element.prototype.updateRectangle.reset();
+        window.vizMocks.Element.prototype.updateRectangle.resetHistory();
         scrollBarClassModule.ScrollBar.restore();
         this.createSeriesFamily.restore();
         this.prepareSegmentRectPoints.restore();
         this.createCrosshair.restore();
         vizUtils.updatePanesCanvases.restore();
 
-        this.layoutManager.layoutElements.reset();
+        this.layoutManager.layoutElements.resetHistory();
         this.layoutManager = null;
         this.StubLayoutManager.reset();
         this.StubLayoutManager.restore();
@@ -265,7 +265,7 @@ exports.environment = {
     },
 
     mockValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data, groupsData) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
             const categories = [];
             if(data) {
                 data.forEach(function(item) {

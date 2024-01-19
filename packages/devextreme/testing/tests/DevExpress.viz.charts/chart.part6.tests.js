@@ -1324,7 +1324,7 @@ QUnit.test('\'done\' event is triggered after all \'_render\' calls when async s
         series: { type: 'line' },
         onDone: onDone
     });
-    onDone.reset();
+    onDone.resetHistory();
     commons.getTrackerStub().stub('update').reset();
     chartMocks.seriesMockData.series[1].canRenderCompleteHandle = function() {
         this.canRenderCompleteHandle = function() {
@@ -1378,7 +1378,7 @@ QUnit.test('title option', function(assert) {
     const series = chart.getAllSeries()[0];
     const valAxis = chart._valueAxes[0];
     const argAxis = chart._argumentAxes[0];
-    onDrawn.reset();
+    onDrawn.resetHistory();
     // Act
     chart.option({
         title: 'changed title'
@@ -1464,7 +1464,7 @@ QUnit.test('adjustOnZoom option', function(assert) {
         max: 2
     });
 
-    valAxis.adjust.reset();
+    valAxis.adjust.resetHistory();
 
     // act
     chart.option({
