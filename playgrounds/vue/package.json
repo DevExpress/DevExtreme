@@ -35,6 +35,6 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "echo empty"
+    "build": "webpack"
   }
 }
