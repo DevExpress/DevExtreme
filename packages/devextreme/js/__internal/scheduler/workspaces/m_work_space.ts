@@ -1571,6 +1571,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     );
   }
 
+  getCellSize(isAllDay: boolean): { width: number; height: number } {
+    return {
+      width: this.getCellWidth(),
+      height: isAllDay
+        ? this.getCellHeight()
+        : this.getAllDayHeight(),
+    };
+  }
+
   getMaxAllowedPosition(groupIndex) {
     return getMaxAllowedPosition(
       groupIndex,
