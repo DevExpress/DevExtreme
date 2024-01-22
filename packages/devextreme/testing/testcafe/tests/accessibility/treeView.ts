@@ -12,7 +12,7 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   height: [
     undefined,
-    // 320, // NOTE: False positive axe report 'Scrollable region must have keyboard access'
+    320, // NOTE: False positive axe report 'Scrollable region must have keyboard access'
   ],
   items: [[], employees],
   searchEnabled: [true, false],
