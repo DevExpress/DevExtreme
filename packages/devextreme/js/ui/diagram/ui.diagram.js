@@ -996,7 +996,9 @@ class Diagram extends Widget {
             },
             layoutParameters: this._getDataBindingLayoutParameters()
         };
-        this._executeDiagramCommand(DiagramCommand.BindDocument, data);
+        if(data.nodeDataSource) {
+            this._executeDiagramCommand(DiagramCommand.BindDocument, data);
+        }
     }
     _reloadContentByChanges(changes, isExternalChanges) {
         const keys = this._getChangesKeys(changes);
