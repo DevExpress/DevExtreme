@@ -9,7 +9,7 @@ import { getData } from '../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;
 
-fixture.disablePageReloads`Keyboard Navigation - common`
+fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
 test('Next cell should be focused immediately on a single Enter key press if showEditorAlways is enabled in cell mode (T1196539)', async (t) => {

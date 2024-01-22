@@ -4,7 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 
 const SCREENSHOT_BASE_NAME = 'timezone-yearly-recurrent';
 
-fixture.disablePageReloads`Yearly recurrent appointments with timezones`
+fixture`Yearly recurrent appointments with timezones`
   .page(url(__dirname, '../../../container.html'));
 
 test('Should correctly display the recurrent yearly appointment with the same timezone', async (t) => {

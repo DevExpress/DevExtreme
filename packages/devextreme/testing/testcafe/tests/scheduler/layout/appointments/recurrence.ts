@@ -4,7 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { changeTheme } from '../../../../helpers/changeTheme';
 
-fixture.disablePageReloads`AppointmentForm screenshot tests`
+fixture`AppointmentForm screenshot tests`
   .page(url(__dirname, '../../../container.html'));
 
 ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {

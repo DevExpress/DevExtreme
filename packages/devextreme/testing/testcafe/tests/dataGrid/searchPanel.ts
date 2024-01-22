@@ -5,7 +5,7 @@ import DataGrid from '../../model/dataGrid';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Themes } from '../../helpers/themes';
 
-fixture.disablePageReloads`Search Panel`
+fixture`Search Panel`
   .page(url(__dirname, '../container.html'));
 
 // T1046688

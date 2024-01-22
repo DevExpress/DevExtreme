@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../../helpers/domUtils';
 
-fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
+fixture`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
   .page(url(__dirname, '../../../container.html'));
 
 interface TestAppointment {

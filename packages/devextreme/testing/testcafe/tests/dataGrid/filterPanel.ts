@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-fixture.disablePageReloads`filterPanel`
+fixture`filterPanel`
   .page(url(__dirname, '../container.html'));
 
 // T1182854

@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Agenda:Tooltip`
+fixture`Agenda:Tooltip`
   .page(url(__dirname, '../../container.html'));
 
 test('Tooltip\'s date should be equal to date of current appointment(T1037028)', async (t) => {

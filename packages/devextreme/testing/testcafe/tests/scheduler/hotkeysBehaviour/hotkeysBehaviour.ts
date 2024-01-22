@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import FocusableElement from '../../../model/internal/focusable';
 
-fixture.disablePageReloads`Hotkeys for appointments update and navigation`
+fixture`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'));
 
 ['week', 'month'].forEach((view) => {

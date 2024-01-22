@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Outlook dragging base tests`
+fixture`Outlook dragging base tests`
   .page(url(__dirname, '../../../container.html'));
 
 test('Basic drag-n-drop movements in groups', async (t) => {

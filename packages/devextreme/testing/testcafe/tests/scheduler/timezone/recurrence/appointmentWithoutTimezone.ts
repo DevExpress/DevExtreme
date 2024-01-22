@@ -6,7 +6,7 @@ import createWidget from '../../../../helpers/createWidget';
 import SelectBox from '../../../../model/selectBox';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
+fixture`Recurrent appointments without timezone in scheduler with timezone`
   .page(url(__dirname, '../../../container.html'));
 
 const SELECT_SELECTOR = '#container';

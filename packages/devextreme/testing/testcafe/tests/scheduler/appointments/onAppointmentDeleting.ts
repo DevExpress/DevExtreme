@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`onAppointmentDeleting event`
+fixture`onAppointmentDeleting event`
   .page(url(__dirname, '../../container.html'));
 
 const data = [

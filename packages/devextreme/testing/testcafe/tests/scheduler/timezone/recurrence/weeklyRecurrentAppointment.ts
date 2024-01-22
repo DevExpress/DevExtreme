@@ -4,7 +4,7 @@ import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils'
 
 const SCREENSHOT_BASE_NAME = 'timezone-weekly-recurrent';
 
-fixture.disablePageReloads`Weekly recurrent appointments with timezones`
+fixture`Weekly recurrent appointments with timezones`
   .page(url(__dirname, '../../../container.html'));
 
 // === One day in week tests section ===

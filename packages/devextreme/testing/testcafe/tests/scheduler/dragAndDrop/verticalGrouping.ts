@@ -3,7 +3,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler with vertical grouping`
+fixture`Drag-and-drop appointments in the Scheduler with vertical grouping`
   .page(url(__dirname, '../../container.html'));
 
 test('Should drag appoinment to the previous day`s cell (T1025952)', async (t) => {

@@ -2,7 +2,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler Timeline: Cross-Scrolling`
+fixture`Scheduler Timeline: Cross-Scrolling`
   .page(url(__dirname, '../../../../container.html'));
 
 test('Timeline should have Cross-Scrolling enabled', async (t) => {

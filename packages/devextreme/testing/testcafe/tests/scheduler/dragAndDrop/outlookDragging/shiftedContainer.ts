@@ -5,7 +5,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Outlook dragging base tests in shifted container`
+fixture`Outlook dragging base tests in shifted container`
   .page(url(__dirname, '../../../container.html'));
 
 test('Basic drag-n-drop movements in shifted container', async (t) => {

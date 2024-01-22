@@ -4,7 +4,7 @@ import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../.
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Offset: Markup recurrent appointments`
+fixture`Offset: Markup recurrent appointments`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
