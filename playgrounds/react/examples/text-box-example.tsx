@@ -21,7 +21,7 @@ export default class extends React.Component<any, { text: string; uncontrolledTe
     this.setFocusToTextBox = this.setFocusToTextBox.bind(this);
   }
 
-  private handleChange(e: unknown) {
+  private handleChange(e: any) {
     this.setState({
       text: `#${(e.value as string).toUpperCase().replace('A', '_')}`,
     });

@@ -15,8 +15,11 @@ interface IListItemProps {
 }
 
 const items: IListItemProps[] = [
+  // @ts-expect-error
   { text: '123' },
+  // @ts-expect-error
   { text: '234' },
+  // @ts-expect-error
   { text: '567' },
 ];
 
@@ -76,6 +79,7 @@ export default class extends React.Component<any, { text: string; items: IListIt
     };
 
     this.dataSource = new DataSource(
+      // @ts-expect-error
       {
         store: {
           type: 'array',
@@ -105,6 +109,7 @@ export default class extends React.Component<any, { text: string; items: IListIt
   private addTextToList() {
     const { items: stateItems, text } = this.state;
     this.setState({
+      // @ts-expect-error
       items: [...stateItems, { text }],
       text: '',
     });

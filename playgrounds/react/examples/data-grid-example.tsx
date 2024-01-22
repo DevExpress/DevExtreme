@@ -104,7 +104,7 @@ export default class extends React.Component<any, { expandAll: boolean, pageSize
           <Column dataField="country" groupIndex={0} width={180} />
           <Column dataField="region" cellComponent={RegionComponent} />
           <Column dataField="date" dataType="date" />
-          <Column dataField="amount" dataType="currency" width={90} />
+          <Column dataField="amount" format="currency" width={90} />
 
           <Pager
             allowedPageSizes={[5, 10, 15, 20]}

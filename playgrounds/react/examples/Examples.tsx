@@ -6,7 +6,7 @@ import AccordionExample from './accordion-example';
 import BoxExample from './box-example';
 import ChartExample from './chart-example';
 import DataGridExample from './data-grid-example';
-import DrawerExample from './drawer-example';
+// import DrawerExample from './drawer-example';
 import EditorExample from './editor-example';
 import Example from './example-block';
 // import FormExample from './form-example';
@@ -22,7 +22,7 @@ import SelectBoxExample from './selectbox-example';
 import TextBoxExample from './text-box-example';
 import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
-import DateBoxExample from './date-box-example';
+// import DateBoxExample from './date-box-example';
 
 const Examples = () => {
     return (
@@ -43,9 +43,9 @@ const Examples = () => {
 
             <DataGridExample />
 
-            <DateBoxExample />
+            {/* <DateBoxExample /> */}
 
-            <DrawerExample />
+            {/* <DrawerExample /> */}
 
             <EditorExample />
 
