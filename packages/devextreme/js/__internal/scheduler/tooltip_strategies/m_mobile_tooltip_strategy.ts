@@ -68,7 +68,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   private setTooltipConfig(): void {
     const isTabletWidth = getWidth(getWindow()) > 700;
 
-    const listHeight = getOuterHeight(this._list.$element());
+    const listHeight = getOuterHeight(this._list.$element().find('.dx-scrollable-content'));
     this._tooltip.option(
       isTabletWidth
         ? createTabletDeviceConfig(listHeight)

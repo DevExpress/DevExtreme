@@ -2,6 +2,7 @@ import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 import List from '@js/ui/list/ui.list.edit';
+import { createPromise } from '@ts/core/utils/promise';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -142,9 +143,8 @@ export class TooltipStrategyBase {
     const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
     // @ts-expect-error
     return new FunctionTemplate((options) => {
-      // eslint-disable-next-line @typescript-eslint/init-declarations
-      let resolve: () => void;
-      const promise = new Promise<void>((r) => { resolve = r; });
+      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+      const { promise, resolve } = createPromise<void>();
       this.asyncTemplatePromises.add(promise);
       return template.render({
         model: isEmptyDropDownAppointmentTemplate ? {
