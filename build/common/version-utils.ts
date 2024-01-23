@@ -32,11 +32,38 @@ function getDayNumber(date: Date): number {
   );
 }
 
-export function makeTimestampVersion(baseVersion: string | undefined, date: Date): string | undefined {
+export function makeTimestamp(date: Date): string {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   const year = (date.getFullYear() % 100).toString().padStart(2, '0');
   const day = getDayNumber(date).toString().padStart(3, '0');
-  const timestampVersion = `${baseVersion}-build-${year}${day}-${hours}${minutes}`;
-  return timestampVersion;
+  return `${year}${day}-${hours}${minutes}`;
+}
+
+type BuildStage = 'alpha' | 'beta' | 'build' | '';
+
+export function makeVersion(baseVersion: string, daily: boolean, date: Date): string {
+  if (!baseVersion.match(/\d+\.\d+\.\d+/)) {
+    throw new Error('Error: The baseVersion must satisfy devexpress version pattern (XX.X.X)!')
+  }
+
+  let [major, minor, patch] = baseVersion.split('.').map(n => Number(n));
+
+  const stage: BuildStage = daily ?
+      patch <= 1 ? 'alpha' : 'build' :
+      patch <= 2 ? 'beta' : '';
+
+  if (daily) {
+    patch += 1;
+  }
+
+  const base = [major, minor, patch].join('.');
+  const fullVersion = [base, stage];
+
+  if (daily) {
+    const timestamp = makeTimestamp(date);
+    fullVersion.push(timestamp);
+  }
+
+  return fullVersion.filter(v=> v).join('-');
 }
