@@ -42,8 +42,8 @@ export function makeTimestamp(date: Date): string {
 
 type BuildStage = 'alpha' | 'beta' | 'build' | '';
 
-export function makeVersion(baseVersion: string, daily: boolean, date: Date): string {
-  if (!baseVersion.match(/\d+\.\d+\.\d+/)) {
+export function makeVersion(baseVersion: string | undefined, daily: boolean, date: Date): string {
+  if (!baseVersion?.match(/\d+\.\d+\.\d+/)) {
     throw new Error('Error: The baseVersion must satisfy devexpress version pattern (XX.X.X)!')
   }
 

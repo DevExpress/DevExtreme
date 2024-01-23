@@ -1,10 +1,10 @@
 import sh from 'shelljs';
 import pkg from '../package.json';
-import { formatVersion, makeTimestampVersion, updateVersion } from './common/version-utils';
+import { formatVersion, makeVersion, updateVersion } from './common/version-utils';
 
-const timestampVersion = makeTimestampVersion(formatVersion(pkg.version), new Date());
+const timestampVersion = makeVersion(formatVersion(pkg.version), true, new Date());
 if(timestampVersion === undefined) {
-  console.error(`Unable to generarte timestamp version from ${pkg.version}`);
+  console.error(`Unable to generate timestamp version from ${pkg.version}`);
   process.exit(1);
 }
 

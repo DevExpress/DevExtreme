@@ -43,6 +43,7 @@ describe('version utils', () => {
   })
 
   test.each([
+    { date: new Date(2023, 5, 5, 12, 30) },
     { baseVersion: '1234.5', date: new Date(2023, 5, 5, 12, 30) },
     { baseVersion: '123456', date: new Date(2023, 5, 5, 12, 30) },
     { baseVersion: 'abcdef', date: new Date(2023, 5, 5, 12, 30) },
