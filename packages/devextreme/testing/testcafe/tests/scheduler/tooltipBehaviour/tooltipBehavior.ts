@@ -130,7 +130,7 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
       .map((d) => d.resolve());
   });
 
-  await t.click(scheduler.element);
+  await t.click(scheduler.toolbar.navigator.element); // just click away
   await t.click(scheduler.collectors.find('7').element);
   await resolveAllRenderDeferreds();
 
@@ -138,7 +138,7 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
 
   // check again after re-doing steps
 
-  await t.click(scheduler.element);
+  await t.click(scheduler.toolbar.navigator.element); // just click away
   await t.click(scheduler.collectors.find('7').element);
   await resolveAllRenderDeferreds();
 
