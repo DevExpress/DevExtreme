@@ -10,8 +10,14 @@ const NEW_ETALON_FILE_NAME_PATTERN = /^(?!.*(?:_mask|_diff|_etalon)\.png$).*\.pn
 const ETALONS_FOLDER_NAME = 'etalons';
 
 const getAllEtalonsNames = () => {
+  const newEtalons = new Map();
   const allFileNames = readdirSync(PATH_TO_CURRENT_ETALONS);
-  const newEtalons = allFileNames.filter((name) => NEW_ETALON_FILE_NAME_PATTERN.test(name));
+  
+  allFileNames.forEach((name) => {
+    if(NEW_ETALON_FILE_NAME_PATTERN.test(name)) {
+      newEtalons.set(name, true);
+    }
+  });
 
   return newEtalons;
 };
@@ -28,17 +34,17 @@ function processEtalonFolder(etalonFolderPath, allEtalons) {
   const allFiles = readdirSync(etalonFolderPath);
 
   return allFiles.some((currentFileName) => {
-    const etalonIndex = allEtalons.indexOf(currentFileName);
+    const hasFile = allEtalons.has(currentFileName);
 
-    if (etalonIndex >= 0) {
+    if (hasFile) {
       const dstFileName = join(etalonFolderPath, currentFileName);
       const srcFileName = join(PATH_TO_CURRENT_ETALONS, currentFileName);
 
       copyFileSync(srcFileName, dstFileName);
-      allEtalons.splice(etalonIndex, 1);
+      allEtalons.delete(currentFileName);
     }
 
-    return allEtalons.length === 0;
+    return allEtalons.size === 0;
   });
 }
 
@@ -75,8 +81,8 @@ function foldersWithScreenshotsExist() {
 }
 
 function checkFilesAfterCopy(allEtalons) {
-  allEtalons.forEach((f) => {
-    console.log(`File "${f}" is not copied`);
+  allEtalons.forEach((value, key) => {
+    console.log(`File "${key}" is not copied`);
   });
 }
 
@@ -84,6 +90,7 @@ function checkFilesAfterCopy(allEtalons) {
   if (foldersWithScreenshotsExist()) {
     const allEtalons = getAllEtalonsNames();
     const absPathToTests = resolve(PATH_TO_TESTCAFE_TESTS);
+    
     processFolder(absPathToTests, allEtalons);
 
     checkFilesAfterCopy(allEtalons);
