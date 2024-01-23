@@ -12,9 +12,9 @@ const ETALONS_FOLDER_NAME = 'etalons';
 const getAllEtalonsNames = () => {
   const newEtalons = new Map();
   const allFileNames = readdirSync(PATH_TO_CURRENT_ETALONS);
-  
+
   allFileNames.forEach((name) => {
-    if(NEW_ETALON_FILE_NAME_PATTERN.test(name)) {
+    if (NEW_ETALON_FILE_NAME_PATTERN.test(name)) {
       newEtalons.set(name, true);
     }
   });
@@ -32,40 +32,50 @@ function getAllDirs(path) {
 
 function processEtalonFolder(etalonFolderPath, allEtalons) {
   const allFiles = readdirSync(etalonFolderPath);
+  let hasEtalonsToMove = allEtalons.size !== 0;
 
-  return allFiles.some((currentFileName) => {
-    const hasFile = allEtalons.has(currentFileName);
+  allFiles.forEach((currentFileName) => {
+    if (hasEtalonsToMove) {
+      const hasFile = allEtalons.has(currentFileName);
 
-    if (hasFile) {
-      const dstFileName = join(etalonFolderPath, currentFileName);
-      const srcFileName = join(PATH_TO_CURRENT_ETALONS, currentFileName);
+      if (hasFile) {
+        const dstFileName = join(etalonFolderPath, currentFileName);
+        const srcFileName = join(PATH_TO_CURRENT_ETALONS, currentFileName);
 
-      copyFileSync(srcFileName, dstFileName);
-      allEtalons.delete(currentFileName);
+        copyFileSync(srcFileName, dstFileName);
+        allEtalons.delete(currentFileName);
+        hasEtalonsToMove = allEtalons.size !== 0;
+      }
     }
-
-    return allEtalons.size === 0;
   });
+
+  return hasEtalonsToMove;
 }
 
 function processFolder(currentDir, allEtalons) {
-  const dirs = getAllDirs(currentDir);
+  const currentDirrectoryFolders = getAllDirs(currentDir);
+  let continueProcessFolders = true;
 
-  return dirs.some((dir) => {
-    const folderName = dir.split('/').at(-1);
+  currentDirrectoryFolders.forEach((dir) => {
+    if (continueProcessFolders) {
+      const folderName = dir.split('/').at(-1);
 
-    if (folderName === ETALONS_FOLDER_NAME) {
-      return processEtalonFolder(dir, allEtalons);
+      if (folderName === ETALONS_FOLDER_NAME) {
+        continueProcessFolders = processEtalonFolder(dir, allEtalons);
+      } else {
+        continueProcessFolders = processFolder(dir, allEtalons);
+      }
     }
-    return processFolder(dir, allEtalons);
   });
+
+  return continueProcessFolders;
 }
 
 function foldersWithScreenshotsExist() {
   let result = true;
   const pathsToCheck = {
-   'path to testcafe tests': PATH_TO_TESTCAFE_TESTS,
-   'path to compared screenshots': PATH_TO_CURRENT_ETALONS
+    'path to testcafe tests': PATH_TO_TESTCAFE_TESTS,
+    'path to compared screenshots': PATH_TO_CURRENT_ETALONS
   };
 
   Object.keys(pathsToCheck).forEach((pathName) => {
@@ -80,17 +90,22 @@ function foldersWithScreenshotsExist() {
   return result;
 }
 
-function checkFilesAfterCopy(allEtalons) {
-  allEtalons.forEach((value, key) => {
-    console.log(`File "${key}" is not copied`);
-  });
+function checkFilesAfterCopy(allEtalonsMap) {
+  if (allEtalonsMap.size === 0) {
+    console.log('all screenshots were moved');
+  } else {
+    allEtalonsMap.forEach((value, key) => {
+      console.log(`File "${key}" is not copied`);
+    });
+  }
 }
 
 (() => {
   if (foldersWithScreenshotsExist()) {
     const allEtalons = getAllEtalonsNames();
+    console.log(`${allEtalons.size} screenshots to moving were found`);
     const absPathToTests = resolve(PATH_TO_TESTCAFE_TESTS);
-    
+
     processFolder(absPathToTests, allEtalons);
 
     checkFilesAfterCopy(allEtalons);
