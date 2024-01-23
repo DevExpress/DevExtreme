@@ -131,7 +131,7 @@ const refreshDataGrid = () => {
 </script>
 <style scoped>
 
-.informer {
+#gridContainer .informer {
   display: grid;
   width: 120px;
   grid-template-columns: 100%;
@@ -139,8 +139,12 @@ const refreshDataGrid = () => {
   text-align: center;
 }
 
-.count {
+#gridContainer .count {
   font-size: 18px;
   font-weight: 500;
+}
+
+#gridContainer .dx-toolbar-items-container {
+  min-height: 44px;
 }
 </style>

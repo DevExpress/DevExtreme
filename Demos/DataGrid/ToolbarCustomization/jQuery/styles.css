@@ -10,3 +10,7 @@
   font-size: 18px;
   font-weight: 500;
 }
+
+#gridContainer .dx-toolbar-items-container {
+  min-height: 44px;
+}
