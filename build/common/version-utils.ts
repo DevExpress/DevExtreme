@@ -27,8 +27,8 @@ export function updateVersion(version: string | undefined): void {
 }
 
 export function updateVersionJs(version: string | undefined): void {
-  const VERSION_JS_PATH = path.join(ROOT_DIR, 'packages/devextreme/js/core/version.js')
-  fs.writeFileSync(VERSION_JS_PATH, `export const version = '${validateVersion(version)}';\n`, )
+  const VERSION_JS_PATH = path.join(ROOT_DIR, 'packages/devextreme/js/core/version.js');
+  fs.writeFileSync(VERSION_JS_PATH, `export const version = '${validateVersion(version)}';\n`);
 }
 
 export function formatVersion(version: string | undefined): string | undefined {
