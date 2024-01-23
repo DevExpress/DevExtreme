@@ -2,6 +2,7 @@ import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 import List from '@js/ui/list/ui.list.edit';
+import { createPromise } from '@ts/core/utils/promise';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -14,6 +15,8 @@ const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = `${TOOLTIP_APPOINTMENT_
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button`;
 
 export class TooltipStrategyBase {
+  protected asyncTemplatePromises = new Set<Promise<void>>();
+
   _tooltip: any;
 
   _options: any;
@@ -139,15 +142,24 @@ export class TooltipStrategyBase {
 
     const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
     // @ts-expect-error
-    return new FunctionTemplate((options) => template.render({
-      model: isEmptyDropDownAppointmentTemplate ? {
-        appointmentData,
-        targetedAppointmentData,
-        isButtonClicked,
-      } : appointmentData,
-      container: options.container,
-      index,
-    }));
+    return new FunctionTemplate((options) => {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+      const { promise, resolve } = createPromise<void>();
+      this.asyncTemplatePromises.add(promise);
+      return template.render({
+        model: isEmptyDropDownAppointmentTemplate ? {
+          appointmentData,
+          targetedAppointmentData,
+          isButtonClicked,
+        } : appointmentData,
+        container: options.container,
+        index,
+        onRendered: () => {
+          this.asyncTemplatePromises.delete(promise);
+          resolve();
+        },
+      });
+    });
   }
 
   _getItemListTemplateName() {
