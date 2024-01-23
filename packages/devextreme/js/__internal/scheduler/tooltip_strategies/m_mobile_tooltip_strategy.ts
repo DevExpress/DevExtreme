@@ -4,7 +4,10 @@ import Overlay from '@js/ui/overlay/ui.overlay';
 
 import { TooltipStrategyBase } from './m_tooltip_strategy_base';
 
-const SLIDE_PANEL_CLASS_NAME = 'dx-scheduler-overlay-panel';
+const CLASS = {
+  slidePanel: 'dx-scheduler-overlay-panel',
+  scrollableContent: '.dx-scrollable-content',
+};
 
 const MAX_TABLET_OVERLAY_HEIGHT_FACTOR = 0.9;
 
@@ -68,7 +71,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   private setTooltipConfig(): void {
     const isTabletWidth = getWidth(getWindow()) > 700;
 
-    const listHeight = getOuterHeight(this._list.$element().find('.dx-scrollable-content'));
+    const listHeight = getOuterHeight(this._list.$element().find(CLASS.scrollableContent));
     this._tooltip.option(
       isTabletWidth
         ? createTabletDeviceConfig(listHeight)
@@ -89,7 +92,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   }
 
   _createTooltip(target, dataList) {
-    const element = this._createTooltipElement(SLIDE_PANEL_CLASS_NAME);
+    const element = this._createTooltipElement(CLASS.slidePanel);
 
     return this._options.createComponent(element, Overlay, {
       target: getWindow(),
@@ -99,7 +102,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
       onShowing: () => this._onShowing(),
       onShown: this._onShown.bind(this),
       contentTemplate: this._getContentTemplate(dataList),
-      wrapperAttr: { class: SLIDE_PANEL_CLASS_NAME },
+      wrapperAttr: { class: CLASS.slidePanel },
     });
   }
 }

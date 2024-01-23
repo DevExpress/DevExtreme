@@ -124,22 +124,31 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
+  const resolveAllRenderDeferreds = ClientFunction(() => {
+    (window as any).deferreds
+      .filter((d) => d.state === 'pedning')
+      .map((d) => d.resolve());
+  });
+
   await t
     .click(scheduler.collectors.find('7').element);
+  await resolveAllRenderDeferreds();
 
-  const resolveRenderDeferred = ClientFunction(() => {
-    (window as any).deferred.resolve();
-  });
-  await resolveRenderDeferred();
+  await takeScreenshot('tooltip-rendering-with-react.png');
+
+  // check again after re-doing steps
+
+  await t.click(scheduler.element);
+  await t.click(scheduler.collectors.find('7').element);
 
   await takeScreenshot('tooltip-rendering-with-react.png');
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }, [600, 1000]).before(async () => {
-  const prepareRenderDeferred = ClientFunction(() => {
-    (window as any).deferred = $.Deferred();
+  const prepareRenderDeferreds = ClientFunction(() => {
+    (window as any).deferreds = [];
   });
-  await prepareRenderDeferred();
+  await prepareRenderDeferreds();
 
   await createWidget('dxScheduler', {
     currentDate: new Date(2017, 4, 25),
@@ -150,7 +159,9 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
       templates: {
         appointmentTooltip: {
           render(args) {
-            (window as any).deferred.done(() => {
+            const deferred = $.Deferred();
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            deferred.done(() => {
               args.container.append(
                 $('<div>')
                   .height(50)
@@ -158,6 +169,7 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
               );
               args.onRendered();
             });
+            (window as any).deferreds.push(deferred);
           },
         },
       },
@@ -194,6 +206,6 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
   });
 }).after(async () => {
   await ClientFunction(() => {
-    delete (window as any).deferred;
+    delete (window as any).deferreds;
   })();
 });
