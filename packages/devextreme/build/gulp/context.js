@@ -6,12 +6,7 @@ const argv = require('yargs')
     .default('uglify', false)
     .argv;
 
-const version = require('./version')(
-    require('../../package.json').version,
-    process.env.DEVEXTREME_DXBUILD_LABEL,
-    process.env.DEVEXTREME_DXBUILD_FLAVOR,
-    process.env.DEVEXTREME_DXBUILD_REVISION
-);
+const version = require('../../package.json').version;
 
 module.exports = {
     version,
