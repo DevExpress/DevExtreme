@@ -76,7 +76,7 @@ function foldersWithScreenshotsExist() {
 
 function checkFilesAfterCopy(allEtalons) {
   allEtalons.forEach((f) => {
-    console.log(`file ${f} not copyed`);
+    console.log(`File "${f}" is not copied`);
   });
 }
 
