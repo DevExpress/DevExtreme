@@ -6,6 +6,7 @@ import notify from 'devextreme/ui/notify';
 
 const firstNameLabel = { 'aria-label': 'First Name' };
 const lastNameLabel = { 'aria-label': 'Last Name' };
+const fileUploaderLabel = { 'aria-label': 'Select Photo' };
 
 export default function App() {
   const formElement = useRef(null);
@@ -29,7 +30,7 @@ export default function App() {
         </div>
       </div>
       <div className="fileuploader-container">
-        <FileUploader selectButtonText="Select photo" labelText="" accept="image/*" uploadMode="useForm" />
+        <FileUploader inputAttr={fileUploaderLabel} selectButtonText="Select photo" labelText="" accept="image/*" uploadMode="useForm" />
       </div>
       <Button className="button" text="Update profile" type="success" onClick={onClick} />
     </form>

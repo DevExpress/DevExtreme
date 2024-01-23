@@ -33,6 +33,7 @@
         label-text=""
         accept="image/*"
         upload-mode="useForm"
+        :input-attr="{ 'aria-label': 'Select Photo' }"
       />
     </div>
     <DxButton
