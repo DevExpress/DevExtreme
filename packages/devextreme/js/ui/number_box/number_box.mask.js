@@ -420,8 +420,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const isValueChanged = parsedValue !== this._parsedValue;
 
         const isDecimalPointRestricted = char === decimalSeparator && maxPrecision === 0;
-        const isUselessCharRestricted =
-            !isTextSelected
+        const isUselessCharRestricted = !isTextSelected
             && !isValueChanged
             && char !== MINUS
             && this._isStub(char);
