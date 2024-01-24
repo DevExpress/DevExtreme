@@ -2641,3 +2641,40 @@ test('An exception should not throw after pressing enter on the save button and 
     },
   });
 });
+
+// T1194439
+test('Focus behavior should be correct when editing cells', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  for (let i = 0; i < 10; i += 1) {
+    const cell = dataGrid.getDataCell(i, 0);
+
+    await t
+      .click(cell.element)
+      .expect(cell.isEditCell)
+      .ok()
+      .expect(cell.isFocused)
+      .ok()
+      .typeText(cell.element, `new_value ${i}`);
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(10)].map((_, i) => ({
+    ID: i + 1,
+    CompanyName: `company name ${i + 1}`,
+    City: `city ${i + 1}`,
+  })),
+  keyExpr: 'ID',
+  columns: [{
+    dataField: 'CompanyName',
+    showEditorAlways: true,
+  }, {
+    caption: 'City',
+    calculateCellValue(rowData) { return rowData.City; },
+    allowEditing: false,
+  }],
+  showBorders: true,
+  editing: {
+    allowUpdating: true,
+    mode: 'batch',
+  },
+}));
