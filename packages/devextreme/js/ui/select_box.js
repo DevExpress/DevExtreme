@@ -886,6 +886,12 @@ class SelectBox extends DropDownList {
     }
 }
 
+SelectBox.defaultOptions = function(rule) {
+    DropDownList.defaultOptions(rule);
+};
+
+SelectBox.getInstance = DropDownList.getInstance;
+
 registerComponent('dxSelectBox', SelectBox);
 
 export default SelectBox;
