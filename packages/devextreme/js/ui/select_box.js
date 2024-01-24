@@ -24,7 +24,6 @@ const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 class SelectBox extends DropDownList {
 
     _supportedKeys() {
-        const that = this;
         const parent = super._supportedKeys();
         const clearSelectBox = function(e) {
             const isEditable = this._isEditable();
@@ -41,9 +40,9 @@ class SelectBox extends DropDownList {
             this._preventSubstitution = true;
         };
 
-        const searchIfNeeded = function() {
-            if(that.option('searchEnabled') && that._valueSubstituted()) {
-                that._searchHandler();
+        const searchIfNeeded = () => {
+            if(this.option('searchEnabled') && this._valueSubstituted()) {
+                this._searchHandler();
             }
         };
 
@@ -680,20 +679,19 @@ class SelectBox extends DropDownList {
     }
 
     _loadItem(value, cache) {
-        const that = this;
         const deferred = new Deferred();
 
         super._loadItem(value, cache)
-            .done((function(item) {
+            .done(((item) => {
                 deferred.resolve(item);
             }).bind(this))
-            .fail((function(args) {
+            .fail(((args) => {
                 if(args?.shouldSkipCallback) {
                     return;
                 }
 
-                const selectedItem = that.option('selectedItem');
-                if(that.option('acceptCustomValue') && value === that._valueGetter(selectedItem)) {
+                const selectedItem = this.option('selectedItem');
+                if(this.option('acceptCustomValue') && value === this._valueGetter(selectedItem)) {
                     deferred.resolve(selectedItem);
                 } else {
                     deferred.reject();
