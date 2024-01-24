@@ -886,11 +886,14 @@ class SelectBox extends DropDownList {
     }
 }
 
-SelectBox.defaultOptions = function(rule) {
-    DropDownList.defaultOptions(rule);
-};
-
+SelectBox.defaultOptions = DropDownList.defaultOptions;
 SelectBox.getInstance = DropDownList.getInstance;
+
+///#DEBUG
+SelectBox.mockTextEditorLabel = DropDownList.mockTextEditorLabel;
+
+SelectBox.restoreTextEditorLabel = DropDownList.restoreTextEditorLabel;
+///#ENDDEBUG
 
 registerComponent('dxSelectBox', SelectBox);
 
