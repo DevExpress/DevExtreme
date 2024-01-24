@@ -21,11 +21,11 @@ const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 
-const SelectBox = DropDownList.inherit({
+class SelectBox extends DropDownList {
 
-    _supportedKeys: function() {
+    _supportedKeys() {
         const that = this;
-        const parent = this.callBase();
+        const parent = super._supportedKeys();
         const clearSelectBox = function(e) {
             const isEditable = this._isEditable();
 
@@ -48,7 +48,7 @@ const SelectBox = DropDownList.inherit({
         };
 
         return extend({}, parent, {
-            tab: function() {
+            tab() {
                 if(this.option('opened') && !this._popup.getFocusableElements().length) {
                     this._resetCaretPosition(true);
                 }
@@ -57,7 +57,7 @@ const SelectBox = DropDownList.inherit({
 
                 this._cancelSearchIfNeed();
             },
-            upArrow: function(e) {
+            upArrow(e) {
                 if(parent.upArrow.apply(this, arguments)) {
                     if(!this.option('opened')) {
                         this._setNextValue(e);
@@ -65,7 +65,7 @@ const SelectBox = DropDownList.inherit({
                     return true;
                 }
             },
-            downArrow: function(e) {
+            downArrow(e) {
                 if(parent.downArrow.apply(this, arguments)) {
                     if(!this.option('opened')) {
                         this._setNextValue(e);
@@ -73,29 +73,29 @@ const SelectBox = DropDownList.inherit({
                     return true;
                 }
             },
-            leftArrow: function() {
+            leftArrow() {
                 searchIfNeeded();
                 parent.leftArrow && parent.leftArrow.apply(this, arguments);
             },
-            rightArrow: function() {
+            rightArrow() {
                 searchIfNeeded();
                 parent.rightArrow && parent.rightArrow.apply(this, arguments);
             },
-            home: function() {
+            home() {
                 searchIfNeeded();
                 parent.home && parent.home.apply(this, arguments);
             },
-            end: function() {
+            end() {
                 searchIfNeeded();
                 parent.end && parent.end.apply(this, arguments);
             },
-            escape: function() {
+            escape() {
                 const result = parent.escape && parent.escape.apply(this, arguments);
                 this._cancelEditing();
 
                 return result ?? true;
             },
-            enter: function(e) {
+            enter(e) {
                 const isOpened = this.option('opened');
                 const inputText = this._input().val().trim();
                 const isCustomText = inputText && this._list && !this._list.option('focusedElement');
@@ -125,7 +125,7 @@ const SelectBox = DropDownList.inherit({
                     }
                 }
             },
-            space: function(e) {
+            space(e) {
                 const isOpened = this.option('opened');
                 const isSearchEnabled = this.option('searchEnabled');
                 const acceptCustomValue = this.option('acceptCustomValue');
@@ -140,10 +140,10 @@ const SelectBox = DropDownList.inherit({
             backspace: clearSelectBox,
             del: clearSelectBox
         });
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             placeholder: messageLocalization.format('Select'),
 
             fieldTemplate: null,
@@ -154,7 +154,7 @@ const SelectBox = DropDownList.inherit({
 
             acceptCustomValue: false,
 
-            onCustomItemCreating: function(e) {
+            onCustomItemCreating(e) {
                 if(!isDefined(e.customItem)) {
                     e.customItem = e.text;
                 }
@@ -180,55 +180,55 @@ const SelectBox = DropDownList.inherit({
 
             useHiddenSubmitElement: true
         });
-    },
+    }
 
-    _init: function() {
-        this.callBase();
+    _init() {
+        super._init();
         this._initCustomItemCreatingAction();
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this.$element().addClass(SELECTBOX_CLASS);
         this._renderTooltip();
 
-        this.callBase();
+        super._initMarkup();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
-    },
+    }
 
-    _createPopup: function() {
-        this.callBase();
+    _createPopup() {
+        super._createPopup();
         this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
         this._popup.$overlayContent().attr('tabindex', -1);
-    },
+    }
 
-    _popupWrapperClass: function() {
-        return this.callBase() + ' ' + SELECTBOX_POPUP_WRAPPER_CLASS;
-    },
+    _popupWrapperClass() {
+        return super._popupWrapperClass() + ' ' + SELECTBOX_POPUP_WRAPPER_CLASS;
+    }
 
     _setDeprecatedOptions() {
-        this.callBase();
+        super._setDeprecatedOptions();
         extend(this._deprecatedOptions, {
             'valueChangeEvent': { since: '22.2', alias: 'customItemCreateEvent' }
         });
-    },
+    }
 
-    _cancelEditing: function() {
+    _cancelEditing() {
         if(!this.option('searchEnabled') && this._list) {
             this._focusListElement(null);
             this._updateField(this.option('selectedItem'));
         }
-    },
+    }
 
-    _renderOpenedState: function() {
-        this.callBase();
+    _renderOpenedState() {
+        super._renderOpenedState();
 
         if(this.option('opened')) {
             this._scrollToSelectedItem();
             this._focusSelectedElement();
         }
-    },
+    }
 
-    _focusSelectedElement: function() {
+    _focusSelectedElement() {
         const searchValue = this._searchValue();
 
         if(!searchValue) {
@@ -242,9 +242,9 @@ const SelectBox = DropDownList.inherit({
         const focusedElement = index !== -1 && !this._isCustomItemSelected() ? $listItems.eq(index) : null;
 
         this._focusListElement(focusedElement);
-    },
+    }
 
-    _renderFocusedElement: function() {
+    _renderFocusedElement() {
         if(!this._list) {
             return;
         }
@@ -260,20 +260,20 @@ const SelectBox = DropDownList.inherit({
         const focusedElement = $listItems.not(DISABLED_STATE_SELECTOR).eq(0);
 
         this._focusListElement(focusedElement);
-    },
+    }
 
-    _focusListElement: function(element) {
+    _focusListElement(element) {
         this._preventInputValueRender = true;
         this._list.option('focusedElement', getPublicElement(element));
         delete this._preventInputValueRender;
-    },
+    }
 
-    _scrollToSelectedItem: function() {
+    _scrollToSelectedItem() {
         this._list && this._list.scrollToItem(this._list.option('selectedItem'));
-    },
+    }
 
-    _listContentReadyHandler: function() {
-        this.callBase();
+    _listContentReadyHandler() {
+        super._listContentReadyHandler();
 
         const isPaginate = this._dataController.paginate();
 
@@ -282,42 +282,42 @@ const SelectBox = DropDownList.inherit({
         }
 
         this._scrollToSelectedItem();
-    },
+    }
 
-    _renderValue: function() {
+    _renderValue() {
         this._renderInputValue();
         this._setSubmitValue();
 
         return new Deferred().resolve();
-    },
+    }
 
-    _renderInputValue: function() {
-        return this.callBase().always(function() {
+    _renderInputValue() {
+        return super._renderInputValue().always(function() {
             this._renderInputValueAsync();
         }.bind(this));
-    },
+    }
 
-    _renderInputValueAsync: function() {
+    _renderInputValueAsync() {
         this._renderTooltip();
         this._renderInputValueImpl().always(function() {
             this._refreshSelected();
         }.bind(this));
-    },
+    }
 
-    _renderInputValueImpl: function() {
+    _renderInputValueImpl() {
         this._renderField();
 
         return new Deferred().resolve();
-    },
+    }
 
-    _setNextItem: function(step) {
+    _setNextItem(step) {
         const item = this._calcNextItem(step);
         const value = this._valueGetter(item);
 
         this._setValue(value);
-    },
+    }
 
-    _setNextValue: function(e) {
+    _setNextValue(e) {
         const dataSourceIsLoaded = this._dataController.isLoaded()
             ? new Deferred().resolve()
             : this._dataController.load();
@@ -343,29 +343,29 @@ const SelectBox = DropDownList.inherit({
                 this._setNextItem(step);
             }
         }).bind(this));
-    },
+    }
 
-    _setSelectedItem: function(item) {
+    _setSelectedItem(item) {
         const isUnknownItem = !this._isCustomValueAllowed() && (item === undefined);
 
-        this.callBase(isUnknownItem ? null : item);
+        super._setSelectedItem(isUnknownItem ? null : item);
 
         if(!isUnknownItem && (!this._isEditable() || this._isCustomItemSelected())) {
             this._setListOption('selectedItem', this.option('selectedItem'));
         }
-    },
+    }
 
-    _isCustomValueAllowed: function() {
-        return this.option('acceptCustomValue') || this.callBase();
-    },
+    _isCustomValueAllowed() {
+        return this.option('acceptCustomValue') || super._isCustomValueAllowed();
+    }
 
-    _displayValue: function(item) {
+    _displayValue(item) {
         item = (!isDefined(item) && this._isCustomValueAllowed()) ? this.option('value') : item;
-        return this.callBase(item);
-    },
+        return super._displayValue(item);
+    }
 
-    _listConfig: function() {
-        const result = extend(this.callBase(), {
+    _listConfig() {
+        const result = extend(super._listConfig(), {
             pageLoadMode: 'scrollBottom',
             onSelectionChanged: this._getSelectionChangeHandler(),
             selectedItem: this.option('selectedItem'),
@@ -380,9 +380,9 @@ const SelectBox = DropDownList.inherit({
         }
 
         return result;
-    },
+    }
 
-    _listFocusedItemChangeHandler: function(e) {
+    _listFocusedItemChangeHandler(e) {
         if(this._preventInputValueRender) {
             return;
         }
@@ -392,9 +392,9 @@ const SelectBox = DropDownList.inherit({
         const focusedItem = list._getItemData(focusedElement);
 
         this._updateField(focusedItem);
-    },
+    }
 
-    _updateField: function(item) {
+    _updateField(item) {
         const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
         if(!(fieldTemplate && this.option('fieldTemplate'))) {
@@ -406,23 +406,23 @@ const SelectBox = DropDownList.inherit({
         }
 
         this._renderField();
-    },
+    }
 
-    _getSelectionChangeHandler: function() {
+    _getSelectionChangeHandler() {
         return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
-    },
+    }
 
-    _selectionChangeHandler: function(e) {
+    _selectionChangeHandler(e) {
         each(e.addedItems || [], (function(_, addedItem) {
             this._setValue(this._valueGetter(addedItem));
         }).bind(this));
-    },
+    }
 
-    _getActualSearchValue: function() {
+    _getActualSearchValue() {
         return this._dataController.searchValue();
-    },
+    }
 
-    _toggleOpenState: function(isVisible) {
+    _toggleOpenState(isVisible) {
         if(this.option('disabled')) {
             return;
         }
@@ -453,23 +453,23 @@ const SelectBox = DropDownList.inherit({
             this._scrollToSelectedItem();
         }
 
-        this.callBase(isVisible);
-    },
+        super._toggleOpenState(isVisible);
+    }
 
-    _renderTooltip: function() {
+    _renderTooltip() {
         if(this.option('tooltipEnabled')) {
             this.$element().attr('title', this.option('displayValue'));
         }
-    },
+    }
 
-    _renderDimensions: function() {
-        this.callBase();
+    _renderDimensions() {
+        super._renderDimensions();
 
         this._updatePopupWidth();
         this._updateListDimensions();
-    },
+    }
 
-    _isValueEqualInputText: function() {
+    _isValueEqualInputText() {
         const initialSelectedItem = this.option('selectedItem');
 
         if(initialSelectedItem === null) {
@@ -481,26 +481,26 @@ const SelectBox = DropDownList.inherit({
         const inputText = this._searchValue();
 
         return displayValue === inputText;
-    },
+    }
 
-    _popupHidingHandler: function() {
+    _popupHidingHandler() {
         if(this._isValueEqualInputText()) {
             this._cancelEditing();
         }
-        this.callBase();
-    },
+        super._popupHidingHandler();
+    }
 
-    _popupHiddenHandler: function() {
-        this.callBase();
+    _popupHiddenHandler() {
+        super._popupHiddenHandler();
 
         if(this._shouldCancelSearch()) {
             this._wasSearch(false);
             this._searchCanceled();
             this._shouldCancelSearch(false);
         }
-    },
+    }
 
-    _restoreInputText: function(saveEditingValue) {
+    _restoreInputText(saveEditingValue) {
         if(this.option('readOnly')) {
             return;
         }
@@ -538,19 +538,19 @@ const SelectBox = DropDownList.inherit({
                 this._clearFilter();
             }).bind(this));
         }).bind(this));
-    },
+    }
 
-    _valueChangeEventIncludesBlur: function() {
+    _valueChangeEventIncludesBlur() {
         const valueChangeEvent = this.option(this._getValueChangeEventOptionName());
 
         return valueChangeEvent.includes('blur');
-    },
+    }
 
-    _isPreventedFocusOutEvent: function(e) {
+    _isPreventedFocusOutEvent(e) {
         return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
-    },
+    }
 
-    _focusOutHandler: function(e) {
+    _focusOutHandler(e) {
         if(!this._isPreventedFocusOutEvent(e)) {
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
@@ -563,10 +563,10 @@ const SelectBox = DropDownList.inherit({
         }
 
         e.target = this._input().get(0);
-        this.callBase(e);
-    },
+        super._focusOutHandler(e);
+    }
 
-    _cancelSearchIfNeed: function(e) {
+    _cancelSearchIfNeed(e) {
         const { searchEnabled } = this.option();
         const isOverlayTarget = this._isOverlayNestedTarget(e?.relatedTarget);
 
@@ -584,21 +584,21 @@ const SelectBox = DropDownList.inherit({
                 this._searchCanceled();
             }
         }
-    },
+    }
 
-    _shouldCancelSearch: function(value) {
+    _shouldCancelSearch(value) {
         if(!arguments.length) {
             return this._shouldCancelSearchValue;
         }
 
         this._shouldCancelSearchValue = value;
-    },
+    }
 
-    _isOverlayNestedTarget: function(target) {
+    _isOverlayNestedTarget(target) {
         return !!$(target).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
-    },
+    }
 
-    _clearTextValue: function() {
+    _clearTextValue() {
         const selectedItem = this.option('selectedItem');
         const selectedItemText = this._displayGetter(selectedItem);
         const shouldRestoreValue = selectedItem && selectedItemText !== '';
@@ -611,28 +611,28 @@ const SelectBox = DropDownList.inherit({
         }
 
         delete this._savedTextRemoveEvent;
-    },
+    }
 
-    _shouldOpenPopup: function() {
+    _shouldOpenPopup() {
         return this._needPassDataSourceToList() && this._wasSearch();
-    },
+    }
 
-    _isFocused: function() {
+    _isFocused() {
         const activeElement = domAdapter.getActiveElement(this.element());
-        return this.callBase() && $(activeElement).closest(this._input()).length > 0;
-    },
+        return super._isFocused() && $(activeElement).closest(this._input()).length > 0;
+    }
 
-    _getValueChangeEventOptionName: function() {
+    _getValueChangeEventOptionName() {
         return 'customItemCreateEvent';
-    },
+    }
 
-    _renderValueChangeEvent: function() {
+    _renderValueChangeEvent() {
         if(this._isEditable()) {
-            this.callBase();
+            super._renderValueChangeEvent();
         }
-    },
+    }
 
-    _fieldRenderData: function() {
+    _fieldRenderData() {
         const $listFocused = this._list && this.option('opened') && $(this._list.option('focusedElement'));
 
         if($listFocused && $listFocused.length) {
@@ -640,17 +640,17 @@ const SelectBox = DropDownList.inherit({
         }
 
         return this.option('selectedItem');
-    },
+    }
 
-    _isSelectedValue: function(value) {
+    _isSelectedValue(value) {
         return this._isValueEquals(value, this.option('value'));
-    },
+    }
 
-    _shouldCloseOnItemClick: function() {
+    _shouldCloseOnItemClick() {
         return !(this.option('showSelectionControls') && this.option('selectionMode') !== 'single');
-    },
+    }
 
-    _listItemClickHandler: function(e) {
+    _listItemClickHandler(e) {
         const previousValue = this._getCurrentValue();
         this._focusListElement($(e.itemElement));
 
@@ -669,21 +669,21 @@ const SelectBox = DropDownList.inherit({
         if(this._shouldClearFilter()) {
             this._cancelSearchIfNeed();
         }
-    },
+    }
 
-    _shouldClearFilter: function() {
+    _shouldClearFilter() {
         return this._wasSearch();
-    },
+    }
 
-    _completeSelection: function(value) {
+    _completeSelection(value) {
         this._setValue(value);
-    },
+    }
 
-    _loadItem: function(value, cache) {
+    _loadItem(value, cache) {
         const that = this;
         const deferred = new Deferred();
 
-        this.callBase(value, cache)
+        super._loadItem(value, cache)
             .done((function(item) {
                 deferred.resolve(item);
             }).bind(this))
@@ -701,34 +701,34 @@ const SelectBox = DropDownList.inherit({
             }).bind(this));
 
         return deferred.promise();
-    },
+    }
 
-    _loadInputValue: function(value, callback) {
+    _loadInputValue(value, callback) {
         this._loadItemDeferred = this._loadItem(value).always(callback);
 
         return this._loadItemDeferred;
-    },
+    }
 
-    _isCustomItemSelected: function() {
+    _isCustomItemSelected() {
         const selectedItem = this.option('selectedItem');
         const searchValue = this._searchValue();
         const selectedItemText = this._displayGetter(selectedItem);
 
         return !selectedItemText || searchValue !== selectedItemText.toString();
-    },
+    }
 
-    _valueChangeEventHandler: function(e) {
+    _valueChangeEventHandler(e) {
         if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this._isValueChanging) {
             this._isValueChanging = true;
             this._customItemAddedHandler(e);
         }
-    },
+    }
 
-    _initCustomItemCreatingAction: function() {
+    _initCustomItemCreatingAction() {
         this._customItemCreatingAction = this._createActionByOption('onCustomItemCreating');
-    },
+    }
 
-    _createCustomItem: function(text) {
+    _createCustomItem(text) {
         const params = {
             text: text
         };
@@ -740,9 +740,9 @@ const SelectBox = DropDownList.inherit({
         }
 
         return item;
-    },
+    }
 
-    _customItemAddedHandler: function(e) {
+    _customItemAddedHandler(e) {
         const searchValue = this._searchValue();
 
         const item = this._createCustomItem(searchValue);
@@ -761,9 +761,9 @@ const SelectBox = DropDownList.inherit({
         } else {
             this._setCustomItem(item);
         }
-    },
+    }
 
-    _setCustomItem: function(item) {
+    _setCustomItem(item) {
         if(this._disposed) {
             return;
         }
@@ -774,24 +774,24 @@ const SelectBox = DropDownList.inherit({
         this._setValue(this._valueGetter(item));
         this._renderDisplayText(this._displayGetter(item));
         this._isValueChanging = false;
-    },
+    }
 
-    _clearValueHandler: function(e) {
+    _clearValueHandler(e) {
         this._preventFiltering = true;
-        this.callBase(e);
+        super._clearValueHandler(e);
         this._searchCanceled();
 
         return false;
-    },
+    }
 
-    _wasSearch: function(value) {
+    _wasSearch(value) {
         if(!arguments.length) {
             return !!this._wasSearchValue;
         }
         this._wasSearchValue = value;
-    },
+    }
 
-    _searchHandler: function() {
+    _searchHandler() {
         if(this._preventFiltering) {
             delete this._preventFiltering;
             return;
@@ -801,19 +801,19 @@ const SelectBox = DropDownList.inherit({
             this._wasSearch(true);
         }
 
-        this.callBase(arguments);
-    },
+        super._searchHandler(arguments);
+    }
 
-    _dataSourceFiltered: function(searchValue) {
-        this.callBase();
+    _dataSourceFiltered(searchValue) {
+        super._dataSourceFiltered();
 
         if(searchValue !== null) {
             this._renderInputSubstitution();
             this._renderFocusedElement();
         }
-    },
+    }
 
-    _valueSubstituted: function() {
+    _valueSubstituted() {
         const input = this._input().get(0);
         const currentSearchLength = this._searchValue().length;
         const isAllSelected = input.selectionStart === 0 && input.selectionEnd === currentSearchLength;
@@ -821,16 +821,16 @@ const SelectBox = DropDownList.inherit({
         const isLastSymbolSelected = currentSearchLength === input.selectionEnd;
 
         return this._wasSearch() && inputHasSelection && !isAllSelected && isLastSymbolSelected && this._shouldSubstitutionBeRendered();
-    },
+    }
 
-    _shouldSubstitutionBeRendered: function() {
+    _shouldSubstitutionBeRendered() {
         return !this._preventSubstitution
             && this.option('searchEnabled')
             && !this.option('acceptCustomValue')
             && this.option('searchMode') === 'startswith';
-    },
+    }
 
-    _renderInputSubstitution: function() {
+    _renderInputSubstitution() {
         if(!this._shouldSubstitutionBeRendered()) {
             delete this._preventSubstitution;
             return;
@@ -854,15 +854,15 @@ const SelectBox = DropDownList.inherit({
 
         inputElement.value = displayValue;
         this._caret({ start: valueLength, end: displayValue.length });
-    },
+    }
 
-    _dispose: function() {
+    _dispose() {
         this._renderInputValueAsync = noop;
         delete this._loadItemDeferred;
-        this.callBase();
-    },
+        super._dispose();
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case 'customItemCreateEvent':
                 this._refreshValueChangeEvent();
@@ -883,10 +883,10 @@ const SelectBox = DropDownList.inherit({
             case 'allowClearing':
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
-});
+    }
+}
 
 registerComponent('dxSelectBox', SelectBox);
 
