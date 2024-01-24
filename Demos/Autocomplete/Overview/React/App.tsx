@@ -9,6 +9,7 @@ function isNotEmpty(value: string) {
   return value !== undefined && value !== null && value !== '';
 }
 
+const positionLabel = { 'aria-label': 'Position' };
 const position = positions[0];
 
 const states = new ODataStore({
@@ -117,6 +118,7 @@ function App() {
               dataSource={positions}
               value={position}
               disabled={true}
+              inputAttr={positionLabel}
             />
           </div>
         </div>

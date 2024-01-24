@@ -41,6 +41,7 @@
             :data-source="positions"
             :value="position"
             :disabled="true"
+            :input-attr="{ 'aria-label': 'Position' }"
           />
         </div>
       </div>

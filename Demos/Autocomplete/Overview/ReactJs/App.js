@@ -8,6 +8,7 @@ import { names, surnames, positions } from './data.js';
 function isNotEmpty(value) {
   return value !== undefined && value !== null && value !== '';
 }
+const positionLabel = { 'aria-label': 'Position' };
 const position = positions[0];
 const states = new ODataStore({
   version: 2,
@@ -105,6 +106,7 @@ function App() {
               dataSource={positions}
               value={position}
               disabled={true}
+              inputAttr={positionLabel}
             />
           </div>
         </div>

@@ -28,6 +28,7 @@ $(() => {
     dataSource: positions,
     value: position,
     disabled: true,
+    inputAttr: { 'aria-label': 'Position' },
   });
 
   $('#state').dxAutocomplete({
