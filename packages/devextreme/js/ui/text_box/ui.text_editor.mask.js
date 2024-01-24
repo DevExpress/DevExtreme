@@ -29,18 +29,18 @@ const buildInMaskRules = {
     '0': /[0-9]/,
     '9': /[0-9\s]/,
     '#': /[-+0-9\s]/,
-    'L': function(char) {
+    'L'(char) {
         return isLiteralChar(char);
     },
-    'l': function(char) {
+    'l'(char) {
         return isLiteralChar(char) || isSpaceChar(char);
     },
     'C': /\S/,
     'c': /./,
-    'A': function(char) {
+    'A'(char) {
         return isLiteralChar(char) || isNumericChar(char);
     },
-    'a': function(char) {
+    'a'(char) {
         return isLiteralChar(char) || isNumericChar(char) || isSpaceChar(char);
     }
 };
@@ -58,10 +58,10 @@ function isSpaceChar(char) {
     return char === ' ';
 }
 
-const TextEditorMask = TextEditorBase.inherit({
+export default class TextEditorMask extends TextEditorBase {
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             mask: '',
 
             maskChar: '_',
@@ -74,9 +74,9 @@ const TextEditorMask = TextEditorBase.inherit({
 
             showMaskMode: 'always'
         });
-    },
+    }
 
-    _supportedKeys: function() {
+    _supportedKeys() {
         const that = this;
 
         const keyHandlerMap = {
@@ -84,7 +84,7 @@ const TextEditorMask = TextEditorBase.inherit({
             enter: that._changeHandler
         };
 
-        const result = that.callBase();
+        const result = that._supportedKeys();
         each(keyHandlerMap, function(key, callback) {
             const parentHandler = result[key];
             result[key] = function(e) {
@@ -94,28 +94,28 @@ const TextEditorMask = TextEditorBase.inherit({
         });
 
         return result;
-    },
+    }
 
-    _getSubmitElement: function() {
-        return !this.option('mask') ? this.callBase() : this._$hiddenElement;
-    },
+    _getSubmitElement() {
+        return !this.option('mask') ? super._getSubmitElement() : this._$hiddenElement;
+    }
 
-    _init: function() {
-        this.callBase();
+    _init() {
+        super._init();
 
         this._initMaskStrategy();
-    },
+    }
 
-    _initMaskStrategy: function() {
+    _initMaskStrategy() {
         this._maskStrategy = new MaskStrategy(this);
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderHiddenElement();
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    _attachMouseWheelEventHandlers: function() {
+    _attachMouseWheelEventHandlers() {
         const hasMouseWheelHandler = this._onMouseWheel !== noop;
 
         if(!hasMouseWheelHandler) {
@@ -138,13 +138,13 @@ const TextEditorMask = TextEditorBase.inherit({
         eventsEngine.on(input, eventName, function(e) {
             mouseWheelAction({ event: e });
         });
-    },
+    }
 
-    _onMouseWheel: noop,
+    _onMouseWheel() {}
 
     _useMaskBehavior() {
         return Boolean(this.option('mask'));
-    },
+    }
 
     _attachDropEventHandler() {
         const useMaskBehavior = this._useMaskBehavior();
@@ -158,28 +158,28 @@ const TextEditorMask = TextEditorBase.inherit({
 
         eventsEngine.off(input, eventName);
         eventsEngine.on(input, eventName, (e) => e.preventDefault());
-    },
+    }
 
     _render() {
         this._renderMask();
-        this.callBase();
+        super._render();
         this._attachDropEventHandler();
         this._attachMouseWheelEventHandlers();
-    },
+    }
 
-    _renderHiddenElement: function() {
+    _renderHiddenElement() {
         if(this.option('mask')) {
             this._$hiddenElement = $('<input>')
                 .attr('type', 'hidden')
                 .appendTo(this._inputWrapper());
         }
-    },
+    }
 
-    _removeHiddenElement: function() {
+    _removeHiddenElement() {
         this._$hiddenElement && this._$hiddenElement.remove();
-    },
+    }
 
-    _renderMask: function() {
+    _renderMask() {
         this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
 
@@ -194,9 +194,9 @@ const TextEditorMask = TextEditorBase.inherit({
         this._maskStrategy.attachEvents();
         this._parseMask();
         this._renderMaskedValue();
-    },
+    }
 
-    _changeHandler: function(e) {
+    _changeHandler(e) {
         const $input = this._input();
         const inputValue = $input.val();
 
@@ -207,14 +207,14 @@ const TextEditorMask = TextEditorBase.inherit({
         this._changedValue = inputValue;
         const changeEvent = createEvent(e, { type: 'change' });
         eventsEngine.trigger($input, changeEvent);
-    },
+    }
 
-    _parseMask: function() {
+    _parseMask() {
         this._maskRules = extend({}, buildInMaskRules, this.option('maskRules'));
         this._maskRulesChain = this._parseMaskRule(0);
-    },
+    }
 
-    _parseMaskRule: function(index) {
+    _parseMaskRule(index) {
         const mask = this.option('mask');
         if(index >= mask.length) {
             return new EmptyMaskRule();
@@ -228,9 +228,9 @@ const TextEditorMask = TextEditorBase.inherit({
 
         result.next(this._parseMaskRule(index + 1 + isEscapedChar));
         return result;
-    },
+    }
 
-    _getMaskRule: function(pattern) {
+    _getMaskRule(pattern) {
         let ruleConfig;
 
         each(this._maskRules, function(rulePattern, allowedChars) {
@@ -246,9 +246,9 @@ const TextEditorMask = TextEditorBase.inherit({
         return isDefined(ruleConfig)
             ? new MaskRule(extend({ maskChar: this.option('maskChar') || ' ' }, ruleConfig))
             : new StubMaskRule({ maskChar: pattern });
-    },
+    }
 
-    _renderMaskedValue: function() {
+    _renderMaskedValue() {
         if(!this._maskRulesChain) {
             return;
         }
@@ -261,9 +261,9 @@ const TextEditorMask = TextEditorBase.inherit({
 
         this._handleChain(chainArgs);
         this._displayMask();
-    },
+    }
 
-    _replaceSelectedText: function(text, selection, char) {
+    _replaceSelectedText(text, selection, char) {
         if(char === undefined) {
             return text;
         }
@@ -273,23 +273,23 @@ const TextEditorMask = TextEditorBase.inherit({
         const edited = textBefore + char + textAfter;
 
         return edited;
-    },
+    }
 
-    _isMaskedValueMode: function() {
+    _isMaskedValueMode() {
         return this.option('useMaskedValue');
-    },
+    }
 
-    _displayMask: function(caret) {
+    _displayMask(caret) {
         caret = caret || this._caret();
         this._renderValue();
         this._caret(caret);
-    },
+    }
 
-    _isValueEmpty: function() {
+    _isValueEmpty() {
         return isEmpty(this._value);
-    },
+    }
 
-    _shouldShowMask: function() {
+    _shouldShowMask() {
         const showMaskMode = this.option('showMaskMode');
 
         if(showMaskMode === 'onFocus') {
@@ -297,9 +297,9 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         return true;
-    },
+    }
 
-    _showMaskPlaceholder: function() {
+    _showMaskPlaceholder() {
         if(this._shouldShowMask()) {
             const text = this._maskRulesChain.text();
             this.option('text', text);
@@ -307,9 +307,9 @@ const TextEditorMask = TextEditorBase.inherit({
                 this._renderDisplayText(text);
             }
         }
-    },
+    }
 
-    _renderValue: function() {
+    _renderValue() {
         if(this._maskRulesChain) {
             this._showMaskPlaceholder();
 
@@ -322,42 +322,42 @@ const TextEditorMask = TextEditorBase.inherit({
                 this._$hiddenElement.val(submitElementValue);
             }
         }
-        return this.callBase();
-    },
+        return super._renderValue();
+    }
 
-    _getPreparedValue: function() {
+    _getPreparedValue() {
         return this._convertToValue().replace(/\s+$/, '');
-    },
+    }
 
-    _valueChangeEventHandler: function(e) {
+    _valueChangeEventHandler(e) {
         if(!this._maskRulesChain) {
-            this.callBase.apply(this, arguments);
+            super._valueChangeEventHandler.apply(this, arguments);
             return;
         }
 
         this._saveValueChangeEvent(e);
 
         this.option('value', this._getPreparedValue());
-    },
+    }
 
-    _isControlKeyFired: function(e) {
+    _isControlKeyFired(e) {
         return this._isControlKey(normalizeKeyName(e)) || isCommandKeyPressed(e);
-    },
+    }
 
-    _handleChain: function(args) {
+    _handleChain(args) {
         const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
         this._updateMaskInfo();
         return handledCount;
-    },
+    }
 
-    _normalizeChainArguments: function(args) {
+    _normalizeChainArguments(args) {
         args = args || {};
         args.index = 0;
         args.fullText = this._maskRulesChain.text();
         return args;
-    },
+    }
 
-    _convertToValue: function(text) {
+    _convertToValue(text) {
         if(this._isMaskedValueMode()) {
             text = this._replaceMaskCharWithEmpty(text || this._textValue || '');
         } else {
@@ -365,13 +365,13 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         return text;
-    },
+    }
 
-    _replaceMaskCharWithEmpty: function(text) {
+    _replaceMaskCharWithEmpty(text) {
         return text.replace(new RegExp(this.option('maskChar'), 'g'), EMPTY_CHAR);
-    },
+    }
 
-    _maskKeyHandler: function(e, keyHandler) {
+    _maskKeyHandler(e, keyHandler) {
         if(this.option('readOnly')) {
             return;
         }
@@ -399,16 +399,16 @@ const TextEditorMask = TextEditorBase.inherit({
             this._maskRulesChain.reset();
             raiseInputEvent();
         }
-    },
+    }
 
-    _handleKey: function(key, direction) {
+    _handleKey(key, direction) {
         this._direction(direction || FORWARD_DIRECTION);
         this._adjustCaret(key);
         this._handleKeyChain(key);
         this._moveCaret();
-    },
+    }
 
-    _handleSelection: function() {
+    _handleSelection() {
         if(!this._hasSelection()) {
             return;
         }
@@ -416,33 +416,33 @@ const TextEditorMask = TextEditorBase.inherit({
         const caret = this._caret();
         const emptyChars = new Array(caret.end - caret.start + 1).join(EMPTY_CHAR);
         this._handleKeyChain(emptyChars);
-    },
+    }
 
-    _handleKeyChain: function(chars) {
+    _handleKeyChain(chars) {
         const caret = this._caret();
         const start = this.isForwardDirection() ? caret.start : caret.start - 1;
         const end = this.isForwardDirection() ? caret.end : caret.end - 1;
         const length = start === end ? 1 : end - start;
 
         this._handleChain({ text: chars, start: start, length: length });
-    },
+    }
 
-    _tryMoveCaretBackward: function() {
+    _tryMoveCaretBackward() {
         this.setBackwardDirection();
         const currentCaret = this._caret().start;
         this._adjustCaret();
         return !currentCaret || currentCaret !== this._caret().start;
-    },
+    }
 
-    _adjustCaret: function(char) {
+    _adjustCaret(char) {
         const caretStart = this._caret().start;
         const isForwardDirection = this.isForwardDirection();
 
         const caret = this._maskRulesChain.adjustedCaret(caretStart, isForwardDirection, char);
         this._caret({ start: caret, end: caret });
-    },
+    }
 
-    _moveCaret: function() {
+    _moveCaret() {
         const currentCaret = this._caret().start;
         const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
@@ -451,9 +451,9 @@ const TextEditorMask = TextEditorBase.inherit({
             : currentCaret;
 
         this._caret({ start: caret, end: caret });
-    },
+    }
 
-    _caret: function(position, force) {
+    _caret(position, force) {
         const $input = this._input();
 
         if(!$input.length) {
@@ -464,44 +464,44 @@ const TextEditorMask = TextEditorBase.inherit({
             return caret($input);
         }
         caret($input, position, force);
-    },
+    }
 
-    _hasSelection: function() {
+    _hasSelection() {
         const caret = this._caret();
         return caret.start !== caret.end;
-    },
+    }
 
-    _direction: function(direction) {
+    _direction(direction) {
         if(!arguments.length) {
             return this._typingDirection;
         }
 
         this._typingDirection = direction;
-    },
+    }
 
-    setForwardDirection: function() {
+    setForwardDirection() {
         this._direction(FORWARD_DIRECTION);
-    },
+    }
 
-    setBackwardDirection: function() {
+    setBackwardDirection() {
         this._direction(BACKWARD_DIRECTION);
-    },
+    }
 
-    isForwardDirection: function() {
+    isForwardDirection() {
         return this._direction() === FORWARD_DIRECTION;
-    },
+    }
 
     _updateMaskInfo() {
         this._textValue = this._maskRulesChain.text();
         this._value = this._maskRulesChain.value();
-    },
+    }
 
-    _clean: function() {
+    _clean() {
         this._maskStrategy && this._maskStrategy.clean();
-        this.callBase();
-    },
+        super._clean();
+    }
 
-    _validateMask: function() {
+    _validateMask() {
         if(!this._maskRulesChain) {
             return;
         }
@@ -511,9 +511,9 @@ const TextEditorMask = TextEditorBase.inherit({
             isValid: isValid,
             validationError: isValid ? null : { editorSpecific: true, message: this.option('maskInvalidMessage') }
         });
-    },
+    }
 
-    _updateHiddenElement: function() {
+    _updateHiddenElement() {
         this._removeHiddenElement();
 
         if(this.option('mask')) {
@@ -522,15 +522,15 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         this._setSubmitElementName(this.option('name'));
-    },
+    }
 
-    _updateMaskOption: function() {
+    _updateMaskOption() {
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
-    },
+    }
 
-    _processEmptyMask: function(mask) {
+    _processEmptyMask(mask) {
         if(mask) return;
 
         const value = this.option('value');
@@ -543,9 +543,9 @@ const TextEditorMask = TextEditorBase.inherit({
             editor: this
         });
         this._renderValue();
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case 'mask':
                 this._updateMaskOption();
@@ -559,7 +559,7 @@ const TextEditorMask = TextEditorBase.inherit({
             case 'value':
                 this._renderMaskedValue();
                 this._validateMask();
-                this.callBase(args);
+                super._optionChanged(args);
 
                 this._changedValue = this._input().val();
                 break;
@@ -570,17 +570,15 @@ const TextEditorMask = TextEditorBase.inherit({
                 this._renderValue();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
+    }
 
-    clear: function() {
+    clear() {
         const { value: defaultValue } = this._getDefaultOptions();
         if(this.option('value') === defaultValue) {
             this._renderMaskedValue();
         }
-        this.callBase();
+        super.clear();
     }
-});
-
-export default TextEditorMask;
+}

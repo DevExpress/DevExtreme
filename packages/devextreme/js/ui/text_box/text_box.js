@@ -16,57 +16,56 @@ const SEARCHBOX_CLASS = 'dx-searchbox';
 const ICON_CLASS = 'dx-icon';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
 
-const TextBox = TextEditor.inherit({
-
-    ctor: function(element, options) {
+class TextBox extends TextEditor {
+    ctor(element, options) {
         if(options) {
             this._showClearButton = options.showClearButton;
         }
 
-        this.callBase.apply(this, arguments);
-    },
+        super.ctor.apply(this, arguments);
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             value: '',
             mode: 'text',
 
             maxLength: null
         });
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this.$element().addClass(TEXTBOX_CLASS);
 
-        this.callBase();
+        super._initMarkup();
         this.setAria('role', 'textbox');
-    },
+    }
 
-    _renderInputType: function() {
-        this.callBase();
+    _renderInputType() {
+        super._renderInputType();
 
         this._renderSearchMode();
-    },
+    }
 
-    _useTemplates: function() {
+    _useTemplates() {
         return false;
-    },
+    }
 
-    _renderProps: function() {
-        this.callBase();
+    _renderProps() {
+        super._renderProps();
         this._toggleMaxLengthProp();
-    },
+    }
 
-    _toggleMaxLengthProp: function() {
+    _toggleMaxLengthProp() {
         const maxLength = this._getMaxLength();
         if(maxLength && maxLength > 0) {
             this._input().attr('maxLength', maxLength);
         } else {
             this._input().removeAttr('maxLength');
         }
-    },
+    }
 
-    _renderSearchMode: function() {
+    _renderSearchMode() {
         const $element = this._$element;
 
         if(this.option('mode') === 'search') {
@@ -83,56 +82,56 @@ const TextBox = TextEditor.inherit({
             this.option('showClearButton', this._showClearButton === undefined ? this.option('showClearButton') : this._showClearButton);
             delete this._showClearButton;
         }
-    },
+    }
 
-    _renderSearchIcon: function() {
+    _renderSearchIcon() {
         const $searchIcon = $('<div>')
             .addClass(ICON_CLASS)
             .addClass(SEARCH_ICON_CLASS);
 
         $searchIcon.prependTo(this._input().parent());
         this._$searchIcon = $searchIcon;
-    },
+    }
 
-    _getLabelContainerWidth: function() {
+    _getLabelContainerWidth() {
         if(this._$searchIcon) {
             const $inputContainer = this._input().parent();
 
             return getWidth($inputContainer) - this._getLabelBeforeWidth();
         }
 
-        return this.callBase();
-    },
+        return super._getLabelContainerWidth();
+    }
 
-    _getLabelBeforeWidth: function() {
-        let labelBeforeWidth = this.callBase();
+    _getLabelBeforeWidth() {
+        let labelBeforeWidth = super._getLabelBeforeWidth();
 
         if(this._$searchIcon) {
             labelBeforeWidth += getOuterWidth(this._$searchIcon);
         }
 
         return labelBeforeWidth;
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case 'maxLength':
                 this._toggleMaxLengthProp();
                 break;
             case 'mode':
-                this.callBase(args);
+                super._optionChanged(args);
                 this._updateLabelWidth();
                 break;
             case 'mask':
-                this.callBase(args);
+                super._optionChanged(args);
                 this._toggleMaxLengthProp();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
+    }
 
-    _onKeyDownCutOffHandler: function(e) {
+    _onKeyDownCutOffHandler(e) {
         const actualMaxLength = this._getMaxLength();
 
         if(actualMaxLength && !e.ctrlKey && !this._hasSelection()) {
@@ -147,28 +146,28 @@ const TextBox = TextEditor.inherit({
         } else {
             return true;
         }
-    },
+    }
 
-    _onChangeCutOffHandler: function(e) {
+    _onChangeCutOffHandler(e) {
         const $input = $(e.target);
         if(this.option('maxLength')) {
             this._cutOffExtraChar($input);
         }
-    },
+    }
 
-    _cutOffExtraChar: function($input) {
+    _cutOffExtraChar($input) {
         const actualMaxLength = this._getMaxLength();
         const textInput = $input.val();
         if(actualMaxLength && textInput.length > actualMaxLength) {
             $input.val(textInput.substr(0, actualMaxLength));
         }
-    },
+    }
 
-    _getMaxLength: function() {
+    _getMaxLength() {
         const isMaskSpecified = !!this.option('mask');
         return isMaskSpecified ? null : this.option('maxLength');
     }
-});
+}
 
 registerComponent('dxTextBox', TextBox);
 
