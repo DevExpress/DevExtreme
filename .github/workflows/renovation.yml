@@ -49,7 +49,7 @@ jobs:
     runs-on: devextreme-shr2
     name: Send notifications
     needs: [jest-tests]
-    if: always() && contains(needs.*.result, 'failure')
+    if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
       - uses: actions/checkout@v4
@@ -58,4 +58,3 @@ jobs:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 24_1
