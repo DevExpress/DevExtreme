@@ -27,8 +27,14 @@ const SWITCH_OFF_CLASS = SWITCH_CLASS + '-off';
 
 const SWITCH_ANIMATION_DURATION = 100;
 
-const Switch = Editor.inherit({
-    _supportedKeys: function() {
+class Switch extends Editor {
+    ctor() {
+        super.ctor.apply(this, arguments);
+        this._feedbackHideTimeout = 0;
+        this._animating = false;
+    }
+
+    _supportedKeys() {
         const isRTL = this.option('rtlEnabled');
 
         const click = function(e) {
@@ -41,20 +47,20 @@ const Switch = Editor.inherit({
             this._saveValueChangeEvent(e);
             this._animateValue(value);
         };
-        return extend(this.callBase(), {
+        return extend(super._supportedKeys(), {
             space: click,
             enter: click,
             leftArrow: move.bind(this, isRTL ? true : false),
             rightArrow: move.bind(this, isRTL ? false : true)
         });
-    },
+    }
 
-    _useTemplates: function() {
+    _useTemplates() {
         return false;
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             hoverStateEnabled: true,
 
             activeStateEnabled: true,
@@ -65,12 +71,12 @@ const Switch = Editor.inherit({
 
             value: false
         });
-    },
+    }
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
+    _defaultOptionsRules() {
+        return super._defaultOptionsRules().concat([
             {
-                device: function() {
+                device() {
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
@@ -78,12 +84,9 @@ const Switch = Editor.inherit({
                 }
             }
         ]);
-    },
+    }
 
-    _feedbackHideTimeout: 0,
-    _animating: false,
-
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderContainers();
 
         this.$element()
@@ -98,19 +101,19 @@ const Switch = Editor.inherit({
 
         this._renderSwipeable();
 
-        this.callBase();
+        super._initMarkup();
 
         this._renderSwitchInner();
         this._renderLabels();
         this._renderValue();
-    },
+    }
 
-    _getInnerOffset: function(value, offset) {
+    _getInnerOffset(value, offset) {
         const ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
         return 100 * ratio + '%';
-    },
+    }
 
-    _getHandleOffset: function(value, offset) {
+    _getHandleOffset(value, offset) {
         if(this.option('rtlEnabled')) {
             value = !value;
         }
@@ -121,9 +124,9 @@ const Switch = Editor.inherit({
         } else {
             return 100 * (-offset) + '%';
         }
-    },
+    }
 
-    _renderSwitchInner: function() {
+    _renderSwitchInner() {
         this._$switchInner = $('<div>')
             .addClass(SWITCH_INNER_CLASS)
             .appendTo(this._$switchContainer);
@@ -131,9 +134,9 @@ const Switch = Editor.inherit({
         this._$handle = $('<div>')
             .addClass(SWITCH_HANDLE_CLASS)
             .appendTo(this._$switchInner);
-    },
+    }
 
-    _renderLabels: function() {
+    _renderLabels() {
         this._$labelOn = $('<div>')
             .addClass(SWITCH_ON_CLASS)
             .prependTo(this._$switchInner);
@@ -143,18 +146,18 @@ const Switch = Editor.inherit({
             .appendTo(this._$switchInner);
 
         this._setLabelsText();
-    },
+    }
 
-    _renderContainers: function() {
+    _renderContainers() {
         this._$switchContainer = $('<div>')
             .addClass(SWITCH_CONTAINER_CLASS);
 
         this._$switchWrapper = $('<div>')
             .addClass(SWITCH_WRAPPER_CLASS)
             .append(this._$switchContainer);
-    },
+    }
 
-    _renderSwipeable: function() {
+    _renderSwipeable() {
         this._createComponent(this.$element(), Swipeable, {
             elastic: false,
             immediate: true,
@@ -163,42 +166,42 @@ const Switch = Editor.inherit({
             onEnd: this._swipeEndHandler.bind(this),
             itemSizeFunc: this._getItemSizeFunc.bind(this)
         });
-    },
+    }
 
-    _getItemSizeFunc: function() {
+    _getItemSizeFunc() {
         return getOuterWidth(this._$switchContainer, true) - getBoundingRect(this._$handle.get(0)).width;
-    },
+    }
 
-    _renderSubmitElement: function() {
+    _renderSubmitElement() {
         this._$submitElement = $('<input>')
             .attr('type', 'hidden')
             .appendTo(this.$element());
-    },
+    }
 
-    _getSubmitElement: function() {
+    _getSubmitElement() {
         return this._$submitElement;
-    },
+    }
 
-    _offsetDirection: function() {
+    _offsetDirection() {
         return this.option('rtlEnabled') ? -1 : 1;
-    },
+    }
 
-    _renderPosition: function(state, swipeOffset) {
+    _renderPosition(state, swipeOffset) {
         const innerOffset = this._getInnerOffset(state, swipeOffset);
         const handleOffset = this._getHandleOffset(state, swipeOffset);
 
         this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
         this._$handle.css('transform', ' translateX(' + handleOffset + ')');
-    },
+    }
 
-    _validateValue: function() {
+    _validateValue() {
         const check = this.option('value');
         if(typeof check !== 'boolean') {
             this._options.silent('value', !!check);
         }
-    },
+    }
 
-    _renderClick: function() {
+    _renderClick() {
         const eventName = addNamespace(clickEventName, this.NAME);
         const $element = this.$element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
@@ -207,9 +210,9 @@ const Switch = Editor.inherit({
         eventsEngine.on($element, eventName, (function(e) {
             this._clickAction({ event: e });
         }).bind(this));
-    },
+    }
 
-    _clickHandler: function(args) {
+    _clickHandler(args) {
         const e = args.event;
 
         this._saveValueChangeEvent(e);
@@ -219,9 +222,9 @@ const Switch = Editor.inherit({
         }
 
         this._animateValue(!this.option('value'));
-    },
+    }
 
-    _animateValue: function(value) {
+    _animateValue(value) {
         const startValue = this.option('value');
         const endValue = value;
 
@@ -259,14 +262,14 @@ const Switch = Editor.inherit({
             from: fromInnerConfig,
             to: toInnerConfig,
             duration: SWITCH_ANIMATION_DURATION,
-            complete: function() {
+            complete() {
                 that._animating = false;
                 that.option('value', endValue);
             }
         });
-    },
+    }
 
-    _swipeStartHandler: function(e) {
+    _swipeStartHandler(e) {
         const state = this.option('value');
         const rtlEnabled = this.option('rtlEnabled');
         const maxOffOffset = rtlEnabled ? 0 : 1;
@@ -279,13 +282,13 @@ const Switch = Editor.inherit({
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
         this._toggleActiveState(this.$element(), this.option('activeStateEnabled'));
-    },
+    }
 
-    _swipeUpdateHandler: function(e) {
+    _swipeUpdateHandler(e) {
         this._renderPosition(this.option('value'), e.event.offset);
-    },
+    }
 
-    _swipeEndHandler: function(e) {
+    _swipeEndHandler(e) {
         const that = this;
         const offsetDirection = this._offsetDirection();
         const toInnerConfig = {};
@@ -305,7 +308,7 @@ const Switch = Editor.inherit({
         fx.animate(this._$switchInner, {
             to: toInnerConfig,
             duration: SWITCH_ANIMATION_DURATION,
-            complete: function() {
+            complete() {
                 that._swiping = false;
                 const pos = that.option('value') + offsetDirection * e.event.targetOffset;
                 that._saveValueChangeEvent(e.event);
@@ -314,9 +317,9 @@ const Switch = Editor.inherit({
                 that._toggleActiveState(that.$element(), false);
             }
         });
-    },
+    }
 
-    _renderValue: function() {
+    _renderValue() {
         this._validateValue();
 
         const val = this.option('value');
@@ -328,20 +331,20 @@ const Switch = Editor.inherit({
             'pressed': val,
             'label': val ? this.option('switchedOnText') : this.option('switchedOffText')
         });
-    },
+    }
 
-    _setLabelsText: function() {
+    _setLabelsText() {
         this._$labelOn && this._$labelOn.text(this.option('switchedOnText'));
         this._$labelOff && this._$labelOff.text(this.option('switchedOffText'));
-    },
+    }
 
-    _visibilityChanged: function(visible) {
+    _visibilityChanged(visible) {
         if(visible) {
             this.repaint();
         }
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case 'width':
                 delete this._marginBound;
@@ -353,13 +356,13 @@ const Switch = Editor.inherit({
                 break;
             case 'value':
                 this._renderValue();
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
-});
+}
 
 registerComponent('dxSwitch', Switch);
 
