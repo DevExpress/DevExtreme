@@ -17,9 +17,9 @@ import TextBox from './text_box';
 const TEXTAREA_CLASS = 'dx-textarea';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
-const TextArea = TextBox.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+class TextArea extends TextBox {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             /**
             * @name dxTextAreaOptions.mode
             * @hidden
@@ -73,35 +73,35 @@ const TextArea = TextBox.inherit({
             * @hidden
             */
         });
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this.$element().addClass(TEXTAREA_CLASS);
-        this.callBase();
+        super._initMarkup();
         this.setAria('multiline', 'true');
-    },
+    }
 
-    _renderContentImpl: function() {
+    _renderContentImpl() {
         this._updateInputHeight();
-        this.callBase();
-    },
+        super._renderContentImpl();
+    }
 
-    _renderInput: function() {
-        this.callBase();
+    _renderInput() {
+        super._renderInput();
         this._renderScrollHandler();
-    },
+    }
 
-    _createInput: function() {
+    _createInput() {
         const $input = $('<textarea>');
         this._applyInputAttributes($input, this.option('inputAttr'));
         this._updateInputAutoResizeAppearance($input);
 
         return $input;
-    },
+    }
 
-    _setInputMinHeight: noop,
+    _setInputMinHeight() {}
 
-    _renderScrollHandler: function() {
+    _renderScrollHandler() {
         this._eventY = 0;
         const $input = this._input();
         const initScrollData = prepareScrollData($input, true);
@@ -109,13 +109,13 @@ const TextArea = TextBox.inherit({
         eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
         eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
         eventsEngine.on($input, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
-    },
+    }
 
-    _pointerDownHandler: function(e) {
+    _pointerDownHandler(e) {
         this._eventY = eventData(e).y;
-    },
+    }
 
-    _pointerMoveHandler: function(e) {
+    _pointerMoveHandler(e) {
         const currentEventY = eventData(e).y;
         const delta = this._eventY - currentEventY;
 
@@ -125,9 +125,9 @@ const TextArea = TextBox.inherit({
         }
 
         this._eventY = currentEventY;
-    },
+    }
 
-    _renderDimensions: function() {
+    _renderDimensions() {
         const $element = this.$element();
         const element = $element.get(0);
         const width = this._getOptionValue('width', element);
@@ -141,37 +141,37 @@ const TextArea = TextBox.inherit({
             width: width,
             height: height
         });
-    },
+    }
 
-    _resetDimensions: function() {
+    _resetDimensions() {
         this.$element().css({
             'height': '',
             'minHeight': '',
             'maxHeight': ''
         });
-    },
+    }
 
-    _renderEvents: function() {
+    _renderEvents() {
         if(this.option('autoResizeEnabled')) {
             eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
         }
 
-        this.callBase();
-    },
+        super._renderEvents();
+    }
 
-    _refreshEvents: function() {
+    _refreshEvents() {
         eventsEngine.off(this._input(), addNamespace('input paste', this.NAME));
-        this.callBase();
-    },
+        super._refreshEvents();
+    }
 
     _getHeightDifference($input) {
         return getVerticalOffsets(this._$element.get(0), false)
             + getVerticalOffsets(this._$textEditorContainer.get(0), false)
             + getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
             + getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
-    },
+    }
 
-    _updateInputHeight: function() {
+    _updateInputHeight() {
         if(!hasWindow()) {
             return;
         }
@@ -215,39 +215,39 @@ const TextArea = TextBox.inherit({
         if(autoHeightResizing) {
             this._$element.css('height', 'auto');
         }
-    },
+    }
 
-    _getBoundaryHeight: function(optionName) {
+    _getBoundaryHeight(optionName) {
         const boundaryValue = this.option(optionName);
 
         if(isDefined(boundaryValue)) {
             return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this.$element().get(0).parentElement, this._$element.get(0));
         }
-    },
+    }
 
-    _renderInputType: noop,
+    _renderInputType() {}
 
-    _visibilityChanged: function(visible) {
+    _visibilityChanged(visible) {
         if(visible) {
             this._updateInputHeight();
         }
-    },
+    }
 
-    _updateInputAutoResizeAppearance: function($input, isAutoResizeEnabled) {
+    _updateInputAutoResizeAppearance($input, isAutoResizeEnabled) {
         if($input) {
             const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
 
             $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
         }
-    },
+    }
 
-    _dimensionChanged: function() {
+    _dimensionChanged() {
         if(this.option('visible')) {
             this._updateInputHeight();
         }
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case 'autoResizeEnabled':
                 this._updateInputAutoResizeAppearance(this._input(), args.value);
@@ -256,7 +256,7 @@ const TextArea = TextBox.inherit({
                 break;
             case 'value':
             case 'height':
-                this.callBase(args);
+                super._optionChanged(args);
                 this._updateInputHeight();
                 break;
             case 'minHeight':
@@ -265,11 +265,11 @@ const TextArea = TextBox.inherit({
                 this._updateInputHeight();
                 break;
             case 'visible':
-                this.callBase(args);
+                super._optionChanged(args);
                 args.value && this._updateInputHeight();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
 
@@ -278,7 +278,7 @@ const TextArea = TextBox.inherit({
     * @publicName getButton(name)
     * @hidden
     */
-});
+}
 
 registerComponent('dxTextArea', TextArea);
 

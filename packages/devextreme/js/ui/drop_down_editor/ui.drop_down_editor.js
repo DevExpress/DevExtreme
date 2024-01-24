@@ -960,6 +960,9 @@ const DropDownEditor = TextBox.inherit({
     }
 });
 
+DropDownEditor.getInstance = TextBox.getInstance;
+DropDownEditor.defaultOptions = TextBox.defaultOptions;
+
 registerComponent('dxDropDownEditor', DropDownEditor);
 
 export default DropDownEditor;
