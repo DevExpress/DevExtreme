@@ -1,9 +1,9 @@
-import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/tag_box.d';
-import TagBox from '../../model/tagBox';
+import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../../js/ui/tag_box.d';
+import TagBox from '../../../model/tagBox';
 
 const TIME_TO_WAIT = 150;
 
