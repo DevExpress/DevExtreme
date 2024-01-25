@@ -20,7 +20,7 @@ export const getImageSourceType = (source) => {
         return 'dxIcon';
     }
 
-    if(/^\s?([\w-_]\s?)+$/.test(source)) {
+    if(/^\s?([\w-_:]\s?)+$/.test(source)) {
         return 'fontIcon';
     }
 
