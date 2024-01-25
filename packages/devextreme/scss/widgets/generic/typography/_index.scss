@@ -13,16 +13,14 @@
 
   @include dx-base-typography();
 
-  h1,
-  .dx-font-xl {
+  h1 {
     font-weight: 200;
-    font-size: $generic-xl-font-size;
+    font-size: $generic-h1-font-size;
   }
 
-  h2,
-  .dx-font-l {
+  h2 {
     font-weight: normal;
-    font-size: $generic-l-font-size;
+    font-size: $generic-h2-font-size;
   }
 
   h3 {
@@ -30,14 +28,9 @@
     font-size: $generic-h3-font-size;
   }
 
-  .dx-font-m {
-    font-weight: normal;
-    font-size: $generic-m-font-size;
-  }
-
-  h4,
-  .dx-font-s {
-    @include dx-s-font-mixin();
+  h4 {
+    font-weight: 500;
+    font-size: $generic-h4-font-size;
   }
 
   h5 {
@@ -45,7 +38,30 @@
     font-size: $generic-h5-font-size;
   }
 
-  h6,
+  h6 {
+    font-weight: 800;
+    font-size: $generic-h6-font-size;
+  }
+
+  .dx-font-xl {
+    font-weight: 200;
+    font-size: $generic-xl-font-size;
+  }
+
+  .dx-font-l {
+    font-weight: normal;
+    font-size: $generic-l-font-size;
+  }
+
+  .dx-font-m {
+    font-weight: normal;
+    font-size: $generic-m-font-size;
+  }
+
+  .dx-font-s {
+    @include dx-s-font-mixin();
+  }
+
   small,
   .dx-font-xs {
     font-weight: 800;
