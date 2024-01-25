@@ -23,6 +23,7 @@ import { implementationsMap } from 'core/utils/size';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
+const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
 
@@ -562,6 +563,16 @@ QUnit.test('icon should not be rendered when custom item template is used', func
     });
 
     assert.strictEqual($list.find('.' + LIST_ITEM_ICON_CONTAINER_CLASS).length, 0, 'item content has not been rendered');
+});
+
+QUnit.test('it should be possible to define custom icon class with colon symbol (T1212049)', function(assert) {
+    const $list = $('#list').dxList({
+        items: [{ icon: 'some:class', text: 'Item 1' }],
+    });
+
+    const $itemIcon = $list.find(`.${LIST_ITEM_ICON_CLASS}`);
+
+    assert.ok($itemIcon.hasClass('some:class'));
 });
 
 QUnit.test('swipe should prepare item for delete', function(assert) {
