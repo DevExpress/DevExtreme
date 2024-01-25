@@ -2,28 +2,23 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/tag_box.d';
-import TagBox from '../../model/tagBox';
+import { Properties } from '../../../../js/ui/date_box.d';
+import DateBox from '../../model/dateBox';
+
+const TIME_TO_WAIT = 1500;
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
-const items = [
-  'HD Video Player',
-  'SuperHD Video Player',
-  'SuperPlasma 50',
-];
+const now = new Date();
 
 const options: Options<Properties> = {
-  dataSource: [[], items],
-  value: [undefined, [items[0]]],
+  value: [undefined, now],
   disabled: [true, false],
   readOnly: [true, false],
-  searchEnabled: [true, false],
-  searchTimeout: [0],
+  type: ['date', 'time', 'datetime'],
   showClearButton: [true, false],
-  showSelectionControls: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -50,10 +45,12 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
     return;
   }
 
-  const tagBox = new TagBox(defaultSelector);
-  const { input } = tagBox;
+  const dateBox = new DateBox(defaultSelector);
+  const { dropDownEditorButton } = dateBox;
 
-  await t.typeText(input, 'hd');
+  await t
+    .click(dropDownEditorButton)
+    .wait(TIME_TO_WAIT);
 };
 
 const a11yCheckConfig = {
