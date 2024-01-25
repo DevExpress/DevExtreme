@@ -7,6 +7,7 @@ QUnit.test('replace all case insensitive', function(assert) {
     assert.strictEqual(stringUtils.replaceAll('test sentence', 'test', '<b>$1</b>'), '<b>test</b> sentence', 'replacement token $1');
     assert.strictEqual(stringUtils.replaceAll('Test sentence', 'test', '<b>$1</b>'), '<b>Test</b> sentence', 'Replacement for different case');
     assert.strictEqual(stringUtils.replaceAll('Test sentence test', 'test', '<b>$1</b>'), '<b>Test</b> sentence <b>test</b>', 'Multiple replacements');
+    assert.strictEqual(stringUtils.replaceAll('test sentence', 'test', '\\$1\\'), '\\test\\ sentence', 'backslash escaped correctly');
 });
 
 QUnit.test('stringFormat', function(assert) {
