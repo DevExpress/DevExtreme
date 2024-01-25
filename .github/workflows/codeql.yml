@@ -28,6 +28,10 @@ jobs:
         with:
           ref: ${{ matrix.branch }}
 
+      - name: Get head SHA
+        id: get-head-sha
+        run: echo "SHA=$(git rev-parse origin/${{ matrix.branch }})" >> "$GITHUB_OUTPUT"
+
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
@@ -42,6 +46,8 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           category: "/language:${{matrix.language}}"
+          ref: refs/heads/${{ matrix.branch }}
+          sha: ${{ steps.get-head-sha.outputs.SHA }}
 
   fetch:
     runs-on: devextreme-shr2
