@@ -59,7 +59,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxTagBox',
+  component: 'dxDateBox',
   a11yCheckConfig,
   options,
   created,
