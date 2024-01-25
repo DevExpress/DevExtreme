@@ -100,8 +100,6 @@ $base-focus-color: null !default;
 * $type color
 */
 $base-focus-bg: null !default;
-$typography-bg: null !default;
-$typography-color: null !default;
 $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
 $base-disabled-color: null !default;
@@ -143,8 +141,6 @@ $scrollview-pulldown-path: null !default;
 */
 $base-link-color: $base-accent !default;
 
-$typography-link-color: $base-link-color !default;
-
 @if $mode == "light" {
   $material-color-theme-modificator: "light" !default;
   $base-text-color: rgba(0, 0, 0, 0.87) !default;
@@ -162,8 +158,6 @@ $typography-link-color: $base-link-color !default;
   $base-inverted-text-color: #fff !default;
   $base-focus-color: $base-inverted-text-color !default;
   $base-focus-bg: color.change(#000, $alpha: 0.04) !default;
-  $typography-bg: $base-bg !default;
-  $typography-color: $base-text-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
@@ -187,11 +181,13 @@ $typography-link-color: $base-link-color !default;
   $base-inverted-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-focus-color: $base-inverted-text-color !default;
   $base-focus-bg: color.change(#fff, $alpha: 0.05) !default;
-  $typography-bg: $base-bg !default;
-  $typography-color: $base-text-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
 }
+
+$typography-bg: $base-bg !default;
+$typography-color: $base-text-color !default;
+$typography-link-color: $base-link-color !default;
 

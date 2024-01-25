@@ -23,7 +23,7 @@ $overlay-shader-bg: null !default;
 * $name 30. Border radius
 * $type text
 */
-$overlay-content-border-radius: $base-border-radius-large !default;
+$overlay-content-border-radius: $base-border-radius + 2px !default;
 
 @if $color == "carmine" {
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;

@@ -41,7 +41,7 @@ $dropdowneditor-icon-active-color: null !default;
 * $name 100. Dropdown button border radius
 * $type text
 */
-$dropdowneditor-icon-border-radius: $base-border-radius-small !default;
+$dropdowneditor-icon-border-radius: $base-border-radius - 1px !default;
 
 @if $color == "carmine" {
   $dropdowneditor-button-hover-bg: darken($base-bg, 4%) !default; // #fff => #f5f6f7
