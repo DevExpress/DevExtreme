@@ -1,6 +1,6 @@
 {
   "name": "devextreme-monorepo",
-  "version": "23.2.3",
+  "version": "23.2.4",
   "license": "MIT",
   "author": "Developer Express Inc.",
   "scripts": {
@@ -75,4 +75,3 @@
     "playgrounds/*"
   ]
 }
-
