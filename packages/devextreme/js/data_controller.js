@@ -3,6 +3,7 @@ import { Deferred } from './core/utils/deferred';
 import { DataSource } from './data/data_source/data_source';
 import { normalizeDataSourceOptions } from './data/data_source/utils';
 import { extend } from './core/utils/extend';
+import ArrayStore from './data/array_store';
 
 const DataControllerMock = {
     load: () => Deferred().reject(),
@@ -47,6 +48,17 @@ class DataController {
         this._initDataSource(dataSourceOptions);
     }
 
+    static initFromArray(items, key) {
+        const dataSource = new DataSource({
+            store: new ArrayStore({
+                key,
+                data: items
+            }),
+            pageSize: 0,
+        });
+        return new DataController(dataSource);
+    }
+
     _initDataSource(dataSourceOptions) {
         let widgetDataSourceOptions;
         let dataSourceType;
@@ -55,7 +67,7 @@ class DataController {
 
         if(dataSourceOptions) {
             if(dataSourceOptions instanceof DataSource) {
-                // this._isSharedDataSource = true;
+                this._isSharedDataSource = true;
                 this._dataSource = dataSourceOptions;
             } else {
                 widgetDataSourceOptions = {};
@@ -170,11 +182,19 @@ class DataController {
         return this._dataSource.pageIndex(pageIndex);
     }
 
+    resetDataSource() {
+        this._disposeDataSource();
+    }
+
     resetDataSourcePageIndex() {
         if(this.pageIndex()) {
             this.pageIndex(0);
             this.load();
         }
+    }
+
+    initDataSource(dataSourceOptions) {
+        this._initDataSource(dataSourceOptions);
     }
 
     totalCount() {
@@ -218,7 +238,7 @@ class DataController {
     }
 
     key() {
-        return this._dataSource.key();
+        return this._dataSource?.key();
     }
 
     keyOf(item) {
@@ -231,6 +251,18 @@ class DataController {
 
     items() {
         return this._dataSource.items();
+    }
+
+    itemsToDataSource(value, key) {
+        if(!this._dataSource) {
+            this._dataSource = new DataSource({
+                store: new ArrayStore({
+                    key,
+                    data: value
+                }),
+                pageSize: 0,
+            });
+        }
     }
 
     applyMapFunction(data) {

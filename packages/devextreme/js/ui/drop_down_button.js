@@ -9,8 +9,6 @@ import { compileGetter } from '../core/utils/data';
 import { getPublicElement } from '../core/element';
 import { getImageContainer } from '../core/utils/icon';
 import DataController from '../data_controller';
-import { DataSource } from '../data/data_source/data_source';
-import ArrayStore from '../data/array_store';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { isPlainObject, isDefined } from '../core/utils/type';
@@ -120,7 +118,6 @@ const DropDownButton = Widget.inherit({
         this._initDataController();
         this._compileKeyGetter();
         this._compileDisplayGetter();
-        this._itemsToDataController(this.option('items'));
         this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
     },
@@ -130,6 +127,8 @@ const DropDownButton = Widget.inherit({
 
         if(dataSource) {
             this._dataController = new DataController(dataSource);
+        } else {
+            this._dataController = DataController.initFromArray(this.option('items'), this._getKey());
         }
     },
 
@@ -147,19 +146,6 @@ const DropDownButton = Widget.inherit({
             })
         });
         this.callBase();
-    },
-
-    _itemsToDataController: function(value) {
-        if(!this._dataController) {
-            const dataSource = new DataSource({
-                store: new ArrayStore({
-                    key: this._getKey(),
-                    data: value
-                }),
-                pageSize: 0,
-            });
-            this._dataController = new DataController(dataSource);
-        }
     },
 
     _getKey: function() {
@@ -645,8 +631,8 @@ const DropDownButton = Widget.inherit({
     },
 
     _updateDataController: function(items = this._dataController.items()) {
-        this._dataController = undefined;
-        this._itemsToDataController(items);
+        this._dataController.resetDataSource();
+        this._dataController.itemsToDataSource(items, this._getKey());
         this._updateKeyExpr();
     },
 
@@ -707,8 +693,7 @@ const DropDownButton = Widget.inherit({
                 if(Array.isArray(value)) {
                     this._updateDataController(value);
                 } else {
-                    // TODO get rid of private method usage
-                    this._dataController._initDataSource(value);
+                    this._dataController.initDataSource(value);
                     this._updateKeyExpr();
                 }
                 this._updateItemCollection(name);
@@ -769,7 +754,7 @@ const DropDownButton = Widget.inherit({
         }
     },
 
-    // TODO move me
+    // TODO move me?
     getDataSource: function() {
         return this._dataController.getDataSource();
     }
