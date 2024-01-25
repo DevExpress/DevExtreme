@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { extend } from '../core/utils/extend';
 import ArrayStore from '../data/array_store';
 import { DataSource } from '../data/data_source/data_source';
@@ -9,7 +7,7 @@ interface DataSourceType {
   _userData: unknown;
   _pageSize: number;
   dispose: () => void;
-  load: () => Promise<unknown>;
+  load: (loadOptions?: unknown) => Promise<unknown>;
   loadSingle: (propName: string, propValue: unknown) => Promise<unknown>;
   loadOptions: () => unknown;
   cancel: (operationId: number) => void;
@@ -20,7 +18,9 @@ interface DataSourceType {
   key: () => string;
   keyOf: (item: unknown) => string;
   paginate: (paginate?: unknown) => unknown;
-  pageIndex: (pageIndex?: number) => number | undefined;
+  pageIndex: <TIdx = number | undefined>(pageIndex: TIdx) => TIdx extends number
+    ? undefined
+    : number;
   reload: () => Promise<unknown>;
   select: (...args: unknown[]) => unknown;
   searchExpr: (searchExpr?: unknown) => unknown;
@@ -40,7 +40,9 @@ interface DataSourceType {
 class DataController {
   private _isSharedDataSource = false;
 
-  private _dataSource?: DataSourceType;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  private _dataSource: DataSourceType;
 
   constructor(dataSourceOptions: DataSourceType) {
     this._initDataSource(dataSourceOptions);
@@ -54,7 +56,7 @@ class DataController {
       }),
       pageSize: 0,
     });
-    return new DataController(dataSource);
+    return new DataController(dataSource as unknown as DataSourceType);
   }
 
   _initDataSource(dataSourceOptions: DataSourceType): void {
@@ -70,7 +72,7 @@ class DataController {
         const normalizedDataSourceOptions = normalizeDataSourceOptions(dataSourceOptions);
         this._dataSource = new DataSourceConstructor(
           extend(true, {}, {}, normalizedDataSourceOptions),
-        );
+        ) as unknown as DataSourceType;
       }
     }
   }
@@ -83,6 +85,8 @@ class DataController {
         this._dataSource.dispose();
       }
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       delete this._dataSource;
     }
   }
@@ -97,7 +101,7 @@ class DataController {
 
     if (arguments.length < 2) {
       pValue = propName;
-      pName = this.key();
+      pName = this.key() as string;
     }
 
     return this._dataSource.loadSingle(pName, pValue);
@@ -108,6 +112,8 @@ class DataController {
   }
 
   loadNextPage(): Promise<unknown> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this.pageIndex(1 + this.pageIndex());
 
@@ -151,6 +157,9 @@ class DataController {
   }
 
   pageIndex(pageIndex?: number): number | undefined {
+    if (pageIndex === undefined) {
+      return this._dataSource.pageIndex(undefined);
+    }
     return this._dataSource.pageIndex(pageIndex);
   }
 
@@ -220,6 +229,8 @@ class DataController {
 
   itemsToDataSource(value: unknown[], key: string): void {
     if (!this._dataSource) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       this._dataSource = new DataSource({
         store: new ArrayStore({
           key,
