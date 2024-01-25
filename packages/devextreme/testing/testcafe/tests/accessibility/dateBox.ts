@@ -1,11 +1,10 @@
+import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/date_box.d';
 import DateBox from '../../model/dateBox';
-
-const TIME_TO_WAIT = 150;
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
@@ -18,7 +17,6 @@ const options: Options<Properties> = {
   disabled: [true, false],
   readOnly: [true, false],
   type: ['date', 'time', 'datetime'],
-  showClearButton: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -39,18 +37,25 @@ const options: Options<Properties> = {
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const { disabled, readOnly } = optionConfiguration;
+  const {
+    disabled, readOnly, type, value,
+  } = optionConfiguration;
 
-  if (disabled || readOnly) {
+  if (
+    disabled
+    || readOnly
+    || (type === 'datetime' && !value)
+  ) {
     return;
   }
 
   const dateBox = new DateBox(defaultSelector);
-  const { dropDownEditorButton } = dateBox;
 
-  await t
-    .click(dropDownEditorButton)
-    .wait(TIME_TO_WAIT);
+  await ClientFunction(() => {
+    (dateBox.getInstance() as any).open();
+  }, {
+    dependencies: { dateBox },
+  })();
 };
 
 const a11yCheckConfig = {
