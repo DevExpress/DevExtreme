@@ -3,8 +3,8 @@ import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/select_box.d';
-import SelectBox from '../../model/selectBox';
+import { Properties } from '../../../../js/ui/tag_box.d';
+import TagBox from '../../model/tagBox';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
@@ -18,13 +18,15 @@ const items = [
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  value: [undefined, items[0]],
+  value: [undefined, [items[0]]],
   disabled: [true, false],
   readOnly: [true, false],
   searchEnabled: [true, false],
   searchTimeout: [0],
   showClearButton: [true, false],
+  showSelectionControls: [true, false],
   placeholder: [undefined, 'placeholder'],
+  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
     undefined,
@@ -43,14 +45,12 @@ const options: Options<Properties> = {
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const { disabled, readOnly } = optionConfiguration;
-
-  if (disabled || readOnly) {
+  if (optionConfiguration.disabled) {
     return;
   }
 
-  const selectBox = new SelectBox(defaultSelector);
-  const { input } = selectBox;
+  const tagBox = new TagBox(defaultSelector);
+  const { input } = tagBox;
 
   await t.typeText(input, 'hd');
 };
@@ -62,7 +62,7 @@ const a11yCheckConfig = isMaterialBased() ? {
 } : {};
 
 const configuration: Configuration = {
-  component: 'dxSelectBox',
+  component: 'dxTagBox',
   a11yCheckConfig,
   options,
   created,

@@ -17,6 +17,7 @@ const options: Options<Properties> = {
   showClearButton: [true, false],
   value: [undefined, 'A'],
   disabled: [true, false],
+  readOnly: [true, false],
   searchTimeout: [0],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
@@ -36,7 +37,9 @@ const options: Options<Properties> = {
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  if (optionConfiguration.disabled) {
+  const { disabled, readOnly } = optionConfiguration;
+
+  if (disabled || readOnly) {
     return;
   }
 
