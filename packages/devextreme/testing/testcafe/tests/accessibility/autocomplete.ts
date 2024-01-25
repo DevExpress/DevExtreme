@@ -1,33 +1,24 @@
-import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../../js/ui/tag_box.d';
-import TagBox from '../../../model/tagBox';
-
-const TIME_TO_WAIT = 150;
+import url from '../../helpers/getPageUrl';
+import { clearTestPage } from '../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../js/ui/autocomplete.d';
+import Autocomplete from '../../model/autocomplete';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
-const items = [
-  'HD Video Player',
-  'SuperHD Video Player',
-  'SuperPlasma 50',
-];
+const items = ['A', 'Aa', 'B'];
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  value: [undefined, [items[0]]],
+  placeholder: [undefined, 'placeholder'],
+  showClearButton: [true, false],
+  value: [undefined, 'A'],
   disabled: [true, false],
   readOnly: [true, false],
-  searchEnabled: [true, false],
   searchTimeout: [0],
-  showClearButton: [true, false],
-  showSelectionControls: [true, false],
-  placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
     undefined,
@@ -52,11 +43,10 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
     return;
   }
 
-  const tagBox = new TagBox(defaultSelector);
+  const autocomplete = new Autocomplete(defaultSelector);
+  const { input } = autocomplete;
 
-  await t
-    .click(tagBox.element)
-    .wait(TIME_TO_WAIT);
+  await t.typeText(input, 'a');
 };
 
 const a11yCheckConfig = {
@@ -65,7 +55,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxTagBox',
+  component: 'dxAutocomplete',
   a11yCheckConfig,
   options,
   created,

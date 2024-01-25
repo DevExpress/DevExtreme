@@ -1,24 +1,23 @@
-import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../../js/ui/autocomplete.d';
-import Autocomplete from '../../../model/autocomplete';
+import { ClientFunction } from 'testcafe';
+import url from '../../helpers/getPageUrl';
+import { clearTestPage } from '../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../js/ui/lookup.d';
+import Lookup from '../../model/lookup';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
-const items = ['A', 'Aa', 'B'];
+const items = ['John Heart', 'Samantha Bright'];
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  placeholder: [undefined, 'placeholder'],
-  showClearButton: [true, false],
-  value: [undefined, 'A'],
   disabled: [true, false],
   readOnly: [true, false],
-  searchTimeout: [0],
+  placeholder: [undefined, 'placeholder'],
+  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
     undefined,
@@ -43,10 +42,13 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
     return;
   }
 
-  const autocomplete = new Autocomplete(defaultSelector);
-  const { input } = autocomplete;
+  const lookup = new Lookup(defaultSelector);
 
-  await t.typeText(input, 'a');
+  await ClientFunction(() => {
+    (lookup.getInstance() as any).open();
+  }, {
+    dependencies: { lookup },
+  })();
 };
 
 const a11yCheckConfig = {
@@ -55,7 +57,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxAutocomplete',
+  component: 'dxLookup',
   a11yCheckConfig,
   options,
   created,

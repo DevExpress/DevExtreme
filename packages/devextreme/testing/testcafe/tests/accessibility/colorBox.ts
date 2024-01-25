@@ -1,22 +1,20 @@
 import { ClientFunction } from 'testcafe';
-import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../../js/ui/date_box.d';
-import DateBox from '../../../model/dateBox';
+import url from '../../helpers/getPageUrl';
+import { clearTestPage } from '../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../js/ui/color_box.d';
+import ColorBox from '../../model/colorbox';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
-const now = new Date();
-
 const options: Options<Properties> = {
-  value: [undefined, now],
+  value: [undefined, '#f05b41'],
   disabled: [true, false],
   readOnly: [true, false],
-  type: ['date', 'time', 'datetime'],
+  editAlphaChannel: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -37,24 +35,18 @@ const options: Options<Properties> = {
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const {
-    disabled, readOnly, type, value,
-  } = optionConfiguration;
+  const { disabled, readOnly } = optionConfiguration;
 
-  if (
-    disabled
-    || readOnly
-    || (type === 'datetime' && !value)
-  ) {
+  if (disabled || readOnly) {
     return;
   }
 
-  const dateBox = new DateBox(defaultSelector);
+  const colorBox = new ColorBox(defaultSelector);
 
   await ClientFunction(() => {
-    (dateBox.getInstance() as any).open();
+    (colorBox.getInstance() as any).open();
   }, {
-    dependencies: { dateBox },
+    dependencies: { colorBox },
   })();
 };
 
@@ -64,7 +56,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxDateBox',
+  component: 'dxColorBox',
   a11yCheckConfig,
   options,
   created,

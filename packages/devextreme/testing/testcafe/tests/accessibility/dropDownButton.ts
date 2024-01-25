@@ -1,10 +1,10 @@
 import { ClientFunction } from 'testcafe';
-import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../../js/ui/drop_down_button.d';
-import DropDownButton from '../../../model/dropDownButton';
+import url from '../../helpers/getPageUrl';
+import { clearTestPage } from '../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../js/ui/drop_down_button.d';
+import DropDownButton from '../../model/dropDownButton';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))

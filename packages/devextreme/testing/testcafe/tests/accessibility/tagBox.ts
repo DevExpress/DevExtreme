@@ -1,20 +1,31 @@
-import { ClientFunction } from 'testcafe';
-import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../../js/ui/color_box.d';
-import ColorBox from '../../../model/colorbox';
+import url from '../../helpers/getPageUrl';
+import { clearTestPage } from '../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../js/ui/tag_box.d';
+import TagBox from '../../model/tagBox';
+
+const TIME_TO_WAIT = 150;
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
+const items = [
+  'HD Video Player',
+  'SuperHD Video Player',
+  'SuperPlasma 50',
+];
+
 const options: Options<Properties> = {
-  value: [undefined, '#f05b41'],
+  dataSource: [[], items],
+  value: [undefined, [items[0]]],
   disabled: [true, false],
   readOnly: [true, false],
-  editAlphaChannel: [true, false],
+  searchEnabled: [true, false],
+  searchTimeout: [0],
+  showClearButton: [true, false],
+  showSelectionControls: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -41,13 +52,11 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
     return;
   }
 
-  const colorBox = new ColorBox(defaultSelector);
+  const tagBox = new TagBox(defaultSelector);
 
-  await ClientFunction(() => {
-    (colorBox.getInstance() as any).open();
-  }, {
-    dependencies: { colorBox },
-  })();
+  await t
+    .click(tagBox.element)
+    .wait(TIME_TO_WAIT);
 };
 
 const a11yCheckConfig = {
@@ -56,7 +65,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxColorBox',
+  component: 'dxTagBox',
   a11yCheckConfig,
   options,
   created,
