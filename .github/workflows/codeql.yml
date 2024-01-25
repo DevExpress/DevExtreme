@@ -46,7 +46,7 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           category: "/language:${{matrix.language}}"
-          ref: ${{ matrix.branch }}
+          ref: refs/heads/${{ matrix.branch }}
           sha: ${{ steps.get-head-sha.outputs.SHA }}
 
   fetch:
