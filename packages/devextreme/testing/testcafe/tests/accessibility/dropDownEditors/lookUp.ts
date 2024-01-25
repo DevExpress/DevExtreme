@@ -1,22 +1,21 @@
 import { ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/date_box.d';
-import DateBox from '../../model/dateBox';
+import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../../js/ui/lookup.d';
+import Lookup from '../../../model/lookup';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
 
-const now = new Date();
+const items = ['John Heart', 'Samantha Bright'];
 
 const options: Options<Properties> = {
-  value: [undefined, now],
+  dataSource: [[], items],
   disabled: [true, false],
   readOnly: [true, false],
-  type: ['date', 'time', 'datetime'],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -37,24 +36,18 @@ const options: Options<Properties> = {
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const {
-    disabled, readOnly, type, value,
-  } = optionConfiguration;
+  const { disabled, readOnly } = optionConfiguration;
 
-  if (
-    disabled
-    || readOnly
-    || (type === 'datetime' && !value)
-  ) {
+  if (disabled || readOnly) {
     return;
   }
 
-  const dateBox = new DateBox(defaultSelector);
+  const lookup = new Lookup(defaultSelector);
 
   await ClientFunction(() => {
-    (dateBox.getInstance() as any).open();
+    (lookup.getInstance() as any).open();
   }, {
-    dependencies: { dateBox },
+    dependencies: { lookup },
   })();
 };
 
@@ -64,7 +57,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxDateBox',
+  component: 'dxLookup',
   a11yCheckConfig,
   options,
   created,

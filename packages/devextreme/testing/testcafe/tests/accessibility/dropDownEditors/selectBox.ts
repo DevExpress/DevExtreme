@@ -1,9 +1,9 @@
-import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/select_box.d';
-import SelectBox from '../../model/selectBox';
+import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
+import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
+import { Properties } from '../../../../../js/ui/select_box.d';
+import SelectBox from '../../../model/selectBox';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
