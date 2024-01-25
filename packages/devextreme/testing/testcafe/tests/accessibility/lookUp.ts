@@ -13,7 +13,7 @@ fixture.disablePageReloads`Accessibility`
 const items = ['John Heart', 'Samantha Bright'];
 
 const options: Options<Properties> = {
-  dataSource: items,
+  dataSource: [[], items],
   disabled: [true, false],
   readOnly: [true, false],
   placeholder: [undefined, 'placeholder'],
