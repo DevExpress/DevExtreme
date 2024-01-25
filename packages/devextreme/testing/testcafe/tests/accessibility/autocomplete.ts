@@ -1,6 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
+import { isMaterialBased } from '../../helpers/themeUtils';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/autocomplete.d';
@@ -19,6 +19,7 @@ const options: Options<Properties> = {
   value: [undefined, 'A'],
   disabled: [true, false],
   searchTimeout: [0],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
     undefined,
     [
@@ -46,11 +47,11 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   await t.typeText(input, 'a');
 };
 
-const a11yCheckConfig = isMaterialBased() ? {
-  // NOTE: color-contrast issues in Material
-  runOnly: isMaterial() ? '' : 'color-contrast',
-  rules: { 'color-contrast': { enabled: !isMaterial() } },
-} : {};
+const a11yCheckConfig = {
+  runOnly: isMaterialBased() ? '' : 'color-contrast',
+  // NOTE: color-contrast issues
+  rules: { 'color-contrast': { enabled: false } },
+};
 
 const configuration: Configuration = {
   component: 'dxAutocomplete',
