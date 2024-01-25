@@ -1,6 +1,5 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { isMaterialBased } from '../../helpers/themeUtils';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/autocomplete.d';
@@ -48,7 +47,6 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
 };
 
 const a11yCheckConfig = {
-  runOnly: isMaterialBased() ? '' : 'color-contrast',
   // NOTE: color-contrast issues
   rules: { 'color-contrast': { enabled: false } },
 };
