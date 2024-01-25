@@ -2,8 +2,6 @@ const { spawnSync } = require('child_process');
 const parseArgs = require('minimist');
 
 const matrix = [
-    { componentFolder: 'accessibility', name: 'accessibility (1/2)', indices: '1/2' },
-    { componentFolder: 'accessibility', name: 'accessibility (2/2)', indices: '2/2' },
     { componentFolder: 'treeList', name: 'treeList', concurrency: 1 },
     { componentFolder: 'dataGrid', name: 'dataGrid (1/2)', indices: '1/2' },
     { componentFolder: 'dataGrid', name: 'dataGrid (2/2)', indices: '2/2' },
