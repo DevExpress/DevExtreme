@@ -5,6 +5,8 @@ import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/tag_box.d';
 import TagBox from '../../model/tagBox';
 
+const TIME_TO_WAIT = 150;
+
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => clearTestPage());
@@ -51,9 +53,10 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   }
 
   const tagBox = new TagBox(defaultSelector);
-  const { input } = tagBox;
 
-  await t.typeText(input, 'hd');
+  await t
+    .click(tagBox.element)
+    .wait(TIME_TO_WAIT);
 };
 
 const a11yCheckConfig = {

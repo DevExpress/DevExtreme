@@ -5,7 +5,7 @@ import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/date_box.d';
 import DateBox from '../../model/dateBox';
 
-const TIME_TO_WAIT = 1500;
+const TIME_TO_WAIT = 150;
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
