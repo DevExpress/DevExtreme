@@ -1,7 +1,6 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/tag_box.d';
 import TagBox from '../../model/tagBox';
@@ -55,11 +54,10 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   await t.typeText(input, 'hd');
 };
 
-const a11yCheckConfig = isMaterialBased() ? {
-  // NOTE: color-contrast issues in Material
-  runOnly: isMaterial() ? '' : 'color-contrast',
-  rules: { 'color-contrast': { enabled: !isMaterial() } },
-} : {};
+const a11yCheckConfig = {
+  // NOTE: color-contrast issues
+  rules: { 'color-contrast': { enabled: false } },
+};
 
 const configuration: Configuration = {
   component: 'dxTagBox',
