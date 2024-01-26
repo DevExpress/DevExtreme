@@ -20,7 +20,12 @@
   padding-block-end: $generic-base-inline-borderedwidget-bottom-padding;
   padding-inline-end: $generic-base-inline-borderedwidget-inner-size;
   padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
-  font-size: 1em;
+}
+
+.dx-editor-underlined {
+  .dx-lookup-field {
+    padding-inline-start: 0;
+  }
 }
 
 @include dx-lookup-arrow(

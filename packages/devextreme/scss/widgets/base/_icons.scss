@@ -121,7 +121,8 @@
 .dx-icon-clearcircle,
 .dx-icon-accountbox,
 .dx-icon-ordersbox,
-.dx-icon-arrowback {
+.dx-icon-arrowback,
+.dx-icon-pinmap {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -440,7 +441,6 @@ $icons: (
     "taskstop": '\f15e',
     "clearcircle": '\f15f',
     "send": '\f160',
-    "pinmap": '\f161',
     "photooutline": '\f162',
     "panelright": '\f163',
     "panelleft": '\f164',
@@ -458,6 +458,7 @@ $icons: (
     "dataarea": '\f176',
     "datausage": '\f177',
     "datapie": '\f178',
+    "pinmap": '\f179',
 );
 
 // stylelint-enable

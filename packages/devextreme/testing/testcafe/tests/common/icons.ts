@@ -245,7 +245,7 @@ const iconSet = {
   taskstop: '\f15e',
   clearcircle: '\f15f',
   send: '\f160', // material only
-  pinmap: '\f161', // material only
+  pinmap: '\f179',
   photooutline: '\f162',
   panelright: '\f163',
   panelleft: '\f164',

@@ -242,7 +242,6 @@ $scrollview-pulldown-path: null !default;
   $base-border-color-accessible-hover: lighten($base-border-color-accessible, 6.27) !default;
   $base-border-color-accessible-focused: lighten($base-border-color-accessible-hover, 3.92) !default;
   $base-border-color-disabled: darken($base-border-color, 12.16) !default;
-
   $base-separator-color: darken($base-border-color, 5.88) !default;
 
   $base-inverted-bg: lighten($base-bg, 100%) !default;
@@ -255,7 +254,6 @@ $scrollview-pulldown-path: null !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
 }
-
 
 /**
 * $name 80. Hover state text color
@@ -286,6 +284,8 @@ $base-spin-icon-color: $base-icon-color !default;
 * $type color
 */
 $base-link-color: $base-accent !default;
+
+$typography-color: $base-text-color !default;
 $typography-link-color: $base-link-color !default;
 
 $base-element-bg: $base-bg !default;

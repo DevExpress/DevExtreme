@@ -1,10 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../helpers/createWidget';
-import Scheduler from '../../model/scheduler';
+import Scheduler, { CLASS } from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 import { changeTheme } from '../../helpers/changeTheme';
+import { Themes } from '../../helpers/themes';
 
 fixture.disablePageReloads`Scheduler: Workspace`
   .page(url(__dirname, '../container.html'));
@@ -183,5 +184,94 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
     });
   }).after(async () => {
     await changeTheme('generic.light');
+  });
+});
+
+[
+  Themes.genericLight,
+  Themes.materialBlue,
+  Themes.fluentBlue,
+  // eslint-disable-next-line spellcheck/spell-checker
+  Themes.fluentSaaS,
+  Themes.genericDark,
+  Themes.materialBlueDark,
+  Themes.fluentBlueDark,
+  // eslint-disable-next-line spellcheck/spell-checker
+  Themes.fluentSaaSDark,
+].forEach((theme) => {
+  test(`Check cell hover state in ${theme}`, async (t) => {
+    // arrange
+    const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const firstDateTableCell = scheduler.getDateTableCell(0, 0);
+
+    // act
+    await t
+      .hover(firstDateTableCell)
+      .expect(firstDateTableCell.hasClass(CLASS.hoverCell))
+      .ok();
+
+    // assert
+    await t
+      .expect(await takeScreenshot(`scheduler-week-cell-hover-state-${theme}.png`, scheduler.workSpace))
+      .ok();
+
+    await t
+      .hover(scheduler.getDateTableCell(0, 1))
+      .expect(scheduler.getDateTableCell(0, 1).hasClass(CLASS.hoverCell))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+    await createWidget('dxScheduler', {
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2019, 4, 1),
+      height: 500,
+    });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
+  });
+
+  test(`Check cell active state in ${theme}`, async (t) => {
+    // arrange
+    const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const firstDateTableCell = scheduler.getDateTableCell(0, 0);
+
+    // act
+    await t
+      .hover(firstDateTableCell)
+      .expect(firstDateTableCell.hasClass(CLASS.hoverCell))
+      .ok()
+      .dispatchEvent(firstDateTableCell, 'mousedown')
+      .expect(firstDateTableCell.hasClass(CLASS.activeCell))
+      .ok();
+
+    // assert
+    await t
+      .expect(await takeScreenshot(`scheduler-week-cell-active-state-${theme}.png`, scheduler.workSpace))
+      .ok();
+
+    await t
+      .dispatchEvent(firstDateTableCell, 'mouseup')
+      .expect(firstDateTableCell.hasClass(CLASS.activeCell))
+      .notOk()
+      .hover(scheduler.getDateTableCell(0, 1))
+      .expect(scheduler.getDateTableCell(0, 1).hasClass(CLASS.hoverCell))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+    await createWidget('dxScheduler', {
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2019, 4, 1),
+      height: 500,
+    });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
   });
 });

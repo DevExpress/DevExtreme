@@ -12,6 +12,46 @@ const CLASS = ClassNames;
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
+test('Navigation via the Tab key should work when cellRender/cellComponent is used (T1207684)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
+    keyExpr: 'id',
+    columns: [
+      { dataField: 'id' },
+      { dataField: 'text', allowSorting: false, cellTemplate: '#test' },
+    ],
+    // @ts-expect-error private option
+    templatesRenderAsynchronously: true,
+  });
+
+  // simulating async rendering in React
+  await ClientFunction(() => {
+    const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid.getView('rowsView')._templatesCache = {};
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid._getTemplate = () => ({
+      render(options) {
+        setTimeout(() => {
+          options.deferred?.resolve();
+        }, 100);
+      },
+    });
+
+    dataGrid.repaint();
+  })();
+});
+
 test('Next cell should be focused immediately on a single Enter key press if showEditorAlways is enabled in cell mode (T1196539)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

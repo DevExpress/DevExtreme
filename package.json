@@ -29,7 +29,7 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^20.11.0",
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "^2.0.4",
     "@types/yargs": "^17.0.32",

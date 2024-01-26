@@ -26,12 +26,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -117,12 +117,12 @@ jobs:
         chrome-version: '120.0.6099.71'
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -172,7 +172,7 @@ jobs:
     runs-on: devextreme-shr2
     name: Send notifications
     needs: [build, testcafe]
-    if: always() && contains(needs.*.result, 'failure')
+    if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
       - uses: actions/checkout@v4
@@ -181,4 +181,3 @@ jobs:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 24_1

@@ -1293,9 +1293,9 @@ class EditingControllerImpl extends modules.ViewController {
   _processCanceledEditingCell(): any {}
 
   _repaintEditCell(column, oldColumn, oldEditRowIndex) {
-    this._needFocusEditor = true;
     if (!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
       this._editCellInProgress = true;
+      this._needFocusEditor = true;
 
       // T316439
       this.getController('editorFactory').loseFocus();
@@ -1305,6 +1305,7 @@ class EditingControllerImpl extends modules.ViewController {
         rowIndices: [oldEditRowIndex, this._getVisibleEditRowIndex()],
       });
     } else if (column !== oldColumn) {
+      this._needFocusEditor = true;
       // TODO check this necessity T816039
       this._dataController.updateItems({
         changeType: 'update',
