@@ -1,338 +1,307 @@
-import DropDownEditor from './drop_down_editor/ui.drop_down_editor';
-import DataExpressionMixin from './editor/ui.data_expression';
-import { noop, grep } from '../core/utils/common';
-import { isDefined, isObject } from '../core/utils/type';
-import { map } from '../core/utils/iterator';
-import { tabbable } from './widget/selectors';
-import { when, Deferred } from '../core/utils/deferred';
-import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
-import { extend } from '../core/utils/extend';
-import { getElementMaxHeightByWindow } from '../ui/overlay/utils';
-import registerComponent from '../core/component_registrator';
-import { normalizeKeyName } from '../events/utils/index';
-import devices from '../core/devices';
-import domAdapter from '../core/dom_adapter';
-import { getPublicElement } from '../core/element';
+import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
+import domAdapter from '@js/core/dom_adapter';
+import { getPublicElement } from '@js/core/element';
+import $ from '@js/core/renderer';
+// @ts-expect-error
+import { grep, noop } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { map } from '@js/core/utils/iterator';
+import { isDefined, isObject } from '@js/core/utils/type';
+import eventsEngine from '@js/events/core/events_engine';
+import { normalizeKeyName } from '@js/events/utils/index';
+import DropDownEditor from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
+import { getElementMaxHeightByWindow } from '@js/ui/overlay/utils';
+import { tabbable } from '@js/ui/widget/selectors';
 
-// STYLE dropDownBox
-const getActiveElement = domAdapter.getActiveElement;
+const { getActiveElement } = domAdapter;
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const realDevice = devices.real();
 
-const DropDownBox = DropDownEditor.inherit({
-    _supportedKeys: function() {
-        return extend({}, this.callBase(), {
-            tab: function(e) {
-                if(!this.option('opened')) {
-                    return;
-                }
-
-                const $tabbableElements = this._getTabbableElements();
-                const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
-
-                $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
-                e.preventDefault();
-            }
-        });
-    },
-
-    ///#DEBUG
-    _realDevice: realDevice,
-    ///#ENDDEBUG
-
-    _getTabbableElements: function() {
-        return this._getElements().filter(tabbable);
-    },
-
-    _getElements: function() {
-        return $(this.content()).find('*');
-    },
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            /**
-             * @name dxDropDownBoxOptions.attr
-             * @hidden
-             */
-
-            acceptCustomValue: false,
-
-            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-
-
-            /**
-            * @name dxDropDownBoxOptions.onContentReady
-            * @hidden true
-            * @action
-            */
-
-            /**
-             * @name dxDropDownBoxOptions.spellcheck
-             * @type boolean
-             * @default false
-             * @hidden
-             */
-
-            /**
-             * @name dxDropDownBoxOptions.applyValueMode
-             * @type string
-             * @default "instantly"
-             * @acceptValues 'useButtons'|'instantly'
-             * @hidden
-             */
-
-            /**
-             * @name dxDropDownBoxOptions.itemTemplate
-             * @type template
-             * @default "item"
-             * @hidden
-             */
-
-            openOnFieldClick: true,
-
-
-            displayValueFormatter: function(value) {
-                return Array.isArray(value) ? value.join(', ') : value;
-            },
-            useHiddenSubmitElement: true
-        });
-    },
-
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
-
-    _initTemplates: function() {
-        this.callBase();
-    },
-
-    _initMarkup: function() {
-        this._initDataExpressions();
-        this.$element().addClass(DROP_DOWN_BOX_CLASS);
-
-        this.callBase();
-    },
-
-    _setSubmitValue: function() {
-        const value = this.option('value');
-        const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
-
-        this._getSubmitElement().val(submitValue);
-    },
-
-    _shouldUseDisplayValue: function(value) {
-        return this.option('valueExpr') === 'this' && isObject(value);
-    },
-
-    _sortValuesByKeysOrder(orderedKeys, values) {
-        const sortedValues = values.sort((a, b) => {
-            return orderedKeys.indexOf(a.itemKey) - orderedKeys.indexOf(b.itemKey);
-        });
-
-        return sortedValues.map(x => x.itemDisplayValue);
-    },
-
-    _renderInputValue: function() {
-        this._rejectValueLoading();
-        const values = [];
-
-        if(!this._dataSource) {
-            this.callBase(values);
-            return new Deferred().resolve();
+const DropDownBox = (DropDownEditor as any).inherit({
+  _supportedKeys() {
+    return extend({}, this.callBase(), {
+      tab(e) {
+        if (!this.option('opened')) {
+          return;
         }
 
-        const currentValue = this._getCurrentValue();
-        let keys = currentValue ?? [];
+        const $tabbableElements = this._getTabbableElements();
+        const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
-        keys = Array.isArray(keys) ? keys : [keys];
+        // @ts-expect-error
+        $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
+        e.preventDefault();
+      },
+    });
+  },
 
-        const itemLoadDeferreds = map(keys, key => {
-            const deferred = new Deferred();
-            this
-                ._loadItem(key)
-                .always(item => {
-                    const displayValue = this._displayGetter(item);
-                    if(isDefined(displayValue)) {
-                        values.push({ itemKey: key, itemDisplayValue: displayValue });
-                    } else if(this.option('acceptCustomValue')) {
-                        values.push({ itemKey: key, itemDisplayValue: key });
-                    }
-                    deferred.resolve();
-                });
-            return deferred;
+  /// #DEBUG
+  _realDevice: realDevice,
+  /// #ENDDEBUG
+
+  _getTabbableElements() {
+    return this._getElements().filter(tabbable);
+  },
+
+  _getElements() {
+    return $(this.content()).find('*');
+  },
+
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+
+      acceptCustomValue: false,
+
+      contentTemplate: ANONYMOUS_TEMPLATE_NAME,
+
+      openOnFieldClick: true,
+
+      displayValueFormatter(value) {
+        return Array.isArray(value) ? value.join(', ') : value;
+      },
+      useHiddenSubmitElement: true,
+    });
+  },
+
+  _getAnonymousTemplateName() {
+    return ANONYMOUS_TEMPLATE_NAME;
+  },
+
+  _initTemplates() {
+    this.callBase();
+  },
+
+  _initMarkup() {
+    this._initDataExpressions();
+    this.$element().addClass(DROP_DOWN_BOX_CLASS);
+
+    this.callBase();
+  },
+
+  _setSubmitValue() {
+    const value = this.option('value');
+    const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
+
+    this._getSubmitElement().val(submitValue);
+  },
+
+  _shouldUseDisplayValue(value) {
+    return this.option('valueExpr') === 'this' && isObject(value);
+  },
+
+  _sortValuesByKeysOrder(orderedKeys, values) {
+    const sortedValues = values.sort((a, b) => orderedKeys.indexOf(a.itemKey) - orderedKeys.indexOf(b.itemKey));
+
+    return sortedValues.map((x) => x.itemDisplayValue);
+  },
+
+  _renderInputValue() {
+    this._rejectValueLoading();
+    const values = [];
+
+    if (!this._dataSource) {
+      this.callBase(values);
+      // @ts-expect-error
+      return new Deferred().resolve();
+    }
+
+    const currentValue = this._getCurrentValue();
+    let keys = currentValue ?? [];
+
+    keys = Array.isArray(keys) ? keys : [keys];
+
+    const itemLoadDeferreds = map(keys, (key) => {
+      // @ts-expect-error
+      const deferred = new Deferred();
+      this
+        ._loadItem(key)
+        .always((item) => {
+          const displayValue = this._displayGetter(item);
+          if (isDefined(displayValue)) {
+            values.push({ itemKey: key, itemDisplayValue: displayValue } as never);
+          } else if (this.option('acceptCustomValue')) {
+            values.push({ itemKey: key, itemDisplayValue: key } as never);
+          }
+          deferred.resolve();
         });
+      return deferred;
+    });
 
-        const callBase = this.callBase.bind(this);
-        return when
-            .apply(this, itemLoadDeferreds)
-            .always(() => {
-                const orderedValues = this._sortValuesByKeysOrder(keys, values);
-                this.option('displayValue', orderedValues);
-                callBase(values.length && orderedValues);
-            });
-    },
+    const callBase = this.callBase.bind(this);
+    return when
+      .apply(this, itemLoadDeferreds)
+      .always(() => {
+        const orderedValues = this._sortValuesByKeysOrder(keys, values);
+        this.option('displayValue', orderedValues);
+        callBase(values.length && orderedValues);
+      });
+  },
 
-    _loadItem: function(value) {
-        const deferred = new Deferred();
-        const that = this;
+  _loadItem(value) {
+    // @ts-expect-error
+    const deferred = new Deferred();
+    const that = this;
 
-        const selectedItem = grep(this.option('items') || [], (function(item) {
-            return this._isValueEquals(this._valueGetter(item), value);
-        }).bind(this))[0];
+    const selectedItem = grep(this.option('items') || [], (item) => this._isValueEquals(this._valueGetter(item), value))[0];
 
-        if(selectedItem !== undefined) {
-            deferred.resolve(selectedItem);
-        } else {
-            this._loadValue(value)
-                .done(function(item) {
-                    deferred.resolve(item);
-                })
-                .fail(function(args) {
-                    if(args?.shouldSkipCallback) {
-                        return;
-                    }
-
-                    if(that.option('acceptCustomValue')) {
-                        deferred.resolve(value);
-                    } else {
-                        deferred.reject();
-                    }
-                });
-        }
-
-        return deferred.promise();
-    },
-
-    _popupTabHandler: function(e) {
-        if(normalizeKeyName(e) !== 'tab') return;
-
-        const $firstTabbable = this._getTabbableElements().first().get(0);
-        const $lastTabbable = this._getTabbableElements().last().get(0);
-        const $target = e.target;
-        const moveBackward = !!($target === $firstTabbable && e.shiftKey);
-        const moveForward = !!($target === $lastTabbable && !e.shiftKey);
-
-        if(moveBackward || moveForward) {
-            this.close();
-            eventsEngine.trigger(this._input(), 'focus');
-
-            if(moveBackward) {
-                e.preventDefault();
-            }
-        }
-    },
-
-    _renderPopupContent: function() {
-        if(this.option('contentTemplate') === ANONYMOUS_TEMPLATE_NAME) {
+    if (selectedItem !== undefined) {
+      deferred.resolve(selectedItem);
+    } else {
+      this._loadValue(value)
+        .done((item) => {
+          deferred.resolve(item);
+        })
+        .fail((args) => {
+          if (args?.shouldSkipCallback) {
             return;
-        }
+          }
 
-        const contentTemplate = this._getTemplateByOption('contentTemplate');
-
-        if(!(contentTemplate && this.option('contentTemplate'))) {
-            return;
-        }
-
-        const $popupContent = this._popup.$content();
-        const templateData = {
-            value: this._fieldRenderData(),
-            component: this
-        };
-
-        $popupContent.empty();
-
-        contentTemplate.render({
-            container: getPublicElement($popupContent),
-            model: templateData
+          if (that.option('acceptCustomValue')) {
+            deferred.resolve(value);
+          } else {
+            deferred.reject();
+          }
         });
-    },
+    }
 
-    _canShowVirtualKeyboard: function() {
-        return realDevice.mac; // T845484
-    },
+    return deferred.promise();
+  },
 
-    _isNestedElementActive: function() {
-        const activeElement = getActiveElement();
-        return activeElement && this._popup.$content().get(0).contains(activeElement);
-    },
+  _popupTabHandler(e) {
+    if (normalizeKeyName(e) !== 'tab') return;
 
-    _shouldHideOnParentScroll: function() {
-        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
-    },
+    const $firstTabbable = this._getTabbableElements().first().get(0);
+    const $lastTabbable = this._getTabbableElements().last().get(0);
+    const $target = e.target;
+    const moveBackward = !!($target === $firstTabbable && e.shiftKey);
+    const moveForward = !!($target === $lastTabbable && !e.shiftKey);
 
-    _popupHiddenHandler: function() {
-        this.callBase();
-        this._popupPosition = undefined;
-    },
+    if (moveBackward || moveForward) {
+      this.close();
+      // @ts-expect-error
+      eventsEngine.trigger(this._input(), 'focus');
 
-    _popupPositionedHandler: function(e) {
-        this.callBase(e);
-        this._popupPosition = e.position;
-    },
+      if (moveBackward) {
+        e.preventDefault();
+      }
+    }
+  },
 
-    _getDefaultPopupPosition: function(isRtlEnabled) {
-        const { my, at } = this.callBase(isRtlEnabled);
+  _renderPopupContent() {
+    if (this.option('contentTemplate') === ANONYMOUS_TEMPLATE_NAME) {
+      return;
+    }
 
-        return {
-            my,
-            at,
-            offset: { v: -1 },
-            collision: 'flipfit'
-        };
-    },
+    const contentTemplate = this._getTemplateByOption('contentTemplate');
 
-    _popupConfig: function() {
-        const { focusStateEnabled } = this.option();
+    if (!(contentTemplate && this.option('contentTemplate'))) {
+      return;
+    }
 
-        return extend(this.callBase(), {
-            tabIndex: -1,
-            dragEnabled: false,
-            focusStateEnabled,
-            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-            hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
-            position: extend(this.option('popupPosition'), {
-                of: this.$element(),
-            }),
-            _ignoreFunctionValueDeprecation: true,
-            maxHeight: function() {
-                const popupLocation = this._popupPosition?.v.location;
+    const $popupContent = this._popup.$content();
+    const templateData = {
+      value: this._fieldRenderData(),
+      component: this,
+    };
 
-                return getElementMaxHeightByWindow(this.$element(), popupLocation);
-            }.bind(this)
-        });
-    },
+    $popupContent.empty();
 
-    _popupShownHandler: function() {
-        this.callBase();
-        const $firstElement = this._getTabbableElements().first();
-        eventsEngine.trigger($firstElement, 'focus');
-    },
+    contentTemplate.render({
+      container: getPublicElement($popupContent),
+      model: templateData,
+    });
+  },
 
-    _setCollectionWidgetOption: noop,
+  _canShowVirtualKeyboard() {
+    // @ts-expect-error
+    return realDevice.mac; // T845484
+  },
 
-    _optionChanged: function(args) {
-        this._dataExpressionOptionChanged(args);
-        switch(args.name) {
-            case 'dataSource':
-                this._renderInputValue();
-                break;
-            case 'displayValue':
-                this.option('text', args.value);
-                break;
-            case 'displayExpr':
-                this._renderValue();
-                break;
-            case 'contentTemplate':
-                this._invalidate();
-                break;
-            default:
-                this.callBase(args);
-        }
-    },
+  _isNestedElementActive() {
+    const activeElement = getActiveElement();
+    return activeElement && this._popup.$content().get(0).contains(activeElement);
+  },
+
+  _shouldHideOnParentScroll() {
+    return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
+  },
+
+  _popupHiddenHandler() {
+    this.callBase();
+    this._popupPosition = undefined;
+  },
+
+  _popupPositionedHandler(e) {
+    this.callBase(e);
+    this._popupPosition = e.position;
+  },
+
+  _getDefaultPopupPosition(isRtlEnabled) {
+    const { my, at } = this.callBase(isRtlEnabled);
+
+    return {
+      my,
+      at,
+      offset: { v: -1 },
+      collision: 'flipfit',
+    };
+  },
+
+  _popupConfig() {
+    const { focusStateEnabled } = this.option();
+
+    return extend(this.callBase(), {
+      tabIndex: -1,
+      dragEnabled: false,
+      focusStateEnabled,
+      contentTemplate: ANONYMOUS_TEMPLATE_NAME,
+      hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
+      position: extend(this.option('popupPosition'), {
+        of: this.$element(),
+      }),
+      _ignoreFunctionValueDeprecation: true,
+      maxHeight: function () {
+        const popupLocation = this._popupPosition?.v.location;
+
+        return getElementMaxHeightByWindow(this.$element(), popupLocation);
+      }.bind(this),
+    });
+  },
+
+  _popupShownHandler() {
+    this.callBase();
+    const $firstElement = this._getTabbableElements().first();
+    // @ts-expect-error
+    eventsEngine.trigger($firstElement, 'focus');
+  },
+
+  _setCollectionWidgetOption: noop,
+
+  _optionChanged(args) {
+    this._dataExpressionOptionChanged(args);
+    switch (args.name) {
+      case 'dataSource':
+        this._renderInputValue();
+        break;
+      case 'displayValue':
+        this.option('text', args.value);
+        break;
+      case 'displayExpr':
+        this._renderValue();
+        break;
+      case 'contentTemplate':
+        this._invalidate();
+        break;
+      default:
+        this.callBase(args);
+    }
+  },
 }).include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);
