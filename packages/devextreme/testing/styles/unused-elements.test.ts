@@ -82,8 +82,8 @@ test('There are no unused variables in SCSS files', () => {
     .map((fileName) => resolve(fileName).toLowerCase());
 
   let variables: string[] = [];
-  scssFiles.forEach((file) => {
-    variables = variables.concat(extractVariables(file));
+  scssFiles.forEach((filePath) => {
+    variables = variables.concat(extractVariables(getFilePath(filePath.substring(filePath.indexOf('/scss')))));
   });
 
   const uniqueVariables = findUniqueVariables(variables);
