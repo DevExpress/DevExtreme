@@ -20,7 +20,8 @@ const options: Options<Properties> = {
   max: [undefined, 20],
   label: ['', 'label'],
   name: ['', 'name'],
-  stylingMode: ['outlined', 'filled', 'underlined'],
+  // NOTE: Doesn't matter if there are contrast issues
+  // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 

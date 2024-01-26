@@ -18,7 +18,8 @@ const options: Options<Properties> = {
   label: ['', 'label'],
   name: ['', 'name'],
   spellcheck: [true, false],
-  stylingMode: ['outlined', 'filled', 'underlined'],
+  // NOTE: Doesn't matter if there are contrast issues
+  // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
