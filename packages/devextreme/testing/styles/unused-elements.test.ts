@@ -42,6 +42,7 @@ const getFilesFromDirectory = (directoryName: string, extensions: string[] = [])
 };
 
 const extractVariables = (filePath: string): string[] => {
+  console.log(filePath);
   const content = readFileSync(filePath, 'utf8');
   const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
