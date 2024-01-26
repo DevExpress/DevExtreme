@@ -43,7 +43,7 @@ const getFilesFromDirectory = (directoryName: string, extensions: string[] = [])
 
 const extractVariables = (filePath: string): string[] => {
   const content = readFileSync(filePath, 'utf8');
-  const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]*`, 'g');
+  const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
 };
 
@@ -89,7 +89,6 @@ test('There are no unused variables in SCSS files', () => {
   const uniqueVariables = findUniqueVariables(variables);
 
   const exclusions: string[] = [
-    '$',
     '$validation-message-padding',
     '$cell-other-color',
     '$scheduler-default-header-height',
