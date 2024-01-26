@@ -23,6 +23,7 @@ $menu-item-selected-bg: null !default;
 $menu-popup-border-color: $base-border-color !default;
 $menu-separator-bg: $base-border-color !default;
 $menu-item-selected-color: $base-text-color !default;
+$menu-item-link-color: $base-link-color !default;
 $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
 $menu-container-shadow-color: null !default;
 
