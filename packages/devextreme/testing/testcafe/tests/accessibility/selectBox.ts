@@ -1,9 +1,8 @@
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/select_box.d';
-import SelectBox from '../../model/selectBox';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
@@ -23,6 +22,8 @@ const options: Options<Properties> = {
   searchEnabled: [true, false],
   searchTimeout: [0],
   showClearButton: [true, false],
+  opened: [true, false],
+  deferRendering: [true, false],
   placeholder: [undefined, 'placeholder'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
@@ -41,19 +42,6 @@ const options: Options<Properties> = {
   ],
 };
 
-const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const { disabled, readOnly } = optionConfiguration;
-
-  if (disabled || readOnly) {
-    return;
-  }
-
-  const selectBox = new SelectBox(defaultSelector);
-  const { input } = selectBox;
-
-  await t.typeText(input, 'hd');
-};
-
 const a11yCheckConfig = {
   // NOTE: color-contrast issues
   rules: { 'color-contrast': { enabled: false } },
@@ -63,7 +51,6 @@ const configuration: Configuration = {
   component: 'dxSelectBox',
   a11yCheckConfig,
   options,
-  created,
 };
 
 testAccessibility(configuration);

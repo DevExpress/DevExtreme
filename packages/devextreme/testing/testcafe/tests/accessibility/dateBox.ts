@@ -20,6 +20,7 @@ const options: Options<Properties> = {
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+  deferRendering: [true, false],
   buttons: [
     undefined,
     [
