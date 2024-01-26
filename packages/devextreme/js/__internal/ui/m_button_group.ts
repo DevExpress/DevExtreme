@@ -1,271 +1,259 @@
-import $ from '../core/renderer';
-import Widget from './widget/ui.widget';
-import Button from './button';
-import CollectionWidget from './collection/ui.collection_widget.edit';
-import registerComponent from '../core/component_registrator';
-import { extend } from '../core/utils/extend';
-import { isDefined, isFunction } from '../core/utils/type';
-import { BindableTemplate } from '../core/templates/bindable_template';
-
-// STYLE buttonGroup
+import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
+import { BindableTemplate } from '@js/core/templates/bindable_template';
+import { extend } from '@js/core/utils/extend';
+import { isDefined, isFunction } from '@js/core/utils/type';
+import Button from '@js/ui/button';
+import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
+import Widget from '@js/ui/widget/ui.widget';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
-const BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper';
-const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
-const BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item';
-const BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item';
-const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width';
+const BUTTON_GROUP_WRAPPER_CLASS = `${BUTTON_GROUP_CLASS}-wrapper`;
+const BUTTON_GROUP_ITEM_CLASS = `${BUTTON_GROUP_CLASS}-item`;
+const BUTTON_GROUP_FIRST_ITEM_CLASS = `${BUTTON_GROUP_CLASS}-first-item`;
+const BUTTON_GROUP_LAST_ITEM_CLASS = `${BUTTON_GROUP_CLASS}-last-item`;
+const BUTTON_GROUP_ITEM_HAS_WIDTH = `${BUTTON_GROUP_ITEM_CLASS}-has-width`;
 const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
 const BUTTON_GROUP_STYLING_MODE_CLASS = {
-    contained: 'dx-buttongroup-mode-contained',
-    outlined: 'dx-buttongroup-mode-outlined',
-    text: 'dx-buttongroup-mode-text',
+  contained: 'dx-buttongroup-mode-contained',
+  outlined: 'dx-buttongroup-mode-outlined',
+  text: 'dx-buttongroup-mode-text',
 };
 
 const ButtonCollection = CollectionWidget.inherit({
-    _initTemplates() {
-        this.callBase();
-        /**
-         * @name dxButtonGroupItem.html
-         * @hidden
-         */
-        this._templateManager.addDefaultTemplates({
-            item: new BindableTemplate((($container, data, model) => {
-                this._prepareItemStyles($container);
-                const template = this.option('buttonTemplate');
-                this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
-                    _templateData: this._hasCustomTemplate(template) ? model : {},
-                    template: model.template || template
-                }));
-            }), ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod'))
-        });
-    },
+  _initTemplates() {
+    this.callBase();
 
-    _getBasicButtonOptions() {
-        return {
-            focusStateEnabled: false,
-            onClick: null,
-            hoverStateEnabled: this.option('hoverStateEnabled'),
-            activeStateEnabled: this.option('activeStateEnabled'),
-            stylingMode: this.option('stylingMode')
-        };
-    },
+    this._templateManager.addDefaultTemplates({
+      item: new BindableTemplate(($container, data, model) => {
+        this._prepareItemStyles($container);
+        const template = this.option('buttonTemplate');
+        this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
+          _templateData: this._hasCustomTemplate(template) ? model : {},
+          template: model.template || template,
+        }));
+      }, ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod')),
+    });
+  },
 
-    _getDefaultOptions: function _getDefaultOptions() {
-        return extend(this.callBase(), {
-            itemTemplateProperty: null
-        });
-    },
+  _getBasicButtonOptions() {
+    return {
+      focusStateEnabled: false,
+      onClick: null,
+      hoverStateEnabled: this.option('hoverStateEnabled'),
+      activeStateEnabled: this.option('activeStateEnabled'),
+      stylingMode: this.option('stylingMode'),
+    };
+  },
 
-    _hasCustomTemplate(template) {
-        return isFunction(template) || this.option('integrationOptions.templates')[template];
-    },
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      itemTemplateProperty: null,
+    });
+  },
 
-    _selectedItemClass() {
-        return 'dx-item-selected dx-state-selected';
-    },
+  _hasCustomTemplate(template) {
+    return isFunction(template) || this.option('integrationOptions.templates')[template];
+  },
 
-    _prepareItemStyles($item) {
-        const itemIndex = $item.data('dxItemIndex');
-        itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
+  _selectedItemClass() {
+    return 'dx-item-selected dx-state-selected';
+  },
 
-        const items = this.option('items');
-        items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
+  _prepareItemStyles($item) {
+    const itemIndex = $item.data('dxItemIndex');
+    itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
 
-        $item.addClass(SHAPE_STANDARD_CLASS);
-    },
+    const items = this.option('items');
+    items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
 
-    _renderItemContent(args) {
-        args.container = $(args.container).parent();
-        return this.callBase(args);
-    },
+    $item.addClass(SHAPE_STANDARD_CLASS);
+  },
 
-    _setAriaSelectionAttribute: function($target, value) {
-        this.setAria('pressed', value, $target);
-    },
+  _renderItemContent(args) {
+    args.container = $(args.container).parent();
+    return this.callBase(args);
+  },
 
-    _renderItemContentByNode: function(args, $node) {
-        args.container = $(args.container.children().first());
-        return this.callBase(args, $node);
-    },
+  _setAriaSelectionAttribute($target, value) {
+    this.setAria('pressed', value, $target);
+  },
 
-    _focusTarget() {
-        return this.$element().parent();
-    },
+  _renderItemContentByNode(args, $node) {
+    args.container = $(args.container.children().first());
+    return this.callBase(args, $node);
+  },
 
-    _keyboardEventBindingTarget() {
-        return this._focusTarget();
-    },
+  _focusTarget() {
+    return this.$element().parent();
+  },
 
-    _refreshContent() {
-        this._prepareContent();
-        this._renderContent();
-    },
+  _keyboardEventBindingTarget() {
+    return this._focusTarget();
+  },
 
-    _itemClass() {
-        return BUTTON_GROUP_ITEM_CLASS;
-    },
+  _refreshContent() {
+    this._prepareContent();
+    this._renderContent();
+  },
 
-    _itemSelectHandler: function(e) {
-        if(this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
-            return;
-        }
+  _itemClass() {
+    return BUTTON_GROUP_ITEM_CLASS;
+  },
 
-        this.callBase(e);
+  _itemSelectHandler(e) {
+    if (this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
+      return;
     }
+
+    this.callBase(e);
+  },
 });
 
-const ButtonGroup = Widget.inherit({
-    _getDefaultOptions() {
-        return extend(this.callBase(), {
-            hoverStateEnabled: true,
+const ButtonGroup = (Widget as any).inherit({
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      hoverStateEnabled: true,
 
-            focusStateEnabled: true,
+      focusStateEnabled: true,
 
-            selectionMode: 'single',
+      selectionMode: 'single',
 
-            selectedItems: [],
+      selectedItems: [],
 
-            selectedItemKeys: [],
+      selectedItemKeys: [],
 
-            stylingMode: 'contained',
+      stylingMode: 'contained',
 
-            keyExpr: 'text',
+      keyExpr: 'text',
 
-            items: [],
+      items: [],
 
+      buttonTemplate: 'content',
 
-            buttonTemplate: 'content',
+      onSelectionChanged: null,
 
-            onSelectionChanged: null,
+      onItemClick: null,
+    });
+  },
 
-            onItemClick: null
-        });
-    },
+  _init() {
+    this.callBase();
+    this._createItemClickAction();
+  },
 
-    _init() {
-        this.callBase();
-        this._createItemClickAction();
-    },
+  _createItemClickAction() {
+    this._itemClickAction = this._createActionByOption('onItemClick');
+  },
 
-    _createItemClickAction() {
-        this._itemClickAction = this._createActionByOption('onItemClick');
-    },
+  _initMarkup() {
+    this.setAria('role', 'group');
+    this.$element().addClass(BUTTON_GROUP_CLASS);
+    this._renderStylingMode();
+    this._renderButtons();
+    this._syncSelectionOptions();
+    this.callBase();
+  },
 
-    _initMarkup() {
-        this.setAria('role', 'group');
-        this.$element().addClass(BUTTON_GROUP_CLASS);
-        this._renderStylingMode();
-        this._renderButtons();
-        this._syncSelectionOptions();
-        this.callBase();
-    },
+  _renderStylingMode() {
+    const { stylingMode } = this.option();
 
-    _renderStylingMode() {
-        const { stylingMode } = this.option();
-
-        for(const key in BUTTON_GROUP_STYLING_MODE_CLASS) {
-            this.$element().removeClass(BUTTON_GROUP_STYLING_MODE_CLASS[key]);
-        }
-
-        this.$element().addClass(BUTTON_GROUP_STYLING_MODE_CLASS[stylingMode] ?? BUTTON_GROUP_STYLING_MODE_CLASS.contained);
-    },
-
-    _fireSelectionChangeEvent: function(addedItems, removedItems) {
-        this._createActionByOption('onSelectionChanged', {
-            excludeValidators: ['disabled', 'readOnly']
-        })({ addedItems: addedItems, removedItems: removedItems });
-    },
-
-    _renderButtons() {
-        const $buttons = $('<div>')
-            .addClass(BUTTON_GROUP_WRAPPER_CLASS)
-            .appendTo(this.$element());
-
-        const selectedItems = this.option('selectedItems');
-
-        const options = {
-            selectionMode: this.option('selectionMode'),
-            items: this.option('items'),
-            keyExpr: this.option('keyExpr'),
-            buttonTemplate: this.option('buttonTemplate'),
-            scrollingEnabled: false,
-            selectedItemKeys: this.option('selectedItemKeys'),
-            focusStateEnabled: this.option('focusStateEnabled'),
-            hoverStateEnabled: this.option('hoverStateEnabled'),
-            activeStateEnabled: this.option('activeStateEnabled'),
-            stylingMode: this.option('stylingMode'),
-            accessKey: this.option('accessKey'),
-            tabIndex: this.option('tabIndex'),
-            noDataText: '',
-            selectionRequired: false,
-            onItemRendered: e => {
-                const width = this.option('width');
-                isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
-            },
-            onSelectionChanged: e => {
-                this._syncSelectionOptions();
-                this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
-            },
-            onItemClick: e => {
-                this._itemClickAction(e);
-            }
-        };
-
-        if(isDefined(selectedItems) && selectedItems.length) {
-            options.selectedItems = selectedItems;
-        }
-        this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
-    },
-
-    _syncSelectionOptions() {
-        this._setOptionWithoutOptionChange('selectedItems', this._buttonsCollection.option('selectedItems'));
-        this._setOptionWithoutOptionChange('selectedItemKeys', this._buttonsCollection.option('selectedItemKeys'));
-    },
-
-    _optionChanged(args) {
-        switch(args.name) {
-            case 'stylingMode':
-            case 'selectionMode':
-            case 'keyExpr':
-            case 'buttonTemplate':
-            case 'items':
-            case 'activeStateEnabled':
-            case 'focusStateEnabled':
-            case 'hoverStateEnabled':
-            case 'tabIndex':
-                this._invalidate();
-                break;
-            case 'selectedItemKeys':
-            case 'selectedItems':
-                this._buttonsCollection.option(args.name, args.value);
-                break;
-            case 'onItemClick':
-                this._createItemClickAction();
-                break;
-            case 'onSelectionChanged':
-                break;
-            case 'width':
-                this.callBase(args);
-                this
-                    ._buttonsCollection
-                    .itemElements()
-                    .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
-                break;
-            default:
-                this.callBase(args);
-        }
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const key in BUTTON_GROUP_STYLING_MODE_CLASS) {
+      this.$element().removeClass(BUTTON_GROUP_STYLING_MODE_CLASS[key]);
     }
+
+    this.$element().addClass(BUTTON_GROUP_STYLING_MODE_CLASS[stylingMode] ?? BUTTON_GROUP_STYLING_MODE_CLASS.contained);
+  },
+
+  _fireSelectionChangeEvent(addedItems, removedItems) {
+    this._createActionByOption('onSelectionChanged', {
+      excludeValidators: ['disabled', 'readOnly'],
+    })({ addedItems, removedItems });
+  },
+
+  _renderButtons() {
+    const $buttons = $('<div>')
+      .addClass(BUTTON_GROUP_WRAPPER_CLASS)
+      .appendTo(this.$element());
+
+    const selectedItems = this.option('selectedItems');
+
+    const options = {
+      selectionMode: this.option('selectionMode'),
+      items: this.option('items'),
+      keyExpr: this.option('keyExpr'),
+      buttonTemplate: this.option('buttonTemplate'),
+      scrollingEnabled: false,
+      selectedItemKeys: this.option('selectedItemKeys'),
+      focusStateEnabled: this.option('focusStateEnabled'),
+      hoverStateEnabled: this.option('hoverStateEnabled'),
+      activeStateEnabled: this.option('activeStateEnabled'),
+      stylingMode: this.option('stylingMode'),
+      accessKey: this.option('accessKey'),
+      tabIndex: this.option('tabIndex'),
+      noDataText: '',
+      selectionRequired: false,
+      onItemRendered: (e) => {
+        const width = this.option('width');
+        isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+      },
+      onSelectionChanged: (e) => {
+        this._syncSelectionOptions();
+        this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
+      },
+      onItemClick: (e) => {
+        this._itemClickAction(e);
+      },
+    } as any;
+
+    if (isDefined(selectedItems) && selectedItems.length) {
+      options.selectedItems = selectedItems;
+    }
+    this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
+  },
+
+  _syncSelectionOptions() {
+    this._setOptionWithoutOptionChange('selectedItems', this._buttonsCollection.option('selectedItems'));
+    this._setOptionWithoutOptionChange('selectedItemKeys', this._buttonsCollection.option('selectedItemKeys'));
+  },
+
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'stylingMode':
+      case 'selectionMode':
+      case 'keyExpr':
+      case 'buttonTemplate':
+      case 'items':
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+      case 'tabIndex':
+        this._invalidate();
+        break;
+      case 'selectedItemKeys':
+      case 'selectedItems':
+        this._buttonsCollection.option(args.name, args.value);
+        break;
+      case 'onItemClick':
+        this._createItemClickAction();
+        break;
+      case 'onSelectionChanged':
+        break;
+      case 'width':
+        this.callBase(args);
+        this
+          ._buttonsCollection
+          .itemElements()
+          .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
+        break;
+      default:
+        this.callBase(args);
+    }
+  },
 });
 
 registerComponent('dxButtonGroup', ButtonGroup);
 
 export default ButtonGroup;
-
-
-/**
- * @name dxButtonGroupItem
- * @inherits CollectionWidgetItem
- * @type object
- */
