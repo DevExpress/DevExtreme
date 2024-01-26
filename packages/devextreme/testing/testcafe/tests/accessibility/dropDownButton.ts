@@ -12,8 +12,9 @@ const items = ['Download Trial For Visual Studio', 'Download Trial For All Platf
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  stylingMode: ['contained', 'outlined', 'text'],
-  type: ['normal', 'success', 'danger', 'default'],
+  // NOTE: Doesn't matter if there are contrast issues
+  // stylingMode: ['contained', 'outlined', 'text'],
+  // type: ['normal', 'success', 'danger', 'default'],
   text: [undefined, 'Download Trial'],
   icon: [undefined, 'save'],
   splitButton: [true, false],
