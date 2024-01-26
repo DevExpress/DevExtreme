@@ -3,6 +3,7 @@ import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/select_box.d';
+import { isMaterial } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
@@ -43,8 +44,12 @@ const options: Options<Properties> = {
 };
 
 const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
+  rules: {
+    // NOTE: color-contrast issues
+    'color-contrast': { enabled: false },
+    // NOTE: aria-dialog-name issue in Material
+    'aria-dialog-name': { enabled: !isMaterial() },
+  },
 };
 
 const configuration: Configuration = {
