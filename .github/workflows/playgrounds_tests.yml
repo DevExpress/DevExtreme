@@ -36,6 +36,10 @@ jobs:
       working-directory: ./packages/devextreme
       run: npm run build
 
+    - name: Build
+      working-directory: ./packages/devextreme-react
+      run: npm run pack
+
     - name: Check sources compilation
       working-directory: ./playgrounds/react
       run: npm run build
