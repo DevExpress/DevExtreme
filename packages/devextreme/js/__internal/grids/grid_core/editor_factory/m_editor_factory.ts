@@ -84,7 +84,8 @@ export class EditorFactory extends ViewControllerWithMixin {
         let isHideBorder;
 
         if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
-          const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}`);
+          const focusCellSelector = `${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}, .${EDITOR_INLINE_BLOCK}`;
+          const $focusCell = $focus.closest(focusCellSelector);
 
           if ($focusCell.get(0) !== $focus.get(0)) {
             isHideBorder = this._needHideBorder($focusCell);
