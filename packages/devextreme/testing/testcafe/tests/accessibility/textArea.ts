@@ -19,7 +19,6 @@ const options: Options<Properties> = {
   name: ['', 'name'],
   spellcheck: [true, false],
   stylingMode: ['outlined', 'filled', 'underlined'],
-  tabIndex: [0, 1],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
