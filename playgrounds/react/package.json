@@ -28,7 +28,7 @@
     "webpack-dev-server": "4.15.1"
   },
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "node runner.js",
     "start": "webpack-dev-server",
     "build": "webpack"
   },
