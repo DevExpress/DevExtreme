@@ -42,7 +42,6 @@ const getFilesFromDirectory = (directoryName: string, extensions: string[] = [])
 };
 
 const extractVariables = (filePath: string): string[] => {
-  console.log(filePath);
   const content = readFileSync(filePath, 'utf8');
   const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
@@ -80,7 +79,7 @@ test('There are no unused images in repository', () => {
 
 test('There are no unused variables in SCSS files', () => {
   const scssFiles = getFilesFromDirectory(join('scss', 'widgets'), ['.scss'])
-    .map((fileName) => resolve(fileName).toLowerCase());
+    .map((fileName) => resolve(fileName));
 
   let variables: string[] = [];
   scssFiles.forEach((filePath) => {
