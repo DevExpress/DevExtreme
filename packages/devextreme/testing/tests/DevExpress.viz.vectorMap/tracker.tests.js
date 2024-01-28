@@ -670,7 +670,7 @@ QUnit.test('turnOff when off', function(assert) {
     assert.strictEqual(this.focusOff.lastCall, null);
 });
 
-QUnit.test('turnOff should update data synchronously', function(assert) {
+QUnit.test('turnOff should update data synchronously (T1211755)', function(assert) {
     this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(true);
     this.focus.turnOff();
