@@ -93,13 +93,14 @@ export class EditorFactory extends ViewControllerWithMixin {
       let $focus = this._getFocusedElement($dataGridElement);
 
       if ($focus && $focus.length) {
-        let isHideBorder;
+        let isHideBorder = false;
 
         if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
-          const focusCellSelector = `${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}, .${EDITOR_INLINE_BLOCK}`;
+          const focusCellSelector = `${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}`;
           const $focusCell = $focus.closest(focusCellSelector);
 
-          if ($focusCell.get(0) !== $focus.get(0)) {
+          const isInnerElementHasFocus = $focusCell.get(0) !== $focus.get(0);
+          if (isInnerElementHasFocus) {
             isHideBorder = this._needHideBorder($focusCell);
             $focus = $focusCell;
           }
@@ -116,7 +117,8 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   _needHideBorder($element) {
-    return $element.hasClass(EDITOR_INLINE_BLOCK);
+    const isEditing = this.getController('editing').isEditing();
+    return $element.hasClass(EDITOR_INLINE_BLOCK) || !isEditing;
   }
 
   _updateFocus(e) {
