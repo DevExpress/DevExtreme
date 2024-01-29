@@ -117,8 +117,11 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   _needHideBorder($element) {
+    const rowsViewElement = this.getView('rowsView').element();
+    const isRowsView = $element.closest(rowsViewElement).length > 0;
     const isEditing = this.getController('editing').isEditing();
-    return $element.hasClass(EDITOR_INLINE_BLOCK) || !isEditing;
+
+    return $element.hasClass(EDITOR_INLINE_BLOCK) || isRowsView && !isEditing;
   }
 
   _updateFocus(e) {
