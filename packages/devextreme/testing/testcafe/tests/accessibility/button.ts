@@ -1,8 +1,10 @@
+import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
-import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from '../../../../js/ui/button.d';
+import Button from '../../model/button';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
@@ -19,6 +21,20 @@ const optionsWithSimpleItems: Options<Properties> = {
   // type: ['danger', 'default', 'normal', 'success'],
 };
 
+const created = async (t: TestController, optionConfiguration): Promise<void> => {
+  const { icon, text } = optionConfiguration;
+
+  if (!(icon && text)) {
+    const button = new Button(defaultSelector);
+
+    await ClientFunction(() => {
+      (button.getInstance() as any).option({ elementAttr: { 'aria-label': 'aria-label' } });
+    }, {
+      dependencies: { button },
+    })();
+  }
+};
+
 const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
@@ -30,6 +46,7 @@ const configurationWithSimpleItems: Configuration = {
   component: 'dxButton',
   a11yCheckConfig,
   options: optionsWithSimpleItems,
+  created,
 };
 
 testAccessibility(configurationWithSimpleItems);
