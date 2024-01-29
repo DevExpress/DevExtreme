@@ -17,7 +17,6 @@
   "devDependencies": {
     "@types/react": "18.2.23",
     "@types/react-dom": "18.2.18",
-    "babel-jest": "^29.7.0",
     "css-loader": "6.9.0",
     "source-map-loader": "4.0.2",
     "style-loader": "3.3.4",

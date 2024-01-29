@@ -1,18 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strict": false,
+    "strict": true,
     "jsx": "react",
     "allowJs": true,
     "target": "ESNext"
   },
   "include": ["**/*"],
-  // "paths": {
-  //   "devextreme-react": [
-  //     "../../node_modules/devextreme-react/src"
-  //   ],
-  //   "devextreme-react/*": [
-  //     "../../node_modules/devextreme-react/src/*"
-  //   ]
-  // }
 }
