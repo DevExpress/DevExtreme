@@ -103,7 +103,7 @@ function checkFilesAfterCopy(allEtalonsMap) {
 (() => {
   if (foldersWithScreenshotsExist()) {
     const allEtalons = getAllEtalonsNames();
-    console.log(`${allEtalons.size} screenshots to moving were found`);
+    console.log(`${allEtalons.size} new screenshots are found`);
     const absPathToTests = resolve(PATH_TO_TESTCAFE_TESTS);
 
     processFolder(absPathToTests, allEtalons);
