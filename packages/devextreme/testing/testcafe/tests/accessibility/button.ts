@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { isMaterialBased } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
@@ -39,6 +40,8 @@ const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
     'color-contrast': { enabled: false },
+    // NOTE: false positive in isMaterialBased
+    'nested-interactive': { enabled: !isMaterialBased() },
   },
 };
 
