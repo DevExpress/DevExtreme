@@ -2619,7 +2619,9 @@ export const keyboardNavigationModule: import('../m_types').Module = {
         },
         renderDelayedTemplates(change) {
           this.callBase.apply(this, arguments);
-          this._renderFocusByChange(change);
+          this.waitAsyncTemplates().done(() => {
+            this._renderFocusByChange(change);
+          });
         },
         _renderFocusByChange(change) {
           const { operationTypes, repaintChangesOnly } = change ?? {};
