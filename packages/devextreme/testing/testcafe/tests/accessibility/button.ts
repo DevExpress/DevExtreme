@@ -27,7 +27,7 @@ const a11yCheckConfig = {
 };
 
 const configurationWithSimpleItems: Configuration = {
-  component: 'dxList',
+  component: 'dxButton',
   a11yCheckConfig,
   options: optionsWithSimpleItems,
 };
