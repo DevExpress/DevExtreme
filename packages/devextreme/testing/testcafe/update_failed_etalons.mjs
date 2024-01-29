@@ -32,43 +32,45 @@ function getAllDirs(path) {
 
 function processEtalonFolder(etalonFolderPath, allEtalons) {
   const allFiles = readdirSync(etalonFolderPath);
-  let hasEtalonsToMove = allEtalons.size !== 0;
 
-  allFiles.forEach((currentFileName) => {
-    if (hasEtalonsToMove) {
-      const hasFile = allEtalons.has(currentFileName);
+  for (let currentFileName of allFiles) {
+    const hasFile = allEtalons.has(currentFileName);
 
-      if (hasFile) {
-        const dstFileName = join(etalonFolderPath, currentFileName);
-        const srcFileName = join(PATH_TO_CURRENT_ETALONS, currentFileName);
+    if (hasFile) {
+      const dstFileName = join(etalonFolderPath, currentFileName);
+      const srcFileName = join(PATH_TO_CURRENT_ETALONS, currentFileName);
 
-        copyFileSync(srcFileName, dstFileName);
-        allEtalons.delete(currentFileName);
-        hasEtalonsToMove = allEtalons.size !== 0;
+      copyFileSync(srcFileName, dstFileName);
+      allEtalons.delete(currentFileName);
+
+      if (allEtalons.size === 0) {
+        return false;
       }
     }
-  });
+  }
 
-  return hasEtalonsToMove;
+  return allEtalons.size !== 0;
 }
 
 function processFolder(currentDir, allEtalons) {
   const currentDirrectoryFolders = getAllDirs(currentDir);
-  let continueProcessFolders = true;
 
-  currentDirrectoryFolders.forEach((dir) => {
-    if (continueProcessFolders) {
-      const folderName = dir.split('/').at(-1);
+  for (let dir of currentDirrectoryFolders) {
+    const folderName = dir.split('/').at(-1);
+    let continueProcessFolders;
 
-      if (folderName === ETALONS_FOLDER_NAME) {
-        continueProcessFolders = processEtalonFolder(dir, allEtalons);
-      } else {
-        continueProcessFolders = processFolder(dir, allEtalons);
-      }
+    if (folderName === ETALONS_FOLDER_NAME) {
+      continueProcessFolders = processEtalonFolder(dir, allEtalons);
+    } else {
+      continueProcessFolders = processFolder(dir, allEtalons);
     }
-  });
 
-  return continueProcessFolders;
+    if(continueProcessFolders === false) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function foldersWithScreenshotsExist() {
