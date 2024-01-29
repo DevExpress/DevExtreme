@@ -57,15 +57,11 @@ function processFolder(currentDir, allEtalons) {
 
   for (let dir of currentDirrectoryFolders) {
     const folderName = dir.split('/').at(-1);
-    let continueProcessFolders;
+    const continueProcessFolders = folderName === ETALONS_FOLDER_NAME
+      ? processEtalonFolder(dir, allEtalons)
+      : processFolder(dir, allEtalons);
 
-    if (folderName === ETALONS_FOLDER_NAME) {
-      continueProcessFolders = processEtalonFolder(dir, allEtalons);
-    } else {
-      continueProcessFolders = processFolder(dir, allEtalons);
-    }
-
-    if(continueProcessFolders === false) {
+    if (continueProcessFolders === false) {
       return false;
     }
   }
