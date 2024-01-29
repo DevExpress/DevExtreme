@@ -199,7 +199,7 @@ const DropDownButton = Widget.inherit({
 
         if(this._list && this._lastSelectedItemData !== undefined) {
             const cachedResult = this.option('useSelectMode') ? this._list.option('selectedItem') : this._lastSelectedItemData;
-            return (new Deferred()).resolve(cachedResult);
+            return d.resolve(cachedResult);
         }
         this._lastSelectedItemData = undefined;
 
@@ -632,7 +632,7 @@ const DropDownButton = Widget.inherit({
 
     _updateDataController: function(items = this._dataController.items()) {
         this._dataController.resetDataSource();
-        this._dataController.itemsToDataSource(items, this._getKey());
+        this._dataController.updateDataSourceByItems(items, this._getKey());
         this._updateKeyExpr();
     },
 
@@ -691,11 +691,11 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'dataSource':
                 if(Array.isArray(value)) {
-                    this._updateDataController(value);
+                    this._dataController.updateDataSourceByItems(value, this._getKey());
                 } else {
                     this._dataController.initDataSource(value);
-                    this._updateKeyExpr();
                 }
+                this._updateKeyExpr();
                 this._updateItemCollection(name);
                 break;
             case 'icon':
@@ -754,7 +754,6 @@ const DropDownButton = Widget.inherit({
         }
     },
 
-    // TODO move me?
     getDataSource: function() {
         return this._dataController.getDataSource();
     }

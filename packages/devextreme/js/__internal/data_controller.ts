@@ -45,7 +45,7 @@ class DataController {
   private _dataSource: DataSourceType;
 
   constructor(dataSourceOptions: DataSourceType) {
-    this._initDataSource(dataSourceOptions);
+    this._updateDataSource(dataSourceOptions);
   }
 
   static initFromArray(items: unknown[], key: string): DataController {
@@ -59,7 +59,7 @@ class DataController {
     return new DataController(dataSource as unknown as DataSourceType);
   }
 
-  _initDataSource(dataSourceOptions: DataSourceType): void {
+  _updateDataSource(dataSourceOptions: DataSourceType): void {
     this._disposeDataSource();
 
     if (dataSourceOptions) {
@@ -176,7 +176,7 @@ class DataController {
   }
 
   initDataSource(dataSourceOptions: DataSourceType): void {
-    this._initDataSource(dataSourceOptions);
+    this._updateDataSource(dataSourceOptions);
   }
 
   totalCount(): number {
@@ -227,18 +227,17 @@ class DataController {
     return this._dataSource.items();
   }
 
-  itemsToDataSource(value: unknown[], key: string): void {
-    if (!this._dataSource) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      this._dataSource = new DataSource({
-        store: new ArrayStore({
-          key,
-          data: value,
-        }),
-        pageSize: 0,
-      });
-    }
+  updateDataSourceByItems(items: unknown[], key: string): void {
+    this._disposeDataSource();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this._dataSource = new DataSource({
+      store: new ArrayStore({
+        key,
+        data: items,
+      }),
+      pageSize: 0,
+    });
   }
 
   applyMapFunction(data: unknown): unknown {
