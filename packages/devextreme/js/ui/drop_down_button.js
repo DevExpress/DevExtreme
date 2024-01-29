@@ -124,12 +124,12 @@ const DropDownButton = Widget.inherit({
 
     _initDataController() {
         const dataSource = this.option('dataSource');
+        let key;
 
-        if(dataSource) {
-            this._dataController = new DataController(dataSource);
-        } else {
-            this._dataController = DataController.initFromArray(this.option('items'), this._getKey());
+        if(!dataSource) {
+            key = this._getKey();
         }
+        this._dataController = DataController.init(dataSource ?? this.option('items'), key);
     },
 
     _initTemplates() {
@@ -632,7 +632,7 @@ const DropDownButton = Widget.inherit({
 
     _updateDataController: function(items = this._dataController.items()) {
         this._dataController.resetDataSource();
-        this._dataController.updateDataSourceByItems(items, this._getKey());
+        this._dataController.updateDataSource(items, this._getKey());
         this._updateKeyExpr();
     },
 
@@ -690,11 +690,7 @@ const DropDownButton = Widget.inherit({
                 this._updateItemCollection(name);
                 break;
             case 'dataSource':
-                if(Array.isArray(value)) {
-                    this._dataController.updateDataSourceByItems(value, this._getKey());
-                } else {
-                    this._dataController.initDataSource(value);
-                }
+                this._dataController.updateDataSource(value);
                 this._updateKeyExpr();
                 this._updateItemCollection(name);
                 break;

@@ -48,15 +48,18 @@ class DataController {
     this._updateDataSource(dataSourceOptions);
   }
 
-  static initFromArray(items: unknown[], key: string): DataController {
-    const dataSource = new DataSource({
-      store: new ArrayStore({
-        key,
-        data: items,
-      }),
-      pageSize: 0,
-    });
-    return new DataController(dataSource as unknown as DataSourceType);
+  static init(dataSource: unknown[] | DataSourceType, key?: string): DataController {
+    if (Array.isArray(dataSource)) {
+      const ds = new DataSource({
+        store: new ArrayStore({
+          key,
+          data: dataSource,
+        }),
+        pageSize: 0,
+      });
+      return new DataController(ds as unknown as DataSourceType);
+    }
+    return new DataController(dataSource);
   }
 
   _updateDataSource(dataSourceOptions: DataSourceType): void {
@@ -175,8 +178,12 @@ class DataController {
     }
   }
 
-  initDataSource(dataSourceOptions: DataSourceType): void {
-    this._updateDataSource(dataSourceOptions);
+  updateDataSource(dataSourceOptions: unknown[] | DataSourceType, key?: string): void {
+    if (Array.isArray(dataSourceOptions)) {
+      this.updateDataSourceByItems(dataSourceOptions, key);
+    } else {
+      this._updateDataSource(dataSourceOptions);
+    }
   }
 
   totalCount(): number {
@@ -227,7 +234,7 @@ class DataController {
     return this._dataSource.items();
   }
 
-  updateDataSourceByItems(items: unknown[], key: string): void {
+  updateDataSourceByItems(items: unknown[], key?: string): void {
     this._disposeDataSource();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
