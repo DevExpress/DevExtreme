@@ -61,7 +61,19 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
-    const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus, .dx-adaptive-item-text:focus`;
+    const focusedElementSelector = `
+      td[tabindex]:focus,
+      ${rowSelector},
+      input:focus,
+      button:focus,
+      textarea:focus,
+      div[tabindex]:focus,
+      .dx-lookup-field:focus,
+      .dx-checkbox:focus,
+      .dx-switch:focus,
+      .dx-dropdownbutton
+      .dx-buttongroup:focus,
+      .dx-adaptive-item-text:focus`;
 
     // T181706
     const $focusedElement = $dataGridElement.find(focusedElementSelector);
