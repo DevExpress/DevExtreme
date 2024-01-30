@@ -12,7 +12,7 @@ export interface Configuration<TComponentOptions = unknown> {
   created?: (t: TestController, optionConfiguration?: TComponentOptions) => Promise<void>;
 }
 
-const defaultSelector = '#container';
+export const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
 const defaultA11yCheckConfig = isMaterialBased() ? {
