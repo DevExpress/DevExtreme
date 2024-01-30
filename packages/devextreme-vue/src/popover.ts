@@ -7,10 +7,8 @@ type AccessibleOptions = Pick<Properties,
   "closeOnOutsideClick" |
   "container" |
   "contentTemplate" |
-  "copyRootClassesToWrapper" |
   "deferRendering" |
   "disabled" |
-  "elementAttr" |
   "enableBodyScroll" |
   "height" |
   "hideEvent" |
@@ -56,10 +54,8 @@ const DxPopover = createComponent({
     closeOnOutsideClick: [Boolean, Function],
     container: {},
     contentTemplate: {},
-    copyRootClassesToWrapper: Boolean,
     deferRendering: Boolean,
     disabled: Boolean,
-    elementAttr: {},
     enableBodyScroll: Boolean,
     height: [Function, Number, String],
     hideEvent: [Object, String],
@@ -102,10 +98,8 @@ const DxPopover = createComponent({
     "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
-    "update:copyRootClassesToWrapper": null,
     "update:deferRendering": null,
     "update:disabled": null,
-    "update:elementAttr": null,
     "update:enableBodyScroll": null,
     "update:height": null,
     "update:hideEvent": null,

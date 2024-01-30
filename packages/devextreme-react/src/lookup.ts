@@ -286,10 +286,8 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
   contentTemplate?: ((contentElement: any) => string | any) | template;
-  copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   height?: (() => number | string) | number | string;
   hideEvent?: Record<string, any> | string | {

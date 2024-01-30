@@ -1136,13 +1136,11 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
   contentTemplate?: ((contentElement: any) => string | any) | template;
-  copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
@@ -1827,13 +1825,11 @@ type IPopupProps = React.PropsWithChildren<{
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
   contentTemplate?: ((contentElement: any) => string | any) | template;
-  copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;

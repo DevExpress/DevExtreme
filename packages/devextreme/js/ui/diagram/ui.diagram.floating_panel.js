@@ -7,6 +7,7 @@ import Popup from '../popup/ui.popup';
 import DiagramPanel from './ui.diagram.panel';
 
 const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
+const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 
 class DiagramFloatingPanel extends DiagramPanel {
     _init() {
@@ -124,8 +125,7 @@ class DiagramFloatingPanel extends DiagramPanel {
             minHeight: this._getPopupMinHeight(),
             position: this._getPopupPosition(),
             showCloseButton: true,
-            copyRootClassesToWrapper: true,
-            _ignoreCopyRootClassesToWrapperDeprecation: true,
+            wrapperAttr: { class: DIAGRAM_TOOLBOX_POPUP_CLASS },
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },

@@ -80,7 +80,6 @@ class Tooltip extends BaseComponent<React.PropsWithChildren<ITooltipOptions>> {
     PropTypes.bool,
     PropTypes.func
   ]),
-  copyRootClassesToWrapper: PropTypes.bool,
   deferRendering: PropTypes.bool,
   disabled: PropTypes.bool,
   height: PropTypes.oneOfType([
