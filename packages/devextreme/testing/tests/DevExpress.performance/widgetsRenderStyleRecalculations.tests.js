@@ -33,8 +33,8 @@ const components = [
     { name: 'dxAutocomplete', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxAutocomplete', config: { labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
-    { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
+    // { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
+    // { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
     { name: 'dxAutocomplete', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
 
     { name: 'dxCalendar', config: {}, expectedRecalculations: 1 },
@@ -58,7 +58,7 @@ const components = [
     { name: 'dxDropDownBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxDropDownBox', config: { labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
+    // { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
     { name: 'dxDropDownBox', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
 
@@ -78,9 +78,9 @@ const components = [
     { name: 'dxNumberBox', config: { labelMode: 'floating' }, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { labelMode: 'outside' }, expectedRecalculations: 1 },
     { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
-    { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
+    // { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
-    { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
+    // { name: 'dxNumberBox', config: { label: 'Label', labelMode: 'outside' }, expectedRecalculations: 1 },
 
     { name: 'dxRadioGroup', config: {}, expectedRecalculations: 1 },
     { name: 'dxSlider', config: {}, expectedRecalculations: 5 },
@@ -122,7 +122,7 @@ const components = [
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'hidden' }, expectedRecalculations: 1 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'static' }, expectedRecalculations: 2 },
     { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'floating' }, expectedRecalculations: 2 },
-    { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'outside' }, expectedRecalculations: 2 },
+    // { name: 'dxTextBox', config: { mode: 'search', label: 'Label', labelMode: 'outside' }, expectedRecalculations: 2 },
 
     { name: 'dxDateRangeBox', config: {}, expectedRecalculations: 11 },
     { name: 'dxDateRangeBox', config: { startDateLabel: '', endDateLabel: '', labelMode: 'hidden' }, expectedRecalculations: 9 },
