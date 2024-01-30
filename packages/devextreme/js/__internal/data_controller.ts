@@ -37,6 +37,10 @@ interface DataSourceType {
   _applyMapFunction: <TData = unknown>(data: TData) => TData;
 }
 
+interface DataControllerOptions extends Record<string, unknown> {
+  key: string;
+}
+
 class DataController {
   private _isSharedDataSource = false;
 
@@ -44,13 +48,11 @@ class DataController {
   // @ts-expect-error
   private _dataSource: DataSourceType;
 
-  constructor(dataSourceOptions: unknown[] | DataSourceType, key?: string) {
+  constructor(dataSourceOptions: unknown[] | DataSourceType, { key }: DataControllerOptions) {
     this.updateDataSource(dataSourceOptions, key);
   }
 
   _updateDataSource(dataSourceOptions: DataSourceType): void {
-    this._disposeDataSource();
-
     if (dataSourceOptions) {
       if (dataSourceOptions instanceof DataSource) {
         this._isSharedDataSource = true;
@@ -64,6 +66,18 @@ class DataController {
         ) as unknown as DataSourceType;
       }
     }
+  }
+
+  _updateDataSourceByItems(items: unknown[], key?: string): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this._dataSource = new DataSource({
+      store: new ArrayStore({
+        key,
+        data: items,
+      }),
+      pageSize: 0,
+    });
   }
 
   _disposeDataSource(): void {
@@ -85,6 +99,10 @@ class DataController {
   }
 
   loadSingle(propName: string, propValue: unknown): Promise<unknown> {
+    if (!this._dataSource) {
+      return Promise.reject();
+    }
+
     let pName = propName;
     let pValue = propValue;
 
@@ -164,9 +182,12 @@ class DataController {
     }
   }
 
-  updateDataSource(dataSourceOptions: unknown[] | DataSourceType, key?: string): void {
+  updateDataSource(items: unknown[] | DataSourceType, key?: string): void {
+    const dataSourceOptions = items ?? this.items();
+
+    this._disposeDataSource();
     if (Array.isArray(dataSourceOptions)) {
-      this.updateDataSourceByItems(dataSourceOptions, key);
+      this._updateDataSourceByItems(dataSourceOptions, key);
     } else {
       this._updateDataSource(dataSourceOptions);
     }
@@ -217,20 +238,7 @@ class DataController {
   }
 
   items(): unknown[] {
-    return this._dataSource.items();
-  }
-
-  updateDataSourceByItems(items: unknown[], key?: string): void {
-    this._disposeDataSource();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    this._dataSource = new DataSource({
-      store: new ArrayStore({
-        key,
-        data: items,
-      }),
-      pageSize: 0,
-    });
+    return this._dataSource?.items();
   }
 
   applyMapFunction(data: unknown): unknown {
