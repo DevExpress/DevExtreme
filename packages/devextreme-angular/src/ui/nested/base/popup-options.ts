@@ -87,6 +87,13 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('dragOutsideBoundary', value);
     }
 
+    get elementAttr(): any {
+        return this._getOption('elementAttr');
+    }
+    set elementAttr(value: any) {
+        this._setOption('elementAttr', value);
+    }
+
     get enableBodyScroll(): boolean {
         return this._getOption('enableBodyScroll');
     }

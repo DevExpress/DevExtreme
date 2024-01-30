@@ -88,10 +88,6 @@ const Overlay = Widget.inherit({
 
             shadingColor: '',
 
-            /**
-            * @name dxOverlayOptions.elementAttr
-            * @hidden
-            */
 
             wrapperAttr: {},
 
@@ -235,9 +231,6 @@ const Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        // if(this.option('copyRootClassesToWrapper')) {
-        //     this._$wrapper.addClass($element.attr('class'));
-        // }
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');

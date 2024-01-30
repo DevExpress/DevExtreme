@@ -7,7 +7,6 @@ import Popup from '../popup/ui.popup';
 import DiagramPanel from './ui.diagram.panel';
 
 const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
-const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 
 class DiagramFloatingPanel extends DiagramPanel {
     _init() {
@@ -111,6 +110,12 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
     _getPopupOptions() {
         const that = this;
+        let wrapperClass = this._getPopupClass();
+
+        if(this.isMobileView()) {
+            wrapperClass += ` ${DIAGRAM_MOBILE_POPUP_CLASS}`;
+        }
+
         return {
             animation: hasWindow() ? this._getPopupAnimation() : null,
             shading: false,
@@ -125,7 +130,7 @@ class DiagramFloatingPanel extends DiagramPanel {
             minHeight: this._getPopupMinHeight(),
             position: this._getPopupPosition(),
             showCloseButton: true,
-            wrapperAttr: { class: DIAGRAM_TOOLBOX_POPUP_CLASS },
+            wrapperAttr: { class: wrapperClass },
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },

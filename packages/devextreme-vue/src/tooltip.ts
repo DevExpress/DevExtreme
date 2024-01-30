@@ -9,6 +9,7 @@ type AccessibleOptions = Pick<Properties,
   "contentTemplate" |
   "deferRendering" |
   "disabled" |
+  "elementAttr" |
   "height" |
   "hideEvent" |
   "hideOnOutsideClick" |
@@ -49,6 +50,7 @@ const DxTooltip = createComponent({
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
+    elementAttr: {},
     height: [Function, Number, String],
     hideEvent: [Object, String],
     hideOnOutsideClick: [Boolean, Function],
@@ -86,6 +88,7 @@ const DxTooltip = createComponent({
     "update:contentTemplate": null,
     "update:deferRendering": null,
     "update:disabled": null,
+    "update:elementAttr": null,
     "update:height": null,
     "update:hideEvent": null,
     "update:hideOnOutsideClick": null,

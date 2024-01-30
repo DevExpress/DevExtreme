@@ -43,7 +43,6 @@ define(function(require) {
                     name === 'templatesRenderAsynchronously' ||
                     name === 'ignoreChildEvents' ||
                     name === '_dataController' ||
-                    name === '_ignoreElementAttrDeprecation' ||
                     name === '_ignorePreventScrollEventsDeprecation' ||
                     name === '_checkParentVisibility') {
                     return;

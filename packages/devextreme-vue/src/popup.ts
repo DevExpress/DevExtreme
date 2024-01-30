@@ -13,6 +13,7 @@ type AccessibleOptions = Pick<Properties,
   "dragAndResizeArea" |
   "dragEnabled" |
   "dragOutsideBoundary" |
+  "elementAttr" |
   "enableBodyScroll" |
   "focusStateEnabled" |
   "fullScreen" |
@@ -69,6 +70,7 @@ const DxPopup = createComponent({
     dragAndResizeArea: {},
     dragEnabled: Boolean,
     dragOutsideBoundary: Boolean,
+    elementAttr: {},
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
@@ -122,6 +124,7 @@ const DxPopup = createComponent({
     "update:dragAndResizeArea": null,
     "update:dragEnabled": null,
     "update:dragOutsideBoundary": null,
+    "update:elementAttr": null,
     "update:enableBodyScroll": null,
     "update:focusStateEnabled": null,
     "update:fullScreen": null,
