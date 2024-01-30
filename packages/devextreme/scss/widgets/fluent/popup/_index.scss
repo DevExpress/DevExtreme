@@ -27,7 +27,7 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
   }
 
   .dx-state-focused {
-    &.dx-overlay-content {
+    & > .dx-overlay-content {
       box-shadow: $fluent-popup-focused-content-shadow;
     }
   }
