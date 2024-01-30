@@ -7,7 +7,6 @@ import { selectionModule } from '@ts/grids/grid_core/selection/m_selection';
 import treeListCore from '../m_core';
 
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
 const originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
@@ -92,8 +91,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
         renderSelectCheckBoxContainer($container, model) {
           const that = this;
           const rowsView = that.component.getView('rowsView');
-
-          $container.addClass(CELL_FOCUS_DISABLED_CLASS);
 
           const $checkbox = rowsView._renderSelectCheckBox($container, {
             value: model.row.isSelected,
