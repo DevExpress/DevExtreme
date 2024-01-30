@@ -1,32 +1,24 @@
-import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { noop } from '../../core/utils/common';
 
 const EMPTY_CHAR = ' ';
 
-const BaseMaskRule = Class.inherit({
+class BaseMaskRule {
 
-    ctor: function(config) {
+    constructor(config) {
         this._value = EMPTY_CHAR;
         extend(this, config);
-    },
+    }
 
-    next: function(rule) {
+    next(rule) {
         if(!arguments.length) {
             return this._next;
         }
 
         this._next = rule;
-    },
+    }
 
-    text: noop,
-    value: noop,
-    rawValue: noop,
-
-    handle: noop,
-
-    _prepareHandlingArgs: function(args, config) {
+    _prepareHandlingArgs(args, config) {
         config = config || {};
         const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
         args[handlingProperty] = config.str ?? args[handlingProperty];
@@ -34,80 +26,86 @@ const BaseMaskRule = Class.inherit({
         args.length = config.length ?? args.length;
         args.index = args.index + 1;
         return args;
-    },
+    }
 
-    reset: noop,
-    clear: noop,
-
-    first: function(index) {
+    first(index) {
         index = index || 0;
         return this.next().first(index + 1);
-    },
+    }
 
-    isAccepted: function() {
+    isAccepted() {
         return false;
-    },
+    }
 
-    adjustedCaret: function(caret, isForwardDirection, char) {
+    adjustedCaret(caret, isForwardDirection, char) {
         return isForwardDirection
             ? this._adjustedForward(caret, 0, char)
             : this._adjustedBackward(caret, 0, char);
-    },
-    _adjustedForward: noop,
-    _adjustedBackward: noop,
+    }
+    _adjustedForward() {}
+    _adjustedBackward() {}
 
-    isValid: noop
-});
+    isValid() {}
 
-export const EmptyMaskRule = BaseMaskRule.inherit({
+    reset() {}
+    clear() {}
 
-    next: noop,
+    text() {}
+    value() {}
+    rawValue() {}
 
-    handle: function() {
+    handle() {}
+}
+
+export class EmptyMaskRule extends BaseMaskRule {
+
+    next() {}
+
+    handle() {
         return 0;
-    },
+    }
 
-    text: function() {
+    text() {
         return '';
-    },
+    }
 
-    value: function() {
+    value() {
         return '';
-    },
+    }
 
-    first: function() {
+    first() {
         return 0;
-    },
+    }
 
-    rawValue: function() {
+    rawValue() {
         return '';
-    },
+    }
 
-    adjustedCaret: function() {
+    adjustedCaret() {
         return 0;
-    },
+    }
 
-    isValid: function() {
+    isValid() {
         return true;
     }
 
-});
+}
 
-export const MaskRule = BaseMaskRule.inherit({
+export class MaskRule extends BaseMaskRule {
 
-    text: function() {
+    text() {
         return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
-    },
+    }
 
-    value: function() {
+    value() {
         return this._value + this.next().value();
-    },
+    }
 
-    rawValue: function() {
+    rawValue() {
         return this._value + this.next().rawValue();
-    },
+    }
 
-    handle: function(args) {
+    handle(args) {
         const str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
         if(!str || !str.length || !args.length) {
             return 0;
@@ -125,19 +123,19 @@ export const MaskRule = BaseMaskRule.inherit({
         return this._accepted()
             ? this.next().handle(this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 })) + 1
             : this.handle(this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }));
-    },
+    }
 
-    clear: function(args) {
+    clear(args) {
         this._tryAcceptChar(EMPTY_CHAR, args);
         this.next().clear(this._prepareHandlingArgs(args));
-    },
+    }
 
-    reset: function() {
+    reset() {
         this._accepted(false);
         this.next().reset();
-    },
+    }
 
-    _tryAcceptChar: function(char, args) {
+    _tryAcceptChar(char, args) {
         this._accepted(false);
 
         if(!this._isAllowed(char, args)) {
@@ -147,30 +145,30 @@ export const MaskRule = BaseMaskRule.inherit({
         args.fullText = args.fullText.substring(0, args.index) + acceptedChar + args.fullText.substring(args.index + 1);
         this._accepted(true);
         this._value = char;
-    },
+    }
 
-    _accepted: function(value) {
+    _accepted(value) {
         if(!arguments.length) {
             return !!this._isAccepted;
         }
         this._isAccepted = !!value;
-    },
+    }
 
-    first: function(index) {
+    first(index) {
         return this._value === EMPTY_CHAR
             ? index || 0
-            : this.callBase(index);
-    },
+            : super.first(index);
+    }
 
-    _isAllowed: function(char, args) {
+    _isAllowed(char, args) {
         if(char === EMPTY_CHAR) {
             return true;
         }
 
         return this._isValid(char, args);
-    },
+    }
 
-    _isValid: function(char, args) {
+    _isValid(char, args) {
         const allowedChars = this.allowedChars;
 
         if(allowedChars instanceof RegExp) {
@@ -186,43 +184,43 @@ export const MaskRule = BaseMaskRule.inherit({
         }
 
         return allowedChars === char;
-    },
+    }
 
-    isAccepted: function(caret) {
+    isAccepted(caret) {
         return (caret === 0)
             ? this._accepted()
             : this.next().isAccepted(caret - 1);
-    },
+    }
 
-    _adjustedForward: function(caret, index, char) {
+    _adjustedForward(caret, index, char) {
         if(index >= caret) {
             return index;
         }
 
         return this.next()._adjustedForward(caret, index + 1, char) || index + 1;
-    },
+    }
 
-    _adjustedBackward: function(caret, index) {
+    _adjustedBackward(caret, index) {
         if(index >= caret - 1) {
             return caret;
         }
 
         return this.next()._adjustedBackward(caret, index + 1) || index + 1;
-    },
+    }
 
-    isValid: function(args) {
+    isValid(args) {
         return this._isValid(this._value, args) && this.next().isValid(this._prepareHandlingArgs(args));
     }
 
-});
+}
 
-export const StubMaskRule = MaskRule.inherit({
+export class StubMaskRule extends MaskRule {
 
-    value: function() {
+    value() {
         return this.next().value();
-    },
+    }
 
-    handle: function(args) {
+    handle(args) {
         const hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
         const str = hasValueProperty ? args.value : args.text;
         if(!str.length || !args.length) {
@@ -240,27 +238,27 @@ export const StubMaskRule = MaskRule.inherit({
 
         const nextArgs = this._isAllowed(char) ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }) : args;
         return this.next().handle(nextArgs) + 1;
-    },
+    }
 
-    clear: function(args) {
+    clear(args) {
         this._accepted(false);
         this.next().clear(this._prepareHandlingArgs(args));
-    },
+    }
 
-    _tryAcceptChar: function(char) {
+    _tryAcceptChar(char) {
         this._accepted(this._isValid(char));
-    },
+    }
 
-    _isValid: function(char) {
+    _isValid(char) {
         return char === this.maskChar;
-    },
+    }
 
-    first: function(index) {
+    first(index) {
         index = index || 0;
         return this.next().first(index + 1);
-    },
+    }
 
-    _adjustedForward: function(caret, index, char) {
+    _adjustedForward(caret, index, char) {
         if(index >= caret && char === this.maskChar) {
             return index;
         }
@@ -269,18 +267,17 @@ export const StubMaskRule = MaskRule.inherit({
             return caret;
         }
         return this.next()._adjustedForward(caret, index + 1, char);
-    },
+    }
 
-    _adjustedBackward: function(caret, index) {
+    _adjustedBackward(caret, index) {
         if(index >= caret - 1) {
             return 0;
         }
 
         return this.next()._adjustedBackward(caret, index + 1);
-    },
-
-    isValid: function(args) {
-        return this.next().isValid(this._prepareHandlingArgs(args));
     }
 
-});
+    isValid(args) {
+        return this.next().isValid(this._prepareHandlingArgs(args));
+    }
+}
