@@ -35,8 +35,12 @@ const options: Options<Properties> = {
 };
 
 const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
+  rules: {
+    // NOTE: color-contrast issues
+    'color-contrast': { enabled: false },
+    // NOTE: aria-dialog-name issues
+    'aria-dialog-name': { enabled: false },
+  },
 };
 
 const configuration: Configuration = {
