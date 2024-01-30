@@ -1018,7 +1018,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
@@ -1614,7 +1613,6 @@ type IPopupProps = React.PropsWithChildren<{
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;

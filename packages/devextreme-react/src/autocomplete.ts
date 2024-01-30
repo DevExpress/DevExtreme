@@ -302,7 +302,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;

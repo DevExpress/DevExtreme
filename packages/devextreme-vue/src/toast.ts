@@ -11,7 +11,6 @@ type AccessibleOptions = Pick<Properties,
   "contentTemplate" |
   "deferRendering" |
   "displayTime" |
-  "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hideOnOutsideClick" |
@@ -55,7 +54,6 @@ const DxToast = createComponent({
     contentTemplate: {},
     deferRendering: Boolean,
     displayTime: Number,
-    elementAttr: {},
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
@@ -96,7 +94,6 @@ const DxToast = createComponent({
     "update:contentTemplate": null,
     "update:deferRendering": null,
     "update:displayTime": null,
-    "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hideOnOutsideClick": null,

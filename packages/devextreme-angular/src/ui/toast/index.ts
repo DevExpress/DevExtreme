@@ -172,21 +172,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:dxOverlayOptions.elementAttr]
-    
-     * @deprecated [depNote:dxOverlayOptions.elementAttr]
-    
-     */
-    @Input()
-    get elementAttr(): any {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: any) {
-        this._setOption('elementAttr', value);
-    }
-
-
-    /**
      * [descr:WidgetOptions.focusStateEnabled]
     
      */
@@ -570,13 +555,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -743,7 +721,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'displayTimeChange' },
-            { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hideOnOutsideClickChange' },

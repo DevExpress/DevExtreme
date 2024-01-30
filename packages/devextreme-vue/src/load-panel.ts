@@ -8,7 +8,6 @@ type AccessibleOptions = Pick<Properties,
   "container" |
   "deferRendering" |
   "delay" |
-  "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hideOnOutsideClick" |
@@ -50,7 +49,6 @@ const DxLoadPanel = createComponent({
     container: {},
     deferRendering: Boolean,
     delay: Number,
-    elementAttr: {},
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
@@ -89,7 +87,6 @@ const DxLoadPanel = createComponent({
     "update:container": null,
     "update:deferRendering": null,
     "update:delay": null,
-    "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hideOnOutsideClick": null,

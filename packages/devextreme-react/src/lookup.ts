@@ -288,7 +288,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   height?: (() => number | string) | number | string;
   hideEvent?: Record<string, any> | string | {

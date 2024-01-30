@@ -135,21 +135,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:dxOverlayOptions.elementAttr]
-    
-     * @deprecated [depNote:dxOverlayOptions.elementAttr]
-    
-     */
-    @Input()
-    get elementAttr(): any {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: any) {
-        this._setOption('elementAttr', value);
-    }
-
-
-    /**
      * [descr:dxLoadPanelOptions.focusStateEnabled]
     
      */
@@ -525,13 +510,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -702,7 +680,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
             { emit: 'containerChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'delayChange' },
-            { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hideOnOutsideClickChange' },
