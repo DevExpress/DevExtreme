@@ -337,6 +337,8 @@
   }
 }
 
-.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper .dx-overlay-content {
-  box-shadow: $material-popup-overlay-content-shadow;
+.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper {
+  .dx-overlay-content {
+    box-shadow: $material-popup-overlay-content-shadow;
+  }
 }
