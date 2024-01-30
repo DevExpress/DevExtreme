@@ -44,22 +44,8 @@ class DataController {
   // @ts-expect-error
   private _dataSource: DataSourceType;
 
-  constructor(dataSourceOptions: DataSourceType) {
-    this._updateDataSource(dataSourceOptions);
-  }
-
-  static init(dataSource: unknown[] | DataSourceType, key?: string): DataController {
-    if (Array.isArray(dataSource)) {
-      const ds = new DataSource({
-        store: new ArrayStore({
-          key,
-          data: dataSource,
-        }),
-        pageSize: 0,
-      });
-      return new DataController(ds as unknown as DataSourceType);
-    }
-    return new DataController(dataSource);
+  constructor(dataSourceOptions: unknown[] | DataSourceType, key?: string) {
+    this.updateDataSource(dataSourceOptions, key);
   }
 
   _updateDataSource(dataSourceOptions: DataSourceType): void {

@@ -129,7 +129,7 @@ const DropDownButton = Widget.inherit({
         if(!dataSource) {
             key = this._getKey();
         }
-        this._dataController = DataController.init(dataSource ?? this.option('items'), key);
+        this._dataController = new DataController(dataSource ?? this.option('items'), key);
     },
 
     _initTemplates() {
