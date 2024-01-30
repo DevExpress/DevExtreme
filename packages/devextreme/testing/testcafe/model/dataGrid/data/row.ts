@@ -7,6 +7,7 @@ import CommandCell from '../commandCell';
 const CLASS = {
   commandExpand: 'dx-command-expand',
   commandDrag: 'dx-command-drag',
+  commandAdaptive: 'dx-datagrid-adaptive-more',
   focusedRow: 'dx-row-focused',
   rowRemoved: 'dx-row-removed',
   selection: 'dx-selection',
@@ -69,5 +70,9 @@ export default class DataRow extends FocusableElement {
       () => ($(element()) as any).offset(),
       { dependencies: { element } },
     )();
+  }
+
+  getAdaptiveMore(): Selector {
+    return this.element().find(`.${CLASS.commandAdaptive}`);
   }
 }

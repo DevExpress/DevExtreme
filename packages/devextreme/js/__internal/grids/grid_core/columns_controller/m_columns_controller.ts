@@ -1354,14 +1354,47 @@ export class ColumnsController extends modules.Controller {
         if (arguments.length === 2) {
           return columnOptionCore(that, column, option);
         }
-        columnOptionCore(that, column, option, value, notFireEvent);
+
+        this.columnOptionUpdate(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
-        each(option, (optionName, value) => {
-          columnOptionCore(that, column, optionName, value, notFireEvent);
+        const normalizedOptions = this.normalizeColumnOptions(option);
+
+        Object.entries(normalizedOptions).forEach(([optionName, optionValue]) => {
+          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
         });
       }
 
       fireColumnsChanged(that);
+    }
+  }
+
+  private normalizeColumnOptions(columnOptions: Record<string, any>): Record<string, any> {
+    switch (true) {
+      case columnOptions.width && !columnOptions.widthSetByResize:
+        return {
+          ...columnOptions,
+          widthSetByResize: false,
+        };
+      default:
+        return columnOptions;
+    }
+  }
+
+  private columnOptionUpdate(
+    controller: ColumnsController,
+    column: any,
+    optionName: string,
+    value?: any,
+    notFireEvent?: boolean,
+  ): void {
+    switch (optionName) {
+      case 'width':
+        columnOptionCore(controller, column, optionName, value, notFireEvent);
+        columnOptionCore(controller, column, 'widthSetByResize', false, notFireEvent);
+        break;
+      default:
+        columnOptionCore(controller, column, optionName, value, notFireEvent);
+        break;
     }
   }
 

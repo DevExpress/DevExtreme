@@ -901,11 +901,23 @@ export class ColumnsResizerViewController extends modules.ViewController {
         }
 
         if (adaptColumnWidthByRatio) {
-          columnsController.columnOption(column.index, 'visibleWidth', columnWidth);
-          columnsController.columnOption(column.index, 'width', `${(columnWidth / contentWidth * 100).toFixed(3)}%`);
+          columnsController.columnOption(
+            column.index,
+            {
+              visibleWidth: columnWidth,
+              width: `${(columnWidth / contentWidth * 100).toFixed(3)}%`,
+              widthSetByResize: true,
+            },
+          );
         } else {
-          columnsController.columnOption(column.index, 'visibleWidth', null);
-          columnsController.columnOption(column.index, 'width', columnWidth);
+          columnsController.columnOption(
+            column.index,
+            {
+              visibleWidth: null,
+              width: columnWidth,
+              widthSetByResize: true,
+            },
+          );
         }
       }
     }

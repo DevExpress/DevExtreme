@@ -62,6 +62,8 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
+
+  columnResizeSeparator: 'dx-datagrid-columns-separator',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -702,5 +704,9 @@ export default class DataGrid extends Widget {
 
   getScrollBarThumbTrack(scrollbarPosition: string): Selector {
     return this.getRowsView().find(`.dx-scrollbar-${scrollbarPosition.toLowerCase()} .dx-scrollable-scroll`);
+  }
+
+  getColumnResizeSeparator(): Selector {
+    return this.element.find(`.${CLASS.columnResizeSeparator}`);
   }
 }

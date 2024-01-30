@@ -331,12 +331,17 @@ class AdaptiveColumnsController extends modules.ViewController {
     const columnId = getColumnId(this, column);
     const widthOption = this._columnsController.columnOption(columnId, 'width');
     const bestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
+    const widthSetByResize = this._columnsController.columnOption(columnId, 'widthSetByResize');
 
     if (widthOption && widthOption !== 'auto' && !this._isPercentWidth(widthOption)) {
       return parseFloat(widthOption);
     }
 
     const colWidth = this._calculateColumnWidth(column, containerWidth, contentColumns, columnsCanFit);
+
+    if (widthSetByResize) {
+      return !colWidth ? null : colWidth;
+    }
 
     return colWidth < bestFitWidth ? null : colWidth;
   }
@@ -556,7 +561,7 @@ class AdaptiveColumnsController extends modules.ViewController {
         const percentWidths = that._calculatePercentWidths(resultWidths, visibleColumns);
 
         const columnsCanFit = percentWidths < 100 && percentWidths !== 0;
-        for (i = 0; i < visibleColumns.length; i++) {
+        for (i = 0; i < visibleColumns.length; i += 1) {
           const visibleColumn = visibleColumns[i];
 
           let columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit);
@@ -564,6 +569,13 @@ class AdaptiveColumnsController extends modules.ViewController {
           const widthOption = that._columnsController.columnOption(columnId, 'width');
           const minWidth = that._columnsController.columnOption(columnId, 'minWidth');
           const columnBestFitWidth = that._columnsController.columnOption(columnId, 'bestFitWidth');
+          const widthSetByResize = this._columnsController.columnOption(columnId, 'widthSetByResize');
+
+          // NOTE: The last column is command adaptive column
+          // So, the last real visible data column has index length - 2
+          if (widthSetByResize && i >= visibleColumns.length - 2) {
+            break;
+          }
 
           if (resultWidths[i] === HIDDEN_COLUMNS_WIDTH) {
             hasHiddenColumns = true;
