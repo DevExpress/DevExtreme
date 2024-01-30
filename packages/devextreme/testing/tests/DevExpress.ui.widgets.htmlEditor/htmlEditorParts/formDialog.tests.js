@@ -46,7 +46,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
         assert.strictEqual(wrapperHasDialogClass, true, 'Wrapper with the FormDialog class');
     });
 
-    test('Dialog wrapper has dx-dropdowneditor-overlay class', function(assert) {
+    test('Dialog wrapper has dx-dropdowneditor-overlay class (T1141075)', function(assert) {
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
 
         formDialog.show();
