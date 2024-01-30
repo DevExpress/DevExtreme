@@ -124,7 +124,7 @@ const DropDownButton = Widget.inherit({
 
     _initDataController() {
         const dataSource = this.option('dataSource');
-        this._dataController = new DataController(dataSource ?? this.option('items'), { key: this._getKey() });
+        this._dataController = new DataController(dataSource ?? this.option('items'), { key: this.option('keyExpr') });
     },
 
     _initTemplates() {
@@ -143,15 +143,8 @@ const DropDownButton = Widget.inherit({
         this.callBase();
     },
 
-    _getKey: function() {
-        const keyExpr = this.option('keyExpr');
-        const storeKey = this._dataController?.key();
-
-        return isDefined(storeKey) && (!isDefined(keyExpr) || keyExpr === 'this') ? storeKey : keyExpr;
-    },
-
     _compileKeyGetter() {
-        this._keyGetter = compileGetter(this._getKey());
+        this._keyGetter = compileGetter(this._dataController.key());
     },
 
     _compileDisplayGetter() {
@@ -199,7 +192,7 @@ const DropDownButton = Widget.inherit({
         this._lastSelectedItemData = undefined;
 
         const selectedItemKey = this.option('selectedItemKey');
-        this._dataController.loadSingle(this._getKey(), selectedItemKey)
+        this._dataController.loadSingle(selectedItemKey)
             .then(d.resolve)
             .catch(() => {
                 d.resolve(null);
@@ -374,7 +367,7 @@ const DropDownButton = Widget.inherit({
             selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             groupTemplate: this.option('groupTemplate'),
-            keyExpr: this._getKey(),
+            keyExpr: this._dataController.key(),
             noDataText: this.option('noDataText'),
             displayExpr: this.option('displayExpr'),
             itemTemplate: this.option('itemTemplate'),
@@ -632,7 +625,7 @@ const DropDownButton = Widget.inherit({
 
     _updateKeyExpr: function() {
         this._compileKeyGetter();
-        this._setListOption('keyExpr', this._getKey());
+        this._setListOption('keyExpr', this._dataController.key());
     },
 
     focus: function() {

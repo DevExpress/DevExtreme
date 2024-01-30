@@ -1,4 +1,5 @@
 import { extend } from '../core/utils/extend';
+import { isDefined } from '../core/utils/type';
 import ArrayStore from '../data/array_store';
 import { DataSource } from '../data/data_source/data_source';
 import { normalizeDataSourceOptions } from '../data/data_source/utils';
@@ -48,8 +49,11 @@ class DataController {
   // @ts-expect-error
   private _dataSource: DataSourceType;
 
+  private _keyExpr: string;
+
   constructor(dataSourceOptions: unknown[] | DataSourceType, { key }: DataControllerOptions) {
-    this.updateDataSource(dataSourceOptions, key);
+    this._keyExpr = key;
+    this.updateDataSource(dataSourceOptions);
   }
 
   _updateDataSource(dataSourceOptions: DataSourceType): void {
@@ -68,12 +72,12 @@ class DataController {
     }
   }
 
-  _updateDataSourceByItems(items: unknown[], key?: string): void {
+  _updateDataSourceByItems(items: unknown[]): void {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this._dataSource = new DataSource({
       store: new ArrayStore({
-        key,
+        key: this.key(),
         data: items,
       }),
       pageSize: 0,
@@ -185,9 +189,12 @@ class DataController {
   updateDataSource(items: unknown[] | DataSourceType, key?: string): void {
     const dataSourceOptions = items ?? this.items();
 
+    if (key) {
+      this._keyExpr = key;
+    }
     this._disposeDataSource();
     if (Array.isArray(dataSourceOptions)) {
-      this._updateDataSourceByItems(dataSourceOptions, key);
+      this._updateDataSourceByItems(dataSourceOptions);
     } else {
       this._updateDataSource(dataSourceOptions);
     }
@@ -226,7 +233,9 @@ class DataController {
   }
 
   key(): string | undefined {
-    return this._dataSource?.key();
+    const storeKey = this._dataSource?.key();
+
+    return isDefined(storeKey) && this._keyExpr === 'this' ? storeKey : this._keyExpr;
   }
 
   keyOf(item: unknown): string {

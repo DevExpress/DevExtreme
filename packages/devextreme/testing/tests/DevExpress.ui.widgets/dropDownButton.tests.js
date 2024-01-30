@@ -1439,7 +1439,7 @@ QUnit.module('common use cases', {
             selectedItemKey: 1
         });
 
-        assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
+        assert.strictEqual(this.dropDownButton._dataController.key(), 'key', '_keyGetter was updated');
     });
 
     QUnit.test('keyGetter should be updated after dataSource option change', function(assert) {
@@ -1459,7 +1459,7 @@ QUnit.module('common use cases', {
             selectedItemKey: 1
         });
 
-        assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
+        assert.strictEqual(this.dropDownButton._dataController.key(), 'key', '_keyGetter was updated');
     });
 
     QUnit.test('list keyExpr should be updated after keyExpr option change', function(assert) {
