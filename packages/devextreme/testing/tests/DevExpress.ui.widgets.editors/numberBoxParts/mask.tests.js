@@ -2102,7 +2102,7 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
         this.input.focus();
         this.clock.tick(CARET_TIMEOUT_DURATION);
         for(let i = 0; i < 2; ++i) {
-            this.keyboard.caret(3);
+            this.keyboard.caret(1);
             this.input.trigger('dxclick');
             this.clock.tick(CARET_TIMEOUT_DURATION);
         }
