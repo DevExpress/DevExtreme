@@ -1665,8 +1665,8 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCustomCommand' | 'onItemClick' | 'onItemDblClick' | 'onRequestEditOperation' | 'onRequestLayoutUpdate' | 'onSelectionChanged'>;
 
 /**
-* @hidden
-*/
+ * @hidden
+ */
 type Events = {
 /**
  * @docid dxDiagramOptions.onContentReady
