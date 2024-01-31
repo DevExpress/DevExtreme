@@ -32,7 +32,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "test": "ng test",
+    "test": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng test",
     "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve --open -c dev",
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng build"
   }
