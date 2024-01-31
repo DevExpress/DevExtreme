@@ -26,7 +26,7 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
   }
 
   .dx-state-focused {
-    & > .dx-overlay-content {
+    &.dx-overlay-content {
       box-shadow: $material-popup-focused-content-shadow;
     }
   }
