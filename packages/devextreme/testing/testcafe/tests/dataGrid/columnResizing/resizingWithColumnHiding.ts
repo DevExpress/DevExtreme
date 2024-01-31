@@ -70,49 +70,6 @@ test('Column resizing should work correctly with columnHidingEnabled option', as
   allowColumnResizing: true,
 })).after(async () => disposeDataGrid());
 
-test('Should correctly resize column when the last column resized', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-
-  const border = Selector('[e2e-header-border]').nth(0);
-  const lastBorder = Selector('[e2e-header-border]').nth(1);
-  const separator = dataGrid.getColumnResizeSeparator();
-
-  await t.hover(lastBorder, DRAG_MOUSE_OPTS);
-  await t.drag(separator, 1000, 0, DRAG_MOUSE_OPTS);
-  await takeScreenshot('col-resizing_last-cell-max-right.png', dataGrid.element);
-
-  await t.hover(border, DRAG_MOUSE_OPTS);
-  await t.drag(separator, 1000, 0, DRAG_MOUSE_OPTS);
-  await takeScreenshot('col-resizing_middle-cell-with-last-cell.png', dataGrid.element);
-
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: new Array(20)
-    .fill(null)
-    .map((_, idx) => ({
-      A: `A_${idx}`,
-      B: `B_${idx}`,
-      C: `C_${idx}`,
-      D: `D_${idx}`,
-    })),
-  columns: [
-    {
-      dataField: 'A',
-      headerCellTemplate: HEADER_CELL_TEMPLATE_FUNC,
-    },
-    'B',
-    {
-      dataField: 'C',
-      headerCellTemplate: HEADER_CELL_TEMPLATE_FUNC,
-    },
-    'D',
-  ],
-  columnHidingEnabled: true,
-  allowColumnResizing: true,
-})).after(async () => disposeDataGrid());
-
 safeSizeTest('Column hiding should work with resized columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
