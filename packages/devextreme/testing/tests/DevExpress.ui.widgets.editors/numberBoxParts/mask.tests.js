@@ -10,7 +10,7 @@ import 'ui/text_box/ui.text_editor';
 
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
-const CARET_TIMEOUT_DURATION = 0;
+const CARET_TIMEOUT_DURATION = 100;
 
 const DROP_EVENT_NAME = 'drop';
 
