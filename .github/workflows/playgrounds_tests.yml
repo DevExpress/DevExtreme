@@ -97,44 +97,6 @@ jobs:
       working-directory: ./playgrounds/angular
       run: npm run build
 
-  Angular-test:
-    runs-on: devextreme-shr2
-    needs: [Angular]
-    timeout-minutes: 60
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '120.0.6099.71'
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      run: 7z x artifacts.zip -aoa
-
     - name: Run TestCafe tests
       working-directory: ./playgrounds/angular
       run: npm run test
