@@ -9,6 +9,9 @@ on:
   push:
     branches: [24_1]
 
+env:
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   build:
     name: build
@@ -40,6 +43,18 @@ jobs:
     - name: Build
       working-directory: ./packages/devextreme
       run: npm run build
+
+    - name: Zip artifacts
+      working-directory: ./packages/devextreme
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme/artifacts.zip
+        retention-days: 1
 
   Angular:
     needs: [build]
