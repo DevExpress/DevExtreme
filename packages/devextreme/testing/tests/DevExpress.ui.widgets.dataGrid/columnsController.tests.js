@@ -5498,7 +5498,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
         assert.deepEqual(lastArgs, {
             changeTypes: { columns: true, length: 1 },
             columnIndex: 1,
-            optionNames: { width: true, length: 1 }
+            optionNames: { width: true, widthSetByResize: true, length: 2 }
         });
     });
 

@@ -1333,10 +1333,24 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 160 },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 1, optionName: 'width', optionValue: 140 }
+            {
+                'columnIndex': 0,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 160,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            },
+            {
+                'columnIndex': 1,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 140,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            }
         ], 'update column options after resizing');
     });
 
@@ -1365,10 +1379,24 @@ QUnit.module('Columns resizing', {
         assert.equal($('#container').width(), 200);
 
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: 110 },
-            { columnIndex: 0, optionName: 'width', optionValue: '55.000%' },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: 90 },
-            { columnIndex: 1, optionName: 'width', optionValue: '45.000%' }
+            {
+                'columnIndex': 0,
+                'optionName': {
+                    'visibleWidth': 110,
+                    'width': '55.000%',
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            },
+            {
+                'columnIndex': 1,
+                'optionName': {
+                    'visibleWidth': 90,
+                    'width': '45.000%',
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            }
         ], 'update column options after resizing');
     });
 
@@ -1398,10 +1426,24 @@ QUnit.module('Columns resizing', {
         assert.equal($('#container').width(), 200);
 
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 110 },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 1, optionName: 'width', optionValue: 90 }
+            {
+                'columnIndex': 0,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 110,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            },
+            {
+                'columnIndex': 1,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 90,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            }
         ], 'update column options after resizing');
     });
 
@@ -1430,10 +1472,24 @@ QUnit.module('Columns resizing', {
         assert.equal($('#container').width(), 200);
 
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: 110 },
-            { columnIndex: 0, optionName: 'width', optionValue: '55.000%' },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: 90 },
-            { columnIndex: 1, optionName: 'width', optionValue: '45.000%' }
+            {
+                'columnIndex': 0,
+                'optionName': {
+                    'visibleWidth': 110,
+                    'width': '55.000%',
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            },
+            {
+                'columnIndex': 1,
+                'optionName': {
+                    'visibleWidth': 90,
+                    'width': '45.000%',
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            }
         ], 'update column options after resizing');
     });
 
@@ -1454,10 +1510,24 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 159 },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 1, optionName: 'width', optionValue: 140 }
+            {
+                'columnIndex': 0,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 159,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            },
+            {
+                'columnIndex': 1,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 140,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            }
         ], 'update column options after resizing');
     });
 
@@ -1478,10 +1548,24 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 0, optionName: 'width', optionValue: 3 },
-            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-            { columnIndex: 1, optionName: 'width', optionValue: 297 },
+            {
+                'columnIndex': 0,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 3,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            },
+            {
+                'columnIndex': 1,
+                'optionName': {
+                    'visibleWidth': null,
+                    'width': 297,
+                    'widthSetByResize': true
+                },
+                'optionValue': undefined
+            }
         ], 'update column widths');
 
         // act
@@ -2999,16 +3083,41 @@ QUnit.module('Columns resizing', {
 
             if(columnResizingMode === 'nextColumn') {
                 updateOptions = [
-                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 0, optionName: 'width', optionValue: 50 },
-                    { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 1, optionName: 'width', optionValue: 150 }
+                    {
+                        'columnIndex': 0,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 50,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    },
+                    {
+                        'columnIndex': 1,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 150,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    }
                 ];
             } else {
                 updateOptions = [
-                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 0, optionName: 'width', optionValue: 50 },
-                    { columnIndex: 2, optionName: 'visibleWidth', optionValue: 'auto' }
+                    {
+                        'columnIndex': 0,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 50,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    },
+                    {
+                        'columnIndex': 2,
+                        'optionName': 'visibleWidth',
+                        'optionValue': 'auto'
+                    }
                 ];
             }
             assert.deepEqual(resizeController._columnsController.updateOptions, updateOptions, 'column widths were updated');
@@ -3050,15 +3159,36 @@ QUnit.module('Columns resizing', {
 
             if(columnResizingMode === 'nextColumn') {
                 updateOptions = [
-                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 0, optionName: 'width', optionValue: 150 },
-                    { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 1, optionName: 'width', optionValue: 50 }
+                    {
+                        'columnIndex': 0,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 150,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    },
+                    {
+                        'columnIndex': 1,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 50,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    }
                 ];
             } else {
                 updateOptions = [
-                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 0, optionName: 'width', optionValue: 170 }
+                    {
+                        'columnIndex': 0,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 170,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    }
                 ];
             }
             assert.deepEqual(resizeController._columnsController.updateOptions, updateOptions, 'column widths were updated');
@@ -3076,8 +3206,15 @@ QUnit.module('Columns resizing', {
                 assert.strictEqual(resizeController._columnsController.updateOptions.length, 0, 'column widths were not updated');
             } else {
                 assert.deepEqual(resizeController._columnsController.updateOptions, [
-                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                    { columnIndex: 0, optionName: 'width', optionValue: 200 }
+                    {
+                        'columnIndex': 0,
+                        'optionName': {
+                            'visibleWidth': null,
+                            'width': 200,
+                            'widthSetByResize': true
+                        },
+                        'optionValue': undefined
+                    }
                 ], 'column widths were updated');
             }
         });
@@ -3136,10 +3273,24 @@ QUnit.module('Columns resizing', {
 
             // assert
             assert.deepEqual(resizeController._columnsController.updateOptions, [
-                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                { columnIndex: 0, optionName: 'width', optionValue: 140 },
-                { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
-                { columnIndex: 1, optionName: 'width', optionValue: 160 },
+                {
+                    'columnIndex': 0,
+                    'optionName': {
+                        'visibleWidth': null,
+                        'width': 140,
+                        'widthSetByResize': true
+                    },
+                    'optionValue': undefined
+                },
+                {
+                    'columnIndex': 1,
+                    'optionName': {
+                        'visibleWidth': null,
+                        'width': 160,
+                        'widthSetByResize': true
+                    },
+                    'optionValue': undefined
+                }
             ], 'update column options after resizing');
         });
 
@@ -3163,8 +3314,15 @@ QUnit.module('Columns resizing', {
 
             // assert
             assert.deepEqual(resizeController._columnsController.updateOptions, [
-                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                { columnIndex: 0, optionName: 'width', optionValue: 160 }
+                {
+                    'columnIndex': 0,
+                    'optionName': {
+                        'visibleWidth': null,
+                        'width': 160,
+                        'widthSetByResize': true
+                    },
+                    'optionValue': undefined
+                }
             ], 'update column options after resizing');
         });
 
@@ -3203,7 +3361,7 @@ QUnit.module('Columns resizing', {
                 event: {
                     data: resizeController,
                     type: 'mousemove',
-                    pageX: -9650,
+                    pageX: -9750,
                     preventDefault: function() {}
                 }
             });
@@ -3283,8 +3441,15 @@ QUnit.module('Columns resizing', {
 
             // assert
             assert.deepEqual(resizeController._columnsController.updateOptions, [
-                { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
-                { columnIndex: 0, optionName: 'width', optionValue: 225 }
+                {
+                    'columnIndex': 0,
+                    'optionName': {
+                        'visibleWidth': null,
+                        'width': 225,
+                        'widthSetByResize': true
+                    },
+                    'optionValue': undefined
+                }
             ], 'update column options after resizing');
         });
 
@@ -3317,8 +3482,15 @@ QUnit.module('Columns resizing', {
 
             // assert
             assert.deepEqual(resizeController._columnsController.updateOptions, [
-                { columnIndex: 3, optionName: 'visibleWidth', optionValue: null },
-                { columnIndex: 3, optionName: 'width', optionValue: 225 }
+                {
+                    'columnIndex': 3,
+                    'optionName': {
+                        'visibleWidth': null,
+                        'width': 225,
+                        'widthSetByResize': true
+                    },
+                    'optionValue': undefined
+                }
             ], 'update column options after resizing');
         });
     });
