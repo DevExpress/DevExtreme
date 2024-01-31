@@ -125,6 +125,16 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
     - name: Run TestCafe tests
       working-directory: ./playgrounds/angular
       run: npm run test
