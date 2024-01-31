@@ -2342,8 +2342,8 @@ QUnit.module('ShadowDOM', {}, function() {
 
         setTimeout(function() {
             assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
-            clock.restore();
             done();
+            clock.restore();
         }, 100);
     });
 });
