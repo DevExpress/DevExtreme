@@ -38,19 +38,8 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: npx nx build devextreme-main
-
-    - name: Zip artifacts
       working-directory: ./packages/devextreme
-      run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme/artifacts.zip
-        retention-days: 1
+      run: npm run build
 
   Angular:
     needs: [build]
