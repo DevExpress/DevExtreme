@@ -10,7 +10,7 @@ import 'ui/text_box/ui.text_editor';
 
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
-const CARET_TIMEOUT_DURATION = 100;
+const CARET_TIMEOUT_DURATION = 0;
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -2335,15 +2335,16 @@ QUnit.module('ShadowDOM', {}, function() {
 
         input.focus();
         clock.tick(CARET_TIMEOUT_DURATION);
-        for(let i = 0; i < 2; ++i) {
-            keyboard.caret(1);
-            input.trigger('dxclick');
-            clock.tick(CARET_TIMEOUT_DURATION);
-        }
+        keyboard.caret(3);
+        input.trigger('dxclick');
+        clock.tick(CARET_TIMEOUT_DURATION);
+        const done = assert.async();
 
-        assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
-
-        clock.restore();
+        setTimeout(function() {
+            assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+            clock.restore();
+            done();
+        }, 100);
     });
 });
 
