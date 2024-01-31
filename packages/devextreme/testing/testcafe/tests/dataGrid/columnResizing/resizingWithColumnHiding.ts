@@ -43,11 +43,11 @@ test('Column resizing should work correctly with columnHidingEnabled option', as
   const headerCellBorder = Selector('[e2e-header-border]');
   const separator = dataGrid.getColumnResizeSeparator();
 
-  await t.hover(headerCellBorder);
+  await t.hover(headerCellBorder, DRAG_MOUSE_OPTS);
   await t.drag(separator, 1000, 0, DRAG_MOUSE_OPTS);
   await takeScreenshot('col-resizing_middle-cell-max-right.png', dataGrid.element);
 
-  await t.hover(headerCellBorder);
+  await t.hover(headerCellBorder, DRAG_MOUSE_OPTS);
   await t.drag(separator, -1000, 0, DRAG_MOUSE_OPTS);
   await takeScreenshot('col-resizing_middle-cell-max-left.png', dataGrid.element);
 
@@ -78,11 +78,11 @@ test('Should correctly resize column when the last column resized', async (t) =>
   const lastBorder = Selector('[e2e-header-border]').nth(1);
   const separator = dataGrid.getColumnResizeSeparator();
 
-  await t.hover(lastBorder);
+  await t.hover(lastBorder, DRAG_MOUSE_OPTS);
   await t.drag(separator, 1000, 0, DRAG_MOUSE_OPTS);
   await takeScreenshot('col-resizing_last-cell-max-right.png', dataGrid.element);
 
-  await t.hover(border);
+  await t.hover(border, DRAG_MOUSE_OPTS);
   await t.drag(separator, 1000, 0, DRAG_MOUSE_OPTS);
   await takeScreenshot('col-resizing_middle-cell-with-last-cell.png', dataGrid.element);
 
@@ -120,7 +120,7 @@ safeSizeTest('Column hiding should work with resized columns', async (t) => {
   const headerCellBorder = Selector('[e2e-header-border]');
   const separator = dataGrid.getColumnResizeSeparator();
 
-  await t.hover(headerCellBorder);
+  await t.hover(headerCellBorder, DRAG_MOUSE_OPTS);
   await t.drag(separator, 300, 0, DRAG_MOUSE_OPTS);
   await t.resizeWindow(250, 400);
   await t.click(dataGrid.getDataRow(0).getAdaptiveMore());
