@@ -2336,7 +2336,7 @@ QUnit.module('ShadowDOM', {}, function() {
         input.focus();
         clock.tick(CARET_TIMEOUT_DURATION);
         for(let i = 0; i < 2; ++i) {
-            keyboard.caret(3);
+            keyboard.caret(1);
             input.trigger('dxclick');
             clock.tick(CARET_TIMEOUT_DURATION);
         }
