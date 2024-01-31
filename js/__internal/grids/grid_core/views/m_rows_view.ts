@@ -993,7 +993,7 @@ export class RowsView extends ColumnsView {
   }
 
   _updateLastRowBorder(isFreeSpaceRowVisible) {
-    if (this.option('showBorders') && this.option('showRowLines') && !isFreeSpaceRowVisible) {
+    if (this.option('showBorders') && !isFreeSpaceRowVisible) {
       this.element().addClass(LAST_ROW_BORDER);
     } else {
       this.element().removeClass(LAST_ROW_BORDER);
