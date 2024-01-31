@@ -57,11 +57,9 @@ const DblClick = Class.inherit({
 
     remove: function() {
         this._handlerCount--;
-
         if(this._handlerCount <= 0) {
             this._forgetLastClick();
             eventsEngine.off(domAdapter.getDocument(), NAMESPACED_CLICK_EVENT);
-            this._handlerCount = 0;
         }
     }
 
