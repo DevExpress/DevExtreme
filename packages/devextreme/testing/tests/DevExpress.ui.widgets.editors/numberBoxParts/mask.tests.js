@@ -2338,13 +2338,10 @@ QUnit.module('ShadowDOM', {}, function() {
         keyboard.caret(3);
         input.trigger('dxclick');
         clock.tick(CARET_TIMEOUT_DURATION);
-        const done = assert.async();
 
-        setTimeout(function() {
-            assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
-            done();
-            clock.restore();
-        }, 100);
+        assert.timeout(100);
+        assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+        clock.restore();
     });
 });
 
