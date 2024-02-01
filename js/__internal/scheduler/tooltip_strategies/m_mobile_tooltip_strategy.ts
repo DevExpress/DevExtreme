@@ -79,7 +79,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     );
   }
 
-  private async _onShowing(): Promise<void> {
+  private _onShowing(): Promise<void> {
     this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
     /*
     NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
@@ -87,8 +87,9 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     */
     this.setTooltipConfig();
 
-    await Promise.all([...this.asyncTemplatePromises]);
-    this.setTooltipConfig();
+    return Promise.all([...this.asyncTemplatePromises]).then(() => {
+      this.setTooltipConfig();
+    });
   }
 
   _createTooltip(target, dataList) {
