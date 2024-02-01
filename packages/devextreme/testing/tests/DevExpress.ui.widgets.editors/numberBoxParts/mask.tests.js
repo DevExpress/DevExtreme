@@ -2106,9 +2106,10 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
             this.keyboard.caret(3);
             this.input.trigger('dxclick');
             this.clock.tick(CARET_TIMEOUT_DURATION);
+            assert.timeout(100);
         }
 
-        assert.timeout(500);
+
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
 
         this.clock.restore();
