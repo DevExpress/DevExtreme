@@ -1,4 +1,5 @@
 import eventsEngine from '../../events/core/events_engine';
+import { name as dxDblClickEvent } from '../../events/double_click';
 import { extend } from '../../core/utils/extend';
 import { isNumeric, isDefined, isFunction, isString } from '../../core/utils/type';
 import devices from '../../core/devices';
@@ -579,7 +580,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
             }
         }.bind(this));
 
-        eventsEngine.on($input, 'dxdblclick', function() {
+        eventsEngine.on($input, dxDblClickEvent, function() {
             this.clearCaretTimeout();
         }.bind(this));
     },
