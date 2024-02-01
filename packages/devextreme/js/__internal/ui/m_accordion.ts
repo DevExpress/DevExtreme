@@ -125,8 +125,8 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _initMarkup() {
-    this._deferredItems = [];
-    this._deferredTemplateItems = [];
+    this._deferredBodyTemplates = [];
+    this._deferredTitleTemplates = [];
     this.callBase();
 
     this.setAria({
@@ -145,7 +145,7 @@ const Accordion = CollectionWidget.inherit({
   _render() {
     this.callBase();
 
-    when.apply(this, this._deferredTemplateItems).done(() => {
+    when.apply(this, [...this._deferredTitleTemplates, ...this._deferredBodyTemplates]).done(() => {
       this._updateItemHeights(true);
     });
   },
@@ -191,13 +191,13 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _afterItemElementDeleted($item, deletedActionArgs) {
-    this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
+    this._deferredBodyTemplates.splice(deletedActionArgs.itemIndex, 1);
     this.callBase.apply(this, arguments);
   },
 
   _renderItemContent(args) {
     // @ts-expect-error
-    this._deferredTemplateItems[args.index] = new Deferred();
+    this._deferredTitleTemplates[args.index] = new Deferred();
 
     const itemTitle = this.callBase(extend({}, args, {
       contentClass: ACCORDION_ITEM_TITLE_CLASS,
@@ -209,10 +209,10 @@ const Accordion = CollectionWidget.inherit({
 
     // @ts-expect-error
     const deferred = new Deferred();
-    if (isDefined(this._deferredItems[args.index])) {
-      this._deferredItems[args.index] = deferred;
+    if (isDefined(this._deferredBodyTemplates[args.index])) {
+      this._deferredBodyTemplates[args.index] = deferred;
     } else {
-      this._deferredItems.push(deferred);
+      this._deferredBodyTemplates.push(deferred);
     }
 
     if (!this.option('deferRendering') || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
@@ -227,7 +227,7 @@ const Accordion = CollectionWidget.inherit({
 
   _onItemTemplateRendered(_, renderArgs) {
     return () => {
-      const item = this._deferredTemplateItems[renderArgs.index];
+      const item = this._deferredTitleTemplates[renderArgs.index];
       item && item.resolve();
     };
   },
@@ -260,7 +260,7 @@ const Accordion = CollectionWidget.inherit({
     const $items = this._itemElements();
 
     iteratorUtils.each(addedSelection, (_, index) => {
-      this._deferredItems[index].resolve();
+      this._deferredBodyTemplates[index].resolve();
 
       const $item = $items.eq(index)
         .addClass(ACCORDION_ITEM_OPENED_CLASS)
@@ -388,10 +388,10 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _clean() {
-    this._deferredTemplateItems.forEach((item) => {
+    this._deferredTitleTemplates.forEach((item) => {
       item.reject();
     });
-    this._deferredTemplateItems = [];
+    this._deferredTitleTemplates = [];
     clearTimeout(this._animationTimer);
     this.callBase();
   },
