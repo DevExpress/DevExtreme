@@ -5,9 +5,7 @@ import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
-
 import BaseModule from './base';
-
 import Popup from '../../popup';
 import List from '../../list_light';
 
@@ -18,6 +16,7 @@ let ListPopupModule = BaseModule;
 if(Quill) {
     const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
     const SUGGESTION_LIST_WRAPPER_CLASS = 'dx-suggestion-list-wrapper';
+    const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
     const MIN_HEIGHT = 100;
 
@@ -34,7 +33,7 @@ if(Quill) {
 
             this.options = extend({}, this._getDefaultOptions(), options);
             this._popup = this.renderPopup();
-            this._popup.$wrapper().addClass(SUGGESTION_LIST_WRAPPER_CLASS);
+            this._popup.$wrapper().addClass(`${SUGGESTION_LIST_WRAPPER_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
             this._renderPreventFocusOut();
         }
 
