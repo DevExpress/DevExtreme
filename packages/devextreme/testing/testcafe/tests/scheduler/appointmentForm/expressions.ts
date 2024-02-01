@@ -16,13 +16,19 @@ const disposeScheduler = async () => ClientFunction(() => {
   ($(SCHEDULER_SELECTOR) as any).dxScheduler('dispose');
 }, { dependencies: { SCHEDULER_SELECTOR } })();
 
-// General test cases
-[
+const getDataSourceValues = ClientFunction(() => ($(SCHEDULER_SELECTOR) as any)
+  .dxScheduler('instance')
+  .option('dataSource'), { dependencies: { SCHEDULER_SELECTOR } });
+
+const COMMON_TEST_CASES = [
   // Text
   {
     editor: 'text',
     errorMessage: 'appointment\'s text incorrect',
     getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.subjectElement().value,
+    setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
+      .typeText(scheduler.appointmentPopup.subjectElement, value, { replace: true }),
+    setTestValue: '???',
     expectedValue: TEST_TITLE,
     cases: [
       {
@@ -73,6 +79,9 @@ const disposeScheduler = async () => ClientFunction(() => {
     editor: 'description',
     errorMessage: 'appointment\'s description incorrect',
     getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.descriptionElement().value,
+    setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
+      .typeText(scheduler.appointmentPopup.descriptionElement, value, { replace: true }),
+    setTestValue: '???',
     expectedValue: TEST_DESCRIPTION,
     cases: [
       {
@@ -126,6 +135,9 @@ const disposeScheduler = async () => ClientFunction(() => {
     editor: 'startDate',
     errorMessage: 'appointment\'s startDate incorrect',
     getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.startDateElement().value,
+    setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
+      .typeText(scheduler.appointmentPopup.startDateElement, value, { replace: true }),
+    setTestValue: '10/10/2020, 01:00 AM',
     expectedValue: '12/10/2023, 10:00 AM',
     cases: [
       {
@@ -176,6 +188,9 @@ const disposeScheduler = async () => ClientFunction(() => {
     editor: 'endDate',
     errorMessage: 'appointment\'s endDate incorrect',
     getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.endDateElement().value,
+    setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
+      .typeText(scheduler.appointmentPopup.endDateElement, value, { replace: true }),
+    setTestValue: '10/10/2020, 01:00 AM',
     expectedValue: '12/10/2023, 2:00 PM',
     cases: [
       {
@@ -221,7 +236,72 @@ const disposeScheduler = async () => ClientFunction(() => {
       },
     ],
   },
-  // startDateTimeZone
+  // allDay
+  {
+    editor: 'allDay',
+    errorMessage: 'appointment\'s allDay incorrect',
+    getValue: async (scheduler: Scheduler) => scheduler
+      .appointmentPopup.getAllDaySwitchValue(),
+    setValue: async (t: TestController, scheduler: Scheduler, value: string) => {
+      const currentValue = await scheduler.appointmentPopup.getAllDaySwitchValue();
+
+      if (currentValue !== value) {
+        await t.click(scheduler.appointmentPopup.allDayElement);
+      }
+    },
+    setTestValue: 'false',
+    expectedValue: 'true',
+    cases: [
+      {
+        name: 'expression should work',
+        options: {
+          dataSource: [{
+            text: TEST_TITLE,
+            startDate: '2023-12-10T10:00:00',
+            endDate: '2023-12-10T14:00:00',
+            allDayCustom: true,
+          }],
+          allDayExpr: 'allDayCustom',
+        },
+      },
+      {
+        name: 'nested expression should work',
+        options: {
+          dataSource: [{
+            text: TEST_TITLE,
+            startDate: '2023-12-10T10:00:00',
+            endDate: '2023-12-10T14:00:00',
+            nested: {
+              allDayCustom: true,
+            },
+          }],
+          allDayExpr: 'nested.allDayCustom',
+        },
+      },
+      {
+        name: 'deep nested expression should work',
+        options: {
+          dataSource: [{
+            text: TEST_TITLE,
+            startDate: '2023-12-10T10:00:00',
+            endDate: '2023-12-10T14:00:00',
+            nestedA: {
+              nestedB: {
+                nestedC: {
+                  allDayCustom: true,
+                },
+              },
+            },
+          }],
+          allDayExpr: 'nestedA.nestedB.nestedC.allDayCustom',
+        },
+      },
+    ],
+  },
+];
+
+const ADDITIONAL_TEST_CASES = [
+// startDateTimeZone
   {
     editor: 'startDateTimeZone',
     errorMessage: 'appointment\'s startDateTimeZone incorrect',
@@ -347,60 +427,6 @@ const disposeScheduler = async () => ClientFunction(() => {
       },
     ],
   },
-  // allDay
-  {
-    editor: 'allDay',
-    errorMessage: 'appointment\'s allDay incorrect',
-    getValue: async (scheduler: Scheduler) => scheduler
-      .appointmentPopup.getAllDaySwitchValue(),
-    expectedValue: 'true',
-    cases: [
-      {
-        name: 'expression should work',
-        options: {
-          dataSource: [{
-            text: TEST_TITLE,
-            startDate: '2023-12-10T10:00:00',
-            endDate: '2023-12-10T14:00:00',
-            allDayCustom: true,
-          }],
-          allDayExpr: 'allDayCustom',
-        },
-      },
-      {
-        name: 'nested expression should work',
-        options: {
-          dataSource: [{
-            text: TEST_TITLE,
-            startDate: '2023-12-10T10:00:00',
-            endDate: '2023-12-10T14:00:00',
-            nested: {
-              allDayCustom: true,
-            },
-          }],
-          allDayExpr: 'nested.allDayCustom',
-        },
-      },
-      {
-        name: 'deep nested expression should work',
-        options: {
-          dataSource: [{
-            text: TEST_TITLE,
-            startDate: '2023-12-10T10:00:00',
-            endDate: '2023-12-10T14:00:00',
-            nestedA: {
-              nestedB: {
-                nestedC: {
-                  allDayCustom: true,
-                },
-              },
-            },
-          }],
-          allDayExpr: 'nestedA.nestedB.nestedC.allDayCustom',
-        },
-      },
-    ],
-  },
   // recurrenceRule
   {
     editor: 'recurrenceRule',
@@ -458,6 +484,11 @@ const disposeScheduler = async () => ClientFunction(() => {
       },
     ],
   },
+];
+
+[
+  ...COMMON_TEST_CASES,
+  ...ADDITIONAL_TEST_CASES,
 ].forEach(({
   editor,
   errorMessage,
@@ -480,6 +511,40 @@ const disposeScheduler = async () => ClientFunction(() => {
       const value = await getValue(scheduler);
 
       await t.expect(value).eql(expectedValue, errorMessage);
+    }).before(async () => {
+      await createWidget('dxScheduler', {
+        currentDate: '2023-12-10',
+        cellDuration: 240,
+        ...options,
+      });
+    }).after(async () => disposeScheduler());
+  });
+});
+
+COMMON_TEST_CASES.forEach(({
+  editor,
+  setValue,
+  setTestValue,
+  cases,
+}) => {
+  cases.forEach(({
+    name,
+    options,
+  }) => {
+    test(`${editor}: ${name} should not mutate DataSource data directly`, async (t) => {
+      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+      const appointment = scheduler.getAppointment(TEST_TITLE);
+      const expectedDataSource = options.dataSource;
+
+      await t.expect(appointment).ok(`appointment with title: ${TEST_TITLE} not found.`);
+
+      await t.doubleClick(appointment.element);
+      await setValue(t, scheduler, setTestValue);
+      await t.click(scheduler.appointmentPopup.cancelButton);
+
+      const dataSource = await getDataSourceValues();
+
+      await t.expect(dataSource).eql(expectedDataSource);
     }).before(async () => {
       await createWidget('dxScheduler', {
         currentDate: '2023-12-10',
