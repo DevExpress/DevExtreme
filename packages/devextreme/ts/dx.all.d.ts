@@ -21572,6 +21572,7 @@ declare module DevExpress.ui {
     deferRendering?: boolean;
     /**
      * [descr:dxOverlayOptions.elementAttr]
+     * @deprecated [depNote:dxOverlayOptions.elementAttr]
      */
     elementAttr?: any;
     /**
