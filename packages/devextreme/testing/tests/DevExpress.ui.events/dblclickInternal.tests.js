@@ -15,23 +15,21 @@ QUnit.module('event firing');
 QUnit.test('dxdblclick should be works correctly even if its module imported between "on()" calls (T1208575)', function(assert) {
     const el = $('#element');
     const handler = sinon.stub();
-    const done = assert.async();
+
+    const dblClickModule = require('events/dblclick');
+
+    assert.equal(dblClickModule.name, dblclickEvent.name);
+
     assert.timeout(100);
 
-    import('events/dblclick').then((m) => {
-        assert.equal(m.name, dblclickEvent.name);
+    el.off(dblclickEvent.name);
 
-        el.off(dblclickEvent.name);
+    el.on(dblclickEvent.name, handler);
+    el.on(dblclickEvent.name, () => {});
 
-        el.on(dblclickEvent.name, handler);
-        el.on(dblclickEvent.name, () => {});
+    el.trigger('dxclick');
 
-        el.trigger('dxclick');
-
-        assert.equal(handler.callCount, 3);
-        done();
-    });
-
+    assert.equal(handler.callCount, 3);
 
 });
 
