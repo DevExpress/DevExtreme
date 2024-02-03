@@ -27,7 +27,7 @@ const DblClick = Class.inherit({
 
     add: function() {
         // eslint-disable-next-line no-undef
-        top.LOG = top.LOG_open ? ['ADD'].concat(top.LOG) : top.LOG;
+        top.LOG = top.LOG_open ? top.LOG.concat(['ADD']) : top.LOG;
         if(this._handlerCount <= 0) {
             eventsEngine.on(domAdapter.getDocument(), NAMESPACED_CLICK_EVENT, this._clickHandler.bind(this));
         }
@@ -61,7 +61,7 @@ const DblClick = Class.inherit({
         this._handlerCount--;
 
         // eslint-disable-next-line no-undef,spellcheck/spell-checker
-        top.LOG = top.LOG_open ? ['REMOVE ' + this._handlerCount].concat(top.LOG) : top.LOG;
+        top.LOG = top.LOG_open ? top.LOG.concat(['REMOVE ' + this._handlerCount]) : top.LOG;
         if(this._handlerCount <= 0) {
             this._forgetLastClick();
             eventsEngine.off(domAdapter.getDocument(), NAMESPACED_CLICK_EVENT);
@@ -71,6 +71,8 @@ const DblClick = Class.inherit({
 
 });
 
+// eslint-disable-next-line no-undef
+top.LOG = top.LOG_open ? top.LOG.concat(['registerEvent(DBLCLICK_EVENT']) : top.LOG;
 registerEvent(DBLCLICK_EVENT_NAME, new DblClick());
 
 export { DBLCLICK_EVENT_NAME as name };
