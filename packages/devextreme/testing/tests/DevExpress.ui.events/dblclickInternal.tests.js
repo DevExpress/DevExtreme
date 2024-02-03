@@ -1,5 +1,4 @@
 const $ = require('jquery');
-const { on, off, trigger } = require('events');
 const dblclickEvent = { name: 'dxdblclick' };
 
 QUnit.testStart(function() {
@@ -15,19 +14,19 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     const el = $('#element');
     const handler = sinon.stub();
 
-    on(el, dblclickEvent.name, handler);
+    el.on(dblclickEvent.name, handler);
 
     // const dblClickEventOrig = require('events/dblclick');
 
     // assert.equal(dblClickEventOrig.name, dblclickEvent.name);
 
-    off(el, dblclickEvent.name);
+    el.off(dblclickEvent.name);
 
-    on(el, dblclickEvent.name, handler);
-    on(el, dblclickEvent.name, () => {});
+    el.on(dblclickEvent.name, handler);
+    el.on(dblclickEvent.name, () => {});
 
-    trigger(el, 'dxclick');
-    trigger(el, 'dxclick');
+    el.trigger('dxclick');
+    el.trigger('dxclick');
 
     assert.equal(handler.callCount, 2);
 });
