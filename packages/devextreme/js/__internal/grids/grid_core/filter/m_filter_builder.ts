@@ -8,10 +8,14 @@ import { restoreFocus } from '@js/ui/shared/accessibility';
 
 import modules from '../m_modules';
 
-const FilterBuilderView = modules.View.inherit({
+class FilterBuilderView extends modules.View {
+  private _filterBuilderPopup: any;
+
+  private _filterBuilder: any;
+
   _renderCore() {
     this._updatePopupOptions();
-  },
+  }
 
   _updatePopupOptions() {
     if (this.option('filterBuilderPopup.visible')) {
@@ -19,7 +23,7 @@ const FilterBuilderView = modules.View.inherit({
     } else if (this._filterBuilderPopup) {
       this._filterBuilderPopup.hide();
     }
-  },
+  }
 
   _disposePopup() {
     if (this._filterBuilderPopup) {
@@ -30,7 +34,7 @@ const FilterBuilderView = modules.View.inherit({
       this._filterBuilder.dispose();
       this._filterBuilder = undefined;
     }
-  },
+  }
 
   _initPopup() {
     const that = this;
@@ -53,7 +57,7 @@ const FilterBuilderView = modules.View.inherit({
         that._disposePopup();
       },
     }));
-  },
+  }
 
   _getPopupContentTemplate(contentElement) {
     const $contentElement = $(contentElement);
@@ -63,11 +67,12 @@ const FilterBuilderView = modules.View.inherit({
       value: this.option('filterValue'),
       fields: this.getController('columns').getFilteringColumns(),
     }, this.option('filterBuilder'), {
+      // @ts-expect-error
       customOperations: this.getController('filterSync').getCustomFilterOperations(),
     }));
 
     this._createComponent($contentElement, ScrollView, { direction: 'both' });
-  },
+  }
 
   _getPopupToolbarItems() {
     const that = this;
@@ -97,7 +102,7 @@ const FilterBuilderView = modules.View.inherit({
         },
       },
     ];
-  },
+  }
 
   optionChanged(args) {
     switch (args.name) {
@@ -107,10 +112,10 @@ const FilterBuilderView = modules.View.inherit({
         args.handled = true;
         break;
       default:
-        this.callBase(args);
+        super.optionChanged(args);
     }
-  },
-});
+  }
+}
 
 export const filterBuilderModule = {
   defaultOptions() {
