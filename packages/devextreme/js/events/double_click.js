@@ -58,6 +58,8 @@ const DblClick = Class.inherit({
     remove: function() {
         this._handlerCount--;
 
+        // eslint-disable-next-line no-undef,spellcheck/spell-checker
+        top.LOG = top.LOG_open ? ['REMOVE ' + this._handlerCount].concat(top.LOG) : top.LOG;
         if(this._handlerCount <= 0) {
             this._forgetLastClick();
             eventsEngine.off(domAdapter.getDocument(), NAMESPACED_CLICK_EVENT);
