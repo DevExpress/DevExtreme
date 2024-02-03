@@ -16,6 +16,10 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     const el = $('#element');
     const handler = sinon.stub();
 
+    el.on(dblclickEvent.name, () => {});
+
+    assert.timeout(100);
+
     const dblClickModule = require('events/dblclick');
 
     assert.equal(dblClickModule.name, dblclickEvent.name);
