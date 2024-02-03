@@ -1,5 +1,4 @@
 const $ = require('jquery');
-const dblClickModule = require('../../../artifacts/npm/devextreme/esm/events/dblclick');
 const dblclickEvent = { name: 'dxdblclick' };
 
 top.LOG = top.LOG || [];
