@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -784,16 +785,17 @@ class ResizingController extends modules.ViewController {
   }
 }
 
-const SynchronizeScrollingController = modules.ViewController.inherit({
+class SynchronizeScrollingController extends modules.ViewController {
   _scrollChangedHandler(views, pos, viewName) {
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
         views[j].scrollTo({ left: pos.left, top: pos.top });
       }
     }
-  },
+  }
 
   init() {
+    // @ts-expect-error
     const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
 
     for (let i = 0; i < views.length; i++) {
@@ -802,8 +804,8 @@ const SynchronizeScrollingController = modules.ViewController.inherit({
         view.scrollChanged.add(this._scrollChangedHandler.bind(this, views));
       }
     }
-  },
-});
+  }
+}
 
 const GridView = modules.View.inherit({
   _endUpdateCore() {
