@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const dblClickModule = require('../../../artifacts/npm/devextreme/esm/events/dblclick');
 const dblclickEvent = { name: 'dxdblclick' };
 
 top.LOG = [];
@@ -23,27 +24,32 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     top.LOG_open = true;
     top.LOG.push('1st ON');
     el.on(dblclickEvent.name, () => {});
+    const done = assert.async();
 
     assert.timeout(100);
 
-    const dblClickModule = require('events/dblclick');
+    setTimeout(() => {
+        const dblClickModule = require('events/dblclick');
 
-    assert.equal(dblClickModule.name, dblclickEvent.name);
+        assert.equal(dblClickModule.name, dblclickEvent.name);
 
-    assert.timeout(100);
+        assert.timeout(100);
 
-    el.off(dblclickEvent.name);
+        el.off(dblclickEvent.name);
 
-    el.on(dblclickEvent.name, handler);
-    el.on(dblclickEvent.name, () => {});
+        el.on(dblclickEvent.name, handler);
+        el.on(dblclickEvent.name, () => {});
 
-    el.trigger('dxclick');
-    el.trigger('dxclick');
+        el.trigger('dxclick');
+        el.trigger('dxclick');
 
-    assert.equal(top.LOG.join('; '), '========================<<<<<<<<<<');
-    assert.equal(handler.callCount, 3);
+        assert.equal(top.LOG.join('; '), '========================<<<<<<<<<<');
+        assert.equal(handler.callCount, 3);
 
-    top.LOG_open = false;
+        top.LOG_open = false;
+        done();
+    }, 0);
+
 
 });
 
