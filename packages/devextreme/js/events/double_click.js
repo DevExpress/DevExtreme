@@ -26,6 +26,8 @@ const DblClick = Class.inherit({
     },
 
     add: function() {
+        // eslint-disable-next-line no-undef
+        top.LOG = top.LOG_open ? ['ADD'].concat(top.LOG) : top.LOG;
         if(this._handlerCount <= 0) {
             eventsEngine.on(domAdapter.getDocument(), NAMESPACED_CLICK_EVENT, this._clickHandler.bind(this));
         }

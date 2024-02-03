@@ -21,6 +21,7 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
 
     // eslint-disable-next-line spellcheck/spell-checker
     top.LOG_open = true;
+    top.LOG.push('1st ON');
     el.on(dblclickEvent.name, () => {});
 
     assert.timeout(100);
@@ -39,8 +40,9 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     el.trigger('dxclick');
     el.trigger('dxclick');
 
+    assert.equal(top.LOG.join('; '), '========================<<<<<<<<<<');
     assert.equal(handler.callCount, 3);
-    assert.equal(top.LOG.join('\n'), '');
+
     top.LOG_open = false;
 
 });
