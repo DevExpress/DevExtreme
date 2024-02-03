@@ -6,6 +6,8 @@ QUnit.testStart(function() {
         '<div id="element">TEST</div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#element').on(dblclickEvent.name, () => {});
 });
 
 QUnit.module('event firing');
@@ -14,11 +16,9 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     const el = $('#element');
     const handler = sinon.stub();
 
-    el.on(dblclickEvent.name, handler);
+    const dblClickEventOrig = require('events/dblclick');
 
-    // const dblClickEventOrig = require('events/dblclick');
-
-    // assert.equal(dblClickEventOrig.name, dblclickEvent.name);
+    assert.equal(dblClickEventOrig.name, dblclickEvent.name);
 
     el.off(dblclickEvent.name);
 
@@ -28,6 +28,6 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     el.trigger('dxclick');
     el.trigger('dxclick');
 
-    assert.equal(handler.callCount, 2);
+    assert.equal(handler.callCount, 3);
 });
 
