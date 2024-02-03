@@ -27,7 +27,8 @@ QUnit.test('dxdblclick should be added correctly even if its module imported bet
     on(el, dblclickEvent.name, () => {});
 
     trigger(el, 'dxclick');
+    trigger(el, 'dxclick');
 
-    assert.equal(handler.callCount, 1);
+    assert.equal(handler.callCount, 2);
 });
 
