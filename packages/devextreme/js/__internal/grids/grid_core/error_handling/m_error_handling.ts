@@ -1,25 +1,33 @@
+/* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
 
+import { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
+import { ModuleType } from '../m_types';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';
 const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const ACTION_CLASS = 'action';
 
-const ErrorHandlingController = modules.ViewController.inherit({
+class ErrorHandlingController extends modules.ViewController {
+  private _columnHeadersView: any;
+
+  private _rowsView: any;
+
   init() {
     const that = this;
 
+    // @ts-expect-error
     that._columnHeadersView = that.getView('columnHeadersView');
     that._rowsView = that.getView('rowsView');
-  },
+  }
 
-  _createErrorRow(error, $tableElements) {
+  _createErrorRow(error, $tableElements?) {
     const that = this;
     let $errorRow;
     let $closeButton;
@@ -59,7 +67,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
     }
 
     return $errorMessage;
-  },
+  }
 
   _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
@@ -74,7 +82,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
     }
 
     return $message;
-  },
+  }
 
   renderErrorRow(error, rowIndex, $popupContent) {
     const that = this;
@@ -116,7 +124,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
     resizingController && resizingController.fireContentReadyAction();
 
     return $firstErrorRow;
-  },
+  }
 
   removeErrorRow($row) {
     if (!$row) {
@@ -128,20 +136,46 @@ const ErrorHandlingController = modules.ViewController.inherit({
       }
     }
     $row && $row.hasClass(ERROR_ROW_CLASS) && $row.remove();
-  },
+  }
 
   optionChanged(args) {
-    const that = this;
-
     switch (args.name) {
       case 'errorRowEnabled':
         args.handled = true;
         break;
       default:
-        that.callBase(args);
+        super.optionChanged(args);
     }
-  },
-});
+  }
+}
+
+const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
+  init() {
+    const that = this;
+    // @ts-expect-error
+    const errorHandlingController = that.getController('errorHandling');
+
+    super.init();
+
+    that.dataErrorOccurred.add((error, $popupContent) => {
+      if (that.option('errorRowEnabled')) {
+        errorHandlingController.renderErrorRow(error, undefined, $popupContent);
+      }
+    });
+    that.changed.add((e) => {
+      if (e && e.changeType === 'loadError') {
+        return;
+      }
+      // @ts-expect-error
+      const errorHandlingController = that.getController('errorHandling');
+      const editingController = that.getController('editing');
+
+      if (editingController && !editingController.hasChanges()) {
+        errorHandlingController && errorHandlingController.removeErrorRow();
+      }
+    });
+  }
+};
 
 export const errorHandlingModule = {
   defaultOptions() {
@@ -154,31 +188,7 @@ export const errorHandlingModule = {
   },
   extenders: {
     controllers: {
-      data: {
-        init() {
-          const that = this;
-          const errorHandlingController = that.getController('errorHandling');
-
-          that.callBase();
-
-          that.dataErrorOccurred.add((error, $popupContent) => {
-            if (that.option('errorRowEnabled')) {
-              errorHandlingController.renderErrorRow(error, undefined, $popupContent);
-            }
-          });
-          that.changed.add((e) => {
-            if (e && e.changeType === 'loadError') {
-              return;
-            }
-            const errorHandlingController = that.getController('errorHandling');
-            const editingController = that.getController('editing');
-
-            if (editingController && !editingController.hasChanges()) {
-              errorHandlingController && errorHandlingController.removeErrorRow();
-            }
-          });
-        },
-      },
+      data,
     },
   },
 };
