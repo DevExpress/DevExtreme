@@ -807,27 +807,35 @@ class SynchronizeScrollingController extends modules.ViewController {
   }
 }
 
-const GridView = modules.View.inherit({
+class GridView extends modules.View {
+  private _resizingController: any;
+
+  private _dataController: any;
+
+  private _groupElement: any;
+
+  private _rootElement: any;
+
   _endUpdateCore() {
     if (this.component._requireResize) {
       this.component._requireResize = false;
       this._resizingController.resize();
     }
-  },
+  }
 
   init() {
     const that = this;
     that._resizingController = that.getController('resizing');
     that._dataController = that.getController('data');
-  },
+  }
 
   getView(name) {
     return this.component._views[name];
-  },
+  }
 
   element() {
     return this._groupElement;
-  },
+  }
 
   optionChanged(args) {
     const that = this;
@@ -836,9 +844,9 @@ const GridView = modules.View.inherit({
       that._groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!args.value);
       args.handled = true;
     } else {
-      that.callBase(args);
+      super.optionChanged(args);
     }
-  },
+  }
 
   _renderViews($groupElement) {
     const that = this;
@@ -849,11 +857,11 @@ const GridView = modules.View.inherit({
         view.render($groupElement);
       }
     });
-  },
+  }
 
   _getTableRoleName() {
     return 'group';
-  },
+  }
 
   render($rootElement) {
     const isFirstRender = !this._groupElement;
@@ -875,7 +883,7 @@ const GridView = modules.View.inherit({
     }
 
     this._renderViews($groupElement);
-  },
+  }
 
   update() {
     const that = this;
@@ -889,8 +897,8 @@ const GridView = modules.View.inherit({
         that._resizingController.fireContentReadyAction();
       }
     }
-  },
-});
+  }
+}
 
 export const gridViewModule = {
   defaultOptions() {
