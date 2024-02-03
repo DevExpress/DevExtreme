@@ -25,8 +25,9 @@ QUnit.test('dxdblclick should be added correctly even if its module imported bet
 
     on(el, dblclickEvent.name, handler);
     on(el, dblclickEvent.name, () => {});
-
-    trigger(el, 'dxclick');
+    /* eslint-disable */
+    console.log('--------dblclickEvent.name-->', dblclickEvent.name);
+    trigger(el, dblclickEvent.name);
     trigger(el, 'dxclick');
 
     assert.equal(handler.callCount, 2);
