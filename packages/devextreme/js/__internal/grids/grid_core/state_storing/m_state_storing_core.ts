@@ -40,8 +40,8 @@ const getUniqueStorageKey = function (options) {
   return isDefined(options.storageKey) ? options.storageKey : 'storage';
 };
 
-class StateStoringController extends modules.ViewController {
-  private _state: any;
+export class StateStoringController extends modules.ViewController {
+  protected _state: any;
 
   private _isLoaded: any;
 
@@ -101,8 +101,6 @@ class StateStoringController extends modules.ViewController {
     };
 
     eventsEngine.on(getWindow(), 'unload', that._windowUnloadHandler);
-
-    return that;
   }
 
   isLoaded() {
@@ -168,5 +166,3 @@ class StateStoringController extends modules.ViewController {
     eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
   }
 }
-
-export default { StateStoringController };
