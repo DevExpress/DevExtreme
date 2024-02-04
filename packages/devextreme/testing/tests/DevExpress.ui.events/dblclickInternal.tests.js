@@ -1,5 +1,5 @@
 const $ = require('jquery');
-import { dblClick } from 'events/dblclick';
+const { dblClick } = require('events/dblclick');
 
 const dblclickEvent = { name: 'dxdblclick' };
 
