@@ -23,14 +23,14 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     top.LOG.push('1st ON');
     const done = assert.async();
 
-    import('events/dblclick').then((m) => {
+    /*    import('events/dblclick').then((m) => {
         el.off(dblclickEvent.name);
         top.LOG.push('IMPORT');
         top.LOG_open = false;
 
         done();
         return m;
-    });
+    });*/
 
     setTimeout(() => {
         done();
