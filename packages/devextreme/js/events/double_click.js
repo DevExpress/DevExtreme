@@ -73,7 +73,7 @@ const DblClick = Class.inherit({
 
 const dblClick = new DblClick();
 // eslint-disable-next-line no-undef
-top.LOG = top.LOG_open ? (top.LOG || []).concat(['registerEvent(DBLCLICK_EVENT']) : top.LOG;
+top.LOG = (top.LOG || []).concat(['registerEvent(DBLCLICK_EVENT']);
 
 registerEvent(DBLCLICK_EVENT_NAME, dblClick);
 
