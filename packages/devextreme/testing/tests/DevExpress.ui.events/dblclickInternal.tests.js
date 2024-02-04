@@ -1,14 +1,14 @@
 const $ = require('jquery');
 const dblclickEvent = { name: 'dxdblclick' };
 
-top.LOG = top.LOG || [];
-top.LOG_open = false;
-
 QUnit.testStart(function() {
     const markup =
         '<div id="element">TEST</div>';
 
     $('#qunit-fixture').html(markup);
+
+    top.LOG = top.LOG || [];
+    top.LOG_open = false;
 
     $('#element').on(dblclickEvent.name, () => {});
 });
@@ -27,12 +27,12 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
 
     assert.timeout(100);
 
-    // const dblClickModule = require('events/dblclick');
-    import('events/dblclick').then(() => {
+    const dblClickModule = top.require('events/dblclick');
+    /* import('events/dblclick').then(() => {
         top.LOG.push('LOAD MODULE');
-    });
+    }); */
 
-    // assert.equal(dblClickModule.name, dblclickEvent.name);
+    assert.equal(dblClickModule.name, dblclickEvent.name);
 
     assert.timeout(100);
 
