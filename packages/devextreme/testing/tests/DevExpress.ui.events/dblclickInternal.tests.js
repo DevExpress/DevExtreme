@@ -32,7 +32,9 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     el.on(dblclickEvent.name, () => {});
 
     el.trigger('dxclick');
+    el.trigger('dxclick');
 
+    assert.equal(top.LOG.join('; '), '<<<=====================');
     assert.equal(handler.callCount, 3);
 
     top.LOG_open = false;
