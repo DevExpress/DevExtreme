@@ -21,8 +21,13 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     // eslint-disable-next-line spellcheck/spell-checker
     top.LOG_open = true;
     top.LOG.push('1st ON');
+    const done = assert.async;
 
-    import('events/dblclick');
+    import('events/dblclick').then((m) => {
+        done();
+
+        return m;
+    });
 
     el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
