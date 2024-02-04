@@ -22,12 +22,12 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     top.LOG_open = true;
     top.LOG.push('1st ON');
 
-    el.off(dblclickEvent.name);
 
-    if(top.LOG_open) {
+    /*    if(top['LOG' + '_open']) {
         require('events/dblclick');
-    }
+    }*/
 
+    el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
     el.on(dblclickEvent.name, () => {});
 
