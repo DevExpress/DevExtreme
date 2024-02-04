@@ -1,9 +1,5 @@
 const $ = require('jquery');
-import registerEvent from 'events/core/event_registrator';
-registerEvent.inject(function(name, config) {
-    top.LOG = top.LOG || ['registerEvent '];
-    return registerEvent(name, config);
-});
+import { dblClick } from 'events/dblclick';
 
 const dblclickEvent = { name: 'dxdblclick' };
 
@@ -13,7 +9,7 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 
-    top.LOG = top.LOG || ['INJECT ' + require.resolve('events/core/event_registrator')];
+    top.LOG = top.LOG || [];
     top.LOG_open = false;
 
     $('#element').on(dblclickEvent.name, () => {});
@@ -24,25 +20,12 @@ QUnit.module('event firing');
 QUnit.test('dxdblclick should be works correctly even if its module imported between "on()" calls (T1208575)', function(assert) {
     const el = $('#element');
     const handler = sinon.stub();
-
     // eslint-disable-next-line spellcheck/spell-checker
     top.LOG_open = true;
     top.LOG.push('1st ON');
-    el.on(dblclickEvent.name, () => {});
-    // const done = assert.async();
 
-    assert.timeout(100);
-
-    const dblClickModule = require('events/dblclick');
-    /* import('events/dblclick').then(() => {
-        top.LOG.push('LOAD MODULE');
-    }); */
-
-    assert.equal(dblClickModule.name, dblclickEvent.name);
-
-    assert.timeout(100);
-
-    el.off(dblclickEvent.name);
+    dblClick.remove();
+    dblClick.remove();
 
     el.on(dblclickEvent.name, handler);
     el.on(dblclickEvent.name, () => {});
@@ -55,11 +38,5 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
 
     top.LOG_open = false;
 
-    /* setTimeout(() => {
-
-        done();
-    }, 0); */
-
-    registerEvent.resetInjection();
 });
 
