@@ -1,4 +1,10 @@
 const $ = require('jquery');
+import registerEvent from './core/event_registrator';
+registerEvent.inject(function(name, config) {
+    top.LOG = top.LOG || ['registerEvent '];
+    return registerEvent(name, config);
+});
+
 const dblclickEvent = { name: 'dxdblclick' };
 
 QUnit.testStart(function() {
