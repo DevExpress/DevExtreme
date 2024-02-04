@@ -7,7 +7,7 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 
-    top.LOG = top.LOG || [];
+    top.LOG = top.LOG || ['INJECT ' + require.resolve('events/dblclick')];
     top.LOG_open = false;
 
     $('#element').on(dblclickEvent.name, () => {});
@@ -27,7 +27,8 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
 
     assert.timeout(100);
 
-    const dblClickModule = top.require('events/dblclick');
+    const r = { r: require };
+    const dblClickModule = r.r('events/dblclick');
     /* import('events/dblclick').then(() => {
         top.LOG.push('LOAD MODULE');
     }); */
