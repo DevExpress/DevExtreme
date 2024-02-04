@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 const dblclickEvent = { name: 'dxdblclick' };
 
 QUnit.testStart(function() {
@@ -34,7 +34,7 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
 
     setTimeout(() => {
         done();
-    }, 500);
+    }, 1500);
 
     el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
