@@ -15,18 +15,14 @@ QUnit.testStart(function() {
 
 QUnit.module('event firing');
 
-QUnit.test('dxdblclick should be works correctly even if its module imported between "on()" calls (T1208575)', function(assert) {
+QUnit.test('dxdblclick should be works correctly even if its module imported between "on()" calls (T1208575)', async function(assert) {
     const el = $('#element');
     const handler = sinon.stub();
     // eslint-disable-next-line spellcheck/spell-checker
     top.LOG_open = true;
     top.LOG.push('1st ON');
 
-    const mPath = 'events/dblclick';
-
-    if(top['LOG' + '_open']) {
-        require(mPath);
-    }
+    await import('events/dblclick');
 
     el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
