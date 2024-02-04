@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import { dblClick } from 'events/dblclick_impl';
-
-const dblclickEvent = { name: 'dxdblclick' };
+import { name as dxDblClickEventName } from 'events/dblclick';
 
 QUnit.testStart(function() {
     const markup =
@@ -11,8 +10,6 @@ QUnit.testStart(function() {
 
     top.LOG = top.LOG || [];
     top.LOG_open = false;
-
-    $('#element').on(dblclickEvent.name, () => {});
 });
 
 QUnit.module('event firing');
@@ -27,8 +24,8 @@ QUnit.test('dxdblclick should be works correctly even if dblClick.remove() calls
     dblClick.remove();
     dblClick.remove();
 
-    el.on(dblclickEvent.name, handler);
-    el.on(dblclickEvent.name, () => {});
+    el.on(dxDblClickEventName, handler);
+    el.on(dxDblClickEventName, () => {});
 
     el.trigger('dxclick');
     el.trigger('dxclick');
