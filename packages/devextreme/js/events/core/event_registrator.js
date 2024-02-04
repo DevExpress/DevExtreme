@@ -1,6 +1,6 @@
 import { each } from '../../core/utils/iterator';
 import callbacks from './event_registrator_callbacks';
-
+import injector from '../../core/utils/dependency_injector';
 const registerEvent = function(name, eventObject) {
     const strategy = {};
 
@@ -32,4 +32,4 @@ const registerEvent = function(name, eventObject) {
 };
 registerEvent.callbacks = callbacks;
 
-export default registerEvent;
+export default injector(registerEvent);
