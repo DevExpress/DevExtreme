@@ -437,7 +437,7 @@ export class ColumnsController extends modules.Controller {
     return true;
   }
 
-  _compileVisibleColumns(rowIndex) {
+  _compileVisibleColumns(rowIndex?) {
     this._visibleColumns = this._visibleColumns || this._compileVisibleColumnsCore();
     rowIndex = isDefined(rowIndex) ? rowIndex : this._visibleColumns.length - 1;
 
@@ -454,7 +454,7 @@ export class ColumnsController extends modules.Controller {
     return this._compileVisibleColumns.apply(this, arguments);
   }
 
-  getFixedColumns(rowIndex) {
+  getFixedColumns(rowIndex?) {
     this._fixedColumns = this._fixedColumns || this._getFixedColumnsCore();
     rowIndex = isDefined(rowIndex) ? rowIndex : this._fixedColumns.length - 1;
 
