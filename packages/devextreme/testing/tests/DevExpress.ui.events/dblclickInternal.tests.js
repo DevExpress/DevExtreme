@@ -32,6 +32,10 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
         return m;
     });
 
+    setTimeout(() => {
+        done();
+    }, 500);
+
     el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
     el.on(dblclickEvent.name, () => {});
