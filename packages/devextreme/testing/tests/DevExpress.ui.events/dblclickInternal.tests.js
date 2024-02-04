@@ -24,8 +24,11 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     const done = assert.async;
 
     import('events/dblclick').then((m) => {
-        done();
+        el.off(dblclickEvent.name);
+        top.LOG.push('IMPORT');
+        top.LOG_open = false;
 
+        done();
         return m;
     });
 
@@ -39,6 +42,6 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
     assert.equal(top.LOG.join('; '), '<<<=====================');
     assert.equal(handler.callCount, 3);
 
-    top.LOG_open = false;
+
 });
 
