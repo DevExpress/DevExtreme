@@ -1544,7 +1544,9 @@ export class DataController extends ControllerWithDataMixin {
     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
     if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
-      this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
+      this.updateItems({
+        changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly, isLiveUpdate: changesOnly,
+      });
     }
   }
 
