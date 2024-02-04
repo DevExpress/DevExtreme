@@ -7,7 +7,8 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 
-    top.LOG = top.LOG || ['INJECT ' + require.resolve('events/dblclick')];
+    top.LOG = top.LOG || ['INJECT ' + require.resolve('events/core/event_registrator')];
+    top.LOG.push(['INJECT ' + require.cache[require.resolve('events/core/event_registrator')]?.default]);
     top.LOG_open = false;
 
     $('#element').on(dblclickEvent.name, () => {});
