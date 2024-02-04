@@ -60,6 +60,6 @@ QUnit.test('dxdblclick should be works correctly even if its module imported bet
         done();
     }, 0); */
 
-
+    registerEvent.resetInjection();
 });
 
