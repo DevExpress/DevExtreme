@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import { dblClick } from 'events/dblclick_impl';
+
 const dblclickEvent = { name: 'dxdblclick' };
 
 QUnit.testStart(function() {
@@ -15,28 +17,16 @@ QUnit.testStart(function() {
 
 QUnit.module('event firing');
 
-QUnit.test('dxdblclick should be works correctly even if its module imported between "on()" calls (T1208575)', function(assert) {
+QUnit.test('dxdblclick should be works correctly even if dblClick.remove() calls many times (T1208575)', function(assert) {
     const el = $('#element');
     const handler = sinon.stub();
     // eslint-disable-next-line spellcheck/spell-checker
     top.LOG_open = true;
     top.LOG.push('1st ON');
-    const done = assert.async();
 
-    /*    import('events/dblclick').then((m) => {
-        el.off(dblclickEvent.name);
-        top.LOG.push('IMPORT');
-        top.LOG_open = false;
+    dblClick.remove();
+    dblClick.remove();
 
-        done();
-        return m;
-    });*/
-
-    setTimeout(() => {
-        done();
-    }, 1500);
-
-    el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
     el.on(dblclickEvent.name, () => {});
 
