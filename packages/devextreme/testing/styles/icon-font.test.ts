@@ -39,12 +39,12 @@ describe('Equals svg to font', () => {
     const countElementFluentFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsfluent.ttf`);
     const countElementFluentSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/fluent`);
 
-    // 'optionsgear.svg', 'pinmap.svg', 'send.svg' icons are missed
-    expect(countElementFluentFont + 3).toBe(countElementFluentSvg);
+    // 'optionsgear.svg', 'send.svg' icons are missed
+    expect(countElementFluentFont + 2).toBe(countElementFluentSvg);
   });
 
   test('check svg elements', () => {
-    const isOnlyMaterialIcons = ['optionsgear.svg', 'pinmap.svg', 'send.svg'];
+    const isOnlyMaterialIcons = ['optionsgear.svg', 'send.svg'];
 
     const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
     const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`).filter((svg) => !isOnlyMaterialIcons.includes(svg));

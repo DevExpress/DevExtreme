@@ -6,6 +6,7 @@ import windowUtils from 'core/utils/window';
 const POPUP_CLASS = 'dx-popup';
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const SUGGESTION_LIST_WRAPPER_CLASS = 'dx-suggestion-list-wrapper';
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const MIN_HEIGHT = 100;
 
@@ -57,6 +58,7 @@ QUnit.module('Popup module', moduleConfig, () => {
         const $suggestionListWrapper = $suggestionList.closest(`.${SUGGESTION_LIST_WRAPPER_CLASS}`);
 
         assert.strictEqual($suggestionListWrapper.length, 1, 'Suggestion list is wrapped by element with specific class');
+        assert.ok($suggestionListWrapper.hasClass(DROPDOWN_EDITOR_OVERLAY_CLASS));
         assert.ok($suggestionList.is(':visible'), 'list is visible');
         assert.strictEqual($suggestionList.length, 1, 'one list');
         assert.ok(insertEmbedContent.notCalled, 'ok');

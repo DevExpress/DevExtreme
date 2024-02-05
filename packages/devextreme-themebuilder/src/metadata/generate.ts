@@ -23,7 +23,7 @@ const generate = async (): Promise<void> => {
 
   await collector.saveMetadata(
     metadataDestinationFile,
-    version.package,
+    version,
     browserslist,
     dependencyCollector.flatStylesDependencyTree,
   );

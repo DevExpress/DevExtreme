@@ -29,7 +29,7 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^20.11.0",
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "^2.0.4",
     "@types/yargs": "^17.0.32",
@@ -55,7 +55,7 @@
     "eslint-plugin-testcafe": "0.2.1",
     "husky": "^8.0.3",
     "lint-staged": "14.0.1",
-    "nx": "17.2.7",
+    "nx": "17.2.8",
     "nx-cloud": "16.5.2",
     "postcss": "^8.4.31",
     "shx": "0.3.4",

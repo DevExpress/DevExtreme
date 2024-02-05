@@ -4,32 +4,32 @@ import { isMaterialBased } from '../themeUtils';
 import { a11yCheck, A11yCheckOptions } from './utils';
 import { generateOptionMatrix, Options } from '../generateOptionMatrix';
 
-export interface Configuration<TComponentOptions=unknown> {
+export interface Configuration<TComponentOptions = unknown> {
   component: WidgetName;
   options?: Options<TComponentOptions>;
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
-  created?: (t: TestController, optionConfiguration?: Options) => Promise<void>;
+  created?: (t: TestController, optionConfiguration?: TComponentOptions) => Promise<void>;
 }
 
-const defaultSelector = '#container';
+export const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
 const defaultA11yCheckConfig = isMaterialBased() ? {
   runOnly: 'color-contrast',
 } : {};
 
-const getOptionConfigurations = (options: Options | undefined) => {
+const getOptionConfigurations = <TComponentOptions = unknown>(
+  options: Options<TComponentOptions> | undefined,
+): TComponentOptions[] => {
   if (!(options && Object.keys(options).length)) {
-    return [defaultOptions];
+    return [defaultOptions as TComponentOptions];
   }
 
-  const configurations: Options[] = generateOptionMatrix(options);
-
-  return configurations;
+  return generateOptionMatrix(options);
 };
 
-export const testAccessibility = <TComponentOptions=unknown>(
+export const testAccessibility = <TComponentOptions = unknown>(
   configuration: Configuration<TComponentOptions>,
 ): void => {
   const {
@@ -40,7 +40,7 @@ export const testAccessibility = <TComponentOptions=unknown>(
     created = defaultCreated,
   } = configuration;
 
-  const optionConfigurations: Options[] = getOptionConfigurations(options);
+  const optionConfigurations = getOptionConfigurations(options);
 
   optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {

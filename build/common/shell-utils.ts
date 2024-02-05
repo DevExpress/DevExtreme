@@ -4,7 +4,7 @@ function mapKeyValue(key: string, value: unknown, map: Record<string, Mapping>):
   const mapping = key in map ? map[key] : undefined;
   if (mapping !== undefined) {
     if (typeof (mapping) === 'string') {
-      return `${mapping}='${value}'`;
+      return `${mapping}="${value}"`;
     }
 
     if (mapping.kind === 'flag') {
@@ -12,7 +12,7 @@ function mapKeyValue(key: string, value: unknown, map: Record<string, Mapping>):
     }
   }
 
-  return `${key}='${value}'`;
+  return `${key}="${value}"`;
 }
 
 export function mapOptions<TOptions extends Record<string, any>>(options: TOptions, map: Record<keyof TOptions, Mapping>): string {

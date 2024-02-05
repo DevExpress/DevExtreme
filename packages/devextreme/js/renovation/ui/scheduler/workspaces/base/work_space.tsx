@@ -47,7 +47,6 @@ import {
   DATE_TABLE_MIN_CELL_WIDTH,
   getCellIndices,
   getDateTableWidth,
-  getSelectedCells,
   isCellAllDay,
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
@@ -1119,14 +1118,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       if (nextFocusedCell === cellData
           && this.cellsSelectionState!.focusedCell.cellData.index !== cellData.index) {
         const firstCell = this.cellsSelectionState!.firstSelectedCell;
-        const lastCell = cellData;
-
-        const selectedCells = getSelectedCells(
-          this.viewDataProvider,
-          firstCell,
-          lastCell,
-          !!firstCell.allDay,
-        );
+        const selectedCells = this.viewDataProvider.getCellsBetween(firstCell, cellData);
 
         this.cellsSelectionState = {
           focusedCell: {

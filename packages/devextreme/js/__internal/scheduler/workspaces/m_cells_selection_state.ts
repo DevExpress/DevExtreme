@@ -1,5 +1,3 @@
-import { getSelectedCells } from '@js/renovation/ui/scheduler/workspaces/base/utils';
-
 export default class CellsSelectionState {
   _focusedCell: any = null;
 
@@ -62,7 +60,7 @@ export default class CellsSelectionState {
 
     this._firstSelectedCell = firstCell;
 
-    this._selectedCells = getSelectedCells(this._viewDataProvider, firstCell, lastCell, isLastCellAllDay);
+    this._selectedCells = this._viewDataProvider.getCellsBetween(firstCell, lastCell);
   }
 
   setSelectedCellsByData(selectedCellsData) {

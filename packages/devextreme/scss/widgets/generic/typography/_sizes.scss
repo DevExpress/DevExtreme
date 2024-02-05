@@ -7,8 +7,12 @@ $generic-l-font-size: null !default;
 $generic-m-font-size: null !default;
 $generic-s-font-size: null !default;
 $generic-xs-font-size: null !default;
+$generic-h1-font-size: null !default;
+$generic-h2-font-size: null !default;
 $generic-h3-font-size: null !default;
+$generic-h4-font-size: null !default;
 $generic-h5-font-size: null !default;
+$generic-h6-font-size: null !default;
 
 @if $size == "default" {
   $generic-xl-font-size: 34px !default;
@@ -16,8 +20,12 @@ $generic-h5-font-size: null !default;
   $generic-m-font-size: 20px !default;
   $generic-s-font-size: 18px !default;
   $generic-xs-font-size: 12px !default;
+  $generic-h1-font-size: 34px !default;
+  $generic-h2-font-size: 28px !default;
   $generic-h3-font-size: 22px !default;
+  $generic-h4-font-size: 18px !default;
   $generic-h5-font-size: 16px !default;
+  $generic-h6-font-size: 12px !default;
 }
 
 @else if $size == "compact" {
@@ -26,6 +34,10 @@ $generic-h5-font-size: null !default;
   $generic-m-font-size: 18px !default;
   $generic-s-font-size: 16px !default;
   $generic-xs-font-size: 10px !default;
+  $generic-h1-font-size: 29px !default;
+  $generic-h2-font-size: 24px !default;
   $generic-h3-font-size: 20px !default;
+  $generic-h4-font-size: 16px !default;
   $generic-h5-font-size: 14px !default;
+  $generic-h6-font-size: 10px !default;
 }

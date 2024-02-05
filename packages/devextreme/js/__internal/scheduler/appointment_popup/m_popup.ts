@@ -199,7 +199,7 @@ export class AppointmentPopup {
       appointment.endDate = appointment.calculateEndDate('toAppointment');
     }
 
-    const formData = appointment.source();
+    const formData = appointment.clone().source();
 
     this.form.readOnly = this._isReadOnly(formData);
     this.form.updateFormData(formData);

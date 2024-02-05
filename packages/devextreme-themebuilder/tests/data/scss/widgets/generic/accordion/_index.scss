@@ -9,7 +9,7 @@
 $font-file: "icons";
 
 .dx-accordion {
-  background-color: $base-font-family;
+  font-family: $base-font-family;
   color: $accordion-title-color;
   background-image: url(icons/#{$font-file}.woff2);
 
