@@ -77,7 +77,6 @@ function createDefaultBatch(dev) {
     tasks.push('localization');
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
-    tasks.push('version-replace');
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');

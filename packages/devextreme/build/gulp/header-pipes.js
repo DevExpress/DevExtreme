@@ -17,7 +17,7 @@ function makeLicensePipe(commentType) {
     return lazyPipe().pipe(function() {
         return header(licenseTemplate, {
             commentType: commentType,
-            version: context.version.product,
+            version: context.version,
             eula: context.EULA_URL
         });
     });
