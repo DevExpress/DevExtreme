@@ -14,7 +14,7 @@ export function stopEventsSkipping(): boolean;
 export function needSkipEvent(e: { target?: any; type: string }): boolean;
 export function setEventFixMethod(func: any): void;
 export function createEvent(originalEvent: any, args?: any): any;
-export function fireEvent(arg: { originalEvent: any; delegateTarget?: any }): any;
+export function fireEvent(arg: { originalEvent: any; delegateTarget?: any; type?: any; target?: any }): any;
 export function normalizeKeyName(arg: { key?: string; which?: string | number }): string | undefined;
 export function getChar(arg: { key?: string; which: string | number }): string;
 export function addNamespace(eventNames: Array<string> | string, namespace: string): string;

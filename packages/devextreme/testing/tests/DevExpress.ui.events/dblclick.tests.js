@@ -1,5 +1,6 @@
 const $ = require('jquery');
 const dblclickEvent = require('events/dblclick');
+const { dblClick } = require('__internal/events/dblclick_impl');
 const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
@@ -34,6 +35,21 @@ QUnit.test('dxdblclick should bubble up', function(assert) {
     $('#element').trigger(dblclickEvent.name);
 });
 
+QUnit.test('dxdblclick should be works correctly even if dblClick.remove() calls many times (T1208575)', function(assert) {
+    const el = $('#element');
+    const handler = sinon.stub();
+
+    // emulate calling .off('dxdblclick') before import 'events/dblclick' (T1208575)
+    dblClick.remove();
+
+    el.off(dblclickEvent.name);
+    el.on(dblclickEvent.name, handler);
+    el.on(dblclickEvent.name, () => {});
+
+    el.trigger('dxclick');
+
+    assert.equal(handler.callCount, 0);
+});
 
 QUnit.module('timeout', moduleConfig);
 
