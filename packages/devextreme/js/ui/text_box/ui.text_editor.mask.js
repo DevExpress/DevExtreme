@@ -525,9 +525,15 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _updateMaskOption: function() {
+        const valueChangeEvent = addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`);
+        const $input = this._input();
+
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
+        // reattach events to get correct handlers order (T1214019)
+        eventsEngine.off($input, valueChangeEvent);
+        eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
     },
 
     _processEmptyMask: function(mask) {
