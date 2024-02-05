@@ -448,6 +448,8 @@ class ColumnHeadersView extends ColumnsView {
         return that.getCellElements(index || 0);
       }
     }
+
+    return undefined;
   }
 
   getColumnIndexByElement($cell) {
