@@ -6,7 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
-import stateStoring from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
@@ -721,7 +721,7 @@ const DataController = Class.inherit((function () {
         });
       }
 
-      that._stateStoringController = new stateStoring.StateStoringController(options.component).init();
+      that._stateStoringController = new StateStoringController(options.component).init();
 
       that._columnsInfo = [];
       that._rowsInfo = [];
