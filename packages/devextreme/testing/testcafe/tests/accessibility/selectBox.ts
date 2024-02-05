@@ -47,7 +47,7 @@ const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
     'color-contrast': { enabled: false },
-    // NOTE: aria-dialog-name issue in Material and Fluent
+    // NOTE: aria-dialog-name false-positive in Material and Fluent
     'aria-dialog-name': { enabled: !isMaterialBased() },
   },
 };
