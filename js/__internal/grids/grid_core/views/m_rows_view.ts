@@ -1079,7 +1079,7 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  setLoading(isLoading, messageText) {
+  setLoading(isLoading, messageText?) {
     const that = this;
     let loadPanel = that._loadPanel;
     const dataController = that._dataController;
