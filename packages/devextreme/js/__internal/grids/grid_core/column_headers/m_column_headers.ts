@@ -63,7 +63,7 @@ function addCssClassesToCellContent(that, $cell, column, $cellContent?) {
     .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${that._getIndicatorClassName('headerFilter')}`).length);
 }
 
-class ColumnHeadersView extends ColumnsView {
+export class ColumnHeadersView extends ColumnsView {
   private _isGroupingChanged: any;
 
   private _lastActionElement: any;
