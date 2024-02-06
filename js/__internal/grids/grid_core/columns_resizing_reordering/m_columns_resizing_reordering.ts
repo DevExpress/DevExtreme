@@ -617,11 +617,11 @@ const isNextColumnResizingMode = function (that) {
 };
 
 export class ColumnsResizerViewController extends modules.ViewController {
-  private _columnHeadersView: any;
+  protected _columnHeadersView: any;
 
   private _$parentContainer: any;
 
-  private readonly _targetPoint: any;
+  protected readonly _targetPoint: any;
 
   private _resizingInfo: any;
 

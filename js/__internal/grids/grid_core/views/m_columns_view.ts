@@ -524,7 +524,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return renderingTemplate;
   }
 
-  renderTemplate(container, template, options, allowRenderToDetachedContainer, change?) {
+  renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
     const isDataRow = options.rowType === 'data';
