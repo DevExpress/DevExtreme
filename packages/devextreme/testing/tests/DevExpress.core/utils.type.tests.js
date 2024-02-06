@@ -87,6 +87,13 @@ QUnit.test('isNumeric', function(assert) {
     assert.strictEqual(typeUtils.isNumeric(function() { }), false, 'function');
 });
 
+QUnit.test('isIterableObject', function(assert) {
+    assert.strictEqual(typeUtils.isIterableObject({}), false);
+    assert.strictEqual(typeUtils.isIterableObject([]), true);
+    assert.strictEqual(typeUtils.isIterableObject(''), true);
+    assert.strictEqual(typeUtils.isIterableObject(document.getElementsByTagName('body')), true);
+});
+
 QUnit.test('isObject', function(assert) {
     assert.strictEqual(typeUtils.isObject({}), true, 'empty object');
     assert.strictEqual(typeUtils.isObject({ a: 1 }), true, 'object');

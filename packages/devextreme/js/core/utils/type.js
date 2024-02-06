@@ -58,6 +58,10 @@ const isEmptyObject = function(object) {
     return true;
 };
 
+const isIterableObject = (object) => {
+    return object !== null && typeof object[Symbol.iterator] === 'function';
+};
+
 const isPlainObject = function(object) {
     if(!object || type(object) !== 'object') {
         return false;
@@ -108,6 +112,7 @@ export {
     isNumeric,
     isObject,
     isEmptyObject,
+    isIterableObject,
     isPlainObject,
     isPrimitive,
     isWindow,
