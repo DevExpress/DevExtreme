@@ -103,7 +103,7 @@ describe('getSkippedHoursInRange', () => {
       [0, 18, 36],
       [8, 24, 32],
     ])(
-      'should return correct skipped hours for %d and %d as start and end day hour',
+      'should return correct skipped hours if skipped dates are the middle of period',
       (startDayHour, endDayHour, expectedHours) => {
         const mockViewDataProvider = {
           isSkippedDate: (date: Date) => isDataOnWeekend(date),
@@ -123,5 +123,62 @@ describe('getSkippedHoursInRange', () => {
           .toBe(expectedHours);
       },
     );
+
+    it('should return correct skipped hours if skipped date is at the end', () => {
+      const mockViewDataProvider = {
+        isSkippedDate: (date: Date) => isDataOnWeekend(date),
+        getViewOptions: () => ({
+          startDayHour: 10,
+          endDayHour: 16,
+        }),
+      };
+
+      const result = getSkippedHoursInRange(
+        new Date(2024, 1, 1),
+        new Date(2024, 1, 4, 13),
+        mockViewDataProvider as any,
+      );
+
+      expect(result)
+        .toBe(6 + 3);
+    });
+
+    it('should return correct skipped hours if skipped date is at the start', () => {
+      const mockViewDataProvider = {
+        isSkippedDate: (date: Date) => isDataOnWeekend(date),
+        getViewOptions: () => ({
+          startDayHour: 10,
+          endDayHour: 16,
+        }),
+      };
+
+      const result = getSkippedHoursInRange(
+        new Date(2024, 1, 4, 12),
+        new Date(2024, 1, 6),
+        mockViewDataProvider as any,
+      );
+
+      expect(result)
+        .toBe(4);
+    });
+
+    it('should return correct skipped hours if skipped date is at the end (2)', () => {
+      const mockViewDataProvider = {
+        isSkippedDate: (date: Date) => isDataOnWeekend(date),
+        getViewOptions: () => ({
+          startDayHour: 12,
+          endDayHour: 16,
+        }),
+      };
+
+      const result = getSkippedHoursInRange(
+        new Date(2024, 1, 2, 13, 0),
+        new Date(2024, 1, 3, 18, 0),
+        mockViewDataProvider as any,
+      );
+
+      expect(result)
+        .toBe(4);
+    });
   });
 });
