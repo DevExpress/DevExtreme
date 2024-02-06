@@ -1,4 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+import { DevExtremeModule } from 'devextreme-angular';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -7,6 +10,11 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        ReactiveFormsModule,
+        BrowserTransferStateModule,
+        DevExtremeModule,
+      ]
     }).compileComponents();
   });
 
