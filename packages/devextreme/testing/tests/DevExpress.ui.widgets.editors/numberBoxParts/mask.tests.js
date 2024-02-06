@@ -2104,7 +2104,8 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
 
         this.keyboard.caret(3);
         this.input.trigger('dxclick');
-        this.clock.tick(CARET_TIMEOUT_DURATION);
+        this.clock.tick(400);
+        this.input.trigger('dxclick');
 
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
     });
@@ -2336,7 +2337,8 @@ QUnit.module('ShadowDOM', {}, function() {
         clock.tick(CARET_TIMEOUT_DURATION);
         keyboard.caret(3);
         input.trigger('dxclick');
-        clock.tick(CARET_TIMEOUT_DURATION);
+        clock.tick(400);
+        input.trigger('dxclick');
 
         assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
         clock.restore();
