@@ -95,7 +95,7 @@ class FilterPanelView extends modules.View {
         that.option('filterPanel.filterEnabled', e.value);
       },
     });
-    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint')!);
+    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint'));
     return $element;
   }
 
