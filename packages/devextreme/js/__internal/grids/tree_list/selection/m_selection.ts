@@ -84,7 +84,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
           };
           config.isSelectableItem = (item) => !!item;
           config.getItemData = (item) => item;
-          config.allowLoadByRange = () => false;
+          config.allowLoadByRange = () => undefined;
           return config;
         },
 
