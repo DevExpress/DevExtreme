@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import $, { dxElementWrapper } from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
@@ -10,8 +11,10 @@ import {
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/m_utils';
 
+import { DataController } from '../data_controller/m_data_controller';
 import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';
+import { ModuleType } from '../m_types';
 import gridUtils from '../m_utils';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
@@ -22,16 +25,20 @@ const FILTER_PANEL_LEFT_CONTAINER = `${FILTER_PANEL_CLASS}-left`;
 
 const FILTER_PANEL_TARGET = 'filterPanel';
 
-const FilterPanelView = modules.View.inherit({
+class FilterPanelView extends modules.View {
+  private _columnsController: any;
+
+  private readonly _filterValueBuffer: any;
+
   isVisible() {
     return this.option('filterPanel.visible') && this.getController('data').dataSource();
-  },
+  }
 
   init() {
     this.getController('data').dataSourceChanged.add(() => this.render());
 
     this._columnsController = this.getController('columns');
-  },
+  }
 
   _renderCore() {
     const $element = this.element();
@@ -52,7 +59,7 @@ const FilterPanelView = modules.View.inherit({
       .appendTo($element);
 
     this._renderFilterBuilderText($element, $leftContainer);
-  },
+  }
 
   _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
     const $filterElement = this._getFilterElement();
@@ -75,7 +82,7 @@ const FilterPanelView = modules.View.inherit({
     $leftContainer
       .append($filterElement)
       .append($textElement);
-  },
+  }
 
   _getCheckElement() {
     const that = this;
@@ -88,9 +95,9 @@ const FilterPanelView = modules.View.inherit({
         that.option('filterPanel.filterEnabled', e.value);
       },
     });
-    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint'));
+    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint')!);
     return $element;
-  },
+  }
 
   _getFilterElement() {
     const that = this;
@@ -103,7 +110,7 @@ const FilterPanelView = modules.View.inherit({
     that._addTabIndexToElement($element);
 
     return $element;
-  },
+  }
 
   _getTextElement() {
     const that = this;
@@ -111,6 +118,7 @@ const FilterPanelView = modules.View.inherit({
     let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
+      // @ts-expect-error
       when(that.getFilterText(filterValue, that.getController('filterSync').getCustomFilterOperations())).done((filterText) => {
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {
@@ -137,18 +145,19 @@ const FilterPanelView = modules.View.inherit({
     that._addTabIndexToElement($textElement);
 
     return $textElement;
-  },
+  }
 
   _showFilterBuilder() {
     this.option('filterBuilderPopup.visible', true);
-  },
+  }
 
   _getRemoveButtonElement() {
     const that = this;
+    // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
     const $element = $('<div>')
       .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-      .text(that.option('filterPanel.texts.clearFilter'));
+      .text(that.option('filterPanel.texts.clearFilter')!);
 
     eventsEngine.on($element, 'click', clearFilterValue);
 
@@ -157,14 +166,14 @@ const FilterPanelView = modules.View.inherit({
     that._addTabIndexToElement($element);
 
     return $element;
-  },
+  }
 
   _addTabIndexToElement($element) {
     if (!this.option('useLegacyKeyboardNavigation')) {
       const tabindex = this.option('tabindex') || 0;
       $element.attr('tabindex', tabindex);
     }
-  },
+  }
 
   optionChanged(args) {
     switch (args.name) {
@@ -178,9 +187,9 @@ const FilterPanelView = modules.View.inherit({
         args.handled = true;
         break;
       default:
-        this.callBase(args);
+        super.optionChanged(args);
     }
-  },
+  }
 
   _getConditionText(fieldText, operationText, valueText) {
     let result = `[${fieldText}] ${operationText}`;
@@ -188,11 +197,11 @@ const FilterPanelView = modules.View.inherit({
       result += valueText;
     }
     return result;
-  },
+  }
 
   _getValueMaskedText(value) {
     return Array.isArray(value) ? `('${value.join('\', \'')}')` : ` '${value}'`;
-  },
+  }
 
   _getValueText(field, customOperation, value) {
     // @ts-expect-error
@@ -213,7 +222,7 @@ const FilterPanelView = modules.View.inherit({
       deferred.resolve('');
     }
     return deferred.promise();
-  },
+  }
 
   getConditionText(filterValue, options) {
     const that = this;
@@ -237,9 +246,9 @@ const FilterPanelView = modules.View.inherit({
       deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
     });
     return deferred;
-  },
+  }
 
-  getGroupText(filterValue, options, isInnerGroup) {
+  getGroupText(filterValue, options, isInnerGroup?) {
     const that = this;
     // @ts-expect-error
     const result = new Deferred();
@@ -268,7 +277,7 @@ const FilterPanelView = modules.View.inherit({
       result.resolve(text);
     });
     return result;
-  },
+  }
 
   getFilterText(filterValue, customOperations) {
     const that = this;
@@ -279,8 +288,21 @@ const FilterPanelView = modules.View.inherit({
       groupOperationDescriptions: that.option('filterBuilder.groupOperationDescriptions'),
     };
     return isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);
-  },
-});
+  }
+}
+
+const data = (Base: ModuleType<DataController>) => class FilterPanelDataControllerExtender extends Base {
+  optionChanged(args) {
+    switch (args.name) {
+      case 'filterPanel':
+        this._applyFilter();
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+    }
+  }
+};
 
 export const filterPanelModule = {
   defaultOptions() {
@@ -301,18 +323,7 @@ export const filterPanelModule = {
   },
   extenders: {
     controllers: {
-      data: {
-        optionChanged(args) {
-          switch (args.name) {
-            case 'filterPanel':
-              this._applyFilter();
-              args.handled = true;
-              break;
-            default:
-              this.callBase(args);
-          }
-        },
-      },
+      data,
     },
   },
 };

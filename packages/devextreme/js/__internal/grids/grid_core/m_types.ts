@@ -30,6 +30,10 @@ type OptionsMethod<TOptions> =
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
 export interface InternalGrid extends GridBaseType {
+  _views: View[];
+
+  _controllers: Controller[];
+
   option: OptionsMethod<InternalGridOptions>;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
