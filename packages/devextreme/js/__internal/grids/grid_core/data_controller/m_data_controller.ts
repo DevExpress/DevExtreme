@@ -1552,7 +1552,7 @@ export class DataController extends ControllerWithDataMixin {
     return this._skipProcessingPagingChange && (fullName === 'paging.pageIndex' || fullName === 'paging.pageSize');
   }
 
-  getUserState() {
+  getUserState(): any {
     return {
       searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
