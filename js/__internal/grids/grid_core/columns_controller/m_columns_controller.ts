@@ -1713,7 +1713,7 @@ export class ColumnsController extends modules.Controller {
     return this._rowCount;
   }
 
-  getRowIndex(columnIndex, alwaysGetRowIndex) {
+  getRowIndex(columnIndex, alwaysGetRowIndex?) {
     const column = this._columns[columnIndex];
     const bandColumnsCache = this.getBandColumnsCache();
 

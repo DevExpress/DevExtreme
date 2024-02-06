@@ -750,7 +750,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
   }
 
   _getRows(change?) {
-    return [];
+    return [] as any[];
   }
 
   _getCellOptions(options): any {
@@ -920,7 +920,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   }
 
-  _handleDataChanged() {
+  _handleDataChanged(e) {
   }
 
   callbackNames() {
@@ -1014,7 +1014,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return result.promise();
   }
 
-  _updateContent($newTableElement, change, isFixedTableRendering) {
+  _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
       this.setTableElement($newTableElement, isFixedTableRendering);
