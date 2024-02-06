@@ -10,9 +10,9 @@ require('nconf').argv();
 
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
     // eslint-disable-next-line no-undef
-    window.DevExpress.ui.themes.ready(resolve);
-    // eslint-disable-next-line no-undef
-    window.DevExpress.ui.themes.current(themeName);
+    // window.DevExpress.ui.themes.ready(resolve);
+    // // eslint-disable-next-line no-undef
+    // window.DevExpress.ui.themes.current(themeName);
 }),
 { dependencies: { themeName } })();
 
@@ -22,7 +22,7 @@ createTestCafe({
     port1: 1437,
     port2: 1438,
     // eslint-disable-next-line spellcheck/spell-checker
-    experimentalProxyless: true,
+    // experimentalProxyless: true,
 })
     .then(tc => {
         testCafe = tc;

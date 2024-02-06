@@ -73,5 +73,8 @@
     "packages/*",
     "packages/devextreme/artifacts/npm/*",
     "playgrounds/*"
-  ]
+  ],
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
 }

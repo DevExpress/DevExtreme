@@ -458,6 +458,7 @@ export default {
     detachCssClasses,
     attachCssClasses,
     current,
+    autoInit,
     waitForThemeLoad,
     isPendingThemeLoaded,
 };

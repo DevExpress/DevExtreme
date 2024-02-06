@@ -125,7 +125,29 @@ const Resizable = DOMComponent.inherit({
         const $handle = $('<div>')
             .addClass(RESIZABLE_HANDLE_CLASS)
             .addClass(RESIZABLE_HANDLE_CLASS + '-' + handleName)
-            .appendTo(this.$element());
+            .insertAfter(this.$element());
+
+        debugger;
+
+        const $handleCollapseIcon = $('<div>')
+            .addClass('dx-resizable-handle-collapse-icon')
+            .addClass('dx-icon')
+            .addClass('dx-icon-spinleft');
+
+        const $handleIcon = $('<div>')
+            .addClass('dx-resizable-handle-icon')
+            .addClass('dx-icon')
+            .addClass('dx-icon-overflow');
+
+        const $handleExpandIcon = $('<div>')
+            .addClass('dx-resizable-handle-expand-icon')
+            .addClass('dx-icon')
+            .addClass('dx-icon-spinright');
+
+
+        $handleCollapseIcon.appendTo($handle);
+        $handleIcon.appendTo($handle);
+        $handleExpandIcon.appendTo($handle);
 
         this._handles.push($handle);
     },

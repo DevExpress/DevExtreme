@@ -41,6 +41,94 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <style>
+
+
+.demo-light {
+  background: rgba(245, 229, 166, 0.5);
+}
+
+.demo-dark {
+  background: rgba(148, 215, 199, 0.5);
+}
+
+.demo-dark.header {
+  background: rgba(243, 158, 108, 0.5);
+}
+
+.demo-dark.footer {
+  background: rgba(123, 155, 207, 0.5);
+}
+
+.small {
+  height: 50px;
+  border: 1px solid lightgray;
+}
+
+.dx-resizable-handle {
+  cursor: ew-resize;
+  position: relative !important;
+  background-color: rgba(224, 224, 224, 1);
+  z-index: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dx-resizable-handle:hover,
+.dx-resizable-resizing > .dx-resizable-handle {
+  background-color: rgba(15, 108, 189, 0.5);
+}
+
+.dx-resizable-handle-right {
+  cursor: ew-resize;
+  width: 10px;
+  flex-direction: column;
+}
+
+.dx-resizable-handle-bottom {
+  cursor: ns-resize;
+  height: 10px;
+  flex-direction: row;
+}
+
+.dx-box-item-content {
+  overflow: hidden;
+}
+
+.dx-resizable-handle-icon {
+
+}
+
+
+.dx-resizable-handle-icon {
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+
+.dx-resizable-handle-bottom .dx-resizable-handle-icon {
+   rotate: 90deg;
+}
+
+.dx-resizable-handle-bottom .dx-resizable-handle-collapse-icon {
+   rotate: 90deg;
+}
+
+.dx-resizable-handle-bottom .dx-resizable-handle-expand-icon {
+   rotate: 90deg;
+}
+
+.dataSourceBox {
+  border: 1px dashed grey;
+}
+
+
+.dx-draggable-dragging {
+  opacity: 0.5;
+}
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -49,14 +137,576 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="addPaneTop"></div>
+        <div id="addPaneCenter"></div>
+        <div id="removePane"></div>
+        <div class="dx-viewport">
+            <div id='options'></div>
+
+            <div class="dataSourceBox"></div>
+
+            <!-- <div class="boxOptions1">
+              <div class="demo-dark" data-options="dxItem: {ratio: 20, minSize: 10 }"> ratio = 20 </div> -->
+              <!-- <div class="dx-resizable-handle" data-options="dxItem: {ratio: 0.1}"> . </div> -->
+              <!-- <div class="demo-light" data-options="dxItem: {ratio: 60, minSize: 10}"> ratio = 60 </div> -->
+              <!-- <div class="dx-resizable-handle" data-options="dxItem: {ratio: 0.1}"> . </div> -->
+              <!-- <div class="demo-dark" data-options="dxItem: {ratio: 10, minSize: 5}"> ratio = 10 </div>
+              <div class="demo-dark" data-options="dxItem: {ratio: 10, minSize: 5}"> ratio = 10 </div>
+            </div> -->
+         
+                 <br>
+                 <br>
+                 <div id="boxOptions3">
+                   <div class="demo-dark header" data-options="dxItem: {ratio: 20 }"> Header<div id="textBox"></div></div>
+                   <div data-options="dxItem: {ratio: 60, minSize: 40}">
+                     <div id="boxOptions4">
+                       <div class="demo-dark" data-options="dxItem: {ratio: 33, minSize: 10}">
+                         <div id="simpleList"></div>
+                       </div>
+                       <div class="demo-light" data-options="dxItem: {ratio: 33, minSize: 10}">
+                         <div id="gridContainer"></div>
+                       </div>
+                       <div class="demo-dark" data-options="dxItem: { ratio: 34, minSize: 10}">
+                         <div id="boxOptions5">
+                           <div class="demo-dark header" data-options="dxItem: {ratio: 50 }">
+                             <div id="chart"></div>
+                           </div>
+                           <div class="demo-dark header" data-options="dxItem: {ratio: 50 }">
+                             <div style="padding: 10px" id="pie">
+                               
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                   <div class="demo-dark footer" data-options="dxItem: {ratio: 20, minSize: 10}"> Footer </div>
+                 </div>
+         </div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
-            });
+
+// const registerServiceWorker = async () => {
+//   if ("serviceWorker" in navigator) {
+//     try {
+//       const registration = await navigator.serviceWorker.register("./sw.js", {
+//         scope: "/",
+//       });
+//       if (registration.installing) {
+//         console.log("Service worker installing");
+//       } else if (registration.waiting) {
+//         console.log("Service worker installed");
+//       } else if (registration.active) {
+//         console.log("Service worker active");
+//       }
+//     } catch (error) {
+//       console.error(`Registration failed with ${error}`);
+//     }
+//   }
+// };
+
+// registerServiceWorker();
+
+            $(() => {
+$('#addPaneCenter').dxButton({
+  text: 'Add Pane Center',
+  onClick: () => {
+    const centerBoxItems = centerBox.option('items');
+
+    console.log(centerBox.option('items'))
+
+    centerBoxItems.push({ minSize: 10 })
+
+    centerBox.option('items', centerBoxItems)
+  }
+});
+
+$('#addPaneTop').dxButton({
+  text: 'Add Pane Bottom',
+  onClick: () => {
+    const topBoxItems = dataSourceBox.option('dataSource');
+
+    console.log(dataSourceBox.option('dataSource'))
+
+    topBoxItems.push({ minSize: Math.random(), template: () => '<div>New Added Panel</div>' + Math.random() })
+
+    dataSourceBox.option('dataSource', topBoxItems);
+    //topBox.refresh();
+  }
+});
+
+$('#removePane').dxButton({
+  text: 'Remove Pane',
+  onClick: () => {
+    
+  }
+});
+
+$("#textBox").dxTextBox({
+
+});
+
+
+const dataSourceBox = $(".dataSourceBox").dxBox(
+
+{
+  direction: 'col',
+  repaintChangesOnly: true,
+  height: 600,
+  dataSource: [
+    { 
+      ratio: 20,
+      template: () => {
+        return '<div>Header</div>'
+      }
+    },
+    { 
+      ratio: 50,
+      direction: 'row',
+      template: () => {
+        return '<div id="centerBox">Center Panel</div>'
+      },
+      box: {
+        dataSource: [
+          {
+            ratio: 33, minSize: 10,
+            template: () => {
+              return '<div>Left</div>'
+            }
+          },
+          {
+            ratio: 33, minSize: 10,
+            template: () => {
+              return '<div>Center</div>'
+            }
+          },
+          {
+            ratio: 34, minSize: 10,
+            box: {
+              direction: 'col',
+              dataSource: [
+              { 
+                ratio: 50,
+                template: () => {
+                  return '<div>Right Top</div>'
+                }
+              },
+              {
+                ratio: 50,
+                template: () => {
+                  return '<div>Right Bottom</div>'
+                }
+              }]
+            }  
+          
+          }
+        ]
+      },
+    },
+    //...
+    {
+      ratio: 30,
+      template: (arg1, arg2, arg3) => {
+        const $footerTextBox = $('<div id="footerTextBox"></div>');
+
+        arg3.append($footerTextBox);
+
+        $footerTextBox.dxTextBox({
+
+        })
+      }
+    }
+  ]
+}).dxBox('instance');
+
+
+
+  $('.boxOptions1').dxBox({
+    direction: 'row',
+    width: '100%',
+    height: 75,
+  });
+
+  $('#boxOptions2').dxBox({
+    direction: 'row',
+    width: '100%',
+    height: 75,
+    align: 'center',
+    crossAlign: 'center',
+  });
+
+  const topBox = $('#boxOptions3').dxBox({
+    direction: 'col',
+    width: '100%',
+    height: 500,
+  }).dxBox('instance');
+
+//   $("#boxOptions3").dxSortable({
+//   filter: '.dx-box-item',
+//   itemOrientation: 'vertical',
+//   handle: '.dx-box-item',
+//   moveItemOnDrop: true,
+// })
+
+
+  const centerBox = $('#boxOptions4').dxBox({
+    direction: 'row',
+    width: '100%',
+    height: '100%',
+  }).dxBox('instance');
+
+  $('#boxOptions5').dxBox({
+    direction: 'col',
+    width: '100%',
+    height: '100%',
+  });
+
+
+  $(() => {
+
+    $(() => {
+  $('#simpleList').dxList({
+    dataSource: employees,
+    height: '100%',
+    grouped: true,
+    collapsibleGroups: true,
+    groupTemplate(data) {
+      return $(`<div>Assigned: ${data.key}</div>`);
+    },
+  });
+});
+
+  $('#gridContainer').dxDataGrid({
+    dataSource: {
+      store: {
+        type: 'odata',
+        version: 2,
+        url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
+        key: 'Id',
+        beforeSend(request) {
+          const year = new Date().getFullYear() - 1;
+          request.params.startDate = `${year}-05-10`;
+          request.params.endDate = `${year}-5-15`;
+        },
+      },
+    },
+    paging: {
+      pageSize: 10,
+    },
+    pager: {
+      showPageSizeSelector: true,
+      allowedPageSizes: [10, 25, 50, 100],
+    },
+    remoteOperations: false,
+    searchPanel: {
+      visible: true,
+      highlightCaseSensitive: true,
+    },
+    groupPanel: { visible: true },
+    grouping: {
+      autoExpandAll: false,
+    },
+    allowColumnReordering: true,
+    rowAlternationEnabled: true,
+    showBorders: true,
+    width: '100%',
+    height: '100%',
+    columns: [
+      {
+        dataField: 'Product',
+        groupIndex: 0,
+      },
+      {
+        dataField: 'Amount',
+        caption: 'Sale Amount',
+        dataType: 'number',
+        format: 'currency',
+        alignment: 'right',
+      },
+      {
+        dataField: 'Discount',
+        caption: 'Discount %',
+        dataType: 'number',
+        format: 'percent',
+        alignment: 'right',
+        allowGrouping: false,
+        cellTemplate: discountCellTemplate,
+        cssClass: 'bullet',
+      },
+      {
+        dataField: 'SaleDate',
+        dataType: 'date',
+      },
+      {
+        dataField: 'Region',
+        dataType: 'string',
+      },
+      {
+        dataField: 'Sector',
+        dataType: 'string',
+      },
+      {
+        dataField: 'Channel',
+        dataType: 'string',
+      },
+      {
+        dataField: 'Customer',
+        dataType: 'string',
+        width: 150,
+      },
+    ],
+    onContentReady(e) {
+      if (!collapsed) {
+        collapsed = true;
+        e.component.expandRow(['EnviroCare']);
+      }
+    },
+  });
+});
+
+const discountCellTemplate = function (container, options) {
+  $('<div/>').dxBullet({
+    onIncidentOccurred: null,
+    size: {
+      width: 150,
+      height: 35,
+    },
+    margin: {
+      top: 5,
+      bottom: 0,
+      left: 5,
+    },
+    showTarget: false,
+    showZeroLevel: true,
+    value: options.value * 100,
+    startScaleValue: 0,
+    endScaleValue: 100,
+    tooltip: {
+      enabled: true,
+      font: {
+        size: 18,
+      },
+      paddingTopBottom: 2,
+      customizeTooltip() {
+        return { text: options.text };
+      },
+      zIndex: 5,
+    },
+  }).appendTo(container);
+};
+
+let collapsed = false;
+
+});
+
+
+const employees = [{
+  key: 'Mr. John Heart',
+  items: ['Choose between PPO and HMO Health Plan', 'Google AdWords Strategy', 'New Brochures', 'Update NDA Agreement', 'Review Product Recall Report by Engineering Team'],
+}, {
+  key: 'Mrs. Olivia Peyton',
+  items: ['Update Personnel Files', 'Review Health Insurance Options Under the Affordable Care Act', 'Non-Compete Agreements'],
+}, {
+  key: 'Mr. Robert Reagan',
+  items: ['Deliver R&D Plans for 2013', 'Decide on Mobile Devices to Use in the Field', 'Try New Touch-Enabled WinForms Apps', 'Approval on Converting to New HDMI Specification'],
+}, {
+  key: 'Ms. Greta Sims',
+  items: ['Approve Hiring of John Jeffers', 'Update Employee Files with New NDA', 'Give Final Approval for Refunds'],
+}, {
+  key: 'Mr. Brett Wade',
+  items: ['Prepare 3013 Marketing Plan', 'Rollout of New Website and Marketing Brochures', 'Review 2012 Sales Report and Approve 2013 Plans', 'Review Site Up-Time Report'],
+}, {
+  key: 'Mrs. Sandra Johnson',
+  items: ['Provide New Health Insurance Docs', 'Review HR Budget Company Wide', 'Final Budget Review'],
+}, {
+  key: 'Mr. Kevin Carter',
+  items: ['Sign Updated NDA', 'Review Overtime Report', 'Upgrade Server Hardware', 'Upgrade Personal Computers'],
+}, {
+  key: 'Ms. Cynthia Stanwick',
+  items: ['Prepare 2013 Financial', 'Update Revenue Projections', 'Submit D&B Number to ISP for Credit Approval'],
+}, {
+  key: 'Dr. Kent Samuelson',
+  items: ['Update Sales Strategy Documents', 'Review Revenue Projections', 'Refund Request Template'],
+}];
+
+
+$(() => {
+  const data = complaintsData.sort((a, b) => b.count - a.count);
+  const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
+  let cumulativeCount = 0;
+  const dataSource = data.map((item) => {
+    cumulativeCount += item.count;
+    return {
+      complaint: item.complaint,
+      count: item.count,
+      cumulativePercentage: Math.round((cumulativeCount * 100) / totalCount),
+    };
+  });
+
+  $('#chart').dxChart({
+    palette: 'Harmony Light',
+    dataSource,
+    height: '100%',
+    title: 'Pizza Shop Complaints',
+    argumentAxis: {
+      label: {
+        overlappingBehavior: 'stagger',
+      },
+    },
+    tooltip: {
+      enabled: true,
+      shared: true,
+      customizeTooltip(info) {
+        const content = ["<div><div class='tooltip-header'></div>",
+          "<div class='tooltip-body'><div class='series-name'>",
+          "<span class='top-series-name'></span>",
+          ": </div><div class='value-text'>",
+          "<span class='top-series-value'></span>",
+          "</div><div class='series-name'>",
+          "<span class='bottom-series-name'></span>",
+          ": </div><div class='value-text'>",
+          "<span class='bottom-series-value'></span>",
+          '% </div></div></div>'].join('');
+
+        const htmlContent = $(content);
+
+        htmlContent.find('.tooltip-header').text(info.argumentText);
+        htmlContent.find('.top-series-name').text(info.points[0].seriesName);
+        htmlContent.find('.top-series-value').text(info.points[0].valueText);
+        htmlContent.find('.bottom-series-name').text(info.points[1].seriesName);
+        htmlContent.find('.bottom-series-value').text(info.points[1].valueText);
+
+        return {
+          html: $('<div>').append(htmlContent).html(),
+        };
+      },
+    },
+    valueAxis: [{
+      name: 'frequency',
+      position: 'left',
+      tickInterval: 300,
+    }, {
+      name: 'percentage',
+      position: 'right',
+      showZero: true,
+      label: {
+        customizeText(info) {
+          return `${info.valueText}%`;
+        },
+      },
+      constantLines: [{
+        value: 80,
+        color: '#fc3535',
+        dashStyle: 'dash',
+        width: 2,
+        label: { visible: false },
+      }],
+      tickInterval: 20,
+      valueMarginsEnabled: false,
+    }],
+    commonSeriesSettings: {
+      argumentField: 'complaint',
+    },
+    series: [{
+      type: 'bar',
+      valueField: 'count',
+      axis: 'frequency',
+      name: 'Complaint frequency',
+      color: '#fac29a',
+    }, {
+      type: 'spline',
+      valueField: 'cumulativePercentage',
+      axis: 'percentage',
+      name: 'Cumulative percentage',
+      color: '#6b71c3',
+    }],
+    legend: {
+      verticalAlignment: 'top',
+      horizontalAlignment: 'center',
+    },
+  });
+});
+const complaintsData = [
+  { complaint: 'Cold pizza', count: 780 },
+  { complaint: 'Not enough cheese', count: 120 },
+  { complaint: 'Underbaked or Overbaked', count: 52 },
+  { complaint: 'Delayed delivery', count: 1123 },
+  { complaint: 'Damaged pizza', count: 321 },
+  { complaint: 'Incorrect billing', count: 89 },
+  { complaint: 'Wrong size delivered', count: 222 },
+];
+
+$(() => {
+  $('#pie').dxPieChart({
+    height: '100%',
+    // size: {
+    //   height: '100%',
+    // },
+    palette: 'bright',
+    dataSource,
+    series: [
+      {
+        argumentField: 'country',
+        valueField: 'area',
+        label: {
+          visible: true,
+          connector: {
+            visible: true,
+            width: 1,
+          },
+        },
+      },
+    ],
+    title: 'Area of Countries',
+    export: {
+      enabled: true,
+    },
+    onPointClick(e) {
+      const point = e.target;
+
+      toggleVisibility(point);
+    },
+    onLegendClick(e) {
+      const arg = e.target;
+
+      toggleVisibility(this.getAllSeries()[0].getPointsByArg(arg)[0]);
+    },
+  });
+
+  function toggleVisibility(item) {
+    if (item.isVisible()) {
+      item.hide();
+    } else {
+      item.show();
+    }
+  }
+});
+
+
+const dataSource = [{
+  country: 'Russia',
+  area: 12,
+}, {
+  country: 'Canada',
+  area: 7,
+}, {
+  country: 'USA',
+  area: 7,
+}, {
+  country: 'China',
+  area: 7,
+}, {
+  country: 'Brazil',
+  area: 6,
+}, {
+  country: 'Australia',
+  area: 5,
+}, {
+  country: 'India',
+  area: 2,
+}, {
+  country: 'Others',
+  area: 55,
+}];
         </script>
     </div>
 </body>

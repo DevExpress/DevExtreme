@@ -230,6 +230,7 @@ export default CollectionWidget.inherit({
         }
 
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
+
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();
         this._fireContentReadyAction();
@@ -250,6 +251,7 @@ export default CollectionWidget.inherit({
                 break;
             }
             case 'dataSource':
+                debugger;
                 if(!this.option('repaintChangesOnly') || !args.value) {
                     this.option('items', []);
                 }

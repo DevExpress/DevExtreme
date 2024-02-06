@@ -21,8 +21,29 @@ const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['danger', 'default', 'normal', 'success'];
 
 fixture.disablePageReloads`Button`
-  .page(url(__dirname, '../../container.html'));
+  .page('http://localhost:20030/packages/devextreme/testing/testcafe/tests/container.html')
+  // .clientScripts([{ content: 'console.log(JSON.stringify(window.DevExpress.ui.themes))' }]);
+// eslint-disable-next-line no-template-curly-in-string
+  .clientScripts([{ content: 'debugger; window.addEventListener("load", function() { debugger }); const linkRels = Array.from(document.getElementsByTagName("link"));const linkRel = linkRels.find((x) => x.href.includes("dx.light.css"));const urlSegments = linkRel.href.replace("dx.light.css", "dx.material.blue.dark.css");linkRel.href = urlSegments;' }]);
 
+const registerServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js', {
+        scope: '/',
+      });
+      if (registration.installing) {
+        console.log('Service worker installing');
+      } else if (registration.waiting) {
+        console.log('Service worker installed');
+      } else if (registration.active) {
+        console.log('Service worker active');
+      }
+    } catch (error) {
+      console.error(`Registration failed with ${error}`);
+    }
+  }
+};
 test('Buttons render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -47,7 +68,8 @@ test('Buttons render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}).before(async (t) => {
+  await t.debug();
   for (const stylingMode of stylingModes) {
     for (const type of types) {
       for (const text of ['Button Text', '']) {
