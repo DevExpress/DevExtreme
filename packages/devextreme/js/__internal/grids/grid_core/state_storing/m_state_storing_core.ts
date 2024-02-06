@@ -101,6 +101,8 @@ export class StateStoringController extends modules.ViewController {
     };
 
     eventsEngine.on(getWindow(), 'unload', that._windowUnloadHandler);
+
+    return this; // needed by pivotGrid mocks
   }
 
   isLoaded() {
@@ -166,3 +168,5 @@ export class StateStoringController extends modules.ViewController {
     eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
   }
 }
+
+export default { StateStoringController };

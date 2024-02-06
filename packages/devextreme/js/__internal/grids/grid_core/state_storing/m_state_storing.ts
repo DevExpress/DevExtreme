@@ -114,6 +114,8 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
     // @ts-expect-error
     super.init.apply(this, arguments);
     processLoadState(this);
+
+    return this;
   }
 
   isLoading() {
@@ -284,7 +286,7 @@ const selection = (Base: ModuleType<SelectionController>) => class StateStoringS
       return;
     }
     // @ts-expect-error
-    super._fireSelectionChanged(this, arguments);
+    super._fireSelectionChanged.apply(this, arguments);
   }
 };
 
