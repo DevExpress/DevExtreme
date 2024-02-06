@@ -118,7 +118,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
   isLoading() {
     // @ts-expect-error
-    return this.callBase() || this.getController('data').isStateLoading();
+    return super.isLoading() || this.getController('data').isStateLoading();
   }
 
   state(state?) {
