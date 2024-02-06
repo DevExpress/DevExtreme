@@ -755,7 +755,7 @@ QUnit.module('Keyboard controller', {
 
         // act
         navigationController.option('keyboardNavigation.enabled', false);
-        navigationController.optionChanged({ name: 'keyboardNavigation' });
+        navigationController.optionChanged({ name: 'keyboardNavigation', fullName: 'keyboardNavigation.enabled' });
         callViewsRenderCompleted(this.component._views);
 
         // assert
@@ -802,7 +802,7 @@ QUnit.module('Keyboard controller', {
 
         // act
         navigationController.option('keyboardNavigation.enabled', true);
-        navigationController.optionChanged({ name: 'keyboardNavigation' });
+        navigationController.optionChanged({ name: 'keyboardNavigation', fullName: 'keyboardNavigation.enabled' });
         callViewsRenderCompleted(this.component._views);
 
         // assert
