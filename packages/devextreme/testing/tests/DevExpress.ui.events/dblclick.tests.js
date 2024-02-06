@@ -35,7 +35,7 @@ QUnit.test('dxdblclick should bubble up', function(assert) {
     $('#element').trigger(dblclickEvent.name);
 });
 
-QUnit.test('dxdblclick should be works correctly even if dblClick.remove() calls many times (T1208575)', function(assert) {
+QUnit.test('dxdblclick should not be handled on a usual dxclick even if dblClick.remove() was called more than necessary (T1208575)', function(assert) {
     const el = $('#element');
     const handler = sinon.stub();
 
