@@ -183,6 +183,7 @@ const TextEditorMask = TextEditorBase.inherit({
         this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
 
+        this._maskStrategy.clean();
         this._maskStrategy.detachEvents();
 
         if(!this.option('mask')) {
