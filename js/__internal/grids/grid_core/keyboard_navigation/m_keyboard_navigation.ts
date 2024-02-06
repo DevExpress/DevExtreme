@@ -372,6 +372,11 @@ export class KeyboardNavigationController extends modules.ViewController {
   optionChanged(args: OptionChanged) {
     switch (args.name) {
       case 'keyboardNavigation':
+        if (args.fullName === 'keyboardNavigation.enabled') {
+          this.init();
+        }
+        args.handled = true;
+        break;
       case 'useLegacyKeyboardNavigation':
         this.init();
         args.handled = true;
