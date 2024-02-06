@@ -12,10 +12,13 @@ const getSkippedHoursInRange = (
   const allDayIntervalDuration = 24 * msInHour;
   let excludedHours = 0;
 
+  const { startDayHour, endDayHour } = viewDataProvider.getViewOptions();
+  const dayHours = endDayHour - startDayHour;
+
   for (let time = startTime; time < endTime; time += allDayIntervalDuration) {
     const checkDate = new Date(time);
     if (viewDataProvider.isSkippedDate(checkDate)) {
-      excludedHours += 24;
+      excludedHours += dayHours;
     }
   }
 

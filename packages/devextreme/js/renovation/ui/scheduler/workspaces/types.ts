@@ -189,6 +189,8 @@ interface ViewOptions {
   isGroupedByDate: boolean;
   startCellIndex: number;
   startRowIndex: number;
+  startDayHour: number;
+  endDayHour: number;
 }
 
 export interface ViewDataProviderOptions {

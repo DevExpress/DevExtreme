@@ -6,6 +6,10 @@ describe('getSkippedHoursInRange', () => {
     it('should skip large interval', () => {
       const mockViewDataProvider = {
         isSkippedDate: (date: Date) => date.getDay() >= 6,
+        getViewOptions: () => ({
+          startDayHour: 0,
+          endDayHour: 24,
+        }),
       };
 
       const result = getSkippedHoursInRange(
@@ -21,6 +25,10 @@ describe('getSkippedHoursInRange', () => {
     it('should skip 2 weekend days if startDate and endDate inside weekend', () => {
       const mockViewDataProvider = {
         isSkippedDate: (date: Date) => isDataOnWeekend(date),
+        getViewOptions: () => ({
+          startDayHour: 0,
+          endDayHour: 24,
+        }),
       };
 
       const result = getSkippedHoursInRange(
@@ -37,6 +45,10 @@ describe('getSkippedHoursInRange', () => {
   describe('border conditions', () => {
     const mockViewDataProvider = {
       isSkippedDate: (date: Date) => isDataOnWeekend(date),
+      getViewOptions: () => ({
+        startDayHour: 0,
+        endDayHour: 24,
+      }),
     };
 
     it('should not skip weekend if endDate at 0 border of weekend', () => {
@@ -82,5 +94,34 @@ describe('getSkippedHoursInRange', () => {
       expect(result)
         .toBe(48);
     });
+  });
+
+  describe('startDayHour and endDayHour', () => {
+    it.each<[number, number, number]>([
+      [0, 24, 48],
+      [7, 17, 20],
+      [0, 18, 36],
+      [8, 24, 32],
+    ])(
+      'should return correct skipped hours for %d and %d as start and end day hour',
+      (startDayHour, endDayHour, expectedHours) => {
+        const mockViewDataProvider = {
+          isSkippedDate: (date: Date) => isDataOnWeekend(date),
+          getViewOptions: () => ({
+            startDayHour,
+            endDayHour,
+          }),
+        };
+
+        const result = getSkippedHoursInRange(
+          new Date(2024, 1, 1),
+          new Date(2024, 1, 6),
+          mockViewDataProvider as any,
+        );
+
+        expect(result)
+          .toBe(expectedHours);
+      },
+    );
   });
 });
