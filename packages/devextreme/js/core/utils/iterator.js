@@ -1,5 +1,3 @@
-import { isIterableObject } from './type';
-
 const map = (values, callback) => {
     if(Array.isArray(values)) {
         return values.map(callback);
@@ -23,7 +21,7 @@ const map = (values, callback) => {
 const each = (values, callback) => {
     if(!values) return;
 
-    if(isIterableObject(values)) {
+    if('length' in values) {
         for(let i = 0; i < values.length; i++) {
             if(callback.call(values[i], i, values[i]) === false) {
                 break;
