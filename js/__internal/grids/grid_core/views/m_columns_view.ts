@@ -883,8 +883,13 @@ export class ColumnsView extends viewWithColumnStateMixin {
       case 'onCellPrepared':
       case 'onRowPrepared':
       case 'onCellHoverChanged':
-      case 'keyboardNavigation':
         this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'keyboardNavigation':
+        if (args.fullName === 'keyboardNavigation.enabled') {
+          this._invalidate(true, true);
+        }
         args.handled = true;
         break;
     }
