@@ -94,8 +94,6 @@ const getScreenshotName = (
   { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
   { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
   { views: [{ type: 'timelineWeek', cellDuration: 480, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-  // NOTE: The timelineWorkWeek view has some existing issues
-  // Therefore some screenshots is invalid :(
   { views: [{ type: 'timelineWorkWeek', cellDuration: 480, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
   {
     views: [{ type: 'timelineWorkWeek', cellDuration: 480, firstDayOfWeek: 3 }],
@@ -123,6 +121,7 @@ end: ${endDayHour}
 first day: ${views[0].firstDayOfWeek}
 )`, async (t) => {
         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+        await t.wait(10000);
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
         await takeScreenshot(
