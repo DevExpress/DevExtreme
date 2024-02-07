@@ -43,6 +43,7 @@ const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
 const SelectBox = require('ui/select_box');
 const SliderHandle = require('ui/slider/ui.slider_handle');
+const Splitter = require('ui/splitter');
 const Tabs = require('ui/tabs');
 const TabPanel = require('ui/tab_panel');
 const TagBox = require('ui/tag_box');
@@ -1420,6 +1421,15 @@ testComponentDefaults(SliderHandle, {},
             position: 'top',
             showMode: 'onHover'
         }
+    }
+);
+
+testComponentDefaults(Splitter,
+    {},
+    {
+        direction: 'horizontal',
+        activeStateEnabled: false,
+        focusStateEnabled: false,
     }
 );
 

@@ -6,7 +6,7 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Drawer from '../drawer/ui.drawer';
-import SplitterControl from '../splitter';
+import SplitterControl from '../splitter_control';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
