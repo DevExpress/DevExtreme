@@ -158,7 +158,7 @@ const DropDownButton = Widget.inherit({
         this._updateArrowClass();
 
         if(isDefined(this.option('selectedItemKey'))) {
-            this._loadSelectedItem().done(this._updateActionButton.bind(this));
+            this._loadSelectedItem().always(this._updateActionButton.bind(this));
         }
     },
 
@@ -193,9 +193,9 @@ const DropDownButton = Widget.inherit({
 
         const selectedItemKey = this.option('selectedItemKey');
         this._dataController.loadSingle(selectedItemKey)
-            .then(d.resolve)
-            .catch(() => {
-                d.resolve(null);
+            .done(d.resolve)
+            .fail(() => {
+                d.reject(null);
             });
 
         this._loadSingleDeferred = d;
@@ -542,6 +542,10 @@ const DropDownButton = Widget.inherit({
     },
 
     _updateActionButton(selectedItem) {
+        if(selectedItem === undefined) {
+            return;
+        }
+
         if(this.option('useSelectMode')) {
             this.option({
                 text: this._getDisplayValue(selectedItem),
@@ -561,7 +565,11 @@ const DropDownButton = Widget.inherit({
     _selectedItemKeyChanged(value) {
         this._setListOption('selectedItemKeys', this.option('useSelectMode') && isDefined(value) ? [value] : []);
         const previousItem = this.option('selectedItem');
-        this._loadSelectedItem().done((selectedItem) => {
+        this._loadSelectedItem().always((selectedItem) => {
+            if(selectedItem === undefined) {
+                return;
+            }
+
             this._updateActionButton(selectedItem);
 
             if(this._displayGetter(previousItem) !== this._displayGetter(selectedItem)) {

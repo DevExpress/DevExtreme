@@ -1572,8 +1572,8 @@ QUnit.module('common use cases', {
 
         const list = getList(this.dropDownButton);
         assert.deepEqual(list.option('selectedItemKeys'), [], 'list selectedItemKey is kept');
-        // TODO research me
-        // assert.strictEqual(list.option('selectedItem'), undefined, 'list selectedItem is correct');
+
+        assert.strictEqual(list.option('selectedItem'), undefined, 'list selectedItem is correct');
     });
 
     QUnit.test('click on item should raise selectionChanged - subscription by "on" method', function(assert) {

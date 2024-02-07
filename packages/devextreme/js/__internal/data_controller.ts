@@ -1,3 +1,5 @@
+import { Deferred } from '@js/core/utils/deferred';
+
 import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
 import ArrayStore from '../data/array_store';
@@ -104,7 +106,9 @@ class DataController {
 
   loadSingle(propName: string, propValue: unknown): Promise<unknown> {
     if (!this._dataSource) {
-      return Promise.reject();
+      // @ts-expect-error TS2350
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return new Deferred().reject();
     }
 
     let pName = propName;
