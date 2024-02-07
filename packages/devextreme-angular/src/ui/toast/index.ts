@@ -146,21 +146,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
-    
-     * @deprecated [depNote:dxOverlayOptions.copyRootClassesToWrapper]
-    
-     */
-    @Input()
-    get copyRootClassesToWrapper(): boolean {
-        return this._getOption('copyRootClassesToWrapper');
-    }
-    set copyRootClassesToWrapper(value: boolean) {
-        this._setOption('copyRootClassesToWrapper', value);
-    }
-
-
-    /**
      * [descr:dxOverlayOptions.deferRendering]
     
      */
@@ -183,21 +168,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     }
     set displayTime(value: number) {
         this._setOption('displayTime', value);
-    }
-
-
-    /**
-     * [descr:dxOverlayOptions.elementAttr]
-    
-     * @deprecated [depNote:dxOverlayOptions.elementAttr]
-    
-     */
-    @Input()
-    get elementAttr(): any {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: any) {
-        this._setOption('elementAttr', value);
     }
 
 
@@ -571,13 +541,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() copyRootClassesToWrapperChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
@@ -586,13 +549,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() displayTimeChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() elementAttrChange: EventEmitter<any>;
 
     /**
     
@@ -763,10 +719,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
             { emit: 'closeOnOutsideClickChange' },
             { emit: 'closeOnSwipeChange' },
             { emit: 'contentTemplateChange' },
-            { emit: 'copyRootClassesToWrapperChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'displayTimeChange' },
-            { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hideOnOutsideClickChange' },

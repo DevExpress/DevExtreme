@@ -8,13 +8,11 @@ type AccessibleOptions = Pick<Properties,
   "closeOnOutsideClick" |
   "container" |
   "contentTemplate" |
-  "copyRootClassesToWrapper" |
   "deferRendering" |
   "disabled" |
   "dragAndResizeArea" |
   "dragEnabled" |
   "dragOutsideBoundary" |
-  "elementAttr" |
   "enableBodyScroll" |
   "focusStateEnabled" |
   "fullScreen" |
@@ -66,13 +64,11 @@ const DxPopup = createComponent({
     closeOnOutsideClick: [Boolean, Function],
     container: {},
     contentTemplate: {},
-    copyRootClassesToWrapper: Boolean,
     deferRendering: Boolean,
     disabled: Boolean,
     dragAndResizeArea: {},
     dragEnabled: Boolean,
     dragOutsideBoundary: Boolean,
-    elementAttr: {},
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
@@ -121,13 +117,11 @@ const DxPopup = createComponent({
     "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
-    "update:copyRootClassesToWrapper": null,
     "update:deferRendering": null,
     "update:disabled": null,
     "update:dragAndResizeArea": null,
     "update:dragEnabled": null,
     "update:dragOutsideBoundary": null,
-    "update:elementAttr": null,
     "update:enableBodyScroll": null,
     "update:focusStateEnabled": null,
     "update:fullScreen": null,

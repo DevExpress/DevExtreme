@@ -110,6 +110,12 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
     _getPopupOptions() {
         const that = this;
+        let wrapperClass = this._getPopupClass();
+
+        if(this.isMobileView()) {
+            wrapperClass += ` ${DIAGRAM_MOBILE_POPUP_CLASS}`;
+        }
+
         return {
             animation: hasWindow() ? this._getPopupAnimation() : null,
             shading: false,
@@ -124,8 +130,7 @@ class DiagramFloatingPanel extends DiagramPanel {
             minHeight: this._getPopupMinHeight(),
             position: this._getPopupPosition(),
             showCloseButton: true,
-            copyRootClassesToWrapper: true,
-            _ignoreCopyRootClassesToWrapperDeprecation: true,
+            wrapperAttr: { class: wrapperClass },
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },

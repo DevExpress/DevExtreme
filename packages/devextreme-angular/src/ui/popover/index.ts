@@ -135,21 +135,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
     /**
-     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
-    
-     * @deprecated [depNote:dxOverlayOptions.copyRootClassesToWrapper]
-    
-     */
-    @Input()
-    get copyRootClassesToWrapper(): boolean {
-        return this._getOption('copyRootClassesToWrapper');
-    }
-    set copyRootClassesToWrapper(value: boolean) {
-        this._setOption('copyRootClassesToWrapper', value);
-    }
-
-
-    /**
      * [descr:dxOverlayOptions.deferRendering]
     
      */
@@ -172,21 +157,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
-    }
-
-
-    /**
-     * [descr:dxOverlayOptions.elementAttr]
-    
-     * @deprecated [depNote:dxOverlayOptions.elementAttr]
-    
-     */
-    @Input()
-    get elementAttr(): any {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: any) {
-        this._setOption('elementAttr', value);
     }
 
 
@@ -619,13 +589,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() copyRootClassesToWrapperChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
@@ -634,13 +597,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() disabledChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() elementAttrChange: EventEmitter<any>;
 
     /**
     
@@ -854,10 +810,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { emit: 'closeOnOutsideClickChange' },
             { emit: 'containerChange' },
             { emit: 'contentTemplateChange' },
-            { emit: 'copyRootClassesToWrapperChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
             { emit: 'enableBodyScrollChange' },
             { emit: 'heightChange' },
             { emit: 'hideEventChange' },

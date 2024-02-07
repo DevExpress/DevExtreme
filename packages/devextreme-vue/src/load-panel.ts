@@ -6,10 +6,8 @@ type AccessibleOptions = Pick<Properties,
   "animation" |
   "closeOnOutsideClick" |
   "container" |
-  "copyRootClassesToWrapper" |
   "deferRendering" |
   "delay" |
-  "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hideOnOutsideClick" |
@@ -49,10 +47,8 @@ const DxLoadPanel = createComponent({
     animation: Object,
     closeOnOutsideClick: [Boolean, Function],
     container: {},
-    copyRootClassesToWrapper: Boolean,
     deferRendering: Boolean,
     delay: Number,
-    elementAttr: {},
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
@@ -89,10 +85,8 @@ const DxLoadPanel = createComponent({
     "update:animation": null,
     "update:closeOnOutsideClick": null,
     "update:container": null,
-    "update:copyRootClassesToWrapper": null,
     "update:deferRendering": null,
     "update:delay": null,
-    "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hideOnOutsideClick": null,
