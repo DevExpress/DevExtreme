@@ -7,24 +7,26 @@ fixture.disablePageReloads`Resize appointments in All Day Panel`
   .page(url(__dirname, '../../container.html'));
 
 test('Resize in the workWeek view between weeks', async (t) => {
+  const CELL_WIDTH = 75;
+
   const scheduler = new Scheduler('#container');
   const appointment1 = scheduler.getAppointment('1st');
   const appointment2 = scheduler.getAppointment('2nd');
   const appointment3 = scheduler.getAppointment('3rd');
 
   await t
-    .drag(appointment1.resizableHandle.right, 400, 0)
-    .drag(appointment2.resizableHandle.left, -400, 0)
-    .drag(appointment3.resizableHandle.right, -140, 0)
+    .drag(appointment1.resizableHandle.right, CELL_WIDTH * 6, 0)
+    .drag(appointment2.resizableHandle.left, -CELL_WIDTH * 6, 0)
+    .drag(appointment3.resizableHandle.right, -CELL_WIDTH * 2, 0)
     .expect(
       await compareScreenshot(t, 'resize-all-day-workweek-weekend-0.png'),
     )
     .ok();
 
   await t
-    .drag(appointment1.resizableHandle.right, -400, 0)
-    .drag(appointment2.resizableHandle.left, 400, 0)
-    .drag(appointment3.resizableHandle.right, 140, 0)
+    .drag(appointment1.resizableHandle.right, -CELL_WIDTH * 6, 0)
+    .drag(appointment2.resizableHandle.left, CELL_WIDTH * 6, 0)
+    .drag(appointment3.resizableHandle.right, CELL_WIDTH * 2, 0)
     .expect(
       await compareScreenshot(t, 'resize-all-day-workweek-weekend-1.png'),
     )
