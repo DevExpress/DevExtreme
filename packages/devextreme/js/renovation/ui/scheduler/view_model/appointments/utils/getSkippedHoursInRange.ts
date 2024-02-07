@@ -1,10 +1,12 @@
 import { ViewDataProviderType } from '../../../workspaces/types';
 
 const HOUR_IN_MS = 1000 * 60 * 60;
+const HOURS_IN_DAY = 24;
 
 const getSkippedHoursInRange = (
   startDate: Date,
   endDate: Date,
+  isAllDay: boolean,
   viewDataProvider: ViewDataProviderType,
 ): number => {
   let result = 0;
@@ -17,7 +19,7 @@ const getSkippedHoursInRange = (
   endDateWithStartHour.setHours(0, 0, 0, 0);
 
   const { startDayHour, endDayHour } = viewDataProvider.getViewOptions();
-  const dayHours = endDayHour - startDayHour;
+  const dayHours = isAllDay ? HOURS_IN_DAY : endDayHour - startDayHour;
 
   while (currentDate < endDateWithStartHour) {
     if (viewDataProvider.isSkippedDate(currentDate)) {
@@ -31,7 +33,9 @@ const getSkippedHoursInRange = (
   const endDateHours = endDate.getHours() + Math.ceil(endDate.getTime() % HOUR_IN_MS);
 
   if (viewDataProvider.isSkippedDate(startDate)) {
-    if (startDateHours < startDayHour) {
+    if (isAllDay) {
+      result += HOURS_IN_DAY;
+    } else if (startDateHours < startDayHour) {
       result += dayHours;
     } else if (startDateHours < endDayHour) {
       result += endDayHour - startDateHours;
@@ -39,7 +43,9 @@ const getSkippedHoursInRange = (
   }
 
   if (viewDataProvider.isSkippedDate(endDate)) {
-    if (endDateHours > endDayHour) {
+    if (isAllDay) {
+      result += HOURS_IN_DAY;
+    } else if (endDateHours > endDayHour) {
       result += dayHours;
     } else if (endDateHours > startDayHour) {
       result += endDateHours - startDayHour;

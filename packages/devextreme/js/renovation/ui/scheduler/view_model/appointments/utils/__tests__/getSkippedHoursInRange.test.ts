@@ -15,6 +15,7 @@ describe('getSkippedHoursInRange', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 9, 8, 23, 23),
         new Date(2021, 12, 28, 18, 18),
+        true,
         mockViewDataProvider as any,
       );
 
@@ -34,11 +35,12 @@ describe('getSkippedHoursInRange', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 3, 3),
         new Date(2021, 3, 4, 0, 0, 0, 1),
+        true,
         mockViewDataProvider as any,
       );
 
       expect(result)
-        .toBe(25);
+        .toBe(48);
     });
   });
 
@@ -55,28 +57,31 @@ describe('getSkippedHoursInRange', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 3, 2),
         new Date(2021, 3, 3),
+        true,
         mockViewDataProvider as any,
       );
 
       expect(result)
-        .toBe(0);
+        .toBe(24);
     });
 
     it('should skip only first weekend hour if endDate > 0 border of weekend', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 3, 2),
         new Date(2021, 3, 3, 0, 0, 0, 1),
+        true,
         mockViewDataProvider as any,
       );
 
       expect(result)
-        .toBe(1);
+        .toBe(24);
     });
 
     it('should skip 1 weekend day if endDate is at the end of the weekend day', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 3, 2),
         new Date(2021, 3, 3, 23, 59, 59),
+        true,
         mockViewDataProvider as any,
       );
 
@@ -88,6 +93,7 @@ describe('getSkippedHoursInRange', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 3, 2),
         new Date(2021, 3, 5, 0, 0, 0, 1),
+        true,
         mockViewDataProvider as any,
       );
 
@@ -96,7 +102,7 @@ describe('getSkippedHoursInRange', () => {
     });
   });
 
-  describe('startDayHour and endDayHour', () => {
+  describe('startDayHour and endDayHour and allDay = false', () => {
     interface TestParams {
       startDate: Date;
       endDate: Date;
@@ -170,7 +176,7 @@ describe('getSkippedHoursInRange', () => {
         }),
       };
 
-      const result = getSkippedHoursInRange(startDate, endDate, mockViewDataProvider as any);
+      const result = getSkippedHoursInRange(startDate, endDate, false, mockViewDataProvider as any);
       expect(result).toBe(expectedHours);
     });
   });
