@@ -6,13 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        required: false
-        description: Use 'daily' for daily builds with timestamp version, use 'stable' for releases.
+        description: "Choose a tag: 'daily' when publishing a daily build with a timestamp version, 'stable' when publishing a stable build from a release branch"
         type: choice
         options:
           - daily
           - stable
         default: 'daily'
+        required: false
       filter:
         type: string
         description: Package file filter pattern
