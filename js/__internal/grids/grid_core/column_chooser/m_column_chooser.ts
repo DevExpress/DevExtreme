@@ -155,6 +155,7 @@ class ColumnChooserView extends ColumnsView {
           $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
         }
       },
+      // @ts-expect-error
       container: columnChooserOptions.container,
     };
 
