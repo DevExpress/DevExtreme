@@ -28,6 +28,11 @@
             "automerge": true
         },
         {
+            "matchPackageNames": [ "chrome", "firefox" ],
+            "matchUpdateTypes": [ "minor", "patch" ],
+            "enabled": false
+        },
+        {
             "matchPackagePatterns": [
                 "^@devextreme-generator/"
             ],
