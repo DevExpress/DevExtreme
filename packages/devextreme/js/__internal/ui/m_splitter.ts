@@ -45,7 +45,12 @@ class Splitter extends CollectionWidget {
   }
 
   _optionChanged(args) {
-    super._optionChanged(args);
+    switch (args.name) {
+      case 'direction':
+        break;
+      default:
+        super._optionChanged(args);
+    }
   }
 }
 
