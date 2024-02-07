@@ -155,6 +155,13 @@ describe('getSkippedHoursInRange', () => {
         expectedHours: 4,
       },
       {
+        startDate: new Date(2024, 1, 4, 8),
+        endDate: new Date(2024, 1, 6),
+        startDayHour: 10,
+        endDayHour: 16,
+        expectedHours: 6,
+      },
+      {
         startDate: new Date(2024, 1, 2, 13, 0),
         endDate: new Date(2024, 1, 3, 18, 0),
         startDayHour: 12,
