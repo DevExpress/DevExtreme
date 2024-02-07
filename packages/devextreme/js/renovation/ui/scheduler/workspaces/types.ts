@@ -247,6 +247,7 @@ export interface ViewDataProviderType {
   isSkippedDate: (date: Date) => boolean;
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
   getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
+  viewType: ViewType;
 }
 
 interface CompleteViewDataGenerationOptions {

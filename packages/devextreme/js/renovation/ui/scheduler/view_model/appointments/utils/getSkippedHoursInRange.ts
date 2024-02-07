@@ -6,9 +6,10 @@ const HOURS_IN_DAY = 24;
 const getSkippedHoursInRange = (
   startDate: Date,
   endDate: Date,
-  isAllDay: boolean,
+  allDay: boolean,
   viewDataProvider: ViewDataProviderType,
 ): number => {
+  const isAllDay = allDay && !viewDataProvider.viewType.includes('timeline');
   let result = 0;
 
   const currentDate = new Date(startDate);
