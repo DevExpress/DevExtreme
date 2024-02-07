@@ -337,6 +337,9 @@ function getDefaultClickHandler(module, name) {
         const value = formats[name];
         const newValue = !(isBoolean(value) ? value : isDefined(value));
 
+        // Remove condition after adding method
+        module.quill.startFormat?.();
+
         applyFormat(module, [name, newValue, USER_ACTION], event);
 
         getToolbarModule(module)?._updateFormatWidget(name, newValue, formats);

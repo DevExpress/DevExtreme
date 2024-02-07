@@ -98,7 +98,8 @@ const simpleModuleConfig = {
             },
             getSelection: () => { return { index: 0, length: 0 }; },
             getFormat: () => { return {}; },
-            getModule: (moduleName) => this.quillMock[moduleName]
+            getModule: (moduleName) => this.quillMock[moduleName],
+            startFormat: sinon.spy()
         };
 
         this.options = {
@@ -330,7 +331,8 @@ testModule('Toolbar module', simpleModuleConfig, () => {
             }]
         );
         assert.ok(isHandlerTriggered, 'Custom handler triggered');
-        assert.equal($homeIcon.length, 1, 'last button has a custom icon');
+        assert.strictEqual($homeIcon.length, 1, 'last button has a custom icon');
+        assert.strictEqual(this.quillMock.startFormat.callCount, 2);
     });
 
     test('Enum format handling', function(assert) {
