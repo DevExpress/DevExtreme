@@ -98,7 +98,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExten
       if (dataController.isLoaded() && !dataController.getDataSource()) {
         that.setLoading(false);
         that.renderNoDataText();
-        // @ts-expect-error
         const columnHeadersView = that.component.getView('columnHeadersView');
         columnHeadersView && columnHeadersView.render();
         that.component._fireContentReadyAction();

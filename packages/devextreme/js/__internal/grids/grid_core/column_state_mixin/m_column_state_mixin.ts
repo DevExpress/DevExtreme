@@ -107,6 +107,8 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
         showColumnLines: this.option('showColumnLines'),
       });
     }
+
+    return undefined;
   }
 };
 
