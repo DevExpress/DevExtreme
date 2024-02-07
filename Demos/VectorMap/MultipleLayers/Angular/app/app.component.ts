@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule } from 'devextreme-angular';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { FeatureCollection, Service } from './app.service';
 
@@ -18,7 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap: any = mapsData.world;
+  worldMap = mapsData.world;
 
   streamsData: FeatureCollection;
 
@@ -26,12 +25,7 @@ export class AppComponent {
     this.streamsData = service.getStreamsData();
   }
 
-  customizeText(itemInfo) {
-    if (itemInfo.color === '#3c20c8') {
-      return 'Cold';
-    }
-    return 'Warm';
-  }
+  customizeText = ({ color }) => (color === '#3c20c8' ? 'Cold' : 'Warm');
 }
 
 @NgModule({

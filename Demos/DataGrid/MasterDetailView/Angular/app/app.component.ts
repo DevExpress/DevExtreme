@@ -3,7 +3,6 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxTemplateModule } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
-
 import { DetailGridComponent } from './detail-grid/detail-grid.component';
 
 if (!/localhost/.test(document.location.host)) {

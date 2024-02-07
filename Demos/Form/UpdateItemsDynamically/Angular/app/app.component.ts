@@ -1,12 +1,10 @@
-import {
-  NgModule, Component, enableProdMode, AfterViewInit,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxFormModule,
-} from 'devextreme-angular';
-
+import { DxFormModule } from 'devextreme-angular';
+import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,52 +18,39 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   employee: Employee;
 
-  isHomeAddressVisible: boolean;
+  isHomeAddressVisible = true;
 
-  checkBoxOptions: any;
+  phoneOptions: DxTextBoxTypes.Properties[] = [];
 
-  phoneOptions: any[] = [];
+  checkBoxOptions: DxCheckBoxTypes.Properties = {
+    text: 'Show Address',
+    value: true,
+    onValueChanged: (e: DxCheckBoxTypes.ValueChangedEvent) => {
+      this.isHomeAddressVisible = e.component.option('value');
+    },
+  };
 
-  addPhoneButtonOptions: any;
+  addPhoneButtonOptions: DxButtonTypes.Properties = {
+    icon: 'add',
+    text: 'Add phone',
+    onClick: () => {
+      this.employee.Phones.push('');
+      this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+    },
+  };
 
   constructor(service: Service) {
     this.employee = service.getEmployee();
-    this.isHomeAddressVisible = true;
 
     this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-
-    this.checkBoxOptions = {
-      text: 'Show Address',
-      value: true,
-      onValueChanged: (e) => {
-        this.isHomeAddressVisible = e.component.option('value');
-      },
-    };
-
-    this.addPhoneButtonOptions = {
-      icon: 'add',
-      text: 'Add phone',
-      onClick: () => {
-        this.employee.Phones.push('');
-        this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-      },
-    };
   }
 
-  ngAfterViewInit(): void {}
+  getPhonesOptions = (phones: string[]) => phones.map((_, index) => this.generateNewPhoneOptions(index));
 
-  getPhonesOptions(phones: any) {
-    const options = [];
-    for (let i = 0; i < phones.length; i++) {
-      options.push(this.generateNewPhoneOptions(i));
-    }
-    return options;
-  }
-
-  generateNewPhoneOptions(index: number) {
+  generateNewPhoneOptions(index: number): DxTextBoxTypes.Properties {
     return {
       mask: '+1 (X00) 000-0000',
       maskRules: { X: /[01-9]/ },

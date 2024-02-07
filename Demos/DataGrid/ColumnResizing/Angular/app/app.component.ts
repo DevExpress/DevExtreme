@@ -1,9 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
-
 import { Customer, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,13 +18,12 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   customers: Customer[];
 
-  resizingModes: string[] = ['nextColumn', 'widget'];
+  resizingModes = ['nextColumn', 'widget'];
 
-  columnResizingMode: string;
+  columnResizingMode = this.resizingModes[0];
 
   constructor(service: Service) {
     this.customers = service.getCustomers();
-    this.columnResizingMode = this.resizingModes[0];
   }
 }
 

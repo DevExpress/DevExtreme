@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxTreeListModule, DxSelectBoxModule } from 'devextreme-angular';
-
+import { DxSelectBoxModule } from 'devextreme-angular';
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,9 +18,9 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: Employee[];
 
-  filterModes: Array<string>;
+  filterModes: DxTreeListTypes.TreeListFilterMode[];
 
-  filterModeValue = 'matchOnly';
+  filterModeValue: DxTreeListTypes.TreeListFilterMode = 'matchOnly';
 
   constructor(service: Service) {
     this.employees = service.getEmployees();

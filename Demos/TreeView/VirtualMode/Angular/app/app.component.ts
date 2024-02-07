@@ -14,16 +14,12 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-  dataSource: any;
-
-  constructor() {
-    this.dataSource = new DataSource({
-      store: new ODataStore({
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
-      }),
-    });
-  }
+  dataSource = new DataSource({
+    store: new ODataStore({
+      version: 2,
+      url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
+    }),
+  });
 }
 
 @NgModule({

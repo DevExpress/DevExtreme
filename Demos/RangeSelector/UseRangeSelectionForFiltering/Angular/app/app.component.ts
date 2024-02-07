@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxRangeSelectorModule, DxDataGridModule } from 'devextreme-angular';
-
+import { DxDataGridModule } from 'devextreme-angular';
+import { DxRangeSelectorModule, DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,23 +20,19 @@ export class AppComponent {
 
   selectedEmployees: Employee[];
 
-  tableTitles: string[] = ['First Name', 'Last Name', 'Birth Year', 'City', 'Title'];
-
   constructor(service: Service) {
     this.employees = service.getEmployees();
     this.selectedEmployees = this.employees;
   }
 
-  onValueChanged(e) {
-    const selectedEmployees: any[] = [];
-
-    this.employees.forEach((item, index) => {
-      if (item.BirthYear >= e.value[0] && item.BirthYear <= e.value[1]) {
-        selectedEmployees.push(item);
-      }
-    });
-
-    this.selectedEmployees = selectedEmployees;
+  onValueChanged(e: DxRangeSelectorTypes.ValueChangedEvent) {
+    this.selectedEmployees = this.employees.map(
+      (item, index) => (
+        (item.BirthYear >= (e.value[0] as number) && item.BirthYear <= (e.value[1] as number))
+          ? item
+          : undefined
+      ),
+    ).filter(Boolean);
   }
 }
 

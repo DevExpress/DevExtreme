@@ -3,7 +3,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTagBoxModule, DxPopoverModule, DxTemplateModule } from 'devextreme-angular';
 import ArrayStore from 'devextreme/data/array_store';
-
+import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { Service, Product } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,13 +22,13 @@ export class AppComponent {
 
   editableProducts: string[];
 
-  dataSource: any;
+  dataSource: ArrayStore;
 
   product: Product;
 
   value: number[];
 
-  target: any;
+  target: EventTarget;
 
   visible = false;
 
@@ -42,7 +42,7 @@ export class AppComponent {
     this.value = [1, 2];
   }
 
-  onCustomItemCreating(args) {
+  onCustomItemCreating(args: DxTagBoxTypes.CustomItemCreatingEvent) {
     const newValue = args.text;
     const isItemInDataSource = this.editableProducts.some((item) => item === newValue);
     if (!isItemInDataSource) {
@@ -51,8 +51,8 @@ export class AppComponent {
     args.customItem = newValue;
   }
 
-  onMouseEnter(e, product) {
-    this.target = e.target;
+  onMouseEnter({ target }: MouseEvent, product: Product) {
+    this.target = target;
     this.product = product;
     this.visible = true;
   }
@@ -62,7 +62,7 @@ export class AppComponent {
     this.visible = false;
   }
 
-  isDisabled(product) {
+  isDisabled(product: Product) {
     return product.Name === 'SuperHD Video Player';
   }
 }

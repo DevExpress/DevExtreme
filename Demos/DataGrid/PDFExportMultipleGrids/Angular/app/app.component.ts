@@ -3,12 +3,12 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { jsPDF } from 'jspdf';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-import { jsPDF } from 'jspdf';
-
+import { Options as DataSourceConfig } from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,9 +26,9 @@ export class AppComponent {
 
   @ViewChild('ratingDataGrid', { static: false }) ratingDataGrid: DxDataGridComponent;
 
-  priceDataSource: any;
+  priceDataSource: DataSourceConfig;
 
-  ratingDataSource: any;
+  ratingDataSource: DataSourceConfig;
 
   constructor() {
     this.priceDataSource = {

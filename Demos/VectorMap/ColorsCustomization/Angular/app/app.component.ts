@@ -2,8 +2,8 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule } from 'devextreme-angular';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
+import { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Countries, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -18,19 +18,17 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap: any = mapsData.world;
+  worldMap = mapsData.world;
 
   countries: Countries;
 
   constructor(service: Service) {
     this.countries = service.getCountries();
-    this.customizeTooltip = this.customizeTooltip.bind(this);
-    this.customizeLayers = this.customizeLayers.bind(this);
     this.click = this.click.bind(this);
   }
 
-  customizeTooltip(arg) {
-    const name = arg.attribute('name');
+  customizeTooltip = ({ attribute }) => {
+    const name = attribute('name');
     const country = this.countries[name];
     if (country) {
       return {
@@ -38,9 +36,9 @@ export class AppComponent {
         color: country.color,
       };
     }
-  }
+  };
 
-  customizeLayers(elements) {
+  customizeLayers = (elements: { attribute: Function, applySettings: Function }[]) => {
     elements.forEach((element) => {
       const country = this.countries[element.attribute('name')];
       if (country) {
@@ -51,10 +49,9 @@ export class AppComponent {
         });
       }
     });
-  }
+  };
 
-  click(e) {
-    const target = e.target;
+  click({ target }: DxVectorMapTypes.ClickEvent) {
     if (target && this.countries[target.attribute('name')]) {
       target.selected(!target.selected());
     }

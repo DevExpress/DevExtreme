@@ -7,7 +7,7 @@ export class City {
 
   id: string;
 
-  data: any;
+  data: Record<string, number>;
 }
 
 const cities: City[] = [{

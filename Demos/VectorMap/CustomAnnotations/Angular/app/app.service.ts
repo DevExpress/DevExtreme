@@ -7,7 +7,7 @@ export class StatesCollection {
 
   offsetY?: number;
 
-  data: object;
+  data: { name: string, [key: string]: unknown };
 }
 
 const statesData: StatesCollection[] = [

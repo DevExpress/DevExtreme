@@ -11,7 +11,7 @@ import {
   DxFilterBuilderModule,
 } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { Service } from './app.service';
+import { Fields, Filter, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -27,11 +27,11 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   @ViewChild(DxFilterBuilderComponent, { static: false }) filterBuilder: DxFilterBuilderComponent;
 
-  dataSource: any;
+  dataSource: DataSource;
 
-  fields: Array<any>;
+  fields: Fields;
 
-  filter: any;
+  filter: Filter;
 
   constructor(service: Service) {
     this.fields = service.getFields();

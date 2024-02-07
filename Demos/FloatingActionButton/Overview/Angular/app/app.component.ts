@@ -3,16 +3,11 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
-import {
-  DxDataGridModule,
-  DxDataGridComponent,
-  DxSpeedDialActionModule,
-  DxSelectBoxModule,
-} from 'devextreme-angular';
-
+import { DxSpeedDialActionModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridComponent, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import {
   Service, Employee, State, directions,
 } from './app.service';
@@ -34,14 +29,13 @@ export class AppComponent {
 
   states: State[];
 
-  directions: any;
+  directions = directions;
 
   selectedRowIndex = -1;
 
   constructor(private service: Service) {
     this.employees = service.getEmployees();
     this.states = service.getStates();
-    this.directions = directions;
   }
 
   editRow() {
@@ -59,11 +53,11 @@ export class AppComponent {
     this.grid.instance.deselectAll();
   }
 
-  selectedChanged(e) {
+  selectedChanged(e: DxDataGridTypes.SelectionChangedEvent) {
     this.selectedRowIndex = e.component.getRowIndexByKey(e.selectedRowKeys[0]);
   }
 
-  directionChanged(e) {
+  directionChanged(e: DxSelectBoxTypes.SelectionChangedEvent) {
     config({
       floatingActionButtonConfig: this.directions[e.selectedItem],
     });

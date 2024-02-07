@@ -1,7 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule, DxTemplateModule } from 'devextreme-angular';
+import { DxTemplateModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -17,15 +18,15 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: Employee[];
 
-  constructor(private service: Service) {
+  constructor(service: Service) {
     this.employees = service.getEmployees();
   }
 
-  onContentReady(e) {
-    if (!e.component.getSelectedRowKeys().length) { e.component.selectRowsByIndexes(0); }
+  onContentReady(e: DxDataGridTypes.ContentReadyEvent) {
+    if (!e.component.getSelectedRowKeys().length) { e.component.selectRowsByIndexes([0]); }
   }
 
-  onSelectionChanged(e) {
+  onSelectionChanged(e: DxDataGridTypes.SelectionChangedEvent) {
     e.component.collapseAll(-1);
     e.component.expandRow(e.currentSelectedRowKeys[0]);
   }

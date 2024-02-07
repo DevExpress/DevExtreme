@@ -1,10 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 import themes from 'devextreme/ui/themes';
-
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

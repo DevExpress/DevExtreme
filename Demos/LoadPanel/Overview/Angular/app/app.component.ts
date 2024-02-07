@@ -20,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employee: Employee;
 
-  employeeInfo: any = {};
+  employeeInfo: Employee | {} = {};
 
   loadingVisible = false;
 

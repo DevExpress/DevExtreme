@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
 export class Employee {
   ID: number;
@@ -424,11 +425,11 @@ export class Service {
     return employees;
   }
 
-  getEnterKeyActions() {
+  getEnterKeyActions(): DxTreeListTypes.EnterKeyAction[] {
     return ['startEdit', 'moveFocus'];
   }
 
-  getEnterKeyDirections() {
+  getEnterKeyDirections(): DxTreeListTypes.EnterKeyDirection[] {
     return ['none', 'column', 'row'];
   }
 }

@@ -15,14 +15,16 @@ import {
   DxValidationSummaryModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-
+import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import { ValidationCallbackData } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const sendRequest = function (value) {
+const sendRequest = function (value: string) {
   const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -45,25 +47,25 @@ export class AppComponent {
 
   confirmPassword = '';
 
-  passwordMode = 'password';
+  passwordMode: DxTextBoxTypes.TextBoxType = 'password';
 
-  confirmPasswordMode = 'password';
+  confirmPasswordMode: DxTextBoxTypes.TextBoxType = 'password';
 
-  maxDate: Date = new Date();
+  maxDate = new Date();
 
   cityPattern = '^[^0-9]+$';
 
-  namePattern: any = /^[^0-9]+$/;
+  namePattern = /^[^0-9]+$/;
 
-  phonePattern: any = /^[02-9]\d{9}$/;
+  phonePattern = /^[02-9]\d{9}$/;
 
   countries: string[];
 
-  phoneRules: any = {
+  phoneRules: DxTextBoxTypes.Properties['maskRules'] = {
     X: /[02-9]/,
   };
 
-  passwordButton: any = {
+  passwordButton: DxButtonTypes.Properties = {
     icon: 'eyeopen',
     stylingMode: 'text',
     onClick: () => {
@@ -71,7 +73,7 @@ export class AppComponent {
     },
   };
 
-  confirmPasswordButton: any = {
+  confirmPasswordButton: DxButtonTypes.Properties = {
     icon: 'eyeopen',
     stylingMode: 'text',
     onClick: () => {
@@ -86,13 +88,9 @@ export class AppComponent {
 
   passwordComparison = () => this.password;
 
-  checkComparison() {
-    return true;
-  }
+  checkComparison = () => true;
 
-  validateVacationDatesRange({ value }) {
-    const [startDate, endDate] = value;
-
+  validateVacationDatesRange({ value: [startDate, endDate] }: ValidationCallbackData) {
     if (startDate === null || endDate === null) {
       return true;
     }
@@ -103,9 +101,7 @@ export class AppComponent {
     return daysDifference < 25;
   }
 
-  validateVacationDatesPresence({ value }) {
-    const [startDate, endDate] = value;
-
+  validateVacationDatesPresence({ value: [startDate, endDate] }: ValidationCallbackData) {
     if (startDate === null && endDate === null) {
       return true;
     }
@@ -113,9 +109,7 @@ export class AppComponent {
     return startDate !== null && endDate !== null;
   }
 
-  asyncValidation(params) {
-    return sendRequest(params.value);
-  }
+  asyncValidation = (params: ValidationCallbackData) => sendRequest(params.value);
 
   onPasswordChanged() {
     if (this.confirmPassword) {
@@ -123,7 +117,7 @@ export class AppComponent {
     }
   }
 
-  onFormSubmit = function (e) {
+  onFormSubmit = function (e: SubmitEvent) {
     notify({
       message: 'You have submitted the form',
       position: {

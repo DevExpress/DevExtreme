@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
-import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -15,7 +15,7 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  pivotGridDataSource: any;
+  pivotGridDataSource: DataSourceConfig;
 
   constructor(service: Service) {
     this.pivotGridDataSource = {

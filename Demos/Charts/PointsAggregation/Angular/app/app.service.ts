@@ -11,7 +11,7 @@ export class WeatherIndicators {
 export class AggregationInterval {
   displayName: string;
 
-  interval: any;
+  interval: string | Record<string, number>;
 }
 
 export class AggregationFunction {

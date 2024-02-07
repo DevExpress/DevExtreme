@@ -13,11 +13,9 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  customizeTooltip(arg: any) {
-    return {
-      text: `${arg.valueText} ohm`,
-    };
-  }
+  customizeTooltip = ({ valueText }) => ({
+    text: `${valueText} ohm`,
+  });
 }
 
 @NgModule({

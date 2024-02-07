@@ -1,9 +1,7 @@
-import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,7 +21,7 @@ export class AppComponent {
     this.orders = service.getOrders();
   }
 
-  calculateSelectedRow(options) {
+  calculateSelectedRow(options: Parameters<DxDataGridTypes.Summary['calculateCustomSummary']>[0]) {
     if (options.name === 'SelectedRowsSummary') {
       if (options.summaryProcess === 'start') {
         options.totalValue = 0;
@@ -37,8 +35,8 @@ export class AppComponent {
     }
   }
 
-  onSelectionChanged(e) {
-    e.component.refresh(true);
+  async onSelectionChanged(e: DxDataGridTypes.SelectionChangedEvent) {
+    await e.component.refresh(true);
   }
 }
 

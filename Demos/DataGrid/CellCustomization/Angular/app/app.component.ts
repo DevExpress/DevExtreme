@@ -27,15 +27,15 @@ export class AppComponent {
     this.dataSource = service.getWeekData();
   }
 
-  abs(value) {
+  abs(value: number) {
     return Math.abs(value);
   }
 }
 
 @Pipe({ name: 'gridCellData' })
 export class GridCellDataPipe implements PipeTransform {
-  transform(gridData: any) {
-    return gridData.data[gridData.column.caption.toLowerCase()];
+  transform({ data, column }) {
+    return data[column.caption.toLowerCase()];
   }
 }
 

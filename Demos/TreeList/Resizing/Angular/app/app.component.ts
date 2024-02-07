@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxTreeListModule, DxSelectBoxModule } from 'devextreme-angular';
-
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,17 +18,16 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: Employee[];
 
-  resizingModes: string[] = ['nextColumn', 'widget'];
+  resizingModes: DxTreeListTypes.ColumnResizeMode[] = ['nextColumn', 'widget'];
 
-  columnResizingMode: string;
+  columnResizingMode = this.resizingModes[0];
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
-    this.columnResizingMode = this.resizingModes[0];
   }
 
-  selectResizing(data) {
-    this.columnResizingMode = data.value;
+  selectResizing({ value }: DxSelectBoxTypes.ValueChangedEvent) {
+    this.columnResizingMode = value;
   }
 }
 

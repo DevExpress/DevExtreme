@@ -1,11 +1,8 @@
-import {
-  NgModule, Component, enableProdMode, ViewChild,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxDataGridModule, DxCheckBoxModule } from 'devextreme-angular';
-
+import { DxCheckBoxModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import {
   Service, Employee, Task, Status,
 } from './app.service';
@@ -27,7 +24,7 @@ export class AppComponent {
 
   statuses: Array<Status>;
 
-  showDragIcons: boolean;
+  showDragIcons = true;
 
   constructor(service: Service) {
     this.tasks = service.getTasks();
@@ -35,20 +32,16 @@ export class AppComponent {
     this.employees = service.getEmployees();
 
     this.statuses = service.getStatuses();
-
-    this.showDragIcons = true;
-
-    this.onReorder = this.onReorder.bind(this);
   }
 
-  onReorder(e) {
+  onReorder = (e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) => {
     const visibleRows = e.component.getVisibleRows();
     const toIndex = this.tasks.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
     const fromIndex = this.tasks.findIndex((item) => item.ID === e.itemData.ID);
 
     this.tasks.splice(fromIndex, 1);
     this.tasks.splice(toIndex, 0, e.itemData);
-  }
+  };
 }
 
 @NgModule({

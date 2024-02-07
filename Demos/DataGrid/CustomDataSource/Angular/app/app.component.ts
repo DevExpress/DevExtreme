@@ -3,9 +3,9 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
 import { DxDataGridModule } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
+import { LoadOptions } from 'devextreme/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,14 +18,14 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   url: string;
 
-  dataSource: any = {};
+  dataSource = {} as CustomStore;
 
   constructor(httpClient: HttpClient) {
-    const isNotEmpty = (value: any) => (value !== undefined && value !== null && value !== '');
+    const isNotEmpty = (value: unknown) => (value !== undefined && value !== null && value !== '');
 
     this.dataSource = new CustomStore({
       key: 'OrderNumber',
-      async load(loadOptions: any) {
+      async load(loadOptions: LoadOptions) {
         const url = 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders';
 
         const paramNames = [
@@ -42,7 +42,7 @@ export class AppComponent {
           });
 
         try {
-          const result: any = await lastValueFrom(httpClient.get(url, { params }));
+          const result = await lastValueFrom(httpClient.get(url, { params })) as Record<string, unknown>;
 
           return {
             data: result.data,

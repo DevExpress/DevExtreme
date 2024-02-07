@@ -3,12 +3,8 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-
-import {
-  DxTagBoxModule,
-} from 'devextreme-angular';
-
-import { Product, Service } from './app.service';
+import { DxTagBoxModule } from 'devextreme-angular';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,8 +18,6 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
   simpleProducts: DataSource;
-
-  data: any;
 
   constructor(service: Service) {
     this.simpleProducts = new DataSource({

@@ -10,7 +10,6 @@ import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
-import DataGrid from 'devextreme/ui/data_grid';
 import 'devextreme/data/odata/store';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,35 +27,29 @@ export class AppComponent {
 
   @ViewChild('ratingDataGrid', { static: false }) ratingDataGrid: DxDataGridComponent;
 
-  priceDataSource: any;
+  priceDataSource = {
+    store: {
+      type: 'odata',
+      version: 2,
+      url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+      key: 'Product_ID',
+    },
+    select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
+    filter: ['Product_ID', '<', 10],
+  };
 
-  ratingDataSource: any;
+  ratingDataSource = {
+    store: {
+      type: 'odata',
+      version: 2,
+      url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+      key: 'Product_ID',
+    },
+    select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
+    filter: ['Product_ID', '<', 10],
+  };
 
-  constructor() {
-    this.priceDataSource = {
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-        key: 'Product_ID',
-      },
-      select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
-      filter: ['Product_ID', '<', 10],
-    };
-
-    this.ratingDataSource = {
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-        key: 'Product_ID',
-      },
-      select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
-      filter: ['Product_ID', '<', 10],
-    };
-  }
-
-  exportGrids(e) {
+  exportGrids() {
     const context = this;
     const workbook = new Workbook();
     const priceSheet = workbook.addWorksheet('Price');

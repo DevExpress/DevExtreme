@@ -3,11 +3,10 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
+import { HttpClientModule } from '@angular/common/http';
 import ArrayStore from 'devextreme/data/array_store';
-import { Service, Employee } from './app.service';
+import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,7 +22,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   dataSource: ArrayStore;
 
-  selectedItems: any[];
+  selectedItems: DxDiagramTypes.Item[];
 
   constructor(service: Service) {
     this.dataSource = new ArrayStore({
@@ -43,14 +42,14 @@ export class AppComponent {
     }
   }
 
-  selectionChangedHandler(e) {
+  selectionChangedHandler(e: DxDiagramTypes.SelectionChangedEvent) {
     this.selectedItems = e.items.filter((item) => item.itemType === 'shape');
   }
 }
 
 @Pipe({ name: 'stringifyItems' })
 export class StringifyItemsPipe implements PipeTransform {
-  transform(items: any[]) {
+  transform(items: Record<string, unknown>[]) {
     return items
       .map((item) => item.text)
       .join(', ');

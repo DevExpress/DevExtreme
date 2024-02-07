@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTextBoxModule } from 'devextreme-angular';
+import { DxTextBoxModule, DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -12,16 +12,11 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-  emailValue: string;
+  emailValue = 'smith@corp.com';
 
-  rules: any;
+  rules = { X: /[02-9]/ };
 
-  constructor() {
-    this.emailValue = 'smith@corp.com';
-    this.rules = { X: /[02-9]/ };
-  }
-
-  valueChanged(data) {
+  valueChanged(data: DxTextBoxTypes.ValueChangedEvent) {
     this.emailValue = `${data.value.replace(/\s/g, '').toLowerCase()}@corp.com`;
   }
 }

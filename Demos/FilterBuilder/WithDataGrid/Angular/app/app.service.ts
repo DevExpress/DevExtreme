@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 
-const filter: Array<any> = [
+export type Condition = Condition[] | string | number;
+export type Fields = typeof fields;
+
+const filter: Condition = [
   ['Product_Current_Inventory', '<>', 0],
   'or',
   [
@@ -9,7 +12,7 @@ const filter: Array<any> = [
     ['Product_Cost', '<', 200],
   ],
 ];
-const fields: Array<any> = [
+const fields: Record<string, string | number>[] = [
   {
     caption: 'ID',
     width: 50,
@@ -42,11 +45,11 @@ const fields: Array<any> = [
 
 @Injectable()
 export class Service {
-  getFields(): Array<any> {
+  getFields(): Fields {
     return fields;
   }
 
-  getFilter(): Array<any> {
+  getFilter(): Condition {
     return filter;
   }
 }

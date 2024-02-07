@@ -23,11 +23,11 @@ export class AppComponent {
     this.countriesInfo = service.getCountriesInfo();
   }
 
-  customizeTooltip(arg: any) {
-    return {
-      text: `${arg.percentText} - ${arg.valueText}`,
-    };
-  }
+  customizeTooltip = ({ percentText, valueText }) => (
+    {
+      text: `${percentText} - ${valueText}`,
+    }
+  );
 }
 
 @NgModule({

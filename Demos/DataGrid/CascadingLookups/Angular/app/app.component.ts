@@ -1,8 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
-import { Column } from 'devextreme/ui/data_grid';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import {
   Service, Employee, State, City,
 } from './app.service';
@@ -31,22 +30,20 @@ export class AppComponent {
     this.getFilteredCities = this.getFilteredCities.bind(this);
   }
 
-  getFilteredCities(options) {
+  getFilteredCities(options: { data: City }) {
     return {
       store: this.cities,
       filter: options.data ? ['StateID', '=', options.data.StateID] : null,
     };
   }
 
-  onEditorPreparing(e) {
+  onEditorPreparing(e: DxDataGridTypes.EditorPreparingEvent<Employee>) {
     if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-      const isStateNotSet = e.row.data.StateID === undefined;
-
-      e.editorOptions.disabled = isStateNotSet;
+      e.editorOptions.disabled = e.row.data.StateID === undefined;
     }
   }
 
-  setStateValue(this: Column, newData: Employee, value: number, currentRowData: Employee) {
+  setStateValue(this: DxDataGridTypes.Column, newData: Employee, value: number, currentRowData: Employee) {
     newData.CityID = null;
     this.defaultSetCellValue(newData, value, currentRowData);
   }

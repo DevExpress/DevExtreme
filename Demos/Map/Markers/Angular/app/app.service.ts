@@ -7,7 +7,7 @@ export class Tooltip {
 }
 
 export class Marker {
-  location: any;
+  location: unknown;
 
   tooltip: Tooltip;
 }

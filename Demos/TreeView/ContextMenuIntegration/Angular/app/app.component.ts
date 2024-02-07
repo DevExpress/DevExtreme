@@ -3,10 +3,9 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import {
-  DxTreeViewModule, DxTreeViewComponent, DxListModule, DxContextMenuModule, DxContextMenuComponent,
-} from 'devextreme-angular';
+import { DxListModule } from 'devextreme-angular';
+import { DxTreeViewComponent, DxTreeViewModule, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { DxContextMenuModule, DxContextMenuComponent, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 import { Product, Service, MenuItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,34 +27,33 @@ export class AppComponent {
 
   selectedTreeItem: Product;
 
-  logItems: string[];
+  logItems: string[] = [];
 
   menuItems: MenuItem[];
 
   constructor(service: Service) {
     this.products = service.getProducts();
     this.menuItems = service.getMenuItems();
-    this.logItems = [];
   }
 
-  treeViewItemContextMenu(e) {
-    this.selectedTreeItem = e.itemData;
+  treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent) {
+    this.selectedTreeItem = e.itemData as Product;
 
     const isProduct = e.itemData.price !== undefined;
     const contextMenu = this.contextMenu.instance;
+
     contextMenu.option('items[0].visible', !isProduct);
     contextMenu.option('items[1].visible', !isProduct);
     contextMenu.option('items[2].visible', isProduct);
     contextMenu.option('items[3].visible', isProduct);
-
     contextMenu.option('items[0].disabled', e.node.expanded);
     contextMenu.option('items[1].disabled', !e.node.expanded);
   }
 
-  contextMenuItemClick(e) {
+  contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
     let logEntry = '';
     const treeView = this.treeView.instance;
-    switch (e.itemData.id) {
+    switch ((e.itemData as Product).id) {
       case 'expand': {
         logEntry = `The '${this.selectedTreeItem.text}' group was expanded`;
         treeView.expandItem(this.selectedTreeItem.id);

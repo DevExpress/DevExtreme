@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
+import { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
 import { Appointment, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -37,7 +37,7 @@ export class AppComponent {
     this.appointmentsData = service.getAppointments();
   }
 
-  onChangeAllDayPanelMode(e) {
+  onChangeAllDayPanelMode(e: DxRadioGroupTypes.ValueChangedEvent) {
     this.allDayPanelMode = e.value;
   }
 }

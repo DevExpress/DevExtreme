@@ -1,7 +1,6 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import {
   DxToolbarModule,
   DxSelectBoxModule,
@@ -12,7 +11,6 @@ import {
   DxButtonGroupModule,
   DxCheckBoxModule,
 } from 'devextreme-angular';
-
 import notify from 'devextreme/ui/notify';
 import {
   FontFamily,
@@ -48,7 +46,7 @@ export class AppComponent {
 
   headings: Heading[] = this.service.getHeadings();
 
-  heading: string = this.headings[0].text;
+  heading = this.headings[0].text;
 
   fontStyles: FontStyle[] = this.service.getFontStyles();
 
@@ -56,7 +54,7 @@ export class AppComponent {
 
   textAlignItemsExtended: TextAlignExtended[] = this.service.getTextAlignExtended();
 
-  selectedTextAlign: string[] = [this.textAlignItems[0].alignment];
+  selectedTextAlign = [this.textAlignItems[0].alignment];
 
   listTypes: ListType[] = this.service.getListType();
 
@@ -72,14 +70,6 @@ export class AppComponent {
 
   onSelectionChanged(name: string) {
     notify(`The "${name}" value has been changed`);
-  }
-
-  onCheckBoxValueChanged() {
-    notify('The "Navigation Pane" checkbox value has been changed');
-  }
-
-  onDateBoxValueChanged() {
-    notify('The "DateBox" value has been changed');
   }
 
   onFontFamilyClick() {

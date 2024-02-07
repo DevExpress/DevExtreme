@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule } from 'devextreme-angular';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { FeatureCollection, Service } from './app.service';
 
@@ -18,7 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap: any = mapsData.world;
+  worldMap = mapsData.world;
 
   markers: FeatureCollection;
 
@@ -26,18 +25,14 @@ export class AppComponent {
     this.markers = service.getMarkers();
   }
 
-  customizeText(arg) {
-    return ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
-  }
+  customizeText = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
 
-  customizeItems(items) {
-    return items.reverse();
-  }
+  customizeItems = (items: unknown[]) => items.reverse();
 
-  customizeTooltip(arg) {
-    if (arg.layer.type === 'marker') {
+  customizeTooltip({ layer: { type }, attribute }) {
+    if (type === 'marker') {
       return {
-        text: arg.attribute('tooltip'),
+        text: attribute('tooltip'),
       };
     }
   }

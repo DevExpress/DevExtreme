@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 export interface PopulationByAge {
   name: string;
   total: number;
-  items: any[];
+  items: Record<string, unknown>[];
 }
 
 const populationsByAge: PopulationByAge[] = [{

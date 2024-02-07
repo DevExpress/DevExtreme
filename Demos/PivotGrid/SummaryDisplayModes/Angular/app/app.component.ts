@@ -3,6 +3,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -16,9 +17,9 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  pivotGridDataSource: any;
+  pivotGridDataSource: PivotGridDataSource;
 
-  summaryDisplayModes: any[] = [
+  summaryDisplayModes = [
     { text: 'None', value: 'none' },
     { text: 'Absolute Variation', value: 'absoluteVariation' },
     { text: 'Percent Variation', value: 'percentVariation' },
@@ -61,20 +62,23 @@ export class AppComponent {
     });
   }
 
-  prepareContextMenu(e) {
+  prepareContextMenu(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
+    type SourceField = (typeof e.field) & { index: number };
+
     if (e.field && e.field.dataField === 'amount') {
       this.summaryDisplayModes.forEach((mode) => {
         e.items.push({
           text: mode.text,
           selected: e.field.summaryDisplayMode === mode.value,
           onItemClick: () => {
-            let format;
+            let format: string;
             const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
+
             if (mode.value === 'none'
                             || mode.value === 'absoluteVariation') {
               format = 'currency';
             }
-            this.pivotGridDataSource.field(e.field.index, {
+            this.pivotGridDataSource.field((e.field as SourceField).index, {
               summaryDisplayMode: mode.value,
               format,
               caption,

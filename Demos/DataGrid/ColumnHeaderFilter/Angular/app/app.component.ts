@@ -1,9 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxDataGridModule } from 'devextreme-angular';
-
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,17 +17,12 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: Employee[];
 
-  showHeaderFilter: boolean;
+  editorOptions = { placeholder: 'Search city or state' };
 
-  editorOptions: any;
-
-  searchExpr: any;
+  searchExpr = ['City', 'State'];
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
-    this.showHeaderFilter = true;
-    this.editorOptions = { placeholder: 'Search city or state' };
-    this.searchExpr = ['City', 'State'];
   }
 }
 

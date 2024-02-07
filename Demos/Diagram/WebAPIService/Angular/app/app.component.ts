@@ -20,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   url: string;
 
-  dataSource: any;
+  dataSource: AspNetData.CustomStore;
 
   constructor() {
     this.url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';

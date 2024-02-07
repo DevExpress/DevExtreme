@@ -1,19 +1,16 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
+import { enableProdMode, Component, NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';
-
-import {
-  DxDropDownButtonModule,
-  DxToolbarModule,
-} from 'devextreme-angular';
-import { SimpleObject, Service } from './app.service';
+import { DxToolbarModule } from 'devextreme-angular';
+import { DxDropDownButtonModule, DxDropDownButtonComponent, DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
+import { ItemObject, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+type Color = string;
 
 @Component({
   selector: 'demo-app',
@@ -22,34 +19,29 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  fontSize: number;
+  dropDownButton: DxDropDownButtonComponent['instance'];
 
-  color: string;
-
-  lineHeight: number;
-
-  alignment: string;
-
-  dropDownButton: any;
-
-  colors: string[];
+  colors: Color[];
 
   downloads: string[];
 
-  profileSettings: SimpleObject[];
+  profileSettings: ItemObject[];
 
-  fontSizes: SimpleObject[];
+  fontSizes: ItemObject[];
 
-  lineHeights: SimpleObject[];
+  lineHeights: ItemObject[];
 
-  alignments: SimpleObject[];
+  alignments: ItemObject[];
+
+  fontSize = 14;
+
+  color: string = null;
+
+  lineHeight = 1.35;
+
+  alignment = 'left';
 
   constructor(service: Service) {
-    this.fontSize = 14;
-    this.color = null;
-    this.lineHeight = 1.35;
-    this.alignment = 'left';
-
     this.colors = service.getColors();
     this.fontSizes = service.getFontSizes();
     this.downloads = service.getDownloads();
@@ -58,33 +50,36 @@ export class AppComponent {
     this.lineHeights = service.getLineHeights();
   }
 
-  onAlignmentChanged = (e) => {
+  onAlignmentChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent) => {
     this.alignment = e.item.value;
   };
 
-  onFontSizeChanged = (e) => {
+  onFontSizeChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent) => {
     this.fontSize = e.item.value;
   };
 
-  onLineHeightChanged = (e) => {
+  onLineHeightChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent) => {
     this.lineHeight = e.item.value;
   };
 
-  onButtonClick(e) {
+  onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent) {
     notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
   }
 
-  onItemClick(e) {
+  onItemClick(e: DxDropDownButtonTypes.ItemClickEvent) {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }
 
-  onColorPickerInit = (e) => {
+  onColorPickerInit = (e: DxDropDownButtonTypes.InitializedEvent) => {
     this.dropDownButton = e.component;
   };
 
-  onColorClick(color) {
+  onColorClick(color: Color) {
+    const iconElement = this.dropDownButton.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement;
+
+    iconElement.style.color = color;
+
     this.color = color;
-    this.dropDownButton.element().getElementsByClassName('dx-icon-square')[0].style.color = color;
     this.dropDownButton.close();
   }
 }

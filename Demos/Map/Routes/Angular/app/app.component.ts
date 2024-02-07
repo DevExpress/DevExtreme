@@ -1,13 +1,10 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxMapModule, DxSelectBoxModule } from 'devextreme-angular';
-
+import { DxMapModule } from 'devextreme-angular';
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import {
-  Marker,
-  APIKey,
-  Route,
-  Service,
+  Marker, APIKey, Route, Service,
 } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,23 +24,21 @@ export class AppComponent {
 
   markers: Marker[];
 
-  apiKey: APIKey = {};
+  apiKey: APIKey = { bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC' };
 
   constructor(service: Service) {
-    this.apiKey.bing = 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC';
-
     this.markers = service.getMarkers();
     this.routes = service.getRoutes();
   }
 
-  setMode(e) {
+  setMode(e: DxSelectBoxTypes.ValueChangedEvent) {
     this.routes = this.routes.map((item) => {
       item.mode = e.value;
       return item;
     });
   }
 
-  selectColor(e) {
+  selectColor(e: DxSelectBoxTypes.ValueChangedEvent) {
     this.routes = this.routes.map((item) => {
       item.color = e.value;
       return item;

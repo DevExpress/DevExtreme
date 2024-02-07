@@ -10,7 +10,7 @@ import {
   DxChartModule,
   DxChartComponent,
 } from 'devextreme-angular';
-import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,9 +28,9 @@ export class AppComponent implements AfterViewInit {
 
   @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
 
-  pivotGridDataSource: any;
+  pivotGridDataSource: DataSourceConfig;
 
-  constructor(service: Service, private currencyPipe: CurrencyPipe) {
+  constructor(service: Service) {
     this.customizeTooltip = this.customizeTooltip.bind(this);
 
     this.pivotGridDataSource = {

@@ -1,6 +1,4 @@
-import {
-  NgModule, Component, enableProdMode, ViewEncapsulation,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
@@ -16,6 +14,9 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+type Position = Parameters<typeof notify>[1]['position'];
+type Direction = Parameters<typeof notify>[1]['direction'];
+
 @Component({
   selector: 'demo-app',
   templateUrl: 'app/app.component.html',
@@ -24,13 +25,13 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   types: string[] = ['error', 'info', 'success', 'warning'];
 
-  positions: string[] = [
+  positions: Position[] = [
     'top left', 'top center', 'top right',
     'bottom left', 'bottom center', 'bottom right',
     'left center', 'center', 'right center',
   ];
 
-  directions: string[] = [
+  directions: Direction[] = [
     'down-push', 'down-stack', 'up-push', 'up-stack',
     'left-push', 'left-stack', 'right-push', 'right-stack',
   ];
@@ -39,20 +40,20 @@ export class AppComponent {
 
   isPredefined = true;
 
-  predefinedPosition = 'bottom center';
+  predefinedPosition: Position = 'bottom center';
 
-  coordinatePosition: object = {
+  coordinatePosition: Position = {
     top: undefined,
     bottom: undefined,
     left: undefined,
     right: undefined,
   };
 
-  direction = 'up-push';
+  direction: Direction = 'up-push';
 
   show() {
-    const position: any = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
-    const direction: any = this.direction;
+    const position = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
+    const direction = this.direction;
 
     notify({
       message: `Toast ${this.id}`,

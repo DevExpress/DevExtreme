@@ -22,7 +22,7 @@ const categories = [
   'Projectors',
   'Automation',
 ];
-export const fields: FilterBuilderTypes.Properties['fields'] = [
+export const fields: FilterBuilderTypes.Field[] = [
   {
     dataField: 'ID',
     dataType: 'number',

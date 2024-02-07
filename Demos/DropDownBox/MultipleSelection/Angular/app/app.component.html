@@ -10,7 +10,7 @@
         placeholder="Select a value..."
         [showClearButton]="true"
         [dataSource]="treeDataSource"
-        (onValueChanged)="onDropDownBoxValueChanged($event)"
+        (onValueChanged)="onDropDownBoxValueChanged()"
       >
         <div *dxTemplate="let data of 'content'">
           <dx-tree-view

@@ -2,7 +2,7 @@ import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTextAreaModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-
+import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -17,7 +17,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  valueChangeEvents: any[];
+  valueChangeEvents = [{
+    title: 'On Change',
+    name: 'change',
+  }, {
+    title: 'On Key Up',
+    name: 'keyup',
+  }];
 
   eventValue: string;
 
@@ -34,25 +40,18 @@ export class AppComponent {
   constructor(private service: Service) {
     this.valueForEditableTextArea = this.service.getContent();
     this.value = this.service.getContent();
-    this.valueChangeEvents = [{
-      title: 'On Change',
-      name: 'change',
-    }, {
-      title: 'On Key Up',
-      name: 'keyup',
-    }];
     this.eventValue = this.valueChangeEvents[0].name;
     this.autoResizeEnabled = false;
   }
 
-  onCheckboxValueChanged(e) {
+  onCheckboxValueChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
     let str = this.service.getContent();
-    this.value = e.value ? str.substring(0, 100) : str;
-    this.maxLength = e.value ? 100 : null;
+    this.value = value ? str.substring(0, 100) : str;
+    this.maxLength = value ? 100 : null;
   }
 
-  onAutoResizeChanged(e) {
-    this.height = e.value ? undefined : 90;
+  onAutoResizeChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
+    this.height = value ? undefined : 90;
   }
 }
 

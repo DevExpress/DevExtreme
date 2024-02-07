@@ -7,7 +7,6 @@ import {
   DxLoadIndicatorModule,
   DxTemplateModule,
 } from 'devextreme-angular';
-import ArrayStore from 'devextreme/data/array_store';
 
 import { Product, Service } from './app.service';
 
@@ -26,33 +25,29 @@ export class AppComponent {
 
   products: Product[];
 
-  data: any;
-
   isLoaded = true;
 
   selectedItem: Product;
 
-  deferredProducts: any;
+  deferredProducts = {
+    loadMode: 'raw',
+    load: () => {
+      this.isLoaded = false;
+      const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(this.simpleProducts);
+          this.isLoaded = true;
+        }, 3000);
+      });
+
+      return promise;
+    },
+  };
 
   constructor(service: Service) {
-    const that = this;
     this.products = service.getProducts();
     this.selectedItem = this.products[0];
     this.simpleProducts = service.getSimpleProducts();
-    this.deferredProducts = {
-      loadMode: 'raw',
-      load() {
-        that.isLoaded = false;
-        const promise = new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve(that.simpleProducts);
-            that.isLoaded = true;
-          }, 3000);
-        });
-
-        return promise;
-      },
-    };
   }
 }
 

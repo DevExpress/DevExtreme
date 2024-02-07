@@ -11,7 +11,7 @@
         placeholder="Select a value..."
         [showClearButton]="true"
         [dataSource]="treeDataSource"
-        (onValueChanged)="syncTreeViewSelection($event)"
+        (onValueChanged)="syncTreeViewSelection()"
         (onOptionChanged)="onTreeBoxOptionChanged($event)"
       >
         <div *dxTemplate="let data of 'content'">

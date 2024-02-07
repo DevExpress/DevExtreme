@@ -1,7 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxGanttModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxGanttModule, DxGanttTypes } from 'devextreme-angular/ui/gantt';
+import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import {
   Service, Task, Dependency, Resource, ResourceAssignment,
 } from './app.service';
@@ -26,35 +27,32 @@ export class AppComponent {
 
   resourceAssignments: ResourceAssignment[];
 
-  contextMenuItems: {};
+  showResources = true;
 
-  showResources: boolean;
+  disableContextMenu = false;
 
-  disableContextMenu: boolean;
+  contextMenuItems = this.getContextMenuItems();
 
   constructor(service: Service) {
     this.tasks = service.getTasks();
     this.dependencies = service.getDependencies();
     this.resources = service.getResources();
     this.resourceAssignments = service.getResourceAssignments();
-    this.showResources = true,
-    this.disableContextMenu = false,
-    this.contextMenuItems = this.getContextMenuItems();
   }
 
-  onContextMenuPreparing(e) {
+  onContextMenuPreparing(e: DxGanttTypes.ContextMenuPreparingEvent) {
     e.cancel = this.disableContextMenu;
   }
 
-  onCustomizeContextMenu(e) {
+  onCustomizeContextMenu(e: DxCheckBoxTypes.ValueChangedEvent) {
     this.contextMenuItems = e.value ? this.getContextMenuItems() : undefined;
   }
 
-  onPreventContextMenuShowing(e) {
+  onPreventContextMenuShowing(e: DxCheckBoxTypes.ValueChangedEvent) {
     this.disableContextMenu = e.value;
   }
 
-  onCustomCommandClick(e) {
+  onCustomCommandClick(e: DxGanttTypes.CustomCommandEvent) {
     if (e.name == 'ToggleDisplayOfResources') {
       this.showResources = !this.showResources;
     }

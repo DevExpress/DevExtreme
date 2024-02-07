@@ -5,7 +5,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { Service, Employee } from './app.service';
+import { Service, Employee, Data } from './app.service';
 
 @Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
@@ -23,7 +23,7 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSource;
 
   currentDate: Date = new Date(2021, 5, 2, 11, 30);
 
@@ -37,8 +37,8 @@ export class AppComponent {
     this.resourcesDataSource = service.getEmployees();
   }
 
-  markWeekEnd = (cellData) => {
-    function isWeekEnd(date) {
+  markWeekEnd = (cellData: Data & { groups: Data }) => {
+    function isWeekEnd(date: Date) {
       const day = date.getDay();
       return day === 0 || day === 6;
     }
@@ -48,7 +48,7 @@ export class AppComponent {
     return classObject;
   };
 
-  markTraining = (cellData) => {
+  markTraining = (cellData: Data & { groups: Data }) => {
     const classObject = {
       'day-cell': true,
     };
@@ -57,12 +57,7 @@ export class AppComponent {
     return classObject;
   };
 
-  static getCurrentTraining(date, employeeID) {
-    const result = (date + employeeID) % 3;
-    const currentTraining = `training-background-${result}`;
-
-    return currentTraining;
-  }
+  static getCurrentTraining = (date: number, employeeID: number) => `training-background-${(date + employeeID) % 3}`;
 }
 
 @NgModule({

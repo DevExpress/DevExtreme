@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
-
 import { DxSchedulerModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -58,16 +57,11 @@ connection
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  store1: any;
+  store1: AspNetData.CustomStore = store1;
 
-  store2: any;
+  store2: AspNetData.CustomStore = store2;
 
-  currentDate: Date = new Date(2021, 3, 27);
-
-  constructor() {
-    this.store1 = store1;
-    this.store2 = store2;
-  }
+  currentDate = new Date(2021, 3, 27);
 }
 
 @NgModule({

@@ -1,12 +1,19 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTreeMapModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxSelectBoxModule } from 'devextreme-angular';
+import { DxTreeMapModule, DxTreeMapTypes } from 'devextreme-angular/ui/tree-map';
 import { SalesAmount, Service } from './app.service';
 
 interface ColorizationOption {
   name: string;
-  options: any;
+  options: {
+    type: DxTreeMapTypes.TreeMapColorizerType,
+    palette: string | string[],
+    colorizeGroups: boolean,
+    colorCodeField?: string,
+    range?: number[],
+  };
 }
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,7 +30,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   salesAmount: SalesAmount[];
 
-  options: any;
+  options: ColorizationOption[ 'options' ];
 
   colorizationOptions: ColorizationOption[] = [{
     name: 'Discrete',
@@ -64,14 +71,13 @@ export class AppComponent {
     this.options = this.colorizationOptions[2].options;
   }
 
-  customizeTooltip(arg) {
-    const data = arg.node.data;
-
-    return {
-      text: arg.node.isLeaf() ? (`<span class='product'>${data.name
-      }</span><br/>Sales Amount: ${arg.valueText}`) : null,
-    };
-  }
+  customizeTooltip = ({ node, valueText }) => (
+    {
+      text: node.isLeaf()
+        ? (`<span class='product'>${node.data.name}</span><br/>Sales Amount: ${valueText}`)
+        : null,
+    }
+  );
 }
 
 @NgModule({

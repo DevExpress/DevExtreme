@@ -4,6 +4,7 @@ import {
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
+import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   sales: Sale[];
 
-  dataSource: any;
+  dataSource: DataSourceConfig;
 
   constructor(service: Service) {
     this.dataSource = {

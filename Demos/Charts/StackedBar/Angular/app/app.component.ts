@@ -23,11 +23,9 @@ export class AppComponent {
     this.dataSource = service.getMaleAgeData();
   }
 
-  customizeTooltip(arg: any) {
-    return {
-      text: `${arg.seriesName} years: ${arg.valueText}`,
-    };
-  }
+  customizeTooltip = ({ valueText, seriesName }) => ({
+    text: `${seriesName} years: ${valueText}`,
+  });
 }
 
 @NgModule({

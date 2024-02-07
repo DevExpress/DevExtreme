@@ -48,21 +48,14 @@ export class AppComponent {
     }
   }
 
-  customizePoint = () => {
-    let pointSettings: any;
-
-    pointSettings = {
-      color: this.colors[Number(this.isFirstLevel)],
-    };
-
-    if (!this.isFirstLevel) {
-      pointSettings.hoverStyle = {
+  customizePoint = () => ({
+    color: this.colors[Number(this.isFirstLevel)],
+    ...this.isFirstLevel ? {} : {
+      hoverStyle: {
         hatching: 'none',
-      };
-    }
-
-    return pointSettings;
-  };
+      },
+    },
+  });
 }
 
 @NgModule({

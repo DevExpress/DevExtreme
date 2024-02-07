@@ -3,8 +3,9 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule, DxChartComponent, DxRangeSelectorModule } from 'devextreme-angular';
-
+import { DxRangeSelectorModule } from 'devextreme-angular';
+import { VisualRange } from 'devextreme-angular/common/charts';
+import { DxChartModule, DxChartComponent } from 'devextreme-angular/ui/chart';
 import { Service, StockPrice } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,14 +23,10 @@ export class AppComponent {
 
   stockPrices: StockPrice[];
 
-  visualRange: any = {};
+  visualRange: VisualRange = {};
 
   constructor(service: Service) {
     this.stockPrices = service.getStockPrices();
-  }
-
-  valueChanged(e: any) {
-    this.chart.instance.zoomArgument(new Date(e.value[0]), new Date(e.value[1]));
   }
 }
 

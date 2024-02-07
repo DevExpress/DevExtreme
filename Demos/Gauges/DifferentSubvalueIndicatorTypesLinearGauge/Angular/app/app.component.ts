@@ -13,9 +13,7 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  customizeText(arg: any) {
-    return `$${arg.valueText}`;
-  }
+  customizeText = ({ valueText }) => `$${valueText}`;
 }
 
 @NgModule({

@@ -3,8 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
-
+import { DxButtonModule } from 'devextreme-angular';
+import { DxChartComponent, DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, Mountain } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,17 +27,14 @@ export class AppComponent {
     this.mountains = service.getMountains();
   }
 
-  customizeTooltip(arg: any) {
-    return {
-      text: `<span class='title'>${arg.argumentText}</span><br />&nbsp;<br />`
-                + `System: ${arg.point.data.system}<br />` + `Height: ${
-        arg.valueText} m`,
-    };
-  }
+  customizeTooltip = ({ argumentText, valueText, point: { data: { system } } }) => (
+    {
+      text: `<span class='title'>${argumentText}</span><br />&nbsp;<br />System: ${
+        system}<br />Height: ${valueText} m`,
+    }
+  );
 
-  customizeLabel(arg: any) {
-    return `${arg.value} m`;
-  }
+  customizeLabel: DxChartTypes.ValueAxisLabel['customizeText'] = ({ value }) => `${value} m`;
 
   print() {
     this.chart.instance.print();

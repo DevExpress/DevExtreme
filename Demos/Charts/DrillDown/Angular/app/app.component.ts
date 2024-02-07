@@ -6,7 +6,7 @@ import { CitiesPopulation, Service } from './app.service';
 
 interface DrillInfo {
   text: string;
-  node?: any;
+  node?: Element;
 }
 
 if (!/localhost/.test(document.location.host)) {

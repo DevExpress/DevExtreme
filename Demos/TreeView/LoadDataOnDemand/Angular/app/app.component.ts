@@ -3,8 +3,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
-import { DxTreeViewModule } from 'devextreme-angular';
+import { DxTreeViewComponent, DxTreeViewModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,10 +15,10 @@ if (!/localhost/.test(document.location.host)) {
   providers: [],
 })
 export class AppComponent {
-  createChildren: any;
+  createChildren: DxTreeViewComponent['createChildren'];
 
   constructor(http: HttpClient) {
-    this.createChildren = (parent) => {
+    this.createChildren = (parent: Record<string, { id: unknown }>) => {
       const parentId = parent ? parent.itemData.id : '';
 
       return lastValueFrom(

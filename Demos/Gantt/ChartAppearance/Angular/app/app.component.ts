@@ -2,9 +2,8 @@ import { ViewEncapsulation } from '@angular/compiler/src/core';
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxGanttModule, DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule,
-} from 'devextreme-angular';
+import { DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule } from 'devextreme-angular';
+import { DxGanttModule, DxGanttTypes } from 'devextreme-angular/ui/gantt';
 import {
   Service, Task, Dependency, Resource, ResourceAssignment,
 } from './app.service';
@@ -30,44 +29,37 @@ export class AppComponent {
 
   resourceAssignments: ResourceAssignment[];
 
-  scaleType: string;
+  scaleType: DxGanttTypes.Properties['scaleType'] = 'months';
 
-  titlePosition: string;
+  titlePosition: DxGanttTypes.Properties['taskTitlePosition'] = 'outside';
 
-  showResources: boolean;
+  showResources = true;
 
-  showDependencies: boolean;
+  showDependencies = true;
 
-  showCustomTaskTooltip: boolean;
+  showCustomTaskTooltip = true;
 
-  startDateRange: Date;
+  startDateRange = new Date(2018, 11, 1);
 
-  endDateRange: Date;
+  endDateRange = new Date(2019, 11, 1);
 
   constructor(service: Service) {
     this.tasks = service.getTasks();
     this.dependencies = service.getDependencies();
     this.resources = service.getResources();
     this.resourceAssignments = service.getResourceAssignments();
-    this.scaleType = 'months';
-    this.titlePosition = 'outside';
-    this.showResources = true;
-    this.showDependencies = true;
-    this.showCustomTaskTooltip = true;
-    this.startDateRange = new Date(2018, 11, 1);
-    this.endDateRange = new Date(2019, 11, 1);
   }
 
-  getTimeEstimate(task) {
-    return Math.abs(task.start - task.end) / 36e5;
+  getTimeEstimate(task: Task) {
+    return Math.abs((task.start as unknown as number) - (task.end as unknown as number)) / 36e5;
   }
 
-  getTimeLeft(task) {
-    const timeEstimate = Math.abs(task.start - task.end) / 36e5;
+  getTimeLeft(task: Task) {
+    const timeEstimate = Math.abs((task.start as unknown as number) - (task.end as unknown as number)) / 36e5;
     return Math.floor((100 - task.progress) / 100 * timeEstimate);
   }
 
-  getTime(date) {
+  getTime(date: Date) {
     return date.toLocaleString();
   }
 }

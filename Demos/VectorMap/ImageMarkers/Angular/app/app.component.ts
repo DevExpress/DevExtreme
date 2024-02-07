@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule } from 'devextreme-angular';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
 import { FeatureCollection, Service } from './app.service';
 
@@ -18,7 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  usaMap: any = mapsData.usa;
+  usaMap = mapsData.usa;
 
   weather: FeatureCollection;
 

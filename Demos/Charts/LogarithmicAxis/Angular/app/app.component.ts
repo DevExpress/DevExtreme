@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule } from 'devextreme-angular';
-
 import { Service, RelativeMass } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,20 +21,17 @@ export class AppComponent {
     this.relativeMasses = service.getRelativeMasses();
   }
 
-  customizePoint = (arg: any) => {
-    let color; let
-      hoverStyle;
-    switch (arg.data.type) {
-      case 'Star':
-        color = 'red';
-        hoverStyle = { border: { color: 'red' } };
-        break;
-      case 'Satellite':
-        color = 'gray';
-        hoverStyle = { border: { color: 'gray' } };
-    }
-    return { color, hoverStyle };
-  };
+  customizePoint = ({ data: { type } }) => (
+    {
+      Star: {
+        color: 'red',
+        hoverStyle: { border: { color: 'red' } },
+      },
+      Satellite: {
+        color: 'gray',
+        hoverStyle: { border: { color: 'gray' } },
+      },
+    }[type]);
 }
 
 @NgModule({

@@ -3,13 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxSelectBoxModule,
-  DxCheckBoxModule,
-  DxCalendarModule,
-  DxButtonModule,
-  DxCalendarComponent,
-} from 'devextreme-angular';
+import { DxSelectBoxModule, DxCheckBoxModule, DxButtonModule } from 'devextreme-angular';
+import { DxCalendarComponent, DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,15 +19,15 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   @ViewChild(DxCalendarComponent, { static: false }) calendar: DxCalendarComponent;
 
-  now: Date = new Date();
+  now = new Date();
 
-  value: any = [new Date(), new Date(new Date().getTime() + 1000 * 60 * 60 * 24)];
+  value = [new Date(), new Date(new Date().getTime() + 1000 * 60 * 60 * 24)];
 
-  selectionModes: string[] = [
+  selectionModes: DxCalendarTypes.CalendarSelectionMode[] = [
     'single', 'multiple', 'range',
   ];
 
-  selectionMode = 'multiple';
+  selectionMode: DxCalendarTypes.CalendarSelectionMode = 'multiple';
 
   minDateValue: Date | null = null;
 
@@ -40,7 +35,7 @@ export class AppComponent {
 
   disabledDates: Function | null = null;
 
-  isWeekend(date) {
+  isWeekend(date: Date) {
     const day = date.getDay();
 
     return day === 0 || day === 6;
@@ -60,7 +55,7 @@ export class AppComponent {
 
   disableWeekend({ value }) {
     this.disabledDates = value
-      ? (data) => data.view === 'month' && this.isWeekend(data.date)
+      ? (data: { view: string, date: Date }) => data.view === 'month' && this.isWeekend(data.date)
       : null;
   }
 

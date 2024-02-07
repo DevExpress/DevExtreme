@@ -1,18 +1,13 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTreeListModule } from 'devextreme-angular';
-
 import DataSource from 'devextreme/data/data_source';
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
-
-const getOrderDay = function (rowData: any): number {
-  return (new Date(rowData.OrderDate)).getDay();
-};
 
 @Component({
   selector: 'demo-app',
@@ -22,15 +17,14 @@ const getOrderDay = function (rowData: any): number {
 })
 
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSource;
 
-  filterValue: Array<any>;
+  filterValue: DxTreeListTypes.Properties['filterValue'] = ['City', '=', 'Bentonville'];
 
   constructor(service: Service) {
     this.dataSource = new DataSource({
       store: service.getEmployees(),
     });
-    this.filterValue = ['City', '=', 'Bentonville'];
   }
 }
 

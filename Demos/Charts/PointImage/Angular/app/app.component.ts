@@ -1,8 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule } from 'devextreme-angular';
-
+import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, IceHockeyStatistics } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -24,26 +23,23 @@ export class AppComponent {
     this.iceHockeyStatistics = service.getIceHockeyStatistics();
   }
 
-  customizePoint(arg: any) {
-    if (arg.value == 1) {
-      return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
-    } if (arg.value == 2) {
-      return { image: { url: '../../../../images/Charts/PointImage/icon-medal-silver.png', width: 20, height: 20 }, visible: true };
-    } if (arg.value == 3) {
-      return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
-    }
-  }
+  customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
+    const color = {
+      1: 'gold',
+      2: 'silver',
+      3: 'bronse',
+    }[value];
 
-  customizeText(arg: any) {
-    if (arg.valueText == 1) {
-      return `${arg.valueText}st place`;
-    } if (arg.valueText == 2) {
-      return `${arg.valueText}nd place`;
-    } if (arg.valueText == 3) {
-      return `${arg.valueText}rd place`;
+    if (color) {
+      return { image: { url: `../../../../images/Charts/PointImage/icon-medal-${color}.png`, width: 20, height: 20 }, visible: true };
     }
-    return `${arg.valueText}th place`;
-  }
+  };
+
+  customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => ({
+    1: `${valueText}st place`,
+    2: `${valueText}nd place`,
+    3: `${valueText}rd place`,
+  }[valueText] || `${valueText}th place`);
 }
 
 @NgModule({

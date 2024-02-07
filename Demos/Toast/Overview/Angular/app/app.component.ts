@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule, DxToastModule } from 'devextreme-angular';
-
+import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,12 +28,9 @@ export class AppComponent {
     this.products = service.getProducts();
   }
 
-  checkAvailable(e, product) {
-    const type = e.value ? 'success' : 'error';
-    const text = product.Name + (e.value ? ' is available' : ' is not available');
-
-    this.type = type;
-    this.message = text;
+  checkAvailable({ value }: DxCheckBoxTypes.ValueChangedEvent, product: Product) {
+    this.type = value ? 'success' : 'error';
+    this.message = product.Name + (value ? ' is available' : ' is not available');
     this.isVisible = true;
   }
 }

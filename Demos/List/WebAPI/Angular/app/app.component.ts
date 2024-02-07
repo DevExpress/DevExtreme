@@ -15,21 +15,17 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-  listData: any;
-
-  constructor() {
-    this.listData = new DataSource({
-      store: AspNetData.createStore({
-        key: 'ProductID',
-        loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders',
-      }),
-      sort: 'ProductName',
-      group: 'Category.CategoryName',
-      paginate: true,
-      pageSize: 1,
-      filter: ['UnitPrice', '>', 15],
-    });
-  }
+  listData = new DataSource({
+    store: AspNetData.createStore({
+      key: 'ProductID',
+      loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders',
+    }),
+    sort: 'ProductName',
+    group: 'Category.CategoryName',
+    paginate: true,
+    pageSize: 1,
+    filter: ['UnitPrice', '>', 15],
+  });
 }
 
 @NgModule({

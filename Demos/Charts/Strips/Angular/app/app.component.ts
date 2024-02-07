@@ -1,13 +1,14 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule } from 'devextreme-angular';
-
+import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, Temperature } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+const customizeText: DxChartTypes.ArgumentAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;
 
 @Component({
   selector: 'demo-app',
@@ -33,18 +34,18 @@ export class AppComponent {
     this.lowAverage = lowAverage;
   }
 
-  customizePoint = (arg: any) => {
-    if (arg.value > this.highAverage) {
+  customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
+    if (value > this.highAverage) {
       return { color: this.highAverageColor };
-    } if (arg.value < this.lowAverage) {
+    } if (value < this.lowAverage) {
       return { color: this.lowAverageColor };
     }
   };
 
-  customizeLabel = (arg: any) => {
-    if (arg.value > this.highAverage) {
+  customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
+    if (value > this.highAverage) {
       return getLabelsSettings(this.highAverageColor);
-    } if (arg.value < this.lowAverage) {
+    } if (value < this.lowAverage) {
       return getLabelsSettings(this.lowAverageColor);
     }
   };
@@ -52,16 +53,12 @@ export class AppComponent {
   customizeText = customizeText;
 }
 
-function getLabelsSettings(backgroundColor: any) {
+function getLabelsSettings(backgroundColor: string) {
   return {
     visible: true,
     backgroundColor,
     customizeText,
   };
-}
-
-function customizeText(arg: any) {
-  return `${arg.valueText}&#176F`;
 }
 
 @NgModule({

@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
+import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { Appointment, Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,37 +27,35 @@ export class AppComponent {
   constructor(service: Service) {
     this.tasks = service.getTasks();
     this.appointments = service.getAppointments();
-    this.onAppointmentRemove = this.onAppointmentRemove.bind(this);
-    this.onAppointmentAdd = this.onAppointmentAdd.bind(this);
   }
 
-  onAppointmentRemove(e) {
+  onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {
     const index = this.appointments.indexOf(e.itemData);
 
     if (index >= 0) {
       this.appointments.splice(index, 1);
       this.tasks.push(e.itemData);
     }
-  }
+  };
 
-  onAppointmentAdd(e) {
+  onAppointmentAdd = (e: DxSchedulerTypes.AppointmentDraggingAddEvent) => {
     const index = this.tasks.indexOf(e.fromData);
 
     if (index >= 0) {
       this.tasks.splice(index, 1);
       this.appointments.push(e.itemData);
     }
-  }
+  };
 
-  onListDragStart(e) {
+  onListDragStart(e: DxSchedulerTypes.AppointmentDraggingStartEvent) {
     e.cancel = true;
   }
 
-  onItemDragStart(e) {
-    e.itemData = e.fromData;
+  onItemDragStart(e: DxSchedulerTypes.AppointmentDraggingStartEvent) {
+    Object.assign(e.itemData, e.fromData);
   }
 
-  onItemDragEnd(e) {
+  onItemDragEnd(e: DxSchedulerTypes.AppointmentDraggingEndEvent) {
     if (e.toData) {
       e.cancel = true;
     }

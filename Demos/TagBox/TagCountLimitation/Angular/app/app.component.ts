@@ -1,9 +1,7 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTagBoxModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-
+import { DxTagBoxModule, DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,7 +25,7 @@ export class AppComponent {
     this.slicedProducts = this.products.slice(0, 5);
   }
 
-  onMultiTagPreparing(args) {
+  onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
     const selectedItemsLength = args.selectedItems.length;
     const totalCount = 5;
 

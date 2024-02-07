@@ -3,7 +3,6 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
@@ -12,6 +11,8 @@ import {
   DxNumberBoxModule,
 } from 'devextreme-angular';
 import Query from 'devextreme/data/query';
+import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { Appointment, Service, MovieData } from './app.service';
 
 @Pipe({ name: 'apply' })
@@ -52,23 +53,23 @@ export class AppComponent {
     this.moviesData = service.getMoviesData();
   }
 
-  onContentReady = (e) => {
+  onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
     e.component.scrollTo(new Date());
   };
 
-  onAppointmentClick = (e) => {
+  onAppointmentClick = (e: DxSchedulerTypes.AppointmentClickEvent) => {
     e.cancel = true;
   };
 
-  onAppointmentDblClick = (e) => {
+  onAppointmentDblClick = (e: DxSchedulerTypes.AppointmentDblClickEvent) => {
     e.cancel = true;
   };
 
-  changeIndicatorUpdateInterval = (e) => {
+  changeIndicatorUpdateInterval = (e: DxNumberBoxTypes.ValueChangedEvent) => {
     this.indicatorUpdateInterval = e.value * 1000;
   };
 
-  getMovieById = (id) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
+  getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 }
 
 @NgModule({

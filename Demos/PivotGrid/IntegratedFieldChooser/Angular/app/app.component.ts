@@ -1,9 +1,9 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPivotGridModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxSelectBoxModule } from 'devextreme-angular';
+import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -15,40 +15,33 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-  dataSource: any;
-
-  applyChangesModes: any;
-
-  applyChangesMode: any;
-
-  constructor() {
-    this.dataSource = {
-      fields: [
-        { dataField: '[Product].[Category]', area: 'row' },
-        {
-          dataField: '[Product].[Subcategory]',
-          area: 'row',
-          headerFilter: {
-            search: {
-              enabled: true,
-            },
+  dataSource: DataSourceConfig = {
+    fields: [
+      { dataField: '[Product].[Category]', area: 'row' },
+      {
+        dataField: '[Product].[Subcategory]',
+        area: 'row',
+        headerFilter: {
+          search: {
+            enabled: true,
           },
         },
-        { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
-        { dataField: '[Ship Date].[Month of Year]', area: 'column' },
-        { dataField: '[Measures].[Customer Count]', area: 'data' },
-      ],
-      store: {
-        type: 'xmla',
-        url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
-        catalog: 'Adventure Works DW Standard Edition',
-        cube: 'Adventure Works',
       },
-    };
+      { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
+      { dataField: '[Ship Date].[Month of Year]', area: 'column' },
+      { dataField: '[Measures].[Customer Count]', area: 'data' },
+    ],
+    store: {
+      type: 'xmla',
+      url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
+      catalog: 'Adventure Works DW Standard Edition',
+      cube: 'Adventure Works',
+    },
+  };
 
-    this.applyChangesModes = ['instantly', 'onDemand'];
-    this.applyChangesMode = this.applyChangesModes[0];
-  }
+  applyChangesModes: DxPivotGridTypes.ApplyChangesMode[] = ['instantly', 'onDemand'];
+
+  applyChangesMode = this.applyChangesModes[0];
 }
 
 @NgModule({

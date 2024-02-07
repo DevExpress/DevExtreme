@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
-
+import { DxSelectBoxModule } from 'devextreme-angular';
+import { DxPolarChartModule, DxPolarChartTypes } from 'devextreme-angular/ui/polar-chart';
 import { WindRose, WindDescription, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,13 +25,10 @@ export class AppComponent {
     this.windSources = service.getWindSources();
   }
 
-  onLegendClick(e: any) {
-    const series = e.target;
-    if (series.isVisible()) {
-      series.hide();
-    } else {
-      series.show();
-    }
+  onLegendClick({ target: series }: DxPolarChartTypes.LegendClickEvent) {
+    series.isVisible()
+      ? series.hide()
+      : series.show();
   }
 }
 

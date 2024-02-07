@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxDataGridModule, DxListModule, DxDropDownBoxModule, DxTagBoxModule,
 } from 'devextreme-angular';
-import { createStore } from 'devextreme-aspnet-data-nojquery';
+import { createStore, CustomStore } from 'devextreme-aspnet-data-nojquery';
 import { Service, Status } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,24 +19,21 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employees: object;
+  employees: CustomStore;
 
-  tasks: object;
+  tasks: CustomStore;
 
   statuses: Status[];
 
-  dropDownOptions: object;
+  dropDownOptions = { width: 500 };
 
-  editorOptions: object;
+  editorOptions = {
+    itemTemplate: 'statusTemplate',
+  };
 
-  url: string;
+  url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
 
   constructor(service: Service) {
-    this.dropDownOptions = { width: 500 };
-    this.editorOptions = {
-      itemTemplate: 'statusTemplate',
-    };
-    this.url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
     this.statuses = service.getStatuses();
     this.tasks = createStore({
       key: 'ID',

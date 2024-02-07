@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export const directions: any = {
+export const directions = {
   auto: {
     icon: 'rowfield',
     shading: true,

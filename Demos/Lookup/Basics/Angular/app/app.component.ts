@@ -20,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: string[];
 
-  dataSource: any;
+  dataSource: DataSource;
 
   constructor(service: Service) {
     this.dataSource = new DataSource({

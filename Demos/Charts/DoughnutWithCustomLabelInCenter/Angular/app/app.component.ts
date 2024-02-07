@@ -21,7 +21,7 @@ export class AppComponent {
 
   countries: Iterable<string>;
 
-  pipe: any = new DecimalPipe('en-US');
+  pipe = new DecimalPipe('en-US');
 
   constructor(service: Service) {
     this.service = service;

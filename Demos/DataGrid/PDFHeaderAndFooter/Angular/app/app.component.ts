@@ -1,14 +1,10 @@
-import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import {
-  DxDataGridModule, DxTemplateModule,
-} from 'devextreme-angular';
+import { DxTemplateModule } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, Country } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,7 +24,7 @@ export class AppComponent {
     this.countries = service.getCountries();
   }
 
-  onExporting(e) {
+  onExporting(e: DxDataGridTypes.ExportingEvent) {
     const doc = new jsPDF();
     const lastPoint = { x: 0, y: 0 };
 

@@ -1,8 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
-import { Service, Employee } from './app.service';
+import { Options as DataSourceConfig } from 'devextreme/data/data_source';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -15,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSourceConfig;
 
   constructor(service: Service) {
     this.dataSource = {
@@ -23,11 +24,11 @@ export class AppComponent {
     };
   }
 
-  customizeColumns(columns) {
+  customizeColumns(columns: DxDataGridTypes.Column[]) {
     columns[0].width = 70;
   }
 
-  onContentReady(e) {
+  onContentReady(e: DxDataGridTypes.ContentReadyEvent) {
     e.component.option('loadPanel.enabled', false);
   }
 }

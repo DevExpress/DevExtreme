@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxTreeListModule, DxButtonModule, DxCheckBoxModule, DxSelectBoxModule,
-} from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,26 +18,23 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: Employee[];
 
-  enterKeyActions: Array<string>;
+  editOnkeyPress = true;
 
-  enterKeyDirections: Array<string>;
+  enterKeyActions: DxTreeListTypes.EnterKeyAction[];
 
-  editOnkeyPress: boolean;
+  enterKeyDirections: DxTreeListTypes.EnterKeyDirection[];
 
-  enterKeyAction: string;
+  enterKeyAction: DxTreeListTypes.EnterKeyAction = 'moveFocus';
 
-  enterKeyDirection: string;
+  enterKeyDirection: DxTreeListTypes.EnterKeyDirection = 'column';
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
     this.enterKeyActions = service.getEnterKeyActions();
     this.enterKeyDirections = service.getEnterKeyDirections();
-    this.editOnkeyPress = true;
-    this.enterKeyAction = 'moveFocus';
-    this.enterKeyDirection = 'column';
   }
 
-  onFocusedCellChanging(e) {
+  onFocusedCellChanging(e: DxTreeListTypes.FocusedCellChangingEvent) {
     e.isHighlighted = true;
   }
 }

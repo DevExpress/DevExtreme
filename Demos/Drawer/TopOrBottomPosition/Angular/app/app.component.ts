@@ -3,9 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxDrawerComponent, DxDrawerModule, DxListModule, DxRadioGroupModule, DxToolbarModule,
-} from 'devextreme-angular';
+import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
+import { DxDrawerComponent, DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { List, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,17 +24,17 @@ export class AppComponent {
 
   navigation: List[];
 
-  showSubmenuModes: string[] = ['slide', 'expand'];
+  showSubmenuModes: DxDrawerTypes.RevealMode[] = ['slide', 'expand'];
 
-  positionModes: string[] = ['top', 'bottom'];
+  positionModes: DxDrawerTypes.PanelLocation[] = ['top', 'bottom'];
 
-  showModes: string[] = ['push', 'shrink', 'overlap'];
+  showModes: DxDrawerTypes.OpenedStateMode[] = ['push', 'shrink', 'overlap'];
 
-  selectedOpenMode = 'shrink';
+  selectedOpenMode: DxDrawerTypes.OpenedStateMode = 'shrink';
 
-  selectedPosition = 'top';
+  selectedPosition: DxDrawerTypes.PanelLocation = 'top';
 
-  selectedRevealMode = 'expand';
+  selectedRevealMode: DxDrawerTypes.RevealMode = 'expand';
 
   text: string;
 

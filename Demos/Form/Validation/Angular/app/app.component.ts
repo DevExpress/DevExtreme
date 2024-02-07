@@ -7,15 +7,19 @@ import {
   DxCheckBoxModule,
   DxSelectBoxModule,
   DxNumberBoxModule,
-  DxButtonModule,
-  DxFormModule,
   DxAutocompleteModule,
-  DxFormComponent,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
-
+import { AsyncRule } from 'devextreme-angular/common';
+import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
+import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import { DxDateBoxTypes } from 'devextreme-angular/ui/date-box';
+import { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
+import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Customer, Service } from './app.service';
+
+type EditorOptions = DxTextBoxTypes.Properties;
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -37,9 +41,23 @@ const sendRequest = function (value) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  @ViewChild(DxFormComponent, { static: false }) form:DxFormComponent;
+  @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
 
-  passwordEditorOptions: any = {
+  customer: Customer;
+
+  countries: string[];
+
+  cities: string[];
+
+  maxDate: Date = new Date();
+
+  cityPattern = '^[^0-9]+$';
+
+  namePattern = /^[^0-9]+$/;
+
+  phonePattern = /^[02-9]\d{9}$/;
+
+  passwordEditorOptions: EditorOptions = {
     mode: 'password',
     valueChangeEvent: 'keyup',
     onValueChanged: () => {
@@ -62,19 +80,19 @@ export class AppComponent {
     ],
   };
 
-  emailEditorOptions: any = {
+  emailEditorOptions: EditorOptions = {
     valueChangeEvent: 'keyup',
   };
 
-  nameEditorOptions: any = {
+  nameEditorOptions: EditorOptions = {
     valueChangeEvent: 'keyup',
   };
 
-  addressEditorOptions: any = {
+  addressEditorOptions: EditorOptions = {
     valueChangeEvent: 'keyup',
   };
 
-  phoneEditorOptions: any = {
+  phoneEditorOptions: EditorOptions = {
     mask: '+1 (X00) 000-0000',
     maskRules: {
       X: /[02-9]/,
@@ -83,65 +101,49 @@ export class AppComponent {
     valueChangeEvent: 'keyup',
   };
 
-  confirmPasswordEditorOptions: any = {
+  confirmPasswordEditorOptions: EditorOptions = {
     mode: 'password',
     valueChangeEvent: 'keyup',
     buttons: [
       {
         name: 'password',
-        stylingMode: 'text',
-        icon: 'eyeopen',
         location: 'after',
         options: {
-          stylingMode: 'text',
           icon: 'eyeopen',
+          stylingMode: 'text',
           onClick: () => this.changePasswordMode('ConfirmPassword'),
         },
       },
     ],
   };
 
-  colCountByScreen = {
+  colCountByScreen: DxFormTypes.GroupItem['colCountByScreen'] = {
     xs: 2,
     sm: 2,
     md: 2,
     lg: 2,
   };
 
-  customer: Customer;
-
-  countries: string[];
-
-  cities: string[];
-
-  maxDate: Date = new Date();
-
-  cityPattern = '^[^0-9]+$';
-
-  namePattern: any = /^[^0-9]+$/;
-
-  phonePattern: any = /^[02-9]\d{9}$/;
-
-  dateBoxOptions = {
+  dateBoxOptions: DxDateBoxTypes.Properties = {
     placeholder: 'Birth Date',
     acceptCustomValue: false,
     openOnFieldClick: true,
   };
 
-  dateRangeBoxOptions = {
+  dateRangeBoxOptions: DxDateRangeBoxTypes.Properties = {
     startDatePlaceholder: 'Start Date',
     endDatePlaceholder: 'End Date',
     acceptCustomValue: false,
   };
 
-  registerButtonOptions = {
+  registerButtonOptions: DxButtonTypes.Properties = {
     text: 'Register',
     type: 'default',
     width: '120px',
     useSubmitBehavior: true,
   };
 
-  resetButtonOptions = {
+  resetButtonOptions: DxButtonTypes.Properties = {
     text: 'Reset',
     width: '120px',
     disabled: true,
@@ -151,26 +153,26 @@ export class AppComponent {
     },
   };
 
-  passwordComparison = () => this.form.instance.option('formData').Password;
-
-  checkComparison() {
-    return true;
-  }
-
-  changePasswordMode = (name) => {
-    let editor = this.form.instance.getEditor(name);
-    editor.option(
-      'mode',
-      editor.option('mode') === 'text' ? 'password' : 'text',
-    );
-  };
-
   constructor(service: Service) {
     this.maxDate = new Date(this.maxDate.setFullYear(this.maxDate.getFullYear() - 21));
     this.countries = service.getCountries();
     this.cities = service.getCities();
     this.customer = service.getCustomer();
   }
+
+  passwordComparison = () => this.form.instance.option('formData').Password;
+
+  checkComparison() {
+    return true;
+  }
+
+  changePasswordMode = (name: string) => {
+    let editor = this.form.instance.getEditor(name);
+    editor.option(
+      'mode',
+      editor.option('mode') === 'text' ? 'password' : 'text',
+    );
+  };
 
   validateVacationDatesRange({ value }) {
     const [startDate, endDate] = value;
@@ -195,11 +197,9 @@ export class AppComponent {
     return startDate !== null && endDate !== null;
   }
 
-  asyncValidation(params) {
-    return sendRequest(params.value);
-  }
+  asyncValidation: AsyncRule['validationCallback'] = ({ value }) => sendRequest(value);
 
-  onFormSubmit = function (e) {
+  onFormSubmit = (e: SubmitEvent) => {
     notify({
       message: 'You have submitted the form',
       position: {
@@ -211,7 +211,7 @@ export class AppComponent {
     e.preventDefault();
   };
 
-  onOptionChanged = function (e) {
+  onOptionChanged = (e: DxFormTypes.OptionChangedEvent) => {
     if (e.name === 'isDirty') {
       const resetButton = this.form.instance.getButton('Reset');
       resetButton.option('disabled', !e.value);

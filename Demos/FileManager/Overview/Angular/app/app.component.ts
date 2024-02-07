@@ -1,9 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxFileManagerModule, DxPopupModule } from 'devextreme-angular';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { DxPopupModule } from 'devextreme-angular';
+import { DxFileManagerModule, DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   remoteProvider: RemoteFileSystemProvider;
 
-  imageItemToDisplay: any = {};
+  imageItemToDisplay = {} as DxFileManagerTypes.SelectedFileOpenedEvent['file'];
 
   popupVisible = false;
 
@@ -28,7 +28,7 @@ export class AppComponent {
     });
   }
 
-  displayImagePopup(e) {
+  displayImagePopup(e: DxFileManagerTypes.SelectedFileOpenedEvent) {
     this.imageItemToDisplay = e.file;
     this.popupVisible = true;
   }

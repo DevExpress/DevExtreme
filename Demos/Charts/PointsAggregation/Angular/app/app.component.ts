@@ -1,10 +1,7 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
+import { enableProdMode, Component, NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-
+import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import {
   Service, WeatherIndicators, AggregationInterval, AggregationFunction,
 } from './app.service';
@@ -35,35 +32,42 @@ export class AppComponent {
     this.functions = service.getAggregationFunctions();
   }
 
-  customizeTooltip(arg: any) {
-    const aggregationInfo = arg.point.aggregationInfo;
-    const start = aggregationInfo && aggregationInfo.intervalStart;
-    const end = aggregationInfo && aggregationInfo.intervalEnd;
+  customizeTooltip({
+    valueText,
+    point: { aggregationInfo },
+    seriesName,
+    value,
+    argument,
+    rangeValue1,
+    rangeValue2,
+  }) {
+    const start = aggregationInfo?.intervalStart;
+    const end = aggregationInfo?.intervalEnd;
 
-    if (arg.seriesName === 'Average temperature') {
+    if (seriesName === 'Average temperature') {
       return {
         text: `${!aggregationInfo
-          ? `Date: ${arg.argument.toDateString()}`
+          ? `Date: ${argument.toDateString()}`
           : `Interval: ${start.toDateString()
           } - ${end.toDateString()}`
-        }<br/>Temperature: ${arg.value.toFixed(2)} °C`,
+        }<br/>Temperature: ${value.toFixed(2)} °C`,
       };
-    } if (arg.seriesName === 'Temperature range') {
+    } if (seriesName === 'Temperature range') {
       return {
         text: `Interval: ${start.toDateString()
         } - ${end.toDateString()
-        }<br/>Temperature range: ${arg.rangeValue1
-        } - ${arg.rangeValue2} °C`,
+        }<br/>Temperature range: ${rangeValue1
+        } - ${rangeValue2} °C`,
       };
-    } if (arg.seriesName === 'Precipitation') {
+    } if (seriesName === 'Precipitation') {
       return {
-        text: `Date: ${arg.argument.toDateString()
-        }<br/>Precipitation: ${arg.valueText} mm`,
+        text: `Date: ${argument.toDateString()
+        }<br/>Precipitation: ${valueText} mm`,
       };
     }
   }
 
-  calculateRangeArea(aggregationInfo:any, series:any) {
+  calculateRangeArea(aggregationInfo: Record<string, any>) {
     if (!aggregationInfo.data.length) {
       return;
     }

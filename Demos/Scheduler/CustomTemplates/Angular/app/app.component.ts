@@ -3,8 +3,9 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule, DxSchedulerComponent, DxTemplateModule } from 'devextreme-angular';
+import { DxTemplateModule } from 'devextreme-angular';
 import Query from 'devextreme/data/query';
+import { DxSchedulerModule, DxSchedulerComponent, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
@@ -41,7 +42,7 @@ export class AppComponent {
     this.theatreData = service.getTheatreData();
   }
 
-  onAppointmentFormOpening = (data) => {
+  onAppointmentFormOpening = (data: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
     const that = this;
     const form = data.form;
     let movieInfo = that.getMovieById(data.appointmentData.movieId) || {};
@@ -57,11 +58,11 @@ export class AppComponent {
         items: that.moviesData,
         displayExpr: 'text',
         valueExpr: 'id',
-        onValueChanged(args) {
-          movieInfo = that.getMovieById(args.value);
+        onValueChanged({ value }) {
+          movieInfo = that.getMovieById(value);
 
           form.updateData('director', movieInfo.director);
-          form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
+          form.updateData('endDate', new Date((startDate as Date).getTime() + 60 * 1000 * movieInfo.duration));
         },
       },
     }, {
@@ -80,9 +81,8 @@ export class AppComponent {
       editorOptions: {
         width: '100%',
         type: 'datetime',
-        onValueChanged(args) {
-          startDate = args.value;
-          form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
+        onValueChanged({ value }) {
+          form.updateData('endDate', new Date((value as Date).getTime() + 60 * 1000 * movieInfo.duration));
         },
       },
     }, {
@@ -99,21 +99,14 @@ export class AppComponent {
       editorType: 'dxRadioGroup',
       editorOptions: {
         dataSource: [5, 10, 15, 20],
-        itemTemplate(itemData) {
+        itemTemplate(itemData: string) {
           return `$${itemData}`;
         },
       },
     }]);
   };
 
-  getDataObj = (objData) => {
-    for (let i = 0; i < this.data.length; i++) {
-      if (this.data[i].startDate.getTime() === objData.startDate.getTime() && this.data[i].theatreId === objData.theatreId) { return this.data[i]; }
-    }
-    return null;
-  };
-
-  getMovieById = (id) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
+  getMovieById = (id: string) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 }
 
 @NgModule({

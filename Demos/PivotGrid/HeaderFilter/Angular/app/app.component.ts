@@ -16,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  pivotGridDataSource: any;
+  pivotGridDataSource: PivotGridDataSource;
 
   searchEnabled = true;
 

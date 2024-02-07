@@ -49,15 +49,14 @@
         <dx-button
           [text]="this.expandAll ? 'Collapse All' : 'Expand All'"
           width="136"
-          (onClick)="toggleExpandAll($event)"
+          (onClick)="toggleExpandAll()"
         >
         </dx-button>
       </div>
     </dxi-item>
     <dxi-item location="after">
       <div *dxTemplate>
-        <dx-button icon="refresh" (onClick)="refreshDataGrid($event)">
-        </dx-button>
+        <dx-button icon="refresh" (onClick)="refreshDataGrid()"> </dx-button>
       </div>
     </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>

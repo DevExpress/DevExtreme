@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxDataGridModule, DxButtonModule, DxCheckBoxModule, DxSelectBoxModule,
-} from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, Employee, State } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,23 +24,20 @@ export class AppComponent {
 
   enterKeyDirections: Array<string>;
 
-  editOnkeyPress: boolean;
+  editOnkeyPress = true;
 
-  enterKeyAction: string;
+  enterKeyAction: DxDataGridTypes.EnterKeyAction = 'moveFocus';
 
-  enterKeyDirection: string;
+  enterKeyDirection: DxDataGridTypes.EnterKeyDirection = 'column';
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
     this.states = service.getStates();
     this.enterKeyActions = service.getEnterKeyActions();
     this.enterKeyDirections = service.getEnterKeyDirections();
-    this.editOnkeyPress = true;
-    this.enterKeyAction = 'moveFocus';
-    this.enterKeyDirection = 'column';
   }
 
-  onFocusedCellChanging(e) {
+  onFocusedCellChanging(e: DxDataGridTypes.FocusedCellChangingEvent) {
     e.isHighlighted = true;
   }
 }

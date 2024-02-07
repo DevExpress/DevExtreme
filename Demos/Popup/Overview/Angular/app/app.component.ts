@@ -24,11 +24,11 @@ export class AppComponent {
 
   popupVisible = false;
 
-  moreInfoButtonOptions: any;
+  moreInfoButtonOptions: Record<string, unknown>;
 
-  emailButtonOptions: any;
+  emailButtonOptions: Record<string, unknown>;
 
-  closeButtonOptions: any;
+  closeButtonOptions: Record<string, unknown>;
 
   positionOf: string;
 
@@ -72,11 +72,11 @@ export class AppComponent {
     };
   }
 
-  detailsButtonMouseEnter(id) {
+  detailsButtonMouseEnter(id: number) {
     this.positionOf = `#image${id}`;
   }
 
-  showInfo(employee) {
+  showInfo(employee: Employee) {
     this.currentEmployee = employee;
     this.popupVisible = true;
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export class Marker {
-  location: any;
+  location: unknown;
 }
 
 export type APIKey = {

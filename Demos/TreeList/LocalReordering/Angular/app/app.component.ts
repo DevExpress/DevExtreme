@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxTreeListModule, DxCheckBoxModule } from 'devextreme-angular';
-
+import { DxCheckBoxModule } from 'devextreme-angular';
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -30,10 +29,9 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
-    this.onReorder = this.onReorder.bind(this);
   }
 
-  onDragChange(e) {
+  onDragChange(e: DxTreeListTypes.RowDraggingChangeEvent) {
     const visibleRows = e.component.getVisibleRows();
     const sourceNode = e.component.getNodeByKey(e.itemData.ID);
     let targetNode = visibleRows[e.toIndex].node;
@@ -47,7 +45,7 @@ export class AppComponent {
     }
   }
 
-  onReorder(e) {
+  onReorder = (e: DxTreeListTypes.RowDraggingReorderEvent) => {
     const visibleRows = e.component.getVisibleRows();
 
     if (e.dropInsideItem) {
@@ -72,7 +70,7 @@ export class AppComponent {
       const targetIndex = this.employees.indexOf(targetData) + 1;
       this.employees.splice(targetIndex, 0, sourceData);
     }
-  }
+  };
 }
 
 @NgModule({

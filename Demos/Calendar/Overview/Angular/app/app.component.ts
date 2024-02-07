@@ -2,12 +2,9 @@ import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxSelectBoxModule,
-  DxCheckBoxModule,
-  DxDateBoxModule,
-  DxCalendarModule,
-  DxTemplateModule,
+  DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule, DxTemplateModule,
 } from 'devextreme-angular';
+import { DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,11 +17,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  now: Date = new Date();
+  now = new Date();
 
-  currentValue: Date = new Date();
+  currentValue = new Date();
 
-  zoomLevels: string[] = [
+  zoomLevels: DxCalendarTypes.CalendarZoomLevel[] = [
     'month', 'year', 'decade', 'century',
   ];
 
@@ -38,15 +35,15 @@ export class AppComponent {
     { id: 6, text: 'Saturday' },
   ];
 
-  weekNumberRules: string[] = [
+  weekNumberRules: DxCalendarTypes.WeekNumberRule[] = [
     'auto', 'firstDay', 'firstFourDays', 'fullWeek',
   ];
 
   cellTemplate = 'cell';
 
-  holidays: any = [[1, 0], [4, 6], [25, 11]];
+  holidays = [[1, 0], [4, 6], [25, 11]];
 
-  isWeekend(date) {
+  isWeekend(date: Date) {
     const day = date.getDay();
 
     return day === 0 || day === 6;

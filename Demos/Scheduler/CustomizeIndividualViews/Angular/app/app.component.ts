@@ -16,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSource;
 
   currentDate: Date = new Date(2021, 3, 27);
 

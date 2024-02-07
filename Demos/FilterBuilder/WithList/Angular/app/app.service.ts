@@ -18,7 +18,7 @@ export class Product {
   ImageSrc: string;
 }
 
-const filter: Array<any> = [
+const filter = [
   ['Category', '=', 'Video Players'],
   'or',
   [
@@ -40,7 +40,7 @@ const categories: string[] = [
   'Projectors',
   'Automation',
 ];
-const fields: Array<any> = [
+const fields = [
   {
     dataField: 'ID',
     dataType: 'number',
@@ -226,3 +226,6 @@ export class Service {
     return filter;
   }
 }
+
+export type Fields = typeof fields;
+export type Filter = typeof filter;

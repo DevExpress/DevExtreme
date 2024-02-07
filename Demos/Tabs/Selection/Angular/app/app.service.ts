@@ -8,7 +8,7 @@ export class Tab {
   icon: string;
 }
 
-const employees: any = [
+const employees = [
   {
     id: 0,
     icon: 'user',

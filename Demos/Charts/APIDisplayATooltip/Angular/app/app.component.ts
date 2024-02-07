@@ -3,8 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPieChartModule, DxSelectBoxModule, DxPieChartComponent } from 'devextreme-angular';
-
+import { DxPieChartModule, DxPieChartComponent, DxPieChartTypes } from 'devextreme-angular/ui/pie-chart';
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Population } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,19 +28,18 @@ export class AppComponent {
     this.populationData = service.getPopulationData();
   }
 
-  pointClick(e: any) {
-    const point = e.target;
+  pointClick({ target: point }: DxPieChartTypes.PointClickEvent) {
     point.showTooltip();
-    this.selectedRegion = point.argument;
+    this.selectedRegion = point.data.region;
   }
 
-  valueChanged(e: any) {
-    this.chart.instance.getAllSeries()[0].getPointsByArg(e.value)[0].showTooltip();
+  valueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
+    this.chart.instance.getAllSeries()[0].getPointsByArg(value)[0].showTooltip();
   }
 
-  customizeTooltip(arg: any) {
+  customizeTooltip({ argumentText, valueText }: Record<string, string>) {
     return {
-      text: `${arg.argumentText}<br/>${arg.valueText}`,
+      text: `${argumentText}<br/>${valueText}`,
     };
   }
 }

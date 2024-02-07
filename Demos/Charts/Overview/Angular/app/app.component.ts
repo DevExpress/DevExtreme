@@ -1,8 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule } from 'devextreme-angular';
-
+import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, ComplaintsWithPercent } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,21 +21,21 @@ export class AppComponent {
     this.dataSource = service.getComplaintsData();
   }
 
-  customizeTooltip = (info: any) => ({
+  customizeTooltip = ({ points, argumentText }) => ({
     html: `<div><div class='tooltip-header'>${
-      info.argumentText}</div>`
+      argumentText}</div>`
                 + '<div class=\'tooltip-body\'><div class=\'series-name\'>'
-                + `<span class='top-series-name'>${info.points[0].seriesName}</span>`
+                + `<span class='top-series-name'>${points[0].seriesName}</span>`
                 + ': </div><div class=\'value-text\'>'
-                + `<span class='top-series-value'>${info.points[0].valueText}</span>`
+                + `<span class='top-series-value'>${points[0].valueText}</span>`
                 + '</div><div class=\'series-name\'>'
-                + `<span class='bottom-series-name'>${info.points[1].seriesName}</span>`
+                + `<span class='bottom-series-name'>${points[1].seriesName}</span>`
                 + ': </div><div class=\'value-text\'>'
-                + `<span class='bottom-series-value'>${info.points[1].valueText}</span>`
+                + `<span class='bottom-series-value'>${points[1].valueText}</span>`
                 + '% </div></div></div>',
   });
 
-  customizeLabelText = (info: any) => `${info.valueText}%`;
+  customizeLabelText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}%`;
 }
 
 @NgModule({

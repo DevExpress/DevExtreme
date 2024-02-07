@@ -3,9 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxDrawerComponent, DxDrawerModule, DxListModule, DxRadioGroupModule, DxToolbarModule,
-} from 'devextreme-angular';
+import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
+import { DxDrawerModule, DxDrawerComponent, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { List, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -24,19 +23,19 @@ export class AppComponent {
 
   navigation: List[];
 
-  showSubmenuModes: string[] = ['slide', 'expand'];
-
-  positionModes: string[] = ['left', 'right'];
-
-  showModes: string[] = ['push', 'shrink', 'overlap'];
-
   text: string;
 
-  selectedOpenMode = 'shrink';
+  showSubmenuModes: DxDrawerTypes.RevealMode[] = ['slide', 'expand'];
 
-  selectedPosition = 'left';
+  positionModes: DxDrawerTypes.PanelLocation[] = ['left', 'right'];
 
-  selectedRevealMode = 'slide';
+  showModes: DxDrawerTypes.OpenedStateMode[] = ['push', 'shrink', 'overlap'];
+
+  selectedOpenMode: DxDrawerTypes.OpenedStateMode = 'shrink';
+
+  selectedPosition: DxDrawerTypes.PanelLocation = 'left';
+
+  selectedRevealMode: DxDrawerTypes.RevealMode = 'slide';
 
   isDrawerOpen = true;
 

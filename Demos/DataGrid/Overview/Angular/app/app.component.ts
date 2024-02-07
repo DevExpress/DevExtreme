@@ -1,14 +1,9 @@
-import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxDataGridModule,
-  DxBulletModule,
-  DxTemplateModule,
-} from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
+import { DxBulletModule, DxTemplateModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,14 +21,14 @@ export class AppComponent {
 
   collapsed = false;
 
-  contentReady = (e) => {
+  contentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
     if (!this.collapsed) {
       this.collapsed = true;
       e.component.expandRow(['EnviroCare']);
     }
   };
 
-  customizeTooltip = (pointsInfo) => ({ text: `${parseInt(pointsInfo.originalValue)}%` });
+  customizeTooltip = ({ originalValue }: Record<string, string>) => ({ text: `${parseInt(originalValue)}%` });
 
   constructor(service: Service) {
     this.dataSource = service.getDataSource();

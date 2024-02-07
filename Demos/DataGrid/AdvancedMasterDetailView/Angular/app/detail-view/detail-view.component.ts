@@ -1,6 +1,8 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { DxFormTypes } from 'devextreme-angular/ui/form';
+import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
 @Component({
   selector: 'detail-view',
@@ -44,7 +46,7 @@ export class DetailViewComponent implements AfterViewInit {
     }
   }
 
-  handleValueChange(e: any) {
+  handleValueChange(e: DxSelectBoxTypes.ValueChangedEvent) {
     this.productIdBySupplier = e.value;
     this.orderHistoryData = new DataSource({
       store: AspNetData.createStore({
@@ -55,7 +57,7 @@ export class DetailViewComponent implements AfterViewInit {
     });
   }
 
-  customizeItemTemplate(item: any) {
+  customizeItemTemplate(item: DxFormTypes.SimpleItem) {
     item.template = 'formItem';
   }
 }

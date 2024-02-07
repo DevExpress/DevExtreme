@@ -3,9 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxSpeedDialActionModule, DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
-
 import { Appointment, Resource, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -34,7 +32,7 @@ export class AppComponent {
     this.priorities = service.getResources();
   }
 
-  showAppointmentPopup(e) {
+  showAppointmentPopup() {
     this.scheduler.instance.showAppointmentPopup();
   }
 }

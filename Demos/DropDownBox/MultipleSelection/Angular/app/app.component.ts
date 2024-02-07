@@ -1,19 +1,13 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  enableProdMode, Component, ViewChild, NgModule,
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
-import {
-  DxDropDownBoxModule,
-  DxTreeViewModule,
-  DxDataGridModule,
-  DxTreeViewComponent,
-} from 'devextreme-angular';
-
 import CustomStore from 'devextreme/data/custom_store';
+import { DxDropDownBoxModule, DxDataGridModule } from 'devextreme-angular';
+import { DxTreeViewComponent, DxTreeViewModule, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,23 +19,22 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView;
+  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
 
   treeDataSource: any;
 
-  treeBoxValue: string[];
-
   gridDataSource: any;
 
-  gridBoxValue: number[] = [3];
+  treeBoxValue = ['1_1'];
+
+  gridBoxValue = [3];
 
   constructor(http: HttpClient) {
     this.treeDataSource = this.makeAsyncDataSource(http, 'treeProducts.json');
     this.gridDataSource = this.makeAsyncDataSource(http, 'customers.json');
-    this.treeBoxValue = ['1_1'];
   }
 
-  makeAsyncDataSource(http, jsonFile) {
+  makeAsyncDataSource(http: HttpClient, jsonFile: string) {
     return new CustomStore({
       loadMode: 'raw',
       key: 'ID',
@@ -51,29 +44,27 @@ export class AppComponent {
     });
   }
 
-  onDropDownBoxValueChanged(e) {
-    this.updateSelection(this.treeView && this.treeView.instance);
+  onDropDownBoxValueChanged() {
+    this.updateSelection(this.treeView?.instance);
   }
 
-  onTreeViewReady(e) {
+  onTreeViewReady(e: DxTreeViewTypes.ContentReadyEvent) {
     this.updateSelection(e.component);
   }
 
-  updateSelection(treeView) {
+  updateSelection(treeView: DxTreeViewComponent['instance']) {
     if (!treeView) return;
 
     if (!this.treeBoxValue) {
       treeView.unselectAll();
     }
 
-    if (this.treeBoxValue) {
-      this.treeBoxValue.forEach(((value) => {
-        treeView.selectItem(value);
-      }));
-    }
+    this.treeBoxValue?.forEach(((value) => {
+      treeView.selectItem(value);
+    }));
   }
 
-  onTreeViewSelectionChanged(e) {
+  onTreeViewSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
     this.treeBoxValue = e.component.getSelectedNodeKeys();
   }
 }

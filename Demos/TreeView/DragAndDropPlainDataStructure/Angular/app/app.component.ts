@@ -3,13 +3,17 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxTreeViewModule, DxTreeViewComponent, DxSortableModule } from 'devextreme-angular';
+import { DxSortableModule, DxSortableTypes } from 'devextreme-angular/ui/sortable';
+import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { Service, FileSystemItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+type TreeView = ReturnType<AppComponent['getTreeView']>;
+type Node = DxTreeViewTypes.Node;
+type Item = DxTreeViewTypes.Item;
 
 @Component({
   selector: 'demo-app',
@@ -31,7 +35,7 @@ export class AppComponent {
     this.itemsDriveD = service.getItemsDriveD();
   }
 
-  onDragChange(e) {
+  onDragChange(e: DxSortableTypes.DragChangeEvent) {
     if (e.fromComponent === e.toComponent) {
       const fromNode = this.findNode(this.getTreeView(e.fromData), e.fromIndex);
       const toNode = this.findNode(this.getTreeView(e.toData), this.calculateToIndex(e));
@@ -41,7 +45,7 @@ export class AppComponent {
     }
   }
 
-  onDragEnd(e) {
+  onDragEnd(e: DxSortableTypes.DragEndEvent) {
     if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
       return;
     }
@@ -69,13 +73,13 @@ export class AppComponent {
     toTreeView.scrollToItem(toTopVisibleNode);
   }
 
-  getTreeView(driveName) {
+  getTreeView(driveName: string) {
     return driveName === 'driveC'
       ? this.treeviewDriveC.instance
       : this.treeviewDriveD.instance;
   }
 
-  calculateToIndex(e) {
+  calculateToIndex(e: DxSortableTypes.DragChangeEvent | DxSortableTypes.DragEndEvent) {
     if (e.fromComponent != e.toComponent || e.dropInsideItem) {
       return e.toIndex;
     }
@@ -85,7 +89,7 @@ export class AppComponent {
       : e.toIndex + 1;
   }
 
-  findNode(treeView, index) {
+  findNode(treeView: TreeView, index: number) {
     const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
     if (nodeElement) {
       return this.findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
@@ -93,7 +97,7 @@ export class AppComponent {
     return null;
   }
 
-  findNodeById(nodes, id) {
+  findNodeById(nodes: Node[], id: string | number) {
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].itemData.id == id) {
         return nodes[i];
@@ -108,7 +112,7 @@ export class AppComponent {
     return null;
   }
 
-  moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
+  moveNode(fromNode: Node, toNode: Node, fromItems: Item[], toItems: Item[], isDropInsideItem: boolean) {
     const fromIndex = fromItems.findIndex((item) => item.id == fromNode.itemData.id);
     fromItems.splice(fromIndex, 1);
 
@@ -127,7 +131,7 @@ export class AppComponent {
     }
   }
 
-  moveChildren(node, fromDataSource, toDataSource) {
+  moveChildren(node: Node, fromDataSource: Item[], toDataSource: Item[]) {
     if (!node.itemData.isDirectory) {
       return;
     }
@@ -143,7 +147,7 @@ export class AppComponent {
     });
   }
 
-  isChildNode(parentNode, childNode) {
+  isChildNode(parentNode: Node, childNode: Node) {
     let parent = childNode.parent;
     while (parent !== null) {
       if (parent.itemData.id === parentNode.itemData.id) {
@@ -154,7 +158,7 @@ export class AppComponent {
     return false;
   }
 
-  getTopVisibleNode(component) {
+  getTopVisibleNode(component: DxSortableTypes.DragEndEvent['fromComponent']) {
     const treeViewElement = component.element();
     const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
     const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');

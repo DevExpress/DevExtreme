@@ -1,7 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCircularGaugeModule, DxNumberBoxModule, DxButtonModule } from 'devextreme-angular';
+import { DxNumberBoxModule, DxButtonModule } from 'devextreme-angular';
+import { DxCircularGaugeModule, DxCircularGaugeTypes } from 'devextreme-angular/ui/circular-gauge';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -15,15 +16,13 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   mainGenerator = 34;
 
-  additionalGenerator: number[] = [12, 23];
+  additionalGenerator = [12, 23];
 
   gaugeValue = 34;
 
-  gaugeSubvalues: number[] = [12, 23];
+  gaugeSubvalues = [12, 23];
 
-  customizeText(arg: any) {
-    return `${arg.valueText} kV`;
-  }
+  customizeText: DxCircularGaugeTypes.ScaleLabel['customizeText'] = ({ valueText }) => `${valueText} kV`;
 
   updateValues() {
     this.gaugeValue = this.mainGenerator;

@@ -3,13 +3,10 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import {
-  DxScrollViewModule,
-  DxScrollViewComponent,
-  DxCheckBoxModule,
-  DxSelectBoxModule,
-} from 'devextreme-angular';
+import { DxSelectBoxModule } from 'devextreme-angular';
+import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { DxScrollViewModule, DxScrollViewComponent, DxScrollViewTypes } from 'devextreme-angular/ui/scroll-view';
+import { ScrollbarMode } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,24 +23,8 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent implements AfterViewInit {
   @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
 
-  showScrollbarModes: any[];
-
-  content: string;
-
-  updateContentTimer: unknown;
-
-  scrollByContent = true;
-
-  scrollByThumb = true;
-
-  scrollbarMode: string;
-
-  pullDown = false;
-
-  constructor(service: Service) {
-    this.content = service.getContent();
-
-    this.showScrollbarModes = [{
+  showScrollbarModes: { text: string, value: ScrollbarMode }[] = [
+    {
       text: 'On Scroll',
       value: 'onScroll',
     }, {
@@ -55,33 +36,47 @@ export class AppComponent implements AfterViewInit {
     }, {
       text: 'Never',
       value: 'never',
-    }];
+    },
+  ];
 
-    this.scrollbarMode = this.showScrollbarModes[0].value;
+  content: string;
+
+  updateContentTimer: unknown;
+
+  scrollByContent = true;
+
+  scrollByThumb = true;
+
+  scrollbarMode: ScrollbarMode = this.showScrollbarModes[0].value;
+
+  pullDown = false;
+
+  constructor(service: Service) {
+    this.content = service.getContent();
   }
 
   ngAfterViewInit() {
     this.scrollView.instance.option('onReachBottom', this.updateBottomContent);
   }
 
-  valueChanged = (data) => {
+  valueChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
     this.scrollView.instance.option('onReachBottom', data.value ? this.updateBottomContent : null);
   };
 
-  updateContent = (args, eventName) => {
+  updateContent = (args: DxScrollViewTypes.PullDownEvent | DxScrollViewTypes.ReachBottomEvent, eventName: string) => {
     const updateContentText = `<br /><div>Content has been updated on the ${eventName} event.</div><br />`;
     if (this.updateContentTimer) { clearTimeout(this.updateContentTimer as number); }
     this.updateContentTimer = setTimeout(() => {
       this.content = (eventName == 'PullDown' ? updateContentText + this.content : this.content + updateContentText);
-      args.component.release();
+      args.component.release(false);
     }, 500);
   };
 
-  updateTopContent = (e) => {
+  updateTopContent = (e: DxScrollViewTypes.PullDownEvent) => {
     this.updateContent(e, 'PullDown');
   };
 
-  updateBottomContent = (e) => {
+  updateBottomContent = (e: DxScrollViewTypes.ReachBottomEvent) => {
     this.updateContent(e, 'ReachBottom');
   };
 }

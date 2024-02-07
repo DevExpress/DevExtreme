@@ -1,14 +1,12 @@
 import {
   NgModule, Component, ViewChild, enableProdMode,
 } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import ArrayStore from 'devextreme/data/array_store';
-import dxDiagram, { dxDiagramConnector } from 'devextreme/ui/diagram';
+import { DxDiagramModule, DxDiagramComponent, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,19 +23,16 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
 
-  items: any[];
-
   orgItemsDataSource: ArrayStore;
 
   constructor(service: Service) {
-    this.items = service.getOrgItems();
     this.orgItemsDataSource = new ArrayStore({
       key: 'ID',
-      data: this.items,
+      data: service.getOrgItems(),
     });
   }
 
-  showToast(text) {
+  showToast(text: string) {
     notify({
       position: {
         at: 'top', my: 'top', of: '#diagram', offset: '0 4',
@@ -48,7 +43,7 @@ export class AppComponent {
     });
   }
 
-  requestLayoutUpdateHandler(e) {
+  requestLayoutUpdateHandler(e: DxDiagramTypes.RequestLayoutUpdateEvent) {
     for (let i = 0; i < e.changes.length; i++) {
       if (e.changes[i].type === 'remove') { e.allowed = true; } else if (e.changes[i].data.ParentID !== undefined && e.changes[i].data.ParentID !== null) { e.allowed = true; }
     }
@@ -109,11 +104,14 @@ export class AppComponent {
     }
   }
 
-  itemStyleExpr(obj) {
-    if (obj.Type === 'root') { return { fill: '#ffcfc3' }; }
-    if (obj.Type === 'team') { return { fill: '#b7e3fe' }; }
-    return { fill: '#bbefcb' };
-  }
+  itemStyleExpr = ({ Type }: Record<string, string>) => (
+    {
+      fill: {
+        root: '#ffcfc3',
+        team: '#b7e3fe',
+      }[Type] || '#bbefcb',
+    }
+  );
 }
 
 @NgModule({

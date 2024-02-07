@@ -1,11 +1,14 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxLinearGaugeModule, DxCircularGaugeModule } from 'devextreme-angular';
+import { DxCircularGaugeModule, DxCircularGaugeTypes } from 'devextreme-angular/ui/circular-gauge';
+import { DxLinearGaugeModule, DxLinearGaugeTypes } from 'devextreme-angular/ui/linear-gauge';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+type ScaleLabel = DxLinearGaugeTypes.ScaleLabel | DxCircularGaugeTypes.ScaleLabel;
 
 @Component({
   selector: 'demo-app',
@@ -13,9 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  customizeText(arg: any) {
-    return `${arg.valueText}°`;
-  }
+  customizeText: ScaleLabel['customizeText'] = ({ valueText }) => `${valueText}°`;
 }
 
 @NgModule({

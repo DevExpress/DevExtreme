@@ -1,9 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxTabsModule, DxSelectBoxModule, DxMultiViewModule } from 'devextreme-angular';
-
 import { Tab, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

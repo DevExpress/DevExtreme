@@ -3,18 +3,16 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
 import { DxAutocompleteModule, DxTemplateModule } from 'devextreme-angular';
-import ODataStore from 'devextreme/data/odata/store';
 import CustomStore from 'devextreme/data/custom_store';
-
+import ODataStore from 'devextreme/data/odata/store';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-function isNotEmpty(value: any): boolean {
+function isNotEmpty(value: unknown): boolean {
   return value !== undefined && value !== null && value !== '';
 }
 
@@ -32,7 +30,7 @@ export class AppComponent {
 
   positions: string[];
 
-  states: any;
+  states: ODataStore;
 
   clientsStore: CustomStore;
 
@@ -52,7 +50,7 @@ export class AppComponent {
     this.clientsStore = new CustomStore({
       key: 'Value',
       useDefaultSearch: true,
-      load(loadOptions: any) {
+      async load(loadOptions) {
         let params: HttpParams = new HttpParams();
         [
           'skip',
@@ -64,8 +62,8 @@ export class AppComponent {
           }
         });
         return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup', { params }))
-          .then((data: any) => ({
-            data: data.data,
+          .then(({ data }: { data: Record<string, unknown>[] }) => ({
+            data,
           }))
           .catch((error) => { throw 'Data Loading Error'; });
       },

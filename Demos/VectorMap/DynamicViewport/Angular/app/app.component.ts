@@ -3,11 +3,10 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxVectorMapModule, DxSelectBoxModule, DxTextBoxModule, DxVectorMapComponent, DxSwitchModule,
-} from 'devextreme-angular';
-
+import { DxTextBoxModule, DxSwitchModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxVectorMapModule, DxVectorMapComponent, DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { ViewportCoordinate, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,35 +22,29 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap: any = mapsData.world;
+  worldMap = mapsData.world;
 
-  zoomFactorValue: string;
+  zoomFactorValue = '1.00';
 
-  centerValue: string;
+  centerValue = '0.000, 46.036';
 
   viewportData: ViewportCoordinate[];
-
-  panVisible: boolean;
-
-  zoomVisible: boolean;
 
   @ViewChild(DxVectorMapComponent, { static: false }) map: DxVectorMapComponent;
 
   constructor(service: Service) {
-    this.centerValue = '0.000, 46.036';
-    this.zoomFactorValue = '1.00';
     this.viewportData = service.getCoordinates();
   }
 
-  onValueChanged(e) {
+  onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
     this.map.instance.viewport(e.value);
   }
 
-  zoomChanged(e) {
+  zoomChanged(e: DxVectorMapTypes.ZoomFactorChangedEvent) {
     this.zoomFactorValue = e.zoomFactor.toFixed(2);
   }
 
-  centerChanged(e) {
+  centerChanged(e: DxVectorMapTypes.CenterChangedEvent) {
     this.centerValue = `${e.center[0].toFixed(3)
     }, ${e.center[1].toFixed(3)}`;
   }

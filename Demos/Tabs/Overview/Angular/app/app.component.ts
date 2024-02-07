@@ -3,11 +3,9 @@ import {
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import {
-  DxTabsModule, DxSelectBoxModule, DxCheckBoxModule, DxTabsComponent,
-} from 'devextreme-angular';
-
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { DxTabsModule, DxTabsComponent, DxTabsTypes } from 'devextreme-angular/ui/tabs';
 import { Tab, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -33,27 +31,25 @@ export class AppComponent {
 
   tabsWithIcon: Tab[];
 
-  orientations: string[] = ['horizontal', 'vertical'];
-
-  stylingModes: string[] = ['primary', 'secondary'];
-
-  iconPositions: string[] = ['top', 'start', 'end', 'bottom'];
-
-  width = 'auto';
-
-  orientation: string;
-
-  stylingMode: string;
-
-  iconPosition: string;
-
   showNavButtons = false;
 
   scrollByContent = false;
 
   rtlEnabled = false;
 
-  shouldRestrictWidth = false;
+  orientations: DxTabsTypes.Orientation[] = ['horizontal', 'vertical'];
+
+  stylingModes: DxTabsTypes.TabsStyle[] = ['primary', 'secondary'];
+
+  iconPositions: DxTabsTypes.TabsIconPosition[] = ['top', 'start', 'end', 'bottom'];
+
+  width = 'auto';
+
+  orientation = this.orientations[0];
+
+  stylingMode = this.stylingModes[1];
+
+  iconPosition = this.iconPositions[0];
 
   widgetWrapperClasses = {
     'widget-wrapper': true,
@@ -66,12 +62,9 @@ export class AppComponent {
     this.tabsWithText = service.getTabsWithText();
     this.tabsWithIconAndText = service.getTabsWithIconAndText();
     this.tabsWithIcon = service.getTabsWithIcon();
-    this.orientation = this.orientations[0];
-    this.stylingMode = this.stylingModes[1];
-    this.iconPosition = this.iconPositions[0];
   }
 
-  onOrientationChanged(e) {
+  onOrientationChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
     if (e.value === 'vertical') {
       this.widgetWrapperClasses['widget-wrapper-vertical'] = true;
       this.widgetWrapperClasses['widget-wrapper-horizontal'] = false;
@@ -85,7 +78,7 @@ export class AppComponent {
     this.widgetWrapperClasses['strict-width'] = this.scrollByContent || this.showNavButtons;
   }
 
-  onFullWidthChanged(e) {
+  onFullWidthChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
     this.width = e.value ? '100%' : 'auto';
   }
 }

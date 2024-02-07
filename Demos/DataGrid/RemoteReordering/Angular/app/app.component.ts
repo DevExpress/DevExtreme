@@ -1,9 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,36 +16,28 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  tasksStore: any;
+  tasksStore = AspNetData.createStore({
+    key: 'ID',
+    loadUrl: `${url}/Tasks`,
+    updateUrl: `${url}/UpdateTask`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  employeesStore: any;
+  employeesStore = AspNetData.createStore({
+    key: 'ID',
+    loadUrl: `${url}/Employees`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  constructor() {
-    this.tasksStore = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: `${url}/Tasks`,
-      updateUrl: `${url}/UpdateTask`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.employeesStore = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: `${url}/Employees`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.onReorder = this.onReorder.bind(this);
-  }
-
-  onReorder(e) {
+  onReorder = (e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) => {
     e.promise = this.processReorder(e);
-  }
+  };
 
-  async processReorder(e) {
+  async processReorder(e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) {
     const visibleRows = e.component.getVisibleRows();
     const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 

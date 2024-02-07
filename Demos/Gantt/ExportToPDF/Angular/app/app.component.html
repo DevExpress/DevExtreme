@@ -64,6 +64,7 @@
       <div class="value">
         <dx-select-box
           [items]="dateRanges"
+          [displayExpr]="capitalize"
           [inputAttr]="{ 'aria-label': 'Date Range' }"
           [(value)]="dateRangeBoxValue"
           (onValueChanged)="onDateRangeBoxSelectionChanged($event)"

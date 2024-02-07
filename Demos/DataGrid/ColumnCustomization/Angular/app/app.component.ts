@@ -1,9 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxDataGridModule } from 'devextreme-angular';
-
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,9 +21,7 @@ export class AppComponent {
     this.employees = service.getEmployees();
   }
 
-  calculateCellValue(data) {
-    return [data.Title, data.FirstName, data.LastName].join(' ');
-  }
+  calculateCellValue = ({ Title, FirstName, LastName }) => [Title, FirstName, LastName].join(' ');
 }
 
 @NgModule({

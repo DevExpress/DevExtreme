@@ -1,9 +1,10 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
+import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -15,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSourceConfig;
 
   constructor() {
     this.dataSource = {

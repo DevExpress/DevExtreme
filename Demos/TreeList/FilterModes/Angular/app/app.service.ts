@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
 export class Employee {
   ID: number;
@@ -424,7 +425,7 @@ export class Service {
     return employees;
   }
 
-  getFilterModes() {
+  getFilterModes(): DxTreeListTypes.TreeListFilterMode[] {
     return ['matchOnly', 'withAncestors', 'fullBranch'];
   }
 }

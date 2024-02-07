@@ -10,6 +10,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { Service } from './app.service';
+import type { Fields, Condition } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,13 +24,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSource;
 
-  fields: Array<any>;
+  fields: Fields;
 
-  filter: any;
+  filter: Condition;
 
-  gridFilterValue: any;
+  gridFilterValue: Condition;
 
   constructor(service: Service) {
     this.fields = service.getFields();

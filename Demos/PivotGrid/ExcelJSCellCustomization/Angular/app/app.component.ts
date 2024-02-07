@@ -1,16 +1,19 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPivotGridModule } from 'devextreme-angular';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
+import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+type CellData = DxPivotGridTypes.CellPreparedEvent['cell'] & { area?: string };
 
 @Component({
   selector: 'demo-app',
@@ -20,7 +23,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   sales: Sale[];
 
-  dataSource: any;
+  dataSource: DataSourceConfig;
 
   constructor(service: Service) {
     this.dataSource = {
@@ -50,7 +53,7 @@ export class AppComponent {
     };
   }
 
-  onExporting(e) {
+  onExporting(e: DxPivotGridTypes.ExportingEvent) {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Sales');
 
@@ -78,30 +81,31 @@ export class AppComponent {
     });
   }
 
-  onCellPrepared({ cell, area, cellElement }) {
-    cell.area = area;
-    if (this.isDataCell(cell) || this.isTotalCell(cell)) {
-      const appearance = this.getConditionalAppearance(cell);
+  onCellPrepared({ cell, area, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
+    const cellData = { ...cell, area };
+
+    if (this.isDataCell(cellData) || this.isTotalCell(cellData)) {
+      const appearance = this.getConditionalAppearance(cellData);
       Object.assign(cellElement.style, this.getCssStyles(appearance));
     }
   }
 
-  isDataCell(cell) {
+  isDataCell(cell: CellData) {
     return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
   }
 
-  isTotalCell(cell) {
+  isTotalCell(cell: CellData) {
     return (cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'T' || cell.rowType === 'GT' || cell.columnType === 'T' || cell.columnType === 'GT');
   }
 
-  getExcelCellFormat({ fill, font, bold }) {
+  getExcelCellFormat({ fill, font, bold }: ReturnType<typeof this.getConditionalAppearance>) {
     return {
       fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: fill } },
       font: { color: { argb: font }, bold },
     };
   }
 
-  getCssStyles({ fill, font, bold }) {
+  getCssStyles({ fill, font, bold }: ReturnType<typeof this.getConditionalAppearance>) {
     return {
       'background-color': `#${fill}`,
       color: `#${font}`,
@@ -109,18 +113,20 @@ export class AppComponent {
     };
   }
 
-  getConditionalAppearance(cell) {
+  getConditionalAppearance(cell: CellData) {
     if (this.isTotalCell(cell)) {
       return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
     }
+
     const { value } = cell;
+
     if (value < 20000) {
       return { font: '9C0006', fill: 'FFC7CE', bold: false };
     }
-    if (value > 50000) {
-      return { font: '006100', fill: 'C6EFCE', bold: false };
-    }
-    return { font: '9C6500', fill: 'FFEB9C', bold: false };
+
+    return (value > 50000)
+      ? { font: '006100', fill: 'C6EFCE', bold: false }
+      : { font: '9C6500', fill: 'FFEB9C', bold: false };
   }
 }
 

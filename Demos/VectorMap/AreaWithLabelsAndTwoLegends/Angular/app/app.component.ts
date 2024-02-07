@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule } from 'devextreme-angular';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { FeatureCollection, Service } from './app.service';
 
@@ -18,7 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap: any = mapsData.world;
+  worldMap = mapsData.world;
 
   markers: FeatureCollection;
 
@@ -30,26 +29,23 @@ export class AppComponent {
     this.customizeLayers = this.customizeLayers.bind(this);
   }
 
-  customizeText(arg) {
-    if (arg.index === 0) {
+  customizeText({ index, start, end }) {
+    if (index === 0) {
       return '< 0.5%';
-    } if (arg.index === 5) {
-      return '> 3%';
     }
-    return `${arg.start}% to ${arg.end}%`;
+
+    return (index === 5)
+      ? '> 3%'
+      : `${start}% to ${end}%`;
   }
 
-  customizeTooltip(arg) {
-    return {
-      text: arg.attribute('text'),
-    };
-  }
+  customizeTooltip = (arg: { attribute: Function }) => ({
+    text: arg.attribute('text'),
+  });
 
-  customizeItems(items) {
-    return items.reverse();
-  }
+  customizeItems = (items: unknown[]) => items.reverse();
 
-  customizeLayers(elements) {
+  customizeLayers(elements: { attribute: Function }[]) {
     elements.forEach((element) => {
       const name = element.attribute('name');
       const population = this.populations[name];
@@ -59,9 +55,7 @@ export class AppComponent {
     });
   }
 
-  customizeMarkers(arg) {
-    return ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
-  }
+  customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
 }
 
 @NgModule({

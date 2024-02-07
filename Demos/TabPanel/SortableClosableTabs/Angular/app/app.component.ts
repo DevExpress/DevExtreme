@@ -1,10 +1,10 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import {
   DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule, DxTemplateModule,
 } from 'devextreme-angular';
+import { DxSortableTypes } from 'devextreme-angular/ui/sortable';
 import { Employee, Service, Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -28,21 +28,20 @@ export class AppComponent {
 
   tasks: Task[];
 
-  tasksDataSourceStorage: any;
+  tasksDataSourceStorage: { key: number, dataSourceInstance: Task[] }[] = [];
 
   constructor(private service: Service) {
     this.allEmployees = service.getEmployees();
     this.employees = service.getEmployees().slice(0, 3);
     this.selectedIndex = 0;
     this.tasks = service.getTasks();
-    this.tasksDataSourceStorage = [];
   }
 
-  onTabDragStart(e) {
+  onTabDragStart(e: DxSortableTypes.DragStartEvent) {
     e.itemData = e.fromData[e.fromIndex];
   }
 
-  onTabDrop(e) {
+  onTabDrop(e: DxSortableTypes.ReorderEvent) {
     e.fromData.splice(e.fromIndex, 1);
     e.toData.splice(e.toIndex, 0, e.itemData);
   }
@@ -54,7 +53,7 @@ export class AppComponent {
     this.employees.push(newItem);
   }
 
-  closeButtonHandler(itemData) {
+  closeButtonHandler(itemData: Employee) {
     const index = this.employees.indexOf(itemData);
 
     this.employees.splice(index, 1);
@@ -69,20 +68,24 @@ export class AppComponent {
     return this.employees.length === this.allEmployees.length;
   }
 
-  getTasks(id) {
-    let item = this.tasksDataSourceStorage.find((i) => i.key === id);
+  getTasks(id: number) {
+    let item = this.tasksDataSourceStorage.find(
+      (i) => i.key === id,
+    );
+
     if (!item) {
       item = {
         key: id,
         dataSourceInstance: this.tasks.filter((task) => task.EmployeeID === id),
       };
+
       this.tasksDataSourceStorage.push(item);
     }
 
     return item.dataSourceInstance;
   }
 
-  getCompletedTasks(id) {
+  getCompletedTasks(id: number) {
     return this.tasks.filter((task) => task.EmployeeID === id).filter((task) => task.Status === 'Completed');
   }
 }

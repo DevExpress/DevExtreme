@@ -15,15 +15,15 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  commands: any[] = [
+  commands: { text: string }[] = [
     { text: 'Call' },
     { text: 'Send message' },
     { text: 'Edit' },
     { text: 'Delete' },
   ];
 
-  showNotify(value) {
-    notify(`The "${value}" button is clicked.`);
+  showNotify(text: string) {
+    notify(`The "${text}" button is clicked.`);
   }
 }
 

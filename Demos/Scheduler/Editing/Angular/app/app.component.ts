@@ -1,9 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxSchedulerModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxCheckBoxModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
+import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { Appointment, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,19 +26,19 @@ export class AppComponent {
     this.appointmentsData = service.getAppointments();
   }
 
-  showToast(event, value, type) {
+  showToast(event: string, value: string, type: string) {
     notify(`${event} "${value}"` + ' task', type, 800);
   }
 
-  onAppointmentAdded(e) {
+  onAppointmentAdded(e: DxSchedulerTypes.AppointmentAddedEvent) {
     this.showToast('Added', e.appointmentData.text, 'success');
   }
 
-  onAppointmentUpdated(e) {
+  onAppointmentUpdated(e: DxSchedulerTypes.AppointmentUpdatedEvent) {
     this.showToast('Updated', e.appointmentData.text, 'info');
   }
 
-  onAppointmentDeleted(e) {
+  onAppointmentDeleted(e: DxSchedulerTypes.AppointmentDeletedEvent) {
     this.showToast('Deleted', e.appointmentData.text, 'warning');
   }
 }

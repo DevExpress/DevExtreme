@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 export interface CitiesPopulation {
   name: string;
-  items: any[];
+  items: Record<string, unknown>[];
 }
 
 const citiesPopulations: CitiesPopulation[] = [{

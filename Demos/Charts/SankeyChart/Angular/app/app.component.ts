@@ -1,8 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSankeyModule } from 'devextreme-angular';
-
+import { DxSankeyModule, DxSankeyTypes } from 'devextreme-angular/ui/sankey';
 import { Service, DataItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,11 +21,11 @@ export class AppComponent {
     this.data = service.getData();
   }
 
-  customizeLinkTooltip(info: any) {
-    return {
-      html: `<b>From:</b> ${info.source}<br/><b>To:</b> ${info.target}<br/><b>Weight:</b> ${info.weight}`,
-    };
-  }
+  customizeLinkTooltip: DxSankeyTypes.Tooltip['customizeLinkTooltip'] = ({ source, target, weight }) => (
+    {
+      html: `<b>From:</b> ${source}<br/><b>To:</b> ${target}<br/><b>Weight:</b> ${weight}`,
+    }
+  );
 }
 @NgModule({
   imports: [

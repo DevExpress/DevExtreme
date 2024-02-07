@@ -26,7 +26,7 @@ export class FeatureGeometry {
   coordinates: number[];
 }
 
-const populations: Object = {
+const populations = {
   China: 19,
   India: 17.4,
   'United States': 4.44,
@@ -149,7 +149,7 @@ const markers: FeatureCollection = {
 
 @Injectable()
 export class Service {
-  getPopulations(): Object {
+  getPopulations() {
     return populations;
   }
 

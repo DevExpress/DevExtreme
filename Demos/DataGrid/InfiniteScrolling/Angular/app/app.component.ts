@@ -1,8 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
-import { Service, Employee } from './app.service';
+import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
+import { Options as DataSourceConfig } from 'devextreme/data/data_source';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -15,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSourceConfig;
 
   constructor(service: Service) {
     this.dataSource = {
@@ -23,7 +24,7 @@ export class AppComponent {
     };
   }
 
-  customizeColumns(columns) {
+  customizeColumns(columns: DxDataGridComponent['customizeColumns']) {
     columns[0].width = 70;
   }
 }

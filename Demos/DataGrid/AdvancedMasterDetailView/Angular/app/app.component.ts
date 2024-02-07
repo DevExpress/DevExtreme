@@ -1,13 +1,11 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import {
   DxDataGridModule, DxFormModule, DxSelectBoxModule, DxTabPanelModule,
 } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import DataSource from 'devextreme/data/data_source';
-
 import { DetailViewComponent } from './detail-view/detail-view.component';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,19 +18,11 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  url: string;
+  url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
-  suppliersData: any;
-
-  productsDataMap: object = {};
-
-  productIdBySupplier: object = {};
-
-  orderHistoryDataMap: object = {};
+  suppliersData: DataSource;
 
   constructor() {
-    this.url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
-
     this.suppliersData = new DataSource({
       store: AspNetData.createStore({
         key: 'SupplierID',

@@ -9,7 +9,7 @@ export class Employee {
 
   Position: string;
 
-  Picture: any;
+  Picture: string;
 
   BirthDate: string;
 

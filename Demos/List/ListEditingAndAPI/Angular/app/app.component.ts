@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSelectBoxModule, DxCheckBoxModule, DxListModule } from 'devextreme-angular';
-
+import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxListModule, DxListTypes } from 'devextreme-angular/ui/list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,7 +19,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   allowDeletion = false;
 
-  itemDeleteMode = 'toggle';
+  itemDeleteMode: DxListTypes.ItemDeleteMode = 'toggle';
 
   tasks: string[];
 

@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxRadioGroupModule, DxTemplateModule } from 'devextreme-angular';
-
+import { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
 import { PriorityEntity, Service, Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -16,8 +16,6 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  priorities: string[];
-
   priorityEntities: PriorityEntity[];
 
   selectionPriorityId: number;
@@ -28,25 +26,26 @@ export class AppComponent {
 
   currentData: string[] = [];
 
+  priorities = [
+    'Low',
+    'Normal',
+    'Urgent',
+    'High',
+  ];
+
   constructor(service: Service) {
     this.tasks = service.getTasks();
-    this.priorities = [
-      'Low',
-      'Normal',
-      'Urgent',
-      'High',
-    ];
     this.priorityEntities = service.getPriorityEntities();
     this.colorPriority = this.priorities[2];
     this.currentData[0] = this.tasks[1].subject;
     this.selectionPriorityId = this.priorityEntities[0].id;
   }
 
-  onValueChanged($event) {
+  onValueChanged({ value }: DxRadioGroupTypes.ValueChangedEvent) {
     this.currentData = [];
 
     this.tasks.forEach((item, index) => {
-      if (item.priority == $event.value) {
+      if (item.priority == value) {
         this.currentData.push(this.tasks[index].subject);
       }
     });

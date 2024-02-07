@@ -5,8 +5,8 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
-import { DxChartModule, DxChartComponent } from 'devextreme-angular';
+import { DxChartComponent, DxChartModule } from 'devextreme-angular';
+import { VisualRange } from 'devextreme-angular/common/charts';
 import DataSource from 'devextreme/data/data_source';
 
 if (!/localhost/.test(document.location.host)) {
@@ -21,41 +21,35 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
 
-  private _visualRange: any = {};
+  private _visualRange: VisualRange = {
+    startValue: new Date(2017, 3, 1),
+    length: {
+      weeks: 2,
+    },
+  };
 
   HALFDAY = 43200000;
 
   packetsLock = 0;
 
-  chartDataSource: any;
+  chartDataSource = new DataSource({
+    store: [],
+    sort: 'date',
+    paginate: false,
+  });
 
-  bounds: any;
+  bounds = {
+    startValue: new Date(2017, 0, 1),
+    endValue: new Date(2017, 11, 31),
+  };
 
-  constructor(private httpClient: HttpClient) {
-    this.chartDataSource = new DataSource({
-      store: [],
-      sort: 'date',
-      paginate: false,
-    });
+  constructor(private httpClient: HttpClient) {}
 
-    this.bounds = {
-      startValue: new Date(2017, 0, 1),
-      endValue: new Date(2017, 11, 31),
-    };
-
-    this._visualRange = {
-      startValue: new Date(2017, 3, 1),
-      length: {
-        weeks: 2,
-      },
-    };
-  }
-
-  get currentVisualRange(): any {
+  get currentVisualRange(): VisualRange {
     return this._visualRange;
   }
 
-  set currentVisualRange(range: any) {
+  set currentVisualRange(range: VisualRange) {
     this._visualRange.startValue = range.startValue;
     this._visualRange.endValue = range.endValue;
     this.onVisualRangeChanged();
@@ -63,9 +57,14 @@ export class AppComponent {
 
   onVisualRangeChanged() {
     const items = this.component.instance.getDataSource().items();
+    const itemsFirstDate = items?.[0]?.date as number;
+    const itemsLastDate = items?.[items.length - 1]?.date as number;
+    const startDate = this._visualRange.startValue as number;
+    const endDate = this._visualRange.endValue as number;
+
     if (!items.length
-            || items[0].date - this._visualRange.startValue >= this.HALFDAY
-            || this._visualRange.endValue - items[items.length - 1].date >= this.HALFDAY) {
+            || itemsFirstDate - startDate >= this.HALFDAY
+            || endDate - itemsLastDate >= this.HALFDAY) {
       this.uploadDataByVisualRange();
     }
   }
@@ -73,12 +72,12 @@ export class AppComponent {
   uploadDataByVisualRange() {
     const dataSource = this.component.instance.getDataSource();
     const storage = dataSource.items();
+    const bounded = !!storage.length;
     const ajaxArgs = {
-      startVisible: this.getDateString(this._visualRange.startValue),
-      endVisible: this.getDateString(this._visualRange.endValue),
-      startBound: this.getDateString(storage.length ? storage[0].date : null),
-      endBound: this.getDateString(storage.length
-        ? storage[storage.length - 1].date : null),
+      startVisible: this.getDateString(this._visualRange.startValue as Date),
+      endVisible: this.getDateString(this._visualRange.endValue as Date),
+      startBound: this.getDateString(bounded ? storage[0].date : null),
+      endBound: this.getDateString(bounded ? storage[storage.length - 1].date : null),
     };
 
     if (ajaxArgs.startVisible !== ajaxArgs.startBound
@@ -87,7 +86,7 @@ export class AppComponent {
       this.component.instance.showLoadingIndicator();
 
       this.getDataFrame(ajaxArgs)
-        .then((dataFrame: any) => {
+        .then((dataFrame: Record<string, number | Date>[]) => {
           this.packetsLock--;
           dataFrame = dataFrame.map((i) => ({
             date: new Date(i.Date),
@@ -96,6 +95,7 @@ export class AppComponent {
           }));
 
           const componentStorage = dataSource.store();
+
           dataFrame.forEach((item) => componentStorage.insert(item));
           dataSource.reload();
 
@@ -108,16 +108,14 @@ export class AppComponent {
     }
   }
 
-  getDataFrame(args: any) {
-    let params = '?';
-
-    params += `startVisible=${args.startVisible}`;
-    params += `&endVisible=${args.endVisible}`;
-    params += `&startBound=${args.startBound}`;
-    params += `&endBound=${args.endBound}`;
+  getDataFrame(args: Record<string, string>) {
+    const params = `startVisible=${args.startVisible}`
+        + `&endVisible=${args.endVisible}`
+        + `&startBound=${args.startBound}`
+        + `&endBound=${args.endBound}`;
 
     return lastValueFrom(
-      this.httpClient.get(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`),
+      this.httpClient.get(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData?${params}`),
     );
   }
 

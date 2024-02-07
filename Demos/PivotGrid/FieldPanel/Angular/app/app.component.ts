@@ -1,8 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPivotGridModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxCheckBoxModule } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -17,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  pivotGridDataSource: any;
+  pivotGridDataSource: PivotGridDataSource;
 
   showDataFields = true;
 
@@ -57,9 +58,11 @@ export class AppComponent {
     });
   }
 
-  contextMenuPreparing(e) {
+  contextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
+    type SourceField = (typeof e.field) & { index: number };
+
     const dataSource = e.component.getDataSource();
-    const sourceField = e.field;
+    const sourceField = e.field as SourceField;
 
     if (sourceField) {
       if (!sourceField.groupName || sourceField.groupIndex === 0) {
@@ -67,8 +70,9 @@ export class AppComponent {
           text: 'Hide field',
           onItemClick() {
             let fieldIndex;
+
             if (sourceField.groupName) {
-              fieldIndex = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex].index;
+              fieldIndex = (dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex] as SourceField).index;
             } else {
               fieldIndex = sourceField.index;
             }

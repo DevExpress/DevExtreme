@@ -22,11 +22,13 @@ export class AppComponent {
     this.weatherData = service.getWeatherData();
   }
 
-  customizeTooltip(arg: any) {
-    return {
-      text: `${arg.seriesName}: ${arg.value} ( range: ${arg.lowErrorValue} - ${arg.highErrorValue})`,
-    };
-  }
+  customizeTooltip = ({
+    seriesName, value, lowErrorValue, highErrorValue,
+  }) => (
+    {
+      text: `${seriesName}: ${value} ( range: ${lowErrorValue} - ${highErrorValue})`,
+    }
+  );
 }
 
 @NgModule({

@@ -3,8 +3,8 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
 import { DxTreeListModule } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,10 +16,10 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  dataSource: any;
+  dataSource: DataSource;
 
   constructor(http: HttpClient) {
-    this.dataSource = {
+    this.dataSource = new DataSource({
       load(loadOptions) {
         let params = new HttpParams();
         if (loadOptions.parentIds) {
@@ -31,14 +31,10 @@ export class AppComponent {
           http.get('https://js.devexpress.com/Demos/Mvc/api/treeListData', { params }),
         );
       },
-    };
+    });
   }
 
-  customizeSizeText(e) {
-    if (e.value !== null) {
-      return `${Math.ceil(e.value / 1024)} KB`;
-    }
-  }
+  customizeSizeText = ({ value }) => (value === null ? '' : `${Math.ceil(value / 1024)} KB`);
 }
 
 @NgModule({

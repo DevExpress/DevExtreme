@@ -2,7 +2,6 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule } from 'devextreme-angular';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { FeatureCollection, Service } from './app.service';
 
@@ -18,7 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap: any = mapsData.world;
+  worldMap = mapsData.world;
 
   markers: FeatureCollection;
 
@@ -30,17 +29,11 @@ export class AppComponent {
     this.customizeText = this.customizeText.bind(this);
   }
 
-  customizeText(arg) {
-    return this.names[arg.index];
-  }
+  customizeText = ({ index }: { index: number }) => this.names[index];
 
-  customizeTooltip(arg) {
-    if (arg.layer.type === 'marker') {
-      return {
-        text: arg.attribute('tooltip'),
-      };
-    }
-  }
+  customizeTooltip = ({ layer, attribute }: { layer: Record<string, string>, attribute: Function }) => ((layer.type === 'marker')
+    ? { text: attribute('tooltip') }
+    : undefined);
 }
 
 @NgModule({

@@ -1,11 +1,10 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import {
   DxTabPanelModule, DxCheckBoxModule, DxSelectBoxModule, DxTemplateModule,
 } from 'devextreme-angular';
-
+import { DxTabPanelTypes } from 'devextreme-angular/ui/tab-panel';
 import { TabPanelItem, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,30 +22,21 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   dataSource: TabPanelItem[];
 
-  tabsPositions: string[] = [
-    'left',
-    'top',
-    'right',
-    'bottom',
+  tabsPositions: DxTabPanelTypes.Position[] = [
+    'left', 'top', 'right', 'bottom',
   ];
 
-  tabsPosition: string = this.tabsPositions[0];
+  tabsPosition: DxTabPanelTypes.Position = this.tabsPositions[0];
 
-  stylingModes: string[] = [
-    'secondary',
-    'primary',
+  stylingModes: DxTabPanelTypes.TabsStyle[] = ['secondary', 'primary'];
+
+  stylingMode: DxTabPanelTypes.TabsStyle = this.stylingModes[0];
+
+  iconPositions: DxTabPanelTypes.TabsIconPosition[] = [
+    'top', 'start', 'end', 'bottom',
   ];
 
-  stylingMode: string = this.stylingModes[0];
-
-  iconPositions: string[] = [
-    'top',
-    'start',
-    'end',
-    'bottom',
-  ];
-
-  iconPosition: string = this.iconPositions[0];
+  iconPosition: DxTabPanelTypes.TabsIconPosition = this.iconPositions[0];
 
   constructor(service: Service) {
     this.dataSource = service.getItems();

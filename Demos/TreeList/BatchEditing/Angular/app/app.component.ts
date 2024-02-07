@@ -1,9 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxTreeListModule } from 'devextreme-angular';
-
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Task, Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -35,7 +33,7 @@ export class AppComponent {
     ];
   }
 
-  initNewRow(e) {
+  initNewRow(e: DxTreeListTypes.InitNewRowEvent) {
     e.data.Task_Status = 'Not Started';
     e.data.Task_Start_Date = new Date();
     e.data.Task_Due_Date = new Date();

@@ -1,10 +1,9 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTreeListModule, DxNumberBoxModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { DxNumberBoxModule } from 'devextreme-angular';
+import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,12 +18,6 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  columns: any;
-
-  dataSource: any;
-
-  taskEmployees: any;
-
   taskSubject: string;
 
   taskAssigned: string;
@@ -35,33 +28,31 @@ export class AppComponent {
 
   taskProgress: string;
 
-  focusedRowKey: number;
+  focusedRowKey = 45;
 
-  constructor() {
-    this.focusedRowKey = 45;
-    this.dataSource = AspNetData.createStore({
-      key: 'Task_ID',
-      loadUrl: `${url}/Tasks`,
-      onBeforeSend(_, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-    this.taskEmployees = AspNetData.createStore({
-      key: 'ID',
-      loadMode: 'raw',
-      loadUrl: `${url}/TaskEmployees`,
-    });
-  }
+  dataSource = AspNetData.createStore({
+    key: 'Task_ID',
+    loadUrl: `${url}/Tasks`,
+    onBeforeSend(_, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  onFocusedRowChanged(e) {
+  taskEmployees = AspNetData.createStore({
+    key: 'ID',
+    loadMode: 'raw',
+    loadUrl: `${url}/TaskEmployees`,
+  });
+
+  onFocusedRowChanged(e: DxTreeListTypes.FocusedRowChangedEvent) {
     const rowData = e.row && e.row.data;
-    let cellValue;
-    let assigned;
+    let cellValue: unknown;
+    let assigned: string;
 
     if (rowData) {
       cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
-      this.taskEmployees.byKey(cellValue).done((item) => {
-        assigned = item.Name;
+      this.taskEmployees.byKey(cellValue).done(({ Name }) => {
+        assigned = Name;
       });
 
       this.taskSubject = rowData.Task_Subject;
