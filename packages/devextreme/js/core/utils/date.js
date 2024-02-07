@@ -184,12 +184,6 @@ function trimTime(date) {
     return correctDateWithUnitBeginning(date, 'day');
 }
 
-const setToDayStart = function(date) {
-    const result = trimTime(date);
-    result.setHours(0, 0, 0, 0);
-    return new Date(result);
-};
-
 const setToDayEnd = function(date) {
     const result = trimTime(date);
 
@@ -707,7 +701,6 @@ const dateUtils = {
     getDatesDifferences: getDatesDifferences,
     correctDateWithUnitBeginning: correctDateWithUnitBeginning,
     trimTime: trimTime,
-    setToDayStart: setToDayStart,
     setToDayEnd: setToDayEnd,
     roundDateByStartDayHour: roundDateByStartDayHour,
     dateTimeFromDecimal: dateTimeFromDecimal,
