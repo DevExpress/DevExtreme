@@ -10,6 +10,7 @@ describe('getSkippedHoursInRange', () => {
           startDayHour: 0,
           endDayHour: 24,
         }),
+        viewType: 'week',
       };
 
       const result = getSkippedHoursInRange(
@@ -30,6 +31,7 @@ describe('getSkippedHoursInRange', () => {
           startDayHour: 0,
           endDayHour: 24,
         }),
+        viewType: 'week',
       };
 
       const result = getSkippedHoursInRange(
@@ -51,6 +53,7 @@ describe('getSkippedHoursInRange', () => {
         startDayHour: 0,
         endDayHour: 24,
       }),
+      viewType: 'week',
     };
 
     it('should not skip weekend if endDate at 0 border of weekend', () => {
@@ -181,9 +184,44 @@ describe('getSkippedHoursInRange', () => {
           startDayHour,
           endDayHour,
         }),
+        viewType: 'week',
       };
 
       const result = getSkippedHoursInRange(startDate, endDate, false, mockViewDataProvider as any);
+      expect(result).toBe(expectedHours);
+    });
+
+    it.each<{ startDate: Date; endDate: Date; expectedHours: number }>([
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 6),
+        expectedHours: 16,
+      },
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 4),
+        expectedHours: 8,
+      },
+      {
+        startDate: new Date(2024, 1, 4),
+        endDate: new Date(2024, 1, 6),
+        expectedHours: 8,
+      },
+    ])('should return correct number of skipped hours for timeline view', ({
+      startDate,
+      endDate,
+      expectedHours,
+    }) => {
+      const mockViewDataProvider = {
+        isSkippedDate: (date: Date) => isDataOnWeekend(date),
+        getViewOptions: () => ({
+          startDayHour: 11,
+          endDayHour: 19,
+        }),
+        viewType: 'timelineWeek',
+      };
+
+      const result = getSkippedHoursInRange(startDate, endDate, true, mockViewDataProvider as any);
       expect(result).toBe(expectedHours);
     });
   });
