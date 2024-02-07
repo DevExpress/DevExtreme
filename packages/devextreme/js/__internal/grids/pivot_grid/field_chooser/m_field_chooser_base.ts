@@ -84,8 +84,9 @@ function getStringState(state) {
   return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
 
-const FieldChooserBase = (Widget as any)
-  .inherit(columnStateMixin)
+const WidgetWithColumnStateMixin = columnStateMixin(Widget as any);
+
+const FieldChooserBase = WidgetWithColumnStateMixin
   .inherit(sortingMixin)
   .inherit(headerFilterMixin)
   .inherit({

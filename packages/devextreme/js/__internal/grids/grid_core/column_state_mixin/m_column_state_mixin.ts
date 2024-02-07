@@ -1,12 +1,19 @@
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
 
 const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
 
-export default {
+export interface ColumnStateMixinRequirements {
+  option: any;
+
+  component: any;
+
+  setAria: any;
+}
+
+export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMixinRequirements>(Base: T) => class extends Base {
   _applyColumnState(options) {
     const that = this;
     const rtlEnabled = this.option('rtlEnabled');
@@ -25,15 +32,19 @@ export default {
     $indicatorsContainer[(isGroupPanelItem || !options.showColumnLines) && indicatorAlignment === 'left' ? 'appendTo' : 'prependTo'](options.rootElement);
 
     return $span;
-  },
+  }
 
-  _getIndicatorClassName: noop,
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getIndicatorClassName(name: string): string {
+
+  }
 
   _getColumnAlignment(alignment, rtlEnabled) {
     rtlEnabled = rtlEnabled || this.option('rtlEnabled');
 
     return alignment && alignment !== 'center' ? alignment : getDefaultAlignment(rtlEnabled);
-  },
+  }
 
   _createIndicatorContainer(options, ignoreIndicatorAlignment) {
     let $indicatorsContainer = this._getIndicatorContainer(options.rootElement);
@@ -46,28 +57,30 @@ export default {
     this.setAria('role', 'presentation', $indicatorsContainer);
 
     return $indicatorsContainer.css('float', options.showColumnLines && !ignoreIndicatorAlignment ? indicatorAlignment : null);
-  },
+  }
 
   _getIndicatorContainer($cell) {
     return $cell && $cell.find(`.${COLUMN_INDICATORS_CLASS}`);
-  },
+  }
 
   _getIndicatorElements($cell) {
     const $indicatorContainer = this._getIndicatorContainer($cell);
 
     return $indicatorContainer && $indicatorContainer.children();
-  },
+  }
 
   _renderIndicator(options) {
     const $container = options.container;
     const $indicator = options.indicator;
 
     $container && $indicator && $container.append($indicator);
-  },
+  }
 
   _updateIndicators(indicatorName) {
     const that = this;
+    // @ts-expect-error
     const columns = that.getColumns();
+    // @ts-expect-error
     const $cells = that.getColumnElements();
     let $cell;
 
@@ -83,7 +96,7 @@ export default {
         rowOptions.cells[$cell.index()].column = columns[i];
       }
     }
-  },
+  }
 
   _updateIndicator($cell, column, indicatorName) {
     if (!column.command) {
@@ -94,5 +107,7 @@ export default {
         showColumnLines: this.option('showColumnLines'),
       });
     }
-  },
+  }
 };
+
+export default ColumnStateMixin;
