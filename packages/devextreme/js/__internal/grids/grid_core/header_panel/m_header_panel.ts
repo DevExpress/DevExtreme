@@ -19,7 +19,7 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
-  _getToolbarItems() {
+  _getToolbarItems(): any[] {
     return [];
   }
 
