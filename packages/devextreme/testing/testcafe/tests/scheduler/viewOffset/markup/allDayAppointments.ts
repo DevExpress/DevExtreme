@@ -121,7 +121,6 @@ end: ${endDayHour}
 first day: ${views[0].firstDayOfWeek}
 )`, async (t) => {
         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-        await t.wait(10000);
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
         await takeScreenshot(
