@@ -97,88 +97,81 @@ describe('getSkippedHoursInRange', () => {
   });
 
   describe('startDayHour and endDayHour', () => {
-    it.each<[number, number, number]>([
-      [0, 24, 48],
-      [7, 17, 20],
-      [0, 18, 36],
-      [8, 24, 32],
-    ])(
-      'should return correct skipped hours if skipped dates are the middle of period',
-      (startDayHour, endDayHour, expectedHours) => {
-        const mockViewDataProvider = {
-          isSkippedDate: (date: Date) => isDataOnWeekend(date),
-          getViewOptions: () => ({
-            startDayHour,
-            endDayHour,
-          }),
-        };
+    interface TestParams {
+      startDate: Date;
+      endDate: Date;
+      startDayHour: number;
+      endDayHour: number;
+      expectedHours: number;
+    }
 
-        const result = getSkippedHoursInRange(
-          new Date(2024, 1, 1),
-          new Date(2024, 1, 6),
-          mockViewDataProvider as any,
-        );
-
-        expect(result)
-          .toBe(expectedHours);
+    it.each<TestParams>([
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 6),
+        startDayHour: 0,
+        endDayHour: 24,
+        expectedHours: 48,
       },
-    );
-
-    it('should return correct skipped hours if skipped date is at the end', () => {
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 6),
+        startDayHour: 7,
+        endDayHour: 17,
+        expectedHours: 20,
+      },
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 6),
+        startDayHour: 0,
+        endDayHour: 18,
+        expectedHours: 36,
+      },
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 6),
+        startDayHour: 8,
+        endDayHour: 24,
+        expectedHours: 32,
+      },
+      {
+        startDate: new Date(2024, 1, 1),
+        endDate: new Date(2024, 1, 4, 13),
+        startDayHour: 10,
+        endDayHour: 16,
+        expectedHours: 6 + 3,
+      },
+      {
+        startDate: new Date(2024, 1, 4, 12),
+        endDate: new Date(2024, 1, 6),
+        startDayHour: 10,
+        endDayHour: 16,
+        expectedHours: 4,
+      },
+      {
+        startDate: new Date(2024, 1, 2, 13, 0),
+        endDate: new Date(2024, 1, 3, 18, 0),
+        startDayHour: 12,
+        endDayHour: 16,
+        expectedHours: 4,
+      },
+    ])('should return correct number of skipped hours', ({
+      startDate,
+      endDate,
+      expectedHours,
+      startDayHour,
+      endDayHour,
+    }) => {
       const mockViewDataProvider = {
         isSkippedDate: (date: Date) => isDataOnWeekend(date),
         getViewOptions: () => ({
-          startDayHour: 10,
-          endDayHour: 16,
+          startDayHour,
+          endDayHour,
         }),
       };
 
-      const result = getSkippedHoursInRange(
-        new Date(2024, 1, 1),
-        new Date(2024, 1, 4, 13),
-        mockViewDataProvider as any,
-      );
-
-      expect(result)
-        .toBe(6 + 3);
-    });
-
-    it('should return correct skipped hours if skipped date is at the start', () => {
-      const mockViewDataProvider = {
-        isSkippedDate: (date: Date) => isDataOnWeekend(date),
-        getViewOptions: () => ({
-          startDayHour: 10,
-          endDayHour: 16,
-        }),
-      };
-
-      const result = getSkippedHoursInRange(
-        new Date(2024, 1, 4, 12),
-        new Date(2024, 1, 6),
-        mockViewDataProvider as any,
-      );
-
-      expect(result)
-        .toBe(4);
-    });
-
-    it('should return correct skipped hours if skipped date is at the end (2)', () => {
-      const mockViewDataProvider = {
-        isSkippedDate: (date: Date) => isDataOnWeekend(date),
-        getViewOptions: () => ({
-          startDayHour: 12,
-          endDayHour: 16,
-        }),
-      };
-
-      const result = getSkippedHoursInRange(
-        new Date(2024, 1, 2, 13, 0),
-        new Date(2024, 1, 3, 18, 0),
-        mockViewDataProvider as any,
-      );
-
-      expect(result)
-        .toBe(4);
+      const result = getSkippedHoursInRange(startDate, endDate, mockViewDataProvider as any);
+      expect(result).toBe(expectedHours);
     });
   });
 });
