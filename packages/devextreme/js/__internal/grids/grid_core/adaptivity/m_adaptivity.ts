@@ -94,7 +94,7 @@ function focusCellHandler(e) {
   eventsEngine.trigger($nextCell, 'dxclick');
 }
 
-class AdaptiveColumnsController extends modules.ViewController {
+export class AdaptiveColumnsController extends modules.ViewController {
   private _columnsController: any;
 
   private _dataController: any;
