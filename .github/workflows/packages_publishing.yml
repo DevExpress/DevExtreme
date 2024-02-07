@@ -5,31 +5,24 @@ on:
     - cron: '0 0 * * 1-5'
   workflow_dispatch:
     inputs:
+      tag:
+        required: false
+        description: Use 'daily' for daily builds with timestamp version, use 'stable' for releases.
+        type: choice
+        options:
+          - daily
+          - stable
+        default: 'daily'
       filter:
         type: string
         description: Package file filter pattern
         required: false
-      timestamp-version:
-        type: boolean
-        description: Set timestamp version
-        required: false
-        default: true
-      next-tag:
-        type: boolean
-        description: Move 'next' tag
-        required: false
-        default: true
-      stable-tag:
-        type: boolean
-        description: Move 'stable' tag
-        required: false
-        default: false
 
 env:
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
-  SET_TIMESTAMP_VERSION: ${{ (github.event_name == 'workflow_dispatch' && inputs.timestamp-version) || (github.event_name != 'workflow_dispatch' && true) }}
-  MOVE_NEXT_TAG: ${{ (github.event_name == 'workflow_dispatch' && inputs.next-tag) || (github.event_name != 'workflow_dispatch' && true) }}
-  MOVE_STABLE_TAG: ${{ (github.event_name == 'workflow_dispatch' && inputs.stable-tag) || (github.event_name != 'workflow_dispatch' && false) }}
+  SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
+  MOVE_DAILY_TAG: ${{ inputs.tag == 'daily }}
+  MOVE_STABLE_TAG: ${{ inputs.tag == 'stable }}
 
 jobs:
 
@@ -123,8 +116,8 @@ jobs:
           npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           npm publish --quiet --ignore-scripts --registry https://npm.pkg.github.com;
 
-      - name: Move 'next' tag
-        if: ${{ env.MOVE_NEXT_TAG == 'true' }}
+      - name: Move 'daily' tag
+        if: ${{ env.MOVE_DAILY_TAG == 'true' }}
         env:
           PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
           PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
@@ -132,7 +125,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-next
+          npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily
 
       - name: Move 'stable' tag
         if: ${{ env.MOVE_STABLE_TAG == 'true' }}
