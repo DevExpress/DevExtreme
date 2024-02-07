@@ -30,8 +30,6 @@
   $calendar-navigator-text-color,
 );
 @include dx-calendar-body-mixin(
-  $calendar-cell-other-color,
-  $calendar-week-number-cell-color,
   $calendar-week-number-cell-bg,
   $base-border-radius,
   $material-calendar-cell-font-size,

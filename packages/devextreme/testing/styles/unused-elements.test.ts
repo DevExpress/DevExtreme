@@ -96,8 +96,6 @@ test('There are no unused images in repository', () => {
 
     const exclusions: { generic: string[]; material: string[]; fluent: string[] } = {
       generic: [
-        '$validation-message-padding',
-        '$cell-other-color',
         '$scheduler-default-header-height',
         '$scheduler-appointment-recurrence-content-padding',
         '$scheduler-appointment-recurrence-content-padding-rtl',
@@ -121,8 +119,6 @@ test('There are no unused images in repository', () => {
         '$generic-treevieew-item-padding',
       ],
       material: [
-        '$validation-message-padding',
-        '$cell-other-color',
         '$scheduler-default-header-height',
         '$scheduler-vertical-group-header-content-top-offset',
         '$tree-view-icon-size',
@@ -157,8 +153,6 @@ test('There are no unused images in repository', () => {
         '$treelist-row-alternation-bg',
       ],
       fluent: [
-        '$validation-message-padding',
-        '$cell-other-color',
         '$scheduler-default-header-height',
         '$scheduler-appointment-recurrence-content-padding',
         '$scheduler-appointment-recurrence-content-padding-rtl',
