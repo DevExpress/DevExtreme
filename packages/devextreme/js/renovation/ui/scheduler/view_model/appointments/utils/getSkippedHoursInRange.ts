@@ -1,43 +1,52 @@
 import { ViewDataProviderType } from '../../../workspaces/types';
-import dateUtils from '../../../../../../core/utils/date';
+
+const HOUR_IN_MS = 1000 * 60 * 60;
 
 const getSkippedHoursInRange = (
   startDate: Date,
   endDate: Date,
   viewDataProvider: ViewDataProviderType,
 ): number => {
-  const msInHour = dateUtils.dateToMilliseconds('hour');
-  const startTime = dateUtils.setToDayStart(startDate).getTime();
-  const endTime = dateUtils.setToDayEnd(new Date(endDate.getTime() - 1)).getTime();
-  const allDayIntervalDuration = 24 * msInHour;
-  let excludedHours = 0;
+  let result = 0;
+
+  const currentDate = new Date(startDate);
+  currentDate.setDate(currentDate.getDate() + 1);
+  currentDate.setHours(0, 0, 0, 0);
+
+  const endDateWithStartHour = new Date(endDate);
+  endDateWithStartHour.setHours(0, 0, 0, 0);
 
   const { startDayHour, endDayHour } = viewDataProvider.getViewOptions();
   const dayHours = endDayHour - startDayHour;
 
-  for (let time = startTime; time < endTime; time += allDayIntervalDuration) {
-    const checkDate = new Date(time);
-    if (viewDataProvider.isSkippedDate(checkDate)) {
-      excludedHours += dayHours;
+  while (currentDate < endDateWithStartHour) {
+    if (viewDataProvider.isSkippedDate(currentDate)) {
+      result += dayHours;
+    }
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  const startDateHours = startDate.getHours();
+  const endDateHours = endDate.getHours() + Math.ceil(endDate.getTime() % HOUR_IN_MS);
+
+  if (viewDataProvider.isSkippedDate(startDate)) {
+    if (startDateHours < startDayHour) {
+      result += dayHours;
+    } else if (startDateHours < endDayHour) {
+      result += endDayHour - startDateHours;
     }
   }
 
-  if (viewDataProvider.isSkippedDate(startDate)
-    && startDate.getHours() > startDayHour
-    && startDate.getHours() < endDayHour
-  ) {
-    excludedHours += endDayHour - startDate.getHours() - dayHours;
+  if (viewDataProvider.isSkippedDate(endDate)) {
+    if (endDateHours > endDayHour) {
+      result += dayHours;
+    } else if (endDateHours > startDayHour) {
+      result += endDateHours - startDayHour;
+    }
   }
 
-  const endDateHours = new Date(endTime).getHours();
-
-  if (viewDataProvider.isSkippedDate(endDate)
-    && endDateHours <= endDayHour
-    && endDateHours > startDayHour) {
-    excludedHours += endDateHours + Math.ceil(endTime % (1000 / 60 / 60)) - startDayHour - dayHours;
-  }
-
-  return excludedHours;
+  return result;
 };
 
 export default getSkippedHoursInRange;

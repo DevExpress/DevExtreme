@@ -22,7 +22,7 @@ describe('getSkippedHoursInRange', () => {
         .toBe(384);
     });
 
-    it('should skip 2 weekend days if startDate and endDate inside weekend', () => {
+    it('should skip 1 weekend day and 1 hour of the second weekend day if endDate is 1 ms in the second weekend day', () => {
       const mockViewDataProvider = {
         isSkippedDate: (date: Date) => isDataOnWeekend(date),
         getViewOptions: () => ({
@@ -38,7 +38,7 @@ describe('getSkippedHoursInRange', () => {
       );
 
       expect(result)
-        .toBe(48);
+        .toBe(25);
     });
   });
 
@@ -62,7 +62,7 @@ describe('getSkippedHoursInRange', () => {
         .toBe(0);
     });
 
-    it('should skip weekend if endDate > 0 border of weekend', () => {
+    it('should skip only first weekend hour if endDate > 0 border of weekend', () => {
       const result = getSkippedHoursInRange(
         new Date(2021, 3, 2),
         new Date(2021, 3, 3, 0, 0, 0, 1),
@@ -70,7 +70,7 @@ describe('getSkippedHoursInRange', () => {
       );
 
       expect(result)
-        .toBe(24);
+        .toBe(1);
     });
 
     it('should skip 1 weekend day if endDate is at the end of the weekend day', () => {
