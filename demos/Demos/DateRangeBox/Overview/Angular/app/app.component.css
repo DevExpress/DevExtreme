@@ -1,0 +1,16 @@
+::ng-deep .demo-container {
+  height: 690px;
+}
+
+::ng-deep .dx-field {
+  padding: 8px;
+}
+
+::ng-deep .selected-days-wrapper {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+::ng-deep .multiline-label {
+  padding-top: 0;
+}

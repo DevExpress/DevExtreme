@@ -1,0 +1,1 @@
+DevExtreme Angular Editors is a set of controls that allow users to edit and validate data. You can use them as Angular components that support AOT compilation, TypeScript compile-time checking and declarative configuration. This demo shows how to add and configure the TextBox, ColorBox, NumberBox, and Switch components. More examples with editors are available in this section.

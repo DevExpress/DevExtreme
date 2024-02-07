@@ -1,0 +1,45 @@
+<dx-html-editor height="750px" [value]="valueContent">
+  <dxo-table-context-menu
+    [enabled]="contextMenuEnabled"
+  ></dxo-table-context-menu>
+  <dxo-table-resizing [enabled]="allowResizing"></dxo-table-resizing>
+  <dxo-toolbar>
+    <dxi-item name="bold"></dxi-item>
+    <dxi-item name="color"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="alignLeft"></dxi-item>
+    <dxi-item name="alignCenter"></dxi-item>
+    <dxi-item name="alignRight"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="insertTable"></dxi-item>
+    <dxi-item name="insertHeaderRow"></dxi-item>
+    <dxi-item name="insertRowAbove"></dxi-item>
+    <dxi-item name="insertRowBelow"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="insertColumnLeft"></dxi-item>
+    <dxi-item name="insertColumnRight"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="deleteColumn"></dxi-item>
+    <dxi-item name="deleteRow"></dxi-item>
+    <dxi-item name="deleteTable"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="cellProperties"></dxi-item>
+    <dxi-item name="tableProperties"></dxi-item>
+  </dxo-toolbar>
+</dx-html-editor>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <dx-check-box
+      text="Allow Table Resizing"
+      [(value)]="allowResizing"
+    ></dx-check-box>
+  </div>
+  <div class="option">
+    <dx-check-box
+      text="Enable Table Context Menu"
+      [(value)]="contextMenuEnabled"
+    ></dx-check-box>
+  </div>
+</div>

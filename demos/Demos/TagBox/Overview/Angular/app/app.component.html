@@ -1,0 +1,162 @@
+<div>
+  <div class="dx-fieldset">
+    <div class="dx-field">
+      <div class="dx-field-label">Default mode</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        ></dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Search mode</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [searchEnabled]="true"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Batch selection</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [showSelectionControls]="true"
+          applyValueMode="useButtons"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Hide selected items</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [hideSelectedItems]="true"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Single line mode</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [multiline]="false"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Add custom items</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="editableProducts"
+          [acceptCustomValue]="true"
+          (onCustomItemCreating)="onCustomItemCreating($event)"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">With custom placeholder</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          placeholder="Choose Product..."
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Disabled</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [value]="[simpleProducts[0]]"
+          [disabled]="true"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Data source</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [dataSource]="dataSource"
+          displayExpr="Name"
+          valueExpr="Id"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Custom template</div>
+      <div class="dx-field-value">
+        <dx-tag-box
+          [dataSource]="dataSource"
+          [value]="value"
+          displayExpr="Name"
+          valueExpr="Id"
+          itemTemplate="customItem"
+          tagTemplate="customTag"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+          <div *dxTemplate="let product of 'customItem'">
+            <div class="custom-item">
+              <img [src]="product.ImageSrc" />
+              <div class="product-name">
+                {{ product.Name }}
+              </div>
+            </div>
+          </div>
+          <div *dxTemplate="let product of 'customTag'">
+            <div
+              [ngClass]="{
+                'dx-tag-content': true,
+                'disabled-tag': isDisabled(product)
+              }"
+              [attr.aria-disabled]="isDisabled(product)"
+              (mouseenter)="onMouseEnter($event, product)"
+              (mouseleave)="onMouseLeave()"
+            >
+              <img [src]="product.ImageSrc" class="tag-img" />
+              <span>{{ product.Name }}</span>
+              <div
+                *ngIf="!isDisabled(product)"
+                class="dx-tag-remove-button"
+              ></div>
+            </div>
+          </div>
+        </dx-tag-box>
+        <dx-popover [target]="target" [visible]="visible">
+          <div *dxTemplate="let data of 'content'">
+            <p>
+              <b>Name: </b><span>{{ product.Name }}</span>
+            </p>
+            <p>
+              <b>Price: </b><span>{{ product.Price }}</span>
+            </p>
+            <p>
+              <b>In-stock: </b><span>{{ product.Current_Inventory }}</span>
+            </p>
+            <p>
+              <b>Category: </b><span>{{ product.Category }}</span>
+            </p>
+          </div>
+        </dx-popover>
+      </div>
+    </div>
+  </div>
+</div>

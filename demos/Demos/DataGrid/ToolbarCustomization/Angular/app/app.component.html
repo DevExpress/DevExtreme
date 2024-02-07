@@ -1,0 +1,64 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="orders"
+  keyExpr="ID"
+  [showBorders]="true"
+>
+  <dxo-grouping [autoExpandAll]="expandAll"></dxo-grouping>
+  <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+
+  <dxi-column dataField="OrderNumber" caption="Invoice Number"></dxi-column>
+  <dxi-column dataField="OrderDate"></dxi-column>
+  <dxi-column dataField="Employee"></dxi-column>
+  <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+  <dxi-column
+    dataField="CustomerStoreState"
+    caption="State"
+    [groupIndex]="0"
+  ></dxi-column>
+  <dxi-column
+    dataField="SaleAmount"
+    alignment="right"
+    format="currency"
+  ></dxi-column>
+
+  <dxo-toolbar>
+    <dxi-item location="before">
+      <div *dxTemplate class="informer">
+        <div class="count">{{ totalCount }}</div>
+        <span>Total Count</span>
+      </div>
+    </dxi-item>
+    <dxi-item location="before">
+      <div *dxTemplate>
+        <dx-select-box
+          width="225"
+          [items]="groupingValues"
+          [inputAttr]="{ 'aria-label': 'Value' }"
+          displayExpr="text"
+          valueExpr="value"
+          value="CustomerStoreState"
+          (onValueChanged)="toggleGroupColumn($event)"
+        >
+        </dx-select-box>
+      </div>
+    </dxi-item>
+    <dxi-item location="before">
+      <div *dxTemplate>
+        <dx-button
+          [text]="this.expandAll ? 'Collapse All' : 'Expand All'"
+          width="136"
+          (onClick)="toggleExpandAll()"
+        >
+        </dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item location="after">
+      <div *dxTemplate>
+        <dx-button icon="refresh" (onClick)="refreshDataGrid()"> </dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item name="columnChooserButton"></dxi-item>
+  </dxo-toolbar>
+</dx-data-grid>

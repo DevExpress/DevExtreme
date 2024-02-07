@@ -1,0 +1,27 @@
+.widget-container {
+  margin-right: 240px;
+}
+
+#gallery {
+  margin: auto;
+  max-width: 450px;
+}
+
+.options {
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 180px;
+  top: 0;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+}

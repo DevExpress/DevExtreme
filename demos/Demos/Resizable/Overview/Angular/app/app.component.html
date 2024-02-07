@@ -1,0 +1,60 @@
+<div class="widget-container">
+  <div class="dx-fieldset">
+    <div class="dx-fieldset-header">Resizable DataGrid</div>
+    <div class="dx-field">
+      <dx-resizable
+        [class]="resizableClasses"
+        id="gridContainer"
+        [minWidth]="400"
+        [minHeight]="150"
+        [maxHeight]="370"
+        [keepAspectRatio]="keepAspectRatio"
+        [handles]="handles.join(' ')"
+        area=".widget-container .dx-field"
+      >
+        <dx-data-grid
+          id="grid"
+          [dataSource]="orders"
+          keyExpr="ID"
+          [showBorders]="true"
+          height="100%"
+        >
+          <dxo-paging [pageSize]="8"></dxo-paging>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxi-column
+            [allowGrouping]="false"
+            dataField="OrderNumber"
+            [width]="130"
+            caption="Invoice Number"
+          ></dxi-column>
+          <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+          <dxi-column
+            dataField="CustomerStoreState"
+            caption="State"
+          ></dxi-column>
+          <dxi-column dataField="Employee"></dxi-column>
+          <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+          <dxi-column dataField="SaleAmount" format="currency"></dxi-column>
+        </dx-data-grid>
+      </dx-resizable>
+    </div>
+  </div>
+</div>
+<div class="options">
+  <div class="caption">Resizable Options</div>
+  <div class="option">
+    <div>Handles</div>
+    <dx-tag-box
+      [items]="handleValues"
+      [(value)]="handles"
+      [inputAttr]="{ 'aria-label': 'Handle' }"
+      (onValueChanged)="handlesValueChange($event)"
+    ></dx-tag-box>
+  </div>
+  <div class="option">
+    <dx-check-box
+      text="Keep aspect ratio"
+      [(value)]="keepAspectRatio"
+    ></dx-check-box>
+  </div>
+</div>
