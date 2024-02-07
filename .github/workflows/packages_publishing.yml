@@ -19,8 +19,8 @@ on:
 env:
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
-  MOVE_DAILY_TAG: ${{ inputs.tag == 'daily }}
-  MOVE_STABLE_TAG: ${{ inputs.tag == 'stable }}
+  MOVE_DAILY_TAG: ${{ inputs.tag == 'daily' }}
+  MOVE_STABLE_TAG: ${{ inputs.tag == 'stable' }}
 
 jobs:
 
