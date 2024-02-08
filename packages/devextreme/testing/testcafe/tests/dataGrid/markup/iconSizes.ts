@@ -13,10 +13,8 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
-  await dataGrid.option('dataSource', []);
-
   await t
-    .expect(await takeScreenshot('grid-no-data-text-position.png', dataGrid.element))
+    .expect(await takeScreenshot('icon-sizes-fluent-compact.png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
