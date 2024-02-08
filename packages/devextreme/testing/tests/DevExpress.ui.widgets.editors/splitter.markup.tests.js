@@ -11,9 +11,9 @@ QUnit.testStart(function() {
 
 const SPLITTER_CLASS = 'dx-splitter';
 const PANE_SPLITTER_CLASS = 'dx-pane-splitter';
-const SPLITTER_ITEM_CLASS = `${SPLITTER_CLASS}-item`;
-const HORIZONTAL_DIRECTION_CLASS = `${SPLITTER_CLASS}-horizontal`;
-const VERTICAL_DIRECTION_CLASS = `${SPLITTER_CLASS}-vertical`;
+const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-horizontal';
+const VERTICAL_DIRECTION_CLASS = 'dx-splitter-vertical';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -55,6 +55,11 @@ QUnit.module('Splitter markup', moduleConfig, () => {
 
         assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), false);
         assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), true);
+
+        this.instance.option('direction', 'horizontal');
+
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
     });
 
     QUnit.test('Splitter should be initialized with pane', function(assert) {

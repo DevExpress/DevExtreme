@@ -1,4 +1,4 @@
-import Splitter from '../__internal/ui/m_splitter';
+import Splitter from '../__internal/ui/splitter/splitter';
 
 export default Splitter;
 

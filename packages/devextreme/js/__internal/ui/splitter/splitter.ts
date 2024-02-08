@@ -2,14 +2,14 @@
 import registerComponent from '@js/core/component_registrator';
 import { extend } from '@js/core/utils/extend';
 import CollectionWidgetItem from '@js/ui/collection/item';
+import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 
 const SPLITTER_CLASS = 'dx-splitter';
-
-const SPLITTER_ITEM_CLASS = `${SPLITTER_CLASS}-item`;
+const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
-const HORIZONTAL_DIRECTION_CLASS = `${SPLITTER_CLASS}-horizontal`;
-const VERTICAL_DIRECTION_CLASS = `${SPLITTER_CLASS}-vertical`;
+const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-horizontal';
+const VERTICAL_DIRECTION_CLASS = 'dx-splitter-vertical';
 
 // NOTE: The following class may be temporary
 const PANE_SPLITTER_CLASS = 'dx-pane-splitter';
@@ -18,54 +18,58 @@ const PANE_SPLITTER_CLASS = 'dx-pane-splitter';
 class SplitterItem extends CollectionWidgetItem {
 }
 
-class Splitter extends CollectionWidget {
-  _getDefaultOptions() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class Splitter extends (CollectionWidget as any) {
+  _getDefaultOptions(): Record<string, unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       direction: 'horizontal',
     });
   }
 
-  _itemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemClass(): string {
     return SPLITTER_ITEM_CLASS;
   }
 
-  _itemDataKey() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemDataKey(): string {
     return SPLITTER_ITEM_DATA_KEY;
   }
 
-  _initMarkup() {
-    // @ts-expect-error
-    this.$element().addClass(`${SPLITTER_CLASS} ${PANE_SPLITTER_CLASS}`);
+  _initMarkup(): void {
+    this.$element()
+      .addClass(SPLITTER_CLASS)
+      .addClass(PANE_SPLITTER_CLASS);
 
     this._toggleDirection();
     super._initMarkup();
   }
 
-  _renderItems(items) {
+  _renderItems(items: Item[]): void {
     super._renderItems(items);
   }
 
-  _renderItemContent(args) {
+  _renderItemContent(args: object): object {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._renderItemContent(args);
   }
 
-  _itemOptionChanged(item, property, value) {
+  _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
     super._itemOptionChanged(item, property, value);
   }
 
-  _isHorizontalDirection() {
-    // @ts-expect-error
+  _isHorizontalDirection(): boolean {
     return this.option('direction') === 'horizontal';
   }
 
-  _toggleDirection() {
-    // @ts-expect-error
+  _toggleDirection(): void {
     this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
-    // @ts-expect-error
     this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
   }
 
-  _optionChanged(args) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _optionChanged(args): void {
     switch (args.name) {
       case 'direction':
         this._toggleDirection();
@@ -76,10 +80,9 @@ class Splitter extends CollectionWidget {
   }
 }
 
-// @ts-expect-error
 Splitter.ItemClass = SplitterItem;
 
-// @ts-expect-error
+// @ts-expect-error // temp fix
 registerComponent('dxSplitter', Splitter);
 
 export default Splitter;
