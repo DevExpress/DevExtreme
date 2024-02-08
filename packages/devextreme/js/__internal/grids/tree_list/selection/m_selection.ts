@@ -9,8 +9,8 @@ import treeListCore from '../m_core';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
-const originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
-const originalHandleDataChanged = selectionModule.extenders.controllers.data._handleDataChanged;
+const originalRowClick = (selectionModule.extenders.views.rowsView as any)._rowClick;
+const originalHandleDataChanged = (selectionModule.extenders.controllers.data as any)._handleDataChanged;
 
 const nodeExists = function (array, currentKey) {
   return !!array.filter((key) => key === currentKey).length;
@@ -588,7 +588,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
           if (this.isExpandIcon($targetElement)) {
             this.callBase.apply(this, arguments);
           } else {
-            // @ts-expect-error
             originalRowClick.apply(this, arguments);
           }
         },
