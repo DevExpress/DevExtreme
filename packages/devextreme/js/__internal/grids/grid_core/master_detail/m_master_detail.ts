@@ -38,7 +38,7 @@ const initMasterDetail = function (that) {
   that._isExpandAll = that.option('masterDetail.autoExpandAll');
 };
 
-const data = (Base: ModuleType<DataController>) => class DataMasterDetailExtender extends Base {
+export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) => class DataMasterDetailExtender extends Base {
   _isExpandAll: any;
 
   _expandedItems: any;
@@ -74,6 +74,11 @@ const data = (Base: ModuleType<DataController>) => class DataMasterDetailExtende
       // @ts-expect-error
       super.collapseAll.apply(that, arguments);
     }
+  }
+
+  isRowExpandedHack() {
+    // @ts-expect-error
+    return super.isRowExpanded.apply(this, arguments);
   }
 
   isRowExpanded(key) {
@@ -122,6 +127,10 @@ const data = (Base: ModuleType<DataController>) => class DataMasterDetailExtende
     return result;
   }
 
+  _processDataItemHack() {
+    return super._processDataItem.apply(this, arguments as any);
+  }
+
   _processDataItem(data, options) {
     const that = this;
     const dataItem = super._processDataItem.apply(that, arguments as any);
@@ -143,6 +152,10 @@ const data = (Base: ModuleType<DataController>) => class DataMasterDetailExtende
       dataItem.values[options.detailColumnIndex] = dataItem.isExpanded;
     }
     return dataItem;
+  }
+
+  _processItemsHack() {
+    return super._processItems.apply(this, arguments as any);
   }
 
   _processItems(items, change) {
@@ -383,7 +396,7 @@ export const masterDetailModule = {
   extenders: {
     controllers: {
       columns,
-      data,
+      data: dataMasterDetailExtenderMixin,
       resizing,
     },
     views: {
