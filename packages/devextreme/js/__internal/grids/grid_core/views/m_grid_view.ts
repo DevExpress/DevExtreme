@@ -57,13 +57,13 @@ export class ResizingController extends modules.ViewController {
 
   private _dataController: any;
 
-  private _rowsView: any;
+  _rowsView: any;
 
-  private _columnHeadersView: any;
+  _columnHeadersView: any;
 
   _columnsController: any;
 
-  private _footerView: any;
+  _footerView: any;
 
   private _prevContentMinHeight: any;
 
