@@ -5,8 +5,15 @@ import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 
 const SPLITTER_CLASS = 'dx-splitter';
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+
+const SPLITTER_ITEM_CLASS = `${SPLITTER_CLASS}-item`;
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
+const HORIZONTAL_DIRECTION_CLASS = `${SPLITTER_CLASS}-horizontal`;
+const VERTICAL_DIRECTION_CLASS = `${SPLITTER_CLASS}-vertical`;
+
+// NOTE: The following class may be temporary
+const PANE_SPLITTER_CLASS = 'dx-pane-splitter';
+// export type SplitDirection = 'horizontal' | 'vertical';
 
 class SplitterItem extends CollectionWidgetItem {
 }
@@ -28,7 +35,9 @@ class Splitter extends CollectionWidget {
 
   _initMarkup() {
     // @ts-expect-error
-    this.$element().addClass(SPLITTER_CLASS);
+    this.$element().addClass(`${SPLITTER_CLASS} ${PANE_SPLITTER_CLASS}`);
+
+    this._toggleDirection();
     super._initMarkup();
   }
 
@@ -44,9 +53,22 @@ class Splitter extends CollectionWidget {
     super._itemOptionChanged(item, property, value);
   }
 
+  _isHorizontalDirection() {
+    // @ts-expect-error
+    return this.option('direction') === 'horizontal';
+  }
+
+  _toggleDirection() {
+    // @ts-expect-error
+    this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
+    // @ts-expect-error
+    this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
+  }
+
   _optionChanged(args) {
     switch (args.name) {
       case 'direction':
+        this._toggleDirection();
         break;
       default:
         super._optionChanged(args);
