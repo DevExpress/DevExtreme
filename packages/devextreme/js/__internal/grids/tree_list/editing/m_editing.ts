@@ -169,8 +169,8 @@ const EditingController = editingModule.controllers.editing.inherit((function ()
   };
 })());
 
-const originalRowClick = editingModule.extenders.views.rowsView._rowClick;
-const originalRowDblClick = editingModule.extenders.views.rowsView._rowDblClick;
+const originalRowClick = (editingModule.extenders.views.rowsView as any)._rowClick;
+const originalRowDblClick = (editingModule.extenders.views.rowsView as any)._rowDblClick;
 
 const validateClick = function (e) {
   const $targetElement = $(e.event.target);
