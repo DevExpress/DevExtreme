@@ -5695,7 +5695,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             this.clock.tick(300);
 
             // assert
-            assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40], 'selected keys after scroll down');
+            // T1180554
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 51], 'selected keys after scroll down');
         });
 
         QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift not on the first page (T1070776)`, function(assert) {

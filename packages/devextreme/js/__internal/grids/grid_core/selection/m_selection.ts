@@ -195,6 +195,7 @@ export class SelectionController extends modules.Controller {
       maxFilterLengthInRequest: (selectionOptions as any).maxFilterLengthInRequest,
       selectionFilter: this.option('selectionFilter'),
       ignoreDisabledItems: true,
+      isVirtualPaging: virtualPaging,
       allowLoadByRange() {
         const hasGroupColumns = columnsController.getGroupColumns().length > 0;
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
