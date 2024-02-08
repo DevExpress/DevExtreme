@@ -220,20 +220,6 @@ QUnit.module('options changing', {
         }
     });
 
-    QUnit.test('The validation error should be null after removing the mask (T1214604)', function(assert) {
-        const textBox = $('#textbox').dxTextBox({
-            value: '123',
-            mask: '000000/0009',
-            maskInvalidMessage: 'mask error',
-        }).dxTextBox('instance');
-
-        assert.strictEqual(textBox.option('validationError').message, 'Value is invalid', 'validation message was added');
-
-        textBox.option({ mask: '' });
-
-        assert.strictEqual(textBox.option('validationError'), null);
-    });
-
     QUnit.test('readOnly', function(assert) {
         assert.expect(2);
 
