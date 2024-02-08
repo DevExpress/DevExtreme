@@ -11,6 +11,7 @@ import 'ui/text_box/ui.text_editor';
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const CARET_TIMEOUT_DURATION = 0;
+const CARET_NO_DBLCLICK_DURATION = 300;
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -2105,7 +2106,7 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
         for(let i = 0; i < 2; ++i) {
             this.keyboard.caret(3);
             this.input.trigger('dxclick');
-            this.clock.tick(300);
+            this.clock.tick(CARET_NO_DBLCLICK_DURATION);
         }
 
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
@@ -2339,7 +2340,7 @@ QUnit.module('ShadowDOM', {}, function() {
         for(let i = 0; i < 2; ++i) {
             keyboard.caret(3);
             input.trigger('dxclick');
-            clock.tick(300);
+            clock.tick(CARET_NO_DBLCLICK_DURATION);
         }
 
         assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
