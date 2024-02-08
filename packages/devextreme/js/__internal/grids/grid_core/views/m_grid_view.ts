@@ -61,7 +61,7 @@ class ResizingController extends modules.ViewController {
 
   private _columnHeadersView: any;
 
-  private _columnsController: any;
+  _columnsController: any;
 
   private _footerView: any;
 
@@ -80,6 +80,10 @@ class ResizingController extends modules.ViewController {
   private _devicePixelRatio: any;
 
   private _lastHeight: any;
+
+  _adaptiveColumnsController: any;
+
+  _updateScrollableTimeoutID: any;
 
   _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
