@@ -192,7 +192,7 @@ export class SelectionController extends modules.Controller {
       selectedKeys: this.option('selectedRowKeys'),
       mode: this._selectionMode,
       deferred,
-      alwaysSelectByShift: (selectionOptions as any).alwaysSelectByShift,
+      alwaysSelectByShift: selectionOptions.alwaysSelectByShift,
       maxFilterLengthInRequest: (selectionOptions as any).maxFilterLengthInRequest,
       selectionFilter: this.option('selectionFilter'),
       ignoreDisabledItems: true,
