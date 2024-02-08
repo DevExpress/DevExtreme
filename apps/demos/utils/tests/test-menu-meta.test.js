@@ -1,8 +1,8 @@
 const { readdirSync } = require('fs');
 const { join } = require('path');
 
-const rootDemosFolder = join(__dirname, '..', '..', 'JSDemos', 'Demos');
-const meta = require('../../JSDemos/menuMeta.json');
+const rootDemosFolder = join(__dirname, '..', '..', 'Demos');
+const meta = require('../../menuMeta.json');
 
 const demos = [];
 const folders = {};

@@ -70,9 +70,8 @@
     "pre-commit"
   ],
   "workspaces": [
-    "demos/*",
+    "apps/*",
     "packages/*",
-    "packages/devextreme/artifacts/npm/*",
-    "playgrounds/*"
+    "packages/devextreme/artifacts/npm/*"
   ]
 }

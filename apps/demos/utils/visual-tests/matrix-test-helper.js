@@ -151,7 +151,7 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  const test = testObject.page(`http://localhost:8080/JSDemos/Demos/${product}/${demo}/${framework}/`);
+  const test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 
@@ -186,8 +186,8 @@ export function getPortByIndex(testIndex) {
 export function updateConfig(customSettings) {
   settings.verbose = true;
   settings.manualTestIndex = 0;
-  settings.demoExpr = /JSDemos\/Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|angularjs|jquery|react|vue)\/.*/i;
-  settings.demoFilesExpr = /JSDemos\/Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i;
+  settings.demoExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|angularjs|jquery|react|vue)\/.*/i;
+  settings.demoFilesExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i;
   settings.commonEtalonsExpr = /testing\/etalons\/(?<product>\w+)-(?<demo>\w+)(?<suffix>.*).png/i;
   settings.manualEtalonsExpr = /testing\/widgets\/(?<product>\w+)\/.*/i;
   settings.concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
@@ -205,8 +205,8 @@ export function updateConfig(customSettings) {
   settings.ignoreChangesPathPatterns = [
     /mvcdemos.*/i,
     /netcoredemos.*/i,
-    /jsdemos\/menumeta.json/i,
-    /jsdemos\/.*.md/i,
+    /menumeta.json/i,
+    /.*.md/i,
   ];
 
   if (customSettings) {

@@ -1,4 +1,4 @@
-name: Unit tests
+name: Demos unit tests
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
@@ -28,11 +28,9 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-modules
 
-      - name: Delete DX packages
-        run:  sed -i '/23.2-next/d' ./package.json
-
       - name: Run npm install
         run: npm install --no-audit --no-fund
 
       - name: Run unit tests
+        working-directory: apps/demos
         run: npm run test

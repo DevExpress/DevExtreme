@@ -3,9 +3,9 @@
 const fs = require('fs');
 const helper = require('../../visual-tests/matrix-test-helper');
 
-const productDemoFramework = [{ filename: 'JSDemos/Demos/Accordion/Overview/Angular/index.json' }];
-const productDemo = [{ filename: 'JSDemos/Demos/Accordion/Overview/visualtestrc.json' }];
-const productDemoDescription = [{ filename: 'JSDemos/Demos/Accordion/Overview/description.md' }];
+const productDemoFramework = [{ filename: 'Demos/Accordion/Overview/Angular/index.json' }];
+const productDemo = [{ filename: 'Demos/Accordion/Overview/visualtestrc.json' }];
+const productDemoDescription = [{ filename: 'Demos/Accordion/Overview/description.md' }];
 const stubPath = [{ filename: 'stub' }];
 const manualScreenPath = [{ filename: 'testing/widgets/datagrid/etalons/image.png' }];
 const manualTestPath = [{ filename: 'testing/widgets/datagrid/sometest.test.js' }];
@@ -38,27 +38,27 @@ describe('Matrix test helper tests', () => {
 
   test('Product-Demo-Framework change test', () => {
     updateChanges(productDemoFramework);
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Angular/').name).toBe('only');
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Jquery/').name).toBe('skip');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Angular/').name).toBe('only');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Jquery/').name).toBe('skip');
   });
 
   test('Product-Demo change test', () => {
     updateChanges(productDemo);
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Angular/').name).toBe('only');
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Jquery/').name).toBe('only');
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Another/Jquery/').name).toBe('skip');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Angular/').name).toBe('only');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Jquery/').name).toBe('only');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Another/Jquery/').name).toBe('skip');
   });
 
   test('Do nothing on description.md change test', () => {
     updateChanges(productDemoDescription);
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Angular/').name).toBe('skip');
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Jquery/').name).toBe('skip');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Angular/').name).toBe('skip');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Jquery/').name).toBe('skip');
   });
 
   test('Run all on unknown change test', () => {
     updateChanges(stubPath);
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Angular/').name).toBe('test');
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/JSDemos/Demos/Accordion/Overview/Jquery/').name).toBe('test');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Angular/').name).toBe('test');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Jquery/').name).toBe('test');
   });
 
   test('Run manual test on manual etalon change', () => {
