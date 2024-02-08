@@ -35,7 +35,7 @@ $fluent-grid-base-column-chooser-item-margin: 8px !default;
 $fluent-command-edit-icon-margin: 2px !default;
 
 $fluent-command-edit-icon-size: null !default;
-$fluent-filter-panel-icon-size: 20px !default;
+$fluent-filter-panel-icon-size: null !default;
 
 $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
 
@@ -67,6 +67,7 @@ $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
   $fluent-grid-base-treeview-select-all-item-offset: 34px !default;
 
   $fluent-command-edit-icon-size: 20px !default;
+  $fluent-filter-panel-icon-size: 20px !default;
 }
 
 @else if $size == "compact" {
@@ -97,6 +98,7 @@ $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
   $fluent-grid-base-treeview-select-all-item-offset: 28px !default;
 
   $fluent-command-edit-icon-size: 16px !default;
+  $fluent-filter-panel-icon-size: 16px !default;
 }
 
 $fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;
