@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
@@ -5,7 +6,9 @@ import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import Toolbar, { Properties as ToolbarProperties } from '@js/ui/toolbar';
 
+import { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
+import { ResizingController } from '../views/m_grid_view';
 
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
@@ -234,6 +237,15 @@ export class HeaderPanel extends ColumnsView {
   }
 }
 
+const resizing = (Base: ModuleType<ResizingController>) => class HeaderPanelResizingExtender extends Base {
+  _updateDimensionsCore() {
+    // @ts-expect-error
+    super._updateDimensionsCore.apply(this, arguments);
+
+    this.getView('headerPanel').updateToolbarDimensions();
+  }
+};
+
 export const headerPanelModule = {
   defaultOptions() {
     return {
@@ -244,13 +256,7 @@ export const headerPanelModule = {
   },
   extenders: {
     controllers: {
-      resizing: {
-        _updateDimensionsCore() {
-          this.callBase.apply(this, arguments);
-
-          this.getView('headerPanel').updateToolbarDimensions();
-        },
-      },
+      resizing,
     },
   },
 };
