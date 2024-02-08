@@ -25,36 +25,10 @@ changed-files.json
 !.vscode/settings.json
 gulpfile.js/.eslintrc.js
 
-JSDemos/shared/empty-file.js
+shared/empty-file.js
 
-JSDemos/Demos/**/config.js
-JSDemos/Demos/**/tsconfig.json
+Demos/**/config.js
+Demos/**/tsconfig.json
 
-MVCDemos/App_Data/Northwind.mdf
-MVCDemos/Content/icons
-MVCDemos/Content/DevExtreme
-MVCDemos/Content/Descr/Temp
-!MVCDemos/Content/demo-template.css
-MVCDemos/Content/SampleData/SampleImages
-MVCDemos/Scripts/*
-!MVCDemos/Scripts/data
-!MVCDemos/Scripts/signalr
-!MVCDemos/Scripts/utils
-!MVCDemos/Scripts/_references\.js
-MVCDemos/App_Data/menuMeta.json
-MVCDemos/packages
-
-NetCoreDemos/wwwroot/Descr/Temp
-NetCoreDemos/wwwroot/bundle.min.css
-NetCoreDemos/wwwroot/bundle.min.js
-NetCoreDemos/wwwroot/js
-NetCoreDemos/wwwroot/css/*
-!NetCoreDemos/wwwroot/css/custom\.css
-!NetCoreDemos/wwwroot/css/DemosStyles
-!NetCoreDemos/wwwroot/css/demo-template.css
-NetCoreDemos/wwwroot/SampleData/SampleImages
-NetCoreDemos/menuMeta.json
-NetCoreDemos/wwwroot/bundle.min.css
-NetCoreDemos/wwwroot/bundle.min.js
 .DS_Store
 publish-demos

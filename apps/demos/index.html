@@ -16,7 +16,7 @@
     <div id="toolbar"></div>
     <div id="drawer" style="height: calc(100% - 56px)">
       <div id="content" style="height: 100%">
-        <iframe id="frame" style="width: 100%; height: calc(100% - 56px); resize: both" src="JSDemos/Demos/DataGrid/Overview/jQuery/"></iframe>
+        <iframe id="frame" style="width: 100%; height: calc(100% - 56px); resize: both" src="Demos/DataGrid/Overview/jQuery/"></iframe>
         <br />
         <div>
           <a id="demolink" target="_blank" href="">open in separate tab</a>
@@ -72,7 +72,7 @@
 
       const processLink = () => {
         if (window.location.hash === "") {
-          window.location.hash = "#JSDemos/Demos/DataGrid/Overview/jQuery/dx.light.css";
+          window.location.hash = "#Demos/DataGrid/Overview/jQuery/dx.light.css";
         }
 
         const pathParts = window.location.hash
@@ -166,7 +166,7 @@
 
         DevExpress.utils.ajax
           .sendRequest({
-            url: "JSDemos/menuMeta.json",
+            url: "menuMeta.json",
             dataType: "json",
           })
           .then((data) => {
