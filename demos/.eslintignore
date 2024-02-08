@@ -1,0 +1,10 @@
+node_modules/*
+MVCDemos/*
+bundles/*
+NetCoreDemos/*
+publish-demos/*
+JSDemos/Demos/**/testcafe-test-code.js
+JSDemos/shared/empty-file.js
+
+JSDemos/Demos/**/config.js
+JSDemos/Demos/**/Vue/**/*.html

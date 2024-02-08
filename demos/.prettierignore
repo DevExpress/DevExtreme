@@ -1,0 +1,12 @@
+*.js
+*.mjs
+*.ts
+*.tsx
+*.vue
+*.css
+*.md
+*.json
+MVCDemos
+NetCoreDemos
+.github
+publish-demos

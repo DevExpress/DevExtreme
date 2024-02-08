@@ -1,0 +1,38 @@
+name: Unit tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "[0-9][0-9]_[0-9]"
+
+jobs:
+  test:
+    name: Run unit tests
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
+
+      - name: Delete DX packages
+        run:  sed -i '/23.2-next/d' ./package.json
+
+      - name: Run npm install
+        run: npm install --no-audit --no-fund
+
+      - name: Run unit tests
+        run: npm run test
