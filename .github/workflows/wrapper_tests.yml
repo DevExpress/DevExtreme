@@ -1,7 +1,7 @@
 name: DevExtreme Wrappers Tests
 
 on:
-  pull_request:
+#  pull_request:
   push:
     branches: [24_1]
 
