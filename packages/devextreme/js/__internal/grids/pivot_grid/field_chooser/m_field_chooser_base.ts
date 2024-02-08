@@ -1,3 +1,4 @@
+import Class from '@js/core/class';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
@@ -86,7 +87,9 @@ function getStringState(state) {
 
 const FieldChooserBase = (Widget as any)
   .inherit(columnStateMixin)
-  .inherit(sortingMixin)
+// @ts-expect-error
+  // eslint-disable-next-line
+  .inherit(new sortingMixin(Class))
   .inherit(headerFilterMixin)
   .inherit({
     _getDefaultOptions() {
