@@ -52,7 +52,7 @@ const restoreFocus = function (focusedElement, selectionRange) {
   gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
-class ResizingController extends modules.ViewController {
+export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
 
   private _dataController: any;
