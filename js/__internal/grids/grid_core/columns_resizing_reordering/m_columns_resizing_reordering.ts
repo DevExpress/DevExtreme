@@ -20,6 +20,9 @@ import {
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
+import { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
+import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -1496,6 +1499,26 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 }
 
+const rowsView = (Base: ModuleType<RowsView>) => class RowsViewColumnsResizingExtender extends Base {
+  _needUpdateRowHeight(itemCount) {
+    const wordWrapEnabled = this.option('wordWrapEnabled');
+    const columnsResizerController = this.getController('columnsResizer');
+    const isResizing = columnsResizerController.isResizing();
+
+    return super._needUpdateRowHeight.apply(this, arguments as any) || itemCount > 0 && wordWrapEnabled && isResizing;
+  }
+};
+
+const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryColumnsResizingExtender extends Base {
+  renderFocusOverlay() {
+    if (this.getController('columnsResizer').isResizing()) {
+      return;
+    }
+
+    return super.renderFocusOverlay.apply(this, arguments as any);
+  }
+};
+
 export const columnsResizingReorderingModule = {
   views: {
     columnsSeparatorView: ColumnsSeparatorView,
@@ -1510,26 +1533,10 @@ export const columnsResizingReorderingModule = {
   },
   extenders: {
     views: {
-      rowsView: {
-        _needUpdateRowHeight(itemCount) {
-          const wordWrapEnabled = this.option('wordWrapEnabled');
-          const columnsResizerController = this.getController('columnsResizer');
-          const isResizing = columnsResizerController.isResizing();
-
-          return this.callBase.apply(this, arguments) || itemCount > 0 && wordWrapEnabled && isResizing;
-        },
-      },
+      rowsView,
     },
     controllers: {
-      editorFactory: {
-        renderFocusOverlay() {
-          if (this.getController('columnsResizer').isResizing()) {
-            return;
-          }
-
-          return this.callBase.apply(this, arguments);
-        },
-      },
+      editorFactory,
     },
   },
 };
