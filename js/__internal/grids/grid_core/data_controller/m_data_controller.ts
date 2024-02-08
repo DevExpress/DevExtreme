@@ -1212,7 +1212,7 @@ export class DataController extends ControllerWithDataMixin {
     this._applyFilter();
   }
 
-  clearFilter(filterName) {
+  clearFilter(filterName?) {
     const that = this;
     const columnsController = that._columnsController;
     const clearColumnOption = function (optionName) {
