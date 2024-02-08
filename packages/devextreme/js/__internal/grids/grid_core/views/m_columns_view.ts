@@ -31,7 +31,6 @@ import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_colum
 import { ColumnsController } from '../columns_controller/m_columns_controller';
 import { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
-import { ModuleType, View } from '../m_types';
 import gridCoreUtils from '../m_utils';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
