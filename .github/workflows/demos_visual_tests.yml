@@ -1,106 +1,73 @@
-name: Visual Tests
+name: Demos Visual Tests
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
-#  pull_request:
+  pull_request:
   push:
     branches:
       - "[0-9][0-9]_[0-9]"
   workflow_dispatch:
-  schedule:
-    - cron: '0 * * * 6,0'
 
 jobs:
-  build:
+  get-changes:
     runs-on: ubuntu-latest
-    name: Build DevExtreme
-    timeout-minutes: 30
+    name: Get changed demos
+    timeout-minutes: 5
 
     steps:
+      - name: Get sources
+        uses: actions/checkout@v4
 
-    #Git
-    - name: Get sources
-      uses: actions/checkout@v3
+      - name: Get changed files
+        uses: ./.github/actions/get-changed-files
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: apps/demos/Demos
+          result: apps/demos/changed-files.json
 
-    - name: Clone devextreme repo from PR author fork
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ./devextreme-repo
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: changed-demos
+          path: apps/demos/changed-files.json
+          retention-days: 1
 
-    - name: Clone devextreme repo
-      run: |
-        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
-        test -d ./devextreme-repo || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme ./devextreme-repo
+  build:
+    runs-on: ubuntu-latest
+    name: Build devextreme
+    timeout-minutes: 20
 
-    - name: Log devextreme top commit
-      working-directory: ./devextreme-repo
-      run: git log -1 --oneline
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
 
-    #Build Devextreme
-    - name: DevExtreme - Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: 'devextreme-repo/**/node_modules'
-        key: ${{ runner.os }}-devextreme-node-modules-${{ hashFiles('devextreme-repo/**/package-lock.json') }}
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
 
-    - name: DevExtreme - Install packages
-      working-directory: ./devextreme-repo
-      run: npm install --no-audit --no-fund
+      - name: DevExtreme - Install packages
+        run: npm install --no-audit --no-fund
 
-    - name: DevExtreme - Build
-      working-directory: ./devextreme-repo/packages/devextreme
-      run: npm run build-npm-devextreme
-
-    - name: DevExtreme - Pack
-      working-directory: ./devextreme-repo/packages/devextreme/artifacts/npm/devextreme
-      run: npm pack
-
-    - name: DevExtreme dist - Pack
-      working-directory: ./devextreme-repo/packages/devextreme/artifacts/npm/devextreme-dist
-      run: npm pack
-
-    #Build Demos
-    - name: Demos - Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Delete DX packages
-      run:  sed -i '/23.2-next/d' ./package.json
-
-    - name: Demos - Install packages
-      run: |
-        npm install --no-audit --no-fund
-
-    - name: Demos - Install devextreme package
-      run: npm install $(find ./devextreme-repo/packages/devextreme/artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
-
-    - name: Demos - Install devextreme-dist package
-      run: npm install $(find ./devextreme-repo/packages/devextreme/artifacts/npm/devextreme-dist/ -maxdepth 1 -name "devextreme-*.tgz")
-
-    #Publish artifacts
-    - name: Zip node_modules
-      run: 7z a -t7z -mx3 -mmt2 node_modules.7z node_modules
-
-    - name: Copy build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: devextreme-sources
-        path: node_modules.7z
-        retention-days: 1
+      - name: DevExtreme - Build
+        run: npx nx build devextreme-main
 
   testcafe:
-    needs: build
+    needs:
+      - build
+      - get-changes
     strategy:
       fail-fast: false
       matrix:
@@ -114,28 +81,31 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Pin Chrome version
-      run: |
-        CHROME_VERSION=117.0.5938.92
-        wget "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
-        sudo dpkg -i "google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
-
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Delete DX packages
-      run:  sed -i '/23.2-next/d' ./package.json
-
-    - name: Download devextreme sources
-      uses: actions/download-artifact@v3
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
       with:
-        name: devextreme-sources
+        chrome-version: '121.0.6167.160'
 
-    - name: Unpack artifacts
-      run: 7z x node_modules.7z
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
-    - name: Prepare JS
-      run: npm run prepare-js
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: DevExtreme - Install packages
+      run: npm install --no-audit --no-fund
+
+    - name: DevExtreme - Build
+      run: npx nx build devextreme-main
 
     - name: Run Web Server
       run: |
@@ -144,19 +114,18 @@ jobs:
         python -m http.server 8082 &
         python -m http.server 8083 &
 
-    - name: Get changed files
-      uses: ./.github/actions/get-changed-files
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
       with:
-        path: changed-files.json
+        name: changed-demos
+        path: apps/demos
 
     - name: Run TestCafe tests
       shell: bash
+      working-directory: apps/demos
       env:
         STRATEGY: ${{ matrix.STRATEGY }}
-        CHANGEDFILEINFOSPATH: ${{ github.workspace }}/changed-files.json
+        CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         #DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
@@ -170,6 +139,7 @@ jobs:
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
+      working-directory: apps/demos
       run: |
         message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
         echo "::warning ::$message"
@@ -179,7 +149,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: screenshots
-        path: ${{ github.workspace }}/testing/artifacts/compared-screenshots/*
+        path: apps/demos/testing/artifacts/compared-screenshots/*
         if-no-files-found: ignore
 
     - name: Copy accessibility report
@@ -187,5 +157,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: accessibility-reports
-        path: ${{ github.workspace }}/testing/artifacts/axe-reports/*
+        path: apps/demos/testing/artifacts/axe-reports/*
         if-no-files-found: ignore

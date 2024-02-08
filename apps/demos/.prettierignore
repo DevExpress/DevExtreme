@@ -6,7 +6,6 @@
 *.css
 *.md
 *.json
-MVCDemos
-NetCoreDemos
 .github
 publish-demos
+coverage

@@ -3,6 +3,7 @@ const bundleConfig = {
     'devextreme.angular.systemjs.js': [
       'devextreme/*',
       'devextreme/animation/*',
+      'devextreme/common/*',
       'devextreme/core/*',
       'devextreme/core/utils/*',
       'devextreme/data/*',
@@ -28,7 +29,7 @@ const bundleConfig = {
     ],
   },
   map: {
-    'devextreme.angular.systemjs.js': '../../../../../bundles/devextreme.angular.systemjs.js',
+    'devextreme.angular.systemjs.js': '../../../../bundles/devextreme.angular.systemjs.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
   },
@@ -42,12 +43,12 @@ System.config(bundleConfig);
 
 if (window.config) {
   [
-    'devextreme',
-    'devextreme-angular',
-    'devexpress-gantt',
-    'devexpress-diagram',
+    // 'devextreme',
+    // 'devextreme-angular',
+    // 'devexpress-gantt',
+    // 'devexpress-diagram',
     'rxjs',
-    'devextreme/bundles/dx.all',
+    // 'devextreme/bundles/dx.all',
   ].forEach((pkg) => delete window.config.map[pkg]);
 
   System.config(window.config);

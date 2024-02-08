@@ -13,16 +13,16 @@ const getPatterns = () => {
   const CONSTEL = process.env.CONSTEL;
 
   if (CONSTEL == null) {
-    return ['JSDemos/Demos/**/*.@(vue|[tj]s?(x))'];
+    return ['apps/demos/Demos/**/*.@(vue|[tj]s?(x))'];
   }
 
   const changedFiles: Array<{ filename: string }> | null = getChangedFiles();
 
   const [current, total] = CONSTEL.split('/').map(Number);
 
-  const demos = fs.readdirSync(path.resolve(process.cwd(), 'JSDemos/Demos'));
+  const demos = fs.readdirSync(path.resolve(process.cwd(), 'Demos'));
   const filteredDemos = demos.filter((_, index) => index % total === current - 1);
-  const filteredDemosPatterns = filteredDemos.map((widgetName) => `JSDemos/Demos/${widgetName}/**/*.@(vue|[tj]s?(x))`);
+  const filteredDemosPatterns = filteredDemos.map((widgetName) => `Demos/${widgetName}/**/*.@(vue|[tj]s?(x))`);
 
   if (changedFiles != null) {
     const isChangedConfig = changedFiles.some(
@@ -34,7 +34,7 @@ const getPatterns = () => {
     }
 
     const changedDemos = changedFiles
-      .filter((item) => item.filename.startsWith('JSDemos/Demos'))
+      .filter((item) => item.filename.startsWith('Demos'))
       .map((item) => {
         const parts = item.filename.split('/');
         return {
@@ -43,10 +43,10 @@ const getPatterns = () => {
           framework: parts[4],
         };
       })
-      .filter(({ widget, name, framework }) => fs.statSync(`JSDemos/Demos/${widget}/${name}/${framework}`).isDirectory())
+      .filter(({ widget, name, framework }) => fs.statSync(`Demos/${widget}/${name}/${framework}`).isDirectory())
       .filter(({ widget }) => filteredDemos.includes(widget));
 
-    return changedDemos.map(({ widget, name, framework }) => `JSDemos/Demos/${widget}/${name}/${framework}/**/*.@(vue|[tj]s?(x))`);
+    return changedDemos.map(({ widget, name, framework }) => `Demos/${widget}/${name}/${framework}/**/*.@(vue|[tj]s?(x))`);
   }
 
   return filteredDemosPatterns;

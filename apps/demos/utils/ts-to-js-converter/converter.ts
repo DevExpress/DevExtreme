@@ -2,6 +2,7 @@
 import cps from 'child_process';
 import path from 'path';
 import { glob } from 'glob';
+// @ts-ignore
 import { readFile, writeFile } from 'fs/promises';
 import { copy, emptyDir, remove } from 'fs-extra';
 import { promisify } from 'util';
@@ -192,6 +193,7 @@ const prettify = async (resolve: PathResolvers, log: Logger) => {
 
 const hasTypescriptFiles = async (resolve: PathResolver) => {
   const filenamePatterns = ['./*.ts', './*.tsx'];
+  // @ts-ignore
   const files = (await Promise.all(filenamePatterns.map((pattern) => platformGlob(resolve(pattern))))).flat(1);
   return files.length > 0;
 };

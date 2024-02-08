@@ -151,7 +151,7 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  const test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
+  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 

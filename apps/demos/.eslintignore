@@ -1,10 +1,12 @@
-node_modules/*
-MVCDemos/*
+node_modules
 bundles/*
-NetCoreDemos/*
+coverage
 publish-demos/*
-JSDemos/Demos/**/testcafe-test-code.js
-JSDemos/shared/empty-file.js
+Demos/**/testcafe-test-code.js
+shared/empty-file.ts
 
-JSDemos/Demos/**/config.js
-JSDemos/Demos/**/Vue/**/*.html
+Demos/**/config.js
+Demos/**/Vue/**/*.html
+
+# TODO
+utils

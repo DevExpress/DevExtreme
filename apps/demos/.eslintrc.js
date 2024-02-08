@@ -10,10 +10,14 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     sourceType: 'module',
     'ecmaVersion': 2018,
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react'],
+    },
   },
   plugins: [
     'spellcheck',
@@ -354,7 +358,7 @@ module.exports = {
     },
   }, {
     files: [
-      'JSDemos/configs/**/*.js',
+      'configs/**/*.js',
     ],
     globals: {
       System: true,
@@ -375,8 +379,8 @@ module.exports = {
     },
   }, {
     files: [
-      'JSDemos/Demos/**/jQuery/*.*',
-      'JSDemos/Demos/**/AngularJS/*.*',
+      'Demos/**/jQuery/*.*',
+      'Demos/**/AngularJS/*.*',
       'utils/templates/jQuery/**/*.*',
       'utils/templates/AngularJS/**/*.*',
     ],
@@ -399,8 +403,8 @@ module.exports = {
     }],
   }, {
     files: [
-      'JSDemos/Demos/**/React/*.*',
-      'JSDemos/Demos/**/ReactJs/*.*',
+      'Demos/**/React/*.*',
+      'Demos/**/ReactJs/*.*',
       'utils/templates/React/*.*',
     ],
     extends: [
@@ -444,7 +448,7 @@ module.exports = {
       'object-curly-spacing': ['error', 'always'],
       'semi-spacing': 'error',
       semi: 'error',
-      'space-before-blocks': 'error',
+      // 'space-before-blocks': 'error',
       'space-before-function-paren': ['error', 'never'],
       'space-in-parens': 'error',
       'space-infix-ops': 'error',
@@ -515,8 +519,8 @@ module.exports = {
     },
   }, {
     files: [
-      'JSDemos/Demos/**/Vue/*.vue',
-      'JSDemos/Demos/**/Vue/*.js',
+      'Demos/**/Vue/*.vue',
+      'Demos/**/Vue/*.js',
       'utils/templates/Vue/*.vue',
       'utils/templates/Vue/*.js',
     ],
@@ -550,7 +554,7 @@ module.exports = {
       'object-curly-spacing': ['error', 'always'],
       'semi-spacing': 'error',
       semi: 'error',
-      'space-before-blocks': 'error',
+      // 'space-before-blocks': 'error',
       'space-before-function-paren': ['error', 'never'],
       'space-in-parens': 'error',
       'space-infix-ops': 'error',

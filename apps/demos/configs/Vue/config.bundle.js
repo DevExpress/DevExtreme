@@ -3,6 +3,7 @@ const bundleConfig = {
     'devextreme.vue.systemjs.js': [
       'devextreme/*',
       'devextreme/animation/*',
+      'devextreme/common/*',
       'devextreme/core/*',
       'devextreme/core/utils/*',
       'devextreme/data/*',
@@ -23,7 +24,7 @@ const bundleConfig = {
     ],
   },
   map: {
-    'devextreme.vue.systemjs.js': '../../../../../bundles/devextreme.vue.systemjs.js',
+    'devextreme.vue.systemjs.js': '../../../../bundles/devextreme.vue.systemjs.js',
   },
 };
 

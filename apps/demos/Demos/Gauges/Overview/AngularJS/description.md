@@ -1,1 +1,0 @@
-DevExtreme JavaScript Gauges is a collection of adaptive gauge controls available as AngularJS directives. They come in two geometric shapes: circular, or radial, and linear. Behaving like native components, gauges support two-way binding to scope properties and declarative configuration. View demos in this section to discover gauges' key features.
