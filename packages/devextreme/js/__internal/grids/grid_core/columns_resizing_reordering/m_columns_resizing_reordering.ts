@@ -625,7 +625,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _resizingInfo: any;
 
-  private _columnsController: any;
+  _columnsController: any;
 
   private _pointsByColumns: any;
 
@@ -1212,7 +1212,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   private _animationColumnIndex?: number;
 
-  private _columnHeadersView: any;
+  _columnHeadersView: any;
 
   private _draggingHeaderView: any;
 

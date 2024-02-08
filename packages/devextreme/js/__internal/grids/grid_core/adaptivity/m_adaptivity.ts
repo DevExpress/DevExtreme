@@ -972,7 +972,6 @@ const columnsResizer = (
   }
 
   _getNextColumnIndex(currentColumnIndex) {
-    // @ts-expect-error
     const visibleColumns = this._columnsController.getVisibleColumns();
     let index = super._getNextColumnIndex(currentColumnIndex);
 
