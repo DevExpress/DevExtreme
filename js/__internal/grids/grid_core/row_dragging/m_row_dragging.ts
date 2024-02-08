@@ -4,25 +4,27 @@ import { deferUpdate } from '@js/core/utils/common';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
+import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import gridCoreUtils from '../m_utils';
 import { ATTRIBUTES, CLASSES } from './const';
 import { GridCoreRowDraggingDom } from './dom';
 
-const RowDraggingExtender = {
+const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtender extends Base {
   init() {
-    this.callBase.apply(this, arguments);
+    super.init.apply(this, arguments as any);
     this._updateHandleColumn();
-  },
+  }
 
   _allowReordering() {
     const rowDragging = this.option('rowDragging');
 
     return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
-  },
+  }
 
   _updateHandleColumn() {
-    const rowDragging = this.option('rowDragging');
+    const rowDragging: any = this.option('rowDragging');
     const allowReordering = this._allowReordering();
     const columnsController = this._columnsController;
     const isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
@@ -40,12 +42,13 @@ const RowDraggingExtender = {
     });
 
     columnsController?.columnOption('type:drag', 'visible', isHandleColumnVisible);
-  },
+  }
 
   _renderContent() {
-    const rowDragging = this.option('rowDragging');
+    const rowDragging: any = this.option('rowDragging');
     const allowReordering = this._allowReordering();
-    const $content = this.callBase.apply(this, arguments);
+    const $content = super._renderContent.apply(this, arguments as any);
+    // @ts-expect-error
     const isFixedTableRendering = this._isFixedTableRendering;
     const sortableName = '_sortable';
     const sortableFixedName = '_sortableFixed';
@@ -131,10 +134,10 @@ const RowDraggingExtender = {
     }
 
     return $content;
-  },
+  }
 
   _renderCore(e) {
-    this.callBase.apply(this, arguments);
+    super._renderCore.apply(this, arguments as any);
 
     if (e && e.changeType === 'update'
         && e.repaintChangesOnly
@@ -143,15 +146,18 @@ const RowDraggingExtender = {
         this._updateSortable();
       });
     }
-  },
+  }
 
   _updateSortable() {
     const offset = this._dataController.getRowIndexOffset();
+    // @ts-expect-error
     const offsetDiff = offset - this._previousOffset;
 
+    // @ts-expect-error
     [this._sortable, this._sortableFixed].forEach((sortable) => {
       const toIndex = sortable?.option('toIndex');
 
+      // @ts-expect-error
       if (isDefined(toIndex) && isDefined(this._previousOffset)) {
         sortable?.option('toIndex', toIndex - offsetDiff);
       }
@@ -159,13 +165,14 @@ const RowDraggingExtender = {
       sortable?.update();
     });
 
+    // @ts-expect-error
     this._previousOffset = offset;
-  },
+  }
 
   _resizeCore() {
-    this.callBase.apply(this, arguments);
+    super._resizeCore.apply(this, arguments as any);
     this._updateSortable();
-  },
+  }
 
   _getDraggableGridOptions(options) {
     const gridOptions = this.option();
@@ -197,13 +204,13 @@ const RowDraggingExtender = {
         $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
       },
     };
-  },
+  }
 
   _synchronizeScrollLeftPosition(gridInstance) {
     const scrollable = gridInstance?.getScrollable();
 
     scrollable?.scrollTo({ x: this._scrollLeft });
-  },
+  }
 
   _getDraggableRowTemplate() {
     return (options) => {
@@ -214,6 +221,7 @@ const RowDraggingExtender = {
       const row = items && items[options.fromIndex];
       const gridOptions = this._getDraggableGridOptions(row);
 
+      // @ts-expect-error
       this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
       $dataGridContainer
         .find('.dx-gridbase-container')
@@ -222,13 +230,13 @@ const RowDraggingExtender = {
 
       return $dataGridContainer;
     };
-  },
+  }
 
   _getHandleTemplate() {
     return GridCoreRowDraggingDom.createHandleTemplateFunc(
       (string) => this.addWidgetPrefix(string),
     );
-  },
+  }
 
   optionChanged(args) {
     if (args.name === 'rowDragging') {
@@ -237,8 +245,8 @@ const RowDraggingExtender = {
       args.handled = true;
     }
 
-    this.callBase.apply(this, arguments);
-  },
+    super.optionChanged.apply(this, arguments as any);
+  }
 };
 
 export const rowDraggingModule = {
@@ -254,7 +262,7 @@ export const rowDraggingModule = {
   },
   extenders: {
     views: {
-      rowsView: RowDraggingExtender,
+      rowsView,
     },
   },
 };
