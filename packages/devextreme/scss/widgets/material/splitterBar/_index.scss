@@ -3,10 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/splitter";
+@use "../../base/splitterBar";
 
 // adduse
-.dx-splitter {
+.dx-splitter-bar {
   background-color: $splitter-bg;
 
   &.dx-splitter-inactive {

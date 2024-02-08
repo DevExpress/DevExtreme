@@ -16,7 +16,7 @@ export const Consts = {
     TREELIST_COLLAPSED_SELECTOR: '.dx-treelist-collapsed',
     SELECTION_SELECTOR: '.dx-gantt-sel',
     SPLITTER_WRAPPER_SELECTOR: '.dx-splitter-wrapper',
-    SPLITTER_SELECTOR: '.dx-splitter',
+    SPLITTER_SELECTOR: '.dx-splitter-bar',
     POPUP_SELECTOR: '.dx-popup-normal',
     GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR: '.dx-gantt-hb',
     TIME_MARKER_SELECTOR: '.dx-gantt-tm',

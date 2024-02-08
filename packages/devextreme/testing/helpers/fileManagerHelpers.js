@@ -86,7 +86,7 @@ export const Consts = {
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
     SPLITTER_WRAPPER_CLASS: 'dx-splitter-wrapper',
-    SPLITTER_CLASS: 'dx-splitter',
+    SPLITTER_CLASS: 'dx-splitter-bar',
     FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
     READONLY_STATE_CLASS: 'dx-state-readonly',
