@@ -10,7 +10,6 @@ QUnit.testStart(function() {
 });
 
 const SPLITTER_CLASS = 'dx-splitter';
-const PANE_SPLITTER_CLASS = 'dx-pane-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-splitter-vertical';
@@ -33,9 +32,8 @@ const moduleConfig = {
 };
 
 QUnit.module('Splitter markup', moduleConfig, () => {
-    QUnit.test('Splitter should have dx-splitter and dx-pane-splitter classes', function(assert) {
+    QUnit.test('Splitter should have dx-splitter class', function(assert) {
         assert.strictEqual(this.$element.hasClass(SPLITTER_CLASS), true);
-        assert.strictEqual(this.$element.hasClass(PANE_SPLITTER_CLASS), true);
     });
 
     QUnit.test('Splitter should be initialized with horizontal class by default', function(assert) {

@@ -11,10 +11,6 @@ const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-splitter-vertical';
 
-// NOTE: The following class may be temporary
-const PANE_SPLITTER_CLASS = 'dx-pane-splitter';
-// export type SplitDirection = 'horizontal' | 'vertical';
-
 class SplitterItem extends CollectionWidgetItem {
 }
 
@@ -38,9 +34,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _initMarkup(): void {
-    this.$element()
-      .addClass(SPLITTER_CLASS)
-      .addClass(PANE_SPLITTER_CLASS);
+    this.$element().addClass(SPLITTER_CLASS);
 
     this._toggleDirection();
     super._initMarkup();
