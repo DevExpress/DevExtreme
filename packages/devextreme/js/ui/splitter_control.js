@@ -9,11 +9,11 @@ import Guid from '../core/guid';
 
 const window = getWindow();
 
-const SPLITTER_CLASS = 'dx-splitter';
-const SPLITTER_WRAPPER_CLASS = `${SPLITTER_CLASS}-wrapper`;
-const SPLITTER_INACTIVE_CLASS = `${SPLITTER_CLASS}-inactive`;
-const SPLITTER_BORDER_CLASS = `${SPLITTER_CLASS}-border`;
-const SPLITTER_INITIAL_STATE_CLASS = `${SPLITTER_CLASS}-initial`;
+const SPLITTER_CLASS = 'dx-splitter-bar';
+const SPLITTER_WRAPPER_CLASS = 'dx-splitter-wrapper';
+const SPLITTER_INACTIVE_CLASS = 'dx-splitter-inactive';
+const SPLITTER_BORDER_CLASS = 'dx-splitter-border';
+const SPLITTER_INITIAL_STATE_CLASS = 'dx-splitter-initial';
 
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 
