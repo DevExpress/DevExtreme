@@ -114,6 +114,7 @@ export default class Selection {
         let deferred;
         const isVirtualPaging = this.options.isVirtualPaging;
         const allowLoadByRange = this.options.allowLoadByRange?.();
+        const alwaysSelectByShift = this.options.alwaysSelectByShift;
         let indexOffset;
         let focusedItemNotInLoadedRange = false;
         let shiftFocusedItemNotInLoadedRange = false;
@@ -139,7 +140,11 @@ export default class Selection {
         const itemKey = this.options.keyOf(itemData);
 
         keys = keys || {};
-        const allowSelectByShift = keys.shift && (allowLoadByRange !== false || (!focusedItemNotInLoadedRange && !shiftFocusedItemNotInLoadedRange));
+        let allowSelectByShift = keys.shift;
+
+        if(alwaysSelectByShift === false && allowSelectByShift) {
+            allowSelectByShift = (allowLoadByRange !== false || (!focusedItemNotInLoadedRange && !shiftFocusedItemNotInLoadedRange));
+        }
 
         if(allowSelectByShift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
             if(allowLoadByRange && (focusedItemNotInLoadedRange || shiftFocusedItemNotInLoadedRange)) {
