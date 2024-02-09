@@ -16,6 +16,7 @@ import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
+import { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ExportController } from '../../data_grid/export/m_export';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -94,7 +95,7 @@ function focusCellHandler(e) {
   eventsEngine.trigger($nextCell, 'dxclick');
 }
 
-class AdaptiveColumnsController extends modules.ViewController {
+export class AdaptiveColumnsController extends modules.ViewController {
   private _columnsController: any;
 
   private _dataController: any;
@@ -972,7 +973,6 @@ const columnsResizer = (
   }
 
   _getNextColumnIndex(currentColumnIndex) {
-    // @ts-expect-error
     const visibleColumns = this._columnsController.getVisibleColumns();
     let index = super._getNextColumnIndex(currentColumnIndex);
 
@@ -1261,6 +1261,51 @@ const columns = (
   }
 };
 
+const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResizingControllerExtender extends Base {
+  _needBestFit() {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return super._needBestFit() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
+  }
+
+  _correctColumnWidths(resultWidths, visibleColumns) {
+    const adaptiveController = this._adaptiveColumnsController;
+    const oldHiddenColumns = adaptiveController.getHiddenColumns();
+    const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
+
+    adaptiveController.hideRedundantColumns(resultWidths, visibleColumns, hidingColumnsQueue);
+    const hiddenColumns = adaptiveController.getHiddenColumns();
+    if (adaptiveController.hasAdaptiveDetailRowExpanded()) {
+      if (oldHiddenColumns.length !== hiddenColumns.length) {
+        adaptiveController.updateForm(hiddenColumns);
+      }
+    }
+
+    !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
+
+    return super._correctColumnWidths.apply(this, arguments as any);
+  }
+
+  _toggleBestFitMode(isBestFit) {
+    isBestFit && this._adaptiveColumnsController._showHiddenColumns();
+    super._toggleBestFitMode(isBestFit);
+  }
+
+  _needStretch() {
+    const adaptiveColumnsController = this._adaptiveColumnsController;
+    return super._needStretch.apply(this, arguments as any) || adaptiveColumnsController.getHidingColumnsQueue().length || adaptiveColumnsController.hasHiddenColumns();
+  }
+
+  init() {
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    super.init();
+  }
+
+  dispose() {
+    super.dispose.apply(this, arguments as any);
+    clearTimeout(this._updateScrollableTimeoutID);
+  }
+};
+
 export const adaptivityModule: import('../m_types').Module = {
   defaultOptions() {
     return {
@@ -1281,48 +1326,7 @@ export const adaptivityModule: import('../m_types').Module = {
       columnsResizer,
       draggingHeader,
       editing,
-      resizing: {
-        _needBestFit() {
-          return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
-        },
-
-        _correctColumnWidths(resultWidths, visibleColumns) {
-          const adaptiveController = this._adaptiveColumnsController;
-          const oldHiddenColumns = adaptiveController.getHiddenColumns();
-          const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
-
-          adaptiveController.hideRedundantColumns(resultWidths, visibleColumns, hidingColumnsQueue);
-          const hiddenColumns = adaptiveController.getHiddenColumns();
-          if (adaptiveController.hasAdaptiveDetailRowExpanded()) {
-            if (oldHiddenColumns.length !== hiddenColumns.length) {
-              adaptiveController.updateForm(hiddenColumns);
-            }
-          }
-
-          !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
-
-          return this.callBase.apply(this, arguments);
-        },
-
-        _toggleBestFitMode(isBestFit) {
-          isBestFit && this._adaptiveColumnsController._showHiddenColumns();
-          this.callBase(isBestFit);
-        },
-
-        _needStretch() {
-          const adaptiveColumnsController = this._adaptiveColumnsController;
-          return this.callBase.apply(this, arguments) || adaptiveColumnsController.getHidingColumnsQueue().length || adaptiveColumnsController.hasHiddenColumns();
-        },
-
-        init() {
-          this._adaptiveColumnsController = this.getController('adaptiveColumns');
-          this.callBase();
-        },
-        dispose() {
-          this.callBase.apply(this, arguments);
-          clearTimeout(this._updateScrollableTimeoutID);
-        },
-      },
+      resizing,
       data,
       editorFactory,
       columns,

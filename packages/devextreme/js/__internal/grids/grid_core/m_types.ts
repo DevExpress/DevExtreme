@@ -301,11 +301,3 @@ export interface Module {
   };
   defaultOptions?: () => InternalGridOptions;
 }
-
-declare const exportVar: {
-  Controller;
-  View;
-  ViewController;
-};
-
-export default exportVar;
