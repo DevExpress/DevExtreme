@@ -143,7 +143,7 @@ export default class Selection {
         let allowSelectByShift = keys.shift;
 
         if(alwaysSelectByShift === false && allowSelectByShift) {
-            allowSelectByShift &= (allowLoadByRange !== false || (!focusedItemNotInLoadedRange && !shiftFocusedItemNotInLoadedRange));
+            allowSelectByShift = (allowLoadByRange !== false || (!focusedItemNotInLoadedRange && !shiftFocusedItemNotInLoadedRange));
         }
 
         if(allowSelectByShift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
