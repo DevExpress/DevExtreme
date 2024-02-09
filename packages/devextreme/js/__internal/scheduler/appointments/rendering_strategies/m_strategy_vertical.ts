@@ -325,6 +325,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     const {
       startDate: startDateWithTime,
+      endDate,
       normalizedEndDate,
     } = position.info.appointment;
     const startDate = dateUtils.trimTime(startDateWithTime);
@@ -334,7 +335,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     const skippedHours = getSkippedHoursInRange(
       startDate,
-      normalizedEndDate,
+      endDate,
       appointment.allDay,
       this.viewDataProvider,
     );
