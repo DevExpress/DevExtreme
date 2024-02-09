@@ -30,6 +30,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     const skippedHours = getSkippedHoursInRange(
       startDate,
       endDate,
+      appointment.allDay,
       this.viewDataProvider,
     );
     const durationInCells = (duration - skippedHours * toMs('hour')) / cellDuration;
