@@ -16836,6 +16836,7 @@ declare module DevExpress.ui {
     export type GroupCaptionTemplateData = {
       readonly caption?: string;
       readonly component: dxForm;
+      readonly name?: string;
     };
     export type GroupItemTemplateData = {
       readonly component: dxForm;

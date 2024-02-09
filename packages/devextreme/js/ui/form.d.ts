@@ -134,6 +134,7 @@ export type GroupItemTemplateData = {
 export type GroupCaptionTemplateData = {
     readonly caption?: string;
     readonly component: dxForm;
+    readonly name?: string;
 };
 
 /** @public */

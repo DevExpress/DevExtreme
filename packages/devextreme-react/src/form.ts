@@ -301,7 +301,7 @@ class EmptyItem extends NestedOption<IEmptyItemProps> {
 type IGroupItemProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
   caption?: string;
-  captionTemplate?: ((data: { caption: string, component: dxForm }, itemElement: any) => string | any) | template;
+  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
@@ -380,7 +380,7 @@ type IItemProps = React.PropsWithChildren<{
   visibleIndex?: number;
   alignItemLabels?: boolean;
   caption?: string;
-  captionTemplate?: ((data: { caption: string, component: dxForm }, itemElement: any) => string | any) | template;
+  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
