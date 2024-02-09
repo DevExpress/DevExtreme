@@ -39,7 +39,7 @@ export default class ViewDataProvider {
 
   viewDataMapWithSelection: any;
 
-  constructor(private readonly viewType: ViewType) {
+  constructor(public readonly viewType: ViewType) {
     this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
     this.viewData = {};
     this.completeViewDataMap = [];
