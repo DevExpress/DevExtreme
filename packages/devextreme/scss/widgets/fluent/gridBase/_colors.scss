@@ -19,7 +19,6 @@ $datagrid-border-color: $base-border-color !default;
 * $type color
 */
 $datagrid-columnchooser-item-color: null !default;
-$datagrid-columnchooser-hover-icon-color: color.change($datagrid-base-color, $alpha: 0.38) !default;
 $datagrid-block-separator-bg: null !default;
 
 /**
@@ -71,12 +70,6 @@ $datagrid-row-focused-color: $base-text-color !default;
 $datagrid-row-focused-bg: null !default;
 $datagrid-hover-bg: $base-hover-bg !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
-
-/**
-* $name 30. Context menu icon color
-* $type color
-*/
-$datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 
 /**
 * $name 40. Modified data background color
@@ -176,11 +169,11 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
     $datagrid-row-focused-bg: lighten(desaturate(adjust-hue($base-accent, 3), 0.98), 50.00) !default; // #d0e5fb
     $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
   }
-  
+
   @if $color == "saas" {
     $datagrid-row-focused-bg: lighten(adjust-hue($base-accent, -1), 26.47) !default; // #dbe6ff
     $datagrid-filter-row-background-color: $base-typography-bg !default;
-  } 
+  }
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
