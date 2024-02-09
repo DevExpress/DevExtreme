@@ -49,7 +49,7 @@ jobs:
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme/artifacts.zip
@@ -143,7 +143,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme
@@ -165,7 +165,7 @@ jobs:
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: compared-screenshots
         path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/compared-screenshots/**/*
@@ -173,7 +173,7 @@ jobs:
 
     - name: Copy failed test artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: failed-tests
         path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/failedtests/**/*
