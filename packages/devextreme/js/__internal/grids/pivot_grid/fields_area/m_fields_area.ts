@@ -1,7 +1,6 @@
 import '../field_chooser/m_field_chooser_base';
 
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
 import Button from '@js/ui/button';
@@ -24,16 +23,19 @@ function renderGroupConnector(field, nextField, prevField, $container) {
   }
 }
 
-const FieldsArea = AreaItem.inherit({
+class FieldsArea extends AreaItem {
+  _area: any;
 
-  ctor(component, area) {
-    this.callBase(component);
+  _rowPopup: any;
+
+  constructor(component, area) {
+    super(component);
     this._area = area;
-  },
+  }
 
   _getAreaName() {
     return 'fields';
-  },
+  }
 
   _createGroupElement() {
     return $(DIV)
@@ -41,11 +43,11 @@ const FieldsArea = AreaItem.inherit({
       .addClass('dx-area-fields')
       .addClass(AREA_DRAG_CLASS)
       .attr('group', this._area);
-  },
+  }
 
   isVisible() {
     return !!this.option('fieldPanel.visible') && this.option(`fieldPanel.show${capitalizeFirstLetter(this._area)}Fields`);
-  },
+  }
 
   _renderButton(element) {
     const that = this;
@@ -62,7 +64,7 @@ const FieldsArea = AreaItem.inherit({
       },
     });
     button.$element().addClass('dx-pivotgrid-fields-area-hamburger');
-  },
+  }
 
   _getPopupOptions(row, button) {
     return {
@@ -90,7 +92,7 @@ const FieldsArea = AreaItem.inherit({
       hideOnOutsideClick: true,
       container: button.parent(),
     };
-  },
+  }
 
   _renderPopup(tableElement, row) {
     const that = this;
@@ -116,11 +118,11 @@ const FieldsArea = AreaItem.inherit({
 
     FieldChooserBase.subscribeToEvents(that._rowPopup.content());
     FieldChooserBase.renderSortable(that._rowPopup.content());
-  },
+  }
 
   _shouldCreateButton() {
     return false;
-  },
+  }
 
   _renderTableContent(tableElement, data) {
     const that = this;
@@ -159,23 +161,25 @@ const FieldsArea = AreaItem.inherit({
     } else {
       head.append(row);
     }
-  },
+  }
 
   setGroupWidth(value) {
     setWidth(this.groupElement(), value);
-  },
+  }
 
   setGroupHeight(value) {
     setHeight(this.groupElement(), value);
-  },
+  }
 
   reset() {
-    this.callBase();
+    super.reset();
     this.groupElement().css('marginTop', 0);
-  },
+  }
 
-  _renderVirtualContent: noop,
-});
+  _renderVirtualContent() {
+
+  }
+}
 
 export default { FieldsArea };
 export { FieldsArea };
