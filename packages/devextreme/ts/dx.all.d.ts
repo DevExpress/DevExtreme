@@ -16833,6 +16833,10 @@ declare module DevExpress.ui {
       | 'tabbed'
       | 'button';
     export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+    export type GroupCaptionTemplateData = {
+      readonly caption?: string;
+      readonly component: dxForm;
+    };
     export type GroupItemTemplateData = {
       readonly component: dxForm;
       readonly formData?: any;
@@ -16945,6 +16949,15 @@ declare module DevExpress.ui {
      * [descr:dxFormGroupItem.caption]
      */
     caption?: string;
+    /**
+     * [descr:dxFormGroupItem.captionTemplate]
+     */
+    captionTemplate?:
+      | DevExpress.core.template
+      | ((
+          data: DevExpress.ui.dxForm.GroupCaptionTemplateData,
+          itemElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxFormGroupItem.colCount]
      */

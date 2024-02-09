@@ -301,6 +301,7 @@ class EmptyItem extends NestedOption<IEmptyItemProps> {
 type IGroupItemProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
   caption?: string;
+  captionTemplate?: ((data: { caption: string, component: dxForm }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
@@ -316,6 +317,9 @@ type IGroupItemProps = React.PropsWithChildren<{
   template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
   visible?: boolean;
   visibleIndex?: number;
+  captionRender?: (...params: any) => React.ReactNode;
+  captionComponent?: React.ComponentType<any>;
+  captionKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   keyFn?: (data: any) => string;
@@ -327,6 +331,11 @@ class GroupItem extends NestedOption<IGroupItemProps> {
     colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
   };
   public static TemplateProps = [{
+    tmplOption: "captionTemplate",
+    render: "captionRender",
+    component: "captionComponent",
+    keyFn: "captionKeyFn"
+  }, {
     tmplOption: "template",
     render: "render",
     component: "component",
@@ -371,6 +380,7 @@ type IItemProps = React.PropsWithChildren<{
   visibleIndex?: number;
   alignItemLabels?: boolean;
   caption?: string;
+  captionTemplate?: ((data: { caption: string, component: dxForm }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
@@ -406,6 +416,9 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   keyFn?: (data: any) => string;
+  captionRender?: (...params: any) => React.ReactNode;
+  captionComponent?: React.ComponentType<any>;
+  captionKeyFn?: (data: any) => string;
 }>
 class Item extends NestedOption<IItemProps> {
   public static OptionName = "items";
@@ -420,6 +433,11 @@ class Item extends NestedOption<IItemProps> {
     render: "render",
     component: "component",
     keyFn: "keyFn"
+  }, {
+    tmplOption: "captionTemplate",
+    render: "captionRender",
+    component: "captionComponent",
+    keyFn: "captionKeyFn"
   }];
 }
 
