@@ -20,7 +20,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
     const {
       startDate,
-      endDate,
       normalizedEndDate,
     } = position.info.appointment;
 
@@ -31,7 +30,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     const cellDuration = this.cellDurationInMinutes * toMs('minute');
     const skippedHours = getSkippedHoursInRange(
       startDate,
-      endDate,
+      normalizedEndDate,
       appointment.allDay,
       this.viewDataProvider,
     );
