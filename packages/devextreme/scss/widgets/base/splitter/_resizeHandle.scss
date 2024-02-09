@@ -1,0 +1,17 @@
+// adduse
+.dx-splitter-handle {
+  display: flex;
+  border: 3px solid red;
+  background-color: red;
+
+  height: 200px;
+  width: 10px;
+  z-index: 998;
+
+  cursor: col-resize;
+}
+
+.dx-splitter-handle-active {
+    border: 3px solid green;
+    background-color: green;
+}
