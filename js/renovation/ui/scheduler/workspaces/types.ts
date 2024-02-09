@@ -189,6 +189,8 @@ interface ViewOptions {
   isGroupedByDate: boolean;
   startCellIndex: number;
   startRowIndex: number;
+  startDayHour: number;
+  endDayHour: number;
 }
 
 export interface ViewDataProviderOptions {
@@ -243,6 +245,7 @@ export interface ViewDataProviderType {
   createGroupedDataMapProvider: () => void;
   isSkippedDate: (date: Date) => boolean;
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
+  viewType: ViewType;
 }
 
 interface CompleteViewDataGenerationOptions {

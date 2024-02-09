@@ -333,6 +333,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     const skippedHours = getSkippedHoursInRange(
       position.info.appointment.startDate,
       position.info.appointment.endDate,
+      appointment.allDay,
       this.viewDataProvider,
     );
 
