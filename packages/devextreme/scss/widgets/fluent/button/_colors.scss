@@ -7,7 +7,6 @@
 $button-border-radius: $base-border-radius !default;
 $button-disabled-background: $base-background-disabled !default;
 $button-disabled-icon-opacity: 0.6 !default;
-$button-disabled-text-opacity: 0.6 !default;
 $button-shadow-color: null !default;
 
 /**
@@ -248,7 +247,7 @@ $button-accent-foreground-color: null !default;
     $button-danger-outlined-focused-bg: $button-danger-outlined-hover-bg !default;
     $button-danger-outlined-active-bg: darken($button-danger-outlined-hover-bg, 4) !default;
     $button-danger-outlined-selected-bg: darken($button-danger-outlined-hover-bg, 4) !default;
-  
+
     $button-success-outlined-hover-bg: mix($base-bg, $base-success, 90%) !default;
     $button-success-outlined-focused-bg: $button-success-outlined-hover-bg !default;
     $button-success-outlined-active-bg: darken($button-success-outlined-hover-bg, 4) !default;

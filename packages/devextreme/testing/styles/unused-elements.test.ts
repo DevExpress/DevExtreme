@@ -96,35 +96,16 @@ test('There are no unused images in repository', () => {
 
     const exclusions: { generic: string[]; material: string[]; fluent: string[] } = {
       generic: [
-        '$scheduler-default-header-height',
+        // TODO: it's used, but through import
         '$scheduler-appointment-recurrence-content-padding',
+        // TODO: it's used, but through import
         '$scheduler-appointment-recurrence-content-padding-rtl',
-        '$scheduler-vertical-group-header-content-top-offset',
-        '$material-filled-texteditor-input-button-horizontal-padding',
-        '$tree-view-icon-size',
-        '$button-disabled-text-opacity',
-        '$generic-button-text-transform',
-        '$generic-button-text-font-weight',
-        '$generic-button-text-letter-spacing',
+        // TODO: test found the value in comment
         '$type-values',
-        '$generic-html-editor-horizontal-padding',
-        '$generic-scheduler-focused-tab-border',
-        '$generic-scheduler-view-switcher-font-size',
-        '$generic-scheduler-navigator-border-radius',
-        '$generic-fa-button-label-shadow',
-        '$tabs-tab-hover-border-color',
-        '$texteditor-hover-bg',
-        '$generic-timeview-clock-additional-size',
-        '$treelist-row-alternation-bg',
-        '$generic-treevieew-item-padding',
       ],
       material: [
-        '$scheduler-default-header-height',
-        '$scheduler-vertical-group-header-content-top-offset',
-        '$tree-view-icon-size',
         '$material-accordion-shadow',
         '$button-inverted-icon-color',
-        '$button-disabled-text-opacity',
         '$material-button-padding',
         '$material-normal-button-shadow',
         '$material-normal-button-active-state-shadow',
@@ -150,17 +131,11 @@ test('There are no unused images in repository', () => {
         '$switch-hover-bg',
         '$material-tagbox-remove-button-right',
         '$material-tagbox-outlined-with-label-top-padding',
-        '$treelist-row-alternation-bg',
       ],
       fluent: [
-        '$scheduler-default-header-height',
         '$scheduler-appointment-recurrence-content-padding',
         '$scheduler-appointment-recurrence-content-padding-rtl',
-        '$scheduler-vertical-group-header-content-top-offset',
-        '$material-filled-texteditor-input-button-horizontal-padding',
-        '$tree-view-icon-size',
         '$fluent-accordion-shadow',
-        '$button-disabled-text-opacity',
         '$fluent-button-padding',
         '$disabled-background-color',
         '$filemanager-file-item-focused-bg',
@@ -199,7 +174,6 @@ test('There are no unused images in repository', () => {
         '$fluent-texteditor-clear-icon-size',
         '$fluent-texteditor-label-outside-font-size',
         '$fluent-standard-texteditor-input-padding',
-        '$treelist-row-alternation-bg',
       ],
     };
 
