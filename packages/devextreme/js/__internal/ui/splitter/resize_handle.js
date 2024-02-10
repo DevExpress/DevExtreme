@@ -34,10 +34,15 @@ class ResizeHandle extends Widget {
     _initMarkup() {
         super._initMarkup();
 
+        this._toggleDirection();
         this.$element().addClass(RESIZE_HANDLE_CLASS);
         this.$element().addClass(RESIZE_HANDLE_ACTIVE_CLASS);
     }
 
+    _toggleDirection() {
+        this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
+        this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
+    }
 
     _render() {
         super._render();
@@ -100,9 +105,8 @@ class ResizeHandle extends Widget {
         this.$element().toggleClass(RESIZE_HANDLE_ACTIVE_CLASS, isActive);
     }
 
-    _toggleDirection() {
-        this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
-        this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
+    _isHorizontalDirection() {
+        return this.option('direction') === 'horizontal';
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
