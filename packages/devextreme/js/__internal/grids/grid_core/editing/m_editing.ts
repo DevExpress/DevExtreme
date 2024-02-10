@@ -4,7 +4,7 @@ import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
 import $, { dxElementWrapper } from '@js/core/renderer';
-import { equalByValue, noop } from '@js/core/utils/common';
+import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
@@ -2337,7 +2337,7 @@ export type EditingController =
   & ICellBasedEditingControllerExtender
   & IFormBasedEditingControllerExtender;
 
-const data = (Base: ModuleType<DataController>) => class DataControllerEditingExtender extends Base {
+export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerEditingExtender extends Base {
   init() {
     this._editingController = this.getController('editing');
     super.init();
@@ -2454,10 +2454,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerEditingEx
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
-  _editCellPrepared = noop;
-
-  _formItemPrepared = noop;
-
   _editingController: any;
 
   _pointerDownTarget: any;
@@ -2611,6 +2607,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     }
 
     if (isEditing) {
+      // @ts-expect-error
       (this._editCellPrepared as any)($cell);
     }
 
@@ -2773,7 +2770,7 @@ export const editingModule = {
   },
   extenders: {
     controllers: {
-      data,
+      data: dataControllerEditingExtenderMixin,
     },
     views: {
       rowsView,

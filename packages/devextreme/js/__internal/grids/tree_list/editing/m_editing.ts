@@ -6,7 +6,9 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
-import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
+import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import { dataControllerEditingExtenderMixin, editingModule } from '@ts/grids/grid_core/editing/m_editing';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import treeListCore from '../m_core';
@@ -194,7 +196,7 @@ function needToCallOriginalClickHandler(e, originalClickHandler) {
   return false;
 }
 
-const RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
+const rowsView = extend({}, editingModule.extenders.views.rowsView, {
   _renderCellCommandContent($container, options) {
     const editingController = this._editingController;
     const isEditRow = options.row && editingController.isEditRow(options.row.rowIndex);
@@ -220,6 +222,15 @@ const RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
   },
 });
 
+const data = (Base: ModuleType<DataController>) => class DataControllerTreeListEditingExtender extends dataControllerEditingExtenderMixin(Base) {
+  // NOTE: There is no changeRowExpand method in the grid_core/editing, so everything ok
+  changeRowExpand() {
+    this._editingController.refresh();
+    // @ts-expect-error
+    return super.changeRowExpand.apply(this, arguments);
+  }
+};
+
 treeListCore.registerModule('editing', {
   defaultOptions() {
     return extend(true, editingModule.defaultOptions(), {
@@ -235,15 +246,10 @@ treeListCore.registerModule('editing', {
   },
   extenders: {
     controllers: extend(true, {}, editingModule.extenders.controllers, {
-      data: {
-        changeRowExpand() {
-          this._editingController.refresh();
-          return this.callBase.apply(this, arguments);
-        },
-      },
+      data,
     }),
     views: {
-      rowsView: RowsViewExtender,
+      rowsView,
       headerPanel: editingModule.extenders.views.headerPanel,
     },
   },
