@@ -1,23 +1,16 @@
-import $ from '../../../core/renderer';
 import Widget from '../../../ui/widget/ui.widget';
-import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
-import pointerEvents from '../../../events/pointer';
 import { addNamespace } from '../../../events/utils/index';
 import registerComponent from '../../../core/component_registrator';
 import { extend } from '../../../core/utils/extend';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../../events/drag';
+import Guid from '../../../core/guid';
 
-// const window = getWindow();
-
-const RESIZE_HANDLE_CLASS = 'dx-splitter-handle';
-const SPLITTER_ACTIVE_CLASS = 'dx-splitter-handle-active';
-
-const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-handle-horizontal';
-const VERTICAL_DIRECTION_CLASS = 'dx-splitter-handle-vertical';
-
-// It should have direction, onResize, onResizeStart, onResizeEnd options. Choose correct events namespace: 'dxResize...'
-
-const SPLITTER_MODULE_NAMESPACE = 'dxResize';
+const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
+const RESIZE_HANDLE_ACTIVE_CLASS = 'dx-resize-handle-active';
+const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
+const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
+const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
 class ResizeHandle extends Widget {
     _getDefaultOptions() {
@@ -32,25 +25,53 @@ class ResizeHandle extends Widget {
 
     _init() {
         super._init();
-        this.SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE);
-        this.SPLITTER_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, SPLITTER_MODULE_NAMESPACE);
-        this.SPLITTER_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, SPLITTER_MODULE_NAMESPACE);
+        const namespace = `${RESIZE_HANDLER_MODULE_NAMESPACE}${new Guid().toString()}`;
+        this.DRAGSTART_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
+        this.DRAGSTART_EVENT_NAME = addNamespace(dragEventMove, namespace);
+        this.DRAGSTART_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
     }
 
     _initMarkup() {
         super._initMarkup();
 
         this.$element().addClass(RESIZE_HANDLE_CLASS);
-        this.$element().addClass(SPLITTER_ACTIVE_CLASS);
+        this.$element().addClass(RESIZE_HANDLE_ACTIVE_CLASS);
     }
+
 
     _render() {
         super._render();
 
         this._detachEventHandlers();
         this._attachEventHandlers();
-
         this._toggleActive(false);
+        this._renderActions();
+    }
+
+    _dragStartHandler(e) {
+        this._resizeStartAction({
+            event: e,
+        });
+
+        this._toggleActive(true);
+    }
+    _dragHandler(e) {
+        this._resizeAction({
+            event: e,
+        });
+    }
+
+    _dragEndHandler(e) {
+        this._resizeEndAction({
+            event: e,
+        });
+        this._toggleActive(false);
+    }
+
+    _renderActions() {
+        this._resizeStartAction = this._createActionByOption('onResizeStart');
+        this._resizeEndAction = this._createActionByOption('onResizeEnd');
+        this._resizeAction = this._createActionByOption('onResize');
     }
 
     _clean() {
@@ -59,62 +80,24 @@ class ResizeHandle extends Widget {
     }
 
     _attachEventHandlers() {
-        eventsEngine.on(this.$element(), this.SPLITTER_POINTER_DOWN_EVENT_NAME, this._onMouseDownHandler.bind(this));
+        const handlers = {};
+        handlers[this.DRAGSTART_START_EVENT_NAME] = this._dragStartHandler.bind(this);
+        handlers[this.DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
+        handlers[this.DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
 
-        // eventsEngine.on(document, this.SPLITTER_POINTER_MOVE_EVENT_NAME, this._onMouseMoveHandler.bind(this));
-        // eventsEngine.on(document, this.SPLITTER_POINTER_UP_EVENT_NAME, this._onMouseUpHandler.bind(this));
+        eventsEngine.on(this.$element(), handlers, {
+            // TODO: specify direction
+            direction: 'both',
+            immediate: true
+        });
     }
 
-    _detachEventHandlers(onlyDocumentEvents = false) {
-        const document = domAdapter.getDocument();
-        if(!onlyDocumentEvents) {
-            eventsEngine.off(this.$element(), this.SPLITTER_POINTER_DOWN_EVENT_NAME);
-        }
-        eventsEngine.off(document, this.SPLITTER_POINTER_MOVE_EVENT_NAME);
-        eventsEngine.off(document, this.SPLITTER_POINTER_UP_EVENT_NAME);
+    _detachEventHandlers() {
+        eventsEngine.off(this.$element());
     }
-
-    _onMouseDownHandler(e) {
-        console.log('mouse down');
-        e.preventDefault();
-
-        const document = domAdapter.getDocument();
-
-        eventsEngine.on(document, this.SPLITTER_POINTER_MOVE_EVENT_NAME, this._onMouseMoveHandler.bind(this));
-        eventsEngine.on(document, this.SPLITTER_POINTER_UP_EVENT_NAME, this._onMouseUpHandler.bind(this));
-
-        this._toggleActive(true);
-
-        if(this.onResizeStart) {
-            this.onResizeStart();
-        }
-    }
-
-    _onMouseMoveHandler(e) {
-        const leftButtonPressed = e.which === 1;
-        if(leftButtonPressed) {
-            console.log('move');
-        }
-    }
-
-    _onMouseUpHandler() {
-        // TODO: remove condition block
-        if(!this._isSplitterActive) {
-            console.log('sadasdasdasd');
-            debugger;
-            return;
-        }
-
-        this._detachEventHandlers(true);
-
-        this._toggleActive(false);
-    }
-
 
     _toggleActive(isActive) {
-        this.$element().toggleClass(SPLITTER_ACTIVE_CLASS, isActive);
-
-        this._isSplitterActive = isActive;
+        this.$element().toggleClass(RESIZE_HANDLE_ACTIVE_CLASS, isActive);
     }
 
     _toggleDirection() {
@@ -131,13 +114,13 @@ class ResizeHandle extends Widget {
             case 'onResize':
             case 'onResizeStart':
             case 'onResizeEnd':
+                this._renderActions();
                 break;
             default:
                 super._optionChanged(args);
         }
     }
 }
-
 
 // @ts-expect-error // temp fix
 registerComponent('dxResizeHandle', ResizeHandle);

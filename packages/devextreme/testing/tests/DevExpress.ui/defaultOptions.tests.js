@@ -38,6 +38,7 @@ const Popover = require('ui/popover');
 const Tooltip = require('ui/tooltip');
 const RadioGroup = require('ui/radio_group');
 const Resizable = require('ui/resizable');
+const ResizeHandle = require('ui/splitter/resize_handle');
 const Scheduler = require('ui/scheduler/ui.scheduler');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
@@ -819,6 +820,13 @@ testComponentDefaults(RadioGroup,
 testComponentDefaults(Resizable,
     { },
     { keepAspectRatio: true }
+);
+
+testComponentDefaults(ResizeHandle,
+    {},
+    {
+        direction: 'horizontal',
+    }
 );
 
 testComponentDefaults(Gallery,

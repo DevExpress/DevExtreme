@@ -10,3 +10,9 @@
     flex-direction: column;
   }
 }
+
+.dx-resize-handle {
+  cursor: col-resize;
+  height: 100%;
+  width: 1px;
+}
