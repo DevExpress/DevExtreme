@@ -1490,7 +1490,6 @@ class EditingControllerImpl extends modules.ViewController {
       let deferred;
       let params;
 
-      // @ts-expect-error
       if (this._beforeSaveEditData(change, index)) {
         return;
       }
@@ -1662,7 +1661,6 @@ class EditingControllerImpl extends modules.ViewController {
 
   // @ts-expect-error
   _resolveAfterSave(deferred, { cancel, error } = {}) {
-    // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
     }).fail(deferred.reject);
@@ -1961,7 +1959,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  _needUpdateRow(column) {
+  _needUpdateRow(column?) {
     const visibleColumns = this._columnsController.getVisibleColumns();
 
     if (!column) {
@@ -2013,7 +2011,6 @@ class EditingControllerImpl extends modules.ViewController {
 
   _updateRowImmediately(row, forceUpdateRow, isCustomSetCellValue) {
     this._updateEditRowCore(row, !forceUpdateRow, isCustomSetCellValue);
-    // @ts-expect-error
     this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
     if (!forceUpdateRow) {
       this._focusEditingCell();
@@ -2035,7 +2032,6 @@ class EditingControllerImpl extends modules.ViewController {
       const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
 
       this._updateEditRowCore(row, false, isCustomSetCellValue);
-      // @ts-expect-error
       this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
 
       if (columnIndex >= 0) {
@@ -2054,7 +2050,7 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  _validateEditFormAfterUpdate(): any {}
+  _validateEditFormAfterUpdate(row, isCustomSetCellValue): any {}
 
   _addChange(changeParams, options?) {
     const row = options?.row;
@@ -2267,13 +2263,13 @@ class EditingControllerImpl extends modules.ViewController {
   _afterInsertRow(key): any {}
 
   // @ts-expect-error
-  _beforeSaveEditData(change?) {
+  _beforeSaveEditData(change?, editIndex?) {
     if (change && !isDefined(change.key) && isDefined(change.type)) {
       return true;
     }
   }
 
-  _afterSaveEditData(): any {}
+  _afterSaveEditData(cancel?): any {}
 
   _beforeCancelEditData(): any {}
 
