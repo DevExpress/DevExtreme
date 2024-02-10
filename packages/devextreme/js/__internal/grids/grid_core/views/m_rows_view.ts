@@ -1279,7 +1279,7 @@ export class RowsView extends ColumnsView {
 
   setScrollerSpacing() { }
 
-  _restoreErrorRow() { }
+  _restoreErrorRow(contentTable?) { }
 }
 
 export const rowsModule = {
