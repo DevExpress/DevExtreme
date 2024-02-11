@@ -96,10 +96,6 @@ test('There are no unused images in repository', () => {
 
     const exclusions: { generic: string[]; material: string[]; fluent: string[] } = {
       generic: [
-        // TODO: it's used, but through import
-        '$scheduler-appointment-recurrence-content-padding',
-        // TODO: it's used, but through import
-        '$scheduler-appointment-recurrence-content-padding-rtl',
         // TODO: test found the value in comment
         '$type-values',
       ],
@@ -108,10 +104,6 @@ test('There are no unused images in repository', () => {
         '$type-values',
       ],
       fluent: [
-        // TODO: it's used, but through import
-        '$scheduler-appointment-recurrence-content-padding',
-        // TODO: it's used, but through import
-        '$scheduler-appointment-recurrence-content-padding-rtl',
         // TODO: test found the value in comment
         '$type-values',
       ],
