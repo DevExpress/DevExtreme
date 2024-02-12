@@ -184,6 +184,7 @@ jobs:
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
+      working-directory: apps/demos
       run: |
         message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
         echo "::warning ::$message"
