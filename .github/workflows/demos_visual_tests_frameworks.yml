@@ -1,17 +1,15 @@
-name: Frameworks
+name: Demos Frameworks
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
-#  pull_request:
+  pull_request:
   push:
     branches:
       - "[0-9][0-9]_[0-9]"
   workflow_dispatch:
-  schedule:
-    - cron: '0 */2 * * 6,0'
 
 jobs:
   build-devextreme:
@@ -20,110 +18,46 @@ jobs:
     timeout-minutes: 20
 
     steps:
+      - name: Get sources
+        uses: actions/checkout@v4
 
-    #Git
-    - name: Get sources
-      uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    - name: Clone devextreme repo from PR author fork
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: git clone -b ${{github.event.pull_request.head.ref}} --depth 1 https://github.com/${{github.event.pull_request.user.login}}/devextreme ./devextreme
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Clone devextreme repo
-      run: |
-        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
-        test -d ./devextreme || git clone -b $BASE_BRANCH --depth 1 https://github.com/devexpress/devextreme ./devextreme
+      - name: DevExtreme - Install packages
+        run: npm install --no-audit --no-fund
 
-    - name: Log devextreme top commit
-      working-directory: ./devextreme
-      run: git log -1 --oneline
+      - name: DevExtreme - Build-all
+        run: npm run all:build
 
-    #Build Devextreme
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: 'devextreme/**/node_modules'
-        key: ${{ runner.os }}-devextreme-node-modules-${{ hashFiles('devextreme/**/package-lock.json') }}
+      - name: Move packages
+        run: |
+          mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+          mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+          mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
+          mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
+          mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Install packages
-      working-directory: ./devextreme
-      run: npm install --no-audit --no-fund
-
-    - name: Build
-      working-directory: ./devextreme/packages/devextreme
-      run: npm run build-npm-devextreme
-
-    # Inject descriptions
-    # This is required for lint check for deprecated usages - some deprecated tags are generated during descriptions injection
-
-    - name: Clone devextreme-documentation repo
-      run: |
-        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
-        test -d ./devextreme-documentation-repo || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-documentation ./devextreme-documentation-repo
-
-    - name: Install packages to devextreme-documentation
-      working-directory: ./devextreme-documentation-repo
-      run: npm i
-
-    - name: Make Declarations.json
-      working-directory: ./devextreme
-      run: npm run tools:discover-declarations
-
-    - name: Make Descriptions.json
-      working-directory: ./devextreme-documentation-repo
-      run: npm run update-topics -- --artifacts ../devextreme/artifacts/internal-tools
-
-    - name: Inject descriptions
-      working-directory: ./devextreme
-      run: npm run devextreme:inject-descriptions
-
-    # Pack
-
-    - name: Pack devextreme
-      working-directory: ./devextreme/packages/devextreme/artifacts/npm/devextreme
-      run: npm pack
-
-    - name: Pack devextreme-dist
-      working-directory: ./devextreme/packages/devextreme/artifacts/npm/devextreme-dist
-      run: npm pack
-
-    - name: Pack devextreme-angular
-      working-directory: ./devextreme/packages/devextreme-angular
-      run: npm run pack
-
-    - name: Pack devextreme-react
-      working-directory: ./devextreme/packages/devextreme-react
-      run: npm run pack
-
-    - name: Pack devextreme-vue
-      working-directory: ./devextreme/packages/devextreme-vue
-      run: npm run pack
-
-    - name: Copy packages
-      run: |
-        cp ./devextreme/packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
-        cp ./devextreme/packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
-        cp ./devextreme/packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
-        cp ./devextreme/packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
-        cp ./devextreme/packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
-
-    - name: Copy build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: devextreme-sources
-        path: |
-          devextreme-installer.tgz
-          devextreme-dist-installer.tgz
-          devextreme-angular-installer.tgz
-          devextreme-react-installer.tgz
-          devextreme-vue-installer.tgz
-        retention-days: 1
+      - name: Copy build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-sources
+          path: |
+            devextreme-installer.tgz
+            devextreme-dist-installer.tgz
+            devextreme-angular-installer.tgz
+            devextreme-react-installer.tgz
+            devextreme-vue-installer.tgz
+          retention-days: 1
 
   build-demos:
     runs-on: ubuntu-latest
@@ -134,60 +68,87 @@ jobs:
     steps:
 
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Delete DX packages
-      run:  sed -i '/23.2-next/d' ./package.json
-
-    - name: Install packages
-      run: npm install --no-audit --no-fund
-
-    - name: Install package
+      # NOTE: workaround due to wrappers are incorrect NPM packages now
+    - name: Install wrappers packages
       run: |
-        npm install devextreme-installer.tgz
-        npm install devextreme-dist-installer.tgz
-        npm install devextreme-react-installer.tgz
-        npm install devextreme-vue-installer.tgz
-        npm install devextreme-angular-installer.tgz
+        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
+        mv node_modules/devextreme/package/* node_modules/devextreme
+        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
+        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
+        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
+        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
+        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
+        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
+        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
+        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
     - name: Prepare bundles
+      working-directory: apps/demos
       run: npm run prepare-bundles
 
     - name: Demos - Run tsc
+      working-directory: apps/demos
       run: tsc --noEmit
 
-    #Publish artifacts
-    - name: Zip node_modules
-      run: 7z a -t7z -mx3 -mmt2 node_modules.7z node_modules
-
     - name: Copy build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devextreme-sources
         path: |
-          node_modules.7z
           bundles/
         retention-days: 1
 
+  get-changes:
+    runs-on: ubuntu-latest
+    name: Get changed demos
+    timeout-minutes: 5
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        uses: ./.github/actions/get-changed-files
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: apps/demos/Demos
+          result: apps/demos/changed-files.json
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: changed-demos
+          path: apps/demos/changed-files.json
+          retention-days: 1
+
   lint:
     name: ${{ matrix.name }}
-    needs: build-devextreme
+    needs:
+      - build-devextreme
+      - get-changes
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -209,34 +170,21 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Get changed files
-      uses: ./.github/actions/get-changed-files
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
       with:
-        path: changed-files.json
-
-    - name: Delete DX packages
-      run:  sed -i '/23.2-next/d' ./package.json
+        name: changed-demos
+        path: apps/demos
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
 
     - name: Install packages
-      run: |
-        npm install devextreme-installer.tgz
-        npm install devextreme-dist-installer.tgz
-        npm install devextreme-react-installer.tgz
-        npm install devextreme-vue-installer.tgz
-        npm install devextreme-angular-installer.tgz
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -248,8 +196,9 @@ jobs:
         dotnet tool install -g dotnet-format --version 5.1.225507
 
     - name: Run lint
+      working-directory: apps/demos
       env:
-        CHANGEDFILEINFOSPATH: ${{ github.workspace }}/changed-files.json
+        CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: ${{ matrix.command }}
 
@@ -258,6 +207,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: build-demos
+
     strategy:
       fail-fast: false
       matrix:
@@ -272,49 +222,44 @@ jobs:
             command: CONSTEL=4/5 npm run convert-to-js
           - name: Check generated demos (5/5)
             command: CONSTEL=5/5 npm run convert-to-js
+
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Delete DX packages
-      run:  sed -i '/23.2-next/d' ./package.json
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
 
-    - name: Unpack artifacts
-      run: 7z x node_modules.7z
-
     - name: Install packages
-      run: |
-        npm install devextreme-installer.tgz
-        npm install devextreme-dist-installer.tgz
-        npm install devextreme-react-installer.tgz
-        npm install devextreme-vue-installer.tgz
-        npm install devextreme-angular-installer.tgz
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
 
     - name: Prepare JS
+      working-directory: apps/demos
       run: npm run prepare-js
 
     - name: Check generated JS demos
+      working-directory: apps/demos
       run: |
         ${{ matrix.command }}
 
-        git add ./JSDemos/Demos -N
+        git add ./Demos -N
 
         if git diff --exit-code . ':!package-lock.json' ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
-            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js ./JSDemos/Demos/**/React' and commit changes."
+            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js ./Demos/**/React' and commit changes."
             echo "If you see another diff, ensure that extra listed files have LF endings."
             exit 1
         fi
-
 
   testcafe:
     needs: build-demos
@@ -328,30 +273,51 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    - name: Pin Chrome version
-      run: |
-        CHROME_VERSION=117.0.5938.92
-        wget "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
-        sudo dpkg -i "google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '121.0.6167.160'
 
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Delete DX packages
-      run:  sed -i '/23.2-next/d' ./package.json
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Download devextreme sources
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
 
-    - name: Unpack artifacts
-      run: 7z x node_modules.7z
+    - name: Install packages
+      run: npm install --no-audit --no-fund
+
+    # NOTE: workaround due to wrappers are incorrect NPM packages now
+    - name: Install wrappers packages
+      run: |
+        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
+        mv node_modules/devextreme/package/* node_modules/devextreme
+        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
+        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
+        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
+        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
+        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
+        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
+        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
+        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
     - name: Prepare JS
+      working-directory: apps/demos
       run: npm run prepare-js
 
     - name: Update bundles config
+      working-directory: apps/demos
       run: npx gulp update-config
 
     - name: Run Web Server
@@ -361,17 +327,16 @@ jobs:
         python -m http.server 8082 &
         python -m http.server 8083 &
 
-    - name: Get changed files
-      uses: ./.github/actions/get-changed-files
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
       with:
-        path: changed-files.json
+        name: changed-demos
+        path: apps/demos
 
     - name: Run TestCafe tests
+      working-directory: apps/demos
       env:
-        CHANGEDFILEINFOSPATH: ${{ github.workspace }}/changed-files.json
+        CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         #DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
@@ -390,8 +355,8 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: screenshots-${{ steps.screenshotname.outputs.value }}
-        path: ${{ github.workspace }}/testing/artifacts/compared-screenshots/*
+        path: apps/demos/testing/artifacts/compared-screenshots/*
         if-no-files-found: ignore

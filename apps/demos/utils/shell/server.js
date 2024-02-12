@@ -39,8 +39,8 @@ const demoIndexHandler = (request, response) => {
 const app = express();
 app.use(cookieParser());
 
-app.get('/JSDemos/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/JSDemos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/Demos/:widget/:name/:approach', demoIndexHandler);
+app.get(`/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
 app.get('/themes', (request, response) => response.send(getAvailableThemes));
 app.use(
   serveStatic(root, { index: [indexFileName] }),

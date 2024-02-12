@@ -39,13 +39,13 @@ const getPatterns = () => {
   }
 
   if (CONSTEL == null) {
-    return ['JSDemos/Demos/**/React'];
+    return ['Demos/**/React'];
   }
 
   const [current, total] = CONSTEL.split('/').map(Number);
 
   // When all React TS demos merged, change to just folders
-  const convertedDemos = findFoldersWithTsxFiles('JSDemos/Demos');
+  const convertedDemos = findFoldersWithTsxFiles('Demos');
   const filteredDemos = convertedDemos.filter((_, index) => index % total === current - 1);
 
   return filteredDemos.map((demoName) => demoName.split(path.sep).join(path.posix.sep));
@@ -78,6 +78,7 @@ const performConversion = async (patterns) => {
         ),
       }));
     }),
+  // @ts-ignore
   )).flat(1);
 
   await Promise.all(

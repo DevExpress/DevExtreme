@@ -70,10 +70,10 @@ const getDefaultBuilderConfig = (framework, additionPaths) => ({
     },
   },
   paths: {
-    'devextreme/*': 'node_modules/devextreme/cjs/*',
-    'devexpress-gantt': 'node_modules/devexpress-gantt/dist/dx-gantt.min.js',
-    'devexpress-diagram': 'node_modules/devexpress-diagram/dist/dx-diagram.min.js',
-    [`devextreme-${framework}/*`]: `node_modules/devextreme-${framework}/${['react', 'vue'].includes(framework) ? 'cjs/*' : '*'}`,
+    'devextreme/*': '../../node_modules/devextreme/cjs/*',
+    'devexpress-gantt': '../../node_modules/devexpress-gantt/dist/dx-gantt.min.js',
+    'devexpress-diagram': '../../node_modules/devexpress-diagram/dist/dx-diagram.min.js',
+    [`devextreme-${framework}/*`]: `../../node_modules/devextreme-${framework}/${['react', 'vue'].includes(framework) ? 'cjs/*' : '*'}`,
     ...additionPaths,
   },
 });
@@ -107,7 +107,7 @@ const prepareConfigs = (framework) => {
     if (currentPackage.fesm2015) {
       main = `devextreme-${framework}`;
       minify = false;
-      const bundlesRoot = 'node_modules/devextreme-angular/bundles';
+      const bundlesRoot = '../../node_modules/devextreme-angular/bundles';
       const componentNames = fs.readdirSync(bundlesRoot)
         .filter((fileName) => fileName.indexOf('umd.js.map') !== -1)
         .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
@@ -192,7 +192,7 @@ const build = async (framework) => {
 };
 
 const copyBundlesFolder = () => {
-  const dxPath = path.join(process.cwd(), 'node_modules', 'devextreme');
+  const dxPath = path.join(process.cwd(), '..', '..', 'node_modules', 'devextreme');
   const dxBundlesPath = path.join(dxPath, 'bundles');
   const dxCjsBundlesPath = path.join(dxPath, 'cjs', 'bundles');
 

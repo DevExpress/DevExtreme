@@ -5,7 +5,7 @@ import { copyMetadata, isSkipDemo } from './helper';
 import { ESBundler } from './helper/bundler';
 import ReactBundler from './React/bundler';
 
-import * as menuMeta from '../../JSDemos/menuMeta.json';
+import * as menuMeta from '../../menuMeta.json';
 import VueBundler from './Vue/bundler';
 
 const argv = yargs.options({

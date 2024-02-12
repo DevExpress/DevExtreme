@@ -30,7 +30,8 @@ runManualTest('DataGrid', 'DataValidation', ['jQuery', 'React', 'Vue', 'Angular'
           .nth(3)
           .find('input')
           .nth(0),
-        '12345', {
+        '12345',
+        {
           replace: true,
         },
       ).click($('body'), {

@@ -1,4 +1,4 @@
-name: Visual Tests
+name: Demos Visual Tests
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
@@ -10,81 +10,9 @@ on:
     branches:
       - "[0-9][0-9]_[0-9]"
   workflow_dispatch:
-#  schedule:
-#    - cron: '0 * * * 6,0'
 
 jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    name: Build DevExtreme
-#    timeout-minutes: 30
-#
-#    steps:
-#
-#    #Git
-#    - name: Get sources
-#      uses: actions/checkout@v4
-#
-#    #Build Devextreme
-#    - name: Use Node.js
-#      uses: actions/setup-node@v4
-#      with:
-#        node-version: '20'
-#
-#    - name: Restore npm cache
-#      uses: actions/cache@v4
-#      with:
-#        path: '**/node_modules'
-#        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-#        restore-keys: ${{ runner.os }}-node-modules
-#
-#    - name: DevExtreme - Install packages
-#      run: npm install --no-audit --no-fund
-#
-#    - name: DevExtreme - Build
-#      run: npx nx build devextreme-main
-#
-#    - name: DevExtreme - Pack
-#      working-directory: ./packages/devextreme/artifacts/npm/devextreme
-#      run: npm pack
-#
-#    - name: DevExtreme dist - Pack
-#      working-directory: ./packages/devextreme/artifacts/npm/devextreme-dist
-#      run: npm pack
-#
-#    #Build Demos
-##    - name: Demos - Restore npm cache
-##      uses: actions/cache@v3
-##      with:
-##        path: ./node_modules
-##        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-##        restore-keys: ${{ runner.os }}-node-modules
-##
-##    - name: Delete DX packages
-##      run:  sed -i '/23.2-next/d' ./package.json
-##
-##    - name: Demos - Install packages
-##      run: |
-##        npm install --no-audit --no-fund
-##
-##    - name: Demos - Install devextreme package
-##      run: npm install $(find ./devextreme-repo/packages/devextreme/artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
-##
-##    - name: Demos - Install devextreme-dist package
-##      run: npm install $(find ./devextreme-repo/packages/devextreme/artifacts/npm/devextreme-dist/ -maxdepth 1 -name "devextreme-*.tgz")
-#
-#    #Publish artifacts
-#    - name: Zip node_modules
-#      run: 7z a -t7z -mx3 -mmt2 node_modules.7z node_modules
-#
-#    - name: Copy build artifacts
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: devextreme-sources
-#        path: node_modules.7z
-#        retention-days: 1
-
-  get_changes:
+  get-changes:
     runs-on: ubuntu-latest
     name: Get changed demos
     timeout-minutes: 5
@@ -109,10 +37,37 @@ jobs:
           path: apps/demos/changed-files.json
           retention-days: 1
 
+  build:
+    runs-on: ubuntu-latest
+    name: Build devextreme
+    timeout-minutes: 20
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
+
+      - name: DevExtreme - Install packages
+        run: npm install --no-audit --no-fund
+
+      - name: DevExtreme - Build
+        run: npx nx build devextreme-main
+
   testcafe:
     needs:
-      - get_changes
-#      - build
+      - build
+      - get-changes
     strategy:
       fail-fast: false
       matrix:
@@ -132,7 +87,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '120.0.6099.71'
+        chrome-version: '121.0.6167.160'
 
     - name: Use Node.js
       uses: actions/setup-node@v4

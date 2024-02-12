@@ -5,15 +5,15 @@ const { spawn } = require('child_process');
 const promptsQuestions = require('./prompts-questions');
 const fileSystemUtils = require('../shared/fs-utils');
 const menuMetaUtils = require('./menu-meta-utils');
-const menuMetaData = require('../../JSDemos/menuMeta.json');
+const menuMetaData = require('../../menuMeta.json');
 
 const existingApproaches = ['jQuery', 'AngularJS', 'Angular', 'React', 'Vue'];
 
 // const descriptionFileName = 'description.md';
 
-const menuMetaFilePath = './JSDemos/menuMeta.json';
+const menuMetaFilePath = './menuMeta.json';
 
-const baseDemosDir = 'JSDemos/Demos';
+const baseDemosDir = 'Demos';
 
 const openDemoInEditor = (demoPath) => spawn('code', [demoPath], { shell: true });
 
