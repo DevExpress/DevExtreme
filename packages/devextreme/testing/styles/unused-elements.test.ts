@@ -41,8 +41,14 @@ const getFilesFromDirectory = (directoryName: string, extensions: string[] = [])
   return result;
 };
 
+const removeAllCommentsFromContent = (content: string): string => content
+  .replace(/\/\/.+(\n|\r\n|\r)/g, '')
+  .split(/\/\*|\*\//)
+  .filter((_, index) => index % 2 === 0)
+  .join('');
+
 const extractVariables = (filePath: string): string[] => {
-  const content = readFileSync(filePath, 'utf8');
+  const content = removeAllCommentsFromContent(readFileSync(filePath, 'utf8'));
   const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
 };
@@ -95,18 +101,9 @@ test('There are no unused images in repository', () => {
     const uniqueVariables = findUniqueVariables(variables);
 
     const exclusions: { generic: string[]; material: string[]; fluent: string[] } = {
-      generic: [
-        // TODO: test found the value in comment
-        '$type-values',
-      ],
-      material: [
-        // TODO: test found the value in comment
-        '$type-values',
-      ],
-      fluent: [
-        // TODO: test found the value in comment
-        '$type-values',
-      ],
+      generic: [],
+      material: [],
+      fluent: [],
     };
 
     expect(uniqueVariables).toEqual(exclusions[themeName]);
