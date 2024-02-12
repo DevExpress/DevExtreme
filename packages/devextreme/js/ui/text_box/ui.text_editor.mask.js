@@ -532,7 +532,6 @@ const TextEditorMask = TextEditorBase.inherit({
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
-        // reattach events to get correct handlers order (T1214019)
         eventsEngine.off($input, valueChangeEvent);
         eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
     },

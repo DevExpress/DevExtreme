@@ -2580,7 +2580,7 @@ QUnit.module('Hidden input', {}, () => {
         assert.equal($hiddenInput.attr('name'), 'Editor with mask', 'name of hidden input');
     });
 
-    QUnit.test('Preserve value if the mask option is updated programmatically (T1214019)', function(assert) {
+    QUnit.test('Value change should work as usual after mask option is updated programmatically (T1214019)', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             valueChangeEvent: 'input',
             mask: '000',
@@ -2605,7 +2605,9 @@ QUnit.module('Hidden input', {}, () => {
 
         const $hiddenInput = $textEditor.find('input[type=hidden]');
 
-        assert.equal($hiddenInput.val(), 12, 'Hidden value is saved');
+        assert.strictEqual($input.val(), '12_', 'Value is saved');
+        assert.strictEqual($hiddenInput.val(), '12', 'Hidden value is saved');
+        assert.strictEqual(instance.option('value'), '12', 'Value option is correct');
     });
 
     [
