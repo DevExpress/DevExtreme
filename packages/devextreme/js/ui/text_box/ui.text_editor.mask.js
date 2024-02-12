@@ -540,10 +540,12 @@ const TextEditorMask = TextEditorBase.inherit({
             isValid: true,
             validationError: null,
         });
+
         this.validationRequest.fire({
             value: value,
             editor: this,
         });
+
         this._renderValue();
     },
 

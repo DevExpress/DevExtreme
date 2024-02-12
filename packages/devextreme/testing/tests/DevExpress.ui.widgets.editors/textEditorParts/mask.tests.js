@@ -2353,11 +2353,17 @@ QUnit.module('validation', {}, () => {
         assert.strictEqual(textEditor.option('validationError'), null);
     });
 
-    QUnit.test('The validation status in Validator should be valid after removing the mask (T1214604)', function(assert) {
+    QUnit.test('A custom validation error is kept after mask restoring', function(assert) {
+        const customErrorMessage = 'custom error';
+
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '000000/0009',
         }).dxValidator({
-            validationRules: [{ type: 'required' }],
+            validationRules: [{
+                type: 'custom',
+                message: customErrorMessage,
+                validationCallback: () => false,
+            }],
         });
 
         const textEditor = $textEditor.dxTextEditor('instance');
@@ -2366,10 +2372,12 @@ QUnit.module('validation', {}, () => {
         textEditor.option({ value: '123' });
 
         assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
 
         textEditor.option({ mask: '' });
 
-        assert.strictEqual(validator.option('validationStatus'), 'valid');
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
     });
 });
 
