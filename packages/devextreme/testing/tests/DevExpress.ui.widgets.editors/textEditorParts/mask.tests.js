@@ -4,6 +4,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
 import 'ui/text_box/ui.text_editor';
+import 'ui/validator';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const CLEAR_BUTTON_CLASS = '.dx-clear-button-area';
@@ -2333,6 +2334,50 @@ QUnit.module('validation', {}, () => {
 
         textEditor.option('value', 'f');
         assert.notOk(textEditor.option('isValid'), 'mask with an invalid value should be invalid');
+    });
+
+    QUnit.test('The invalid mask error should be restores after removing the mask (T1214604)', function(assert) {
+        const maskInvalidMessage = 'mask error';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000000/0009',
+            maskInvalidMessage,
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        textEditor.option({ value: '123' });
+
+        assert.strictEqual(textEditor.option('validationError').message, maskInvalidMessage, 'validation message was added');
+
+        textEditor.option({ mask: '' });
+
+        assert.strictEqual(textEditor.option('validationError'), null);
+    });
+
+    QUnit.test('A custom validation error is kept after mask restoring', function(assert) {
+        const customErrorMessage = 'custom error';
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000000/0009',
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                message: customErrorMessage,
+                validationCallback: () => false,
+            }],
+        });
+
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const validator = $textEditor.dxValidator('instance');
+
+        textEditor.option({ value: '123' });
+
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
+
+        textEditor.option({ mask: '' });
+
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
     });
 });
 
