@@ -2608,7 +2608,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
 
     if (isEditing) {
       // @ts-expect-error
-      (this._editCellPrepared as any)($cell);
+      this._editCellPrepared($cell);
     }
 
     const hasTemplate = !!parameters.column?.cellTemplate;
@@ -2686,6 +2686,14 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     return this.waitAsyncTemplates(true).done(() => {
       this._editingController._focusEditorIfNeed();
     });
+  }
+
+  _editCellPrepared() {
+
+  }
+
+  _formItemPrepared() {
+
   }
 };
 
