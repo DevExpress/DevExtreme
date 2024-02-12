@@ -20,8 +20,6 @@
     "vue:copy-metadata": "shx mkdir -p ./packages/devextreme-vue/metadata/ && shx cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-vue/metadata/",
     "vue:regenerate": "nx regenerate devextreme-vue",
     "regenerate-all": "nx run-many -t regenerate",
-    "lint-staged": "lint-staged",
-    "prepare": "husky install",
     "test-scripts": "jest --config build/jest.config.js",
     "all:update-version": "ts-node build/update-version.ts",
     "all:build": "ts-node build/build-all.ts"
@@ -55,7 +53,7 @@
     "eslint-plugin-testcafe": "0.2.1",
     "husky": "^8.0.3",
     "lint-staged": "14.0.1",
-    "nx": "17.2.8",
+    "nx": "17.3.1",
     "nx-cloud": "16.5.2",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
@@ -65,10 +63,6 @@
     "typescript": "~4.2.4",
     "yargs": "^17.7.2"
   },
-  "pre-commit": [
-    "lint-staged",
-    "pre-commit"
-  ],
   "workspaces": [
     "apps/*",
     "packages/*",

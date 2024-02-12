@@ -1,0 +1,12 @@
+// adduse
+.dx-splitter {
+  display: flex;
+
+  .dx-splitter-item {
+    flex: 1 0 0px;
+  }
+
+  &.dx-splitter-vertical {
+    flex-direction: column;
+  }
+}

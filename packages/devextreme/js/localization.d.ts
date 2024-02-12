@@ -109,7 +109,9 @@ export interface FormatObject {
     */
    type?: PredefinedFormat | string;
 }
-type ExternalFormat = never;
+type ExternalFormat =
+  Intl.DateTimeFormatOptions |
+  Intl.NumberFormatOptions;
 
 /**
  * @docid

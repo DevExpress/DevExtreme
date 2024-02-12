@@ -192,9 +192,11 @@ export class SelectionController extends modules.Controller {
       selectedKeys: this.option('selectedRowKeys'),
       mode: this._selectionMode,
       deferred,
+      alwaysSelectByShift: selectionOptions.alwaysSelectByShift,
       maxFilterLengthInRequest: (selectionOptions as any).maxFilterLengthInRequest,
       selectionFilter: this.option('selectionFilter'),
       ignoreDisabledItems: true,
+      isVirtualPaging: virtualPaging,
       allowLoadByRange() {
         const hasGroupColumns = columnsController.getGroupColumns().length > 0;
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
@@ -567,8 +569,9 @@ export const selectionModule = {
         showCheckBoxesMode: 'onClick', // "onLongTap", "always", "none"
         allowSelectAll: true,
         selectAllMode: 'allPages',
-        maxFilterLengthInRequest: 1500,
         deferred: false,
+        maxFilterLengthInRequest: 1500,
+        alwaysSelectByShift: false,
       },
       selectionFilter: [],
       selectedRowKeys: [],
