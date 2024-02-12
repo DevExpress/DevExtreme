@@ -534,14 +534,18 @@ const TextEditorMask = TextEditorBase.inherit({
         if(mask) return;
 
         const value = this.option('value');
+
         this.option({
             text: value,
-            isValid: true
+            isValid: true,
+            validationError: null,
         });
+
         this.validationRequest.fire({
             value: value,
-            editor: this
+            editor: this,
         });
+
         this._renderValue();
     },
 
