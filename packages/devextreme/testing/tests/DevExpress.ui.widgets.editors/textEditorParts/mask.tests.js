@@ -2336,7 +2336,7 @@ QUnit.module('validation', {}, () => {
         assert.notOk(textEditor.option('isValid'), 'mask with an invalid value should be invalid');
     });
 
-    QUnit.test('The validation error should be null after removing the mask (T1214604)', function(assert) {
+    QUnit.test('The invalid mask error should be restores after removing the mask (T1214604)', function(assert) {
         const maskInvalidMessage = 'mask error';
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '000000/0009',
