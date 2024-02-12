@@ -632,6 +632,22 @@ QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler
     assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
 });
 
+QUnit.test('onFieldDataChanged must be called once if new formData contains "length" property (T1213983)', function(assert) {
+    const onFieldDataChangedStub = sinon.stub();
+
+    const form = $('#form').dxForm({
+        formData: {},
+        items: [{
+            dataField: 'length',
+        }],
+        onFieldDataChanged: onFieldDataChangedStub,
+    }).dxForm('instance');
+
+    form.option({ formData: { length: 10 } });
+
+    assert.strictEqual(onFieldDataChangedStub.callCount, 1);
+});
+
 
 [
     { editorType: 'dxTextBox' },
