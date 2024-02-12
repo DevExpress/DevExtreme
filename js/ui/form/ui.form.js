@@ -927,11 +927,10 @@ const Form = Widget.inherit({
         this._createActionByOption('onFieldDataChanged')(args);
     },
 
-    _triggerOnFieldDataChangedByDataSet: function(data) {
-        const that = this;
+    _triggerOnFieldDataChangedByDataSet(data) {
         if(data && isObject(data)) {
-            each(data, function(dataField, value) {
-                that._triggerOnFieldDataChanged({ dataField: dataField, value: value });
+            Object.keys(data).forEach(key => {
+                this._triggerOnFieldDataChanged({ dataField: key, value: data[key] });
             });
         }
     },
