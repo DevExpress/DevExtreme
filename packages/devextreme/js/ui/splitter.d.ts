@@ -27,11 +27,11 @@ import {
 export type ResizeMode = 'live' | 'postponed';
 
 /**
- * @docid
+ * @docid _ui_splitter_ResizeInfo
  * @hidden
  */
 export interface ResizeInfo {
-    /** @docid */
+    /** @docid _ui_splitter_ResizeInfo.handleElement */
     readonly handleElement?: DxElement;
 }
 
@@ -101,7 +101,7 @@ export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> =
  * @docid _ui_splitter_ResizeEvent
  * @public
  * @type object
- * @inherits Cancelable,NativeEventInfo,ResizeInfo
+ * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
  */
 export type ResizeEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 
@@ -109,7 +109,7 @@ export type ResizeEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TK
  * @docid _ui_splitter_ResizeStartEvent
  * @public
  * @type object
- * @inherits Cancelable,NativeEventInfo,ResizeInfo
+ * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
  */
 export type ResizeStartEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 
@@ -117,7 +117,7 @@ export type ResizeStartEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitt
  * @docid _ui_splitter_ResizeEndEvent
  * @public
  * @type object
- * @inherits Cancelable,NativeEventInfo,ResizeInfo
+ * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
  */
 export type ResizeEndEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 

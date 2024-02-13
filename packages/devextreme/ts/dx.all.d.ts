@@ -25742,12 +25742,12 @@ declare module DevExpress.ui {
       > &
       ResizeInfo;
     /**
-     * [descr:ResizeInfo]
+     * [descr:_ui_splitter_ResizeInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface ResizeInfo {
       /**
-       * [descr:ResizeInfo.handleElement]
+       * [descr:_ui_splitter_ResizeInfo.handleElement]
        */
       readonly handleElement?: DevExpress.core.DxElement;
     }
