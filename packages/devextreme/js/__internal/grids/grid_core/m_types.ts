@@ -1,11 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
-import { Component } from '@js/core/component';
-import { PropertyType } from '@js/core/index';
-import { dxElementWrapper } from '@js/core/renderer';
-import { Properties as DataGridOptions } from '@js/ui/data_grid';
-import Widget from '@js/ui/widget/ui.widget';
+import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
+import type { Component } from '@js/core/component';
+import type { PropertyType } from '@js/core/index';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { Properties as DataGridOptions } from '@js/ui/data_grid';
+import type Widget from '@js/ui/widget/ui.widget';
 
 type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
 

@@ -1,4 +1,4 @@
-import { Properties } from '@js/ui/scheduler';
+import type { Properties } from '@js/ui/scheduler';
 
 export type SchedulerOptions = Required<Properties>;
 

@@ -1,4 +1,4 @@
-import { ValidatorRule } from './types';
+import type { ValidatorRule } from './types';
 
 export const createValidatorRule = <TValue>(
   name: string,

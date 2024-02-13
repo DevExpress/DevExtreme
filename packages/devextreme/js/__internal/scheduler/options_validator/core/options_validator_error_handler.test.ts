@@ -1,5 +1,5 @@
 import { OptionsValidatorErrorHandler } from '@ts/scheduler/options_validator/core/options_validator_error_handler';
-import { GlobalErrorHandler } from '@ts/scheduler/options_validator/core/types';
+import type { GlobalErrorHandler } from '@ts/scheduler/options_validator/core/types';
 
 type TestValidators = 'A' | 'B' | 'C' | 'D';
 

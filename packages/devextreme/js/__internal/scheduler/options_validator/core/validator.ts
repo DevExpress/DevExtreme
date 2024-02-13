@@ -1,4 +1,4 @@
-import { ValidatorResult, ValidatorRule } from './types';
+import type { ValidatorResult, ValidatorRule } from './types';
 
 export class Validator<TWidgetOptions, TOption> {
   constructor(
