@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import * as React from 'react';
+import { ValueChangedEvent } from 'devextreme/ui/text_box';
 import DataSource from 'devextreme/data/data_source';
 import { Button } from 'devextreme-react/button';
 import { List, Item as ListItem, IItemProps } from 'devextreme-react/list';
@@ -55,10 +56,6 @@ class Item extends React.Component<IListItemProps, { counter: number }> {
   }
 }
 
-function ItemKeyGetter(data: any) {
-  return data.text;
-}
-
 function ItemsRender(item: string) {
   return <i>{item}</i>;
 }
@@ -96,7 +93,7 @@ export default class extends React.Component<any, { text: string; items: IItemPr
     this.dataSource.dispose();
   }
 
-  private updateText(e: any) {
+  private updateText(e: ValueChangedEvent) {
     this.setState({
       text: e.value,
     });
@@ -133,7 +130,7 @@ export default class extends React.Component<any, { text: string; items: IItemPr
           repaintChangesOnly
           items={stateItems}
           itemComponent={Item}
-          itemKeyFn={ItemKeyGetter}
+          keyExpr="text"
         />
 
         <hr />

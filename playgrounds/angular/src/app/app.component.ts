@@ -100,7 +100,7 @@ import ArrayStore from 'devextreme/data/array_store';
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild(DxPopoverComponent) popover: DxPopoverComponent;
   
-  value: any = [
+  value: Array<Date|Number|String> = [
     new Date(),
     new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
   ];

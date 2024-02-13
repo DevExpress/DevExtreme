@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { ClickEvent } from 'devextreme/ui/button';
+import { MasterDetailTemplateData, ColumnCellTemplateData, ToolbarPreparingEvent } from 'devextreme/ui/data_grid';
+import { ValueChangedEvent } from 'devextreme/ui/number_box';
 import { Template } from 'devextreme-react/core/template';
 import {
   DataGrid,
@@ -15,7 +18,7 @@ import { NumberBox } from 'devextreme-react/number-box';
 import Example from './example-block';
 import { sales } from './data';
 
-const DetailComponent = ({ data: { data } }: any) => (
+const DetailComponent = ({ data: { data } }: MasterDetailTemplateData) => (
   <p>
     Row data:
     <br />
@@ -23,12 +26,12 @@ const DetailComponent = ({ data: { data } }: any) => (
   </p>
 );
 
-const CityComponent = (props: any) => {
+const CityComponent = (props: ColumnCellTemplateData) => {
   const { data } = props;
   return <i>{data.displayValue}</i>;
 };
 
-const RegionComponent = (props: any) => {
+const RegionComponent = (props: ColumnCellTemplateData) => {
   const { data } = props;
   return <b>{data.displayValue}</b>;
 };
@@ -45,8 +48,8 @@ export default class extends React.Component<any, { expandAll: boolean, pageSize
     this.handlePageIndexChange = this.handlePageIndexChange.bind(this);
   }
 
-  private handleToolbarPreparing(args: any) {
-    args.toolbarOptions.items.unshift({
+  private handleToolbarPreparing(args: ToolbarPreparingEvent) {
+    args.toolbarOptions.items?.unshift({
       location: 'after',
       template: 'toolbarLabel',
     },
@@ -55,7 +58,7 @@ export default class extends React.Component<any, { expandAll: boolean, pageSize
       widget: 'dxButton',
       options: {
         icon: 'chevronup',
-        onClick: (e: any) => {
+        onClick: (e: ClickEvent) => {
           this.setState((state) => {
             e.component.option('icon', state.expandAll ? 'chevrondown' : 'chevronup');
             return {
@@ -67,7 +70,7 @@ export default class extends React.Component<any, { expandAll: boolean, pageSize
     });
   }
 
-  private handlePageIndexChange(e: any) {
+  private handlePageIndexChange(e: ValueChangedEvent) {
     this.setState({
       pageSize: e.value,
     });
