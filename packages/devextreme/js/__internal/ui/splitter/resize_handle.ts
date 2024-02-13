@@ -8,7 +8,6 @@ import { addNamespace } from '../../../events/utils/index';
 import Widget from '../../../ui/widget/ui.widget';
 
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
-const RESIZE_HANDLE_ACTIVE_CLASS = 'dx-resize-handle-active';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
@@ -31,6 +30,7 @@ class ResizeHandle extends (Widget as any) {
     this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
     this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
     this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
+    this.handlers = {};
   }
 
   _initMarkup(): void {
@@ -48,7 +48,6 @@ class ResizeHandle extends (Widget as any) {
   _render(): void {
     super._render();
 
-    this._detachEventHandlers();
     this._attachEventHandlers();
     this._renderActions();
   }
@@ -57,20 +56,12 @@ class ResizeHandle extends (Widget as any) {
     this._resizeStartAction({
       event: e,
     });
-
-    this._toggleActive(true);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _resizeHandler(e): void {
-    const resizeInfo = {
-      offsetX: e.offset.x,
-      offsetY: e.offset.y,
-    };
-
     this._resizeAction({
       event: e,
-      resizeInfo,
     });
   }
 
@@ -78,9 +69,6 @@ class ResizeHandle extends (Widget as any) {
     this._resizeEndAction({
       event: e,
     });
-    this._toggleActive(false);
-
-    this._detachEventHandlers();
   }
 
   _renderActions(): void {
@@ -89,29 +77,20 @@ class ResizeHandle extends (Widget as any) {
     this._resizeAction = this._createActionByOption('onResize');
   }
 
-  _clean(): void {
-    this._detachEventHandlers();
-    super._clean();
-  }
-
   _attachEventHandlers(): void {
-    const handlers = {};
-    handlers[this.RESIZE_START_EVENT_NAME] = this._resizeStartHandler.bind(this);
-    handlers[this.RESIZE_EVENT_NAME] = this._resizeHandler.bind(this);
-    handlers[this.RESIZE_END_EVENT_NAME] = this._resizeEndHandler.bind(this);
+    this.handlers[this.RESIZE_START_EVENT_NAME] = this._resizeStartHandler.bind(this);
+    this.handlers[this.RESIZE_EVENT_NAME] = this._resizeHandler.bind(this);
+    this.handlers[this.RESIZE_END_EVENT_NAME] = this._resizeEndHandler.bind(this);
 
-    eventsEngine.on(this.$element(), handlers, {
+    eventsEngine.on(this.$element(), this.handlers, {
       direction: this.option('direction'),
       immediate: true,
     });
   }
 
   _detachEventHandlers(): void {
-    eventsEngine.off(this.$element(), undefined, undefined);
-  }
-
-  _toggleActive(isActive: boolean): void {
-    this.$element().toggleClass(RESIZE_HANDLE_ACTIVE_CLASS, isActive);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this.$element(), this.handlers);
   }
 
   _isHorizontalDirection(): boolean {
@@ -123,7 +102,6 @@ class ResizeHandle extends (Widget as any) {
     switch (args.name) {
       case 'direction':
         this._toggleDirection();
-
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;

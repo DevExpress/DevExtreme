@@ -95,13 +95,22 @@ QUnit.module('Events', moduleConfig, () => {
         assert.ok(onResizeEndStub.calledOnce);
     });
 
-    QUnit.test('onResize event handler should recieve correct arguments when orientation is vertical', function(assert) {
-        this.reinit({
-            direction: 'vertical',
-            onResize: function(e) {
+    QUnit.test('event handlers should recieve correct arguments', function(assert) {
+        const checkArgs = (e) => {
+            assert.ok(e.event);
+            assert.ok(e.component);
+            assert.ok(e.element);
+        };
 
-                assert.strictEqual(e.resizeInfo.offsetY, 10);
-                assert.strictEqual(e.resizeInfo.offsetX, 0);
+        this.reinit({
+            onResizeStart: function(e) {
+                checkArgs(e);
+            },
+            onResize: function(e) {
+                checkArgs(e);
+            },
+            onResizeEnd: function(e) {
+                checkArgs(e);
             },
         });
 
@@ -110,58 +119,21 @@ QUnit.module('Events', moduleConfig, () => {
         pointer.start().dragStart().drag(0, 10).dragEnd();
     });
 
-    QUnit.test('onResize event handler should recieve correct arguments when orientation is horizontal', function(assert) {
-        this.reinit({
-            direction: 'horizontal',
-            onResize: function(e) {
-                assert.strictEqual(e.resizeInfo.offsetY, 0);
-                assert.strictEqual(e.resizeInfo.offsetX, 10);
-            },
-        });
+    QUnit.test('events should be called once after direction option changed', function(assert) {
+        const onResizeStartStub = sinon.stub();
+
+        this.reinit({ onResize: onResizeStartStub });
 
         const pointer = pointerMock(this.instance.$element());
 
-        pointer.start().dragStart().drag(10, 0).dragEnd();
-    });
+        pointer.start().dragStart().drag(10, 10).dragEnd();
 
-    QUnit.test('onResize event handler should recieve correct resizeInfo when called twice', function(assert) {
-        let isFirstCall = true;
-        this.reinit({
-            onResize: function(e) {
-                if(isFirstCall) {
-                    assert.strictEqual(e.resizeInfo.offsetY, 10);
-                    isFirstCall = false;
-                } else {
-                    assert.strictEqual(e.resizeInfo.offsetY, 25);
-                }
-            },
-        });
+        assert.ok(onResizeStartStub.calledOnce);
 
-        const pointer = pointerMock(this.instance.$element());
+        this.instance.option('direction', 'vertical');
 
-        pointer.start().dragStart().drag(0, 10).drag(0, 15).dragEnd();
-    });
+        pointer.start().dragStart().drag(10, 10).dragEnd();
 
-    QUnit.test('onResize event handler should recieve correct resizeInfo when resize stopped and started over again', function(assert) {
-        let isFirstCall = true;
-
-        this.reinit({
-            onResize: function(e) {
-                if(isFirstCall) {
-                    assert.strictEqual(e.resizeInfo.offsetY, 10);
-                    isFirstCall = false;
-                } else {
-                    assert.strictEqual(e.resizeInfo.offsetY, 15);
-                }
-            },
-        });
-
-        const pointer = pointerMock(this.instance.$element());
-        pointer.start().dragStart().drag(0, 10).dragEnd();
-        pointer.start().dragStart().drag(0, 15).dragEnd();
+        assert.ok(onResizeStartStub.calledTwice);
     });
 });
-
-
-// TODO test namespace with GUID !
-// test toggle active ?
