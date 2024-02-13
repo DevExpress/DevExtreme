@@ -29,7 +29,7 @@ import {
 import {
   DxPopoverComponent
 } from 'devextreme-angular';
-import ArrayStore from 'devextreme/artifacts/npm/devextreme/data/array_store';
+import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
   selector: 'my-app',
