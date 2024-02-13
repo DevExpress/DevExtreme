@@ -150,20 +150,30 @@ export type OptionChanged = {
 }[OptionNames];
 
 export interface Controllers {
-  data: import('./data_controller/m_data_controller').DataController;
+  adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsController;
+  applyFilter: import('./filter/m_filter_row').ApplyFilterViewController;
+  columnChooser: import('./column_chooser/m_column_chooser').ColumnChooserController;
   columns: import('./columns_controller/m_columns_controller').ColumnsController;
-  resizing: any;
-  adaptiveColumns: any;
-  columnChooser: any;
-  editorFactory: any; // import('./editor_factory/module').EditorFactory;
-  editing: any; // import('./editing/m_editing').EditingController;
+  columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
+  contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
+  data: import('./data_controller/m_data_controller').DataController;
+  draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
+  // todo: export is dataGrid-only controller
+  editing: import('./editing/m_editing').EditingController;
+  editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
+  errorHandling: import('./error_handling/m_error_handling').ErrorHandlingController;
+  export: import('../data_grid/export/m_export').ExportController;
+  filterSync: import('./filter/m_filter_sync').FilterSyncController;
+  focus: import('./focus/m_focus').FocusController;
+  // headerFilter: import('./header_filter/m_header_filter').
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
-  focus: any;
-  columnsResizer: any;
-  validating: any;
-  export: any;
-  draggingHeader: any;
+  resizing: import('./views/m_grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
+  validating: any;
+  stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
+  synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
+  tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
+  // validating
 }
 
 type ControllerTypes = {
@@ -171,9 +181,21 @@ type ControllerTypes = {
 };
 
 export interface Views {
-  headerPanel: any;
-  rowsView: any;
-  columnChooserView: any;
+  columnChooserView: import('./column_chooser/m_column_chooser').ColumnChooserView;
+  columnHeadersView: import('./column_headers/m_column_headers').ColumnHeadersView;
+  headerPanel: import('./header_panel/m_header_panel').HeaderPanel;
+  // headerFilterView: import('./header_filter/m_header_filter').
+  rowsView: import('./views/m_rows_view').RowsView;
+  pagerView: import('./pager/m_pager').PagerView;
+  columnsSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsSeparatorView;
+  blockSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').BlockSeparatorView;
+  draggingHeaderView: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderView;
+  trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
+  contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
+  // footerView: import('../dataGrid')
+  gridView: import('./views/m_grid_view').GridView;
+  filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
+  filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
 }
 type ViewTypes = {
   [ P in keyof Views ]: new(component: any) => Views[P];
@@ -264,6 +286,10 @@ export declare class ViewController extends Controller {
 }
 
 export declare class View extends ModuleItem {
+  renderCompleted: any;
+
+  resizeCompleted: any;
+
   _endUpdateCore(): void;
 
   _invalidate(requireResize?: any, requireReady?: any): void;

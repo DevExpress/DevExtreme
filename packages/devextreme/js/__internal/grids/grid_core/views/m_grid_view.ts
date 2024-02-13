@@ -75,7 +75,7 @@ export class ResizingController extends modules.ViewController {
 
   private _resizeDeferred: any;
 
-  private _lastWidth: any;
+  public _lastWidth: any;
 
   private _devicePixelRatio: any;
 
@@ -781,7 +781,6 @@ export class ResizingController extends modules.ViewController {
     this._prevContentMinHeight = null;
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
-    // @ts-expect-error
     this._columnHeadersView = this.getView('columnHeadersView');
     // @ts-expect-error
     this._footerView = this.getView('footerView');
@@ -789,7 +788,7 @@ export class ResizingController extends modules.ViewController {
   }
 }
 
-class SynchronizeScrollingController extends modules.ViewController {
+export class SynchronizeScrollingController extends modules.ViewController {
   _scrollChangedHandler(views, pos, viewName) {
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
@@ -805,13 +804,14 @@ class SynchronizeScrollingController extends modules.ViewController {
     for (let i = 0; i < views.length; i++) {
       const view = views[i];
       if (view) {
+        // @ts-expect-error
         view.scrollChanged.add(this._scrollChangedHandler.bind(this, views));
       }
     }
   }
 }
 
-class GridView extends modules.View {
+export class GridView extends modules.View {
   private _resizingController: any;
 
   private _dataController: any;

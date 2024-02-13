@@ -75,6 +75,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
       const editRowIndex = this._dataController.getRowIndexByKey(editRowKey);
       const $editFormElements = this._rowsView.getCellElements(editRowIndex);
+      // @ts-expect-error
       return this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
     }
 

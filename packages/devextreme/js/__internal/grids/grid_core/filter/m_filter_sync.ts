@@ -139,8 +139,8 @@ const updateFilterRowCondition = function (columnsController, column, condition)
   columnsController.columnOption(getColumnIdentifier(column), filterRowOptions);
 };
 
-class FilterSyncController extends modules.Controller {
-  private _skipSyncColumnOptions: any;
+export class FilterSyncController extends modules.Controller {
+  public _skipSyncColumnOptions: any;
 
   syncFilterValue() {
     const that = this;
@@ -224,7 +224,8 @@ class FilterSyncController extends modules.Controller {
     return getNormalizedFilter(filterValue);
   }
 
-  syncFilterRow(column) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  syncFilterRow(column, filterValue?) {
     this.option('filterValue', this._getSyncFilterRow(this.option('filterValue'), column));
   }
 
@@ -249,7 +250,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
   }
 
   skipCalculateColumnFilters() {
-    // @ts-expect-error
     const filterSyncController = this.getController('filterSync');
     return (isDefined(this.option('filterValue')) || filterSyncController._skipSyncColumnOptions) && this.isFilterSyncActive();
   }
@@ -266,7 +266,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     if (this.isFilterSyncActive()) {
       // @ts-expect-error
       const currentColumnForHeaderFilter = this.getController('headerFilter').getCurrentColumn();
-      // @ts-expect-error
       const currentColumnForFilterRow = this.getController('applyFilter').getCurrentColumnForFiltering();
       const currentColumn = currentColumnForHeaderFilter || currentColumnForFilterRow;
       const needRemoveCurrentColumnFilter = currentColumnForHeaderFilter || isDefined(currentColumnForFilterRow?.filterValue);
@@ -275,7 +274,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
         filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(currentColumn));
       }
     }
-    // @ts-expect-error
     const customOperations = this.getController('filterSync').getCustomFilterOperations();
     const calculatedFilterValue = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
     if (calculatedFilterValue) {
@@ -313,7 +311,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     switch (args.name) {
       case 'filterValue':
         this._applyFilter();
-        // @ts-expect-error
         this.isFilterSyncActive() && this.getController('filterSync').syncFilterValue();
         args.handled = true;
         break;
@@ -323,7 +320,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
       case 'columns':
         if (this.isFilterSyncActive()) {
           const column = this.getController('columns').getColumnByPath(args.fullName);
-          // @ts-expect-error
           const filterSyncController = this.getController('filterSync');
           if (column && !filterSyncController._skipSyncColumnOptions) {
             const propertyName = this._parseColumnPropertyName(args.fullName);
@@ -348,7 +344,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
   }
 
   _applyFilter(): Promise<void> {
-    // @ts-expect-error
     const filterSyncController = this.getController('filterSync');
 
     if (filterSyncController._skipSyncColumnOptions) {

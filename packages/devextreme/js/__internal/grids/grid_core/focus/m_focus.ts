@@ -22,7 +22,7 @@ const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
-class FocusController extends core.ViewController {
+export class FocusController extends core.ViewController {
   private _dataController: any;
 
   private _keyboardController: any;
@@ -254,6 +254,7 @@ class FocusController extends core.ViewController {
       this._triggerUpdateFocusedRow(key, deferred);
     } else {
       const focusedRowIndex = this.getFocusedRowIndexByKey(key);
+      // @ts-expect-error
       this.getView('rowsView').scrollToRowElement(key, deferred).done(() => {
         deferred.resolve(focusedRowIndex);
       });
@@ -284,6 +285,7 @@ class FocusController extends core.ViewController {
       };
       this.component.on('contentReady', triggerUpdateFocusedRow);
 
+      // @ts-expect-error
       this.getView('rowsView').scrollTopPosition(offset);
     } else {
       deferred.resolve(-1);
@@ -303,6 +305,7 @@ class FocusController extends core.ViewController {
           focusedRowKey: key,
         });
       } else {
+        // @ts-expect-error
         d = this.getView('rowsView').scrollToRowElement(key);
       }
 
@@ -385,6 +388,7 @@ class FocusController extends core.ViewController {
       }
     });
 
+    // @ts-expect-error
     $mainRow && rowsView.scrollToElementVertically($mainRow);
   }
 

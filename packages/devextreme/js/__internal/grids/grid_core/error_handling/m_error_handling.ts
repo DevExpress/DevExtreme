@@ -14,7 +14,7 @@ const ERROR_MESSAGE_CLASS = 'dx-error-message';
 const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const ACTION_CLASS = 'action';
 
-class ErrorHandlingController extends modules.ViewController {
+export class ErrorHandlingController extends modules.ViewController {
   private _columnHeadersView: any;
 
   private _rowsView: any;
@@ -22,7 +22,6 @@ class ErrorHandlingController extends modules.ViewController {
   init() {
     const that = this;
 
-    // @ts-expect-error
     that._columnHeadersView = that.getView('columnHeadersView');
     that._rowsView = that.getView('rowsView');
   }
@@ -126,7 +125,7 @@ class ErrorHandlingController extends modules.ViewController {
     return $firstErrorRow;
   }
 
-  removeErrorRow($row) {
+  removeErrorRow($row?) {
     if (!$row) {
       const $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
       $row = $columnHeaders && $columnHeaders.find(`.${ERROR_ROW_CLASS}`);
@@ -152,7 +151,6 @@ class ErrorHandlingController extends modules.ViewController {
 const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
   init() {
     const that = this;
-    // @ts-expect-error
     const errorHandlingController = that.getController('errorHandling');
 
     super.init();
@@ -166,7 +164,6 @@ const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataContro
       if (e && e.changeType === 'loadError') {
         return;
       }
-      // @ts-expect-error
       const errorHandlingController = that.getController('errorHandling');
       const editingController = that.getController('editing');
 

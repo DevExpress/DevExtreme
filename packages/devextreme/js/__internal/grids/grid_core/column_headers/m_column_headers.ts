@@ -354,7 +354,6 @@ export class ColumnHeadersView extends ColumnsView {
     super._columnOptionChanged(e);
 
     if (optionNames.width || optionNames.visible) {
-      // @ts-expect-error
       this.resizeCompleted.fire();
     }
   }

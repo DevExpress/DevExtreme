@@ -16,7 +16,7 @@ const viewName = {
 };
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
-class ContextMenuController extends modules.ViewController {
+export class ContextMenuController extends modules.ViewController {
   init() {
     this.createAction('onContextMenuPreparing');
   }
@@ -41,6 +41,7 @@ class ContextMenuController extends modules.ViewController {
       if ($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
         $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr');
         $targetRowElement = $targetCellElement.parent();
+        // @ts-expect-error
         const rowIndex = view.getRowIndex($targetRowElement);
         const columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
         const rowOptions = $targetRowElement.data('options');
@@ -49,11 +50,13 @@ class ContextMenuController extends modules.ViewController {
           targetElement: getPublicElement($targetElement),
           target: viewName[this],
           rowIndex,
+          // @ts-expect-error
           row: view._getRows()[rowIndex],
           columnIndex,
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
+        // @ts-expect-error
         options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
         // @ts-expect-error
@@ -78,7 +81,7 @@ class ContextMenuController extends modules.ViewController {
   }
 }
 
-class ContextMenuView extends modules.View {
+export class ContextMenuView extends modules.View {
   _renderCore() {
     const that = this;
     const $element = that.element().addClass(CONTEXT_MENU);
@@ -92,7 +95,6 @@ class ContextMenuView extends modules.View {
         onPositioning(actionArgs) {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
-          // @ts-expect-error
           const items = that.getController('contextMenu').getContextMenuItems(event);
 
           if (items) {

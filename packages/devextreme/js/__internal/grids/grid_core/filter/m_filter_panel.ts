@@ -25,7 +25,7 @@ const FILTER_PANEL_LEFT_CONTAINER = `${FILTER_PANEL_CLASS}-left`;
 
 const FILTER_PANEL_TARGET = 'filterPanel';
 
-class FilterPanelView extends modules.View {
+export class FilterPanelView extends modules.View {
   private _columnsController: any;
 
   private readonly _filterValueBuffer: any;
@@ -118,7 +118,6 @@ class FilterPanelView extends modules.View {
     let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
-      // @ts-expect-error
       when(that.getFilterText(filterValue, that.getController('filterSync').getCustomFilterOperations())).done((filterText) => {
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {

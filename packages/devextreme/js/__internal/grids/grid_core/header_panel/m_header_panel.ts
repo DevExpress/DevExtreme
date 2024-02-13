@@ -232,7 +232,7 @@ export class HeaderPanel extends ColumnsView {
 
   }
 
-  hasGroupedColumns() {
+  hasGroupedColumns(): any {
 
   }
 }

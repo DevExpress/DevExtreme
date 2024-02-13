@@ -856,6 +856,7 @@ class EditingControllerImpl extends modules.ViewController {
         break;
       default: {
         const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
+        // @ts-expect-error
         let visibleItemIndex = isViewportBottom ? rowsView?.getBottomVisibleItemIndex() : rowsView?.getTopVisibleItemIndex();
         const row: any = dataController.getVisibleRows()[visibleItemIndex];
 

@@ -207,7 +207,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       let $focusedCell = this._getFocusedCell();
 
       $focusedCell = !isElementDefined($focusedCell)
-        ? this._rowsView.getCellElements(0).filter('[tabindex]').eq(0)
+        ? this._rowsView.getCellElements(0)!.filter('[tabindex]').eq(0)
         : $focusedCell;
 
       if (!$element.closest($focusedCell).length) {
@@ -1096,6 +1096,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _ctrlFKeyHandler(eventArgs) {
     if (this.option('searchPanel.visible')) {
+      // @ts-expect-error
       const searchTextEditor = this._headerPanel.getSearchTextEditor();
       if (searchTextEditor) {
         searchTextEditor.focus();

@@ -494,7 +494,7 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  _needUpdateRowHeight(itemsCount) {
+  _needUpdateRowHeight(itemsCount): boolean | undefined {
     return itemsCount > 0 && !this._rowHeight;
   }
 
@@ -1090,7 +1090,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  hasHeight(hasHeight) {
+  hasHeight(hasHeight?) {
     if (arguments.length === 0) { return !!this._hasHeight; }
 
     this._hasHeight = hasHeight;
