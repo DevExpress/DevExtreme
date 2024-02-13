@@ -123,6 +123,9 @@ class ResizeHandle extends (Widget as any) {
     switch (args.name) {
       case 'direction':
         this._toggleDirection();
+
+        this._detachEventHandlers();
+        this._attachEventHandlers();
         break;
       case 'onResize':
       case 'onResizeStart':
