@@ -38,6 +38,22 @@ QUnit.module('Initialization', moduleConfig, () => {
     QUnit.test('ResizeHandle  should be initialized with horizontal direction by default', function(assert) {
         assert.strictEqual(this.instance.option('direction'), 'horizontal');
     });
+
+    QUnit.test('every resizeHandle should be initialized with unique name', function(assert) {
+        const firstInstanceResizeStartEventName = this.instance.RESIZE_START_EVENT_NAME;
+        const firstInstanceResizeEventName = this.instance.RESIZE_EVENT_NAME;
+        const firstInstanceResizeEndEventName = this.instance.RESIZE_END_EVENT_NAME;
+
+        this.reinit();
+
+        const secondInstanceResizeStartEventName = this.instance.RESIZE_START_EVENT_NAME;
+        const secondInstanceResizeEventName = this.instance.RESIZE_EVENT_NAME;
+        const secondInstanceResizeEndEventName = this.instance.RESIZE_END_EVENT_NAME;
+
+        assert.notStrictEqual(firstInstanceResizeStartEventName, secondInstanceResizeStartEventName);
+        assert.notStrictEqual(firstInstanceResizeEventName, secondInstanceResizeEventName);
+        assert.notStrictEqual(firstInstanceResizeEndEventName, secondInstanceResizeEndEventName);
+    });
 });
 
 QUnit.module('Events', moduleConfig, () => {
@@ -77,6 +93,72 @@ QUnit.module('Events', moduleConfig, () => {
         assert.ok(onResizeStartStub.calledOnce);
         assert.ok(onResizeStub.calledTwice);
         assert.ok(onResizeEndStub.calledOnce);
+    });
+
+    QUnit.test('onResize event handler should recieve correct arguments when orientation is vertical', function(assert) {
+        this.reinit({
+            direction: 'vertical',
+            onResize: function(e) {
+
+                assert.strictEqual(e.resizeInfo.offsetY, 10);
+                assert.strictEqual(e.resizeInfo.offsetX, 0);
+            },
+        });
+
+        const pointer = pointerMock(this.instance.$element());
+
+        pointer.start().dragStart().drag(0, 10).dragEnd();
+    });
+
+    QUnit.test('onResize event handler should recieve correct arguments when orientation is horizontal', function(assert) {
+        this.reinit({
+            direction: 'horizontal',
+            onResize: function(e) {
+                assert.strictEqual(e.resizeInfo.offsetY, 0);
+                assert.strictEqual(e.resizeInfo.offsetX, 10);
+            },
+        });
+
+        const pointer = pointerMock(this.instance.$element());
+
+        pointer.start().dragStart().drag(10, 0).dragEnd();
+    });
+
+    QUnit.test('onResize event handler should recieve correct resizeInfo when called twice', function(assert) {
+        let isFirstCall = true;
+        this.reinit({
+            onResize: function(e) {
+                if(isFirstCall) {
+                    assert.strictEqual(e.resizeInfo.offsetY, 10);
+                    isFirstCall = false;
+                } else {
+                    assert.strictEqual(e.resizeInfo.offsetY, 25);
+                }
+            },
+        });
+
+        const pointer = pointerMock(this.instance.$element());
+
+        pointer.start().dragStart().drag(0, 10).drag(0, 15).dragEnd();
+    });
+
+    QUnit.test('onResize event handler should recieve correct resizeInfo when resize stopped and started over again', function(assert) {
+        let isFirstCall = true;
+
+        this.reinit({
+            onResize: function(e) {
+                if(isFirstCall) {
+                    assert.strictEqual(e.resizeInfo.offsetY, 10);
+                    isFirstCall = false;
+                } else {
+                    assert.strictEqual(e.resizeInfo.offsetY, 15);
+                }
+            },
+        });
+
+        const pointer = pointerMock(this.instance.$element());
+        pointer.start().dragStart().drag(0, 10).dragEnd();
+        pointer.start().dragStart().drag(0, 15).dragEnd();
     });
 });
 

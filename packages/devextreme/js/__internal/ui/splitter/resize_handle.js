@@ -26,9 +26,9 @@ class ResizeHandle extends Widget {
     _init() {
         super._init();
         const namespace = `${RESIZE_HANDLER_MODULE_NAMESPACE}${new Guid().toString()}`;
-        this.DRAGSTART_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
-        this.DRAGSTART_EVENT_NAME = addNamespace(dragEventMove, namespace);
-        this.DRAGSTART_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
+        this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
+        this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
+        this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
     }
 
     _initMarkup() {
@@ -36,7 +36,6 @@ class ResizeHandle extends Widget {
 
         this._toggleDirection();
         this.$element().addClass(RESIZE_HANDLE_CLASS);
-        this.$element().addClass(RESIZE_HANDLE_ACTIVE_CLASS);
     }
 
     _toggleDirection() {
@@ -49,24 +48,30 @@ class ResizeHandle extends Widget {
 
         this._detachEventHandlers();
         this._attachEventHandlers();
-        this._toggleActive(false);
         this._renderActions();
     }
 
-    _dragStartHandler(e) {
+    _resizeStartHandler(e) {
         this._resizeStartAction({
             event: e,
         });
 
         this._toggleActive(true);
     }
-    _dragHandler(e) {
+
+    _resizeHandler(e) {
+        const resizeInfo = {
+            offsetX: e.offset.x,
+            offsetY: e.offset.y
+        };
+
         this._resizeAction({
             event: e,
+            resizeInfo
         });
     }
 
-    _dragEndHandler(e) {
+    _resizeEndHandler(e) {
         this._resizeEndAction({
             event: e,
         });
@@ -86,14 +91,13 @@ class ResizeHandle extends Widget {
 
     _attachEventHandlers() {
         const handlers = {};
-        handlers[this.DRAGSTART_START_EVENT_NAME] = this._dragStartHandler.bind(this);
-        handlers[this.DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
-        handlers[this.DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
+        handlers[this.RESIZE_START_EVENT_NAME] = this._resizeStartHandler.bind(this);
+        handlers[this.RESIZE_EVENT_NAME] = this._resizeHandler.bind(this);
+        handlers[this.RESIZE_END_EVENT_NAME] = this._resizeEndHandler.bind(this);
 
         eventsEngine.on(this.$element(), handlers, {
-            // TODO: specify direction
-            direction: 'both',
-            immediate: true
+            direction: this.option('direction'),
+            immediate: true,
         });
     }
 
