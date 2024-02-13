@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import ResizeHandle from 'ui/resize_handle';
 import pointerMock from '../../helpers/pointerMock.js';
+import ResizeHandle from '__internal/ui/splitter/resize_handle';
 
 QUnit.testStart(() => {
     const markup = '<div id="resizeHandle"></div>';

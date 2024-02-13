@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'ui/splitter';
 
 import fx from 'animation/fx';
-import ResizeHandle from 'ui/resize_handle';
+import ResizeHandle from '__internal/ui/splitter/resize_handle';
 
 QUnit.testStart(function() {
     const markup =
