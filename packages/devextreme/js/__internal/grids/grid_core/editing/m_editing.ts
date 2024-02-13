@@ -2571,6 +2571,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     });
   }
 
+  _rowClickTreeListHack(e) {
+    // @ts-expect-error
+    super._rowClick.apply(this, arguments);
+  }
+
   _rowClick(e) {
     const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
 
@@ -2579,6 +2584,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     if (!this._editCellByClick(e, 'click') && !isEditForm) {
       super._rowClick.apply(this, arguments as any);
     }
+  }
+
+  _rowDblClickTreeListHack(e) {
+    // @ts-expect-error
+    super._rowDblClick.apply(this, arguments);
   }
 
   _rowDblClick(e) {
