@@ -44,6 +44,7 @@
         "jspdf": "2.5.1",
         "jspdf-autotable": "3.5.28",
         "mustache": "4.2.0",
+        "plugin-typescript": "8.0.0",
         "preact": "10.12.1",
         "prettier": "2.8.4",
         "prompts": "2.4.2",
