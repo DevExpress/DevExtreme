@@ -90,18 +90,7 @@ jobs:
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
       run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+        npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz --workspaces=false
 
     - name: Prepare bundles
       working-directory: apps/demos
@@ -245,18 +234,7 @@ jobs:
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
       run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+        npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz --workspaces=false
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -315,18 +293,7 @@ jobs:
     # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
       run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+        npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz --workspaces=false
 
     - name: Prepare JS
       working-directory: apps/demos
