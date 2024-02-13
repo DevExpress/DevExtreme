@@ -107,7 +107,7 @@ import { DxiLocationComponent } from './location-dxi';
         'minSize',
         'resizable',
         'size',
-        'splitter',
+        'splitterComponent',
         'heightRatio',
         'widthRatio',
         'expanded',

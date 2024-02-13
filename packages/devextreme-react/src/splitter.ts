@@ -123,7 +123,7 @@ type IItemProps = React.PropsWithChildren<{
   minSize?: number | string;
   resizable?: boolean;
   size?: number | string;
-  splitter?: dxSplitterOptions;
+  splitterComponent?: dxSplitterOptions;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
@@ -135,7 +135,7 @@ class Item extends NestedOption<IItemProps> {
   public static OptionName = "items";
   public static IsCollectionItem = true;
   public static ExpectedChildren = {
-    splitter: { optionName: "splitter", isCollectionItem: false }
+    splitterComponent: { optionName: "splitterComponent", isCollectionItem: false }
   };
   public static TemplateProps = [{
     tmplOption: "template",
@@ -147,7 +147,7 @@ class Item extends NestedOption<IItemProps> {
 
 // owners:
 // Item
-type ISplitterProps = React.PropsWithChildren<{
+type ISplitterComponentProps = React.PropsWithChildren<{
   allowKeyboardNavigation?: boolean;
   bindingOptions?: Record<string, any>;
   dataSource?: Array<any | dxSplitterItem | string> | DataSource | DataSourceOptions | null | Store | string;
@@ -179,8 +179,8 @@ type ISplitterProps = React.PropsWithChildren<{
   itemComponent?: React.ComponentType<any>;
   itemKeyFn?: (data: any) => string;
 }>
-class Splitter extends NestedOption<ISplitterProps> {
-  public static OptionName = "splitter";
+class SplitterComponent extends NestedOption<ISplitterComponentProps> {
+  public static OptionName = "splitterComponent";
   public static DefaultsProps = {
     defaultItems: "items"
   };
@@ -198,8 +198,8 @@ export {
   ISplitterOptions,
   Item,
   IItemProps,
-  Splitter,
-  ISplitterProps
+  SplitterComponent,
+  ISplitterComponentProps
 };
 import type * as SplitterTypes from 'devextreme/ui/splitter_types';
 export { SplitterTypes };

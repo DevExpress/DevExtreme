@@ -113,7 +113,7 @@ const DxItem = createConfigurationComponent({
     "update:minSize": null,
     "update:resizable": null,
     "update:size": null,
-    "update:splitter": null,
+    "update:splitterComponent": null,
     "update:template": null,
     "update:text": null,
     "update:visible": null,
@@ -126,7 +126,7 @@ const DxItem = createConfigurationComponent({
     minSize: [Number, String],
     resizable: Boolean,
     size: [Number, String],
-    splitter: Object,
+    splitterComponent: Object,
     template: {},
     text: String,
     visible: Boolean
@@ -135,9 +135,9 @@ const DxItem = createConfigurationComponent({
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
-  splitter: { isCollectionItem: false, optionName: "splitter" }
+  splitterComponent: { isCollectionItem: false, optionName: "splitterComponent" }
 };
-const DxSplitter = createConfigurationComponent({
+const DxSplitterComponent = createConfigurationComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -195,13 +195,13 @@ const DxSplitter = createConfigurationComponent({
     width: [Function, Number, String]
   }
 });
-(DxSplitter as any).$_optionName = "splitter";
+(DxSplitterComponent as any).$_optionName = "splitterComponent";
 
 export default DxSplitter;
 export {
   DxSplitter,
   DxItem,
-  DxSplitter
+  DxSplitterComponent
 };
 import type * as DxSplitterTypes from "devextreme/ui/splitter_types";
 export { DxSplitterTypes };
