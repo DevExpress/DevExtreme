@@ -310,7 +310,7 @@
         "dxTagBox-selected": "{0} valgt",
         "dxTagBox-allSelected": "Alle valgt ({0})",
         "dxTagBox-moreSelected": "{0} flere",
-        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
+        "dxTagBox-tagRoleDescription": "tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Skriv ut",
         "vizExport-titleMenuText": "Eksporterer/Skriver ut",

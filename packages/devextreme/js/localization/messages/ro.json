@@ -310,7 +310,7 @@
         "dxTagBox-selected": "{0} selectat",
         "dxTagBox-allSelected": "Toate selctate ({0})",
         "dxTagBox-moreSelected": "{0} mai mult",
-        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
+        "dxTagBox-tagRoleDescription": "tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Printare",
         "vizExport-titleMenuText": "Exportare/Printare",

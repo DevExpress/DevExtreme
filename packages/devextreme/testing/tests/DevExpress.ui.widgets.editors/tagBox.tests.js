@@ -7848,7 +7848,7 @@ QUnit.module('accessibility', () => {
 
         assert.strictEqual(tag.attr('role'), 'button');
         assert.strictEqual(tag.attr('aria-label'), '1');
-        assert.strictEqual(tag.attr('aria-roledescription'), 'tag, press the delete button to remove');
+        assert.strictEqual(tag.attr('aria-roledescription'), 'tag. Press the delete button to remove this tag');
     });
 
     QUnit.test('TagBox element should have aria-labelledby with correct ids if tag was deleted by keyboard', function(assert) {

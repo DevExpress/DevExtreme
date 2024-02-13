@@ -310,7 +310,7 @@
         "dxTagBox-selected": "{0} kiválasztva",
         "dxTagBox-allSelected": "Összes kiválasztva ({0})",
         "dxTagBox-moreSelected": "{0} több",
-        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
+        "dxTagBox-tagRoleDescription": "tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Nyomtatás",
         "vizExport-titleMenuText": "Exportálás/Nyomtatás",
