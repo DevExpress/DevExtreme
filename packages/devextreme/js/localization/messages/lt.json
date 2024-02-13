@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} pasirinkta",
         "dxTagBox-allSelected": "Viskas pasirinkta ({0})",
         "dxTagBox-moreSelected": "dar {0}",
+        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
 
         "vizExport-printingButtonText": "Spausdinti",
         "vizExport-titleMenuText": "Eksportavimas/Spausdinimas",

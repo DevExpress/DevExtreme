@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} 已选择",
         "dxTagBox-allSelected": "已全选 ({0})",
         "dxTagBox-moreSelected": "{0} 更多",
+        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
 
         "vizExport-printingButtonText": "打印",
         "vizExport-titleMenuText": "导出中/打印中",

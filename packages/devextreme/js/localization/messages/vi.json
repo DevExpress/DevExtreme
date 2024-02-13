@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} đã được chọn",
         "dxTagBox-allSelected": "Tất cả đã được chọn ({0})",
         "dxTagBox-moreSelected": "{0} thêm",
+        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
 
         "vizExport-printingButtonText": "In",
         "vizExport-titleMenuText": "Xuất ra/In",

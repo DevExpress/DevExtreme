@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} انتخاب شده",
         "dxTagBox-allSelected": "همه انتخاب شده اند ({0})",
         "dxTagBox-moreSelected": "{0} سایر",
+        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
 
         "vizExport-printingButtonText": "چاپ",
         "vizExport-titleMenuText": "صادرات / چاپ",

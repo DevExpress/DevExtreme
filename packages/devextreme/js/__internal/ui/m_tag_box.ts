@@ -1142,9 +1142,8 @@ const TagBox = (SelectBox as any).inherit({
     const aria = {
       role: 'button',
       label: value,
-      // TODO: Add localization
       // eslint-disable-next-line spellcheck/spell-checker
-      roledescription: 'tag, press the delete button to remove',
+      roledescription: messageLocalization.format('dxTagBox-tagRoleDescription'),
     };
 
     this.setAria(aria, element);

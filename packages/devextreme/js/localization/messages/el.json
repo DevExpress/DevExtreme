@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} επιλεγμένο/α",
         "dxTagBox-allSelected": "Όλα επιλέχθηκαν ({0})",
         "dxTagBox-moreSelected": "{0} περισσότερα",
+        "dxTagBox-tagRoleDescription": "tag, press the delete button to remove",
 
         "vizExport-printingButtonText": "Εκτύπωση",
         "vizExport-titleMenuText": "Εξαγωγή/Εκτύπωση",
