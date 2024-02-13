@@ -310,7 +310,7 @@
         "dxTagBox-selected": "{0} selected",
         "dxTagBox-allSelected": "All selected ({0})",
         "dxTagBox-moreSelected": "{0} more",
-        "dxTagBox-tagRoleDescription": "tag. Press the delete button to remove this tag",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Print",
         "vizExport-titleMenuText": "Exporting/Printing",

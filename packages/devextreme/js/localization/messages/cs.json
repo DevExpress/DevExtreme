@@ -310,7 +310,7 @@
         "dxTagBox-selected": "{0} vybráno",
         "dxTagBox-allSelected": "Vše vybráno ({0})",
         "dxTagBox-moreSelected": "{0} navíc",
-        "dxTagBox-tagRoleDescription": "tag. Press the delete button to remove this tag",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Tisk",
         "vizExport-titleMenuText": "Export/import",

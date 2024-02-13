@@ -310,7 +310,7 @@
         "dxTagBox-selected": "{0} つ選択済み",
         "dxTagBox-allSelected": "すべて選択済み ({0})",
         "dxTagBox-moreSelected": "その他 {0} つ選択",
-        "dxTagBox-tagRoleDescription": "tag. Press the delete button to remove this tag",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "印刷",
         "vizExport-titleMenuText": "エクスポート / 印刷",
