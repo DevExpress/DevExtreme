@@ -107,6 +107,10 @@ QUnit.module('Events', moduleConfig, () => {
         assert.ok(newOnResizeStartStub.calledOnce);
         assert.ok(newOnResizeStub.calledOnce);
         assert.ok(newOnResizeEndStub.calledOnce);
+
+        assert.ok(onResizeStartStub.calledOnce);
+        assert.ok(onResizeStub.calledTwice);
+        assert.ok(onResizeEndStub.calledOnce);
     });
 
     QUnit.test('event handlers should recieve correct arguments', function(assert) {
