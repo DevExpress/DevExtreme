@@ -2,7 +2,7 @@
 import * as React from 'react';
 import DataSource from 'devextreme/data/data_source';
 import { Button } from 'devextreme-react/button';
-import { List, Item as ListItem } from 'devextreme-react/list';
+import { List, Item as ListItem, IItemProps } from 'devextreme-react/list';
 import { TextBox } from 'devextreme-react/text-box';
 
 import Example from './example-block';
@@ -14,12 +14,9 @@ interface IListItemProps {
   index: number;
 }
 
-const items: IListItemProps[] = [
-  // @ts-expect-error
+const items: IItemProps[] = [
   { text: '123' },
-  // @ts-expect-error
   { text: '234' },
-  // @ts-expect-error
   { text: '567' },
 ];
 
@@ -68,7 +65,7 @@ function ItemsRender(item: string) {
 
 const listItems: string[] = ['orange', 'apple', 'potato'];
 
-export default class extends React.Component<any, { text: string; items: IListItemProps[]; }> {
+export default class extends React.Component<any, { text: string; items: IItemProps[]; }> {
   private dataSource: DataSource;
 
   constructor(props: unknown) {
@@ -79,14 +76,13 @@ export default class extends React.Component<any, { text: string; items: IListIt
     };
 
     this.dataSource = new DataSource(
-      // @ts-expect-error
       {
         store: {
           type: 'array',
           data: items,
         },
         sort: [
-          { getter: 'text', desc: true },
+          { selector: 'text', desc: true },
         ],
         pageSize: 1,
       },
@@ -109,7 +105,6 @@ export default class extends React.Component<any, { text: string; items: IListIt
   private addTextToList() {
     const { items: stateItems, text } = this.state;
     this.setState({
-      // @ts-expect-error
       items: [...stateItems, { text }],
       text: '',
     });
