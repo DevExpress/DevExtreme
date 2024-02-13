@@ -552,7 +552,6 @@ export interface dxFormGroupItem {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1 data:object
      * @type_function_return string|Element|jQuery
      * @public
      */
