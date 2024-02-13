@@ -432,10 +432,10 @@ QUnit.test('translates coordinates with tickInterval info', function(assert) {
     });
 
     assert.equal(this.translator.translate.callCount, 8); // 4 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, [1, 0, 5]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, [2, 0, 5]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, [3, 0, 5]);
-    assert.deepEqual(this.translator.translate.getCall(6).args, [4, 0, 5]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, [1, 0, false, 5]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, [2, 0, false, 5]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, [3, 0, false, 5]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, [4, 0, false, 5]);
 });
 
 QUnit.module('checkAlignmentConstantLineLabels', environment2DTranslator);
