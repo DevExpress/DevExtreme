@@ -11,11 +11,8 @@ $fluent-slider-height: 28px !default; // for fieldset height
 $fluent-slider-radius: 50% !default;
 $fluent-slider-track-height: null !default;
 $fluent-slider-track-border-radius: 2px !default;
-$fluent-slider-handle-active-border-width: 2px !default;
 $fluent-slider-handle-height: null !default;
 $fluent-slider-handle-inner-size: null !default;
-$fluent-slider-handle-inner-border-width: 1px !default;
-$fluent-slider-handle-inner-disabled-size: 2px !default;
 
 @if $size == "default" {
   $fluent-slider-track-height: 4px !default;

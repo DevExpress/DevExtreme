@@ -7,8 +7,6 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-$fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizontal-padding;
-
 @mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
   min-width: $fluent-button-height;
 
@@ -35,7 +33,7 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
 
 @mixin dx-button-text-and-icon-sizing() {
   @include dx-button-sizing(
-    $fluent-button-vertical-padding, 
+    $fluent-button-vertical-padding,
     $fluent-button-icon-text-padding,
     $fluent-button-horizontal-padding,
     $fluent-button-icon-size,
@@ -52,7 +50,6 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
   $hover-background-color,
   $focused-background-color,
   $active-background-color,
-  $disabled-background-color,
   $icon-color,
   $selected-background-color: $active-background-color,
   $selected-color: $text-color,
@@ -84,7 +81,7 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
 
   &.dx-state-focused {
     background-color: $focused-background-color;
-    
+
     &,
     .dx-icon {
       color: $text-color-hover;
@@ -93,7 +90,7 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
 
   &.dx-state-active {
     background-color: $active-background-color;
-    
+
     &,
     .dx-icon {
       color: $text-color-active;
@@ -121,7 +118,6 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
     $button-hover-bg,
     $button-focused-bg,
     $button-active-bg,
-    $button-disabled-background,
     $button-icon-color,
     $button-selected-bg,
     $button-selected-color,
@@ -158,7 +154,6 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
     $hover-bg,
     $focused-bg,
     $active-bg,
-    transparent,
     $button-color,
     $selected-bg,
     $selected-color,
@@ -179,7 +174,7 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
   border-width: 1px;
   border-style: solid;
   border-color: $border-color;
-  
+
   @include dx-button-styling-variant(
     transparent,
     $button-color,
@@ -188,7 +183,6 @@ $fluent-button-padding: $fluent-button-vertical-padding $fluent-button-horizonta
     $hover-bg,
     $focused-bg,
     $active-bg,
-    transparent,
     $button-color,
     $selected-bg,
     $selected-color,

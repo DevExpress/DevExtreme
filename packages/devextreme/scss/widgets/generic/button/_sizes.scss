@@ -11,10 +11,6 @@ $generic-button-border-weight: $generic-base-border-width !default;
 
 $generic-button-content-line-height: $generic-base-line-height !default;
 
-$generic-button-text-transform: none !default;
-$generic-button-text-font-weight: 400 !default;
-$generic-button-text-letter-spacing: normal !default;
-
 @if $size == "default" {
   $generic-button-text-line-height: 1.2858 !default;
   $generic-button-vertical-padding: 8px !default;
