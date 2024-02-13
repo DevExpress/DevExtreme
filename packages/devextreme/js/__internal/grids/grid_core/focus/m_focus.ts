@@ -23,9 +23,9 @@ const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
 export class FocusController extends core.ViewController {
-  private _dataController: any;
+  private _dataController!: DataController;
 
-  private _keyboardController: any;
+  private _keyboardController!: KeyboardNavigationController;
 
   init() {
     this._dataController = this.getController('data');

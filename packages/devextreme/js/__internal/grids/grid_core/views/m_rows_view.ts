@@ -1076,7 +1076,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  height(height) {
+  height(height?) {
     const that = this;
     const $element = this.element();
 
@@ -1219,7 +1219,7 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  _scrollToElement($element, offset) {
+  _scrollToElement($element, offset?) {
     const scrollable = this.getScrollable();
     scrollable && scrollable.scrollToElement($element, offset);
   }
@@ -1277,7 +1277,7 @@ export class RowsView extends ColumnsView {
     this._scrollable && this._scrollable.dispose();
   }
 
-  setScrollerSpacing() { }
+  setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
 
   _restoreErrorRow() { }
 }

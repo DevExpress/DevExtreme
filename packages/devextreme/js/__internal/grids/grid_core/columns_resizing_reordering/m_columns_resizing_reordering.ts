@@ -24,8 +24,13 @@ import { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_facto
 import { ModuleType } from '@ts/grids/grid_core/m_types';
 import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
+import { ColumnChooserView } from '../column_chooser/m_column_chooser';
+import { ColumnHeadersView } from '../column_headers/m_column_headers';
+import { ColumnsController } from '../columns_controller/m_columns_controller';
+import { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { PagerView } from '../pager/m_pager';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -56,7 +61,7 @@ const allowReordering = function (that) {
 export class TrackerView extends modules.View {
   private _positionChanged: any;
 
-  private _tablePositionController: any;
+  private _tablePositionController!: TablePositionViewController;
 
   _renderCore() {
     const deferred = super._renderCore();
@@ -99,7 +104,7 @@ export class TrackerView extends modules.View {
 
   init() {
     super.init();
-    this._tablePositionController = this.getController('tablePosition' as any);
+    this._tablePositionController = this.getController('tablePosition');
     this._subscribeToCallback();
   }
 
@@ -158,7 +163,7 @@ export class SeparatorView extends modules.View {
     }
   }
 
-  width(value) {
+  width(value?) {
     const $element = this.element();
     if ($element) {
       if (isDefined(value)) {
@@ -173,7 +178,7 @@ export class SeparatorView extends modules.View {
 export class ColumnsSeparatorView extends SeparatorView {
   private _positionChanged: any;
 
-  private _tablePositionController: any;
+  private _tablePositionController!: TablePositionViewController;
 
   private _isTransparent?: boolean;
 
@@ -237,7 +242,7 @@ export class ColumnsSeparatorView extends SeparatorView {
 
   init() {
     super.init();
-    this._tablePositionController = this.getController('tablePosition' as any);
+    this._tablePositionController = this.getController('tablePosition');
     this._init();
   }
 
@@ -381,7 +386,7 @@ export class DraggingHeaderView extends modules.View {
 
   private _controller!: DraggingHeaderViewController;
 
-  private _columnsResizerViewController: any;
+  private _columnsResizerViewController!: ColumnsResizerViewController;
 
   private _dragOptions: any;
 
@@ -620,7 +625,7 @@ const isNextColumnResizingMode = function (that) {
 };
 
 export class ColumnsResizerViewController extends modules.ViewController {
-  protected _columnHeadersView: any;
+  protected _columnHeadersView!: ColumnHeadersView;
 
   private _$parentContainer: any;
 
@@ -628,7 +633,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _resizingInfo: any;
 
-  _columnsController: any;
+  _columnsController!: ColumnsController;
 
   private _pointsByColumns: any;
 
@@ -638,9 +643,9 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _endResizingHandler: any;
 
-  private _columnsSeparatorView: any;
+  private _columnsSeparatorView!: ColumnsSeparatorView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   private readonly _scrollRight: any;
 
@@ -650,11 +655,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _scrollLeft?: number;
 
-  private _trackerView: any;
+  private _trackerView!: TrackerView;
 
-  private _tablePositionController: any;
+  private _tablePositionController!: TablePositionViewController;
 
-  private _draggingHeaderView: any;
+  private _draggingHeaderView!: DraggingHeaderView;
 
   _isHeadersRowArea(posY) {
     if (this._columnHeadersView) {
@@ -1079,8 +1084,8 @@ export class ColumnsResizerViewController extends modules.ViewController {
     let previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
     let previousTableHeight = 0;
 
-    // @ts-expect-error
     that._subscribeToCallback(that.getController('tablePosition').positionChanged, (e) => {
+      // @ts-expect-error
       if (that._isResizing && !that._rowsView.isResizing) {
         const scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
         if (previousScrollbarVisibility !== scrollbarVisibility || (previousTableHeight && previousTableHeight !== e.height)) {
@@ -1138,13 +1143,13 @@ export class ColumnsResizerViewController extends modules.ViewController {
 }
 
 export class TablePositionViewController extends modules.ViewController {
-  private _columnHeadersView: any;
+  private _columnHeadersView!: ColumnHeadersView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
-  private readonly positionChanged: any;
+  public readonly positionChanged: any;
 
-  private _pagerView: any;
+  private _pagerView!: PagerView;
 
   constructor(component) {
     super(component);
@@ -1200,23 +1205,23 @@ export class TablePositionViewController extends modules.ViewController {
 }
 
 export class DraggingHeaderViewController extends modules.ViewController {
-  private _columnsController: any;
+  private _columnsController!: ColumnsController;
 
-  private _columnsSeparatorView: any;
+  private _columnsSeparatorView!: ColumnsSeparatorView;
 
-  private _blockSeparatorView: any;
+  private _blockSeparatorView!: BlockSeparatorView;
 
   private _animationColumnIndex?: number;
 
-  _columnHeadersView: any;
+  _columnHeadersView!: ColumnHeadersView;
 
-  private _draggingHeaderView: any;
+  private _draggingHeaderView!: DraggingHeaderView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
-  private _headerPanelView: any;
+  private _headerPanelView!: HeaderPanel;
 
-  private _columnChooserView: any;
+  private _columnChooserView!: ColumnChooserView;
 
   private isCustomGroupColumnPosition?: boolean;
 
@@ -1451,6 +1456,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
         } else {
           that.hideSeparators('block');
           that.getController('tablePosition').update(parameters.posY);
+          // @ts-expect-error
           separator.moveByX(parameters.posX - separator.width());
           separator.show();
         }

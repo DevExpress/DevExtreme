@@ -11,6 +11,7 @@ import {
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/m_utils';
 
+import { ColumnsController } from '../columns_controller/m_columns_controller';
 import { DataController } from '../data_controller/m_data_controller';
 import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';
@@ -26,7 +27,7 @@ const FILTER_PANEL_LEFT_CONTAINER = `${FILTER_PANEL_CLASS}-left`;
 const FILTER_PANEL_TARGET = 'filterPanel';
 
 export class FilterPanelView extends modules.View {
-  private _columnsController: any;
+  private _columnsController!: ColumnsController;
 
   private readonly _filterValueBuffer: any;
 

@@ -180,7 +180,7 @@ const updateFilterValue = function (that, options) {
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFilterRowExtender extends Base {
   private _filterRangeOverlayInstance: any;
 
-  private _applyFilterViewController: any;
+  private _applyFilterViewController!: ApplyFilterViewController;
 
   _updateEditorValue(column, $editorContainer) {
     const that = this;
@@ -860,6 +860,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     super._startResizing.apply(that, arguments);
 
     if (that.isResizing()) {
+      // @ts-expect-error
       const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
       if (overlayInstance) {
@@ -877,10 +878,12 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     let $cell;
 
     if (that.isResizing()) {
+      // @ts-expect-error
       const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
       if (overlayInstance) {
         $cell = overlayInstance.$element().closest('td');
+        // @ts-expect-error
         that._columnHeadersView._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
         overlayInstance.$content().show();
       }
@@ -922,7 +925,7 @@ const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingC
 };
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPanel extends Base {
-  private _applyFilterViewController: any;
+  private _applyFilterViewController!: ApplyFilterViewController;
 
   _getToolbarItems() {
     const items = super._getToolbarItems();

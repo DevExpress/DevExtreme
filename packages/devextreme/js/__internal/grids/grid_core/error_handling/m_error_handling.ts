@@ -5,9 +5,11 @@ import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
 
+import { ColumnHeadersView } from '../column_headers/m_column_headers';
 import { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import { ModuleType } from '../m_types';
+import { RowsView } from '../views/m_rows_view';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';
@@ -15,9 +17,9 @@ const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const ACTION_CLASS = 'action';
 
 export class ErrorHandlingController extends modules.ViewController {
-  private _columnHeadersView: any;
+  private _columnHeadersView!: ColumnHeadersView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   init() {
     const that = this;

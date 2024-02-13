@@ -15,8 +15,13 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 
+import { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
+import { ColumnHeadersView } from '../column_headers/m_column_headers';
+import { ColumnsController } from '../columns_controller/m_columns_controller';
+import { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { RowsView } from './m_rows_view';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
@@ -55,13 +60,13 @@ const restoreFocus = function (focusedElement, selectionRange) {
 export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
 
-  private _dataController: any;
+  private _dataController!: DataController;
 
-  _rowsView: any;
+  _rowsView!: RowsView;
 
-  _columnHeadersView: any;
+  _columnHeadersView!: ColumnHeadersView;
 
-  _columnsController: any;
+  _columnsController!: ColumnsController;
 
   _footerView: any;
 
@@ -81,7 +86,7 @@ export class ResizingController extends modules.ViewController {
 
   private _lastHeight: any;
 
-  _adaptiveColumnsController: any;
+  _adaptiveColumnsController!: AdaptiveColumnsController;
 
   _updateScrollableTimeoutID: any;
 
@@ -240,6 +245,7 @@ export class ResizingController extends modules.ViewController {
     this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
     if (this._needStretch()) {
+      // @ts-expect-error
       $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
     }
   }
@@ -269,7 +275,7 @@ export class ResizingController extends modules.ViewController {
     let hasMinWidth = false;
     let resetBestFitMode;
     let isColumnWidthsCorrected = false;
-    let resultWidths = [];
+    let resultWidths: any[] = [];
     let focusedElement;
     let selectionRange;
 
@@ -698,6 +704,7 @@ export class ResizingController extends modules.ViewController {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 
+    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
   }
 
@@ -812,9 +819,9 @@ export class SynchronizeScrollingController extends modules.ViewController {
 }
 
 export class GridView extends modules.View {
-  private _resizingController: any;
+  private _resizingController!: ResizingController;
 
-  private _dataController: any;
+  private _dataController!: DataController;
 
   private _groupElement: any;
 

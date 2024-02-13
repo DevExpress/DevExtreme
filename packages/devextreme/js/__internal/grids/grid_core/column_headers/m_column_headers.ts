@@ -565,7 +565,7 @@ export class ColumnHeadersView extends ColumnsView {
     return this._columnsController && this._columnsController.getRowCount();
   }
 
-  setRowsOpacity(columnIndex, value, rowIndex) {
+  setRowsOpacity(columnIndex, value, rowIndex?) {
     let i;
     let columnElements;
     const rowCount = this.getRowCount();
