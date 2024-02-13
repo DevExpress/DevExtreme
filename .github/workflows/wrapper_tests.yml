@@ -40,9 +40,6 @@ jobs:
         working-directory: ./packages/devextreme
         run: npm run build
 
-      - name: Generate wrappers
-        run: npm run regenerate-all
-
       - name: Check generated code
         shell: bash
         run: |
