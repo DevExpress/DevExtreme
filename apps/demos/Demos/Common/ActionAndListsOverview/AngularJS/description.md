@@ -1,1 +1,0 @@
-DevExtreme ships with various JavaScript UI components for visualizing data collections and performing actions on the view. These components are available as AngularJS directives that support two-way binding and declarative configuration. This demo showcases the List and Tile View components. Discover more components from other demos in this section.
