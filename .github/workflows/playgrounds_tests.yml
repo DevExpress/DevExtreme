@@ -53,8 +53,17 @@ jobs:
         path: ./packages/devextreme/artifacts.zip
         retention-days: 1
 
-  Angular:
+  test:
+    name: ${{ matrix.ARGS.platform }}
     needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { platform: "angular" },
+          { platform: "react" },
+          { platform: "vue" },
+        ]
     runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
@@ -87,99 +96,13 @@ jobs:
       run: 7z x artifacts.zip -aoa
 
     - name: Build
-      working-directory: ./packages/devextreme-angular
+      working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}
       run: npm run pack
 
     - name: Check sources compilation
-      working-directory: ./playgrounds/angular
+      working-directory: ./playgrounds/${{ matrix.ARGS.platform }}
       run: npm run build
 
     - name: Run test
-      working-directory: ./playgrounds/angular
-      run: npm run test
-
-  React:
-    needs: [build]
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      run: 7z x artifacts.zip -aoa
-
-    - name: Build
-      working-directory: ./packages/devextreme-react
-      run: npm run pack
-
-    - name: Check sources compilation
-      working-directory: ./playgrounds/react
-      run: npm run build
-
-    - name: Run test
-      working-directory: ./playgrounds/react
-      run: npm run test
-
-  Vue:
-    needs: [build]
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      run: 7z x artifacts.zip -aoa
-
-    - name: Check sources compilation
-      working-directory: ./playgrounds/vue
-      run: npm run build
-
-    - name: Run test
-      working-directory: ./playgrounds/vue
+      working-directory: ./playgrounds/${{ matrix.ARGS.platform }}
       run: npm run test
