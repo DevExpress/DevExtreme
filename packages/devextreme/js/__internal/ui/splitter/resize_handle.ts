@@ -1,6 +1,5 @@
 import { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
-import registerComponent from '../../../core/component_registrator';
 import Guid from '../../../core/guid';
 import { extend } from '../../../core/utils/extend';
 import eventsEngine from '../../../events/core/events_engine';
@@ -135,8 +134,5 @@ class ResizeHandle extends (Widget as any) {
     }
   }
 }
-
-// @ts-expect-error // temp
-registerComponent('dxResizeHandle', ResizeHandle);
 
 export default ResizeHandle;
