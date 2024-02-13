@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { GridBase, GridBaseOptions } from '@js/common/grids';
+import { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
 import { Component } from '@js/core/component';
 import { PropertyType } from '@js/core/index';
 import { dxElementWrapper } from '@js/core/renderer';
@@ -81,6 +81,10 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 'toolbar'
 >;
 
+interface InternalSelection extends SelectionBase {
+  alwaysSelectByShift?: boolean;
+}
+
 export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid {
   dataRowTemplate?: any;
 
@@ -93,6 +97,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   forceApplyBindings?: any;
 
   loadItemsOnExportingSelectedItems?: boolean | undefined;
+
+  selection?: InternalSelection;
 }
 
 // todo: move to upper .d.ts files

@@ -41,8 +41,14 @@ const getFilesFromDirectory = (directoryName: string, extensions: string[] = [])
   return result;
 };
 
+const removeAllCommentsFromContent = (content: string): string => content
+  .replace(/\/\/.+(\n|\r\n|\r)/g, '')
+  .split(/\/\*|\*\//)
+  .filter((_, index) => index % 2 === 0)
+  .join('');
+
 const extractVariables = (filePath: string): string[] => {
-  const content = readFileSync(filePath, 'utf8');
+  const content = removeAllCommentsFromContent(readFileSync(filePath, 'utf8'));
   const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
 };
@@ -108,7 +114,6 @@ test('There are no unused images in repository', () => {
         '$generic-button-text-transform',
         '$generic-button-text-font-weight',
         '$generic-button-text-letter-spacing',
-        '$type-values',
         '$generic-html-editor-horizontal-padding',
         '$generic-scheduler-focused-tab-border',
         '$generic-scheduler-view-switcher-font-size',
@@ -136,7 +141,6 @@ test('There are no unused images in repository', () => {
         '$material-normal-button-focused-state-shadow',
         '$disabled-background-color',
         '$filemanager-file-item-focused-bg',
-        '$type-values',
         '$material-grid-base-footer-font-size',
         '$htmleditor-normal-format-active-bg',
         '$htmleditor-default-format-active-bg',
@@ -152,7 +156,6 @@ test('There are no unused images in repository', () => {
         '$material-scheduler-appointment-tooltip-width',
         '$material-slider-tooltip-width-without-paddings',
         '$switch-hover-bg',
-        '$material-tagbox-remove-button-right',
         '$material-tagbox-outlined-with-label-top-padding',
         '$treelist-row-alternation-bg',
       ],
@@ -171,7 +174,6 @@ test('There are no unused images in repository', () => {
         '$disabled-background-color',
         '$filemanager-file-item-focused-bg',
         '$datagrid-columnchooser-hover-icon-color',
-        '$type-values',
         '$datagrid-menu-icon-color',
         '$fluent-grid-base-footer-font-size',
         '$loadpanel-content-shadow-color',
