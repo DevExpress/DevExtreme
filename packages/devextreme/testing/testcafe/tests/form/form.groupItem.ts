@@ -30,7 +30,7 @@ test(testName, async (t) => {
 test(testName, async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Gruop caption template.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Group caption template.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
