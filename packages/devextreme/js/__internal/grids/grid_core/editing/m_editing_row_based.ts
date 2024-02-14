@@ -1,4 +1,7 @@
+/* eslint-disable max-classes-per-file */
 import { equalByValue } from '@js/core/utils/common';
+import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { ModuleType } from '../m_types';
 import {
@@ -103,52 +106,58 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 };
 
+const data = (Base: ModuleType<DataController>) => class DataEditingRowBasedExtender extends Base {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
+    const editingController = this.getController('editing');
+
+    if (editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {
+      return;
+    }
+
+    return super._getChangedColumnIndices.apply(this, arguments as any);
+  }
+};
+
+const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedExtender extends Base {
+  _editingController: any;
+
+  _createRow(row) {
+    const $row = super._createRow.apply(this, arguments as any);
+
+    if (row) {
+      const editingController = this._editingController;
+      const isEditRow = editingController.isEditRow(row.rowIndex);
+
+      if (isEditRow) {
+        $row.addClass(EDIT_ROW);
+        $row.removeClass(ROW_SELECTED_CLASS);
+
+        if (row.rowType === 'detail') {
+          $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+        }
+      }
+    }
+
+    return $row;
+  }
+
+  _update(change) {
+    super._update(change);
+    if (change.changeType === 'updateSelection') {
+      this.getTableElements().children('tbody').children(`.${EDIT_ROW}`).removeClass(ROW_SELECTED_CLASS);
+    }
+  }
+};
+
 export const editingRowBasedModule = {
   extenders: {
     controllers: {
       editing: editingControllerExtender,
-      data: {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
-          const editingController = this.getController('editing');
-
-          if (editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {
-            return;
-          }
-
-          return this.callBase.apply(this, arguments);
-        },
-      },
+      data,
     },
     views: {
-      rowsView: {
-        _createRow(row) {
-          const $row = this.callBase.apply(this, arguments);
-
-          if (row) {
-            const editingController = this._editingController;
-            const isEditRow = editingController.isEditRow(row.rowIndex);
-
-            if (isEditRow) {
-              $row.addClass(EDIT_ROW);
-              $row.removeClass(ROW_SELECTED_CLASS);
-
-              if (row.rowType === 'detail') {
-                $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
-              }
-            }
-          }
-
-          return $row;
-        },
-
-        _update(change) {
-          this.callBase(change);
-          if (change.changeType === 'updateSelection') {
-            this.getTableElements().children('tbody').children(`.${EDIT_ROW}`).removeClass(ROW_SELECTED_CLASS);
-          }
-        },
-      },
+      rowsView,
     },
   },
 };
