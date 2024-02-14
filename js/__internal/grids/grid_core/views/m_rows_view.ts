@@ -78,6 +78,8 @@ const getScrollableBottomPadding = function (that) {
 export class RowsView extends ColumnsView {
   _loadPanel: any;
 
+  _editingController: any;
+
   _editorFactoryController!: any;
 
   _hasHeight: boolean | undefined;
@@ -914,6 +916,7 @@ export class RowsView extends ColumnsView {
     const dataController = that.getController('data');
 
     super.init();
+    this._editingController = this.getController('editing');
     that._editorFactoryController = that.getController('editorFactory');
     that._rowHeight = 0;
     that._scrollTop = 0;
