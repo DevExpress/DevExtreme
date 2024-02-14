@@ -6,6 +6,7 @@ import DataHeaderArea from './dataHeaderArea';
 import FieldChooser from './fieldChooser';
 import Popup from '../popup';
 import RowHeaderArea from './rowHeaderArea';
+import RowsArea from './rowsArea';
 
 const CLASS = {
   fieldChooser: 'dx-pivotgridfieldchooser',
@@ -64,6 +65,10 @@ export default class PivotGrid extends Widget {
 
   getRowHeaderArea(): RowHeaderArea {
     return new RowHeaderArea(this.element);
+  }
+
+  getRowsArea(): RowsArea {
+    return new RowsArea(this.element);
   }
 
   getDataHeaderArea(): DataHeaderArea {
