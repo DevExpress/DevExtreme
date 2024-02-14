@@ -1248,7 +1248,7 @@ testComponentDefaults(LoadIndicator,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current('material');
+        themes.current('material.blue.light');
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1263,7 +1263,7 @@ testComponentDefaults(LoadIndicator,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current('generic');
+        themes.current('generic.light');
     },
     function() {
         themes.current(this.originalCurrentTheme);
