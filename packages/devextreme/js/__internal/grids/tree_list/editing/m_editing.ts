@@ -198,7 +198,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
 
   private validateClick(e) {
     const $targetElement = $(e.event.target);
-    const originalClickHandler = e.event.type === 'dxdblclick' ? super._rowClick : super._rowDblClick;
+    const originalClickHandler = e.event.type === 'dxdblclick' ? super._rowDblClick : super._rowClick;
 
     if ($targetElement.closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
       return false;
@@ -256,7 +256,6 @@ treeListCore.registerModule('editing', {
   },
   extenders: {
     controllers: {
-      ...editingModule.extenders.controllers,
       data,
     },
     views: {
