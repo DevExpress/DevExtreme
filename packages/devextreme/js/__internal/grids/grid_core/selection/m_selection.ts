@@ -106,7 +106,7 @@ const selectionHeaderTemplate = (container, options) => {
 };
 
 export class SelectionController extends modules.Controller {
-  private _dataController!: DataController;
+  _dataController!: DataController;
 
   private _selectionMode?: string;
 
@@ -218,7 +218,8 @@ export class SelectionController extends modules.Controller {
         // @ts-expect-error
         return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
       },
-      plainItems() {
+      // eslint-disable-next-line
+      plainItems(cached?) {
         return dataController.items(true);
       },
       isItemSelected(item) {
@@ -480,7 +481,8 @@ export class SelectionController extends modules.Controller {
     return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
-  getSelectedRowKeys() {
+  // eslint-disable-next-line
+  getSelectedRowKeys(mode?) {
     return this._selection.getSelectedItemKeys();
   }
 
@@ -509,7 +511,8 @@ export class SelectionController extends modules.Controller {
     return this.selectRows(keys);
   }
 
-  getSelectedRowsData() {
+  // eslint-disable-next-line
+  getSelectedRowsData(mode?) {
     return this._selection.getSelectedItems();
   }
 
@@ -565,7 +568,7 @@ export class SelectionController extends modules.Controller {
   }
 }
 
-const data = (Base: ModuleType<DataController>) => class DataControllerSelectionExtender extends Base {
+export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerSelectionExtender extends Base {
   init() {
     const selectionController = this.getController('selection');
     const isDeferredMode = this.option('selection.deferred');
@@ -669,7 +672,7 @@ const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMe
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersSelectionExtender extends Base {
+export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersSelectionExtender extends Base {
   init() {
     const that = this;
     super.init();
@@ -703,7 +706,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  _renderSelectAllCheckBox($container, column) {
+  _renderSelectAllCheckBox($container, column?) {
     const that = this;
     const selectionController = that.getController('selection');
     const isEmptyData = that.getController('data').isEmpty();
@@ -758,7 +761,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionExtender extends Base {
+export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => class RowsViewSelectionExtender extends Base {
   renderSelectCheckBoxContainer($container, options) {
     if (options.rowType === 'data' && !options.row.isNewRow) {
       $container.addClass(EDITOR_CELL_CLASS);
@@ -889,6 +892,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionExtender
     return $row;
   }
 
+  _rowClickForTreeList(e): void {
+    super._rowClick(e);
+  }
+
   _rowClick(e) {
     const that = this;
     const dxEvent = e.event;
@@ -954,13 +961,13 @@ export const selectionModule = {
 
   extenders: {
     controllers: {
-      data,
+      data: dataSelectionExtenderMixin,
       contextMenu,
     },
 
     views: {
-      columnHeadersView,
-      rowsView,
+      columnHeadersView: columnHeadersSelectionExtenderMixin,
+      rowsView: rowsViewSelectionExtenderMixin,
     },
   },
 };
