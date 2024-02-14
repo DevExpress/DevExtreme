@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, max-classes-per-file */
-import { GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -25,7 +24,6 @@ import { removeEvent } from '@js/events/remove';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
-import { current, isFluent } from '@js/ui/themes';
 import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
