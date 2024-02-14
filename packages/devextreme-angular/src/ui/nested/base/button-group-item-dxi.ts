@@ -501,11 +501,11 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('size', value);
     }
 
-    get splitterComponent(): dxSplitterOptions | undefined {
-        return this._getOption('splitterComponent');
+    get splitter(): dxSplitterOptions | undefined {
+        return this._getOption('splitter');
     }
-    set splitterComponent(value: dxSplitterOptions | undefined) {
-        this._setOption('splitterComponent', value);
+    set splitter(value: dxSplitterOptions | undefined) {
+        this._setOption('splitter', value);
     }
 
     get heightRatio(): number {

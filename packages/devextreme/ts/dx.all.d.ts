@@ -25777,9 +25777,9 @@ declare module DevExpress.ui {
    */
   export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
     /**
-     * [descr:dxSplitterItem.splitterComponent]
+     * [descr:dxSplitterItem.splitter]
      */
-    splitterComponent?: DevExpress.ui.dxSplitter.Properties<any, TKey>;
+    splitter?: DevExpress.ui.dxSplitter.Properties<any, TKey>;
     /**
      * [descr:dxSplitterItem.size]
      */

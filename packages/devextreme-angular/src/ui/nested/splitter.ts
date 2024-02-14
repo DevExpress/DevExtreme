@@ -29,7 +29,7 @@ import { DxiItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-splitter-component',
+    selector: 'dxo-splitter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -60,16 +60,16 @@ import { DxiItemComponent } from './item-dxi';
         'width'
     ]
 })
-export class DxoSplitterComponentComponent extends DxoSplitterOptions implements OnDestroy, OnInit  {
+export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit  {
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitterComponent?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {
-        return 'splitterComponent';
+        return 'splitter';
     }
 
 
@@ -107,10 +107,10 @@ export class DxoSplitterComponentComponent extends DxoSplitterOptions implements
 
 @NgModule({
   declarations: [
-    DxoSplitterComponentComponent
+    DxoSplitterComponent
   ],
   exports: [
-    DxoSplitterComponentComponent
+    DxoSplitterComponent
   ],
 })
-export class DxoSplitterComponentModule { }
+export class DxoSplitterModule { }
