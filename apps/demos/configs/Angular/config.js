@@ -39,7 +39,7 @@ window.config = {
     /**/
   },
   paths: {
-    'npm:': '../../../../../node_modules/',
+    'npm:': '../../../../../../node_modules/',
   },
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',

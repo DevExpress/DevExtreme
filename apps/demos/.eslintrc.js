@@ -15,6 +15,9 @@ module.exports = {
     sourceType: 'module',
     'ecmaVersion': 2018,
     requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react'],
+    },
   },
   plugins: [
     'spellcheck',

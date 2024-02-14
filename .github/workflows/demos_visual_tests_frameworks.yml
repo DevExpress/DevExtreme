@@ -90,7 +90,18 @@ jobs:
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
       run: |
-        npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz --workspaces=false
+        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
+        mv node_modules/devextreme/package/* node_modules/devextreme
+        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
+        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
+        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
+        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
+        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
+        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
+        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
+        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
     - name: Prepare bundles
       working-directory: apps/demos
@@ -103,9 +114,9 @@ jobs:
     - name: Copy build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: devextreme-sources
+        name: devextreme-bundles
         path: |
-          bundles/
+          apps/demos/bundles/
         retention-days: 1
 
   get-changes:
@@ -234,7 +245,18 @@ jobs:
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
       run: |
-        npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz --workspaces=false
+        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
+        mv node_modules/devextreme/package/* node_modules/devextreme
+        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
+        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
+        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
+        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
+        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
+        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
+        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
+        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -247,7 +269,7 @@ jobs:
 
         git add ./Demos -N
 
-        if git diff --exit-code . ':!package-lock.json' ':!package.json' ; then
+        if git diff --exit-code . ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
             echo "Generated JS demos are outdated. Execute 'npm run convert-to-js ./Demos/**/React' and commit changes."
@@ -293,7 +315,18 @@ jobs:
     # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
       run: |
-        npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz --workspaces=false
+        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
+        mv node_modules/devextreme/package/* node_modules/devextreme
+        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
+        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
+        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
+        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
+        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
+        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
+        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
+        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -315,6 +348,15 @@ jobs:
       with:
         name: changed-demos
         path: apps/demos
+
+    - name: Create bundles dir
+      run: mkdir apps/demos/bundles
+
+    - name: Download bundles artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-bundles
+        path: apps/demos/bundles
 
     - name: Run TestCafe tests
       working-directory: apps/demos

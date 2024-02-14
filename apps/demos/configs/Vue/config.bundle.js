@@ -23,7 +23,7 @@ const bundleConfig = {
     ],
   },
   map: {
-    'devextreme.vue.systemjs.js': '../../../../../bundles/devextreme.vue.systemjs.js',
+    'devextreme.vue.systemjs.js': '../../../../bundles/devextreme.vue.systemjs.js',
   },
 };
 

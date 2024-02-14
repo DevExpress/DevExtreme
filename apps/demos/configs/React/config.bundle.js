@@ -25,17 +25,17 @@ const bundleConfig = {
     ],
   },
   map: {
-    'devextreme.react.systemjs.js': '../../../../../bundles/devextreme.react.systemjs.js',
+    'devextreme.react.systemjs.js': '../../../../bundles/devextreme.react.systemjs.js',
     'devextreme/localization/messages': 'npm:devextreme/localization/messages',
   },
   packages: {
     'react': {
       defaultExtension: 'js',
-      main: '../../../../umd/react.development.js',
+      main: '../../../../../../../node_modules/react/umd/react.development.js',
     },
     'react-dom': {
       defaultExtension: 'js',
-      main: '../../../../umd/react-dom.development.js',
+      main: '../../../../../../../node_modules/react-dom/umd/react-dom.development.js',
     },
     'devextreme/localization/messages': {
       format: 'json',

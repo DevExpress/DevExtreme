@@ -95,7 +95,7 @@ const prepareConfigs = (framework) => {
       metaValue: {
         build: true,
       },
-      pathValue: 'node_modules/rxjs/*',
+      pathValue: '../../node_modules/rxjs/*',
     }];
 
     packages = [

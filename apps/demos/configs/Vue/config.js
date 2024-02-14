@@ -37,8 +37,8 @@ window.config = {
     /**/
   },
   paths: {
-    'root:': '../../../../../',
-    'npm:': '../../../../../node_modules/',
+    'root:': '../../../../',
+    'npm:': '../../../../../../node_modules/',
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
