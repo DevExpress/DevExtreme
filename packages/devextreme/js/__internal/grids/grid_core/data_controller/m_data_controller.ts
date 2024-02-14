@@ -1604,7 +1604,7 @@ export class DataController extends ControllerWithDataMixin {
   }
 
   hasLoadOperation(): boolean {
-    const operationTypes = this._dataSource?.operationTypes() || {};
+    const operationTypes = this._dataSource?.operationTypes() ?? {};
 
     return Object.keys(operationTypes).some((type) => operationTypes[type]);
   }
