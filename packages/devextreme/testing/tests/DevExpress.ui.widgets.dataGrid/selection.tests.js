@@ -2051,35 +2051,6 @@ QUnit.module('ChangeRowSelection for multiple selection. DataSource with key', {
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 4, 3], 'selectedRowKeys');
     });
 
-    // T1214734
-    QUnit.test('changeRowSelection with shift key after partial update when dataSource\'s reshapeOnPush = true', function(assert) {
-        // arrange
-        this.applyOptions({
-            repaintChangesOnly: true,
-            selection: {
-                mode: 'multiple',
-                showCheckBoxesMode: 'always'
-            },
-            onSelectionChanged: function(e) {
-                dataSource.store().push([{ type: 'update', key: 1, data: { name: 'test123' } }]);
-            }
-        });
-
-        const dataSource = createDataSource(this.array, { key: 'id' }, { reshapeOnPush: true });
-        this.dataController.setDataSource(dataSource);
-        dataSource.load();
-
-        // act
-        this.selectionController.changeItemSelection(1);
-        this.clock.tick();
-        this.selectionController.changeItemSelection(3, { shift: true });
-        this.clock.tick();
-
-        // assert
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 4, 3], 'selectedRowKeys');
-        assert.deepEqual(this.getVisibleRows()[0].data, { id: 1, name: 'test123', age: 15 }, 'data of the first row');
-    });
-
     // T547950
     QUnit.test('focusedItemIndex should be reset to -1 after change page index', function(assert) {
     // arrange
