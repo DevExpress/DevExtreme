@@ -12,12 +12,17 @@ const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
+const RESIZE_DIRECTION = {
+  horizontal: 'horizontal',
+  vertical: 'vertical',
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ResizeHandle extends (Widget as any) {
   _getDefaultOptions(): Record<string, unknown> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
-      direction: 'horizontal',
+      direction: RESIZE_DIRECTION.horizontal,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
@@ -36,11 +41,11 @@ class ResizeHandle extends (Widget as any) {
   _initMarkup(): void {
     super._initMarkup();
 
-    this._toggleDirection();
+    this._toggleDirectionClass();
     this.$element().addClass(RESIZE_HANDLE_CLASS);
   }
 
-  _toggleDirection(): void {
+  _toggleDirectionClass(): void {
     this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
     this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
   }
@@ -49,7 +54,9 @@ class ResizeHandle extends (Widget as any) {
     super._render();
 
     this._attachEventHandlers();
-    this._renderActions();
+    this._renderResizeStartAction();
+    this._renderResizeAction();
+    this._renderResizeEndAction();
   }
 
   _resizeStartHandler(e: ResizeStartEvent): void {
@@ -71,10 +78,16 @@ class ResizeHandle extends (Widget as any) {
     });
   }
 
-  _renderActions(): void {
-    this._resizeStartAction = this._createActionByOption('onResizeStart');
-    this._resizeEndAction = this._createActionByOption('onResizeEnd');
+  _renderResizeAction(): void {
     this._resizeAction = this._createActionByOption('onResize');
+  }
+
+  _renderResizeStartAction(): void {
+    this._resizeStartAction = this._createActionByOption('onResizeStart');
+  }
+
+  _renderResizeEndAction(): void {
+    this._resizeEndAction = this._createActionByOption('onResizeEnd');
   }
 
   _attachEventHandlers(): void {
@@ -94,21 +107,25 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _isHorizontalDirection(): boolean {
-    return this.option('direction') === 'horizontal';
+    return this.option('direction') === RESIZE_DIRECTION.horizontal;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
     switch (args.name) {
       case 'direction':
-        this._toggleDirection();
+        this._toggleDirectionClass();
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;
       case 'onResize':
+        this._renderResizeAction();
+        break;
       case 'onResizeStart':
+        this._renderResizeStartAction();
+        break;
       case 'onResizeEnd':
-        this._renderActions();
+        this._renderResizeEndAction();
         break;
       default:
         super._optionChanged(args);

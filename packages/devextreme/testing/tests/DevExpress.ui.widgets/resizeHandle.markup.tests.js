@@ -22,6 +22,7 @@ const moduleConfig = {
 
         const init = (options = {}) => {
             this.instance = new ResizeHandle('#resizeHandle', options);
+            this.$element = this.instance.$element();
         };
 
         init();
@@ -39,30 +40,30 @@ const moduleConfig = {
 
 QUnit.module('ResizeHandle markup', moduleConfig, () => {
     QUnit.test('should have correct root class', function(assert) {
-        assert.strictEqual(this.instance.$element().hasClass(RESIZE_HANDLE_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(RESIZE_HANDLE_CLASS), true);
     });
 
     QUnit.test('should be initialized with horizontal class by default', function(assert) {
-        assert.strictEqual(this.instance.$element().hasClass(VERTICAL_DIRECTION_CLASS), false);
-        assert.strictEqual(this.instance.$element().hasClass(HORIZONTAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), true);
     });
 
     QUnit.test('direction should be initialized correctly', function(assert) {
         this.reinit({ direction: 'vertical' });
 
-        assert.strictEqual(this.instance.$element().hasClass(HORIZONTAL_DIRECTION_CLASS), false);
-        assert.strictEqual(this.instance.$element().hasClass(VERTICAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), true);
     });
 
     QUnit.test('direction should be changed at runtime', function(assert) {
         this.instance.option('direction', 'vertical');
 
-        assert.strictEqual(this.instance.$element().hasClass(HORIZONTAL_DIRECTION_CLASS), false);
-        assert.strictEqual(this.instance.$element().hasClass(VERTICAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), true);
 
         this.instance.option('direction', 'horizontal');
 
-        assert.strictEqual(this.instance.$element().hasClass(HORIZONTAL_DIRECTION_CLASS), true);
-        assert.strictEqual(this.instance.$element().hasClass(VERTICAL_DIRECTION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
     });
 });
