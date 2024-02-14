@@ -35,7 +35,6 @@ class ResizeHandle extends (Widget as any) {
     this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
     this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
     this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
-    this.handlers = {};
   }
 
   _initMarkup(): void {
@@ -53,10 +52,10 @@ class ResizeHandle extends (Widget as any) {
   _render(): void {
     super._render();
 
+    this._createResizeStartAction();
+    this._createResizeAction();
+    this._createResizeEndAction();
     this._attachEventHandlers();
-    this._renderResizeStartAction();
-    this._renderResizeAction();
-    this._renderResizeEndAction();
   }
 
   _resizeStartHandler(e: ResizeStartEvent): void {
@@ -78,32 +77,50 @@ class ResizeHandle extends (Widget as any) {
     });
   }
 
-  _renderResizeAction(): void {
+  _createResizeAction(): void {
     this._resizeAction = this._createActionByOption('onResize');
   }
 
-  _renderResizeStartAction(): void {
+  _createResizeStartAction(): void {
     this._resizeStartAction = this._createActionByOption('onResizeStart');
   }
 
-  _renderResizeEndAction(): void {
+  _createResizeEndAction(): void {
     this._resizeEndAction = this._createActionByOption('onResizeEnd');
   }
 
   _attachEventHandlers(): void {
-    this.handlers[this.RESIZE_START_EVENT_NAME] = this._resizeStartHandler.bind(this);
-    this.handlers[this.RESIZE_EVENT_NAME] = this._resizeHandler.bind(this);
-    this.handlers[this.RESIZE_END_EVENT_NAME] = this._resizeEndHandler.bind(this);
+    const eventData = { direction: this.option('direction'), immediate: true };
 
-    eventsEngine.on(this.$element(), this.handlers, {
-      direction: this.option('direction'),
-      immediate: true,
-    });
+    eventsEngine.on(
+      this.$element(),
+      this.RESIZE_START_EVENT_NAME,
+      eventData,
+      this._resizeStartHandler.bind(this),
+    );
+
+    eventsEngine.on(
+      this.$element(),
+      this.RESIZE_EVENT_NAME,
+      eventData,
+      this._resizeHandler.bind(this),
+    );
+
+    eventsEngine.on(
+      this.$element(),
+      this.RESIZE_END_EVENT_NAME,
+      eventData,
+      this._resizeEndHandler.bind(this),
+    );
   }
 
   _detachEventHandlers(): void {
     // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this.$element(), this.handlers);
+    eventsEngine.off(this.$element(), this.RESIZE_START_EVENT_NAME);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
   }
 
   _isHorizontalDirection(): boolean {
@@ -119,13 +136,13 @@ class ResizeHandle extends (Widget as any) {
         this._attachEventHandlers();
         break;
       case 'onResize':
-        this._renderResizeAction();
+        this._createResizeAction();
         break;
       case 'onResizeStart':
-        this._renderResizeStartAction();
+        this._createResizeStartAction();
         break;
       case 'onResizeEnd':
-        this._renderResizeEndAction();
+        this._createResizeEndAction();
         break;
       default:
         super._optionChanged(args);
