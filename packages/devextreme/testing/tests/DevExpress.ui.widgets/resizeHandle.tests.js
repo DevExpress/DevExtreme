@@ -14,7 +14,7 @@ const moduleConfig = {
         fx.off = true;
 
         const init = (options = {}) => {
-            this.instance = new ResizeHandle('#resizeHandle', options);
+            this.instance = new ResizeHandle($('#resizeHandle'), options);
             this.$element = this.instance.$element();
         };
 
