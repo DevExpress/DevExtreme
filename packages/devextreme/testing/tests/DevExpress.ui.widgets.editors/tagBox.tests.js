@@ -7837,18 +7837,18 @@ QUnit.module('accessibility', () => {
         assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
     });
 
-    QUnit.test('TagBox tag element should have a correct aria attributes', function(assert) {
+    QUnit.test('TagBox tag element should have correct aria attributes', function(assert) {
         const items = [1, 2, 3];
         const $tagBox = $('#tagBox').dxTagBox({
             items,
             value: [items[0]],
         });
 
-        const tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+        const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
 
-        assert.strictEqual(tag.attr('role'), 'button');
-        assert.strictEqual(tag.attr('aria-label'), '1');
-        assert.strictEqual(tag.attr('aria-roledescription'), 'Tag. Press the delete button to remove this tag');
+        assert.strictEqual($tag.attr('role'), 'button');
+        assert.strictEqual($tag.attr('aria-label'), '1');
+        assert.strictEqual($tag.attr('aria-roledescription'), 'Tag. Press the delete button to remove this tag');
     });
 
     QUnit.test('TagBox element should have aria-labelledby with correct ids if tag was deleted by keyboard', function(assert) {

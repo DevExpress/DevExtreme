@@ -1138,15 +1138,15 @@ const TagBox = (SelectBox as any).inherit({
     }
   },
 
-  _setTagAria(element, value) {
+  _setTagAria($tag, tagText) {
     const aria = {
       role: 'button',
-      label: value,
+      label: tagText,
       // eslint-disable-next-line spellcheck/spell-checker
       roledescription: messageLocalization.format('dxTagBox-tagRoleDescription'),
     };
 
-    this.setAria(aria, element);
+    this.setAria(aria, $tag);
   },
 
   _getItemModel(item, displayValue) {
