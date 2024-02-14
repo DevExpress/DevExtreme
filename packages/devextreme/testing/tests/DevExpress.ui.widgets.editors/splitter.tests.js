@@ -52,7 +52,7 @@ QUnit.module('Events', moduleConfig, () => {
         });
 
         QUnit.test(`${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
-            checkHandlerCalled((resizeHandlerStub) => this.instance.option('onResizeStart', resizeHandlerStub), assert, pointerMock(this.$element));
+            checkHandlerCalled((resizeHandlerStub) => this.instance.option(eventHandler, resizeHandlerStub), assert, pointerMock(this.$element));
         });
 
         QUnit.test(`${eventHandler} should be called once after direction option changed`, function(assert) {
