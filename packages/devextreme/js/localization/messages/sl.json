@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} izbranih",
         "dxTagBox-allSelected": "Vsi izbrani ({0})",
         "dxTagBox-moreSelected": "še {0}",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Natisni",
         "vizExport-titleMenuText": "Izvozi/Natisni",

@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} seçili",
         "dxTagBox-allSelected": "Tümü seçildi ({0})",
         "dxTagBox-moreSelected": "{0} daha",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Yazdır",
         "vizExport-titleMenuText": "Dışa Aktar/Yazdır",
