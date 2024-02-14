@@ -1265,10 +1265,8 @@ const PivotGrid = (Widget as any).inherit({
       }
 
       const scrollBarWidth = that._dataArea.getScrollbarWidth();
-      const hasVerticalScrollbar = calculateHasScroll(
-        dataAreaHeight,
-        getHeight(that._dataArea.tableElement()),
-      );
+      const correctDataTableHeight = getHeight(that._dataArea.tableElement()) - getHeight(that._dataArea.headElement());
+      const hasVerticalScrollbar = calculateHasScroll(dataAreaHeight, correctDataTableHeight);
 
       that._dataArea.tableElement().css({
         width: that._hasHeight && hasVerticalScrollbar && scrollBarWidth
