@@ -521,7 +521,7 @@ export type RangeRule = {
   * @docid
   * @public
   */
-  max?: Date | number;
+  max?: Date | number | string;
   /**
   * @docid
   * @default 'Value is out of range'
@@ -532,7 +532,7 @@ export type RangeRule = {
   * @docid
   * @public
   */
-  min?: Date | number;
+  min?: Date | number | string;
   /**
   * @docid
   * @default false
