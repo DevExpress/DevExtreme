@@ -1520,7 +1520,12 @@ testComponentDefaults(Tabs,
         { mode: item.mode },
         function() {
             this.originalRealDevice = devices.real();
-            this._origBrowser = browser;
+            this._origBrowserSettings = {
+                chrome: browser.chrome,
+                safari: browser.safari,
+                version: item.version,
+                [item.name]: browser[item.name]
+            };
 
             delete browser.chrome;
             delete browser.safari;
@@ -1530,6 +1535,11 @@ testComponentDefaults(Tabs,
             devices.real({ platform: 'ios', deviceType: 'phone' });
         },
         function() {
+            browser.chrome = this._origBrowserSettings.chrome;
+            browser.safari = this._origBrowserSettings.safari;
+            browser.version = this._origBrowserSettings.version;
+            browser[item.name] = this._origBrowserSettings[item.name];
+
             devices.real(this.originalRealDevice);
         }
     );
