@@ -83,12 +83,6 @@ export default Splitter;
  */
 
 /**
- * @name dxSplitterItem
- * @inherits CollectionWidgetItem
- * @type object
- */
-
-/**
  * @name dxSplitterItem.html
  * @type String
  * @hidden
