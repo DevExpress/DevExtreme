@@ -1442,9 +1442,13 @@ testComponentDefaults(SliderHandle, {},
 testComponentDefaults(Splitter,
     {},
     {
-        direction: 'horizontal',
+        orientation: 'horizontal',
         activeStateEnabled: false,
         focusStateEnabled: false,
+        repaintChangesOnly: false,
+        onResize: null,
+        onResizeStart: null,
+        onResizeEnd: null,
     }
 );
 
