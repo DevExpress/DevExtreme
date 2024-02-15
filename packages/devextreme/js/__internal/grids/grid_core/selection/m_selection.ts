@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
@@ -13,6 +14,10 @@ import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Selection from '@js/ui/selection/selection';
 import errors from '@js/ui/widget/ui.errors';
+import { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
+import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
@@ -101,7 +106,7 @@ const selectionHeaderTemplate = (container, options) => {
 };
 
 export class SelectionController extends modules.Controller {
-  private _dataController!: DataController;
+  _dataController!: DataController;
 
   private _selectionMode?: string;
 
@@ -109,7 +114,7 @@ export class SelectionController extends modules.Controller {
 
   private _selection!: Selection;
 
-  private readonly selectionChanged: any;
+  selectionChanged: any;
 
   private _selectedItemsInternalChange?: boolean;
 
@@ -213,7 +218,8 @@ export class SelectionController extends modules.Controller {
         // @ts-expect-error
         return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
       },
-      plainItems() {
+      // eslint-disable-next-line
+      plainItems(cached?) {
         return dataController.items(true);
       },
       isItemSelected(item) {
@@ -475,7 +481,8 @@ export class SelectionController extends modules.Controller {
     return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
-  getSelectedRowKeys() {
+  // eslint-disable-next-line
+  getSelectedRowKeys(mode?) {
     return this._selection.getSelectedItemKeys();
   }
 
@@ -504,7 +511,8 @@ export class SelectionController extends modules.Controller {
     return this.selectRows(keys);
   }
 
-  getSelectedRowsData() {
+  // eslint-disable-next-line
+  getSelectedRowsData(mode?) {
     return this._selection.getSelectedItems();
   }
 
@@ -560,6 +568,377 @@ export class SelectionController extends modules.Controller {
   }
 }
 
+export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerSelectionExtender extends Base {
+  init() {
+    const selectionController = this.getController('selection');
+    const isDeferredMode = this.option('selection.deferred');
+
+    super.init.apply(this, arguments as any);
+
+    if (isDeferredMode) {
+      selectionController._updateCheckboxesState({
+        isDeferredMode: true,
+        selectionFilter: this.option('selectionFilter'),
+      });
+    }
+  }
+
+  _loadDataSource() {
+    const that = this;
+
+    return super._loadDataSource().always(() => {
+      that.getController('selection').refresh();
+    });
+  }
+
+  _processDataItem(item, options) {
+    const that = this;
+    const selectionController = that.getController('selection');
+    const hasSelectColumn = selectionController.isSelectColumnVisible();
+    const isDeferredSelection = options.isDeferredSelection = options.isDeferredSelection === undefined ? this.option('selection.deferred') : options.isDeferredSelection;
+    const dataItem = super._processDataItem.apply(this, arguments as any);
+
+    dataItem.isSelected = selectionController.isRowSelected(isDeferredSelection ? dataItem.data : dataItem.key);
+
+    if (hasSelectColumn && dataItem.values) {
+      for (let i = 0; i < options.visibleColumns.length; i++) {
+        if (options.visibleColumns[i].command === 'select') {
+          dataItem.values[i] = dataItem.isSelected;
+          break;
+        }
+      }
+    }
+    return dataItem;
+  }
+
+  refresh(options) {
+    const that = this;
+    // @ts-expect-error
+    const d = new Deferred();
+
+    super.refresh.apply(this, arguments as any).done(() => {
+      if (!options || options.selection) {
+        that.getController('selection').refresh().done(d.resolve).fail(d.reject);
+      } else {
+        d.resolve();
+      }
+    }).fail(d.reject);
+
+    return d.promise();
+  }
+
+  // eslint-disable-next-line
+  _handleDataChanged(e?) {
+    const hasLoadOperation = this.hasLoadOperation();
+    super._handleDataChanged.apply(this, arguments as any);
+
+    if (hasLoadOperation && !this._repaintChangesOnly) {
+      this.getController('selection').focusedItemIndex(-1);
+    }
+  }
+
+  _applyChange(change) {
+    if (change && change.changeType === 'updateSelection') {
+      change.items.forEach((item, index) => {
+        const currentItem = this._items[index];
+        if (currentItem) {
+          currentItem.isSelected = item.isSelected;
+          currentItem.values = item.values;
+        }
+      });
+      return;
+    }
+
+    return super._applyChange.apply(this, arguments as any);
+  }
+
+  _endUpdateCore() {
+    const changes = this._changes;
+    const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
+    if (isUpdateSelection) {
+      const itemIndexes = changes.map((change) => change.itemIndexes || []).reduce((a, b) => a.concat(b));
+      this._changes = [{ changeType: 'updateSelection', itemIndexes }];
+    }
+    super._endUpdateCore.apply(this, arguments as any);
+  }
+};
+
+const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMenuControllerSelectionExtender extends Base {
+  _contextMenuPrepared(options) {
+    const dxEvent = options.event;
+
+    if (dxEvent.originalEvent && dxEvent.originalEvent.type !== 'dxhold' || options.items && options.items.length > 0) return;
+
+    processLongTap(this, dxEvent);
+  }
+};
+
+export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersSelectionExtender extends Base {
+  init() {
+    const that = this;
+    super.init();
+    that.getController('selection').selectionChanged.add(that._updateSelectAllValue.bind(that));
+  }
+
+  _updateSelectAllValue() {
+    const that = this;
+    const $element = that.element();
+    const $editor = $element && $element.find(`.${SELECT_CHECKBOX_CLASS}`);
+
+    if ($element && $editor.length && that.option('selection.mode') === 'multiple') {
+      const selectAllValue = that.getController('selection').isSelectAll();
+      const hasSelection = selectAllValue !== false;
+      const isVisible = that.option('selection.allowSelectAll') ? !that.getController('data').isEmpty() : hasSelection;
+
+      $editor.dxCheckBox('instance').option({
+        visible: isVisible,
+        value: selectAllValue,
+      });
+    }
+  }
+
+  _handleDataChanged(e) {
+    super._handleDataChanged(e);
+
+    if (!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
+      this.waitAsyncTemplates().done(() => {
+        this._updateSelectAllValue();
+      });
+    }
+  }
+
+  _renderSelectAllCheckBox($container, column?) {
+    const that = this;
+    const selectionController = that.getController('selection');
+    const isEmptyData = that.getController('data').isEmpty();
+
+    const groupElement = $('<div>')
+      .appendTo($container)
+      .addClass(SELECT_CHECKBOX_CLASS);
+
+    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
+
+    that.getController('editorFactory').createEditor(groupElement, extend({}, column, {
+      parentType: 'headerRow',
+      dataType: 'boolean',
+      value: selectionController.isSelectAll(),
+      editorOptions: {
+        visible: !isEmptyData && (that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false),
+      },
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : that.option('tabIndex') || 0,
+      setValue(value, e) {
+        const allowSelectAll = that.option('selection.allowSelectAll');
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        e.component.option('visible', allowSelectAll || e.component.option('value') !== false);
+
+        if (!e.event || selectionController.isSelectAll() === value) {
+          return;
+        }
+
+        if (e.value && !allowSelectAll) {
+          e.component.option('value', false);
+        } else {
+          e.value ? selectionController.selectAll() : selectionController.deselectAll();
+        }
+
+        e.event.preventDefault();
+      },
+    }));
+
+    return groupElement;
+  }
+
+  _attachSelectAllCheckBoxClickEvent($element) {
+    eventsEngine.on($element, clickEventName, this.createAction((e) => {
+      const { event } = e;
+
+      if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
+        // @ts-expect-error
+        eventsEngine.trigger($(event.currentTarget).children(`.${SELECT_CHECKBOX_CLASS}`), clickEventName);
+      }
+      event.preventDefault();
+    }));
+  }
+};
+
+export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => class RowsViewSelectionExtender extends Base {
+  renderSelectCheckBoxContainer($container, options) {
+    if (options.rowType === 'data' && !options.row.isNewRow) {
+      $container.addClass(EDITOR_CELL_CLASS);
+      this._attachCheckBoxClickEvent($container);
+
+      this._renderSelectCheckBox($container, options);
+    } else {
+      gridCoreUtils.setEmptyText($container);
+    }
+  }
+
+  _renderSelectCheckBox(container, options) {
+    const groupElement = $('<div>')
+      .addClass(SELECT_CHECKBOX_CLASS)
+      .appendTo(container);
+
+    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), groupElement);
+
+    this.getController('editorFactory').createEditor(groupElement, extend({}, options.column, {
+      parentType: 'dataRow',
+      dataType: 'boolean',
+      lookup: null,
+      value: options.value,
+      setValue(value, e) {
+        if (e?.event?.type === 'keydown') {
+          // @ts-expect-error
+          eventsEngine.trigger(e.element, clickEventName, e);
+        }
+      },
+      row: options.row,
+    }));
+
+    return groupElement;
+  }
+
+  _attachCheckBoxClickEvent($element) {
+    eventsEngine.on($element, clickEventName, this.createAction(function (e) {
+      const selectionController = this.getController('selection');
+      const { event } = e;
+      const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${ROW_CLASS}`));
+
+      if (rowIndex >= 0) {
+        selectionController.startSelectionWithCheckboxes();
+        selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
+
+        if ($(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
+          this.getController('data').updateItems({
+            changeType: 'updateSelection',
+            itemIndexes: [rowIndex],
+          });
+        }
+      }
+    }));
+  }
+
+  _update(change) {
+    const that = this;
+    const tableElements = that.getTableElements();
+
+    if (change.changeType === 'updateSelection') {
+      if (tableElements.length > 0) {
+        each(tableElements, (_, tableElement) => {
+          each(change.itemIndexes || [], (_, index) => {
+            let $row;
+
+            // T108078
+            if (change.items[index]) {
+              $row = that._getRowElements($(tableElement)).eq(index);
+              if ($row.length) {
+                const { isSelected } = change.items[index];
+                $row
+                  .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
+                  .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
+                that.setAria('selected', isSelected, $row);
+              }
+            }
+          });
+        });
+
+        that._updateCheckboxesClass();
+      }
+    } else {
+      super._update(change);
+    }
+  }
+
+  _createTable() {
+    const that = this;
+    const selectionMode = that.option('selection.mode');
+    const $table = super._createTable.apply(that, arguments as any);
+
+    if (selectionMode !== 'none') {
+      if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !touch) {
+        // TODO Not working timeout by hold when it is larger than other timeouts by hold
+        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${DATA_ROW_CLASS}`, that.createAction((e) => {
+          processLongTap(that.component, e.event);
+
+          e.event.stopPropagation();
+        }));
+      }
+      eventsEngine.on($table, 'mousedown selectstart', that.createAction((e) => {
+        const { event } = e;
+
+        if (event.shiftKey) {
+          event.preventDefault();
+        }
+      }));
+    }
+
+    return $table;
+  }
+
+  _createRow(row) {
+    const $row = super._createRow.apply(this, arguments as any);
+
+    if (row) {
+      const { isSelected } = row;
+      if (isSelected) {
+        $row.addClass(ROW_SELECTION_CLASS);
+      }
+
+      const selectionMode = this.option(SELECTION_MODE);
+      if (selectionMode !== 'none') {
+        this.setAria('selected', isSelected, $row);
+      }
+    }
+
+    return $row;
+  }
+
+  _rowClickForTreeList(e): void {
+    super._rowClick(e);
+  }
+
+  _rowClick(e) {
+    const that = this;
+    const dxEvent = e.event;
+    const isSelectionDisabled = $(dxEvent.target).closest(`.${SELECTION_DISABLED_CLASS}`).length;
+
+    if (!that.isClickableElement($(dxEvent.target))) {
+      if (!isSelectionDisabled && (that.option(SELECTION_MODE) !== 'multiple' || that.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
+        if (that.getController('selection').changeItemSelection(e.rowIndex, {
+          control: isCommandKeyPressed(dxEvent),
+          shift: dxEvent.shiftKey,
+        })) {
+          dxEvent.preventDefault();
+          e.handled = true;
+        }
+      }
+      super._rowClick(e);
+    }
+  }
+
+  isClickableElement($target) {
+    const isCommandSelect = $target.closest(`.${COMMAND_SELECT_CLASS}`).length;
+
+    return !!isCommandSelect;
+  }
+
+  _renderCore(change) {
+    const deferred = super._renderCore(change);
+    this._updateCheckboxesClass();
+    return deferred;
+  }
+
+  _updateCheckboxesClass() {
+    const tableElements = this.getTableElements();
+    const selectionController = this.getController('selection');
+    const isCheckBoxesHidden = selectionController.isSelectColumnVisible() && !selectionController.isSelectionWithCheckboxes();
+
+    each(tableElements, (_, tableElement) => {
+      $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);
+    });
+  }
+};
+
 export const selectionModule = {
   defaultOptions() {
     return {
@@ -583,369 +962,13 @@ export const selectionModule = {
 
   extenders: {
     controllers: {
-      data: {
-        init() {
-          const selectionController = this.getController('selection');
-          const isDeferredMode = this.option('selection.deferred');
-
-          this.callBase.apply(this, arguments);
-
-          if (isDeferredMode) {
-            selectionController._updateCheckboxesState({
-              isDeferredMode: true,
-              selectionFilter: this.option('selectionFilter'),
-            });
-          }
-        },
-
-        _loadDataSource() {
-          const that = this;
-
-          return that.callBase().always(() => {
-            that.getController('selection').refresh();
-          });
-        },
-
-        _processDataItem(item, options) {
-          const that = this;
-          const selectionController = that.getController('selection');
-          const hasSelectColumn = selectionController.isSelectColumnVisible();
-          const isDeferredSelection = options.isDeferredSelection = options.isDeferredSelection === undefined ? this.option('selection.deferred') : options.isDeferredSelection;
-          const dataItem = this.callBase.apply(this, arguments);
-
-          dataItem.isSelected = selectionController.isRowSelected(isDeferredSelection ? dataItem.data : dataItem.key);
-
-          if (hasSelectColumn && dataItem.values) {
-            for (let i = 0; i < options.visibleColumns.length; i++) {
-              if (options.visibleColumns[i].command === 'select') {
-                dataItem.values[i] = dataItem.isSelected;
-                break;
-              }
-            }
-          }
-          return dataItem;
-        },
-
-        refresh(options) {
-          const that = this;
-          // @ts-expect-error
-          const d = new Deferred();
-
-          this.callBase.apply(this, arguments).done(() => {
-            if (!options || options.selection) {
-              that.getController('selection').refresh().done(d.resolve).fail(d.reject);
-            } else {
-              d.resolve();
-            }
-          }).fail(d.reject);
-
-          return d.promise();
-        },
-
-        _handleDataChanged() {
-          const hasLoadOperation = this.hasLoadOperation();
-
-          this.callBase.apply(this, arguments);
-
-          if (hasLoadOperation && !this._repaintChangesOnly) {
-            this.getController('selection').focusedItemIndex(-1);
-          }
-        },
-
-        _applyChange(change) {
-          if (change && change.changeType === 'updateSelection') {
-            change.items.forEach((item, index) => {
-              const currentItem = this._items[index];
-              if (currentItem) {
-                currentItem.isSelected = item.isSelected;
-                currentItem.values = item.values;
-              }
-            });
-            return;
-          }
-
-          return this.callBase.apply(this, arguments);
-        },
-
-        _endUpdateCore() {
-          const changes = this._changes;
-          const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
-          if (isUpdateSelection) {
-            const itemIndexes = changes.map((change) => change.itemIndexes || []).reduce((a, b) => a.concat(b));
-            this._changes = [{ changeType: 'updateSelection', itemIndexes }];
-          }
-          this.callBase.apply(this, arguments);
-        },
-      },
-      contextMenu: {
-        _contextMenuPrepared(options) {
-          const dxEvent = options.event;
-
-          if (dxEvent.originalEvent && dxEvent.originalEvent.type !== 'dxhold' || options.items && options.items.length > 0) return;
-
-          processLongTap(this, dxEvent);
-        },
-      },
+      data: dataSelectionExtenderMixin,
+      contextMenu,
     },
 
     views: {
-      columnHeadersView: {
-        init() {
-          const that = this;
-          that.callBase();
-          that.getController('selection').selectionChanged.add(that._updateSelectAllValue.bind(that));
-        },
-        _updateSelectAllValue() {
-          const that = this;
-          const $element = that.element();
-          const $editor = $element && $element.find(`.${SELECT_CHECKBOX_CLASS}`);
-
-          if ($element && $editor.length && that.option('selection.mode') === 'multiple') {
-            const selectAllValue = that.getController('selection').isSelectAll();
-            const hasSelection = selectAllValue !== false;
-            const isVisible = that.option('selection.allowSelectAll') ? !that.getController('data').isEmpty() : hasSelection;
-
-            $editor.dxCheckBox('instance').option({
-              visible: isVisible,
-              value: selectAllValue,
-            });
-          }
-        },
-        _handleDataChanged(e) {
-          this.callBase(e);
-
-          if (!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
-            this.waitAsyncTemplates().done(() => {
-              this._updateSelectAllValue();
-            });
-          }
-        },
-
-        _renderSelectAllCheckBox($container, column) {
-          const that = this;
-          const selectionController = that.getController('selection');
-          const isEmptyData = that.getController('data').isEmpty();
-
-          const groupElement = $('<div>')
-            .appendTo($container)
-            .addClass(SELECT_CHECKBOX_CLASS);
-
-          that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
-
-          that.getController('editorFactory').createEditor(groupElement, extend({}, column, {
-            parentType: 'headerRow',
-            dataType: 'boolean',
-            value: selectionController.isSelectAll(),
-            editorOptions: {
-              visible: !isEmptyData && (that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false),
-            },
-            tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : that.option('tabIndex') || 0,
-            setValue(value, e) {
-              const allowSelectAll = that.option('selection.allowSelectAll');
-              e.component.option('visible', allowSelectAll || e.component.option('value') !== false);
-
-              if (!e.event || selectionController.isSelectAll() === value) {
-                return;
-              }
-
-              if (e.value && !allowSelectAll) {
-                e.component.option('value', false);
-              } else {
-                e.value ? selectionController.selectAll() : selectionController.deselectAll();
-              }
-
-              e.event.preventDefault();
-            },
-          }));
-
-          return groupElement;
-        },
-
-        _attachSelectAllCheckBoxClickEvent($element) {
-          eventsEngine.on($element, clickEventName, this.createAction((e) => {
-            const { event } = e;
-
-            if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-              // @ts-expect-error
-              eventsEngine.trigger($(event.currentTarget).children(`.${SELECT_CHECKBOX_CLASS}`), clickEventName);
-            }
-            event.preventDefault();
-          }));
-        },
-      },
-
-      rowsView: {
-        renderSelectCheckBoxContainer($container, options) {
-          if (options.rowType === 'data' && !options.row.isNewRow) {
-            $container.addClass(EDITOR_CELL_CLASS);
-            this._attachCheckBoxClickEvent($container);
-
-            this._renderSelectCheckBox($container, options);
-          } else {
-            gridCoreUtils.setEmptyText($container);
-          }
-        },
-
-        _renderSelectCheckBox(container, options) {
-          const groupElement = $('<div>')
-            .addClass(SELECT_CHECKBOX_CLASS)
-            .appendTo(container);
-
-          this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), groupElement);
-
-          this.getController('editorFactory').createEditor(groupElement, extend({}, options.column, {
-            parentType: 'dataRow',
-            dataType: 'boolean',
-            lookup: null,
-            value: options.value,
-            setValue(value, e) {
-              if (e?.event?.type === 'keydown') {
-                // @ts-expect-error
-                eventsEngine.trigger(e.element, clickEventName, e);
-              }
-            },
-            row: options.row,
-          }));
-
-          return groupElement;
-        },
-
-        _attachCheckBoxClickEvent($element) {
-          eventsEngine.on($element, clickEventName, this.createAction(function (e) {
-            const selectionController = this.getController('selection');
-            const { event } = e;
-            const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${ROW_CLASS}`));
-
-            if (rowIndex >= 0) {
-              selectionController.startSelectionWithCheckboxes();
-              selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
-
-              if ($(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-                this.getController('data').updateItems({
-                  changeType: 'updateSelection',
-                  itemIndexes: [rowIndex],
-                });
-              }
-            }
-          }));
-        },
-
-        _update(change) {
-          const that = this;
-          const tableElements = that.getTableElements();
-
-          if (change.changeType === 'updateSelection') {
-            if (tableElements.length > 0) {
-              each(tableElements, (_, tableElement) => {
-                each(change.itemIndexes || [], (_, index) => {
-                  let $row;
-
-                  // T108078
-                  if (change.items[index]) {
-                    $row = that._getRowElements($(tableElement)).eq(index);
-                    if ($row.length) {
-                      const { isSelected } = change.items[index];
-                      $row
-                        .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
-                        .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-                      that.setAria('selected', isSelected, $row);
-                    }
-                  }
-                });
-              });
-
-              that._updateCheckboxesClass();
-            }
-          } else {
-            that.callBase(change);
-          }
-        },
-
-        _createTable() {
-          const that = this;
-          const selectionMode = that.option('selection.mode');
-          const $table = that.callBase.apply(that, arguments);
-
-          if (selectionMode !== 'none') {
-            if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !touch) {
-              // TODO Not working timeout by hold when it is larger than other timeouts by hold
-              eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${DATA_ROW_CLASS}`, that.createAction((e) => {
-                processLongTap(that.component, e.event);
-
-                e.event.stopPropagation();
-              }));
-            }
-            eventsEngine.on($table, 'mousedown selectstart', that.createAction((e) => {
-              const { event } = e;
-
-              if (event.shiftKey) {
-                event.preventDefault();
-              }
-            }));
-          }
-
-          return $table;
-        },
-
-        _createRow(row) {
-          const $row = this.callBase.apply(this, arguments);
-
-          if (row) {
-            const { isSelected } = row;
-            if (isSelected) {
-              $row.addClass(ROW_SELECTION_CLASS);
-            }
-
-            const selectionMode = this.option(SELECTION_MODE);
-            if (selectionMode !== 'none') {
-              this.setAria('selected', isSelected, $row);
-            }
-          }
-
-          return $row;
-        },
-
-        _rowClick(e) {
-          const that = this;
-          const dxEvent = e.event;
-          const isSelectionDisabled = $(dxEvent.target).closest(`.${SELECTION_DISABLED_CLASS}`).length;
-
-          if (!that.isClickableElement($(dxEvent.target))) {
-            if (!isSelectionDisabled && (that.option(SELECTION_MODE) !== 'multiple' || that.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
-              if (that.getController('selection').changeItemSelection(e.rowIndex, {
-                control: isCommandKeyPressed(dxEvent),
-                shift: dxEvent.shiftKey,
-              })) {
-                dxEvent.preventDefault();
-                e.handled = true;
-              }
-            }
-            that.callBase(e);
-          }
-        },
-
-        isClickableElement($target) {
-          const isCommandSelect = $target.closest(`.${COMMAND_SELECT_CLASS}`).length;
-
-          return !!isCommandSelect;
-        },
-
-        _renderCore(change) {
-          const deferred = this.callBase(change);
-          this._updateCheckboxesClass();
-          return deferred;
-        },
-
-        _updateCheckboxesClass() {
-          const tableElements = this.getTableElements();
-          const selectionController = this.getController('selection');
-          const isCheckBoxesHidden = selectionController.isSelectColumnVisible() && !selectionController.isSelectionWithCheckboxes();
-
-          each(tableElements, (_, tableElement) => {
-            $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);
-          });
-        },
-      },
+      columnHeadersView: columnHeadersSelectionExtenderMixin,
+      rowsView: rowsViewSelectionExtenderMixin,
     },
   },
 };
