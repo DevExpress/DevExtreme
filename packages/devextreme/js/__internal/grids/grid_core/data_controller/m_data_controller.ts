@@ -1215,7 +1215,7 @@ export class DataController extends ControllerWithDataMixin {
     this._applyFilter();
   }
 
-  clearFilter(filterName) {
+  clearFilter(filterName?) {
     const that = this;
     const columnsController = that._columnsController;
     const clearColumnOption = function (optionName) {
@@ -1601,6 +1601,12 @@ export class DataController extends ControllerWithDataMixin {
 
   totalCount() {
     return this._dataSource ? this._dataSource?.totalCount() : 0;
+  }
+
+  hasLoadOperation(): boolean {
+    const operationTypes = this._dataSource?.operationTypes() ?? {};
+
+    return Object.keys(operationTypes).some((type) => operationTypes[type]);
   }
 }
 export const dataControllerModule: Module = {

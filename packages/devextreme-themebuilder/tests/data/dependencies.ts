@@ -44,6 +44,7 @@ export const dependencies: FlatStylesDependencies = {
   slider: ['validation', 'button', 'popup', 'popover', 'tooltip'],
   rangeslider: ['validation', 'button', 'popup', 'popover', 'tooltip', 'slider'],
   speeddialaction: [],
+  splitter: [],
   switch: ['validation'],
   tagbox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list', 'checkbox', 'selectbox'],
   textarea: ['validation', 'button', 'loadindicator', 'textbox'],

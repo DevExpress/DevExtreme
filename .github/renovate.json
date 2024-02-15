@@ -17,6 +17,22 @@
             "groupName": "CLDR"
         },
         {
+            "matchPackagePrefixes": [ "actions/" ],
+            "groupName": "actions",
+            "matchUpdateTypes": [ "major" ],
+            "automerge": true
+        },
+        {
+            "matchPackageNames": [ "chrome", "firefox" ],
+            "matchUpdateTypes": [ "major" ],
+            "automerge": true
+        },
+        {
+            "matchPackageNames": [ "chrome", "firefox" ],
+            "matchUpdateTypes": [ "minor", "patch" ],
+            "enabled": false
+        },
+        {
             "matchPackagePatterns": [
                 "^@devextreme-generator/"
             ],
