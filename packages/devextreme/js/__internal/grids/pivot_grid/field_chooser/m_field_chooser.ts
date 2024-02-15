@@ -88,7 +88,7 @@ function getScrollable(container) {
   return container.find(`.${CLASSES.scrollable.self}`).dxScrollable('instance');
 }
 
-const FieldChooser = FieldChooserBase.inherit({
+class FieldChooser extends FieldChooserBase {
   _getDefaultOptions() {
     return extend(this.callBase(), {
       height: 400,
@@ -106,7 +106,7 @@ const FieldChooser = FieldChooserBase.inherit({
         allFields: localizationMessage.format('dxPivotGrid-allFields'),
       },
     });
-  },
+  }
 
   _refreshDataSource() {
     const that = this;
@@ -126,7 +126,7 @@ const FieldChooser = FieldChooserBase.inherit({
     that.callBase();
 
     that._dataSource && that._dataSource.on('changed', that._changedHandler);
-  },
+  }
 
   _disposeDataSource() {
     const that = this;
@@ -136,29 +136,29 @@ const FieldChooser = FieldChooserBase.inherit({
       dataSource.off('changed', that._changedHandler);
       that._dataSource = undefined;
     }
-  },
+  }
 
   _dispose() {
     this._disposeDataSource();
     this.callBase.apply(this, arguments);
-  },
+  }
 
   _init() {
     this.callBase();
     this._refreshDataSource();
     this._dataChangedHandlers = [];
     this._initActions();
-  },
+  }
 
   _initActions() {
     this._actions = {
       onContextMenuPreparing: this._createActionByOption('onContextMenuPreparing'),
     };
-  },
+  }
 
   _trigger(eventName, eventArg) {
     this._actions[eventName](eventArg);
-  },
+  }
 
   _setOptionsByReference() {
     this.callBase();
@@ -166,7 +166,7 @@ const FieldChooser = FieldChooserBase.inherit({
     extend(this._optionsByReference, {
       dataSource: true,
     });
-  },
+  }
 
   _optionChanged(args) {
     const that = this;
@@ -188,12 +188,12 @@ const FieldChooser = FieldChooserBase.inherit({
       default:
         that.callBase(args);
     }
-  },
+  }
 
-  _clean(skipStateSetting) {
+  _clean(skipStateSetting?) {
     !skipStateSetting && this._dataSource && this.option('state', this._dataSource.state());
     this.$element().children(`.${CLASSES.fieldChooser.container}`).remove();
-  },
+  }
 
   _renderLayout0($container) {
     const that = this;
@@ -214,7 +214,7 @@ const FieldChooser = FieldChooserBase.inherit({
     that._renderArea($col2, 'column');
     that._renderArea($col3, 'filter');
     that._renderArea($col4, 'data');
-  },
+  }
 
   _renderLayout1($container) {
     const that = this;
@@ -227,7 +227,7 @@ const FieldChooser = FieldChooserBase.inherit({
     that._renderArea($col2, 'row');
     that._renderArea($col2, 'column');
     that._renderArea($col2, 'data');
-  },
+  }
 
   _renderLayout2($container) {
     const that = this;
@@ -245,7 +245,7 @@ const FieldChooser = FieldChooserBase.inherit({
     that._renderArea($col1, 'row');
     that._renderArea($col2, 'column');
     that._renderArea($col2, 'data');
-  },
+  }
 
   _initMarkup() {
     const that = this;
@@ -275,7 +275,7 @@ const FieldChooser = FieldChooserBase.inherit({
     }
 
     currentState && dataSource.state(currentState, true);
-  },
+  }
 
   _renderContentImpl() {
     this.callBase();
@@ -283,13 +283,13 @@ const FieldChooser = FieldChooserBase.inherit({
     this.renderSortable();
     this._renderContextMenu();
     this.updateDimensions();
-  },
+  }
 
   _fireContentReadyAction() {
     if (!this._dataSource || !this._dataSource.isLoading()) {
       this.callBase();
     }
-  },
+  }
 
   _getContextMenuArgs(dxEvent) {
     const targetFieldElement = $(dxEvent.target).closest(`.${CLASSES.area.field}`);
@@ -314,7 +314,7 @@ const FieldChooser = FieldChooserBase.inherit({
       area,
       items: [],
     };
-  },
+  }
 
   _renderContextMenu() {
     const that = this;
@@ -348,9 +348,9 @@ const FieldChooser = FieldChooserBase.inherit({
       },
       cssClass: CLASSES.fieldChooser.contextMenu,
     });
-  },
+  }
 
-  _createTreeItems(fields, groupFieldNames, path) {
+  _createTreeItems(fields, groupFieldNames, path?) {
     const that = this;
     let isMeasure;
     let resultItems: any = [];
@@ -415,7 +415,7 @@ const FieldChooser = FieldChooserBase.inherit({
     }
 
     return resultItems;
-  },
+  }
 
   _createFieldsDataSource(dataSource) {
     let fields = dataSource && dataSource.fields() || [];
@@ -429,7 +429,7 @@ const FieldChooser = FieldChooserBase.inherit({
     }, 0, 'items');
 
     return treeItems;
-  },
+  }
 
   _renderFieldsTreeView(container) {
     const that = this;
@@ -530,7 +530,7 @@ const FieldChooser = FieldChooserBase.inherit({
     };
 
     that._dataChangedHandlers.push(dataChanged);
-  },
+  }
 
   _renderAreaFields($container, area) {
     const that = this;
@@ -543,7 +543,7 @@ const FieldChooser = FieldChooserBase.inherit({
         that.renderField(field, true).appendTo($container);
       }
     });
-  },
+  }
 
   _renderArea(container, area) {
     const that = this;
@@ -587,17 +587,17 @@ const FieldChooser = FieldChooserBase.inherit({
       $fieldsContainer.addClass(CLASSES.treeView.borderVisible);
       that._renderFieldsTreeView($fieldsContainer);
     }
-  },
+  }
 
   _getSortableOptions() {
     // TODO
     return {
-
+      direction: '',
     };
-  },
+  }
 
   _adjustSortableOnChangedArgs() {
-  },
+  }
 
   resetTreeView() {
     const treeView = this.$element().find(`.${CLASSES.treeView.self}`).dxTreeView('instance');
@@ -606,7 +606,7 @@ const FieldChooser = FieldChooserBase.inherit({
       treeView.option('searchValue', '');
       treeView.collapseAll();
     }
-  },
+  }
 
   applyChanges() {
     const state = this.option('state');
@@ -614,7 +614,7 @@ const FieldChooser = FieldChooserBase.inherit({
     if (isDefined(state)) {
       this._dataSource.state(state);
     }
-  },
+  }
 
   cancelChanges() {
     const dataSource = this._dataSource;
@@ -624,25 +624,25 @@ const FieldChooser = FieldChooserBase.inherit({
       return true;
     }
     return false;
-  },
+  }
 
   getDataSource() {
     return this._dataSource;
-  },
+  }
 
   updateDimensions() {
     const $scrollableElements = this.$element().find(`.${CLASSES.area.self} .${CLASSES.scrollable.self}`);
     $scrollableElements.dxScrollable('update');
-  },
+  }
 
   _visibilityChanged(visible) {
     if (visible && hasWindow) {
       this.updateDimensions();
     }
-  },
-});
+  }
+}
 
-registerComponent('dxPivotGridFieldChooser', FieldChooser);
+registerComponent('dxPivotGridFieldChooser', FieldChooser as any);
 
 export default { FieldChooser };
 export { FieldChooser };
