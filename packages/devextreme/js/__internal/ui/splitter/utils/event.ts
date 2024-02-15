@@ -6,6 +6,6 @@ export function getActionNameByEventName(eventName: string): string {
 
 export const RESIZE_EVENT = {
   onResize: 'onResize',
-  onResizeStart: 'onResize',
-  onResizeEnd: 'onResize',
+  onResizeStart: 'onResizeStart',
+  onResizeEnd: 'onResizeEnd',
 };

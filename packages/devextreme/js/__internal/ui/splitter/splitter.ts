@@ -138,7 +138,7 @@ class Splitter extends (CollectionWidget as any) {
     const { name } = args;
 
     switch (name) {
-      case 'direction':
+      case 'orientation':
         this._toggleOrientationClass();
         break;
       case 'onResizeStart':
