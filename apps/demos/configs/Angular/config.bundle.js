@@ -3,6 +3,7 @@ const bundleConfig = {
     'devextreme.angular.systemjs.js': [
       'devextreme/*',
       'devextreme/animation/*',
+      'devextreme/common/*',
       'devextreme/core/*',
       'devextreme/core/utils/*',
       'devextreme/data/*',
