@@ -167,6 +167,15 @@ class Splitter extends (CollectionWidget as any) {
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;
+      case 'onResize':
+        this._createResizeAction();
+        break;
+      case 'onResizeStart':
+        this._createResizeStartAction();
+        break;
+      case 'onResizeEnd':
+        this._createResizeEndAction();
+        break;
       default:
         super._optionChanged(args);
     }
