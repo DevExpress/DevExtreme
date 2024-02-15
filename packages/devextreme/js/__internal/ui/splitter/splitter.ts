@@ -159,6 +159,11 @@ class Splitter extends (CollectionWidget as any) {
     eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
   }
 
+  _clean(): void {
+    this._detachEventHandlers();
+    super._clean();
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
     switch (args.name) {
