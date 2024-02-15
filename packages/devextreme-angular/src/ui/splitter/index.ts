@@ -28,7 +28,7 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeMode, ResizeStartEvent } from 'devextreme/ui/splitter';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeMode, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
@@ -282,11 +282,27 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
     
+     * [descr:dxSplitterOptions.onItemCollapsed]
+    
+    
+     */
+    @Output() onItemCollapsed: EventEmitter<ItemCollapsedEvent>;
+
+    /**
+    
      * [descr:dxSplitterOptions.onItemContextMenu]
     
     
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
+
+    /**
+    
+     * [descr:dxSplitterOptions.onItemExpanded]
+    
+    
+     */
+    @Output() onItemExpanded: EventEmitter<ItemExpandedEvent>;
 
     /**
     
@@ -454,7 +470,9 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemCollapsed', emit: 'onItemCollapsed' },
             { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+            { subscribe: 'itemExpanded', emit: 'onItemExpanded' },
             { subscribe: 'itemRendered', emit: 'onItemRendered' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'resize', emit: 'onResize' },

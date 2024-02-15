@@ -9,7 +9,7 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeMode, ResizeStartEvent } from 'devextreme/ui/splitter';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeMode, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 @Component({
     template: ''
@@ -99,11 +99,25 @@ export abstract class DxoSplitterOptions extends NestedOption {
         this._setOption('onItemClick', value);
     }
 
+    get onItemCollapsed(): ((e: ItemCollapsedEvent) => void) {
+        return this._getOption('onItemCollapsed');
+    }
+    set onItemCollapsed(value: ((e: ItemCollapsedEvent) => void)) {
+        this._setOption('onItemCollapsed', value);
+    }
+
     get onItemContextMenu(): ((e: ItemContextMenuEvent) => void) {
         return this._getOption('onItemContextMenu');
     }
     set onItemContextMenu(value: ((e: ItemContextMenuEvent) => void)) {
         this._setOption('onItemContextMenu', value);
+    }
+
+    get onItemExpanded(): ((e: ItemExpandedEvent) => void) {
+        return this._getOption('onItemExpanded');
+    }
+    set onItemExpanded(value: ((e: ItemExpandedEvent) => void)) {
+        this._setOption('onItemExpanded', value);
     }
 
     get onItemRendered(): ((e: ItemRenderedEvent) => void) {

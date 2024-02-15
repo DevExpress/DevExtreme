@@ -25849,6 +25849,14 @@ declare module DevExpress.ui {
      * [descr:dxSplitterOptions.onResizeStart]
      */
     onResizeStart?: (e: DevExpress.ui.dxSplitter.ResizeStartEvent) => void;
+    /**
+     * [descr:dxSplitterOptions.onItemExpanded]
+     */
+    onItemExpanded?: (e: DevExpress.ui.dxSplitter.ItemExpandedEvent) => void;
+    /**
+     * [descr:dxSplitterOptions.onItemCollapsed]
+     */
+    onItemCollapsed?: (e: DevExpress.ui.dxSplitter.ItemCollapsedEvent) => void;
   }
   /**
    * [descr:dxSwitch]

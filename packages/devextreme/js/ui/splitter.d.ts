@@ -210,6 +210,22 @@ export interface dxSplitterOptions<
      * @public
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/splitter:ItemExpandedEvent}
+     * @action
+     * @public
+     */
+    onItemExpanded?: ((e: ItemExpandedEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/splitter:ItemCollapsedEvent}
+     * @action
+     * @public
+     */
+    onItemCollapsed?: ((e: ItemCollapsedEvent) => void);
 }
 /**
  * @docid

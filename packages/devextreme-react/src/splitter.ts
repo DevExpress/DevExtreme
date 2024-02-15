@@ -8,9 +8,14 @@ import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxSplitterItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent, dxSplitterOptions } from "devextreme/ui/splitter";
+import type { dxSplitterItem } from "UNKNOWN_MODULE";
+import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent, dxSplitterOptions, OptionChangedEvent } from "devextreme/ui/splitter";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
+import type { DataSourceOptions } from "devextreme/data/data_source";
+import type { Store } from "devextreme/data/store";
+
+import type DataSource from "devextreme/data/data_source";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -21,7 +26,9 @@ type ISplitterOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
   onResize?: ((e: ResizeEvent<TItem, TKey>) => void);
   onResizeEnd?: ((e: ResizeEndEvent<TItem, TKey>) => void);
@@ -47,7 +54,7 @@ class Splitter<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
 
   protected subscribableOptions = ["items"];
 
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemRendered","onResize","onResizeEnd","onResizeStart"];
+  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemRendered","onResize","onResizeEnd","onResizeStart"];
 
   protected _defaults = {
     defaultItems: "items"
@@ -79,7 +86,9 @@ class Splitter<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
   onDisposing: PropTypes.func,
   onInitialized: PropTypes.func,
   onItemClick: PropTypes.func,
+  onItemCollapsed: PropTypes.func,
   onItemContextMenu: PropTypes.func,
+  onItemExpanded: PropTypes.func,
   onItemRendered: PropTypes.func,
   onOptionChanged: PropTypes.func,
   onResize: PropTypes.func,
@@ -129,6 +138,9 @@ type IItemProps = React.PropsWithChildren<{
 class Item extends NestedOption<IItemProps> {
   public static OptionName = "items";
   public static IsCollectionItem = true;
+  public static ExpectedChildren = {
+    splitter: { optionName: "splitter", isCollectionItem: false }
+  };
   public static TemplateProps = [{
     tmplOption: "template",
     render: "render",
@@ -137,12 +149,63 @@ class Item extends NestedOption<IItemProps> {
   }];
 }
 
+// owners:
+// Item
+type ISplitterProps = React.PropsWithChildren<{
+  allowKeyboardNavigation?: boolean;
+  bindingOptions?: Record<string, any>;
+  dataSource?: Array<any | dxSplitterItem | string> | DataSource | DataSourceOptions | null | Store | string;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  height?: (() => number | string) | number | string;
+  hoverStateEnabled?: boolean;
+  items?: Array<any | dxSplitterItem | string>;
+  itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: DisposingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void);
+  onItemCollapsed?: ((e: ItemCollapsedEvent) => void);
+  onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+  onItemExpanded?: ((e: ItemExpandedEvent) => void);
+  onItemRendered?: ((e: ItemRenderedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onResize?: ((e: ResizeEvent) => void);
+  onResizeEnd?: ((e: ResizeEndEvent) => void);
+  onResizeStart?: ((e: ResizeStartEvent) => void);
+  orientation?: "horizontal" | "vertical";
+  repaintChangesOnly?: boolean;
+  resizeMode?: "live" | "postponed";
+  rtlEnabled?: boolean;
+  visible?: boolean;
+  width?: (() => number | string) | number | string;
+  defaultItems?: Array<any | dxSplitterItem | string>;
+  onItemsChange?: (value: Array<any | dxSplitterItem | string>) => void;
+  itemRender?: (...params: any) => React.ReactNode;
+  itemComponent?: React.ComponentType<any>;
+  itemKeyFn?: (data: any) => string;
+}>
+class Splitter extends NestedOption<ISplitterProps> {
+  public static OptionName = "splitter";
+  public static DefaultsProps = {
+    defaultItems: "items"
+  };
+  public static TemplateProps = [{
+    tmplOption: "itemTemplate",
+    render: "itemRender",
+    component: "itemComponent",
+    keyFn: "itemKeyFn"
+  }];
+}
+
 export default Splitter;
 export {
   Splitter,
   ISplitterOptions,
   Item,
-  IItemProps
+  IItemProps,
+  Splitter,
+  ISplitterProps
 };
 import type * as SplitterTypes from 'devextreme/ui/splitter_types';
 export { SplitterTypes };
