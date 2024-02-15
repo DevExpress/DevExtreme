@@ -55,10 +55,6 @@ class Splitter extends (CollectionWidget as any) {
     super._initMarkup();
   }
 
-  _render(): void {
-    super._render();
-  }
-
   _renderItems(items: Item[]): void {
     super._renderItems(items);
   }
