@@ -63,30 +63,35 @@ class Splitter extends (CollectionWidget as any) {
     super._initMarkup();
   }
 
+  _initActions(): void {
+    this._actions = {
+      onResize: this._createActionByOption('onResize'),
+      onResizeStart: this._createActionByOption('onResizeStart'),
+      onResizeEnd: this._createActionByOption('onResizeEnd'),
+    };
+  }
+
   _render(): void {
     super._render();
-
-    this._createResizeStartAction();
-    this._createResizeAction();
-    this._createResizeEndAction();
     this._attachEventHandlers();
+    this._initActions();
   }
 
   _resizeStartHandler(e: ResizeStartEvent): void {
-    this._resizeStartAction({
+    this._actions.onResizeStart({
       event: e,
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _resizeHandler(e): void {
-    this._resizeAction({
+    this._actions.onResize({
       event: e,
     });
   }
 
   _resizeEndHandler(e: ResizeEndEvent): void {
-    this._resizeEndAction({
+    this._actions.onResizeEnd({
       event: e,
     });
   }
@@ -111,18 +116,6 @@ class Splitter extends (CollectionWidget as any) {
   _toggleDirectionClass(): void {
     this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
     this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
-  }
-
-  _createResizeAction(): void {
-    this._resizeAction = this._createActionByOption('onResize');
-  }
-
-  _createResizeStartAction(): void {
-    this._resizeStartAction = this._createActionByOption('onResizeStart');
-  }
-
-  _createResizeEndAction(): void {
-    this._resizeEndAction = this._createActionByOption('onResizeEnd');
   }
 
   _attachEventHandlers(): void {
@@ -172,14 +165,10 @@ class Splitter extends (CollectionWidget as any) {
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;
-      case 'onResize':
-        this._createResizeAction();
-        break;
       case 'onResizeStart':
-        this._createResizeStartAction();
-        break;
       case 'onResizeEnd':
-        this._createResizeEndAction();
+      case 'onResize':
+        this._actions[args.name] = this._createActionByOption(args.name);
         break;
       default:
         super._optionChanged(args);
