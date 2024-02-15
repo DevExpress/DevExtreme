@@ -7,6 +7,10 @@ import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collecti
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 
 import ResizeHandle from './resize_handle';
+import {
+  getActionNameByEventName,
+  RESIZE_EVENT,
+} from './utils/event';
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
@@ -51,17 +55,8 @@ class Splitter extends (CollectionWidget as any) {
     super._initMarkup();
   }
 
-  _createActions(): void {
-    this._actions = {
-      onResize: this._createActionByOption('onResize'),
-      onResizeStart: this._createActionByOption('onResizeStart'),
-      onResizeEnd: this._createActionByOption('onResizeEnd'),
-    };
-  }
-
   _render(): void {
     super._render();
-    this._createActions();
   }
 
   _renderItems(items: Item[]): void {
@@ -94,21 +89,26 @@ class Splitter extends (CollectionWidget as any) {
     this._createComponent($resizeHandle, ResizeHandle, this._getResizeHandleConfig());
   }
 
-  _getResizeHandleConfig(): unknown {
+  _getAction(eventName: string): (e) => void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
+  }
+
+  _getResizeHandleConfig(): object {
     return {
       direction: this.option('orientation') === ORIENTATION.vertical ? 'horizontal' : 'vertical',
       onResizeStart: (e): void => {
-        this._actions.onResizeStart({
+        this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,
         });
       },
       onResize: (e): void => {
-        this._actions.onResize({
+        this._getAction(RESIZE_EVENT.onResize)({
           event: e,
         });
       },
       onResizeEnd: (e): void => {
-        this._actions.onResizeEnd({
+        this._getAction(RESIZE_EVENT.onResizeEnd)({
           event: e,
         });
       },
@@ -125,7 +125,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _isHorizontalOrientation(): boolean {
-    return this.option('orientation') === 'horizontal';
+    return this.option('orientation') === ORIENTATION.horizontal;
   }
 
   _toggleOrientationClass(): void {
@@ -135,14 +135,16 @@ class Splitter extends (CollectionWidget as any) {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
-    switch (args.name) {
-      case 'orientation':
+    const { name } = args;
+
+    switch (name) {
+      case 'direction':
         this._toggleOrientationClass();
         break;
       case 'onResizeStart':
       case 'onResizeEnd':
       case 'onResize':
-        this._actions[args.name] = this._createActionByOption(args.name);
+        this[getActionNameByEventName(name)] = this._createActionByOption(name);
         break;
       default:
         super._optionChanged(args);
