@@ -290,7 +290,7 @@ export class FieldChooser extends FieldChooserBase {
 
   _fireContentReadyAction() {
     if (!this._dataSource || !this._dataSource.isLoading()) {
-      super._renderContentImpl();
+      super._fireContentReadyAction();
     }
   }
 
