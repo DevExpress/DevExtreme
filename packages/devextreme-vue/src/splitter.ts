@@ -140,78 +140,11 @@ const DxItem = createConfigurationComponent({
 });
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-(DxItem as any).$_expectedChildren = {
-  splitter: { isCollectionItem: false, optionName: "splitter" }
-};
-const DxSplitter = createConfigurationComponent({
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:allowKeyboardNavigation": null,
-    "update:bindingOptions": null,
-    "update:dataSource": null,
-    "update:disabled": null,
-    "update:elementAttr": null,
-    "update:height": null,
-    "update:hoverStateEnabled": null,
-    "update:items": null,
-    "update:itemTemplate": null,
-    "update:onContentReady": null,
-    "update:onDisposing": null,
-    "update:onInitialized": null,
-    "update:onItemClick": null,
-    "update:onItemCollapsed": null,
-    "update:onItemContextMenu": null,
-    "update:onItemExpanded": null,
-    "update:onItemRendered": null,
-    "update:onOptionChanged": null,
-    "update:onResize": null,
-    "update:onResizeEnd": null,
-    "update:onResizeStart": null,
-    "update:orientation": null,
-    "update:repaintChangesOnly": null,
-    "update:resizeMode": null,
-    "update:rtlEnabled": null,
-    "update:visible": null,
-    "update:width": null,
-  },
-  props: {
-    allowKeyboardNavigation: Boolean,
-    bindingOptions: Object,
-    dataSource: {},
-    disabled: Boolean,
-    elementAttr: Object,
-    height: [Function, Number, String],
-    hoverStateEnabled: Boolean,
-    items: Array,
-    itemTemplate: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemCollapsed: Function,
-    onItemContextMenu: Function,
-    onItemExpanded: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    orientation: String,
-    repaintChangesOnly: Boolean,
-    resizeMode: String,
-    rtlEnabled: Boolean,
-    visible: Boolean,
-    width: [Function, Number, String]
-  }
-});
-(DxSplitter as any).$_optionName = "splitter";
 
 export default DxSplitter;
 export {
   DxSplitter,
-  DxItem,
-  DxSplitter
+  DxItem
 };
 import type * as DxSplitterTypes from "devextreme/ui/splitter_types";
 export { DxSplitterTypes };
