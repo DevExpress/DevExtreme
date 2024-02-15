@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
@@ -28,12 +29,12 @@ const { Sortable } = SortableModule;
 
 const DIV = '<div>';
 
-const HeaderFilterView = HeaderFilterViewBase.inherit({
+class HeaderFilterView extends HeaderFilterViewBase {
   _getSearchExpr(options, headerFilterOptions) {
     options.useDefaultSearchExpr = true;
-    return this.callBase(options, headerFilterOptions);
-  },
-});
+    return super._getSearchExpr(options, headerFilterOptions);
+  }
+}
 
 const processItems = function (groupItems, field) {
   const filterValues: any = [];
@@ -88,8 +89,6 @@ const mixinWidget = headerFilterMixin(
     columnStateMixin(Widget as any),
   ),
 );
-
-// const test = headerFilterMixin(Widget as any);
 
 export class FieldChooserBase extends mixinWidget {
   _getDefaultOptions() {
