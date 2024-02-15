@@ -5,7 +5,6 @@ import { extend } from '@js/core/utils/extend';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
-import { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
 import ResizeHandle from './resize_handle';
 
@@ -69,16 +68,17 @@ class Splitter extends (CollectionWidget as any) {
     super._renderItems(items);
   }
 
-  _itemsCount() {
+  _itemsCount(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.option('items').length;
   }
 
-  _isLastItem(index: number) {
+  _isLastItem(index: number): boolean {
     return index === this._itemsCount() - 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  _renderItem(index, itemData, $container, $itemToReplace) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _renderItem(index, itemData, $container, $itemToReplace): unknown {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     if (!this._isLastItem(index)) {
@@ -88,26 +88,26 @@ class Splitter extends (CollectionWidget as any) {
     return $itemFrame;
   }
 
-  _renderResizeHandle() {
+  _renderResizeHandle(): void {
     const $resizeHandle = $('<div>').appendTo(this.$element());
 
     this._createComponent($resizeHandle, ResizeHandle, this._getResizeHandleConfig());
   }
 
-  _getResizeHandleConfig() {
+  _getResizeHandleConfig(): unknown {
     return {
       direction: this.option('orientation') === ORIENTATION.vertical ? 'horizontal' : 'vertical',
-      onResizeStart: (e) => {
+      onResizeStart: (e): void => {
         this._actions.onResizeStart({
           event: e,
         });
       },
-      onResize: (e) => {
+      onResize: (e): void => {
         this._actions.onResize({
           event: e,
         });
       },
-      onResizeEnd: (e) => {
+      onResizeEnd: (e): void => {
         this._actions.onResizeEnd({
           event: e,
         });
