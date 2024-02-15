@@ -398,7 +398,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $table;
   }
 
-  _rowPointerDown() {
+  _rowPointerDown(e?: any) {
 
   }
 

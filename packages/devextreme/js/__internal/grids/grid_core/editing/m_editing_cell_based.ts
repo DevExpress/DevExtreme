@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
@@ -10,6 +11,8 @@ import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
+import { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { ModuleType } from '../m_types';
 import {
@@ -673,48 +676,53 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 };
 
+const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedExtender extends Base {
+  _createTable() {
+    const $table = super._createTable.apply(this, arguments as any);
+    const editingController = this._editingController;
+
+    if (editingController.isCellOrBatchEditMode() && this.option('editing.allowUpdating')) {
+      eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `td:not(.${EDITOR_CELL_CLASS})`, this.createAction(() => {
+        if (editingController.isEditing()) {
+          editingController.closeEditCell();
+        }
+      }));
+    }
+
+    return $table;
+  }
+
+  _createRow(row) {
+    const $row = super._createRow.apply(this, arguments as any);
+
+    if (row) {
+      const editingController = this._editingController;
+      const isRowRemoved = !!row.removed;
+
+      if (editingController.isBatchEditMode()) {
+        isRowRemoved && $row.addClass(ROW_REMOVED);
+      }
+    }
+    return $row;
+  }
+};
+
+const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingCellBasedExtender extends Base {
+  isVisible() {
+    const editingOptions = this.getController('editing').option('editing');
+
+    return super.isVisible() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
+  }
+};
+
 export const editingCellBasedModule = {
   extenders: {
     controllers: {
       editing: editingControllerExtender,
     },
     views: {
-      rowsView: {
-        _createTable() {
-          const $table = this.callBase.apply(this, arguments);
-          const editingController = this._editingController;
-
-          if (editingController.isCellOrBatchEditMode() && this.option('editing.allowUpdating')) {
-            eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `td:not(.${EDITOR_CELL_CLASS})`, this.createAction(() => {
-              if (editingController.isEditing()) {
-                editingController.closeEditCell();
-              }
-            }));
-          }
-
-          return $table;
-        },
-        _createRow(row) {
-          const $row = this.callBase.apply(this, arguments);
-
-          if (row) {
-            const editingController = this._editingController;
-            const isRowRemoved = !!row.removed;
-
-            if (editingController.isBatchEditMode()) {
-              isRowRemoved && $row.addClass(ROW_REMOVED);
-            }
-          }
-          return $row;
-        },
-      },
-      headerPanel: {
-        isVisible() {
-          const editingOptions = this.getController('editing').option('editing');
-
-          return this.callBase() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
-        },
-      },
+      rowsView,
+      headerPanel,
     },
   },
 };
