@@ -1030,7 +1030,7 @@ export class ColumnsController extends modules.Controller {
 
   _updateColumnOptions(column, columnIndex) {
     column.selector = column.selector || function (data) { return column.calculateCellValue(data); };
-    if (this._reinitAfterLookupChanges && this._previousColumns) {
+    if (this._reinitAfterLookupChanges && this._previousColumns?.[columnIndex]) {
       column.selector.columnIndex = columnIndex;
       column.selector.originalCallback = this._previousColumns[columnIndex].selector.originalCallback;
     } else {
