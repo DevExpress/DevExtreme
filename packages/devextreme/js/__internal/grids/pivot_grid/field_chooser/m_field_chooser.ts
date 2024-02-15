@@ -143,7 +143,7 @@ export class FieldChooser extends FieldChooserBase {
 
   _dispose() {
     this._disposeDataSource();
-    super._dispose();
+    super._dispose.apply(this, arguments);
   }
 
   _init() {
