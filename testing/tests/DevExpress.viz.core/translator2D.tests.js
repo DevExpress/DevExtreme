@@ -1963,12 +1963,12 @@ QUnit.test('Translate. Numeric, interval 5', function(assert) {
 QUnit.test('Translate with interval. Numeric, interval 5', function(assert) {
     const translator = this.createTranslator({ min: 5, max: 20 }); // 5, 10, 15, 20
 
-    assert.equal(translator.translate(-6.5, undefined, 10), null, 'BP less than min');
-    assert.equal(translator.translate(undefined, undefined, 10), null, 'BP undefined');
-    assert.equal(translator.translate(30, undefined, 10), null, 'BP more than max');
-    assert.equal(translator.translate(17.5, undefined, 10), 1000, 'BP inside range');
-    assert.equal(translator.translate(3, undefined, 10), 625, 'BP on the min');
-    assert.equal(translator.translate(29, undefined, 10), 1375, 'BP on the max');
+    assert.equal(translator.translate(-6.5, undefined, undefined, 10), null, 'BP less than min');
+    assert.equal(translator.translate(undefined, undefined, undefined, 10), null, 'BP undefined');
+    assert.equal(translator.translate(30, undefined, undefined, 10), null, 'BP more than max');
+    assert.equal(translator.translate(17.5, undefined, undefined, 10), 1000, 'BP inside range');
+    assert.equal(translator.translate(3, undefined, undefined, 10), 625, 'BP on the min');
+    assert.equal(translator.translate(29, undefined, undefined, 10), 1375, 'BP on the max');
 });
 
 QUnit.test('Translate. Numeric, interval 0.4', function(assert) {
@@ -2133,14 +2133,14 @@ QUnit.test('Translate. With direction', function(assert) {
 QUnit.test('Translate with interval. With direction, Numeric, interval 5', function(assert) {
     const translator = this.createTranslator({ min: 5, max: 20 }); // 5, 10, 15, 20
 
-    assert.equal(translator.translate(17.5, -1, 10), 750, 'BP inside range');
-    assert.equal(translator.translate(17.5, 1, 10), 1250, 'BP inside range');
+    assert.equal(translator.translate(17.5, -1, undefined, 10), 750, 'BP inside range');
+    assert.equal(translator.translate(17.5, 1, undefined, 10), 1250, 'BP inside range');
 
-    assert.equal(translator.translate(3, -1, 10), 500, 'BP on the min');
-    assert.equal(translator.translate(3, 1, 10), 750, 'BP on the min');
+    assert.equal(translator.translate(3, -1, undefined, 10), 500, 'BP on the min');
+    assert.equal(translator.translate(3, 1, undefined, 10), 750, 'BP on the min');
 
-    assert.equal(translator.translate(29, -1, 10), 1250, 'BP on the max');
-    assert.equal(translator.translate(29, 1, 10), 1500, 'BP on the max');
+    assert.equal(translator.translate(29, -1, undefined, 10), 1250, 'BP on the max');
+    assert.equal(translator.translate(29, 1, undefined, 10), 1500, 'BP on the max');
 });
 
 QUnit.test('from.', function(assert) {
