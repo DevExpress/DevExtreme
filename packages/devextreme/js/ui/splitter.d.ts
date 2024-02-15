@@ -128,7 +128,7 @@ export type ResizeEndEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Can
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
+export type ItemCollapsedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
  * @docid _ui_splitter_ItemExpandedEvent
@@ -136,7 +136,7 @@ export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxSplitter<TKey>, K
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
+export type ItemExpandedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
  * @deprecated use Properties instead

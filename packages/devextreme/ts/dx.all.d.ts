@@ -25673,12 +25673,14 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ItemCollapsedEvent]
      */
-    export type ItemCollapsedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<
-        dxSplitter<TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
-        DevExpress.events.ItemInfo<TKey>;
+    export type ItemCollapsedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<
+      dxSplitter<TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > &
+      DevExpress.events.ItemInfo<TKey>;
     /**
      * [descr:_ui_splitter_ItemContextMenuEvent]
      */
@@ -25693,12 +25695,14 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ItemExpandedEvent]
      */
-    export type ItemExpandedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<
-        dxSplitter<TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
-        DevExpress.events.ItemInfo<TKey>;
+    export type ItemExpandedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<
+      dxSplitter<TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > &
+      DevExpress.events.ItemInfo<TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
