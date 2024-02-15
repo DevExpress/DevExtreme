@@ -19,7 +19,7 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('material.blue.light');
+  await changeTheme('fluent.blue.light.compact');
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(3)].map((_, index) => ({ id: index, text: `item ${index}`, group: `group ${index % 2}` })),
     keyExpr: 'id',
