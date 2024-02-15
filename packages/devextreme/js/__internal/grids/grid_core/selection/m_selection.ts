@@ -643,10 +643,12 @@ export const selectionModule = {
           return d.promise();
         },
 
-        _handleDataChanged(e) {
+        _handleDataChanged() {
+          const hasLoadOperation = this.hasLoadOperation();
+
           this.callBase.apply(this, arguments);
 
-          if ((!e || e.changeType === 'refresh') && !this._repaintChangesOnly) {
+          if (hasLoadOperation && !this._repaintChangesOnly) {
             this.getController('selection').focusedItemIndex(-1);
           }
         },
