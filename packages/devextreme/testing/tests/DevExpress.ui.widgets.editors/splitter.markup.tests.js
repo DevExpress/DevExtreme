@@ -11,8 +11,8 @@ QUnit.testStart(function() {
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-horizontal';
-const VERTICAL_DIRECTION_CLASS = 'dx-splitter-vertical';
+const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
+const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -37,27 +37,27 @@ QUnit.module('Splitter markup', moduleConfig, () => {
     });
 
     QUnit.test('Splitter should be initialized with horizontal class by default', function(assert) {
-        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
-        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_ORIENTATION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_ORIENTATION_CLASS), true);
     });
 
-    QUnit.test('Splitter direction should be initialized correctly', function(assert) {
-        this.reinit({ direction: 'vertical' });
+    QUnit.test('Splitter orientation should be initialized correctly', function(assert) {
+        this.reinit({ orientation: 'vertical' });
 
-        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), false);
-        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_ORIENTATION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_ORIENTATION_CLASS), true);
     });
 
-    QUnit.test('direction should be changed at runtime', function(assert) {
-        this.instance.option('direction', 'vertical');
+    QUnit.test('orientation should be changed at runtime', function(assert) {
+        this.instance.option('orientation', 'vertical');
 
-        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), false);
-        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_ORIENTATION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_ORIENTATION_CLASS), true);
 
-        this.instance.option('direction', 'horizontal');
+        this.instance.option('orientation', 'horizontal');
 
-        assert.strictEqual(this.$element.hasClass(HORIZONTAL_DIRECTION_CLASS), true);
-        assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
+        assert.strictEqual(this.$element.hasClass(HORIZONTAL_ORIENTATION_CLASS), true);
+        assert.strictEqual(this.$element.hasClass(VERTICAL_ORIENTATION_CLASS), false);
     });
 
     QUnit.test('Splitter should be initialized with pane', function(assert) {

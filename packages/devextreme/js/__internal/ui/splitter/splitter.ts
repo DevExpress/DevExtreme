@@ -136,7 +136,7 @@ class Splitter extends (CollectionWidget as any) {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
     switch (args.name) {
-      case 'direction':
+      case 'orientation':
         this._toggleOrientationClass();
         break;
       case 'onResizeStart':
