@@ -25642,40 +25642,6 @@ declare module DevExpress.ui {
       TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxSplitter<TItem, TKey>>;
-    /**
-     * @deprecated Use Item instead
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
-      /**
-       * [descr:dxSplitterItem.splitter]
-       */
-      splitter?: Properties<any, TKey>;
-      /**
-       * [descr:dxSplitterItem.size]
-       */
-      size?: number | string;
-      /**
-       * [descr:dxSplitterItem.maxSize]
-       */
-      maxSize?: number | string;
-      /**
-       * [descr:dxSplitterItem.minSize]
-       */
-      minSize?: number | string;
-      /**
-       * [descr:dxSplitterItem.collapsed]
-       */
-      collapsed?: boolean;
-      /**
-       * [descr:dxSplitterItem.collapsible]
-       */
-      collapsible?: boolean;
-      /**
-       * [descr:dxSplitterItem.resizable]
-       */
-      resizable?: boolean;
-    }
     export type ExplicitTypes<TItem extends ItemLike<TKey>, TKey> = {
       Properties: Properties<TItem, TKey>;
       ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
@@ -25693,10 +25659,6 @@ declare module DevExpress.ui {
       TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.InitializedEventInfo<dxSplitter<TItem, TKey>>;
-    /**
-     * [descr:dxSplitterItem]
-     */
-    export type Item<TKey = any> = dxSplitterItem<TKey>;
     /**
      * [descr:_ui_splitter_ItemClickEvent]
      */
@@ -25812,6 +25774,40 @@ declare module DevExpress.ui {
         KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
       > &
       ResizeInfo;
+  }
+  /**
+   * @deprecated Use Item instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
+    /**
+     * [descr:dxSplitterItem.splitter]
+     */
+    splitter?: DevExpress.ui.dxSplitter.Properties<any, TKey>;
+    /**
+     * [descr:dxSplitterItem.size]
+     */
+    size?: number | string;
+    /**
+     * [descr:dxSplitterItem.maxSize]
+     */
+    maxSize?: number | string;
+    /**
+     * [descr:dxSplitterItem.minSize]
+     */
+    minSize?: number | string;
+    /**
+     * [descr:dxSplitterItem.collapsed]
+     */
+    collapsed?: boolean;
+    /**
+     * [descr:dxSplitterItem.collapsible]
+     */
+    collapsible?: boolean;
+    /**
+     * [descr:dxSplitterItem.resizable]
+     */
+    resizable?: boolean;
   }
   /**
    * [descr:dxSplitterOptions]
@@ -30653,6 +30649,9 @@ declare module DevExpress.ui.dxPopup {
 }
 declare module DevExpress.ui.dxResponsiveBox {
   export type Item = dxResponsiveBoxItem;
+}
+declare module DevExpress.ui.dxSplitter {
+  export type Item<TKey = any> = dxSplitterItem<TKey>;
 }
 declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;

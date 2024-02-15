@@ -239,15 +239,14 @@ export default class dxSplitter<
 > extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
 /**
- * @docid dxSplitterItem
  * @public
- * @type object
- * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui.dxSplitter
  */
 export type Item<TKey = any> = dxSplitterItem<TKey>;
 
 /**
  * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
     /**
