@@ -481,9 +481,9 @@ class PatternRule extends NestedOption<IPatternRuleProps> {
 // SimpleItem
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
-  max?: Date | number;
+  max?: Date | number | string;
   message?: string;
-  min?: Date | number;
+  min?: Date | number | string;
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
@@ -792,8 +792,8 @@ type IValidationRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   ignoreEmptyValue?: boolean;
-  max?: Date | number;
-  min?: Date | number;
+  max?: Date | number | string;
+  min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
