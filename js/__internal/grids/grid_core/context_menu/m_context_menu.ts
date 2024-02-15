@@ -16,7 +16,7 @@ const viewName = {
 };
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
-class ContextMenuController extends modules.ViewController {
+export class ContextMenuController extends modules.ViewController {
   init() {
     this.createAction('onContextMenuPreparing');
   }
