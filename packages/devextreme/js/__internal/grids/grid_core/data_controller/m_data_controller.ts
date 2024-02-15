@@ -1602,6 +1602,12 @@ export class DataController extends ControllerWithDataMixin {
   totalCount() {
     return this._dataSource ? this._dataSource?.totalCount() : 0;
   }
+
+  hasLoadOperation(): boolean {
+    const operationTypes = this._dataSource?.operationTypes() ?? {};
+
+    return Object.keys(operationTypes).some((type) => operationTypes[type]);
+  }
 }
 export const dataControllerModule: Module = {
   defaultOptions() {

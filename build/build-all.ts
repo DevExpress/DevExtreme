@@ -72,7 +72,11 @@ sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
     packAndCopy(NPM_DIR);
 sh.popd();
 
-sh.exec('npm run pack -w devextreme-angular -w devextreme-react -w devextreme-vue', { silent: true });
+sh.exec('npm run pack -w devextreme-react -w devextreme-vue', { silent: true });
+
+sh.pushd('packages/devextreme-angular');
+    sh.exec('npm run pack -- --with-descriptions', { silent: true });
+sh.popd();
 
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_DIR);
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_DIR);
