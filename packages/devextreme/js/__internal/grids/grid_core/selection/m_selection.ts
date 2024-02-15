@@ -627,7 +627,8 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return d.promise();
   }
 
-  _handleDataChanged() {
+  // eslint-disable-next-line
+  _handleDataChanged(e?) {
     const hasLoadOperation = this.hasLoadOperation();
     super._handleDataChanged.apply(this, arguments as any);
 
