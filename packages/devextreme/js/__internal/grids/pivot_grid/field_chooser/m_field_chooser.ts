@@ -88,24 +88,27 @@ function getScrollable(container) {
   return container.find(`.${CLASSES.scrollable.self}`).dxScrollable('instance');
 }
 
-class FieldChooser extends FieldChooserBase {
+export class FieldChooser extends FieldChooserBase {
   _getDefaultOptions() {
-    return extend(this.callBase(), {
-      height: 400,
-      layout: 0,
-      dataSource: null,
-      encodeHtml: true,
-      onContextMenuPreparing: null,
-      allowSearch: false,
-      searchTimeout: 500,
-      texts: {
-        columnFields: localizationMessage.format('dxPivotGrid-columnFields'),
-        rowFields: localizationMessage.format('dxPivotGrid-rowFields'),
-        dataFields: localizationMessage.format('dxPivotGrid-dataFields'),
-        filterFields: localizationMessage.format('dxPivotGrid-filterFields'),
-        allFields: localizationMessage.format('dxPivotGrid-allFields'),
+    return {
+      ...super._getDefaultOptions(),
+      ...{
+        height: 400,
+        layout: 0,
+        dataSource: null,
+        encodeHtml: true,
+        onContextMenuPreparing: null,
+        allowSearch: false,
+        searchTimeout: 500,
+        texts: {
+          columnFields: localizationMessage.format('dxPivotGrid-columnFields'),
+          rowFields: localizationMessage.format('dxPivotGrid-rowFields'),
+          dataFields: localizationMessage.format('dxPivotGrid-dataFields'),
+          filterFields: localizationMessage.format('dxPivotGrid-filterFields'),
+          allFields: localizationMessage.format('dxPivotGrid-allFields'),
+        },
       },
-    });
+    };
   }
 
   _refreshDataSource() {
@@ -123,7 +126,7 @@ class FieldChooser extends FieldChooserBase {
 
     that._disposeDataSource();
 
-    that.callBase();
+    super._refreshDataSource();
 
     that._dataSource && that._dataSource.on('changed', that._changedHandler);
   }
@@ -140,11 +143,11 @@ class FieldChooser extends FieldChooserBase {
 
   _dispose() {
     this._disposeDataSource();
-    this.callBase.apply(this, arguments);
+    super._dispose();
   }
 
   _init() {
-    this.callBase();
+    super._init();
     this._refreshDataSource();
     this._dataChangedHandlers = [];
     this._initActions();
@@ -161,7 +164,7 @@ class FieldChooser extends FieldChooserBase {
   }
 
   _setOptionsByReference() {
-    this.callBase();
+    super._setOptionsByReference();
 
     extend(this._optionsByReference, {
       dataSource: true,
@@ -186,7 +189,7 @@ class FieldChooser extends FieldChooserBase {
         that._actions[args.name] = that._createActionByOption(args.name);
         break;
       default:
-        that.callBase(args);
+        super._optionChanged(args);
     }
   }
 
@@ -253,7 +256,7 @@ class FieldChooser extends FieldChooserBase {
     const $container = $(DIV).addClass(CLASSES.fieldChooser.container).appendTo($element);
     const layout = that.option('layout');
 
-    that.callBase();
+    super._initMarkup();
 
     $element
       .addClass(CLASSES.fieldChooser.self)
@@ -278,7 +281,7 @@ class FieldChooser extends FieldChooserBase {
   }
 
   _renderContentImpl() {
-    this.callBase();
+    super._renderContentImpl();
 
     this.renderSortable();
     this._renderContextMenu();
@@ -287,7 +290,7 @@ class FieldChooser extends FieldChooserBase {
 
   _fireContentReadyAction() {
     if (!this._dataSource || !this._dataSource.isLoading()) {
-      this.callBase();
+      super._renderContentImpl();
     }
   }
 
@@ -645,4 +648,3 @@ class FieldChooser extends FieldChooserBase {
 registerComponent('dxPivotGridFieldChooser', FieldChooser as any);
 
 export default { FieldChooser };
-export { FieldChooser };
