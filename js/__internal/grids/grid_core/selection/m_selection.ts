@@ -180,8 +180,7 @@ export class SelectionController extends modules.Controller {
   _getSelectionConfig() {
     const dataController = this._dataController;
     const columnsController = this.getController('columns');
-    const selectionOptions = this.option('selection') ?? {};
-    // @ts-expect-error
+    const selectionOptions: any = this.option('selection') ?? {};
     const { deferred } = selectionOptions;
     const scrollingMode = this.option('scrolling.mode');
     const virtualPaging = scrollingMode === 'virtual' || scrollingMode === 'infinite';
@@ -193,7 +192,7 @@ export class SelectionController extends modules.Controller {
       mode: this._selectionMode,
       deferred,
       alwaysSelectByShift: selectionOptions.alwaysSelectByShift,
-      maxFilterLengthInRequest: (selectionOptions as any).maxFilterLengthInRequest,
+      maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
       selectionFilter: this.option('selectionFilter'),
       ignoreDisabledItems: true,
       isVirtualPaging: virtualPaging,
