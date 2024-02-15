@@ -6,17 +6,11 @@ import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collecti
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
-import Guid from '../../../core/guid';
-import eventsEngine from '../../../events/core/events_engine';
-import { end as eventEnd, move as eventMove, start as eventStart } from '../../../events/drag';
-import { addNamespace } from '../../../events/utils/index';
-
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-splitter-vertical';
-const SPLITTER_MODULE_NAMESPACE = 'dxSplitter';
 
 const RESIZE_DIRECTION = {
   horizontal: 'horizontal',
@@ -38,14 +32,6 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  _init(): void {
-    super._init();
-    const namespace = `${SPLITTER_MODULE_NAMESPACE}${new Guid().toString()}`;
-    this.RESIZE_START_EVENT_NAME = addNamespace(eventStart, namespace);
-    this.RESIZE_EVENT_NAME = addNamespace(eventMove, namespace);
-    this.RESIZE_END_EVENT_NAME = addNamespace(eventEnd, namespace);
-  }
-
   // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return SPLITTER_ITEM_CLASS;
@@ -63,7 +49,7 @@ class Splitter extends (CollectionWidget as any) {
     super._initMarkup();
   }
 
-  _initActions(): void {
+  _createActions(): void {
     this._actions = {
       onResize: this._createActionByOption('onResize'),
       onResizeStart: this._createActionByOption('onResizeStart'),
@@ -73,8 +59,7 @@ class Splitter extends (CollectionWidget as any) {
 
   _render(): void {
     super._render();
-    this._attachEventHandlers();
-    this._initActions();
+    this._createActions();
   }
 
   _resizeStartHandler(e: ResizeStartEvent): void {
@@ -118,52 +103,11 @@ class Splitter extends (CollectionWidget as any) {
     this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
   }
 
-  _attachEventHandlers(): void {
-    const eventData = { direction: this.option('direction'), immediate: true };
-
-    eventsEngine.on(
-      this.$element(),
-      this.RESIZE_START_EVENT_NAME,
-      eventData,
-      this._resizeStartHandler.bind(this),
-    );
-
-    eventsEngine.on(
-      this.$element(),
-      this.RESIZE_EVENT_NAME,
-      eventData,
-      this._resizeHandler.bind(this),
-    );
-
-    eventsEngine.on(
-      this.$element(),
-      this.RESIZE_END_EVENT_NAME,
-      eventData,
-      this._resizeEndHandler.bind(this),
-    );
-  }
-
-  _detachEventHandlers(): void {
-    // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this.$element(), this.RESIZE_START_EVENT_NAME);
-    // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
-    // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
-  }
-
-  _clean(): void {
-    this._detachEventHandlers();
-    super._clean();
-  }
-
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
     switch (args.name) {
       case 'direction':
         this._toggleDirectionClass();
-        this._detachEventHandlers();
-        this._attachEventHandlers();
         break;
       case 'onResizeStart':
       case 'onResizeEnd':
