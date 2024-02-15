@@ -35,67 +35,25 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Splitter Initialization', moduleConfig, () => {
-    QUnit.test('Splitter should be initialized with Splitter type', function(assert) {
-        assert.ok(this.instance instanceof Splitter);
-    });
-
-    QUnit.test('Splitter items count should be the same as datasource items count', function(assert) {
-        this.reinit({ dataSource: [{
-            template: () => $('<div>').text('Pane 1')
-        }, {
-            template: () => $('<div>').text('Pane 2')
-        }, {
-            template: () => $('<div>').text('Pane 3')
-        }] });
-
-        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
-        assert.strictEqual(items.length, 3);
-    });
-
-    QUnit.test('Splitter with three items should have two resize handles', function(assert) {
-        this.reinit({ dataSource: [{
-            template: () => $('<div>').text('Pane 1')
-        }, {
-            template: () => $('<div>').text('Pane 2')
-        }, {
-            template: () => $('<div>').text('Pane 3')
-        }] });
-
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
-
-        assert.strictEqual(handles.length, 2);
-    });
-
-    QUnit.test('Splitter with one item should have no handles', function(assert) {
-        this.reinit({ dataSource: [{ template: () => $('<div>').text('Pane 1') }] });
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
-
-        assert.strictEqual(handles.length, 0);
-    });
-
-    QUnit.test('Splitter with no items should have no handles', function(assert) {
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
-
-        assert.strictEqual(handles.length, 0);
-    });
-});
-
-
-QUnit.module('Splitter Initialization', moduleConfig, () => {
+QUnit.module('Initialization', moduleConfig, () => {
     QUnit.test('Splitter should be initialized with Splitter type', function(assert) {
         assert.ok(this.instance instanceof Splitter);
     });
 
     QUnit.test('items count should be the same as datasource items count', function(assert) {
+        this.reinit({ dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }, { text: 'pane 3' }] });
+
+        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+        assert.strictEqual(items.length, 3);
+    });
+
+    QUnit.test('items should be able to be initialized with template', function(assert) {
         this.reinit({ dataSource: [{
-            template: () => $('<div>').text('Pane 1')
-        }, {
-            template: () => $('<div>').text('Pane 2')
-        }, {
-            template: () => $('<div>').text('Pane 3')
-        }] });
+            template: () => $('<div>').text('Pane 1') }, {
+            template: () => $('<div>').text('Pane 2') }, {
+            template: () => $('<div>').text('Pane 3') }]
+        });
 
         const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
 
@@ -103,13 +61,7 @@ QUnit.module('Splitter Initialization', moduleConfig, () => {
     });
 
     QUnit.test('Splitter with three items should have two resize handles', function(assert) {
-        this.reinit({ dataSource: [{
-            template: () => $('<div>').text('Pane 1')
-        }, {
-            template: () => $('<div>').text('Pane 2')
-        }, {
-            template: () => $('<div>').text('Pane 3')
-        }] });
+        this.reinit({ dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }, { text: 'pane 3' }] });
 
         const handles = this.$element.find(`.${RESIZE_HANDLE}`);
 
@@ -130,31 +82,45 @@ QUnit.module('Splitter Initialization', moduleConfig, () => {
     });
 });
 
-// TODO: refactor
+
 QUnit.module('Events', moduleConfig, () => {
-    QUnit.test('resize events should be raised', function(assert) {
-        this.reinit({ dataSource: [{
-            template: () => $('<div>').text('Pane 1')
-        }, {
-            template: () => $('<div>').text('Pane 2')
-        }] });
+    ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
+        QUnit.test(`${eventHandler} should be called when handle dragged`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            this.reinit({
+                [eventHandler]: resizeHandlerStub,
+                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+            });
 
-        const onResizeStartStub = sinon.stub();
-        const onResizeStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
+            const handles = this.$element.find(`.${RESIZE_HANDLE}`);
 
-        this.instance.on('resize', onResizeStub);
-        this.instance.on('resizeStart', onResizeStartStub);
-        this.instance.on('resizeEnd', onResizeEndStub);
+            const pointer = pointerMock(handles[0]);
 
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
+            pointer.start().dragStart().drag(0, 50).dragEnd();
 
-        const pointer = pointerMock(handles[0]);
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
+        });
 
-        pointer.start().dragStart().drag(0, 50).dragEnd();
+        QUnit.test(`${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
+            const handlerStub = sinon.stub();
+            const handlerStubAfterUpdate = sinon.stub();
 
-        assert.strictEqual(onResizeStartStub.callCount, 1);
-        assert.strictEqual(onResizeStub.callCount, 1);
-        assert.strictEqual(onResizeEndStub.callCount, 1);
+            this.reinit({
+                [eventHandler]: handlerStub,
+                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+            });
+
+            const handles = this.$element.find(`.${RESIZE_HANDLE}`);
+            const pointer = pointerMock(handles[0]);
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            this.instance.option(eventHandler, handlerStubAfterUpdate);
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(handlerStub.callCount, 1);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
     });
 });
