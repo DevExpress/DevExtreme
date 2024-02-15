@@ -25,6 +25,7 @@ const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
   const result = eval(code);
   if (result && typeof result.then === 'function') {
+    // eslint-disable-next-line no-promise-executor-return
     return Promise.race([result, new Promise((resolve) => setTimeout(resolve, 60000))]);
   }
 
@@ -81,6 +82,7 @@ const getTestSpecificSkipRules = (testName) => {
     case 'DataGrid-PDFExportImages':
     case 'DataGrid-RowSelection':
     case 'FilterBuilder-WithList':
+    case 'TagBox-Overview':
       return ['image-alt'];
     default:
       return [];

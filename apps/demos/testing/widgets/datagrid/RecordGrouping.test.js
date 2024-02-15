@@ -24,9 +24,12 @@ runManualTest('DataGrid', 'RecordGrouping', ['jQuery', 'React', 'Vue', 'Angular'
     await takeScreenshot('datagrid_record_grouping_3_desktop.png');
 
     await t
-      .drag($('.dx-datagrid-headers .dx-datagrid-drag-action').nth(0),
-        50, -50,
-        { offsetX: 5, offsetY: 5 });
+      .drag(
+        $('.dx-datagrid-headers .dx-datagrid-drag-action').nth(0),
+        50,
+        -50,
+        { offsetX: 5, offsetY: 5 },
+      );
 
     await takeScreenshot('datagrid_record_grouping_4_desktop.png');
 

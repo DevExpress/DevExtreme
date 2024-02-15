@@ -18,7 +18,8 @@ runManualTest('DataGrid', 'ColumnCustomization', ['jQuery', 'React', 'Vue', 'Ang
 
     await t.drag(
       $('td').withAttribute('aria-label', 'Column Birth Date'),
-      500, 200,
+      500,
+      200,
       { offsetX: 5, offsetY: 5 },
     );
     await takeScreenshot('datagrid_column_customization_3.png');
