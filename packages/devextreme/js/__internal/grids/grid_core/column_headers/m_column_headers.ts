@@ -408,7 +408,8 @@ export class ColumnHeadersView extends ColumnsView {
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
   }
 
-  _isSortableElement() {
+  // eslint-disable-next-line
+  _isSortableElement($target?) {
     return true;
   }
 
