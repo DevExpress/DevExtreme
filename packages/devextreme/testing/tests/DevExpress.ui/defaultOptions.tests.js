@@ -1243,30 +1243,36 @@ testComponentDefaults(TabPanel,
 testComponentDefaults(LoadIndicator,
     {},
     {
-        _animatingSegmentCount: 2,
-        _animatingSegmentInner: true
+        _animatingSegmentCount: 7,
+        _animatingSegmentInner: false
     },
     function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('material.blue.light');
+        this.origIsMaterialBased = themes.isMaterialBased;
+        this.origIsGeneric = themes.isGeneric;
+        themes.isMaterialBased = function() { return false; };
+        themes.isGeneric = function() { return true; };
     },
     function() {
-        themes.current(this.originalCurrentTheme);
+        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isGeneric = this.origIsGeneric;
     }
 );
 
 testComponentDefaults(LoadIndicator,
     {},
     {
-        _animatingSegmentCount: 7,
-        _animatingSegmentInner: false
+        _animatingSegmentCount: 2,
+        _animatingSegmentInner: true
     },
     function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('generic.light');
+        this.origIsMaterialBased = themes.isMaterialBased;
+        this.origIsGeneric = themes.isGeneric;
+        themes.isMaterialBased = function() { return true; };
+        themes.isGeneric = function() { return false; };
     },
     function() {
-        themes.current(this.originalCurrentTheme);
+        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isGeneric = this.origIsGeneric;
     }
 );
 
