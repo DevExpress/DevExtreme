@@ -1,11 +1,11 @@
 import dateUtils from '@js/core/utils/date';
-import { ViewType } from '@js/renovation/ui/scheduler/types';
+import type { ViewType } from '@js/renovation/ui/scheduler/types';
 import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
 import {
   calculateIsGroupedAllDayPanel,
   isHorizontalView,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { ViewCellData } from '@js/renovation/ui/scheduler/workspaces/types';
+import type { ViewCellData } from '@js/renovation/ui/scheduler/workspaces/types';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
 import { dateUtilsTs } from '@ts/core/utils/date';
 

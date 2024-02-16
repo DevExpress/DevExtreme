@@ -21,6 +21,12 @@ module.exports = {
                 tsconfigRootDir: __dirname,
             },
             rules: {
+                '@typescript-eslint/consistent-type-imports': [
+                    'error',
+                    {
+                        'disallowTypeAnnotations': false
+                    }
+                ],
                 'no-restricted-globals': [
                     'warn',
                     {

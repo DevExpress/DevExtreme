@@ -23,7 +23,7 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 
 import modules from '../m_modules';
-import { Module } from '../m_types';
+import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
   COLUMN_CHOOSER_LOCATION,

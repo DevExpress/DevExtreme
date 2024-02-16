@@ -1,4 +1,4 @@
-import { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
+import type { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
 import Guid from '../../../core/guid';
 import { extend } from '../../../core/utils/extend';
