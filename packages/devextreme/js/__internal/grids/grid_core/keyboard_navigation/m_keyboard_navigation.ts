@@ -184,7 +184,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       if (
         $element.is(':visible')
         && this._focusedView
-        && this._focusedView.getScrollable
+        && this._focusedView.getScrollable()
       ) {
         this._focusedView._scrollToElement($element);
         this._isNeedScroll = false;
