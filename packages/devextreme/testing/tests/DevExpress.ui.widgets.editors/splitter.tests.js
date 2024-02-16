@@ -29,6 +29,10 @@ const moduleConfig = {
 
             init(options);
         };
+
+        this.getResizeHandles = () => {
+            return this.$element.find(`.${RESIZE_HANDLE}`);
+        };
     },
     afterEach: function() {
         fx.off = false;
@@ -63,22 +67,19 @@ QUnit.module('Initialization', moduleConfig, () => {
     QUnit.test('Splitter with three items should have two resize handles', function(assert) {
         this.reinit({ dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }, { text: 'pane 3' }] });
 
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
-
-        assert.strictEqual(handles.length, 2);
+        assert.strictEqual(this.getResizeHandles().length, 2);
     });
 
     QUnit.test('Splitter with one item should have no handles', function(assert) {
         this.reinit({ dataSource: [{ template: () => $('<div>').text('Pane 1') }] });
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
 
-        assert.strictEqual(handles.length, 0);
+        assert.strictEqual(this.getResizeHandles().length, 0);
     });
 
     QUnit.test('Splitter with no items should have no handles', function(assert) {
-        const handles = this.$element.find(`.${RESIZE_HANDLE}`);
+        this.reinit({ dataSource: [] });
 
-        assert.strictEqual(handles.length, 0);
+        assert.strictEqual(this.getResizeHandles().length, 0);
     });
 });
 
@@ -92,9 +93,7 @@ QUnit.module('Events', moduleConfig, () => {
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
             });
 
-            const handles = this.$element.find(`.${RESIZE_HANDLE}`);
-
-            const pointer = pointerMock(handles[0]);
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -110,8 +109,7 @@ QUnit.module('Events', moduleConfig, () => {
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
             });
 
-            const handles = this.$element.find(`.${RESIZE_HANDLE}`);
-            const pointer = pointerMock(handles[0]);
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -122,5 +120,115 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(handlerStub.callCount, 1);
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
         });
+    });
+});
+
+QUnit.module('Nested Splitter Events', moduleConfig, () => {
+    ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
+        QUnit.test(`${eventHandler} should be called when handle in nested splitter is dragged`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            this.reinit({
+                [eventHandler]: resizeHandlerStub,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            const pointer = pointerMock(this.getResizeHandles()[0]);
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
+        });
+
+        QUnit.test(`nestedSplitter.${eventHandler} should be called instead of parentSplitter.${eventHandler}`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            const nestedSplitterResizeHandlerStub = sinon.stub();
+            this.reinit({
+                [eventHandler]: resizeHandlerStub,
+                items: [{
+                    splitter: {
+                        [eventHandler]: nestedSplitterResizeHandlerStub,
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            const pointer = pointerMock(this.getResizeHandles()[0]);
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 0);
+            assert.strictEqual(nestedSplitterResizeHandlerStub.callCount, 1);
+        });
+
+        QUnit.test(`nestedSplitter.${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
+            const handlerStub = sinon.stub();
+            const handlerStubAfterUpdate = sinon.stub();
+
+            this.reinit({
+                items: [{
+                    splitter: {
+                        [eventHandler]: handlerStub,
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            let pointer = pointerMock(this.getResizeHandles().get(0));
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(handlerStub.callCount, 1);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 0);
+            handlerStub.reset();
+
+            this.instance.option(`items[0].splitter.${eventHandler}`, handlerStubAfterUpdate);
+
+            pointer = pointerMock(this.getResizeHandles()[0]);
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(handlerStub.callCount, 0);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
+    });
+
+    QUnit.test('itemRendered should be called when nested splitter panes are rendered', function(assert) {
+        const itemRenderedSpy = sinon.spy();
+
+        this.reinit({
+            onItemRendered: itemRenderedSpy,
+            items: [{
+                text: 'Pane_1',
+            }, {
+                splitter: {
+                    items: [{ text: 'NestedPane_1' }, { text: 'NestedPane_2' }]
+                }
+            }]
+        });
+
+        assert.strictEqual(itemRenderedSpy.callCount, 4, 'itemRendered.callCount');
+    });
+
+    QUnit.test('nested splitter itemRendered should be called instead of parent.itemRendered', function(assert) {
+        const itemRenderedSpy = sinon.spy();
+        const nestedItemRenderedSpy = sinon.spy();
+
+        this.reinit({
+            onItemRendered: itemRenderedSpy,
+            items: [{
+                text: 'Pane_1',
+            }, {
+                splitter: {
+                    onItemRendered: nestedItemRenderedSpy,
+                    items: [{ text: 'NestedPane_1' }, { text: 'NestedPane_2' }]
+                }
+            }]
+        });
+
+        assert.strictEqual(itemRenderedSpy.callCount, 2, 'itemRendered.callCount');
+        assert.strictEqual(nestedItemRenderedSpy.callCount, 2, 'itemRendered.callCount');
     });
 });

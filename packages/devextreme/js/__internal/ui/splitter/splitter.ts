@@ -116,8 +116,39 @@ class Splitter extends (CollectionWidget as any) {
     return super._renderItemContent(args);
   }
 
-  _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
-    super._itemOptionChanged(item, property, value);
+  _createItemByTemplate(
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    itemTemplate,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    args,
+  ): unknown {
+    if (args.itemData.splitter) {
+      return itemTemplate.source
+        ? itemTemplate.source()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        : ($ as any)();
+    }
+    return super._createItemByTemplate(itemTemplate, args);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _postprocessRenderItem(args): void {
+    const splitterConfig = args.itemData.splitter;
+    if (!splitterConfig) {
+      return;
+    }
+
+    this._createComponent($(args.itemContent), Splitter, extend({
+      itemTemplate: this.option('itemTemplate'),
+      onResize: this.option('onResize'),
+      onResizeStart: this.option('onResizeStart'),
+      onResizeEnd: this.option('onResizeEnd'),
+      onItemClick: this.option('onItemClick'),
+      onItemContextMenu: this.option('onItemContextMenu'),
+      onItemRendered: this.option('onItemRendered'),
+      onItemExpanded: this.option('onItemExpanded'),
+      onItemCollapsed: this.option('onItemCollapsed'),
+    }, splitterConfig));
   }
 
   _isHorizontalOrientation(): boolean {
@@ -127,6 +158,10 @@ class Splitter extends (CollectionWidget as any) {
   _toggleOrientationClass(): void {
     this.$element().toggleClass(HORIZONTAL_ORIENTATION_CLASS, this._isHorizontalOrientation());
     this.$element().toggleClass(VERTICAL_ORIENTATION_CLASS, !this._isHorizontalOrientation());
+  }
+
+  _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
+    super._itemOptionChanged(item, property, value);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
