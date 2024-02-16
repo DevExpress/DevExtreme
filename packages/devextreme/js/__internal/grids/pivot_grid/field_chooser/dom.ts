@@ -1,4 +1,5 @@
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { getOuterWidth } from '@js/core/utils/size';
 
 import { ATTRIBUTES, CLASSES, SORTABLE_CONST } from './const';

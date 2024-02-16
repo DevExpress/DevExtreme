@@ -1,8 +1,8 @@
 import { Deferred } from '@js/core/utils/deferred';
 import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
 
-import { DataController } from '../grid_core/data_controller/m_data_controller';
-import { ModuleType } from '../grid_core/m_types';
+import type { DataController } from '../grid_core/data_controller/m_data_controller';
+import type { ModuleType } from '../grid_core/m_types';
 import core from './m_core';
 
 function findIndex(items, callback) {

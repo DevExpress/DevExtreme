@@ -2,7 +2,8 @@
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
-import { Deferred, DeferredObj, when } from '@js/core/utils/deferred';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
 import { createObjectWithChanges } from '@js/data/array_utils';
@@ -11,10 +12,10 @@ import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
-import { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import {
   ADD_ROW_BUTTON_CLASS,
   CELL_MODIFIED_CLASS,
@@ -31,7 +32,7 @@ import {
   ROW_REMOVED,
   TARGET_COMPONENT_NAME,
 } from './const';
-import { EditingController } from './m_editing';
+import type { EditingController } from './m_editing';
 import { isEditable } from './m_editing_utils';
 
 export interface ICellBasedEditingControllerExtender {
