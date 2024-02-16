@@ -264,7 +264,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     let filterValue = this.option('filterValue');
 
     if (this.isFilterSyncActive()) {
-      // @ts-expect-error
       const currentColumnForHeaderFilter = this.getController('headerFilter').getCurrentColumn();
       const currentColumnForFilterRow = this.getController('applyFilter').getCurrentColumnForFiltering();
       const currentColumn = currentColumnForHeaderFilter || currentColumnForFilterRow;

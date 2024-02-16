@@ -165,7 +165,7 @@ export interface Controllers {
   export: import('../data_grid/export/m_export').ExportController;
   filterSync: import('./filter/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
-  // headerFilter: import('./header_filter/m_header_filter').
+  headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   resizing: import('./views/m_grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
@@ -184,7 +184,7 @@ export interface Views {
   columnChooserView: import('./column_chooser/m_column_chooser').ColumnChooserView;
   columnHeadersView: import('./column_headers/m_column_headers').ColumnHeadersView;
   headerPanel: import('./header_panel/m_header_panel').HeaderPanel;
-  // headerFilterView: import('./header_filter/m_header_filter').
+  headerFilterView: import('./header_filter/m_header_filter_core').HeaderFilterView;
   rowsView: import('./views/m_rows_view').RowsView;
   pagerView: import('./pager/m_pager').PagerView;
   columnsSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsSeparatorView;

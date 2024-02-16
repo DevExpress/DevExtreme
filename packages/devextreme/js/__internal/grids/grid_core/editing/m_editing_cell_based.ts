@@ -700,6 +700,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
       const editingController = this._editingController;
       const isRowRemoved = !!row.removed;
 
+      // @ts-expect-error
       if (editingController.isBatchEditMode()) {
         isRowRemoved && $row.addClass(ROW_REMOVED);
       }

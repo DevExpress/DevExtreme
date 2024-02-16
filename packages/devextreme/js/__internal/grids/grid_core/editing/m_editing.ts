@@ -2456,7 +2456,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
-  _editingController: any;
+  _editingController!: EditingController;
 
   _pointerDownTarget: any;
 

@@ -18,6 +18,8 @@ import { removeEvent } from '@js/events/remove';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
+import type { EditingController } from '../editing/m_editing';
+import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
 import { ColumnsView } from './m_columns_view';
 
@@ -79,9 +81,9 @@ const getScrollableBottomPadding = function (that) {
 export class RowsView extends ColumnsView {
   _loadPanel: any;
 
-  _editingController: any;
+  _editingController!: EditingController;
 
-  _editorFactoryController!: any;
+  _editorFactoryController!: EditorFactory;
 
   _hasHeight: boolean | undefined;
 
