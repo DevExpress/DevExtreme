@@ -2739,6 +2739,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingE
   isVisible() {
     const editingOptions = this.getController('editing').option('editing');
 
+    // @ts-expect-error
     return super.isVisible() || editingOptions?.allowAdding;
   }
 };

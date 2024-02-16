@@ -9,6 +9,7 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
+import type { RowsView } from '../views/m_rows_view';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';

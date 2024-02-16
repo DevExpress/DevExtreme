@@ -712,6 +712,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingC
   isVisible() {
     const editingOptions = this.getController('editing').option('editing');
 
+    // @ts-expect-error
     return super.isVisible() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
   }
 };
