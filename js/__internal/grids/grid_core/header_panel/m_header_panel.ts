@@ -4,11 +4,12 @@ import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
-import Toolbar, { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import Toolbar from '@js/ui/toolbar';
 
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
-import { ResizingController } from '../views/m_grid_view';
+import type { ResizingController } from '../views/m_grid_view';
 
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';

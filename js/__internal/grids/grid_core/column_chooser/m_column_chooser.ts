@@ -13,11 +13,11 @@ import Popup from '@js/ui/popup/ui.popup';
 import { current, isGeneric, isMaterial as isMaterialTheme } from '@js/ui/themes';
 import TreeView from '@js/ui/tree_view';
 
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { HeaderPanel } from '../header_panel/m_header_panel';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';

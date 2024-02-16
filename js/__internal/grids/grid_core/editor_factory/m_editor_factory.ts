@@ -16,7 +16,7 @@ import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 
 import modules from '../m_modules';
-import { Module, ModuleType, ViewController } from '../m_types';
+import type { Module, ModuleType, ViewController } from '../m_types';
 import gridCoreUtils from '../m_utils';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';

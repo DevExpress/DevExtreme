@@ -9,10 +9,10 @@ import {
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import { DataController } from '../data_controller/m_data_controller';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { anyOf, noneOf } from './m_filter_custom_operations';
 

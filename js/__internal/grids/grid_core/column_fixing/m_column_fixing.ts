@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { move } from '@js/animation/translator';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -13,15 +14,15 @@ import { name as wheelEventName } from '@js/events/core/wheel';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import {
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { normalizeWidth } from '../views/m_columns_view';
-import { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/m_rows_view';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';

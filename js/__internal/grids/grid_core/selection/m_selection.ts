@@ -14,12 +14,12 @@ import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Selection from '@js/ui/selection/selection';
 import errors from '@js/ui/widget/ui.errors';
-import { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
