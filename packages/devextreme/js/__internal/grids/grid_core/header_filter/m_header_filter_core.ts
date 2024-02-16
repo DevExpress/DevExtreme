@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import '@js/ui/list/modules/search';
 import '@js/ui/list/modules/selection';
 
@@ -9,8 +10,9 @@ import messageLocalization from '@js/localization/message';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
+import Modules from '@ts/grids/grid_core/m_modules';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
@@ -61,14 +63,18 @@ export function updateHeaderFilterItemSelectionState(item, filterValuesMatch, is
   }
 }
 
-export const HeaderFilterView = modules.View.inherit({
+export class HeaderFilterView extends Modules.View {
+  _popupContainer: any;
+
+  _listComponent: any;
+
   getPopupContainer() {
     return this._popupContainer;
-  },
+  }
 
   getListComponent() {
     return this._listComponent;
-  },
+  }
 
   applyHeaderFilter(options) {
     const that = this;
@@ -123,7 +129,7 @@ export const HeaderFilterView = modules.View.inherit({
     options.apply();
 
     that.hideHeaderFilterMenu();
-  },
+  }
 
   showHeaderFilterMenu($columnElement, options) {
     const that = this;
@@ -138,13 +144,13 @@ export const HeaderFilterView = modules.View.inherit({
 
       popupContainer.show();
     }
-  },
+  }
 
   hideHeaderFilterMenu() {
     const headerFilterMenu = this.getPopupContainer();
 
     headerFilterMenu && headerFilterMenu.hide();
-  },
+  }
 
   updatePopup($element, options) {
     const that = this;
@@ -165,7 +171,7 @@ export const HeaderFilterView = modules.View.inherit({
         collision: 'fit fit', // T1156848
       });
     }
-  },
+  }
 
   _getSearchExpr(options, headerFilterOptions) {
     const { lookup } = options;
@@ -196,11 +202,11 @@ export const HeaderFilterView = modules.View.inherit({
     }
 
     return options.dataField || options.selector;
-  },
+  }
 
   _cleanPopupContent() {
     this._popupContainer && this._popupContainer.$content().empty();
-  },
+  }
 
   _initializePopupContainer(options) {
     const that = this;
@@ -267,7 +273,7 @@ export const HeaderFilterView = modules.View.inherit({
     } else {
       that._popupContainer.option(dxPopupOptions);
     }
-  },
+  }
 
   _initializeListContainer(options, headerFilterOptions) {
     const that = this;
@@ -280,6 +286,7 @@ export const HeaderFilterView = modules.View.inherit({
       searchMode: headerFilterOptions.search.mode || '',
       dataSource: options.dataSource,
       onContentReady() {
+        // @ts-expect-error
         that.renderCompleted.fire();
       },
       itemTemplate(data, _, element) {
@@ -380,9 +387,10 @@ export const HeaderFilterView = modules.View.inherit({
         }),
       );
     }
-  },
+  }
 
   _normalizeHeaderFilterOptions(options) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const generalHeaderFilter = this.option('headerFilter') || {};
     const specificHeaderFilter = options.headerFilter || {};
 
@@ -402,18 +410,18 @@ export const HeaderFilterView = modules.View.inherit({
     };
 
     return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
-  },
+  }
 
   _renderCore() {
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
-  },
-});
+  }
+}
 
 export const allowHeaderFiltering = function (column) {
   return isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
 };
 
-export const headerFilterMixin = {
+export const headerFilterMixin = (Base: ModuleType<any>) => class HeaderFilterMixin extends Base {
   _applyColumnState(options) {
     let $headerFilterIndicator;
     const { rootElement } = options;
@@ -423,7 +431,7 @@ export const headerFilterMixin = {
       rootElement.find(`.${HEADER_FILTER_CLASS}`).remove();
 
       if (allowHeaderFiltering(column)) {
-        $headerFilterIndicator = this.callBase(options).toggleClass('dx-header-filter-empty', this._isHeaderFilterEmpty(column));
+        $headerFilterIndicator = super._applyColumnState(options).toggleClass('dx-header-filter-empty', this._isHeaderFilterEmpty(column));
         if (!this.option('useLegacyKeyboardNavigation')) {
           $headerFilterIndicator.attr('tabindex', this.option('tabindex') || 0);
         }
@@ -438,19 +446,19 @@ export const headerFilterMixin = {
       return $headerFilterIndicator;
     }
 
-    return this.callBase(options);
-  },
+    return super._applyColumnState(options);
+  }
 
   _isHeaderFilterEmpty(column) {
     return !column.filterValues || !column.filterValues.length;
-  },
+  }
 
   _getIndicatorClassName(name) {
     if (name === 'headerFilter') {
       return HEADER_FILTER_CLASS;
     }
-    return this.callBase(name);
-  },
+    return super._getIndicatorClassName(name);
+  }
 
   _renderIndicator(options) {
     const $container = options.container;
@@ -464,8 +472,8 @@ export const headerFilterMixin = {
       }
     }
 
-    this.callBase(options);
-  },
+    super._renderIndicator(options);
+  }
 
   optionChanged(args) {
     if (args.name === 'headerFilter') {
@@ -473,7 +481,7 @@ export const headerFilterMixin = {
       this._invalidate(requireReady, requireReady);
       args.handled = true;
     } else {
-      this.callBase(args);
+      super.optionChanged(args);
     }
-  },
+  }
 };
