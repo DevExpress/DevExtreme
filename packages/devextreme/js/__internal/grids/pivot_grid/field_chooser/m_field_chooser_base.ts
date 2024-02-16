@@ -125,9 +125,7 @@ export class FieldChooserBase extends mixinWidget {
     super._init();
     this._headerFilterView = new HeaderFilterView(this);
     this._refreshDataSource();
-    // TODO check
-    // this.subscribeToEvents();
-    this.subscribeToEvents(null);
+    this.subscribeToEvents();
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
   }
@@ -158,9 +156,7 @@ export class FieldChooserBase extends mixinWidget {
             && getStringState(this._dataSource.state()) !== getStringState(args.value)) {
           this._dataSource.state(args.value);
         } else {
-          // TODO check
-          // this._clean(true);
-          this._clean();
+          this._clean(true);
           this._renderComponent();
         }
         break;
@@ -218,7 +214,8 @@ export class FieldChooserBase extends mixinWidget {
     return $fieldElement;
   }
 
-  _clean() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _clean(value?) {
   }
 
   _render() {
@@ -355,7 +352,7 @@ export class FieldChooserBase extends mixinWidget {
     };
   }
 
-  subscribeToEvents(element) {
+  subscribeToEvents(element?) {
     const that = this;
     const func = function (e) {
       const field: any = $(e.currentTarget).data('field');
