@@ -10,11 +10,10 @@
 @use "../overlay";
 @include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color, $material-validation-overlay-border-radius);
 @include dx-modern-styles-validation(
-  $material-validation-message-font-size, 
+  $material-validation-message-font-size,
   $material-validation-message-line-height,
   $material-filled-texteditor-input-horizontal-padding,
-  $material-validation-message-padding,
   $material-validationsummary-item-margin,
-  $material-validation-message-vertical-padding, 
+  $material-validation-message-vertical-padding,
   $material-validation-message-horizontal-padding,
 );

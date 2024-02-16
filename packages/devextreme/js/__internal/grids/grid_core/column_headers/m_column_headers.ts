@@ -401,13 +401,13 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   _getIndicatorContainer($cell, returnAll?) {
-    // @ts-expect-error
     const $indicatorsContainer = super._getIndicatorContainer($cell);
 
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
   }
 
-  _isSortableElement() {
+  // eslint-disable-next-line
+  _isSortableElement($target?) {
     return true;
   }
 

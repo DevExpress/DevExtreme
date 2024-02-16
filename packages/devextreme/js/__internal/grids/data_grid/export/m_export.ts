@@ -13,12 +13,12 @@ import List from '@js/ui/list_light';
 import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
 
-import { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
-import { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
-import { EditingController } from '../../grid_core/editing/m_editing';
-import { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
-import { ModuleType } from '../../grid_core/m_types';
-import { RowsView } from '../../grid_core/views/m_rows_view';
+import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
+import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
+import type { EditingController } from '../../grid_core/editing/m_editing';
+import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
+import type { ModuleType } from '../../grid_core/m_types';
+import type { RowsView } from '../../grid_core/views/m_rows_view';
 import dataGridCore from '../m_core';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';

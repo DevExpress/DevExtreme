@@ -7,12 +7,6 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-$material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
-$material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
-$material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
-$material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
-$material-normal-button-focused-state-shadow: $material-button-box-shadow-size $button-focused-shadow-color;
-
 @mixin dx-button-onlyicon-sizing($icon-size: $material-button-icon-size) {
   min-width: $material-button-height;
 
@@ -39,7 +33,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 
 @mixin dx-button-text-and-icon-sizing() {
   @include dx-button-sizing(
-    $material-button-vertical-padding, 
+    $material-button-vertical-padding,
     $material-button-icon-text-padding,
     $material-button-horizontal-padding,
     $material-button-icon-size,
@@ -54,7 +48,6 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   $hover-background-color,
   $focused-background-color,
   $active-background-color,
-  $disabled-background-color,
   $icon-color,
   $selected-background-color: $active-background-color,
   $selected-color: $text-color,
@@ -110,7 +103,6 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     $button-hover-bg,
     $button-focused-bg,
     $button-active-bg,
-    $button-disabled-background,
     $button-icon-color,
     $button-selected-bg,
     $button-selected-color,
@@ -145,7 +137,6 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     $hover-bg,
     $focused-bg,
     $active-bg,
-    transparent,
     $button-color,
     $selected-bg,
     $selected-color,
@@ -156,14 +147,13 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   border-width: 1px;
   border-style: solid;
   border-color: $border-color;
-  
+
   @include dx-button-styling-variant(
     transparent,
     $button-color,
     $hover-bg,
     $focused-bg,
     $active-bg,
-    transparent,
     $button-color,
     $selected-bg,
   );

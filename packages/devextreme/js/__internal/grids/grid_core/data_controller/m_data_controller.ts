@@ -19,7 +19,7 @@ import type {
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { SearchDataControllerExtension } from '../search/m_search';
-import { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
+import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 
 const changePaging = function (that, optionName, value) {
   const dataSource = that._dataSource;
@@ -1602,6 +1602,12 @@ export class DataController extends ControllerWithDataMixin {
 
   totalCount() {
     return this._dataSource ? this._dataSource?.totalCount() : 0;
+  }
+
+  hasLoadOperation(): boolean {
+    const operationTypes = this._dataSource?.operationTypes() ?? {};
+
+    return Object.keys(operationTypes).some((type) => operationTypes[type]);
   }
 }
 export const dataControllerModule: Module = {

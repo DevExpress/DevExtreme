@@ -20,17 +20,17 @@ import {
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
-import { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { ColumnChooserView } from '../column_chooser/m_column_chooser';
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { HeaderPanel } from '../header_panel/m_header_panel';
+import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import { PagerView } from '../pager/m_pager';
+import type { PagerView } from '../pager/m_pager';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';

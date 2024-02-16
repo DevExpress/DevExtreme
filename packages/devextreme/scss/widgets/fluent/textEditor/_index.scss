@@ -64,7 +64,7 @@ $fluent-editor-border-width: 1px;
     background-color: transparent;
     border-color: $texteditor-border-color-disabled;
   }
-  
+
   &.dx-invalid {
     border-color: $texteditor-invalid-faded-border-color;
 
@@ -73,7 +73,7 @@ $fluent-editor-border-width: 1px;
       border-color: $texteditor-invalid-focused-border-color;
     }
 
-    &::before {        
+    &::before {
       border-color: $texteditor-invalid-faded-border-color;
     }
   }
@@ -94,7 +94,7 @@ $fluent-editor-border-width: 1px;
     border-top-color: $texteditor-border-color-focused;
     border-bottom-color: $texteditor-border-bottom-color-focused;
 
-    &::before {        
+    &::before {
       transform: scaleX(1);
       transition-property: transform;
       transition-duration: 200ms;
@@ -136,7 +136,7 @@ $fluent-editor-border-width: 1px;
   &.dx-state-active {
     background-color: $texteditor-filled-bg-focused;
   }
-  
+
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
@@ -541,7 +541,7 @@ $fluent-editor-border-width: 1px;
   $fluent-filled-texteditor-input-with-label-bottom-padding,
   $fluent-texteditor-font-size,
   $fluent-texteditor-label-outside-height,
-); 
+);
 @include dx-editor-underlined(
   $texteditor-label-transition,
   $fluent-texteditor-label-font-size,
@@ -578,7 +578,6 @@ $fluent-editor-border-width: 1px;
   $fluent-underlined-editor-button-height,
   $fluent-editor-custom-button-margin,
   $fluent-editor-custom-button-margin,
-  $fluent-filled-texteditor-input-button-horizontal-padding,
   0,
   $texteditor-spin-button-horizontal-padding,
   $fluent-button-vertical-padding,

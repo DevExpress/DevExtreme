@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} seleccionat",
         "dxTagBox-allSelected": "Tot seleccionat ({0})",
         "dxTagBox-moreSelected": "{0} Més",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Imprimir",
         "vizExport-titleMenuText": "Exportació/impressió",

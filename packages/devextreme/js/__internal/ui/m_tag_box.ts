@@ -3,7 +3,8 @@ import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import Guid from '@js/core/guid';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { getIntersection, removeDuplicates } from '@js/core/utils/array';
 import { ensureDefined, equalByValue, noop } from '@js/core/utils/common';
@@ -438,7 +439,7 @@ const TagBox = (SelectBox as any).inherit({
       .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
     const elementAria = {
-      role: 'group',
+      role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
       roledescription: 'tagbox',
     };
@@ -1125,6 +1126,8 @@ const TagBox = (SelectBox as any).inherit({
 
       $tag = this._createTag(value, $input, tagId);
 
+      this._setTagAria($tag, value);
+
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
       } else {
@@ -1134,6 +1137,17 @@ const TagBox = (SelectBox as any).inherit({
 
       this._updateElementAria(tagId);
     }
+  },
+
+  _setTagAria($tag, tagText) {
+    const aria = {
+      role: 'button',
+      label: tagText,
+      // eslint-disable-next-line spellcheck/spell-checker
+      roledescription: messageLocalization.format('dxTagBox-tagRoleDescription'),
+    };
+
+    this.setAria(aria, $tag);
   },
 
   _getItemModel(item, displayValue) {

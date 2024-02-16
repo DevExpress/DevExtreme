@@ -15,13 +15,13 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 
-import { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { DataController } from '../data_controller/m_data_controller';
+import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import { RowsView } from './m_rows_view';
+import type { RowsView } from './m_rows_view';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';

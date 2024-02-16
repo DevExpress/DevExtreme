@@ -1,5 +1,5 @@
 import * as validationFunctions from './common/validation_functions';
-import { SchedulerOptions } from './types';
+import type { SchedulerOptions } from './types';
 import {
   cellDurationMustBeLessThanVisibleInterval,
   endDayHourMustBeGreaterThanStartDayHour,

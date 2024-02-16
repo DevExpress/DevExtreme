@@ -13,13 +13,13 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import { DataController } from '../data_controller/m_data_controller';
-import { EditingController } from '../editing/m_editing';
-import { HeaderPanel } from '../header_panel/m_header_panel';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { DataController } from '../data_controller/m_data_controller';
+import type { EditingController } from '../editing/m_editing';
+import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 
 const OPERATION_ICONS = {

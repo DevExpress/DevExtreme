@@ -1676,7 +1676,7 @@ declare module DevExpress.common {
     /**
      * [descr:RangeRule.max]
      */
-    max?: Date | number;
+    max?: Date | number | string;
     /**
      * [descr:RangeRule.message]
      */
@@ -1684,7 +1684,7 @@ declare module DevExpress.common {
     /**
      * [descr:RangeRule.min]
      */
-    min?: Date | number;
+    min?: Date | number | string;
     /**
      * [descr:RangeRule.reevaluate]
      */

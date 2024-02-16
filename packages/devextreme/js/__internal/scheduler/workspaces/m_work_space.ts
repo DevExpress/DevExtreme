@@ -29,7 +29,7 @@ import pointerEvents from '@js/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import { getMemoizeScrollTo } from '@js/renovation/ui/common/utils/scroll/getMemoizeScrollTo';
-import { ViewType } from '@js/renovation/ui/scheduler/types';
+import type { ViewType } from '@js/renovation/ui/scheduler/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate,

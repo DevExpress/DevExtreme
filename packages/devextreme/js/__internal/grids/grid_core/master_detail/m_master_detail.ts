@@ -6,11 +6,11 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import gridCoreUtils from '../m_utils';
 

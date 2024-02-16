@@ -266,6 +266,7 @@ const Slider = TrackBar.inherit({
         this._$wrapper.addClass(SLIDER_WRAPPER_CLASS);
 
         this._createComponent(this._$wrapper, Swipeable, {
+            rtlEnabled: false,
             elastic: false,
             immediate: true,
             immediateTimeout: 0,

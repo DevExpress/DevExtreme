@@ -403,7 +403,7 @@ $material-editor-custom-button-margin: 5px;
   $material-filled-texteditor-input-with-label-bottom-padding,
   $material-texteditor-label-outside-font-size,
   $material-texteditor-label-outside-height,
-); 
+);
 @include dx-editor-underlined(
   $texteditor-label-transition,
   $material-texteditor-label-font-size,
@@ -440,8 +440,7 @@ $material-editor-custom-button-margin: 5px;
   $material-underlined-editor-button-height,
   $material-editor-custom-button-margin,
   $material-editor-custom-button-margin * 2,
-  $material-filled-texteditor-input-button-horizontal-padding,
-  $material-filled-texteditor-spin-button-horizontal-padding, 
+  $material-filled-texteditor-spin-button-horizontal-padding,
   $material-filled-texteditor-spin-button-horizontal-padding,
   $material-button-vertical-padding,
 );
