@@ -435,6 +435,10 @@ export class FieldChooserBase extends mixinWidget {
     eventsEngine.on(that.$element(), clickEventName, `.${CLASSES.area.field}.${CLASSES.area.box}`, func);
   }
 
+  _initTemplates() {
+
+  }
+
   addWidgetPrefix(className) {
     return `dx-pivotgrid-${className}`;
   }
