@@ -91,13 +91,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   store!: () => any;
 
-  items!: () => any;
-
   group!: (args?: any) => any;
-
-  isLoaded!: () => boolean;
-
-  pageIndex!: (args?: any) => any;
 
   init(dataSource?, remoteOperations?) {
     const that = this;
@@ -659,6 +653,16 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataSource.totalCount();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _changeRowExpandCore(path?: any) {
+
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  changeRowExpand(path?: any): any {
+
+  }
+
   totalCount() {
     // eslint-disable-next-line radix
     return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
@@ -666,6 +670,10 @@ export default class DataSourceAdapter extends modules.Controller {
 
   totalCountCorrection() {
     return this._totalCountCorrection;
+  }
+
+  items(): any {
+
   }
 
   itemsCount() {
@@ -786,5 +794,14 @@ export default class DataSourceAdapter extends modules.Controller {
 
   getCachedStoreData() {
     return this._cachedStoreData;
+  }
+
+  isLoaded(): any {
+
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  pageIndex(pageIndex?) {
+
   }
 }

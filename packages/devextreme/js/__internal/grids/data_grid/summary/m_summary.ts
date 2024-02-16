@@ -13,11 +13,13 @@ import storeHelper from '@js/data/store_helper';
 import { normalizeSortingInfo } from '@js/data/utils';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
-import dataSourceAdapter from '../m_data_source_adapter';
+import dataSourceAdapterProvider from '../m_data_source_adapter';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -71,6 +73,119 @@ const getGroupAggregates = function (data) {
 
 const recalculateWhileEditing = function (that) {
   return that.option('summary.recalculateWhileEditing');
+};
+
+const forEachGroup = function (groups, groupCount, callback, path?) {
+  path = path || [];
+  for (let i = 0; i < groups.length; i++) {
+    path.push(groups[i].key);
+    if (groupCount === 1) {
+      callback(path, groups[i].items);
+    } else {
+      forEachGroup(groups[i].items, groupCount - 1, callback, path);
+    }
+    path.pop();
+  }
+};
+
+const applyAddedData = function (data, insertedData, groupLevel?) {
+  if (groupLevel) {
+    return applyAddedData(data, insertedData.map((item) => ({ items: [item] }), groupLevel - 1));
+  }
+
+  return data.concat(insertedData);
+};
+
+const applyRemovedData = function (data, removedData, groupLevel) {
+  if (groupLevel) {
+    return data.map((data) => {
+      const updatedData = {};
+      const updatedItems = applyRemovedData(data.items || [], removedData, groupLevel - 1);
+
+      Object.defineProperty(updatedData, 'aggregates', {
+        get: () => data.aggregates,
+        set: (value) => {
+          data.aggregates = value;
+        },
+      });
+
+      return extend(updatedData, data, { items: updatedItems });
+    });
+  }
+
+  return data.filter((data) => removedData.indexOf(data) < 0);
+};
+
+const sortGroupsBySummaryCore = function (items, groups, sortByGroups) {
+  if (!items || !groups.length) return items;
+
+  const group = groups[0];
+  const sorts = sortByGroups[0];
+  let query;
+
+  if (group && sorts && sorts.length) {
+    query = dataQuery(items);
+    each(sorts, function (index) {
+      if (index === 0) {
+        query = query.sortBy(this.selector, this.desc);
+      } else {
+        query = query.thenBy(this.selector, this.desc);
+      }
+    });
+    query.enumerate().done((sortedItems) => {
+      items = sortedItems;
+    });
+  }
+
+  groups = groups.slice(1);
+  sortByGroups = sortByGroups.slice(1);
+  if (groups.length && sortByGroups.length) {
+    each(items, function () {
+      this.items = sortGroupsBySummaryCore(this.items, groups, sortByGroups);
+    });
+  }
+
+  return items;
+};
+
+const sortGroupsBySummary = function (data, group, summary) {
+  const sortByGroups = summary && summary.sortByGroups && summary.sortByGroups();
+
+  if (sortByGroups && sortByGroups.length) {
+    return sortGroupsBySummaryCore(data, group, sortByGroups);
+  }
+  return data;
+};
+
+const calculateAggregates = function (that, summary, data, groupLevel) {
+  let calculator;
+
+  if (recalculateWhileEditing(that)) {
+    const editingController = that.getController('editing');
+    if (editingController) {
+      const insertedData = editingController.getInsertedData();
+      if (insertedData.length) {
+        data = applyAddedData(data, insertedData, groupLevel);
+      }
+
+      const removedData = editingController.getRemovedData();
+      if (removedData.length) {
+        data = applyRemovedData(data, removedData, groupLevel);
+      }
+    }
+  }
+
+  if (summary) {
+    calculator = new AggregateCalculator({
+      totalAggregates: summary.totalAggregates,
+      groupAggregates: summary.groupAggregates,
+      data,
+      groupLevel,
+    });
+
+    calculator.calculate();
+  }
+  return calculator ? calculator.totalAggregates() : [];
 };
 
 export const FooterView = ColumnsView.inherit((function () {
@@ -170,237 +285,126 @@ export const FooterView = ColumnsView.inherit((function () {
   };
 })());
 
-const SummaryDataSourceAdapterExtender = (function () {
-  function forEachGroup(groups, groupCount, callback, path?) {
-    path = path || [];
-    for (let i = 0; i < groups.length; i++) {
-      path.push(groups[i].key);
-      if (groupCount === 1) {
-        callback(path, groups[i].items);
-      } else {
-        forEachGroup(groups[i].items, groupCount - 1, callback, path);
-      }
-      path.pop();
+const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class SummaryDataSourceAdapterExtender extends Base {
+  _totalAggregates: any;
+
+  _summaryGetter: any;
+
+  init() {
+    super.init.apply(this, arguments as any);
+    this._totalAggregates = [];
+    this._summaryGetter = noop;
+  }
+
+  summaryGetter(summaryGetter?) {
+    if (!arguments.length) {
+      return this._summaryGetter;
+    }
+
+    if (isFunction(summaryGetter)) {
+      this._summaryGetter = summaryGetter;
     }
   }
 
-  return {
-    init() {
-      this.callBase.apply(this, arguments);
-      this._totalAggregates = [];
-      this._summaryGetter = noop;
-    },
-    summaryGetter(summaryGetter) {
-      if (!arguments.length) {
-        return this._summaryGetter;
-      }
-
-      if (isFunction(summaryGetter)) {
-        this._summaryGetter = summaryGetter;
-      }
-    },
-    summary(summary) {
-      if (!arguments.length) {
-        return this._summaryGetter();
-      }
-
-      this._summaryGetter = function () { return summary; };
-    },
-    totalAggregates() {
-      return this._totalAggregates;
-    },
-    isLastLevelGroupItemsPagingLocal() {
-      const summary = this.summary();
-      const sortByGroupsInfo = summary && summary.sortByGroups();
-
-      return sortByGroupsInfo && sortByGroupsInfo.length;
-    },
-    sortLastLevelGroupItems(items, groups, paths) {
-      const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
-      let result = [];
-
-      paths.forEach((path) => {
-        forEachGroup(groupedItems, groups.length, (itemsPath, items) => {
-          if (path.toString() === itemsPath.toString()) {
-            result = result.concat(items);
-          }
-        });
-      });
-
-      return result;
-    },
-  };
-}());
-
-const SummaryDataSourceAdapterClientExtender = (function () {
-  const applyAddedData = function (data, insertedData, groupLevel?) {
-    if (groupLevel) {
-      return applyAddedData(data, insertedData.map((item) => ({ items: [item] }), groupLevel - 1));
+  summary(summary?) {
+    if (!arguments.length) {
+      return this._summaryGetter();
     }
 
-    return data.concat(insertedData);
-  };
+    this._summaryGetter = function () { return summary; };
+  }
 
-  const applyRemovedData = function (data, removedData, groupLevel) {
-    if (groupLevel) {
-      return data.map((data) => {
-        const updatedData = {};
-        const updatedItems = applyRemovedData(data.items || [], removedData, groupLevel - 1);
+  totalAggregates() {
+    return this._totalAggregates;
+  }
 
-        Object.defineProperty(updatedData, 'aggregates', {
-          get: () => data.aggregates,
-          set: (value) => {
-            data.aggregates = value;
-          },
-        });
+  isLastLevelGroupItemsPagingLocal() {
+    const summary = this.summary();
+    const sortByGroupsInfo = summary?.sortByGroups();
 
-        return extend(updatedData, data, { items: updatedItems });
-      });
-    }
+    return sortByGroupsInfo?.length;
+  }
 
-    return data.filter((data) => removedData.indexOf(data) < 0);
-  };
+  sortLastLevelGroupItems(items, groups, paths) {
+    const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
+    let result = [];
 
-  const calculateAggregates = function (that, summary, data, groupLevel) {
-    let calculator;
-
-    if (recalculateWhileEditing(that)) {
-      const editingController = that.getController('editing');
-      if (editingController) {
-        const insertedData = editingController.getInsertedData();
-        if (insertedData.length) {
-          data = applyAddedData(data, insertedData, groupLevel);
+    paths.forEach((path) => {
+      forEachGroup(groupedItems, groups.length, (itemsPath, items) => {
+        if (path.toString() === itemsPath.toString()) {
+          result = result.concat(items);
         }
+      });
+    });
 
-        const removedData = editingController.getRemovedData();
-        if (removedData.length) {
-          data = applyRemovedData(data, removedData, groupLevel);
-        }
-      }
-    }
+    return result;
+  }
+
+  _customizeRemoteOperations(options) {
+    const summary = this.summary();
 
     if (summary) {
-      calculator = new AggregateCalculator({
-        totalAggregates: summary.totalAggregates,
-        groupAggregates: summary.groupAggregates,
-        data,
-        groupLevel,
-      });
-
-      calculator.calculate();
-    }
-    return calculator ? calculator.totalAggregates() : [];
-  };
-
-  const sortGroupsBySummaryCore = function (items, groups, sortByGroups) {
-    if (!items || !groups.length) return items;
-
-    const group = groups[0];
-    const sorts = sortByGroups[0];
-    let query;
-
-    if (group && sorts && sorts.length) {
-      query = dataQuery(items);
-      each(sorts, function (index) {
-        if (index === 0) {
-          query = query.sortBy(this.selector, this.desc);
-        } else {
-          query = query.thenBy(this.selector, this.desc);
-        }
-      });
-      query.enumerate().done((sortedItems) => {
-        items = sortedItems;
-      });
-    }
-
-    groups = groups.slice(1);
-    sortByGroups = sortByGroups.slice(1);
-    if (groups.length && sortByGroups.length) {
-      each(items, function () {
-        this.items = sortGroupsBySummaryCore(this.items, groups, sortByGroups);
-      });
-    }
-
-    return items;
-  };
-
-  const sortGroupsBySummary = function (data, group, summary) {
-    const sortByGroups = summary && summary.sortByGroups && summary.sortByGroups();
-
-    if (sortByGroups && sortByGroups.length) {
-      return sortGroupsBySummaryCore(data, group, sortByGroups);
-    }
-    return data;
-  };
-
-  return {
-    _customizeRemoteOperations(options) {
-      const summary = this.summary();
-
-      if (summary) {
-        if (options.remoteOperations.summary) {
-          if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
-            if (options.storeLoadOptions.group) {
-              if (options.remoteOperations.grouping) {
-                options.storeLoadOptions.groupSummary = summary.groupAggregates;
-              } else if (summary.groupAggregates.length) {
-                options.remoteOperations.paging = false;
-              }
+      if (options.remoteOperations.summary) {
+        if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
+          if (options.storeLoadOptions.group) {
+            if (options.remoteOperations.grouping) {
+              options.storeLoadOptions.groupSummary = summary.groupAggregates;
+            } else if (summary.groupAggregates.length) {
+              options.remoteOperations.paging = false;
             }
-            options.storeLoadOptions.totalSummary = summary.totalAggregates;
           }
-        } else if (summary.totalAggregates.length || (summary.groupAggregates.length && options.storeLoadOptions.group)) {
-          options.remoteOperations.paging = false;
+          options.storeLoadOptions.totalSummary = summary.totalAggregates;
         }
+      } else if (summary.totalAggregates.length || (summary.groupAggregates.length && options.storeLoadOptions.group)) {
+        options.remoteOperations.paging = false;
       }
-      this.callBase.apply(this, arguments);
+    }
+    super._customizeRemoteOperations.apply(this, arguments as any);
 
-      const cachedExtra = options.cachedData.extra;
+    const cachedExtra = options.cachedData.extra;
 
-      if (cachedExtra && cachedExtra.summary && !options.isCustomLoading) {
-        options.storeLoadOptions.totalSummary = undefined;
-      }
-    },
-    _handleDataLoadedCore(options) {
-      const that = this;
-      const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
-      const remoteOperations = options.remoteOperations || {};
-      const summary = that.summaryGetter()(remoteOperations);
+    if (cachedExtra?.summary && !options.isCustomLoading) {
+      options.storeLoadOptions.totalSummary = undefined;
+    }
+  }
 
-      if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
-        if (remoteOperations.summary) {
-          if (!remoteOperations.paging && groups.length && summary) {
-            if (!remoteOperations.grouping) {
-              calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
-            }
-            options.data = sortGroupsBySummary(options.data, groups, summary);
-          }
-        } else if (!remoteOperations.paging && summary) {
-          const operationTypes = options.operationTypes || {};
-          const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
-          if (!hasOperations || !options.cachedData?.extra?.summary || groups.length && summary.groupAggregates.length) {
-            const totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
-            options.extra = isPlainObject(options.extra) ? options.extra : {};
-            options.extra.summary = totalAggregates;
-            if (options.cachedData) {
-              options.cachedData.extra = options.extra;
-            }
+  _handleDataLoadedCore(options) {
+    const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
+    const remoteOperations = options.remoteOperations || {};
+    const summary = this.summaryGetter()(remoteOperations);
+
+    if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
+      if (remoteOperations.summary) {
+        if (!remoteOperations.paging && groups.length && summary) {
+          if (!remoteOperations.grouping) {
+            calculateAggregates(this, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
           }
           options.data = sortGroupsBySummary(options.data, groups, summary);
         }
+      } else if (!remoteOperations.paging && summary) {
+        const operationTypes = options.operationTypes || {};
+        const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
+        if (!hasOperations || !options.cachedData?.extra?.summary || groups.length && summary.groupAggregates.length) {
+          const totalAggregates = calculateAggregates(this, summary, options.data, groups.length);
+          options.extra = isPlainObject(options.extra) ? options.extra : {};
+          options.extra.summary = totalAggregates;
+          if (options.cachedData) {
+            options.cachedData.extra = options.extra;
+          }
+        }
+        options.data = sortGroupsBySummary(options.data, groups, summary);
       }
+    }
 
-      if (!options.isCustomLoading) {
-        that._totalAggregates = options.extra && options.extra.summary || that._totalAggregates;
-      }
+    if (!options.isCustomLoading) {
+      this._totalAggregates = options.extra && options.extra.summary || this._totalAggregates;
+    }
 
-      that.callBase(options);
-    },
-  };
-}());
+    super._handleDataLoadedCore(options);
+  }
+};
 
-dataSourceAdapter.extend(SummaryDataSourceAdapterExtender);
-dataSourceAdapter.extend(SummaryDataSourceAdapterClientExtender);
+dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
 gridCore.registerModule('summary', {
   defaultOptions() {
