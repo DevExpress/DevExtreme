@@ -25723,10 +25723,59 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxSplitter<TItem, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties<
-      TItem extends ItemLike<TKey> = any,
-      TKey = any
-    > = dxSplitterOptions<TItem, TKey>;
+    /**
+     * [descr:dxSplitterOptions]
+     */
+    export interface Properties<TItem extends ItemLike<TKey> = any, TKey = any>
+      extends CollectionWidgetOptions<dxSplitter<TItem, TKey>, TItem, TKey> {
+      /**
+       * [descr:dxSplitterOptions.dataSource]
+       */
+      dataSource?: DevExpress.data.DataSource.DataSourceLike<
+        TItem,
+        TKey
+      > | null;
+      /**
+       * [descr:dxSplitterOptions.orientation]
+       */
+      orientation?: DevExpress.common.Orientation;
+      /**
+       * [descr:dxSplitterOptions.items]
+       */
+      items?: Array<TItem>;
+      /**
+       * [descr:dxSplitterOptions.repaintChangesOnly]
+       */
+      repaintChangesOnly?: boolean;
+      /**
+       * [descr:dxSplitterOptions.resizeMode]
+       */
+      resizeMode?: ResizeMode;
+      /**
+       * [descr:dxSplitterOptions.allowKeyboardNavigation]
+       */
+      allowKeyboardNavigation?: boolean;
+      /**
+       * [descr:dxSplitterOptions.onResize]
+       */
+      onResize?: (e: ResizeEvent) => void;
+      /**
+       * [descr:dxSplitterOptions.onResizeEnd]
+       */
+      onResizeEnd?: (e: ResizeEndEvent) => void;
+      /**
+       * [descr:dxSplitterOptions.onResizeStart]
+       */
+      onResizeStart?: (e: ResizeStartEvent) => void;
+      /**
+       * [descr:dxSplitterOptions.onItemExpanded]
+       */
+      onItemExpanded?: (e: ItemExpandedEvent) => void;
+      /**
+       * [descr:dxSplitterOptions.onItemCollapsed]
+       */
+      onItemCollapsed?: (e: ItemCollapsedEvent) => void;
+    }
     /**
      * [descr:_ui_splitter_ResizeEndEvent]
      */
@@ -25808,59 +25857,6 @@ declare module DevExpress.ui {
      * [descr:dxSplitterItem.resizable]
      */
     resizable?: boolean;
-  }
-  /**
-   * [descr:dxSplitterOptions]
-   * @deprecated [depNote:dxSplitterOptions]
-   */
-  export interface dxSplitterOptions<
-    TItem extends DevExpress.ui.dxSplitter.ItemLike<TKey> = any,
-    TKey = any
-  > extends CollectionWidgetOptions<dxSplitter<TItem, TKey>, TItem, TKey> {
-    /**
-     * [descr:dxSplitterOptions.dataSource]
-     */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey> | null;
-    /**
-     * [descr:dxSplitterOptions.orientation]
-     */
-    orientation?: DevExpress.common.Orientation;
-    /**
-     * [descr:dxSplitterOptions.items]
-     */
-    items?: Array<TItem>;
-    /**
-     * [descr:dxSplitterOptions.repaintChangesOnly]
-     */
-    repaintChangesOnly?: boolean;
-    /**
-     * [descr:dxSplitterOptions.resizeMode]
-     */
-    resizeMode?: DevExpress.ui.dxSplitter.ResizeMode;
-    /**
-     * [descr:dxSplitterOptions.allowKeyboardNavigation]
-     */
-    allowKeyboardNavigation?: boolean;
-    /**
-     * [descr:dxSplitterOptions.onResize]
-     */
-    onResize?: (e: DevExpress.ui.dxSplitter.ResizeEvent) => void;
-    /**
-     * [descr:dxSplitterOptions.onResizeEnd]
-     */
-    onResizeEnd?: (e: DevExpress.ui.dxSplitter.ResizeEndEvent) => void;
-    /**
-     * [descr:dxSplitterOptions.onResizeStart]
-     */
-    onResizeStart?: (e: DevExpress.ui.dxSplitter.ResizeStartEvent) => void;
-    /**
-     * [descr:dxSplitterOptions.onItemExpanded]
-     */
-    onItemExpanded?: (e: DevExpress.ui.dxSplitter.ItemExpandedEvent) => void;
-    /**
-     * [descr:dxSplitterOptions.onItemCollapsed]
-     */
-    onItemCollapsed?: (e: DevExpress.ui.dxSplitter.ItemCollapsedEvent) => void;
   }
   /**
    * [descr:dxSwitch]

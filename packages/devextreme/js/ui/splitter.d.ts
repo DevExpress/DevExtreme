@@ -139,55 +139,53 @@ export type ItemCollapsedEvent<TItem extends ItemLike<TKey> = any, TKey = any> =
 export type ItemExpandedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
+ * @docid dxSplitterOptions
  * @public
- * @docid
  */
-export interface dxSplitterOptions<
+export interface Properties<
     TItem extends ItemLike<TKey> = any,
     TKey = any,
 > extends CollectionWidgetOptions<dxSplitter<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
+     * @docid dxSplitterOptions.dataSource
      * @type string | Array<string | dxSplitterItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
+     * @docid dxSplitterOptions.orientation
      * @default 'horizontal'
      * @public
      */
     orientation?: Orientation;
     /**
-     * @docid
+     * @docid dxSplitterOptions.items
      * @type Array<string | dxSplitterItem | any>
      * @fires dxSplitterOptions.onOptionChanged
      * @public
      */
     items?: Array<TItem>;
     /**
-     * @docid
+     * @docid dxSplitterOptions.repaintChangesOnly
      * @default false
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid
+     * @docid dxSplitterOptions.resizeMode
      * @default 'live'
      * @public
      */
     resizeMode?: ResizeMode;
     /**
-     * @docid
+     * @docid dxSplitterOptions.allowKeyboardNavigation
      * @default true
      * @public
      */
     allowKeyboardNavigation?: boolean;
     /**
-     * @docid
+     * @docid dxSplitterOptions.onResize
      * @default null
      * @type_function_param1 e:{ui/splitter:ResizeEvent}
      * @action
@@ -195,7 +193,7 @@ export interface dxSplitterOptions<
      */
     onResize?: ((e: ResizeEvent) => void);
     /**
-     * @docid
+     * @docid dxSplitterOptions.onResizeEnd
      * @default null
      * @type_function_param1 e:{ui/splitter:ResizeEndEvent}
      * @action
@@ -203,7 +201,7 @@ export interface dxSplitterOptions<
      */
     onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
-     * @docid
+     * @docid dxSplitterOptions.onResizeStart
      * @default null
      * @type_function_param1 e:{ui/splitter:ResizeStartEvent}
      * @action
@@ -211,7 +209,7 @@ export interface dxSplitterOptions<
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
-     * @docid
+     * @docid dxSplitterOptions.onItemExpanded
      * @default null
      * @type_function_param1 e:{ui/splitter:ItemExpandedEvent}
      * @action
@@ -219,7 +217,7 @@ export interface dxSplitterOptions<
      */
     onItemExpanded?: ((e: ItemExpandedEvent) => void);
     /**
-     * @docid
+     * @docid dxSplitterOptions.onItemCollapsed
      * @default null
      * @type_function_param1 e:{ui/splitter:ItemCollapsedEvent}
      * @action
@@ -227,6 +225,7 @@ export interface dxSplitterOptions<
      */
     onItemCollapsed?: ((e: ItemCollapsedEvent) => void);
 }
+
 /**
  * @docid
  * @inherits CollectionWidget
@@ -308,18 +307,6 @@ export type ExplicitTypes<
     ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
 };
-
-/** @public */
-export type Properties<
-    TItem extends ItemLike<TKey> = any,
-    TKey = any,
-> = dxSplitterOptions<TItem, TKey>;
-
-/** @deprecated use Properties instead */
-export type Options<
-    TItem extends ItemLike<TKey> = any,
-    TKey = any,
-> = Properties<TItem, TKey>;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
