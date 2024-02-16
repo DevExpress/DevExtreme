@@ -27,12 +27,11 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
-import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
-import type { ModuleType, View } from '../m_types';
 import gridCoreUtils from '../m_utils';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
@@ -155,9 +154,7 @@ export const normalizeWidth = (width: string | number | undefined): string | und
   return width;
 };
 
-const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
-
-export class ColumnsView extends viewWithColumnStateMixin {
+export class ColumnsView extends ColumnStateMixin(modules.View) {
   _tableElement: any;
 
   _scrollLeft: any;

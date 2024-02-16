@@ -1,6 +1,7 @@
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 const SORT_CLASS = 'dx-sort';
 const SORT_NONE_CLASS = 'dx-sort-none';
@@ -10,7 +11,7 @@ const SORT_INDEX_CLASS = 'dx-sort-index';
 const SORT_INDEX_ICON_CLASS = 'dx-sort-index-icon';
 const HEADERS_ACTION_CLASS = 'action';
 
-export default {
+const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base {
   _applyColumnState(options) {
     const that = this;
     let ariaSortState;
@@ -29,7 +30,7 @@ export default {
 
       if (!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
         ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
-        $sortIndicator = that.callBase(options)
+        $sortIndicator = super._applyColumnState(options)
           .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')
           .toggleClass(SORTDOWN_CLASS, column.sortOrder === 'desc');
 
@@ -50,8 +51,8 @@ export default {
 
       return $sortIndicator;
     }
-    return that.callBase(options);
-  },
+    return super._applyColumnState(options);
+  }
 
   _setAriaSortAttribute(column, ariaSortState, $rootElement, hasSeveralSortIndexes) {
     $rootElement.removeAttr('aria-roledescription');
@@ -80,7 +81,7 @@ export default {
         this.setAria('roledescription', description, $rootElement);
       }
     }
-  },
+  }
 
   _getIndicatorClassName(name) {
     if (name === 'sort') {
@@ -88,8 +89,8 @@ export default {
     } if (name === 'sortIndex') {
       return SORT_INDEX_ICON_CLASS;
     }
-    return this.callBase(name);
-  },
+    return super._getIndicatorClassName(name);
+  }
 
   _renderIndicator(options) {
     const { column } = options;
@@ -109,20 +110,22 @@ export default {
       }
     }
 
-    this.callBase(options);
-  },
+    super._renderIndicator(options);
+  }
 
   _updateIndicator($cell, column, indicatorName) {
     if (indicatorName === 'sort' && isDefined(column.groupIndex)) {
       return;
     }
 
-    return this.callBase.apply(this, arguments);
-  },
+    return super._updateIndicator.apply(this, arguments as any);
+  }
 
   _getIndicatorElements($cell, returnAll) {
-    const $indicatorElements = this.callBase($cell);
+    const $indicatorElements = super._getIndicatorElements($cell);
 
     return returnAll ? $indicatorElements : $indicatorElements && $indicatorElements.not(`.${SORT_NONE_CLASS}`);
-  },
+  }
 };
+
+export default sortingMixin;
