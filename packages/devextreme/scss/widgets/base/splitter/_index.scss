@@ -11,3 +11,8 @@
     flex-direction: column;
   }
 }
+
+.dx-resize-handle {
+  cursor: col-resize;
+  flex-basis: 1px;
+}
