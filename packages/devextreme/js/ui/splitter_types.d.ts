@@ -13,6 +13,7 @@ export {
   ResizeEndEvent,
   ItemCollapsedEvent,
   ItemExpandedEvent,
-  Properties,
+  dxSplitterOptions,
   Item,
+  Properties,
 } from './splitter';
