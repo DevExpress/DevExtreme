@@ -9,6 +9,8 @@ import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import gridCoreUtils from '../m_utils';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
@@ -25,6 +27,11 @@ const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LOAD_TIMEOUT = 300;
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 const VISIBLE_PAGE_INDEX = 'paging.pageIndex';
+const PAGING_METHOD_NAMES = [
+  'beginPageIndex',
+  'endPageIndex',
+  'pageIndex',
+];
 
 const isVirtualMode = function (that) {
   return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
@@ -60,291 +67,366 @@ const updateItemIndices = function (items) {
   return items;
 };
 
-const VirtualScrollingDataSourceAdapterExtender = (function () {
-  const updateLoading = function (that) {
-    const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
+const updateLoading = function (that) {
+  const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
 
-    if (isVirtualMode(that)) {
-      if (beginPageIndex < 0 || (that.viewportSize() >= 0 && that.getViewportItemIndex() >= 0 && (beginPageIndex * that.pageSize() > that.getViewportItemIndex()
-                || beginPageIndex * that.pageSize() + that.itemsCount() < that.getViewportItemIndex() + that.viewportSize())) && that._dataSource.isLoading()) {
-        if (!that._isLoading) {
-          that._isLoading = true;
-          that.loadingChanged.fire(true);
+  if (isVirtualMode(that)) {
+    if (beginPageIndex < 0 || (that.viewportSize() >= 0 && that.getViewportItemIndex() >= 0 && (beginPageIndex * that.pageSize() > that.getViewportItemIndex()
+              || beginPageIndex * that.pageSize() + that.itemsCount() < that.getViewportItemIndex() + that.viewportSize())) && that._dataSource.isLoading()) {
+      if (!that._isLoading) {
+        that._isLoading = true;
+        that.loadingChanged.fire(true);
+      }
+    } else if (that._isLoading) {
+      that._isLoading = false;
+      that.loadingChanged.fire(false);
+    }
+  }
+};
+
+const proxyDataSourceAdapterMethod = function (that, methodName, args) {
+  if (that.option(LEGACY_SCROLLING_MODE) === false && PAGING_METHOD_NAMES.includes(methodName)) {
+    const dataSource = that._dataSource;
+
+    return dataSource.pageIndex.apply(dataSource, args);
+  }
+
+  const virtualScrollController = that._virtualScrollController;
+  return virtualScrollController[methodName].apply(virtualScrollController, args);
+};
+
+export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingCoreDataSourceAdapterExtender extends Base {
+  _totalCount: any;
+
+  _isLoaded: any;
+
+  _loadPageCount: any;
+
+  _virtualScrollController: any;
+
+  _renderTime: any;
+
+  _isLoading: any;
+
+  _startLoadTime: any;
+
+  init() {
+    super.init.apply(this, arguments as any);
+    this._items = [];
+    this._totalCount = -1;
+    this._isLoaded = true;
+    this._loadPageCount = 1;
+
+    this._virtualScrollController = new VirtualScrollController(this.component, this._getVirtualScrollDataOptions());
+  }
+
+  _getVirtualScrollDataOptions() {
+    const that = this;
+    return {
+      pageSize() {
+        return that.pageSize();
+      },
+      totalItemsCount() {
+        return that.totalItemsCount();
+      },
+      hasKnownLastPage() {
+        return that.hasKnownLastPage();
+      },
+      pageIndex(index) {
+        return that._dataSource.pageIndex(index);
+      },
+      isLoading() {
+        return that._dataSource.isLoading() && !that.isCustomLoading();
+      },
+      pageCount() {
+        return that.pageCount();
+      },
+      load() {
+        return that._dataSource.load();
+      },
+      updateLoading() {
+        updateLoading(that);
+      },
+      itemsCount() {
+        return that.itemsCount(true);
+      },
+      items() {
+        return that._dataSource.items();
+      },
+      viewportItems(items) {
+        if (items) {
+          that._items = items;
         }
-      } else if (that._isLoading) {
-        that._isLoading = false;
-        that.loadingChanged.fire(false);
+        return that._items;
+      },
+      onChanged(e) {
+        that.changed.fire(e);
+      },
+      changingDuration() {
+        if (that.isLoading()) {
+          return LOAD_TIMEOUT;
+        }
+
+        return that._renderTime || 0;
+      },
+    };
+  }
+
+  _handleLoadingChanged(isLoading) {
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      super._handleLoadingChanged.apply(this, arguments as any);
+      return;
+    }
+
+    if (!isVirtualMode(this) || this._isLoadingAll) {
+      this._isLoading = isLoading;
+      super._handleLoadingChanged.apply(this, arguments as any);
+    }
+
+    if (isLoading) {
+      this._startLoadTime = new Date();
+    } else {
+      this._startLoadTime = undefined;
+    }
+  }
+
+  _handleLoadError() {
+    if (this.option(LEGACY_SCROLLING_MODE) !== false) {
+      this._isLoading = false;
+      this.loadingChanged.fire(false);
+    }
+
+    super._handleLoadError.apply(this, arguments as any);
+  }
+
+  _handleDataChanged(e) {
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      this._items = this._dataSource.items().slice();
+      this._totalCount = this._dataSourceTotalCount(true);
+      super._handleDataChanged.apply(this, arguments as any);
+      return;
+    }
+
+    const callBase = super._handleDataChanged.bind(this);
+
+    this._virtualScrollController.handleDataChanged(callBase, e);
+  }
+
+  _customizeRemoteOperations(options, operationTypes) {
+    const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
+    let renderAsync = this.option('scrolling.renderAsync');
+
+    if (!isDefined(renderAsync)) {
+      renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
+    }
+
+    if ((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
+      options.delay = undefined;
+    }
+
+    super._customizeRemoteOperations.apply(this, arguments as any);
+  }
+
+  items() {
+    return this._items;
+  }
+
+  _dataSourceTotalCount(isBase?) {
+    return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualMode(this) && !isBase ? this._totalCount : super._dataSourceTotalCount();
+  }
+
+  itemsCount(isBase?) {
+    if (isBase || this.option(LEGACY_SCROLLING_MODE) === false) {
+      return super.itemsCount();
+    }
+    return this._virtualScrollController.itemsCount();
+  }
+
+  load(loadOptions) {
+    if (this.option(LEGACY_SCROLLING_MODE) === false || loadOptions) {
+      return super.load(loadOptions);
+    }
+    return this._virtualScrollController.load();
+  }
+
+  isLoading() {
+    return this.option(LEGACY_SCROLLING_MODE) === false ? this._dataSource.isLoading() : this._isLoading;
+  }
+
+  isLoaded() {
+    return this._dataSource.isLoaded() && this._isLoaded;
+  }
+
+  resetPagesCache(isLiveUpdate?) {
+    if (!isLiveUpdate) {
+      this._virtualScrollController.reset(true);
+    }
+    super.resetPagesCache.apply(this, arguments as any);
+  }
+
+  _changeRowExpandCore() {
+    const result = super._changeRowExpandCore.apply(this, arguments as any);
+
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      return result;
+    }
+
+    this.resetPagesCache();
+    updateLoading(this);
+
+    return result;
+  }
+
+  reload() {
+    this._dataSource.pageIndex(this.pageIndex());
+    const virtualScrollController = this._virtualScrollController;
+
+    if (this.option(LEGACY_SCROLLING_MODE) !== false && virtualScrollController) {
+      // @ts-expect-error
+      const d = new Deferred();
+      super.reload.apply(this, arguments as any).done((r) => {
+        const delayDeferred = virtualScrollController.getDelayDeferred();
+        if (delayDeferred) {
+          delayDeferred.done(d.resolve).fail(d.reject);
+        } else {
+          d.resolve(r);
+        }
+      }).fail(d.reject);
+      return d;
+    }
+    return super.reload.apply(this, arguments as any);
+  }
+
+  refresh(options, operationTypes) {
+    if (this.option(LEGACY_SCROLLING_MODE) !== false) {
+      const { storeLoadOptions } = options;
+      const dataSource = this._dataSource;
+
+      if (operationTypes.reload) {
+        this._virtualScrollController.reset();
+        dataSource.items().length = 0;
+        this._isLoaded = false;
+
+        updateLoading(this);
+        this._isLoaded = true;
+
+        if (isAppendMode(this)) {
+          this.pageIndex(0);
+          dataSource.pageIndex(0);
+          storeLoadOptions.pageIndex = 0;
+          options.pageIndex = 0;
+          storeLoadOptions.skip = 0;
+        } else {
+          dataSource.pageIndex(this.pageIndex());
+          if (dataSource.paginate()) {
+            options.pageIndex = this.pageIndex();
+            storeLoadOptions.skip = this.pageIndex() * this.pageSize();
+          }
+        }
+      } else if (isAppendMode(this) && storeLoadOptions.skip && this._totalCountCorrection < 0) {
+        storeLoadOptions.skip += this._totalCountCorrection;
       }
     }
-  };
 
-  const result = {
-    init() {
-      this.callBase.apply(this, arguments);
-      this._items = [];
-      this._totalCount = -1;
-      this._isLoaded = true;
-      this._loadPageCount = 1;
+    return super.refresh.apply(this, arguments as any);
+  }
 
-      this._virtualScrollController = new VirtualScrollController(this.component, this._getVirtualScrollDataOptions());
-    },
-    _getVirtualScrollDataOptions() {
-      const that = this;
-      return {
-        pageSize() {
-          return that.pageSize();
-        },
-        totalItemsCount() {
-          return that.totalItemsCount();
-        },
-        hasKnownLastPage() {
-          return that.hasKnownLastPage();
-        },
-        pageIndex(index) {
-          return that._dataSource.pageIndex(index);
-        },
-        isLoading() {
-          return that._dataSource.isLoading() && !that.isCustomLoading();
-        },
-        pageCount() {
-          return that.pageCount();
-        },
-        load() {
-          return that._dataSource.load();
-        },
-        updateLoading() {
-          updateLoading(that);
-        },
-        itemsCount() {
-          return that.itemsCount(true);
-        },
-        items() {
-          return that._dataSource.items();
-        },
-        viewportItems(items) {
-          if (items) {
-            that._items = items;
-          }
-          return that._items;
-        },
-        onChanged(e) {
-          that.changed.fire(e);
-        },
-        changingDuration() {
-          if (that.isLoading()) {
-            return LOAD_TIMEOUT;
-          }
+  dispose() {
+    this._virtualScrollController.dispose();
+    super.dispose.apply(this, arguments as any);
+  }
 
-          return that._renderTime || 0;
-        },
-      };
-    },
-    _handleLoadingChanged(isLoading) {
-      if (this.option(LEGACY_SCROLLING_MODE) === false) {
-        this.callBase.apply(this, arguments);
-        return;
-      }
+  loadPageCount(count?) {
+    if (!isDefined(count)) {
+      return this._loadPageCount;
+    }
+    this._loadPageCount = count;
+  }
 
-      if (!isVirtualMode(this) || this._isLoadingAll) {
-        this._isLoading = isLoading;
-        this.callBase.apply(this, arguments);
-      }
+  _handleDataLoading(options) {
+    const loadPageCount = this.loadPageCount();
+    const pageSize = this.pageSize();
+    const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
+    const { storeLoadOptions } = options;
+    const takeIsDefined = isDefined(storeLoadOptions.take);
 
-      if (isLoading) {
-        this._startLoadTime = new Date();
-      } else {
-        this._startLoadTime = undefined;
-      }
-    },
-    _handleLoadError() {
-      if (this.option(LEGACY_SCROLLING_MODE) !== false) {
-        this._isLoading = false;
-        this.loadingChanged.fire(false);
-      }
+    options.loadPageCount = loadPageCount;
+    if (!options.isCustomLoading && newMode && takeIsDefined && loadPageCount > 1 && pageSize > 0) {
+      storeLoadOptions.take = loadPageCount * pageSize;
+    }
+    super._handleDataLoading.apply(this, arguments as any);
+  }
 
-      this.callBase.apply(this, arguments);
-    },
-    _handleDataChanged(e) {
-      if (this.option(LEGACY_SCROLLING_MODE) === false) {
-        this._items = this._dataSource.items().slice();
-        this._totalCount = this._dataSourceTotalCount(true);
-        this.callBase.apply(this, arguments);
-        return;
-      }
+  _loadPageSize() {
+    return super._loadPageSize.apply(this, arguments as any) * this.loadPageCount();
+  }
 
-      const callBase = this.callBase.bind(this);
+  beginPageIndex(): any {
+    return proxyDataSourceAdapterMethod(this, 'beginPageIndex', [...arguments]);
+  }
 
-      this._virtualScrollController.handleDataChanged(callBase, e);
-    },
-    _customizeRemoteOperations(options, operationTypes) {
-      const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
-      let renderAsync = this.option('scrolling.renderAsync');
+  endPageIndex(): any {
+    return proxyDataSourceAdapterMethod(this, 'endPageIndex', [...arguments]);
+  }
 
-      if (!isDefined(renderAsync)) {
-        renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
-      }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  pageIndex(pageIndex?): any {
+    return proxyDataSourceAdapterMethod(this, 'pageIndex', [...arguments]);
+  }
 
-      if ((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
-        options.delay = undefined;
-      }
+  virtualItemsCount(): any {
+    return proxyDataSourceAdapterMethod(this, 'virtualItemsCount', [...arguments]);
+  }
 
-      this.callBase.apply(this, arguments);
-    },
-    items() {
-      return this._items;
-    },
-    _dataSourceTotalCount(isBase) {
-      return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualMode(this) && !isBase ? this._totalCount : this.callBase();
-    },
-    itemsCount(isBase) {
-      if (isBase || this.option(LEGACY_SCROLLING_MODE) === false) {
-        return this.callBase();
-      }
-      return this._virtualScrollController.itemsCount();
-    },
-    load(loadOptions) {
-      if (this.option(LEGACY_SCROLLING_MODE) === false || loadOptions) {
-        return this.callBase(loadOptions);
-      }
-      return this._virtualScrollController.load();
-    },
-    isLoading() {
-      return this.option(LEGACY_SCROLLING_MODE) === false ? this._dataSource.isLoading() : this._isLoading;
-    },
-    isLoaded() {
-      return this._dataSource.isLoaded() && this._isLoaded;
-    },
-    resetPagesCache(isLiveUpdate) {
-      if (!isLiveUpdate) {
-        this._virtualScrollController.reset(true);
-      }
-      this.callBase.apply(this, arguments);
-    },
-    _changeRowExpandCore() {
-      const result = this.callBase.apply(this, arguments);
+  getContentOffset(): any {
+    return proxyDataSourceAdapterMethod(this, 'getContentOffset', [...arguments]);
+  }
 
-      if (this.option(LEGACY_SCROLLING_MODE) === false) {
-        return result;
-      }
+  getVirtualContentSize(): any {
+    return proxyDataSourceAdapterMethod(this, 'getVirtualContentSize', [...arguments]);
+  }
 
-      this.resetPagesCache();
-      updateLoading(this);
+  setContentItemSizes(): any {
+    return proxyDataSourceAdapterMethod(this, 'setContentItemSizes', [...arguments]);
+  }
 
-      return result;
-    },
-    reload() {
-      this._dataSource.pageIndex(this.pageIndex());
-      const virtualScrollController = this._virtualScrollController;
+  setViewportPosition(): any {
+    return proxyDataSourceAdapterMethod(this, 'setViewportPosition', [...arguments]);
+  }
 
-      if (this.option(LEGACY_SCROLLING_MODE) !== false && virtualScrollController) {
-        // @ts-expect-error
-        const d = new Deferred();
-        this.callBase.apply(this, arguments).done((r) => {
-          const delayDeferred = virtualScrollController.getDelayDeferred();
-          if (delayDeferred) {
-            delayDeferred.done(d.resolve).fail(d.reject);
-          } else {
-            d.resolve(r);
-          }
-        }).fail(d.reject);
-        return d;
-      }
-      return this.callBase.apply(this, arguments);
-    },
-    refresh(options, operationTypes) {
-      if (this.option(LEGACY_SCROLLING_MODE) !== false) {
-        const { storeLoadOptions } = options;
-        const dataSource = this._dataSource;
+  getViewportItemIndex(): any {
+    return proxyDataSourceAdapterMethod(this, 'getViewportItemIndex', [...arguments]);
+  }
 
-        if (operationTypes.reload) {
-          this._virtualScrollController.reset();
-          dataSource.items().length = 0;
-          this._isLoaded = false;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setViewportItemIndex(viewportItemIndex?): any {
+    return proxyDataSourceAdapterMethod(this, 'setViewportItemIndex', [...arguments]);
+  }
 
-          updateLoading(this);
-          this._isLoaded = true;
+  getItemIndexByPosition(): any {
+    return proxyDataSourceAdapterMethod(this, 'getItemIndexByPosition', [...arguments]);
+  }
 
-          if (isAppendMode(this)) {
-            this.pageIndex(0);
-            dataSource.pageIndex(0);
-            storeLoadOptions.pageIndex = 0;
-            options.pageIndex = 0;
-            storeLoadOptions.skip = 0;
-          } else {
-            dataSource.pageIndex(this.pageIndex());
-            if (dataSource.paginate()) {
-              options.pageIndex = this.pageIndex();
-              storeLoadOptions.skip = this.pageIndex() * this.pageSize();
-            }
-          }
-        } else if (isAppendMode(this) && storeLoadOptions.skip && this._totalCountCorrection < 0) {
-          storeLoadOptions.skip += this._totalCountCorrection;
-        }
-      }
+  viewportSize(): any {
+    return proxyDataSourceAdapterMethod(this, 'viewportSize', [...arguments]);
+  }
 
-      return this.callBase.apply(this, arguments);
-    },
-    dispose() {
-      this._virtualScrollController.dispose();
-      this.callBase.apply(this, arguments);
-    },
-    loadPageCount(count) {
-      if (!isDefined(count)) {
-        return this._loadPageCount;
-      }
-      this._loadPageCount = count;
-    },
-    _handleDataLoading(options) {
-      const loadPageCount = this.loadPageCount();
-      const pageSize = this.pageSize();
-      const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
-      const { storeLoadOptions } = options;
-      const takeIsDefined = isDefined(storeLoadOptions.take);
+  viewportItemSize(): any {
+    return proxyDataSourceAdapterMethod(this, 'viewportItemSize', [...arguments]);
+  }
 
-      options.loadPageCount = loadPageCount;
-      if (!options.isCustomLoading && newMode && takeIsDefined && loadPageCount > 1 && pageSize > 0) {
-        storeLoadOptions.take = loadPageCount * pageSize;
-      }
-      this.callBase.apply(this, arguments);
-    },
-    _loadPageSize() {
-      return this.callBase.apply(this, arguments) * this.loadPageCount();
-    },
-  };
+  getItemSize(): any {
+    return proxyDataSourceAdapterMethod(this, 'getItemSize', [...arguments]);
+  }
 
-  [
-    'beginPageIndex',
-    'endPageIndex',
-    'pageIndex',
-  ].forEach((name) => {
-    result[name] = function () {
-      if (this.option(LEGACY_SCROLLING_MODE) === false) {
-        const dataSource = this._dataSource;
-        return dataSource.pageIndex.apply(dataSource, arguments);
-      }
+  getItemSizes(): any {
+    return proxyDataSourceAdapterMethod(this, 'getItemSizes', [...arguments]);
+  }
 
-      const virtualScrollController = this._virtualScrollController;
-      return virtualScrollController[name].apply(virtualScrollController, arguments);
-    };
-  });
-
-  [
-    'virtualItemsCount',
-    'getContentOffset',
-    'getVirtualContentSize',
-    'setContentItemSizes', 'setViewportPosition',
-    'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
-    'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
-    'loadIfNeed',
-  ].forEach((name) => {
-    result[name] = function () {
-      const virtualScrollController = this._virtualScrollController;
-      return virtualScrollController[name].apply(virtualScrollController, arguments);
-    };
-  });
-
-  return result;
-}());
+  loadIfNeed(): any {
+    return proxyDataSourceAdapterMethod(this, 'loadIfNeed', [...arguments]);
+  }
+};
 
 const VirtualScrollingRowsViewExtender = (function () {
   const removeEmptyRows = function ($emptyRows, className) {
@@ -828,7 +910,6 @@ export const virtualScrollingModule = {
     };
   },
   extenders: {
-    dataSourceAdapter: VirtualScrollingDataSourceAdapterExtender,
     controllers: {
       data: (function () {
         const members = {

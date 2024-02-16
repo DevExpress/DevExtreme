@@ -1,12 +1,13 @@
 import { extend } from '@js/core/utils/extend';
-import { virtualScrollingModule } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { ModuleType } from '@ts/grids/grid_core/m_types';
+import { dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender, virtualScrollingModule } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
 
-import dataSourceAdapter from './data_source_adapter/m_data_source_adapter';
+import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';
 import gridCore from './m_core';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
 const originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data;
-const originalDataSourceAdapterExtender = virtualScrollingModule.extenders.dataSourceAdapter;
 
 virtualScrollingModule.extenders.controllers.data = extend({}, originalDataControllerExtender, {
   _loadOnOptionChange() {
@@ -16,16 +17,15 @@ virtualScrollingModule.extenders.controllers.data = extend({}, originalDataContr
     this.callBase();
   },
 });
-
-virtualScrollingModule.extenders.dataSourceAdapter = extend({}, originalDataSourceAdapterExtender, {
+const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingDataSourceAdapterExtender extends virtualScrollingDataSourceAdapterExtender(Base) {
   changeRowExpand() {
-    return this.callBase.apply(this, arguments).done(() => {
+    return super.changeRowExpand.apply(this, arguments as any).done(() => {
       const viewportItemIndex = this.getViewportItemIndex();
 
       viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex);
     });
-  },
-});
+  }
+};
 
 gridCore.registerModule('virtualScrolling', extend({}, virtualScrollingModule, {
   defaultOptions() {
@@ -37,4 +37,4 @@ gridCore.registerModule('virtualScrolling', extend({}, virtualScrollingModule, {
   },
 }));
 
-dataSourceAdapter.extend(virtualScrollingModule.extenders.dataSourceAdapter);
+dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
