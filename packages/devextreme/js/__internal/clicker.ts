@@ -12,12 +12,24 @@ export class Clicker extends Component {
     /*
       once jsx is set up, will be rewritten as:
 
-      <div class="my-app">
+      <div class='my-app'>
         <button onclick={() => this.counter.update((c) => c + 1)}>
           press me
         </button>
-        counter is {c}
+        counter is {this.counter}
       </div>
+    */
+
+    /*
+      or in jquery-like way:
+
+      $$('div').addClass('my-app').append(
+        $$('button')
+          .text('press me')
+          .on('click', () => this.counter.update((c) => c + 1)),
+        $$.text('counter is '),
+        $$.text(this.counter)
+      )
     */
     return {
       type: 'tag',
