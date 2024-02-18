@@ -1,6 +1,6 @@
 import { extend } from '@js/core/utils/extend';
-import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import { dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender, virtualScrollingModule } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
 
 import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';

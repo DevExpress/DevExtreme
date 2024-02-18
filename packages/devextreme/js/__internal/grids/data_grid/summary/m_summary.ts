@@ -13,8 +13,8 @@ import storeHelper from '@js/data/store_helper';
 import { normalizeSortingInfo } from '@js/data/utils';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
-import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import AggregateCalculator from '../m_aggregate_calculator';
