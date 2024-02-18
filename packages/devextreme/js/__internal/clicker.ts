@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line max-classes-per-file
@@ -5,32 +6,44 @@ import { Observable } from '@ts/core/reactive';
 import type { VNode } from '@ts/core/reactive_dom';
 import { Component } from '@ts/core/reactive_dom';
 
+import { $$ } from './core/reactive_jquery';
+
 export class Clicker extends Component {
   counter = new Observable(0);
 
   getMarkup(): VNode {
-    /*
-      once jsx is set up, will be rewritten as:
+    // return this.getMarkup_vnode();
+    // return this.getMarkup_jsx();
+    return this.getMarkup_jquery();
+  }
 
+  /*
+  private getMarkup_jsx(): VNode {
+    return
       <div class='my-app'>
         <button onclick={() => this.counter.update((c) => c + 1)}>
           press me
         </button>
+        <br/>
         counter is {this.counter}
       </div>
-    */
+  }
+  */
 
-    /*
-      or in jquery-like way:
-
-      $$('div').addClass('my-app').append(
+  private getMarkup_jquery(): VNode {
+    return $$('div')
+      .addClass('my-app')
+      .append(
         $$('button')
           .text('press me')
-          .on('click', () => this.counter.update((c) => c + 1)),
+          .attr('onclick', () => this.counter.update((c) => c + 1)),
+        $$('br'),
         $$.text('counter is '),
-        $$.text(this.counter)
-      )
-    */
+        $$.text(this.counter),
+      );
+  }
+
+  private getMarkup_vnode(): VNode {
     return {
       type: 'tag',
       tag: 'div',

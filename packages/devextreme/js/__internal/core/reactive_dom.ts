@@ -7,7 +7,7 @@
 import type { MaybeSubscribable, Subscribable } from './reactive';
 import { computed, isSubscribable, toSubscribable } from './reactive';
 
-interface TagNode {
+export interface TagNode {
   type: 'tag';
 
   tag: string;
@@ -16,13 +16,13 @@ interface TagNode {
   child?: VNode | Subscribable<VNode>;
 }
 
-interface TextNode {
+export interface TextNode {
   type: 'text';
 
   text: MaybeSubscribable<string | number | undefined>;
 }
 
-interface ArrayNode {
+export interface ArrayNode {
   type: 'array';
 
   children: MaybeSubscribable<VNode>[];
