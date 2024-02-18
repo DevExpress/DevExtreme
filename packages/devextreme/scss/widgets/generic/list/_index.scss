@@ -119,13 +119,13 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     @include toggle-delete-icon($list-item-active-color);
   }
 
-  .dx-icon {
+  .dx-list-static-delete-button .dx-icon {
     color: $list-icon-color;
   }
 
   &.dx-state-active,
   &.dx-state-focused {
-    .dx-button .dx-icon {
+    .dx-list-static-delete-button .dx-icon {
       color: $base-icon-color;
     }
   }
