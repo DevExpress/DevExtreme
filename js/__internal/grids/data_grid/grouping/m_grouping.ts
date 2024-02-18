@@ -7,9 +7,9 @@ import { getHeight } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
-import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
