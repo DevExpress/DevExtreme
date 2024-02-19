@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
-import { isMaterialBased, isFluent } from '../../../helpers/themeUtils';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { isMaterialBased, isFluent, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
@@ -321,6 +322,26 @@ test('Disabled item should be focused on tab press to match accessibility criter
 }).before(async () => createWidget('dxList', {
   dataSource: [{ text: 'item1' }, { text: 'item2' }],
   searchEnabled: true,
+}));
+
+test('The delete button should be displayed correctly after the list item focus (T1216108)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
+
+  await list.focus();
+
+  await testScreenshot(t, takeScreenshot, 'The delete button should be displayed correctly after the list item focus.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+  dataSource: {
+    text: 'item 1',
+    icon: 'user',
+  },
+  allowItemDeleting: true,
+  itemDeleteMode: 'static',
 }));
 
 test('Checking simple list with selectAll and "more" button via aXe', async (t) => {
