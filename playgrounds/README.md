@@ -6,7 +6,7 @@ To run a playground, clone this repository and follow the instructions below.
 
 ## Prepare the devextreme package
 
-Before anything else, you need to install modules and build the devextreme package. Run the following scripts from the root directory of this repository:
+Before you run a playground, install modules and build the devextreme package. Run the following scripts from the root directory of this repository:
 ```
 npm install
 npm run build -w=devextreme-main
@@ -46,13 +46,13 @@ cd playgrounds/vue
 npm run start
 ```
 
-## Updating devextreme code
+## Updating DevExtreme code
 
-To see changes applied to devextreme code in playgrounds, you need to re-build the devextreme package.
+To observe the changes made to the DevExtreme code within playgrounds, rebuild the `devextreme` package.
 ```
 npm run build -w=devextreme-main
 ```
-If you want hot update, apply changes to the following directory:
+If you need your changes to apply dynamically without reloading the playground, save them in the following directory:
 ```
 packages\devextreme\artifacts\npm\devextreme\esm
 ```
