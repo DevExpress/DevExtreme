@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import $ from '@js/core/renderer';
 import {
   normalizeStyleProp, styleProp,
@@ -12,8 +10,9 @@ const ORIENTATION = {
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
 
-export default class SplitterLayoutStrategy {
-  private readonly items: unknown;
+export default class SplitterLayoutHelper {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly items: any;
 
   private readonly orientation: string;
 
@@ -21,17 +20,22 @@ export default class SplitterLayoutStrategy {
 
   constructor(items: unknown, orientation: string) {
     this.items = items;
+    this.layoutState = [];
     this.orientation = orientation;
   }
 
   initializeState(): void {
     this.layoutState = [];
+
     this.items.each((index, splitterItem) => {
+      // @ts-expect-error todo: fix error
       this.layoutState.push(parseFloat($(splitterItem).css(FLEX_PROPERTY_NAME)));
+      //
     });
   }
 
-  applyNewLayout(e: unknown): void {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  applyNewLayout(e): void {
     const newLayoutState = this._getNewLayout(e);
 
     this.items.each((index, item) => {
@@ -55,7 +59,8 @@ export default class SplitterLayoutStrategy {
     element.style[styleProp(prop)] = normalizedProp;
   }
 
-  _getOffset(e: unknown): number {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _getOffset(e): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.orientation === ORIENTATION.horizontal ? e.offset.x : e.offset.y;
   }
@@ -66,19 +71,23 @@ export default class SplitterLayoutStrategy {
       const itemSize = this.orientation === ORIENTATION.horizontal
         ? itemRect.width : itemRect.height;
 
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      const result = total + itemSize;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return total + itemSize;
+      return result;
     }, 0);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return itemSizesSum;
   }
 
-  _getNewLayout(e: undefined): unknown {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _getNewLayout(e): number[] {
     const delta = (this._getOffset(e) / this._getSplitterItemsSizeSum()) * 100;
 
     const newLayoutState = [...this.layoutState];
 
+    // @ts-expect-error todo: fix error
     const firstItemIndex: number = $(e.target).prev().data().dxItemIndex;
     const secondItemIndex = firstItemIndex + 1;
 

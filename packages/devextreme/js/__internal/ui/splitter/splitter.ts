@@ -11,7 +11,7 @@ import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
-import SplitterLayoutStrategy from './utils/splitter.layout_strategy';
+import SplitterLayoutHelper from './utils/splitter.layout_helper';
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
@@ -61,8 +61,8 @@ class Splitter extends (CollectionWidget as any) {
 
     const splitterItemsCount = this._itemElements().length;
     if (splitterItemsCount > 1) {
-      this.layoutStrategy = new SplitterLayoutStrategy(this._itemElements(), this.option('orientation'));
-      this.layoutStrategy.layoutItems();
+      this.layoutHelper = new SplitterLayoutHelper(this._itemElements(), this.option('orientation'));
+      this.layoutHelper.layoutItems();
     }
   }
 
@@ -101,21 +101,21 @@ class Splitter extends (CollectionWidget as any) {
     return {
       direction: this.option('orientation'),
       onResizeStart: (e): void => {
-        this.layoutStrategy.initializeState();
+        this.layoutHelper.initializeState();
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,
         });
       },
       onResize: (e): void => {
-        this.layoutStrategy.applyNewLayout(e.event);
+        this.layoutHelper.applyNewLayout(e.event);
 
         this._getAction(RESIZE_EVENT.onResize)({
           event: e,
         });
       },
       onResizeEnd: (e): void => {
-        this.layoutStrategy.applyNewLayout(e.event);
+        this.layoutHelper.applyNewLayout(e.event);
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event: e,
