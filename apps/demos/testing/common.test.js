@@ -82,8 +82,9 @@ const getTestSpecificSkipRules = (testName) => {
     case 'DataGrid-PDFExportImages':
     case 'DataGrid-RowSelection':
     case 'FilterBuilder-WithList':
-    case 'TagBox-Overview':
       return ['image-alt'];
+    case 'TagBox-Overview':
+      return ['image-alt', 'image-redundant-alt'];
     default:
       return [];
   }

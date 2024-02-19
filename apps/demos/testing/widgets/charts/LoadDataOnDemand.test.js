@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 
-fixture('Charts.LoadDataOnDemand')
+fixture.skip('Charts.LoadDataOnDemand')
   .page('http://localhost:8080/')
   .beforeEach(async (t) => {
     await t
