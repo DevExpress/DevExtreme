@@ -6,7 +6,7 @@ import { findTemplates } from '../../core/utils/template_manager';
 import { getPublicElement } from '../../core/element';
 import domAdapter from '../../core/dom_adapter';
 import { isPlainObject, isFunction, isDefined } from '../../core/utils/type';
-import { when } from '../../core/utils/deferred';
+import { when, Deferred } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import Action from '../../core/action';
@@ -50,6 +50,14 @@ const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
 const CollectionWidget = Widget.inherit({
+
+    _renderItemsAsyncNew() {
+        const d = new Deferred();
+        when.apply(this, this._deferredItemsNew).done(() => {
+            d.resolve();
+        });
+        return d.promise();
+    },
 
     _activeStateUnit: '.' + ITEM_CLASS,
 
@@ -613,6 +621,7 @@ const CollectionWidget = Widget.inherit({
         this._cleanItemContainer();
         this._inkRipple && delete this._inkRipple;
         this._resetActiveState();
+        this._deferredItemsNew = [];
     },
 
     _cleanItemContainer: function() {
@@ -668,6 +677,8 @@ const CollectionWidget = Widget.inherit({
     },
 
     _initMarkup: function() {
+        this._deferredItemsNew = [];
+
         this.callBase();
         this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
 
@@ -839,6 +850,7 @@ const CollectionWidget = Widget.inherit({
         }
 
         this._renderEmptyMessage();
+        this._renderItemsAsyncNew();
     },
 
     _getItemsContainer: function() {
@@ -1022,8 +1034,11 @@ const CollectionWidget = Widget.inherit({
         });
     },
 
-    _onItemTemplateRendered: function() {
-        return noop;
+    _onItemTemplateRendered(itemTemplate, renderArgs) {
+        this._deferredItemsNew[renderArgs.index] = new Deferred();
+        return () => {
+            this._deferredItemsNew[renderArgs.index].resolve();
+        };
     },
 
     _emptyMessageContainer: function() {
