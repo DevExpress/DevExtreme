@@ -1401,6 +1401,9 @@ export const validatingModule = {
               const value = validator.option('adapter').getValue();
               if (cellValueShouldBeValidated(value, rowOptions) || validatingController._rowIsValidated(change)) {
                 editingController.waitForDeferredOperations().done(() => {
+                  if (!$element.closest('tbody')) {
+                    return;
+                  }
                   when(validatingController.validateCell(validator)).done((result) => {
                     validationResult = result;
                     const { column } = validationResult.validator.option('dataGetter')();
