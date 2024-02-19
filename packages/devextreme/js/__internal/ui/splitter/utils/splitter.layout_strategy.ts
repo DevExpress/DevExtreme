@@ -10,6 +10,8 @@ const ORIENTATION = {
   vertical: 'vertical',
 };
 
+const FLEX_PROPERTY_NAME = 'flexGrow';
+
 export default class SplitterLayoutStrategy {
   private readonly items: unknown;
 
@@ -25,7 +27,7 @@ export default class SplitterLayoutStrategy {
   initializeState(): void {
     this.layoutState = [];
     this.items.each((index, splitterItem) => {
-      this.layoutState.push(parseFloat($(splitterItem).css('flex-grow')));
+      this.layoutState.push(parseFloat($(splitterItem).css(FLEX_PROPERTY_NAME)));
     });
   }
 
@@ -33,7 +35,7 @@ export default class SplitterLayoutStrategy {
     const newLayoutState = this._getNewLayout(e);
 
     this.items.each((index, item) => {
-      this._setFlexProp(item, 'flexGrow', newLayoutState[index]);
+      this._setFlexProp(item, FLEX_PROPERTY_NAME, newLayoutState[index]);
     });
   }
 
@@ -42,7 +44,7 @@ export default class SplitterLayoutStrategy {
     const splitterItemRatio = 100 / this.items.length;
 
     this.items.each((index, item) => {
-      this._setFlexProp(item, 'flexGrow', splitterItemRatio);
+      this._setFlexProp(item, FLEX_PROPERTY_NAME, splitterItemRatio);
     });
   }
 
