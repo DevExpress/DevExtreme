@@ -11,7 +11,6 @@ const stateStoring = (
 ) => class TreeListStateStoringExtender extends stateStoringModule.extenders.controllers.stateStoring(Base) {
   applyState(state) {
     super.applyState(state);
-    // @ts-expect-error
     this.option('expandedRowKeys', state.expandedRowKeys ? state.expandedRowKeys.slice() : []);
   }
 };
