@@ -5,11 +5,11 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { DataController } from '../data_controller/m_data_controller';
-import { ModuleType } from '../m_types';
-import { SelectionController } from '../selection/m_selection';
-import { RowsView } from '../views/m_rows_view';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
+import type { ModuleType } from '../m_types';
+import type { SelectionController } from '../selection/m_selection';
+import type { RowsView } from '../views/m_rows_view';
 import { StateStoringController } from './m_state_storing_core';
 
 const getDataState = (that) => {

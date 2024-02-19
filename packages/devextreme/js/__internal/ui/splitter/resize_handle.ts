@@ -1,4 +1,4 @@
-import { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
+import type { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
 import Guid from '../../../core/guid';
 import { extend } from '../../../core/utils/extend';
@@ -6,6 +6,10 @@ import eventsEngine from '../../../events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '../../../events/drag';
 import { addNamespace } from '../../../events/utils/index';
 import Widget from '../../../ui/widget/ui.widget';
+import {
+  getActionNameByEventName,
+  RESIZE_EVENT,
+} from './utils/event';
 
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
@@ -52,41 +56,31 @@ class ResizeHandle extends (Widget as any) {
   _render(): void {
     super._render();
 
-    this._createResizeStartAction();
-    this._createResizeAction();
-    this._createResizeEndAction();
     this._attachEventHandlers();
   }
 
   _resizeStartHandler(e: ResizeStartEvent): void {
-    this._resizeStartAction({
+    this._getAction(RESIZE_EVENT.onResizeStart)({
       event: e,
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _resizeHandler(e): void {
-    this._resizeAction({
+    this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
   }
 
   _resizeEndHandler(e: ResizeEndEvent): void {
-    this._resizeEndAction({
+    this._getAction(RESIZE_EVENT.onResizeEnd)({
       event: e,
     });
   }
 
-  _createResizeAction(): void {
-    this._resizeAction = this._createActionByOption('onResize');
-  }
-
-  _createResizeStartAction(): void {
-    this._resizeStartAction = this._createActionByOption('onResizeStart');
-  }
-
-  _createResizeEndAction(): void {
-    this._resizeEndAction = this._createActionByOption('onResizeEnd');
+  _getAction(eventName: string): (e) => void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
   }
 
   _attachEventHandlers(): void {
@@ -129,20 +123,18 @@ class ResizeHandle extends (Widget as any) {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
-    switch (args.name) {
+    const { name } = args;
+
+    switch (name) {
       case 'direction':
         this._toggleDirectionClass();
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;
       case 'onResize':
-        this._createResizeAction();
-        break;
       case 'onResizeStart':
-        this._createResizeStartAction();
-        break;
       case 'onResizeEnd':
-        this._createResizeEndAction();
+        this[getActionNameByEventName(name)] = this._createActionByOption(name);
         break;
       default:
         super._optionChanged(args);

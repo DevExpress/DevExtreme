@@ -54,112 +54,68 @@ QUnit.module('Initialization', moduleConfig, () => {
 });
 
 QUnit.module('Events', moduleConfig, () => {
-    QUnit.test('resize event handlers should be fired', function(assert) {
-        const onResizeStartStub = sinon.stub();
-        const onResizeStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
+    ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
+        QUnit.test(`${eventHandler} event handler should be fired`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            this.reinit({ [eventHandler]: resizeHandlerStub });
 
-        this.reinit({
-            onResizeStart: onResizeStartStub,
-            onResize: onResizeStub,
-            onResizeEnd: onResizeEndStub
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
         });
 
-        const pointer = pointerMock(this.$element);
+        QUnit.test(`${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            this.instance.option(eventHandler, resizeHandlerStub);
 
-        pointer.start().dragStart().drag(0, 50).drag(0, 50).dragEnd();
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
 
-        assert.ok(onResizeStartStub.calledOnce);
-        assert.ok(onResizeStub.calledTwice);
-        assert.ok(onResizeEndStub.calledOnce);
-    });
-
-    QUnit.test('resize event handlers should be correctly added with "on" function', function(assert) {
-        const onResizeStartStub = sinon.stub();
-        const onResizeStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
-
-        this.instance.on('resize', onResizeStub);
-        this.instance.on('resizeStart', onResizeStartStub);
-        this.instance.on('resizeEnd', onResizeEndStub);
-
-        const pointer = pointerMock(this.$element);
-
-        pointer.start().dragStart().drag(0, 50).drag(0, 50).dragEnd();
-
-        assert.ok(onResizeStartStub.calledOnce);
-        assert.ok(onResizeStub.calledTwice);
-        assert.ok(onResizeEndStub.calledOnce);
-    });
-
-    QUnit.test('resize event handlers should be able to update at runtime', function(assert) {
-        const pointer = pointerMock(this.$element);
-
-        const onResizeStartStub = sinon.stub();
-        const onResizeStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
-
-        this.instance.option('onResizeStart', onResizeStartStub);
-        this.instance.option('onResize', onResizeStub);
-        this.instance.option('onResizeEnd', onResizeEndStub);
-
-        pointer.start().dragStart().drag(0, 50).dragEnd();
-
-        assert.ok(onResizeStartStub.calledOnce);
-        assert.ok(onResizeStub.calledOnce);
-        assert.ok(onResizeEndStub.calledOnce);
-    });
-
-    QUnit.test('event handlers should recieve correct arguments', function(assert) {
-        const checkArgs = (e, expectedEventName) => {
-            assert.strictEqual(e.component.NAME, this.instance.NAME);
-            assert.strictEqual($(e.element).get(0), this.$element.get(0));
-            assert.strictEqual(e.event.type, expectedEventName);
-            assert.strictEqual($(e.event.target).get(0), this.$element.get(0));
-        };
-
-        this.reinit({
-            onResizeStart: function(e) {
-                checkArgs(e, 'dxdragstart');
-            },
-            onResize: function(e) {
-                checkArgs(e, 'dxdrag');
-            },
-            onResizeEnd: function(e) {
-                checkArgs(e, 'dxdragend');
-            },
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
         });
 
-        const pointer = pointerMock(this.$element);
+        QUnit.test(`${eventHandler} should be called once after direction option changed`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            this.reinit({ [eventHandler]: resizeHandlerStub });
+            this.instance.option('direction', 'vertical');
 
-        pointer.start().dragStart().drag(0, 10).dragEnd();
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
+        });
     });
 
-    QUnit.test('events should be called once after direction option changed', function(assert) {
-        const onResizeStub = sinon.stub();
-        const onResizeStartStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
+    ['resizeStart', 'resize', 'resizeEnd'].forEach(eventHandler => {
+        QUnit.test(`${eventHandler} event handler should be correctly added with "on" function`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            this.instance.on(eventHandler, resizeHandlerStub);
 
-        this.reinit({
-            onResizeStart: onResizeStartStub,
-            onResize: onResizeStub,
-            onResizeEnd: onResizeEndStub
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
         });
+    });
 
-        const pointer = pointerMock(this.$element);
+    [['onResizeStart', 'dxdragstart'], ['onResize', 'dxdrag'], ['onResizeEnd', 'dxdragend']].forEach(eventData => {
+        QUnit.test(`${eventData[0]} event handler should recieve correct arguments`, function(assert) {
+            const eventHandlerName = eventData[0];
+            const eventName = eventData[1];
 
-        pointer.start().dragStart().drag(10, 10).dragEnd();
+            const checkArgs = (e, expectedEventName) => {
+                assert.strictEqual(e.component.NAME, this.instance.NAME);
+                assert.strictEqual($(e.element).get(0), this.$element.get(0));
+                assert.strictEqual(e.event.type, expectedEventName);
+                assert.strictEqual($(e.event.target).get(0), this.$element.get(0));
+            };
 
-        assert.ok(onResizeStartStub.calledOnce);
-        assert.ok(onResizeStartStub.calledOnce);
-        assert.ok(onResizeEndStub.calledOnce);
+            this.reinit({
+                [eventHandlerName]: function(e) {
+                    checkArgs(e, eventName);
+                },
+            });
 
-        this.instance.option('direction', 'vertical');
+            const pointer = pointerMock(this.$element);
 
-        pointer.start().dragStart().drag(10, 10).dragEnd();
-
-        assert.ok(onResizeStartStub.calledTwice);
-        assert.ok(onResizeStartStub.calledTwice);
-        assert.ok(onResizeEndStub.calledTwice);
+            pointer.start().dragStart().drag(0, 10).dragEnd();
+        });
     });
 });

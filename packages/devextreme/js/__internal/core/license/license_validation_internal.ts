@@ -1,4 +1,4 @@
-import { Token } from './types';
+import type { Token } from './types';
 
 // @ts-expect-error - only for internal usage
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

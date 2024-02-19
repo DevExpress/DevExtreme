@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable max-classes-per-file */
 import Guid from '@js/core/guid';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
@@ -16,7 +17,7 @@ import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
-import { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ExportController } from '../../data_grid/export/m_export';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';

@@ -5,16 +5,16 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { DataController } from '../data_controller/m_data_controller';
-import { EditingController } from '../editing/m_editing';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
+import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
-import { EditorFactory } from '../editor_factory/m_editor_factory';
-import { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import core from '../m_modules';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
-import { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/m_rows_view';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
