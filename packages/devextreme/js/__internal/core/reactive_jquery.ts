@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-namespace */
+import type DOMComponent from '@js/core/dom_component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
@@ -11,9 +12,10 @@ import type {
   Component,
   ComponentConstructor,
   ComponentNode, ComponentOptions,
-  TagNode, TextNode, VNode,
+  MapMaybeSubscribable,
+  TagNode, TextNode, VNode, WidgetConstructor, WidgetNode, WidgetOptions,
 } from './reactive_dom';
-import { _renderComponentNode } from './reactive_dom';
+import { _renderComponentNode, _renderWidgetNode } from './reactive_dom';
 
 export type BondElement<TComponent extends Component<any>> = Element & { _component: TComponent };
 // eslint-disable-next-line max-len
@@ -106,7 +108,7 @@ class ComponentHelper<TComponent extends Component<any>> implements ComponentNod
 
   constructor(
     public component: ComponentConstructor<TComponent>,
-    public props: ComponentOptions<TComponent>,
+    public props: MapMaybeSubscribable<ComponentOptions<TComponent>>,
   ) {}
 
   toRenderer(): BondRenderer<TComponent> {
@@ -117,24 +119,22 @@ class ComponentHelper<TComponent extends Component<any>> implements ComponentNod
   }
 }
 
-export function $$(tag: string): TagHelper;
-export function $$<TComponent extends Component<any>>(
-  component: ComponentConstructor<TComponent>,
-  props: ComponentOptions<TComponent>
-): ComponentHelper<TComponent>;
-export function $$<TComponent extends Component<any>>(
-  tag: string | ComponentConstructor<TComponent>,
-  props?: ComponentOptions<TComponent>,
-): TagHelper | ComponentHelper<TComponent> {
-  if (typeof tag === 'string') {
-    return new TagHelper(tag, undefined, undefined);
-  }
+class WidgetHelper<TWidget extends DOMComponent> implements WidgetNode<TWidget> {
+  type = 'widget' as const;
 
-  return new ComponentHelper(
-    tag,
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    props!,
-  );
+  constructor(
+    public widget: WidgetConstructor<TWidget>,
+    public props: MapMaybeSubscribable<WidgetOptions<TWidget>>,
+  ) {}
+
+  toWidgetInstance(): TWidget {
+    const [, widget] = _renderWidgetNode(this);
+    return widget as TWidget;
+  }
+}
+
+export function $$(tag: string): TagHelper {
+  return $$.tag(tag);
 }
 
 export namespace $$ {
@@ -143,5 +143,29 @@ export namespace $$ {
       type: 'text',
       text: value,
     };
+  }
+
+  export function tag(tagName: string): TagHelper {
+    return new TagHelper(tagName, undefined, undefined);
+  }
+
+  export function component<TComponent extends Component<any>>(
+    comp: ComponentConstructor<TComponent>,
+    props: MapMaybeSubscribable<ComponentOptions<TComponent>>,
+  ): ComponentHelper<TComponent> {
+    return new ComponentHelper(
+      comp,
+      props,
+    );
+  }
+
+  export function widget<TWidget extends DOMComponent<any>>(
+    w: WidgetConstructor<TWidget>,
+    props: MapMaybeSubscribable<WidgetOptions<TWidget>>,
+  ): WidgetHelper<TWidget> {
+    return new WidgetHelper(
+      w,
+      props,
+    );
   }
 }

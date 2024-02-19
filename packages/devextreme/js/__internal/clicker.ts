@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line max-classes-per-file
+import dxButton from '@js/ui/button';
 import { Observable } from '@ts/core/reactive';
 import type { VNode } from '@ts/core/reactive_dom';
 import { Component } from '@ts/core/reactive_dom';
@@ -50,9 +51,14 @@ export class Clicker extends Component<{}> {
     return $$('div')
       .addClass('my-app')
       .append(
-        $$(FancyButton, {
+        $$.component(FancyButton, {
           text: 'press me',
           onclick: () => this.counter.update((c) => c + 1),
+        }),
+        $$('br'),
+        $$.widget(dxButton, {
+          text: 'press me too',
+          onClick: () => this.counter.update((c) => c + 1),
         }),
         $$('br'),
         $$.text('counter is '),

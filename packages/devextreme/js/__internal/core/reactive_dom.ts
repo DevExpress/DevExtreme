@@ -8,6 +8,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable spellcheck/spell-checker */
 
+import type DOMComponent from '@js/core/dom_component';
+
 import type { MaybeSubscribable, Subscribable } from './reactive';
 import { computed, isSubscribable, toSubscribable } from './reactive';
 
@@ -35,12 +37,41 @@ export interface ArrayNode {
 export interface ComponentNode<TComponent extends Component<any> = Component<any>> {
   type: 'component';
 
-  component: new (props: ComponentOptions<TComponent>) => TComponent;
+  component: ComponentConstructor<TComponent>;
 
-  props: ComponentOptions<TComponent>;
+  props: MapMaybeSubscribable<ComponentOptions<TComponent>>;
 }
 
-export type VNode = TagNode | TextNode | ArrayNode | ComponentNode;
+export interface WidgetNode<TWidget extends DOMComponent = DOMComponent<any>> {
+  type: 'widget';
+
+  widget: WidgetConstructor<TWidget>;
+
+  props: MapMaybeSubscribable<WidgetOptions<TWidget>>;
+}
+
+export type VNode = TagNode | TextNode | ArrayNode | ComponentNode | WidgetNode;
+
+// eslint-disable-next-line max-len
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
+export function _renderWidgetNode(node: WidgetNode) {
+  const el = document.createElement('div');
+  // eslint-disable-next-line new-cap
+  const widget = new node.widget(el, {});
+
+  Object.entries(node.props).forEach(([name, value]) => {
+    toSubscribable(value).subscribe((value) => {
+      widget.option(name, value);
+    });
+  });
+
+  return [el, widget] as const;
+}
+
+function renderWidgetNode(node: WidgetNode): Node {
+  const [el] = _renderWidgetNode(node);
+  return el;
+}
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
@@ -129,8 +160,16 @@ function _render(node: VNode): Node {
     return renderComponentNode(node);
   }
 
+  if (node.type === 'widget') {
+    return renderWidgetNode(node);
+  }
+
   return assertNever(node);
 }
+
+export type MapMaybeSubscribable<T> = {
+  [P in keyof T]: MaybeSubscribable<T[P]>;
+};
 
 function render(node: MaybeSubscribable<VNode>): Subscribable<Node> {
   return computed(
@@ -150,7 +189,13 @@ export type ComponentOptions<TComponent>
   = TComponent extends Component<infer TProps>
     ? TProps
     : never;
+export type WidgetOptions<TComponent>
+  = TComponent extends DOMComponent<infer TProps>
+    ? TProps
+    : never;
 
+// eslint-disable-next-line max-len
+export type WidgetConstructor<TWidget> = new (el: Element, props: WidgetOptions<TWidget>) => TWidget;
 export type ComponentConstructor<TComponent> = new (p: ComponentOptions<TComponent>) => TComponent;
 
 export abstract class Component<TProperties extends {}> {

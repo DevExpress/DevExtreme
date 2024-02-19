@@ -265,7 +265,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   _createTable(columns, isAppend) {
-    const $table = $$(Table, {
+    const $table = $$.component(Table, {
       className: `${this.addWidgetPrefix(TABLE_CLASS)} ${this.addWidgetPrefix(TABLE_FIXED_CLASS)}`,
     }).toRenderer();
 
