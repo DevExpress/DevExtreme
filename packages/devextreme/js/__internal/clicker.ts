@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line max-classes-per-file
 import dxButton from '@js/ui/button';
-import { Observable } from '@ts/core/reactive';
+import { computed, Observable } from '@ts/core/reactive';
 import type { VNode } from '@ts/core/reactive_dom';
 import { Component } from '@ts/core/reactive_dom';
 
@@ -28,6 +28,8 @@ class FancyButton extends Component<FancyButtonOptions> {
 export class Clicker extends Component<{}> {
   counter = new Observable(0);
 
+  doubledContuner = computed((c: number) => c * 2, [this.counter]);
+
   useDxWidget = new Observable(false);
 
   getMarkup(): VNode {
@@ -47,19 +49,22 @@ export class Clicker extends Component<{}> {
         $$('br'),
         $$.iff(this.useDxWidget)
           .then(
-            $$.component(FancyButton, {
-              text: 'press me',
-              onclick: () => this.counter.update((c) => c + 1),
-            }),
-          ).elsee(
             $$.widget(dxButton, {
               text: 'press me too',
               onClick: () => this.counter.update((c) => c + 1),
+            }),
+          ).elsee(
+            $$.component(FancyButton, {
+              text: 'press me',
+              onclick: () => this.counter.update((c) => c + 1),
             }),
           ),
         $$('br'),
         $$.text('counter is '),
         $$.text(this.counter),
+        $$('br'),
+        $$.text('double counter is '),
+        $$.text(this.doubledContuner),
       );
   }
 
