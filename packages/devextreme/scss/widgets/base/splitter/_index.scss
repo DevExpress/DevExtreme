@@ -5,6 +5,7 @@
 
   .dx-splitter-item {
     flex: 1 0 0px;
+    overflow: hidden;
   }
 
   &.dx-splitter-vertical {
@@ -14,5 +15,6 @@
 
 .dx-resize-handle {
   cursor: col-resize;
-  flex-basis: 1px;
+  flex-basis: 8px;
+  border: 1px solid gray;
 }
