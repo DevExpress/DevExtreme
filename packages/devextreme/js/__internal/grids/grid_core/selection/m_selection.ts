@@ -830,6 +830,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
 
             // T108078
             if (change.items[index]) {
+              // @ts-expect-error
               $row = that._getRowElements($(tableElement)).eq(index);
               if ($row.length) {
                 const { isSelected } = change.items[index];
@@ -934,6 +935,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     const isCheckBoxesHidden = selectionController.isSelectColumnVisible() && !selectionController.isSelectionWithCheckboxes();
 
     each(tableElements, (_, tableElement) => {
+      // @ts-expect-error
       $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);
     });
   }

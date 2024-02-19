@@ -3,12 +3,21 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-namespace */
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+
 import type { MaybeSubscribable } from './reactive';
 import type {
   Component,
   ComponentConstructor,
-  ComponentNode, ComponentOptions, TagNode, TextNode, VNode,
+  ComponentNode, ComponentOptions,
+  TagNode, TextNode, VNode,
 } from './reactive_dom';
+import { _renderComponentNode } from './reactive_dom';
+
+export type BondElement<TComponent extends Component<any>> = Element & { _component: TComponent };
+// eslint-disable-next-line max-len
+export type BondRenderer<TComponent extends Component<any>> = dxElementWrapper & { _component: TComponent };
 
 class TagHelper implements TagNode {
   type = 'tag' as const;
@@ -99,6 +108,13 @@ class ComponentHelper<TComponent extends Component<any>> implements ComponentNod
     public component: ComponentConstructor<TComponent>,
     public props: ComponentOptions<TComponent>,
   ) {}
+
+  toRenderer(): BondRenderer<TComponent> {
+    const [el, comp] = _renderComponentNode(this);
+    const $el = $(el as Element) as BondRenderer<TComponent>;
+    $el._component = comp as TComponent;
+    return $el;
+  }
 }
 
 export function $$(tag: string): TagHelper;

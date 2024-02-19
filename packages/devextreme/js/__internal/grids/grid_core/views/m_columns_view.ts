@@ -27,12 +27,15 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
+import type { BondRenderer } from '@ts/core/reactive_jquery';
+import { $$ } from '@ts/core/reactive_jquery';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { Table } from './components';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
@@ -155,7 +158,7 @@ export const normalizeWidth = (width: string | number | undefined): string | und
 };
 
 export class ColumnsView extends ColumnStateMixin(modules.View) {
-  _tableElement: any;
+  _tableElement?: BondRenderer<Table> | null;
 
   _scrollLeft: any;
 
@@ -262,9 +265,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   _createTable(columns, isAppend) {
-    const $table = $('<table>')
-      .addClass(this.addWidgetPrefix(TABLE_CLASS))
-      .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
+    const $table = $$(Table, {
+      className: `${this.addWidgetPrefix(TABLE_CLASS)} ${this.addWidgetPrefix(TABLE_FIXED_CLASS)}`,
+    }).toRenderer();
 
     if (columns && !isAppend) {
       $table
@@ -583,6 +586,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   _wrapRowIfNeed($table, $row, isRefreshing?) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
@@ -864,10 +868,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   getTableElements() {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this._tableElement || $();
   }
 
-  getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
+  getTableElement(isFixedTableRendering?): BondRenderer<Table> | undefined | null {
     return this._tableElement;
   }
 
@@ -960,6 +965,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $scrollContainer = this._getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
+      // @ts-expect-error
       $scrollContainer.remove();
     }
   }
@@ -1059,7 +1065,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return result;
   }
 
-  getColumnWidths($tableElement?: dxElementWrapper): number[] {
+  getColumnWidths($tableElement?: dxElementWrapper | null): number[] {
     (this.option('forceApplyBindings') || noop)();
 
     $tableElement = $tableElement ?? this.getTableElement();
@@ -1182,6 +1188,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $tableElements = that.getTableElements();
 
     iteratorUtils.each($tableElements, (_, tableElement) => {
+      // @ts-expect-error
       $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
     });
 

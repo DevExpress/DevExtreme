@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -6,6 +7,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable spellcheck/spell-checker */
+
 import type { MaybeSubscribable, Subscribable } from './reactive';
 import { computed, isSubscribable, toSubscribable } from './reactive';
 
@@ -40,10 +42,18 @@ export interface ComponentNode<TComponent extends Component<any> = Component<any
 
 export type VNode = TagNode | TextNode | ArrayNode | ComponentNode;
 
-function renderComponentNode(node: ComponentNode): Node {
+// eslint-disable-next-line max-len
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
+export function _renderComponentNode(node: ComponentNode) {
   // eslint-disable-next-line new-cap
   const component = new node.component(node.props);
-  return component.render();
+  return [component.render(), component] as const;
+}
+
+function renderComponentNode(node: ComponentNode): Node {
+  // eslint-disable-next-line new-cap
+  const [el] = _renderComponentNode(node);
+  return el;
 }
 
 function renderTagNode(node: TagNode): Node {
@@ -143,7 +153,7 @@ export type ComponentOptions<TComponent>
 
 export type ComponentConstructor<TComponent> = new (p: ComponentOptions<TComponent>) => TComponent;
 
-export abstract class Component<TProperties> {
+export abstract class Component<TProperties extends {}> {
   protected props: { [P in keyof TProperties]: Subscribable<TProperties[P]> };
 
   constructor(props: { [P in keyof TProperties]: MaybeSubscribable<TProperties[P]> }) {
