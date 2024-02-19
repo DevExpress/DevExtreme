@@ -1,7 +1,14 @@
+/* eslint-disable max-classes-per-file */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-namespace */
 import type { MaybeSubscribable } from './reactive';
-import type { TagNode, TextNode, VNode } from './reactive_dom';
+import type {
+  Component,
+  ComponentConstructor,
+  ComponentNode, ComponentOptions, TagNode, TextNode, VNode,
+} from './reactive_dom';
 
 class TagHelper implements TagNode {
   type = 'tag' as const;
@@ -85,8 +92,33 @@ class TagHelper implements TagNode {
   }
 }
 
-export function $$(tag: string): TagHelper {
-  return new TagHelper(tag, undefined, undefined);
+class ComponentHelper<TComponent extends Component<any>> implements ComponentNode<TComponent> {
+  type = 'component' as const;
+
+  constructor(
+    public component: ComponentConstructor<TComponent>,
+    public props: ComponentOptions<TComponent>,
+  ) {}
+}
+
+export function $$(tag: string): TagHelper;
+export function $$<TComponent extends Component<any>>(
+  component: ComponentConstructor<TComponent>,
+  props: ComponentOptions<TComponent>
+): ComponentHelper<TComponent>;
+export function $$<TComponent extends Component<any>>(
+  tag: string | ComponentConstructor<TComponent>,
+  props?: ComponentOptions<TComponent>,
+): TagHelper | ComponentHelper<TComponent> {
+  if (typeof tag === 'string') {
+    return new TagHelper(tag, undefined, undefined);
+  }
+
+  return new ComponentHelper(
+    tag,
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    props!,
+  );
 }
 
 export namespace $$ {

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/prefer-ts-expect-error */
@@ -28,7 +30,21 @@ export interface ArrayNode {
   children: MaybeSubscribable<VNode>[];
 }
 
-export type VNode = TagNode | TextNode | ArrayNode;
+export interface ComponentNode<TComponent extends Component<any> = Component<any>> {
+  type: 'component';
+
+  component: new (props: ComponentOptions<TComponent>) => TComponent;
+
+  props: ComponentOptions<TComponent>;
+}
+
+export type VNode = TagNode | TextNode | ArrayNode | ComponentNode;
+
+function renderComponentNode(node: ComponentNode): Node {
+  // eslint-disable-next-line new-cap
+  const component = new node.component(node.props);
+  return component.render();
+}
 
 function renderTagNode(node: TagNode): Node {
   const el = document.createElement(node.tag);
@@ -83,21 +99,34 @@ function renderArrayNode(node: ArrayNode): Node {
   return fragment;
 }
 
+function assertNever(a: never): never {
+  throw new Error(a);
+}
+
+function _render(node: VNode): Node {
+  if (node.type === 'tag') {
+    return renderTagNode(node);
+  }
+  if (node.type === 'text') {
+    return renderTextNode(node);
+  }
+
+  if (node.type === 'array') {
+    return renderArrayNode(node);
+  }
+
+  if (node.type === 'component') {
+    return renderComponentNode(node);
+  }
+
+  return assertNever(node);
+}
+
 function render(node: MaybeSubscribable<VNode>): Subscribable<Node> {
-  return computed((node): Node => {
-    if (node.type === 'tag') {
-      return renderTagNode(node);
-    }
-    if (node.type === 'text') {
-      return renderTextNode(node);
-    }
-
-    if (node.type === 'array') {
-      return renderArrayNode(node);
-    }
-
-    throw new Error('unknown vnode');
-  }, [toSubscribable(node)]);
+  return computed(
+    (node): Node => _render(node),
+    [toSubscribable(node)],
+  );
 }
 
 export function bindToDom(root: Element, node: MaybeSubscribable<VNode>): void {
@@ -107,10 +136,29 @@ export function bindToDom(root: Element, node: MaybeSubscribable<VNode>): void {
   });
 }
 
-export abstract class Component {
+export type ComponentOptions<TComponent>
+  = TComponent extends Component<infer TProps>
+    ? TProps
+    : never;
+
+export type ComponentConstructor<TComponent> = new (p: ComponentOptions<TComponent>) => TComponent;
+
+export abstract class Component<TProperties> {
+  protected props: { [P in keyof TProperties]: Subscribable<TProperties[P]> };
+
+  constructor(props: { [P in keyof TProperties]: MaybeSubscribable<TProperties[P]> }) {
+    this.props = {} as { [P in keyof TProperties]: Subscribable<TProperties[P]> };
+    Object.entries(props ?? {}).forEach(([name, value]) => {
+      this.props[name] = toSubscribable(value);
+    });
+  }
   abstract getMarkup(): VNode;
 
-  render(root: Element): void {
+  bindToDom(root: Element): void {
     bindToDom(root, this.getMarkup());
+  }
+
+  render(): Node {
+    return _render(this.getMarkup());
   }
 }

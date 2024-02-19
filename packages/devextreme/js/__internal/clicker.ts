@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -8,7 +9,22 @@ import { Component } from '@ts/core/reactive_dom';
 
 import { $$ } from './core/reactive_jquery';
 
-export class Clicker extends Component {
+interface FancyButtonOptions {
+  text: string;
+
+  onclick: () => void;
+}
+
+class FancyButton extends Component<FancyButtonOptions> {
+  getMarkup(): VNode {
+    return $$('button')
+      .addClass('my-fancy-button')
+      .text(this.props.text)
+      .attr('onclick', this.props.onclick);
+  }
+}
+
+export class Clicker extends Component<{}> {
   counter = new Observable(0);
 
   getMarkup(): VNode {
@@ -34,9 +50,10 @@ export class Clicker extends Component {
     return $$('div')
       .addClass('my-app')
       .append(
-        $$('button')
-          .text('press me')
-          .attr('onclick', () => this.counter.update((c) => c + 1)),
+        $$(FancyButton, {
+          text: 'press me',
+          onclick: () => this.counter.update((c) => c + 1),
+        }),
         $$('br'),
         $$.text('counter is '),
         $$.text(this.counter),
