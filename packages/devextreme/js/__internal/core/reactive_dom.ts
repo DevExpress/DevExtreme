@@ -50,7 +50,44 @@ export interface WidgetNode<TWidget extends DOMComponent = DOMComponent<any>> {
   props: MapMaybeSubscribable<WidgetOptions<TWidget>>;
 }
 
-export type VNode = TagNode | TextNode | ArrayNode | ComponentNode | WidgetNode;
+export interface IfNode {
+  type: 'if';
+
+  condition: MaybeSubscribable<boolean>;
+
+  trueChild: MaybeSubscribable<VNode>;
+
+  falseChild?: MaybeSubscribable<VNode>;
+}
+
+export type VNode = TagNode | TextNode | ArrayNode | ComponentNode | WidgetNode | IfNode;
+
+function renderIfNode(node: IfNode): Node {
+  // note: will break if observable isn't initialized
+
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let el!: Element;
+
+  toSubscribable(node.condition).subscribe((condition) => {
+    if (condition) {
+      render(node.trueChild).subscribe((res) => {
+        if (el) {
+          el.replaceWith(res);
+        }
+        el = res as Element;
+      });
+    } else if (node.falseChild) {
+      render(node.falseChild).subscribe((res) => {
+        if (el) {
+          el.replaceWith(res);
+        }
+        el = res as Element;
+      });
+    }
+  });
+
+  return el;
+}
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
@@ -162,6 +199,10 @@ function _render(node: VNode): Node {
 
   if (node.type === 'widget') {
     return renderWidgetNode(node);
+  }
+
+  if (node.type === 'if') {
+    return renderIfNode(node);
   }
 
   return assertNever(node);

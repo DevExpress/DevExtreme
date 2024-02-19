@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -12,6 +13,7 @@ import type {
   Component,
   ComponentConstructor,
   ComponentNode, ComponentOptions,
+  IfNode,
   MapMaybeSubscribable,
   TagNode, TextNode, VNode, WidgetConstructor, WidgetNode, WidgetOptions,
 } from './reactive_dom';
@@ -133,6 +135,25 @@ class WidgetHelper<TWidget extends DOMComponent> implements WidgetNode<TWidget> 
   }
 }
 
+class IfHelper implements IfNode {
+  type = 'if' as const;
+
+  constructor(
+    public condition: MaybeSubscribable<boolean>,
+    public trueChild: MaybeSubscribable<VNode>,
+
+    public falseChild: MaybeSubscribable<VNode> | undefined,
+  ) {}
+
+  elsee(falseChild: MaybeSubscribable<VNode>): IfHelper {
+    return new IfHelper(
+      this.condition,
+      this.trueChild,
+      falseChild,
+    );
+  }
+}
+
 export function $$(tag: string): TagHelper {
   return $$.tag(tag);
 }
@@ -142,6 +163,14 @@ export namespace $$ {
     return {
       type: 'text',
       text: value,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  export function iff(condition: MaybeSubscribable<boolean>) {
+    return {
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      then: (trueChild: MaybeSubscribable<VNode>) => new IfHelper(condition, trueChild, undefined),
     };
   }
 

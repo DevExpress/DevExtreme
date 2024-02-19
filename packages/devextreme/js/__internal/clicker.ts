@@ -28,10 +28,39 @@ class FancyButton extends Component<FancyButtonOptions> {
 export class Clicker extends Component<{}> {
   counter = new Observable(0);
 
+  useDxWidget = new Observable(false);
+
   getMarkup(): VNode {
     // return this.getMarkup_vnode();
     // return this.getMarkup_jsx();
     return this.getMarkup_jquery();
+  }
+
+  private getMarkup_jquery(): VNode {
+    return $$('div')
+      .addClass('my-app')
+      .append(
+        $$.component(FancyButton, {
+          text: 'switch buttons',
+          onclick: () => this.useDxWidget.update((u) => !u),
+        }),
+        $$('br'),
+        $$.iff(this.useDxWidget)
+          .then(
+            $$.component(FancyButton, {
+              text: 'press me',
+              onclick: () => this.counter.update((c) => c + 1),
+            }),
+          ).elsee(
+            $$.widget(dxButton, {
+              text: 'press me too',
+              onClick: () => this.counter.update((c) => c + 1),
+            }),
+          ),
+        $$('br'),
+        $$.text('counter is '),
+        $$.text(this.counter),
+      );
   }
 
   /*
@@ -46,25 +75,6 @@ export class Clicker extends Component<{}> {
       </div>
   }
   */
-
-  private getMarkup_jquery(): VNode {
-    return $$('div')
-      .addClass('my-app')
-      .append(
-        $$.component(FancyButton, {
-          text: 'press me',
-          onclick: () => this.counter.update((c) => c + 1),
-        }),
-        $$('br'),
-        $$.widget(dxButton, {
-          text: 'press me too',
-          onClick: () => this.counter.update((c) => c + 1),
-        }),
-        $$('br'),
-        $$.text('counter is '),
-        $$.text(this.counter),
-      );
-  }
 
   private getMarkup_vnode(): VNode {
     return {
