@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Gallery from '../../../model/gallery';
 import { setAttribute } from '../../../helpers/domUtils';

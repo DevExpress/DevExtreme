@@ -1,5 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
 import { a11yCheck } from '../../../helpers/accessibility/utils';

@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
@@ -8,13 +7,6 @@ fixture.disablePageReloads`Offset: Multi cell selection`
   .page(url(__dirname, '../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-
-// TODO Vinogradov: Change it to a general dispose widget helper function.
-const disposeScheduler = ClientFunction(() => {
-  const scheduler = ($(SCHEDULER_SELECTOR) as any).dxScheduler('instance');
-
-  scheduler?.dispose();
-}, { dependencies: { SCHEDULER_SELECTOR } });
 
 [
   0,
@@ -69,7 +61,7 @@ rtl: ${rtlEnabled},
           offset,
           rtlEnabled,
         });
-      }).after(async () => disposeScheduler());
+      }).after(async () => disposeWidget('dxScheduler'));
     });
 
     test(`Multi cell selection in the all-day panel should work (
@@ -99,6 +91,6 @@ rtl: ${rtlEnabled},
         currentView: 'week',
         offset,
       });
-    }).after(async () => disposeScheduler());
+    }).after(async () => disposeWidget('dxScheduler'));
   });
 });
