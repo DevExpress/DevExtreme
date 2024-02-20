@@ -358,12 +358,12 @@ test('The button icon in custom template should be displayed correctly after the
 }).before(async () => createWidget('dxList', {
   dataSource: [{ text: 'item 1' }],
   itemTemplate: (_, __, element) => {
-    const jButton = $('<div>').dxButton({
+    const button = ($('<div>') as any).dxButton({
       text: 'custom',
       icon: 'home',
     });
 
-    element.append(jButton);
+    element.append(button);
   },
 }));
 
