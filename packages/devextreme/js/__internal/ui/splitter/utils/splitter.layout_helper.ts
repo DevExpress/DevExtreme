@@ -9,6 +9,8 @@ const ORIENTATION = {
 };
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
+const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 export default class SplitterLayoutHelper {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,10 +18,15 @@ export default class SplitterLayoutHelper {
 
   private readonly orientation: string;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly $element: any;
+
   private layoutState: number[];
 
-  constructor(items: unknown, orientation: string) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  constructor(items: unknown, orientation: string, $element) {
     this.items = items;
+    this.$element = $element;
     this.layoutState = [];
     this.orientation = orientation;
   }
@@ -66,20 +73,31 @@ export default class SplitterLayoutHelper {
   }
 
   _getSplitterItemsSizeSum(): number {
-    const itemSizesSum = this.items.toArray().reduce((total, item) => {
-      const itemRect = item.getBoundingClientRect();
-      const itemSize = this.orientation === ORIENTATION.horizontal
-        ? itemRect.width : itemRect.height;
+    const splitterSize = this.$element.get(0).getBoundingClientRect();
+    const size: number = this.orientation === ORIENTATION.horizontal
+      ? splitterSize.width : splitterSize.height;
 
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      const result = total + itemSize;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return result;
-    }, 0);
+    const handlesCount = this.$element.find(`.${RESIZE_HANDLE_CLASS}`).length;
+    const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return itemSizesSum;
+    return size - handlesSizeSum;
   }
+
+  // _getSplitterItemsSizeSum(): number {
+  //   const itemSizesSum = this.items.toArray().reduce((total, item) => {
+  //     const itemRect = item.getBoundingClientRect();
+  //     const itemSize = this.orientation === ORIENTATION.horizontal
+  //       ? itemRect.width : itemRect.height;
+
+  //     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  //     const result = total + itemSize;
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  //     return result;
+  //   }, 0);
+
+  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  //   return itemSizesSum;
+  // }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _getNewLayout(e): number[] {

@@ -39,6 +39,80 @@ const moduleConfig = {
     }
 };
 
+QUnit.module('Resizing', moduleConfig, () => {
+    function assertLayout(items, expectedLayout, assert) {
+        items.toArray().forEach((item, index) => {
+            assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
+        });
+    }
+
+    ['horizontal', 'vertical'].forEach(orientation => {
+        QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [{ }, { }]
+            });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            assertLayout(items, ['50', '50'], assert);
+        });
+    });
+
+    [[50, ['75', '25'], 'horizontal'], [-50, ['25', '75'], 'horizontal'], [-100, ['0', '100'], 'horizontal'],
+        [100, ['100', '0'], 'horizontal'], [75, ['87.5', '12.5'], 'horizontal'],
+        [50, ['75', '25'], 'vertical'], [-50, ['25', '75'], 'vertical'], [-100, ['0', '100'], 'vertical'],
+        [100, ['100', '0'], 'vertical'], [75, ['87.5', '12.5'], 'vertical']
+    ].forEach(resizeInfo => {
+        QUnit.test(`items should resize proportionally with ${resizeInfo[2]} orientation`, function(assert) {
+            const resizeDistance = resizeInfo[0];
+            const expectedSize = resizeInfo[1];
+            const orientation = resizeInfo[2];
+
+            this.reinit({
+                width: 208, height: 208,
+                dataSource: [{ }, { }],
+                orientation
+            });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
+
+            assertLayout(items, expectedSize, assert);
+        });
+    });
+
+    [[500, ['100', '0'], 'horizontal'], [-500, ['0', '100'], 'vertical']].forEach(resizeInfo => {
+        QUnit.test(`resize item should not be resized beyound splitter borders with ${resizeInfo[2]} orientation`, function(assert) {
+            const resizeDistance = resizeInfo[0];
+            const expectedSize = resizeInfo[1];
+            const orientation = resizeInfo[2];
+
+            this.reinit({ width: 208, height: 208, dataSource: [{ }, { }], orientation });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
+
+            assertLayout(items, expectedSize, assert);
+        });
+    });
+
+    QUnit.test('resize item should not be resized beyound neighbour', function(assert) {
+        this.reinit({ width: 208, dataSource: [{ }, { }, { }, { }] });
+
+        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(400, 0).dragEnd();
+
+        assertLayout(items, ['50', '0', '25', '25'], assert);
+    });
+});
+
 QUnit.module('Initialization', moduleConfig, () => {
     QUnit.test('Splitter should be initialized with Splitter type', function(assert) {
         assert.ok(this.instance instanceof Splitter);
