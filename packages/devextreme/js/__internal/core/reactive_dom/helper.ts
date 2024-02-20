@@ -7,17 +7,17 @@
 import type DOMComponent from '@js/core/dom_component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { MaybeSubscribable } from '@ts/core/reactive';
 
-import type { MaybeSubscribable } from './reactive';
+import type { Component } from './component';
 import type {
-  Component,
   ComponentConstructor,
   ComponentNode, ComponentOptions,
   IfNode,
   MapMaybeSubscribable,
   TagNode, TextNode, VNode, WidgetConstructor, WidgetNode, WidgetOptions,
-} from './reactive_dom';
-import { _renderComponentNode, _renderWidgetNode } from './reactive_dom';
+} from './rendering';
+import { _renderComponentNode, _renderWidgetNode } from './rendering';
 
 export type BondElement<TComponent extends Component<any>> = Element & { _component: TComponent };
 // eslint-disable-next-line max-len

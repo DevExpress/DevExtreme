@@ -8,7 +8,7 @@ import { computed, Observable } from '@ts/core/reactive';
 import type { VNode } from '@ts/core/reactive_dom';
 import { Component } from '@ts/core/reactive_dom';
 
-import { $$ } from './core/reactive_jquery';
+import { $$ } from './core/reactive_dom';
 
 interface FancyButtonOptions {
   text: string;

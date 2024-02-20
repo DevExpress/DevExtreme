@@ -27,8 +27,8 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
-import type { BondRenderer } from '@ts/core/reactive_jquery';
-import { $$ } from '@ts/core/reactive_jquery';
+import type { BondRenderer } from '@ts/core/reactive_dom';
+import { $$ } from '@ts/core/reactive_dom';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';

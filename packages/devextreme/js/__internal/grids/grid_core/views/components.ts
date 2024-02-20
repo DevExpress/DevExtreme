@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import type { VNode } from '@ts/core/reactive_dom';
-import { Component } from '@ts/core/reactive_dom';
-import { $$ } from '@ts/core/reactive_jquery';
+import { $$, Component } from '@ts/core/reactive_dom';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TableProperties {
