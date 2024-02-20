@@ -28,6 +28,7 @@ import 'ui/switch';
 import 'generic_light.css!';
 
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
+const FORM_GROUP_CUSTOM_CAPTION_CLASS = 'dx-form-group-custom-caption';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
@@ -1367,6 +1368,123 @@ QUnit.module('Grouping', () => {
         assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Labels\'s content has correct data');
     });
 
+    QUnit.module('Caption template', () => {
+        test('Group caption template should be rendered correctly if string is passed', function(assert) {
+            const captionTemplate = 'Caption template string';
+            const $form = $('#form').dxForm({
+                items: [
+                    {
+                        itemType: 'group',
+                        captionTemplate,
+                    }]
+            });
+            const $group = $form.find(`.${FORM_GROUP_CLASS}`);
+            const $caption = $form.find(`.${FORM_GROUP_CUSTOM_CAPTION_CLASS}`);
+
+            assert.ok($caption.parent().is($group), 'caption is placed in group item');
+            assert.strictEqual($caption.text(), captionTemplate, 'caption text is correct');
+        });
+
+        test('Group caption template should be rendered correctly if template function is passed', function(assert) {
+            const customClass = 'CustomClass';
+            const customText = 'Custom text';
+            const $form = $('#form').dxForm({
+                items: [
+                    {
+                        itemType: 'group',
+                        captionTemplate: (data, $element) => {
+                            return $(`<div class=${customClass}>${customText}</div>`);
+                        },
+                    }]
+            });
+            const $group = $form.find(`.${FORM_GROUP_CLASS}`);
+            const $caption = $form.find(`.${FORM_GROUP_CUSTOM_CAPTION_CLASS}`);
+            const $template = $form.find(`.${customClass}`);
+
+            assert.ok($caption.parent().is($group), 'caption is placed in group item');
+            assert.ok($template.parent().is($caption), 'template is placed in custom caption item');
+            assert.strictEqual($template.text(), customText, 'caption text is correct');
+        });
+
+        test('Group caption template should have caption, component and name as first argument', function(assert) {
+            const templateStub = sinon.stub();
+            const caption = 'Group caption';
+            const name = 'Group name';
+
+            const form = $('#form').dxForm({
+                items: [{
+                    itemType: 'group',
+                    name,
+                    caption,
+                    captionTemplate: templateStub,
+                }]
+            }).dxForm('instance');
+
+            const data = templateStub.getCall(0).args[0];
+
+            assert.strictEqual(data.caption, caption, 'caption is passed as first argument field');
+            assert.strictEqual(data.component, form, 'component instance is passed as first argument field');
+            assert.strictEqual(data.name, name, 'name is passed as first argument field');
+        });
+
+        test('Group caption template should have group custom caption element as second argument', function(assert) {
+            const templateStub = sinon.stub();
+
+            $('#form').dxForm({
+                items: [{
+                    itemType: 'group',
+                    captionTemplate: templateStub,
+                }]
+            }).dxForm('instance');
+
+            const $element = $(templateStub.getCall(0).args[1]);
+
+            assert.ok($element.hasClass(FORM_GROUP_CUSTOM_CAPTION_CLASS));
+        });
+
+        test('Group caption template should have correct container argument', function(assert) {
+            $('#form').dxForm({
+                items: [{
+                    itemType: 'group',
+                    captionTemplate: (_, container) => {
+                        assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
+                    },
+                }]
+            });
+        });
+
+        test('Group caption template should be rendered correctly on runtime change', function(assert) {
+            const $form = $('#form').dxForm({
+                items: [
+                    {
+                        itemType: 'group',
+                        captionTemplate: 'caption',
+                    }]
+            });
+            const form = $form.dxForm('instance');
+
+            form.option('items[0].captionTemplate', 'new caption');
+
+            const $caption = $form.find(`.${FORM_GROUP_CUSTOM_CAPTION_CLASS}`);
+
+            assert.strictEqual($caption.text(), 'new caption', 'caption text is updated');
+        });
+
+        test('Group should have aria-labelledby attribute equal to captionTemplate id', function(assert) {
+            const $form = $('#form').dxForm({
+                items: [{
+                    itemType: 'group',
+                    captionTemplate: 'Custom caption',
+                },],
+            });
+
+            const $group = $form.find(`.${FORM_GROUP_CLASS}`);
+            const $caption = $form.find(`.${FORM_GROUP_CUSTOM_CAPTION_CLASS}`);
+
+            assert.strictEqual($group.eq(0).attr('aria-labelledby'), $caption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
+        });
+    });
+
     test('Template has correct component instance', function(assert) {
         let templateOwnerComponent;
 
@@ -1374,7 +1492,7 @@ QUnit.module('Grouping', () => {
             items: [
                 {
                     name: 'test',
-                    template: function(data, $container) {
+                    template: function(data) {
                         templateOwnerComponent = data.component.NAME;
                     }
                 }
