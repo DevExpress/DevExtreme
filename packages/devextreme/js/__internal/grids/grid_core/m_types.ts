@@ -168,7 +168,6 @@ export interface Controllers {
   validating: any;
   export: any;
   draggingHeader: any;
-  errorHandling: any;
   selection: import('./selection/m_selection').SelectionController;
 }
 
