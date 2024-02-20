@@ -66,20 +66,40 @@ class Splitter extends (CollectionWidget as any) {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _itemElements(): any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._itemContainer().children(this._itemSelector());
+  }
+
   _itemsCount(): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.option('items').length;
   }
 
-  _isLastItem(index: number): boolean {
-    return index === this._itemsCount() - 1;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static _findLastIndexOfVisible(array: any[]): number {
+    for (let i = array.length - 1; i >= 0; i -= 1) {
+      if (array[i].visible !== false) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  _lastVisibleItemIndex(): number {
+    return Splitter._findLastIndexOfVisible(this.option('items'));
+  }
+
+  _isLastVisibleItem(index: number): boolean {
+    return index === this._lastVisibleItemIndex();
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _renderItem(index, itemData, $container, $itemToReplace): unknown {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
-    if (!this._isLastItem(index)) {
+    if (itemData.visible !== false && !this._isLastVisibleItem(index)) {
       this._renderResizeHandle();
     }
 

@@ -11,6 +11,7 @@ const ORIENTATION = {
 const FLEX_PROPERTY_NAME = 'flexGrow';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
+const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 
 export default class SplitterLayoutHelper {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,10 +53,11 @@ export default class SplitterLayoutHelper {
 
   layoutItems(): void {
     // NOTE: temporarily evenly distributed
-    const splitterItemRatio = 100 / this.items.length;
+    const splitterItemRatio = 100 / this.items.not(`.${INVISIBLE_ITEM_CLASS}`).length;
 
     this.items.each((index, item) => {
-      this._setFlexProp(item, FLEX_PROPERTY_NAME, splitterItemRatio);
+      const isInvisible = $(item).hasClass(INVISIBLE_ITEM_CLASS);
+      this._setFlexProp(item, FLEX_PROPERTY_NAME, isInvisible ? 0 : splitterItemRatio);
     });
   }
 
@@ -68,6 +70,7 @@ export default class SplitterLayoutHelper {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _getOffset(e): number {
+    // TODO: consider RTL
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.orientation === ORIENTATION.horizontal ? e.offset.x : e.offset.y;
   }
@@ -77,7 +80,8 @@ export default class SplitterLayoutHelper {
     const size: number = this.orientation === ORIENTATION.horizontal
       ? splitterSize.width : splitterSize.height;
 
-    const handlesCount = this.$element.find(`.${RESIZE_HANDLE_CLASS}`).length;
+    const handlesCount = this.$element.children(`.${RESIZE_HANDLE_CLASS}`).length;
+
     const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
 
     return size - handlesSizeSum;
