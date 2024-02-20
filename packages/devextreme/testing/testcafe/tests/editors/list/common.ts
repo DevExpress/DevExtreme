@@ -336,10 +336,10 @@ test('The delete button should be displayed correctly after the list item focus 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxList', {
-  dataSource: {
+  dataSource: [{
     text: 'item 1',
     icon: 'user',
-  },
+  }],
   allowItemDeleting: true,
   itemDeleteMode: 'static',
 }));
