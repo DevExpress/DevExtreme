@@ -1,0 +1,88 @@
+<dx-html-editor height="725px" [value]="valueContent">
+  <dxo-toolbar [multiline]="isMultiline">
+    <dxi-item name="undo"></dxi-item>
+    <dxi-item name="redo"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item
+      name="size"
+      [acceptedValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"
+      [options]="{ inputAttr: { 'aria-label': 'Font size' } }"
+    ></dxi-item>
+    <dxi-item
+      name="font"
+      [acceptedValues]="[
+        'Arial',
+        'Courier New',
+        'Georgia',
+        'Impact',
+        'Lucida Console',
+        'Tahoma',
+        'Times New Roman',
+        'Verdana'
+      ]"
+      [options]="{ inputAttr: { 'aria-label': 'Font family' } }"
+    ></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="bold"></dxi-item>
+    <dxi-item name="italic"></dxi-item>
+    <dxi-item name="strike"></dxi-item>
+    <dxi-item name="underline"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="alignLeft"></dxi-item>
+    <dxi-item name="alignCenter"></dxi-item>
+    <dxi-item name="alignRight"></dxi-item>
+    <dxi-item name="alignJustify"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="orderedList"></dxi-item>
+    <dxi-item name="bulletList"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item
+      name="header"
+      [acceptedValues]="[false, 1, 2, 3, 4, 5]"
+      [options]="{ inputAttr: { 'aria-label': 'Header' } }"
+    ></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="color"></dxi-item>
+    <dxi-item name="background"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="link"></dxi-item>
+    <dxi-item name="image"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="clear"></dxi-item>
+    <dxi-item name="codeBlock"></dxi-item>
+    <dxi-item name="blockquote"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="insertTable"></dxi-item>
+    <dxi-item name="deleteTable"></dxi-item>
+    <dxi-item name="insertRowAbove"></dxi-item>
+    <dxi-item name="insertRowBelow"></dxi-item>
+    <dxi-item name="deleteRow"></dxi-item>
+    <dxi-item name="insertColumnLeft"></dxi-item>
+    <dxi-item name="insertColumnRight"></dxi-item>
+    <dxi-item name="deleteColumn"></dxi-item>
+  </dxo-toolbar>
+  <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
+  <dxo-image-upload [tabs]="currentTab" fileUploadMode="base64">
+  </dxo-image-upload>
+</dx-html-editor>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <dx-check-box
+      text="Multiline toolbar"
+      [(value)]="isMultiline"
+    ></dx-check-box>
+  </div>
+  <div class="option">
+    <div class="label">Image upload tabs:</div>
+    <dx-select-box
+      [items]="tabs"
+      [inputAttr]="{ 'aria-label': 'Tab' }"
+      [(value)]="currentTab"
+      valueExpr="value"
+      displayExpr="name"
+    >
+    </dx-select-box>
+  </div>
+</div>

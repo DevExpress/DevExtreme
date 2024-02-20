@@ -1,0 +1,48 @@
+<dx-scheduler
+  [dataSource]="dataSource"
+  [views]="views"
+  [currentView]="currentView"
+  [currentDate]="currentDate"
+  [firstDayOfWeek]="0"
+  [startDayHour]="9"
+  [endDayHour]="19"
+  [showAllDayPanel]="false"
+  [height]="730"
+  dataCellTemplate="dataCellTemplate"
+  dateCellTemplate="dateCellTemplate"
+  timeCellTemplate="timeCellTemplate"
+  (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+  (onAppointmentAdding)="onAppointmentAdding($event)"
+  (onAppointmentUpdating)="onAppointmentUpdating($event)"
+  (onOptionChanged)="onOptionChanged($event)"
+>
+  <div
+    *dxTemplate="let dataCell of 'dataCellTemplate'"
+    [ngClass]="{
+      'disable-date': (isDisableDate | apply : dataCell.startDate),
+      dinner:
+        !(isDisableDate | apply : dataCell.startDate) &&
+        (isDinner | apply : dataCell.startDate),
+      'dx-scheduler-date-table-cell-text': currentView === 'month'
+    }"
+  >
+    {{ currentView === "month" ? (dataCell.startDate | date) : "" }}
+  </div>
+
+  <div
+    *dxTemplate="let dateCell of 'dateCellTemplate'"
+    [ngClass]="{
+      'disable-date': (isDisabledDateCell | apply : dateCell.date)
+    }"
+  >
+    {{ dateCell.text }}
+  </div>
+
+  <div
+    *dxTemplate="let timeCell of 'timeCellTemplate'"
+    [ngClass]="{ dinner: isDinner | apply : timeCell.date }"
+  >
+    {{ timeCell.text }}
+    <div *ngIf="hasCoffeeCupIcon | apply : timeCell.date" class="cafe"></div>
+  </div>
+</dx-scheduler>

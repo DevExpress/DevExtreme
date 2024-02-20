@@ -1,0 +1,3 @@
+To display multiple PieChart components that share [series](/Documentation/ApiReference/UI_Components/dxPieChart/Configuration/series/) and [legend](/Documentation/ApiReference/UI_Components/dxPieChart/Configuration/legend/) settings, you can use a `v-for` notation to iterate through every PieChart option.
+
+When you display PieChart components side by side, their pies may differ in size. You can join all charts into a size group to resize these pies to match each other. To do so, set the [sizeGroup](/Documentation/ApiReference/UI_Components/dxPieChart/Configuration/#sizeGroup) property of every chart to the same value.

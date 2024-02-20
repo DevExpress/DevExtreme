@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 
 fixture.disablePageReloads`Summary`
   .page(url(__dirname, '../container.html'));

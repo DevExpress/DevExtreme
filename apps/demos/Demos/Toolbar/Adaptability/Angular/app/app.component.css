@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+::ng-deep .dx-resizable-handle::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 36px;
+  border: none;
+  border-radius: 50px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.24);
+}
+
+::ng-deep .dx-resizable-handle-right::after {
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%);
+}
+
+::ng-deep .dx-toolbar.dx-toolbar-multiline .dx-toolbar-item {
+  margin-bottom: 5px;
+}
+
+::ng-deep .widget-container {
+  margin-right: 10px;
+}
+
+::ng-deep .resizable-container {
+  padding: 10px;
+  height: 300px;
+  border: 1px dotted #999;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+::ng-deep .options-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: relative;
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+::ng-deep .toolbar-separator {
+  height: 36px;
+  margin: 0 5px;
+  border-left: 1px solid #ddd;
+}
+
+::ng-deep .toolbar-menu-separator {
+  height: 1px;
+  border-bottom: 1px solid #ddd;
+}

@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { virtualData } from './virtualData.js';
 // eslint-disable-next-line import/extensions

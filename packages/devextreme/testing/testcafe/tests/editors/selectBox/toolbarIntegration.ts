@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { isMaterial } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`SelectBox as Toolbar item`

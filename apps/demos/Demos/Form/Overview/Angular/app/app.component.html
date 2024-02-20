@@ -1,0 +1,77 @@
+<div id="form-demo">
+  <div class="widget-container">
+    <div *ngIf="labelMode === 'outside'">Select company:</div>
+    <dx-select-box
+      #company
+      displayExpr="Name"
+      [inputAttr]="{ 'aria-label': 'Company' }"
+      [(dataSource)]="companies"
+      label="Select company"
+      [labelMode]="getCompanySelectorLabelMode()"
+      [value]="companies[0]"
+    ></dx-select-box>
+    <dx-form
+      id="form"
+      [(formData)]="company.value"
+      [readOnly]="readOnly"
+      [labelMode]="labelMode"
+      [showColonAfterLabel]="showColon"
+      [labelLocation]="labelLocation"
+      [minColWidth]="minColWidth"
+      [colCount]="colCount"
+      [width]="width"
+    ></dx-form>
+  </div>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Label mode:</span>
+      <dx-select-box
+        [items]="['outside', 'static', 'floating', 'hidden']"
+        [inputAttr]="{ 'aria-label': 'Label Mode' }"
+        [(value)]="labelMode"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Label location:</span>
+      <dx-select-box
+        [items]="['left', 'top']"
+        [inputAttr]="{ 'aria-label': 'Label Location' }"
+        [(value)]="labelLocation"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Columns count:</span>
+      <dx-select-box
+        [items]="['auto', 1, 2, 3]"
+        [inputAttr]="{ 'aria-label': 'Column Count' }"
+        [(value)]="colCount"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Min column width:</span>
+      <dx-select-box
+        [items]="[150, 200, 300]"
+        [inputAttr]="{ 'aria-label': 'Min Column Width' }"
+        [(value)]="minColWidth"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Form width:</span>
+      <dx-number-box
+        [max]="550"
+        [(value)]="width"
+        [inputAttr]="{ 'aria-label': 'Form Width' }"
+      ></dx-number-box>
+    </div>
+    <div class="option">
+      <dx-check-box text="readOnly" [(value)]="readOnly"></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="showColonAfterLabel"
+        [(value)]="showColon"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>
