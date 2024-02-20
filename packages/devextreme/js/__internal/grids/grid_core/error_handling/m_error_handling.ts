@@ -152,7 +152,6 @@ class ErrorHandlingController extends modules.ViewController {
 const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
   init() {
     const that = this;
-    // @ts-expect-error
     const errorHandlingController = that.getController('errorHandling');
 
     super.init();
@@ -166,7 +165,6 @@ const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataContro
       if (e && e.changeType === 'loadError') {
         return;
       }
-      // @ts-expect-error
       const errorHandlingController = that.getController('errorHandling');
       const editingController = that.getController('editing');
 

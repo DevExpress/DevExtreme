@@ -61,7 +61,7 @@ export interface InternalGrid extends GridBaseType {
   _createComponent: <TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options: TComponent extends Component<infer TOptions> ? TOptions : never
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never
   ) => TComponent;
 }
 
@@ -163,6 +163,7 @@ export interface Controllers {
   validating: any;
   export: any;
   draggingHeader: any;
+  errorHandling: any;
   selection: import('./selection/m_selection').SelectionController;
 }
 
