@@ -59,7 +59,7 @@
     "husky": "^8.0.3",
     "jspdf-autotable": "3.8.1",
     "lint-staged": "14.0.1",
-    "nx": "17.3.1",
+    "nx": "17.3.2",
     "nx-cloud": "16.5.2",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
