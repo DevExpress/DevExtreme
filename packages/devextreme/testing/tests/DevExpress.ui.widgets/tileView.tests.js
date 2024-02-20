@@ -281,7 +281,10 @@ QUnit.module('rendering', {
         const clock = sinon.useFakeTimers();
 
         try {
-            this.$element.dxTileView({ items: [{ text: 'test 1' }] }).dxTileView('instance');
+            this.$element.dxTileView({
+                items: [{ text: 'test 1' }],
+                focusStateEnabled: true,
+            }).dxTileView('instance');
 
             const firstItem = this.$element.find(TILEVIEW_ITEM_SELECTOR).eq(0);
 
