@@ -2,7 +2,7 @@ import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screens
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import { changeTheme } from '../../helpers/changeTheme';

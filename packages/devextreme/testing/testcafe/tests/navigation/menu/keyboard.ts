@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import Menu from '../../../model/menu';
 
 fixture.disablePageReloads`Menu_keyboard`

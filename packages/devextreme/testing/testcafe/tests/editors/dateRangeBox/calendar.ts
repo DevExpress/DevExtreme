@@ -4,7 +4,7 @@ import {
   setAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
 import DateRangeBox from '../../../model/dateRangeBox';
