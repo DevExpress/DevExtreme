@@ -3,7 +3,7 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../js/renovat
 
 import Widget from '../internal/widget';
 import Scrollbar from './internal/scrollbar';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 
 const CLASS = {
   scrollable: 'dx-scrollable',

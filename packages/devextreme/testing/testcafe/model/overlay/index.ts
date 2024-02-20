@@ -1,5 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
 
 const CLASS = {
