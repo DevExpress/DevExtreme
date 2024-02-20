@@ -183,7 +183,6 @@ const TextEditorMask = TextEditorBase.inherit({
         this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
 
-        this._maskStrategy.clean();
         this._maskStrategy.detachEvents();
 
         if(!this.option('mask')) {
@@ -526,14 +525,10 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _updateMaskOption: function() {
-        const valueChangeEvent = addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`);
-        const $input = this._input();
-
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
-        eventsEngine.off($input, valueChangeEvent);
-        eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        this._refreshValueChangeEvent();
     },
 
     _processEmptyMask: function(mask) {
