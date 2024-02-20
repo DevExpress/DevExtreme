@@ -1,0 +1,172 @@
+<template>
+  <div>
+    <div class="dx-fieldset">
+      <div class="fields-container">
+        <div class="dx-field">
+          <div class="dx-field-label">Built-in icon</div>
+          <div class="dx-field-value">
+            <DxButton
+              icon="check"
+              type="success"
+              text="Done"
+              @click="doneClick()"
+            />
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Image icon</div>
+          <div class="dx-field-value">
+            <DxButton
+              icon="../../../../images/icons/weather.png"
+              text="Weather"
+              @click="weatherClick()"
+            />
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">External icon</div>
+          <div class="dx-field-value">
+            <DxButton
+              class="send"
+              icon="fa fa-envelope-o"
+              text="Send"
+              @click="sendClick()"
+            />
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Icon only</div>
+          <div class="dx-field-value">
+            <DxButton
+              icon="plus"
+              @click="plusClick()"
+            />
+            <DxButton
+              id="back"
+              icon="back"
+              @click="backClick()"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dx-fieldset">
+      <div class="dx-fieldset-header">DISABLED</div>
+      <div class="fields-container">
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              icon="check"
+              type="success"
+              text="Done"
+            />
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              icon="../../../../images/icons/weather.png"
+              text="Weather"
+            />
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              class="send"
+              icon="fa fa-envelope-o"
+              text="Send"
+            />
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              icon="plus"
+            />
+            <DxButton
+              id="back-disabled"
+              :disabled="true"
+              icon="back"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import DxButton from 'devextreme-vue/button';
+import notify from 'devextreme/ui/notify';
+
+function weatherClick() {
+  notify('The Weather button was clicked');
+}
+function doneClick() {
+  notify('The Done button was clicked');
+}
+function sendClick() {
+  notify('The Send button was clicked');
+}
+function plusClick() {
+  notify('The button was clicked');
+}
+function backClick() {
+  notify('The button was clicked');
+}
+</script>
+<style scoped>
+#back,
+#back-disabled {
+  margin-left: 4px;
+}
+
+.dx-viewport .dx-fieldset {
+  width: 520px;
+  margin: 30px auto;
+}
+
+.dx-viewport .dx-fieldset:first-child {
+  margin-top: 120px;
+}
+
+.dx-viewport .dx-fieldset-header {
+  font-size: 16px;
+}
+
+.dx-viewport .dx-field {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.dx-viewport .dx-field-value:not(.dx-widget) > .dx-button {
+  float: none;
+}
+
+.dx-viewport .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+.dx-viewport .dx-field-label {
+  float: none;
+  width: 100%;
+}
+
+.dx-viewport .dx-field-label {
+  padding-left: 0;
+}
+
+.send .dx-button-content .dx-icon {
+  font-size: 18px;
+}
+
+.fields-container {
+  display: flex;
+  align-items: baseline;
+}
+
+.dx-field-value {
+  display: flex;
+}
+</style>

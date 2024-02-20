@@ -1,0 +1,1 @@
+This example displays the spider web mode of&nbsp;the PolarChart component. In&nbsp;this mode, chart sectors are straight rather than circular. The spider web mode is&nbsp;enabled using the **useSpiderWeb** property.

@@ -1,0 +1,1 @@
+DevExtreme React Editors is a collection of 15+ UI components for data editing with integrated client-side data validation. [Learn more about DevExtreme React components](/Documentation/Guide/React_Components/DevExtreme_React_Components/).
