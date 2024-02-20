@@ -9,9 +9,8 @@
 /* eslint-disable spellcheck/spell-checker */
 
 import type DOMComponent from '@js/core/dom_component';
-
-import type { MaybeSubscribable, Subscribable } from './reactive';
-import { computed, isSubscribable, toSubscribable } from './reactive';
+import type { MaybeSubscribable, Subscribable } from '@ts/core/reactive';
+import { computed, isSubscribable, toSubscribable } from '@ts/core/reactive';
 
 export interface TagNode {
   type: 'tag';
