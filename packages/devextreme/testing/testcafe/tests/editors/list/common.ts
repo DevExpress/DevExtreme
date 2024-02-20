@@ -330,7 +330,7 @@ test('The delete button should be displayed correctly after the list item focus 
 
   await list.focus();
 
-  await testScreenshot(t, takeScreenshot, 'The delete button should be displayed correctly after the list item focus.png');
+  await testScreenshot(t, takeScreenshot, 'The delete button should be displayed correctly after the list item is focused.png');
 
   await t
     .expect(compareResults.isValid())
