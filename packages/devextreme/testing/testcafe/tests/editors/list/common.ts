@@ -324,13 +324,13 @@ test('Disabled item should be focused on tab press to match accessibility criter
   searchEnabled: true,
 }));
 
-test('The delete button should be displayed correctly after the list item focus (T1216108)', async (t) => {
+test('The delete button should be displayed correctly after the list item focused (T1216108)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const list = new List('#container');
 
   await list.focus();
 
-  await testScreenshot(t, takeScreenshot, 'The delete button should be displayed correctly after the list item is focused.png');
+  await testScreenshot(t, takeScreenshot, 'List delete button when item is focused.png');
 
   await t
     .expect(compareResults.isValid())
@@ -342,6 +342,29 @@ test('The delete button should be displayed correctly after the list item focus 
   }],
   allowItemDeleting: true,
   itemDeleteMode: 'static',
+}));
+
+test('The button icon in custom template should be displayed correctly after the list item focused (T1216108)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
+
+  await list.focus();
+
+  await testScreenshot(t, takeScreenshot, 'List icon in button when item is focused.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+  dataSource: [{ text: 'item 1' }],
+  itemTemplate: (_, __, element) => {
+    const jButton = $('<div>').dxButton({
+      text: 'custom',
+      icon: 'home',
+    });
+
+    element.append(jButton);
+  },
 }));
 
 test('Checking simple list with selectAll and "more" button via aXe', async (t) => {
