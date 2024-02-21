@@ -131,7 +131,7 @@ test('Item collection should be updated after direct option changing (T817436)',
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDropDownButton', {
     splitButton,
-    width: 150,
-    template: () => $('<div>Custom button<i class="dx-icon-user"></i></div>'),
+    width: 200,
+    template: () => $('<div>Custom text<i class="dx-icon-user"></i></div>'),
   }));
 });
