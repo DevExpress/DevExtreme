@@ -279,7 +279,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     stylingMode?: ButtonStyle;
     /**
      * @docid
-     * @default null
      * @type_function_return string|Element|jQuery
      * @public
      */
