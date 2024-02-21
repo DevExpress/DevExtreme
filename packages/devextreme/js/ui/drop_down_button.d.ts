@@ -33,6 +33,10 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+import {
+    TemplateData,
+} from './button';
+
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
@@ -273,6 +277,13 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @public
      */
     stylingMode?: ButtonStyle;
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""

@@ -418,6 +418,19 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
 
     /**
+     * [descr:dxDropDownButtonOptions.template]
+    
+     */
+    @Input()
+    get template(): any {
+        return this._getOption('template');
+    }
+    set template(value: any) {
+        this._setOption('template', value);
+    }
+
+
+    /**
      * [descr:dxDropDownButtonOptions.text]
     
      */
@@ -750,6 +763,13 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() templateChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() textChange: EventEmitter<string>;
 
     /**
@@ -851,6 +871,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
             { emit: 'splitButtonChange' },
             { emit: 'stylingModeChange' },
             { emit: 'tabIndexChange' },
+            { emit: 'templateChange' },
             { emit: 'textChange' },
             { emit: 'typeChange' },
             { emit: 'useItemTextAsTitleChange' },
