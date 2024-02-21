@@ -19,16 +19,19 @@ export default class SplitterLayoutHelper {
 
   private readonly orientation: string;
 
+  private readonly isRtl: boolean;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readonly $element: any;
 
   private layoutState: number[];
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  constructor(items: unknown, orientation: string, $element) {
+  constructor(items: unknown, orientation: string, $element, isRtl: boolean) {
     this.items = items;
     this.$element = $element;
     this.layoutState = [];
+    this.isRtl = isRtl;
     this.orientation = orientation;
   }
 
@@ -70,9 +73,9 @@ export default class SplitterLayoutHelper {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _getOffset(e): number {
-    // TODO: consider RTL
+    const xOffset: number = this.isRtl ? -e.offset.x : e.offset.x;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.orientation === ORIENTATION.horizontal ? e.offset.x : e.offset.y;
+    return this.orientation === ORIENTATION.horizontal ? xOffset : e.offset.y;
   }
 
   _getSplitterItemsSizeSum(): number {

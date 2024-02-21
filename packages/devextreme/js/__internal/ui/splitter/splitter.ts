@@ -61,7 +61,7 @@ class Splitter extends (CollectionWidget as any) {
 
     const splitterItemsCount = this._itemElements().length;
     if (splitterItemsCount > 1) {
-      this.layoutHelper = new SplitterLayoutHelper(this._itemElements(), this.option('orientation'), this.$element());
+      this.layoutHelper = new SplitterLayoutHelper(this._itemElements(), this.option('orientation'), this.$element(), this.option('rtlEnabled'));
       this.layoutHelper.layoutItems();
     }
   }
