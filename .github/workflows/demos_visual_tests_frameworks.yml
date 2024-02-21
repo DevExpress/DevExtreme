@@ -344,6 +344,7 @@ jobs:
         python -m http.server 8083 &
 
     - name: Download artifacts
+      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
