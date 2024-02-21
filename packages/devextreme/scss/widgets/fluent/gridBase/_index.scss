@@ -129,7 +129,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     .dx-sort-up,
     .dx-sort-down,
     .dx-header-filter {
-      @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+      @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
     }
 
     .dx-header-filter:not(.dx-header-filter-empty) {
@@ -196,7 +196,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       > div {
-        @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+        @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
       }
 
       > span {
