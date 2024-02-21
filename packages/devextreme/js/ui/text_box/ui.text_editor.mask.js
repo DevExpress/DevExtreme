@@ -528,6 +528,7 @@ const TextEditorMask = TextEditorBase.inherit({
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
+        this._refreshValueChangeEvent();
     },
 
     _processEmptyMask: function(mask) {

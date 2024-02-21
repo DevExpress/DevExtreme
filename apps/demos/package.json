@@ -72,7 +72,7 @@
         "@types/react": "17.0.2",
         "@types/react-dom": "17.0.2",
         "@types/yargs": "17.0.24",
-        "@types/eslint": "8.21.2",
+        "@types/eslint": "8.56.2",
         "@typescript-eslint/parser": "4.33.0",
         "@vue/eslint-config-typescript": "11.0.3",
         "axe-core": "4.7.2",
