@@ -2,7 +2,8 @@
 import { noop } from '@js/core//utils/common';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { Deferred, when } from '@js/core/utils/deferred';
 import {
@@ -23,10 +24,10 @@ import {
 } from '@js/events/utils/index';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { focused } from '@js/ui/widget/selectors';
-import { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
-import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
 import {
@@ -40,7 +41,7 @@ import {
   ROW_CLASS,
 } from '../editing/const';
 import modules from '../m_modules';
-import {
+import type {
   Controllers, ModuleType, OptionChanged, RowKey, Views,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';

@@ -277,6 +277,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('caption', value);
     }
 
+    get captionTemplate(): any {
+        return this._getOption('captionTemplate');
+    }
+    set captionTemplate(value: any) {
+        this._setOption('captionTemplate', value);
+    }
+
     get colCount(): number {
         return this._getOption('colCount');
     }

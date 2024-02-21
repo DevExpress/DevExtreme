@@ -1,4 +1,5 @@
-import { SORT_ORDER, SortOrderType } from './const';
+import type { SortOrderType } from './const';
+import { SORT_ORDER } from './const';
 
 export const reverseSortOrder = (
   sortOrder: SortOrderType,

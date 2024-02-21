@@ -1,0 +1,35 @@
+::ng-deep .dx-htmleditor-content img {
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+::ng-deep .dx-htmleditor-content table {
+  width: 50%;
+}
+
+::ng-deep .options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .option {
+  margin-top: 10px;
+  display: inline-block;
+  margin-right: 40px;
+}
+
+::ng-deep .option > .dx-selectbox,
+::ng-deep .option > .label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+::ng-deep .option > .label {
+  margin-right: 10px;
+}

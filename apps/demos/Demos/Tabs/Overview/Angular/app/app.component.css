@@ -1,0 +1,75 @@
+::ng-deep .tabs-demo {
+  display: flex;
+}
+
+::ng-deep .strict-width {
+  max-width: 340px;
+}
+
+::ng-deep .dx-theme-generic .strict-width {
+  max-width: 250px;
+}
+
+::ng-deep .widget-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  width: 100%;
+  min-width: 200px;
+  padding: 16px 32px;
+  overflow: clip;
+}
+
+::ng-deep .widget-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  width: 100%;
+}
+
+::ng-deep .widget-wrapper-vertical {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+
+::ng-deep .options {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+::ng-deep #show-navigation-buttons {
+  margin-top: 22px;
+}
+
+::ng-deep .option {
+  margin-top: 20px;
+}
+
+::ng-deep .dx-tabs {
+  max-width: 100%;
+}
+
+::ng-deep .dx-tabs-vertical {
+  height: 216px;
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
+  border-block-end: 1px solid rgb(225, 225, 225, 0.4);
+}
+
+::ng-deep .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
+  height: 232px;
+  border-inline-end: 1px solid rgb(225, 225, 225, 0.4);
+}

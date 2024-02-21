@@ -1,0 +1,107 @@
+<div class="tabs-demo">
+  <div class="widget-container">
+    <div [ngClass]="widgetWrapperClasses">
+      <dx-tabs
+        #withText
+        [width]="width"
+        [selectedIndex]="0"
+        [rtlEnabled]="rtlEnabled"
+        [scrollByContent]="scrollByContent"
+        [showNavButtons]="showNavButtons"
+        [dataSource]="tabsWithText"
+        [orientation]="orientation"
+        [stylingMode]="stylingMode"
+        [iconPosition]="iconPosition"
+      ></dx-tabs>
+
+      <dx-tabs
+        #withIconAndText
+        [width]="width"
+        [selectedIndex]="0"
+        [rtlEnabled]="rtlEnabled"
+        [scrollByContent]="scrollByContent"
+        [showNavButtons]="showNavButtons"
+        [dataSource]="tabsWithIconAndText"
+        [orientation]="orientation"
+        [stylingMode]="stylingMode"
+        [iconPosition]="iconPosition"
+      ></dx-tabs>
+
+      <dx-tabs
+        #withIcon
+        [width]="width"
+        [selectedIndex]="0"
+        [rtlEnabled]="rtlEnabled"
+        [scrollByContent]="scrollByContent"
+        [showNavButtons]="showNavButtons"
+        [dataSource]="tabsWithIcon"
+        [orientation]="orientation"
+        [stylingMode]="stylingMode"
+        [iconPosition]="iconPosition"
+      ></dx-tabs>
+    </div>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Orientation</span>
+      <dx-select-box
+        [inputAttr]="{ 'aria-label': 'Orientation' }"
+        [items]="orientations"
+        [(value)]="orientation"
+        (onValueChanged)="onOrientationChanged($event)"
+      ></dx-select-box>
+    </div>
+
+    <div class="option">
+      <span>Styling mode</span>
+      <dx-select-box
+        [inputAttr]="{ 'aria-label': 'Styling Mode' }"
+        [items]="stylingModes"
+        [(value)]="stylingMode"
+      ></dx-select-box>
+    </div>
+
+    <div class="option">
+      <span>Icon position</span>
+      <dx-select-box
+        [inputAttr]="{ 'aria-label': 'Icon Position' }"
+        [items]="iconPositions"
+        [(value)]="iconPosition"
+      ></dx-select-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        id="show-navigation-buttons"
+        text="Show navigation buttons"
+        [(value)]="showNavButtons"
+        (onValueChanged)="toggleStrictWidthClass()"
+      ></dx-check-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        text="Scroll content"
+        [(value)]="scrollByContent"
+        (onValueChanged)="toggleStrictWidthClass()"
+      ></dx-check-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        text="Full width"
+        [value]="false"
+        (onValueChanged)="onFullWidthChanged($event)"
+      ></dx-check-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        text="Right-to-left mode"
+        [(value)]="rtlEnabled"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>

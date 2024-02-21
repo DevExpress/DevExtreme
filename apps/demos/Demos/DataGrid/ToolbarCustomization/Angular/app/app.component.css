@@ -1,0 +1,16 @@
+::ng-deep #gridContainer .informer {
+  display: grid;
+  width: 120px;
+  grid-template-columns: 100%;
+  padding-right: 20px;
+  text-align: center;
+}
+
+::ng-deep #gridContainer .count {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep #gridContainer .dx-toolbar-items-container {
+  min-height: 44px;
+}

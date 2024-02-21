@@ -123,6 +123,12 @@
   font-size: 20px;
 }
 
+.dx-form-group-custom-caption {
+  .dx-icon {
+    vertical-align: top;
+  }
+}
+
 .dx-form-group-with-caption {
   & > .dx-form-group-content {
     padding-top: 19px;

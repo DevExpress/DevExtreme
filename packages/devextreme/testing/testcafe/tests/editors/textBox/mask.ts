@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import TextBox from '../../../model/textBox';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`TextBox_mask`

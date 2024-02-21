@@ -1,0 +1,56 @@
+::ng-deep .demo-container {
+  overflow: visible;
+}
+
+::ng-deep .flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .dx-drawer-content {
+  display: flex;
+}
+
+::ng-deep #toolbar {
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
+  padding: 5px 10px;
+  z-index: 10000;
+}
+
+::ng-deep .dx-list.panel-list {
+  height: 400px;
+  padding-top: 12px;
+}
+
+::ng-deep .options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .options-container {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .option {
+  margin-top: 10px;
+  display: inline-block;
+  margin-right: 50px;
+}
+
+::ng-deep label {
+  font-weight: bold;
+}
+
+::ng-deep #content {
+  padding: 0 24px;
+}
+
+::ng-deep #content h2 {
+  font-size: 26px;
+}

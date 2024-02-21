@@ -12,13 +12,7 @@
 // adduse
 @use "../textEditor" as *;
 
-$textbox-search-icon-right-padding: math.div($fluent-filled-texteditor-input-horizontal-padding, 2);
-$textbox-filled-search-icon-size:
-  $texteditor-icon-container-size +
-  $fluent-filled-texteditor-input-horizontal-padding +
-  $textbox-search-icon-right-padding;
-
-@mixin dx-texteditor-search-icon($texteditor-icon-size, $texteditor-padding) {
+@mixin dx-texteditor-search-icon($texteditor-icon-size) {
   position: absolute;
   display: flex;
   align-items: center;
@@ -40,7 +34,7 @@ $textbox-filled-search-icon-size:
 
   &.dx-editor-underlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($textbox-search-icon-size, $fluent-base-standard-texteditor-input-horizontal-padding);
+      @include dx-texteditor-search-icon($textbox-search-icon-size);
     }
 
     .dx-texteditor-input,
@@ -52,7 +46,7 @@ $textbox-filled-search-icon-size:
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($textbox-search-icon-size, $fluent-filled-texteditor-input-horizontal-padding);
+      @include dx-texteditor-search-icon($textbox-search-icon-size);
     }
 
     .dx-texteditor-input,

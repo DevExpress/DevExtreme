@@ -32,7 +32,6 @@ $fluent-grid-base-border-color: $datagrid-border-color;
 $fluent-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $fluent-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $fluent-grid-base-header-cell-vertical-padding: round(math.div($fluent-grid-base-header-height - $fluent-grid-base-header-line-height, 2));
-$fluent-grid-base-footer-font-size: $fluent-grid-base-header-cell-font-size;
 
 $fluent-grid-base-command-select-column-width: $fluent-grid-base-checkbox-size + 2 * $fluent-grid-base-cell-horizontal-padding;
 
@@ -129,7 +128,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     .dx-sort-up,
     .dx-sort-down,
     .dx-header-filter {
-      @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+      @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
     }
 
     .dx-header-filter:not(.dx-header-filter-empty) {
@@ -196,7 +195,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       > div {
-        @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+        @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
       }
 
       > span {
@@ -1143,7 +1142,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         $button-danger-bg,
         $button-danger-bg,
         $button-danger-bg,
-        $button-disabled-background,
         $button-danger-color
       );
 

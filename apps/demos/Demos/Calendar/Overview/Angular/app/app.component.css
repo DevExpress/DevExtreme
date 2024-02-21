@@ -1,0 +1,51 @@
+::ng-deep #calendar-demo {
+  display: flex;
+}
+
+::ng-deep .calendar-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
+  text-shadow: none;
+  font-weight: bold;
+}
+
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
+  color: #3030ff;
+}
+
+::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
+  color: #8080ff;
+}
+
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
+  color: #ff3030;
+}
+
+::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
+  color: #ff8080;
+}
+
+::ng-deep .dx-calendar-week-number-cell .week-number {
+  font-style: italic;
+}
+
+::ng-deep .caption {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+::ng-deep .options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .option {
+  margin-top: 10px;
+}

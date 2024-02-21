@@ -1,0 +1,82 @@
+<div id="calendar-demo">
+  <div class="calendar-container">
+    <dx-calendar
+      #calendar
+      [(value)]="currentValue"
+      [showWeekNumbers]="false"
+      [disabled]="false"
+      [firstDayOfWeek]="0"
+      [zoomLevel]="zoomLevels[0]"
+      [cellTemplate]="cellTemplate"
+      weekNumberRule="auto"
+    >
+      <span
+        *dxTemplate="let cell of 'custom'"
+        [ngClass]="getCellCssClass(cell)"
+      >
+        {{ cell.text }}
+      </span>
+    </dx-calendar>
+  </div>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Zoom level</span>
+      <dx-select-box
+        [dataSource]="zoomLevels"
+        [(value)]="calendar.zoomLevel"
+        [inputAttr]="{ 'aria-label': 'Zoom Level' }"
+      >
+      </dx-select-box>
+    </div>
+    <div class="option">
+      <span>Selected date</span>
+      <dx-date-box
+        id="selected-date"
+        [(value)]="currentValue"
+        [inputAttr]="{ 'aria-label': 'Date' }"
+      >
+      </dx-date-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Use custom cell template"
+        [value]="false"
+        (onValueChanged)="useCellTemplate($event)"
+      >
+      </dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box [(value)]="calendar.disabled" text="Disable the calendar">
+      </dx-check-box>
+    </div>
+    <div class="caption option">
+      <span>Week numeration</span>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Show week numbers"
+        [(value)]="calendar.showWeekNumbers"
+      >
+      </dx-check-box>
+    </div>
+    <div class="option">
+      <span>First day of week</span>
+      <dx-select-box
+        [dataSource]="weekDays"
+        [inputAttr]="{ 'aria-label': 'First Day of Week' }"
+        [(value)]="calendar.firstDayOfWeek"
+        valueExpr="id"
+        displayExpr="text"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Week number rule</span>
+      <dx-select-box
+        [dataSource]="weekNumberRules"
+        [inputAttr]="{ 'aria-label': 'Week Number Rule' }"
+        [(value)]="calendar.weekNumberRule"
+      ></dx-select-box>
+    </div>
+  </div>
+</div>

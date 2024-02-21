@@ -1,0 +1,58 @@
+<div class="form">
+  <div class="drive-panel">
+    <div class="drive-header dx-treeview-item"
+      ><div class="dx-treeview-item-content"
+        ><i class="dx-icon dx-icon-activefolder"></i><span>Drive C:</span></div
+      ></div
+    >
+    <dx-sortable
+      filter=".dx-treeview-item"
+      group="shared"
+      data="driveC"
+      [allowDropInsideItem]="true"
+      [allowReordering]="true"
+      (onDragChange)="onDragChange($event)"
+      (onDragEnd)="onDragEnd($event)"
+    >
+      <dx-tree-view
+        #treeviewDriveC
+        id="treeviewDriveC"
+        dataStructure="plain"
+        displayExpr="name"
+        [expandNodesRecursive]="false"
+        [items]="itemsDriveC"
+        [width]="250"
+        [height]="380"
+      >
+      </dx-tree-view>
+    </dx-sortable>
+  </div>
+  <div class="drive-panel">
+    <div class="drive-header dx-treeview-item"
+      ><div class="dx-treeview-item-content"
+        ><i class="dx-icon dx-icon-activefolder"></i><span>Drive D:</span></div
+      ></div
+    >
+    <dx-sortable
+      filter=".dx-treeview-item"
+      group="shared"
+      data="driveD"
+      [allowDropInsideItem]="true"
+      [allowReordering]="true"
+      (onDragChange)="onDragChange($event)"
+      (onDragEnd)="onDragEnd($event)"
+    >
+      <dx-tree-view
+        #treeviewDriveD
+        id="treeviewDriveD"
+        dataStructure="plain"
+        displayExpr="name"
+        [expandNodesRecursive]="false"
+        [items]="itemsDriveD"
+        [width]="250"
+        [height]="380"
+      >
+      </dx-tree-view>
+    </dx-sortable>
+  </div>
+</div>

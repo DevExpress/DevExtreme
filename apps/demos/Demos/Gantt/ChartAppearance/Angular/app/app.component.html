@@ -1,0 +1,150 @@
+<div id="demo-container">
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="column">
+      <div class="option">
+        <div class="label">Scale Type:</div>
+        <div class="value">
+          <dx-select-box
+            [items]="[
+              'auto',
+              'minutes',
+              'hours',
+              'days',
+              'weeks',
+              'months',
+              'quarters',
+              'years'
+            ]"
+            [inputAttr]="{ 'aria-label': 'Scale Type' }"
+            [(value)]="scaleType"
+          ></dx-select-box>
+        </div>
+      </div>
+      <div class="option">
+        <div class="label">Title Position:</div>
+        <div class="value">
+          <dx-select-box
+            [items]="['inside', 'outside', 'none']"
+            [inputAttr]="{ 'aria-label': 'Title Position' }"
+            [(value)]="titlePosition"
+          ></dx-select-box>
+        </div>
+      </div>
+      <div class="option">
+        <div class="label">Show Resources:</div>
+        <div class="value">
+          <dx-check-box [(value)]="showResources"></dx-check-box>
+        </div>
+      </div>
+      <div class="option">
+        <div class="label">Show Dependencies:</div>
+        <div class="value">
+          <dx-check-box [(value)]="showDependencies"></dx-check-box>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="option">
+        <div class="label">Start Date Range:</div>
+        <div class="value">
+          <dx-date-box
+            [(value)]="startDateRange"
+            type="date"
+            [inputAttr]="{ 'aria-label': 'Start Date Range' }"
+          >
+          </dx-date-box>
+        </div>
+      </div>
+      <div class="option">
+        <div class="label">End Date Range:</div>
+        <div class="value">
+          <dx-date-box
+            [(value)]="endDateRange"
+            type="date"
+            [inputAttr]="{ 'aria-label': 'End Date Range' }"
+          >
+          </dx-date-box>
+        </div>
+      </div>
+      <div class="option">
+        <div class="label">Customize Task Tooltip:</div>
+        <div class="value">
+          <dx-check-box [(value)]="showCustomTaskTooltip"></dx-check-box>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-container">
+    <dx-gantt
+      taskListWidth="500"
+      height="700"
+      [taskTitlePosition]="titlePosition"
+      [scaleType]="scaleType"
+      [showResources]="showResources"
+      [showDependencies]="showDependencies"
+      [taskTooltipContentTemplate]="
+        showCustomTaskTooltip ? 'taskTooltipContentTemplate' : undefined
+      "
+      [taskTimeTooltipContentTemplate]="
+        showCustomTaskTooltip ? 'taskTimeTooltipContentTemplate' : undefined
+      "
+      [taskProgressTooltipContentTemplate]="
+        showCustomTaskTooltip ? 'taskProgressTooltipContentTemplate' : undefined
+      "
+      [startDateRange]="startDateRange"
+      [endDateRange]="endDateRange"
+    >
+      <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+      <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+      <dxo-resources [dataSource]="resources"></dxo-resources>
+      <dxo-resource-assignments
+        [dataSource]="resourceAssignments"
+      ></dxo-resource-assignments>
+
+      <dxi-column
+        dataField="title"
+        caption="Subject"
+        [width]="300"
+      ></dxi-column>
+      <dxi-column
+        dataField="start"
+        caption="Start Date"
+        dataType="date"
+      ></dxi-column>
+      <dxi-column
+        dataField="end"
+        caption="End Date"
+        dataType="date"
+      ></dxi-column>
+
+      <dxo-editing [enabled]="true"></dxo-editing>
+      <div
+        *dxTemplate="let task of 'taskTooltipContentTemplate'"
+        class="custom-task-edit-tooltip"
+      >
+        <div class="custom-tooltip-title">{{ task.title }}</div>
+        <div class="custom-tooltip-row"
+          ><span> Estimate: </span>{{ getTimeEstimate(task)
+          }}<span> hours </span></div
+        >
+        <div class="custom-tooltip-row"
+          ><span> Left: </span>{{ getTimeLeft(task) }}<span> hours </span></div
+        >
+      </div>
+      <div
+        *dxTemplate="let task of 'taskTimeTooltipContentTemplate'"
+        class="custom-task-edit-tooltip"
+      >
+        <div class="custom-tooltip-title">Start: {{ getTime(task.start) }}</div>
+        <div class="custom-tooltip-title">End: {{ getTime(task.end) }}</div>
+      </div>
+      <div
+        *dxTemplate="let task of 'taskProgressTooltipContentTemplate'"
+        class="custom-task-edit-tooltip"
+      >
+        <div class="custom-tooltip-title">{{ task.progress }}%</div>
+      </div>
+    </dx-gantt>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+::ng-deep #gridContainer {
+  height: 450px;
+}
+
+::ng-deep .dx-row img {
+  height: 100px;
+}
+
+::ng-deep #gridContainer tr.main-row td:not(:first-child) {
+  height: 21px;
+}
+
+::ng-deep #gridContainer tr.notes-row {
+  white-space: normal;
+  vertical-align: top;
+}
+
+::ng-deep #gridContainer tr.notes-row td {
+  height: 70px;
+  color: #999;
+}
+
+::ng-deep .dark #gridContainer tr.notes-row td {
+  color: #777;
+}
+
+::ng-deep #gridContainer tbody.dx-state-hover {
+  background-color: #ebebeb;
+}
+
+::ng-deep .dark #gridContainer tbody.dx-state-hover {
+  background-color: #484848;
+}
+
+::ng-deep #gridContainer tbody.dx-state-hover tr.main-row td {
+  color: #000;
+}
+
+::ng-deep .dark #gridContainer tbody.dx-state-hover tr.main-row td {
+  color: #ccc;
+}
+
+::ng-deep #gridContainer tbody.dx-state-hover tr.notes-row td {
+  color: #888;
+}

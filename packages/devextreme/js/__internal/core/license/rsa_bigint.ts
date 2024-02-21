@@ -1,4 +1,4 @@
-import { PublicKey } from './key';
+import type { PublicKey } from './key';
 
 interface Args {
   key: PublicKey;

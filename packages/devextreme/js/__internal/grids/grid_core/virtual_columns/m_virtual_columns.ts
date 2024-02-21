@@ -4,11 +4,11 @@ import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 
-import { ColumnHeadersView } from '../column_headers/m_column_headers';
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { ModuleType } from '../m_types';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
-import { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/m_rows_view';
 import { createColumnsInfo } from './m_virtual_columns_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;

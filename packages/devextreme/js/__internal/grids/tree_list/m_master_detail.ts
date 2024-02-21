@@ -1,6 +1,6 @@
 import { extend } from '@js/core/utils/extend';
-import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import { dataMasterDetailExtenderMixin, masterDetailModule } from '@ts/grids/grid_core/master_detail/m_master_detail';
 
 import treeListCore from './m_core';

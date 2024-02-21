@@ -1,0 +1,24 @@
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [dataSource]="appointmentsData"
+  [views]="['agenda']"
+  currentView="agenda"
+  [currentDate]="currentDate"
+  [startDayHour]="9"
+  [height]="600"
+>
+  <dxi-resource
+    fieldExpr="assigneeId"
+    label="Assignee"
+    [allowMultiple]="true"
+    [dataSource]="assignees"
+    [useColorAsDefault]="true"
+  >
+  </dxi-resource>
+  <dxi-resource
+    fieldExpr="priorityId"
+    label="Priority"
+    [dataSource]="priorities"
+  >
+  </dxi-resource>
+</dx-scheduler>

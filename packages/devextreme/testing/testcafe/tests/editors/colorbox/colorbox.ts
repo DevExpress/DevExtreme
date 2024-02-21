@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import ColorBox from '../../../model/colorbox';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import { clearTestPage } from '../../../helpers/clearPage';

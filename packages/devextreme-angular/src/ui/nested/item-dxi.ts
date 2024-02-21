@@ -75,6 +75,7 @@ import { DxiLocationComponent } from './location-dxi';
         'visibleIndex',
         'alignItemLabels',
         'caption',
+        'captionTemplate',
         'colCount',
         'colCountByScreen',
         'tabPanelOptions',

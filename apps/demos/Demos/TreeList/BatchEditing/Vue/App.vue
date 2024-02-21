@@ -1,0 +1,89 @@
+<template>
+  <div>
+    <div id="tree-list-demo">
+      <DxTreeList
+        id="tasks"
+        :data-source="tasks"
+        :column-auto-width="true"
+        :word-wrap-enabled="true"
+        :show-borders="true"
+        key-expr="Task_ID"
+        parent-id-expr="Task_Parent_ID"
+        @init-new-row="onInitNewRow"
+      >
+        <DxEditing
+          :allow-adding="true"
+          :allow-updating="true"
+          :allow-deleting="true"
+          mode="batch"
+        />
+        <DxColumn
+          :min-width="250"
+          data-field="Task_Subject"
+        >
+          <DxRequiredRule/>
+        </DxColumn>
+        <DxColumn
+          :min-width="120"
+          data-field="Task_Assigned_Employee_ID"
+          caption="Assigned"
+        >
+          <DxLookup
+            :data-source="employees"
+            value-expr="ID"
+            display-expr="Name"
+          />
+          <DxRequiredRule/>
+        </DxColumn>
+        <DxColumn
+          :min-width="120"
+          data-field="Task_Status"
+          caption="Status"
+        >
+          <DxLookup
+            :data-source="statuses"
+          />
+        </DxColumn>
+        <DxColumn
+          data-field="Task_Start_Date"
+          caption="Start Date"
+          data-type="date"
+        />
+        <DxColumn
+          data-field="Task_Due_Date"
+          caption="Due Date"
+          data-type="date"
+        />
+      </DxTreeList>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import {
+  DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxTreeListTypes,
+} from 'devextreme-vue/tree-list';
+import { tasks, employees } from './data.ts';
+
+const statuses = [
+  'Not Started',
+  'Need Assistance',
+  'In Progress',
+  'Deferred',
+  'Completed',
+];
+
+function onInitNewRow({ data }: DxTreeListTypes.InitNewRowEvent) {
+  data.Task_Status = 'Not Started';
+  data.Task_Start_Date = new Date();
+  data.Task_Due_Date = new Date();
+}
+</script>
+<style scoped>
+#tree-list-demo {
+  min-height: 700px;
+}
+
+#tasks {
+  max-height: 700px;
+}
+</style>

@@ -13,6 +13,7 @@ export {
   InitializedEvent,
   OptionChangedEvent,
   GroupItemTemplateData,
+  GroupCaptionTemplateData,
   SimpleItemTemplateData,
   SimpleItemLabelTemplateData,
   Item,
