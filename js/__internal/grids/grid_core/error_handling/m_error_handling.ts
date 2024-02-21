@@ -4,9 +4,9 @@ import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 
-import { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';

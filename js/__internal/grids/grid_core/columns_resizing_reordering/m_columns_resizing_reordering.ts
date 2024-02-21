@@ -20,9 +20,9 @@ import {
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
-import { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';

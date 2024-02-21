@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
@@ -11,10 +12,10 @@ import {
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@js/ui/filter_builder/utils';
 
-import { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import gridUtils from '../m_utils';
 
 const FILTER_PANEL_CLASS = 'filter-panel';

@@ -2,7 +2,8 @@
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
@@ -24,12 +25,12 @@ import { removeEvent } from '@js/events/remove';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
-import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import modules from '../m_modules';
-import { Controllers, ModuleType, Views } from '../m_types';
+import type { Controllers, ModuleType, Views } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
   ACTION_OPTION_NAMES,
