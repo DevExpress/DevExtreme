@@ -1,6 +1,6 @@
 import { divisibleBy, greaterThan, lessThan } from './common/index';
 import { createValidatorRule } from './core/index';
-import { SchedulerOptions } from './types';
+import type { SchedulerOptions } from './types';
 
 export const endDayHourMustBeGreaterThanStartDayHour = createValidatorRule(
   'endDayHourGreaterThanStartDayHour',

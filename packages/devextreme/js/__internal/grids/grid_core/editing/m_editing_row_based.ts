@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { equalByValue } from '@js/core/utils/common';
-import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
@@ -12,7 +12,7 @@ import {
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
 } from './const';
-import { EditingController } from './m_editing';
+import type { EditingController } from './m_editing';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
   isRowEditMode() {

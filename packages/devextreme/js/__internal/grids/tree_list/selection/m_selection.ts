@@ -3,17 +3,17 @@ import $ from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
   columnHeadersSelectionExtenderMixin,
   dataSelectionExtenderMixin,
   rowsViewSelectionExtenderMixin,
-  SelectionController,
   selectionModule,
 } from '@ts/grids/grid_core/selection/m_selection';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
 

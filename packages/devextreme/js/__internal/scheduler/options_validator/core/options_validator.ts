@@ -1,5 +1,5 @@
-import { OptionsValidatorErrors, OptionsValidatorResult } from './types';
-import { Validator } from './validator';
+import type { OptionsValidatorErrors, OptionsValidatorResult } from './types';
+import type { Validator } from './validator';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValidatorType<TWidgetOptions> = Validator<TWidgetOptions, any>;
