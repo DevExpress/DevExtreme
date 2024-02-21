@@ -261,6 +261,7 @@ class DataGrid extends Widget<Properties> {
   }
 }
 
+// @ts-expect-error
 registerComponent('dxDataGrid', DataGrid);
 
 export default DataGrid;

@@ -1,7 +1,10 @@
 import DOMComponent from './dom_component';
 import { UserDefinedElement } from './element';
 
-type ComponentFactory<TComponent> = new(element: UserDefinedElement, options?: Record<string, unknown>) => TComponent;
+type ComponentFactory<TComponent> = {
+  new(element: UserDefinedElement, options?: Record<string, unknown>): TComponent;
+  getInstance(element: UserDefinedElement): TComponent;
+};
 
 /**
  * @docid
