@@ -26,6 +26,11 @@
     "all:update-version": "ts-node build/update-version.ts",
     "all:build": "ts-node build/build-all.ts"
   },
+  "overrides": {
+    "archiver-utils": {
+      "glob": "10.3.10"
+    }
+  },
   "nx": {},
   "private": true,
   "devDependencies": {
