@@ -15,7 +15,6 @@ const REDUCE_CELLS_CSS = `
 }`;
 
 const APPOINTMENTS_TIME = [
-  { startTime: '04:00:00', endTime: '08:00:00' },
   { startTime: '10:15:00', endTime: '16:15:00' },
   { startTime: '17:05:00', endTime: '22:05:00' },
 ];
@@ -26,7 +25,16 @@ const APPOINTMENTS_TIMELINE_TIME = [
   { startTime: '17:05:00', endTime: '22:05:00', endDateShiftDays: 1 },
 ];
 
-const RECURRENT_APPOINTMENTS = [
+const RECURRENT_APPOINTMENTS_MONTH = [
+  {
+    startDate: '2023-08-01T15:00:00',
+    endDate: '2023-08-01T19:00:00',
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,TH,FR',
+    text: 'Daily 15-19',
+  },
+];
+
+const RECURRENT_APPOINTMENTS_MONTH_TIMELINE = [
   {
     startDate: '2023-08-01T09:00:00',
     endDate: '2023-08-01T13:00:00',
@@ -46,12 +54,12 @@ const APPOINTMENTS = {
     '2023-08-26',
     '2023-10-08',
     APPOINTMENTS_TIME,
-  ).concat(RECURRENT_APPOINTMENTS),
+  ).concat(RECURRENT_APPOINTMENTS_MONTH),
   timelineMonth: generateAppointments(
     '2023-08-31',
     '2023-09-08',
     APPOINTMENTS_TIMELINE_TIME,
-  ).concat(RECURRENT_APPOINTMENTS),
+  ).concat(RECURRENT_APPOINTMENTS_MONTH_TIMELINE),
 };
 
 const getScreenshotName = (
