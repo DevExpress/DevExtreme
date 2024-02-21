@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
 import ListItem from './item';
 import ListGroup from './group';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 
 const CLASS = {
   list: 'dx-list',

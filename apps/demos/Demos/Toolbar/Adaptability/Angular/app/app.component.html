@@ -1,0 +1,308 @@
+<div class="widget-container">
+  <dx-resizable
+    class="resizable-container"
+    [minWidth]="500"
+    [minHeight]="150"
+    [maxHeight]="370"
+    handles="right"
+    area=".widget-container"
+  >
+    <dx-toolbar #toolbar [multiline]="true">
+      <dxi-item location="before" widget="dxButton">
+        <div *dxTemplate>
+          <dx-button icon="undo" (onClick)="onButtonClick('Undo')"></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" widget="dxButton">
+        <div *dxTemplate>
+          <dx-button icon="redo" (onClick)="onButtonClick('Redo')"></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuSeparatorTemplate"
+      >
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" locateInMenu="auto" widget="dxDropDownButton">
+        <div *dxTemplate>
+          <dx-drop-down-button
+            width="100%"
+            displayExpr="text"
+            keyExpr="size"
+            itemTemplate="fontSizeTemplate"
+            [items]="fontSizes"
+            [selectedItemKey]="fontSizes[2].size"
+            [useSelectMode]="true"
+            (onSelectionChanged)="onSelectionChanged('Font Size')"
+          >
+            <div *dxTemplate="let data of 'fontSizeTemplate'">
+              <div [style.fontSize]="data.size + 'px'">{{ data.text }}</div>
+            </div>
+          </dx-drop-down-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" locateInMenu="auto" widget="dxDropDownButton">
+        <div *dxTemplate>
+          <dx-drop-down-button
+            width="100%"
+            icon="indent"
+            displayExpr="text"
+            keyExpr="lineHeight"
+            [items]="lineHeights"
+            [useSelectMode]="true"
+            [selectedItemKey]="lineHeight"
+            (onSelectionChanged)="onSelectionChanged('Line Height')"
+          ></dx-drop-down-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" locateInMenu="auto" widget="dxSelectBox">
+        <div *dxTemplate>
+          <dx-select-box
+            placeholder="Font"
+            displayExpr="text"
+            [inputAttr]="{ 'aria-label': 'Font' }"
+            [items]="fontFamilies"
+            (onItemClick)="onFontFamilyClick()"
+          ></dx-select-box>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuSeparatorTemplate"
+      >
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" widget="dxButtonGroup">
+        <div *dxTemplate>
+          <dx-button-group
+            displayExpr="text"
+            keyExpr="icon"
+            stylingMode="outlined"
+            selectionMode="multiple"
+            [items]="fontStyles"
+            (onItemClick)="onButtonClick($event.itemData.hint)"
+          ></dx-button-group>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before">
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        widget="dxButtonGroup"
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuTextAlignTemplate"
+      >
+        <div *dxTemplate>
+          <dx-button-group
+            keyExpr="alignment"
+            stylingMode="outlined"
+            [items]="textAlignItems"
+            [(selectedItemKeys)]="selectedTextAlign"
+            (onItemClick)="onTextAlignChanged($event)"
+          ></dx-button-group>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" widget="dxButtonGroup">
+        <div *dxTemplate>
+          <dx-button-group
+            keyExpr="alignment"
+            stylingMode="outlined"
+            [items]="listTypes"
+            (onItemClick)="onButtonClick($event.itemData.hint)"
+          ></dx-button-group>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuSeparatorTemplate"
+      >
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="before" locateInMenu="auto" widget="dxSelectBox">
+        <div *dxTemplate>
+          <dx-select-box
+            displayExpr="text"
+            valueExpr="text"
+            [inputAttr]="{ 'aria-label': 'Text Style' }"
+            [value]="heading"
+            [items]="headings"
+            (onItemClick)="onHeadingClick()"
+          ></dx-select-box>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuSeparatorTemplate"
+      >
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+      >
+        <div *dxTemplate>
+          <dx-button
+            icon="link"
+            text="Link"
+            (onClick)="onButtonClick('Link')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+      >
+        <div *dxTemplate>
+          <dx-button
+            icon="image"
+            text="Add image"
+            (onClick)="onButtonClick('Add Image')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuSeparatorTemplate"
+      >
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+      >
+        <div *dxTemplate>
+          <dx-button
+            icon="clearformat"
+            text="Clear formating"
+            (onClick)="onButtonClick('Clear Formating')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+      >
+        <div *dxTemplate>
+          <dx-button
+            icon="codeblock"
+            text="Code block"
+            (onClick)="onButtonClick('Code Block')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+      >
+        <div *dxTemplate>
+          <dx-button
+            icon="blockquote"
+            text="Blockquote"
+            (onClick)="onButtonClick('Blockquote')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item
+        location="before"
+        locateInMenu="auto"
+        menuItemTemplate="menuSeparatorTemplate"
+      >
+        <div *dxTemplate>
+          <div class="toolbar-separator"></div>
+        </div>
+      </dxi-item>
+
+      <dxi-item location="after" widget="dxButton" showText="inMenu">
+        <div *dxTemplate>
+          <dx-button
+            icon="attach"
+            text="Attach"
+            (onClick)="onButtonClick('Attach')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item locateInMenu="always" widget="dxButton" showText="inMenu">
+        <div *dxTemplate>
+          <dx-button
+            icon="help"
+            text="About"
+            (onClick)="onButtonClick('About')"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <div *dxTemplate="let data of 'menuSeparatorTemplate'">
+        <div class="toolbar-menu-separator"></div>
+      </div>
+
+      <div *dxTemplate="let data of 'menuTextAlignTemplate'">
+        <dx-button-group
+          keyExpr="alignment"
+          stylingMode="outlined"
+          [items]="textAlignItemsExtended"
+          [selectedItemKeys]="selectedTextAlign"
+          (onItemClick)="onTextAlignChanged($event)"
+        ></dx-button-group>
+      </div>
+    </dx-toolbar>
+  </dx-resizable>
+</div>
+
+<div class="options-container">
+  <div class="caption">Options</div>
+
+  <dx-check-box
+    [(value)]="toolbar.multiline"
+    text="Multiline mode"
+  ></dx-check-box>
+</div>

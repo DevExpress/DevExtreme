@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
 import { fields, filter } from './data';

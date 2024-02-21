@@ -1,0 +1,61 @@
+<div id="demo-container">
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <div class="label">Sorting Mode:</div>
+      <div class="value">
+        <dx-select-box
+          [items]="['single', 'multiple', 'none']"
+          [(value)]="sortingMode"
+          [inputAttr]="{ 'aria-label': 'Sorting Mode' }"
+          (onValueChanged)="onSortingValueChanged()"
+        ></dx-select-box>
+      </div>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Show Sort Indexes"
+        [(value)]="showSortIndexes"
+        [disabled]="showSortIndexDisabled"
+      ></dx-check-box>
+    </div>
+  </div>
+  <div class="widget-container">
+    <dx-gantt
+      taskListWidth="500"
+      scaleType="weeks"
+      height="700"
+      [rootValue]="-1"
+    >
+      <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+      <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+      <dxo-resources [dataSource]="resources"></dxo-resources>
+      <dxo-resource-assignments
+        [dataSource]="resourceAssignments"
+      ></dxo-resource-assignments>
+
+      <dxi-column
+        dataField="title"
+        caption="Subject"
+        [width]="300"
+        sortOrder="asc"
+      ></dxi-column>
+      <dxi-column
+        dataField="start"
+        caption="Start Date"
+        dataType="date"
+      ></dxi-column>
+      <dxi-column
+        dataField="end"
+        caption="End Date"
+        dataType="date"
+      ></dxi-column>
+
+      <dxo-editing [enabled]="true"></dxo-editing>
+      <dxo-sorting
+        [mode]="sortingMode"
+        [showSortIndexes]="showSortIndexes"
+      ></dxo-sorting>
+    </dx-gantt>
+  </div>
+</div>

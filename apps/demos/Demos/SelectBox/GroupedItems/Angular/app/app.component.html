@@ -1,0 +1,50 @@
+<div class="dx-fieldset">
+  <div class="dx-field">
+    <div class="dx-field-label">Data grouped in the DataSource</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="fromUngroupedData"
+        [inputAttr]="{ 'aria-label': 'Data' }"
+        valueExpr="ID"
+        [grouped]="true"
+        displayExpr="Name"
+        [value]="1"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Pre-grouped data</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="fromPregroupedData"
+        [inputAttr]="{ 'aria-label': 'Pregrouped Data' }"
+        valueExpr="ID"
+        [grouped]="true"
+        displayExpr="Name"
+        [value]="1"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Custom group template</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="fromUngroupedData"
+        valueExpr="ID"
+        [grouped]="true"
+        [inputAttr]="{ 'aria-label': 'Templated Ungrouped Data' }"
+        displayExpr="Name"
+        [searchEnabled]="true"
+        groupTemplate="group"
+        [value]="1"
+      >
+        <div *dxTemplate="let data of 'group'">
+          <div class="custom-icon">
+            <span class="dx-icon-box icon"></span>
+            {{ data.key }}
+          </div>
+        </div>
+      </dx-select-box>
+    </div>
+  </div>
+</div>

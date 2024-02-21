@@ -1,0 +1,58 @@
+#center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-box-container,
+.multiview-container {
+  padding: 16px;
+}
+
+#demo-items-container {
+  width: 680px;
+}
+
+.employee-info {
+  display: flex;
+  align-items: center;
+}
+
+.employee-photo {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  flex-shrink: 0;
+  object-fit: contain;
+  margin-right: 24px;
+}
+
+.employee-notes b {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.dx-field-label {
+  font-size: 16px;
+}
+
+#multiview {
+  cursor: move;
+}
+
+.demo-info {
+  padding-left: 8px;
+  opacity: 0.6;
+}
+
+.icon-container {
+  padding-left: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.dx-icon {
+  font-size: 18px;
+}

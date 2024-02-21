@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
@@ -23,6 +23,24 @@ test(testName, async (t) => {
       itemType: 'group',
       caption: 'Group1',
       items: ['item1'],
+    },
+  ],
+}));
+
+test(testName, async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Group caption template.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxForm', {
+  items: [
+    {
+      itemType: 'group',
+      items: ['item1'],
+      captionTemplate: () => $('<div><i class="dx-icon dx-icon-user"></i>Custom caption template</div>'),
     },
   ],
 }));

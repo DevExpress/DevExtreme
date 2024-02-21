@@ -1,0 +1,14 @@
+<dx-pivot-grid
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [allowExpandAll]="true"
+  [height]="490"
+  [showBorders]="true"
+  [dataSource]="dataSource"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onExporting)="onExporting($event)"
+>
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+  <dxo-export [enabled]="true"></dxo-export>
+</dx-pivot-grid>

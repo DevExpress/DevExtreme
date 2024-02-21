@@ -1,0 +1,24 @@
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [dataSource]="appointmentsData"
+  [views]="views"
+  currentView="Auto Mode"
+  [currentDate]="currentDate"
+  [height]="730"
+>
+  <dxi-view name="Auto Mode" type="month" maxAppointmentsPerCell="auto">
+  </dxi-view>
+  <dxi-view
+    name="Unlimited Mode"
+    type="month"
+    maxAppointmentsPerCell="unlimited"
+  >
+  </dxi-view>
+  <dxi-view name="Numeric Mode" type="month" [maxAppointmentsPerCell]="2">
+  </dxi-view>
+  <dxi-resource
+    fieldExpr="roomId"
+    label="room"
+    [dataSource]="resourcesData"
+  ></dxi-resource>
+</dx-scheduler>

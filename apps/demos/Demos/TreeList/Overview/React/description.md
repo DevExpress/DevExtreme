@@ -1,0 +1,3 @@
+DevExtreme React Tree List is a UI component that displays hierarchical data in a table. Its main features include robust data layer, multiple editing modes, client-side data validation, numerous filtering and searching properties, and many more. [Learn more about DevExtreme React components](/Documentation/Guide/React_Components/DevExtreme_React_Components/).
+
+To get started with the DevExtreme TreeList component, refer to the following tutorial for step-by-step instructions: [Getting Started with TreeList](/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/).

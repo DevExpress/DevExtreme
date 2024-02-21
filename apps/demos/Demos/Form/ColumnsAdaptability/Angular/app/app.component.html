@@ -1,0 +1,21 @@
+<div id="form-container">
+  <dx-form
+    id="form"
+    [formData]="employee"
+    labelLocation="top"
+    [minColWidth]="233"
+    colCount="auto"
+    [colCountByScreen]="colCountByScreen"
+    [screenByWidth]="screen"
+  ></dx-form>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <dx-check-box
+        text="Calculate the number of columns automatically"
+        [value]="false"
+        (onValueChanged)="valueChanged($event)"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>

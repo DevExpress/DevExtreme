@@ -1,5 +1,5 @@
 import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { scrollTo } from './utils';

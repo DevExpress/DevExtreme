@@ -2,6 +2,7 @@ export const WIDGET_CLASS = 'dx-widget';
 export const FORM_CLASS = 'dx-form';
 export const FORM_GROUP_CLASS = 'dx-form-group';
 export const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
+export const FORM_GROUP_CUSTOM_CAPTION_CLASS = 'dx-form-group-custom-caption';
 export const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
 export const FIELD_ITEM_CLASS = 'dx-field-item';
 export const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
