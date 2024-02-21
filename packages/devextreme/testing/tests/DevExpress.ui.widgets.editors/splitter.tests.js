@@ -84,6 +84,66 @@ QUnit.module('Resizing', moduleConfig, () => {
             assertLayout(items, ['100', '0'], assert);
         });
 
+        QUnit.test(`first and second items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 224, height: 224,
+                orientation,
+                dataSource: [{}, {}, { visible: false, }, { }, { }]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(-25, -25).dragEnd();
+
+            assertLayout(items, ['12.5', '37.5', '0', '25', '25'], assert);
+        });
+
+        QUnit.test(`last items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 224, height: 224,
+                orientation,
+                dataSource: [{}, {}, { visible: false, }, { }, {}]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(2));
+            pointer.start().dragStart().drag(-25, -25).dragEnd();
+
+            assertLayout(items, ['25', '25', '0', '12.5', '37.5'], assert);
+        });
+
+        QUnit.test(`items should be resized when their neighbour item is not visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                orientation,
+                dataSource: [{}, { visible: false, }, { },]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(50, 50).dragEnd();
+
+            assertLayout(items, ['75', '0', '25'], assert);
+        });
+
+        QUnit.test(`last two items should be able to resize when first item is not visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                orientation,
+                dataSource: [{ visible: false, }, {}, {},]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(50, 50).dragEnd();
+
+            assertLayout(items, ['0', '75', '25'], assert);
+        });
+
         QUnit.test(`nested splitter should have no size if not visible, ${orientation} orientation`, function(assert) {
             this.reinit({ orientation, width: 208, dataSource: [ { }, { visible: false, splitter: { dataSource: [{ }] } }] });
 

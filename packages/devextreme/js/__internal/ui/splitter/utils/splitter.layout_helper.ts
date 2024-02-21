@@ -114,7 +114,8 @@ export default class SplitterLayoutHelper {
 
     // @ts-expect-error todo: fix error
     const firstItemIndex: number = $(e.target).prev().data().dxItemIndex;
-    const secondItemIndex = firstItemIndex + 1;
+
+    const secondItemIndex = this._findNextVisibleItemIndex(firstItemIndex);
 
     const decreasingItemIndex = delta < 0 ? firstItemIndex : secondItemIndex;
     const currentSize = this.layoutState[decreasingItemIndex];
@@ -125,5 +126,15 @@ export default class SplitterLayoutHelper {
     newLayoutState[increasingItemIndex] = this.layoutState[increasingItemIndex] + actualDelta;
 
     return newLayoutState;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _findNextVisibleItemIndex(firstItemIndex: number): number {
+    for (let i = firstItemIndex + 1; i < this.items.length; i += 1) {
+      if (!$(this.items[i]).hasClass(INVISIBLE_ITEM_CLASS)) {
+        return i;
+      }
+    }
+    return -1;
   }
 }
