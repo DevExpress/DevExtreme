@@ -4,7 +4,9 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DxDataGridComponent, DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import {
+  DxDataGridComponent, DxDataGridModule, DxDataGridTypes, dxDataGrid,
+} from 'devextreme-angular/ui/data-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -41,7 +43,7 @@ export class AppComponent {
   async processBatchRequest(
     url: string,
     changes: Array<DxDataGridTypes.DataChange>,
-    component: DxDataGridComponent['instance'],
+    component: dxDataGrid,
   ): Promise<void> {
     await lastValueFrom(
       this.http.post(url, JSON.stringify(changes), {
