@@ -158,7 +158,7 @@ const DropDownButton = Widget.inherit({
         this._updateArrowClass();
 
         if(isDefined(this.option('selectedItemKey'))) {
-            this._loadSelectedItem().always(this._updateActionButton.bind(this));
+            this._loadSelectedItem().done(this._updateActionButton.bind(this));
         }
     },
 
@@ -542,10 +542,6 @@ const DropDownButton = Widget.inherit({
     },
 
     _updateActionButton(selectedItem) {
-        if(selectedItem === undefined) {
-            return;
-        }
-
         if(this.option('useSelectMode')) {
             this.option({
                 text: this._getDisplayValue(selectedItem),
@@ -566,10 +562,6 @@ const DropDownButton = Widget.inherit({
         this._setListOption('selectedItemKeys', this.option('useSelectMode') && isDefined(value) ? [value] : []);
         const previousItem = this.option('selectedItem');
         this._loadSelectedItem().always((selectedItem) => {
-            if(selectedItem === undefined) {
-                return;
-            }
-
             this._updateActionButton(selectedItem);
 
             if(this._displayGetter(previousItem) !== this._displayGetter(selectedItem)) {
