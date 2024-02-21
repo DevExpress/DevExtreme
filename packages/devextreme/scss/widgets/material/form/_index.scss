@@ -131,7 +131,8 @@
   color: $form-field-required-color;
 }
 
-.dx-field-item-custom-label-content {
+.dx-field-item-custom-label-content,
+.dx-form-group-custom-caption {
   .dx-icon {
     @include dx-icon-sizing($material-form-label-icon-size);
     @include dx-icon-margin(math.div($material-base-icon-size, 3));

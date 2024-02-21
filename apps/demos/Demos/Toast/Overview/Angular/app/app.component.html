@@ -1,0 +1,16 @@
+<div id="product-list">
+  <div class="header">Product List</div>
+  <ul>
+    <li *ngFor="let product of products">
+      <img [alt]="product.Name" [src]="product.ImageSrc" />
+      <div>{{ product.Name }}</div>
+      <dx-check-box
+        text="Available"
+        (onValueChanged)="checkAvailable($event, product)"
+      >
+      </dx-check-box>
+    </li>
+  </ul>
+  <dx-toast [(visible)]="isVisible" [type]="type" [message]="message">
+  </dx-toast>
+</div>

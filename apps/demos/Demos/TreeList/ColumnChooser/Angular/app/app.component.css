@@ -1,0 +1,44 @@
+::ng-deep #employees {
+  max-height: 440px;
+}
+
+::ng-deep .options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .option {
+  margin-top: 10px;
+}
+
+::ng-deep .option > span {
+  margin-right: 10px;
+}
+
+::ng-deep .option > .dx-selectbox {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+::ng-deep .selectbox-container {
+  display: flex;
+}
+
+::ng-deep .checkboxes-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+::ng-deep .checkboxes-container > .option {
+  margin: 10px 30px 10px 0;
+  width: 200px;
+}

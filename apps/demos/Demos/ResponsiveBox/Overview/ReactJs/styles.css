@@ -1,0 +1,37 @@
+.demo-container,
+#page,
+#app {
+  height: 100%;
+  min-height: 300px;
+}
+
+.header {
+  background-color: rgba(243, 158, 108, 0.8);
+  text-align: center;
+}
+
+.content {
+  background-color: rgba(245, 229, 166, 0.8);
+}
+
+.left-side-bar {
+  background-color: rgba(148, 215, 199, 0.8);
+}
+
+.right-side-bar {
+  background-color: rgba(119, 199, 231, 0.8);
+}
+
+.footer {
+  background-color: rgba(123, 155, 207, 0.8);
+}
+
+.item {
+  height: 100%;
+}
+
+#page p {
+  font-size: 20px;
+  padding-top: 10px;
+  text-align: center;
+}

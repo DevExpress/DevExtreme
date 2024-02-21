@@ -1,0 +1,45 @@
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [dataSource]="appointmentsData"
+  [views]="['workWeek']"
+  currentView="workWeek"
+  [currentDate]="currentDate"
+  [startDayHour]="9"
+  [endDayHour]="19"
+  [height]="600"
+>
+  <dxi-resource
+    fieldExpr="roomId"
+    label="Room"
+    [dataSource]="rooms"
+    [useColorAsDefault]="currentResource === 'Room'"
+  >
+  </dxi-resource>
+  <dxi-resource
+    fieldExpr="priorityId"
+    label="Priority"
+    [dataSource]="priorities"
+    [useColorAsDefault]="currentResource === 'Priority'"
+  >
+  </dxi-resource>
+  <dxi-resource
+    fieldExpr="assigneeId"
+    label="Assignee"
+    [allowMultiple]="true"
+    [dataSource]="assignees"
+    [useColorAsDefault]="currentResource === 'Assignee'"
+  >
+  </dxi-resource>
+</dx-scheduler>
+
+<div class="options">
+  <div class="caption">Use colors of:</div>
+  <div class="option">
+    <dx-radio-group
+      [items]="resourcesList"
+      [(value)]="currentResource"
+      layout="horizontal"
+    >
+    </dx-radio-group>
+  </div>
+</div>

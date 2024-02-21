@@ -52,7 +52,7 @@
     }
   },
   "workspaceLayout": {
-    "appsDir": "playgrounds",
+    "appsDir": "apps",
     "libsDir": "packages"
   }
 }

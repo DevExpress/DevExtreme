@@ -1,0 +1,57 @@
+<div class="dx-fieldset">
+  <div class="dx-field">
+    <div class="dx-field-label">Locale-dependent format</div>
+    <div class="dx-field-value">
+      <dx-date-range-box
+        startDatePlaceholder="12/31/2018"
+        endDatePlaceholder="12/31/2018"
+        [showClearButton]="true"
+        [useMaskBehavior]="true"
+        [openOnFieldClick]="false"
+      >
+      </dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Built-in predefined format</div>
+    <div class="dx-field-value">
+      <dx-date-range-box
+        displayFormat="shortdate"
+        [startDate]="startDate"
+        [endDate]="endDate"
+        [showClearButton]="true"
+        [useMaskBehavior]="true"
+        [openOnFieldClick]="false"
+      >
+      </dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Locale Data Markup Language (LDML) pattern</div>
+    <div class="dx-field-value">
+      <dx-date-range-box
+        displayFormat="EEEE, d of MMM, yyyy"
+        [startDate]="startDate"
+        [endDate]="endDate"
+        [showClearButton]="true"
+        [useMaskBehavior]="true"
+        [openOnFieldClick]="false"
+      >
+      </dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Format with literal characters</div>
+    <div class="dx-field-value">
+      <dx-date-range-box
+        displayFormat="'Year': yyyy, 'Month': MMM, 'Day': d"
+        [startDate]="startDate"
+        [endDate]="endDate"
+        [showClearButton]="true"
+        [useMaskBehavior]="true"
+        [openOnFieldClick]="false"
+      >
+      </dx-date-range-box>
+    </div>
+  </div>
+</div>

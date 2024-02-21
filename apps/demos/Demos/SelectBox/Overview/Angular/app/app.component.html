@@ -1,0 +1,109 @@
+<div class="dx-fieldset">
+  <div class="dx-field">
+    <div class="dx-field-label">Default mode</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Simple Product' }"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">With a custom placeholder</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        placeholder="Choose Product"
+        [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+        [showClearButton]="true"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Read only</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'ReadOnly Product' }"
+        [value]="simpleProducts[0]"
+        [readOnly]="true"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Disabled</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Disabled Product' }"
+        [value]="simpleProducts[0]"
+        [disabled]="true"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Data source usage</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        displayExpr="Name"
+        valueExpr="ID"
+        [dataSource]="data"
+        [inputAttr]="{ 'aria-label': 'Product ID' }"
+        [value]="products[0].ID"
+      ></dx-select-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Custom templates</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        id="custom-templates"
+        displayExpr="Name"
+        valueExpr="ID"
+        fieldTemplate="field"
+        [dataSource]="products"
+        [inputAttr]="{ 'aria-label': 'Templated Product' }"
+        [value]="products[3].ID"
+      >
+        <div *dxTemplate="let data of 'field'">
+          <div class="custom-item">
+            <img alt="Product name" src="{{ data && data.ImageSrc }}" />
+            <dx-text-box
+              class="product-name"
+              [value]="data && data.Name"
+              [inputAttr]="{ 'aria-label': 'Name' }"
+              [readOnly]="true"
+            ></dx-text-box>
+          </div>
+        </div>
+        <div *dxTemplate="let data of 'item'">
+          <div class="custom-item">
+            <img alt="Product name" src="{{ data.ImageSrc }}" />
+            <div class="product-name">
+              {{ data.Name }}
+            </div>
+          </div>
+        </div>
+      </dx-select-box>
+    </div>
+  </div>
+</div>
+<div class="dx-fieldset">
+  <div class="dx-fieldset-header">Event Handling</div>
+  <div class="dx-field">
+    <div class="dx-field-label">Product</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        #selectBox
+        [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Product' }"
+        [value]="simpleProducts[0]"
+        (onValueChanged)="onValueChanged($event)"
+      >
+      </dx-select-box>
+    </div>
+  </div>
+  <div class="current-value">
+    Selected product is <span>{{ selectBox.value }}</span>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<dx-circular-gauge id="gauge" [value]="7.78" centerTemplate="centerTemplate">
+  <dxo-scale [startValue]="0" [endValue]="10" [tickInterval]="1">
+    <dxo-minor-tick [visible]="true"></dxo-minor-tick>
+  </dxo-scale>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-range-container backgroundColor="#03a9f4"></dxo-range-container>
+  <dxo-value-indicator color="#03a9f4"></dxo-value-indicator>
+  <dxo-title text="Gold Production (in Kilograms)" verticalAlignment="bottom">
+    <dxo-font [size]="25"></dxo-font>
+    <dxo-margin top="25"></dxo-margin>
+  </dxo-title>
+  <svg *dxTemplate="let gauge of 'centerTemplate'">
+    <rect x="0" y="0" width="200" height="200" fill="transparent"></rect>
+    <g transform="translate(50 0)">
+      <rect x="0" y="0" width="100" height="70" rx="8" fill="#f2f2f2"></rect>
+      <text text-anchor="middle" y="27" x="50" fill="#000" font-size="20">
+        <tspan x="50">{{ gauge.value() }}</tspan>
+        <tspan x="50" dy="30">kg</tspan>
+      </text>
+    </g>
+    <g transform="translate(43 140)">
+      <rect
+        class="description"
+        x="0"
+        y="0"
+        width="114"
+        height="56"
+        rx="8"
+        fill="#fff"
+      ></rect>
+      <text text-anchor="start" y="23" x="15" fill="#000" font-size="12">
+        <tspan x="15">Capacity: 10 kg</tspan>
+        <tspan x="15" dy="20">Graduation: 10 g</tspan>
+      </text>
+    </g>
+  </svg>
+</dx-circular-gauge>

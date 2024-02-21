@@ -1,0 +1,57 @@
+::ng-deep .field-customization {
+  min-height: 32px;
+}
+
+::ng-deep .dx-lookup {
+  height: 36px;
+}
+
+::ng-deep .dx-theme-material .dx-lookup {
+  height: 48px;
+}
+
+::ng-deep .dx-lookup.field-customization .dx-lookup-field {
+  padding: 2px 5px;
+}
+
+::ng-deep .dx-theme-material .dx-lookup.field-customization .dx-lookup-field {
+  padding: 6px 5px;
+}
+
+::ng-deep .custom-field > img {
+  vertical-align: middle;
+  height: 30px;
+}
+
+::ng-deep .dx-theme-material .custom-field > img {
+  height: 36px;
+}
+
+::ng-deep .custom-field > div {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+::ng-deep .custom-item > img {
+  height: 48px;
+  width: 38px;
+  margin-right: 10px;
+}
+
+::ng-deep .custom-item > div {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 48px;
+  font-size: 15px;
+}
+
+::ng-deep .dx-viewport .dx-fieldset {
+  width: 40%;
+  float: left;
+}
+
+::ng-deep .dx-field > .dx-lookup {
+  flex: 1;
+}

@@ -1,0 +1,21 @@
+name: 'Get changed files'
+description: 'Get a list of the pull request files and save it to the file system as a JSON file'
+
+inputs:
+  path:
+    description: 'Path where find a changes'
+    required: true
+  result:
+    description: 'PAth to the result file'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Get changed files
+      shell: bash
+      run: |
+        gh api \
+          -H "Accept: application/vnd.github+json" \
+          "/repos/{owner}/{repo}/pulls/${{github.event.pull_request.number}}/files" --paginate \
+          --jq '.[] | select(.filename | contains("${{ inputs.path }}")) | {filename:.filename}' | jq -s > ${{ inputs.result }}

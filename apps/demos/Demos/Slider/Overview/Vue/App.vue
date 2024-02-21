@@ -1,0 +1,138 @@
+<template>
+  <div class="form">
+    <div class="dx-fieldset">
+      <div class="dx-field">
+        <div class="dx-field-label">Default mode</div>
+        <div class="dx-field-value">
+          <DxSlider
+            :min="0"
+            :max="100"
+            :value="90"
+          />
+        </div>
+      </div>
+      <div class="dx-field custom-height-slider">
+        <div class="dx-field-label">With labels</div>
+        <div class="dx-field-value">
+          <DxSlider
+            :min="0"
+            :max="100"
+            :value="50"
+            :label="label"
+          />
+        </div>
+      </div>
+      <div class="dx-field custom-height-slider">
+        <div class="dx-field-label">With tooltip</div>
+        <div class="dx-field-value">
+          <DxSlider
+            :min="0"
+            :max="100"
+            :value="35"
+            :tooltip="tooltip"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
+        <div class="dx-field-label">Without range highlighting</div>
+        <div class="dx-field-value">
+          <DxSlider
+            :min="0"
+            :max="100"
+            :value="20"
+            :show-range="false"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
+        <div class="dx-field-label">With discrete step</div>
+        <div class="dx-field-value">
+          <DxSlider
+            :min="0"
+            :max="100"
+            :value="10"
+            :step="10"
+            :tooltip="{ enabled: true }"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
+        <div class="dx-field-label">Disabled</div>
+        <div class="dx-field-value">
+          <DxSlider
+            :min="0"
+            :max="100"
+            :value="50"
+            :disabled="true"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="dx-fieldset">
+      <div class="dx-fieldset-header">Process Value Changes</div>
+      <div class="dx-field">
+        <div class="dx-field-label">On handle movement</div>
+        <div class="dx-field-value">
+          <DxSlider
+            v-model:value="sliderValue"
+            :min="0"
+            :max="100"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
+        <div class="dx-field-label">On handle release</div>
+        <div class="dx-field-value">
+          <DxSlider
+            v-model:value="sliderValue"
+            :min="0"
+            :max="100"
+            call-value-change="onHandleRelease"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
+        <div class="dx-field-label">Slider value</div>
+        <div class="dx-field-value">
+          <DxNumberBox
+            v-model:value="sliderValue"
+            :min="0"
+            :max="100"
+            :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Slider Value' }"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue';
+import { DxSlider } from 'devextreme-vue/slider';
+import { DxNumberBox } from 'devextreme-vue/number-box';
+
+const sliderValue = ref(10);
+const format = (value) => `${value}%`;
+
+const label = {
+  visible: true,
+  position: 'top',
+  format,
+};
+
+const tooltip = {
+  enabled: true,
+  showMode: 'always',
+  position: 'bottom',
+  format,
+};
+</script>
+<style scoped>
+.custom-height-slider {
+  height: 75px;
+}
+
+.dx-field .dx-slider {
+  flex: 1;
+}
+</style>

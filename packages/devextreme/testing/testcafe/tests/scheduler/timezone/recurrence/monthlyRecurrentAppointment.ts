@@ -1,6 +1,6 @@
 import url from '../../../../helpers/getPageUrl';
 import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 
 const SCREENSHOT_BASE_NAME = 'timezone-monthly-recurrent';
 

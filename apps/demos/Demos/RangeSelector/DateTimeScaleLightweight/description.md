@@ -1,0 +1,1 @@
+This demo illustrates a&nbsp;date-time scale. Here, minimum and maximum ranges are set, so&nbsp;that a&nbsp;user cannot select a&nbsp;vacation period less than a&nbsp;week and more than a&nbsp;month. To&nbsp;select a&nbsp;particular month, click between the corresponding scale markers.
