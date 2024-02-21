@@ -1,4 +1,4 @@
-import { Controllers, ViewController, Views } from '../m_types';
+import type { Controllers, ViewController, Views } from '../m_types';
 
 interface State {
   _updateFocusTimeout: any;
