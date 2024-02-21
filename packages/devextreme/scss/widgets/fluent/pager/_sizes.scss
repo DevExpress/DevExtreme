@@ -13,15 +13,18 @@ $fluent-pager-pagesize-padding-top: 7px !default;
 $fluent-pager-pagesize-padding-bottom: 8px !default;
 $fluent-pager-pagesize-padding-left: 10px !default;
 $fluent-pager-pagesize-padding-right: 9px !default;
+$fluent-pager-navbutton-icon-size: null !default;
 $fluent-pager-light-pagesizes-min-width: null !default;
 $fluent-pager-light-pageindex-min-width: null !default;
 
 @if $size == "default" {
+  $fluent-pager-navbutton-icon-size: 21px !default;
   $fluent-pager-light-pagesizes-min-width: 62px !default;
   $fluent-pager-light-pageindex-min-width: 32px !default;
 }
 
 @else if $size == "compact" {
+  $fluent-pager-navbutton-icon-size: 16px !default;
   $fluent-pager-light-pagesizes-min-width: 42px !default;
   $fluent-pager-light-pageindex-min-width: 27px !default;
 }
