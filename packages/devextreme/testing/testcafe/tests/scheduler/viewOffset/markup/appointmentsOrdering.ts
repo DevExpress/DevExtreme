@@ -46,7 +46,7 @@ const APPOINTMENTS = {
     '2023-08-26',
     '2023-10-08',
     APPOINTMENTS_TIME,
-  ),
+  ).concat(RECURRENT_APPOINTMENTS),
   timelineMonth: generateAppointments(
     '2023-08-31',
     '2023-09-08',
@@ -59,12 +59,11 @@ const getScreenshotName = (
   offset: number,
   startDayHour: number,
   endDayHour: number,
-  firstDay?: number,
-) => `view_markup_ordering-appts_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}_first-day-${firstDay}.png`;
+) => `view_markup_ordering-appts_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}.png`;
 
 [
-  { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
-  { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineMonth },
+  { views: [{ type: 'month' }], dataSource: APPOINTMENTS.month },
+  { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.timelineMonth },
 ].forEach(({ views, dataSource }) => {
   [
     0,
@@ -82,8 +81,7 @@ Appointments ordering and workspaces render (
 view: ${views[0].type},
 offset: ${offset},
 start: ${startDayHour},
-end: ${endDayHour},
-first day: ${views[0].firstDayOfWeek}
+end: ${endDayHour}
 )`, async (t) => {
         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -95,7 +93,6 @@ first day: ${views[0].firstDayOfWeek}
             offset,
             startDayHour,
             endDayHour,
-            views[0].firstDayOfWeek,
           ),
           scheduler.workSpace,
         );
