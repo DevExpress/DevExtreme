@@ -28,6 +28,8 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
+    "@angular/common": "12.0.5",
+    "@angular/core": "12.0.5",
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.12",
     "devexpress-diagram": "2.2.5",
