@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget } from '../../../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
@@ -155,6 +155,7 @@ first day: ${views[0].firstDayOfWeek}
         })
         .after(async () => {
           await removeStylesheetRulesFromPage();
+          await disposeWidget('dxScheduler');
         });
     });
   });
