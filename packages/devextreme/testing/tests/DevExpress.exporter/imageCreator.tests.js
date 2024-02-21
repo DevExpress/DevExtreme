@@ -2035,21 +2035,50 @@ QUnit.test('Text decoration', function(assert) {
     const that = this;
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
-    const markup = testingMarkupStart + '<text x="0" y="50" style="font-family:\'Segoe UI Light\'" text-anchor="start"><tspan>Before text... </tspan>'
-            + '<tspan x="500" y="90" text-anchor="end" style="text-decoration:underline; font-size:38px; fill:#23FF23;">Underlined text</tspan>'
-            + '<tspan x="250" y="30" text-anchor="center" style="text-decoration:overline; font-size:24px; fill:#AAFF23;">Overlined text</tspan>'
-            + '<tspan x="0" y="160" text-anchor="start" style="text-decoration:line-through; font-size:14px; fill:#23FFFF;">Line-through text</tspan>'
-            + '<tspan x="250" y="190" text-anchor="middle">After text</tspan>'
-            + '<tspan x="250" y="190" text-anchor="middle" style="text-decoration:line-through;" fill="none" stroke="none">No filled text(no display)</tspan>'
-            + '<tspan x="250" y="190" text-anchor="middle" style="text-decoration:line-through;" fill="none" stroke="#222">No filled text(no display)</tspan>'
+    const element = createSvgElement(
+        testingMarkupStart
+            + '<text x="0" y="50" text-anchor="start">'
+                + '<tspan>Before text... </tspan>'
+                + '<tspan x="500" y="90" text-anchor="end">Underlined text</tspan>'
+                + '<tspan x="250" y="30" text-anchor="center">Overlined text</tspan>'
+                + '<tspan x="0" y="160" text-anchor="start">Line-through text</tspan>'
+                + '<tspan x="250" y="190" text-anchor="middle">After text</tspan>'
+                + '<tspan x="250" y="190" text-anchor="middle" fill="none" stroke="none">No filled text(no display)</tspan>'
+                + '<tspan x="250" y="190" text-anchor="middle" fill="none" stroke="#222">No filled text(no display)</tspan>'
             + '</text>'
-            + testingMarkupEnd;
+            + testingMarkupEnd
+    );
+
+    element.querySelector('text').style = `
+        font-family: 'Segoe UI Light'
+    `;
+    element.querySelectorAll('text > tspan')[1].style = `
+        text-decoration: underline;
+        font-size: 38px;
+        fill: #23FF23;
+    `;
+    element.querySelectorAll('text > tspan')[2].style = `
+        text-decoration: overline;
+        font-size: 24px;
+        fill: #AAFF23;
+    `;
+    element.querySelectorAll('text > tspan')[3].style = `
+        text-decoration: line-through;
+        font-size: 14px;
+        fill: #23FFFF;
+    `;
+    element.querySelectorAll('text > tspan')[5].style = `
+        text-decoration: line-through;
+    `;
+    element.querySelectorAll('text > tspan')[6].style = `
+        text-decoration: line-through;
+    `;
 
     context.measureText.withArgs('Underlined text').returns({
         width: 50
     });
 
-    const imageBlob = getData(markup, {
+    const imageBlob = getData(element, {
         width: 500, height: 250, format: 'png'
     });
 
