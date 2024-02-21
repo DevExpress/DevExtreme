@@ -176,22 +176,28 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     [
-        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal' },
-        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal' },
-        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal' },
-        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal' },
-        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal' },
-        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical' },
-        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical' },
-        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical' },
-        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical' },
-        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical' },
-    ].forEach(({ resizeDistance, expectedSize, orientation }) => {
-        QUnit.test(`items should resize proportionally with ${orientation} orientation`, function(assert) {
+        { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: -100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 75, expectedSize: ['12.5', '87.5'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical', rtl: false },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical', rtl: false },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical', rtl: false },
+    ].forEach(({ resizeDistance, expectedSize, orientation, rtl }) => {
+        QUnit.test(`items should resize proportionally with ${orientation} orientation, rtl ${rtl}`, function(assert) {
             this.reinit({
                 width: 208, height: 208,
                 dataSource: [{ }, { }],
-                orientation
+                orientation,
+                rtlEnabled: rtl,
             });
 
             const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
