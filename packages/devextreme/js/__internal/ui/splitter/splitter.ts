@@ -11,13 +11,19 @@ import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
-import SplitterLayoutHelper from './utils/splitter.layout_helper';
+import {
+  findLastIndexOfVisibleItem, getDelta,
+  getItemsDistribution, getNewLayoutState,
+  setFlexProp, updateItemsSize,
+} from './utils/layout';
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
+const FLEX_PROPERTY_NAME = 'flexGrow';
+const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -59,11 +65,13 @@ class Splitter extends (CollectionWidget as any) {
   _renderItems(items: Item[]): void {
     super._renderItems(items);
 
-    const splitterItemsCount = this._itemElements().length;
-    if (splitterItemsCount > 1) {
-      this.layoutHelper = new SplitterLayoutHelper(this._itemElements(), this.option('orientation'), this.$element(), this.option('rtlEnabled'));
-      this.layoutHelper.layoutItems();
-    }
+    // NOTE: this is temporary items distribution. TODO: use _getVisibleItems and fix tests
+    const splitterItemRatio = 100 / this._itemElements().not(`.${INVISIBLE_ITEM_CLASS}`).length;
+
+    this._itemElements().each((index, item) => {
+      const isInvisible = $(item).hasClass(INVISIBLE_ITEM_CLASS);
+      setFlexProp(item, FLEX_PROPERTY_NAME, isInvisible ? 0 : splitterItemRatio);
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,27 +80,8 @@ class Splitter extends (CollectionWidget as any) {
     return this._itemContainer().children(this._itemSelector());
   }
 
-  _itemsCount(): number {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.option('items').length;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static _findLastIndexOfVisible(array: any[]): number {
-    for (let i = array.length - 1; i >= 0; i -= 1) {
-      if (array[i].visible !== false) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  _lastVisibleItemIndex(): number {
-    return Splitter._findLastIndexOfVisible(this.option('items'));
-  }
-
   _isLastVisibleItem(index: number): boolean {
-    return index === this._lastVisibleItemIndex();
+    return index === findLastIndexOfVisibleItem(this.option('items'));
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -121,22 +110,25 @@ class Splitter extends (CollectionWidget as any) {
     return {
       direction: this.option('orientation'),
       onResizeStart: (e): void => {
-        this.layoutHelper.initializeState();
+        this.layoutState = getItemsDistribution(this._itemElements());
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,
         });
       },
+
       onResize: (e): void => {
-        this.layoutHelper.applyNewLayout(e.event);
+        const handle = e.event.target;
+        const delta = getDelta(e.event.offset, this.option('orientation'), this.option('rtlEnabled'), this.$element());
+        const newLayout = getNewLayoutState(delta, handle, this.layoutState, this._itemElements());
+        updateItemsSize(this._itemElements(), newLayout);
 
         this._getAction(RESIZE_EVENT.onResize)({
           event: e,
         });
       },
-      onResizeEnd: (e): void => {
-        this.layoutHelper.applyNewLayout(e.event);
 
+      onResizeEnd: (e): void => {
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event: e,
         });

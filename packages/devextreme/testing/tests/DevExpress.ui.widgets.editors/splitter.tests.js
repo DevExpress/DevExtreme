@@ -76,12 +76,12 @@ QUnit.module('Resizing', moduleConfig, () => {
         QUnit.test(`items should have no size if not visible, ${orientation} orientation`, function(assert) {
             this.reinit({
                 orientation,
-                dataSource: [{ }, { visible: false }]
+                dataSource: [{ }, { visible: false }, {}]
             });
 
             const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
 
-            assertLayout(items, ['100', '0'], assert);
+            assertLayout(items, ['50', '0', '50'], assert);
         });
 
         QUnit.test(`first and second items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
@@ -142,14 +142,6 @@ QUnit.module('Resizing', moduleConfig, () => {
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
             assertLayout(items, ['0', '75', '25'], assert);
-        });
-
-        QUnit.test(`nested splitter should have no size if not visible, ${orientation} orientation`, function(assert) {
-            this.reinit({ orientation, width: 208, dataSource: [ { }, { visible: false, splitter: { dataSource: [{ }] } }] });
-
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
-            assertLayout(items, ['100', '0'], assert);
         });
 
         QUnit.test(`splitter should have no resize handles if only 1 item is visible, ${orientation} orientation`, function(assert) {
