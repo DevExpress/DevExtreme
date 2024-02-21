@@ -119,3 +119,18 @@ test('Item collection should be updated after direct option changing (T817436)',
     });
   });
 });
+
+[false, true].forEach((splitButton) => {
+  test('Button template', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Button template, splitButton=${splitButton}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDropDownButton', {
+    splitButton,
+    template: () => $('<div>Custom button<i class=" dx-icon-user"></i></div>'),
+  }));
+});
