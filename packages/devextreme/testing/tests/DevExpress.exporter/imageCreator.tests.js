@@ -10,7 +10,9 @@ import { getWindow } from 'core/utils/window';
 
 const window = getWindow();
 
-const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+function createSvgElement(markup) {
+    return new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
+}
 
 const pathNameByUrl = (url) => {
     const a = document.createElement('a');
@@ -1454,11 +1456,21 @@ QUnit.test('Export draws into hidden canvas', function(assert) {
     assert.strictEqual($('canvas')[0].hidden, true);
 });
 
-testWithoutCsp('Text', function(assert) {
+QUnit.test('Text', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
-    const imageBlob = getData(markup);
+    const element = createSvgElement(testingMarkupStart + '<text x="20" y="30" text-anchor="middle">Test</text>' + testingMarkupEnd);
+
+    element.querySelector('text').style = `
+        font-style: italic;
+        font-size: 16px;
+        font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+        font-weight: bold;
+        fill: #232323;
+        opacity: 0.3;
+    `;
+
+    const imageBlob = getData(element);
 
     assert.expect(12);
     $.when(imageBlob).done(function(blob) {
@@ -1772,11 +1784,22 @@ QUnit.test('Text with big amount of spaces', function(assert) {
     });
 });
 
-testWithoutCsp('Stroke text', function(assert) {
+QUnit.test('Stroke text', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5" style="fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;"><tspan style="font-weight: bold; font-style: italic; " stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd;
-    const imageBlob = getData(markup);
+    const element = createSvgElement(testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5"><tspan stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd);
+    element.querySelector('text').style = `
+        fill: #222;
+        font-family: 'Trebuchet MS', Verdana;
+        stroke: #F2f2f2;
+        stroke-width: 5px;
+    `;
+    element.querySelector('tspan').style = `
+        font-weight: bold;
+        font-style: italic; 
+    `;
+
+    const imageBlob = getData(element);
 
     assert.expect(14);
     $.when(imageBlob).done(function(blob) {
@@ -1807,20 +1830,29 @@ testWithoutCsp('Stroke text', function(assert) {
 });
 
 // T697125
-testWithoutCsp('Multiline text with shadow and stroked texts', function(assert) {
+QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart +
+    const element = createSvgElement(testingMarkupStart +
         '<defs>' +
         '<filter id="testFilter1" x="-40%" y="-40%" width="180%" height="200%" transform="translate(0,0)"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="1"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feOffset><feFlood result="floodResult" flood-color="#223387" flood-opacity="0.2"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter>' +
         '</defs>' +
-        '<text filter="url(#testFilter1)" style="white-space: pre; fill: #232323; font-style: italic; font-weight: bold; font-family: \'Trebuchet MS\', Verdana; font-size: 14px; cursor: default;" x="0" y="0" transform="translate(463,51)">' +
+        '<text filter="url(#testFilter1)" x="0" y="0" transform="translate(463,51)">' +
         '<tspan x="0" y="0" stroke="#f2f2f2" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round">Text1</tspan>' +
         '<tspan x="0" dy="13px" stroke="#f2f2f2" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round">Text2</tspan>' +
         '<tspan x="0" y="0">Text1</tspan>' +
         '<tspan x="0" dy="13px">Text2</tspan>' +
-        '</text>' + testingMarkupEnd;
-    const imageBlob = getData(markup);
+        '</text>' + testingMarkupEnd);
+    element.querySelector('text').style = `
+        white-space: pre;
+        fill: #232323;
+        font-style: italic;
+        font-weight: bold;
+        font-family: 'Trebuchet MS', Verdana;
+        font-size: 14px;
+        cursor: default;
+    `;
+    const imageBlob = getData(element);
 
     $.when(imageBlob).done(function(blob) {
         try {
@@ -1999,25 +2031,54 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     });
 });
 
-testWithoutCsp('Text decoration', function(assert) {
+QUnit.test('Text decoration', function(assert) {
     const that = this;
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
-    const markup = testingMarkupStart + '<text x="0" y="50" style="font-family:\'Segoe UI Light\'" text-anchor="start"><tspan>Before text... </tspan>'
-            + '<tspan x="500" y="90" text-anchor="end" style="text-decoration:underline; font-size:38px; fill:#23FF23;">Underlined text</tspan>'
-            + '<tspan x="250" y="30" text-anchor="center" style="text-decoration:overline; font-size:24px; fill:#AAFF23;">Overlined text</tspan>'
-            + '<tspan x="0" y="160" text-anchor="start" style="text-decoration:line-through; font-size:14px; fill:#23FFFF;">Line-through text</tspan>'
-            + '<tspan x="250" y="190" text-anchor="middle">After text</tspan>'
-            + '<tspan x="250" y="190" text-anchor="middle" style="text-decoration:line-through;" fill="none" stroke="none">No filled text(no display)</tspan>'
-            + '<tspan x="250" y="190" text-anchor="middle" style="text-decoration:line-through;" fill="none" stroke="#222">No filled text(no display)</tspan>'
+    const element = createSvgElement(
+        testingMarkupStart
+            + '<text x="0" y="50" text-anchor="start">'
+                + '<tspan>Before text... </tspan>'
+                + '<tspan x="500" y="90" text-anchor="end">Underlined text</tspan>'
+                + '<tspan x="250" y="30" text-anchor="center">Overlined text</tspan>'
+                + '<tspan x="0" y="160" text-anchor="start">Line-through text</tspan>'
+                + '<tspan x="250" y="190" text-anchor="middle">After text</tspan>'
+                + '<tspan x="250" y="190" text-anchor="middle" fill="none" stroke="none">No filled text(no display)</tspan>'
+                + '<tspan x="250" y="190" text-anchor="middle" fill="none" stroke="#222">No filled text(no display)</tspan>'
             + '</text>'
-            + testingMarkupEnd;
+            + testingMarkupEnd
+    );
+
+    element.querySelector('text').style = `
+        font-family: 'Segoe UI Light'
+    `;
+    element.querySelectorAll('text > tspan')[1].style = `
+        text-decoration: underline;
+        font-size: 38px;
+        fill: #23FF23;
+    `;
+    element.querySelectorAll('text > tspan')[2].style = `
+        text-decoration: overline;
+        font-size: 24px;
+        fill: #AAFF23;
+    `;
+    element.querySelectorAll('text > tspan')[3].style = `
+        text-decoration: line-through;
+        font-size: 14px;
+        fill: #23FFFF;
+    `;
+    element.querySelectorAll('text > tspan')[5].style = `
+        text-decoration: line-through;
+    `;
+    element.querySelectorAll('text > tspan')[6].style = `
+        text-decoration: line-through;
+    `;
 
     context.measureText.withArgs('Underlined text').returns({
         width: 50
     });
 
-    const imageBlob = getData(markup, {
+    const imageBlob = getData(element, {
         width: 500, height: 250, format: 'png'
     });
 
@@ -2480,11 +2541,18 @@ QUnit.test('Export.color option', function(assert) {
     });
 });
 
-testWithoutCsp('Read computed style of elements if export target is attached element', function(assert) {
+QUnit.test('Read computed style of elements if export target is attached element', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
-    const element = new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
+    const element = createSvgElement(testingMarkupStart + '<text x="20" y="30">Test</text>' + testingMarkupEnd);
+    element.querySelector('text').style = `
+        font-style: italic;
+        font-size: 16px;
+        font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+        font-weight: bold;
+        fill: #232323;
+        opacity: 0.3;
+    `;
 
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'font-size': '25px', 'font-style': '' });

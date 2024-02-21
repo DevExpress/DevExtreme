@@ -61,7 +61,7 @@
 
     .dx-prev-button,
     .dx-next-button {
-      @include dx-icon-font-centered-sizing(21px);
+      @include dx-icon-font-centered-sizing($fluent-pager-navbutton-icon-size);
     }
   }
 

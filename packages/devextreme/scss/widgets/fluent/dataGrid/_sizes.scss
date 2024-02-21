@@ -15,5 +15,5 @@ $area-field-top-bottom-padding: null !default;
 
 @else if $size == "compact" {
   $area-field-border-radius: 4px !default;
-  $area-field-top-bottom-padding: 1px !default;
+  $area-field-top-bottom-padding: 2px !default;
 }
