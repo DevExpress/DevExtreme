@@ -117,7 +117,7 @@ const getContentTypeHeader = function(options) {
     }
 
     return options.contentType ||
-           defaultContentType;
+        defaultContentType;
 };
 
 const getDataFromResponse = function(xhr) {
