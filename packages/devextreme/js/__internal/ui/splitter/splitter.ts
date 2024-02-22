@@ -8,22 +8,34 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update
 
 import ResizeHandle from './resize_handle';
 import {
+  getComponentInstance,
+} from './utils/component';
+import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
 import {
   findLastIndexOfVisibleItem, getDelta,
+  getInitialLayout,
   getItemsDistribution, getNewLayoutState,
   setFlexProp, updateItemsSize,
 } from './utils/layout';
 
 const SPLITTER_CLASS = 'dx-splitter';
+const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
-const FLEX_PROPERTY_NAME = 'flexGrow';
-const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
+
+const FLEX_PROPERTY = {
+  flexGrow: 'flexGrow',
+  flexShrink: 'flexShrink',
+  flexBasis: 'flexBasis',
+};
+
+const DEFAULT_FLEX_SHRINK_PROP = 0;
+const DEFAULT_FLEX_BASIS_PROP = 0;
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -59,19 +71,14 @@ class Splitter extends (CollectionWidget as any) {
     this.$element().addClass(SPLITTER_CLASS);
 
     this._toggleOrientationClass();
+
+    this._layout = getInitialLayout(this.option('items'));
+
     super._initMarkup();
   }
 
   _renderItems(items: Item[]): void {
     super._renderItems(items);
-
-    // NOTE: this is temporary items distribution. TODO: use _getVisibleItems and fix tests
-    const splitterItemRatio = 100 / this._itemElements().not(`.${INVISIBLE_ITEM_CLASS}`).length;
-
-    this._itemElements().each((index, item) => {
-      const isInvisible = $(item).hasClass(INVISIBLE_ITEM_CLASS);
-      setFlexProp(item, FLEX_PROPERTY_NAME, isInvisible ? 0 : splitterItemRatio);
-    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,6 +94,11 @@ class Splitter extends (CollectionWidget as any) {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _renderItem(index, itemData, $container, $itemToReplace): unknown {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
+
+    const itemElement = $itemFrame.get(0);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, this._layout[index]);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
     if (itemData.visible !== false && !this._isLastVisibleItem(index)) {
       this._renderResizeHandle();

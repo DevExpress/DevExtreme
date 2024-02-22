@@ -105,3 +105,15 @@ export function updateItemsSize(items, sizeDistribution): void {
     setFlexProp(item, FLEX_PROPERTY_NAME, sizeDistribution[index]);
   });
 }
+
+export function getInitialLayout(items: Item[]): number[] {
+  const layout: number[] = [];
+
+  const visibleItemsCount = items.filter((item) => item.visible !== false).length;
+
+  items.forEach((item) => {
+    layout.push(item.visible === false ? 0 : 100 / visibleItemsCount);
+  });
+
+  return layout;
+}
