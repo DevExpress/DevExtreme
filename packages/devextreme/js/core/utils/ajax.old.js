@@ -209,12 +209,12 @@ const getRequestOptions = function(options, headers) {
         params = params || {};
         params['_'] = Date.now();
     }
-
+    console.log('-----getRequestOptions--params-0-->', params, options.data);
     if(params && !options.upload) {
         if(!paramsAlreadyString) {
             params = paramsConvert(params);
         }
-
+console.log('-----getRequestOptions--params--->', params);
         if(getMethod(options) === 'GET') {
             if(params !== '') {
                 url += (url.indexOf('?') > -1 ? '&' : '?') + params;
@@ -275,7 +275,7 @@ const sendRequest = function(options) {
             d.resolve(data, SUCCESS, xhr);
         };
     }
-
+    console.log('----OLD----url-->', url);
     if(options.crossDomain && needScriptEvaluation) {
         const reject = function() {
             d.reject(xhr, ERROR);
@@ -311,6 +311,7 @@ const sendRequest = function(options) {
             clearTimeout(timeoutId);
             if(isStatusSuccess(xhr.status)) {
                 if(hasContent(xhr.status)) {
+                    console.log('---onreadystatechange-----postProcess-->');
                     postProcess(d, xhr, dataType);
                 } else {
                     d.resolve(null, NO_CONTENT, xhr);
