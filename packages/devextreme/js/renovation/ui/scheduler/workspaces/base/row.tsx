@@ -3,6 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { VirtualCell } from './virtual_cell';
 
+const MAX_COL_SPAN = 1000;
+
 export const viewFunction = ({
   props: {
     className,
@@ -21,23 +23,39 @@ export const viewFunction = ({
     className={className}
     style={styles}
   >
-    {hasLeftVirtualCell && (
-      <VirtualCell
-        width={leftVirtualCellWidth}
-        colSpan={leftVirtualCellCount}
-        isHeaderCell={isHeaderRow}
-      />
-    )}
+    {hasLeftVirtualCell
+      && leftVirtualCellCount != null
+      && Array.from({ length: Math.ceil(leftVirtualCellCount / MAX_COL_SPAN) }, (_, index) => {
+        const colSpan = Math.min(leftVirtualCellCount - (MAX_COL_SPAN * index), MAX_COL_SPAN);
+        const width = (leftVirtualCellWidth / leftVirtualCellCount) * colSpan;
+
+        return (
+          <VirtualCell
+            key={`left-virtual-cell-${index}`}
+            width={width}
+            colSpan={colSpan}
+            isHeaderCell={isHeaderRow}
+          />
+        );
+      })}
 
     {children}
 
-    {hasRightVirtualCell && (
-      <VirtualCell
-        width={rightVirtualCellWidth}
-        colSpan={rightVirtualCellCount}
-        isHeaderCell={isHeaderRow}
-      />
-    )}
+    {hasRightVirtualCell
+      && rightVirtualCellCount != null
+      && Array.from({ length: Math.ceil(rightVirtualCellCount / MAX_COL_SPAN) }, (_, index) => {
+        const colSpan = Math.min(rightVirtualCellCount - (MAX_COL_SPAN * index), MAX_COL_SPAN);
+        const width = (rightVirtualCellWidth / rightVirtualCellCount) * colSpan;
+
+        return (
+          <VirtualCell
+            key={`right-virtual-cell-${index}`}
+            width={width}
+            colSpan={colSpan}
+            isHeaderCell={isHeaderRow}
+          />
+        );
+      })}
   </tr>
 );
 
