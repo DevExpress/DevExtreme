@@ -2,7 +2,7 @@
 import { Selector } from 'testcafe';
 import { CellEditor } from '../../model/dataGrid/data/cellEditor';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import DataCell from '../../model/dataGrid/data/cell';
 import EditForm from '../../model/dataGrid/editForm';

@@ -1,7 +1,7 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import CommandCell from '../../../model/dataGrid/commandCell';
 import { ClassNames } from '../../../model/dataGrid/classNames';
@@ -95,7 +95,7 @@ test('Changing keyboardNavigation options should not invalidate the entire conte
       }
     },
     onInitialized(e) {
-      const dataGrid = e.component as any;
+      const dataGrid: any = e.component;
       const rowsView = dataGrid.getView('rowsView');
       // eslint-disable-next-line no-underscore-dangle
       const defaultInvalidate = rowsView._invalidate;
@@ -4260,7 +4260,7 @@ test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with 
     visible: true,
   },
   onKeyDown(e) {
-    const eventKey = e.event.key.toLowerCase();
+    const eventKey = e.event?.key?.toLowerCase?.();
     if (eventKey === 'enter') {
       const focusedRowIndex = e.component.option('focusedRowIndex');
       ($('#otherContainer') as any).text(focusedRowIndex);

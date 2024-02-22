@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import asyncForEach from '../../../helpers/asyncForEach';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox`

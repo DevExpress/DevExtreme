@@ -3,7 +3,7 @@ import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import Guid from '../../../../../js/core/guid';
 import { appendElementTo, setAttribute, setClassAttribute } from '../../../helpers/domUtils';

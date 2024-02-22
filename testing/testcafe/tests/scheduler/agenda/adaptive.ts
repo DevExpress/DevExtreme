@@ -1,5 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';

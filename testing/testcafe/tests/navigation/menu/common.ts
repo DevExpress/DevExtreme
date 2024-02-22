@@ -5,7 +5,7 @@ import {
 } from '../../../helpers/domUtils';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import Menu from '../../../model/menu';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';

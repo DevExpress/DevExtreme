@@ -1,5 +1,5 @@
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
 import { getPropertyValue, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { isMaterial } from '../../../helpers/themeUtils';

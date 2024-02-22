@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`List`
   .page(url(__dirname, '../../container.html'));
