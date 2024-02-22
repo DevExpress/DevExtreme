@@ -8,21 +8,17 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update
 
 import ResizeHandle from './resize_handle';
 import {
-  getComponentInstance,
-} from './utils/component';
-import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
 import {
-  findLastIndexOfVisibleItem, getDelta,
+  findLastIndexOfVisibleItem, getCurrentLayout, getDelta,
   getInitialLayout,
-  getItemsDistribution, getNewLayoutState,
+  getNewLayoutState,
   setFlexProp, updateItemsSize,
 } from './utils/layout';
 
 const SPLITTER_CLASS = 'dx-splitter';
-const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
@@ -122,7 +118,7 @@ class Splitter extends (CollectionWidget as any) {
     return {
       direction: this.option('orientation'),
       onResizeStart: (e): void => {
-        this.layoutState = getItemsDistribution(this._itemElements());
+        this.layoutState = getCurrentLayout(this._itemElements());
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,

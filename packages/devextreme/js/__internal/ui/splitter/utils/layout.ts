@@ -2,9 +2,10 @@ import $ from '@js/core/renderer';
 import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
+import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
-const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
@@ -14,7 +15,7 @@ const ORIENTATION = {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getItemsDistribution(items): number[] {
+export function getCurrentLayout(items): number[] {
   const itemsDistribution = [];
   items.each((index, item) => {
     // @ts-expect-error todo: fix error
@@ -37,7 +38,7 @@ export function findLastIndexOfVisibleItem(items: any[]): number {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function findNextVisibleItemIndex(items, itemIndex: number): number {
   for (let i = itemIndex + 1; i < items.length; i += 1) {
-    if (!$(items[i]).hasClass(INVISIBLE_ITEM_CLASS)) {
+    if (!$(items[i]).hasClass(INVISIBLE_STATE_CLASS)) {
       return i;
     }
   }
