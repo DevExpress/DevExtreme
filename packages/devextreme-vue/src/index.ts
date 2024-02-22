@@ -59,6 +59,7 @@ export { DxSlider } from "./slider";
 export { DxSortable } from "./sortable";
 export { DxSparkline } from "./sparkline";
 export { DxSpeedDialAction } from "./speed-dial-action";
+export { DxSplitter } from "./splitter";
 export { DxSwitch } from "./switch";
 export { DxTabPanel } from "./tab-panel";
 export { DxTabs } from "./tabs";
