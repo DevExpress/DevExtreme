@@ -1,7 +1,6 @@
-const $ = require('jquery');
-const ajax = require('core/utils/ajax');
-const compareVersion = require('core/utils/version').compare;
-
+import ajax from 'core/utils/ajax';
+import $ from 'jquery';
+import { compare as compareVersion } from 'core/utils/version';
 QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.module('sendRequest', {

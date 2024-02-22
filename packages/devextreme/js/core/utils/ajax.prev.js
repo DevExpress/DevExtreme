@@ -5,8 +5,6 @@ import {
     HttpClient,
     HttpParams,
     HttpXhrBackend,
-    HttpClientJsonpModule,
-    JsonpClientBackend,
 } from '@angular/common/http';
 import { timeout, throwError } from 'rxjs';
 import httpRequest from '../http_request';
@@ -265,8 +263,6 @@ function sendRequestFactory(httpClient) {
             };
         }
 
-        console.log('-----ajax.prev requestOptions----->', requestOptions);
-
         if(options.cache === false && isGet && data) {
             data._ = nonce++;
         }
@@ -319,10 +315,14 @@ function sendRequestFactory(httpClient) {
                 }
             );
 
-        const requestSubscription = request.pipe(timeout({
-            each: options.timeout || -1,
-            with: () => throwError(() => ({ timeout: TIMEOUT }))
-        })).subscribe(
+        const requestSubscription = (
+            options.timeout ?
+                request.pipe(timeout({
+                    each: options.timeout,
+                    with: () => throwError(() => ({ timeout: TIMEOUT }))
+                }))
+                : request
+        ).subscribe(
             (response) => {
                 console.log('-----response.BODY-2---->', response);
 
@@ -371,6 +371,6 @@ function sendRequest(options) {
 
 export default injector({ sendRequest: sendRequest });
 
-/*import ajax from 'esm/core/utils/ajax.bundle';
+/* import ajax from 'esm/core/utils/ajax.bundle';
 import $ from 'jquery';
 import { compare as compareVersion } from 'core/utils/version';*/
