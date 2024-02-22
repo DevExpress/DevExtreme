@@ -75,7 +75,7 @@ const defaultData = [
     }
 ];
 
-const createScheduler = (options = {}) => {
+const createScheduler = (options = {}, clock) => {
     const defaultOption = {
         dataSource: defaultData,
         views: ['month'],
@@ -87,7 +87,7 @@ const createScheduler = (options = {}) => {
         width: 600
     };
 
-    return createWrapper($.extend(defaultOption, options));
+    return createWrapper($.extend(defaultOption, options), clock);
 };
 
 const setWindowWidth = width => {
@@ -341,7 +341,8 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
     QUnit.test('Appointment popup should work properly', function(assert) {
         const NEW_EXPECTED_SUBJECT = 'NEW SUBJECT';
-        const scheduler = createScheduler();
+        const clock = sinon.useFakeTimers();
+        const scheduler = createScheduler({}, clock);
         const appointmentPopup = scheduler.appointmentPopup;
 
         assert.notOk(appointmentPopup.isVisible(), 'Appointment popup should be invisible in on init');
@@ -363,6 +364,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
         assert.ok(appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor should be visible after click on recurrence appointment');
         assert.equal(appointmentPopup.form.getSubject(), defaultData[0].text, 'Subject in form should equal selected appointment');
+        clock.restore();
     });
 
     QUnit.test('Recurrence repeat-end editor should have default \'never\' value after reopening appointment popup', function(assert) {

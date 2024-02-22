@@ -272,8 +272,7 @@ class Appointment extends ClickElementWrapper {
 
     click() {
         this.getElement().trigger('dxclick');
-        this.clock.tick(300);
-        this.clock.restore();
+        this.clock && this.clock.tick(300);
     }
 
     dbClick() {
@@ -503,7 +502,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 } else {
                     click();
 
-                    this.clock.tick(300);
+                    this.clock && this.clock.tick(300);
                 }
             },
 
