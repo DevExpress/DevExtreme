@@ -15,12 +15,12 @@
   .dx-resize-handle {
     flex-basis: 8px;
   }
+}
 
-  .dx-resize-handle-horizontal {
-    cursor: ew-resize;
-  }
+.dx-resize-handle-horizontal {
+  cursor: col-resize;
+}
 
-  .dx-resize-handle-vertical {
-    cursor: ns-resize;
-  }
+.dx-resize-handle-vertical {
+  cursor: row-resize;
 }

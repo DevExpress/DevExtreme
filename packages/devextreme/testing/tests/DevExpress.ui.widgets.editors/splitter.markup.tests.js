@@ -20,6 +20,7 @@ const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
+const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -42,7 +43,9 @@ const moduleConfig = {
         this.getNestedSplitter = () => {
             return this.$element.find(`.${SPLITTER_CLASS}`);
         };
-
+        this.getResizeHandles = () => {
+            return this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
+        };
     }
 };
 
@@ -183,3 +186,63 @@ QUnit.module('Classes', moduleConfig, () => {
         assert.strictEqual(this.$element.hasClass(VERTICAL_ORIENTATION_CLASS), false);
     });
 });
+
+QUnit.module('Aria attributes', moduleConfig, () => {
+    QUnit.test('items should have the correct role attribute', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                splitter: {
+                    dataSource: ['Pane_2', 'Pane_3']
+                }
+            }]
+        });
+
+        this.getItems().each((index, item) => {
+            assert.strictEqual($(item).attr('role'), 'group', 'aria-role attribute value is correct');
+        });
+    });
+
+    QUnit.test('last item should not have an id attribute', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                splitter: {
+                    dataSource: ['Pane_2', 'Pane_3']
+                }
+            }]
+        });
+
+        assert.strictEqual(this.getItems().last().attr('id'), undefined, 'id attribute is not set for the last item');
+    });
+
+    QUnit.test('invisible items should not have an id attribute', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+                visible: false,
+            }, {
+                text: 'Pane_2'
+            }]
+        });
+
+        assert.strictEqual(this.getItems().eq(1).attr('id'), undefined, 'id attribute is not set for invisible item');
+    });
+
+    QUnit.test('aria-controls attribute value of the resizeHandle should be equal to the id attribute of the item', function(assert) {
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' },]
+        });
+
+        const items = this.getItems();
+        const resizeHandles = this.getResizeHandles();
+
+        assert.strictEqual(items.eq(0).attr('id'), resizeHandles.eq(0).attr('aria-controls'));
+        assert.strictEqual(items.eq(1).attr('id'), resizeHandles.eq(1).attr('aria-controls'));
+    });
+});
+

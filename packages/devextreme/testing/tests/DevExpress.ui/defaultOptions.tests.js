@@ -827,6 +827,7 @@ testComponentDefaults(ResizeHandle,
     {},
     {
         direction: 'horizontal',
+        focusStateEnabled: true,
         onResize: null,
         onResizeStart: null,
         onResizeEnd: null,
@@ -1452,6 +1453,7 @@ testComponentDefaults(Splitter,
         onResize: null,
         onResizeStart: null,
         onResizeEnd: null,
+        allowKeyboardNavigation: true,
     }
 );
 
