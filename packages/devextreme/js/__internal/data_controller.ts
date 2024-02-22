@@ -59,18 +59,17 @@ class DataController {
   }
 
   _updateDataSource(dataSourceOptions: DataSourceType): void {
-    if (dataSourceOptions) {
-      if (dataSourceOptions instanceof DataSource) {
-        this._isSharedDataSource = true;
-        this._dataSource = dataSourceOptions;
-      } else {
-        const DataSourceConstructor = DataSource;
-
-        const normalizedDataSourceOptions = normalizeDataSourceOptions(dataSourceOptions);
-        this._dataSource = new DataSourceConstructor(
-          extend(true, {}, {}, normalizedDataSourceOptions),
-        ) as unknown as DataSourceType;
-      }
+    if (!dataSourceOptions) {
+      return;
+    }
+    if (dataSourceOptions instanceof DataSource) {
+      this._isSharedDataSource = true;
+      this._dataSource = dataSourceOptions;
+    } else {
+      const normalizedDataSourceOptions = normalizeDataSourceOptions(dataSourceOptions);
+      this._dataSource = new DataSource(
+        extend(true, {}, {}, normalizedDataSourceOptions),
+      ) as unknown as DataSourceType;
     }
   }
 
