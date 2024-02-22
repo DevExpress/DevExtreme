@@ -827,6 +827,9 @@ testComponentDefaults(ResizeHandle,
     {},
     {
         direction: 'horizontal',
+        onResize: null,
+        onResizeStart: null,
+        onResizeEnd: null,
     }
 );
 

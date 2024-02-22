@@ -2,17 +2,25 @@
 // adduse
 .dx-splitter {
   display: flex;
-
+  height: 100%;
+  
   .dx-splitter-item {
-    flex: 1 0 0px;
+    overflow: hidden;
   }
 
   &.dx-splitter-vertical {
     flex-direction: column;
   }
-}
 
-.dx-resize-handle {
-  cursor: col-resize;
-  flex-basis: 1px;
+  .dx-resize-handle {
+    flex-basis: 8px;
+  }
+
+  .dx-resize-handle-horizontal {
+    cursor: ew-resize;
+  }
+
+  .dx-resize-handle-vertical {
+    cursor: ns-resize;
+  }
 }

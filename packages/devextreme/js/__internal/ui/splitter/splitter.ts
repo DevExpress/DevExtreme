@@ -11,12 +11,27 @@ import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
+import {
+  findLastIndexOfVisibleItem, getCurrentLayout, getDelta,
+  getInitialLayout,
+  getNewLayoutState,
+  setFlexProp, updateItemsSize,
+} from './utils/layout';
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
+
+const FLEX_PROPERTY = {
+  flexGrow: 'flexGrow',
+  flexShrink: 'flexShrink',
+  flexBasis: 'flexBasis',
+};
+
+const DEFAULT_FLEX_SHRINK_PROP = 0;
+const DEFAULT_FLEX_BASIS_PROP = 0;
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -52,6 +67,9 @@ class Splitter extends (CollectionWidget as any) {
     this.$element().addClass(SPLITTER_CLASS);
 
     this._toggleOrientationClass();
+
+    this._layout = getInitialLayout(this.option('items'));
+
     super._initMarkup();
   }
 
@@ -59,20 +77,26 @@ class Splitter extends (CollectionWidget as any) {
     super._renderItems(items);
   }
 
-  _itemsCount(): number {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _itemElements(): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.option('items').length;
+    return this._itemContainer().children(this._itemSelector());
   }
 
-  _isLastItem(index: number): boolean {
-    return index === this._itemsCount() - 1;
+  _isLastVisibleItem(index: number): boolean {
+    return index === findLastIndexOfVisibleItem(this.option('items'));
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _renderItem(index, itemData, $container, $itemToReplace): unknown {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
-    if (!this._isLastItem(index)) {
+    const itemElement = $itemFrame.get(0);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, this._layout[index]);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
+
+    if (itemData.visible !== false && !this._isLastVisibleItem(index)) {
       this._renderResizeHandle();
     }
 
@@ -92,17 +116,26 @@ class Splitter extends (CollectionWidget as any) {
 
   _getResizeHandleConfig(): object {
     return {
-      direction: this.option('orientation') === ORIENTATION.vertical ? 'horizontal' : 'vertical',
+      direction: this.option('orientation'),
       onResizeStart: (e): void => {
+        this.layoutState = getCurrentLayout(this._itemElements());
+
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,
         });
       },
+
       onResize: (e): void => {
+        const handle = e.event.target;
+        const delta = getDelta(e.event.offset, this.option('orientation'), this.option('rtlEnabled'), this.$element());
+        const newLayout = getNewLayoutState(delta, handle, this.layoutState, this._itemElements());
+        updateItemsSize(this._itemElements(), newLayout);
+
         this._getAction(RESIZE_EVENT.onResize)({
           event: e,
         });
       },
+
       onResizeEnd: (e): void => {
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event: e,

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Splitter from 'ui/splitter';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
+import 'generic_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE = 'dx-resize-handle';
@@ -38,6 +39,254 @@ const moduleConfig = {
         fx.off = false;
     }
 };
+
+QUnit.module('Resizing', moduleConfig, () => {
+    function assertLayout(items, expectedLayout, assert) {
+        items.toArray().forEach((item, index) => {
+            assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
+        });
+    }
+
+    [
+        { orientation: 'horizontal', expectedCursor: 'ew-resize' },
+        { orientation: 'vertical', expectedCursor: 'ns-resize' }
+    ].forEach(({ orientation, expectedCursor }) => {
+        QUnit.test(`resize handle should have "cursor: ${expectedCursor}" with ${orientation} orientation`, function(assert) {
+            this.reinit({ orientation, dataSource: [{ }, { }] });
+
+            const handle = this.getResizeHandles().eq(0);
+            const cursor = handle.css('cursor');
+
+            assert.strictEqual(cursor, expectedCursor);
+        });
+    });
+
+    ['horizontal', 'vertical'].forEach(orientation => {
+        QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [{ }, { }]
+            });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            assertLayout(items, ['50', '50'], assert);
+        });
+
+        QUnit.test(`items with nested splitter should be evenly distributed by default with ${orientation} orientation`, function(assert) {
+            this.reinit({ width: 208, height: 208, orientation: 'horizontal',
+                dataSource: [{}, {}, {}, {
+                    splitter: {
+                        orientation,
+                        dataSource: [{ }]
+                    },
+                }]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            assertLayout(items, ['25', '25', '25', '25'], assert);
+        });
+
+        QUnit.test(`items should have no size if not visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [{ }, { visible: false }, {}]
+            });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            assertLayout(items, ['50', '0', '50'], assert);
+        });
+
+        QUnit.test(`first and second items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 224, height: 224,
+                orientation,
+                dataSource: [{}, {}, { visible: false, }, { }, { }]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(-25, -25).dragEnd();
+
+            assertLayout(items, ['12.5', '37.5', '0', '25', '25'], assert);
+        });
+
+        QUnit.test(`last items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 224, height: 224,
+                orientation,
+                dataSource: [{}, {}, { visible: false, }, { }, {}]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(2));
+            pointer.start().dragStart().drag(-25, -25).dragEnd();
+
+            assertLayout(items, ['25', '25', '0', '12.5', '37.5'], assert);
+        });
+
+        QUnit.test(`items should be resized when their neighbour item is not visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                orientation,
+                dataSource: [{}, { visible: false, }, { },]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(50, 50).dragEnd();
+
+            assertLayout(items, ['75', '0', '25'], assert);
+        });
+
+        QUnit.test(`last two items should be able to resize when first item is not visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                orientation,
+                dataSource: [{ visible: false, }, {}, {},]
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(50, 50).dragEnd();
+
+            assertLayout(items, ['0', '75', '25'], assert);
+        });
+
+        QUnit.test(`splitter should have no resize handles if only 1 item is visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [{ visible: false }, { }]
+            });
+
+            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE}`);
+
+            assert.strictEqual(resizeHandles.length, 0);
+        });
+
+        QUnit.test(`splitter should have 3 resize handles if 4 out of 6 are visible, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [ { }, { }, { visible: false }, { }, { }, { visible: false }]
+            });
+
+            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE}`);
+
+            assert.strictEqual(resizeHandles.length, 3);
+        });
+    });
+
+    [
+        { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: -100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 75, expectedSize: ['12.5', '87.5'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical', rtl: false },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical', rtl: false },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical', rtl: false },
+    ].forEach(({ resizeDistance, expectedSize, orientation, rtl }) => {
+        QUnit.test(`items should resize proportionally with ${orientation} orientation, rtl ${rtl}`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                dataSource: [{ }, { }],
+                orientation,
+                rtlEnabled: rtl,
+            });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
+
+            assertLayout(items, expectedSize, assert);
+        });
+    });
+
+    [
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal' },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal' },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal' },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal' },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal' },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical' },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical' },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical' },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical' },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical' },
+    ].forEach(({ resizeDistance, expectedSize, orientation }) => {
+        QUnit.test(`items with nested splitter should resize proportionally with ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                dataSource: [{ }, {
+                    splitter: {
+                        orientation,
+                        dataSource: [{ }]
+                    },
+                }],
+                orientation
+            });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
+
+            assertLayout(items, expectedSize, assert);
+        });
+    });
+
+    [
+        { resizeDistance: 500, expectedSize: ['100', '0'], orientation: 'horizontal' },
+        { resizeDistance: -500, expectedSize: ['0', '100'], orientation: 'vertical' }
+    ].forEach(({ resizeDistance, expectedSize, orientation }) => {
+        QUnit.test(`resize item should not be resized beyound splitter borders with ${orientation} orientation`, function(assert) {
+            this.reinit({ width: 208, height: 208, dataSource: [{ }, { }], orientation });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
+
+            assertLayout(items, expectedSize, assert);
+        });
+    });
+
+    QUnit.test('resize item should not be resized beyound neighbour', function(assert) {
+        this.reinit({ height: 208, orientation: 'vertical', dataSource: [{ }, { }, { }, { }] });
+
+        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(0, 400).dragEnd();
+
+        assertLayout(items, ['50', '0', '25', '25'], assert);
+    });
+
+    QUnit.test('resize item with nested splitter should not be resized beyound neighbour', function(assert) {
+        this.reinit({ width: 208, dataSource: [ { splitter: { dataSource: [{ }] } }, { }, { }, { splitter: { dataSource: [{ }] } }] });
+
+        const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(1));
+        pointer.start().dragStart().drag(-400, 0).dragEnd();
+
+        assertLayout(items, ['25', '0', '50', '25'], assert);
+    });
+});
 
 QUnit.module('Initialization', moduleConfig, () => {
     QUnit.test('Splitter should be initialized with Splitter type', function(assert) {
