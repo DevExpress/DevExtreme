@@ -14778,6 +14778,15 @@ declare module DevExpress.ui {
      */
     stylingMode?: DevExpress.common.ButtonStyle;
     /**
+     * [descr:dxDropDownButtonOptions.template]
+     */
+    template?:
+      | DevExpress.core.template
+      | ((
+          data: DevExpress.ui.dxButton.TemplateData,
+          contentElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
      * [descr:dxDropDownButtonOptions.text]
      */
     text?: string;
