@@ -1738,7 +1738,7 @@ function resetMocksInChart(chart) {
     chart._stripLabelAxesGroup.resetStub('linkAppend');
     chart._stripLabelAxesGroup.resetStub('linkRemove');
     chart._stripLabelAxesGroup.resetStub('clear');
-    validateData.reset();
+    validateData.resetHistory();
     chart._crosshairCursorGroup.resetStub('linkAppend');
     chart._crosshairCursorGroup.resetStub('linkRemove');
     chart._crosshairCursorGroup.resetStub('clear');
@@ -1763,7 +1763,7 @@ function resetMocksInChart(chart) {
         }
     }
 
-    vizUtils.updatePanesCanvases.reset();
+    vizUtils.updatePanesCanvases.resetHistory();
 }
 
 function createChartInstance(options, container) {

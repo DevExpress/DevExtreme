@@ -136,6 +136,8 @@ function setupMocks($container) {
     insertMockFactory();
 }
 
+const NON_OVERRIDING_PROPERTIES = ['valueAxis'];
+
 exports.environment = {
     beforeEach: function() {
         const that = this;
@@ -190,10 +192,13 @@ exports.environment = {
         that.createChart = function(options) {
             $.each(options || {}, function(k, v) {
                 if(k === 'commonPaneSettings') {
+                    that.themeManager.getOptions.withArgs(k).reset();
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
                 } else if(k === 'crosshair') {
+                    that.themeManager.getOptions.withArgs(k).reset();
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
-                } else if(k !== 'series') {
+                } else if(k !== 'series' && NON_OVERRIDING_PROPERTIES.indexOf(k) === -1) {
+                    that.themeManager.getOptions.withArgs(k).reset();
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }
             });

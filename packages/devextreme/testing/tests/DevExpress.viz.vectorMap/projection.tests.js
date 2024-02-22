@@ -1215,10 +1215,15 @@ QUnit.test('creation', function(assert) {
     const to = sinon.stub().returns([1000, 2000]);
     const from = sinon.stub().returns([3000, 4000]);
     from.withArgs([0, 0]).returns([300, 400]);
+    from.withArgs([0, -0]).returns([300, 400]);
     from.withArgs([-1, 0]).returns([10, 20]);
+    from.withArgs([-1, -0]).returns([10, 20]);
     from.withArgs([0, +1]).returns([30, 40]);
+    from.withArgs([-0, +1]).returns([30, 40]);
     from.withArgs([+1, 0]).returns([50, 60]);
+    from.withArgs([+1, -0]).returns([50, 60]);
     from.withArgs([0, -1]).returns([70, 80]);
+    from.withArgs([-0, -1]).returns([70, 80]);
 
     const proj = projection({
         aspectRatio: 3,

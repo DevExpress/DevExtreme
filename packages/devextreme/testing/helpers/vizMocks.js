@@ -328,9 +328,9 @@
             return this.__stubs[name];
         };
         stubPrototype.resetStub = function(name) {
-            const stub = this.__stubs[name];
+            const stub = this.stub(name);
 
-            if(stub !== undefined) {
+            if(stub) {
                 if(stub.resetHistory) {
                     stub.resetHistory();
                 } else {

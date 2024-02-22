@@ -1830,7 +1830,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
         seriesMockData.series.push(new MockSeries({}));
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
-        this.validateData.reset();
+        this.validateData.resetHistory();
         // act
         chart.refresh();
         // assert
