@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Splitter from 'ui/splitter';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
+import 'generic_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE = 'dx-resize-handle';
@@ -45,6 +46,20 @@ QUnit.module('Resizing', moduleConfig, () => {
             assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
         });
     }
+
+    [
+        { orientation: 'horizontal', expectedCursor: 'ew-resize' },
+        { orientation: 'vertical', expectedCursor: 'ns-resize' }
+    ].forEach(({ orientation, expectedCursor }) => {
+        QUnit.test(`resize handle should have "cursor: ${expectedCursor}" with ${orientation} orientation`, function(assert) {
+            this.reinit({ orientation, dataSource: [{ }, { }] });
+
+            const handle = this.getResizeHandles().eq(0);
+            const cursor = handle.css('cursor');
+
+            assert.strictEqual(cursor, expectedCursor);
+        });
+    });
 
     ['horizontal', 'vertical'].forEach(orientation => {
         QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
