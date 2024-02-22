@@ -35,6 +35,11 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return width;
   }
 
+  _columnCondition(a, b) {
+    const conditions = this._getConditions(a, b);
+    return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
+  }
+
   _getDurationInDays(startDate, endDate) {
     const adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
     return (adjustedDuration / dateUtils.dateToMilliseconds('day')) || ZERO_APPOINTMENT_DURATION_IN_DAYS;
@@ -72,12 +77,11 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getPositionShift(timeShift?) {
+  getPositionShift(timeShift) {
     return {
       top: 0,
       left: 0,
-      cellPosition: 0,
+      cellPosition: timeShift * this.cellWidth,
     };
   }
 }
