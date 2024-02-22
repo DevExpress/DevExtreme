@@ -1,4 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
+
 import createWidget from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
@@ -12,6 +14,14 @@ const REDUCE_CELLS_CSS = `
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
+
+// TODO Vinogradov: Change it to a general dispose widget helper function.
+const disposeScheduler = ClientFunction(() => {
+  const scheduler = ($(SCHEDULER_SELECTOR) as any).dxScheduler('instance');
+
+  scheduler?.dispose();
+}, { dependencies: { SCHEDULER_SELECTOR } });
+
 const APPOINTMENTS = [
   {
     startDate: '2023-09-05T00:00:00',
@@ -97,6 +107,7 @@ end: ${endDayHour},
       })
         .after(async () => {
           await removeStylesheetRulesFromPage();
+          await disposeScheduler();
         });
     });
   });
@@ -148,6 +159,7 @@ end: ${endDayHour},
 //       })
 //         .after(async () => {
 //           await removeStylesheetRulesFromPage();
+//           await disposeScheduler();
 //         });
 //     });
 //   });
