@@ -145,11 +145,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     return this._getAppointmentDefaultHeight();
   }
 
-  _columnCondition(a, b) {
-    const conditions = this._getConditions(a, b);
-    return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
-  }
-
   createTaskPositionMap(items) {
     return super.createTaskPositionMap(items, true);
   }
@@ -188,14 +183,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
 
   _needHorizontalGroupBounds() {
     return true;
-  }
-
-  getPositionShift(timeShift) {
-    return {
-      cellPosition: timeShift * this.cellWidth,
-      top: 0,
-      left: 0,
-    };
   }
 }
 
