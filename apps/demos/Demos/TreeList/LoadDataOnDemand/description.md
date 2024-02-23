@@ -11,7 +11,7 @@ Set the **remoteOperations**.[filtering](/Documentation/ApiReference/UI_Componen
 3. **Specify the data field that defines whether the node has children**           
 Use the [hasItemsExpr](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#hasItemsExpr) property to set this data field.
 
-Server-side implementation is available in the [ASP.NET Core](https://demos.devexpress.com/aspnetcore/Demo/TreeList/LoadDataOnDemand/) and [ASP.NET MVC](https://demos.devexpress.com/ASPNetMvc/Demo/TreeList/LoadDataOnDemand) versions of this demo under the `TreeListDataController.cs` tab.
+Server-side implementation is available in the [ASP.NET Core](https://demos.devexpress.com/ASPNetCore/Demo/TreeList/LoadDataOnDemand/) and [ASP.NET MVC](https://demos.devexpress.com/ASPNetMvc/Demo/TreeList/LoadDataOnDemand) versions of this demo under the `TreeListDataController.cs` tab.
 
 [note]
 
