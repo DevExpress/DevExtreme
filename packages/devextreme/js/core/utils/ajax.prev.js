@@ -2,7 +2,7 @@
 
 import { Deferred } from './deferred';
 import {
-    HttpClient,
+    HttpClient, HttpEventType,
     HttpParams,
     HttpXhrBackend,
 } from '@angular/common/http';
@@ -18,6 +18,7 @@ const PARSER_ERROR = 'parsererror';
 const SUCCESS = 'success';
 const NO_CONTENT = 'nocontent';
 const TIMEOUT = 'timeout';
+const STATUS_ABORT = 0;
 
 const removeScript = function(scriptNode) {
     scriptNode.parentNode.removeChild(scriptNode);
@@ -254,8 +255,25 @@ function sendRequestFactory(httpClient) {
         const upload = options.upload;
         const beforeSend = options.beforeSend;
         const xhrFields = options.xhrFields;
-        const xhrSurrogate = { };
+        const result = d.promise();
 
+        // eslint-disable-next-line prefer-const
+        let requestSubscription;
+
+        result.abort = function() { // TODO need test
+            requestSubscription.unsubscribe();
+            d.reject({ status: STATUS_ABORT }, 'error');
+            upload?.onabort?.(xhrSurrogate);
+            console.log('----result.abort------>');
+        };
+
+        const xhrSurrogate = {
+            abort() {
+                xhrSurrogate.uploadAborted = true;
+                console.log('---xhrSurrogate-abort---+--->');
+                // upload?.onabort?.(xhrSurrogate); //
+                result.abort();
+            } };
 
         if(jsonpCallBackName) {
             window[jsonpCallBackName] = function(data) {
@@ -295,10 +313,10 @@ function sendRequestFactory(httpClient) {
 
 
         if(beforeSend) {
+            console.log('------beforeSend---->', options.beforeSend);
             beforeSend(xhrSurrogate);
+            // xhrSurrogate.uploadStarted = true;
         }
-
-        console.log('-----ajax.prev---options.dataType-->', [options.crossDomain, needScriptEvaluation, options.dataType]);
 
         const request = options.crossDomain && needScriptEvaluation
             ? httpClient.jsonp(url, jsonpCallBackName)
@@ -309,49 +327,69 @@ function sendRequestFactory(httpClient) {
                     params,
                     body,
                     headers,
+                    reportProgress: true,
                     withCredentials: xhrFields && xhrFields.withCredentials,
-                    observe: 'response',
+                    observe: upload ? 'events' : 'response',
                     responseType: options.responseType || (['jsonp', 'script'].includes(options.dataType) ? 'text' : options.dataType)
                 }
             );
 
-        const requestSubscription = (
+        const requestWithTimeout = (
             options.timeout ?
                 request.pipe(timeout({
                     each: options.timeout,
                     with: () => throwError(() => ({ timeout: TIMEOUT }))
                 }))
                 : request
-        ).subscribe(
-            (response) => {
-                console.log('-----response.BODY-2---->', response);
-
-                if(needScriptEvaluation) {
-                    evalScript(response.body);
-                }
-
-                return d.resolve(
-                    response.body,
-                    response.body ? 'success' : NO_CONTENT,
-                    assignResponseProps(xhrSurrogate, response)
-                );
-            },
-            (response) => {
-                console.log('---REJECT------->', Infinity, response);
-                const errorStatus = options.dataType === 'json' && response.message.includes('parsing')
-                    ? PARSER_ERROR
-                    : (response?.timeout || 'error');
-
-                return d.reject(assignResponseProps(xhrSurrogate, response), errorStatus, response);
-            }
         );
 
-        const result = d.promise();
+        requestSubscription =
+            !upload
+                ? requestWithTimeout.subscribe(
+                    (response) => {
+                        console.log('-----RESPONSE OK---->', response);
 
-        result.abort = function() {
-            requestSubscription.unsubscribe();
-            d.reject(null, 'error');
-        };
+                        if(needScriptEvaluation) {
+                            evalScript(response.body);
+                        }
+
+                        return d.resolve(
+                            response.body,
+                            response.body ? 'success' : NO_CONTENT,
+                            assignResponseProps(xhrSurrogate, response)
+                        );
+                    },
+                    (response) => {
+                        console.log('---REJECT------->', response);
+                        const errorStatus = options.dataType === 'json' && response.message.includes('parsing')
+                            ? PARSER_ERROR
+                            : (response?.timeout || 'error');
+
+                        return d.reject(assignResponseProps(xhrSurrogate, response), errorStatus, response);
+                    }
+                )
+                : requestWithTimeout.subscribe(
+                    (event) => {
+                        console.log('-----UPLOAD EVENT---->', [event.type === HttpEventType.UploadProgress, event, xhrSurrogate]);
+
+                        if(event.type === HttpEventType.Sent) {
+                            // console.log('-----UPLOAD onloadstart---->');
+                            options.upload['onloadstart']?.(event);
+                        } else if(event.type === HttpEventType.UploadProgress) {
+                            //options.upload['onloadstart']?.(event);
+                            console.log('-----UPLOAD onprogress---->');
+                            options.upload['onprogress']?.(event);
+                        } else if(event.type === HttpEventType.Response) {
+                            return d.resolve(null, SUCCESS, { test: 666 });
+                        }
+
+                    },
+                    (error) => {
+                        console.log('---REJECT--UPLOAD----->', error);
+                        return d.reject(xhrSurrogate, error.status, error);
+                    }
+                );
+
 
         return result;
     };
@@ -370,7 +408,3 @@ function sendRequest(options) {
 }
 
 export default injector({ sendRequest: sendRequest });
-
-/* import ajax from 'esm/core/utils/ajax.bundle';
-import $ from 'jquery';
-import { compare as compareVersion } from 'core/utils/version';*/
