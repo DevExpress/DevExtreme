@@ -67,3 +67,33 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
         assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
     });
 });
+
+QUnit.module('Aria attributes', moduleConfig, () => {
+    QUnit.test('aria-label attribute should be set correctly', function(assert) {
+        this.reinit({ });
+
+        assert.strictEqual(this.$element.attr('aria-label'), 'Split bar');
+    });
+
+    ['horizontal', 'vertical'].forEach((direction) => {
+        QUnit.test('aria-orientation attribute should be set correctly', function(assert) {
+            this.reinit({ direction });
+
+            const expectedOrientationAttrValue = direction === 'horizontal' ? 'vertical' : 'horizontal';
+
+            assert.strictEqual(this.$element.attr('aria-orientation'), expectedOrientationAttrValue);
+        });
+    });
+
+    QUnit.test('role attribute should be set correctly', function(assert) {
+        this.reinit({ });
+
+        assert.strictEqual(this.$element.attr('role'), 'application');
+    });
+
+    QUnit.test('aria-roledescription attribute should be set correctly', function(assert) {
+        this.reinit({ });
+
+        assert.strictEqual(this.$element.attr('aria-roledescription'), 'separator');
+    });
+});

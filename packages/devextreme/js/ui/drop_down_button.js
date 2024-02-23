@@ -8,9 +8,7 @@ import List from './list_light';
 import { compileGetter } from '../core/utils/data';
 import { getPublicElement } from '../core/element';
 import { getImageContainer } from '../core/utils/icon';
-import DataHelperMixin from '../data_helper';
-import { DataSource } from '../data/data_source/data_source';
-import ArrayStore from '../data/array_store';
+import DataController from '../data_controller';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { isPlainObject, isDefined } from '../core/utils/type';
@@ -117,12 +115,16 @@ const DropDownButton = Widget.inherit({
         this._createItemClickAction();
         this._createActionClickAction();
         this._createSelectionChangedAction();
-        this._initDataSource();
+        this._initDataController();
         this._compileKeyGetter();
         this._compileDisplayGetter();
-        this._itemsToDataSource(this.option('items'));
         this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+    },
+
+    _initDataController() {
+        const dataSource = this.option('dataSource');
+        this._dataController = new DataController(dataSource ?? this.option('items'), { key: this.option('keyExpr') });
     },
 
     _initTemplates() {
@@ -141,27 +143,8 @@ const DropDownButton = Widget.inherit({
         this.callBase();
     },
 
-    _itemsToDataSource: function(value) {
-        if(!this._dataSource) {
-            this._dataSource = new DataSource({
-                store: new ArrayStore({
-                    key: this._getKey(),
-                    data: value
-                }),
-                pageSize: 0,
-            });
-        }
-    },
-
-    _getKey: function() {
-        const keyExpr = this.option('keyExpr');
-        const storeKey = this._dataSource?.key();
-
-        return isDefined(storeKey) && (!isDefined(keyExpr) || keyExpr === 'this') ? storeKey : keyExpr;
-    },
-
     _compileKeyGetter() {
-        this._keyGetter = compileGetter(this._getKey());
+        this._keyGetter = compileGetter(this._dataController.key());
     },
 
     _compileDisplayGetter() {
@@ -209,10 +192,10 @@ const DropDownButton = Widget.inherit({
         this._lastSelectedItemData = undefined;
 
         const selectedItemKey = this.option('selectedItemKey');
-        this._loadSingle(this._getKey(), selectedItemKey)
+        this._dataController.loadSingle(selectedItemKey)
             .done(d.resolve)
             .fail(() => {
-                d.resolve(null);
+                d.reject(null);
             });
 
         this._loadSingleDeferred = d;
@@ -337,7 +320,7 @@ const DropDownButton = Widget.inherit({
 
         return template.render({
             container: getPublicElement($content),
-            model: this.option('items') || this._dataSource
+            model: this.option('items') || this._dataController.getDataSource()
         });
     },
 
@@ -384,12 +367,12 @@ const DropDownButton = Widget.inherit({
             selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             groupTemplate: this.option('groupTemplate'),
-            keyExpr: this._getKey(),
+            keyExpr: this._dataController.key(),
             noDataText: this.option('noDataText'),
             displayExpr: this.option('displayExpr'),
             itemTemplate: this.option('itemTemplate'),
             items: this.option('items'),
-            dataSource: this._dataSource,
+            dataSource: this._dataController.getDataSource(),
             onItemClick: (e) => {
                 if(!this.option('useSelectMode')) {
                     this._lastSelectedItemData = e.itemData;
@@ -578,7 +561,7 @@ const DropDownButton = Widget.inherit({
     _selectedItemKeyChanged(value) {
         this._setListOption('selectedItemKeys', this.option('useSelectMode') && isDefined(value) ? [value] : []);
         const previousItem = this.option('selectedItem');
-        this._loadSelectedItem().done((selectedItem) => {
+        this._loadSelectedItem().always((selectedItem) => {
             this._updateActionButton(selectedItem);
 
             if(this._displayGetter(previousItem) !== this._displayGetter(selectedItem)) {
@@ -635,15 +618,14 @@ const DropDownButton = Widget.inherit({
         }
     },
 
-    _updateDataSource: function(items = this._dataSource.items()) {
-        this._dataSource = undefined;
-        this._itemsToDataSource(items);
+    _updateDataController: function(items) {
+        this._dataController.updateDataSource(items, this.option('keyExpr'));
         this._updateKeyExpr();
     },
 
     _updateKeyExpr: function() {
         this._compileKeyGetter();
-        this._setListOption('keyExpr', this._getKey());
+        this._setListOption('keyExpr', this._dataController.key());
     },
 
     focus: function() {
@@ -666,7 +648,7 @@ const DropDownButton = Widget.inherit({
                 this._updateActionButton(this.option('selectedItem'));
                 break;
             case 'keyExpr':
-                this._updateDataSource();
+                this._updateDataController();
                 break;
             case 'buttonGroupOptions':
                 this._innerWidgetOptionChanged(this._buttonGroup, args);
@@ -691,16 +673,12 @@ const DropDownButton = Widget.inherit({
                 this.callBase(args);
                 break;
             case 'items':
-                this._updateDataSource(this.option('items'));
+                this._updateDataController(this.option('items'));
                 this._updateItemCollection(name);
                 break;
             case 'dataSource':
-                if(Array.isArray(value)) {
-                    this._updateDataSource(this.option('dataSource'));
-                } else {
-                    this._initDataSource();
-                    this._updateKeyExpr();
-                }
+                this._dataController.updateDataSource(value);
+                this._updateKeyExpr();
                 this._updateItemCollection(name);
                 break;
             case 'icon':
@@ -757,8 +735,12 @@ const DropDownButton = Widget.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    getDataSource: function() {
+        return this._dataController.getDataSource();
     }
-}).include(DataHelperMixin);
+});
 
 registerComponent('dxDropDownButton', DropDownButton);
 export default DropDownButton;
