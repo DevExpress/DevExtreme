@@ -1,12 +1,15 @@
 // eslint-disable-next-line max-classes-per-file
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 
-import ResizeHandle from './resize_handle';
+import Guid from '../../../core/guid';
+import ResizeHandle, { RESIZE_HANDLE_CLASS } from './resize_handle';
+import { getComponentInstance } from './utils/component';
 import {
   getActionNameByEventName,
   RESIZE_EVENT,
@@ -50,6 +53,7 @@ class Splitter extends (CollectionWidget as any) {
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
+      allowKeyboardNavigation: true,
     });
   }
 
@@ -96,17 +100,28 @@ class Splitter extends (CollectionWidget as any) {
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
+    const groupAriaAttributes: { role: string; id?: string } = {
+      role: 'group',
+    };
+
     if (itemData.visible !== false && !this._isLastVisibleItem(index)) {
-      this._renderResizeHandle();
+      const itemId = `dx_${new Guid()}`;
+
+      groupAriaAttributes.id = itemId;
+
+      this._renderResizeHandle(itemId);
     }
+
+    this.setAria(groupAriaAttributes, $itemFrame);
 
     return $itemFrame;
   }
 
-  _renderResizeHandle(): void {
-    const $resizeHandle = $('<div>').appendTo(this.$element());
+  _renderResizeHandle(paneId: string): void {
+    const $resizeHandle = $('<div>')
+      .appendTo(this.$element());
 
-    this._createComponent($resizeHandle, ResizeHandle, this._getResizeHandleConfig());
+    this._createComponent($resizeHandle, ResizeHandle, this._getResizeHandleConfig(paneId));
   }
 
   _getAction(eventName: string): (e) => void {
@@ -114,9 +129,18 @@ class Splitter extends (CollectionWidget as any) {
     return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
   }
 
-  _getResizeHandleConfig(): object {
+  _getResizeHandleConfig(paneId: string): object {
+    const {
+      orientation,
+      allowKeyboardNavigation,
+    } = this.option();
+
     return {
-      direction: this.option('orientation'),
+      direction: orientation,
+      focusStateEnabled: allowKeyboardNavigation,
+      elementAttr: {
+        'aria-controls': paneId,
+      },
       onResizeStart: (e): void => {
         this.layoutState = getCurrentLayout(this._itemElements());
 
@@ -197,11 +221,29 @@ class Splitter extends (CollectionWidget as any) {
     super._itemOptionChanged(item, property, value);
   }
 
+  _getResizeHandleItems(): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.$element().find(`.${RESIZE_HANDLE_CLASS}`);
+  }
+
+  _iterateResizeHandles(callback: (instance: ResizeHandle) => void): void {
+    this._getResizeHandleItems().each((index, element) => {
+      callback(getComponentInstance($(element)));
+
+      return true;
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
+      case 'allowKeyboardNavigation':
+        this._iterateResizeHandles((instance) => {
+          instance.option('focusStateEnabled', value);
+        });
+        break;
       case 'orientation':
         this._toggleOrientationClass();
         break;
@@ -213,6 +255,12 @@ class Splitter extends (CollectionWidget as any) {
       default:
         super._optionChanged(args);
     }
+  }
+
+  registerKeyHandler(key: string, handler: () => void): void {
+    this._iterateResizeHandles((instance) => {
+      instance.registerKeyHandler(key, handler);
+    });
   }
 }
 

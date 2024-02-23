@@ -2,10 +2,12 @@ import $ from 'jquery';
 import Splitter from 'ui/splitter';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
+import { createEvent } from 'events/utils/index';
+
 import 'generic_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const RESIZE_HANDLE = 'dx-resize-handle';
+const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 
 QUnit.testStart(() => {
     const markup =
@@ -32,7 +34,7 @@ const moduleConfig = {
         };
 
         this.getResizeHandles = () => {
-            return this.$element.find(`.${RESIZE_HANDLE}`);
+            return this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
         };
     },
     afterEach: function() {
@@ -46,20 +48,6 @@ QUnit.module('Resizing', moduleConfig, () => {
             assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
         });
     }
-
-    [
-        { orientation: 'horizontal', expectedCursor: 'ew-resize' },
-        { orientation: 'vertical', expectedCursor: 'ns-resize' }
-    ].forEach(({ orientation, expectedCursor }) => {
-        QUnit.test(`resize handle should have "cursor: ${expectedCursor}" with ${orientation} orientation`, function(assert) {
-            this.reinit({ orientation, dataSource: [{ }, { }] });
-
-            const handle = this.getResizeHandles().eq(0);
-            const cursor = handle.css('cursor');
-
-            assert.strictEqual(cursor, expectedCursor);
-        });
-    });
 
     ['horizontal', 'vertical'].forEach(orientation => {
         QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
@@ -165,7 +153,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ visible: false }, { }]
             });
 
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE}`);
+            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
 
             assert.strictEqual(resizeHandles.length, 0);
         });
@@ -176,7 +164,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [ { }, { }, { visible: false }, { }, { }, { visible: false }]
             });
 
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE}`);
+            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
 
             assert.strictEqual(resizeHandles.length, 3);
         });
@@ -479,5 +467,85 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
 
         assert.strictEqual(itemRenderedSpy.callCount, 2, 'itemRendered.callCount');
         assert.strictEqual(nestedItemRenderedSpy.callCount, 2, 'itemRendered.callCount');
+    });
+});
+
+QUnit.module('The dependency of ResizeHandle`s behavior on Splitter options', moduleConfig, () => {
+    QUnit.test('ResizeHandle should be focusable when allowKeyboardNavigation option is set to true', function(assert) {
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }],
+            allowKeyboardNavigation: true
+        });
+
+        this.getResizeHandles().each((index, resizeHandle) => {
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), '0', `resizeHandle[${index}] is focusable`);
+        });
+    });
+
+    QUnit.test('ResizeHandle should not be focusable when allowKeyboardNavigation option is set to false', function(assert) {
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }],
+            allowKeyboardNavigation: false
+        });
+
+        this.getResizeHandles().each((index, resizeHandle) => {
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), undefined, `resizeHandle[${index}] is not focusable`);
+        });
+    });
+
+    QUnit.test('ResizeHandle should not be focusable when allowKeyboardNavigation option is set to false in runtime and vise versa', function(assert) {
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }],
+            allowKeyboardNavigation: true,
+        });
+
+        this.instance.option('allowKeyboardNavigation', false);
+
+        this.getResizeHandles().each((index, resizeHandle) => {
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), undefined, `resizeHandle[${index}] is not focusable`);
+        });
+
+        this.instance.option('allowKeyboardNavigation', true);
+
+        this.getResizeHandles().each((index, resizeHandle) => {
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), '0', `resizeHandle[${index}] is focusable`);
+        });
+    });
+});
+
+QUnit.module('Keyboard support', moduleConfig, () => {
+    QUnit.test('RegisterKeyHandler registers key handling on all internal resizeHandle components', function(assert) {
+        const registerKeyHandlerSpy = sinon.spy();
+
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }],
+        });
+
+        this.instance.registerKeyHandler('enter', registerKeyHandlerSpy);
+
+        this.getResizeHandles().eq(0).trigger(createEvent('keydown', { key: 'Enter' }));
+
+        assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(0).get(0), 'event target is correct');
+        assert.strictEqual(registerKeyHandlerSpy.callCount, 1);
+        registerKeyHandlerSpy.reset();
+
+        this.getResizeHandles().eq(1).trigger(createEvent('keydown', { key: 'Enter' }));
+        assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(1).get(0), 'event target is correct');
+        assert.strictEqual(registerKeyHandlerSpy.callCount, 1);
+    });
+
+    QUnit.test('RegisterKeyHandler registers key handling on all internal resizeHandle components, allowKeyboardNavigation is false', function(assert) {
+        const registerKeyHandlerSpy = sinon.spy();
+
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }],
+            allowKeyboardNavigation: false
+        });
+
+        this.instance.registerKeyHandler('enter', registerKeyHandlerSpy);
+
+        this.getResizeHandles().eq(0).trigger(createEvent('keydown', { key: 'Enter' }));
+
+        assert.strictEqual(registerKeyHandlerSpy.callCount, 0);
     });
 });

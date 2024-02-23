@@ -3,6 +3,8 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 
+import 'generic_light.css!';
+
 QUnit.testStart(() => {
     const markup = '<div id="resizeHandle"></div>';
 
@@ -50,6 +52,19 @@ QUnit.module('Initialization', moduleConfig, () => {
         assert.notStrictEqual(firstInstanceResizeStartEventName, secondInstanceResizeStartEventName);
         assert.notStrictEqual(firstInstanceResizeEventName, secondInstanceResizeEventName);
         assert.notStrictEqual(firstInstanceResizeEndEventName, secondInstanceResizeEndEventName);
+    });
+});
+
+QUnit.module('Cursor', moduleConfig, () => {
+    [
+        { direction: 'horizontal', expectedCursor: 'col-resize' },
+        { direction: 'vertical', expectedCursor: 'row-resize' }
+    ].forEach(({ direction, expectedCursor }) => {
+        QUnit.test(`resize handle should have "cursor: ${expectedCursor}" with ${direction} orientation`, function(assert) {
+            this.reinit({ direction });
+
+            assert.strictEqual(this.$element.css('cursor'), expectedCursor);
+        });
     });
 });
 

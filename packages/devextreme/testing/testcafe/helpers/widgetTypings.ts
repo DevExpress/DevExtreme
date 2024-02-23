@@ -36,6 +36,7 @@ export type WidgetName =
   | 'dxPopover'
   | 'dxSpeedDialAction'
   | 'dxSortable'
+  | 'dxSplitter'
   | 'dxButton'
   | 'dxTextBox'
   | 'dxTextArea'
