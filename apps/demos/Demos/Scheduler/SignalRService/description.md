@@ -8,6 +8,6 @@ Follow the steps below to implement this functionality. Note again that this dem
 
 1. When a push notification is received, call the store's [push(changes)](/Documentation/ApiReference/Data_Layer/CustomStore/Methods/#pushchanges) method to update the store's data (see the `connection.on` event handlers).
 
-For server-side configuration, refer to the [ASP.NET MVC version of this demo](/Demos/WidgetsGallery/Demo/Scheduler/SignalRService/Mvc/Light/).
+For server-side configuration, refer to the [ASP.NET MVC version of this demo](https://demos.devexpress.com/ASPNetMvc/Demo/Scheduler/SignalRService).
 
 For more information about integration with push services, refer to the following help topic: [Integration with Push Services](/Documentation/Guide/Data_Binding/Data_Layer/#Data_Modification/Integration_with_Push_Services).

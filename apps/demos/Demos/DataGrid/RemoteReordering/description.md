@@ -7,7 +7,7 @@ When a row is dropped, the [onReorder][0] event handler is called. Use it to upd
 [0]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#onReorder
 [1]: /Documentation/ApiReference/Data_Layer/CustomStore/Configuration/#update
 [2]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#allowReordering
-[3]: /Demos/WidgetsGallery/Demo/DataGrid/RemoteReordering/NetCore/Light/
-[4]: /Demos/WidgetsGallery/Demo/DataGrid/RemoteReordering/Mvc/Light/
+[3]: https://demos.devexpress.com/aspnetcore/Demo/DataGrid/RemoteReordering/
+[4]: https://demos.devexpress.com/ASPNetMvc/Demo/DataGrid/RemoteReordering/
 [5]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/
 [6]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#dropFeedbackMode
