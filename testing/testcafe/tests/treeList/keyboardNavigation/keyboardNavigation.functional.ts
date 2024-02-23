@@ -1,6 +1,6 @@
 import Button from '../../../model/button';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
 
 fixture`Keyboard Navigation - common`

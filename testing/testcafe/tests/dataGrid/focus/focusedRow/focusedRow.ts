@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../model/dataGrid';
 
 fixture.disablePageReloads`Focused row`
@@ -165,7 +165,7 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
     mode: 'popup',
     allowUpdating: true,
     popup: {
-      animation: null,
+      animation: undefined,
     },
   },
 }));
@@ -577,7 +577,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container): any => {
-        (container as any).append($('<div>')).dxDataGrid({
+        (container.append($('<div>') as any) as any).dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,

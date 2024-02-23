@@ -2,7 +2,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
@@ -253,7 +253,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         dataGrid._getTemplate = () => ({
           render(options) {
             setTimeout(() => {
-              if ($(options.container).closest(document).length) {
+              if ($(options.container).closest(document as any).length) {
                 $(options.container).append($('<div/>').html(`
                     <p>${options.model.data.id}</p>
                     <p>${options.model.data.text}</p>
@@ -267,11 +267,5 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         dataGrid.repaint();
       })();
     })
-    .after(async () => {
-      await ClientFunction(() => {
-        const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-        dataGrid?.dispose();
-      })();
-    });
+    .after(async () => disposeWidget('dxDataGrid'));
 });

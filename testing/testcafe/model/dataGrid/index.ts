@@ -11,7 +11,7 @@ import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
 
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';

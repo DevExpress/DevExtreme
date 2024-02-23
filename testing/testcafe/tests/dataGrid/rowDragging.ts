@@ -2,7 +2,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 

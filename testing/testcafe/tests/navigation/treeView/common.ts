@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';

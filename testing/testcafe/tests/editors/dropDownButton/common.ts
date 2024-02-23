@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, setClassAttribute,
   removeClassAttribute,

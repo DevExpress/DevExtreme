@@ -4,7 +4,7 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/reno
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
-import { WidgetName } from '../../../helpers/createWidget';
+import type { WidgetName } from '../../../helpers/widgetTypings';
 
 const CLASS = {
   scrollable: 'dx-scrollable',

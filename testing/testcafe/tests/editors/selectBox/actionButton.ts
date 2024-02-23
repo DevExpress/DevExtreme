@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`SelectBox`
   .page(url(__dirname, '../../container.html'));

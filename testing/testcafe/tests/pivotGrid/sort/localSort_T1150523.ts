@@ -1,5 +1,5 @@
 import { RequestLogger, RequestMock } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { isMaterial } from '../../../helpers/themeUtils';
 import PivotGrid from '../../../model/pivotGrid';
