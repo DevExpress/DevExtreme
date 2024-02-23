@@ -225,10 +225,15 @@
             }
         },
 
-        sendValidationRequest: function(propertyName, propertyValue, url, method) {
+        sendValidationRequest: function(propertyName, params, url, method, additionalfields) {
             var d = $.Deferred();
             var data = { };
-            data[propertyName] = propertyValue;
+            data[propertyName] = params.value;
+            if (additionalfields.length && params.data) {
+                additionalfields.forEach(function (field) {
+                    data[field] = params.data[field];
+                });
+            }
 
             ajax.sendRequest({
                 url: url,
