@@ -65,6 +65,10 @@ export function globalReadFrom(basePath, relativePath, mapCallback) {
 }
 
 export function changeTheme(dirName, relativePath, demoPath, theme) {
+  if (!theme) {
+    return;
+  }
+
   const indexFilePath = join(dirName, `${relativePath}${demoPath}/index.html`);
 
   const updatedContent = globalReadFrom(dirName, `${relativePath}${demoPath}/index.html`, (data) => data.replace(/dx(\.\w+)*\.light\.css/g, `dx.${theme}.css`));
@@ -240,7 +244,7 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  changeTheme(__dirname, '../../', `/JSDemos/Demos/${product}/${demo}/${framework}/`, process.env.THEME);
+  changeTheme(__dirname, '../../', `/Demos/${product}/${demo}/${framework}/`, process.env.THEME);
 
   const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
   const index = settings.manualTestIndex;
