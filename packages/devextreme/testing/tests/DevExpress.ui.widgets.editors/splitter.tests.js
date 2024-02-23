@@ -489,7 +489,26 @@ QUnit.module('The dependency of ResizeHandle`s behavior on Splitter options', mo
         });
 
         this.getResizeHandles().each((index, resizeHandle) => {
-            assert.strictEqual($(resizeHandle).attr('tabIndex'), undefined, `resizeHandle[${index}] is focusable`);
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), undefined, `resizeHandle[${index}] is not focusable`);
+        });
+    });
+
+    QUnit.test('ResizeHandle should not be focusable when allowKeyboardNavigation option is set to false in runtime and vise versa', function(assert) {
+        this.reinit({
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }],
+            allowKeyboardNavigation: true,
+        });
+
+        this.instance.option('allowKeyboardNavigation', false);
+
+        this.getResizeHandles().each((index, resizeHandle) => {
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), undefined, `resizeHandle[${index}] is not focusable`);
+        });
+
+        this.instance.option('allowKeyboardNavigation', true);
+
+        this.getResizeHandles().each((index, resizeHandle) => {
+            assert.strictEqual($(resizeHandle).attr('tabIndex'), '0', `resizeHandle[${index}] is focusable`);
         });
     });
 });

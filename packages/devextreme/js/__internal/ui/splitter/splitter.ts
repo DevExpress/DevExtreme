@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import CollectionWidgetItem from '@js/ui/collection/item';
@@ -220,11 +221,29 @@ class Splitter extends (CollectionWidget as any) {
     super._itemOptionChanged(item, property, value);
   }
 
+  _getResizeHandleItems(): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.$element().find(`.${RESIZE_HANDLE_CLASS}`);
+  }
+
+  _iterateResizeHandles(callback: (instance: ResizeHandle) => void): void {
+    this._getResizeHandleItems().each((index, element) => {
+      callback(getComponentInstance($(element)));
+
+      return true;
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
+      case 'allowKeyboardNavigation':
+        this._iterateResizeHandles((instance) => {
+          instance.option('focusStateEnabled', value);
+        });
+        break;
       case 'orientation':
         this._toggleOrientationClass();
         break;
@@ -239,10 +258,8 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   registerKeyHandler(key: string, handler: () => void): void {
-    const $resizeHandles = this.$element().find(`.${RESIZE_HANDLE_CLASS}`);
-
-    $resizeHandles.each((index) => {
-      getComponentInstance($resizeHandles.eq(index)).registerKeyHandler(key, handler);
+    this._iterateResizeHandles((instance) => {
+      instance.registerKeyHandler(key, handler);
     });
   }
 }

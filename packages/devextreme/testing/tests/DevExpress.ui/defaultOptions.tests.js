@@ -827,7 +827,7 @@ testComponentDefaults(ResizeHandle,
     {},
     {
         direction: 'horizontal',
-        focusStateEnabled: true,
+        focusStateEnabled: false,
         onResize: null,
         onResizeStart: null,
         onResizeEnd: null,
