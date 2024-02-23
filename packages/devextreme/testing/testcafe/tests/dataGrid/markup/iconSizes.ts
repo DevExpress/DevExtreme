@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 
 fixture.disablePageReloads`Icon Sizes`
