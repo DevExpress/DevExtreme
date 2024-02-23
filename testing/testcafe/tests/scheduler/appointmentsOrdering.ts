@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
 
-import createWidget from '../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
@@ -14,13 +13,6 @@ const REDUCE_CELLS_CSS = `
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
-
-// TODO Vinogradov: Change it to a general dispose widget helper function.
-const disposeScheduler = ClientFunction(() => {
-  const scheduler = ($(SCHEDULER_SELECTOR) as any).dxScheduler('instance');
-
-  scheduler?.dispose();
-}, { dependencies: { SCHEDULER_SELECTOR } });
 
 test('Appointments are ordered correctly with both recurrent and usual appointments (T1212573)', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
@@ -101,5 +93,5 @@ test('Appointments are ordered correctly with both recurrent and usual appointme
   });
 }).after(async () => {
   await removeStylesheetRulesFromPage();
-  await disposeScheduler();
+  await disposeWidget('dxScheduler');
 });
