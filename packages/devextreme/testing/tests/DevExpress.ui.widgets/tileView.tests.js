@@ -277,7 +277,7 @@ QUnit.module('rendering', {
         assert.strictEqual($tile.outerWidth(), DEFAULT_ITEMSIZE, 'Tile width updated correctly');
     });
 
-    QUnit.test('aria-activedescendant should not be set for the component after tile focus', function(assert) {
+    QUnit.test('aria-activedescendant should not be set for the component after tile focus (T1217255)', function(assert) {
         const clock = sinon.useFakeTimers();
 
         try {
@@ -286,13 +286,13 @@ QUnit.module('rendering', {
                 focusStateEnabled: true,
             }).dxTileView('instance');
 
-            const firstItem = this.$element.find(TILEVIEW_ITEM_SELECTOR).eq(0);
+            const $firstItem = this.$element.find(TILEVIEW_ITEM_SELECTOR).eq(0);
 
-            firstItem.trigger('dxpointerdown');
+            $firstItem.trigger('dxpointerdown');
 
             clock.tick(10);
 
-            assert.strictEqual(firstItem.hasClass('dx-state-focused'), true);
+            assert.strictEqual($firstItem.hasClass('dx-state-focused'), true);
             assert.strictEqual(this.$element.attr('aria-activedescendant'), undefined);
         } finally {
             clock.restore();
