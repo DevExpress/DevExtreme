@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -644,6 +645,16 @@ export const validatingModule = {
   extenders: {
     controllers: {
       editing: (Base: ModuleType<EditingController>) => class ValidateEditingController extends Base {
+        processDataItemTreeListHack(item) {
+          // @ts-expect-error
+          super.processDataItem.apply(this, arguments);
+        }
+
+        processItemsTreeListHack(items, e) {
+          // @ts-expect-error
+          return super.processItems.apply(this, arguments);
+        }
+
         _addChange(changeParams) {
           const change = super._addChange.apply(this, arguments as any);
           const validatingController = this.getController('validating');
