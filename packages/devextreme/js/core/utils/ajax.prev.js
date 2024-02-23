@@ -263,13 +263,15 @@ function sendRequestFactory(httpClient) {
         result.abort = function() { // TODO need test
             requestSubscription.unsubscribe();
             d.reject({ status: STATUS_ABORT }, 'error');
+            xhrSurrogate.uploadAborted = true;
             upload?.onabort?.(xhrSurrogate);
             console.log('----result.abort------>');
         };
 
         const xhrSurrogate = {
+            ID: Math.random(20),
             abort() {
-                xhrSurrogate.uploadAborted = true;
+
                 console.log('---xhrSurrogate-abort---+--->');
                 // upload?.onabort?.(xhrSurrogate); //
                 result.abort();
@@ -370,23 +372,26 @@ function sendRequestFactory(httpClient) {
                 )
                 : requestWithTimeout.subscribe(
                     (event) => {
-                        console.log('-----UPLOAD EVENT---->', [event.type === HttpEventType.UploadProgress, event, xhrSurrogate]);
-
+                        console.log('-----UPLOAD EVENT---->', [event.type, event, xhrSurrogate]);
                         if(event.type === HttpEventType.Sent) {
                             // console.log('-----UPLOAD onloadstart---->');
-                            options.upload['onloadstart']?.(event);
+                             options.upload['onloadstart']?.(event);
                         } else if(event.type === HttpEventType.UploadProgress) {
-                            //options.upload['onloadstart']?.(event);
-                            console.log('-----UPLOAD onprogress---->');
+                           // options.upload['onloadstart']?.(event);
+                            console.log('-----UPLOAD onprogress---+->');
                             options.upload['onprogress']?.(event);
                         } else if(event.type === HttpEventType.Response) {
-                            return d.resolve(null, SUCCESS, { test: 666 });
+                            console.log('-----UPLOAD Response-+--->');
+                            return d.resolve(xhrSurrogate, SUCCESS, { test: 666 });
                         }
 
                     },
                     (error) => {
-                        console.log('---REJECT--UPLOAD----->', error);
+                        console.log('---REJECT--UPLOAD-+---->', error);
                         return d.reject(xhrSurrogate, error.status, error);
+                    },
+                    () => {
+                        console.log('Request completed');
                     }
                 );
 
