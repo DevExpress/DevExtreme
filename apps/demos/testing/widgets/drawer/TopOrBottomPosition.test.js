@@ -26,10 +26,10 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
 
     await t
       .click(positions.nth(1))
-      .click(openedStateModes.nth(2))
-      
+      .click(openedStateModes.nth(2));
+
     await takeScreenshot('drawer(overlap, bottom, expand).png');
-      
+
     await t
       .click(menuButton)
       .wait(500);
@@ -48,7 +48,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
       .click(menuButton)
       .wait(500);
 
-    await takeScreenshot('drawer_closed(overlap, bottom, expand).png'); 
+    await takeScreenshot('drawer_closed(overlap, bottom, expand).png');
 
     await t
       .expect(compareResults.isValid())
@@ -65,12 +65,11 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
     const positions = optionsGroup.nth(1).find(`.${RADIO_BUTTON_CLASS}`);
 
     await t
-     .click(openedStateModes.nth(2))
-      .click(positions.nth(1))
-      
+      .click(openedStateModes.nth(2))
+      .click(positions.nth(1));
       
     await takeScreenshot('drawer(overlap, bottom, expand).png');
-      
+
     await t
       .click(menuButton)
       .wait(500);
@@ -89,7 +88,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
       .click(menuButton)
       .wait(500);
 
-    await takeScreenshot('drawer_closed(overlap, bottom, expand).png'); 
+    await takeScreenshot('drawer_closed(overlap, bottom, expand).png');
 
     await t
       .expect(compareResults.isValid())
