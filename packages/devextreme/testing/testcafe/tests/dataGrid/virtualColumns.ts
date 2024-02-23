@@ -2,7 +2,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
@@ -185,13 +185,7 @@ test('The updateDimensions method should render the grid if a container was hidd
         return ($('<div style=\'height: 300px;\'>') as any).text('details');
       },
     },
-  })).after(async () => {
-    await ClientFunction(() => {
-      const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-      dataGrid?.dispose();
-    })();
-  });
+  })).after(async () => disposeWidget('dxDataGrid'));
 });
 
 // T1176161

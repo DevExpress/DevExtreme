@@ -1,4 +1,4 @@
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
 import DropDownMenu from './dropDownMenu';
 
