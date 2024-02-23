@@ -14,7 +14,7 @@ import {
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   DEFAULT_THEME_NAME
-} from '../utils/visual-tests/inject/theme-utils';
+} from '../utils/visual-tests/helpers/theme-utils';
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
