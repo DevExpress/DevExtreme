@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DataGrid.BatchUpdateRequest')
   .page('http://localhost:8080/')
@@ -33,11 +34,11 @@ runManualTest('DataGrid', 'BatchUpdateRequest', ['jQuery', 'React', 'Vue', 'Angu
       })
       .pressKey('enter');
 
-    await takeScreenshot('datagrid_batch_update_request_1_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_batch_update_request_1_desktop.png');
 
     // save changes
     await t.click($('.dx-datagrid-save-button'));
-    await takeScreenshot('datagrid_batch_update_request_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_batch_update_request_2_desktop.png');
 
     // go to the last page to check the inserted row
     await t

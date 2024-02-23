@@ -1,6 +1,7 @@
 import { Selector as $ } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 const CHECKBOX_CLASS = 'dx-checkbox';
@@ -20,13 +21,13 @@ runManualTest('Toolbar', 'Adaptability', ['jQuery', 'React', 'Vue', 'Angular'], 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag($(`.${RESIZABLE_HANDLE_RIGHT_CLASS}`), -400, 0);
-    await takeScreenshot('toolbar_multiline_mode_minimize.png');
+    await testScreenshot(t, takeScreenshot, 'toolbar_multiline_mode_minimize.png');
 
     await t.click($(`.${OPTIONS_CONTAINER_CLASS} .${CHECKBOX_CLASS}`));
-    await takeScreenshot('toolbar_singleline_mode_init.png');
+    await testScreenshot(t, takeScreenshot, 'toolbar_singleline_mode_init.png');
 
     await t.click($(`.${TOOLBAR_CLASS} .${DROP_DOWN_MENU_BUTTON_CLASS}`));
-    await takeScreenshot('toolbar_singleline_mode_menu_open.png');
+    await testScreenshot(t, takeScreenshot, 'toolbar_singleline_mode_menu_open.png');
 
     await t
       .expect(compareResults.isValid())

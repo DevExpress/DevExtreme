@@ -1,4 +1,5 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
 const settings = {
   concurrency: undefined,
@@ -52,6 +53,25 @@ export function getChangedFiles() {
   return changedFilesPath
     && existsSync(changedFilesPath)
     && JSON.parse(readFileSync(changedFilesPath));
+}
+
+export function globalReadFrom(basePath, relativePath, mapCallback) {
+  const absolute = join(basePath, relativePath);
+  if (existsSync(absolute)) {
+    const result = readFileSync(absolute, 'utf8');
+    return (mapCallback && result && mapCallback(result)) || result;
+  }
+  return null;
+}
+
+export function changeTheme(dirName, relativePath, demoPath, theme) {
+  const indexFilePath = join(dirName, `${relativePath}${demoPath}/index.html`);
+
+  const updatedContent = globalReadFrom(dirName, `${relativePath}${demoPath}/index.html`, (data) => data.replace(/dx(\.\w+)*\.light\.css/g, `dx.${theme}.css`));
+
+  if (existsSync(indexFilePath)) {
+    writeFileSync(indexFilePath, updatedContent, 'utf8');
+  }
 }
 
 function getExplicitTestsInternal() {
@@ -220,6 +240,8 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
+  changeTheme(__dirname, '../../', `/JSDemos/Demos/${product}/${demo}/${framework}/`, process.env.THEME);
+
   const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;

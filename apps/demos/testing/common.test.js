@@ -1,7 +1,7 @@
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync } from 'fs';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
@@ -9,18 +9,16 @@ import {
   runTestAtPage,
   shouldRunFramework,
   shouldRunTestAtIndex,
+  globalReadFrom,
+  changeTheme,
 } from '../utils/visual-tests/matrix-test-helper';
+import {
+  DEFAULT_THEME_NAME
+} from '../utils/visual-tests/inject/theme-utils';
+
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
 
-const globalReadFrom = (basePath, relativePath, mapCallback) => {
-  const absolute = join(basePath, relativePath);
-  if (existsSync(absolute)) {
-    const result = readFileSync(absolute, 'utf8');
-    return (mapCallback && result && mapCallback(result)) || result;
-  }
-  return null;
-};
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
   const result = eval(code);
@@ -166,6 +164,8 @@ const getTestSpecificSkipRules = (testName) => {
       }
     }
 
+    changeTheme(__dirname, '../', demoPath, process.env.THEME);
+
     runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
@@ -206,7 +206,8 @@ const getTestSpecificSkipRules = (testName) => {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const comparisonResult = await compareScreenshot(t, `${testName}.png`, undefined, comparisonOptions);
+          const comparisonResult = await compareScreenshot(t, `${testName}${process.env.THEME === DEFAULT_THEME_NAME ? '' : ` (${process.env.THEME})`}.png`, undefined, comparisonOptions);
+
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {
             // eslint-disable-next-line no-console

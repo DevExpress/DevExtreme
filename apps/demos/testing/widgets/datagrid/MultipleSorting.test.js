@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DataGrid.MultipleSorting')
   .page('http://localhost:8080/')
@@ -25,12 +26,12 @@ runManualTest('DataGrid', 'MultipleSorting', ['jQuery', 'React', 'Vue', 'Angular
         },
       });
 
-    await takeScreenshot('datagrid_multiple_sorting_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_multiple_sorting_2_desktop.png');
 
     await t
       .click($('.dx-datagrid-headers .dx-datagrid-action').nth(5));
 
-    await takeScreenshot('datagrid_multiple_sorting_3_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_multiple_sorting_3_desktop.png');
 
     await t
       .click($('.dx-datagrid-headers .dx-datagrid-action').nth(5), {
@@ -39,12 +40,12 @@ runManualTest('DataGrid', 'MultipleSorting', ['jQuery', 'React', 'Vue', 'Angular
         },
       });
 
-    await takeScreenshot('datagrid_multiple_sorting_4_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_multiple_sorting_4_desktop.png');
 
     await t
       .rightClick($('.dx-header-row .dx-datagrid-action').nth(0));
 
-    await takeScreenshot('datagrid_multiple_sorting_5_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_multiple_sorting_5_desktop.png');
 
     await t
       .expect(compareResults.isValid())

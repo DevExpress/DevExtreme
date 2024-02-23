@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture.skip('PieWithResolvedLabelOverlapping')
   .page('http://localhost:8080/')
@@ -17,11 +18,11 @@ runManualTest('Charts', 'PieWithResolvedLabelOverlapping', ['jQuery', 'React', '
 
     await showSelectBoxItems();
     await t.click(selectItem(1));
-    await takeScreenshot('pie_resolve_labels_overlapping_hide.png');
+    await testScreenshot(t, takeScreenshot, 'pie_resolve_labels_overlapping_hide.png');
 
     await showSelectBoxItems();
     await t.click(selectItem(2));
-    await takeScreenshot('pie_resolve_labels_overlapping_none.png');
+    await testScreenshot(t, takeScreenshot, 'pie_resolve_labels_overlapping_none.png');
 
     await t
       .expect(compareResults.isValid())

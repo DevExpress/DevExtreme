@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const CLASSES = {
   listTitle: '.list-title',
@@ -19,7 +20,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag(Selector(CLASSES.listTitle).nth(0), 600, 50, { speed: 0.5 });
-    await takeScreenshot('kanban_list_drag-n-drop.png');
+    await testScreenshot(t, takeScreenshot, 'kanban_list_drag-n-drop.png');
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -31,7 +32,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag(Selector(CLASSES.card).nth(3), 25, 200, { speed: 0.5 });
-    await takeScreenshot('kanban_card_drag-n-drop_same-column.png');
+    await testScreenshot(t, takeScreenshot, 'kanban_card_drag-n-drop_same-column.png');
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -43,7 +44,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag(Selector(CLASSES.card).nth(3), 300, 150, { speed: 0.5 });
-    await takeScreenshot('kanban_card_drag-n-drop_different-column.png');
+    await testScreenshot(t, takeScreenshot, 'kanban_card_drag-n-drop_different-column.png');
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

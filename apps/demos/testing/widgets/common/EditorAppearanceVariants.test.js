@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import asyncForEach from '../../../utils/visual-tests/helpers/async-for-each';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('Common.EditorAppearanceVariants')
   .page('http://localhost:8080/')
@@ -36,7 +37,7 @@ runManualTest('Common', 'EditorAppearanceVariants', ['React', 'Vue', 'Angular', 
         await changeStylingMode(stylingMode);
         await changeLabelMode(labelMode);
         await clickSaveButton();
-        await takeScreenshot(`common_editor_appearance_variants_${stylingMode}_${labelMode}_desktop.png`);
+        await testScreenshot(t, takeScreenshot, `common_editor_appearance_variants_${stylingMode}_${labelMode}_desktop.png`);
       });
     });
 

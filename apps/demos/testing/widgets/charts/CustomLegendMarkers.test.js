@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture.skip('Charts.CustomLegendMarkers')
   .page('http://localhost:8080/')
@@ -14,7 +15,7 @@ runManualTest('Charts', 'CustomLegendMarkers', ['jQuery', 'React', 'Vue', 'Angul
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.hover($('.dxl-marker').nth(1));
-    await takeScreenshot('charts_custom_legend_marker.png', '.dxc-legend');
+    await testScreenshot(t, takeScreenshot, 'charts_custom_legend_marker.png', '.dxc-legend');
 
     await t
       .expect(compareResults.isValid())

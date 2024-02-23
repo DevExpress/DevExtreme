@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DataGrid.CellEditingAndEditingAPI')
   .page('http://localhost:8080/')
@@ -14,7 +15,7 @@ runManualTest('DataGrid', 'CellEditingAndEditingAPI', ['jQuery', 'React', 'Vue',
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click($('.dx-datagrid-rowsview').find('td').nth(2));
-    await takeScreenshot('datagrid_cell_editing_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_cell_editing_2_desktop.png');
 
     await t
       .typeText(
@@ -27,7 +28,7 @@ runManualTest('DataGrid', 'CellEditingAndEditingAPI', ['jQuery', 'React', 'Vue',
         offsetX: 0,
         offsetY: 0,
       });
-    await takeScreenshot('datagrid_cell_editing_3_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_cell_editing_3_desktop.png');
 
     await t
       .hover($('td.dx-command-select').nth(2))
@@ -36,10 +37,10 @@ runManualTest('DataGrid', 'CellEditingAndEditingAPI', ['jQuery', 'React', 'Vue',
       .click($('.dx-checkbox-icon').nth(4))
       .hover($('td.dx-command-select').nth(5))
       .click($('.dx-checkbox-icon').nth(5));
-    await takeScreenshot('datagrid_cell_editing_4_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_cell_editing_4_desktop.png');
 
     await t.click($('.dx-button').withText('Delete Selected Records'));
-    await takeScreenshot('datagrid_cell_editing_5_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_cell_editing_5_desktop.png');
 
     await t
       .expect(compareResults.isValid())

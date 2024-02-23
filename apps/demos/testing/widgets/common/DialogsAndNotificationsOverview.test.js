@@ -1,6 +1,7 @@
 import { Selector as $ } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const IMAGES_CONTAINER_CLASS = 'images';
 const ITEM_CONTENT_CLASS = 'item-content';
@@ -21,7 +22,7 @@ runManualTest('Common', 'DialogsAndNotificationsOverview', ['jQuery', 'React', '
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click($(`.${IMAGES_CONTAINER_CLASS} .${ITEM_CONTENT_CLASS}`));
-    await takeScreenshot('common_dialogs_and_notifications_overview_popup.png');
+    await testScreenshot(t, takeScreenshot, 'common_dialogs_and_notifications_overview_popup.png');
 
     await t
       .expect(compareResults.isValid())

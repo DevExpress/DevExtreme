@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DropDownBox.MultipleSelection')
   .page('http://localhost:8080/')
@@ -17,7 +18,7 @@ runManualTest('DropDownBox', 'MultipleSelection', ['jQuery', 'React', 'Vue', 'An
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0))
       .wait(200);
 
-    await takeScreenshot('dropdownbox_multiple_selection_treebox.png');
+    await testScreenshot(t, takeScreenshot, 'dropdownbox_multiple_selection_treebox.png');
 
     await t
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0))
@@ -27,7 +28,7 @@ runManualTest('DropDownBox', 'MultipleSelection', ['jQuery', 'React', 'Vue', 'An
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(1))
       .wait(200);
 
-    await takeScreenshot('dropdownbox_multiple_selection_gridbox.png');
+    await testScreenshot(t, takeScreenshot, 'dropdownbox_multiple_selection_gridbox.png');
 
     await t
       .expect(compareResults.isValid())

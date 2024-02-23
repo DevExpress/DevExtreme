@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture.skip('Charts.Crosshair')
   .page('http://localhost:8080/')
@@ -14,7 +15,7 @@ runManualTest('Charts', 'Crosshair', ['jQuery', 'React', 'Vue', 'Angular'], (tes
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.hover($('.dxc-series').nth(1).find('circle').nth(1));
-    await takeScreenshot('charts_crosshair.png');
+    await testScreenshot(t, takeScreenshot, 'charts_crosshair.png');
 
     await t
       .expect(compareResults.isValid())

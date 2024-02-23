@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture.skip('Charts.ZoomingOnAreaSelection')
   .page('http://localhost:8080/')
@@ -14,10 +15,10 @@ runManualTest('Charts', 'ZoomingOnAreaSelection', ['jQuery', 'React', 'Vue', 'An
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag($('.dxc-series circle').nth(7), 600, 200);
-    await takeScreenshot('zooming_by_selection.png');
+    await testScreenshot(t, takeScreenshot, 'zooming_by_selection.png');
 
     await t.click($('#reset-zoom'));
-    await takeScreenshot('reset_zooming_by_selection.png');
+    await testScreenshot(t, takeScreenshot, 'reset_zooming_by_selection.png');
 
     await t
       .expect(compareResults.isValid())

@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('VectorMap.DynamicViewport')
   .page('http://localhost:8080/')
@@ -18,11 +19,11 @@ runManualTest('VectorMap', 'DynamicViewport', ['jQuery', 'React', 'Vue', 'Angula
 
     await t.click(zoomButton);
     await t.click(zoomButton);
-    await takeScreenshot('zoom_vector_map_by_control_bar.png');
+    await testScreenshot(t, takeScreenshot, 'zoom_vector_map_by_control_bar.png');
 
     await showSelectBoxItems();
     await t.click(selectItem(4));
-    await takeScreenshot('vector_map_viewport-changing.png');
+    await testScreenshot(t, takeScreenshot, 'vector_map_viewport-changing.png');
 
     await t
       .expect(compareResults.isValid())
