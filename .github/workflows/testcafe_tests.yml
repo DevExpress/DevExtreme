@@ -114,11 +114,18 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder" },
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "timezones", name: "timezone (Europe/Berlin)", timezone: "Europe/Berlin" },
+          { componentFolder: "timezones", name: "timezone (America/Los_Angeles)", timezone: "America/Los_Angeles" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
 
     steps:
+    - name: Set machine timezone
+      run: |
+        sudo ln -sf "/usr/share/zoneinfo/$([ "${{ matrix.ARGS.timezone }}" != "" ] && echo "${{ matrix.ARGS.timezone }}" || echo "GMT")" /etc/localtime
+        date
+
     - name: Get sources
       uses: actions/checkout@v4
 
