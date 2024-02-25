@@ -190,7 +190,7 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('Switch should have correct aria-disabled and tabindex attributes', function(assert) {
-        const $element = $('#switch').dxSwitch();
+        const $element = $('#switch').dxSwitch({ focusStateEnabled: true });
         const instance = $element.dxSwitch('instance');
 
         assert.strictEqual($element.attr('aria-disabled'), undefined);
