@@ -639,3 +639,31 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
     });
 });
 
+QUnit.module('Accessibility', () => {
+    QUnit.test('Switch should have correct aria attributes', function(assert) {
+        const $element = $('#switch').dxSwitch();
+        const instance = $element.dxSwitch('instance');
+
+        assert.strictEqual($element.attr('role'), 'switch');
+
+        assert.strictEqual($element.attr('aria-checked'), 'false');
+        assert.strictEqual($element.attr('aria-label'), instance.option('switchedOffText'));
+        assert.strictEqual($element.attr('aria-disabled'), undefined);
+        assert.strictEqual($element.attr('aria-readonly'), undefined);
+        assert.strictEqual($element.attr('tabindex'), '0');
+
+        instance.option({ value: true });
+
+        assert.strictEqual($element.attr('aria-checked'), 'true');
+        assert.strictEqual($element.attr('aria-label'), instance.option('switchedOnText'));
+
+        instance.option({ disabled: true });
+
+        assert.strictEqual($element.attr('aria-disabled'), 'true');
+        assert.strictEqual($element.attr('tabindex'), undefined);
+
+        instance.option({ readOnly: true });
+
+        assert.strictEqual($element.attr('aria-readonly'), 'true');
+    });
+});
