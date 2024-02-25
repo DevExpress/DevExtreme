@@ -26,6 +26,23 @@ const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
+['', 'label'].forEach((label) => {
+  test(`TextBox should have a correct border color when label is ${label ?? 'empty'} (T1217197)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `TextBox should have a correct border color when label is ${label ?? 'empty'}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxTextBox', {
+    label,
+    value: 'text',
+    labelMode: 'static',
+    readOnly: true,
+  }));
+});
+
 [
   { labelMode: 'static', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
   { labelMode: 'floating', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
