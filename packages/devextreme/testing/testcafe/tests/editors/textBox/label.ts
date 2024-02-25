@@ -26,21 +26,31 @@ const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
-['', 'label'].forEach((label) => {
-  test(`TextBox with readonly state should have a correct border color when label is ${label ?? 'empty'} (T1217197)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('TextBox in readonly state should have correct border color (T1217197)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `TextBox with readonly state should have a correct border color when label is ${label ?? 'empty'}.png`, { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TextBox in readonly state should have correct border color (T1217197).png', { element: '#container' });
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxTextBox', {
-    label,
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+  await appendElementTo('#container', 'div', 'textbox-with-label', { margin: '20px 40px' });
+  await appendElementTo('#container', 'div', 'textbox-without-label', { margin: '20px 40px' });
+
+  await createWidget('dxTextBox', {
     value: 'text',
     labelMode: 'static',
     readOnly: true,
-  }));
+  }, '#textbox-with-label');
+
+  await createWidget('dxTextBox', {
+    value: 'text',
+    label: 'label',
+    labelMode: 'static',
+    readOnly: true,
+  }, '#textbox-without-label');
 });
 
 [
