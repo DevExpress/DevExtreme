@@ -35,9 +35,9 @@ test('TextBox in readonly state should have correct border color (T1217197)', as
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
-  await appendElementTo('#container', 'div', 'textbox-with-label', { margin: '20px 40px' });
-  await appendElementTo('#container', 'div', 'textbox-without-label', { margin: '20px 40px' });
+  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px; padding: 20px;');
+  await appendElementTo('#container', 'div', 'textbox-with-label', { margin: '20px' });
+  await appendElementTo('#container', 'div', 'textbox-without-label', { margin: '20px' });
 
   await createWidget('dxTextBox', {
     value: 'text',
