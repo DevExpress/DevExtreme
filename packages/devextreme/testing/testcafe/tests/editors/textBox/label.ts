@@ -27,10 +27,10 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
 ['', 'label'].forEach((label) => {
-  test(`TextBox should have a correct border color when label is ${label ?? 'empty'} (T1217197)`, async (t) => {
+  test(`TextBox with readonly state should have a correct border color when label is ${label ?? 'empty'} (T1217197)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `TextBox should have a correct border color when label is ${label ?? 'empty'}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `TextBox with readonly state should have a correct border color when label is ${label ?? 'empty'}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
