@@ -2235,7 +2235,8 @@ QUnit.module('file uploading', moduleConfig, () => {
     });
 
     QUnit.test('upload process should be aborted by \'cancel\' button click', function(assert) {
-        const $element = $('#fileuploader').dxFileUploader({ uploadMode: 'instantly' });
+        const spyOnUploadAborted = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({ uploadMode: 'instantly', onUploadAborted: spyOnUploadAborted});
 
         simulateFileChoose($element, fakeFile);
 
@@ -2243,8 +2244,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         const $cancelButton = $element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS);
 
         $cancelButton.trigger('dxclick');
-
-        assert.ok(request.uploadAborted, 'load is aborted');
+        assert.equal(spyOnUploadAborted.callCount, 1, 'load is aborted');
     });
 
     QUnit.test('FormData field name should correspond the \'name\' option value', function(assert) {
@@ -2926,7 +2926,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             onUploadStarted: function(e) {
-                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+                assert.ok(e.request instanceof XMLHttpRequest || e.request.type === 'XMLHttpRequestSurrogate', 'request is correct');
             }
         });
 
@@ -2939,7 +2939,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             onUploaded: function(e) {
-                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+                assert.ok(e.request instanceof XMLHttpRequest || e.request.type === 'XMLHttpRequestSurrogate', 'request is correct');
             }
         });
 
@@ -2953,7 +2953,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             onProgress: function(e) {
-                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+                assert.ok(e.request instanceof XMLHttpRequest || e.request.type === 'XMLHttpRequestSurrogate', 'request is correct');
             }
         });
 
@@ -2967,7 +2967,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             onUploadError: function(e) {
-                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+                assert.ok(e.request instanceof XMLHttpRequest || e.request.type === 'XMLHttpRequestSurrogate', 'request is correct');
             }
         });
 
@@ -2982,7 +2982,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             onUploadAborted: function(e) {
-                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+                assert.ok(e.request instanceof XMLHttpRequest || e.request.type === 'XMLHttpRequestSurrogate', 'request is correct');
             }
         });
 
@@ -2996,7 +2996,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             onBeforeSend: function(e) {
-                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+                assert.ok(e.request instanceof XMLHttpRequest || e.request.type === 'XMLHttpRequestSurrogate', 'request is correct');
             }
         });
 

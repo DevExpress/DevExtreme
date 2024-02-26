@@ -238,7 +238,6 @@ function sendRequestFactory(httpClient) {
     return (options) => {
         const destroy$ = new Subject();
         const d = Deferred();
-        console.log('-----ajax.prev options----->', options);
         const method = (options.method || 'get').toLowerCase();
         const isGet = method === 'get';
         const needScriptEvaluation = options.dataType === 'jsonp' || options.dataType === 'script';
@@ -262,12 +261,8 @@ function sendRequestFactory(httpClient) {
         let requestSubscription;
 
         result.abort = function() { // TODO need test
-            // requestSubscription.unsubscribe();
-
-            //xhrSurrogate.uploadAborted = true;
             destroy$.next();
             destroy$.complete();
-            console.log('----result.abort----upload-+->>>', upload);
             d.reject({ status: STATUS_ABORT }, 'error');
             upload?.onabort?.(xhrSurrogate);
 
@@ -277,8 +272,6 @@ function sendRequestFactory(httpClient) {
             ID: Math.random(20),
             type: 'XMLHttpRequestSurrogate',
             abort() {
-                console.log('---xhrSurrogate-abort---+++--->');
-                // upload?.onabort?.(xhrSurrogate);
                 result.abort();
             } };
 
@@ -320,9 +313,7 @@ function sendRequestFactory(httpClient) {
 
 
         if(beforeSend) {
-            console.log('------beforeSend---->', options.beforeSend);
             beforeSend(xhrSurrogate);
-            // xhrSurrogate.uploadStarted = true;
         }
 
         const request = options.crossDomain && needScriptEvaluation
@@ -357,7 +348,6 @@ function sendRequestFactory(httpClient) {
             !upload
                 ? requestWithTimeout.subscribe(
                     (response) => {
-                        console.log('-----RESPONSE OK---->', response);
 
                         if(needScriptEvaluation) {
                             evalScript(response.body);
@@ -370,7 +360,6 @@ function sendRequestFactory(httpClient) {
                         );
                     },
                     (response) => {
-                        console.log('---REJECT------->', response);
                         const errorStatus = options.dataType === 'json' && response.message.includes('parsing')
                             ? PARSER_ERROR
                             : (response?.timeout || 'error');
@@ -381,40 +370,26 @@ function sendRequestFactory(httpClient) {
                 : requestWithTimeout.subscribe(
                     (event) => {
                         if(event.type === HttpEventType.Sent) {
-                            console.log("-----UPLOAD sent---->", [
-                                event.type,
-                                event,
-                                xhrSurrogate,
-                            ]);
-                            // console.log('-----UPLOAD onloadstart---->');
                             if(!isUploadStarted) {
-                                options.upload["onloadstart"]?.(event);
+                                options.upload['onloadstart']?.(event);
                                 isUploadStarted = true;
                             }
                         } else if(event.type === HttpEventType.UploadProgress) {
-                           // options.upload['onloadstart']?.(event);
-                            console.log('-----UPLOAD onprogress---+->', event);
                             total += event.loaded;
                             if(!isUploadStarted) {
-                                options.upload["onloadstart"]?.(event);
+                                options.upload['onloadstart']?.(event);
                                 isUploadStarted = true;
                             }
-                            options.upload["onprogress"]?.({...event, total });
+                            options.upload['onprogress']?.({ ...event, total });
                         } else if(event.type === HttpEventType.Response) {
-                            console.log('-----UPLOAD Response-+--->');
                             return d.resolve(xhrSurrogate, SUCCESS, { test: 666 });
-                        } else {
-                            console.log('-----UPLOAD event-+--->', event);
                         }
                     },
                     (response) => {
-                        console.log('---REJECT--UPLOAD-+---->', options.upload);
                         options.upload['onerror']?.(assignResponseProps(xhrSurrogate, response));
                         return d.reject(assignResponseProps(xhrSurrogate, response), response.status, response);
                     },
-                    (arg) => {
-                        console.log('Request completed', arg);
-                    }
+                    () => {}
                 );
 
 
