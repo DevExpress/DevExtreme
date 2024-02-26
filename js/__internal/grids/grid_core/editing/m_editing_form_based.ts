@@ -181,7 +181,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         .appendTo(this.component.$element())
         .addClass(editPopupClass);
 
-      // @ts-expect-error
       this._editPopup = this._createComponent($popupContainer, Popup);
       this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
       this._editPopup.on('shown', (e) => {
@@ -214,7 +213,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
     return (container) => {
       const formTemplate = this.getEditFormTemplate();
-      // @ts-expect-error
       const scrollable = this._createComponent($('<div>').appendTo(container), Scrollable);
 
       this._$popupContent = $((scrollable as any).content());
