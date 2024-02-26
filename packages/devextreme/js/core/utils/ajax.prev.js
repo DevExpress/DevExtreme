@@ -6,7 +6,7 @@ import {
     HttpParams,
     HttpXhrBackend,
 } from '@angular/common/http';
-import { timeout, throwError } from 'rxjs';
+import { timeout, throwError, takeUntil, Subject } from 'rxjs';
 import httpRequest from '../http_request';
 import { extendFromObject } from './extend';
 import { getWindow, hasWindow } from './window';
@@ -236,6 +236,7 @@ function sendRequestFactory(httpClient) {
     }
 
     return (options) => {
+        const destroy$ = new Subject();
         const d = Deferred();
         console.log('-----ajax.prev options----->', options);
         const method = (options.method || 'get').toLowerCase();
@@ -261,19 +262,22 @@ function sendRequestFactory(httpClient) {
         let requestSubscription;
 
         result.abort = function() { // TODO need test
-            requestSubscription.unsubscribe();
+            // requestSubscription.unsubscribe();
+
+            //xhrSurrogate.uploadAborted = true;
+            destroy$.next();
+            destroy$.complete();
+            console.log('----result.abort----upload-+->>>', upload);
             d.reject({ status: STATUS_ABORT }, 'error');
-            xhrSurrogate.uploadAborted = true;
             upload?.onabort?.(xhrSurrogate);
-            console.log('----result.abort------>');
+
         };
 
         const xhrSurrogate = {
             ID: Math.random(20),
             abort() {
-
-                console.log('---xhrSurrogate-abort---+--->');
-                // upload?.onabort?.(xhrSurrogate); //
+                console.log('---xhrSurrogate-abort---+++--->');
+                // upload?.onabort?.(xhrSurrogate);
                 result.abort();
             } };
 
@@ -334,7 +338,7 @@ function sendRequestFactory(httpClient) {
                     observe: upload ? 'events' : 'response',
                     responseType: options.responseType || (['jsonp', 'script'].includes(options.dataType) ? 'text' : options.dataType)
                 }
-            );
+            ).pipe(takeUntil(destroy$));
 
         const requestWithTimeout = (
             options.timeout ?
@@ -372,8 +376,8 @@ function sendRequestFactory(httpClient) {
                 )
                 : requestWithTimeout.subscribe(
                     (event) => {
-                        console.log('-----UPLOAD EVENT---->', [event.type, event, xhrSurrogate]);
                         if(event.type === HttpEventType.Sent) {
+                            console.log('-----UPLOAD sent---->', [event.type, event, xhrSurrogate]);
                             // console.log('-----UPLOAD onloadstart---->');
                              options.upload['onloadstart']?.(event);
                         } else if(event.type === HttpEventType.UploadProgress) {
@@ -383,15 +387,16 @@ function sendRequestFactory(httpClient) {
                         } else if(event.type === HttpEventType.Response) {
                             console.log('-----UPLOAD Response-+--->');
                             return d.resolve(xhrSurrogate, SUCCESS, { test: 666 });
+                        } else {
+                            console.log('-----UPLOAD event-+--->', event);
                         }
-
                     },
                     (error) => {
                         console.log('---REJECT--UPLOAD-+---->', error);
                         return d.reject(xhrSurrogate, error.status, error);
                     },
-                    () => {
-                        console.log('Request completed');
+                    (arg) => {
+                        console.log('Request completed', arg);
                     }
                 );
 
