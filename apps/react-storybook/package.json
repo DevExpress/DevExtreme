@@ -1,0 +1,33 @@
+{
+  "name": "react-storybook",
+  "version": "24.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "devextreme": "~24.1.0",
+    "devextreme-react": "~24.1.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.9",
+    "@storybook/addon-interactions": "^7.6.9",
+    "@storybook/addon-links": "^7.6.9",
+    "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/blocks": "^7.6.9",
+    "@storybook/react": "^7.6.9",
+    "@storybook/react-webpack5": "^7.6.9",
+    "@storybook/test": "^7.6.9",
+    "prop-types": "^15.8.1",
+    "react": "~18.0.0",
+    "react-dom": "~18.0.0",
+    "storybook": "^7.6.9",
+    "storybook-addon-code-editor": "^2.2.0",
+    "typescript": "4.2.4"
+  }
+}
