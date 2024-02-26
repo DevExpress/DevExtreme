@@ -90,6 +90,8 @@ jobs:
           { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
           { componentFolder: "scheduler", name: "scheduler (4/5)", indices: "4/5" },
           { componentFolder: "scheduler", name: "scheduler (5/5)", indices: "5/5" },
+          { componentFolder: "scheduler/timezones", name: "scheduler (Europe/Berlin)", timezone: "Europe/Berlin" },
+          { componentFolder: "scheduler/timezones", name: "scheduler (America/Los_Angeles)", timezone: "America/Los_Angeles" },
           { componentFolder: "form", name: "form (1/2)", indices: "1/2" },
           { componentFolder: "form", name: "form (2/2)", indices: "2/2" },
           { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
@@ -114,8 +116,6 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder" },
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "timezones", name: "timezone (Europe/Berlin)", timezone: "Europe/Berlin" },
-          { componentFolder: "timezones", name: "timezone (America/Los_Angeles)", timezone: "America/Los_Angeles" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90

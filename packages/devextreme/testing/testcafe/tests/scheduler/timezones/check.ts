@@ -1,10 +1,10 @@
 import { ClientFunction } from 'testcafe';
-import { getTimezoneTest, MACHINE_TIMEZONES, MachineTimezonesType } from '../../helpers/machineTimezones';
-import url from '../../helpers/getPageUrl';
+import { getTimezoneTest, MACHINE_TIMEZONES, MachineTimezonesType } from '../../../helpers/machineTimezones';
+import url from '../../../helpers/getPageUrl';
 
 fixture
   .disablePageReloads`Runner machine timezone checks`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 type CheckType = [MachineTimezonesType, string];
 const checks: CheckType[] = [
