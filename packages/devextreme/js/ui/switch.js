@@ -319,7 +319,7 @@ const Switch = Editor.inherit({
     _renderValue() {
         this._validateValue();
 
-        const { value } = this.option();
+        const value = this.option('value');
         this._renderPosition(value, 0);
 
         this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, value);
