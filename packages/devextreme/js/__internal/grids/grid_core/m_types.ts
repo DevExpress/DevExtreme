@@ -62,7 +62,7 @@ export interface InternalGrid extends GridBaseType {
   _createComponent: <TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options: TComponent extends Component<infer TOptions> ? TOptions : never
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never
   ) => TComponent;
 }
 
