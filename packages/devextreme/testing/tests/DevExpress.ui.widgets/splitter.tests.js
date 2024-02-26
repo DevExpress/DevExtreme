@@ -253,26 +253,37 @@ QUnit.module('Resizing', moduleConfig, () => {
         });
     });
 
-    QUnit.test('resize item should not be resized beyound neighbour', function(assert) {
-        this.reinit({ height: 208, orientation: 'vertical', dataSource: [{ }, { }, { }, { }] });
+    [
+        { resizeDistance: 200, expectedSize: ['75', '0', '0', '25'], handleIndex: 0, orientation: 'horizontal', rtl: false },
+        { resizeDistance: 200, expectedSize: ['75', '0', '0', '25'], handleIndex: 0, orientation: 'vertical', rtl: false },
+        { resizeDistance: 200, expectedSize: ['0', '50', '25', '25'], handleIndex: 0, orientation: 'horizontal', rtl: true },
+        { resizeDistance: 300, expectedSize: ['100', '0', '0', '0'], handleIndex: 0, orientation: 'horizontal', rtl: false },
+        { resizeDistance: 300, expectedSize: ['100', '0', '0', '0'], handleIndex: 0, orientation: 'vertical', rtl: false },
+        { resizeDistance: 200, expectedSize: ['25', '75', '0', '0'], handleIndex: 1, orientation: 'horizontal', rtl: false },
+        { resizeDistance: 200, expectedSize: ['25', '75', '0', '0'], handleIndex: 1, orientation: 'vertical', rtl: false },
+        { resizeDistance: 200, expectedSize: ['25', '0', '0', '75'], handleIndex: 2, orientation: 'horizontal', rtl: true },
+    ].forEach(({ resizeDistance, expectedSize, handleIndex, orientation, rtl }) => {
+        QUnit.test(`should resize all panes on the way, ${orientation} orientation`, function(assert) {
+            this.reinit({ width: 424, height: 424, dataSource: [{ }, { }, { }, { }], orientation, rtlEnabled: rtl });
 
-        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
 
-        const pointer = pointerMock(this.getResizeHandles().eq(0));
-        pointer.start().dragStart().drag(0, 400).dragEnd();
+            const pointer = pointerMock(this.getResizeHandles().eq(handleIndex));
+            pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
 
-        assertLayout(items, ['50', '0', '25', '25'], assert);
+            assertLayout(items, expectedSize, assert);
+        });
     });
 
-    QUnit.test('resize item with nested splitter should not be resized beyound neighbour', function(assert) {
+    QUnit.test('resize item with nested splitter should resize all panes beyound neighbour', function(assert) {
         this.reinit({ width: 208, dataSource: [ { splitter: { dataSource: [{ }] } }, { }, { }, { splitter: { dataSource: [{ }] } }] });
 
         const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
 
-        const pointer = pointerMock(this.getResizeHandles().eq(1));
+        const pointer = pointerMock(this.getResizeHandles().eq(2));
         pointer.start().dragStart().drag(-400, 0).dragEnd();
 
-        assertLayout(items, ['25', '0', '50', '25'], assert);
+        assertLayout(items, ['0', '0', '0', '100'], assert);
     });
 });
 

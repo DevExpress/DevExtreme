@@ -45,6 +45,21 @@ function findNextVisibleItemIndex(items, itemIndex: number): number {
   return -1;
 }
 
+// eslint-disable-next-line max-len
+function findMaxAvailableDelta(currentLayout, firstItemIndex, secondItemIndex, isSizeDecreasing): number {
+  const firstIndex = isSizeDecreasing ? 0 : secondItemIndex;
+  const lastIndex = isSizeDecreasing ? firstItemIndex : currentLayout.length - 1;
+  let maxAvailableDelta = 0;
+
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  for (let i = firstIndex; i <= lastIndex; i += 1) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    maxAvailableDelta += currentLayout[i];
+  }
+
+  return maxAvailableDelta;
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getNewLayoutState(delta, handle, currentLayout, items): number[] {
   const newLayoutState = [...currentLayout];
@@ -53,12 +68,27 @@ export function getNewLayoutState(delta, handle, currentLayout, items): number[]
   const firstItemIndex: number = $(handle).prev().data().dxItemIndex;
   const secondItemIndex = findNextVisibleItemIndex(items, firstItemIndex);
 
-  const decreasingItemIndex = delta < 0 ? firstItemIndex : secondItemIndex;
-  const currentSize = currentLayout[decreasingItemIndex];
-  const actualDelta: number = Math.min(Math.abs(delta), currentSize);
-  newLayoutState[decreasingItemIndex] = currentSize - actualDelta;
+  const isSizeDecreasing = delta < 0;
+  // eslint-disable-next-line max-len
+  const maxAvailableDelta = findMaxAvailableDelta(currentLayout, firstItemIndex, secondItemIndex, isSizeDecreasing);
+  let currentSplitterItemIndex = isSizeDecreasing ? firstItemIndex : secondItemIndex;
+  const actualDelta: number = Math.min(Math.abs(delta), maxAvailableDelta);
+  let remainingDelta = actualDelta;
 
-  const increasingItemIndex = delta < 0 ? secondItemIndex : firstItemIndex;
+  while (remainingDelta > 0) {
+    const currentSize = currentLayout[currentSplitterItemIndex];
+    if (currentSize >= remainingDelta) {
+      newLayoutState[currentSplitterItemIndex] = currentSize - remainingDelta;
+      remainingDelta = 0;
+    } else {
+      remainingDelta -= currentSize;
+      newLayoutState[currentSplitterItemIndex] = 0;
+    }
+
+    currentSplitterItemIndex += isSizeDecreasing ? -1 : 1;
+  }
+
+  const increasingItemIndex = isSizeDecreasing ? secondItemIndex : firstItemIndex;
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   newLayoutState[increasingItemIndex] = currentLayout[increasingItemIndex] + actualDelta;
 
