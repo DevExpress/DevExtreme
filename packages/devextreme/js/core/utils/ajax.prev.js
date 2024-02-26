@@ -407,9 +407,10 @@ function sendRequestFactory(httpClient) {
                             console.log('-----UPLOAD event-+--->', event);
                         }
                     },
-                    (error) => {
-                        console.log('---REJECT--UPLOAD-+---->', error);
-                        return d.reject(xhrSurrogate, error.status, error);
+                    (response) => {
+                        console.log('---REJECT--UPLOAD-+---->', options.upload);
+                        options.upload['onerror']?.(assignResponseProps(xhrSurrogate, response));
+                        return d.reject(assignResponseProps(xhrSurrogate, response), response.status, response);
                     },
                     (arg) => {
                         console.log('Request completed', arg);
