@@ -73,3 +73,8 @@ $texteditor-label-transition:
   $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
 }
 
+:root {
+  --dx-texteditor-color-text: #{$texteditor-color}; 
+  --dx-texteditor-color-label: #{$texteditor-label-color};
+}
+

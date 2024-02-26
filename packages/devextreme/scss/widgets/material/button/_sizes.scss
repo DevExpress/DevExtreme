@@ -33,3 +33,7 @@ $material-button-active-box-shadow-size: 0 4px 6px !default;
   $material-button-icon-text-padding: 8px;
   $material-button-min-width: 48px !default;
 }
+
+:root { 
+  --dx-button-padding-inline: #{$material-button-horizontal-padding}; 
+} 
