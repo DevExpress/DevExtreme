@@ -14,11 +14,11 @@ import gridCore from './m_core';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
 
-const data = (Base: ModuleType<DataController>) => class VirtualScrollingDataControllerExtender extends virtualScrollingDataControllerExtender(Base) {
+virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataController>) => class TreeListVirtualScrollingDataControllerExtender extends virtualScrollingDataControllerExtender(Base) {
   _loadOnOptionChange() {
-    const virtualScrollController = this._dataSource && this._dataSource._virtualScrollController;
+    const virtualScrollController = this._dataSource?._virtualScrollController;
 
-    virtualScrollController && virtualScrollController.reset();
+    virtualScrollController?.reset();
     // @ts-expect-error
     super._loadOnOptionChange();
   }
@@ -42,11 +42,6 @@ gridCore.registerModule('virtualScrolling', {
         mode: 'virtual',
       },
     });
-  },
-  extenders: {
-    controllers: {
-      data,
-    },
   },
 });
 

@@ -1,9 +1,7 @@
 import $ from '@js/core/renderer';
 import eventsEngine from '@js/events/core/events_engine';
 import { removeEvent } from '@js/events/remove';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
-import { rowsModule } from '@ts/grids/grid_core/views/m_rows_view';
+import { rowsModule, RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
 
@@ -33,7 +31,7 @@ const createIcon = function (hasIcon, isExpanded) {
   return $iconElement;
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class TreeListRowsViewExtender extends Base {
+class TreeListRowsView extends RowsView {
   _renderIconContainer($container, options) {
     const $iconContainer = $('<div>')
       .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
@@ -141,11 +139,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListRowsViewExtender 
   setTableRole($tableElement) {
     this.setAria('role', 'treegrid', $tableElement);
   }
-};
+}
 
 treeListCore.registerModule('rows', {
   defaultOptions: rowsModule.defaultOptions,
   views: {
-    rowsView,
+    rowsView: TreeListRowsView,
   },
 });

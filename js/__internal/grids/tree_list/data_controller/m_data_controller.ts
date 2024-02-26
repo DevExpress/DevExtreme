@@ -1,14 +1,12 @@
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import { dataControllerModule } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/m_data_controller';
 
 import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
 import treeListCore from '../m_core';
 
-const data = (Base: ModuleType<DataController>) => class TreeListDataControllerExtender extends Base {
+export class TreeListDataController extends DataController {
   _getDataSourceAdapter() {
     return dataSourceAdapterProvider;
   }
@@ -197,7 +195,7 @@ const data = (Base: ModuleType<DataController>) => class TreeListDataControllerE
   forEachNode() {
     this._dataSource.forEachNode.apply(this, arguments);
   }
-};
+}
 
 treeListCore.registerModule('data', {
   defaultOptions() {
@@ -219,6 +217,6 @@ treeListCore.registerModule('data', {
     });
   },
   controllers: {
-    data,
+    data: TreeListDataController,
   },
 });
