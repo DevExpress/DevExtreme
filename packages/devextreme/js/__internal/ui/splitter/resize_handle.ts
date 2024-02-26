@@ -11,7 +11,7 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 
-const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
+export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
@@ -27,6 +27,7 @@ class ResizeHandle extends (Widget as any) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       direction: RESIZE_DIRECTION.horizontal,
+      focusStateEnabled: false,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
@@ -35,7 +36,7 @@ class ResizeHandle extends (Widget as any) {
 
   _init(): void {
     super._init();
-    const namespace = `${RESIZE_HANDLER_MODULE_NAMESPACE}${new Guid().toString()}`;
+    const namespace = `${RESIZE_HANDLER_MODULE_NAMESPACE}${new Guid()}`;
     this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
     this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
     this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
@@ -46,6 +47,18 @@ class ResizeHandle extends (Widget as any) {
 
     this._toggleDirectionClass();
     this.$element().addClass(RESIZE_HANDLE_CLASS);
+
+    this._setAriaAttributes();
+  }
+
+  _setAriaAttributes(): void {
+    this.setAria({
+      role: 'application',
+      // eslint-disable-next-line spellcheck/spell-checker
+      roledescription: 'separator',
+      orientation: this._isHorizontalDirection() ? 'vertical' : 'horizontal',
+      label: 'Split bar',
+    });
   }
 
   _toggleDirectionClass(): void {

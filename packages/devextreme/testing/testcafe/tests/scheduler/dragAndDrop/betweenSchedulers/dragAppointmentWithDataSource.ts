@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`

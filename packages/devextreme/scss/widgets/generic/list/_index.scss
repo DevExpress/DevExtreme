@@ -60,7 +60,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     background-color: $list-item-hover-bg;
     color: $list-item-hover-color;
 
-    .dx-icon {
+    .dx-list-item-icon-container .dx-icon {
       color: $list-item-hover-color;
     }
 
@@ -71,7 +71,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     background-color: $list-item-selected-bg;
     color: $list-item-selected-color;
 
-    .dx-icon {
+    .dx-list-item-icon-container .dx-icon {
       color: $list-item-selected-color;
     }
 
@@ -87,7 +87,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     background-color: $list-focused-bg;
     color: $list-item-focus-color;
 
-    .dx-icon {
+    .dx-list-item-icon-container .dx-icon {
       color: $list-item-focus-color;
     }
 
@@ -107,7 +107,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     background-color: $list-item-active-bg;
     color: $list-item-active-color;
 
-    .dx-icon {
+    .dx-list-item-icon-container .dx-icon {
       color: $list-item-active-color;
     }
 
@@ -117,6 +117,17 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     @include toggle-delete-icon($list-item-active-color);
+  }
+
+  .dx-list-static-delete-button .dx-icon {
+    color: $list-icon-color;
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-list-static-delete-button .dx-icon {
+      color: $base-icon-color;
+    }
   }
 }
 

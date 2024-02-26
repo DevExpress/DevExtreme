@@ -1,0 +1,1 @@
+In&nbsp;this example, the crosshair pointer is&nbsp;enabled and a&nbsp;custom style is&nbsp;applied to&nbsp;it. The crosshair pointer allows a&nbsp;user to&nbsp;determine the argument and the value of&nbsp;a&nbsp;specific point more precisely.

@@ -276,6 +276,28 @@ QUnit.module('rendering', {
         assert.strictEqual($tile.outerHeight(), DEFAULT_ITEMSIZE, 'Tile height updated correctly');
         assert.strictEqual($tile.outerWidth(), DEFAULT_ITEMSIZE, 'Tile width updated correctly');
     });
+
+    QUnit.testInActiveWindow('aria-activedescendant should not be set for the component after tile focus (T1217255)', function(assert) {
+        const clock = sinon.useFakeTimers();
+
+        try {
+            this.$element.dxTileView({
+                items: [{ text: 'test 1' }],
+                focusStateEnabled: true,
+            });
+
+            const $firstItem = this.$element.find(TILEVIEW_ITEM_SELECTOR).eq(0);
+
+            $firstItem.trigger('dxpointerdown');
+
+            clock.tick(10);
+
+            assert.strictEqual($firstItem.hasClass('dx-state-focused'), true);
+            assert.strictEqual(this.$element.attr('aria-activedescendant'), undefined);
+        } finally {
+            clock.restore();
+        }
+    });
 });
 
 

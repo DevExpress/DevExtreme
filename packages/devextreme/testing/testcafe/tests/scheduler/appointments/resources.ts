@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import TagBox from '../../../model/tagBox';
 
 fixture.disablePageReloads`Appointment resources`

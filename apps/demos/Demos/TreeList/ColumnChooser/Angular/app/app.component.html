@@ -1,0 +1,92 @@
+<dx-tree-list
+  id="employees"
+  [dataSource]="employees"
+  keyExpr="ID"
+  parentIdExpr="Head_ID"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [columnAutoWidth]="true"
+  [expandedRowKeys]="[1, 5]"
+>
+  <dxo-column-chooser
+    #columnChooser
+    [enabled]="true"
+    [mode]="columnChooserModes[1].key"
+  >
+    <dxo-position
+      my="right top"
+      at="right bottom"
+      of=".dx-treelist-column-chooser-button"
+    ></dxo-position>
+
+    <dxo-search
+      [enabled]="searchEnabled"
+      [editorOptions]="editorOptions"
+    ></dxo-search>
+
+    <dxo-selection
+      [allowSelectAll]="allowSelectAll"
+      [selectByClick]="selectByClick"
+      [recursive]="recursive"
+    ></dxo-selection>
+  </dxo-column-chooser>
+
+  <dxi-column dataField="Title" caption="Position"></dxi-column>
+  <dxi-column dataField="Full_Name" [allowHiding]="false"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State"></dxi-column>
+  <dxi-column caption="Contacts">
+    <dxi-column dataField="Mobile_Phone" [allowHiding]="false"></dxi-column>
+    <dxi-column dataField="Email"></dxi-column>
+    <dxi-column dataField="Skype" [visible]="false"></dxi-column>
+  </dxi-column>
+  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+</dx-tree-list>
+
+<div class="options">
+  <div class="caption">Options</div>
+
+  <div class="selectboxes-container">
+    <div class="option">
+      <span>Column chooser mode</span>
+      <dx-select-box
+        id="columnChooserMode"
+        [items]="columnChooserModes"
+        [inputAttr]="{ 'aria-label': 'Column Chooser Mode' }"
+        [(value)]="columnChooser.mode"
+        valueExpr="key"
+        displayExpr="name"
+      ></dx-select-box>
+    </div>
+  </div>
+
+  <div class="checkboxes-container">
+    <div class="option">
+      <dx-check-box
+        text="Search enabled"
+        [(value)]="searchEnabled"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Allow select all"
+        [(value)]="allowSelectAll"
+        [disabled]="columnChooser.mode === 'dragAndDrop'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Select by click"
+        [(value)]="selectByClick"
+        [disabled]="columnChooser.mode === 'dragAndDrop'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Recursive"
+        [(value)]="recursive"
+        [disabled]="columnChooser.mode === 'dragAndDrop'"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+/* Make random values invisible */
+td[role="gridcell"][aria-colindex="3"],
+td[role="gridcell"][aria-colindex="4"],
+td[role="gridcell"][aria-colindex="5"],
+td[role="gridcell"][aria-colindex="6"] {
+  opacity: 0;
+}

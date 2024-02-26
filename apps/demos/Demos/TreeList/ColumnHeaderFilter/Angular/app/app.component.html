@@ -1,0 +1,31 @@
+<dx-tree-list
+  id="employees"
+  [dataSource]="employees"
+  keyExpr="ID"
+  parentIdExpr="Head_ID"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [columnAutoWidth]="true"
+  [expandedRowKeys]="[1]"
+>
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-selection mode="single"></dxo-selection>
+  <dxi-column dataField="Full_Name"></dxi-column>
+  <dxi-column dataField="Title" caption="Position">
+    <dxo-header-filter [allowSelectAll]="false">
+      <dxo-search [enabled]="true"></dxo-search>
+    </dxo-header-filter>
+  </dxi-column>
+  <dxi-column dataField="City">
+    <dxo-header-filter>
+      <dxo-search
+        [enabled]="true"
+        [searchExpr]="searchExpr"
+        [editorOptions]="editorOptions"
+      ></dxo-search>
+    </dxo-header-filter>
+  </dxi-column>
+  <dxi-column dataField="State"></dxi-column>
+  <dxi-column dataField="Mobile_Phone"></dxi-column>
+  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+</dx-tree-list>

@@ -1,0 +1,9 @@
+::ng-deep #form-container {
+  margin: 10px;
+}
+
+::ng-deep .long-title h3 {
+  font-size: 24px;
+  text-align: center;
+  line-height: 2em;
+}

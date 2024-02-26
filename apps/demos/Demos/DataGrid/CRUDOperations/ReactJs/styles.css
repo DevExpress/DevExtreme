@@ -1,0 +1,65 @@
+#grid {
+  height: 440px;
+}
+
+.options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.option {
+  margin-bottom: 10px;
+}
+
+.option > span {
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
+}
+
+.option > .dx-widget {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#requests .caption {
+  float: left;
+  padding-top: 7px;
+}
+
+#requests > div {
+  padding-bottom: 5px;
+}
+
+#requests > div::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#requests #clear {
+  float: right;
+}
+
+#requests ul {
+  list-style: none;
+  max-height: 100px;
+  overflow: auto;
+  margin: 0;
+}
+
+#requests ul li {
+  padding: 7px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+#requests ul li:last-child {
+  border-bottom: none;
+}
