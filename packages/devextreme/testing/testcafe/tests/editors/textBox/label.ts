@@ -24,34 +24,8 @@ const stylingModes = ['outlined', 'underlined', 'filled'];
 const TEXTBOX_CLASS = 'dx-textbox';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const READONLY_STATE_CLASS = 'dx-state-readonly';
 const INVALID_STATE_CLASS = 'dx-invalid';
-
-test('TextBox in readonly state should have correct border color (T1217197)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'TextBox in readonly state should have correct border color (T1217197).png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px; padding: 20px;');
-  await appendElementTo('#container', 'div', 'textbox-with-label', { margin: '20px' });
-  await appendElementTo('#container', 'div', 'textbox-without-label', { margin: '20px' });
-
-  await createWidget('dxTextBox', {
-    value: 'text',
-    labelMode: 'static',
-    readOnly: true,
-  }, '#textbox-with-label');
-
-  await createWidget('dxTextBox', {
-    value: 'text',
-    label: 'label',
-    labelMode: 'static',
-    readOnly: true,
-  }, '#textbox-without-label');
-});
 
 [
   { labelMode: 'static', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
@@ -100,7 +74,15 @@ stylingModes.forEach((stylingMode) => {
 
     await testScreenshot(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`);
 
-    for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
+    const states = [
+      HOVER_STATE_CLASS,
+      FOCUSED_STATE_CLASS,
+      READONLY_STATE_CLASS,
+      INVALID_STATE_CLASS,
+      `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
+    ];
+
+    for (const state of states as any[]) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }
