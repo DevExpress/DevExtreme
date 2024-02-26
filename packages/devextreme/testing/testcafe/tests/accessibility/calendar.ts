@@ -26,8 +26,6 @@ const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
     'color-contrast': { enabled: false },
-    // NOTE: aria-allowed-attr issues
-    'aria-allowed-attr': { enabled: false },
     // NOTE: empty-table-header issues
     'empty-table-header': { enabled: false },
   },
