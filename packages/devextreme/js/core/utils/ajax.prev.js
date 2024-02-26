@@ -275,6 +275,7 @@ function sendRequestFactory(httpClient) {
 
         const xhrSurrogate = {
             ID: Math.random(20),
+            type: 'XMLHttpRequestSurrogate',
             abort() {
                 console.log('---xhrSurrogate-abort---+++--->');
                 // upload?.onabort?.(xhrSurrogate);
@@ -350,6 +351,7 @@ function sendRequestFactory(httpClient) {
         );
 
         let total = 0;
+        let isUploadStarted = false;
 
         requestSubscription =
             !upload
@@ -379,13 +381,24 @@ function sendRequestFactory(httpClient) {
                 : requestWithTimeout.subscribe(
                     (event) => {
                         if(event.type === HttpEventType.Sent) {
-                            console.log('-----UPLOAD sent---->', [event.type, event, xhrSurrogate]);
+                            console.log("-----UPLOAD sent---->", [
+                                event.type,
+                                event,
+                                xhrSurrogate,
+                            ]);
                             // console.log('-----UPLOAD onloadstart---->');
-                             options.upload['onloadstart']?.(event);
+                            if(!isUploadStarted) {
+                                options.upload["onloadstart"]?.(event);
+                                isUploadStarted = true;
+                            }
                         } else if(event.type === HttpEventType.UploadProgress) {
                            // options.upload['onloadstart']?.(event);
                             console.log('-----UPLOAD onprogress---+->', event);
                             total += event.loaded;
+                            if(!isUploadStarted) {
+                                options.upload["onloadstart"]?.(event);
+                                isUploadStarted = true;
+                            }
                             options.upload["onprogress"]?.({...event, total });
                         } else if(event.type === HttpEventType.Response) {
                             console.log('-----UPLOAD Response-+--->');
