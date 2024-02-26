@@ -553,6 +553,16 @@ const DropDownEditor = TextBox.inherit({
 
         this._renderPopup();
         this._renderPopupContent();
+        this._setPopupAriaLabel();
+    },
+
+    _setPopupAriaLabel() {
+        const { inputAttr } = this.option();
+
+        const ariaLabel = inputAttr['aria-label'];
+        const $overlayContent = this._popup.$overlayContent();
+
+        this.setAria('label', ariaLabel, $overlayContent);
     },
 
     _renderPopupContent: noop,
