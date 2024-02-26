@@ -349,6 +349,8 @@ function sendRequestFactory(httpClient) {
                 : request
         );
 
+        let total = 0;
+
         requestSubscription =
             !upload
                 ? requestWithTimeout.subscribe(
@@ -382,8 +384,9 @@ function sendRequestFactory(httpClient) {
                              options.upload['onloadstart']?.(event);
                         } else if(event.type === HttpEventType.UploadProgress) {
                            // options.upload['onloadstart']?.(event);
-                            console.log('-----UPLOAD onprogress---+->');
-                            options.upload['onprogress']?.(event);
+                            console.log('-----UPLOAD onprogress---+->', event);
+                            total += event.loaded;
+                            options.upload["onprogress"]?.({...event, total });
                         } else if(event.type === HttpEventType.Response) {
                             console.log('-----UPLOAD Response-+--->');
                             return d.resolve(xhrSurrogate, SUCCESS, { test: 666 });
