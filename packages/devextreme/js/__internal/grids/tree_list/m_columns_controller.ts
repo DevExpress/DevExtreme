@@ -1,11 +1,9 @@
 import { isDefined } from '@js/core/utils/type';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import { columnsControllerModule } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 
 import treeListCore from './m_core';
 
-const columns = (Base: ModuleType<ColumnsController>) => class TreeListColumnsControllerExtender extends Base {
+class TreeListColumnsController extends ColumnsController {
   _getFirstItems(dataSourceAdapter) {
     return super._getFirstItems(dataSourceAdapter).map((node) => node.data);
   }
@@ -24,11 +22,11 @@ const columns = (Base: ModuleType<ColumnsController>) => class TreeListColumnsCo
 
     return firstDataColumnIndex;
   }
-};
+}
 
 treeListCore.registerModule('columns', {
   defaultOptions: columnsControllerModule.defaultOptions,
   controllers: {
-    columns,
+    columns: TreeListColumnsController,
   },
 });
