@@ -1401,7 +1401,10 @@ export const validatingModule = {
               const value = validator.option('adapter').getValue();
               if (cellValueShouldBeValidated(value, rowOptions) || validatingController._rowIsValidated(change)) {
                 editingController.waitForDeferredOperations().done(() => {
-                  if (!$element.closest('tr').length) {
+                  // NOTE: after waiting for deferred operations another rerender may occur.
+                  // In this case this validating is outdated
+                  const isDetached = !$element.closest('tr').length;
+                  if (isDetached) {
                     return;
                   }
                   when(validatingController.validateCell(validator)).done((result) => {
