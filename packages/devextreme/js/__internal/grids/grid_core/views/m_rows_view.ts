@@ -187,8 +187,6 @@ export class RowsView extends ColumnsView {
 
       if (isGroup) {
         $row.addClass(GROUP_ROW_CLASS);
-        this.setAria('role', 'row', $row);
-
         this.setAriaExpandedAttribute($row, row);
       }
     }
@@ -225,6 +223,10 @@ export class RowsView extends ColumnsView {
   }
 
   _setAriaRowIndex(row, $row) {
+    if (!$row.is('tr')) {
+      return;
+    }
+
     const { component } = this;
     const isPagerMode = component.option('scrolling.mode') === 'standard' && !gridCoreUtils.isVirtualRowRendering(component);
     let rowIndex = row.rowIndex + 1;
