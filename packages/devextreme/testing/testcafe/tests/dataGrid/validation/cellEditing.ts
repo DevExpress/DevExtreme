@@ -5,7 +5,7 @@ import DataGrid from '../../../model/dataGrid';
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../container.html'));
 
-test('Navigation with tab without saving should not ', async (t) => {
+test('Navigation with tab without saving should not throw an error', async (t) => {
   const grid = new DataGrid('#container');
 
   await t.click(grid.getDataCell(0, 0).element);
