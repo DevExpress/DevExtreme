@@ -25,7 +25,7 @@ DataController
 & GroupingDataControllerExtension>;
 
 const data = (Base: DataControllerBase) => class FocusDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
-  changeRowExpand(path, isRowClick?) {
+  changeRowExpand(path, isRowClick) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
       const keyboardNavigation = this.getController('keyboardNavigation');

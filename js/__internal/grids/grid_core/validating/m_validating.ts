@@ -992,7 +992,6 @@ export const validatingModule = {
 
         _showErrorRow(change) {
           let $popupContent;
-          // @ts-expect-error
           const errorHandling = this.getController('errorHandling');
           const items = this.getController('data').items();
           const rowIndex = this.getIndexByKey(change.key, items);
