@@ -47,15 +47,7 @@ $(() => {
   }).dxProgressBar('instance');
 
   function toggleDropZoneActive(dropZone, isActive) {
-    if (isActive) {
-      dropZone.classList.add('dx-theme-accent-as-border-color');
-      dropZone.classList.remove('dx-theme-border-color');
-      dropZone.classList.add('dropzone-active');
-    } else {
-      dropZone.classList.remove('dx-theme-accent-as-border-color');
-      dropZone.classList.add('dx-theme-border-color');
-      dropZone.classList.remove('dropzone-active');
-    }
+    dropZone.classList.toggle('dropzone-active', isActive);
   }
 
   function toggleImageVisible(visible) {
