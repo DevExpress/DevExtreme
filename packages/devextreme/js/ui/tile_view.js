@@ -7,7 +7,7 @@ import { isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { hasWindow } from '../core/utils/window';
 import { getPublicElement } from '../core/element';
-import { deferRender } from '../core/utils/common';
+import { noop, deferRender } from '../core/utils/common';
 import { nativeScrolling } from '../core/utils/support';
 import ScrollView from './scroll_view';
 import CollectionWidget from './collection/ui.collection_widget.edit';
@@ -270,6 +270,8 @@ const TileView = CollectionWidget.inherit({
             this._itemsPositions.push(itemPosition);
         }).bind(this));
     },
+
+    _refreshActiveDescendant: noop,
 
     _getItemPosition: function(item) {
         const config = this._config;
