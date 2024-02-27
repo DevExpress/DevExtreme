@@ -2,14 +2,13 @@ import * as events from 'devextreme/events';
 import * as testingLib from '@testing-library/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { isIE } from '../configuration/utils';
 import {
   fireOptionChange,
   TestComponent,
   TestPortalComponent,
   Widget,
   WidgetClass,
-} from './test-component';
+} from './test-component-func';
 
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({
@@ -27,22 +26,20 @@ describe('rendering', () => {
   afterEach(() => {
     jest.clearAllMocks();
     testingLib.cleanup();
+    testingLib.configure({ reactStrictMode: false });
   });
 
   it('renders component without children correctly', () => {
-    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
     const { container } = testingLib.render(<TestComponent />);
 
     expect(container.children.length).toBe(1);
 
     const content = container.firstChild as HTMLElement;
     expect(content.tagName.toLowerCase()).toBe('div');
-
-    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders component with children correctly', () => {
-    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
+
     const { container } = testingLib.render(
       <TestComponent>
         <span />
@@ -55,20 +52,17 @@ describe('rendering', () => {
     expect(content.tagName.toLowerCase()).toBe('div');
     expect(content.children.length).toBe(1);
     expect(content.children[0].tagName.toLowerCase()).toBe('span');
-
-    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders component with children correctly after unmount', () => {
+    testingLib.configure({ reactStrictMode: true });
+
     const component = (
       <TestComponent>
         <div>Test</div>
       </TestComponent>
     );
-    const { container, unmount, rerender } = testingLib.render(component, { legacyRoot: true });
-
-    unmount();
-    rerender(component);
+    const { container } = testingLib.render(component);
 
     expect(container.children.length).toBe(1);
 
@@ -80,7 +74,6 @@ describe('rendering', () => {
 
   it('renders portal component without children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
-    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
     const { container } = testingLib.render(<TestPortalComponent />);
 
     expect(container.children.length).toBe(1);
@@ -89,13 +82,10 @@ describe('rendering', () => {
     expect(content.tagName.toLowerCase()).toBe('div');
 
     expect(createPortalFn).not.toHaveBeenCalled();
-    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
   });
 
   it('renders portal component with children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
-    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
-    const forceUpdateFn = jest.spyOn(TestComponent.prototype as any, 'forceUpdate');
     const { container } = testingLib.render(
       <TestPortalComponent>
         <span />
@@ -117,39 +107,6 @@ describe('rendering', () => {
     expect(portal.children[0].tagName.toLowerCase()).toBe('span');
 
     expect(createPortalFn).toHaveBeenCalledTimes(1);
-    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
-    expect(forceUpdateFn).toHaveBeenCalledTimes(1);
-  });
-
-  it('renders portal component with children correctly (IE11)', () => {
-    (isIE as jest.Mock).mockImplementation(() => true);
-    const templateManagerInitializeFn = jest.spyOn(TestComponent.prototype as any, '_setTemplateManagerHooks');
-    const forceUpdateFn = jest.spyOn(TestComponent.prototype as any, 'forceUpdate');
-    const { container } = testingLib.render(
-      <TestPortalComponent>
-        <span />
-      </TestPortalComponent>,
-    );
-
-    expect(container.children.length).toBe(1);
-
-    const content = container.firstChild as HTMLElement;
-    expect(content.tagName.toLowerCase()).toBe('div');
-    expect(content.children.length).toBe(1);
-
-    const portal = content.firstChild as HTMLElement;
-    expect(portal.tagName.toLowerCase()).toBe('div');
-    expect(portal.style).toMatchObject({
-      width: '100%',
-      height: '100%',
-      padding: '0px',
-      margin: '0px',
-    });
-    expect(portal.children.length).toBe(1);
-    expect(portal.children[0].tagName.toLowerCase()).toBe('span');
-
-    expect(templateManagerInitializeFn).toHaveBeenCalledTimes(1);
-    expect(forceUpdateFn).toHaveBeenCalledTimes(1);
   });
 
   it('create widget on componentDidMount', () => {
@@ -314,7 +271,7 @@ describe('disposing', () => {
     events.on(element, 'dxremove', handleDxRemove);
 
     unmount();
-    expect(handleDxRemove).toHaveBeenCalledTimes(2);
+    expect(handleDxRemove).toHaveBeenCalledTimes(1);
   });
 
   it('remove option guards', () => {

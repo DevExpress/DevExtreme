@@ -1,24 +1,30 @@
 /* eslint-disable max-classes-per-file */
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
-import { ExtensionComponent } from '../extension-component';
-import ConfigurationComponent from '../nested-option';
+import { memo } from 'react';
+import { ExtensionComponent } from '../extension-component-func';
+import ConfigurationComponent from '../nested-option-func';
 import {
   TestComponent,
   Widget,
   WidgetClass,
-} from './test-component';
-import { IHtmlOptions } from '../component-base';
+} from './test-component-func';
+import { IHtmlOptions } from '../component-base-func';
 
 const ExtensionWidgetClass = jest.fn<typeof Widget, any[]>(() => Widget);
 
-class TestExtensionComponent<P = any> extends ExtensionComponent<P & IHtmlOptions> {
-  constructor(props: P) {
-    super(props as P & IHtmlOptions);
+const TestExtensionComponent = memo(function TestExtensionComponent(props: any) {
+  return (
+    <ExtensionComponent<IHtmlOptions>
+      widgetClass={ExtensionWidgetClass}
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & {
+  isExtensionComponent: boolean
+};;
 
-    this._WidgetClass = ExtensionWidgetClass;
-  }
-}
+TestExtensionComponent.isExtensionComponent = true;
 
 afterEach(() => {
   WidgetClass.mockClear();
@@ -26,9 +32,15 @@ afterEach(() => {
   cleanup();
 });
 
-class NestedComponent extends ConfigurationComponent<{ a: number }> {
-  public static OptionName = 'option1';
-}
+const NestedComponent = memo(function NestedComponent(props: any) {
+  return (
+    <ConfigurationComponent<{ a: number }>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & { OptionName: string };
+
+NestedComponent.OptionName = 'option1';
 
 it('is initialized as a plugin-component', () => {
   const onMounted = jest.fn();

@@ -165,6 +165,10 @@ class OptionsManager {
     }
   }
 
+  public get isInstanceSet(): boolean {
+    return !!this.instance;
+  }
+
   public dispose(): void {
     optionsManagers.delete(this);
     Object.keys(this.guards).forEach((optionName) => {
