@@ -119,7 +119,7 @@ export class HeaderPanel extends ColumnsView {
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
       const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
       const $toolbar = $('<div>').attr('aria-label', label).appendTo($headerPanel);
-      this._toolbar = this._createComponent($toolbar, Toolbar, this._toolbarOptions);
+      this._toolbar = this._createComponent($toolbar, Toolbar, this._toolbarOptions!);
     } else {
       this._toolbar.option(this._toolbarOptions!);
     }
