@@ -911,7 +911,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
 
   _getCellOptions(options) {
     const that = this;
-    const parameters = that._getCellOptions(options);
+    const parameters = super._getCellOptions(options);
 
     if (options.row.summaryCells) {
       return extend(parameters, getSummaryCellOptions(that, options));
