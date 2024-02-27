@@ -1,9 +1,8 @@
 <template>
   <div class="flex-container">
     <DxToolbar
-      :items="toolbarContent"
       id="toolbar"
-      class="dx-theme-background-color"
+      :items="toolbarContent"
     />
     <DxDrawer
       :opened-state-mode="selectedOpenMode"
@@ -19,7 +18,6 @@
       </template>
       <div
         id="content"
-        class="dx-theme-background-color"
         v-html="text"
       />
     </DxDrawer>
@@ -97,6 +95,7 @@ const toolbarContent = [{
     }
 
     #toolbar {
+      background-color: var(--dx-component-color-bg);
       box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       padding: 5px 10px;
       z-index: 10000;
@@ -135,6 +134,7 @@ const toolbarContent = [{
 
     #content {
       padding: 0 24px;
+      background-color: var(--dx-component-color-bg);
     }
 
     #content h2 {

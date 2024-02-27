@@ -1,7 +1,7 @@
 <div class="flex-container">
   <dx-toolbar
     [items]="toolbarContent"
-    class="dx-theme-background-color"
+    id="toolbar"
   ></dx-toolbar>
   <dx-drawer
     [openedStateMode]="selectedOpenMode"
@@ -24,7 +24,6 @@
     </div>
     <div
       id="content"
-      class="dx-theme-background-color"
       [innerHTML]="text"
     ></div>
   </dx-drawer>

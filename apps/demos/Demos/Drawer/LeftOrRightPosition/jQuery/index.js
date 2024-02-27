@@ -18,9 +18,6 @@ $(() => {
   }).dxDrawer('instance');
 
   $('#toolbar').dxToolbar({
-    elementAttr: {
-      class: 'dx-theme-background-color',
-    },
     items: [{
       widget: 'dxButton',
       location: 'before',
