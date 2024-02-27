@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "表示するデータがありません。",
 
         "dxDropDownEditor-selectLabel": "選択",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "必須",
         "validation-required-formatted": "{0} は必須です。",

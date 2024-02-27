@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Δεν υπάρχουν δεδομένα προς εμφάνιση",
 
         "dxDropDownEditor-selectLabel": "Επιλέξτε",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Απαιτείται συμπλήρωση",
         "validation-required-formatted": "{0} είναι απαιτούμενο προς συμπλήρωση",

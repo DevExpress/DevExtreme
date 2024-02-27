@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Ingen data å vise",
 
         "dxDropDownEditor-selectLabel": "Velg",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Påkrevd",
         "validation-required-formatted": "{0} er påkrevd",

@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Sin datos para mostrar",
 
         "dxDropDownEditor-selectLabel": "Seleccionar",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Obligatorio",
         "validation-required-formatted": "{0} es obligatorio",

@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Нет данных для отображения",
 
         "dxDropDownEditor-selectLabel": "Выбрать",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Поле необходимо заполнить",
         "validation-required-formatted": "Необходимо заполнить: {0}",

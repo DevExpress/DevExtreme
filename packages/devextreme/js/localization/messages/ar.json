@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "لا توجد بيانات للعرض",
 
         "dxDropDownEditor-selectLabel": "تحديد",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "مطلوب",
         "validation-required-formatted": "{0} مطلوب",

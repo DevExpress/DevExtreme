@@ -14,6 +14,7 @@ import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 import domAdapter from 'core/dom_adapter';
+import messageLocalization from 'localization/message';
 
 import 'generic_light.css!';
 QUnit.testStart(function() {
@@ -2070,6 +2071,14 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
         assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
+    });
+
+    QUnit.test('Overlay content must have correct aria-label attribute', function(assert) {
+        $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlayContent.attr('aria-label'), messageLocalization.format('dxDropDownEditor-overlayContentLabel'), 'aria-label on element is correct');
     });
 
     QUnit.test('aria-expanded property on input', function(assert) {

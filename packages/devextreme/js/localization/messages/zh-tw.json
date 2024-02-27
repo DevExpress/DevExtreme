@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "沒有要顯示的資料",
 
         "dxDropDownEditor-selectLabel": "選擇",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "必需",
         "validation-required-formatted": "{0} 是必需的",

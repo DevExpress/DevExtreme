@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Inget data att visa",
 
         "dxDropDownEditor-selectLabel": "Välj",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Krävs",
         "validation-required-formatted": "{0} krävs",

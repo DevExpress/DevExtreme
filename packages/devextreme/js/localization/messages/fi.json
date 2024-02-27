@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Ei näytettäviä tietoja",
 
         "dxDropDownEditor-selectLabel": "Valitse",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Pakollinen",
         "validation-required-formatted": "{0} on pakollinen",

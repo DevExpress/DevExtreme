@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Gösterilecek bilgi yok",
 
         "dxDropDownEditor-selectLabel": "Select",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Zorunlu",
         "validation-required-formatted": "{0} gerekli",

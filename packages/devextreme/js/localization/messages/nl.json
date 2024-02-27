@@ -15,6 +15,7 @@
         "dxCollectionWidget-noDataText": "Geen gegevens om te tonen",
 
         "dxDropDownEditor-selectLabel": "Kiezen",
+        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Verplicht",
         "validation-required-formatted": "{0} is verplicht",
