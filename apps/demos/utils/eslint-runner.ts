@@ -13,7 +13,7 @@ const getPatterns = () => {
   const CONSTEL = process.env.CONSTEL;
 
   if (CONSTEL == null) {
-    return ['apps/demos/Demos/**/*.@(vue|[tj]s?(x))'];
+    return ['Demos/**/*.@(vue|[tj]s?(x))'];
   }
 
   const changedFiles: Array<{ filename: string }> | null = getChangedFiles();

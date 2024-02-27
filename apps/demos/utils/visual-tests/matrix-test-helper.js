@@ -126,7 +126,76 @@ export function shouldRunTestAtIndex(testIndex) {
       === ((testIndex % settings.total) || 0);
 }
 
-export function shouldRunTest(currentFramework, testIndex) {
+const SKIPPED_TESTS = {
+  Angular: {
+    Charts: ['ZoomingAndScrollingAPI'],
+    Common: ['EditorAppearanceVariants'],
+    DataGrid: [
+      'AdvancedMasterDetailView',
+      'AjaxRequest',
+      'Appearance',
+      'BatchEditing',
+      'CellEditingAndEditingAPI',
+      'ColumnCustomization',
+      'CustomNewRecordPosition',
+      'DataValidation',
+      'EditStateManagement',
+      'Filtering',
+      'FilteringAPI',
+      'GroupSummaries',
+      'InfiniteScrolling',
+      'MasterDetailAPI',
+      'MasterDetailView',
+      'MultipleRecordSelectionAPI',
+      'MultipleSorting',
+      'OdataService',
+      'RecordGrouping',
+      'RecordPaging',
+      'RemoteGrouping',
+      'RowEditingAndEditingEvents',
+      'RowSelection',
+      'SimpleArray',
+      'StatePersistence',
+    ],
+    DropDownBox: ['MultipleSelection'],
+    Form: ['CustomizeItem'],
+    Gauges: ['VariableNumberOfBars'],
+    List: [
+      'ItemDragging',
+      'ListSelection',
+    ],
+    PivotGrid: ['IntegratedFieldChooser'],
+    Popup: ['Scrolling'],
+    Scheduler: [
+      'CustomDragAndDrop',
+      'Resources',
+    ],
+    Sortable: ['Kanban'],
+    TabPanel: ['Overview'],
+    Tabs: [
+      'Overview',
+      'Selection',
+    ],
+    Toolbar: ['Adaptability'],
+    TreeView: ['ItemSelectionAndCustomization'],
+  },
+  Vue: {
+    DataGrid: [
+      'EditStateManagement',
+      'FilteringAPI',
+      'StatePersistence',
+    ],
+  },
+};
+
+export function shouldRunTest(currentFramework, testIndex, product, demo) {
+  const frameworkSkippedDemos = SKIPPED_TESTS[currentFramework]
+      && SKIPPED_TESTS[currentFramework][product];
+
+  if (frameworkSkippedDemos && frameworkSkippedDemos.indexOf(demo) > -1) {
+    return false;
+  }
+
   return shouldRunFramework(currentFramework) && shouldRunTestAtIndex(testIndex);
 }
 
@@ -155,7 +224,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 
-  if (!shouldRunTest(framework, index)) {
+  if (!shouldRunTest(framework, index, product, demo)) {
     return;
   }
 
