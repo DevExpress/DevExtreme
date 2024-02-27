@@ -21,13 +21,13 @@
       >
         <div
           *dxTemplate="let dragInfo of 'drag'"
-          class="item dx-card dx-theme-text-color dx-theme-background-color"
+          class="item dx-card"
           style="font-weight: bold; width: 200px; padding: 10px"
         >
           {{ dragInfo.itemData }}
         </div>
         <div
-          class="item dx-card dx-theme-text-color dx-theme-background-color"
+          class="item dx-card"
           [ngClass]="{ 'item-with-handle': handle }"
           *ngFor="let item of items"
         >
