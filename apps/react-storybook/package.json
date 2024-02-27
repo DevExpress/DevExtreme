@@ -27,7 +27,6 @@
     "react": "~18.0.0",
     "react-dom": "~18.0.0",
     "storybook": "^7.6.9",
-    "storybook-addon-code-editor": "^2.2.0",
     "typescript": "4.2.4"
   }
 }
