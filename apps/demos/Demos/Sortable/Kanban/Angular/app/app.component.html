@@ -11,7 +11,7 @@
       (onReorder)="onListReorder($event)"
     >
       <div class="list" *ngFor="let list of lists; let listIndex = index">
-        <div class="list-title dx-theme-text-color">{{
+        <div class="list-title">{{
           statuses[listIndex]
         }}</div>
         <dx-scroll-view
@@ -28,7 +28,7 @@
             (onAdd)="onTaskDrop($event)"
           >
             <div
-              class="card dx-card dx-theme-text-color dx-theme-background-color"
+              class="card dx-card"
               *ngFor="let task of list"
             >
               <div
