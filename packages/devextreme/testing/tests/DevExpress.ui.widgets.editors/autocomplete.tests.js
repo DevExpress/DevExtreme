@@ -1206,13 +1206,13 @@ QUnit.module('Overlay integration', {
 
         const $popup = this.popup;
         const popup = $popup.dxPopup('instance');
-
-        const list = $popup.find('.dx-list').dxList('instance');
-        const updateDimensionsSpy = sinon.spy(list, 'updateDimensions');
+        const initialPopupHeight = $('.dx-list').height();
 
         popup.show();
         this.clock.tick(10);
-        assert.equal(updateDimensionsSpy.callCount, 3, 'initial render + 2x dimension changed handler');
+        const currentPopupHeight = $('.dx-list').height();
+
+        assert.ok(initialPopupHeight < currentPopupHeight, 'popup size should be recalculated');
     });
 
     QUnit.test('dxAutocomplete - popup list has vertical scroll when items count is small and scroll is not needed(T105434)', function(assert) {

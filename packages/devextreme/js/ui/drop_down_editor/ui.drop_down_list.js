@@ -808,7 +808,16 @@ const DropDownList = DropDownEditor.inherit({
             this._popup.repaint();
         }
 
-        this._list && this._list.updateDimensions();
+        const process = () => {
+            this._list?.updateDimensions();
+        };
+
+        if(this._list?._renderItemsAsyncNew) {
+            this._list._renderItemsAsyncNew().then(process);
+        } else {
+            process();
+        }
+
     },
 
     _getMaxHeight: function() {
