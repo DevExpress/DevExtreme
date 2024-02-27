@@ -15,7 +15,6 @@
         "dxCollectionWidget-noDataText": "Không có dữ liệu để hiển thị",
 
         "dxDropDownEditor-selectLabel": "Lựa chọn",
-        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Bắt buộc",
         "validation-required-formatted": "{0} là bắt buộc",

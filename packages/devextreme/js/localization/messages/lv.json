@@ -15,7 +15,6 @@
         "dxCollectionWidget-noDataText": "Nav datu ko attēlot",
 
         "dxDropDownEditor-selectLabel": "Izvēlēties",
-        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Obligāts",
         "validation-required-formatted": "{0} is obligāts",

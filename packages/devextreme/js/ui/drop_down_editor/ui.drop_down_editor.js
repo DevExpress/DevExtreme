@@ -557,9 +557,12 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _setPopupAriaLabel() {
+        const { inputAttr } = this.option();
+
+        const ariaLabel = inputAttr['aria-label'];
         const $overlayContent = this._popup.$overlayContent();
 
-        this.setAria('label', messageLocalization.format('dxDropDownEditor-overlayContentLabel'), $overlayContent);
+        this.setAria('label', ariaLabel, $overlayContent);
     },
 
     _renderPopupContent: noop,

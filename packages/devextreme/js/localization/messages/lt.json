@@ -15,7 +15,6 @@
         "dxCollectionWidget-noDataText": "Nėra duomenų",
 
         "dxDropDownEditor-selectLabel": "Pasirinkti",
-        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Privalomas",
         "validation-required-formatted": "{0} yra privalomas",

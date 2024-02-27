@@ -15,7 +15,6 @@
         "dxCollectionWidget-noDataText": "Nu există date",
 
         "dxDropDownEditor-selectLabel": "Selectează",
-        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Obligatoriu",
         "validation-required-formatted": "{0} este obligatoriu",

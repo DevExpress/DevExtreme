@@ -15,7 +15,6 @@
         "dxCollectionWidget-noDataText": "Ni podatkov za prikaz",
 
         "dxDropDownEditor-selectLabel": "Izberi",
-        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Obvezen podatek",
         "validation-required-formatted": "Podatek {0} je obvezen",

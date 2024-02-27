@@ -15,7 +15,6 @@
         "dxCollectionWidget-noDataText": "Nincs megjeleníthető adat",
 
         "dxDropDownEditor-selectLabel": "Választás",
-        "dxDropDownEditor-overlayContentLabel": "Dropdown",
 
         "validation-required": "Kötelező",
         "validation-required-formatted": "{0} kötelező",
