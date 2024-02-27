@@ -638,3 +638,4 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
         });
     });
 });
+

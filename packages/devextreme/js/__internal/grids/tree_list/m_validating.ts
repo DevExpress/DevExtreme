@@ -1,26 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { extend } from '@js/core/utils/extend';
 import { validatingModule } from '@ts/grids/grid_core/validating/m_validating';
 
-import type { EditingController } from '../grid_core/editing/m_editing';
-import type { ModuleType } from '../grid_core/m_types';
 import treeListCore from './m_core';
 
-const editingControllerExtender = (Base: ModuleType<EditingController>) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
-  processDataItem(item) {
-    super.processDataItemTreeListHack.apply(this, arguments as any);
-  }
-
-  processItems(items, e) {
-    return super.processItemsTreeListHack.apply(this, arguments as any);
-  }
-};
+const EditingControllerExtender = extend({}, validatingModule.extenders.controllers.editing);
+delete EditingControllerExtender.processItems;
+delete EditingControllerExtender.processDataItem;
 
 treeListCore.registerModule('validating', {
   defaultOptions: validatingModule.defaultOptions,
   controllers: validatingModule.controllers,
   extenders: {
     controllers: {
-      editing: editingControllerExtender,
+      editing: EditingControllerExtender,
       editorFactory: validatingModule.extenders.controllers.editorFactory,
     },
     views: validatingModule.extenders.views,
