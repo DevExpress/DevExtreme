@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
+import { memo } from 'react';
 import { act } from 'react-dom/test-utils';
 import * as CommonModule from 'devextreme/core/utils/common';
-import ConfigurationComponent from '../nested-option';
+import ConfigurationComponent from '../nested-option-func';
 import * as OptionsManagerModule from '../options-manager';
 import {
   eventHandlers,
@@ -11,7 +12,7 @@ import {
   TestComponent,
   Widget,
   WidgetClass,
-} from './test-component';
+} from './test-component-func';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
@@ -29,57 +30,96 @@ interface IControlledComponentProps {
   complexOption?: Record<string, unknown>;
 }
 
-class ControlledComponent extends TestComponent<IControlledComponentProps & React.PropsWithChildren> {
-  protected _defaults = {
-    defaultControlledOption: 'controlledOption',
-  };
-}
+const ControlledComponent = memo(function ControlledComponent(props: IControlledComponentProps & React.PropsWithChildren) {
+  return (
+    <TestComponent
+      defaults={{
+        defaultControlledOption: 'controlledOption',
+      }}
+      {...props}
+    />
+  );
+});
 
-class NestedComponent extends ConfigurationComponent<{
-  a?: number;
-  b?: string;
-  c?: string;
-  arrayValue?: unknown[] | null;
-  defaultC?: string;
-  complexValue?: Record<string, unknown>;
-  value?: number;
-  onValueChange?: (value: number) => void;
-} & React.PropsWithChildren> {
-  public static DefaultsProps = {
-    defaultC: 'c',
-  };
-}
+const NestedComponent = memo(function NestedComponent(props: any) {
+  return (
+    <ConfigurationComponent<{
+      a?: number;
+      b?: string;
+      c?: string;
+      arrayValue?: unknown[] | null;
+      defaultC?: string;
+      complexValue?: Record<string, unknown>;
+      value?: number;
+      onValueChange?: (value: number) => void;
+    } & React.PropsWithChildren>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & {
+  OptionName: string
+  DefaultsProps: Record<string, string>
+};
 
-(NestedComponent as any).OptionName = 'nestedOption';
+NestedComponent.DefaultsProps = {
+  defaultC: 'c',
+};
+NestedComponent.OptionName = 'nestedOption';
 
-class CollectionNestedComponent extends ConfigurationComponent<{
-  a?: number;
-  onAChange?: (value: number) => void;
-} & React.PropsWithChildren> {}
-(CollectionNestedComponent as any).OptionName = 'items';
-(CollectionNestedComponent as any).IsCollectionItem = true;
-(CollectionNestedComponent as any).ExpectedChildren = {
+const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
+  return (
+    <ConfigurationComponent<{
+      a?: number;
+      onAChange?: (value: number) => void;
+    } & React.PropsWithChildren>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & {
+  OptionName: string
+  IsCollectionItem: boolean;
+  ExpectedChildren: Record<string, { optionName: string, isCollectionItem: boolean }>
+};
+
+CollectionNestedComponent.OptionName = 'items';
+CollectionNestedComponent.IsCollectionItem = true;
+CollectionNestedComponent.ExpectedChildren = {
   subItems: {
     optionName: 'subItems',
     isCollectionItem: true,
   },
 };
 
-class CollectionSubNestedComponent extends ConfigurationComponent<{
-  a?: number;
-  onAChange?: (value: number) => void;
-}> {}
-(CollectionSubNestedComponent as any).OptionName = 'subItems';
-(CollectionSubNestedComponent as any).IsCollectionItem = true;
+const CollectionSubNestedComponent = memo(function CollectionSubNestedComponent(props: any) {
+  return (
+    <ConfigurationComponent<{
+      a?: number;
+      onAChange?: (value: number) => void;
+    }>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & {
+  OptionName: string
+  IsCollectionItem: boolean;
+};
 
-class TestComponentWithExpectation<P = any> extends TestComponent<P> {
-  protected _expectedChildren = {
-    items: {
-      optionName: 'items',
-      isCollectionItem: true,
-    },
-  };
-}
+CollectionSubNestedComponent.OptionName = 'subItems';
+CollectionSubNestedComponent.IsCollectionItem = true;
+
+const TestComponentWithExpectation = memo(function TestComponentWithExpectation(props: any) {
+  return (
+    <TestComponent
+      expectedChildren={{
+        items: {
+          optionName: 'items',
+          isCollectionItem: true,
+        },
+      }}
+      {...props}
+    />
+  );
+});
 
 describe('option update', () => {
   afterEach(() => {
@@ -1011,7 +1051,7 @@ describe('onXXXChange', () => {
     });
 
     it('is not called if received value is being modified', () => {
-      const ref = React.createRef<TestComponent>();
+      const ref = React.createRef<any>();
       const onPropChange = jest.fn();
       const defaultProps = {
         text: '0',
@@ -1038,10 +1078,10 @@ describe('onXXXChange', () => {
 
       expect(onPropChange).toHaveBeenCalledTimes(1);
 
-      expect(ref.current?.props.text).toBe('X2');
+      expect(ref.current?.getProps().text).toBe('X2');
       fireOptionChange('text', 'X22');
       expect(onPropChange).toHaveBeenCalledTimes(2);
-      expect(ref.current?.props.text).toBe('XX22');
+      expect(ref.current?.getProps().text).toBe('XX22');
     });
 
     it('is not called if new value is equal', () => {

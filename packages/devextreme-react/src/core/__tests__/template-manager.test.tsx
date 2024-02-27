@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useLayoutEffect } from 'react';
 import { TemplateManager } from '../template-manager';
 import { cleanup, render, act, screen } from '@testing-library/react';
 import * as config from '../config';
@@ -18,6 +19,22 @@ const TemplateComponent: React.FC<TemplateComponentProps> = function TemplateCom
   );
 };
 
+interface FunctionTemplateContentProps {
+  text: string,
+  index: number,
+  effect?: () => void
+}
+
+const FunctionTemplateContent: React.FC<FunctionTemplateContentProps> = function FunctionTemplateContent({ text, index, effect }) {
+  useLayoutEffect(() => {
+    effect?.()
+  });
+
+  return (
+    <div className='render-template'>{`${text}-${index}`}</div>
+  );
+};
+
 function getTemplateOptions(args: { type, effect?, content? }[]) {
   const options = {} as any;
 
@@ -34,10 +51,12 @@ function getTemplateOptions(args: { type, effect?, content? }[]) {
     options.renderKey = {
       type: 'render',
       content: arg.content ?? ((data, index) => {
-        arg.effect?.();
-
         return (
-          <div className='render-template'>{`${data.text}-${index}`}</div>
+          <FunctionTemplateContent
+            text={data.text}
+            index={index}
+            effect={arg.effect}
+          />
         )
       }),
     }
