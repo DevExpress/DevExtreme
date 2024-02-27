@@ -144,7 +144,6 @@
   $texteditor-border-color,
   $texteditor-border-bottom-color,
   $texteditor-disabled-color,
-  $texteditor-readonly-color,
   $texteditor-hover-border-color,
   $texteditor-hover-border-bottom-color,
   $texteditor-focused-border-color,
@@ -257,7 +256,7 @@
 
       &.dx-state-readonly {
         @include dx-state-border-style($label-readonly-border-style);
-        @include dx-state-border-color($texteditor-readonly-color, $texteditor-readonly-color);
+        @include dx-state-border-color($texteditor-disabled-color, $texteditor-disabled-color);
       }
 
       &.dx-state-disabled {

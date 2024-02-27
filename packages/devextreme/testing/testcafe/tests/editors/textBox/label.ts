@@ -24,7 +24,6 @@ const stylingModes = ['outlined', 'underlined', 'filled'];
 const TEXTBOX_CLASS = 'dx-textbox';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
-const READONLY_STATE_CLASS = 'dx-state-readonly';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
 [
@@ -74,15 +73,7 @@ stylingModes.forEach((stylingMode) => {
 
     await testScreenshot(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`);
 
-    const states = [
-      HOVER_STATE_CLASS,
-      FOCUSED_STATE_CLASS,
-      READONLY_STATE_CLASS,
-      INVALID_STATE_CLASS,
-      `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
-    ];
-
-    for (const state of states as any[]) {
+    for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }

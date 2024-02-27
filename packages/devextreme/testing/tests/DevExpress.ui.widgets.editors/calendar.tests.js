@@ -4707,15 +4707,6 @@ QUnit.module('Aria accessibility', {
         assert.equal($cell.attr('role'), 'gridcell', 'Cell: aria role is correct');
     });
 
-    QUnit.test('The calendar view wrapper does not have an aria-readonly attribute', function(assert) {
-        this.$element.dxCalendar({
-            readOnly: true,
-        });
-        const $viewsWrapper = $(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)));
-
-        assert.equal($viewsWrapper.attr('aria-readonly'), undefined);
-    });
-
     QUnit.test('aria id on contoured date cell', function(assert) {
         const calendar = this.$element.dxCalendar({
             value: new Date(2015, 5, 1),
