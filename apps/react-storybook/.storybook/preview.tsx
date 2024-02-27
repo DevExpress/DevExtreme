@@ -6,13 +6,10 @@ const preview: Preview = {
   globalTypes: {
     theme: {
       description: 'Global theme for components',
-      defaultValue: 'light',
+      defaultValue: themesToolbarItems[0].value,
       toolbar: {
-        // The label to show for this toolbar item
         title: 'Theme',
-        // Array of plain string values or MenuItem shape (see below)
         items: themesToolbarItems,
-        // Change title based on selected value
         dynamicTitle: true,
       }
     }

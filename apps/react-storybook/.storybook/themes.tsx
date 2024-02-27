@@ -11,8 +11,9 @@ export const themesToolbarItems = [
 ]
 
 export const ThemeDecorator: Decorator = (Story, ctx) => {
+    const themeName = ctx.globals.theme.split('.').length < 3 ? 'generic' : ctx.globals.theme.split('.')[0];
     return (
-        <div className={`dx-theme-${ctx.globals.theme.split('.')[0]}-typography`} style={{ padding: '20px', borderRadius: 6 }}>
+        <div className={`dx-theme-${themeName}-typography`} style={{ padding: '20px', borderRadius: 6 }}>
             <link rel="stylesheet" href={`css/dx.${ctx.globals.theme}.css`} />
             <Story />
         </div>
