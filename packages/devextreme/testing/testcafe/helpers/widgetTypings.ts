@@ -41,7 +41,6 @@ export type WidgetName =
   | 'dxTextBox'
   | 'dxTextArea'
   | 'dxToolbar'
-  | 'dxTileView'
   | 'dxTreeView'
   | 'dxDateBox'
   | 'dxDateRangeBox'
