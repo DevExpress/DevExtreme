@@ -105,6 +105,7 @@ const toolbarContent = [{
     .panel-list {
       height: 400px;
       padding-top: 12px;
+      background-color: var(--dx-color-main-bg);
     }
 
     .options {

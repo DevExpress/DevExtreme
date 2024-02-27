@@ -112,6 +112,7 @@ const toolbarContent = [{
     .panel-list {
       height: 200px;
       padding-top: 12px;
+      background-color: var(--dx-color-main-bg);
     }
 
     .panel-list .dx-list-item {

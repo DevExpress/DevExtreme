@@ -6,7 +6,7 @@ $(() => {
     height: 400,
     closeOnOutsideClick: true,
     template() {
-      const $list = $('<div>').width(200).addClass('panel-list dx-theme-typography-background-color');
+      const $list = $('<div>').width(200).addClass('panel-list');
 
       return $list.dxList({
         dataSource: navigation,
