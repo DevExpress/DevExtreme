@@ -766,17 +766,19 @@ const Draggable = (DOMComponent as any).inherit({
       return;
     }
 
-    const offset = this._getDraggableElementOffset(e.offset.x, e.offset.y);
-
-    this._move(offset);
-    this._updateScrollable(e);
-
     const eventArgs = this._getEventArgs(e);
     this._getAction('onDragMove')(eventArgs);
 
     if (eventArgs.cancel === true) {
+      this._verticalScrollHelper.reset();
+      this._horizontalScrollHelper.reset();
       return;
     }
+
+    const offset = this._getDraggableElementOffset(e.offset.x, e.offset.y);
+
+    this._move(offset);
+    this._updateScrollable(e);
 
     const targetDraggable = this._getTargetDraggable();
     targetDraggable.dragMove(e, scrollBy);

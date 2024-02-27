@@ -286,6 +286,24 @@ QUnit.module('Events', moduleConfig, () => {
         assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), 'itemElement');
     });
 
+    QUnit.test('onDragMove - not drag item when eventArgs.cancel is true', function(assert) {
+        // arrange
+        const onDragMoveSpy = sinon.spy((e) => { e.cancel = true; });
+
+        this.createDraggable({
+            onDragMove: onDragMoveSpy
+        });
+
+        const initialPosition = translator.locate(this.$element);
+
+        // act
+        this.pointer.down().move(0, 40);
+
+        // assert
+        assert.ok(onDragMoveSpy.calledOnce, 'event fired');
+        assert.deepEqual(translator.locate(this.$element), initialPosition, 'element position');
+    });
+
     QUnit.test('\'onDragMove\' option changing', function(assert) {
     // arrange
         const onDragMoveSpy = sinon.spy();
@@ -1768,6 +1786,41 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
 
             assert.equal(onDragMoveSpy.callCount, i + 2, 'onDragMove called');
         }
+    });
+
+    QUnit.test('Autoscroll should not work when onDragMove.eventArgs.cancel is true', function(assert) {
+        // arrange
+        const onDragMoveSpy = sinon.spy((e) => {
+            if(onDragMoveSpy.callCount > 6) {
+                e.cancel = true;
+            }
+        });
+
+        this.createDraggable({
+            scrollSensitivity: 10,
+            onDragMove: onDragMoveSpy,
+            scrollSpeed: 20
+        });
+
+        // act, assert
+        assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+
+        this.pointer.down().move(0, 240);
+        this.clock.tick(10);
+
+        assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+
+        this.pointer.down().move(0, 1);
+
+        for(let i = 1; i < 6; i++) {
+            this.clock.tick(10);
+
+            assert.strictEqual(onDragMoveSpy.callCount, i + 2, 'onDragMove called');
+        }
+
+        this.clock.tick(100);
+
+        assert.strictEqual($('#scrollable').scrollTop(), 5, 'scrollTop');
     });
 
     QUnit.test('Horizontal scrolling', function(assert) {
