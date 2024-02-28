@@ -231,45 +231,10 @@ const ComponentBase = memo(
         instance.current,
         subscribableOptions,
         independentEvents,
+        getConfig,
       ]);
 
-      useEffect(() => {
-        const { style } = props;
-
-        if (childNodes.current?.length) {
-          element.current?.append(...childNodes.current);
-        } else if (element.current?.childNodes.length) {
-          childNodes.current = Array.from(element.current?.childNodes);
-        }
-        updateCssClasses(undefined, props);
-
-        if (style) {
-          setInlineStyles(style);
-        }
-
-        prevPropsRef.current = props;
-
-        return () => {
-          removalLocker?.lock();
-
-          if (instance.current) {
-            const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
-
-            childNodes.current?.forEach((child) => child.parentNode?.removeChild(child));
-
-            if (element.current) {
-              events.triggerHandler(element.current, DX_REMOVE_EVENT, dxRemoveArgs);
-            }
-
-            instance.current.dispose();
-          }
-          optionsManager.current.dispose();
-
-          removalLocker?.unlock();
-        };
-      }, []);
-
-      useEffect(() => {
+      const onComponentUpdated = useCallback(() => {
         if (!optionsManager.current?.isInstanceSet) {
           return;
         }
@@ -285,6 +250,74 @@ const ComponentBase = memo(
         scheduleTemplatesUpdate();
 
         prevPropsRef.current = props;
+      }, [
+        optionsManager.current,
+        prevPropsRef.current,
+        createDXTemplates.current,
+        scheduleTemplatesUpdate,
+        updateCssClasses,
+        getConfig,
+        props,
+      ]);
+
+      const onComponentMounted = useCallback(() => {
+        const { style } = props;
+
+        if (childNodes.current?.length) {
+          element.current?.append(...childNodes.current);
+        } else if (element.current?.childNodes.length) {
+          childNodes.current = Array.from(element.current?.childNodes);
+        }
+        updateCssClasses(undefined, props);
+
+        if (style) {
+          setInlineStyles(style);
+        }
+
+        prevPropsRef.current = props;
+      }, [
+        childNodes.current,
+        element.current,
+        updateCssClasses,
+        setInlineStyles,
+        props,
+      ]);
+
+      const onComponentUnmounted = useCallback(() => {
+        removalLocker?.lock();
+
+        if (instance.current) {
+          const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
+
+          childNodes.current?.forEach((child) => child.parentNode?.removeChild(child));
+
+          if (element.current) {
+            events.triggerHandler(element.current, DX_REMOVE_EVENT, dxRemoveArgs);
+          }
+
+          instance.current.dispose();
+        }
+        optionsManager.current.dispose();
+
+        removalLocker?.unlock();
+      }, [
+        removalLocker,
+        instance.current,
+        childNodes.current,
+        element.current,
+        optionsManager.current,
+      ]);
+
+      useEffect(() => {
+        onComponentMounted();
+
+        return () => {
+          onComponentUnmounted();
+        };
+      }, []);
+
+      useEffect(() => {
+        onComponentUpdated();
       });
 
       useImperativeHandle(ref, () => (
