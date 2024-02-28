@@ -717,4 +717,74 @@ export default function() {
             assert.strictEqual(markup, expectedMarkup);
         });
     });
+
+    testModule('CSP checks', {}, () => {
+        testModule('Mocked quill methods', {
+            beforeEach() {
+                this.replaceStyleAttributeCallCount = 0;
+                this.sourceReplaceStyleAttribute = Quill.replaceStyleAttribute;
+                Quill.replaceStyleAttribute = () => {
+                    this.replaceStyleAttributeCallCount += 1;
+                };
+            },
+            afterEach() {
+                Quill.replaceStyleAttribute = this.sourceReplaceStyleAttribute;
+            }
+        }, () => {
+            test('replaceStyleAttribute should be called on value processing', function(assert) {
+                $('#htmlEditor')
+                    .dxHtmlEditor({
+                        value: '<p></p>'
+                    })
+                    .dxHtmlEditor('instance');
+
+                assert.strictEqual(this.replaceStyleAttributeCallCount, 2);
+            });
+        });
+
+        testModule('rendering vulnerable value', {
+            createHtmlEditor(value) {
+                return $('#htmlEditor')
+                    .dxHtmlEditor({ value })
+                    .dxHtmlEditor('instance');
+            }
+        }, () => {
+            const testCases = [{
+                testName: 'simple style attribute should be rendered coccectly',
+                inputMarkup: '<p style="text-align: right;">content</p>',
+                expectedMarkup: '<p style="text-align: right;">content</p>',
+            }, {
+                testName: 'uppercase style attribute should be rendered coccectly',
+                inputMarkup: '<p STYLE="text-align: right;">content</p>',
+                expectedMarkup: '<p STYLE="text-align: right;">content</p>',
+            }, {
+                testName: 'style attribute with one space after attribute should be rendered coccectly',
+                inputMarkup: '<p style ="text-align: right;">content</p>',
+                expectedMarkup: '<p style ="text-align: right;">content</p>',
+            }, {
+                testName: 'style attribute with two spaces after attribute should be rendered coccectly',
+                inputMarkup: '<p style  ="text-align: right;">content</p>',
+                expectedMarkup: '<p style  ="text-align: right;">content</p>',
+            }, {
+                testName: 'several style attributes should be rendered coccectly',
+                inputMarkup: '<p style="text-align: right;" style="border: solid;">content</p>',
+                expectedMarkup: '<p style="text-align: right;" style="border: solid;">content</p>',
+            }, {
+                testName: 'style inside tag attribute should be rendered coccectly',
+                inputMarkup: '<p>style="text-align: right;"</p>',
+                expectedMarkup: '<p>style="text-align: right;"</p>',
+            }];
+
+            testCases.forEach(testCase => {
+                test(testCase.testName, function(assert) {
+                    const initialValue = testCase.inputMarkup;
+                    const htmlEditor = this.createHtmlEditor(initialValue);
+
+                    const renderedValue = htmlEditor.option('value');
+
+                    assert.strictEqual(renderedValue, testCase.expectedMarkup);
+                });
+            });
+        });
+    });
 }
