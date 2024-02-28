@@ -293,7 +293,7 @@ class FileUploader extends Editor {
 
     _initFileInput() {
         this._isCustomClickEvent = false;
-        const { useNativeInputClick, multiple, accept, hint } = this.option();
+        const { multiple, accept, hint } = this.option();
 
         if(!this._$fileInput) {
             this._$fileInput = renderFileUploaderInput();
@@ -302,7 +302,7 @@ class FileUploader extends Editor {
             eventsEngine.on(this._$fileInput, 'click', e => {
                 e.stopPropagation();
                 this._resetInputValue();
-                return useNativeInputClick || this._isCustomClickEvent;
+                return this.option('useNativeInputClick') || this._isCustomClickEvent;
             });
         }
 
