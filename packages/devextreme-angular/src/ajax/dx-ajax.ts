@@ -21,44 +21,104 @@ const SUCCESS = 'success';
 const NO_CONTENT = 'nocontent';
 const TIMEOUT = 'timeout';
 const STATUS_ABORT = 0;
+const CONTENT_TYPE = 'Content-Type';
+
+function assignResponseProps(xhrSurrogate, response) {
+  function getResponseHeader(name) {
+    return response.headers.get(name);
+  }
+
+  function makeResponseText() {
+    const body = 'error' in response ? response.error : response.body;
+
+    if (typeof body !== 'string' || String(getResponseHeader(CONTENT_TYPE)).startsWith('application/json')) {
+      return JSON.stringify(body);
+    }
+
+    return body;
+  }
+
+  Object.assign(xhrSurrogate, {
+    status: response.status,
+    statusText: response.statusText,
+    getResponseHeader,
+    responseText: makeResponseText(),
+  });
+
+  return xhrSurrogate;
+}
+
+function subscribeRequest(request, options, d, xhrSurrogate) {
+  const needScriptEvaluation = isNeedScriptEvaluation(options);
+
+  request.subscribe(
+    (response) => {
+      if (needScriptEvaluation) {
+        evalScript(response.body);
+      }
+
+      return d.resolve(
+        response.body,
+        response.body ? 'success' : NO_CONTENT,
+        assignResponseProps(xhrSurrogate, response),
+      );
+    },
+    (response) => {
+      const errorStatus = options.dataType === 'json' && response.message.includes('parsing')
+        ? PARSER_ERROR
+        : response?.timeout || 'error';
+
+      return d.reject(assignResponseProps(xhrSurrogate, response), errorStatus, response);
+    },
+  );
+}
+function subscribeUpload(request, options, d, xhrSurrogate) {
+  let total = 0;
+  let isUploadStarted = false;
+
+  request.subscribe(
+    (event: Record<string, any>) => {
+      if (event.type === HttpEventType.Sent) {
+        if (!isUploadStarted) {
+          options.upload.onloadstart?.(event);
+          isUploadStarted = true;
+        }
+      } else if (event.type === HttpEventType.UploadProgress) {
+        total += event.loaded;
+        if (!isUploadStarted) {
+          options.upload.onloadstart?.(event);
+          isUploadStarted = true;
+        }
+        options.upload.onprogress?.({ ...event, total });
+      } else if (event.type === HttpEventType.Response) {
+        return d.resolve(xhrSurrogate, SUCCESS);
+      }
+      return null;
+    },
+    (response) => {
+      options.upload.onerror?.(assignResponseProps(xhrSurrogate, response));
+      return d.reject(assignResponseProps(xhrSurrogate, response), response.status, response);
+    },
+    () => {},
+  );
+}
+
+function isNeedScriptEvaluation(options) {
+  return options.dataType === 'jsonp' || options.dataType === 'script';
+}
 
 export const sendRequestFactory = (httpClient) => {
   const URLENCODED = 'application/x-www-form-urlencoded';
-  const CONTENT_TYPE = 'Content-Type';
 
   let nonce = Date.now();
-
-  function assignResponseProps(xhrSurrogate, response) {
-    function getResponseHeader(name) {
-      return response.headers.get(name);
-    }
-
-    function makeResponseText() {
-      const body = 'error' in response ? response.error : response.body;
-
-      if (typeof body !== 'string' || String(getResponseHeader(CONTENT_TYPE)).startsWith('application/json')) {
-        return JSON.stringify(body);
-      }
-
-      return body;
-    }
-
-    Object.assign(xhrSurrogate, {
-      status: response.status,
-      statusText: response.statusText,
-      getResponseHeader,
-      responseText: makeResponseText(),
-    });
-
-    return xhrSurrogate;
-  }
 
   return (options) => {
     const destroy$ = new Subject<undefined>();
     const d = Deferred();
     const method = (options.method || 'get').toLowerCase();
     const isGet = method === 'get';
-    const needScriptEvaluation = options.dataType === 'jsonp' || options.dataType === 'script';
+    const needScriptEvaluation = isNeedScriptEvaluation(options);
+
     if (options.cache === undefined) {
       options.cache = !needScriptEvaluation;
     }
@@ -142,56 +202,11 @@ export const sendRequestFactory = (httpClient) => {
     const requestWithTimeout = options.timeout
       ? request.pipe(timeoutWith(options.timeout, throwError(() => ({ timeout: TIMEOUT }))))
       : request;
-    let total = 0;
-    let isUploadStarted = false;
 
-    if (!upload) {
-      requestWithTimeout.subscribe(
-        (response) => {
-          if (needScriptEvaluation) {
-            evalScript(response.body);
-          }
-
-          return d.resolve(
-            response.body,
-            response.body ? 'success' : NO_CONTENT,
-            assignResponseProps(xhrSurrogate, response),
-          );
-        },
-        (response) => {
-          const errorStatus = options.dataType === 'json' && response.message.includes('parsing')
-            ? PARSER_ERROR
-            : response?.timeout || 'error';
-
-          return d.reject(assignResponseProps(xhrSurrogate, response), errorStatus, response);
-        },
-      );
+    if (upload) {
+      subscribeUpload(requestWithTimeout, options, d, xhrSurrogate);
     } else {
-      requestWithTimeout.subscribe(
-        (event: Record<string, any>) => {
-          if (event.type === HttpEventType.Sent) {
-            if (!isUploadStarted) {
-              options.upload.onloadstart?.(event);
-              isUploadStarted = true;
-            }
-          } else if (event.type === HttpEventType.UploadProgress) {
-            total += event.loaded;
-            if (!isUploadStarted) {
-              options.upload.onloadstart?.(event);
-              isUploadStarted = true;
-            }
-            options.upload.onprogress?.({ ...event, total });
-          } else if (event.type === HttpEventType.Response) {
-            return d.resolve(xhrSurrogate, SUCCESS);
-          }
-          return null;
-        },
-        (response) => {
-          options.upload.onerror?.(assignResponseProps(xhrSurrogate, response));
-          return d.reject(assignResponseProps(xhrSurrogate, response), response.status, response);
-        },
-        () => {},
-      );
+      subscribeRequest(requestWithTimeout, options, d, xhrSurrogate);
     }
 
     return result;
