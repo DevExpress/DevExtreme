@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

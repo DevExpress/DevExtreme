@@ -1,11 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { GridBase, GridBaseOptions } from '@js/common/grids';
-import { Component } from '@js/core/component';
-import { PropertyType } from '@js/core/index';
-import { dxElementWrapper } from '@js/core/renderer';
-import { Properties as DataGridOptions } from '@js/ui/data_grid';
-import Widget from '@js/ui/widget/ui.widget';
+import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
+import type { Component } from '@js/core/component';
+import type { PropertyType } from '@js/core/index';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { Properties as DataGridOptions } from '@js/ui/data_grid';
+import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
+import type Widget from '@js/ui/widget/ui.widget';
 
 type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
 
@@ -30,6 +31,10 @@ type OptionsMethod<TOptions> =
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
 export interface InternalGrid extends GridBaseType {
+  _views: View[];
+
+  _controllers: Controller[];
+
   option: OptionsMethod<InternalGridOptions>;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
@@ -57,7 +62,7 @@ export interface InternalGrid extends GridBaseType {
   _createComponent: <TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options: TComponent extends Component<infer TOptions> ? TOptions : never
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never
   ) => TComponent;
 }
 
@@ -77,7 +82,15 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 'toolbar'
 >;
 
-export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid {
+type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
+'onNodesInitialized' |
+'expandedRowKeys'
+>;
+interface InternalSelection extends SelectionBase {
+  alwaysSelectByShift?: boolean;
+}
+
+export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid, TemporarlyOptionsTakenFromTreeList {
   dataRowTemplate?: any;
 
   loadingTimeout?: number;
@@ -89,6 +102,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   forceApplyBindings?: any;
 
   loadItemsOnExportingSelectedItems?: boolean | undefined;
+
+  selection?: InternalSelection;
 }
 
 // todo: move to upper .d.ts files
@@ -297,11 +312,3 @@ export interface Module {
   };
   defaultOptions?: () => InternalGridOptions;
 }
-
-declare const exportVar: {
-  Controller;
-  View;
-  ViewController;
-};
-
-export default exportVar;

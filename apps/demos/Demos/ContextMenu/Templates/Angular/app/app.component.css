@@ -1,0 +1,18 @@
+::ng-deep .item-template-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+::ng-deep .dx-menu-item-text {
+  flex-grow: 1;
+}
+
+::ng-deep #image {
+  height: 300px;
+}
+
+::ng-deep .label {
+  color: #767676;
+}

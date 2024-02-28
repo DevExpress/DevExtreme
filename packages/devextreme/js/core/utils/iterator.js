@@ -14,8 +14,8 @@ const map = (values, callback) => {
 
 /**
  * @type {{
- *   <T>(values: T[], callback: (this: T,          index: number,  value: T)          => void | boolean): T[],
- *   <T>(values: T,   callback: (this: T[keyof T], index: keyof T, value: T[keyof T]) => void | boolean): T,
+ *   <T>(values: readonly T[], callback: (this: T,          index: number,  value: T)          => void | boolean): T[],
+ *   <T>(values: T,            callback: (this: T[keyof T], index: keyof T, value: T[keyof T]) => void | boolean): T,
  * }}
  */
 const each = (values, callback) => {

@@ -75,7 +75,6 @@ class Toast extends BaseComponent<React.PropsWithChildren<IToastOptions>> {
     PropTypes.func
   ]),
   closeOnSwipe: PropTypes.bool,
-  copyRootClassesToWrapper: PropTypes.bool,
   deferRendering: PropTypes.bool,
   displayTime: PropTypes.number,
   focusStateEnabled: PropTypes.bool,

@@ -1,11 +1,15 @@
+/* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
-import Toolbar, { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import Toolbar from '@js/ui/toolbar';
 
+import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
+import type { ResizingController } from '../views/m_grid_view';
 
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
@@ -19,7 +23,7 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
-  _getToolbarItems() {
+  _getToolbarItems(): any[] {
     return [];
   }
 
@@ -115,7 +119,7 @@ export class HeaderPanel extends ColumnsView {
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
       const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
       const $toolbar = $('<div>').attr('aria-label', label).appendTo($headerPanel);
-      this._toolbar = this._createComponent($toolbar, Toolbar, this._toolbarOptions!);
+      this._toolbar = this._createComponent($toolbar, Toolbar, this._toolbarOptions);
     } else {
       this._toolbar.option(this._toolbarOptions!);
     }
@@ -234,6 +238,15 @@ export class HeaderPanel extends ColumnsView {
   }
 }
 
+const resizing = (Base: ModuleType<ResizingController>) => class HeaderPanelResizingExtender extends Base {
+  _updateDimensionsCore() {
+    // @ts-expect-error
+    super._updateDimensionsCore.apply(this, arguments);
+
+    this.getView('headerPanel').updateToolbarDimensions();
+  }
+};
+
 export const headerPanelModule = {
   defaultOptions() {
     return {
@@ -244,13 +257,7 @@ export const headerPanelModule = {
   },
   extenders: {
     controllers: {
-      resizing: {
-        _updateDimensionsCore() {
-          this.callBase.apply(this, arguments);
-
-          this.getView('headerPanel').updateToolbarDimensions();
-        },
-      },
+      resizing,
     },
   },
 };

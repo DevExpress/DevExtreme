@@ -543,59 +543,6 @@ testModule('option', moduleConfig, () => {
             assert.notOk(this.$wrapper.hasClass('newClass'));
         });
     });
-
-    [
-        { name: 'elementAttr', value: { class: '123' } },
-        { name: 'copyRootClassesToWrapper', value: true }
-    ].forEach(({ name, value }) => {
-        test(`should show warning if deprecated "${name}" option is used`, function(assert) {
-            sinon.spy(errors, 'log');
-
-            const options = {};
-            options[name] = value;
-
-            try {
-                $('#overlay').dxOverlay(options);
-                assert.deepEqual(errors.log.lastCall.args, [
-                    'W0001',
-                    'dxOverlay',
-                    `${name}`,
-                    '21.2',
-                    'Use the "wrapperAttr" option instead'
-                ], 'args of the log method');
-            } finally {
-                errors.log.restore();
-            }
-        });
-    });
-
-    test('should not show "copyRootClassesToWrapper" deprecation warning if "_ignoreCopyRootClassesToWrapperDeprecation" option enabled', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#overlay').dxOverlay({
-                copyRootClassesToWrapper: { class: '123' },
-                _ignoreCopyRootClassesToWrapperDeprecation: true
-            });
-            assert.ok(errors.log.notCalled, 'no warnings were logged');
-        } finally {
-            errors.log.restore();
-        }
-    });
-
-    test('should not show "elementAttr" deprecation warning if "_ignoreElementAttrDeprecation" option enabled (used in ASP.NET wrappers, refer to issues T678658, T1084114, T1097600)', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#overlay').dxOverlay({
-                elementAttr: { id: 'nested-id' },
-                _ignoreElementAttrDeprecation: true
-            });
-            assert.ok(errors.log.notCalled, 'no warnings were logged');
-        } finally {
-            errors.log.restore();
-        }
-    });
 });
 
 
@@ -2753,29 +2700,6 @@ testModule('container', moduleConfig, () => {
                 deferRendering: false
             });
         });
-    });
-
-    test('css classes from overlay should be duplicated to wrapper if "copyRootClassesToWrapper" is true', function(assert) {
-        const instance = $('#overlayWithClass').dxOverlay({
-            visible: true,
-            copyRootClassesToWrapper: true
-        }).dxOverlay('instance');
-        const $wrapper = instance.$wrapper();
-
-        assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
-        assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
-        assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), 'classes does not removed from wrapper');
-        assert.notOk($wrapper.hasClass(OVERLAY_CLASS), 'only user-defined classes added to wrapper');
-    });
-
-    test('css classes from overlay should not be duplicated to wrapper if "copyClassesToWrapper" is not specified', function(assert) {
-        const instance = $('#overlayWithClass').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        const $wrapper = instance.$wrapper();
-
-        assert.notOk($wrapper.hasClass('something'), 'class was not added to wrapper');
-        assert.notOk($wrapper.hasClass('another'), 'another class was not added to wrapper');
     });
 
     test('defaultTargetContainer should be .dx-viewport by default', function(assert) {

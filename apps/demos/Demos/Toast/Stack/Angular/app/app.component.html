@@ -1,0 +1,76 @@
+<div class="options">
+  <div>Position</div>
+  <dx-radio-group
+    layout="horizontal"
+    [items]="['predefined', 'coordinates']"
+    value="predefined"
+    (onValueChanged)="radioGroupValueChanged($event)"
+  >
+  </dx-radio-group>
+  <dx-select-box
+    [items]="positions"
+    [inputAttr]="{ 'aria-label': 'Position' }"
+    [(value)]="predefinedPosition"
+    [visible]="isPredefined"
+  >
+  </dx-select-box>
+  <div class="section">
+    <dx-number-box
+      [visible]="!isPredefined"
+      placeholder="top"
+      [(value)]="coordinatePosition.top"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.bottom"
+      [inputAttr]="{ 'aria-label': 'Position Top' }"
+    >
+    </dx-number-box>
+    <dx-number-box
+      [visible]="!isPredefined"
+      placeholder="bottom"
+      [(value)]="coordinatePosition.bottom"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.top"
+      [inputAttr]="{ 'aria-label': 'Position Bottom' }"
+    >
+    </dx-number-box>
+  </div>
+  <div class="section">
+    <dx-number-box
+      [visible]="!isPredefined"
+      placeholder="left"
+      [(value)]="coordinatePosition.left"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.right"
+      [inputAttr]="{ 'aria-label': 'Position Left' }"
+    >
+    </dx-number-box>
+    <dx-number-box
+      [visible]="!isPredefined"
+      placeholder="right"
+      [(value)]="coordinatePosition.right"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.left"
+      [inputAttr]="{ 'aria-label': 'Position Right' }"
+    >
+    </dx-number-box>
+  </div>
+  <div>Direction</div>
+  <dx-select-box
+    [items]="directions"
+    [(value)]="direction"
+    [inputAttr]="{ 'aria-label': 'Direction' }"
+  >
+  </dx-select-box>
+  <div class="section">
+    <dx-button text="Show" width="48%" (onClick)="show($event)"></dx-button>
+    <dx-button
+      text="Hide all"
+      width="48%"
+      (onClick)="hideAll($event)"
+    ></dx-button>
+  </div>
+</div>

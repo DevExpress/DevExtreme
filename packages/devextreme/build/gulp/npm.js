@@ -17,7 +17,6 @@ const env = require('./env-variables.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDir, devextremeDistDir } = require('./utils');
-const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 
@@ -119,7 +118,6 @@ const sources = (src, dist, distGlob) => (() => merge(
 
     gulp
         .src(`${dist}/package.json`)
-        .pipe(replace(version, ctx.version.package))
         .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, overwriteInternalPackageName()))
         .pipe(gulp.dest(dist)),
 

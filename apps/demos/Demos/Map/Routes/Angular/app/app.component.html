@@ -1,0 +1,35 @@
+<dx-map
+  provider="bing"
+  [apiKey]="apiKey"
+  [zoom]="14"
+  [height]="440"
+  width="100%"
+  [controls]="true"
+  [markers]="markers"
+  [routes]="routes"
+>
+</dx-map>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <span>Set mode</span>
+    <dx-select-box
+      [dataSource]="['driving', 'walking']"
+      value="driving"
+      [inputAttr]="{ 'aria-label': 'Mode' }"
+      (onValueChanged)="setMode($event)"
+    >
+    </dx-select-box>
+  </div>
+  <div class="option">
+    <span>Route color</span>
+    <dx-select-box
+      [dataSource]="['blue', 'green', 'red']"
+      [inputAttr]="{ 'aria-label': 'Color' }"
+      value="blue"
+      (onValueChanged)="selectColor($event)"
+    >
+    </dx-select-box>
+  </div>
+</div>

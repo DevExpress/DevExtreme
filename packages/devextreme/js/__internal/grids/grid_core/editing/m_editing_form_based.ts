@@ -1,6 +1,8 @@
+/* eslint-disable max-classes-per-file */
 import devices from '@js/core/devices';
 import Guid from '@js/core/guid';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
@@ -13,8 +15,10 @@ import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import {
   BUTTON_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,
@@ -30,7 +34,7 @@ import {
   FOCUSABLE_ELEMENT_SELECTOR,
   FORM_BUTTONS_CONTAINER_CLASS,
 } from './const';
-import { EditingController } from './m_editing';
+import type { EditingController } from './m_editing';
 import { forEachFormItems, getEditorType } from './m_editing_utils';
 
 export interface IFormBasedEditingControllerExtender {
@@ -177,7 +181,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         .appendTo(this.component.$element())
         .addClass(editPopupClass);
 
-      // @ts-expect-error
       this._editPopup = this._createComponent($popupContainer, Popup);
       this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
       this._editPopup.on('shown', (e) => {
@@ -210,7 +213,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
     return (container) => {
       const formTemplate = this.getEditFormTemplate();
-      // @ts-expect-error
       const scrollable = this._createComponent($('<div>').appendTo(container), Scrollable);
 
       this._$popupContent = $((scrollable as any).content());
@@ -486,96 +488,110 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 };
 
+const data = (Base: ModuleType<DataController>) => class DataEditingFormBasedExtender extends Base {
+  _editingController: any;
+
+  _updateEditItem(item) {
+    if (this._editingController.isFormEditMode()) {
+      item.rowType = 'detail';
+    }
+  }
+
+  _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
+    if (isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
+      return;
+    }
+
+    return super._getChangedColumnIndices.apply(this, arguments as any);
+  }
+};
+
+const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedExtender extends Base {
+  _editingController: any;
+
+  _renderCellContent($cell, options) {
+    if (options.rowType === 'data' && this._editingController.isPopupEditMode() && options.row.visible === false) {
+      return;
+    }
+
+    super._renderCellContent.apply(this, arguments as any);
+  }
+
+  getCellElements(rowIndex): dxElementWrapper | undefined {
+    const $cellElements = super.getCellElements(rowIndex);
+    const editingController = this._editingController;
+    const editForm = editingController.getEditForm();
+    const editFormRowIndex = editingController.getEditFormRowIndex();
+
+    if (editFormRowIndex === rowIndex && $cellElements && editForm) {
+      return editForm.$element().find(`.${this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS)}, .${BUTTON_CLASS}`);
+    }
+
+    return $cellElements;
+  }
+
+  _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+    const editFormRowIndex = this._editingController.getEditFormRowIndex();
+
+    if (editFormRowIndex === rowIndex && isString(columnIdentifier)) {
+      const column = this._columnsController.columnOption(columnIdentifier);
+      return this._getEditFormEditorVisibleIndex($cells, column);
+    }
+
+    return super._getVisibleColumnIndex.apply(this, arguments as any);
+  }
+
+  _getEditFormEditorVisibleIndex($cells, column) {
+    let visibleIndex: any = -1;
+
+    // @ts-expect-error
+    each($cells, (index, cellElement) => {
+      const item: any = $(cellElement).find('.dx-field-item-content').data('dx-form-item');
+      if (item?.column && column && item.column.index === column.index) {
+        visibleIndex = index;
+        return false;
+      }
+    });
+    return visibleIndex;
+  }
+
+  _isFormItem(parameters) {
+    const isDetailRow = parameters.rowType === 'detail' || parameters.rowType === 'detailAdaptive';
+    const isPopupEditing = parameters.rowType === 'data' && this._editingController.isPopupEditMode();
+    return (isDetailRow || isPopupEditing) && parameters.item;
+  }
+
+  _updateCell($cell, parameters) {
+    if (this._isFormItem(parameters)) {
+      // @ts-expect-error Badly typed based class
+      this._formItemPrepared(parameters, $cell);
+    } else {
+      super._updateCell($cell, parameters);
+    }
+  }
+
+  _updateContent() {
+    const editingController = this._editingController;
+    const oldEditForm = editingController.getEditForm();
+    const validationGroup = oldEditForm?.option('validationGroup');
+    const deferred = super._updateContent.apply(this, arguments as any);
+    return deferred.done(() => {
+      const newEditForm = editingController.getEditForm();
+      if (validationGroup && newEditForm && newEditForm !== oldEditForm) {
+        newEditForm.option('validationGroup', validationGroup);
+      }
+    });
+  }
+};
+
 export const editingFormBasedModule = {
   extenders: {
     controllers: {
       editing: editingControllerExtender,
-      data: {
-        _updateEditItem(item) {
-          if (this._editingController.isFormEditMode()) {
-            item.rowType = 'detail';
-          }
-        },
-
-        _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-          if (isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
-            return;
-          }
-
-          return this.callBase.apply(this, arguments);
-        },
-      },
+      data,
     },
     views: {
-      rowsView: {
-        _renderCellContent($cell, options) {
-          if (options.rowType === 'data' && this._editingController.isPopupEditMode() && options.row.visible === false) {
-            return;
-          }
-
-          this.callBase.apply(this, arguments);
-        },
-        getCellElements(rowIndex): dxElementWrapper | undefined {
-          const $cellElements = this.callBase(rowIndex);
-          const editingController = this._editingController;
-          const editForm = editingController.getEditForm();
-          const editFormRowIndex = editingController.getEditFormRowIndex();
-
-          if (editFormRowIndex === rowIndex && $cellElements && editForm) {
-            return editForm.$element().find(`.${this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS)}, .${BUTTON_CLASS}`);
-          }
-
-          return $cellElements;
-        },
-        _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
-          const editFormRowIndex = this._editingController.getEditFormRowIndex();
-
-          if (editFormRowIndex === rowIndex && isString(columnIdentifier)) {
-            const column = this._columnsController.columnOption(columnIdentifier);
-            return this._getEditFormEditorVisibleIndex($cells, column);
-          }
-
-          return this.callBase.apply(this, arguments);
-        },
-
-        _getEditFormEditorVisibleIndex($cells, column) {
-          let visibleIndex: any = -1;
-
-          // @ts-expect-error
-          each($cells, (index, cellElement) => {
-            const item: any = $(cellElement).find('.dx-field-item-content').data('dx-form-item');
-            if (item?.column && column && item.column.index === column.index) {
-              visibleIndex = index;
-              return false;
-            }
-          });
-          return visibleIndex;
-        },
-        _isFormItem(parameters) {
-          const isDetailRow = parameters.rowType === 'detail' || parameters.rowType === 'detailAdaptive';
-          const isPopupEditing = parameters.rowType === 'data' && this._editingController.isPopupEditMode();
-          return (isDetailRow || isPopupEditing) && parameters.item;
-        },
-        _updateCell($cell, parameters) {
-          if (this._isFormItem(parameters)) {
-            this._formItemPrepared(parameters, $cell);
-          } else {
-            this.callBase($cell, parameters);
-          }
-        },
-        _updateContent() {
-          const editingController = this._editingController;
-          const oldEditForm = editingController.getEditForm();
-          const validationGroup = oldEditForm?.option('validationGroup');
-          const deferred = this.callBase.apply(this, arguments);
-          return deferred.done(() => {
-            const newEditForm = editingController.getEditForm();
-            if (validationGroup && newEditForm && newEditForm !== oldEditForm) {
-              newEditForm.option('validationGroup', validationGroup);
-            }
-          });
-        },
-      },
+      rowsView,
     },
   },
 };

@@ -48,6 +48,9 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
+$scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px;
+$scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px;
+
 $material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5;
 $material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5;
 
@@ -127,13 +130,13 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-appointment-recurrence {
   .dx-scheduler-appointment-content {
-    padding: baseScheduler.$scheduler-appointment-recurrence-content-padding;
+    padding: $scheduler-appointment-recurrence-content-padding;
   }
 }
 
 .dx-rtl .dx-scheduler-appointment-recurrence {
   .dx-scheduler-appointment-content {
-    padding: baseScheduler.$scheduler-appointment-recurrence-content-padding-rtl;
+    padding: $scheduler-appointment-recurrence-content-padding-rtl;
   }
 }
 

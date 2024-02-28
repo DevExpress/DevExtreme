@@ -852,9 +852,9 @@ QUnit.test('Check calls to translator. Major ticks. Categories, discreteAxisDivi
     this.axis.draw(this.canvas);
 
     assert.deepEqual(this.translator.translate.callCount, 6); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 1, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 1, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 1, false, undefined]);
 });
 
 QUnit.test('Check calls to translator. Major ticks. Categories, discreteAxisDivisionMode crossLabels', function(assert) {
@@ -881,9 +881,9 @@ QUnit.test('Check calls to translator. Major ticks. Categories, discreteAxisDivi
     this.axis.draw(this.canvas);
 
     assert.deepEqual(this.translator.translate.callCount, 6); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 0, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 0, false]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 0, false]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 0, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 0, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 0, false, undefined]);
 });
 
 QUnit.test('Horizontal. Ticks (major and minor) are outside canvas (on zoom) - do not draw outside tick marks', function(assert) {
@@ -1420,8 +1420,8 @@ QUnit.test('Check calls to translator. Boundary ticks', function(assert) {
     this.axis.draw(this.canvas);
 
     assert.deepEqual(this.translator.translate.callCount, 4); // 2 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, [1, -1, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, [3, 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, [1, -1, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, [3, 1, false, undefined]);
 });
 
 QUnit.test('showCustomBoundaryTicks true, first majorTick on bound - do not render first boundary tick', function(assert) {

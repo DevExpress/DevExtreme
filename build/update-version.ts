@@ -1,5 +1,5 @@
 import sh from 'shelljs';
-import { updateVersion } from './common/version-utils';
+import { updateVersion, updateVersionJs } from './common/version-utils';
 
 const version = process.argv[2];
 
@@ -11,3 +11,4 @@ if (version == null) {
 sh.set('-e');
 
 updateVersion(version);
+updateVersionJs(version);

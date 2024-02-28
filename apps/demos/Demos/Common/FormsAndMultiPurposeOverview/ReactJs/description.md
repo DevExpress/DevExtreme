@@ -1,0 +1,1 @@
+DevExtreme React Form is an adaptive UI component that represents data as a set of label-editor pairs. The Form possesses a customizable layout that allows you to arrange the label-editors pairs in columns, groups, and tabs. [Learn more about DevExtreme React components](/Documentation/Guide/React_Components/DevExtreme_React_Components/).

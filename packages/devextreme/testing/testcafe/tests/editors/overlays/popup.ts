@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import Popup from '../../../model/popup';
 

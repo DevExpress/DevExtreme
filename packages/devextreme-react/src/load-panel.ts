@@ -62,7 +62,6 @@ class LoadPanel extends BaseComponent<React.PropsWithChildren<ILoadPanelOptions>
     PropTypes.bool,
     PropTypes.func
   ]),
-  copyRootClassesToWrapper: PropTypes.bool,
   deferRendering: PropTypes.bool,
   delay: PropTypes.number,
   focusStateEnabled: PropTypes.bool,

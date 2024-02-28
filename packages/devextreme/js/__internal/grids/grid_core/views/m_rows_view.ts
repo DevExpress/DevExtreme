@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -77,6 +78,8 @@ const getScrollableBottomPadding = function (that) {
 
 export class RowsView extends ColumnsView {
   _loadPanel: any;
+
+  _editingController: any;
 
   _editorFactoryController!: any;
 
@@ -933,6 +936,7 @@ export class RowsView extends ColumnsView {
     const dataController = that.getController('data');
 
     super.init();
+    this._editingController = this.getController('editing');
     that._editorFactoryController = that.getController('editorFactory');
     that._rowHeight = 0;
     that._scrollTop = 0;
@@ -1012,7 +1016,7 @@ export class RowsView extends ColumnsView {
   }
 
   _updateLastRowBorder(isFreeSpaceRowVisible) {
-    if (this.option('showBorders') && this.option('showRowLines') && !isFreeSpaceRowVisible) {
+    if (this.option('showBorders') && !isFreeSpaceRowVisible) {
       this.element().addClass(LAST_ROW_BORDER);
     } else {
       this.element().removeClass(LAST_ROW_BORDER);
@@ -1098,7 +1102,7 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  setLoading(isLoading, messageText) {
+  setLoading(isLoading, messageText?) {
     const that = this;
     let loadPanel = that._loadPanel;
     const dataController = that._dataController;

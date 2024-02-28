@@ -54,6 +54,7 @@ import {
     FIELD_ITEM_CONTENT_HAS_TABS_CLASS,
     FORM_GROUP_WITH_CAPTION_CLASS,
     FORM_GROUP_CAPTION_CLASS,
+    FORM_GROUP_CUSTOM_CAPTION_CLASS,
     FIELD_ITEM_TAB_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
     GROUP_COL_COUNT_CLASS,
@@ -380,6 +381,7 @@ const Form = Widget.inherit({
                     const preparedItem = { ...item };
                     itemRunTimeInfo.preparedItem = preparedItem;
                     preparedItem.guid = guid;
+                    this._tryPrepareGroupItemCaption(preparedItem);
                     this._tryPrepareGroupItem(preparedItem);
                     this._tryPrepareTabbedItem(preparedItem, path);
                     this._tryPrepareItemTemplate(preparedItem);
@@ -398,6 +400,19 @@ const Form = Widget.inherit({
             }
 
             return result;
+        }
+    },
+
+    _tryPrepareGroupItemCaption: function(item) {
+        if(item.itemType === 'group') {
+            item._prepareGroupCaptionTemplate = (captionTemplate) => {
+                if(item.captionTemplate) {
+                    item.groupCaptionTemplate = this._getTemplate(captionTemplate);
+                }
+
+                item.captionTemplate = this._itemGroupTemplate.bind(this, item);
+            };
+            item._prepareGroupCaptionTemplate(item.captionTemplate);
         }
     },
 
@@ -534,20 +549,28 @@ const Form = Widget.inherit({
         tryUpdateTabPanelInstance([{ guid: item.guid }, ...(item.tabs ?? [])], tabPanel);
     },
 
-    _itemGroupTemplate: function(item, options, $container) {
-        const id = options.editorOptions.inputAttr.id;
-        const $group = $('<div>')
-            .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
-            .addClass(FORM_GROUP_CLASS)
-            .appendTo($container);
+    _itemGroupCaptionTemplate: function(item, $group, id) {
+        if(item.groupCaptionTemplate) {
+            const $captionTemplate = $('<div>')
+                .addClass(FORM_GROUP_CUSTOM_CAPTION_CLASS)
+                .attr('id', id)
+                .appendTo($group);
 
-        const groupAria = {
-            role: 'group',
-            'labelledby': id,
-        };
-        this.setAria(groupAria, $group);
+            item._renderGroupCaptionTemplate = () => {
+                const data = {
+                    component: this,
+                    caption: item.caption,
+                    name: item.name,
+                };
+                item.groupCaptionTemplate.render({
+                    model: data,
+                    container: getPublicElement($captionTemplate)
+                });
+            };
+            item._renderGroupCaptionTemplate();
 
-        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
+            return;
+        }
 
         if(item.caption) {
             $('<span>')
@@ -556,7 +579,9 @@ const Form = Widget.inherit({
                 .attr('id', id)
                 .appendTo($group);
         }
+    },
 
+    _itemGroupContentTemplate: function(item, $group) {
         const $groupContent = $('<div>')
             .addClass(FORM_GROUP_CONTENT_CLASS)
             .appendTo($group);
@@ -591,6 +616,25 @@ const Form = Widget.inherit({
             $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
             $group.attr(GROUP_COL_COUNT_ATTR, colCount);
         }
+    },
+
+    _itemGroupTemplate: function(item, options, $container) {
+        const id = options.editorOptions.inputAttr.id;
+        const $group = $('<div>')
+            .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
+            .addClass(FORM_GROUP_CLASS)
+            .appendTo($container);
+
+        const groupAria = {
+            role: 'group',
+            'labelledby': id,
+        };
+        this.setAria(groupAria, $group);
+
+        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
+
+        this._itemGroupCaptionTemplate(item, $group, id);
+        this._itemGroupContentTemplate(item, $group);
     },
 
     _createLayoutManagerOptions: function(items, extendedLayoutManagerOptions) {
@@ -938,11 +982,10 @@ const Form = Widget.inherit({
         this._createActionByOption('onFieldDataChanged')(args);
     },
 
-    _triggerOnFieldDataChangedByDataSet: function(data) {
-        const that = this;
+    _triggerOnFieldDataChangedByDataSet(data) {
         if(data && isObject(data)) {
-            each(data, function(dataField, value) {
-                that._triggerOnFieldDataChanged({ dataField: dataField, value: value });
+            Object.keys(data).forEach(key => {
+                this._triggerOnFieldDataChanged({ dataField: key, value: data[key] });
             });
         }
     },

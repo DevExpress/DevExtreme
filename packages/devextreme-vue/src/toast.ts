@@ -9,10 +9,8 @@ type AccessibleOptions = Pick<Properties,
   "closeOnOutsideClick" |
   "closeOnSwipe" |
   "contentTemplate" |
-  "copyRootClassesToWrapper" |
   "deferRendering" |
   "displayTime" |
-  "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hideOnOutsideClick" |
@@ -54,10 +52,8 @@ const DxToast = createComponent({
     closeOnOutsideClick: [Boolean, Function],
     closeOnSwipe: Boolean,
     contentTemplate: {},
-    copyRootClassesToWrapper: Boolean,
     deferRendering: Boolean,
     displayTime: Number,
-    elementAttr: {},
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
@@ -96,10 +92,8 @@ const DxToast = createComponent({
     "update:closeOnOutsideClick": null,
     "update:closeOnSwipe": null,
     "update:contentTemplate": null,
-    "update:copyRootClassesToWrapper": null,
     "update:deferRendering": null,
     "update:displayTime": null,
-    "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hideOnOutsideClick": null,

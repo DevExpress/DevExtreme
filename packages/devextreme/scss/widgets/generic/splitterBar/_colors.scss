@@ -1,0 +1,43 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+
+$splitter-inactive-color: $base-border-color !default;
+$splitter-bg: null !default;
+
+
+@if $color == "carmine" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+
+@if $color == "contrast" {
+  $splitter-bg: darken($base-bg, 13.5%) !default;
+}
+
+@if $color == "dark" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+
+@if $color == "darkmoon" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+
+@if $color == "darkviolet" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+
+@if $color == "greenmist" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+
+@if $color == "light" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+
+@if $color == "softblue" {
+  $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+}
+

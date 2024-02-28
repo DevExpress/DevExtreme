@@ -75,7 +75,6 @@ class Popup extends BaseComponent<React.PropsWithChildren<IPopupOptions>> {
     PropTypes.bool,
     PropTypes.func
   ]),
-  copyRootClassesToWrapper: PropTypes.bool,
   deferRendering: PropTypes.bool,
   disabled: PropTypes.bool,
   dragEnabled: PropTypes.bool,

@@ -256,6 +256,11 @@ export default class MaskStrategy {
         clearTimeout(this._dragTimer);
     }
 
+    _clearTimers() {
+        this._clearDragTimer();
+        clearTimeout(this._caretTimeout);
+        clearTimeout(this._inputHandlerTimer);
+    }
 
     getHandler(handlerName) {
         return (args) => {
@@ -275,12 +280,11 @@ export default class MaskStrategy {
     }
 
     detachEvents() {
+        this._clearTimers();
         EventsEngine.off(this._editorInput(), `.${MASK_EVENT_NAMESPACE}`);
     }
 
     clean() {
-        this._clearDragTimer();
-        clearTimeout(this._caretTimeout);
-        clearTimeout(this._inputHandlerTimer);
+        this._clearTimers();
     }
 }

@@ -1,0 +1,30 @@
+::ng-deep .demo-container {
+  height: 450px;
+}
+
+::ng-deep .list-container {
+  height: 100%;
+}
+
+::ng-deep .product {
+  height: 65px;
+}
+
+::ng-deep .product > img {
+  height: 100%;
+  width: 95px;
+  float: left;
+}
+
+::ng-deep .product > div {
+  padding-left: 10px;
+  vertical-align: top;
+  line-height: 65px;
+  font-size: 15px;
+  float: left;
+}
+
+::ng-deep .product > div.price {
+  float: right;
+  font-size: 18px;
+}

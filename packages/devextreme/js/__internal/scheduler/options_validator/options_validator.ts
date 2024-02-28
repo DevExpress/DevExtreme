@@ -8,7 +8,7 @@ import {
   OptionsValidator,
   Validator,
 } from './core/index';
-import { SchedulerOptions, SchedulerValidatorNames } from './types';
+import type { SchedulerOptions, SchedulerValidatorNames } from './types';
 import {
   cellDurationMustBeLessThanVisibleInterval,
   endDayHourMustBeGreaterThanStartDayHour,

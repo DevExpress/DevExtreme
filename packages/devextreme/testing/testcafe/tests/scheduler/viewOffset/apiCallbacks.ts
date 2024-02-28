@@ -1,5 +1,5 @@
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/callbackTestHelper';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';

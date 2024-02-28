@@ -6,9 +6,8 @@ import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-import {
-  License, LicenseVerifyResult, Token, TokenKind,
-} from './types';
+import type { License, LicenseVerifyResult, Token } from './types';
+import { TokenKind } from './types';
 
 interface Payload extends Partial<License> {
   readonly format?: number;

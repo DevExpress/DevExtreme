@@ -1,0 +1,85 @@
+<div id="form-container">
+  <dx-form id="form" [formData]="employee">
+    <dxi-item itemType="group" [colCount]="2" caption="Employee Details">
+      <dxi-item dataField="FirstName" [editorOptions]="nameEditorOptions">
+        <dxo-label template="name"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        dataField="Position"
+        editorType="dxSelectBox"
+        [editorOptions]="positionEditorOptions"
+      >
+        <dxi-validation-rule
+          type="required"
+          message="Position is required"
+        ></dxi-validation-rule>
+        <dxo-label template="position"></dxo-label>
+      </dxi-item>
+      <dxi-item dataField="LastName" [editorOptions]="nameEditorOptions">
+        <dxo-label template="name"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        dataField="HireDate"
+        editorType="dxDateBox"
+        [editorOptions]="hireDateEditorOptions"
+      >
+        <dxi-validation-rule
+          type="required"
+          message="Hire date is required"
+        ></dxi-validation-rule>
+        <dxo-label template="date"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        dataField="BirthDate"
+        editorType="dxDateBox"
+        [editorOptions]="birthDateEditorOptions"
+      >
+        <dxo-label template="date"></dxo-label>
+      </dxi-item>
+      <dxi-item dataField="Address">
+        <dxo-label template="address"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        dataField="Notes"
+        editorType="dxTextArea"
+        [editorOptions]="notesEditorOptions"
+        [colSpan]="2"
+      >
+        <dxo-label template="notes"></dxo-label>
+      </dxi-item>
+      <dxi-item dataField="Phone" [editorOptions]="phoneEditorOptions">
+        <dxo-label template="phone"></dxo-label>
+      </dxi-item>
+      <dxi-item dataField="Email">
+        <dxo-label template="email"></dxo-label>
+      </dxi-item>
+    </dxi-item>
+
+    <ng-container *ngFor="let label of labelTemplates">
+      <div *dxTemplate="let data of label.name">
+        <div><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</div>
+      </div>
+    </ng-container>
+
+    <div *dxTemplate="let data of 'notes'">
+      <div id="template-content">
+        <i id="helpedInfo" class="dx-icon dx-icon-info"></i>
+        Additional
+        <br />
+        {{ data.text }}
+      </div>
+
+      <dx-tooltip
+        target="#helpedInfo"
+        showEvent="mouseenter"
+        hideEvent="mouseleave"
+      >
+        <div *dxTemplate="let data = data; of: 'content'">
+          <div id="tooltip-content">
+            This field must not exceed 200 characters
+          </div>
+        </div>
+      </dx-tooltip>
+    </div>
+  </dx-form>
+</div>

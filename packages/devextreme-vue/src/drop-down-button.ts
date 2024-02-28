@@ -36,6 +36,7 @@ type AccessibleOptions = Pick<Properties,
   "splitButton" |
   "stylingMode" |
   "tabIndex" |
+  "template" |
   "text" |
   "type" |
   "useItemTextAsTitle" |
@@ -83,6 +84,7 @@ const DxDropDownButton = createComponent({
     splitButton: Boolean,
     stylingMode: String,
     tabIndex: Number,
+    template: {},
     text: String,
     type: String,
     useItemTextAsTitle: Boolean,
@@ -127,6 +129,7 @@ const DxDropDownButton = createComponent({
     "update:splitButton": null,
     "update:stylingMode": null,
     "update:tabIndex": null,
+    "update:template": null,
     "update:text": null,
     "update:type": null,
     "update:useItemTextAsTitle": null,
@@ -216,13 +219,11 @@ const DxDropDownOptions = createConfigurationComponent({
     "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
-    "update:copyRootClassesToWrapper": null,
     "update:deferRendering": null,
     "update:disabled": null,
     "update:dragAndResizeArea": null,
     "update:dragEnabled": null,
     "update:dragOutsideBoundary": null,
-    "update:elementAttr": null,
     "update:enableBodyScroll": null,
     "update:focusStateEnabled": null,
     "update:fullScreen": null,
@@ -270,13 +271,11 @@ const DxDropDownOptions = createConfigurationComponent({
     closeOnOutsideClick: [Boolean, Function],
     container: {},
     contentTemplate: {},
-    copyRootClassesToWrapper: Boolean,
     deferRendering: Boolean,
     disabled: Boolean,
     dragAndResizeArea: {},
     dragEnabled: Boolean,
     dragOutsideBoundary: Boolean,
-    elementAttr: {},
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,

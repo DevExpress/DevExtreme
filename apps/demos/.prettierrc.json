@@ -1,0 +1,28 @@
+{
+    "tabWidth": 2,
+    "htmlWhitespaceSensitivity": "strict",
+    "printWidth": 200,
+    "overrides": [{
+        "files": "**/Angular/**/*.component.html",
+        "options": {
+            "printWidth": 80
+        }
+    },
+    {
+        "files": ["**/React/**/*.tsx", "**/ReactJs/**/*.jsx"],
+        "options": {
+            "printWidth": 100,
+            "singleQuote": true,
+            "singleAttributePerLine": true,
+            "trailingComma": "all"
+        }
+    },
+    {
+        "files": "**/ReactJs/**/*.html",
+        "options": {
+            "printWidth": 100,
+            "singleAttributePerLine": true
+        }
+    }
+]
+}

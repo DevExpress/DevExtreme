@@ -1,6 +1,5 @@
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
-
 import Popup from '../../popup';
 import Form from '../../form';
 import { Deferred } from '../../../core/utils/deferred';
@@ -11,6 +10,7 @@ import { isFluent, isMaterialBased } from '../../themes';
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const getApplyButtonConfig = () => {
     if(isFluent()) {
@@ -131,7 +131,7 @@ class FormDialog {
                     }
                 }
             ],
-            _wrapperClassExternal: DIALOG_CLASS,
+            _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
         }, this._popupUserConfig);
     }
 
