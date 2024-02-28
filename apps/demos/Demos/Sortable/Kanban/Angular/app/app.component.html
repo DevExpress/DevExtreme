@@ -11,9 +11,7 @@
       (onReorder)="onListReorder($event)"
     >
       <div class="list" *ngFor="let list of lists; let listIndex = index">
-        <div class="list-title">{{
-          statuses[listIndex]
-        }}</div>
+        <div class="list-title">{{ statuses[listIndex] }}</div>
         <dx-scroll-view
           class="scrollable-list"
           direction="vertical"
@@ -27,10 +25,7 @@
             (onReorder)="onTaskDrop($event)"
             (onAdd)="onTaskDrop($event)"
           >
-            <div
-              class="card dx-card"
-              *ngFor="let task of list"
-            >
+            <div class="card dx-card" *ngFor="let task of list">
               <div
                 class="card-priority"
                 [ngClass]="'priority-' + task.Task_Priority"
