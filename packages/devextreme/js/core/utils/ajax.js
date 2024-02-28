@@ -356,4 +356,12 @@ const sendRequest = function(options) {
     return result;
 };
 
+export {
+    isCrossDomain,
+    getJsonpOptions as getJsonpCallbackName,
+    getRequestHeaders,
+    getRequestOptions,
+    getAcceptHeader,
+    evalScript,
+};
 export default injector({ sendRequest: sendRequest });
