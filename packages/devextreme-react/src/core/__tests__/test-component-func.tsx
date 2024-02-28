@@ -78,8 +78,7 @@ const TestComponent = memo(forwardRef<ComponentRef, any>(function TestComponent<
   return (
     <Component<P & IHtmlOptions>
       ref={componentRef}
-      widgetClass={WidgetClass}
-      /* useRequestAnimationFrameFlag={true} */
+      WidgetClass={WidgetClass}
       clearExtensions={clearExtensions}
       beforeCreateWidget={beforeCreateWidget}
       afterCreateWidget={afterCreateWidget}

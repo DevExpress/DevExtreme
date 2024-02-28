@@ -7,10 +7,10 @@ const refPropName = ['dropZone', 'dialogTrigger'];
 
 type InternalProps = {
   [Property in keyof ComponentBaseProps]-?: ComponentBaseProps[Property];
-}
+};
 
 const internalProps: InternalProps = {
-  widgetClass: {},
+  WidgetClass: {},
   isPortalComponent: false,
   defaults: {},
   templateProps: [],
@@ -25,7 +25,10 @@ const internalProps: InternalProps = {
 };
 
 function isIgnoredProp(name: string) {
-  return name === 'children' || name === classNamePropName || elementPropNames.includes(name) || internalProps.hasOwnProperty(name);
+  return name === 'children'
+    || name === classNamePropName
+    || elementPropNames.includes(name)
+    || Object.prototype.hasOwnProperty.call(internalProps, name);
 }
 
 function getRefElement(value: any): HTMLElement {

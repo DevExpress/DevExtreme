@@ -37,7 +37,7 @@ const ComponentWithTemplates = memo(forwardRef(function ComponentWithTemplates(p
 const ComponentWithAsyncTemplates = memo(function ComponentWithAsyncTemplates(props: any) {
   return (
     <Component
-      widgetClass={WidgetClass}
+      WidgetClass={WidgetClass}
       templateProps={templateProps}
       {...props}
     />
