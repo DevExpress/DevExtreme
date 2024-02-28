@@ -17,11 +17,11 @@ export function updateVersion(version: string | undefined): void {
   }
 
   const packagesPath = path.join(ROOT_DIR, 'packages', '**', 'package.json');
-  const playgroundsPath = path.join(ROOT_DIR, 'playgrounds', '**', 'package.json');
+  const appsPath = path.join(ROOT_DIR, 'apps', '**', 'package.json');
 
   sh.exec(`npm version ${version} -ws --allow-same-version --include-workspace-root --git-tag-version=false --workspaces-update=false`);
 
-  sh.sed('-i', /"devextreme(-angular|-react|-vue)?": ".*"/, `"devextreme$1": "~${version}"`, [packagesPath, playgroundsPath]);
+  sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, [packagesPath, appsPath]);
 
   sh.exec('npm i');
 }
