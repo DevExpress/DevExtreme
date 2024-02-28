@@ -33,6 +33,8 @@ const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
 
+const OVERLAY_CONTENT_LABEL = 'Dropdown';
+
 QUnit.testStart(() => {
     const markup =
         `<div id='container'>
@@ -2754,6 +2756,14 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'false');
         assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
+    });
+
+    QUnit.test('check aria-label attr for overlay content', function(assert) {
+        this.createInstance({ opened: true });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
+
+        assert.strictEqual($overlayContent.attr('aria-label'), OVERLAY_CONTENT_LABEL);
     });
 
     QUnit.test('check aria-expanded attr for visible dropdown', function(assert) {
