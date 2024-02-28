@@ -16,7 +16,7 @@ const ExtensionWidgetClass = jest.fn<typeof Widget, any[]>(() => Widget);
 const TestExtensionComponent = memo(function TestExtensionComponent(props: any) {
   return (
     <ExtensionComponent<IHtmlOptions>
-      widgetClass={ExtensionWidgetClass}
+      WidgetClass={ExtensionWidgetClass}
       {...props}
     />
   );

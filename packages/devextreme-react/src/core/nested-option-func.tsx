@@ -9,23 +9,23 @@ interface INestedOptionMeta {
   makeDirty: () => void;
 }
 
-const NestedOption = memo(function NestedOption<P>(props: P) {
-    // @ts-expect-error TS2339
-    const { children: stateChildren } = props;
-    const children = React.Children.map(
-      stateChildren,
-      (child) => {
-        const childElementInfo = getElementInfo(child);
+const NestedOption = memo(<P = any>(props: P) => {
+  // @ts-expect-error TS2339
+  const { children: stateChildren } = props;
+  const children = React.Children.map(
+    stateChildren,
+    (child) => {
+      const childElementInfo = getElementInfo(child);
 
-        return childElementInfo.type === ElementType.Option ? child : null;
-      },
-    );
-    return React.createElement(
-      React.Fragment,
-      {},
-      children,
-    );
-}) as <P>(props: P) => ReactElement<any> | null;;
+      return childElementInfo.type === ElementType.Option ? child : null;
+    },
+  );
+  return React.createElement(
+    React.Fragment,
+    {},
+    children,
+  );
+}) as <P>(props: P) => ReactElement | null;
 
 export default NestedOption;
 export {

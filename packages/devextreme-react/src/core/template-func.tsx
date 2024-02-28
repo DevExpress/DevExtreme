@@ -23,9 +23,7 @@ interface ITemplateArgs {
   index?: number;
 }
 
-const Template: React.FC<ITemplateProps> = memo(function Template() {
-  return null;
-});
+const Template: React.FC<ITemplateProps> = memo(() => null);
 
 const requiredPropsCheck = (props: Record<string, any>) => {
   if (!props.component && !props.render && !props.children) {

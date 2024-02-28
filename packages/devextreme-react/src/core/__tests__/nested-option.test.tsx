@@ -247,7 +247,7 @@ describe('nested option', () => {
               isCollectionItem: false,
             },
           }}
-          widgetClass={WidgetClass}
+          WidgetClass={WidgetClass}
           {...props}
         />
       );
