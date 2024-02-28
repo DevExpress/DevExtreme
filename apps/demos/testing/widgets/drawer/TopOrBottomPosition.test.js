@@ -67,7 +67,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
     await t
       .click(openedStateModes.nth(2))
       .click(positions.nth(1));
-      
+
     await takeScreenshot('drawer(overlap, bottom, expand).png');
 
     await t
