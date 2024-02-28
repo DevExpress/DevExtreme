@@ -13,8 +13,8 @@ import { deferRender } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import type { dxDataGridOptions } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
+import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -58,7 +58,7 @@ treeListCore.registerModulesOrder([
   'export',
   'gridView']);
 
-class TreeList extends Widget<dxDataGridOptions> {
+class TreeList extends Widget<dxTreeListOptions> {
   _deprecatedOptions: any;
 
   _activeStateUnit = DATAGRID_ROW_SELECTOR;
@@ -205,7 +205,7 @@ class TreeList extends Widget<dxDataGridOptions> {
     }
   }
 
-  registerModule() {
+  static registerModule() {
     treeListCore.registerModule.apply(treeListCore, arguments as any);
   }
 }
