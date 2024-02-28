@@ -65,6 +65,7 @@ import {
     FORM_UNDERLINED_CLASS } from './constants';
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
+import { DROP_DOWN_EDITOR_INPUT_WRAPPER } from '../drop_down_editor/ui.drop_down_editor';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
@@ -1182,10 +1183,12 @@ const Form = Widget.inherit({
     },
 
     _refresh: function() {
-        const editorSelector = `.${FOCUSED_STATE_CLASS} > :not(.dx-dropdowneditor-input-wrapper) input,`
-            + ` .${FOCUSED_STATE_CLASS} textarea`;
+        const editorSelector = '.' + FOCUSED_STATE_CLASS + ' input, .' + FOCUSED_STATE_CLASS + ' textarea';
+        const $editors = this.$element().find(editorSelector).filter((idx, el) =>
+            !$(el).parents('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER).length
+        );
 
-        eventsEngine.trigger(this.$element().find(editorSelector), 'change');
+        eventsEngine.trigger($editors, 'change');
 
         this.callBase();
     },
