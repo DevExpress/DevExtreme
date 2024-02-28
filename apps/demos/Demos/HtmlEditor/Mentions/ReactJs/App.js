@@ -15,7 +15,7 @@ export default function App() {
     <div>
       <div id="chat-window">
         <div
-          className="message dx-theme-background-color"
+          className="message"
           tabIndex={0}
         >
           <div className="photo">
@@ -40,7 +40,7 @@ export default function App() {
         </div>
         <br />
         <div
-          className="message dx-theme-background-color"
+          className="message"
           tabIndex={0}
         >
           <div className="photo">
@@ -58,7 +58,7 @@ export default function App() {
         </div>
         <br />
         <div
-          className="message dx-theme-background-color"
+          className="message"
           tabIndex={0}
         >
           <div className="photo">
