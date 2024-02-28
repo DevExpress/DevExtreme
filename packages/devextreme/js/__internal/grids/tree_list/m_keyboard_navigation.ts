@@ -1,11 +1,12 @@
 import { extend } from '@js/core/utils/extend';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import { keyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import { keyboardNavigationScrollableA11yExtender } from '@ts/grids/grid_core/keyboard_navigation/scrollable_a11y';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import core from './m_core';
 
-const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class TreeListKeyboardNavigationControllerExtender extends Base {
+const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class TreeListKeyboardNavigationControllerExtender extends keyboardNavigationScrollableA11yExtender(Base) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _leftRightKeysHandler(eventArgs, _isEditing?) {
     const rowIndex = this.getVisibleRowIndex();
