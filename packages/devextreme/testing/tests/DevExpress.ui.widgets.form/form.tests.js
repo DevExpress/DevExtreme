@@ -4751,22 +4751,59 @@ QUnit.module('reset', () => {
             },
             items: [
                 {
-                    itemType: 'simple',
-                    cssClass: 'test-ddbox',
-                    dataField: 'CustomerID',
-                    editorOptions: {
-                        displayExpr: 'Text',
-                        valueExpr: 'Value',
-                        showClearButton: true,
-                        dataSource: [{ Value: value, Text: text }],
+                    itemType: 'tabbed',
+                    tabPanelOptions: {
+                        deferRendering: false
                     },
-                    editorType: 'dxDropDownBox',
-                },
+                    tabs: [
+                        {
+                            title: 'Tab 1',
+                            colCount: 1,
+                            items: [
+                                {
+                                    itemType: 'simple',
+                                    cssClass: 'test-ddbox',
+                                    dataField: 'CustomerID',
+                                    editorOptions: {
+                                        displayExpr: 'Text',
+                                        valueExpr: 'Value',
+                                        showClearButton: true,
+                                        dataSource: [{ Value: value, Text: text }],
+                                    },
+                                    editorType: 'dxDropDownBox',
+                                },
+                            ]
+                        },
+                        {
+                            title: 'Tab 2',
+                            colCount: 1,
+                            items: [
+                                {
+                                    itemType: 'simple',
+                                    dataField: 'ShipCountry',
+                                    colSpan: 1
+                                },
+                            ]
+                        }
+                    ]
+                }
             ]
         });
+
         const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
+        const tab = $form.find('.dx-tab')[0];
+
+        tab.click();
 
         screen = 'sm';
+        $input.focus();
+        resizeCallbacks.fire();
+
+        assert.strictEqual($input.val(), text, 'ddBox contain correct value');
+
+        tab.click();
+
+        screen = 'lg';
         $input.focus();
         resizeCallbacks.fire();
 

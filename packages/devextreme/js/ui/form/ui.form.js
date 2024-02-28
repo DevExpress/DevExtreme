@@ -65,8 +65,8 @@ import {
     FORM_UNDERLINED_CLASS } from './constants';
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
-import { DROP_DOWN_EDITOR_INPUT_WRAPPER } from '../drop_down_editor/ui.drop_down_editor';
 
+const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
