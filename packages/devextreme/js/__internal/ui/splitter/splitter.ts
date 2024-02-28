@@ -15,7 +15,10 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 import {
-  findLastIndexOfVisibleItem, getCurrentLayout, getDelta,
+  calculateDelta,
+  findLastIndexOfVisibleItem,
+  getCurrentLayout,
+  getDimensionByOrientation,
   getInitialLayout,
   getNewLayout,
   setFlexProp, updateItemsSize,
@@ -132,6 +135,7 @@ class Splitter extends (CollectionWidget as any) {
   _getResizeHandleConfig(paneId: string): object {
     const {
       orientation,
+      rtlEnabled,
       allowKeyboardNavigation,
     } = this.option();
 
@@ -142,17 +146,30 @@ class Splitter extends (CollectionWidget as any) {
         'aria-controls': paneId,
       },
       onResizeStart: (e): void => {
-        this._currentLayout = getCurrentLayout(this._itemElements());
+        this._$visibleItems = this._getVisibleItems();
+        this._currentLayout = getCurrentLayout(this._$visibleItems);
+        this._activeResizeHandleIndex = this._getResizeHandleItems().index(e.element);
+
+        this._splitterItemsSize = this._getSummaryItemsSize(
+          getDimensionByOrientation(orientation),
+          this._$visibleItems,
+          true,
+        );
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,
         });
       },
       onResize: (e): void => {
-        const handle = e.event.target;
-        const delta = getDelta(e.event.offset, this.option('orientation'), this.option('rtlEnabled'), this.$element());
-        const newLayout = getNewLayout(delta, handle, this._currentLayout, this._itemElements());
-        updateItemsSize(this._itemElements(), newLayout);
+        const { event } = e;
+
+        const newLayout = getNewLayout(
+          this._currentLayout,
+          calculateDelta(event.offset, orientation, rtlEnabled, this._splitterItemsSize),
+          this._activeResizeHandleIndex,
+        );
+
+        updateItemsSize(this._$visibleItems, newLayout);
 
         this._getAction(RESIZE_EVENT.onResize)({
           event: e,
