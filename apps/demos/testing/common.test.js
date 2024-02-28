@@ -13,7 +13,7 @@ import {
   changeTheme,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
-  DEFAULT_THEME_NAME
+  getThemePostfix
 } from '../utils/visual-tests/helpers/theme-utils';
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
@@ -206,7 +206,7 @@ const getTestSpecificSkipRules = (testName) => {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const comparisonResult = await compareScreenshot(t, `${testName}${process.env.THEME === DEFAULT_THEME_NAME ? '' : ` (${process.env.THEME})`}.png`, undefined, comparisonOptions);
+          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(process.env.THEME)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {
