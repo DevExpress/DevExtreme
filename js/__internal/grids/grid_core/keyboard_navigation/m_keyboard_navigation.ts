@@ -2852,7 +2852,7 @@ export const keyboardNavigationModule: import('../m_types').Module = {
     };
   },
   controllers: {
-    keyboardNavigation: KeyboardNavigationController,
+    keyboardNavigation: keyboardNavigationScrollableA11yExtender(KeyboardNavigationController),
   },
   extenders: {
     views: {
