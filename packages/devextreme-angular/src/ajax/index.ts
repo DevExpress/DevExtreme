@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import httpRequest from 'devextreme/core/http_request';
+import devextremeAjax from 'devextreme/core/utils/ajax';
 // eslint-disable-next-line import/named
 import { sendRequestFactory } from './dx-ajax';
 
@@ -11,6 +11,6 @@ import { sendRequestFactory } from './dx-ajax';
 })
 export class DxAjaxModule {
   constructor(httpClient: HttpClient) {
-    httpRequest.inject({ sendRequest: sendRequestFactory(httpClient) });
+    devextremeAjax.inject({ sendRequest: sendRequestFactory(httpClient) });
   }
 }

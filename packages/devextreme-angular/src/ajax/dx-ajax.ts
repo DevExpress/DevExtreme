@@ -1,5 +1,5 @@
 import { Deferred } from 'devextreme/core/utils/deferred';
-import { HttpClient, HttpEventType, HttpParams } from '@angular/common/http';
+import { HttpEventType, HttpParams } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { extendFromObject } from 'devextreme/core/utils//extend';
@@ -20,9 +20,7 @@ const removeScript = function (scriptNode) {
   scriptNode.parentNode.removeChild(scriptNode);
 };
 
-const appendToHead = function (element) {
-  return (domAdapter as any).getHead().appendChild(element);
-};
+const appendToHead = (element) => (domAdapter as any).getHead().appendChild(element);
 
 const createScript = function (options) {
   const script = domAdapter.createElement('script');
