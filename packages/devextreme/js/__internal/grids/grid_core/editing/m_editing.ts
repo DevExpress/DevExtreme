@@ -2193,7 +2193,7 @@ class EditingControllerImpl extends modules.ViewController {
         }));
       }
 
-      $container.append($button, '&nbsp;');
+      $container.append($button);
 
       if (button.template) {
         options.renderAsync = false;
