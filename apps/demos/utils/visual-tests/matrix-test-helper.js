@@ -1,5 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { DEFAULT_THEME_NAME } from './helpers/theme-utils';
 
 const settings = {
   concurrency: undefined,
@@ -182,7 +183,10 @@ const SKIPPED_TESTS = {
       'StatePersistence',
     ],
     DropDownBox: ['MultipleSelection'],
-    Form: ['CustomizeItem'],
+    Form: [
+      'CustomizeItem',
+      { demo: 'Validation', themes: ['material.blue.light'] },
+    ],
     Gauges: ['VariableNumberOfBars'],
     List: [
       'ItemDragging',
@@ -213,10 +217,31 @@ const SKIPPED_TESTS = {
 };
 
 export function shouldRunTest(currentFramework, testIndex, product, demo) {
-  const frameworkSkippedDemos = SKIPPED_TESTS[currentFramework]
-      && SKIPPED_TESTS[currentFramework][product];
+  const shouldSkipDemo = (
+    framework,
+    component,
+    demoName,
+  ) => {
+    const frameworkTests = SKIPPED_TESTS[framework];
+    if (!frameworkTests) return false;
 
-  if (frameworkSkippedDemos && frameworkSkippedDemos.indexOf(demo) > -1) {
+    const componentTests = frameworkTests[component];
+    if (!componentTests) return false;
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const test of componentTests) {
+      if (typeof test === 'string' && test === demoName) {
+        return true;
+      } if (test.demo === demoName
+        && test.themes.includes(process.env.THEME || DEFAULT_THEME_NAME)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  if (shouldSkipDemo(currentFramework, product, demo)) {
     return false;
   }
 
@@ -265,6 +290,10 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 }
 
 export function runManualTest(product, demo, framework, callback) {
+  if (process.env.STRATEGY === 'accessibility') {
+    return;
+  }
+
   if (Array.isArray(framework)) {
     framework.forEach((i) => {
       runManualTestCore(test, product, demo, i, callback);
