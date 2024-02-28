@@ -4,13 +4,11 @@ import { ComponentBase, IHtmlOptions } from './component-base';
 import { ExtensionComponent } from './extension-component';
 
 class Component<P extends IHtmlOptions> extends ComponentBase<P> {
-  // local extensionCreators
   private _extensionCreators: ((element: Element) => void)[] = [];
 
   constructor(props: P) {
     super(props);
 
-    // useCallback - no binding needed
     this._registerExtension = this._registerExtension.bind(this);
   }
 
@@ -25,12 +23,10 @@ class Component<P extends IHtmlOptions> extends ComponentBase<P> {
     this.clearExtensions();
   }
 
-  // ref method
   public clearExtensions(): void {
     this._extensionCreators = [];
   }
 
-  // useCallback
   // @ts-expect-error TS2416
   protected renderChildren(): Record<string, unknown>[] | null | undefined {
     return React.Children.map(
@@ -49,12 +45,10 @@ class Component<P extends IHtmlOptions> extends ComponentBase<P> {
     );
   }
 
-  // useCallback
   private _registerExtension(creator: any) {
     this._extensionCreators.push(creator);
   }
 
-  // useCallback
   private _createExtensions() {
     this._extensionCreators.forEach((creator) => creator(this._element));
   }

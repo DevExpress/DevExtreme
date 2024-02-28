@@ -31,7 +31,6 @@ interface IHtmlOptions {
 }
 
 abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent<P> {
-  // + Moved to helpers.ts
   static displayContentsStyle(): React.CSSProperties {
     return isIE()
       ? {
@@ -43,80 +42,55 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       : { display: 'contents' };
   }
 
-  // + useContext
   static contextType: React.Context<UpdateLocker> = RemovalLockerContext;
 
-  // + useContext
   declare context: React.ContextType<typeof RemovalLockerContext> | undefined;
 
-  // + props.widgetClass
   protected _WidgetClass: any;
 
-  // + ref.getInstance
   protected _instance: any;
 
-  // + ref.getElement
   protected _element: HTMLDivElement;
 
-  // + local portalContainer
   protected portalContainer: HTMLElement | null;
 
-  // + props.isPortalComponent
   protected isPortalComponent = false;
 
-  // + props.defaults
   protected readonly _defaults: Record<string, string>;
 
-  // + props.templateProps
   protected readonly _templateProps: ITemplateMeta[] = [];
 
-  // + props.expectedChildren
   protected readonly _expectedChildren: Record<string, IExpectedChild>;
 
-  // + props.subscribableOptions
   protected readonly subscribableOptions: string[];
 
-  // + props.independentEvents
   protected readonly independentEvents: string[];
 
-  // + local createDXTemplates
   private _createDXTemplates: DXTemplateCreator | undefined;
 
-  // + local clearInstantiationModels
   private _clearInstantiationModels: (() => void) | undefined;
 
-  // + local updateTemplates
   private _updateTemplates: ((callback: () => void) => void) | undefined;
 
-  // + local childNodes
   private _childNodes: Node[] = [];
 
-  // + local optionsManager
   private readonly _optionsManager: OptionsManager;
 
-  // + props.useRequestAnimationFrameFlag
   protected useRequestAnimationFrameFlag = false;
 
-  // + local useDeferUpdateForTemplates
   protected useDeferUpdateForTemplates = false;
 
-  // + local guardsUpdateScheduled
   protected guardsUpdateScheduled = false;
 
   constructor(props: P) {
     super(props);
 
-    // ref method - no binding required
     this._createWidget = this._createWidget.bind(this);
-
-    // useCallback - no binding
     this._setTemplateManagerHooks = this._setTemplateManagerHooks.bind(this);
 
-    // default ref value
     this._optionsManager = new OptionsManager();
   }
 
-  // useEffect with empty deps
   public componentDidMount(): void {
     const { style } = this.props;
 
@@ -132,7 +106,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     }
   }
 
-  // useEffect without deps
   public componentDidUpdate(prevProps: P): void {
     this._updateCssClasses(prevProps, this.props);
 
@@ -144,7 +117,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._scheduleTemplatesUpdate();
   }
 
-  // useEffect with empty deps return value
   public componentWillUnmount(): void {
     this._lockParentOnRemoved();
 
@@ -160,7 +132,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._unlockParentOnRemoved();
   }
 
-  // ref method
   protected _createWidget(element?: Element): void {
     element = element || this._element;
 
@@ -197,7 +168,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._instance.on('optionChanged', this._optionsManager.onOptionChanged);
   }
 
-  // useCallback
   private _scheduleTemplatesUpdate() {
     if (this.guardsUpdateScheduled) {
       return;
@@ -216,7 +186,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     unscheduleGuards();
   }
 
-  // useCallback
   private _getConfig(): IConfigNode {
     return buildConfigTree(
       {
@@ -229,7 +198,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     );
   }
 
-  // useCallback
   private _getElementProps(): Record<string, any> {
     const elementProps: Record<string, any> = {
       ref: (element: HTMLDivElement) => { this._element = element; },
@@ -244,7 +212,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     return elementProps;
   }
 
-  // useCallback
   private _setInlineStyles(styles) {
     Object.entries(styles).forEach(
       ([name, value]) => {
@@ -253,7 +220,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     );
   }
 
-  // useCallback
   private _updateCssClasses(prevProps: P | null, newProps: P) {
     const prevClassName = prevProps ? getClassName(prevProps) : undefined;
     const newClassName = getClassName(newProps);
@@ -275,17 +241,14 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     }
   }
 
-  // - (direct call to context)
   private _lockParentOnRemoved() {
     this.context?.lock();
   }
 
-  // - (direct call to context)
   private _unlockParentOnRemoved() {
     this.context?.unlock();
   }
 
-  // useCallback
   private _setTemplateManagerHooks({
     createDXTemplates,
     clearInstantiationModels,
@@ -296,14 +259,12 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     this._updateTemplates = updateTemplates;
   }
 
-  // prop + useCallback
   protected renderChildren(): React.ReactNode {
     // @ts-expect-error TS2339
     const { children } = this.props;
     return children;
   }
 
-  // useCallback
   protected renderContent(): React.ReactNode {
     // @ts-expect-error TS2339
     const { children } = this.props;
@@ -321,7 +282,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       : this.renderChildren();
   }
 
-  // useCallback
   protected renderPortal(): React.ReactNode {
     return this.portalContainer && createPortal(
       this.renderChildren(),
