@@ -23,7 +23,7 @@ export function updateVersion(version: string | undefined): void {
 
   sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, [packagesPath, appsPath]);
 
-  sh.exec('npm i');
+  sh.exec('npm i --legacy-peer-deps');
 }
 
 export function updateVersionJs(version: string | undefined): void {
