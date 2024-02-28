@@ -41,11 +41,11 @@ const Component = memo(
 
       const registerExtension = useCallback((creator: any) => {
         extensionCreators.current.push(creator);
-      }, []);
+      }, [extensionCreators.current]);
 
       const createExtensions = useCallback(() => {
         extensionCreators.current.forEach((creator) => creator(componentBaseRef.current?.getElement() as HTMLDivElement));
-      }, []);
+      }, [extensionCreators.current, componentBaseRef.current]);
 
       const renderChildren = useCallback(() => React.Children.map(
         // @ts-expect-error TS2339
@@ -60,7 +60,7 @@ const Component = memo(
 
           return child;
         },
-      ), [props]);
+      ), [props, registerExtension]);
 
       const createWidget = useCallback((el?: Element) => {
         componentBaseRef.current?.createWidget(el);
@@ -72,7 +72,10 @@ const Component = memo(
         }
 
         extensionCreators.current = [];
-      }, [extensionCreators.current]);
+      }, [
+        extensionCreators.current,
+        props.clearExtensions,
+      ]);
 
       useEffect(() => {
         createWidget();

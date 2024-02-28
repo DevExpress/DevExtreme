@@ -79,7 +79,7 @@ const ComponentBase = memo(
 
       const prevPropsRef = useRef<P & ComponentBaseProps>();
 
-      const updateCssClasses = useCallback((prevProps: P | undefined, newProps: P) => {
+      const updateCssClasses = useCallback((prevProps: (P & ComponentBaseProps) | undefined, newProps: P & ComponentBaseProps) => {
         const prevClassName = prevProps ? getClassName(prevProps) : undefined;
         const newClassName = getClassName(newProps);
 
@@ -120,7 +120,12 @@ const ComponentBase = memo(
           expectedChildren,
         },
         props,
-      ), [props]);
+      ), [
+        templateProps,
+        defaults,
+        expectedChildren,
+        props,
+      ]);
 
       const setTemplateManagerHooks = useCallback(({
         createDXTemplates: createDXTemplatesFn,
@@ -130,7 +135,11 @@ const ComponentBase = memo(
         createDXTemplates.current = createDXTemplatesFn;
         clearInstantiationModels.current = clearInstantiationModelsFn;
         updateTemplates.current = updateTemplatesFn;
-      }, [createDXTemplates, clearInstantiationModels, updateTemplates]);
+      }, [
+        createDXTemplates.current,
+        clearInstantiationModels.current,
+        updateTemplates.current,
+      ]);
 
       const getElementProps = useCallback(() => {
         const elementProps: Record<string, any> = {
@@ -209,7 +218,20 @@ const ComponentBase = memo(
         instance.current.on('optionChanged', optionsManager.current.onOptionChanged);
 
         afterCreateWidget();
-      }, []);
+      }, [
+        beforeCreateWidget,
+        afterCreateWidget,
+        element.current,
+        optionsManager.current,
+        createDXTemplates.current,
+        clearInstantiationModels.current,
+        WidgetClass,
+        useRequestAnimationFrameFlag,
+        useDeferUpdateForTemplates.current,
+        instance.current,
+        subscribableOptions,
+        independentEvents,
+      ]);
 
       useEffect(() => {
         const { style } = props;
@@ -287,12 +309,12 @@ const ComponentBase = memo(
         // @ts-expect-error TS2339
         const { children } = props;
         return children;
-      }, [props]);
+      }, [props, renderChildren]);
 
       const renderPortal = useCallback(() => portalContainer.current && createPortal(
         _renderChildren(),
         portalContainer.current,
-      ), [props]);
+      ), [portalContainer.current, _renderChildren]);
 
       const renderContent = useCallback(() => {
         // @ts-expect-error TS2339
@@ -309,7 +331,12 @@ const ComponentBase = memo(
             style: { display: 'contents' },
           })
           : _renderChildren();
-      }, [props]);
+      }, [
+        props,
+        isPortalComponent,
+        portalContainer.current,
+        _renderChildren,
+      ]);
 
       return React.createElement(
         React.Fragment,
