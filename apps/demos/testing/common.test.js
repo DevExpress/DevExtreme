@@ -13,7 +13,7 @@ import {
   changeTheme,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
-  getThemePostfix, c,
+  getThemePostfix,
 } from '../utils/visual-tests/helpers/theme-utils';
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
