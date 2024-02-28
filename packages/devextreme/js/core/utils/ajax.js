@@ -202,3 +202,4 @@ const sendRequest = function(options) {
 };
 
 export default injector({ sendRequest: sendRequest });
+export const test = 123;

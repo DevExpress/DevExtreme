@@ -10,7 +10,7 @@ import {
   getRequestHeaders,
   getAcceptHeader,
   evalScript,
-} from 'devextreme/core/utils/ajax';
+} from 'devextreme/core/utils/ajax.utils';
 
 type Result = Promise<any> & { abort: () => void };
 
