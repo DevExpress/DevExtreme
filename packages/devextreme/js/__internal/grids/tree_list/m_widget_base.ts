@@ -9,11 +9,12 @@ import './m_grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
-import { deferRender, noop } from '@js/core/utils/common';
+import { deferRender } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { isMaterialBased } from '@js/ui/themes';
+import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -57,12 +58,14 @@ treeListCore.registerModulesOrder([
   'export',
   'gridView']);
 
-const TreeList = (Widget as any).inherit({
-  _activeStateUnit: DATAGRID_ROW_SELECTOR,
+class TreeList extends Widget<dxTreeListOptions> {
+  _deprecatedOptions: any;
+
+  _activeStateUnit = DATAGRID_ROW_SELECTOR;
 
   _getDefaultOptions() {
-    const that = this;
-    const result = that.callBase();
+    // @ts-expect-error
+    const result = super._getDefaultOptions();
 
     each(treeListCore.modules, function () {
       if (isFunction(this.defaultOptions)) {
@@ -70,19 +73,21 @@ const TreeList = (Widget as any).inherit({
       }
     });
     return result;
-  },
+  }
 
   _setDeprecatedOptions() {
-    this.callBase();
+    // @ts-expect-error
+    super._setDeprecatedOptions();
 
     extend(this._deprecatedOptions, {
       'columnChooser.allowSearch': { since: '23.1', message: 'Use the "columnChooser.search.enabled" option instead' },
       'columnChooser.searchTimeout': { since: '23.1', message: 'Use the "columnChooser.search.timeout" option instead' },
     });
-  },
+  }
 
   _defaultOptionsRules() {
-    return this.callBase().concat([
+    // @ts-expect-error
+    return super._defaultOptionsRules().concat([
       {
         device() {
           // @ts-expect-error
@@ -100,12 +105,13 @@ const TreeList = (Widget as any).inherit({
         },
       },
     ]);
-  },
+  }
 
   _init() {
     const that = this;
 
-    that.callBase();
+    // @ts-expect-error
+    super._init();
 
     if (!this.option('_disableDeprecationWarnings')) {
       gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
@@ -114,38 +120,42 @@ const TreeList = (Widget as any).inherit({
     treeListCore.processModules(that, treeListCore);
 
     callModuleItemsMethod(that, 'init');
-  },
+  }
 
-  _clean: noop,
+  _clean() {}
 
   _optionChanged(args) {
     const that = this;
 
     callModuleItemsMethod(that, 'optionChanged', [args]);
     if (!args.handled) {
-      that.callBase(args);
+      // @ts-expect-error
+      super._optionChanged(args);
     }
-  },
+  }
 
   _dimensionChanged() {
+    // @ts-expect-error
     this.updateDimensions(true);
-  },
+  }
 
   _visibilityChanged(visible) {
     if (visible) {
+      // @ts-expect-error
       this.updateDimensions();
     }
-  },
+  }
 
   _initMarkup() {
-    this.callBase.apply(this, arguments);
-    this.$element().addClass(TREELIST_CLASS);
+    // @ts-expect-error
+    super._initMarkup.apply(this, arguments);
+    (this.$element() as any).addClass(TREELIST_CLASS);
     this.getView('gridView').render(this.$element());
-  },
+  }
 
   _renderContentImpl() {
     this.getView('gridView').update();
-  },
+  }
 
   _renderContent() {
     const that = this;
@@ -153,52 +163,54 @@ const TreeList = (Widget as any).inherit({
     deferRender(() => {
       that._renderContentImpl();
     });
-  },
+  }
 
   _dispose() {
     const that = this;
-    that.callBase();
+    // @ts-expect-error
+    super._dispose();
 
     callModuleItemsMethod(that, 'dispose');
-  },
+  }
 
   isReady() {
     return this.getController('data').isReady();
-  },
+  }
 
   beginUpdate() {
-    const that = this;
-
-    that.callBase();
-    callModuleItemsMethod(that, 'beginUpdate');
-  },
+    super.beginUpdate();
+    callModuleItemsMethod(this, 'beginUpdate');
+  }
 
   endUpdate() {
-    const that = this;
-
-    callModuleItemsMethod(that, 'endUpdate');
-    that.callBase();
-  },
+    callModuleItemsMethod(this, 'endUpdate');
+    super.endUpdate();
+  }
 
   getController(name) {
+    // @ts-expect-error
     return this._controllers[name];
-  },
+  }
 
   getView(name) {
+    // @ts-expect-error
     return this._views[name];
-  },
+  }
 
-  focus(element) {
-    this.callBase();
+  focus(element?) {
+    super.focus();
 
     if (isDefined(element)) {
       this.getController('keyboardNavigation').focus(element);
     }
-  },
-});
+  }
 
-TreeList.registerModule = treeListCore.registerModule.bind(treeListCore);
+  static registerModule() {
+    treeListCore.registerModule.apply(treeListCore, arguments as any);
+  }
+}
 
+// @ts-expect-error
 registerComponent('dxTreeList', TreeList);
 
 export default TreeList;
