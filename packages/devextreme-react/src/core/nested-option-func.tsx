@@ -9,7 +9,8 @@ interface INestedOptionMeta {
   makeDirty: () => void;
 }
 
-const NestedOption = memo(<P = any>(props: P) => {
+// eslint-disable-next-line prefer-arrow-callback
+const NestedOption = memo(function NestedOption<P>(props: P) {
   // @ts-expect-error TS2339
   const { children: stateChildren } = props;
   const children = React.Children.map(
