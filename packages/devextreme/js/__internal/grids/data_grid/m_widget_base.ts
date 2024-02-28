@@ -16,7 +16,7 @@ import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isString } from '@js/core/utils/type';
-import { Properties } from '@js/ui/data_grid';
+import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
