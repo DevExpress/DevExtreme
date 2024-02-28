@@ -163,7 +163,7 @@ const App = () => {
             </Template>
           </Toolbar>
         </div>
-        <div style={{
+        <div className="dx-field" style={{
           color,
           textAlign: alignment,
           lineHeight,

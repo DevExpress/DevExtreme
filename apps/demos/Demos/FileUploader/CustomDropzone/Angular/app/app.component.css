@@ -5,6 +5,7 @@
   border-width: 2px;
   border-style: dashed;
   padding: 10px;
+  border-color: var(--dx-color-border);
 }
 
 ::ng-deep #dropzone-external > * {
