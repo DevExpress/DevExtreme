@@ -61,8 +61,8 @@ function findMaxAvailableDelta(currentLayout, firstItemIndex, secondItemIndex, i
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getNewLayoutState(delta, handle, currentLayout, items): number[] {
-  const newLayoutState = [...currentLayout];
+export function getNewLayout(delta, handle, currentLayout, items): number[] {
+  const newLayout = [...currentLayout];
 
   // @ts-expect-error todo: fix error
   const firstItemIndex: number = $(handle).prev().data().dxItemIndex;
@@ -78,11 +78,11 @@ export function getNewLayoutState(delta, handle, currentLayout, items): number[]
   while (remainingDelta > 0) {
     const currentSize = currentLayout[currentSplitterItemIndex];
     if (currentSize >= remainingDelta) {
-      newLayoutState[currentSplitterItemIndex] = currentSize - remainingDelta;
+      newLayout[currentSplitterItemIndex] = currentSize - remainingDelta;
       remainingDelta = 0;
     } else {
       remainingDelta -= currentSize;
-      newLayoutState[currentSplitterItemIndex] = 0;
+      newLayout[currentSplitterItemIndex] = 0;
     }
 
     currentSplitterItemIndex += isSizeDecreasing ? -1 : 1;
@@ -90,10 +90,10 @@ export function getNewLayoutState(delta, handle, currentLayout, items): number[]
 
   const increasingItemIndex = isSizeDecreasing ? secondItemIndex : firstItemIndex;
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  newLayoutState[increasingItemIndex] = currentLayout[increasingItemIndex] + actualDelta;
+  newLayout[increasingItemIndex] = currentLayout[increasingItemIndex] + actualDelta;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return newLayoutState;
+  return newLayout;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

@@ -17,7 +17,7 @@ import {
 import {
   findLastIndexOfVisibleItem, getCurrentLayout, getDelta,
   getInitialLayout,
-  getNewLayoutState,
+  getNewLayout,
   setFlexProp, updateItemsSize,
 } from './utils/layout';
 
@@ -142,24 +142,22 @@ class Splitter extends (CollectionWidget as any) {
         'aria-controls': paneId,
       },
       onResizeStart: (e): void => {
-        this.layoutState = getCurrentLayout(this._itemElements());
+        this._currentLayout = getCurrentLayout(this._itemElements());
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event: e,
         });
       },
-
       onResize: (e): void => {
         const handle = e.event.target;
         const delta = getDelta(e.event.offset, this.option('orientation'), this.option('rtlEnabled'), this.$element());
-        const newLayout = getNewLayoutState(delta, handle, this.layoutState, this._itemElements());
+        const newLayout = getNewLayout(delta, handle, this._currentLayout, this._itemElements());
         updateItemsSize(this._itemElements(), newLayout);
 
         this._getAction(RESIZE_EVENT.onResize)({
           event: e,
         });
       },
-
       onResizeEnd: (e): void => {
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event: e,
