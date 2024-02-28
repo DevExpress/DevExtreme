@@ -356,6 +356,7 @@ const sendRequest = function(options) {
     return result;
 };
 
+const ajax = injector({ sendRequest: sendRequest });
 export {
     isCrossDomain,
     getJsonpOptions as getJsonpCallbackName,
@@ -363,5 +364,5 @@ export {
     getRequestOptions,
     getAcceptHeader,
     evalScript,
+    ajax as default,
 };
-export default injector({ sendRequest: sendRequest });
