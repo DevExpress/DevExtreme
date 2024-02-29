@@ -66,18 +66,9 @@
         text="Create new file"
         icon="plus"
       >
-        <DxItem
-          text="Text Document"
-          :options="{ extension: '.txt' }"
-        />
-        <DxItem
-          text="RTF Document"
-          :options="{ extension: '.rtf' }"
-        />
-        <DxItem
-          text="Spreadsheet"
-          :options="{ extension: '.xls' }"
-        />
+        <DxItem text="Text Document"/>
+        <DxItem text="RTF Document"/>
+        <DxItem text="Spreadsheet"/>
       </DxItem>
       <DxItem
         name="rename"
@@ -89,22 +80,10 @@
         icon="tags"
         :begin-group="true"
       >
-        <DxItem
-          text="Work"
-          :options="{ category: 'Work' }"
-        />
-        <DxItem
-          text="Important"
-          :options="{ category: 'Important' }"
-        />
-        <DxItem
-          text="Home"
-          :options="{ category: 'Home' }"
-        />
-        <DxItem
-          text="None"
-          :options="{ category: '' }"
-        />
+        <DxItem text="Work"/>
+        <DxItem text="Important"/>
+        <DxItem text="Home"/>
+        <DxItem text="None"/>
       </DxItem>
     </DxContextMenu>
   </DxFileManager>
@@ -116,7 +95,7 @@ import {
   DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
   DxFileSelectionItem, DxItemView, DxDetails, DxColumn,
 } from 'devextreme-vue/file-manager';
-import { fileItems } from './data.ts';
+import { fileItems, getItemInfo } from './data.ts';
 
 const newFileMenuOptions = getNewFileMenuOptions();
 const changeCategoryMenuOptions = getChangeCategoryMenuOptions();
@@ -124,8 +103,7 @@ const fileManager = ref();
 
 function onItemClick({ itemData, viewArea, fileSystemItem }) {
   let updated = false;
-  const extension = itemData.options ? itemData.options.extension : undefined;
-  const category = itemData.options ? itemData.options.category : undefined;
+  const { extension, category } = getItemInfo(itemData.text);
 
   if (extension) {
     updated = createFile(extension, fileSystemItem);
@@ -137,6 +115,7 @@ function onItemClick({ itemData, viewArea, fileSystemItem }) {
     fileManager.value.instance.refresh();
   }
 }
+
 function createFile(fileExtension, directory = fileManager.value.instance.getCurrentDirectory()) {
   const newItem = {
     __KEY__: Date.now(),
