@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
@@ -7,10 +8,15 @@ import { getHeight } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
+import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
+import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
+import type { EditingController } from '../../grid_core/editing/m_editing';
+import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
@@ -190,169 +196,182 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
 
 dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
-const GroupingDataControllerExtender = (function () {
-  return {
-    init() {
-      const that = this;
-      that.callBase();
+const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => class GroupingDataControllerExtender extends Base {
+  init() {
+    const that = this;
+    super.init();
 
-      that.createAction('onRowExpanding');
-      that.createAction('onRowExpanded');
-      that.createAction('onRowCollapsing');
-      that.createAction('onRowCollapsed');
-    },
-    _beforeProcessItems(items) {
-      const groupColumns = this._columnsController.getGroupColumns();
+    that.createAction('onRowExpanding');
+    that.createAction('onRowExpanded');
+    that.createAction('onRowCollapsing');
+    that.createAction('onRowCollapsed');
+  }
 
-      items = this.callBase(items);
-      if (items.length && groupColumns.length) {
-        items = this._processGroupItems(items, groupColumns.length);
+  _beforeProcessItems(items) {
+    const groupColumns = this._columnsController.getGroupColumns();
+
+    items = super._beforeProcessItems(items);
+    if (items.length && groupColumns.length) {
+      items = this._processGroupItems(items, groupColumns.length);
+    }
+    return items;
+  }
+
+  _processItem(item, options) {
+    if (isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0) {
+      item = this._processGroupItem(item, options);
+      options.dataIndex = 0;
+    } else {
+      // @ts-expect-error
+      item = super._processItem.apply(this, arguments);
+    }
+    return item;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _processGroupItem(item, options?) {
+    return item;
+  }
+
+  _processGroupItems(items, groupsCount, options?) {
+    const that = this;
+    const groupedColumns = that._columnsController.getGroupColumns();
+    const column = groupedColumns[groupedColumns.length - groupsCount];
+
+    if (!options) {
+      const scrollingMode = that.option('scrolling.mode');
+      options = {
+        collectContinuationItems: scrollingMode !== 'virtual' && scrollingMode !== 'infinite',
+        resultItems: [],
+        path: [],
+        values: [],
+      };
+    }
+
+    const { resultItems } = options;
+
+    if (options.data) {
+      if (options.collectContinuationItems || !options.data.isContinuation) {
+        resultItems.push({
+          rowType: 'group',
+          data: options.data,
+          groupIndex: options.path.length - 1,
+          isExpanded: !!options.data.items,
+          key: options.path.slice(0),
+          values: options.values.slice(0),
+        });
       }
-      return items;
-    },
-    _processItem(item, options) {
-      if (isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0) {
-        item = this._processGroupItem(item, options);
-        options.dataIndex = 0;
+    }
+    if (items) {
+      if (groupsCount === 0) {
+        resultItems.push.apply(resultItems, items);
       } else {
-        item = this.callBase.apply(this, arguments);
-      }
-      return item;
-    },
-    _processGroupItem(item) {
-      return item;
-    },
-    _processGroupItems(items, groupsCount, options) {
-      const that = this;
-      const groupedColumns = that._columnsController.getGroupColumns();
-      const column = groupedColumns[groupedColumns.length - groupsCount];
-
-      if (!options) {
-        const scrollingMode = that.option('scrolling.mode');
-        options = {
-          collectContinuationItems: scrollingMode !== 'virtual' && scrollingMode !== 'infinite',
-          resultItems: [],
-          path: [],
-          values: [],
-        };
-      }
-
-      const { resultItems } = options;
-
-      if (options.data) {
-        if (options.collectContinuationItems || !options.data.isContinuation) {
-          resultItems.push({
-            rowType: 'group',
-            data: options.data,
-            groupIndex: options.path.length - 1,
-            isExpanded: !!options.data.items,
-            key: options.path.slice(0),
-            values: options.values.slice(0),
-          });
-        }
-      }
-      if (items) {
-        if (groupsCount === 0) {
-          resultItems.push.apply(resultItems, items);
-        } else {
-          for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            if (item && 'items' in item) {
-              options.data = item;
-              options.path.push(item.key);
-              options.values.push(column && column.deserializeValue && !column.calculateDisplayValue ? column.deserializeValue(item.key) : item.key);
-              that._processGroupItems(item.items, groupsCount - 1, options);
-              options.data = undefined;
-              options.path.pop();
-              options.values.pop();
-            } else {
-              resultItems.push(item);
-            }
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item && 'items' in item) {
+            options.data = item;
+            options.path.push(item.key);
+            options.values.push(column && column.deserializeValue && !column.calculateDisplayValue ? column.deserializeValue(item.key) : item.key);
+            that._processGroupItems(item.items, groupsCount - 1, options);
+            options.data = undefined;
+            options.path.pop();
+            options.values.pop();
+          } else {
+            resultItems.push(item);
           }
         }
       }
+    }
 
-      return resultItems;
-    },
-    publicMethods() {
-      return this.callBase().concat(['collapseAll', 'expandAll', 'isRowExpanded', 'expandRow', 'collapseRow']);
-    },
-    collapseAll(groupIndex) {
-      const dataSource = this._dataSource;
-      if (dataSource && dataSource.collapseAll(groupIndex)) {
-        dataSource.pageIndex(0);
-        dataSource.reload();
-      }
-    },
-    expandAll(groupIndex) {
-      const dataSource = this._dataSource;
-      if (dataSource && dataSource.expandAll(groupIndex)) {
-        dataSource.pageIndex(0);
-        dataSource.reload();
-      }
-    },
-    changeRowExpand(key) {
-      const that = this;
-      const expanded = that.isRowExpanded(key);
-      const args: any = {
-        key,
-        expanded,
-      };
+    return resultItems;
+  }
 
-      that.executeAction(expanded ? 'onRowCollapsing' : 'onRowExpanding', args);
+  publicMethods() {
+    return super.publicMethods().concat(['collapseAll', 'expandAll', 'isRowExpanded', 'expandRow', 'collapseRow']);
+  }
 
-      if (!args.cancel) {
-        return when(that._changeRowExpandCore(key)).done(() => {
-          args.expanded = !expanded;
-          that.executeAction(expanded ? 'onRowCollapsed' : 'onRowExpanded', args);
-        });
-      }
+  collapseAll(groupIndex) {
+    const dataSource = this._dataSource;
+    if (dataSource && dataSource.collapseAll(groupIndex)) {
+      dataSource.pageIndex(0);
+      dataSource.reload();
+    }
+  }
 
-      // @ts-expect-error
-      return new Deferred().resolve();
-    },
-    _changeRowExpandCore(key) {
-      const that = this;
-      const dataSource = this._dataSource;
+  expandAll(groupIndex) {
+    const dataSource = this._dataSource;
+    if (dataSource && dataSource.expandAll(groupIndex)) {
+      dataSource.pageIndex(0);
+      dataSource.reload();
+    }
+  }
 
-      // @ts-expect-error
-      const d = new Deferred();
-      if (!dataSource) {
-        d.resolve();
-      } else {
-        when(dataSource.changeRowExpand(key)).done(() => {
-          that.load().done(d.resolve).fail(d.reject);
-        }).fail(d.reject);
-      }
-      return d;
-    },
-    isRowExpanded(key) {
-      const dataSource = this._dataSource;
+  changeRowExpand(key) {
+    const that = this;
+    const expanded = that.isRowExpanded(key);
+    const args: any = {
+      key,
+      expanded,
+    };
 
-      return dataSource && dataSource.isRowExpanded(key);
-    },
-    expandRow(key) {
-      if (!this.isRowExpanded(key)) {
-        return this.changeRowExpand(key);
-      }
-      // @ts-expect-error
-      return new Deferred().resolve();
-    },
-    collapseRow(key) {
-      if (this.isRowExpanded(key)) {
-        return this.changeRowExpand(key);
-      }
-      // @ts-expect-error
-      return new Deferred().resolve();
-    },
-    optionChanged(args) {
-      if (args.name === 'grouping'/* autoExpandAll */) {
-        args.name = 'dataSource';
-      }
-      this.callBase(args);
-    },
-  };
-}());
+    that.executeAction(expanded ? 'onRowCollapsing' : 'onRowExpanding', args);
+
+    if (!args.cancel) {
+      return when(that._changeRowExpandCore(key)).done(() => {
+        args.expanded = !expanded;
+        that.executeAction(expanded ? 'onRowCollapsed' : 'onRowExpanded', args);
+      });
+    }
+
+    // @ts-expect-error
+    return new Deferred().resolve();
+  }
+
+  _changeRowExpandCore(key) {
+    const that = this;
+    const dataSource = this._dataSource;
+
+    // @ts-expect-error
+    const d = new Deferred();
+    if (!dataSource) {
+      d.resolve();
+    } else {
+      when(dataSource.changeRowExpand(key)).done(() => {
+        that.load().done(d.resolve).fail(d.reject);
+      }).fail(d.reject);
+    }
+    return d;
+  }
+
+  isRowExpanded(key) {
+    const dataSource = this._dataSource;
+
+    return dataSource && dataSource.isRowExpanded(key);
+  }
+
+  expandRow(key) {
+    if (!this.isRowExpanded(key)) {
+      return this.changeRowExpand(key);
+    }
+    // @ts-expect-error
+    return new Deferred().resolve();
+  }
+
+  collapseRow(key) {
+    if (this.isRowExpanded(key)) {
+      return this.changeRowExpand(key);
+    }
+    // @ts-expect-error
+    return new Deferred().resolve();
+  }
+
+  optionChanged(args) {
+    if (args.name === 'grouping'/* autoExpandAll */) {
+      args.name = 'dataSource';
+    }
+    super.optionChanged(args);
+  }
+};
 
 const onGroupingMenuItemClick = function (column, params) {
   const columnsController = this._columnsController;
@@ -389,200 +408,202 @@ const allowDragging = (groupPanelOptions, column): boolean => {
   return isVisible && !!canDrag;
 };
 
-export const GroupingHeaderPanelExtender = (function () {
-  return {
-    _getToolbarItems() {
-      const items = this.callBase();
+export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => class GroupingHeaderPanelExtender extends Base {
+  _getToolbarItems() {
+    const items = super._getToolbarItems();
 
-      return this._appendGroupingItem(items);
-    },
+    return this._appendGroupingItem(items);
+  }
 
-    _appendGroupingItem(items) {
-      if (this._isGroupPanelVisible()) {
-        let isRendered = false;
-        const toolbarItem = {
-          template: () => {
-            const $groupPanel = $('<div>').addClass(DATAGRID_GROUP_PANEL_CLASS);
-            this._updateGroupPanelContent($groupPanel);
-            registerKeyboardAction('groupPanel', this, $groupPanel, undefined, this._handleActionKeyDown.bind(this));
-            return $groupPanel;
-          },
-          name: 'groupPanel',
-          onItemRendered: () => {
-            isRendered && this.renderCompleted.fire();
-            isRendered = true;
-          },
-          location: 'before',
-          locateInMenu: 'never',
-          sortIndex: 1,
-        };
-
-        items.push(toolbarItem);
-        this.updateToolbarDimensions();
-      }
-
-      return items;
-    },
-
-    _handleActionKeyDown(args) {
-      const { event } = args;
-      const $target = $(event.target);
-      const groupColumnIndex = $target.closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`).index();
-      const column = this._columnsController.getGroupColumns()[groupColumnIndex];
-      const columnIndex = column && column.index;
-
-      if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-        this.getController('headerFilter').showHeaderFilterMenu(columnIndex, true);
-      } else {
-        this._processGroupItemAction(columnIndex);
-      }
-
-      event.preventDefault();
-    },
-
-    _isGroupPanelVisible(): boolean {
-      return isGroupPanelVisible(this.option('groupPanel'));
-    },
-
-    _renderGroupPanelItems($groupPanel, groupColumns) {
-      const that = this;
-
-      $groupPanel.empty();
-
-      each(groupColumns, (index, groupColumn) => {
-        that._createGroupPanelItem($groupPanel, groupColumn);
-      });
-
-      restoreFocus(this);
-    },
-
-    _createGroupPanelItem($rootElement, groupColumn) {
-      const $groupPanelItem = $('<div>')
-        .addClass(groupColumn.cssClass)
-        .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
-        .data('columnData', groupColumn)
-        .appendTo($rootElement)
-        .text(groupColumn.caption);
-
-      setTabIndex(this, $groupPanelItem);
-
-      return $groupPanelItem;
-    },
-
-    _columnOptionChanged(e) {
-      if (!this._requireReady && !gridCore.checkChanges(e.optionNames, ['width', 'visibleWidth'])) {
-        const $toolbarElement = this.element();
-        const $groupPanel = $toolbarElement && $toolbarElement.find(`.${DATAGRID_GROUP_PANEL_CLASS}`);
-
-        if ($groupPanel && $groupPanel.length) {
+  _appendGroupingItem(items) {
+    if (this._isGroupPanelVisible()) {
+      let isRendered = false;
+      const toolbarItem = {
+        template: () => {
+          const $groupPanel = $('<div>').addClass(DATAGRID_GROUP_PANEL_CLASS);
           this._updateGroupPanelContent($groupPanel);
-          this.updateToolbarDimensions();
-          this.renderCompleted.fire();
-        }
+          registerKeyboardAction('groupPanel', this, $groupPanel, undefined, this._handleActionKeyDown.bind(this));
+          return $groupPanel;
+        },
+        name: 'groupPanel',
+        onItemRendered: () => {
+          // @ts-expect-error
+          isRendered && this.renderCompleted.fire();
+          isRendered = true;
+        },
+        location: 'before',
+        locateInMenu: 'never',
+        sortIndex: 1,
+      };
+
+      items.push(toolbarItem);
+      this.updateToolbarDimensions();
+    }
+
+    return items;
+  }
+
+  _handleActionKeyDown(args) {
+    const { event } = args;
+    const $target = $(event.target);
+    const groupColumnIndex = $target.closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`).index();
+    const column = this._columnsController.getGroupColumns()[groupColumnIndex];
+    const columnIndex = column && column.index;
+
+    if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+      // @ts-expect-error
+      this.getController('headerFilter').showHeaderFilterMenu(columnIndex, true);
+    } else {
+      // @ts-expect-error
+      this._processGroupItemAction(columnIndex);
+    }
+
+    event.preventDefault();
+  }
+
+  _isGroupPanelVisible(): boolean {
+    return isGroupPanelVisible(this.option('groupPanel'));
+  }
+
+  _renderGroupPanelItems($groupPanel, groupColumns) {
+    const that = this;
+
+    $groupPanel.empty();
+
+    each(groupColumns, (index, groupColumn) => {
+      that._createGroupPanelItem($groupPanel, groupColumn);
+    });
+
+    restoreFocus(this);
+  }
+
+  _createGroupPanelItem($rootElement, groupColumn) {
+    const $groupPanelItem = $('<div>')
+      .addClass(groupColumn.cssClass)
+      .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
+      .data('columnData', groupColumn)
+      .appendTo($rootElement)
+      .text(groupColumn.caption);
+
+    setTabIndex(this, $groupPanelItem);
+
+    return $groupPanelItem;
+  }
+
+  _columnOptionChanged(e?) {
+    if (!this._requireReady && !gridCore.checkChanges(e.optionNames, ['width', 'visibleWidth'])) {
+      const $toolbarElement = this.element();
+      const $groupPanel = $toolbarElement && $toolbarElement.find(`.${DATAGRID_GROUP_PANEL_CLASS}`);
+
+      if ($groupPanel && $groupPanel.length) {
+        this._updateGroupPanelContent($groupPanel);
+        this.updateToolbarDimensions();
+        // @ts-expect-error
+        this.renderCompleted.fire();
       }
-      this.callBase();
-    },
+    }
+    super._columnOptionChanged();
+  }
 
-    _updateGroupPanelContent($groupPanel) {
-      const that = this;
-      const groupColumns = that.getController('columns').getGroupColumns();
-      const groupPanelOptions = that.option('groupPanel');
+  _updateGroupPanelContent($groupPanel) {
+    const that = this;
+    const groupColumns = that.getController('columns').getGroupColumns();
+    const groupPanelOptions: any = that.option('groupPanel');
 
-      that._renderGroupPanelItems($groupPanel, groupColumns);
+    that._renderGroupPanelItems($groupPanel, groupColumns);
 
-      if (groupPanelOptions.allowColumnDragging && !groupColumns.length) {
-        $('<div>')
-          .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
-          .text(groupPanelOptions.emptyPanelText)
-          .appendTo($groupPanel);
+    if (groupPanelOptions.allowColumnDragging && !groupColumns.length) {
+      $('<div>')
+        .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
+        .text(groupPanelOptions.emptyPanelText)
+        .appendTo($groupPanel);
 
-        $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_CONTAINER_CLASS}`).addClass(DATAGRID_GROUP_PANEL_LABEL_CLASS);
-        $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_LABEL_CLASS}`).css('maxWidth', 'none');
+      $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_CONTAINER_CLASS}`).addClass(DATAGRID_GROUP_PANEL_LABEL_CLASS);
+      $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_LABEL_CLASS}`).css('maxWidth', 'none');
+    }
+  }
+
+  allowDragging(column?): boolean {
+    const groupPanelOptions = this.option('groupPanel');
+
+    return allowDragging(groupPanelOptions, column);
+  }
+
+  getColumnElements() {
+    const $element = this.element();
+    return $element && $element.find(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
+  }
+
+  getColumns() {
+    return this.getController('columns').getGroupColumns();
+  }
+
+  getBoundingRect() {
+    const that = this;
+    const $element = that.element();
+
+    if ($element && $element.find(`.${DATAGRID_GROUP_PANEL_CLASS}`).length) {
+      const offset = $element.offset();
+
+      return {
+        top: offset.top,
+        bottom: offset.top + getHeight($element),
+      };
+    }
+    return null;
+  }
+
+  getName() {
+    return 'group';
+  }
+
+  getContextMenuItems(options) {
+    const that = this;
+    const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
+    const $groupedColumnElement = $(options.targetElement).closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
+    let items;
+
+    if ($groupedColumnElement.length) {
+      options.column = $groupedColumnElement.data('columnData');
+    }
+
+    if (contextMenuEnabled && options.column) {
+      const { column } = options;
+      const isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
+
+      if (isGroupingAllowed) {
+        const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
+        const groupingTexts: any = that.option('grouping.texts');
+        const onItemClick = onGroupingMenuItemClick.bind(that, column);
+
+        items = [
+          {
+            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
+          },
+          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
+        ];
       }
-    },
+    }
+    return items;
+  }
 
-    allowDragging(column): boolean {
-      const groupPanelOptions = this.option('groupPanel');
+  isVisible() {
+    return super.isVisible() || this._isGroupPanelVisible();
+  }
 
-      return allowDragging(groupPanelOptions, column);
-    },
+  hasGroupedColumns(): boolean {
+    return this._isGroupPanelVisible() && !!this.getColumns().length;
+  }
 
-    getColumnElements() {
-      const $element = this.element();
-      return $element && $element.find(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
-    },
-
-    getColumns() {
-      return this.getController('columns').getGroupColumns();
-    },
-
-    getBoundingRect() {
-      const that = this;
-      const $element = that.element();
-
-      if ($element && $element.find(`.${DATAGRID_GROUP_PANEL_CLASS}`).length) {
-        const offset = $element.offset();
-
-        return {
-          top: offset.top,
-          bottom: offset.top + getHeight($element),
-        };
-      }
-      return null;
-    },
-
-    getName() {
-      return 'group';
-    },
-
-    getContextMenuItems(options) {
-      const that = this;
-      const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
-      const $groupedColumnElement = $(options.targetElement).closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
-      let items;
-
-      if ($groupedColumnElement.length) {
-        options.column = $groupedColumnElement.data('columnData');
-      }
-
-      if (contextMenuEnabled && options.column) {
-        const { column } = options;
-        const isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
-
-        if (isGroupingAllowed) {
-          const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
-          const groupingTexts = that.option('grouping.texts');
-          const onItemClick = onGroupingMenuItemClick.bind(that, column);
-
-          items = [
-            {
-              text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
-            },
-            { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
-          ];
-        }
-      }
-      return items;
-    },
-
-    isVisible() {
-      return this.callBase() || this._isGroupPanelVisible();
-    },
-
-    hasGroupedColumns(): boolean {
-      return this._isGroupPanelVisible() && !!this.getColumns().length;
-    },
-
-    optionChanged(args) {
-      if (args.name === 'groupPanel') {
-        this._invalidate();
-        args.handled = true;
-      } else {
-        this.callBase(args);
-      }
-    },
-  };
-}());
+  optionChanged(args) {
+    if (args.name === 'groupPanel') {
+      this._invalidate();
+      args.handled = true;
+    } else {
+      super.optionChanged(args);
+    }
+  }
+};
 
 const GroupingRowsViewExtender = (function () {
   return {
@@ -621,7 +642,7 @@ const GroupingRowsViewExtender = (function () {
         that._changeGroupRowState(e);
       }
 
-      that.callBase(e);
+      super.callBase(e);
     },
 
     _changeGroupRowState(e) {
@@ -638,45 +659,45 @@ const GroupingRowsViewExtender = (function () {
   };
 }());
 
-const columnHeadersViewExtender = (function () {
-  return {
-    getContextMenuItems(options) {
-      const that = this;
-      const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
-      let items = that.callBase(options);
+const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class GroupingHeadersViewExtender extends Base {
+  getContextMenuItems(options) {
+    const that = this;
+    const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
+    let items: any[] | undefined = super.getContextMenuItems(options);
 
-      if (contextMenuEnabled && options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
-        const { column } = options;
+    if (contextMenuEnabled && options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
+      const { column } = options;
 
-        if (!column.command && (!isDefined(column.allowGrouping) || column.allowGrouping)) {
-          const groupingTexts = that.option('grouping.texts');
-          const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
-          const onItemClick = onGroupingMenuItemClick.bind(that, column);
+      if (!column.command && (!isDefined(column.allowGrouping) || column.allowGrouping)) {
+        const groupingTexts: any = that.option('grouping.texts');
+        const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
+        const onItemClick = onGroupingMenuItemClick.bind(that, column);
 
-          items = items || [];
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        items = items || [];
+        items.push({
+          text: groupingTexts.groupByThisColumn, value: 'group', beginGroup: true, disabled: isColumnGrouped, onItemClick,
+        });
+
+        if (column.showWhenGrouped) {
           items.push({
-            text: groupingTexts.groupByThisColumn, value: 'group', beginGroup: true, disabled: isColumnGrouped, onItemClick,
+            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
           });
-
-          if (column.showWhenGrouped) {
-            items.push({
-              text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
-            });
-          }
-
-          items.push({ text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick });
         }
+
+        items.push({ text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick });
       }
-      return items;
-    },
+    }
+    return items;
+  }
 
-    allowDragging(column): boolean {
-      const groupPanelOptions = this.option('groupPanel');
+  allowDragging(column): boolean {
+    const groupPanelOptions = this.option('groupPanel');
 
-      return allowDragging(groupPanelOptions, column) || this.callBase(column);
-    },
-  };
-}());
+    return allowDragging(groupPanelOptions, column) || super.allowDragging(column);
+  }
+};
+
 gridCore.registerModule('grouping', {
   defaultOptions() {
     return {
@@ -703,19 +724,21 @@ gridCore.registerModule('grouping', {
   extenders: {
     controllers: {
       data: GroupingDataControllerExtender,
-      columns: {
+      columns: (Base: ModuleType<ColumnsController>) => class GroupingColumnsExtender extends Base {
         _getExpandColumnOptions() {
-          const options = this.callBase.apply(this, arguments);
+          // @ts-expect-error
+          const options = super._getExpandColumnOptions.apply(this, arguments);
 
+          // @ts-expect-error
           options.cellTemplate = gridCore.getExpandCellTemplate();
 
           return options;
-        },
+        }
       },
-      editing: {
+      editing: (Base: ModuleType<EditingController>) => class GroupingEditingExtender extends Base {
         _isProcessedItem(item) {
           return isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0;
-        },
+        }
       },
     },
     views: {
