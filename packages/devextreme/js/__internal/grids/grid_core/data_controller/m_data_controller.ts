@@ -19,6 +19,7 @@ import type {
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { SearchDataControllerExtension } from '../search/m_search';
+import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 
 const changePaging = function (that, optionName, value) {
   const dataSource = that._dataSource;
@@ -155,7 +156,7 @@ export class DataController extends ControllerWithDataMixin {
 
   _editingController!: Controllers['editing'];
 
-  _rowsScrollController: any;
+  _rowsScrollController?: VirtualScrollController | null;
 
   _columnsChangedHandler!: (e: any) => any;
 

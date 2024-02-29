@@ -3430,7 +3430,7 @@ QUnit.module('Headers reordering', {
             columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(that.component),
             draggingHeaderView: new columnsResizingReordering.DraggingHeaderView(that.component),
             columnHeadersView: new ColumnHeadersView(that.component),
-            headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
+            headerPanel: new (GroupingHeaderPanelExtender(HeaderPanel))(that.component),
             columnChooserView: new ColumnChooserView(that.component)
         };
 
