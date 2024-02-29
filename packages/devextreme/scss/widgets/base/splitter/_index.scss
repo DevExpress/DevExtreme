@@ -11,16 +11,47 @@
   &.dx-splitter-vertical {
     flex-direction: column;
   }
+}
 
-  .dx-resize-handle {
-    flex-basis: 8px;
+.dx-resize-handle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  .dx-resize-handle-icon {
+    background-color: #424242;
+    border-radius: 1px;
   }
-}
 
-.dx-resize-handle-horizontal {
-  cursor: col-resize;
-}
+  .dx-resize-handle-collapse-prev-button,
+  .dx-resize-handle-collapse-next-button {
+    cursor: pointer;
+  }
 
-.dx-resize-handle-vertical {
-  cursor: row-resize;
+  .dx-resize-handle-hidden-button {
+    visibility: collapse;
+  }
+
+  &.dx-resize-handle-horizontal {
+    width: 8px;
+    flex-direction: column;
+    cursor: col-resize;
+
+    .dx-resize-handle-icon {
+      height: 18px;
+      width: 2px;
+    }
+  }
+
+  &.dx-resize-handle-vertical {
+    height: 8px;
+    flex-direction: row;
+    cursor: row-resize;
+
+    .dx-resize-handle-icon {
+      height: 2px;
+      width: 18px;
+    }
+  }
 }

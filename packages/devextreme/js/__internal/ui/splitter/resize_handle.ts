@@ -1,3 +1,4 @@
+import $ from '@js/core/renderer';
 import type { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
 import Guid from '../../../core/guid';
@@ -14,6 +15,12 @@ import {
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
+const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
+const RESIZE_HANDLE_COLLAPSE_PREV_BUTTON_CLASS = 'dx-resize-handle-collapse-prev-button';
+const RESIZE_HANDLE_COLLAPSE_NEXT_BUTTON_CLASS = 'dx-resize-handle-collapse-next-button';
+const RESIZE_HANDLE_HIDDEN_BUTTON = 'dx-resize-handle-hidden-button';
+const ICON_CLASS = 'dx-icon';
+
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
 const RESIZE_DIRECTION = {
@@ -31,6 +38,9 @@ class ResizeHandle extends (Widget as any) {
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
+      showResizableIcon: true,
+      showCollapsePrev: true,
+      showCollapseNext: true,
     });
   }
 
@@ -45,10 +55,40 @@ class ResizeHandle extends (Widget as any) {
   _initMarkup(): void {
     super._initMarkup();
 
-    this._toggleDirectionClass();
-    this.$element().addClass(RESIZE_HANDLE_CLASS);
+    this._renderResizeHandleContent();
 
     this._setAriaAttributes();
+  }
+
+  _renderResizeHandleContent(): void {
+    this.$element().addClass(RESIZE_HANDLE_CLASS);
+    this._toggleDirectionClass();
+
+    this._$collapsePrevButton = $('<div>').addClass(this._getCollapseIconClass(false)).appendTo(this.$element());
+    this._$resizeHandle = $('<div>').addClass(RESIZE_HANDLE_ICON_CLASS).appendTo(this.$element());
+    this._$collapseNextButton = $('<div>').addClass(this._getCollapseIconClass(true)).appendTo(this.$element());
+
+    this._setResizeHandleContentVisibility();
+  }
+
+  _getCollapseIconClass(isNextButton: boolean): string {
+    const isHorizontal = this._isHorizontalDirection();
+    let classList = `${isNextButton ? RESIZE_HANDLE_COLLAPSE_NEXT_BUTTON_CLASS : RESIZE_HANDLE_COLLAPSE_PREV_BUTTON_CLASS} ${ICON_CLASS}`;
+    if (isNextButton) {
+      classList += ` dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
+    } else {
+      classList += ` dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
+    }
+
+    return classList;
+  }
+
+  _setResizeHandleContentVisibility(): void {
+    const { showCollapsePrev, showCollapseNext, resizable } = this.option();
+
+    this._$collapsePrevButton.toggleClass(RESIZE_HANDLE_HIDDEN_BUTTON, !showCollapsePrev);
+    this._$resizeHandle.toggleClass(RESIZE_HANDLE_HIDDEN_BUTTON, !resizable);
+    this._$collapseNextButton.toggleClass(RESIZE_HANDLE_HIDDEN_BUTTON, !showCollapseNext);
   }
 
   _setAriaAttributes(): void {
