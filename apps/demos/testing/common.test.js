@@ -4,7 +4,6 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
-import themes from 'devextreme-main/js/ui/themes';
 import {
   getPortByIndex,
   runTestAtPage,
