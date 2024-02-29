@@ -1,5 +1,5 @@
 import sh from 'shelljs';
-import pkg from '../package.json';
+import pkg from '../../package.json';
 import { formatVersion, makeVersion, updateVersion } from './common/version-utils';
 
 const timestampVersion = makeVersion(formatVersion(pkg.version), true, new Date());
