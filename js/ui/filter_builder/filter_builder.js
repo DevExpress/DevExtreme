@@ -71,7 +71,7 @@ const OPERATORS = {
     notOr: '!or'
 };
 
-const EditorFactory = Class.inherit(EditorFactoryMixin);
+const EditorFactory = EditorFactoryMixin(class {});
 
 const FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
