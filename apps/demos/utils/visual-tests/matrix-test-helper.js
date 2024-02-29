@@ -79,7 +79,7 @@ export function globalReadFrom(basePath, relativePath, mapCallback) {
 }
 
 export function changeTheme(dirName, relativePath, demoPath, theme) {
-  if (!theme) {
+  if (!theme || theme === DEFAULT_THEME_NAME) {
     return;
   }
 
@@ -167,12 +167,13 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: {
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light'] },
+      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
       { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
-
-      { demo: 'EditStateManagement', themes: ['fluent.blue.light'] },
-      { demo: 'RemoteGrouping', themes: ['fluent.blue.light'] },
-      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light'] },
+      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
+      { demo: 'EditStateManagement', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
+      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
     ],
     List: [
       { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
