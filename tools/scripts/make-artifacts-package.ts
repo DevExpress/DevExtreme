@@ -4,7 +4,7 @@ import path from 'path';
 import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
 import { ensureEmptyDir } from './common/fs-utils';
 
-import { version, license, author } from '../package.json';
+import { version, license, author } from '../../package.json';
 import { npm } from './common/npm-utils';
 
 const ARTIFACTS_PACKAGE_DIR = path.join(ARTIFACTS_DIR, 'devextreme-artifacts');
