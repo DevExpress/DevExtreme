@@ -323,8 +323,8 @@ const prepareEditor = (options) => {
     }
 };
 
-const EditorFactoryMixin = {
-    createEditor: function($container, options) {
+const EditorFactoryMixin = (Base) => class EditorFactoryMixin extends Base {
+    createEditor($container, options) {
         options.cancel = false;
         options.editorElement = getPublicElement($container);
 
