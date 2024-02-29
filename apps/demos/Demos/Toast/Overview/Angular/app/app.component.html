@@ -11,6 +11,11 @@
       </dx-check-box>
     </li>
   </ul>
-  <dx-toast [(visible)]="isVisible" [type]="type" [message]="message">
+    <dx-toast
+            [(visible)]="isVisible"
+            [type]="type"
+            [message]="message"
+            displayTime="600"
+    >
   </dx-toast>
 </div>
