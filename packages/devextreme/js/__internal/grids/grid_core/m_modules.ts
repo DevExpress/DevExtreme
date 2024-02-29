@@ -126,7 +126,8 @@ class ModuleItem implements ModuleItemType {
     return messageLocalization.format(name);
   }
 
-  on() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  on(event, callback) {
     // @ts-expect-error
     return this.component.on.apply(this.component, arguments);
   }
@@ -310,12 +311,9 @@ class View extends ModuleItem implements ViewType {
 
   _getBorderedViews(): ViewsWithBorder {
     return {
-      // @ts-expect-error
       columnHeadersView: this.component._views.columnHeadersView,
       rowsView: this.component._views.rowsView,
-      // @ts-expect-error
       filterPanelView: this.component._views.filterPanelView,
-      // @ts-expect-error
       footerView: this.component._views.footerView,
     };
   }
