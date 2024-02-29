@@ -200,6 +200,10 @@ const getTestSpecificSkipRules = (testName) => {
         } else {
           const testTheme = process.env.THEME;
 
+          if (testTheme === 'material.blue.light') {
+            await t.wait(1000);
+          }
+
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
