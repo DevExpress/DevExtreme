@@ -58,6 +58,9 @@ describe('Ajax request using DxAjaxModule', () => {
     });
 
     const req = httpTestingControllerMock.expectOne(`${url}?%24top=20`);
-    req.flush({ message: 'OK' });
+
+    req.flush([{ id: 0, text: 'TEST' }]);
+
+    expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
   });
 });
