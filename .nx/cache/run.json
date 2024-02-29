@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx dev devextreme-main",
+    "startTime": "2024-03-04T10:03:35.258Z",
+    "endTime": "2024-03-04T10:32:03.287Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "devextreme-main:dev",
+      "target": "dev",
+      "projectName": "devextreme-main",
+      "hash": "10208218039704608215",
+      "startTime": "2024-03-04T10:03:35.263Z",
+      "endTime": "2024-03-04T10:32:03.286Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    }
+  ]
+}
