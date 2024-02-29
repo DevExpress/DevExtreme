@@ -1,4 +1,4 @@
-import Class from '@js/core/class';
+/* eslint-disable max-classes-per-file */
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -73,7 +73,8 @@ const OPERATORS = {
   notOr: '!or',
 };
 
-const EditorFactory = Class.inherit(EditorFactoryMixin);
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+const EditorFactory = EditorFactoryMixin(class {});
 
 class FilterBuilder extends Widget<any> {
   _disableInvalidateForValue!: boolean;

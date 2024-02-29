@@ -40,7 +40,7 @@ interface EditorFactoryMixinType {
 
 }
 
-const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = modules.ViewController.inherit(EditorFactoryMixin);
+const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController) as any;
 
 export class EditorFactory extends ViewControllerWithMixin {
   _isFocusOverlay: any;
