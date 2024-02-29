@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
+import type { Component } from '@js/core/component';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
@@ -10,20 +13,26 @@ import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { Module } from './m_types';
+import type {
+  Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module, ModuleItem as ModuleItemType,
+  OptionChanged,
+  View as ViewType,
+  ViewController as ViewControllerType,
+  Views,
+} from './m_types';
 import type { ViewsWithBorder } from './views/utils/update_views_borders';
 import { updateViewsBorders } from './views/utils/update_views_borders';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
-class ModuleItem {
-  private _updateLockCount: any;
+class ModuleItem implements ModuleItemType {
+  _updateLockCount: any;
 
-  component: any;
+  component!: InternalGrid;
 
-  private _actions: any;
+  _actions: any;
 
-  private _actionConfigs: any;
+  _actionConfigs: any;
 
   constructor(component) {
     const that = this;
@@ -47,12 +56,16 @@ class ModuleItem {
 
   init() { }
 
-  callbackNames(): any { }
+  callbackNames(): string[] | undefined {
+    return undefined;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   callbackFlags(name): any { }
 
-  publicMethods() { }
+  publicMethods(): string[] {
+    return [];
+  }
 
   beginUpdate() {
     this._updateLockCount++;
@@ -67,7 +80,11 @@ class ModuleItem {
     }
   }
 
-  option(name) {
+  option(): InternalGridOptions;
+  option(options: InternalGridOptions): void;
+  option<TPropertyName extends string>(name: TPropertyName): GridPropertyType<InternalGridOptions, TPropertyName>;
+  option<TPropertyName extends string>(name: TPropertyName, value: GridPropertyType<InternalGridOptions, TPropertyName>): void;
+  option(name?) {
     const { component } = this;
     const optionCache = component._optionCache;
 
@@ -78,10 +95,14 @@ class ModuleItem {
       return optionCache[name];
     }
 
+    // @ts-expect-error
     return component.option.apply(component, arguments);
   }
 
-  _silentOption(name, value) {
+  _silentOption<TPropertyName extends string>(
+    name: TPropertyName,
+    value: GridPropertyType<InternalGridOptions, TPropertyName>,
+  ): void {
     const { component } = this;
     const optionCache = component._optionCache;
 
@@ -106,14 +127,16 @@ class ModuleItem {
   }
 
   on() {
+    // @ts-expect-error
     return this.component.on.apply(this.component, arguments);
   }
 
   off() {
+    // @ts-expect-error
     return this.component.off.apply(this.component, arguments);
   }
 
-  optionChanged(args) {
+  optionChanged(args: OptionChanged) {
     if (args.name in this._actions) {
       this.createAction(args.name, this._actionConfigs[args.name]);
       args.handled = true;
@@ -135,15 +158,23 @@ class ModuleItem {
     }
   }
 
-  _createComponent() {
-    return this.component._createComponent.apply(this.component, arguments);
+  _createComponent<TComponent extends Component<any>>(
+    $container: dxElementWrapper,
+    component: new (...args) => TComponent,
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never,
+  ): TComponent {
+    return this.component._createComponent(
+      $container,
+      component,
+      options,
+    );
   }
 
-  getController(name) {
+  getController<T extends keyof Controllers>(name: T): Controllers[T] {
     return this.component._controllers[name];
   }
 
-  createAction(actionName, config) {
+  createAction(actionName, config?) {
     if (isFunction(actionName)) {
       const action = this.component._createAction(actionName.bind(this), config);
       return function (e) {
@@ -190,17 +221,17 @@ class ModuleItem {
 
 const Controller = ModuleItem;
 
-class ViewController extends Controller {
-  getView(name) {
+class ViewController extends Controller implements ViewControllerType {
+  getView<T extends keyof Views>(name: T): Views[T] {
     return this.component._views[name];
   }
 
-  getViews() {
+  getViews(): Views {
     return this.component._views;
   }
 }
 
-class View extends ModuleItem {
+class View extends ModuleItem implements ViewType {
   _requireReady: any;
 
   _requireRender: any;
@@ -234,7 +265,7 @@ class View extends ModuleItem {
     }
   }
 
-  _invalidate(requireResize, requireReady) {
+  _invalidate(requireResize?, requireReady?) {
     this._requireRender = true;
     this.component._requireResize = hasWindow() && (this.component._requireResize || requireResize);
     this._requireReady = this._requireReady || requireReady;
@@ -279,14 +310,17 @@ class View extends ModuleItem {
 
   _getBorderedViews(): ViewsWithBorder {
     return {
+      // @ts-expect-error
       columnHeadersView: this.component._views.columnHeadersView,
       rowsView: this.component._views.rowsView,
+      // @ts-expect-error
       filterPanelView: this.component._views.filterPanelView,
+      // @ts-expect-error
       footerView: this.component._views.footerView,
     };
   }
 
-  render($parent, options?) {
+  render($parent?, options?) {
     let $element = this._$element;
     const isVisible = this.isVisible();
 
@@ -370,7 +404,7 @@ function registerPublicMethods(componentInstance, name: string, moduleItem): voi
   }
 }
 type ComponentInstanceType = Record<string, unknown>;
-type ModuleItemType = new(componentInstance: ComponentInstanceType) => { name: string };
+type ModuleItemTypeCore = new(componentInstance: ComponentInstanceType) => { name: string };
 export function processModules(
   componentInstance: ComponentInstanceType,
   componentClass: { modules: [Module & { name: string }]; modulesOrder: any },
@@ -379,7 +413,7 @@ export function processModules(
   const { modulesOrder } = componentClass;
 
   function createModuleItems(
-    moduleTypes: Record<string, ModuleItemType>,
+    moduleTypes: Record<string, ModuleItemTypeCore>,
   ): unknown {
     const moduleItems = {};
 

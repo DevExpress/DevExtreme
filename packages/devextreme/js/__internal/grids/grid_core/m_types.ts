@@ -8,7 +8,7 @@ import type { Properties as DataGridOptions } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
-type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
+export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
 
 // Data types
 export type RowKey = unknown;
@@ -31,9 +31,9 @@ type OptionsMethod<TOptions> =
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
 export interface InternalGrid extends GridBaseType {
-  _views: View[];
+  _views: Views;
 
-  _controllers: Controller[];
+  _controllers: Controllers;
 
   option: OptionsMethod<InternalGridOptions>;
 
@@ -64,6 +64,13 @@ export interface InternalGrid extends GridBaseType {
     component: new (...args) => TComponent,
     options?: TComponent extends Component<infer TOptions> ? TOptions : never
   ) => TComponent;
+
+  _createAction: any;
+
+  _createActionByOption: any;
+  isReady: any;
+
+  _setOptionWithoutOptionChange: any;
 }
 
 type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
@@ -199,12 +206,10 @@ export interface ClassStaticMembers {
   subclassOf: (obj: any) => any;
 }
 export type ModuleType<T extends ModuleItem> = (new (component: any) => T) & ClassStaticMembers;
-declare class ModuleItem {
+export declare class ModuleItem {
   _updateLockCount: number;
 
   component: InternalGrid;
-
-  name: string;
 
   _createComponent: InternalGrid['_createComponent'];
 
@@ -216,11 +221,9 @@ declare class ModuleItem {
 
   _endUpdateCore(): void;
 
-  ctor(): void;
-
   init(): void;
 
-  callbackNames(): string[];
+  callbackNames(): string[] | undefined;
 
   callbackFlags(name?: string): any | undefined;
 
@@ -256,9 +259,6 @@ declare class ModuleItem {
   getWidgetContainerClass(): string;
 
   elementIsInsideGrid(element: any): boolean;
-
-  static inherit(obj: any): any;
-  static subclassOf(obj: any): any;
 }
 
 export declare class Controller extends ModuleItem {}
@@ -266,7 +266,7 @@ export declare class Controller extends ModuleItem {}
 export declare class ViewController extends Controller {
   getView: InternalGrid['getView'];
 
-  getViews(): View[];
+  getViews(): Views;
 }
 
 export declare class View extends ModuleItem {
