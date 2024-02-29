@@ -1,6 +1,7 @@
 import { Selector as $ } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
@@ -28,18 +29,18 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
       .click(positions.nth(1))
       .click(openedStateModes.nth(2));
 
-    await takeScreenshot('drawer(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer(overlap, bottom, expand).png');
 
     await t
       .click(menuButton)
       .wait(500);
 
-    await takeScreenshot('drawer_opened(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer_opened(overlap, bottom, expand).png');
 
     await t
       .resizeWindow(900, 1000);
 
-    await takeScreenshot('drawer_after_resize(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer_after_resize(overlap, bottom, expand).png');
 
     await t
       .resizeWindow(900, 1200);
@@ -48,7 +49,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
       .click(menuButton)
       .wait(500);
 
-    await takeScreenshot('drawer_closed(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer_closed(overlap, bottom, expand).png');
 
     await t
       .expect(compareResults.isValid())
@@ -68,18 +69,18 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
       .click(openedStateModes.nth(2))
       .click(positions.nth(1));
 
-    await takeScreenshot('drawer(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer(overlap, bottom, expand).png');
 
     await t
       .click(menuButton)
       .wait(500);
 
-    await takeScreenshot('drawer_opened(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer_opened(overlap, bottom, expand).png');
 
     await t
       .resizeWindow(900, 1000);
 
-    await takeScreenshot('drawer_after_resize(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer_after_resize(overlap, bottom, expand).png');
 
     await t
       .resizeWindow(900, 1200);
@@ -88,7 +89,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angul
       .click(menuButton)
       .wait(500);
 
-    await takeScreenshot('drawer_closed(overlap, bottom, expand).png');
+    await testScreenshot(t, takeScreenshot, 'drawer_closed(overlap, bottom, expand).png');
 
     await t
       .expect(compareResults.isValid())

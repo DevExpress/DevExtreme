@@ -177,12 +177,6 @@ const getTestSpecificSkipRules = (testName) => {
           await waitForAngularLoading();
         }
 
-        if (process.env.THEME === 'material.blue.light') {
-          await new Promise((resolve) => {
-            themes.initialized(resolve);
-          });
-        }
-
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
@@ -214,7 +208,17 @@ const getTestSpecificSkipRules = (testName) => {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(process.env.THEME)}.png`, undefined, comparisonOptions);
+          const testTheme = process.env.THEME;
+
+          if (testTheme === 'material.blue.light') {
+            await new Promise((resolve) => {
+              themes.initialized(resolve);
+            });
+          }
+
+          console.log(`${testName}${getThemePostfix(testTheme)}.png`);
+
+          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {
