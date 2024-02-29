@@ -3,6 +3,7 @@ import { HttpEventType, HttpParams } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { getWindow } from 'devextreme/core/utils/window';
+import { isDefined } from 'devextreme/core/utils/type';
 import {
   isCrossDomain,
   getJsonpCallbackName,
@@ -165,6 +166,12 @@ export const sendRequestFactory = (httpClient) => {
     if (!upload && !isGet && !headers[CONTENT_TYPE]) {
       headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
     }
+
+    Object.keys(headers).forEach((key) => {
+      if (!isDefined(headers[key])) {
+        delete headers[key];
+      }
+    });
 
     let params;
     let body;
