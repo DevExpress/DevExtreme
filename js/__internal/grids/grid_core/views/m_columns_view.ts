@@ -853,7 +853,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  getCellIndex($cell) {
+  getCellIndex($cell, rowIndex?) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;

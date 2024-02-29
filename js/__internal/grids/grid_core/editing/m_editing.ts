@@ -853,6 +853,7 @@ class EditingControllerImpl extends modules.ViewController {
         break;
       default: {
         const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
+        // @ts-expect-error
         let visibleItemIndex = isViewportBottom ? rowsView?.getBottomVisibleItemIndex() : rowsView?.getTopVisibleItemIndex();
         const row: any = dataController.getVisibleRows()[visibleItemIndex];
 
@@ -2435,7 +2436,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
-  _editingController: any;
+  _editingController!: EditingController;
 
   _pointerDownTarget: any;
 
@@ -2690,6 +2691,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingE
   isVisible() {
     const editingOptions = this.getController('editing').option('editing');
 
+    // @ts-expect-error
     return super.isVisible() || editingOptions?.allowAdding;
   }
 };

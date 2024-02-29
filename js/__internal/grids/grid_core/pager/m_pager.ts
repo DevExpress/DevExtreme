@@ -13,7 +13,7 @@ const getPageIndex = function (dataController) {
   return 1 + (parseInt(dataController.pageIndex()) || 0);
 };
 
-class PagerView extends modules.View {
+export class PagerView extends modules.View {
   private _pager: any;
 
   private _pageSizes: any;

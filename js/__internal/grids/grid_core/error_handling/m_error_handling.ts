@@ -4,9 +4,11 @@ import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
+import type { RowsView } from '../views/m_rows_view';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';
@@ -14,14 +16,13 @@ const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const ACTION_CLASS = 'action';
 
 export class ErrorHandlingController extends modules.ViewController {
-  private _columnHeadersView: any;
+  private _columnHeadersView!: ColumnHeadersView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   init() {
     const that = this;
 
-    // @ts-expect-error
     that._columnHeadersView = that.getView('columnHeadersView');
     that._rowsView = that.getView('rowsView');
   }
@@ -145,7 +146,6 @@ export class ErrorHandlingController extends modules.ViewController {
 const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
   init() {
     const that = this;
-
     const errorHandlingController = that.getController('errorHandling');
 
     super.init();
@@ -159,7 +159,6 @@ const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataContro
       if (e && e.changeType === 'loadError') {
         return;
       }
-
       const errorHandlingController = that.getController('errorHandling');
       const editingController = that.getController('editing');
 

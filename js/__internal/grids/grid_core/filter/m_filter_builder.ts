@@ -8,7 +8,7 @@ import { restoreFocus } from '@js/ui/shared/accessibility';
 
 import modules from '../m_modules';
 
-class FilterBuilderView extends modules.View {
+export class FilterBuilderView extends modules.View {
   private _filterBuilderPopup: any;
 
   private _filterBuilder: any;
@@ -67,7 +67,6 @@ class FilterBuilderView extends modules.View {
       value: this.option('filterValue'),
       fields: this.getController('columns').getFilteringColumns(),
     }, this.option('filterBuilder'), {
-      // @ts-expect-error
       customOperations: this.getController('filterSync').getCustomFilterOperations(),
     }));
 
