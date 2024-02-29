@@ -12,6 +12,7 @@ import {
   shouldRunTestAtIndex,
   globalReadFrom,
   changeTheme,
+  waitForAngularLoading,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
@@ -30,17 +31,6 @@ const execCode = ClientFunction((code) => {
 
   return Promise.resolve();
 });
-const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
-  let demoAppCounter = 0;
-  const demoAppIntervalHandle = setInterval(() => {
-    const demoApp = document.querySelector('demo-app');
-    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 1000);
-      clearInterval(demoAppIntervalHandle);
-    }
-    demoAppCounter += 1;
-  }, 1000);
-}));
 
 const injectStyle = (style) => `
     var style = document.createElement('style'); 
@@ -209,14 +199,6 @@ const getTestSpecificSkipRules = (testName) => {
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
           const testTheme = process.env.THEME;
-
-          if (testTheme === 'material.blue.light') {
-            await new Promise((resolve) => {
-              themes.initialized(resolve);
-            });
-          }
-
-          console.log(`${testName}${getThemePostfix(testTheme)}.png`);
 
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 

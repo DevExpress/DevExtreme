@@ -1,5 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { ClientFunction } from 'testcafe';
 import { DEFAULT_THEME_NAME } from './helpers/theme-utils';
 
 const settings = {
@@ -34,6 +35,18 @@ function patternGroupFromValues(product, demo, framework) {
     framework: wrap(framework),
   };
 }
+
+export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
+  let demoAppCounter = 0;
+  const demoAppIntervalHandle = setInterval(() => {
+    const demoApp = document.querySelector('demo-app');
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+      setTimeout(resolve, 1000);
+      clearInterval(demoAppIntervalHandle);
+    }
+    demoAppCounter += 1;
+  }, 1000);
+}));
 
 function getInterestProcessArgs() {
   // eslint-disable-next-line spellcheck/spell-checker
@@ -166,61 +179,61 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
-    Charts: ['ZoomingAndScrollingAPI'],
-    Common: ['EditorAppearanceVariants'],
-    DataGrid: [
-      'AdvancedMasterDetailView',
-      'AjaxRequest',
-      'Appearance',
-      'BatchEditing',
-      'CellEditingAndEditingAPI',
-      'ColumnCustomization',
-      'CustomNewRecordPosition',
-      'DataValidation',
-      'EditStateManagement',
-      'Filtering',
-      'FilteringAPI',
-      'GroupSummaries',
-      'InfiniteScrolling',
-      'MasterDetailAPI',
-      'MasterDetailView',
-      'MultipleRecordSelectionAPI',
-      'MultipleSorting',
-      'OdataService',
-      'RecordGrouping',
-      'RecordPaging',
-      'RemoteGrouping',
-      'RowEditingAndEditingEvents',
-      'RowSelection',
-      'SimpleArray',
-      'StatePersistence',
-    ],
-    Drawer: ['TopOrBottomPosition'],
-    DropDownBox: ['MultipleSelection'],
+    // Charts: ['ZoomingAndScrollingAPI'],
+    // Common: ['EditorAppearanceVariants'],
+    // DataGrid: [
+    //   'AdvancedMasterDetailView',
+    //   'AjaxRequest',
+    //   'Appearance',
+    //   'BatchEditing',
+    //   'CellEditingAndEditingAPI',
+    //   'ColumnCustomization',
+    //   'CustomNewRecordPosition',
+    //   'DataValidation',
+    //   'EditStateManagement',
+    //   'Filtering',
+    //   'FilteringAPI',
+    //   'GroupSummaries',
+    //   'InfiniteScrolling',
+    //   'MasterDetailAPI',
+    //   'MasterDetailView',
+    //   'MultipleRecordSelectionAPI',
+    //   'MultipleSorting',
+    //   'OdataService',
+    //   'RecordGrouping',
+    //   'RecordPaging',
+    //   'RemoteGrouping',
+    //   'RowEditingAndEditingEvents',
+    //   'RowSelection',
+    //   'SimpleArray',
+    //   'StatePersistence',
+    // ],
+    // Drawer: ['TopOrBottomPosition'],
+    // DropDownBox: ['MultipleSelection'],
     Form: [
       'CustomizeItem',
       { demo: 'Validation', themes: ['material.blue.light'] },
     ],
-    Gauges: ['VariableNumberOfBars'],
-    List: [
-      'ItemDragging',
-      'ListSelection',
-    ],
-    PivotGrid: ['IntegratedFieldChooser'],
-    Popup: ['Scrolling'],
-    Scheduler: [
-      'CustomDragAndDrop',
-      'Resources',
-    ],
-    Sortable: ['Kanban'],
-    TabPanel: ['Overview'],
-    Tabs: [
-      'Overview',
-      'Selection',
-    ],
-    Toolbar: ['Adaptability'],
-    TreeView: ['ItemSelectionAndCustomization'],
-    VectorMap: ['TooltipHTMLSupport'],
+    // Gauges: ['VariableNumberOfBars'],
+    // List: [
+    //   'ItemDragging',
+    //   'ListSelection',
+    // ],
+    // PivotGrid: ['IntegratedFieldChooser'],
+    // Popup: ['Scrolling'],
+    // Scheduler: [
+    //   'CustomDragAndDrop',
+    //   'Resources',
+    // ],
+    // Sortable: ['Kanban'],
+    // TabPanel: ['Overview'],
+    // Tabs: [
+    //   'Overview',
+    //   'Selection',
+    // ],
+    // Toolbar: ['Adaptability'],
+    // TreeView: ['ItemSelectionAndCustomization'],
+    // VectorMap: ['TooltipHTMLSupport'],
   },
   Vue: {
     DataGrid: [
@@ -286,7 +299,6 @@ export function runTestAtPage(test, demoUrl) {
 export function runManualTestCore(testObject, product, demo, framework, callback) {
   changeTheme(__dirname, '../../', `/Demos/${product}/${demo}/${framework}/`, process.env.THEME);
 
-  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 
@@ -294,11 +306,19 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
+  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
+
   if (settings.explicitTests) {
     if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
       callback(test.only);
     }
     return;
+  }
+
+  if (framework === 'Angular') {
+    test.before(async () => {
+      await waitForAngularLoading();
+    });
   }
 
   callback(test);
