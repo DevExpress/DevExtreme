@@ -8,6 +8,8 @@ import type { Properties as DataGridOptions } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
+import type { ModuleItem } from './m_modules';
+
 export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
 
 // Data types
@@ -212,112 +214,8 @@ type ViewTypes = {
   [ P in keyof Views ]: new(component: any) => Views[P];
 };
 
-type SilentOptionType = <TPropertyName extends string>(
-  optionName: TPropertyName,
-  optionValue: GridPropertyType<InternalGridOptions, TPropertyName>
-) => void;
+export type ModuleType<T extends ModuleItem> = (new (...args: any[]) => T);
 
-type ActionParameters<
-  TActionName extends keyof InternalGridOptions,
-> = Omit<Parameters<InternalGridOptions[TActionName]>[0], 'component' | 'element'>;
-
-export interface ClassStaticMembers {
-  inherit: (obj: any) => any;
-  subclassOf: (obj: any) => any;
-}
-export type ModuleType<T extends ModuleItem> = (new (component: any) => T) & ClassStaticMembers;
-export declare class ModuleItem {
-  _updateLockCount: number;
-
-  component: InternalGrid;
-
-  _createComponent: InternalGrid['_createComponent'];
-
-  getController: InternalGrid['getController'];
-
-  option: InternalGrid['option'];
-
-  _silentOption: SilentOptionType;
-
-  _endUpdateCore(): void;
-
-  init(): void;
-
-  callbackNames(): string[] | undefined;
-
-  callbackFlags(name?: string): any | undefined;
-
-  publicMethods(): string[];
-
-  beginUpdate(): void;
-
-  endUpdate(): void;
-
-  localize(str: string): string;
-
-  on(...args: any[]): void;
-
-  off(...args: any[]): void;
-
-  optionChanged(e: OptionChanged): void;
-
-  getAction(name: string): any;
-
-  setAria(...args: any[]): void;
-
-  createAction(...args: any[]): void;
-
-  executeAction<T extends keyof InternalGridOptions>(
-    actionName: T,
-    args: ActionParameters<T>
-  ): void;
-
-  dispose(): void;
-
-  addWidgetPrefix(className: string): string;
-
-  getWidgetContainerClass(): string;
-
-  elementIsInsideGrid(element: any): boolean;
-}
-
-export declare class Controller extends ModuleItem {}
-
-export declare class ViewController extends Controller {
-  getView: InternalGrid['getView'];
-
-  getViews(): Views;
-}
-
-export declare class View extends ModuleItem {
-  renderCompleted: any;
-
-  resizeCompleted: any;
-
-  _endUpdateCore(): void;
-
-  _invalidate(requireResize?: any, requireReady?: any): void;
-
-  _renderCore(): void;
-
-  _resizeCore(): void;
-
-  _parentElement(): any;
-
-  element(): any;
-
-  getElementHeight(): number;
-
-  isVisible(): boolean;
-
-  getTemplate(name: string): any;
-
-  render($parent?: any, options?: any): void;
-
-  resize(): void;
-
-  focus(preventScroll?: boolean): void;
-}
 type ControllersExtender = {
   [P in keyof Controllers]: ((Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>)
   | Record<string, any>;

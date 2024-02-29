@@ -14,10 +14,8 @@ import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 
 import type {
-  Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module, ModuleItem as ModuleItemType,
+  Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module,
   OptionChanged,
-  View as ViewType,
-  ViewController as ViewControllerType,
   Views,
 } from './m_types';
 import type { ViewsWithBorder } from './views/utils/update_views_borders';
@@ -25,7 +23,7 @@ import { updateViewsBorders } from './views/utils/update_views_borders';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
-class ModuleItem implements ModuleItemType {
+export class ModuleItem {
   _updateLockCount: any;
 
   component!: InternalGrid;
@@ -220,9 +218,9 @@ class ModuleItem implements ModuleItemType {
   }
 }
 
-const Controller = ModuleItem;
+export class Controller extends ModuleItem {}
 
-class ViewController extends Controller implements ViewControllerType {
+export class ViewController extends Controller {
   getView<T extends keyof Views>(name: T): Views[T] {
     return this.component._views[name];
   }
@@ -232,7 +230,7 @@ class ViewController extends Controller implements ViewControllerType {
   }
 }
 
-class View extends ModuleItem implements ViewType {
+export class View extends ModuleItem {
   _requireReady: any;
 
   _requireRender: any;
