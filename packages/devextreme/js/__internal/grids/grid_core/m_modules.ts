@@ -247,6 +247,12 @@ export class View extends ModuleItem {
 
   resizeCompleted: any;
 
+  constructor(component) {
+    super(component);
+    this.renderCompleted = Callbacks();
+    this.resizeCompleted = Callbacks();
+  }
+
   _isReady() {
     return this.component.isReady();
   }
@@ -448,8 +454,7 @@ export function processModules(
       .forEach(([name, type]) => {
         if (rootControllerTypes[name]) {
           throw errors.Error('E1001', moduleName, name);
-          // @ts-expect-error
-        } else if (!type?.subclassOf?.(Controller)) {
+        } else if (!(type?.prototype instanceof Controller)) {
           throw errors.Error('E1002', moduleName, name);
         }
         rootControllerTypes[name] = type;
@@ -458,8 +463,7 @@ export function processModules(
       .forEach(([name, type]) => {
         if (rootViewTypes[name]) {
           throw errors.Error('E1003', moduleName, name);
-          // @ts-expect-error
-        } else if (!type?.subclassOf?.(View)) {
+        } else if (!(type?.prototype instanceof View)) {
           throw errors.Error('E1004', moduleName, name);
         }
         rootViewTypes[name] = type;
