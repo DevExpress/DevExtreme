@@ -187,7 +187,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const normalizedText = this._getInputVal();
         const caret = this._caret();
 
-        const enteredChar = this._lastKeyName === MINUS_KEY ? '' : this._lastKey;
+        const enteredChar = this._lastKeyName === MINUS_KEY
+            ? ''
+            : e.which === 110 ? number.getDecimalSeparator() : this._lastKey;
         const newValue = this._tryParse(normalizedText, caret, enteredChar);
 
         if(this._shouldMoveCaret(normalizedText, caret)) {
