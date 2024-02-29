@@ -898,6 +898,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
       const rowOptions = $cell && $cell.closest('.dx-row').data('options');
+      // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         const validatingController = this.getController('validating');
@@ -1156,7 +1157,9 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   _hideFixedGroupCell($cell, overlayOptions) {
     let $nextFixedRowElement;
     let $groupCellElement;
+    // @ts-expect-error
     const isFixedColumns = this._rowsView.isFixedColumns();
+    // @ts-expect-error
     const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
     if (isFixedColumns && !isFormOrPopupEditMode) {
@@ -1343,6 +1346,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const $focus = $element?.closest(this._getFocusCellSelector());
     const $cell = $focus?.is('td') ? $focus : null;
     const rowOptions = $focus?.closest('.dx-row').data('options');
+    // @ts-expect-error
     const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
     const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
     const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
@@ -1413,6 +1417,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
     const rowOptions = $focus && $focus.closest('.dx-row').data('options');
     const editingController = this.getController('editing');
+    // @ts-expect-error
     const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
     const validatingController = this.getController('validating');
     let validationResult;
@@ -1523,6 +1528,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   _cellPrepared($cell, parameters) {
+    // @ts-expect-error
     if (!this.getController('editing').isFormOrPopupEditMode()) {
       this.getController('validating').createValidator(parameters, $cell);
     }
@@ -1530,13 +1536,14 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
     super._cellPrepared.apply(this, arguments as any);
   }
 
-  _restoreErrorRow(contentTable) {
+  _restoreErrorRow(contentTable?) {
     const editingController = this.getController('editing');
     editingController && editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
       const rowOptions = $(item).data('options');
       if (rowOptions) {
         // @ts-expect-error
         const change = editingController.getChangeByKey(rowOptions.key);
+        // @ts-expect-error
         change && editingController._showErrorRow(change);
       }
     });
