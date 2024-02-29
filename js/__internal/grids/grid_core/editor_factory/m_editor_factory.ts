@@ -17,8 +17,9 @@ import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { EditingController } from '../editing/m_editing';
+import type { ViewController } from '../m_modules';
 import modules from '../m_modules';
-import type { Module, ModuleType, ViewController } from '../m_types';
+import type { Module, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
 

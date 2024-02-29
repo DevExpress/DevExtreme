@@ -136,7 +136,6 @@ export class SeparatorView extends modules.View {
   _renderSeparator() { }
 
   _renderCore(options?) {
-    // @ts-expect-error
     const deferred = super._renderCore(options);
     this._isShown = true;
     this._renderSeparator();
@@ -1085,7 +1084,6 @@ export class ColumnsResizerViewController extends modules.ViewController {
     let previousTableHeight = 0;
 
     that._subscribeToCallback(that.getController('tablePosition').positionChanged, (e) => {
-      // @ts-expect-error
       if (that._isResizing && !that._rowsView.isResizing) {
         const scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
         if (previousScrollbarVisibility !== scrollbarVisibility || (previousTableHeight && previousTableHeight !== e.height)) {
