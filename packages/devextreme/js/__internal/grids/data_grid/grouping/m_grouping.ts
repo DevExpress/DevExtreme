@@ -17,6 +17,7 @@ import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_
 import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
+import type { RowsView } from '../../grid_core/views/m_rows_view';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
@@ -605,59 +606,59 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   }
 };
 
-const GroupingRowsViewExtender = (function () {
-  return {
-    getContextMenuItems(options) {
-      const that = this;
-      const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
-      let items;
+const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingRowsViewExtender extends Base {
+  getContextMenuItems(options) {
+    const that = this;
+    const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
+    let items;
 
-      if (contextMenuEnabled && options.row && options.row.rowType === 'group') {
-        const columnsController = that._columnsController;
-        const column = columnsController.columnOption(`groupIndex:${options.row.groupIndex}`);
+    if (contextMenuEnabled && options.row && options.row.rowType === 'group') {
+      const columnsController = that._columnsController;
+      const column = columnsController.columnOption(`groupIndex:${options.row.groupIndex}`);
 
-        if (column && column.allowGrouping) {
-          const groupingTexts = that.option('grouping.texts');
-          const onItemClick = onGroupingMenuItemClick.bind(that, column);
+      if (column && column.allowGrouping) {
+        const groupingTexts: any = that.option('grouping.texts');
+        const onItemClick = onGroupingMenuItemClick.bind(that, column);
 
-          items = [];
+        items = [];
 
-          items.push(
-            { text: groupingTexts.ungroup, value: 'ungroup', onItemClick },
-            { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
-          );
-        }
+        items.push(
+          { text: groupingTexts.ungroup, value: 'ungroup', onItemClick },
+          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
+        );
       }
-      return items;
-    },
+    }
+    return items;
+  }
 
-    _rowClick(e) {
-      const that = this;
-      const expandMode = that.option('grouping.expandMode');
-      const scrollingMode = that.option('scrolling.mode');
-      const isGroupRowStateChanged = scrollingMode !== 'infinite' && expandMode === 'rowClick' && $(e.event.target).closest(`.${DATAGRID_GROUP_ROW_CLASS}`).length;
-      const isExpandButtonClicked = $(e.event.target).closest(`.${DATAGRID_EXPAND_CLASS}`).length;
+  _rowClick(e) {
+    const that = this;
+    const expandMode = that.option('grouping.expandMode');
+    const scrollingMode = that.option('scrolling.mode');
+    const isGroupRowStateChanged = scrollingMode !== 'infinite' && expandMode === 'rowClick' && $(e.event.target).closest(`.${DATAGRID_GROUP_ROW_CLASS}`).length;
+    const isExpandButtonClicked = $(e.event.target).closest(`.${DATAGRID_EXPAND_CLASS}`).length;
 
-      if (isGroupRowStateChanged || isExpandButtonClicked) {
-        that._changeGroupRowState(e);
-      }
+    if (isGroupRowStateChanged || isExpandButtonClicked) {
+      that._changeGroupRowState(e);
+    }
 
-      super.callBase(e);
-    },
+    super._rowClick(e);
+  }
 
-    _changeGroupRowState(e) {
-      const dataController = this.getController('data');
-      const row = dataController.items()[e.rowIndex];
-      const allowCollapsing = this._columnsController.columnOption(`groupIndex:${row.groupIndex}`, 'allowCollapsing');
+  _changeGroupRowState(e) {
+    const dataController = this.getController('data');
+    const row = dataController.items()[e.rowIndex];
+    // @ts-expect-error
+    const allowCollapsing = this._columnsController.columnOption(`groupIndex:${row.groupIndex}`, 'allowCollapsing');
 
-      if (row.rowType === 'data' || row.rowType === 'group' && allowCollapsing !== false) {
-        dataController.changeRowExpand(row.key, true);
-        e.event.preventDefault();
-        e.handled = true;
-      }
-    },
-  };
-}());
+    if (row.rowType === 'data' || row.rowType === 'group' && allowCollapsing !== false) {
+      // @ts-expect-error
+      dataController.changeRowExpand(row.key, true);
+      e.event.preventDefault();
+      e.handled = true;
+    }
+  }
+};
 
 const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class GroupingHeadersViewExtender extends Base {
   getContextMenuItems(options) {
