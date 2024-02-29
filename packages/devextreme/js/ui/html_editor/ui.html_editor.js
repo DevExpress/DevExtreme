@@ -192,9 +192,13 @@ const HtmlEditor = Editor.inherit({
 
         const quill = getQuill();
 
-        frameDocumentBody.innerHTML = quill.replaceStyleAttribute
+        // NOTE: Operations with style attribute is required
+        // to prevent a 'unsafe-inline' CSP error in DOMParser.
+        const valueWithoutStyles = quill.replaceStyleAttribute
             ? quill.replaceStyleAttribute(value)
             : value;
+
+        frameDocumentBody.innerHTML = valueWithoutStyles;
 
         const removeInlineHandlers = (element) => {
             if(element.attributes) {

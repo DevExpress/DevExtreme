@@ -24,7 +24,7 @@ function removeNewLineChar(operations) {
 
 const getMatcher = (quill) => {
     const Delta = quill.import('delta');
-    const msStyleAttributeName = quill.LIST_STYLE_KEY;
+    const msStyleAttributeName = quill.MS_LIST_DATA_KEY;
 
     return (node, delta) => {
         const ops = delta.ops.slice();
