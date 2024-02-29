@@ -100,9 +100,9 @@ jobs:
       run: npm run pack
 
     - name: Check sources compilation
-      working-directory: ./playgrounds/${{ matrix.ARGS.platform }}
+      working-directory: ./apps/${{ matrix.ARGS.platform }}
       run: npm run build
 
     - name: Run test
-      working-directory: ./playgrounds/${{ matrix.ARGS.platform }}
+      working-directory: ./apps/${{ matrix.ARGS.platform }}
       run: npm run test
