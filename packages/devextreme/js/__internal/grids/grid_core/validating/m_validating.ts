@@ -77,7 +77,7 @@ const cellValueShouldBeValidated = function (value, rowOptions) {
   return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
 };
 
-class ValidatingController extends modules.Controller {
+export class ValidatingController extends modules.Controller {
   _isValidationInProgress = false;
 
   _disableApplyValidationResults = false;
