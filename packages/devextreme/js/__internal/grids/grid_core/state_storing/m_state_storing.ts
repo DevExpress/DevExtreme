@@ -98,7 +98,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExten
       if (dataController.isLoaded() && !dataController.getDataSource()) {
         that.setLoading(false);
         that.renderNoDataText();
-        // @ts-expect-error
         const columnHeadersView = that.component.getView('columnHeadersView');
         columnHeadersView && columnHeadersView.render();
         that.component._fireContentReadyAction();
@@ -210,7 +209,6 @@ const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColum
   _shouldReturnVisibleColumns() {
     // @ts-expect-error
     const result = super._shouldReturnVisibleColumns.apply(this, arguments);
-    // @ts-expect-error
     const stateStoringController = this.getController('stateStoring');
 
     return result && (!stateStoringController.isEnabled() || stateStoringController.isLoaded());
@@ -225,7 +223,6 @@ const data = (Base: ModuleType<DataController>) => class StateStoringDataExtende
   }
 
   _refreshDataSource() {
-    // @ts-expect-error
     const stateStoringController = this.getController('stateStoring');
 
     if (stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
@@ -256,7 +253,6 @@ const data = (Base: ModuleType<DataController>) => class StateStoringDataExtende
 
   isLoading() {
     const that = this;
-    // @ts-expect-error
     const stateStoringController = that.getController('stateStoring');
 
     return super.isLoading() || stateStoringController.isLoading();
@@ -279,7 +275,6 @@ const data = (Base: ModuleType<DataController>) => class StateStoringDataExtende
 const selection = (Base: ModuleType<SelectionController>) => class StateStoringSelectionExtender extends Base {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _fireSelectionChanged(options) {
-    // @ts-expect-error
     const stateStoringController = this.getController('stateStoring');
     const isDeferredSelection = this.option('selection.deferred');
     if (stateStoringController.isLoading() && isDeferredSelection) {

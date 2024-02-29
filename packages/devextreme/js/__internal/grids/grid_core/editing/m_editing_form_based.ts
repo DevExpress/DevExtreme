@@ -79,6 +79,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
       const editRowIndex = this._dataController.getRowIndexByKey(editRowKey);
       const $editFormElements = this._rowsView.getCellElements(editRowIndex);
+      // @ts-expect-error
       return this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
     }
 
@@ -489,15 +490,17 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 };
 
 const data = (Base: ModuleType<DataController>) => class DataEditingFormBasedExtender extends Base {
-  _editingController: any;
+  _editingController!: EditingController;
 
   _updateEditItem(item) {
+    // @ts-expect-error
     if (this._editingController.isFormEditMode()) {
       item.rowType = 'detail';
     }
   }
 
   _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
+    // @ts-expect-error
     if (isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
       return;
     }
@@ -507,9 +510,10 @@ const data = (Base: ModuleType<DataController>) => class DataEditingFormBasedExt
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedExtender extends Base {
-  _editingController: any;
+  _editingController!: EditingController;
 
   _renderCellContent($cell, options) {
+    // @ts-expect-error
     if (options.rowType === 'data' && this._editingController.isPopupEditMode() && options.row.visible === false) {
       return;
     }
@@ -520,6 +524,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
   getCellElements(rowIndex): dxElementWrapper | undefined {
     const $cellElements = super.getCellElements(rowIndex);
     const editingController = this._editingController;
+    // @ts-expect-error
     const editForm = editingController.getEditForm();
     const editFormRowIndex = editingController.getEditFormRowIndex();
 
@@ -557,6 +562,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
 
   _isFormItem(parameters) {
     const isDetailRow = parameters.rowType === 'detail' || parameters.rowType === 'detailAdaptive';
+    // @ts-expect-error
     const isPopupEditing = parameters.rowType === 'data' && this._editingController.isPopupEditMode();
     return (isDetailRow || isPopupEditing) && parameters.item;
   }
@@ -572,10 +578,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
 
   _updateContent() {
     const editingController = this._editingController;
+    // @ts-expect-error
     const oldEditForm = editingController.getEditForm();
     const validationGroup = oldEditForm?.option('validationGroup');
     const deferred = super._updateContent.apply(this, arguments as any);
     return deferred.done(() => {
+      // @ts-expect-error
       const newEditForm = editingController.getEditForm();
       if (validationGroup && newEditForm && newEditForm !== oldEditForm) {
         newEditForm.option('validationGroup', validationGroup);

@@ -120,7 +120,7 @@ const data = (Base: ModuleType<DataController>) => class DataEditingRowBasedExte
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedExtender extends Base {
-  _editingController: any;
+  _editingController!: EditingController;
 
   _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);

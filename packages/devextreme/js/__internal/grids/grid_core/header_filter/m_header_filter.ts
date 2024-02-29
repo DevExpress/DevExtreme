@@ -20,6 +20,7 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_pane
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import gridCoreUtils from '../m_utils';
 import {
   allowHeaderFiltering,
@@ -97,19 +98,19 @@ const getFormatOptions = function (value, column, currentLevel) {
   return result;
 };
 
-class HeaderFilterController extends Modules.ViewController {
-  _columnsController: any;
+export class HeaderFilterController extends Modules.ViewController {
+  _columnsController!: ColumnsController;
 
-  _dataController: any;
+  _dataController!: DataController;
 
-  _headerFilterView: any;
+  _headerFilterView!: HeaderFilterView;
 
   _currentColumn: any;
 
   init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._headerFilterView = this.getView('headerFilterView' as any);
+    this._headerFilterView = this.getView('headerFilterView');
   }
 
   _updateSelectedState(items, column) {
@@ -313,8 +314,9 @@ class HeaderFilterController extends Modules.ViewController {
     const column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
     if (column) {
       const visibleIndex = columnsController.getVisibleIndex(columnIndex);
-      const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView' as any);
+      const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
       const $columnElement = view.getColumnElements()
+        // @ts-expect-error
         .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
       this.showHeaderFilterMenuBase({
@@ -493,7 +495,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     const that = this;
     const filters = [super._calculateAdditionalFilter()];
     const columns = that._columnsController.getVisibleColumns(null, true);
-    const headerFilterController = that.getController('headerFilter' as any);
+    const headerFilterController = that.getController('headerFilter');
     const currentColumn = headerFilterController.getCurrentColumn();
 
     each(columns, (_, column) => {
