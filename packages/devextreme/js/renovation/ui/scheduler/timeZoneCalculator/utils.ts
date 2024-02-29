@@ -3,9 +3,11 @@ import dateUtils from '../../../../core/utils/date';
 import {
   DateType, PathTimeZoneConversion, TimeZoneCalculatorOptions, TimeZoneOffsetsType,
 } from './types';
+import { dateUtilsTs } from '../../../../__internal/core/utils/date';
 
 const MS_IN_MINUTE = 60000;
 const MS_IN_HOUR = 60 * MS_IN_MINUTE;
+const toMs = dateUtils.dateToMilliseconds;
 
 export class TimeZoneCalculator {
   options: TimeZoneCalculatorOptions;
@@ -63,9 +65,10 @@ export class TimeZoneCalculator {
       : 1;
 
     const resultDate = new Date(date);
-    resultDate.setMinutes(resultDate.getMinutes() - direction * (60 * clientOffset));
-    resultDate.setMinutes(resultDate.getMinutes() + direction * (60 * targetOffset));
-    return new Date(resultDate);
+    return dateUtilsTs.addOffsets(resultDate, [
+      direction * (toMs('hour') * targetOffset),
+      -direction * (toMs('hour') * clientOffset),
+    ]);
 
     // V1
     // NOTE: Previous date calculation engine.
