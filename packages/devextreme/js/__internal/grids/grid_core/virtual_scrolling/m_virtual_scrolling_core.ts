@@ -380,7 +380,7 @@ class VirtualScrollController {
     }
   }
 
-  reset(isRefresh) {
+  reset(isRefresh?) {
     this._dataLoader.reset();
     if (!isRefresh) {
       this._itemSizes = {};

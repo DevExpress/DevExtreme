@@ -543,7 +543,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
           this._viewportChanging = false;
           return;
         }
-        this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
+        this._dataSource?.setViewportItemIndex(this._rowsScrollController!.getViewportItemIndex());
       });
     }
 
@@ -600,14 +600,14 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
         return pageCount || 1;
       },
       load() {
-        if (that._rowsScrollController.pageIndex() >= this.pageCount()) {
+        if (that._rowsScrollController!.pageIndex() >= this.pageCount()) {
           that._rowPageIndex = this.pageCount() - 1;
-          that._rowsScrollController.pageIndex(that._rowPageIndex);
+          that._rowsScrollController!.pageIndex(that._rowPageIndex);
         }
 
         if (!this.items().length && this.totalItemsCount()) return;
 
-        that._rowsScrollController.handleDataChanged((change) => {
+        that._rowsScrollController!.handleDataChanged((change) => {
           change = change || {};
           change.changeType = change.changeType || 'refresh';
           change.items = change.items || that._visibleItems;
@@ -733,7 +733,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   }
 
   _updateLoadViewportParams() {
-    const viewportParams = this._rowsScrollController.getViewportParams();
+    const viewportParams = this._rowsScrollController!.getViewportParams();
     const pageSize = this.pageSize();
 
     if (viewportParams && !isVirtualPaging(this) && pageSize > 0) {
@@ -909,6 +909,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   viewportSize() {
     const rowsScrollController = this._rowsScrollController;
     const dataSource = this._dataSource;
+    // @ts-expect-error
     const result = rowsScrollController?.viewportSize.apply(rowsScrollController, arguments);
 
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
@@ -925,6 +926,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   viewportItemSize() {
     const rowsScrollController = this._rowsScrollController;
     const dataSource = this._dataSource;
+    // @ts-expect-error
     const result = rowsScrollController?.viewportItemSize.apply(rowsScrollController, arguments);
 
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
@@ -940,6 +942,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     this._isPaging = false;
 
     if (rowsScrollController) {
+      // @ts-expect-error
       rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
     } else {
       dataSource?.setViewportPosition.apply(dataSource, arguments);
@@ -978,7 +981,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
     const loadedTake = lastLoadOptions?.take || 0;
 
-    const isScrollingBack = this._rowsScrollController.isScrollingBack();
+    const isScrollingBack = this._rowsScrollController!.isScrollingBack();
     const topPreloadCount = isScrollingBack ? this.getPreloadedRowCount() : 0;
     const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
     const totalCountCorrection = this._dataSource?.totalCountCorrection() || 0;
@@ -1121,7 +1124,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const rowsScrollController = this._rowsScrollController;
     const newTake = rowsScrollController?.getViewportParams().take;
 
-    (viewportIsNotFilled || currentTake < newTake) && !this._isPaging && itemCount && this.loadViewport({
+    (viewportIsNotFilled || currentTake < newTake!) && !this._isPaging && itemCount && this.loadViewport({
       checkLoading: true,
       viewportIsNotFilled,
     });
@@ -1143,6 +1146,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
+      // @ts-expect-error
       return rowsScrollController.getItemSize.apply(rowsScrollController, arguments);
     }
 
@@ -1154,6 +1158,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
+      // @ts-expect-error
       return rowsScrollController.getItemSizes.apply(rowsScrollController, arguments);
     }
 
@@ -1165,6 +1170,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
+      // @ts-expect-error
       return rowsScrollController.getContentOffset.apply(rowsScrollController, arguments);
     }
 
@@ -1202,6 +1208,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
+      // @ts-expect-error
       return rowsScrollController.virtualItemsCount.apply(rowsScrollController, arguments);
     }
 
@@ -1543,6 +1550,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   _getRowHeights() {
+    // @ts-expect-error
     const isPopupEditMode = this.getController('editing')?.isPopupEditMode?.();
 
     let rowElements = this._getRowElements(this._tableElement).toArray();

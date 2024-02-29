@@ -1114,6 +1114,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnF
 
     // @ts-expect-error
     const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
+    // @ts-expect-error
     const footerFixedTable = this._footerView?.getFixedTableElement();
     // @ts-expect-error
     this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);

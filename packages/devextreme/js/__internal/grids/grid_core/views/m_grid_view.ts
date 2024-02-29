@@ -790,7 +790,6 @@ export class ResizingController extends modules.ViewController {
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
-    // @ts-expect-error
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
   }
@@ -806,13 +805,11 @@ export class SynchronizeScrollingController extends modules.ViewController {
   }
 
   init() {
-    // @ts-expect-error
     const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
 
     for (let i = 0; i < views.length; i++) {
       const view = views[i];
       if (view) {
-        // @ts-expect-error
         view.scrollChanged.add(this._scrollChangedHandler.bind(this, views));
       }
     }

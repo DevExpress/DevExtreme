@@ -34,14 +34,12 @@ export class ContextMenuController extends modules.ViewController {
     let menuItems;
 
     each(VIEW_NAMES, function () {
-      // @ts-expect-error
       const view = that.getView(this);
       $element = view && view.element();
 
       if ($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
         $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr');
         $targetRowElement = $targetCellElement.parent();
-        // @ts-expect-error
         const rowIndex = view.getRowIndex($targetRowElement);
         const columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
         const rowOptions = $targetRowElement.data('options');

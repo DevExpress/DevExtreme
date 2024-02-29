@@ -156,7 +156,7 @@ export class DataController extends ControllerWithDataMixin {
 
   _editingController!: Controllers['editing'];
 
-  _rowsScrollController?: VirtualScrollController;
+  _rowsScrollController?: VirtualScrollController | null;
 
   _columnsChangedHandler!: (e: any) => any;
 
