@@ -24,6 +24,8 @@ export class AppComponent {
 
   selectedItems: DxDiagramTypes.Item[];
 
+  textExpression = 'Full_Name';
+
   constructor(service: Service) {
     this.dataSource = new ArrayStore({
       key: 'ID',
@@ -31,10 +33,10 @@ export class AppComponent {
     });
   }
 
-  contentReadyHandler(e) {
+  contentReadyHandler(e: DxDiagramTypes.ContentReadyEvent) {
     const diagram = e.component;
     // preselect some shape
-    const items = diagram.getItems().filter((item) => item.itemType === 'shape' && (item.text === 'Greta Sims'));
+    const items = diagram.getItems().filter((item) => item.itemType === 'shape' && (item.dataItem[this.textExpression] === 'Greta Sims'));
     if (items.length > 0) {
       diagram.setSelectedItems(items);
       diagram.scrollToItem(items[0]);
@@ -49,9 +51,9 @@ export class AppComponent {
 
 @Pipe({ name: 'stringifyItems' })
 export class StringifyItemsPipe implements PipeTransform {
-  transform(items: Record<string, unknown>[]) {
+  transform(items: DxDiagramTypes.Item[], textExpression: string): string {
     return items
-      .map((item) => item.text)
+      .map((item) => item.dataItem[textExpression])
       .join(', ');
   }
 }
