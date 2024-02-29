@@ -483,7 +483,6 @@ class EditingControllerImpl extends modules.ViewController {
     eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
   }
 
-  // @ts-expect-error
   _silentOption(name, value) {
     if (name === 'editing.changes') {
       this._changes = deepExtendArraySafe([], value);
