@@ -169,6 +169,7 @@ export interface Controllers {
   export: any;
   draggingHeader: any;
   selection: import('./selection/m_selection').SelectionController;
+  errorHandling: import('./error_handling/m_error_handling').ErrorHandlingController;
 }
 
 type ControllerTypes = {

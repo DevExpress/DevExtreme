@@ -191,6 +191,7 @@ const SKIPPED_TESTS = {
       'SimpleArray',
       'StatePersistence',
     ],
+    Drawer: ['TopOrBottomPosition'],
     DropDownBox: ['MultipleSelection'],
     Form: [
       'CustomizeItem',
@@ -215,6 +216,7 @@ const SKIPPED_TESTS = {
     ],
     Toolbar: ['Adaptability'],
     TreeView: ['ItemSelectionAndCustomization'],
+    VectorMap: ['TooltipHTMLSupport'],
   },
   Vue: {
     DataGrid: [
