@@ -57,6 +57,12 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   _updateFocusHandler: any;
 
+  _editingController: any;
+
+  _rowsView: any;
+
+  _columnsController: any;
+
   private _subscribedContainerRoot!: Node;
 
   _getFocusedElement($dataGridElement) {
@@ -243,7 +249,8 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
   }
 
-  loseFocus() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  loseFocus(skipValidator?) {
     this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
     this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
