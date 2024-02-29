@@ -25,6 +25,7 @@
     "test-scripts": "jest --config build/jest.config.js",
     "all:update-version": "ts-node build/update-version.ts",
     "all:build": "ts-node build/build-all.ts",
+    "install-wrappers": "ts-node build/install-wrappers.ts",
     "webserver": "http-server --port 8080 -c-1"
   },
   "nx": {},
