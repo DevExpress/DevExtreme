@@ -11,11 +11,12 @@ import './module_not_extended/header_panel';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
-import { deferRender, noop } from '@js/core/utils/common';
+import { deferRender } from '@js/core/utils/common';
 import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isString } from '@js/core/utils/type';
+import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -58,12 +59,16 @@ gridCore.registerModulesOrder([
   'export',
   'gridView']);
 
-const DataGrid = (Widget as any).inherit({
-  _activeStateUnit: DATAGRID_ROW_SELECTOR,
+class DataGrid extends Widget<Properties> {
+  _activeStateUnit = DATAGRID_ROW_SELECTOR;
+
+  private readonly _controllers: any;
+
+  private readonly _views: any;
 
   _getDefaultOptions() {
-    const that = this;
-    const result = that.callBase();
+    // @ts-expect-error
+    const result = super._getDefaultOptions();
 
     each(gridCore.modules, function () {
       if (isFunction(this.defaultOptions)) {
@@ -71,22 +76,25 @@ const DataGrid = (Widget as any).inherit({
       }
     });
     return result;
-  },
+  }
 
   _setDeprecatedOptions() {
-    this.callBase();
+    // @ts-expect-error
+    super._setDeprecatedOptions();
 
+    // @ts-expect-error
     extend(this._deprecatedOptions, {
       useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
       rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
       'columnChooser.allowSearch': { since: '23.1', message: 'Use the "columnChooser.search.enabled" option instead' },
       'columnChooser.searchTimeout': { since: '23.1', message: 'Use the "columnChooser.search.timeout" option instead' },
     });
-  },
+  }
 
   _defaultOptionsRules() {
+    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device: { platform: 'ios' },
         options: {
@@ -141,50 +149,58 @@ const DataGrid = (Widget as any).inherit({
         },
       },
     ]);
-  },
+  }
 
   _init() {
     const that = this;
 
-    that.callBase();
+    // @ts-expect-error
+    super._init();
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
 
+    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     gridCore.processModules(that, gridCore as any);
 
     gridCore.callModuleItemsMethod(that, 'init');
-  },
+  }
 
-  _clean: noop,
+  _clean() {
+
+  }
 
   _optionChanged(args) {
     const that = this;
 
     gridCore.callModuleItemsMethod(that, 'optionChanged', [args]);
     if (!args.handled) {
-      that.callBase(args);
+      // @ts-expect-error
+      super._optionChanged(args);
     }
-  },
+  }
 
   _dimensionChanged() {
+    // @ts-expect-error
     this.updateDimensions(true);
-  },
+  }
 
   _visibilityChanged(visible) {
     if (visible) {
+      // @ts-expect-error
       this.updateDimensions();
     }
-  },
+  }
 
   _initMarkup() {
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error
+    super._initMarkup.apply(this, arguments);
     this.getView('gridView').render(this.$element());
-  },
+  }
 
   _renderContentImpl() {
     this.getView('gridView').update();
-  },
+  }
 
   _renderContent() {
     const that = this;
@@ -192,7 +208,7 @@ const DataGrid = (Widget as any).inherit({
     deferRender(() => {
       that._renderContentImpl();
     });
-  },
+  }
 
   _getTemplate(templateName) {
     let template = templateName;
@@ -202,49 +218,53 @@ const DataGrid = (Widget as any).inherit({
       logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
     }
 
-    return this.callBase(template);
-  },
+    return super._getTemplate(template);
+  }
 
   _dispose() {
     const that = this;
-    that.callBase();
+    // @ts-expect-error
+    super._dispose();
 
     gridCore.callModuleItemsMethod(that, 'dispose');
-  },
+  }
 
   isReady() {
     return this.getController('data').isReady();
-  },
+  }
 
   beginUpdate() {
     const that = this;
 
-    that.callBase();
+    super.beginUpdate();
     gridCore.callModuleItemsMethod(that, 'beginUpdate');
-  },
+  }
 
   endUpdate() {
     const that = this;
 
     gridCore.callModuleItemsMethod(that, 'endUpdate');
-    that.callBase();
-  },
+    super.endUpdate();
+  }
 
   getController(name) {
     return this._controllers[name];
-  },
+  }
 
   getView(name) {
     return this._views[name];
-  },
+  }
 
-  focus(element) {
+  focus(element?) {
     this.getController('keyboardNavigation').focus(element);
-  },
-});
+  }
 
-DataGrid.registerModule = gridCore.registerModule.bind(gridCore);
+  static registerModule(name, module) {
+    gridCore.registerModule(name, module);
+  }
+}
 
+// @ts-expect-error
 registerComponent('dxDataGrid', DataGrid);
 
 export default DataGrid;
