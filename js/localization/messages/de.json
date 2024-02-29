@@ -57,12 +57,12 @@
         "dxDateBox-simulatedDataPickerTitleDateTime": "Datum und Zeit auswählen",
         "dxDateBox-validation-datetime": "Der Wert muss ein Datum oder eine Uhrzeit sein",
 
-        "dxDateRangeBox-invalidStartDateMessage": "Start value must be a date",
-        "dxDateRangeBox-invalidEndDateMessage": "End value must be a date",
-        "dxDateRangeBox-startDateOutOfRangeMessage": "Start date is out of range",
-        "dxDateRangeBox-endDateOutOfRangeMessage": "End date is out of range",
-        "dxDateRangeBox-startDateLabel": "Anfangszeit",
-        "dxDateRangeBox-endDateLabel": "Endzeit",
+        "dxDateRangeBox-invalidStartDateMessage": "Anfangsdatum muss ein Datum sein",
+        "dxDateRangeBox-invalidEndDateMessage": "Enddatum muss ein Datum sein",
+        "dxDateRangeBox-startDateOutOfRangeMessage": "Anfangsdatum ist ausserhalb des gültigen Bereichs",
+        "dxDateRangeBox-endDateOutOfRangeMessage": "Enddatum ist ausserhalb des gültigen Bereichs",
+        "dxDateRangeBox-startDateLabel": "Anfangsdatum",
+        "dxDateRangeBox-endDateLabel": "Enddatum",
 
         "dxFileUploader-selectFile": "Datei auswählen",
         "dxFileUploader-dropFile": "oder hierher ziehen",
