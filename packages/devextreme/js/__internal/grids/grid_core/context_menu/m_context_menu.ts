@@ -57,7 +57,6 @@ export class ContextMenuController extends modules.ViewController {
         // @ts-expect-error
         options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
-        // @ts-expect-error
         that.executeAction('onContextMenuPreparing', options);
         that._contextMenuPrepared(options);
         menuItems = options.items;

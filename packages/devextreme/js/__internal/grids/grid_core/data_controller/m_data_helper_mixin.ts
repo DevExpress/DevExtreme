@@ -3,7 +3,8 @@ import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import DataController from '@js/ui/collection/data_controller';
 
-import type { Controller, ModuleType } from '../m_types';
+import type { Controller } from '../m_modules';
+import type { ModuleType } from '../m_types';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';
@@ -13,7 +14,7 @@ const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 
-export const DataHelperMixin = (Base: ModuleType<Controller>) => class DataHelperMixin extends Base {
+export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class DataHelperMixin extends Base {
   protected _dataSource: any;
 
   protected _dataController: any;
