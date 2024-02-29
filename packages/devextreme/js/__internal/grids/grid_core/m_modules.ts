@@ -1,5 +1,5 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
-import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
@@ -10,21 +10,22 @@ import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 
-import type {
-  Controller as ControllerType,
-  Module, ModuleType,
-  View as ViewType,
-  ViewController as ViewControllerType,
-} from './m_types';
+import type { Module } from './m_types';
 import type { ViewsWithBorder } from './views/utils/update_views_borders';
 import { updateViewsBorders } from './views/utils/update_views_borders';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
-const ModuleItem = Class.inherit({
-  _endUpdateCore() { },
+class ModuleItem {
+  private _updateLockCount: any;
 
-  ctor(component) {
+  component: any;
+
+  private _actions: any;
+
+  private _actionConfigs: any;
+
+  constructor(component) {
     const that = this;
     that._updateLockCount = 0;
     that.component = component;
@@ -40,19 +41,22 @@ const ModuleItem = Class.inherit({
       // @ts-expect-error
       that[this] = Callbacks(flags);
     });
-  },
+  }
 
-  init() { },
+  _endUpdateCore() { }
 
-  callbackNames() { },
+  init() { }
 
-  callbackFlags() { },
+  callbackNames(): any { }
 
-  publicMethods() { },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  callbackFlags(name): any { }
+
+  publicMethods() { }
 
   beginUpdate() {
     this._updateLockCount++;
-  },
+  }
 
   endUpdate() {
     if (this._updateLockCount > 0) {
@@ -61,7 +65,7 @@ const ModuleItem = Class.inherit({
         this._endUpdateCore();
       }
     }
-  },
+  }
 
   option(name) {
     const { component } = this;
@@ -75,7 +79,7 @@ const ModuleItem = Class.inherit({
     }
 
     return component.option.apply(component, arguments);
-  },
+  }
 
   _silentOption(name, value) {
     const { component } = this;
@@ -86,7 +90,7 @@ const ModuleItem = Class.inherit({
     }
 
     return component._setOptionWithoutOptionChange(name, value);
-  },
+  }
 
   localize(name) {
     const optionCache = this.component._optionCache;
@@ -99,26 +103,26 @@ const ModuleItem = Class.inherit({
     }
 
     return messageLocalization.format(name);
-  },
+  }
 
   on() {
     return this.component.on.apply(this.component, arguments);
-  },
+  }
 
   off() {
     return this.component.off.apply(this.component, arguments);
-  },
+  }
 
   optionChanged(args) {
     if (args.name in this._actions) {
       this.createAction(args.name, this._actionConfigs[args.name]);
       args.handled = true;
     }
-  },
+  }
 
   getAction(actionName) {
     return this._actions[actionName];
-  },
+  }
 
   setAria(name, value, $target) {
     const target = $target.get(0);
@@ -129,15 +133,15 @@ const ModuleItem = Class.inherit({
     } else {
       $target.attr(prefix + name, value);
     }
-  },
+  }
 
   _createComponent() {
     return this.component._createComponent.apply(this.component, arguments);
-  },
+  }
 
   getController(name) {
     return this.component._controllers[name];
-  },
+  }
 
   createAction(actionName, config) {
     if (isFunction(actionName)) {
@@ -150,59 +154,75 @@ const ModuleItem = Class.inherit({
     this._actionConfigs[actionName] = config;
 
     return undefined;
-  },
+  }
 
   executeAction(actionName, options) {
     const action = this._actions[actionName];
 
     return action && action(options);
-  },
+  }
 
   dispose() {
     const that = this;
     each(that.callbackNames() || [], function () {
       that[this].empty();
     });
-  },
+  }
 
   addWidgetPrefix(className) {
     const componentName = this.component.NAME;
 
     return `dx-${componentName.slice(2).toLowerCase()}${className ? `-${className}` : ''}`;
-  },
+  }
 
   getWidgetContainerClass() {
     const containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
     return this.addWidgetPrefix(containerName);
-  },
+  }
 
   elementIsInsideGrid($element) {
     const $gridElement = $element.closest(`.${this.getWidgetContainerClass()}`).parent();
 
     return $gridElement.is(this.component.$element());
-  },
-});
+  }
+}
 
-const Controller: ModuleType<ControllerType> = ModuleItem as any;
+const Controller = ModuleItem;
 
-const ViewController: ModuleType<ViewControllerType> = Controller.inherit({
+class ViewController extends Controller {
   getView(name) {
     return this.component._views[name];
-  },
+  }
 
   getViews() {
     return this.component._views;
-  },
-});
+  }
+}
 
-const View: ModuleType<ViewType> = ModuleItem.inherit({
+class View extends ModuleItem {
+  _requireReady: any;
+
+  _requireRender: any;
+
+  _$element: any;
+
+  _$parent: any;
+
+  name: any;
+
+  renderCompleted: any;
+
+  isResizing: any;
+
+  resizeCompleted: any;
+
   _isReady() {
     return this.component.isReady();
-  },
+  }
 
   _endUpdateCore() {
-    this.callBase();
+    super._endUpdateCore();
 
     if (!this._isReady() && this._requireReady) {
       this._requireRender = false;
@@ -212,31 +232,26 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
       this._requireRender = false;
       this.render(this._$parent);
     }
-  },
+  }
 
   _invalidate(requireResize, requireReady) {
     this._requireRender = true;
     this.component._requireResize = hasWindow() && (this.component._requireResize || requireResize);
     this._requireReady = this._requireReady || requireReady;
-  },
+  }
 
-  _renderCore() { },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _renderCore(options?): any { }
 
-  _resizeCore() { },
+  _resizeCore() { }
 
   _parentElement() {
     return this._$parent;
-  },
-
-  ctor(component) {
-    this.callBase(component);
-    this.renderCompleted = Callbacks();
-    this.resizeCompleted = Callbacks();
-  },
+  }
 
   element() {
     return this._$element;
-  },
+  }
 
   getElementHeight() {
     const $element = this.element();
@@ -248,19 +263,19 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
     const { offsetHeight } = $element.get(0);
 
     return offsetHeight + marginTop + marginBottom;
-  },
+  }
 
   isVisible() {
     return true;
-  },
+  }
 
   getTemplate(name) {
     return this.component._getTemplate(name);
-  },
+  }
 
   getView(name) {
     return this.component._views[name];
-  },
+  }
 
   _getBorderedViews(): ViewsWithBorder {
     return {
@@ -269,9 +284,9 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
       filterPanelView: this.component._views.filterPanelView,
       footerView: this.component._views.footerView,
     };
-  },
+  }
 
-  render($parent, options) {
+  render($parent, options?) {
     let $element = this._$element;
     const isVisible = this.isVisible();
 
@@ -302,19 +317,19 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
         this.renderCompleted.fire(options);
       }
     }
-  },
+  }
 
   resize() {
     this.isResizing = true;
     this._resizeCore();
     this.resizeCompleted.fire();
     this.isResizing = false;
-  },
+  }
 
   focus(preventScroll) {
     this.element().get(0).focus({ preventScroll });
-  },
-}) as any;
+  }
+}
 
 const MODULES_ORDER_MAX_INDEX = 1000000;
 
