@@ -8,17 +8,14 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import ArrayStore from '@js/data/array_store';
 import CustomStore from '@js/data/custom_store';
-import DataHelperMixin from '@js/data_helper';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { AdaptivityDataControllerExtension } from '../adaptivity/m_adaptivity';
 import modules from '../m_modules';
 import type {
-  Controller as ControllerType,
-  Controllers, Module, ModuleType,
+  Controllers, Module,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
-import type { SearchDataControllerExtension } from '../search/m_search';
+import { DataHelperMixin } from './m_data_helper_mixin';
 
 const changePaging = function (that, optionName, value) {
   const dataSource = that._dataSource;
@@ -77,22 +74,7 @@ interface Item {
 
 export type Filter = any;
 
-interface DataHelperMixinType {
-  postCtor: () => void;
-  readyWatcher: any;
-  _refreshDataSource(): any;
-  _initDataSource(): any;
-}
-
-type DataControllerBaseType = ModuleType<ControllerType
-& DataHelperMixinType
-& SearchDataControllerExtension
-& AdaptivityDataControllerExtension
->;
-
-const ControllerWithDataMixin: DataControllerBaseType = modules.Controller.inherit(DataHelperMixin);
-
-export class DataController extends ControllerWithDataMixin {
+export class DataController extends DataHelperMixin(modules.Controller) {
   _items!: Item[];
 
   _cachedProcessedItems!: Item[] | null;
@@ -132,8 +114,6 @@ export class DataController extends ControllerWithDataMixin {
   _rowIndexOffset!: number;
 
   _loadingText: string | undefined;
-
-  _isSharedDataSource: boolean | undefined;
 
   dataErrorOccurred: any;
 
@@ -1234,6 +1214,7 @@ export class DataController extends ControllerWithDataMixin {
           that.filter(null);
           break;
         case 'search':
+          // @ts-expect-error
           that.searchByText('');
           break;
         case 'header':
@@ -1247,6 +1228,7 @@ export class DataController extends ControllerWithDataMixin {
       }
     } else {
       that.filter(null);
+      // @ts-expect-error
       that.searchByText('');
       clearColumnOption('filterValue');
       clearColumnOption('bufferedFilterValue');

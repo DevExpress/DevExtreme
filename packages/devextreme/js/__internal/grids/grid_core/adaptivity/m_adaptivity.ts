@@ -627,6 +627,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   toggleExpandAdaptiveDetailRow(key?, alwaysExpanded?) {
     if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
+      // @ts-expect-error
       this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   }
@@ -862,6 +863,7 @@ const rowsView = (
   _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
 
+    // @ts-expect-error
     if (row && row.rowType === ADAPTIVE_ROW_TYPE && row.key === this._dataController.adaptiveExpandedKey()) {
       $row.addClass(ADAPTIVE_DETAIL_ROW_CLASS);
     }
@@ -1019,6 +1021,7 @@ const editing = (
 
   _closeEditItem($targetElement) {
     const $itemContents = $targetElement.closest(`.${FORM_ITEM_CONTENT_CLASS}`);
+    // @ts-expect-error
     const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
     const formItem = $itemContents.length ? $itemContents.first().data('dx-form-item') : null;
     const columnIndex = formItem && formItem.column && this._columnsController.getVisibleIndex(formItem.column.index);
@@ -1032,6 +1035,7 @@ const editing = (
     if (!this._adaptiveController.isFormOrPopupEditMode() && this._adaptiveController.hasHiddenColumns()) {
       const items = this._dataController.items();
       const item = items[rowIndex];
+      // @ts-expect-error
       const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
 
       this._isForceRowAdaptiveExpand = !this._adaptiveController.hasAdaptiveDetailRowExpanded();
@@ -1041,6 +1045,7 @@ const editing = (
       }
 
       rowIndices.push(rowIndex + 1);
+      // @ts-expect-error
       this._dataController.adaptiveExpandedKey(item.key);
     }
   }
@@ -1101,6 +1106,7 @@ const editing = (
   }
 
   _beforeCloseEditCellInBatchMode(rowIndices) {
+    // @ts-expect-error
     const expandedKey = this._dataController._adaptiveExpandedKey;
 
     if (expandedKey) {
@@ -1135,15 +1141,9 @@ const editing = (
   }
 };
 
-export interface AdaptivityDataControllerExtension {
-  _adaptiveExpandedKey: any;
-  adaptiveExpandedKey(value?: any): any;
-  toggleExpandAdaptiveDetailRow(key, alwaysExpanded): any;
-}
-
 const data = (
   Base: ModuleType<DataController>,
-) => class AdaptivityDataControllerExtender extends Base implements AdaptivityDataControllerExtension {
+) => class AdaptivityDataControllerExtender extends Base {
   _adaptiveExpandedKey: any;
 
   _processItems(items, change) {
