@@ -97,13 +97,13 @@ function focusCellHandler(e) {
 }
 
 export class AdaptiveColumnsController extends modules.ViewController {
-  private _columnsController: any;
+  private _columnsController!: ColumnsController;
 
-  private _dataController: any;
+  private _dataController!: DataController;
 
-  private _editingController: any;
+  private _editingController!: EditingController;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   private _hiddenColumns: any;
 
@@ -383,6 +383,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
       return this._editingController.isEditCell(rowIndex, columnIndex);
     }
+
+    return undefined;
   }
 
   _getFormItemsByHiddenColumns(hiddenColumns) {
@@ -926,7 +928,7 @@ const rowsView = (
 
   getContextMenuItems(options) {
     if (options.row && options.row.rowType === 'detailAdaptive') {
-      const view = this.component.getView('columnHeadersView' as any);
+      const view = this.component.getView('columnHeadersView');
       // @ts-expect-error
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
       // @ts-expect-error
@@ -1002,7 +1004,7 @@ const draggingHeader = (
 const editing = (
   Base: ModuleType<EditingController>,
 ) => class AdaptivityEditingExtender extends Base {
-  private _adaptiveController: any;
+  private _adaptiveController!: AdaptiveColumnsController;
 
   private _isForceRowAdaptiveExpand?: boolean;
 

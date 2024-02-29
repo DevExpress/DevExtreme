@@ -700,6 +700,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
       const editingController = this._editingController;
       const isRowRemoved = !!row.removed;
 
+      // @ts-expect-error
       if (editingController.isBatchEditMode()) {
         isRowRemoved && $row.addClass(ROW_REMOVED);
       }
@@ -712,6 +713,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingC
   isVisible() {
     const editingOptions = this.getController('editing').option('editing');
 
+    // @ts-expect-error
     return super.isVisible() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
   }
 };

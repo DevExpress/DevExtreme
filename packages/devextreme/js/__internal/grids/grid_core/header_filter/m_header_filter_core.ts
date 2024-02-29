@@ -286,7 +286,6 @@ export class HeaderFilterView extends Modules.View {
       searchMode: headerFilterOptions.search.mode || '',
       dataSource: options.dataSource,
       onContentReady() {
-        // @ts-expect-error
         that.renderCompleted.fire();
       },
       itemTemplate(data, _, element) {

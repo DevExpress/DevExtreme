@@ -15,6 +15,7 @@ import type {
   Controllers, Module,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './m_data_helper_mixin';
 
 const changePaging = function (that, optionName, value) {
@@ -135,7 +136,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   _editingController!: Controllers['editing'];
 
-  _rowsScrollController: any;
+  _rowsScrollController?: VirtualScrollController | null;
 
   _columnsChangedHandler!: (e: any) => any;
 
