@@ -1285,7 +1285,8 @@ export class RowsView extends ColumnsView {
 
   setScrollerSpacing() { }
 
-  _restoreErrorRow() { }
+  // eslint-disable-next-line
+  _restoreErrorRow(contentTable?) { }
 }
 
 export const rowsModule = {
