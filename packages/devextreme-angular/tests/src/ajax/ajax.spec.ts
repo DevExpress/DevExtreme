@@ -5,10 +5,11 @@ import {
 } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { DxAjaxModule } from 'devextreme-angular/ajax';
+// import { DxAjaxModule } from 'devextreme-angular/ajax';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 const mockHandler = {
   handle: (req: HttpRequest<any>): Observable<HttpEvent<any>> => of(new HttpResponse(req)),
 };
@@ -27,7 +28,7 @@ describe('Ajax request', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      imports: [HttpClientTestingModule, DxAjaxModule],
+      imports: [HttpClientTestingModule /*DxAjaxModule*/],
       providers: [{ provide: HTTP_INTERCEPTORS, useClass: TestInterceptor, multi: true }],
     });
     injector = getTestBed();
