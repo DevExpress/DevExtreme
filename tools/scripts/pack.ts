@@ -1,6 +1,6 @@
 import { assert } from './common';
 import { getProject } from './common/nx';
-import { npm } from './common/npm-utils';
+import { npm } from './common/monorepo-tools';
 import { NPM_DIR } from './common/paths';
 
 const [,, name] = process.argv;

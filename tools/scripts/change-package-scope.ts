@@ -4,8 +4,8 @@ import path from 'path';
 import tar from 'tar-fs';
 import yargs from 'yargs';
 import { createUnzip } from 'zlib';
-import { npm } from './common/npm-utils';
-import { ensureEmptyDir } from './common/fs-utils';
+import { npm } from './common/monorepo-tools';
+import { ensureEmptyDir } from './common/monorepo-tools';
 
 const args = yargs.strict().version(false).help(false)
   .option('tgz', { type: 'string', demandOption: true, nargs: 1 })
