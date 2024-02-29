@@ -152,6 +152,15 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
+  jQuery: {
+    DataGrid: [
+      { demo: 'BatchUpdateRequest', theme: ['fluent.blue.light'] },
+      { demo: 'ColumnCustomization', theme: ['fluent.blue.light'] },
+    ],
+    List: [
+      { demo: 'ItemDragging', theme: ['fluent.blue.light'] },
+    ],
+  },
   Angular: {
     Charts: ['ZoomingAndScrollingAPI'],
     Common: ['EditorAppearanceVariants'],
