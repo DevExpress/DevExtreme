@@ -34,7 +34,6 @@ export class ContextMenuController extends modules.ViewController {
     let menuItems;
 
     each(VIEW_NAMES, function () {
-      // @ts-expect-error
       const view = that.getView(this);
       $element = view && view.element();
 
@@ -49,11 +48,13 @@ export class ContextMenuController extends modules.ViewController {
           targetElement: getPublicElement($targetElement),
           target: viewName[this],
           rowIndex,
+          // @ts-expect-error
           row: view._getRows()[rowIndex],
           columnIndex,
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
+        // @ts-expect-error
         options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
         // @ts-expect-error
@@ -78,7 +79,7 @@ export class ContextMenuController extends modules.ViewController {
   }
 }
 
-class ContextMenuView extends modules.View {
+export class ContextMenuView extends modules.View {
   _renderCore() {
     const that = this;
     const $element = that.element().addClass(CONTEXT_MENU);
@@ -92,7 +93,6 @@ class ContextMenuView extends modules.View {
         onPositioning(actionArgs) {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
-          // @ts-expect-error
           const items = that.getController('contextMenu').getContextMenuItems(event);
 
           if (items) {

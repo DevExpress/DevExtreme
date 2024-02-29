@@ -305,7 +305,7 @@ class VirtualScrollController {
     return this._viewportItemSize * this._sizeRatio;
   }
 
-  getItemOffset(itemIndex, isEnd) {
+  getItemOffset(itemIndex, isEnd?) {
     const virtualItemsCount = this.virtualItemsCount();
     let itemCount = itemIndex;
 
@@ -380,7 +380,7 @@ class VirtualScrollController {
     }
   }
 
-  reset(isRefresh) {
+  reset(isRefresh?) {
     this._dataLoader.reset();
     if (!isRefresh) {
       this._itemSizes = {};

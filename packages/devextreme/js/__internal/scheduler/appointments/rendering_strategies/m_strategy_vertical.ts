@@ -444,6 +444,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     return super.getPositionShift(timeShift, isAllDay);
   }
+
+  _needAdjustDuration() {
+    return false;
+  }
 }
 
 export default VerticalRenderingStrategy;

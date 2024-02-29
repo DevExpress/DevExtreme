@@ -200,7 +200,11 @@ class BaseStrategy {
     const matchedCell = this.viewDataProvider.viewDataMap.dateTableMap[rowIndex][columnIndex];
     const matchedCellStartDate = dateUtilsTs.addOffsets(matchedCell.cellData.startDate, [-viewOffset]);
 
-    return (appointmentDate.getTime() - matchedCellStartDate.getTime()) / cellDuration;
+    const result = (appointmentDate.getTime() - matchedCellStartDate.getTime()) / cellDuration;
+    // NOTE: Hande DST summer time change issue.
+    // Time shift greater than cell duration - incorrect.
+    // In this case appointment date should match with the next cell instead.
+    return result % 1;
   }
 }
 

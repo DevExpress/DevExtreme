@@ -15,9 +15,12 @@ import pointerEvents from '@js/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { EditingController } from '../editing/m_editing';
 import modules from '../m_modules';
 import type { Module, ModuleType, ViewController } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { RowsView } from '../views/m_rows_view';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -56,6 +59,12 @@ export class EditorFactory extends ViewControllerWithMixin {
   _$focusOverlay: any;
 
   _updateFocusHandler: any;
+
+  _editingController!: EditingController;
+
+  _rowsView!: RowsView;
+
+  _columnsController!: ColumnsController;
 
   private _subscribedContainerRoot!: Node;
 
@@ -243,7 +252,8 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
   }
 
-  loseFocus() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  loseFocus(skipValidator?) {
     this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
     this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);

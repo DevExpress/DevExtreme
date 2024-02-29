@@ -318,13 +318,14 @@ export class DateGeneratorBaseStrategy {
       const offsetDifference = appointmentAdapter.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
       if (offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
-        source.startDate = new Date(source.startDate.getTime() + offsetDifference * toMs('minute'));
-        source.endDate = new Date(source.endDate.getTime() + offsetDifference * toMs('minute'));
+        source.startDate = dateUtilsTs.addOffsets(source.startDate, [offsetDifference * toMs('minute')]);
+        source.endDate = dateUtilsTs.addOffsets(source.endDate, [offsetDifference * toMs('minute')]);
         source.exceptionDate = new Date(source.startDate);
       }
 
+      const duration = source.endDate.getTime() - source.startDate.getTime();
       const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
-      const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
+      const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
 
       return {
         startDate,
