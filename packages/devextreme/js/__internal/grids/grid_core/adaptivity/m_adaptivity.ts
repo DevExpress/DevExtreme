@@ -374,10 +374,12 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
     if (this._isRowEditMode()) {
       const editRowKey = this.option('editing.editRowKey');
+      // @ts-expect-error
       if (equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
         return true;
       }
     } else {
+      // @ts-expect-error
       const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
       const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
 
@@ -667,6 +669,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   }
 
   hasAdaptiveDetailRowExpanded() {
+    // @ts-expect-error
     return isDefined(this._dataController.adaptiveExpandedKey());
   }
 
@@ -770,6 +773,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   isAdaptiveDetailRowExpanded(key) {
     const dataController = this._dataController;
+    // @ts-expect-error
     return dataController.adaptiveExpandedKey() && equalByValue(dataController.adaptiveExpandedKey(), key);
   }
 
