@@ -15,3 +15,5 @@ export const getTimezoneFixture = (timezones: MachineTimezonesType[]): FixtureFn
   const machineTimezone = getMachineTimezone();
   return timezones.includes(machineTimezone as MachineTimezonesType) ? fixture : fixture.skip;
 };
+
+export const normalizeTimezoneName = (timezone: MachineTimezonesType): string => timezone.replace(/\//g, '-');
