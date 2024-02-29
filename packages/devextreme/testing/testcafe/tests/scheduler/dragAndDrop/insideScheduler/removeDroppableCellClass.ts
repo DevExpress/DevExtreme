@@ -1,5 +1,5 @@
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment inside the scheduler`

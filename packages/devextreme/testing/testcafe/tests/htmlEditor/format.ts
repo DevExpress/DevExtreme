@@ -1,6 +1,6 @@
 import SelectBox from '../../model/selectBox';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 
 fixture.disablePageReloads`HtmlEditor - formats`
   .page(url(__dirname, '../containerQuill.html'));

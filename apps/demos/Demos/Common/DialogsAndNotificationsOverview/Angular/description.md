@@ -1,0 +1,1 @@
+DevExtreme Dialog and Notification Angular components help a user interact with your application. They provide intuitive UI, adaptive design, and customization flexibility. As Angular components, they support native features of the framework: AOT compilation, declarative configuration, TypeScript compile-time checking, and more.

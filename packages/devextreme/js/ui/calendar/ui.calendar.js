@@ -741,6 +741,8 @@ const Calendar = Editor.inherit({
         }
     },
 
+    _setAriaReadonly: noop,
+
     _getKeyboardListeners() {
         return this.callBase().concat([this._view]);
     },

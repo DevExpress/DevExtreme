@@ -60,7 +60,7 @@ const restoreFocus = function (focusedElement, selectionRange) {
 export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
 
-  private _dataController!: DataController;
+  _dataController!: DataController;
 
   _rowsView!: RowsView;
 

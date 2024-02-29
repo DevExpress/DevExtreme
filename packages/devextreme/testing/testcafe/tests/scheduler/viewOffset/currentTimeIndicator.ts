@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
@@ -111,10 +110,5 @@ endDayHour: ${endDayHour}
       startDayHour,
       endDayHour,
     });
-  }).after(async () => {
-    // TODO Vinogradov: Create a separate "disposeWidget" helper function.
-    await ClientFunction(() => {
-      ($(SCHEDULER_SELECTOR) as any).dxScheduler('dispose');
-    }, { dependencies: { SCHEDULER_SELECTOR } })();
-  });
+  }).after(async () => disposeWidget('dxScheduler'));
 });

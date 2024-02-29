@@ -46,6 +46,7 @@ import dxScheduler, { Properties as SchedulerProperties } from '../ui/scheduler'
 import dxScrollView, { Properties as ScrollViewProperties } from '../ui/scroll_view';
 import dxSelectBox, { Properties as SelectBoxProperties } from '../ui/select_box';
 import dxSlider, { Properties as SliderProperties } from '../ui/slider';
+import dxSplitter, { Properties as SplitterProperties } from '../ui/splitter';
 import dxSortable, { Properties as SortableProperties } from '../ui/sortable';
 import dxSpeedDialAction, { Properties as SpeedDialActionProperties } from '../ui/speed_dial_action';
 import dxSwitch, { Properties as SwitchProperties } from '../ui/switch';
@@ -452,6 +453,12 @@ declare global {
         dxSlider(options: SliderProperties): JQuery;
         dxSlider(options: string): any;
         dxSlider(options: string, ...params: any[]): any;
+
+        dxSplitter(): JQuery;
+        dxSplitter(options: 'instance'): dxSplitter;
+        dxSplitter(options: SplitterProperties): JQuery;
+        dxSplitter(options: string): any;
+        dxSplitter(options: string, ...params: any[]): any;
 
         dxSortable(): JQuery;
         dxSortable(options: 'instance'): dxSortable;

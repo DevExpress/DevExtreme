@@ -7,10 +7,12 @@ import { getHeight } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import gridCore from '../m_core';
-import dataSourceAdapter from '../m_data_source_adapter';
+import dataSourceAdapterProvider from '../m_data_source_adapter';
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
 import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
 
@@ -28,148 +30,165 @@ export interface GroupingDataControllerExtension {
   changeRowExpand(key, isRowClick?): any;
 }
 
-const GroupingDataSourceAdapterExtender = (function () {
-  return {
-    init() {
-      this.callBase.apply(this, arguments);
-      this._initGroupingHelper();
-    },
-    _initGroupingHelper(options) {
-      const grouping = this._grouping;
-      const isAutoExpandAll = this.option('grouping.autoExpandAll');
-      const isFocusedRowEnabled = this.option('focusedRowEnabled');
-      const remoteOperations = options ? options.remoteOperations : this.remoteOperations();
-      const isODataRemoteOperations = remoteOperations.filtering && remoteOperations.sorting && remoteOperations.paging;
+const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class GroupingDataSourceAdapterExtender extends Base {
+  _grouping: any;
 
-      if (isODataRemoteOperations && !remoteOperations.grouping && (isAutoExpandAll || !isFocusedRowEnabled)) {
-        if (!grouping || grouping instanceof CollapsedGroupingHelper) {
-          this._grouping = new ExpandedGroupingHelper(this);
-        }
-      } else if (!grouping || grouping instanceof ExpandedGroupingHelper) {
-        this._grouping = new CollapsedGroupingHelper(this);
+  init() {
+    super.init.apply(this, arguments as any);
+    this._initGroupingHelper();
+  }
+
+  _initGroupingHelper(options?) {
+    const grouping = this._grouping;
+    const isAutoExpandAll = this.option('grouping.autoExpandAll');
+    const isFocusedRowEnabled = this.option('focusedRowEnabled');
+    const remoteOperations = options ? options.remoteOperations : this.remoteOperations();
+    const isODataRemoteOperations = remoteOperations.filtering && remoteOperations.sorting && remoteOperations.paging;
+
+    if (isODataRemoteOperations && !remoteOperations.grouping && (isAutoExpandAll || !isFocusedRowEnabled)) {
+      if (!grouping || grouping instanceof CollapsedGroupingHelper) {
+        this._grouping = new ExpandedGroupingHelper(this);
       }
-    },
-    totalItemsCount() {
-      const that = this;
-      const totalCount = that.callBase();
+    } else if (!grouping || grouping instanceof ExpandedGroupingHelper) {
+      this._grouping = new CollapsedGroupingHelper(this);
+    }
+  }
 
-      return totalCount > 0 && that._dataSource.group() && that._dataSource.requireTotalCount() ? totalCount + that._grouping.totalCountCorrection() : totalCount;
-    },
-    itemsCount() {
-      return this._dataSource.group() ? this._grouping.itemsCount() || 0 : this.callBase.apply(this, arguments);
-    },
-    allowCollapseAll() {
-      return this._grouping.allowCollapseAll();
-    },
-    isGroupItemCountable(item) {
-      return this._grouping.isGroupItemCountable(item);
-    },
-    isRowExpanded(key) {
-      const groupInfo = this._grouping.findGroupInfo(key);
-      return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
-    },
-    collapseAll(groupIndex) {
-      return this._collapseExpandAll(groupIndex, false);
-    },
-    expandAll(groupIndex) {
-      return this._collapseExpandAll(groupIndex, true);
-    },
-    _collapseExpandAll(groupIndex, isExpand) {
-      const that = this;
-      const dataSource = that._dataSource;
-      const group = dataSource.group();
-      const groups = gridCore.normalizeSortingInfo(group || []);
+  totalItemsCount() {
+    const totalCount = super.totalItemsCount();
 
-      if (groups.length) {
-        for (let i = 0; i < groups.length; i++) {
-          if (groupIndex === undefined || groupIndex === i) {
-            groups[i].isExpanded = isExpand;
-          } else if (group && group[i]) {
-            groups[i].isExpanded = group[i].isExpanded;
-          }
-        }
-        dataSource.group(groups);
-        that._grouping.foreachGroups((groupInfo, parents) => {
-          if (groupIndex === undefined || groupIndex === parents.length - 1) {
-            groupInfo.isExpanded = isExpand;
-          }
-        }, false, true);
+    return totalCount > 0 && this._dataSource.group() && this._dataSource.requireTotalCount() ? totalCount + this._grouping.totalCountCorrection() : totalCount;
+  }
 
-        that.resetPagesCache();
-      }
-      return true;
-    },
-    refresh() {
-      this.callBase.apply(this, arguments);
+  itemsCount() {
+    return this._dataSource.group() ? this._grouping.itemsCount() || 0 : super.itemsCount.apply(this, arguments as any);
+  }
 
-      return this._grouping.refresh.apply(this._grouping, arguments);
-    },
-    changeRowExpand(path) {
-      const that = this;
-      const dataSource = that._dataSource;
+  allowCollapseAll() {
+    return this._grouping.allowCollapseAll();
+  }
 
-      if (dataSource.group()) {
-        dataSource.beginLoading();
-        if (that._lastLoadOptions) {
-          that._lastLoadOptions.groupExpand = true;
-        }
-        return that._changeRowExpandCore(path).always(() => {
-          dataSource.endLoading();
-        });
-      }
-    },
-    _changeRowExpandCore(path) {
-      return this._grouping.changeRowExpand(path);
-    },
-    /// #DEBUG
-    getGroupsInfo() {
-      return this._grouping._groupsInfo;
-    },
-    /// #ENDDEBUG
-    // @ts-expect-error
-    _hasGroupLevelsExpandState(group, isExpanded) {
-      if (group && Array.isArray(group)) {
-        for (let i = 0; i < group.length; i++) {
-          if (group[i].isExpanded === isExpanded) {
-            return true;
-          }
+  isGroupItemCountable(item) {
+    return this._grouping.isGroupItemCountable(item);
+  }
+
+  isRowExpanded(key) {
+    const groupInfo = this._grouping.findGroupInfo(key);
+    return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
+  }
+
+  collapseAll(groupIndex) {
+    return this._collapseExpandAll(groupIndex, false);
+  }
+
+  expandAll(groupIndex) {
+    return this._collapseExpandAll(groupIndex, true);
+  }
+
+  _collapseExpandAll(groupIndex, isExpand) {
+    const that = this;
+    const dataSource = that._dataSource;
+    const group = dataSource.group();
+    const groups = gridCore.normalizeSortingInfo(group || []);
+
+    if (groups.length) {
+      for (let i = 0; i < groups.length; i++) {
+        if (groupIndex === undefined || groupIndex === i) {
+          groups[i].isExpanded = isExpand;
+        } else if (group && group[i]) {
+          groups[i].isExpanded = group[i].isExpanded;
         }
       }
-    },
-    _customizeRemoteOperations(options, operationTypes) {
-      const { remoteOperations } = options;
-
-      if (options.storeLoadOptions.group) {
-        if (remoteOperations.grouping && !options.isCustomLoading) {
-          if (!remoteOperations.groupPaging || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, true)) {
-            remoteOperations.paging = false;
-          }
+      dataSource.group(groups);
+      that._grouping.foreachGroups((groupInfo, parents) => {
+        if (groupIndex === undefined || groupIndex === parents.length - 1) {
+          groupInfo.isExpanded = isExpand;
         }
+      }, false, true);
 
-        if (!remoteOperations.grouping && (!remoteOperations.sorting || !remoteOperations.filtering || options.isCustomLoading || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, false))) {
+      that.resetPagesCache();
+    }
+    return true;
+  }
+
+  refresh() {
+    super.refresh.apply(this, arguments as any);
+
+    return this._grouping.refresh.apply(this._grouping, arguments);
+  }
+
+  changeRowExpand(path) {
+    const that = this;
+    const dataSource = that._dataSource;
+
+    if (dataSource.group()) {
+      dataSource.beginLoading();
+      if (that._lastLoadOptions) {
+        that._lastLoadOptions.groupExpand = true;
+      }
+      return that._changeRowExpandCore(path).always(() => {
+        dataSource.endLoading();
+      });
+    }
+  }
+
+  _changeRowExpandCore(path) {
+    return this._grouping.changeRowExpand(path);
+  }
+
+  /// #DEBUG
+  getGroupsInfo() {
+    return this._grouping._groupsInfo;
+  }
+
+  /// #ENDDEBUG
+  // @ts-expect-error
+  _hasGroupLevelsExpandState(group, isExpanded) {
+    if (group && Array.isArray(group)) {
+      for (let i = 0; i < group.length; i++) {
+        if (group[i].isExpanded === isExpanded) {
+          return true;
+        }
+      }
+    }
+  }
+
+  _customizeRemoteOperations(options, operationTypes) {
+    const { remoteOperations } = options;
+
+    if (options.storeLoadOptions.group) {
+      if (remoteOperations.grouping && !options.isCustomLoading) {
+        if (!remoteOperations.groupPaging || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, true)) {
           remoteOperations.paging = false;
         }
-      } else if (!options.isCustomLoading && remoteOperations.paging && operationTypes.grouping) {
-        this.resetCache();
       }
 
-      this.callBase.apply(this, arguments);
-    },
-    _handleDataLoading(options) {
-      this.callBase(options);
-      this._initGroupingHelper(options);
-      return this._grouping.handleDataLoading(options);
-    },
-    _handleDataLoaded(options) {
-      return this._grouping.handleDataLoaded(options, this.callBase.bind(this));
-    },
-    _handleDataLoadedCore(options) {
-      return this._grouping.handleDataLoadedCore(options, this.callBase.bind(this));
-    },
-  };
-}());
+      if (!remoteOperations.grouping && (!remoteOperations.sorting || !remoteOperations.filtering || options.isCustomLoading || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, false))) {
+        remoteOperations.paging = false;
+      }
+    } else if (!options.isCustomLoading && remoteOperations.paging && operationTypes.grouping) {
+      this.resetCache();
+    }
 
-dataSourceAdapter.extend(GroupingDataSourceAdapterExtender);
+    super._customizeRemoteOperations.apply(this, arguments as any);
+  }
+
+  _handleDataLoading(options) {
+    super._handleDataLoading(options);
+    this._initGroupingHelper(options);
+    return this._grouping.handleDataLoading(options);
+  }
+
+  _handleDataLoaded(options) {
+    return this._grouping.handleDataLoaded(options, super._handleDataLoaded.bind(this));
+  }
+
+  _handleDataLoadedCore(options) {
+    return this._grouping.handleDataLoadedCore(options, super._handleDataLoadedCore.bind(this));
+  }
+};
+
+dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
 const GroupingDataControllerExtender = (function () {
   return {

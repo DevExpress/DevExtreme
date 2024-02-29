@@ -39,6 +39,9 @@ type IDropDownButtonOptions = React.PropsWithChildren<ReplaceFieldTypes<Properti
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   itemKeyFn?: (data: any) => string;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+  keyFn?: (data: any) => string;
 }>
 
 class DropDownButton extends BaseComponent<React.PropsWithChildren<IDropDownButtonOptions>> {
@@ -66,6 +69,11 @@ class DropDownButton extends BaseComponent<React.PropsWithChildren<IDropDownButt
     render: "itemRender",
     component: "itemComponent",
     keyFn: "itemKeyFn"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component",
+    keyFn: "keyFn"
   }];
 }
 (DropDownButton as any).propTypes = {

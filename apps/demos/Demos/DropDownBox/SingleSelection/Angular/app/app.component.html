@@ -1,0 +1,67 @@
+<div class="dx-fieldset">
+  <div class="dx-field">
+    <div class="dx-field-label">DropDownBox with embedded TreeView</div>
+    <div class="dx-field-value">
+      <dx-drop-down-box
+        [(value)]="treeBoxValue"
+        [inputAttr]="{ 'aria-label': 'Owner' }"
+        [(opened)]="isTreeBoxOpened"
+        valueExpr="ID"
+        displayExpr="name"
+        placeholder="Select a value..."
+        [showClearButton]="true"
+        [dataSource]="treeDataSource"
+        (onValueChanged)="syncTreeViewSelection()"
+        (onOptionChanged)="onTreeBoxOptionChanged($event)"
+      >
+        <div *dxTemplate="let data of 'content'">
+          <dx-tree-view
+            [dataSource]="treeDataSource"
+            dataStructure="plain"
+            keyExpr="ID"
+            parentIdExpr="categoryId"
+            selectionMode="single"
+            displayExpr="name"
+            [selectByClick]="true"
+            (onContentReady)="$event.component.selectItem(treeBoxValue)"
+            (onItemSelectionChanged)="treeView_itemSelectionChanged($event)"
+          >
+          </dx-tree-view>
+        </div>
+      </dx-drop-down-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
+    <div class="dx-field-value">
+      <dx-drop-down-box
+        [(value)]="gridBoxValue"
+        [(opened)]="isGridBoxOpened"
+        valueExpr="ID"
+        [deferRendering]="false"
+        [displayExpr]="gridBox_displayExpr"
+        placeholder="Select a value..."
+        [inputAttr]="{ 'aria-label': 'Owner' }"
+        [showClearButton]="true"
+        [dataSource]="gridDataSource"
+        (onOptionChanged)="onGridBoxOptionChanged($event)"
+      >
+        <div *dxTemplate="let data of 'content'">
+          <dx-data-grid
+            [dataSource]="gridDataSource"
+            [columns]="gridColumns"
+            [hoverStateEnabled]="true"
+            showBorders="true"
+            [(selectedRowKeys)]="gridBoxValue"
+            height="100%"
+          >
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+          </dx-data-grid>
+        </div>
+      </dx-drop-down-box>
+    </div>
+  </div>
+</div>

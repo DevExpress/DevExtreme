@@ -1,0 +1,83 @@
+::ng-deep #content-wrapper {
+  height: 680px;
+}
+
+::ng-deep .widgets-container {
+  display: grid;
+  grid-template-areas:
+    'title title title title'
+    'name name birthDate birthDate '
+    'address address state phone'
+    'hireDate hireDate range range'
+    'notes notes notes notes';
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+::ng-deep .title {
+  grid-area: title;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep #name {
+  grid-area: name;
+}
+
+::ng-deep #address {
+  grid-area: address;
+}
+
+::ng-deep #birth-date {
+  grid-area: birthDate;
+}
+
+::ng-deep #state {
+  grid-area: state;
+}
+
+::ng-deep #phone {
+  grid-area: phone;
+}
+
+::ng-deep #hire-date {
+  grid-area: hireDate;
+}
+
+::ng-deep #notes {
+  grid-area: notes;
+}
+
+::ng-deep #vacation-dates {
+  grid-area: range;
+}
+
+::ng-deep #validate {
+  float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+  width: 100px;
+}
+
+::ng-deep .options {
+  grid-area: options;
+  padding: 20px;
+  margin-bottom: 40px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .editors-modes {
+  display: flex;
+}
+
+::ng-deep .option {
+  padding-right: 20px;
+  margin-top: 20px;
+}

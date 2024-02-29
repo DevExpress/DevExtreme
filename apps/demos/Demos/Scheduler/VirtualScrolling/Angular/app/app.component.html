@@ -1,0 +1,22 @@
+<dx-scheduler
+  [height]="730"
+  [currentDate]="currentDate"
+  [dataSource]="appointments"
+  currentView="Timeline"
+  [startDayHour]="8"
+  [endDayHour]="20"
+  [cellDuration]="60"
+  [showAllDayPanel]="false"
+  [groups]="['humanId']"
+>
+  <dxi-view
+    type="timelineWorkWeek"
+    name="Timeline"
+    groupOrientation="vertical"
+  ></dxi-view>
+  <dxi-view type="workWeek" groupOrientation="vertical"></dxi-view>
+  <dxi-view type="month" groupOrientation="horizontal"></dxi-view>
+  <dxi-resource fieldExpr="humanId" [dataSource]="resources" label="Employee">
+  </dxi-resource>
+  <dxo-scrolling mode="virtual"> </dxo-scrolling>
+</dx-scheduler>

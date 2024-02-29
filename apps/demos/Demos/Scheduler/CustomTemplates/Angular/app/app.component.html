@@ -1,0 +1,75 @@
+<div class="long-title">
+  <h3>DXCinema Show Times</h3>
+</div>
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  id="scheduler"
+  [dataSource]="data"
+  [views]="['day', 'week', 'timelineDay']"
+  currentView="day"
+  [firstDayOfWeek]="0"
+  [startDayHour]="9"
+  [endDayHour]="23"
+  [showAllDayPanel]="false"
+  [groups]="['theatreId']"
+  [currentDate]="currentDate"
+  [crossScrollingEnabled]="true"
+  [cellDuration]="20"
+  [height]="600"
+  appointmentTemplate="appointment-template"
+  appointmentTooltipTemplate="tooltip-template"
+  (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+>
+  <dxo-editing [allowAdding]="false"></dxo-editing>
+
+  <dxi-resource
+    fieldExpr="movieId"
+    [useColorAsDefault]="true"
+    [dataSource]="moviesData"
+  >
+  </dxi-resource>
+
+  <dxi-resource fieldExpr="theatreId" [dataSource]="theatreData">
+  </dxi-resource>
+
+  <div *dxTemplate="let model of 'appointment-template'">
+    <div class="showtime-preview">
+      <div>{{
+        (getMovieById | apply : model.appointmentData.movieId : this).text
+      }}</div>
+      <div
+        >Ticket Price:
+        <strong>{{ "$" + model.targetedAppointmentData.price }}</strong>
+      </div>
+      <div class="dropdown-appointment-dates">
+        {{
+          (model.targetedAppointmentData.displayStartDate
+            | date : "shortTime") +
+            " - " +
+            (model.targetedAppointmentData.displayEndDate | date : "shortTime")
+        }}
+      </div>
+    </div>
+  </div>
+
+  <div *dxTemplate="let model of 'tooltip-template'">
+    <ng-container
+      *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
+    >
+      <div class="movie-tooltip">
+        <img [src]="movie.image" />
+        <div class="movie-info">
+          <div class="movie-title">
+            {{ movie.text + " (" + movie.year + ")" }}
+          </div>
+          <div>
+            {{ "Director: " + movie.director }}
+          </div>
+          <div>
+            {{ "Duration: " + movie.duration + " minutes" }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</dx-scheduler>

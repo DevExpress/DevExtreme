@@ -1,0 +1,62 @@
+<div class="dx-fieldset">
+  <div class="dx-fieldset-header">Default Mode</div>
+  <div class="dx-field">
+    <dx-check-box
+      [value]="false"
+      (onValueChanged)="onCheckboxValueChanged($event)"
+      text="Limit text length"
+    >
+    </dx-check-box>
+  </div>
+  <div class="dx-field">
+    <dx-check-box
+      [(value)]="autoResizeEnabled"
+      (onValueChanged)="onAutoResizeChanged($event)"
+      text="Enable auto resize"
+    ></dx-check-box>
+  </div>
+</div>
+<div class="textarea-wrapper">
+  <dx-text-area
+    [(height)]="height"
+    [maxLength]="maxLength"
+    [(value)]="value"
+    [(autoResizeEnabled)]="autoResizeEnabled"
+    [inputAttr]="{ 'aria-label': 'Notes' }"
+  >
+  </dx-text-area>
+</div>
+<div class="full-width-content">
+  <div class="dx-fieldset">
+    <div class="dx-fieldset-header">Event Handling and API</div>
+    <div class="dx-field">
+      <div class="dx-field-label">Synchronize text areas </div>
+      <div class="dx-field-value">
+        <dx-select-box
+          [items]="valueChangeEvents"
+          valueExpr="name"
+          [inputAttr]="{ 'aria-label': 'Event' }"
+          displayExpr="title"
+          [(value)]="eventValue"
+        >
+        </dx-select-box>
+      </div>
+    </div>
+  </div>
+  <div class="textarea-wrapper">
+    <dx-text-area
+      [height]="90"
+      [(value)]="valueForEditableTextArea"
+      [valueChangeEvent]="eventValue"
+      [inputAttr]="{ 'aria-label': 'Notes' }"
+    >
+    </dx-text-area>
+    <dx-text-area
+      [height]="90"
+      [readOnly]="true"
+      [(value)]="valueForEditableTextArea"
+      [inputAttr]="{ 'aria-label': 'Notes' }"
+    >
+    </dx-text-area>
+  </div>
+</div>

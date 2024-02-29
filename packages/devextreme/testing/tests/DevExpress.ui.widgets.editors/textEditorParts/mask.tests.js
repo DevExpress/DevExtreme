@@ -2625,6 +2625,36 @@ QUnit.module('Hidden input', {}, () => {
         assert.equal($hiddenInput.attr('name'), 'Editor with mask', 'name of hidden input');
     });
 
+    QUnit.test('Value change should work as usual after mask option is updated programmatically (T1214019)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            valueChangeEvent: 'input',
+            mask: '000',
+        });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const instance = $textEditor.dxTextEditor('instance');
+
+        keyboardMock($input, true)
+            .caret(0)
+            .type('1')
+            .change();
+
+        $textEditor.blur();
+        instance.option('mask', '0000');
+        keyboardMock($input, true)
+            .caret(1)
+            .type('2')
+            .change();
+
+        $textEditor.blur();
+        instance.option('mask', '000');
+
+        const $hiddenInput = $textEditor.find('input[type=hidden]');
+
+        assert.strictEqual($input.val(), '12_', 'Value is saved');
+        assert.strictEqual($hiddenInput.val(), '12', 'Hidden value is saved');
+        assert.strictEqual(instance.option('value'), '12', 'Value option is correct');
+    });
+
     [
         { useMaskedValue: true, value: '12-34-' },
         { useMaskedValue: false, value: '1234' }

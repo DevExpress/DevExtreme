@@ -36,6 +36,7 @@ type AccessibleOptions = Pick<Properties,
   "splitButton" |
   "stylingMode" |
   "tabIndex" |
+  "template" |
   "text" |
   "type" |
   "useItemTextAsTitle" |
@@ -83,6 +84,7 @@ const DxDropDownButton = createComponent({
     splitButton: Boolean,
     stylingMode: String,
     tabIndex: Number,
+    template: {},
     text: String,
     type: String,
     useItemTextAsTitle: Boolean,
@@ -127,6 +129,7 @@ const DxDropDownButton = createComponent({
     "update:splitButton": null,
     "update:stylingMode": null,
     "update:tabIndex": null,
+    "update:template": null,
     "update:text": null,
     "update:type": null,
     "update:useItemTextAsTitle": null,

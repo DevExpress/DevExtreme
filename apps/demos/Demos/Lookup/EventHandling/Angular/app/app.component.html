@@ -1,0 +1,29 @@
+<div class="dx-fieldset">
+  <dx-lookup
+    placeholder="Select employee"
+    [items]="employees"
+    [displayExpr]="getDisplayExpr"
+    [applyValueMode]="applyValueMode"
+    [inputAttr]="{ 'aria-label': 'Lookup' }"
+    (onValueChanged)="valueChanged($event)"
+  >
+    <dxo-drop-down-options [showTitle]="false"></dxo-drop-down-options>
+  </dx-lookup>
+</div>
+<div class="selected" *ngIf="selectedEmployee">
+  <div class="frame">
+    <img src="{{ selectedEmployee.Picture }}" alt="" />
+  </div>
+  <div id="selected-employee-notes">{{ selectedEmployee.Notes }}</div>
+</div>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <div class="label">Apply Value Mode</div>
+    <dx-select-box
+      [items]="applyValueModes"
+      [inputAttr]="{ 'aria-label': 'Apply Value Mode' }"
+      [(value)]="applyValueMode"
+    ></dx-select-box>
+  </div>
+</div>

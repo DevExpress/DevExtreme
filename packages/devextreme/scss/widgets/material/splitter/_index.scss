@@ -6,3 +6,9 @@
 @use "../../base/splitter";
 
 // adduse
+
+.dx-splitter {
+  .dx-resize-handle {
+    background-color: $splitter-resize-handle-bg;
+  }
+}

@@ -141,7 +141,7 @@ class OverlapStrategy extends DrawerStrategy {
                     position: panelOffset
                 });
             } else if(revealMode === 'expand') {
-                this._initialPosition = { left: 0 };
+                this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
                 move($panelOverlayContent, this._initialPosition);
 
                 animation.size({
@@ -160,7 +160,7 @@ class OverlapStrategy extends DrawerStrategy {
                 this._initialPosition = drawer.isHorizontalDirection() ? { left: panelOffset } : { top: panelOffset };
                 move($panel, this._initialPosition);
             } else if(revealMode === 'expand') {
-                this._initialPosition = { left: 0 };
+                this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
                 move($panelOverlayContent, this._initialPosition);
 
                 if(drawer.isHorizontalDirection()) {

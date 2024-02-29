@@ -148,7 +148,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     }
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{$fluent-list-item-height + $fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
+      height: calc(100% - #{$fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
     }
 
     .dx-empty-message {

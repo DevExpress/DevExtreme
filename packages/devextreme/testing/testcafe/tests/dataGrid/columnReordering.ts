@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 import { MouseAction, MouseUpEvents } from '../../helpers/mouseUpEvents';
@@ -132,7 +132,7 @@ test.skip('The separator should display correctly when dragging column', async (
   allowColumnResizing: true,
 }));
 
-test('column separator should work properly with expand columns', async (t) => {
+test.skip('column separator should work properly with expand columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);

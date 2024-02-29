@@ -1966,7 +1966,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  _needUpdateRow(column) {
+  _needUpdateRow(column?) {
     const visibleColumns = this._columnsController.getVisibleColumns();
 
     if (!column) {

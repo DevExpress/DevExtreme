@@ -1,0 +1,66 @@
+<div id="container">
+  <dx-button
+    [disabled]="disableButton()"
+    text="Add Tab"
+    icon="add"
+    type="default"
+    (onClick)="addButtonHandler()"
+  ></dx-button>
+</div>
+<dx-sortable
+  filter=".dx-tab"
+  [data]="employees"
+  itemOrientation="horizontal"
+  dragDirection="horizontal"
+  (onDragStart)="onTabDragStart($event)"
+  (onReorder)="onTabDrop($event)"
+>
+  <dx-tab-panel
+    [dataSource]="employees"
+    [height]="410"
+    itemTitleTemplate="title"
+    itemTemplate="item"
+    [deferRendering]="false"
+    [showNavButtons]="true"
+    [repaintChangesOnly]="true"
+    [selectedIndex]="selectedIndex"
+  >
+    <div *dxTemplate="let content of 'title'">
+      <span>{{ content.FirstName }} {{ content.LastName }}</span
+      ><i
+        *ngIf="showCloseButton()"
+        class="dx-icon dx-icon-close"
+        (click)="closeButtonHandler(content)"
+      ></i>
+    </div>
+    <div *dxTemplate="let employee of 'item'">
+      <div class="employeeInfo">
+        <img
+          alt="{{ employee.FirstName }} {{ employee.LastName }}"
+          class="employeePhoto"
+          [src]="employee.Picture"
+        />
+        <p class="employeeNotes"
+          ><b>Position: {{ employee.Position }}</b
+          ><br />{{ employee.Notes }}</p
+        >
+      </div>
+      <div class="caption">{{
+        employee.FirstName + " " + employee.LastName + "'s Tasks:"
+      }}</div>
+      <div class="task-list">
+        <dx-list
+          [dataSource]="getTasks(employee.ID)"
+          [showSelectionControls]="true"
+          [selectedItems]="getCompletedTasks(employee.ID)"
+          [disabled]="true"
+          selectionMode="multiple"
+        >
+          <div *dxTemplate="let item of 'item'">
+            <div>{{ item.Subject }}</div>
+          </div>
+        </dx-list>
+      </div>
+    </div>
+  </dx-tab-panel>
+</dx-sortable>
