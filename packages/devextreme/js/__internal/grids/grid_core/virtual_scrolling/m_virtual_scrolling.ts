@@ -121,7 +121,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   _loadPageCount: any;
 
-  _virtualScrollController: any;
+  _virtualScrollController!: VirtualScrollController;
 
   _renderTime: any;
 
@@ -488,6 +488,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   }
 
   reload() {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const rowsScrollController = this._rowsScrollController || this._dataSource;
     const itemIndex = rowsScrollController && rowsScrollController.getItemIndexByPosition();
     const result = super.reload.apply(this, arguments as any);

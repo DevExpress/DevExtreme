@@ -15,6 +15,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 
+import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -68,7 +69,7 @@ export class ResizingController extends modules.ViewController {
 
   _columnsController!: ColumnsController;
 
-  _footerView: any;
+  _footerView!: FooterView;
 
   private _prevContentMinHeight: any;
 

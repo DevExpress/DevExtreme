@@ -196,7 +196,7 @@ export interface Views {
   draggingHeaderView: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderView;
   trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
   contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
-  // footerView: import('../dataGrid')
+  footerView: import('../data_grid/summary/m_summary').FooterView;
   gridView: import('./views/m_grid_view').GridView;
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;

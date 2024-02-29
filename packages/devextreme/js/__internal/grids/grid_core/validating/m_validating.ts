@@ -82,7 +82,7 @@ export class ValidatingController extends modules.Controller {
 
   _disableApplyValidationResults = false;
 
-  _editingController: any;
+  _editingController!: EditingController;
 
   _validationState: any;
 
@@ -148,6 +148,7 @@ export class ValidatingController extends modules.Controller {
   _rowValidating(validationData, validationResults) {
     // @ts-expect-error
     const deferred = new Deferred();
+    // @ts-expect-error
     const change = this._editingController.getChangeByKey(validationData?.key);
     const brokenRules = this._getBrokenRules(validationData, validationResults);
     const isValid = validationResults ? validationResults.isValid : validationData.isValid;
@@ -373,6 +374,7 @@ export class ValidatingController extends modules.Controller {
           eventsEngine.trigger($focus, pointerEvents.down);
         }
       }
+      // @ts-expect-error
       const editor = !column.editCellTemplate && this.getController('editorFactory').getEditorInstance($container);
       if (result.status === VALIDATION_STATUS.pending) {
         if (editor) {
@@ -391,6 +393,7 @@ export class ValidatingController extends modules.Controller {
 
   _syncInternalEditingData(parameters) {
     const editingController = this._editingController;
+    // @ts-expect-error
     const change = editingController.getChangeByKey(parameters.key);
     const oldDataFromState = editingController._getOldData(parameters.key);
     const oldData = parameters.row?.oldData;
@@ -400,7 +403,7 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  createValidator(parameters, $container) {
+  createValidator(parameters, $container?) {
     const editingController = this._editingController;
     const { column } = parameters;
     let { showEditorAlways } = column;
@@ -437,6 +440,7 @@ export class ValidatingController extends modules.Controller {
       const validationData = this._getValidationData(parameters.key, true);
 
       const getValue = () => {
+        // @ts-expect-error
         const change = editingController.getChangeByKey(validationData?.key);
         const value = column.calculateCellValue(change?.data || {});
         return value !== undefined ? value : parameters.value;
@@ -457,6 +461,7 @@ export class ValidatingController extends modules.Controller {
         },
         dataGetter() {
           const key = validationData?.key;
+          // @ts-expect-error
           const change = editingController.getChangeByKey(key);
           const oldData = editingController._getOldData(key);
           return {
@@ -905,6 +910,7 @@ export const validatingModule = {
             const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
             const validator = $cell && $cell.data('dxValidator');
             const rowOptions = $cell && $cell.closest('.dx-row').data('options');
+            // @ts-expect-error
             const value = validator && validator.option('adapter').getValue();
             if (validator && cellValueShouldBeValidated(value, rowOptions)) {
               const validatingController = this.getController('validating');
