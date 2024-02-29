@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import { compileGetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
 // @ts-expect-error
@@ -65,14 +64,24 @@ function normalizeAggregate(aggregate) {
   };
 }
 
-export default Class.inherit({
-  ctor(options) {
+export default class AggregateCalculator {
+  private readonly _data: any;
+
+  private readonly _groupLevel: any;
+
+  private readonly _totalAggregates: any;
+
+  private readonly _groupAggregates: any;
+
+  private _totals: any;
+
+  constructor(options) {
     this._data = options.data;
     this._groupLevel = options.groupLevel || 0;
     this._totalAggregates = map(options.totalAggregates || [], normalizeAggregate);
     this._groupAggregates = map(options.groupAggregates || [], normalizeAggregate);
     this._totals = [];
-  },
+  }
 
   calculate() {
     if (this._totalAggregates.length) {
@@ -82,11 +91,11 @@ export default Class.inherit({
     if (this._groupAggregates.length && this._groupLevel > 0) {
       this._calculateGroups({ items: this._data });
     }
-  },
+  }
 
   totalAggregates() {
     return this._totals;
-  },
+  }
 
   _aggregate(aggregates, data, container) {
     const length = data.items ? data.items.length : 0;
@@ -101,7 +110,7 @@ export default Class.inherit({
         this._accumulate(i, aggregates[i], container, data.items[j]);
       }
     }
-  },
+  }
 
   _calculateTotals(level, data) {
     if (level === 0) {
@@ -119,7 +128,7 @@ export default Class.inherit({
     if (level === 0) {
       this._totals = this._finalize(this._totalAggregates, this._totals);
     }
-  },
+  }
 
   _calculateGroups(root) {
     const maxLevel = this._groupLevel;
@@ -146,9 +155,9 @@ export default Class.inherit({
     while (--currentLevel > 0) {
       depthFirstSearch(0, currentLevel, root, aggregator);
     }
-  },
+  }
 
-  _seed(aggregates, groupIndex) {
+  _seed(aggregates, groupIndex?) {
     return map(aggregates, (aggregate) => {
       const { aggregator } = aggregate;
       const seed = 'seed' in aggregator
@@ -157,7 +166,7 @@ export default Class.inherit({
 
       return seed;
     });
-  },
+  }
 
   _accumulate(aggregateIndex, aggregate, results, item) {
     const value = aggregate.selector(item);
@@ -173,7 +182,7 @@ export default Class.inherit({
     } else {
       results[aggregateIndex] = aggregator.step(results[aggregateIndex], value);
     }
-  },
+  }
 
   _finalize(aggregates, results) {
     return map(aggregates, (aggregate, index) => {
@@ -182,5 +191,5 @@ export default Class.inherit({
         ? fin(results[index])
         : results[index];
     });
-  },
-});
+  }
+}
