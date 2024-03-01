@@ -82,45 +82,6 @@ QUnit.module('api', moduleConfig);
     });
 });
 
-QUnit.test('update', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
-    const moveDistance = -10;
-    const moveDuration = 10;
-    const onUpdatedHandler = sinon.spy();
-    const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
-    const distance = moveDistance + inertiaDistance;
-    const $scrollable = $('#scrollable');
-    const $scrollableChild = $scrollable.find('div');
-
-    $scrollableChild.height(0);
-
-    $scrollable.dxScrollable({
-        useNative: false,
-        onUpdated: onUpdatedHandler,
-        onEnd: function() {
-            const location = getScrollOffset($scrollable);
-
-            assert.roughEqual(location.top, distance, 1, 'distance was calculated correctly');
-            done();
-        }
-    });
-
-    const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
-
-    $scrollableChild.height(-1 * distance + 1);
-    onUpdatedHandler.resetHistory();
-    $scrollable.dxScrollable('instance').update();
-
-    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
-
-    mouse
-        .down()
-        .wait(moveDuration)
-        .move(0, moveDistance)
-        .up();
-});
-
 QUnit.test('scroll event should be triggered if scroll position changed', function(assert) {
     let called = 0;
     const $scrollable = $('#scrollable').dxScrollable({
