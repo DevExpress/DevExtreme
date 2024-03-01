@@ -2862,7 +2862,6 @@ export const keyboardNavigationModule: import('../m_types').Module = {
       editing,
       data,
       adaptiveColumns,
-      keyboardNavigation: keyboardNavigationScrollableA11yExtender,
     },
   },
 };
