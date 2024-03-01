@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react';
 
-import { ThemeDecorator, themeToolbarItems, compact } from './themes';
+import { ThemeDecorator, themeToolbarItems, compact } from './themes/themes';
 
 const preview: Preview = {
   globalTypes: {

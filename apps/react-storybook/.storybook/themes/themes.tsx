@@ -1,5 +1,6 @@
 import React from 'react';
 import { Decorator } from '@storybook/react';
+import './styles.css';
 
 export const themeToolbarItems = [
     { title: 'Generic Light', value: 'light' },
@@ -36,7 +37,7 @@ export const ThemeDecorator: Decorator = (Story, ctx) => {
     const themeName = theme.split('.').length < 3 ? 'generic' : theme.split('.')[0];
     const cssFileHref = `css/dx.${theme}${compact ? '.compact' : ''}.css`
     return (
-        <div className={`dx-theme-${themeName}-typography`} style={{ padding: '20px', borderRadius: 6 }}>
+        <div className={`dx-theme-${themeName}-typography storybook-theme-decorator`}>
             <link rel="stylesheet" href={cssFileHref} />
             <Story />
         </div>
