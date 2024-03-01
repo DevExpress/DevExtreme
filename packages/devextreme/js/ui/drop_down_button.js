@@ -30,6 +30,8 @@ const DX_BUTTON_CLASS = 'dx-button';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
+const OVERLAY_CONTENT_LABEL = 'Dropdown';
+
 const DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
@@ -424,6 +426,7 @@ const DropDownButton = Widget.inherit({
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
         this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
         this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
+        this._popup.$overlayContent().attr('aria-label', OVERLAY_CONTENT_LABEL);
         this._popup.on('hiding', this._popupHidingHandler.bind(this));
         this._popup.on('showing', this._popupShowingHandler.bind(this));
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
