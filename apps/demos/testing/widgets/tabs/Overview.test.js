@@ -11,9 +11,8 @@ const CHECKBOX_CLASS = 'dx-checkbox';
 
 fixture('Tabs.Overview')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 1200);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 1200];
   });
 
 runManualTest('Tabs', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

@@ -10,9 +10,8 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('TabPanel.Overview')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 1200);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 1200];
   });
 
 runManualTest('TabPanel', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

@@ -12,9 +12,8 @@ const ITEM_CONTENT_CLASS = 'item-content';
 // element because another element obstructs it.
 fixture.skip('Common.DialogsAndNotificationsOverview')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 600);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('Common', 'DialogsAndNotificationsOverview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

@@ -16,6 +16,7 @@ import {
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
+  THEME,
 } from '../utils/visual-tests/helpers/theme-utils';
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
@@ -82,15 +83,18 @@ const getTestSpecificSkipRules = (testName) => {
 const SKIPPED_TESTS = {
   Angular: {
     DataGrid: [
-      { demo: 'ToolbarCustomization', themes: ['fluent.blue.light'] },
+      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
     ],
     Scheduler: [
-      { demo: 'Overview', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
   },
   React: {
     DataGrid: [
-      { demo: 'SignalRService', themes: ['material.blue.light'] },
+      { demo: 'SignalRService', themes: [THEME.material] },
+    ],
+    Scheduler: [
+      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
   },
 };
@@ -215,10 +219,6 @@ const SKIPPED_TESTS = {
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
           const testTheme = process.env.THEME;
-
-          // if (testTheme === 'material.blue.light') {
-          //   await t.wait(1000);
-          // }
 
           if (!shouldRunTest(approach, index, widgetName, demoName, SKIPPED_TESTS)) {
             return;

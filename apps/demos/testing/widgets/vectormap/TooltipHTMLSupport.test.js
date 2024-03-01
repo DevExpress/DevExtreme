@@ -5,9 +5,8 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 
 fixture('VectorMap.TooltipHTMLSupport')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 700);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 700];
   });
 
 runManualTest('VectorMap', 'TooltipHTMLSupport', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

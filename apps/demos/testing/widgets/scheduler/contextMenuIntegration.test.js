@@ -5,9 +5,8 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 
 fixture('Scheduler.ContextMenuIntegration')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 600);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('Scheduler', 'ContextMenuIntegration', 'jQuery', (test) => {

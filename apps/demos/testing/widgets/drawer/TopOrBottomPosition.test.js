@@ -10,9 +10,8 @@ const BUTTON_CLASS = 'dx-button';
 
 fixture('Drawer.TopOrBottomPosition')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 1200);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 1200];
   });
 
 runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

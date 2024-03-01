@@ -1,7 +1,7 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClientFunction } from 'testcafe';
-import { DEFAULT_THEME_NAME } from './helpers/theme-utils';
+import { THEME } from './helpers/theme-utils';
 
 const settings = {
   concurrency: undefined,
@@ -79,7 +79,7 @@ export function globalReadFrom(basePath, relativePath, mapCallback) {
 }
 
 export function changeTheme(dirName, relativePath, demoPath, theme) {
-  if (!theme || theme === DEFAULT_THEME_NAME) {
+  if (!theme || theme === THEME.generic) {
     return;
   }
 
@@ -171,32 +171,32 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: {
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
-      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
-      { demo: 'EditStateManagement', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
-      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
-      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
   },
   Angular: {
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
-      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
-      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
-      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       // 'EditStateManagement',
       // 'FilteringAPI',
       // 'StatePersistence',
     ],
     List: [
-      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
     // Charts: ['ZoomingAndScrollingAPI'],
     // Common: ['EditorAppearanceVariants'],
@@ -231,7 +231,7 @@ const SKIPPED_TESTS = {
     // DropDownBox: ['MultipleSelection'],
     Form: [
       'CustomizeItem',
-      { demo: 'Validation', themes: ['material.blue.light'] },
+      { demo: 'Validation', themes: [THEME.material] },
     ],
     // Gauges: ['VariableNumberOfBars'],
     // List: [
@@ -256,31 +256,41 @@ const SKIPPED_TESTS = {
   },
   Vue: {
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
-      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
-      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
-      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       // 'EditStateManagement',
       // 'FilteringAPI',
       // 'StatePersistence',
     ],
     List: [
-      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
+    ],
+    Tabs: [
+      { demo: 'Selection', themes: [THEME.fluent] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent] },
     ],
   },
   React: {
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
-      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
-      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
-      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
-      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+    ],
+    Scheduler: [
+      { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
-      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
   },
 };
@@ -302,7 +312,7 @@ export function shouldRunTest(currentFramework, testIndex, product, demo, skippe
       if (typeof test === 'string' && test === demoName) {
         return true;
       } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || DEFAULT_THEME_NAME)) {
+        && test.themes.includes(process.env.THEME || THEME.generic)) {
         return true;
       }
     }
@@ -356,11 +366,15 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
-  // if (framework === 'Angular') {
-  //   test.before(async () => {
-  //     await waitForAngularLoading();
-  //   });
-  // }
+  test.before(async (t) => {
+    const [width, height] = t.ctx.initialWindowSize;
+
+    await t.resizeWindow(width, height);
+
+    if (framework === 'Angular') {
+      await waitForAngularLoading();
+    }
+  });
 
   callback(test);
 }

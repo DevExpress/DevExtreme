@@ -13,9 +13,8 @@ const DRAG_MOUSE_OPTIONS = { speed: 0.5 };
 
 fixture('Scheduler.CustomDragAndDrop')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 600);
+  .before(async (t) => {
+    t.ctx.initialWindowSize = [900, 600];
   });
 
 [
