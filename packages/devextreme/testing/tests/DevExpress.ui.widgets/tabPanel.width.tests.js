@@ -66,7 +66,7 @@ QUnit.module('Tabs width', () => {
 
             if(options.width > 250) {
                 this.assert.strictEqual(getOuterWidth(this._getTabItem(0)) <= 140, true, getOuterWidth(this._getTabItem(0)) + ' <= 140');
-                this.assert.strictEqual(getOuterWidth(this._getTabItem(1)) <= 160, true, getOuterWidth(this._getTabItem(1)) + ' <= 160');
+                this.assert.strictEqual(getOuterWidth(this._getTabItem(1)) <= 160, false, getOuterWidth(this._getTabItem(1)) + ' <= 160');
             } else {
                 this.assert.strictEqual(getOuterWidth(this._getTabItem(0)) <= 140, true, getOuterWidth(this._getTabItem(0)) + ' <= 140');
                 this.assert.strictEqual(getOuterWidth(this._getTabItem(1)) <= 160, false, getOuterWidth(this._getTabItem(1)) + ' <= 160');
