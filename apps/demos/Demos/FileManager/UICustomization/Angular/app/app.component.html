@@ -52,26 +52,17 @@
   <dxo-context-menu>
     <dxi-item name="create"></dxi-item>
     <dxi-item text="Create new file" icon="plus">
-      <dxi-item
-        text="Text Document"
-        [options]="{ extension: '.txt' }"
-      ></dxi-item>
-      <dxi-item
-        text="RTF Document"
-        [options]="{ extension: '.rtf' }"
-      ></dxi-item>
-      <dxi-item text="Spreadsheet" [options]="{ extension: '.xls' }"></dxi-item>
+      <dxi-item text="Text Document"></dxi-item>
+      <dxi-item text="RTF Document"></dxi-item>
+      <dxi-item text="Spreadsheet"></dxi-item>
     </dxi-item>
     <dxi-item name="rename" [beginGroup]="true"></dxi-item>
     <dxi-item name="delete"></dxi-item>
     <dxi-item text="Category" icon="tags" [beginGroup]="true">
-      <dxi-item text="Work" [options]="{ category: 'Work' }"></dxi-item>
-      <dxi-item
-        text="Important"
-        [options]="{ category: 'Important' }"
-      ></dxi-item>
-      <dxi-item text="Home" [options]="{ category: 'Home' }"></dxi-item>
-      <dxi-item text="None" [options]="{ category: '' }"></dxi-item>
+      <dxi-item text="Work"></dxi-item>
+      <dxi-item text="Important"></dxi-item>
+      <dxi-item text="Home"></dxi-item>
+      <dxi-item text="None"></dxi-item>
     </dxi-item>
     <dxi-item name="refresh"></dxi-item>
   </dxo-context-menu>
