@@ -152,7 +152,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: screenshots
-        path: apps/demos/testing/artifacts/compared-screenshots/*
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
     - name: Copy accessibility report

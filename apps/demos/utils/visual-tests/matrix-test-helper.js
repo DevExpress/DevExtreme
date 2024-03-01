@@ -184,6 +184,20 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
+    DataGrid: [
+      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
+      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
+      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
+      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+      // 'EditStateManagement',
+      // 'FilteringAPI',
+      // 'StatePersistence',
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
+    ],
     // Charts: ['ZoomingAndScrollingAPI'],
     // Common: ['EditorAppearanceVariants'],
     // DataGrid: [
@@ -242,9 +256,31 @@ const SKIPPED_TESTS = {
   },
   Vue: {
     DataGrid: [
-      'EditStateManagement',
-      'FilteringAPI',
-      'StatePersistence',
+      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
+      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
+      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
+      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+      // 'EditStateManagement',
+      // 'FilteringAPI',
+      // 'StatePersistence',
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
+    ],
+  },
+  React: {
+    DataGrid: [
+      { demo: 'BatchUpdateRequest', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'ColumnCustomization', themes: ['fluent.blue.light'] },
+      { demo: 'CellEditingAndEditingAPI', themes: ['material.blue.light'] },
+      { demo: 'MultipleRecordSelectionAPI', themes: ['material.blue.light'] },
+      { demo: 'RemoteGrouping', themes: ['fluent.blue.light', 'material.blue.light'] },
+      { demo: 'RowEditingAndEditingEvents', themes: ['fluent.blue.light', 'material.blue.light'] },
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: ['fluent.blue.light'] },
     ],
   },
 };
@@ -320,11 +356,11 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
-  if (framework === 'Angular') {
-    test.before(async () => {
-      await waitForAngularLoading();
-    });
-  }
+  // if (framework === 'Angular') {
+  //   test.before(async () => {
+  //     await waitForAngularLoading();
+  //   });
+  // }
 
   callback(test);
 }

@@ -387,6 +387,6 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: screenshots-${{ steps.screenshotname.outputs.value }}
-        path: apps/demos/testing/artifacts/compared-screenshots/*
+        name: screenshots-${{ steps.screenshotname.outputs.value }}-${{ matrix.THEME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
