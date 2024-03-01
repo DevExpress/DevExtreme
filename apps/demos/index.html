@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="node_modules/devextreme-dist/css/dx.dark.css" />
-    <script src="node_modules/devextreme-dist/js/dx.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../node_modules/devextreme-dist/css/dx.dark.css" />
+    <script src="../../node_modules/devextreme-dist/js/dx.all.js"></script>
     <style>
       body,
       html {
@@ -16,7 +16,7 @@
     <div id="toolbar"></div>
     <div id="drawer" style="height: calc(100% - 56px)">
       <div id="content" style="height: 100%">
-        <iframe id="frame" style="width: 100%; height: calc(100% - 56px); resize: both" src="apps/demos/Demos/DataGrid/Overview/jQuery/"></iframe>
+        <iframe id="frame" style="width: 100%; height: calc(100% - 56px); resize: both" src="Demos/DataGrid/Overview/jQuery/"></iframe>
         <br />
         <div>
           <a id="demolink" target="_blank" href="">open in separate tab</a>
@@ -71,9 +71,8 @@
       const isLanguageSwitchingSupported = (platform) => platform && platforms[platform][languages.typescript] !== platforms[platform][languages.javascript];
 
       const processLink = () => {
-          debugger
         if (window.location.hash === "") {
-          window.location.hash = "#apps/demos/Demos/DataGrid/Overview/jQuery/dx.light.css";
+          window.location.hash = "#Demos/DataGrid/Overview/jQuery/dx.light.css";
         }
 
         const pathParts = window.location.hash
@@ -83,22 +82,22 @@
 
         const selectedData = treeList?.getSelectedRowsData("leavesOnly");
         if (selectedData?.length) {
-          pathParts[3] = selectedData[0].Widget;
-          pathParts[4] = selectedData[0].Name;
+          pathParts[1] = selectedData[0].Widget;
+          pathParts[2] = selectedData[0].Name;
         }
 
-        approach = approach ?? pathParts[5];
+        approach = approach ?? pathParts[3];
         platform = platform ?? platformsByApproach[approach];
         language = language ?? languages.typescript;
 
         isLanguageSwitcherVisible = isLanguageSwitchingSupported(platform);
 
-        theme = theme ?? pathParts[6];
-        widget = pathParts[3];
-        name = pathParts[4];
+        theme = theme ?? pathParts[4];
+        widget = pathParts[1];
+        name = pathParts[2];
 
-        pathParts[5] = approach;
-        pathParts[6] = theme;
+        pathParts[3] = approach;
+        pathParts[4] = theme;
 
         const link = pathParts.slice(0, -1).join("/");
 
@@ -167,7 +166,7 @@
 
         DevExpress.utils.ajax
           .sendRequest({
-            url: "apps/demos/menuMeta.json",
+            url: "menuMeta.json",
             dataType: "json",
           })
           .then((data) => {
