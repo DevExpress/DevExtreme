@@ -718,6 +718,8 @@ const TextEditorBase = Editor.inherit({
     _focusOutHandler: function(event) {
         this._preventNestedFocusEvent(event);
 
+        // debugger;
+
         this.callBase.apply(this, arguments);
     },
 
