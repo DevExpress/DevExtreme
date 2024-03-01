@@ -475,7 +475,7 @@ export type ColumnChooser = {
   /**
    * @docid GridBaseOptions.columnChooser.allowSearch
    * @default false
-   * @deprecated
+   * @deprecated GridBaseOptions.columnChooser.search.enabled
    */
   allowSearch?: boolean;
   /**
@@ -516,7 +516,7 @@ export type ColumnChooser = {
   /**
    * @docid GridBaseOptions.columnChooser.searchTimeout
    * @default 500
-   * @deprecated
+   * @deprecated GridBaseOptions.columnChooser.search.timeout
    */
   searchTimeout?: number;
   /**
@@ -657,7 +657,7 @@ export type ColumnHeaderFilter = {
   /**
    * @docid GridBaseColumn.headerFilter.allowSearch
    * @default false
-   * @deprecated
+   * @deprecated GridBaseColumn.headerFilter.search.enabled
    */
   allowSearch?: boolean;
   /**
@@ -689,7 +689,7 @@ export type ColumnHeaderFilter = {
   /**
    * @docid GridBaseColumn.headerFilter.searchMode
    * @default 'contains'
-   * @deprecated
+   * @deprecated GridBaseColumn.headerFilter.search.mode
    */
   searchMode?: SearchMode;
   /**
@@ -1218,7 +1218,7 @@ export type HeaderFilter = {
   /**
    * @docid GridBaseOptions.headerFilter.allowSearch
    * @default false
-   * @deprecated
+   * @deprecated GridBaseOptions.headerFilter.search.enabled
    */
   allowSearch?: boolean;
   /**
@@ -1240,7 +1240,7 @@ export type HeaderFilter = {
   /**
    * @docid GridBaseOptions.headerFilter.searchTimeout
    * @default 500
-   * @deprecated
+   * @deprecated GridBaseOptions.headerFilter.search.timeout
    */
   searchTimeout?: number;
   /**
