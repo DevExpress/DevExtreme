@@ -13,8 +13,6 @@ import { areas } from './data';
 const meta: Meta<typeof PieChart> = {
     title: 'Example/Pie Chart',
     component: PieChart,
-    // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-    tags: ['autodocs'],
     parameters: {
         // More on Story layout: https://storybook.js.org/docs/configure/story-layout
         layout: 'centered',
