@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,239 +41,22 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <!-- <style>
-        #image {
-            height: 300px;
-        }
-
-        .label {
-            color: #767676;
-        }
-    </style> -->
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <!-- <select id="theme-selector" style="display: block;"> -->
-        <!-- </select> -->
-        <!-- <br /> -->
-
-        <!-- <div class="dx-viewport demo-container">
-            <div class="label"> Right click the image to show available actions: </div>
-            <img id="image" alt="product"
-                src="https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/7.png" />
-            <div id="context-menu"></div>
-        </div> -->
-
-        <div id="searchBox"></div>
-
-        <button>button</button>
-
+        <select id="theme-selector" style="display: block;">
+        </select>
+        <br />
+        <div id="button"></div>
         <script>
-            // $(() => {
-            //     $('#context-menu').dxContextMenu({
-            //         dataSource: contextMenuItems,
-            //         width: 200,
-            //         target: '#image',
-            //     });
-            // });
-
-
-            // const contextMenuItems = [
-            //     {
-            //         text: 'Share',
-            //         items: [
-            //             { text: 'Facebook' },
-            //             { text: 'Twitter' }
-            //         ],
-            //     },
-            //     { text: 'Download' },
-            //     { text: 'Comment' },
-            //     { text: 'Favorite' },
-            // ];
-
-
-            $(() => {
-                const searchBox = $('#searchBox').dxSelectBox({
-                    dataSource: products,
-                    displayExpr: 'Name',
-                    inputAttr: { 'aria-label': 'Product' },
-                    valueExpr: 'ID',
-                    deferRendering: false,
-                    onOptionChanged(e) {
-                        if (e.name === 'opened' && !e.value) {
-                            // debugger;
-                        }
-                    },
-                }).dxSelectBox('instance');
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
             });
-
-            const products = [{
-                ID: 1,
-                Name: 'HD Video Player',
-                Price: 330,
-                Current_Inventory: 225,
-                Backorder: 0,
-                Manufacturing: 10,
-                Category: 'Video Players',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/1.png',
-            }, {
-                ID: 2,
-                Name: 'SuperHD Video Player',
-                Price: 400,
-                Current_Inventory: 150,
-                Backorder: 0,
-                Manufacturing: 25,
-                Category: 'Video Players',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/2.png',
-            }, {
-                ID: 3,
-                Name: 'SuperPlasma 50',
-                Price: 2400,
-                Current_Inventory: 0,
-                Backorder: 0,
-                Manufacturing: 0,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/3.png',
-            }, {
-                ID: 4,
-                Name: 'SuperLED 50',
-                Price: 1600,
-                Current_Inventory: 77,
-                Backorder: 0,
-                Manufacturing: 55,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/4.png',
-            }, {
-                ID: 5,
-                Name: 'SuperLED 42',
-                Price: 1450,
-                Current_Inventory: 445,
-                Backorder: 0,
-                Manufacturing: 0,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/5.png',
-            }, {
-                ID: 6,
-                Name: 'SuperLCD 55',
-                Price: 1350,
-                Current_Inventory: 345,
-                Backorder: 0,
-                Manufacturing: 5,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/6.png',
-            }, {
-                ID: 7,
-                Name: 'SuperLCD 42',
-                Price: 1200,
-                Current_Inventory: 210,
-                Backorder: 0,
-                Manufacturing: 20,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/7.png',
-            }, {
-                ID: 8,
-                Name: 'SuperPlasma 65',
-                Price: 3500,
-                Current_Inventory: 0,
-                Backorder: 0,
-                Manufacturing: 0,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/8.png',
-            }, {
-                ID: 9,
-                Name: 'SuperLCD 70',
-                Price: 4000,
-                Current_Inventory: 95,
-                Backorder: 0,
-                Manufacturing: 5,
-                Category: 'Televisions',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/9.png',
-            }, {
-                ID: 10,
-                Name: 'DesktopLED 21',
-                Price: 175,
-                Current_Inventory: null,
-                Backorder: 425,
-                Manufacturing: 75,
-                Category: 'Monitors',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/10.png',
-            }, {
-                ID: 12,
-                Name: 'DesktopLCD 21',
-                Price: 170,
-                Current_Inventory: 210,
-                Backorder: 0,
-                Manufacturing: 60,
-                Category: 'Monitors',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/12.png',
-            }, {
-                ID: 13,
-                Name: 'DesktopLCD 19',
-                Price: 160,
-                Current_Inventory: 150,
-                Backorder: 0,
-                Manufacturing: 210,
-                Category: 'Monitors',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/13.png',
-            }, {
-                ID: 14,
-                Name: 'Projector Plus',
-                Price: 550,
-                Current_Inventory: null,
-                Backorder: 55,
-                Manufacturing: 10,
-                Category: 'Projectors',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/14.png',
-            }, {
-                ID: 15,
-                Name: 'Projector PlusHD',
-                Price: 750,
-                Current_Inventory: 110,
-                Backorder: 0,
-                Manufacturing: 90,
-                Category: 'Projectors',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/15.png',
-            }, {
-                ID: 16,
-                Name: 'Projector PlusHT',
-                Price: 1050,
-                Current_Inventory: 0,
-                Backorder: 75,
-                Manufacturing: 57,
-                Category: 'Projectors',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/16.png',
-            }, {
-                ID: 17,
-                Name: 'ExcelRemote IR',
-                Price: 150,
-                Current_Inventory: 650,
-                Backorder: 0,
-                Manufacturing: 190,
-                Category: 'Automation',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/17.png',
-            }, {
-                ID: 18,
-                Name: 'ExcelRemote Bluetooth',
-                Price: 180,
-                Current_Inventory: 310,
-                Backorder: 0,
-                Manufacturing: 0,
-                Category: 'Automation',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/18.png',
-            }, {
-                ID: 19,
-                Name: 'ExcelRemote IP',
-                Price: 200,
-                Current_Inventory: 0,
-                Backorder: 325,
-                Manufacturing: 225,
-                Category: 'Automation',
-                ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/19.png',
-            }];
         </script>
     </div>
 </body>
