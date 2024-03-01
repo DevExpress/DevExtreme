@@ -10,19 +10,22 @@ async function main() {
   const VERSION = '24.1.0';
   const PACKAGES = ['devextreme-angular', 'devextreme-react', 'devextreme-vue'];
 
-  await Promise.all(PACKAGES.map(packageName => new Promise((resolve) => {
+  await Promise.all(PACKAGES.map(packageName => new Promise<void>((resolve) => {
     const tgzPath = `artifacts/npm/${packageName}-${VERSION}.tgz`;
     const targetPath = `node_modules/${packageName}`;
 
     fs.rmSync(targetPath, { recursive: true, force: true });
     fs.mkdirSync(targetPath);
 
-    fs.createReadStream(tgzPath).pipe(createUnzip()).pipe(tar.extract(targetPath, { strip: 1 })).on('finish', () => {
-      console.log(`Installed ${packageName}`);
-      resolve(1);
-    }).on('error', () => {
-      throw new Error(`Unexpected error occured during extracting from archive: ${packageName}`);
-    });
+    fs.createReadStream(tgzPath)
+      .pipe(createUnzip())
+      .pipe(tar.extract(targetPath, { strip: 1 }))
+      .on('finish', () => {
+        console.log(`Installed ${packageName}`);
+        resolve();
+      }).on('error', () => {
+        throw new Error(`Unexpected error occured during extracting from archive: ${packageName}`);
+      });
   })));
 
   console.log('\nDone!');
