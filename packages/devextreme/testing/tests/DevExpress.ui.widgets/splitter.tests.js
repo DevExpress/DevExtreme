@@ -192,7 +192,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             assert.strictEqual(resizeHandles.length, 2, 'Correct number of resize handles');
         });
 
-        QUnit.test('third handle remains in the same place during resize', function(assert) {
+        QUnit.test('third handle remains in the same place during resize with 1 dragEnd', function(assert) {
             this.reinit({
                 width: 208,
                 height: 200,
@@ -202,11 +202,8 @@ QUnit.module('Resizing', moduleConfig, () => {
             const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
             const handles = this.getResizeHandles();
 
-            let pointer = pointerMock(handles.eq(0));
-            pointer.start().dragStart().drag(50, 0).dragEnd();
-
-            pointer = pointerMock(handles.eq(0));
-            pointer.start().dragStart().drag(-50, 0).dragEnd();
+            const pointer = pointerMock(handles.eq(0));
+            pointer.start().dragStart().drag(50, 0).drag(-50, 0).dragEnd();
 
             assertLayout(items, ['25', '25', '25', '25', '0'], assert);
         });
@@ -221,11 +218,8 @@ QUnit.module('Resizing', moduleConfig, () => {
             const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
             const handles = this.getResizeHandles();
 
-            let pointer = pointerMock(handles.eq(0));
-            pointer.start().dragStart().drag(50, 0).dragEnd();
-
-            pointer = pointerMock(handles.eq(0));
-            pointer.start().dragStart().drag(-70, 0).dragEnd();
+            const pointer = pointerMock(handles.eq(0));
+            pointer.start().dragStart().drag(50, 0).drag(-70, 0).dragEnd();
 
             assertLayout(items, ['25', '75', '0', '0', '0'], assert);
         });
