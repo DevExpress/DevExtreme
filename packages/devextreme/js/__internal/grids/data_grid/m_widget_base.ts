@@ -18,7 +18,7 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction, isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
-import Widget from '@js/ui/widget/ui.widget';
+import { Widget } from '@ts/core/component/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from './m_core';
@@ -67,7 +67,6 @@ class DataGrid extends Widget<Properties> {
   private readonly _views: any;
 
   _getDefaultOptions() {
-    // @ts-expect-error
     const result = super._getDefaultOptions();
 
     each(gridCore.modules, function () {
@@ -79,10 +78,8 @@ class DataGrid extends Widget<Properties> {
   }
 
   _setDeprecatedOptions() {
-    // @ts-expect-error
     super._setDeprecatedOptions();
 
-    // @ts-expect-error
     extend(this._deprecatedOptions, {
       useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
       rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
@@ -92,7 +89,6 @@ class DataGrid extends Widget<Properties> {
   }
 
   _defaultOptionsRules() {
-    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat([
       {
@@ -154,7 +150,6 @@ class DataGrid extends Widget<Properties> {
   _init() {
     const that = this;
 
-    // @ts-expect-error
     super._init();
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
@@ -175,7 +170,6 @@ class DataGrid extends Widget<Properties> {
 
     gridCore.callModuleItemsMethod(that, 'optionChanged', [args]);
     if (!args.handled) {
-      // @ts-expect-error
       super._optionChanged(args);
     }
   }
@@ -223,7 +217,6 @@ class DataGrid extends Widget<Properties> {
 
   _dispose() {
     const that = this;
-    // @ts-expect-error
     super._dispose();
 
     gridCore.callModuleItemsMethod(that, 'dispose');
@@ -264,7 +257,6 @@ class DataGrid extends Widget<Properties> {
   }
 }
 
-// @ts-expect-error
 registerComponent('dxDataGrid', DataGrid);
 
 export default DataGrid;
