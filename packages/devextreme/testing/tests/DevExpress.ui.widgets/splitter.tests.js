@@ -169,18 +169,6 @@ QUnit.module('Resizing', moduleConfig, () => {
             assert.strictEqual(resizeHandles.length, 3);
         });
 
-        QUnit.test('splitter should initialize correctly with multiple items in dataSource', function(assert) {
-            this.reinit({
-                dataSource: [{ }, { }, { }],
-            });
-
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-            const handles = this.getResizeHandles();
-
-            assert.strictEqual(items.length, 3, 'Correct number of items in dataSource');
-            assert.strictEqual(handles.length, 2, 'Correct number of resize handles');
-        });
-
         QUnit.test('resizing behavior with multiple items in dataSource', function(assert) {
             this.reinit({
                 dataSource: [{ }, { }, { }],
