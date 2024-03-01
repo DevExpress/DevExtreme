@@ -1,15 +1,24 @@
 import type { Preview } from '@storybook/react';
 
-import { ThemeDecorator, themesToolbarItems } from './themes';
+import { ThemeDecorator, themeToolbarItems, compact } from './themes';
 
 const preview: Preview = {
   globalTypes: {
     theme: {
       description: 'Global theme for components',
-      defaultValue: themesToolbarItems[0].value,
+      defaultValue: themeToolbarItems[0].value,
       toolbar: {
         title: 'Theme',
-        items: themesToolbarItems,
+        items: themeToolbarItems,
+        dynamicTitle: true,
+      }
+    },
+    compact: {
+      description: 'Compact or non compact theme',
+      defaultValue: compact[0].value,
+      toolbar: {
+        title: 'Compact',
+        items: compact,
         dynamicTitle: true,
       }
     }
