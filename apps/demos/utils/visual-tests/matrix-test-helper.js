@@ -85,7 +85,11 @@ export function changeTheme(dirName, relativePath, demoPath, theme) {
 
   const indexFilePath = join(dirName, `${relativePath}${demoPath}/index.html`);
 
-  const updatedContent = globalReadFrom(dirName, `${relativePath}${demoPath}/index.html`, (data) => data.replace(/dx(\.\w+)*\.light\.css/g, `dx.${theme}.css`));
+  const updatedContent = globalReadFrom(dirName, `${relativePath}${demoPath}/index.html`, (data) => {
+    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+
+    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+  });
 
   if (existsSync(indexFilePath)) {
     writeFileSync(indexFilePath, updatedContent, 'utf8');
@@ -245,13 +249,13 @@ const SKIPPED_TESTS = {
   },
 };
 
-export function shouldRunTest(currentFramework, testIndex, product, demo) {
+export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
   const shouldSkipDemo = (
     framework,
     component,
     demoName,
   ) => {
-    const frameworkTests = SKIPPED_TESTS[framework];
+    const frameworkTests = skippedTests[framework];
     if (!frameworkTests) return false;
 
     const componentTests = frameworkTests[component];
@@ -303,7 +307,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 
-  if (!shouldRunTest(framework, index, product, demo)) {
+  if (!shouldRunTest(framework, index, product, demo, SKIPPED_TESTS)) {
     return;
   }
 

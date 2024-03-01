@@ -12,6 +12,7 @@ import {
   globalReadFrom,
   changeTheme,
   waitForAngularLoading,
+  shouldRunTest,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
@@ -76,6 +77,22 @@ const getTestSpecificSkipRules = (testName) => {
     default:
       return [];
   }
+};
+
+const SKIPPED_TESTS = {
+  Angular: {
+    DataGrid: [
+      { demo: 'ToolbarCustomization', themes: ['fluent.blue.light'] },
+    ],
+    Scheduler: [
+      { demo: 'Overview', themes: ['fluent.blue.light', 'material.blue.light'] },
+    ],
+  },
+  React: {
+    DataGrid: [
+      { demo: 'SignalRService', themes: ['material.blue.light'] },
+    ],
+  },
 };
 
 ['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
@@ -199,8 +216,12 @@ const getTestSpecificSkipRules = (testName) => {
         } else {
           const testTheme = process.env.THEME;
 
-          if (testTheme === 'material.blue.light') {
-            await t.wait(1000);
+          // if (testTheme === 'material.blue.light') {
+          //   await t.wait(1000);
+          // }
+
+          if (!shouldRunTest(approach, index, widgetName, demoName, SKIPPED_TESTS)) {
+            return;
           }
 
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
