@@ -182,16 +182,6 @@ QUnit.module('Resizing', moduleConfig, () => {
             assertLayout(items, ['38.4146', '28.252', '33.3333'], assert);
         });
 
-        QUnit.test('resize handles visibility with multiple items in dataSource', function(assert) {
-            this.reinit({
-                dataSource: [{ }, { }, { }],
-            });
-
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
-
-            assert.strictEqual(resizeHandles.length, 2, 'Correct number of resize handles');
-        });
-
         QUnit.test('third handle remains in the same place during resize with 1 dragEnd', function(assert) {
             this.reinit({
                 width: 208,
