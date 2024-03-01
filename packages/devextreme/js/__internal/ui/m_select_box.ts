@@ -579,7 +579,6 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _focusOutHandler(e) {
-    // debugger;
     if (!this._isPreventedFocusOutEvent(e)) {
       const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
