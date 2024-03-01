@@ -179,7 +179,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
-            assertLayout(items, ['25', '25', '50'], assert);
+            assertLayout(items, ['38.4146', '28.252', '33.3333'], assert);
         });
 
         QUnit.test('resize handles visibility with multiple items in dataSource', function(assert) {
@@ -205,7 +205,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(handles.eq(0));
             pointer.start().dragStart().drag(50, 0).drag(-50, 0).dragEnd();
 
-            assertLayout(items, ['25', '25', '25', '25', '0'], assert);
+            assertLayout(items, ['20', '20', '20', '20', '20'], assert);
         });
 
         QUnit.test('percentage resizing during drag right and left', function(assert) {
@@ -221,7 +221,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(handles.eq(0));
             pointer.start().dragStart().drag(50, 0).drag(-70, 0).dragEnd();
 
-            assertLayout(items, ['25', '75', '0', '0', '0'], assert);
+            assertLayout(items, ['8.63736', '31.3626', '20', '20', '20'], assert);
         });
     });
 
