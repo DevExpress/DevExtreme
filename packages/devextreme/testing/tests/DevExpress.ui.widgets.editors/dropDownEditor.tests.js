@@ -41,6 +41,8 @@ const CUSTOM_CLASS = 'custom-class';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
+const OVERLAY_CONTENT_LABEL = 'Dropdown';
+
 const isIOs = devices.current().platform === 'ios';
 
 const beforeEach = function() {
@@ -2082,6 +2084,15 @@ QUnit.module('aria accessibility', () => {
         instance.option('opened', false);
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
+
+    QUnit.test('Overlay content must have correct aria-label attribute', function(assert) {
+        $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlayContent.attr('aria-label'), OVERLAY_CONTENT_LABEL, 'aria-label on element is correct');
+    });
+
 
     QUnit.test('aria-haspopup property on input', function(assert) {
         const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
