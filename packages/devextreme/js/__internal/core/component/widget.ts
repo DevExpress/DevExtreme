@@ -19,8 +19,7 @@ import '@js/events/hover';
 import Action from '@js/core/action';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
-// @ts-expect-error
-import { deferRender, deferRenderer } from '@js/core/utils/common';
+import { deferRender } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
@@ -51,6 +50,10 @@ export class Widget<TProperties> extends DOMComponent {
   _keyboardListenerId: any;
 
   _isReady: any;
+
+  _fireContentReadyAction() {
+    return deferRender(() => this._contentReadyAction());
+  }
 
   _supportedKeys(event?) {
     return {};
@@ -155,8 +158,6 @@ export class Widget<TProperties> extends DOMComponent {
   }
 
   _renderContentImpl() {}
-
-  _fireContentReadyAction = deferRenderer(function () { return this._contentReadyAction(); });
 
   _dispose() {
     this._contentReadyAction = null;
