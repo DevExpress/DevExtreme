@@ -159,6 +159,12 @@ class ContextMenu extends MenuBase {
 
     _focusInHandler() {}
 
+    _focusOutHandler(e) {
+        this.hide();
+
+        super._focusOutHandler(e);
+    }
+
     _itemContainer() {
         return this._overlay ? this._overlay.$content() : $();
     }
@@ -172,10 +178,8 @@ class ContextMenu extends MenuBase {
     }
 
     _supportedKeys() {
-        const { hideOnOutsideClick, focusedElement } = this;
-
         const selectItem = () => {
-            const $item = $(focusedElement);
+            const $item = $(this.option('focusedElement'));
 
             this.hide();
 
@@ -188,8 +192,7 @@ class ContextMenu extends MenuBase {
 
         return extend(super._supportedKeys(), {
             space: selectItem,
-            escape: this.hide,
-            tab: hideOnOutsideClick ? this.hide : noop,
+            escape: this.hide
         });
     }
 
