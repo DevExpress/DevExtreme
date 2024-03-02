@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -64,7 +65,12 @@ export class Component {
 
   _cancelOptionChange: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: any = {}) {
+    this.ctor(...arguments);
+  }
+
+  ctor(options: any = {}) {
     const { _optionChangedCallbacks, _disposingCallbacks } = options;
 
     this.NAME = publicComponentName(this.constructor);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-useless-constructor */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-multi-assign */
 /* eslint-disable new-cap */
@@ -56,12 +57,18 @@ export class DOMComponent extends Component {
   _$element: any;
 
   constructor(element, options) {
-    super(options);
+    // @ts-expect-error
+    super(element, options);
+  }
 
+  // @ts-expect-error
+  ctor(element, options) {
     this._customClass = null;
 
     this._createElement(element);
     attachInstanceToElement(this._$element, this, this._dispose);
+
+    super.ctor(options);
 
     const validationAlreadyPerformed = peekValidationPerformed();
     // @ts-expect-error
