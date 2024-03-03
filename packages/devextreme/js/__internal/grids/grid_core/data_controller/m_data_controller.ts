@@ -10,6 +10,7 @@ import ArrayStore from '@js/data/array_store';
 import CustomStore from '@js/data/custom_store';
 import errors from '@js/ui/widget/ui.errors';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 
 import modules from '../m_modules';
 import type {
@@ -143,6 +144,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _editingController!: EditingController;
 
+  protected _errorHandlingController!: ErrorHandlingController;
+
   private _columnsChangedHandler!: (e: any) => any;
 
   private _loadingChangedHandler!: (e: any) => any;
@@ -163,6 +166,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._columnsController = this.getController('columns');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
+    this._errorHandlingController = this.getController('errorHandling');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
