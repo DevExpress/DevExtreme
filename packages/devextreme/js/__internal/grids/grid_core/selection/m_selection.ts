@@ -664,7 +664,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
 };
 
 const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMenuControllerSelectionExtender extends Base {
-  _contextMenuPrepared(options) {
+  protected _contextMenuPrepared(options) {
     const dxEvent = options.event;
 
     if (dxEvent.originalEvent && dxEvent.originalEvent.type !== 'dxhold' || options.items && options.items.length > 0) return;

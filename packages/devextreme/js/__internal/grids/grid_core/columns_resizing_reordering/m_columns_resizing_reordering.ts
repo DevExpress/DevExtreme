@@ -484,7 +484,7 @@ export class DraggingHeaderView extends modules.View {
     return this.option('showColumnHeaders') && (allowReordering(this) || commonColumnSettings.allowGrouping || commonColumnSettings.allowHiding);
   }
 
-  private dragHeader(options) {
+  public dragHeader(options) {
     const that = this;
     const { columnElement } = options;
     const isCommandColumn = !!options.sourceColumn.type;
@@ -522,7 +522,7 @@ export class DraggingHeaderView extends modules.View {
     that.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
   }
 
-  private moveHeader(args) {
+  public moveHeader(args) {
     const e = args.event;
     const { that } = e.data;
     const eventData = getEventData(e);
@@ -548,7 +548,7 @@ export class DraggingHeaderView extends modules.View {
     }
   }
 
-  private dockHeader(eventData) {
+  public dockHeader(eventData) {
     const that = this;
     const targetDraggingPanel = that._getDraggingPanelByPos(eventData);
     const controller = that._controller;
@@ -657,13 +657,13 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private readonly _isResizing?: boolean;
 
-  private readonly _scrollLeft?: number;
+  private _scrollLeft?: number;
 
   private _trackerView!: TrackerView;
 
   private _tablePositionController!: TablePositionViewController;
 
-  private readonly _editorFactoryController!: EditorFactory;
+  private _editorFactoryController!: EditorFactory;
 
   private _draggingHeaderView!: DraggingHeaderView;
 
@@ -1099,12 +1099,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
   }
 
   private _init() {
-    const generatePointsByColumnsHandler = function () {
+    const generatePointsByColumnsHandler = () => {
       if (!this._isResizing) {
         this.pointsByColumns(null);
       }
     };
-    const generatePointsByColumnsScrollHandler = function (offset) {
+    const generatePointsByColumnsScrollHandler = (offset) => {
       if (this._scrollLeft !== offset.left) {
         this._scrollLeft = offset.left;
         this.pointsByColumns(null);
@@ -1118,6 +1118,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
     this._columnsController = this.getController('columns');
     this._tablePositionController = this.getController('tablePosition');
+    this._editorFactoryController = this.getController('editorFactory');
     this._draggingHeaderView = this.component.getView('draggingHeaderView');
 
     this._$parentContainer = this.component.$element();
@@ -1267,7 +1268,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     this._headerPanelView = this.getView('headerPanel');
     this._columnChooserView = this.getView('columnChooserView');
 
-    const subscribeToEvents = function () {
+    const subscribeToEvents = () => {
       if (this._draggingHeaderView) {
         const draggingPanels = [this._columnChooserView, this._columnHeadersView, this._headerPanelView];
 

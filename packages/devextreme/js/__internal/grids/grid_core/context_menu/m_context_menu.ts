@@ -72,8 +72,11 @@ export class ContextMenuController extends modules.ViewController {
     return menuItems;
   }
 
+  /**
+   * @extended: selection
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _contextMenuPrepared(options) {}
+  protected _contextMenuPrepared(options) {}
 }
 
 export class ContextMenuView extends modules.View {
@@ -94,7 +97,7 @@ export class ContextMenuView extends modules.View {
       $element,
       ContextMenu,
       {
-        onPositioning(actionArgs) {
+        onPositioning: (actionArgs) => {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
           const items = this._contextMenuController.getContextMenuItems(event);
