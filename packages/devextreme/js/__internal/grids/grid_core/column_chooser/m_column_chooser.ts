@@ -540,7 +540,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
     const columnChooserEnabled = that.option('columnChooser.enabled');
 
     if (columnChooserEnabled) {
-      const onClickHandler = function () {
+      const onClickHandler = () => {
         this._columnChooserView.showColumnChooser();
       };
       const onInitialized = function (e) {
