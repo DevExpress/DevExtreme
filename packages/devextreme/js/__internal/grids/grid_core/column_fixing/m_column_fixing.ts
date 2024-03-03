@@ -575,11 +575,6 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 };
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  public dispose() {
-    super.dispose.apply(this, arguments as any);
-    clearTimeout(this._fixedScrollTimeout);
-  }
-
   private _getRowVisibleColumns(rowIndex) {
     if (this._isFixedTableRendering) {
       return this.getFixedColumns(rowIndex);
@@ -677,6 +672,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
+  public dispose() {
+    super.dispose.apply(this, arguments as any);
+    clearTimeout(this._fixedScrollTimeout);
+  }
+
   public optionChanged(args) {
     const that = this;
 

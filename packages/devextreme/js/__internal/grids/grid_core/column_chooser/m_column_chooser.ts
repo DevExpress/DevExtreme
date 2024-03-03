@@ -87,7 +87,8 @@ export class ColumnChooserController extends modules.ViewController {
         that._createComponent($columnChooserButton, Button, {
           icon: COLUMN_CHOOSER_ICON_NAME,
           onClick() {
-            this._columnChooserView.showColumnChooser();
+            // TODO getView
+            that.getView('columnChooserView').showColumnChooser();
           },
           hint: that.option('columnChooser.title'),
           // @ts-expect-error
@@ -537,9 +538,9 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
     const columnChooserEnabled = that.option('columnChooser.enabled');
 
     if (columnChooserEnabled) {
-      const onClickHandler = () => {
+      const onClickHandler = function () {
         // TODO getView
-        this.getView('columnChooserView').showColumnChooser();
+        that.component.getView('columnChooserView').showColumnChooser();
       };
       const onInitialized = function (e) {
         $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
