@@ -1920,6 +1920,9 @@ class EditingControllerImpl extends modules.ViewController {
     this._afterCancelEditData(rowIndex);
   }
 
+  /**
+   * @extended: filter_row
+   */
   protected _afterCancelEditData(rowIndex) {
     const dataController = this._dataController;
 
@@ -2016,6 +2019,9 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
+  /**
+   * @extended: filter_row
+   */
   public updateFieldValue(options, value, text, forceUpdateRow?) {
     const rowKey = options.key;
     // @ts-expect-error
@@ -2375,7 +2381,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, filter_row
    */
   protected _afterSaveEditData(): any {}
 

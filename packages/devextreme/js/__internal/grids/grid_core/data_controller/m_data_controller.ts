@@ -11,6 +11,9 @@ import CustomStore from '@js/data/custom_store';
 import errors from '@js/ui/widget/ui.errors';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
+import type { ApplyFilterViewController } from '@ts/grids/grid_core/filter/m_filter_row';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 
 import modules from '../m_modules';
 import type {
@@ -146,6 +149,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _errorHandlingController!: ErrorHandlingController;
 
+  protected _filterSyncController!: FilterSyncController;
+
+  protected _headerFilterController!: HeaderFilterController;
+
+  protected _applyFilterController!: ApplyFilterViewController;
+
   private _columnsChangedHandler!: (e: any) => any;
 
   private _loadingChangedHandler!: (e: any) => any;
@@ -167,6 +176,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
     this._errorHandlingController = this.getController('errorHandling');
+    this._filterSyncController = this.getController('filterSync');
+    this._headerFilterController = this.getController('headerFilter');
+    this._applyFilterController = this.getController('applyFilter');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -1218,11 +1230,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.loadingChanged.fire(this.isLoading(), this._loadingText);
   }
 
-  _calculateAdditionalFilter(): Filter {
+  /**
+   * @extended: filter_row, filter_sync
+   */
+  protected _calculateAdditionalFilter(): Filter {
     return null;
   }
 
-  _applyFilter(): Promise<void> {
+  /**
+   * @extended: filter_sync
+   */
+  protected _applyFilter(): Promise<void> {
     const dataSource = this._dataSource;
 
     if (dataSource) {

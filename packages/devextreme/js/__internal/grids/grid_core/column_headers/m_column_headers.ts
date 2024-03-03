@@ -81,6 +81,7 @@ export class ColumnHeadersView extends ColumnsView {
     super.init();
     this._headerPanelView = this.getView('headerPanel');
     this._headerFilterController = this.getController('headerFilter');
+    this._dataController = this.getController('data');
   }
 
   protected _createTable() {
@@ -195,6 +196,9 @@ export class ColumnHeadersView extends ColumnsView {
     return resultTemplate;
   }
 
+  /**
+   * @extended: filter_row
+   */
   protected _handleDataChanged(e) {
     if (e.changeType !== 'refresh') return;
 
@@ -236,6 +240,9 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
+  /**
+   * @extended: filter_row
+   */
   protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
@@ -278,6 +285,9 @@ export class ColumnHeadersView extends ColumnsView {
     event.preventDefault();
   }
 
+  /**
+   * @extended: filter_row
+   */
   protected _renderCore() {
     const that = this;
     const $container = that.element();
@@ -333,6 +343,9 @@ export class ColumnHeadersView extends ColumnsView {
     return $cellElement;
   }
 
+  /**
+   * @extended: filter_row
+   */
   protected _getRows() {
     const result: any[] = [];
     const rowCount = this.getRowCount();
@@ -352,6 +365,9 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
+  /**
+   * @extended: filter_row
+   */
   protected _columnOptionChanged(e) {
     const { changeTypes } = e;
     const { optionNames } = e;
@@ -533,6 +549,9 @@ export class ColumnHeadersView extends ColumnsView {
     return $columnElements ? $columnElements.length : 0;
   }
 
+  /**
+   * @extended: filter_row
+   */
   public isVisible() {
     return this.option('showColumnHeaders')!;
   }

@@ -676,7 +676,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, filter_row
    */
   protected _resizeCore() {
     const scrollLeft = this._scrollLeft;
@@ -827,7 +827,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing, editing_form_based
+   * @extended: column_fixing, editing_form_based, filter_row
    */
   protected _renderCellContent($cell, options, renderOptions) {
     const template = this._getCellTemplate(options);
