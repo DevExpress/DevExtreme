@@ -17,11 +17,11 @@ const viewName = {
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
 export class ContextMenuController extends modules.ViewController {
-  init() {
+  public init() {
     this.createAction('onContextMenuPreparing');
   }
 
-  getContextMenuItems(dxEvent) {
+  public getContextMenuItems(dxEvent) {
     if (!dxEvent) {
       return false;
     }
@@ -73,15 +73,20 @@ export class ContextMenuController extends modules.ViewController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _contextMenuPrepared(options) {
-
-  }
+  private _contextMenuPrepared(options) {}
 }
 
 export class ContextMenuView extends modules.View {
+  private _contextMenuController!: ContextMenuController;
+
+  public init() {
+    super.init();
+
+    this._contextMenuController = this.getController('contextMenu');
+  }
+
   protected _renderCore() {
-    const that = this;
-    const $element = that.element().addClass(CONTEXT_MENU);
+    const $element = this.element().addClass(CONTEXT_MENU);
 
     this.setAria('role', 'presentation', $element);
 
@@ -92,7 +97,7 @@ export class ContextMenuView extends modules.View {
         onPositioning(actionArgs) {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
-          const items = that.getController('contextMenu').getContextMenuItems(event);
+          const items = this._contextMenuController.getContextMenuItems(event);
 
           if (items) {
             contextMenuInstance.option('items', items);
@@ -107,8 +112,8 @@ export class ContextMenuView extends modules.View {
           params.itemData?.onItemClick?.(params);
         },
 
-        cssClass: that.getWidgetContainerClass(),
-        target: that.component.$element(),
+        cssClass: this.getWidgetContainerClass(),
+        target: this.component.$element(),
       },
     );
   }
