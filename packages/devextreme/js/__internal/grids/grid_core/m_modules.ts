@@ -97,7 +97,7 @@ export class ModuleItem {
     return component.option.apply(component, arguments);
   }
 
-  _silentOption<TPropertyName extends string>(
+  protected _silentOption<TPropertyName extends string>(
     name: TPropertyName,
     value: GridPropertyType<InternalGridOptions, TPropertyName>,
   ): void {

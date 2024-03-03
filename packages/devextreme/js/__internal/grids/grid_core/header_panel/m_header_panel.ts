@@ -6,6 +6,7 @@ import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
@@ -23,8 +24,16 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
+  protected _editingController!: EditingController;
+
+  public init() {
+    super.init();
+    this._editingController = this.getController('editing');
+    this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
+  }
+
   /**
-   * @extended: column_chooser
+   * @extended: column_chooser, editing
    */
   protected _getToolbarItems(): any[] {
     return [];
@@ -145,11 +154,6 @@ export class HeaderPanel extends ColumnsView {
     return isDefined(userItem?.disabled);
   }
 
-  init() {
-    super.init();
-    this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
-  }
-
   render() {
     this._toolbarOptions = this._getToolbarOptions();
     super.render.apply(this, arguments as any);
@@ -229,7 +233,7 @@ export class HeaderPanel extends ColumnsView {
   }
 
   /**
-   * @extended: column_chooser
+   * @extended: column_chooser, editing
    */
   public isVisible() {
     return !!(this._toolbarOptions && this._toolbarOptions.visible);

@@ -267,14 +267,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return options;
   }
 
-  protected _updateCell($cell, parameters) {
+  public _updateCell($cell, parameters) {
     if (parameters.rowType) {
       this._cellPrepared($cell, parameters);
     }
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, editing
    */
   protected _createCell(options) {
     const { column } = options;
@@ -469,17 +469,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $table;
   }
 
-  _rowPointerDown(e?: any) {
+  /**
+   * @extended: editing
+   */
+  protected _rowPointerDown(e?: any) {}
 
-  }
+  protected _rowClick() {}
 
-  _rowClick() {
-
-  }
-
-  _rowDblClick() {
-
-  }
+  protected _rowDblClick() {}
 
   _createColGroup(columns) {
     const colgroupElement = $('<colgroup>');
@@ -793,6 +790,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     copyAttributes($rowElement.get(0), $newRowElement.get(0));
   }
 
+  /**
+   * @extended: editing
+   */
   protected _setCellAriaAttributes($cell, cellOptions) {
     if (cellOptions.rowType !== 'freeSpace') {
       this.setAria('role', 'gridcell', $cell);
@@ -827,7 +827,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, editing_form_based
    */
   protected _renderCellContent($cell, options, renderOptions) {
     const template = this._getCellTemplate(options);
@@ -845,7 +845,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return [] as any[];
   }
 
-  _getCellOptions(options): any {
+  protected _getCellOptions(options): any {
     const cellOptions = {
       column: options.column,
       columnIndex: options.columnIndex,
@@ -920,7 +920,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, editing
    */
   public _cellPrepared(cell, options) {
     options.cellElement = getPublicElement($(cell));
@@ -951,7 +951,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, editing
    */
   public getCellIndex($cell, rowIndex?) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
@@ -1083,7 +1083,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return result.promise();
   }
 
-  _updateContent($newTableElement, change, isFixedTableRendering?) {
+  protected _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
       this.setTableElement($newTableElement, isFixedTableRendering);
@@ -1212,7 +1212,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  getCellElements(rowIndex): dxElementWrapper | undefined {
+  /**
+   * @extended: editing_form_based
+   */
+  public getCellElements(rowIndex): dxElementWrapper | undefined {
     return this._getCellElementsCore(rowIndex);
   }
 
@@ -1283,7 +1286,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return elements;
   }
 
-  _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  /**
+   * @extended: editing_form_based
+   */
+  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     if (isString(columnIdentifier)) {
       const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
       return this._columnsController.getVisibleIndex(columnIndex);

@@ -392,7 +392,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  protected _updateCell($cell, options) {
+  public _updateCell($cell, options) {
     if (options.rowType === 'header' && options.column.alignment === 'center') {
       this._alignCaptionByCenter($cell);
     }

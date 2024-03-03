@@ -825,7 +825,7 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
     return result;
   }
 
-  _removeChange() {
+  protected _removeChange() {
     // @ts-expect-error
     const result = super._removeChange.apply(this, arguments);
 
@@ -834,7 +834,7 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
     return result;
   }
 
-  cancelEditData() {
+  public cancelEditData() {
     // @ts-expect-error
     const result = super.cancelEditData.apply(this, arguments);
 

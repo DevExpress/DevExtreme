@@ -187,9 +187,15 @@ export class RowsView extends ColumnsView {
     };
   }
 
-  _update(change?) { }
+  /**
+   * @extended: editing_row_based
+   */
+  protected _update(change?) { }
 
-  _updateCell($cell, options) {
+  /**
+   * @extended: editing_form_based
+   */
+  public _updateCell($cell, options) {
     if (isGroupRow(options)) {
       $cell.addClass(GROUP_CELL_CLASS);
     }
@@ -197,7 +203,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, editing
    */
   protected _getCellTemplate(options) {
     const that = this;
@@ -216,7 +222,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, editing, editing_row_based
    */
   protected _createRow(row?, tag?) {
     const $row = super._createRow.apply(this, arguments as any);
@@ -395,7 +401,10 @@ export class RowsView extends ColumnsView {
     return this._findContentElement();
   }
 
-  _updateContent(newTableElement, change, isFixedTableRendering?) {
+  /**
+   * @extended: editing_form_based
+   */
+  protected _updateContent(newTableElement, change, isFixedTableRendering?) {
     this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -614,7 +623,10 @@ export class RowsView extends ColumnsView {
     return this.option('noDataText');
   }
 
-  _rowClick(e?) {
+  /**
+   * @extended: editing
+   */
+  protected _rowClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
     this.executeAction('onRowClick', extend({
       evaluate(expr) {
@@ -625,7 +637,10 @@ export class RowsView extends ColumnsView {
     }, e, item));
   }
 
-  _rowDblClick(e?) {
+  /**
+   * @extended: editing
+   */
+  protected _rowDblClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
     this.executeAction('onRowDblClick', extend({}, e, item));
   }
@@ -803,7 +818,10 @@ export class RowsView extends ColumnsView {
     return $table;
   }
 
-  _createTable() {
+  /**
+   * @extended: editing_cell_based
+   */
+  protected _createTable() {
     const $table = super._createTable.apply(this, arguments as any);
 
     if (this.option().rowTemplate || this.option().dataRowTemplate) {
@@ -814,7 +832,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, editing
    */
   protected _renderCore(change) {
     const $element = this.element();
@@ -837,7 +855,10 @@ export class RowsView extends ColumnsView {
     return change && change.items || this._dataController.items();
   }
 
-  _getCellOptions(options) {
+  /**
+   * @extended: editing
+   */
+  protected _getCellOptions(options) {
     const that = this;
     const { column } = options;
     const { row } = options;

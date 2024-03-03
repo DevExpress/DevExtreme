@@ -648,7 +648,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     return super.processItems.apply(this, arguments);
   }
 
-  _addChange(changeParams) {
+  protected _addChange(changeParams) {
     const change = super._addChange.apply(this, arguments as any);
     const validatingController = this.getController('validating');
 
@@ -659,7 +659,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     return change;
   }
 
-  _handleChangesChange(args) {
+  protected _handleChangesChange(args) {
     super._handleChangesChange.apply(this, arguments as any);
 
     const validatingController = this.getController('validating');
@@ -772,7 +772,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     return items;
   }
 
-  processDataItem(item) {
+  public processDataItem(item) {
     const isInserted = item.data[INSERT_INDEX];
     const key = isInserted ? item.data.key : item.key;
     const editMode = this.getEditMode();
@@ -1049,7 +1049,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     return changes[gridCoreUtils.getIndexByKey(key, changes)];
   }
 
-  isCellModified(parameters) {
+  public isCellModified(parameters) {
     const cellModified = super.isCellModified(parameters);
     const change = this.getChangeByKey(parameters.key);
     const isCellInvalid = !!parameters.row && this.getController('validating').isInvalidCell({

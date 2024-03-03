@@ -701,7 +701,7 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
     return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
   }
 
-  _updateEditButtons() {
+  protected _updateEditButtons() {
     super._updateEditButtons();
 
     // @ts-expect-error
@@ -711,8 +711,6 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelExtender extends Base {
   private _exportController!: ExportController;
-
-  private _editingController!: EditingController;
 
   _getToolbarItems() {
     const items = super._getToolbarItems();

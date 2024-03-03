@@ -723,7 +723,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: selection
+   * @extended: selection, editing
    */
   protected _processDataItem(dataItem, options) {
     dataItem.values = this.generateDataValues(dataItem.data, options.visibleColumns);
@@ -866,6 +866,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     });
   }
 
+  /**
+   * @extended: editing
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
     if (JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex])) {
@@ -884,7 +887,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: editing_row_based
+   * @extended: editing_row_based, editing, editing_form_based
    */
   protected _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
     let columnIndices;
@@ -1084,7 +1087,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extende: virtual_scrolling
+   * @extende: virtual_scrolling, editing
    */
   protected _updateItemsCore(change) {
     let items;
@@ -1598,6 +1601,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     super.dispose();
   }
 
+  /**
+   * @extended editing
+   */
   public repaintRows(rowIndexes, changesOnly) {
     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
@@ -1635,8 +1641,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this._dataSource?.load();
   }
 
+  /**
+   * @extended: editing
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  reload(reload?, changesOnly?): any {
+  public reload(reload?, changesOnly?): any {
     return this._dataSource?.reload(reload, changesOnly);
   }
 
