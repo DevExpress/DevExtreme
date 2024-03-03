@@ -677,7 +677,10 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return this.option('rtlEnabled') && this._$parentContainer?.parent().css('direction') === 'rtl';
   }
 
-  _pointCreated(point, cellsLength, columns) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _pointCreated(point, cellsLength, columns) {
     const isNextColumnMode = isNextColumnResizingMode(this);
     const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
@@ -782,7 +785,10 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
-  _getNextColumnIndex(currentColumnIndex) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _getNextColumnIndex(currentColumnIndex) {
     return currentColumnIndex + 1;
   }
 
@@ -1249,6 +1255,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   /**
+   * @extended: adaptivity
    * Function that is used to filter column points, it's called for each point
    * @param point Point that we are checking
    * @param columns All columns in the given location

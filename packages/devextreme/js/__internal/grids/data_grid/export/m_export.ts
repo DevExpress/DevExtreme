@@ -350,7 +350,10 @@ export class ExportController extends dataGridCore.ViewController {
     };
   }
 
-  _updateColumnWidth(column, width): void {
+  /**
+   * @extended: adaptivity
+   */
+  protected _updateColumnWidth(column, width): void {
     column.width = width;
   }
 

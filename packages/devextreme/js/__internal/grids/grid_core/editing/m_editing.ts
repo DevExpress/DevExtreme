@@ -96,6 +96,8 @@ class EditingControllerImpl extends modules.ViewController {
 
   _dataController!: Controllers['data'];
 
+  _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+
   _rowsView!: Views['rowsView'];
 
   _lastOperation: any;
@@ -135,6 +137,7 @@ class EditingControllerImpl extends modules.ViewController {
   init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._rowsView = this.getView('rowsView');
     this._lastOperation = null;
     // this contains the value of 'editing.changes' option, to check if it has changed in onOptionChanged
@@ -297,7 +300,10 @@ class EditingControllerImpl extends modules.ViewController {
 
   _needToCloseEditableCell($targetElement): any {}
 
-  _closeEditItem($targetElement): any {}
+  /**
+   * @extended: adaptivity
+   */
+  protected _closeEditItem($targetElement): any {}
 
   _handleDataChanged(args): any {}
 
@@ -1057,7 +1063,10 @@ class EditingControllerImpl extends modules.ViewController {
     return options.cancel;
   }
 
-  _beforeUpdateItems(rowIndices, rowIndex): any {}
+  /**
+   * @extended: adaptivity
+   */
+  protected _beforeUpdateItems(rowIndices, rowIndex): any {}
 
   _getVisibleEditColumnIndex() {
     const editColumnName = this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME);
@@ -1137,8 +1146,11 @@ class EditingControllerImpl extends modules.ViewController {
     this._resetEditRowKey();
   }
 
+  /**
+   * @extended: adaptivity
+   */
   // @ts-expect-error
-  editRow(rowIndex) {
+  public editRow(rowIndex) {
     const dataController = this._dataController;
     const items = dataController.items();
     const item: any = items[rowIndex];
@@ -1358,7 +1370,10 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  deleteRow(rowIndex) {
+  /**
+   * @extended: adaptivity
+   */
+  protected deleteRow(rowIndex) {
     this._checkAndDeleteRow(rowIndex);
   }
 
@@ -1812,7 +1827,10 @@ class EditingControllerImpl extends modules.ViewController {
     $element && $element.addClass(CELL_MODIFIED);
   }
 
-  _beforeCloseEditCellInBatchMode(rowIndices): any {}
+  /**
+   * @extended: adaptivity
+   */
+  protected _beforeCloseEditCellInBatchMode(rowIndices): any {}
 
   cancelEditData() {
     const changes = this.getChanges();
@@ -1868,7 +1886,10 @@ class EditingControllerImpl extends modules.ViewController {
     this._updateEditButtons();
   }
 
-  _getRowIndicesForCascadeUpdating(row, skipCurrentRow) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _getRowIndicesForCascadeUpdating(row, skipCurrentRow) {
     return skipCurrentRow ? [] : [row.rowIndex];
   }
 
@@ -2105,7 +2126,10 @@ class EditingControllerImpl extends modules.ViewController {
     return change;
   }
 
-  _getFormEditItemTemplate(cellOptions, column) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _getFormEditItemTemplate(cellOptions, column) {
     return column.editCellTemplate || this._getDefaultEditorTemplate();
   }
 
@@ -2268,7 +2292,10 @@ class EditingControllerImpl extends modules.ViewController {
 
   highlightDataCell($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); }
 
-  _afterInsertRow(key): any {}
+  /**
+   * @extended: adaptivity
+   */
+  protected _afterInsertRow(key): any {}
 
   // @ts-expect-error
   _beforeSaveEditData(change?) {
@@ -2277,9 +2304,15 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  _afterSaveEditData(): any {}
+  /**
+   * @extended: adaptivity
+   */
+  protected _afterSaveEditData(): any {}
 
-  _beforeCancelEditData(): any {}
+  /**
+   * @extended: adaptivity
+   */
+  protected _beforeCancelEditData(): any {}
 
   _allowEditAction(actionName, options) {
     let allowEditAction: any = this.option(`editing.${actionName}`);

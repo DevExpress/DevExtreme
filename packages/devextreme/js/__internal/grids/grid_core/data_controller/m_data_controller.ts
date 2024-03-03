@@ -645,7 +645,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem!.dataIndex + 1 : 0;
   }
 
-  _processItems(items, change) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _processItems(items, change) {
     const that = this;
     const rowIndexDelta = that.getRowIndexDelta();
     const { changeType } = change;

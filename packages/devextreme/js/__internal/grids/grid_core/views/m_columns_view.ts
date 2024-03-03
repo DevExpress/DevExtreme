@@ -27,6 +27,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
+import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -175,6 +176,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   _dataController!: DataController;
 
+  _adaptiveColumnsController!: AdaptiveColumnsController;
+
   _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
@@ -250,7 +253,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell;
   }
 
-  _createRow(rowObject, tagName?) {
+  protected _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
     const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
 
@@ -667,7 +670,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
   }
 
-  _renderCells($row, options) {
+  protected _renderCells($row, options) {
     const that = this;
     let columnIndex = 0;
     const { row } = options;
@@ -749,7 +752,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  _getCellTemplate(options?): any {
+  protected _getCellTemplate(options?): any {
 
   }
 
@@ -831,7 +834,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return options;
   }
 
-  _cellPrepared(cell, options) {
+  /**
+   * @extended: adaptivity
+   */
+  public _cellPrepared(cell, options) {
     options.cellElement = getPublicElement($(cell));
     this.executeAction('onCellPrepared', options);
   }
@@ -903,6 +909,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._scrollLeft = -1;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._delayedTemplates = [];
     this._templateDeferreds = new Set();
     this._templatesCache = {};
@@ -1165,7 +1172,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $row.children();
   }
 
-  _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
+  /**
+   * @extended: adaptivity
+   */
+  public _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
     const $cells = this.getCellElements(rowIndex);
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
@@ -1234,7 +1244,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
-  getCell(cellPosition, rows?, cells?) {
+  /**
+   * @extended: adaptivity
+   */
+  public getCell(cellPosition, rows?, cells?) {
     const $rows = rows || this._getRowElements();
     let $cells;
 

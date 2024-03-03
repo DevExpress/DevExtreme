@@ -155,7 +155,10 @@ export class RowsView extends ColumnsView {
     super._updateCell.apply(this, arguments as any);
   }
 
-  _getCellTemplate(options) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _getCellTemplate(options) {
     const that = this;
     const { column } = options;
     let template;
@@ -171,7 +174,10 @@ export class RowsView extends ColumnsView {
     return template;
   }
 
-  _createRow(row?, tag?) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _createRow(row?, tag?) {
     const $row = super._createRow.apply(this, arguments as any);
 
     if (row) {
@@ -592,7 +598,10 @@ export class RowsView extends ColumnsView {
     return super._needWrapRow.apply(this, arguments as any) || !!this.option('dataRowTemplate');
   }
 
-  _renderCells($row, options) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _renderCells($row, options) {
     if (options.row.rowType === 'group') {
       this._renderGroupedCells($row, options);
     } else if (options.row.values) {

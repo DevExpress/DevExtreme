@@ -91,7 +91,10 @@ export class EditorFactory extends ViewControllerWithMixin {
     return this.elementIsInsideGrid($focusedElement) && $focusedElement;
   }
 
-  _getFocusCellSelector() {
+  /**
+   * @extended: adaptivity
+   */
+  protected _getFocusCellSelector() {
     return '.dx-row > td';
   }
 
@@ -124,7 +127,10 @@ export class EditorFactory extends ViewControllerWithMixin {
     this.loseFocus();
   }
 
-  _needHideBorder($element) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _needHideBorder($element) {
     const rowsViewElement = this.getView('rowsView').element();
     const isRowsView = $element.closest(rowsViewElement).length > 0;
     const isEditing = this.getController('editing').isEditing();

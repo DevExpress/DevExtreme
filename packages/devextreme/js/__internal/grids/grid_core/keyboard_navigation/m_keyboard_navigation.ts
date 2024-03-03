@@ -134,8 +134,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _editorFactory!: Controllers['editorFactory'];
 
-  _adaptiveController!: Controllers['adaptiveColumns'];
-
   _focusController!: Controllers['focus'];
 
   _adaptiveColumnsController!: Controllers['adaptiveColumns'];
@@ -1841,7 +1839,10 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   // #endregion Cell_Position
   // #region DOM_Manipulation
-  _isCellValid($cell, isClick?) {
+  /**
+   * @extended: adaptivity
+   */
+  public _isCellValid($cell, isClick?) {
     if (isElementDefined($cell)) {
       const $row = $cell.parent();
       const columnIndex = this._rowsView.getCellIndex($cell) + this._columnsController.getColumnIndexOffset();
@@ -2440,8 +2441,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     );
   }
 
+  /**
+   * @extended: adaptivity
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _processNextCellInMasterDetail($nextCell, _$cell) {
+  protected _processNextCellInMasterDetail($nextCell, _$cell) {
     if (!this._isInsideEditForm($nextCell) && $nextCell) {
       this._applyTabIndexToElement($nextCell);
     }
@@ -2480,7 +2484,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       : columnIndex > 0 && columnIndex < visibleColumnsCount - 1;
   }
 
-  _isCellElement($element) {
+  /**
+   * @extended: adaptivity
+   */
+  public _isCellElement($element) {
     return $element.length && $element[0].tagName === 'TD';
   }
 
@@ -2835,7 +2842,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerKeyboardE
 };
 
 const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class AdaptiveColumnsKeyboardExtender extends Base {
-  _showHiddenCellsInView({ viewName, $cells, isCommandColumn }) {
+  protected _showHiddenCellsInView({ viewName, $cells, isCommandColumn }) {
     super._showHiddenCellsInView.apply(this, arguments as any);
 
     viewName === COLUMN_HEADERS_VIEW && !isCommandColumn && $cells.each((_, cellElement) => {
@@ -2844,7 +2851,7 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
     });
   }
 
-  _hideVisibleCellInView({ viewName, $cell, isCommandColumn }) {
+  protected _hideVisibleCellInView({ viewName, $cell, isCommandColumn }) {
     super._hideVisibleCellInView.apply(this, arguments as any);
 
     if (viewName === COLUMN_HEADERS_VIEW && !isCommandColumn && isCellInHeaderRow($cell)) {

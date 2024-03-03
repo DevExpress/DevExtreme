@@ -192,7 +192,7 @@ export class ModuleItem {
     return action && action(options);
   }
 
-  dispose() {
+  public dispose() {
     const that = this;
     each(that.callbackNames() || [], function () {
       that[this].empty();

@@ -91,6 +91,16 @@ export class ResizingController extends modules.ViewController {
 
   _updateScrollableTimeoutID: any;
 
+  public init() {
+    this._prevContentMinHeight = null;
+    this._dataController = this.getController('data');
+    this._columnsController = this.getController('columns');
+    this._columnHeadersView = this.getView('columnHeadersView');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this._footerView = this.getView('footerView');
+    this._rowsView = this.getView('rowsView');
+  }
+
   _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
       this._refreshSizesHandler = (e) => {
@@ -226,7 +236,10 @@ export class ResizingController extends modules.ViewController {
     });
   }
 
-  _toggleBestFitMode(isBestFit) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _toggleBestFitMode(isBestFit) {
     const $rowsTable = this._rowsView.getTableElement();
     const $rowsFixedTable = this._rowsView.getTableElements().eq(1);
 
@@ -389,11 +402,17 @@ export class ResizingController extends modules.ViewController {
     });
   }
 
-  _needBestFit() {
+  /**
+   * @extended: adaptivity
+   */
+  protected _needBestFit() {
     return this.option('columnAutoWidth');
   }
 
-  _needStretch() {
+  /**
+   * @extended: adaptivity
+   */
+  protected _needStretch() {
     return this._columnsController.getVisibleColumns().some((c) => c.width === 'auto' && !c.command);
   }
 
@@ -404,7 +423,10 @@ export class ResizingController extends modules.ViewController {
     return freeWidth / columnCountWithoutWidth;
   }
 
-  _correctColumnWidths(resultWidths, visibleColumns) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _correctColumnWidths(resultWidths, visibleColumns) {
     const that = this;
     let i;
     let hasPercentWidth = false;
@@ -783,15 +805,6 @@ export class ResizingController extends modules.ViewController {
       default:
         super.optionChanged(args);
     }
-  }
-
-  init() {
-    this._prevContentMinHeight = null;
-    this._dataController = this.getController('data');
-    this._columnsController = this.getController('columns');
-    this._columnHeadersView = this.getView('columnHeadersView');
-    this._footerView = this.getView('footerView');
-    this._rowsView = this.getView('rowsView');
   }
 }
 

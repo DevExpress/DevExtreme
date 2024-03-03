@@ -634,7 +634,10 @@ export class ColumnsController extends modules.Controller {
     return this._bandColumnsCache;
   }
 
-  _isColumnVisible(column) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _isColumnVisible(column) {
     return column.visible && this.isParentColumnVisible(column.index);
   }
 
