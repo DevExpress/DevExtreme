@@ -50,35 +50,37 @@ interface EditorFactoryMixinType {
 const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController) as any;
 
 export class EditorFactory extends ViewControllerWithMixin {
-  _isFocusOverlay: any;
+  private _isFocusOverlay: any;
 
-  _updateFocusTimeoutID: any;
+  private _updateFocusTimeoutID: any;
 
-  _$focusedElement: any;
+  private _$focusedElement: any;
 
-  _focusTimeoutID: any;
+  private _focusTimeoutID: any;
 
-  focused: any;
+  public focused: any;
 
-  _$focusOverlay: any;
+  private _$focusOverlay: any;
 
-  _updateFocusHandler: any;
+  private _updateFocusHandler: any;
 
-  _editingController!: EditingController;
+  protected _editingController!: EditingController;
 
-  _rowsView!: RowsView;
+  protected _rowsView!: RowsView;
 
-  _columnsController!: ColumnsController;
+  protected _columnsController!: ColumnsController;
 
   protected _columnsResizerController!: ColumnsResizerViewController;
 
   private _subscribedContainerRoot!: Node;
 
-  init() {
+  public init() {
     this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
     this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
     this._columnsResizerController = this.getController('columnsResizer');
+    this._editingController = this.getController('editing');
+    this._rowsView = this.getView('rowsView');
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
 
@@ -88,7 +90,13 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._attachContainerEventHandlers();
   }
 
-  _getFocusedElement($dataGridElement) {
+  public dispose() {
+    clearTimeout(this._focusTimeoutID);
+    clearTimeout(this._updateFocusTimeoutID);
+    eventsEngine.off(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+  }
+
+  private _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
     const focusedElementSelector = [
       'td[tabindex]:focus',
@@ -117,7 +125,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     return '.dx-row > td';
   }
 
-  _updateFocusCore() {
+  private _updateFocusCore() {
     const $dataGridElement = this.component && this.component.$element();
 
     if ($dataGridElement) {
@@ -150,14 +158,14 @@ export class EditorFactory extends ViewControllerWithMixin {
    * @extended: adaptivity
    */
   protected _needHideBorder($element) {
-    const rowsViewElement = this.getView('rowsView').element();
+    const rowsViewElement = this._rowsView.element();
     const isRowsView = $element.closest(rowsViewElement).length > 0;
-    const isEditing = this.getController('editing').isEditing();
+    const isEditing = this._editingController.isEditing();
 
     return $element.hasClass(EDITOR_INLINE_BLOCK) || (isRowsView && !isEditing);
   }
 
-  _updateFocus(e) {
+  private _updateFocus(e) {
     const that = this;
     const isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
@@ -174,7 +182,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     });
   }
 
-  _updateFocusOverlaySize($element, position) {
+  private _updateFocusOverlaySize($element, position) {
     $element.hide();
 
     // @ts-expect-error
@@ -191,11 +199,14 @@ export class EditorFactory extends ViewControllerWithMixin {
     $element.show();
   }
 
-  callbackNames() {
+  protected callbackNames() {
     return ['focused'];
   }
 
-  focus($element?, isHideBorder?) {
+  /**
+   * @extended: validating
+   */
+  public focus($element?, isHideBorder?) {
     const that = this;
 
     if ($element === undefined) {
@@ -220,7 +231,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
   }
 
-  refocus() {
+  public refocus() {
     const $focus = this.focus();
     this.focus($focus);
   }
@@ -270,7 +281,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
   }
 
-  resize() {
+  public resize() {
     const $focusedElement = this._$focusedElement;
 
     if ($focusedElement) {
@@ -278,8 +289,11 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
   }
 
+  /**
+   * @extended: validating
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  loseFocus(skipValidator?) {
+  public loseFocus(skipValidator?) {
     this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
     this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
@@ -301,7 +315,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     return root;
   }
 
-  _attachContainerEventHandlers() {
+  private _attachContainerEventHandlers() {
     const that = this;
     const $container = that.component && that.component.$element();
 
@@ -313,12 +327,6 @@ export class EditorFactory extends ViewControllerWithMixin {
         }
       });
     }
-  }
-
-  dispose() {
-    clearTimeout(this._focusTimeoutID);
-    clearTimeout(this._updateFocusTimeoutID);
-    eventsEngine.off(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
   }
 }
 

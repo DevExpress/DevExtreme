@@ -1335,7 +1335,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     this._rowsView = this.getView('rowsView');
   }
 
-  loseFocus(skipValidator) {
+  public loseFocus(skipValidator) {
     if (!skipValidator) {
       this.getController('validating').setValidator(null);
     }
@@ -1404,7 +1404,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     return $focus;
   }
 
-  focus($element, isHideBorder) {
+  public focus($element, isHideBorder) {
     if (!arguments.length) return super.focus();
 
     this._hideValidationMessage();
