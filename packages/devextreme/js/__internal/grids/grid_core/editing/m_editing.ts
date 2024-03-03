@@ -854,6 +854,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _addInsertInfo(change, parentKey?) {
+    console.log('add insert info');
     let insertInfo;
     change.key = this.getChangeKeyValue(change);
     const { key } = change;
@@ -895,6 +896,8 @@ class EditingControllerImpl extends modules.ViewController {
    * @extended: TreeList's editing
    */
   protected _setInsertAfterOrBeforeKey(change, parentKey) {
+    // TODO getView
+    const rowsView = this.getView('rowsView');
     const dataController = this._dataController;
     const allItems = dataController.items(true);
     const newRowPosition: any = this._getNewRowPosition();
@@ -915,8 +918,8 @@ class EditingControllerImpl extends modules.ViewController {
         const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
         let visibleItemIndex = isViewportBottom
           // @ts-expect-error
-          ? this._rowsView?.getBottomVisibleItemIndex()
-          : this._rowsView?.getTopVisibleItemIndex();
+          ? rowsView?.getBottomVisibleItemIndex()
+          : rowsView?.getTopVisibleItemIndex();
         const row: any = dataController.getVisibleRows()[visibleItemIndex];
 
         if (row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
