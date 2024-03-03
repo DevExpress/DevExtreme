@@ -378,7 +378,7 @@ export class SelectionController extends modules.Controller {
     return itemIndexes;
   }
 
-  callbackNames() {
+  protected callbackNames() {
     return ['selectionChanged'];
   }
 

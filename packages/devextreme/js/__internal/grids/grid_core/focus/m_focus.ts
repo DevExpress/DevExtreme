@@ -511,7 +511,7 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class FocusEditorFact
 };
 
 const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
-  getSortDataSourceParameters(_, sortByKey?) {
+  public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
     const dataController = this.getController('data');

@@ -634,7 +634,7 @@ export class ExportController extends dataGridCore.ViewController {
     this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  callbackNames() {
+  protected callbackNames() {
     return ['selectionOnlyChanged'];
   }
 

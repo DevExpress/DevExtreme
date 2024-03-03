@@ -841,7 +841,7 @@ export class GridView extends modules.View {
 
   private _rootElement: any;
 
-  _endUpdateCore() {
+  protected _endUpdateCore() {
     if (this.component._requireResize) {
       this.component._requireResize = false;
       this._resizingController.resize();

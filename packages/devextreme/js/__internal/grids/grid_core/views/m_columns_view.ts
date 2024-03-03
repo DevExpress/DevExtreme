@@ -212,6 +212,15 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
   }
 
+  public dispose() {
+    if (hasWindow()) {
+      const window = getWindow();
+
+      this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
+      this._templateTimeouts?.clear();
+    }
+  }
+
   public optionChanged(args) {
     super.optionChanged(args);
 
@@ -1373,14 +1382,5 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   isDisposed() {
     return this.component?._disposed;
-  }
-
-  dispose() {
-    if (hasWindow()) {
-      const window = getWindow();
-
-      this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
-      this._templateTimeouts?.clear();
-    }
   }
 }

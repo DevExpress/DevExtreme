@@ -20,7 +20,7 @@ const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const ROW_LINES_CLASS = 'dx-row-lines';
 
 const columns = (Base: ModuleType<ColumnsController>) => class ColumnsMasterDetailExtender extends Base {
-  _getExpandColumnsCore() {
+  protected _getExpandColumnsCore() {
     const expandColumns = super._getExpandColumnsCore();
 
     if (this.option('masterDetail.enabled')) {

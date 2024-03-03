@@ -103,7 +103,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     that._virtualVisibleColumns = {};
   }
 
-  resetColumnsCache() {
+  public resetColumnsCache() {
     super.resetColumnsCache();
     this._virtualVisibleColumns = {};
   }
@@ -294,7 +294,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return visibleColumns;
   }
 
-  getColumnIndexOffset() {
+  public getColumnIndexOffset() {
     let offset = 0;
     if (this._beginPageIndex > 0) {
       const fixedColumns = this.getFixedColumns();

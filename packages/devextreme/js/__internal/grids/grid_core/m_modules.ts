@@ -50,11 +50,11 @@ export class ModuleItem {
     });
   }
 
-  _endUpdateCore() { }
+  protected _endUpdateCore() { }
 
-  init() { }
+  public init() { }
 
-  callbackNames(): string[] | undefined {
+  protected callbackNames(): string[] | undefined {
     return undefined;
   }
 
@@ -257,7 +257,7 @@ export class View extends ModuleItem {
     return this.component.isReady();
   }
 
-  _endUpdateCore() {
+  protected _endUpdateCore() {
     super._endUpdateCore();
 
     if (!this._isReady() && this._requireReady) {
