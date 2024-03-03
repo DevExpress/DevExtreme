@@ -12,6 +12,7 @@ import Popup from '@js/ui/popup/ui.popup';
 // @ts-expect-error
 import { current, isGeneric, isMaterial as isMaterialTheme } from '@js/ui/themes';
 import TreeView from '@js/ui/tree_view';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -63,6 +64,16 @@ const processItems = function (that: ColumnChooserView, chooserColumns) {
 };
 
 export class ColumnChooserController extends modules.ViewController {
+  private _rowsView!: RowsView;
+
+  private _columnChooserView!: ColumnChooserView;
+
+  public init(): void {
+    super.init();
+    this._rowsView = this.getView('rowsView');
+    this._columnChooserView = this.getView('columnChooserView');
+  }
+
   private renderShowColumnChooserButton($element) {
     const that = this;
     const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
@@ -79,7 +90,7 @@ export class ColumnChooserController extends modules.ViewController {
         that._createComponent($columnChooserButton, Button, {
           icon: COLUMN_CHOOSER_ICON_NAME,
           onClick() {
-            that.getView('columnChooserView').showColumnChooser();
+            this._columnChooserView.showColumnChooser();
           },
           hint: that.option('columnChooser.title'),
           // @ts-expect-error
@@ -94,13 +105,12 @@ export class ColumnChooserController extends modules.ViewController {
   }
 
   public getPosition() {
-    const rowsView = this.getView('rowsView');
     const position = this.option('columnChooser.position');
 
     return isDefined(position) ? position : {
       my: 'right bottom',
       at: 'right bottom',
-      of: rowsView && rowsView.element(),
+      of: this._rowsView && this._rowsView.element(),
       collision: 'fit',
       offset: '-2 -2',
       boundaryOffset: '2 2',
@@ -147,6 +157,7 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
     const $element = that.element().addClass(columnChooserClass);
     const columnChooserOptions = that.option('columnChooser')!;
+    const popupPosition = this._columnChooserController.getPosition();
 
     const themeName = current();
     const isGenericTheme = isGeneric(themeName);
@@ -162,7 +173,7 @@ export class ColumnChooserView extends ColumnsView {
       toolbarItems: [
         { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
       ],
-      position: that.getController('columnChooser').getPosition(),
+      position: popupPosition,
       width: columnChooserOptions.width,
       height: columnChooserOptions.height,
       rtlEnabled: that.option('rtlEnabled'),
@@ -530,7 +541,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
 
     if (columnChooserEnabled) {
       const onClickHandler = function () {
-        that.component.getView('columnChooserView').showColumnChooser();
+        this._columnChooserView.showColumnChooser();
       };
       const onInitialized = function (e) {
         $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
@@ -589,10 +600,8 @@ const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserCol
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnChooserColumnHeadersExtender extends Base {
   protected allowDragging(column) {
-    const columnChooserView = this.component.getView('columnChooserView');
-
-    const isDragMode = !columnChooserView.isSelectMode();
-    const isColumnChooserVisible = columnChooserView.isColumnChooserVisible();
+    const isDragMode = !this._columnChooserView.isSelectMode();
+    const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();
 
     return (isDragMode && isColumnChooserVisible && column.allowHiding) || super.allowDragging(column);
   }

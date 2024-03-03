@@ -28,6 +28,7 @@ import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -177,6 +178,60 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   _dataController!: DataController;
 
   _adaptiveColumnsController!: AdaptiveColumnsController;
+
+  protected _columnChooserController!: ColumnChooserController;
+
+  protected _columnChooserView!: ColumnChooserView;
+
+  public init() {
+    this._scrollLeft = -1;
+    this._columnsController = this.getController('columns');
+    this._dataController = this.getController('data');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this._columnChooserController = this.getController('columnChooser');
+    this._columnChooserView = this.getView('columnChooserView');
+    this._delayedTemplates = [];
+    this._templateDeferreds = new Set();
+    this._templatesCache = {};
+    this._templateTimeouts = new Set();
+    this.createAction('onCellClick');
+    this.createAction('onRowClick');
+    this.createAction('onCellDblClick');
+    this.createAction('onRowDblClick');
+    this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+    this.createAction('onRowPrepared', {
+      excludeValidators: ['disabled', 'readOnly'],
+      category: 'rendering',
+      afterExecute: (e) => {
+        this._afterRowPrepared(e);
+      },
+    });
+
+    this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
+    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
+  }
+
+  public optionChanged(args) {
+    super.optionChanged(args);
+
+    // eslint-disable-next-line default-case
+    switch (args.name) {
+      case 'cellHintEnabled':
+      case 'onCellPrepared':
+      case 'onRowPrepared':
+      case 'onCellHoverChanged':
+        this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'keyboardNavigation':
+        if (args.fullName === 'keyboardNavigation.enabled') {
+          this._invalidate(true, true);
+        }
+        args.handled = true;
+        break;
+    }
+  }
 
   _createScrollableOptions() {
     const that = this;
@@ -882,54 +937,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   setTableElement(tableElement, isFixedTableRendering?) {
     this._tableElement = tableElement;
-  }
-
-  public optionChanged(args) {
-    super.optionChanged(args);
-
-    // eslint-disable-next-line default-case
-    switch (args.name) {
-      case 'cellHintEnabled':
-      case 'onCellPrepared':
-      case 'onRowPrepared':
-      case 'onCellHoverChanged':
-        this._invalidate(true, true);
-        args.handled = true;
-        break;
-      case 'keyboardNavigation':
-        if (args.fullName === 'keyboardNavigation.enabled') {
-          this._invalidate(true, true);
-        }
-        args.handled = true;
-        break;
-    }
-  }
-
-  init() {
-    this._scrollLeft = -1;
-    this._columnsController = this.getController('columns');
-    this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
-    this._delayedTemplates = [];
-    this._templateDeferreds = new Set();
-    this._templatesCache = {};
-    this._templateTimeouts = new Set();
-    this.createAction('onCellClick');
-    this.createAction('onRowClick');
-    this.createAction('onCellDblClick');
-    this.createAction('onRowDblClick');
-    this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
-    this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-    this.createAction('onRowPrepared', {
-      excludeValidators: ['disabled', 'readOnly'],
-      category: 'rendering',
-      afterExecute: (e) => {
-        this._afterRowPrepared(e);
-      },
-    });
-
-    this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
-    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
   }
 
   _afterRowPrepared(e?) {
