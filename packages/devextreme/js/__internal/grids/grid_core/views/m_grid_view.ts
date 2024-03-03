@@ -723,7 +723,10 @@ export class ResizingController extends modules.ViewController {
     } else { this._setScrollerSpacingCore(); }
   }
 
-  _setAriaOwns() {
+  /**
+   * @extended: column_fixing
+   */
+  protected _setAriaOwns() {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 

@@ -310,7 +310,7 @@ export class ColumnHeadersView extends ColumnsView {
     super._renderRow($table, options);
   }
 
-  _createCell(options) {
+  protected _createCell(options) {
     const { column } = options;
     // @ts-expect-error
     const $cellElement = super._createCell.apply(this, arguments);
@@ -465,7 +465,10 @@ export class ColumnHeadersView extends ColumnsView {
     return column ? this._columnsController.getVisibleIndex(column.index, rowIndex) : -1;
   }
 
-  getColumnWidths() {
+  /**
+   * @extended: column_fixing
+   */
+  public getColumnWidths() {
     const $columnElements = this.getColumnElements();
 
     if ($columnElements && $columnElements.length) {
@@ -534,7 +537,10 @@ export class ColumnHeadersView extends ColumnsView {
     return this.getElementHeight();
   }
 
-  getContextMenuItems(options) {
+  /**
+   * @extended: column_fixing
+   */
+  public getContextMenuItems(options) {
     const that = this;
     const { column } = options;
 

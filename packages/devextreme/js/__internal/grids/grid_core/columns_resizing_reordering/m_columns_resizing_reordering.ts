@@ -696,7 +696,10 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return true;
   }
 
-  _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _getTargetPoint(pointsByColumns, currentX, deltaX) {
     if (pointsByColumns) {
       for (let i = 0; i < pointsByColumns.length; i++) {
         if (pointsByColumns[i].x === pointsByColumns[0].x && pointsByColumns[i + 1] && pointsByColumns[i].x === pointsByColumns[i + 1].x) {
@@ -854,7 +857,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
-  _generatePointsByColumns() {
+  /**
+   * @extended: column_fixing
+   * @protected
+   */
+  protected _generatePointsByColumns() {
     const that = this;
     const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];
     const cells = that._columnHeadersView.getColumnElements();
@@ -1229,7 +1236,10 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   private isCustomGroupColumnPosition?: boolean;
 
-  _generatePointsByColumns(options) {
+  /**
+   * @extended: column_fixing
+   */
+  public _generatePointsByColumns(options) {
     const that = this;
 
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
@@ -1255,7 +1265,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, column_fixing
    * Function that is used to filter column points, it's called for each point
    * @param point Point that we are checking
    * @param columns All columns in the given location

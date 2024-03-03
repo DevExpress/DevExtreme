@@ -66,12 +66,9 @@ const processItems = function (that: ColumnChooserView, chooserColumns) {
 export class ColumnChooserController extends modules.ViewController {
   private _rowsView!: RowsView;
 
-  private _columnChooserView!: ColumnChooserView;
-
   public init(): void {
     super.init();
     this._rowsView = this.getView('rowsView');
-    this._columnChooserView = this.getView('columnChooserView');
   }
 
   private renderShowColumnChooserButton($element) {
@@ -541,7 +538,8 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
 
     if (columnChooserEnabled) {
       const onClickHandler = () => {
-        this._columnChooserView.showColumnChooser();
+        // TODO getView
+        this.getView('columnChooserView').showColumnChooser();
       };
       const onInitialized = function (e) {
         $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
