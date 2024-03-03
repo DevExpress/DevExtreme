@@ -23,7 +23,10 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
-  _getToolbarItems(): any[] {
+  /**
+   * @extended: column_chooser
+   */
+  protected _getToolbarItems(): any[] {
     return [];
   }
 
@@ -125,7 +128,7 @@ export class HeaderPanel extends ColumnsView {
     }
   }
 
-  _columnOptionChanged() {
+  protected _columnOptionChanged() {
 
   }
 
@@ -188,7 +191,7 @@ export class HeaderPanel extends ColumnsView {
     return this.getElementHeight();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'onToolbarPreparing') {
       this._invalidate();
       args.handled = true;
@@ -225,7 +228,10 @@ export class HeaderPanel extends ColumnsView {
     super.optionChanged(args);
   }
 
-  isVisible() {
+  /**
+   * @extended: column_chooser
+   */
+  public isVisible() {
     return !!(this._toolbarOptions && this._toolbarOptions.visible);
   }
 

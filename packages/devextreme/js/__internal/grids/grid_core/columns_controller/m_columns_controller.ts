@@ -219,7 +219,7 @@ export class ColumnsController extends modules.Controller {
     return column;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     let needUpdateRequireResize;
 
     switch (args.name) {
@@ -830,7 +830,10 @@ export class ColumnsController extends modules.Controller {
     return sortColumns(columnChooserColumns, sortOrder);
   }
 
-  allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  /**
+   * @extended: column_chooser
+   */
+  public allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
     const that = this;
     const columnIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation);
     const sourceColumn = that._columns[columnIndex];

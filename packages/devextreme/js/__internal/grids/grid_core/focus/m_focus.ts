@@ -33,7 +33,7 @@ export class FocusController extends core.ViewController {
     this.component._optionsByReference.focusedRowKey = true;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const { name, value, previousValue } = args;
 
     switch (name) {

@@ -411,7 +411,7 @@ export class HeaderFilterView extends Modules.View {
     return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
   }
 
-  _renderCore() {
+  protected _renderCore() {
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }

@@ -79,7 +79,7 @@ export class ContextMenuController extends modules.ViewController {
 }
 
 export class ContextMenuView extends modules.View {
-  _renderCore() {
+  protected _renderCore() {
     const that = this;
     const $element = that.element().addClass(CONTEXT_MENU);
 

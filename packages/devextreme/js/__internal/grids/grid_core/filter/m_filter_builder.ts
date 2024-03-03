@@ -13,7 +13,7 @@ export class FilterBuilderView extends modules.View {
 
   private _filterBuilder: any;
 
-  _renderCore() {
+  protected _renderCore() {
     this._updatePopupOptions();
   }
 
@@ -103,7 +103,7 @@ export class FilterBuilderView extends modules.View {
     ];
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'filterBuilder':
       case 'filterBuilderPopup':

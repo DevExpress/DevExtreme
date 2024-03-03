@@ -63,7 +63,7 @@ export class TrackerView extends modules.View {
 
   private _tablePositionController!: TablePositionViewController;
 
-  _renderCore() {
+  protected _renderCore() {
     const deferred = super._renderCore();
     this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
     this.hide();
@@ -89,7 +89,7 @@ export class TrackerView extends modules.View {
     this._tablePositionController.positionChanged.add(that._positionChanged);
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'allowColumnResizing') {
       this._unsubscribeFromCallback();
 
@@ -108,7 +108,7 @@ export class TrackerView extends modules.View {
     this._subscribeToCallback();
   }
 
-  isVisible() {
+  public isVisible() {
     return allowResizing(this);
   }
 
@@ -135,7 +135,7 @@ export class SeparatorView extends modules.View {
 
   _renderSeparator() { }
 
-  _renderCore(options?) {
+  protected _renderCore(options?) {
     const deferred = super._renderCore(options);
     this._isShown = true;
     this._renderSeparator();
@@ -219,11 +219,11 @@ export class ColumnsSeparatorView extends SeparatorView {
     }
   }
 
-  isVisible() {
+  public isVisible() {
     return this.option('showColumnHeaders') && (allowReordering(this) || allowResizing(this));
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'allowColumnResizing') {
       if (args.value) {
         this._init();
@@ -339,7 +339,7 @@ export class BlockSeparatorView extends SeparatorView {
     super.hide();
   }
 
-  isVisible() {
+  public isVisible() {
     const groupPanelOptions: any = this.option('groupPanel');
     const columnChooserOptions = this.option('columnChooser');
 
@@ -421,7 +421,7 @@ export class DraggingHeaderView extends modules.View {
     return result;
   }
 
-  _renderCore() {
+  protected _renderCore() {
     this.element()
       .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(CELL_CONTENT_CLASS)} ${WIDGET_CLASS}`)
       .hide();
@@ -455,7 +455,7 @@ export class DraggingHeaderView extends modules.View {
     element && element.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
   }
 
-  isVisible() {
+  public isVisible() {
     const columnsController = this.getController('columns');
     const commonColumnSettings = columnsController.getCommonSettings();
 
@@ -1105,7 +1105,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     });
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     super.optionChanged(args);
 
     if (args.name === 'allowColumnResizing') {

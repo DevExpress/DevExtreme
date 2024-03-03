@@ -501,7 +501,7 @@ class EditingControllerImpl extends modules.ViewController {
     super._silentOption(name, value);
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'editing') {
       const { fullName } = args;
 

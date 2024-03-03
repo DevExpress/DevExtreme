@@ -382,7 +382,7 @@ export class SelectionController extends modules.Controller {
     return ['selectionChanged'];
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     super.optionChanged(args);
 
     // eslint-disable-next-line default-case

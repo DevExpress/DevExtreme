@@ -960,7 +960,7 @@ export class RowsView extends ColumnsView {
     return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
   }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { optionNames } = e;
 
     if (e.changeTypes.grouping) return;
@@ -1071,7 +1071,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _resizeCore() {
+  protected _resizeCore() {
     const that = this;
 
     that._fireColumnResizedCallbacks();
@@ -1244,7 +1244,7 @@ export class RowsView extends ColumnsView {
     scrollable && scrollable.scrollToElement($element, offset);
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
 
     super.optionChanged(args);

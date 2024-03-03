@@ -135,7 +135,7 @@ export class ModuleItem {
     return this.component.off.apply(this.component, arguments);
   }
 
-  optionChanged(args: OptionChanged) {
+  public optionChanged(args: OptionChanged) {
     if (args.name in this._actions) {
       this.createAction(args.name, this._actionConfigs[args.name]);
       args.handled = true;
@@ -277,9 +277,9 @@ export class View extends ModuleItem {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderCore(options?): any { }
+  protected _renderCore(options?): any { }
 
-  _resizeCore() { }
+  protected _resizeCore() { }
 
   _parentElement() {
     return this._$parent;
@@ -301,7 +301,7 @@ export class View extends ModuleItem {
     return offsetHeight + marginTop + marginBottom;
   }
 
-  isVisible() {
+  public isVisible() {
     return true;
   }
 

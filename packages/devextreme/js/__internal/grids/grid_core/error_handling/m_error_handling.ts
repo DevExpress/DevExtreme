@@ -139,7 +139,7 @@ export class ErrorHandlingController extends modules.ViewController {
     $row && $row.hasClass(ERROR_ROW_CLASS) && $row.remove();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'errorRowEnabled':
         args.handled = true;

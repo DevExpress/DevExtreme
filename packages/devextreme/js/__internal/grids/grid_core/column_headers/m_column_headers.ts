@@ -339,7 +339,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { changeTypes } = e;
     const { optionNames } = e;
 
@@ -476,7 +476,10 @@ export class ColumnHeadersView extends ColumnsView {
     return super.getColumnWidths.apply(this, arguments);
   }
 
-  allowDragging(column) {
+  /**
+   * @extended: column_chooser
+   */
+  protected allowDragging(column) {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 
@@ -498,7 +501,7 @@ export class ColumnHeadersView extends ColumnsView {
     return null;
   }
 
-  getName() {
+  public getName() {
     return 'headers';
   }
 
@@ -512,7 +515,7 @@ export class ColumnHeadersView extends ColumnsView {
     return this.option('showColumnHeaders')!;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
 
     switch (args.name) {

@@ -147,7 +147,7 @@ export class StateStoringController extends modules.ViewController {
     }, that.option('stateStoring.savingTimeout'));
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
 
     switch (args.name) {

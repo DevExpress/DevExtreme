@@ -378,7 +378,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   // #endregion Initialization
 
   // #region Options
-  optionChanged(args: OptionChanged) {
+  public optionChanged(args: OptionChanged) {
     switch (args.name) {
       case 'keyboardNavigation':
         if (args.fullName === 'keyboardNavigation.enabled') {

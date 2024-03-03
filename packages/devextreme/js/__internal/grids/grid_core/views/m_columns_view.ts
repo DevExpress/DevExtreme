@@ -608,7 +608,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     appendTemplate.render({ content: $row, container: $table });
   }
 
-  _resizeCore() {
+  protected _resizeCore() {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
@@ -617,7 +617,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _renderCore(e?) {
+  protected _renderCore(e?) {
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {
@@ -849,7 +849,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this.executeAction('onRowPrepared', options);
   }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { optionNames } = e;
 
     if (gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
@@ -884,7 +884,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._tableElement = tableElement;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     super.optionChanged(args);
 
     // eslint-disable-next-line default-case
@@ -1238,9 +1238,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIdentifier;
   }
 
-  getColumnElements() {}
+  public getColumnElements() {}
 
-  getColumns(rowIndex?) {
+  public getColumns(rowIndex?) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
@@ -1294,9 +1294,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._getRowElements().index($row);
   }
 
-  getBoundingRect() { }
+  protected getBoundingRect() { }
 
-  getName() { }
+  public getName() { }
 
   setScrollerSpacing(width) {
     const that = this;

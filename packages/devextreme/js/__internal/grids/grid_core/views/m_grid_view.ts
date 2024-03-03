@@ -792,7 +792,7 @@ export class ResizingController extends modules.ViewController {
     this._devicePixelRatio = getWindow().devicePixelRatio;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'width':
       case 'height':
@@ -859,7 +859,7 @@ export class GridView extends modules.View {
     return this._groupElement;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
 
     if (isDefined(that._groupElement) && args.name === 'showBorders') {

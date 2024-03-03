@@ -32,7 +32,7 @@ export class FilterPanelView extends modules.View {
 
   private readonly _filterValueBuffer: any;
 
-  isVisible() {
+  public isVisible() {
     return this.option('filterPanel.visible') && this.getController('data').dataSource();
   }
 
@@ -42,7 +42,7 @@ export class FilterPanelView extends modules.View {
     this._columnsController = this.getController('columns');
   }
 
-  _renderCore() {
+  protected _renderCore() {
     const $element = this.element();
 
     $element.empty();
@@ -176,7 +176,7 @@ export class FilterPanelView extends modules.View {
     }
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'filterValue':
         this._invalidate();

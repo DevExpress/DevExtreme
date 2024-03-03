@@ -42,7 +42,7 @@ export class PagerView extends modules.View {
     });
   }
 
-  _renderCore() {
+  protected _renderCore() {
     const that = this;
     const $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS));
     const pagerOptions = that.option('pager') ?? {};
@@ -117,7 +117,7 @@ export class PagerView extends modules.View {
     return that._pageSizes;
   }
 
-  isVisible() {
+  public isVisible() {
     const dataController = this.getController('data');
     const pagerOptions = this.option('pager');
     let pagerVisible = pagerOptions && pagerOptions.visible;
@@ -138,7 +138,7 @@ export class PagerView extends modules.View {
     return this.getElementHeight();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const { name } = args;
     const isPager = name === 'pager';
     const isPaging = name === 'paging';
