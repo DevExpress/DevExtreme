@@ -316,7 +316,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return super.reload.apply(this, arguments as any);
   }
 
-  refresh(options, operationTypes) {
+  public refresh(options, operationTypes) {
     if (this.option(LEGACY_SCROLLING_MODE) !== false) {
       const { storeLoadOptions } = options;
       const dataSource = this._dataSource;
@@ -684,7 +684,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     };
   }
 
-  _updateItemsCore(change) {
+  protected _updateItemsCore(change) {
     const delta = this.getRowIndexDelta();
 
     super._updateItemsCore.apply(this, arguments as any);
@@ -788,7 +788,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return resultItems;
   }
 
-  _afterProcessItems(items) {
+  protected _afterProcessItems(items) {
     this._itemCount = items.filter((item) => isItemCountableByDataSource(item, this._dataSource)).length;
     if (isDefined(this._loadViewportParams)) {
       this._updateLoadViewportParams();
@@ -814,7 +814,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return super._afterProcessItems.apply(this, arguments as any);
   }
 
-  _applyChange(change) {
+  protected _applyChange(change) {
     const that = this;
     const { items } = change;
     const { changeType } = change;
@@ -850,7 +850,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return allItems ? this._allItems || this._items : this._visibleItems || this._items;
   }
 
-  getRowIndexDelta() {
+  protected getRowIndexDelta() {
     let delta = 0;
 
     if (this.option(LEGACY_SCROLLING_MODE)) {
@@ -864,7 +864,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return delta < 0 ? 0 : delta;
   }
 
-  getRowIndexOffset(byLoadedRows?, needGroupOffset?) {
+  public getRowIndexOffset(byLoadedRows?, needGroupOffset?) {
     let offset = 0;
     const dataSource = this.dataSource();
     const rowsScrollController = this._rowsScrollController;
@@ -898,7 +898,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return offset;
   }
 
-  getDataIndex() {
+  protected getDataIndex() {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       return this.getRowIndexOffset(true, true);
     }
@@ -1178,7 +1178,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
   }
 
-  refresh(options) {
+  public refresh(options) {
     const dataSource = this._dataSource;
 
     if (dataSource && options && options.load && isAppendMode(this)) {
@@ -1227,7 +1227,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return super.pageIndex.apply(this, arguments as any);
   }
 
-  _fireChanged(e) {
+  protected _fireChanged(e) {
     super._fireChanged.apply(this, arguments as any);
 
     const { operationTypes } = e;
@@ -1240,7 +1240,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
   }
 
-  _getPagingOptionValue(optionName) {
+  protected _getPagingOptionValue(optionName) {
     let result = super._getPagingOptionValue.apply(this, arguments as any);
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
@@ -1250,11 +1250,11 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return result;
   }
 
-  isEmpty() {
+  public isEmpty() {
     return this.option(LEGACY_SCROLLING_MODE) === false ? !this.items(true).length : super.isEmpty.apply(this, arguments as any);
   }
 
-  isLastPageLoaded() {
+  public isLastPageLoaded() {
     let result = false;
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {

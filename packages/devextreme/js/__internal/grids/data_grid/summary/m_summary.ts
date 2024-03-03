@@ -741,7 +741,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return sortByGroups;
   }
 
-  _createDataSourceAdapterCore(dataSource, remoteOperations) {
+  protected _createDataSourceAdapterCore(dataSource, remoteOperations) {
     const that = this;
     const dataSourceAdapter = super._createDataSourceAdapterCore(dataSource, remoteOperations);
 

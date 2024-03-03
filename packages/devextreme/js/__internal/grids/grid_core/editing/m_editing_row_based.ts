@@ -108,7 +108,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
 const data = (Base: ModuleType<DataController>) => class DataEditingRowBasedExtender extends Base {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
+  protected _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
     const editingController = this.getController('editing');
 
     if (editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {

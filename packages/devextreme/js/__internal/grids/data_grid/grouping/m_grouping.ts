@@ -208,7 +208,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     that.createAction('onRowCollapsed');
   }
 
-  _beforeProcessItems(items) {
+  protected _beforeProcessItems(items) {
     const groupColumns = this._columnsController.getGroupColumns();
 
     items = super._beforeProcessItems(items);
@@ -218,7 +218,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return items;
   }
 
-  _processItem(item, options) {
+  protected _processItem(item, options) {
     if (isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0) {
       item = this._processGroupItem(item, options);
       options.dataIndex = 0;

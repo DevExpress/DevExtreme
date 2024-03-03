@@ -2375,11 +2375,6 @@ export type EditingController =
   & IFormBasedEditingControllerExtender;
 
 export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerEditingExtender extends Base {
-  init() {
-    this._editingController = this.getController('editing');
-    super.init();
-  }
-
   reload(full, repaintChangesOnly) {
     !repaintChangesOnly && this._editingController.refresh();
 
@@ -2407,17 +2402,17 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     this._updateEditRow(this.items(true));
   }
 
-  _applyChangeUpdate(change) {
+  protected _applyChangeUpdate(change) {
     this._updateEditRow(change.items);
     super._applyChangeUpdate(change);
   }
 
-  _applyChangesOnly(change) {
+  protected _applyChangesOnly(change) {
     this._updateEditRow(change.items);
     super._applyChangesOnly(change);
   }
 
-  _processItems(items, change) {
+  protected _processItems(items, change) {
     items = this._editingController.processItems(items, change);
     return super._processItems(items, change);
   }
@@ -2427,7 +2422,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     return super._processDataItem(dataItem, options);
   }
 
-  _processItem(item, options) {
+  protected _processItem(item, options) {
     item = super._processItem(item, options);
 
     if (item.isNewRow) {
@@ -2462,13 +2457,13 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     return super._isCellChanged.apply(this, arguments as any);
   }
 
-  needToRefreshOnDataSourceChange(args) {
+  protected needToRefreshOnDataSourceChange(args) {
     const editingController = this.getController('editing');
     const isParasiteChange = Array.isArray(args.value) && args.value === args.previousValue && editingController.isSaving();
     return !isParasiteChange;
   }
 
-  _handleDataSourceChange(args) {
+  protected _handleDataSourceChange(args) {
     const result = super._handleDataSourceChange(args);
     const changes: any = this.option('editing.changes');
     const dataSource = args.value;

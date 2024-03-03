@@ -59,7 +59,7 @@ export class ModuleItem {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  callbackFlags(name): any { }
+  protected callbackFlags(name): any { }
 
   publicMethods(): string[] {
     return [];

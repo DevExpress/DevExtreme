@@ -290,7 +290,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     return null;
   }
 
-  clearFilter(filterName) {
+  protected clearFilter(filterName) {
     this.component.beginUpdate();
     if (arguments.length > 0) {
       if (filterName === 'filterValue') {

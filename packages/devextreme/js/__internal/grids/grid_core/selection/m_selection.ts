@@ -569,7 +569,7 @@ export class SelectionController extends modules.Controller {
 }
 
 export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerSelectionExtender extends Base {
-  init() {
+  public init() {
     const selectionController = this.getController('selection');
     const isDeferredMode = this.option('selection.deferred');
 
@@ -591,7 +591,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     });
   }
 
-  _processDataItem(item, options) {
+  protected _processDataItem(item, options) {
     const that = this;
     const selectionController = that.getController('selection');
     const hasSelectColumn = selectionController.isSelectColumnVisible();
@@ -628,7 +628,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
   }
 
   // eslint-disable-next-line
-  _handleDataChanged(e?) {
+  protected _handleDataChanged(e?) {
     const hasLoadOperation = this.hasLoadOperation();
     super._handleDataChanged.apply(this, arguments as any);
 
