@@ -98,6 +98,8 @@ class EditingControllerImpl extends modules.ViewController {
 
   _adaptiveColumnsController!: Controllers['adaptiveColumns'];
 
+  _validatingController!: Controllers['validating'];
+
   _rowsView!: Views['rowsView'];
 
   _lastOperation: any;
@@ -138,6 +140,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this._validatingController = this.getController('validating');
     this._rowsView = this.getView('rowsView');
     this._lastOperation = null;
     // this contains the value of 'editing.changes' option, to check if it has changed in onOptionChanged

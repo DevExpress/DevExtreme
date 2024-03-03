@@ -136,6 +136,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   _editingController!: Controllers['editing'];
 
+  _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+
   _rowsScrollController?: VirtualScrollController | null;
 
   _columnsChangedHandler!: (e: any) => any;
@@ -152,38 +154,38 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   _dataChangedHandler!: (e: HandleDataChangedArguments) => any;
 
-  init() {
-    const that = this;
-    that._items = [];
-    that._cachedProcessedItems = null;
-    that._columnsController = this.getController('columns');
+  public init() {
+    this._items = [];
+    this._cachedProcessedItems = null;
+    this._columnsController = this.getController('columns');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
 
-    that._isPaging = false;
-    that._currentOperationTypes = null;
-    that._dataChangedHandler = (e) => {
-      that._currentOperationTypes = this._dataSource.operationTypes();
-      that._handleDataChanged(e);
-      that._currentOperationTypes = null;
+    this._isPaging = false;
+    this._currentOperationTypes = null;
+    this._dataChangedHandler = (e) => {
+      this._currentOperationTypes = this._dataSource.operationTypes();
+      this._handleDataChanged(e);
+      this._currentOperationTypes = null;
     };
-    that._columnsChangedHandler = that._handleColumnsChanged.bind(that);
-    that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
-    that._loadErrorHandler = that._handleLoadError.bind(that);
-    that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
-    that._changingHandler = that._handleChanging.bind(that);
-    that._dataPushedHandler = that._handleDataPushed.bind(that);
+    this._columnsChangedHandler = this._handleColumnsChanged.bind(this);
+    this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
+    this._loadErrorHandler = this._handleLoadError.bind(this);
+    this._customizeStoreLoadOptionsHandler = this._handleCustomizeStoreLoadOptions.bind(this);
+    this._changingHandler = this._handleChanging.bind(this);
+    this._dataPushedHandler = this._handleDataPushed.bind(this);
 
-    that._columnsController.columnsChanged.add(that._columnsChangedHandler);
+    this._columnsController.columnsChanged.add(this._columnsChangedHandler);
 
-    that._isLoading = false;
-    that._isCustomLoading = false;
-    that._repaintChangesOnly = undefined;
-    that._changes = [];
+    this._isLoading = false;
+    this._isCustomLoading = false;
+    this._repaintChangesOnly = undefined;
+    this._changes = [];
 
-    that.createAction('onDataErrorOccurred');
+    this.createAction('onDataErrorOccurred');
 
-    that.dataErrorOccurred.add((error) => that.executeAction('onDataErrorOccurred', { error }));
+    this.dataErrorOccurred.add((error) => this.executeAction('onDataErrorOccurred', { error }));
 
-    that._refreshDataSource();
+    this._refreshDataSource();
     this.postCtor();
   }
 

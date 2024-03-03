@@ -75,6 +75,7 @@ function getDataCellElements($row) {
 function adaptiveCellTemplate(container, options) {
   let $adaptiveColumnButton;
   const $container = $(container);
+  // TODO getController
   const adaptiveColumnsController = options.component.getController('adaptiveColumns');
 
   if (options.rowType === 'data') {
@@ -97,6 +98,8 @@ function focusCellHandler(e) {
 }
 
 export class AdaptiveColumnsController extends modules.ViewController {
+  private _keyboardNavigationController!: KeyboardNavigationController;
+
   private _columnsController!: ColumnsController;
 
   private _dataController!: DataController;
@@ -114,12 +117,13 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _hidingColumnsQueue: any;
 
   public init() {
-    const that = this;
-    that._columnsController = that.getController('columns');
-    that._dataController = that.getController('data');
-    that._rowsView = that.getView('rowsView');
+    this._columnsController = this.getController('columns');
+    this._dataController = this.getController('data');
+    this._editingController = this.getController('editing');
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this._rowsView = this.getView('rowsView');
 
-    that._columnsController.addCommandColumn({
+    this._columnsController.addCommandColumn({
       type: ADAPTIVE_COLUMN_NAME,
       command: ADAPTIVE_COLUMN_NAME,
       visible: true,
@@ -131,14 +135,13 @@ export class AdaptiveColumnsController extends modules.ViewController {
       fixedPosition: 'right',
     });
 
-    that._columnsController.columnsChanged.add(() => {
-      const isAdaptiveVisible = !!that.updateHidingQueue(that._columnsController.getColumns()).length;
-      that._columnsController.columnOption('command:adaptive', 'adaptiveHidden', !isAdaptiveVisible, true);
+    this._columnsController.columnsChanged.add(() => {
+      const isAdaptiveVisible = !!this.updateHidingQueue(this._columnsController.getColumns()).length;
+      this._columnsController.columnOption('command:adaptive', 'adaptiveHidden', !isAdaptiveVisible, true);
     });
-    that._editingController = that.getController('editing');
-    that._hidingColumnsQueue = [];
-    that._hiddenColumns = [];
-    that.createAction('onAdaptiveDetailRowPreparing');
+    this._hidingColumnsQueue = [];
+    this._hiddenColumns = [];
+    this.createAction('onAdaptiveDetailRowPreparing');
 
     super.init();
   }
@@ -184,7 +187,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
     const rowsView = that._rowsView;
 
-    if (column.allowEditing && that.getController('keyboardNavigation').isKeyboardEnabled()) {
+    if (column.allowEditing && this._keyboardNavigationController.isKeyboardEnabled()) {
       $container.attr('tabIndex', that.option('tabIndex'));
 
       if (isCellOrBatchEditMode) {
@@ -228,7 +231,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _getTemplate(item, cellOptions, updateForm?) {
     const that = this;
     const { column } = item;
-    const editingController = this.getController('editing');
+    const editingController = this._editingController;
 
     return function (options, container) {
       const $container = $(container);
@@ -482,6 +485,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public _showHiddenColumns() {
     for (let i = 0; i < COLUMN_VIEWS.length; i++) {
+      // TODO getView
       // @ts-expect-error
       const view = this.getView(COLUMN_VIEWS[i]);
       if (view && view.isVisible() && view.element()) {
@@ -508,6 +512,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _hideVisibleColumn({ isCommandColumn, visibleIndex }: any) {
     const that = this;
     COLUMN_VIEWS.forEach((viewName) => {
+      // TODO: getView
       // @ts-expect-error
       const view = that.getView(viewName);
       view && that._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
@@ -680,7 +685,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   public toggleExpandAdaptiveDetailRow(key?, alwaysExpanded?) {
     if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
       // @ts-expect-error
-      this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
+      this._dataController.toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   }
 
@@ -931,7 +936,7 @@ const rowsView = (
 
   private getContextMenuItems(options) {
     if (options.row && options.row.rowType === 'detailAdaptive') {
-      const view = this.component.getView('columnHeadersView');
+      const view = this._columnHeadersView;
       // @ts-expect-error
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
       // @ts-expect-error
@@ -1076,7 +1081,7 @@ const editing = (
     // @ts-expect-error
     const deferred = new Deferred();
     if (this._isRowEditMode() && this._adaptiveColumnsController.hasHiddenColumns()) {
-      when(this.getController('validating').validate(true)).done((isValid) => {
+      when(this._validatingController.validate(true)).done((isValid) => {
         if (isValid) {
           this._cancelEditAdaptiveDetailRow();
         }
@@ -1179,7 +1184,7 @@ const data = (
     // @ts-expect-error
     const rowIndices = super._getRowIndicesForExpand.apply(this, arguments);
 
-    if (this.getController('adaptiveColumns').isAdaptiveDetailRowExpanded(key)) {
+    if (this._adaptiveColumnsController.isAdaptiveDetailRowExpanded(key)) {
       const lastRowIndex = rowIndices[rowIndices.length - 1];
       rowIndices.push(lastRowIndex + 1);
     }
@@ -1224,10 +1229,8 @@ const data = (
       rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta],
     });
 
-    const adaptiveColumnsController = this.getController('adaptiveColumns');
-
-    adaptiveColumnsController.updateCommandAdaptiveAriaLabel(key, COLLAPSE_ARIA_NAME);
-    adaptiveColumnsController.updateCommandAdaptiveAriaLabel(oldKey, EXPAND_ARIA_NAME);
+    this._adaptiveColumnsController.updateCommandAdaptiveAriaLabel(key, COLLAPSE_ARIA_NAME);
+    this._adaptiveColumnsController.updateCommandAdaptiveAriaLabel(oldKey, EXPAND_ARIA_NAME);
   }
 };
 

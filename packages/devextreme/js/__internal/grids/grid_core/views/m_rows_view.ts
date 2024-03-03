@@ -17,6 +17,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { removeEvent } from '@js/events/remove';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
@@ -85,6 +86,8 @@ export class RowsView extends ColumnsView {
 
   _editorFactoryController!: EditorFactory;
 
+  _columnHeadersView!: ColumnHeadersView;
+
   _hasHeight: boolean | undefined;
 
   _scrollTop: any;
@@ -104,6 +107,34 @@ export class RowsView extends ColumnsView {
   _lastColumnWidths: any;
 
   _hideLoadingTimeoutID: any;
+
+  public init(): void {
+    const dataController = this.getController('data');
+
+    super.init();
+    this._editingController = this.getController('editing');
+    this._editorFactoryController = this.getController('editorFactory');
+    this._columnHeadersView = this.getView('columnHeadersView');
+    this._rowHeight = 0;
+    this._scrollTop = 0;
+    this._scrollLeft = -1;
+    this._scrollRight = 0;
+    this._hasHeight = undefined;
+    this._contentChanges = [];
+    dataController.loadingChanged.add((isLoading, messageText) => {
+      this.setLoading(isLoading, messageText);
+    });
+
+    dataController.dataSourceChanged.add(() => {
+      if (this._scrollLeft >= 0 && !this._dataController.isLoading()) {
+        this._handleScroll({
+          component: this.getScrollable(),
+          forceUpdateScrollPosition: true,
+          scrollOffset: { top: this._scrollTop, left: this._scrollLeft },
+        });
+      }
+    });
+  }
 
   _getDefaultTemplate(column) {
     switch (column.command) {
@@ -942,34 +973,6 @@ export class RowsView extends ColumnsView {
 
   getScrollable() {
     return this._scrollable;
-  }
-
-  init() {
-    const that = this;
-    const dataController = that.getController('data');
-
-    super.init();
-    this._editingController = this.getController('editing');
-    that._editorFactoryController = that.getController('editorFactory');
-    that._rowHeight = 0;
-    that._scrollTop = 0;
-    that._scrollLeft = -1;
-    that._scrollRight = 0;
-    that._hasHeight = undefined;
-    that._contentChanges = [];
-    dataController.loadingChanged.add((isLoading, messageText) => {
-      that.setLoading(isLoading, messageText);
-    });
-
-    dataController.dataSourceChanged.add(() => {
-      if (this._scrollLeft >= 0 && !this._dataController.isLoading()) {
-        this._handleScroll({
-          component: this.getScrollable(),
-          forceUpdateScrollPosition: true,
-          scrollOffset: { top: this._scrollTop, left: this._scrollLeft },
-        });
-      }
-    });
   }
 
   _handleDataChanged(change?) {
