@@ -160,7 +160,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  _customizeRemoteOperations(options, operationTypes) {
+  protected _customizeRemoteOperations(options, operationTypes) {
     const { remoteOperations } = options;
 
     if (options.storeLoadOptions.group) {

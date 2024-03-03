@@ -129,7 +129,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   _startLoadTime: any;
 
-  init() {
+  public init() {
     super.init.apply(this, arguments as any);
     this._items = [];
     this._totalCount = -1;
@@ -191,7 +191,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     };
   }
 
-  _handleLoadingChanged(isLoading) {
+  protected _handleLoadingChanged(isLoading) {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       super._handleLoadingChanged.apply(this, arguments as any);
       return;
@@ -209,7 +209,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     }
   }
 
-  _handleLoadError() {
+  protected _handleLoadError() {
     if (this.option(LEGACY_SCROLLING_MODE) !== false) {
       this._isLoading = false;
       this.loadingChanged.fire(false);
@@ -218,7 +218,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     super._handleLoadError.apply(this, arguments as any);
   }
 
-  _handleDataChanged(e) {
+  protected _handleDataChanged(e) {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
@@ -276,7 +276,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return this._dataSource.isLoaded() && this._isLoaded;
   }
 
-  resetPagesCache(isLiveUpdate?) {
+  protected resetPagesCache(isLiveUpdate?) {
     if (!isLiveUpdate) {
       this._virtualScrollController.reset(true);
     }
@@ -296,7 +296,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return result;
   }
 
-  reload() {
+  protected reload() {
     this._dataSource.pageIndex(this.pageIndex());
     const virtualScrollController = this._virtualScrollController;
 
@@ -389,7 +389,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  pageIndex(pageIndex?): any {
+  protected pageIndex(pageIndex?): any {
     return proxyDataSourceAdapterMethod(this, 'pageIndex', [...arguments]);
   }
 
