@@ -14,6 +14,9 @@ import eventsEngine from '@js/events/core/events_engine';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import type {
+  ColumnsResizerViewController,
+} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { EditingController } from '../editing/m_editing';
@@ -67,7 +70,23 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   _columnsController!: ColumnsController;
 
+  protected _columnsResizerController!: ColumnsResizerViewController;
+
   private _subscribedContainerRoot!: Node;
+
+  init() {
+    this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+    this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+
+    this._columnsResizerController = this.getController('columnsResizer');
+
+    this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
+
+    this._subscribedContainerRoot = this._getContainerRoot();
+    eventsEngine.on(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+
+    this._attachContainerEventHandlers();
+  }
 
   _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
@@ -206,7 +225,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     this.focus($focus);
   }
 
-  renderFocusOverlay($element, isHideBorder) {
+  protected renderFocusOverlay($element, isHideBorder) {
     const that = this;
 
     if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
@@ -264,18 +283,6 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
     this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
-  }
-
-  init() {
-    this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-    this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-
-    this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-
-    this._subscribedContainerRoot = this._getContainerRoot();
-    eventsEngine.on(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
-
-    this._attachContainerEventHandlers();
   }
 
   private _getContainerRoot(): Node {

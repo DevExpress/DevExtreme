@@ -18,6 +18,9 @@ import { removeEvent } from '@js/events/remove';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type {
+  ColumnsResizerViewController,
+} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { EditingController } from '../editing/m_editing';
@@ -89,6 +92,8 @@ export class RowsView extends ColumnsView {
 
   _resizingController!: ResizingController;
 
+  protected _columnsResizerController!: ColumnsResizerViewController;
+
   _columnHeadersView!: ColumnHeadersView;
 
   _hasHeight: boolean | undefined;
@@ -118,6 +123,7 @@ export class RowsView extends ColumnsView {
     this._editingController = this.getController('editing');
     this._editorFactoryController = this.getController('editorFactory');
     this._resizingController = this.getController('resizing');
+    this._columnsResizerController = this.getController('columnsResizer');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
@@ -551,7 +557,10 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  _needUpdateRowHeight(itemsCount): boolean | undefined {
+  /**
+   * @extended: columns_resizing_reordering
+   */
+  protected _needUpdateRowHeight(itemsCount): boolean | undefined {
     return itemsCount > 0 && !this._rowHeight;
   }
 

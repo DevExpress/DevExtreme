@@ -853,7 +853,7 @@ export class ApplyFilterViewController extends modules.ViewController {
 }
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class FilterRowColumnsResizerExtender extends Base {
-  _startResizing() {
+  protected _startResizing() {
     const that = this;
 
     // @ts-expect-error
@@ -873,7 +873,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     }
   }
 
-  _endResizing() {
+  protected _endResizing() {
     const that = this;
     let $cell;
 
