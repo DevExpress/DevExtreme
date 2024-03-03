@@ -588,7 +588,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     this._renderSelectAllCheckBox($cell);
   }
 
-  _isSortableElement($target) {
+  protected _isSortableElement($target) {
     return super._isSortableElement($target) && !$target.closest(`.${SELECT_CHECKBOX_CLASS}`).length;
   }
 };

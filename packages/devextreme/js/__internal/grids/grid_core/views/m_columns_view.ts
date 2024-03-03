@@ -258,7 +258,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return options;
   }
 
-  _updateCell($cell, parameters) {
+  protected _updateCell($cell, parameters) {
     if (parameters.rowType) {
       this._cellPrepared($cell, parameters);
     }
@@ -325,7 +325,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return row && row.dataIndex % 2 === 1;
   }
 
-  _createTable(columns, isAppend?) {
+  protected _createTable(columns, isAppend?) {
     const $table = $('<table>')
       .addClass(this.addWidgetPrefix(TABLE_CLASS))
       .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
@@ -553,7 +553,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _processTemplate(template, options?) {
+  protected _processTemplate(template, options?) {
     const that = this;
     let renderingTemplate;
 
@@ -707,7 +707,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $table;
   }
 
-  _renderRows($table, options) {
+  protected _renderRows($table, options) {
     const that = this;
     const rows = that._getRows(options.change);
     const columnIndices = options.change && options.change.columnIndices || [];
@@ -784,7 +784,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     copyAttributes($rowElement.get(0), $newRowElement.get(0));
   }
 
-  _setCellAriaAttributes($cell, cellOptions) {
+  protected _setCellAriaAttributes($cell, cellOptions) {
     if (cellOptions.rowType !== 'freeSpace') {
       this.setAria('role', 'gridcell', $cell);
 
@@ -794,7 +794,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _renderCell($row, options) {
+  protected _renderCell($row, options) {
     const cellOptions = this._getCellOptions(options);
 
     if (options.columnIndices) {
@@ -832,7 +832,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   }
 
-  _getRows(change?) {
+  protected _getRows(change?) {
     return [] as any[];
   }
 
@@ -974,7 +974,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _afterRowPrepared(e?) {}
 
-  _handleDataChanged(e) {
+  protected _handleDataChanged(e) {
   }
 
   callbackNames() {
@@ -1145,7 +1145,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return [];
   }
 
-  getVisibleColumnIndex(columnIndex, rowIndex) {
+  protected getVisibleColumnIndex(columnIndex, rowIndex) {
     return columnIndex;
   }
 

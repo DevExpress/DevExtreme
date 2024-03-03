@@ -6,6 +6,8 @@ import { getHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 
 import { registerKeyboardAction } from '../m_accessibility';
 import { ColumnsView } from '../views/m_columns_view';
@@ -36,6 +38,7 @@ const createCellContent = function (that, $cell, options) {
 
   addCssClassesToCellContent(that, $cell, options.column, $cellContent);
   const showColumnLines = that.option('showColumnLines');
+  // TODO getController
   const contentAlignment = that.getController('columns').getHeaderContentAlignment(options.column.alignment);
 
   return $cellContent[showColumnLines || contentAlignment === 'right' ? 'appendTo' : 'prependTo']($cell);
@@ -70,7 +73,17 @@ export class ColumnHeadersView extends ColumnsView {
 
   private _hasRowElements: any;
 
-  _createTable() {
+  private _headerFilterController!: HeaderFilterController;
+
+  private _headerPanelView!: HeaderPanel;
+
+  public init(): void {
+    super.init();
+    this._headerPanelView = this.getView('headerPanel');
+    this._headerFilterController = this.getController('headerFilter');
+  }
+
+  protected _createTable() {
     // @ts-expect-error
     const $table = super._createTable.apply(this, arguments);
 
@@ -85,11 +98,11 @@ export class ColumnHeadersView extends ColumnsView {
     return $table;
   }
 
-  _isLegacyKeyboardNavigation() {
+  private _isLegacyKeyboardNavigation() {
     return this.option('useLegacyKeyboardNavigation');
   }
 
-  _getDefaultTemplate(column) {
+  private _getDefaultTemplate(column) {
     const that = this;
 
     return function ($container, options) {
@@ -108,7 +121,7 @@ export class ColumnHeadersView extends ColumnsView {
     };
   }
 
-  _renderEmptyMessage($container, options) {
+  private _renderEmptyMessage($container, options) {
     const textEmpty = this._getEmptyHeaderText();
 
     if (!textEmpty) {
@@ -123,7 +136,7 @@ export class ColumnHeadersView extends ColumnsView {
       const [leftPart, rightPart] = textEmpty.split('{0}');
       const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
 
-      const columnChooserView = this.component.getView('columnChooserView');
+      const columnChooserView = this._columnChooserView;
       const $link = $('<a>').text(columnChooserTitle).addClass(LINK);
 
       eventsEngine.on($link, 'click', this.createAction(() => columnChooserView.showColumnChooser()));
@@ -139,9 +152,9 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _getEmptyHeaderText() {
-    const hasHiddenColumns = !!this.component.getView('columnChooserView').hasHiddenColumns();
-    const hasGroupedColumns = !!this.component.getView('headerPanel').hasGroupedColumns();
+  private _getEmptyHeaderText() {
+    const hasHiddenColumns = !!this._columnChooserView.hasHiddenColumns();
+    const hasGroupedColumns = !!this._headerPanelView.hasGroupedColumns();
 
     switch (true) {
       case hasHiddenColumns && hasGroupedColumns:
@@ -158,11 +171,11 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _getHeaderTemplate(column) {
+  private _getHeaderTemplate(column) {
     return column.headerCellTemplate || { allowRenderToDetachedContainer: true, render: this._getDefaultTemplate(column) };
   }
 
-  _processTemplate(template, options) {
+  protected _processTemplate(template, options) {
     const that = this;
     let resultTemplate;
     const { column } = options;
@@ -182,7 +195,7 @@ export class ColumnHeadersView extends ColumnsView {
     return resultTemplate;
   }
 
-  _handleDataChanged(e) {
+  protected _handleDataChanged(e) {
     if (e.changeType !== 'refresh') return;
 
     if (this._isGroupingChanged || this._requireReady) {
@@ -191,7 +204,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _renderCell($row, options) {
+  protected _renderCell($row, options) {
     const $cell = super._renderCell($row, options);
 
     if (options.row.rowType === 'header') {
@@ -206,7 +219,7 @@ export class ColumnHeadersView extends ColumnsView {
     return $cell;
   }
 
-  _setCellAriaAttributes($cell, cellOptions) {
+  protected _setCellAriaAttributes($cell, cellOptions) {
     super._setCellAriaAttributes($cell, cellOptions);
     if (cellOptions.rowType === 'header') {
       if (!cellOptions.column.type) {
@@ -223,7 +236,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _createRow(row) {
+  protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
 
@@ -240,18 +253,18 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _processHeaderAction(event, $row) {
+  private _processHeaderAction(event, $row) {
 
   }
 
-  _handleActionKeyDown(args) {
+  private _handleActionKeyDown(args) {
     const { event } = args;
     const $target = $(event.target);
 
     this._lastActionElement = event.target;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      const headerFilterController = this.getController('headerFilter');
+      const headerFilterController = this._headerFilterController;
       const $column = $target.closest('td');
       const columnIndex = this.getColumnIndexByElement($column);
       if (columnIndex >= 0) {
@@ -265,7 +278,7 @@ export class ColumnHeadersView extends ColumnsView {
     event.preventDefault();
   }
 
-  _renderCore() {
+  protected _renderCore() {
     const that = this;
     const $container = that.element();
     const change = {};
@@ -292,7 +305,7 @@ export class ColumnHeadersView extends ColumnsView {
     return deferred;
   }
 
-  _renderRows() {
+  protected _renderRows() {
     const that = this;
 
     if (that._dataController.isLoaded() || that._hasRowElements) {
@@ -302,7 +315,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _renderRow($table, options) {
+  protected _renderRow($table, options) {
     const rowIndex = this.getRowCount() === 1 ? null : options.row.rowIndex;
 
     options.columns = this.getColumns(rowIndex);
@@ -320,7 +333,7 @@ export class ColumnHeadersView extends ColumnsView {
     return $cellElement;
   }
 
-  _getRows() {
+  protected _getRows() {
     const result: any[] = [];
     const rowCount = this.getRowCount();
 
@@ -333,7 +346,7 @@ export class ColumnHeadersView extends ColumnsView {
     return result;
   }
 
-  _getCellTemplate(options) {
+  protected _getCellTemplate(options) {
     if (options.rowType === 'header') {
       return this._getHeaderTemplate(options.column);
     }
@@ -357,11 +370,14 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _isElementVisible(elementOptions) {
+  /**
+   * @extended: filter_row
+   */
+  protected _isElementVisible(elementOptions) {
     return elementOptions && elementOptions.visible;
   }
 
-  _alignCaptionByCenter($cell) {
+  private _alignCaptionByCenter($cell) {
     let $indicatorsContainer = this._getIndicatorContainer($cell, true);
 
     if ($indicatorsContainer && $indicatorsContainer.length) {
@@ -376,7 +392,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  _updateCell($cell, options) {
+  protected _updateCell($cell, options) {
     if (options.rowType === 'header' && options.column.alignment === 'center') {
       this._alignCaptionByCenter($cell);
     }
@@ -386,7 +402,7 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateIndicator($cell, column, indicatorName) {
+  protected _updateIndicator($cell, column, indicatorName) {
     // @ts-expect-error
     const $indicatorElement = super._updateIndicator.apply(this, arguments);
 
@@ -399,31 +415,34 @@ export class ColumnHeadersView extends ColumnsView {
     return $indicatorElement;
   }
 
-  _getIndicatorContainer($cell, returnAll?) {
+  protected _getIndicatorContainer($cell, returnAll?) {
     const $indicatorsContainer = super._getIndicatorContainer($cell);
 
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
   }
 
+  /**
+   * @extended: tree_list/selection
+   */
   // eslint-disable-next-line
-  _isSortableElement($target?) {
+  protected _isSortableElement($target?) {
     return true;
   }
 
-  getHeadersRowHeight() {
+  public getHeadersRowHeight() {
     const $tableElement = this.getTableElement();
     const $headerRows = $tableElement && $tableElement.find(`.${HEADER_ROW_CLASS}`);
 
     return $headerRows && $headerRows.toArray().reduce((sum, headerRow) => sum + getHeight(headerRow), 0) || 0;
   }
 
-  getHeaderElement(index) {
+  public getHeaderElement(index) {
     const columnElements = this.getColumnElements();
 
     return columnElements && columnElements.eq(index);
   }
 
-  getColumnElements(index?, bandColumnIndex?) {
+  public getColumnElements(index?, bandColumnIndex?) {
     const that = this;
     let $cellElement;
     const columnsController = that._columnsController;
@@ -450,7 +469,7 @@ export class ColumnHeadersView extends ColumnsView {
     return undefined;
   }
 
-  getColumnIndexByElement($cell) {
+  private getColumnIndexByElement($cell) {
     const cellIndex = this.getCellIndex($cell);
     const $row = $cell.closest('.dx-row');
     const { rowIndex } = $row[0];
@@ -459,7 +478,7 @@ export class ColumnHeadersView extends ColumnsView {
     return column ? column.index : -1;
   }
 
-  getVisibleColumnIndex(columnIndex, rowIndex) {
+  protected getVisibleColumnIndex(columnIndex, rowIndex) {
     const column = this.getColumns()[columnIndex];
 
     return column ? this._columnsController.getVisibleIndex(column.index, rowIndex) : -1;
@@ -491,7 +510,7 @@ export class ColumnHeadersView extends ColumnsView {
     return isReorderingEnabled && column.allowReordering && columns.length > 1;
   }
 
-  getBoundingRect() {
+  protected getBoundingRect() {
     const that = this;
     const $columnElements = that.getColumnElements();
 
@@ -508,13 +527,13 @@ export class ColumnHeadersView extends ColumnsView {
     return 'headers';
   }
 
-  getColumnCount() {
+  private getColumnCount() {
     const $columnElements = this.getColumnElements();
 
     return $columnElements ? $columnElements.length : 0;
   }
 
-  isVisible() {
+  public isVisible() {
     return this.option('showColumnHeaders')!;
   }
 
@@ -533,7 +552,7 @@ export class ColumnHeadersView extends ColumnsView {
     }
   }
 
-  getHeight() {
+  public getHeight() {
     return this.getElementHeight();
   }
 
@@ -569,11 +588,11 @@ export class ColumnHeadersView extends ColumnsView {
     return undefined;
   }
 
-  getRowCount() {
+  private getRowCount() {
     return this._columnsController && this._columnsController.getRowCount();
   }
 
-  setRowsOpacity(columnIndex, value, rowIndex?) {
+  public setRowsOpacity(columnIndex, value, rowIndex?) {
     let i;
     let columnElements;
     const rowCount = this.getRowCount();
