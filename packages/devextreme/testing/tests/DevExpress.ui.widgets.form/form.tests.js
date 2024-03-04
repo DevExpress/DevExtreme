@@ -4791,9 +4791,9 @@ QUnit.module('reset', () => {
         });
 
         const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
-        const tab = $form.find('.dx-tab')[0];
+        const $multiViewWrapper = $form.find('.dx-multiview-wrapper');
 
-        tab.click();
+        $multiViewWrapper.addClass('dx-state-focused');
 
         screen = 'sm';
         $input.focus();
@@ -4801,7 +4801,7 @@ QUnit.module('reset', () => {
 
         assert.strictEqual($input.val(), text, 'ddBox contain correct value');
 
-        tab.click();
+        $multiViewWrapper.addClass('dx-state-focused');
 
         screen = 'lg';
         $input.focus();
