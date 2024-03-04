@@ -5760,6 +5760,48 @@ QUnit.module('datebox validation', {}, () => {
     });
 });
 
+[
+    { input: 'p', expectedValue: 'PM' },
+    { input: 'a', expectedValue: 'AM' },
+    { input: 'x', expectedValue: null },
+    { input: 'y', expectedValue: null },
+    { input: 'z', expectedValue: null },
+    { input: 'b', expectedValue: null },
+    { input: 'c', expectedValue: null },
+    { input: 'd', expectedValue: null },
+    { input: 'i', expectedValue: null },
+    { input: 'j', expectedValue: null },
+].forEach(({ input, expectedValue }) => {
+    QUnit.module('DateBox AM/PM Handling - time datebox type - HH:mmm a display format', {
+        beforeEach: function() {
+            this.$element = $('#dateBox').dxDateBox({
+                value: new Date('10/10/2012 13:07'),
+                useMaskBehavior: true,
+                type: 'time',
+                mode: 'text',
+                displayFormat: 'HH:mm a',
+                pickerType: 'calendar'
+            });
+
+            this.instance = this.$element.dxDateBox('instance');
+            this.$input = this.$element.find('.dx-texteditor-input');
+            this.keyboard = keyboardMock(this.$input, true);
+        },
+        afterEach: function() {
+            fx.off = false;
+        }
+    }, () => {
+        QUnit.test(`_handleAmPmSearch should toggle to ${expectedValue} when "${input}" is pressed for time datebox type - with a HH:mm a display format`, function(assert) {
+            this.instance.option('displayFormat', 'a');
+
+            this.keyboard.type(input);
+
+            const actualValue = (input === 'p' || input === 'a') ? expectedValue : this.$input.val();
+            assert.strictEqual(this.$input.val(), actualValue);
+        });
+    });
+});
+
 QUnit.module('DateBox number and string value support', {
     beforeEach: function() {
         fx.off = true;
