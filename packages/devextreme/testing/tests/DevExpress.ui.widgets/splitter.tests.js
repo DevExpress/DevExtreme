@@ -216,8 +216,8 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     [
-        { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 50, expectedSize: ['48.4066', '0', '11.5934', '20', '20'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 50, expectedSize: ['0', '40', '20', '20', '20'], orientation: 'horizontal', rtl: true },
         { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'vertical', rtl: false },
         { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'vertical', rtl: true },
     ].forEach(({ resizeDistance, expectedSize, orientation, rtl }) => {
@@ -234,7 +234,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const handles = this.getResizeHandles();
 
             const pointer = pointerMock(handles.eq(0));
-            pointer.start().dragStart().drag(50, 0).drag(-50, 0).dragEnd();
+            pointer.start().dragStart().drag(resizeDistance, 0).dragEnd();
 
             assertLayout(items, expectedSize, assert);
         });
