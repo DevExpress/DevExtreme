@@ -216,26 +216,17 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     [
-        { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: -100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 75, expectedSize: ['12.5', '87.5'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical', rtl: false },
-        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical', rtl: false },
-        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical', rtl: false },
-        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical', rtl: false },
-        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 50, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'vertical', rtl: true },
     ].forEach(({ resizeDistance, expectedSize, orientation, rtl }) => {
-        QUnit.test(`percentage resizing during drag right and left with ${orientation} orientation, rtl ${rtl}`, function(assert) {
+        QUnit.test(`resizing multiple panels during drag with ${orientation} orientation, rtl ${rtl}`, function(assert) {
             this.reinit({
-                width: 208, height: 208,
-                dataSource: [{}, {}],
+                width: 208,
+                height: 208,
+                orientation,
+                dataSource: [{}, {}, {}, {}, {}],
                 rtlEnabled: rtl,
             });
 
@@ -243,11 +234,12 @@ QUnit.module('Resizing', moduleConfig, () => {
             const handles = this.getResizeHandles();
 
             const pointer = pointerMock(handles.eq(0));
-            pointer.start().dragStart().drag(resizeDistance, 0).dragEnd();
+            pointer.start().dragStart().drag(50, 0).drag(-50, 0).dragEnd();
 
             assertLayout(items, expectedSize, assert);
         });
     });
+
 
     [
         { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
