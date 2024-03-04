@@ -12,6 +12,7 @@
     "angular:inject-descriptions": "dx-tools inject-descriptions --sources ./packages/devextreme-angular/npm/dist --artifacts ./artifacts/internal-tools",
     "react:copy-metadata": "shx mkdir -p ./packages/devextreme-react/metadata/ && shx cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-react/metadata/",
     "react:regenerate": "nx regenerate devextreme-react",
+    "react-storybook:start": "nx start devextreme-react-storybook",
     "tools": "dx-tools",
     "tools:discover-declarations": "dx-tools discover-declarations --sources ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./artifacts/internal-tools",
     "tools:generate-imd": "dx-tools make-integration-metadata --artifacts ./artifacts/internal-tools",
@@ -24,7 +25,9 @@
     "prepare": "husky install",
     "test-scripts": "jest --config build/jest.config.js",
     "all:update-version": "ts-node build/update-version.ts",
-    "all:build": "ts-node build/build-all.ts"
+    "all:build": "ts-node build/build-all.ts",
+    "overwrite-wrappers-packages": "ts-node build/install-wrappers.ts",
+    "webserver": "http-server --port 8080 -c-1"
   },
   "nx": {},
   "private": true,
@@ -56,6 +59,7 @@
     "eslint-plugin-spellcheck": "0.0.20",
     "eslint-plugin-testcafe": "0.2.1",
     "eslint-plugin-vue": "7.20.0",
+    "http-server": "14.1.1",
     "husky": "^8.0.3",
     "jspdf-autotable": "3.8.1",
     "lint-staged": "14.0.1",
@@ -79,6 +83,8 @@
     "packages/devextreme/artifacts/npm/*"
   ],
   "dependencies": {
+    "devextreme-aspnet-data": "3.0.0",
+    "devextreme-aspnet-data-nojquery": "3.0.0",
     "rxjs": "7.8.0"
   }
 }

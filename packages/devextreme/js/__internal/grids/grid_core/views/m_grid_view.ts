@@ -15,8 +15,14 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 
+import type { FooterView } from '../../data_grid/summary/m_summary';
+import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import type { RowsView } from './m_rows_view';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
@@ -55,15 +61,15 @@ const restoreFocus = function (focusedElement, selectionRange) {
 export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
 
-  private _dataController: any;
+  _dataController!: DataController;
 
-  _rowsView: any;
+  _rowsView!: RowsView;
 
-  _columnHeadersView: any;
+  _columnHeadersView!: ColumnHeadersView;
 
-  _columnsController: any;
+  _columnsController!: ColumnsController;
 
-  _footerView: any;
+  _footerView!: FooterView;
 
   private _prevContentMinHeight: any;
 
@@ -75,13 +81,13 @@ export class ResizingController extends modules.ViewController {
 
   private _resizeDeferred: any;
 
-  private _lastWidth: any;
+  public _lastWidth: any;
 
   private _devicePixelRatio: any;
 
   private _lastHeight: any;
 
-  _adaptiveColumnsController: any;
+  _adaptiveColumnsController!: AdaptiveColumnsController;
 
   _updateScrollableTimeoutID: any;
 
@@ -240,6 +246,7 @@ export class ResizingController extends modules.ViewController {
     this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
     if (this._needStretch()) {
+      // @ts-expect-error
       $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
     }
   }
@@ -269,7 +276,7 @@ export class ResizingController extends modules.ViewController {
     let hasMinWidth = false;
     let resetBestFitMode;
     let isColumnWidthsCorrected = false;
-    let resultWidths = [];
+    let resultWidths: any[] = [];
     let focusedElement;
     let selectionRange;
 
@@ -698,6 +705,7 @@ export class ResizingController extends modules.ViewController {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 
+    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
   }
 
@@ -781,15 +789,13 @@ export class ResizingController extends modules.ViewController {
     this._prevContentMinHeight = null;
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
-    // @ts-expect-error
     this._columnHeadersView = this.getView('columnHeadersView');
-    // @ts-expect-error
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
   }
 }
 
-class SynchronizeScrollingController extends modules.ViewController {
+export class SynchronizeScrollingController extends modules.ViewController {
   _scrollChangedHandler(views, pos, viewName) {
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
@@ -799,7 +805,6 @@ class SynchronizeScrollingController extends modules.ViewController {
   }
 
   init() {
-    // @ts-expect-error
     const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
 
     for (let i = 0; i < views.length; i++) {
@@ -811,10 +816,10 @@ class SynchronizeScrollingController extends modules.ViewController {
   }
 }
 
-class GridView extends modules.View {
-  private _resizingController: any;
+export class GridView extends modules.View {
+  private _resizingController!: ResizingController;
 
-  private _dataController: any;
+  private _dataController!: DataController;
 
   private _groupElement: any;
 

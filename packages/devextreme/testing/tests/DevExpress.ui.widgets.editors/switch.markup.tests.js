@@ -157,27 +157,59 @@ QUnit.module('Switch markup', () => {
     });
 });
 
-QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
-        const $element = $('#switch').dxSwitch({});
+QUnit.module('Accessibility', () => {
+    QUnit.test('Switch should have correct role attribute', function(assert) {
+        const $element = $('#switch').dxSwitch();
 
-        assert.equal($element.attr('role'), 'button', 'aria role is correct');
+        assert.strictEqual($element.attr('role'), 'switch', 'Element should have role=switch');
     });
 
-    QUnit.test('aria properties', function(assert) {
+    QUnit.test('Switch should have correct aria-checked attribute', function(assert) {
+        const $element = $('#switch').dxSwitch();
+        const instance = $element.dxSwitch('instance');
+
+        assert.strictEqual($element.attr('aria-checked'), 'false', 'aria-checked must be false if the value is false');
+
+        instance.option({ value: true });
+
+        assert.strictEqual($element.attr('aria-checked'), 'true', 'aria-checked must be true if the value is true');
+    });
+
+    QUnit.test('Switch should have correct aria-label attribute', function(assert) {
         const $element = $('#switch').dxSwitch({
             switchedOnText: 'on test',
             switchedOffText: 'off test',
-            value: true
         });
         const instance = $element.dxSwitch('instance');
 
-        assert.equal($element.attr('aria-label'), 'on test', 'aria \'on state\' label is correct');
-        assert.equal($element.attr('aria-pressed'), 'true', 'aria \'on state\' pressed attribute is correct');
+        assert.strictEqual($element.attr('aria-label'), 'off test', 'aria-label must have switchOffText if the value is false');
 
-        instance.option('value', false);
-        assert.equal($element.attr('aria-label'), 'off test', 'aria \'off state\' label is correct');
-        assert.equal($element.attr('aria-pressed'), 'false', 'aria \'off state\' pressed attribute is correct');
+        instance.option({ value: true });
+
+        assert.strictEqual($element.attr('aria-label'), 'on test', 'aria-label must have switchedOnText if the value if true');
+    });
+
+    QUnit.test('Switch should have correct aria-disabled and tabindex attributes', function(assert) {
+        const $element = $('#switch').dxSwitch({ focusStateEnabled: true });
+        const instance = $element.dxSwitch('instance');
+
+        assert.strictEqual($element.attr('aria-disabled'), undefined, 'The element should not have an aria-disabled attribute unless it is disabled');
+        assert.strictEqual($element.attr('tabindex'), '0', 'The element must have tabindex=0 if it is not disabled');
+
+        instance.option({ disabled: true });
+
+        assert.strictEqual($element.attr('aria-disabled'), 'true', 'The element must have aria-disabled=true if it is disabled');
+        assert.strictEqual($element.attr('tabindex'), undefined, 'The element should not have an aria-disabled attribute if it is disabled');
+    });
+
+    QUnit.test('Switch should have correct aria-readonly attribute', function(assert) {
+        const $element = $('#switch').dxSwitch();
+        const instance = $element.dxSwitch('instance');
+
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'The element should not have aria-readonly attribute if readOnly is false');
+
+        instance.option({ readOnly: true });
+
+        assert.strictEqual($element.attr('aria-readonly'), 'true', 'The element must have aria-readonly=true if readOnly is true');
     });
 });
-

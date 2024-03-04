@@ -1,7 +1,7 @@
 <dx-chart
   id="chart"
   [dataSource]="temperaturesData"
-  title="Temperature in September"
+  title="Temperature (high) in September, &#176;F"
   [customizePoint]="customizePoint"
   [customizeLabel]="customizeLabel"
 >
@@ -14,12 +14,12 @@
   <dxi-value-axis>
     <dxo-label [customizeText]="customizeText"></dxo-label>
     <dxi-strip [startValue]="highAverage" color="rgba(255,155,85,0.15)">
-      <dxo-label text="Above average">
+      <dxo-label text="Above average high">
         <dxo-font [color]="highAverageColor"></dxo-font>
       </dxo-label>
     </dxi-strip>
     <dxi-strip [endValue]="lowAverage" color="rgba(97,153,230,0.10)">
-      <dxo-label text="Below average">
+      <dxo-label text="Below average low">
         <dxo-font [color]="lowAverageColor"></dxo-font>
       </dxo-label>
     </dxi-strip>

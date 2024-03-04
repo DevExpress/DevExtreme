@@ -251,7 +251,6 @@ export class ColumnHeadersView extends ColumnsView {
     this._lastActionElement = event.target;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      // @ts-expect-error
       const headerFilterController = this.getController('headerFilter');
       const $column = $target.closest('td');
       const columnIndex = this.getColumnIndexByElement($column);
@@ -354,7 +353,6 @@ export class ColumnHeadersView extends ColumnsView {
     super._columnOptionChanged(e);
 
     if (optionNames.width || optionNames.visible) {
-      // @ts-expect-error
       this.resizeCompleted.fire();
     }
   }
@@ -566,7 +564,7 @@ export class ColumnHeadersView extends ColumnsView {
     return this._columnsController && this._columnsController.getRowCount();
   }
 
-  setRowsOpacity(columnIndex, value, rowIndex) {
+  setRowsOpacity(columnIndex, value, rowIndex?) {
     let i;
     let columnElements;
     const rowCount = this.getRowCount();
