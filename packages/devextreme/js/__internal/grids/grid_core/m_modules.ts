@@ -24,13 +24,13 @@ import { updateViewsBorders } from './views/utils/update_views_borders';
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 export class ModuleItem {
-  _updateLockCount: any;
+  public _updateLockCount: any;
 
-  component!: InternalGrid;
+  public component!: InternalGrid;
 
-  _actions: any;
+  public _actions: any;
 
-  _actionConfigs: any;
+  public _actionConfigs: any;
 
   constructor(component) {
     const that = this;
@@ -61,15 +61,15 @@ export class ModuleItem {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected callbackFlags(name): any { }
 
-  publicMethods(): string[] {
+  public publicMethods(): string[] {
     return [];
   }
 
-  beginUpdate() {
+  public beginUpdate() {
     this._updateLockCount++;
   }
 
-  endUpdate() {
+  public endUpdate() {
     if (this._updateLockCount > 0) {
       this._updateLockCount--;
       if (!this._updateLockCount) {
@@ -78,11 +78,11 @@ export class ModuleItem {
     }
   }
 
-  option(): InternalGridOptions;
-  option(options: InternalGridOptions): void;
-  option<TPropertyName extends string>(name: TPropertyName): GridPropertyType<InternalGridOptions, TPropertyName>;
-  option<TPropertyName extends string>(name: TPropertyName, value: GridPropertyType<InternalGridOptions, TPropertyName>): void;
-  option(name?) {
+  public option(): InternalGridOptions;
+  public option(options: InternalGridOptions): void;
+  public option<TPropertyName extends string>(name: TPropertyName): GridPropertyType<InternalGridOptions, TPropertyName>;
+  public option<TPropertyName extends string>(name: TPropertyName, value: GridPropertyType<InternalGridOptions, TPropertyName>): void;
+  public option(name?) {
     const { component } = this;
     const optionCache = component._optionCache;
 
@@ -111,7 +111,7 @@ export class ModuleItem {
     return component._setOptionWithoutOptionChange(name, value);
   }
 
-  localize(name) {
+  protected localize(name) {
     const optionCache = this.component._optionCache;
 
     if (optionCache) {
@@ -125,12 +125,12 @@ export class ModuleItem {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  on(event, callback) {
+  protected on(event, callback) {
     // @ts-expect-error
     return this.component.on.apply(this.component, arguments);
   }
 
-  off() {
+  protected off() {
     // @ts-expect-error
     return this.component.off.apply(this.component, arguments);
   }
@@ -142,11 +142,11 @@ export class ModuleItem {
     }
   }
 
-  getAction(actionName) {
+  protected getAction(actionName) {
     return this._actions[actionName];
   }
 
-  setAria(name, value, $target) {
+  public setAria(name, value, $target) {
     const target = $target.get(0);
     const prefix = name !== 'role' && name !== 'id' ? 'aria-' : '';
 
@@ -157,7 +157,7 @@ export class ModuleItem {
     }
   }
 
-  _createComponent<TComponent extends Component<any>>(
+  public _createComponent<TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
     options?: TComponent extends Component<infer TOptions> ? TOptions : never,
@@ -169,11 +169,11 @@ export class ModuleItem {
     );
   }
 
-  getController<T extends keyof Controllers>(name: T): Controllers[T] {
+  public getController<T extends keyof Controllers>(name: T): Controllers[T] {
     return this.component._controllers[name];
   }
 
-  createAction(actionName, config?) {
+  public createAction(actionName, config?) {
     if (isFunction(actionName)) {
       const action = this.component._createAction(actionName.bind(this), config);
       return function (e) {
@@ -186,7 +186,7 @@ export class ModuleItem {
     return undefined;
   }
 
-  executeAction(actionName, options) {
+  public executeAction(actionName, options) {
     const action = this._actions[actionName];
 
     return action && action(options);
@@ -199,19 +199,19 @@ export class ModuleItem {
     });
   }
 
-  addWidgetPrefix(className) {
+  public addWidgetPrefix(className) {
     const componentName = this.component.NAME;
 
     return `dx-${componentName.slice(2).toLowerCase()}${className ? `-${className}` : ''}`;
   }
 
-  getWidgetContainerClass() {
+  public getWidgetContainerClass() {
     const containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
     return this.addWidgetPrefix(containerName);
   }
 
-  elementIsInsideGrid($element) {
+  public elementIsInsideGrid($element) {
     const $gridElement = $element.closest(`.${this.getWidgetContainerClass()}`).parent();
 
     return $gridElement.is(this.component.$element());
@@ -221,11 +221,11 @@ export class ModuleItem {
 export class Controller extends ModuleItem {}
 
 export class ViewController extends Controller {
-  getView<T extends keyof Views>(name: T): Views[T] {
+  public getView<T extends keyof Views>(name: T): Views[T] {
     return this.component._views[name];
   }
 
-  getViews(): Views {
+  public getViews(): Views {
     return this.component._views;
   }
 }
@@ -233,19 +233,19 @@ export class ViewController extends Controller {
 export class View extends ModuleItem {
   protected _requireReady: any;
 
-  _requireRender: any;
+  public _requireRender: any;
 
-  _$element: any;
+  public _$element: any;
 
-  _$parent: any;
+  public _$parent: any;
 
-  name: any;
+  public name: any;
 
-  renderCompleted: any;
+  public renderCompleted: any;
 
-  isResizing: any;
+  public isResizing: any;
 
-  resizeCompleted: any;
+  public resizeCompleted: any;
 
   constructor(component) {
     super(component);
@@ -253,7 +253,7 @@ export class View extends ModuleItem {
     this.resizeCompleted = Callbacks();
   }
 
-  _isReady() {
+  public _isReady() {
     return this.component.isReady();
   }
 
@@ -270,7 +270,7 @@ export class View extends ModuleItem {
     }
   }
 
-  _invalidate(requireResize?, requireReady?) {
+  public _invalidate(requireResize?, requireReady?) {
     this._requireRender = true;
     this.component._requireResize = hasWindow() && (this.component._requireResize || requireResize);
     this._requireReady = this._requireReady || requireReady;
@@ -281,7 +281,7 @@ export class View extends ModuleItem {
 
   protected _resizeCore() { }
 
-  _parentElement() {
+  public _parentElement() {
     return this._$parent;
   }
 
@@ -289,7 +289,7 @@ export class View extends ModuleItem {
     return this._$element;
   }
 
-  getElementHeight() {
+  public getElementHeight() {
     const $element = this.element();
 
     if (!$element) return 0;
@@ -305,7 +305,7 @@ export class View extends ModuleItem {
     return true;
   }
 
-  getTemplate(name) {
+  public getTemplate(name) {
     return this.component._getTemplate(name);
   }
 
@@ -313,7 +313,7 @@ export class View extends ModuleItem {
     return this.component._views[name];
   }
 
-  _getBorderedViews(): ViewsWithBorder {
+  public _getBorderedViews(): ViewsWithBorder {
     return {
       columnHeadersView: this.component._views.columnHeadersView,
       rowsView: this.component._views.rowsView,
@@ -355,14 +355,14 @@ export class View extends ModuleItem {
     }
   }
 
-  resize() {
+  public resize() {
     this.isResizing = true;
     this._resizeCore();
     this.resizeCompleted.fire();
     this.isResizing = false;
   }
 
-  focus(preventScroll) {
+  public focus(preventScroll) {
     this.element().get(0).focus({ preventScroll });
   }
 }
