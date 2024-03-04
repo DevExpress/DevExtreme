@@ -4737,74 +4737,79 @@ QUnit.module('reset', () => {
         assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
     });
 
-    QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
-        let screen = 'lg';
-
-        const value = 'VINET';
-        const text = 'Vins et alcools Chevalier (France)';
-        const $form = $('#form').dxForm({
-            formData: { CustomerID: value },
-            screenByWidth: function() { return screen; },
-            colCountByScreen: {
-                sm: 1,
-                lg: 2
-            },
-            items: [
-                {
-                    itemType: 'tabbed',
-                    tabPanelOptions: {
-                        deferRendering: false
+    let screen;
+    const value = 'VINET';
+    const text = 'Vins et alcools Chevalier (France)';
+    const formOptions = {
+        formData: { CustomerID: value },
+        screenByWidth: function() { return screen; },
+        colCountByScreen: {
+            sm: 1,
+            lg: 2
+        },
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    deferRendering: false
+                },
+                tabs: [
+                    {
+                        title: 'Tab 1',
+                        colCount: 1,
+                        items: [
+                            {
+                                itemType: 'simple',
+                                cssClass: 'test-ddbox',
+                                dataField: 'CustomerID',
+                                editorOptions: {
+                                    displayExpr: 'Text',
+                                    valueExpr: 'Value',
+                                    showClearButton: true,
+                                    dataSource: [{ Value: value, Text: text }],
+                                },
+                                editorType: 'dxDropDownBox',
+                            },
+                        ]
                     },
-                    tabs: [
-                        {
-                            title: 'Tab 1',
-                            colCount: 1,
-                            items: [
-                                {
-                                    itemType: 'simple',
-                                    cssClass: 'test-ddbox',
-                                    dataField: 'CustomerID',
-                                    editorOptions: {
-                                        displayExpr: 'Text',
-                                        valueExpr: 'Value',
-                                        showClearButton: true,
-                                        dataSource: [{ Value: value, Text: text }],
-                                    },
-                                    editorType: 'dxDropDownBox',
-                                },
-                            ]
-                        },
-                        {
-                            title: 'Tab 2',
-                            colCount: 1,
-                            items: [
-                                {
-                                    itemType: 'simple',
-                                    dataField: 'ShipCountry',
-                                    colSpan: 1
-                                },
-                            ]
-                        }
-                    ]
-                }
-            ]
-        });
+                    {
+                        title: 'Tab 2',
+                        colCount: 1,
+                        items: [
+                            {
+                                itemType: 'simple',
+                                dataField: 'ShipCountry',
+                                colSpan: 1
+                            },
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
 
+    QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
+        screen = 'lg';
+
+        const $form = $('#form').dxForm(formOptions);
         const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
-        const $multiViewWrapper = $form.find('.dx-multiview-wrapper');
-
-        $multiViewWrapper.addClass('dx-state-focused');
 
         screen = 'sm';
-        $input.focus();
         resizeCallbacks.fire();
 
         assert.strictEqual($input.val(), text, 'ddBox contain correct value');
+    });
 
-        $multiViewWrapper.addClass('dx-state-focused');
-
+    QUnit.test('DropDownBox should not lose its value if form resized and TabPanel is focused (T1196835)', function(assert) {
         screen = 'lg';
-        $input.focus();
+
+        const $form = $('#form').dxForm(formOptions);
+        const $tabPanel = $form.find('.dx-tabpanel');
+        const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
+
+        $tabPanel.trigger('focus');
+
+        screen = 'sm';
         resizeCallbacks.fire();
 
         assert.strictEqual($input.val(), text, 'ddBox contain correct value');
