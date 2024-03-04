@@ -385,7 +385,7 @@ export class ValidatingController extends modules.Controller {
         }
       }
       // @ts-expect-error
-      const editor = !column.editCellTemplate && this._e.getEditorInstance($container);
+      const editor = !column.editCellTemplate && this._editorFactoryController.getEditorInstance($container);
       if (result.status === VALIDATION_STATUS.pending) {
         if (editor) {
           editor.option('validationStatus', VALIDATION_STATUS.pending);
