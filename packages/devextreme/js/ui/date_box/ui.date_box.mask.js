@@ -312,15 +312,8 @@ const DateBoxMask = DateBoxBase.inherit({
         const startString = this._searchValue + char.toLowerCase();
         const endLimit = limits.max - limits.min;
 
-        if(this._getActivePartProp('text') === 'AM' || this._getActivePartProp('text') === 'PM') {
-            this._searchValue = startString;
-
-            if(char.toLowerCase() === 'p' && this._getActivePartProp('text') === 'AM') {
-                this._toggleAmPm();
-            } else if(char.toLowerCase() === 'a' && this._getActivePartProp('text') === 'PM') {
-                this._toggleAmPm();
-            }
-
+        if (this._getActivePartProp('text') === 'AM' || this._getActivePartProp('text') === 'PM') {
+            this._handleAmPmSearch(char);
             return;
         }
 
@@ -340,6 +333,18 @@ const DateBoxMask = DateBoxBase.inherit({
         if(this._searchValue) {
             this._clearSearchValue();
             this._searchString(char);
+        }
+    },
+
+    _handleAmPmSearch(char) {
+        const startString = this._searchValue + char.toLowerCase();
+
+        this._searchValue = startString;
+
+        if (char.toLowerCase() === 'p' && this._getActivePartProp('text') === 'AM') {
+            this._toggleAmPm();
+        } else if (char.toLowerCase() === 'a' && this._getActivePartProp('text') === 'PM') {
+            this._toggleAmPm();
         }
     },
 
