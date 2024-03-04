@@ -23,6 +23,7 @@ const NO_CONTENT = 'nocontent';
 const TIMEOUT = 'timeout';
 const STATUS_ABORT = 0;
 const CONTENT_TYPE = 'Content-Type';
+const URLENCODED = 'application/x-www-form-urlencoded';
 
 function assignResponseProps(xhrSurrogate, response) {
   function getResponseHeader(name) {
@@ -108,7 +109,18 @@ function isNeedScriptEvaluation(options) {
   return options.dataType === 'jsonp' || options.dataType === 'script';
 }
 
-function getCleanHeaders(headers) {
+function getCleanedRequestHeaders(options) {
+  const headers = getRequestHeaders(options);
+  const { upload } = options;
+
+  if (!headers.Accept) {
+    headers.Accept = getAcceptHeader(options);
+  }
+
+  if (!upload && !isGetRequest(options) && !headers[CONTENT_TYPE]) {
+    headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
+  }
+
   return Object.keys(headers).reduce((acc, key) => {
     if (isDefined(headers[key])) {
       acc[key] = headers[key];
@@ -117,17 +129,17 @@ function getCleanHeaders(headers) {
   }, {});
 }
 
+function isGetRequest(options) {
+  return (options.method || 'get').toLowerCase() === 'get';
+}
+
 export const sendRequestFactory = (httpClient: HttpClient) => {
-  const URLENCODED = 'application/x-www-form-urlencoded';
-
-  const nonce = Date.now();
-
   return (sendOptions: Record<string, any>) => {
     const options = { ...sendOptions };
     const destroy$ = new Subject<void>();
     const d = Deferred();
     const method = (options.method || 'get').toLowerCase();
-    const isGet = method === 'get';
+    const isGet = isGetRequest(options);
     const needScriptEvaluation = isNeedScriptEvaluation(options);
 
     if (options.cache === undefined) {
@@ -137,7 +149,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => {
     options.crossDomain = isCrossDomain(options.url);
 
     const jsonpCallBackName = getJsonpCallbackName(options);
-    const headers = getRequestHeaders(options);
+    const headers = getCleanedRequestHeaders(options);
     const requestOptions = getRequestOptions(options, headers);
     const { url } = requestOptions;
     const { parameters } = requestOptions;
@@ -167,18 +179,8 @@ export const sendRequestFactory = (httpClient: HttpClient) => {
     }
 
     if (options.cache === false && isGet && data) {
-      data._ = nonce + 1;
+      data._ = Date.now() + 1;
     }
-
-    if (!headers.Accept) {
-      headers.Accept = getAcceptHeader(options);
-    }
-
-    if (!upload && !isGet && !headers[CONTENT_TYPE]) {
-      headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
-    }
-
-    const requestHeaders = getCleanHeaders(headers);
 
     const params = isGet ? data : undefined;
 
@@ -187,7 +189,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => {
         return undefined;
       }
 
-      if (!upload && typeof data === 'object' && requestHeaders[CONTENT_TYPE].indexOf(URLENCODED) === 0) {
+      if (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0) {
         const httpParams = new HttpParams();
         Object.keys(data).forEach((key) => httpParams.set(key, data[key]));
         return httpParams.toString();
@@ -208,7 +210,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => {
         {
           params,
           body,
-          headers: requestHeaders,
+          headers,
           reportProgress: true,
           withCredentials: xhrFields?.withCredentials,
           observe: upload ? 'events' : 'response',
