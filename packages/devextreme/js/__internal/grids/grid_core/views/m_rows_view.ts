@@ -23,6 +23,7 @@ import type {
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { EditingController } from '../editing/m_editing';
@@ -98,6 +99,8 @@ export class RowsView extends ColumnsView {
 
   protected _keyboardNavigationController!: KeyboardNavigationController;
 
+  protected _validatingController!: ValidatingController;
+
   _columnHeadersView!: ColumnHeadersView;
 
   _hasHeight: boolean | undefined;
@@ -129,6 +132,7 @@ export class RowsView extends ColumnsView {
     this._columnsResizerController = this.getController('columnsResizer');
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this._validatingController = this.getController('validating');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
@@ -965,7 +969,10 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  updateFreeSpaceRowHeight($table?) {
+  /**
+   * @extended: validating
+   */
+  public updateFreeSpaceRowHeight($table?) {
     const dataController = this._dataController;
     const itemCount = dataController.items(true).length;
     const contentElement = this._findContentElement();
@@ -1386,8 +1393,11 @@ export class RowsView extends ColumnsView {
    */
   public setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
 
+  /**
+   * @extended: validating
+   */
   // eslint-disable-next-line
-  _restoreErrorRow(contentTable?) { }
+  protected _restoreErrorRow(contentTable?) { }
 }
 
 export const rowsModule = {

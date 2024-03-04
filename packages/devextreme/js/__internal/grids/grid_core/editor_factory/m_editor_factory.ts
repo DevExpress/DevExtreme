@@ -18,6 +18,7 @@ import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { EditingController } from '../editing/m_editing';
@@ -75,6 +76,8 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   protected _keyboardNavigationController!: KeyboardNavigationController;
 
+  protected _validatingController!: ValidatingController;
+
   private _subscribedContainerRoot!: Node;
 
   public init() {
@@ -84,6 +87,8 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._columnsResizerController = this.getController('columnsResizer');
     this._editingController = this.getController('editing');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this._columnsController = this.getController('columns');
+    this._validatingController = this.getController('validating');
     this._rowsView = this.getView('rowsView');
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));

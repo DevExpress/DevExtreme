@@ -19,6 +19,7 @@ import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
 import modules from '../m_modules';
 import type {
@@ -170,6 +171,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _stateStoringController!: StateStoringController;
 
+  protected _validatingController!: ValidatingController;
+
   private _columnsChangedHandler!: (e: any) => any;
 
   private _loadingChangedHandler!: (e: any) => any;
@@ -199,6 +202,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._headerFilterController = this.getController('headerFilter');
     this._selectionController = this.getController('selection');
     this._stateStoringController = this.getController('stateStoring');
+    this._validatingController = this.getController('validating');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -910,7 +914,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: editing
+   * @extended: editing, validating
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {

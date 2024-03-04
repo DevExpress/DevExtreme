@@ -100,13 +100,15 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _validatingController!: Controllers['validating'];
 
-  private _editorFactoryController!: Controllers['editorFactory'];
+  protected _editorFactoryController!: Controllers['editorFactory'];
 
   protected _focusController!: Controllers['focus'];
 
   protected _columnsResizerController!: Controllers['columnsResizer'];
 
   protected _keyboardNavigationController!: Controllers['keyboardNavigation'];
+
+  protected _errorHandlingController!: Controllers['errorHandling'];
 
   protected _rowsView!: Views['rowsView'];
 
@@ -155,6 +157,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnsResizerController = this.getController('columnsResizer');
+    this._errorHandlingController = this.getController('errorHandling');
     this._rowsView = this.getView('rowsView');
     this._headerPanelView = this.getView('headerPanel');
     this._lastOperation = null;
@@ -329,6 +332,9 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected _closeEditItem($targetElement): any {}
 
+  /**
+   * @extended: validating
+   */
   protected _handleDataChanged(args): any {}
 
   protected _isDefaultButtonVisible(button, options) {
@@ -761,6 +767,9 @@ class EditingControllerImpl extends modules.ViewController {
     return loadedRowIndex;
   }
 
+  /**
+   * @extended: validatiing
+   */
   public processItems(items, e) {
     const { changeType } = e;
 
@@ -2041,7 +2050,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   /**
-   * @extended: filter_row
+   * @extended: filter_row, validating
    */
   public updateFieldValue(options, value, text, forceUpdateRow?) {
     const rowKey = options.key;
@@ -2167,7 +2176,10 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  _validateEditFormAfterUpdate(): any {}
+  /**
+   * @extended: validating
+   */
+  protected _validateEditFormAfterUpdate(): any {}
 
   /**
    * @extended: validating
@@ -2384,6 +2396,9 @@ class EditingControllerImpl extends modules.ViewController {
     return buttonItems;
   }
 
+  /**
+   * @extended: validating
+   */
   public highlightDataCell($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); }
 
   /**
@@ -2392,7 +2407,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected _afterInsertRow(key): any {}
 
   /**
-   * @extended: TreeList's editing
+   * @extended: validating, TreeList's editing
    */
   // @ts-expect-error
   protected _beforeSaveEditData(change?) {
@@ -2402,12 +2417,12 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity, filter_row
+   * @extended: adaptivity, filter_row, validating
    */
   protected _afterSaveEditData(): any {}
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, validating
    */
   protected _beforeCancelEditData(): any {}
 

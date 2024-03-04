@@ -937,7 +937,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: adaptivity, editing
+   * @extended: adaptivity, editing, validating
    */
   public _cellPrepared(cell, options) {
     options.cellElement = getPublicElement($(cell));
