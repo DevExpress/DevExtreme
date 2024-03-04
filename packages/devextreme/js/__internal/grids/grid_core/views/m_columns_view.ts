@@ -507,7 +507,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return col;
   }
 
-  renderDelayedTemplates(change?) {
+  /**
+   * @extended: keyboard_navigation
+   */
+  public renderDelayedTemplates(change?) {
     const delayedTemplates = this._delayedTemplates;
     const syncTemplates = delayedTemplates.filter((template) => !template.async);
     const asyncTemplates = delayedTemplates.filter((template) => template.async);

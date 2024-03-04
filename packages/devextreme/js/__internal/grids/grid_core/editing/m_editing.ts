@@ -484,6 +484,11 @@ class EditingControllerImpl extends modules.ViewController {
     return this._rowsView?._getCellElement(rowIndex || 0, columnIndex);
   }
 
+  /**
+   * @extedned: keyboard_navigation
+   * @param rowIndex
+   * @protected
+   */
   protected getFocusedCellInRow(rowIndex) {
     return this.getFirstEditableCellInRow(rowIndex);
   }
@@ -966,6 +971,9 @@ class EditingControllerImpl extends modules.ViewController {
     return -1;
   }
 
+  /**
+   * @extended: keyboard_navigation
+   */
   protected addRow(parentKey) {
     const dataController = this._dataController;
     const store = dataController.store();
@@ -1111,6 +1119,9 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
+  /**
+   * @extended: keyboard_navigation
+   */
   protected _isEditingStart(options) {
     this.executeAction('onEditingStart', options);
 
@@ -1201,7 +1212,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, keyboard_navigation
    */
   // @ts-expect-error
   public editRow(rowIndex) {
@@ -1363,7 +1374,11 @@ class EditingControllerImpl extends modules.ViewController {
     return when(...this._deferreds);
   }
 
-  _processCanceledEditingCell(): any {}
+  /**
+   * @extended: keyboard_navigation
+   * @protected
+   */
+  protected _processCanceledEditingCell(): any {}
 
   protected _repaintEditCell(column, oldColumn, oldEditRowIndex) {
     if (!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
@@ -1387,6 +1402,9 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
+  /**
+   * @extended: keyboard_navigation
+   */
   protected _delayedInputFocus($cell, beforeFocusCallback, callBeforeFocusCallbackAlways?) {
     const inputFocus = () => {
       if (beforeFocusCallback) {

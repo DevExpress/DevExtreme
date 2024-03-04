@@ -635,7 +635,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing
+   * @extended: editing, keyboard_navigation
    */
   protected _rowClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
@@ -843,7 +843,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, editing
+   * @extended: column_fixing, editing, keyboard_navigation
    */
   protected _renderCore(change) {
     const $element = this.element();

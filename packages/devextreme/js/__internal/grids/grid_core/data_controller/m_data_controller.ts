@@ -10,6 +10,7 @@ import ArrayStore from '@js/data/array_store';
 import CustomStore from '@js/data/custom_store';
 import errors from '@js/ui/widget/ui.errors';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { ApplyFilterViewController } from '@ts/grids/grid_core/filter/m_filter_row';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
@@ -149,6 +150,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _editingController!: EditingController;
 
+  protected _editorFactoryController!: EditorFactory;
+
   protected _errorHandlingController!: ErrorHandlingController;
 
   protected _filterSyncController!: FilterSyncController;
@@ -181,6 +184,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._columnsController = this.getController('columns');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
+    this._editorFactoryController = this.getController('editorFactory');
     this._errorHandlingController = this.getController('errorHandling');
     this._filterSyncController = this.getController('filterSync');
     this._applyFilterController = this.getController('applyFilter');
@@ -1099,8 +1103,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     });
   }
 
+  /**
+   * @extended: keyboard_navigation
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _correctRowIndices(rowIndex: any): any { }
+  protected _correctRowIndices(rowIndex: any): any { }
 
   /**
    * @extend: virtual_scrolling
