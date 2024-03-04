@@ -12,6 +12,7 @@
     "angular:inject-descriptions": "dx-tools inject-descriptions --sources ./packages/devextreme-angular/npm/dist --artifacts ./artifacts/internal-tools",
     "react:copy-metadata": "shx mkdir -p ./packages/devextreme-react/metadata/ && shx cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-react/metadata/",
     "react:regenerate": "nx regenerate devextreme-react",
+    "react-storybook:start": "nx start devextreme-react-storybook",
     "tools": "dx-tools",
     "tools:discover-declarations": "dx-tools discover-declarations --sources ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./artifacts/internal-tools",
     "tools:generate-imd": "dx-tools make-integration-metadata --artifacts ./artifacts/internal-tools",
