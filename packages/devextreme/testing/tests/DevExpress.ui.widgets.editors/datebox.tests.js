@@ -5761,17 +5761,17 @@ QUnit.module('datebox validation', {}, () => {
 });
 
 [
-    { type: 'time', input: 'p', expectedValue: 'PM' },
-    { type: 'time', input: 'a', expectedValue: 'AM' },
-    { type: 'time', input: 'x', expectedValue: null },
-    { type: 'time', input: 'y', expectedValue: null },
-    { type: 'time', input: 'z', expectedValue: null },
-    { type: 'datetime', input: 'p', expectedValue: 'PM' },
-    { type: 'datetime', input: 'a', expectedValue: 'AM' },
-    { type: 'datetime', input: 'x', expectedValue: null },
-    { type: 'datetime', input: 'y', expectedValue: null },
-    { type: 'datetime', input: 'z', expectedValue: null },
-].forEach(({ type, input, expectedValue }) => {
+    { type: 'time', input: 'p', displayFormat: 'HH:mm a', expectedValue: 'PM' },
+    { type: 'time', input: 'a', displayFormat: 'HH:mm a', expectedValue: 'AM' },
+    { type: 'time', input: 'x', displayFormat: 'HH:mm a', expectedValue: null },
+    { type: 'time', input: 'y', displayFormat: 'HH:mm a', expectedValue: null },
+    { type: 'time', input: 'z', displayFormat: 'HH:mm a', expectedValue: null },
+    { type: 'datetime', input: 'p', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: 'PM' },
+    { type: 'datetime', input: 'a', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: 'AM' },
+    { type: 'datetime', input: 'x', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
+    { type: 'datetime', input: 'y', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
+    { type: 'datetime', input: 'z', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
+].forEach(({ type, input, displayFormat, expectedValue }) => {
     QUnit.module('DateBox AM/PM Handling - time datebox type - HH:mmm a display format', {
         beforeEach: function() {
             this.$element = $('#dateBox').dxDateBox({
@@ -5779,7 +5779,7 @@ QUnit.module('datebox validation', {}, () => {
                 useMaskBehavior: true,
                 type: type,
                 mode: 'text',
-                displayFormat: 'HH:mm a',
+                displayFormat: displayFormat,
                 pickerType: 'calendar'
             });
 
@@ -5791,7 +5791,7 @@ QUnit.module('datebox validation', {}, () => {
             fx.off = false;
         }
     }, () => {
-        QUnit.test(`_handleAmPmSearch should toggle to ${expectedValue} when "${input}" is pressed for "${type}" datebox type - with a HH:mm a display format`, function(assert) {
+        QUnit.test(`_handleAmPmSearch should toggle to ${expectedValue} when "${input}" is pressed for "${type}" datebox type - with a "${displayFormat}" a display format`, function(assert) {
             this.instance.option('displayFormat', 'a');
 
             this.keyboard.type(input);
