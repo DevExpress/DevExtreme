@@ -1417,6 +1417,12 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
       const value = validator.option('adapter').getValue();
       if (cellValueShouldBeValidated(value, rowOptions) || validatingController._rowIsValidated(change)) {
         editingController.waitForDeferredOperations().done(() => {
+          // NOTE: after waiting for deferred operations another rerender may occur.
+          // In this case this validating is outdated
+          const isDetached = $element.closest('tr').length === 0;
+          if (isDetached) {
+            return;
+          }
           when(validatingController.validateCell(validator)).done((result) => {
             validationResult = result;
             const { column } = validationResult.validator.option('dataGetter')();
