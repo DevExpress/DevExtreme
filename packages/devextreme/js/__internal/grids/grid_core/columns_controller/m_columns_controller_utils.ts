@@ -73,8 +73,11 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   let result: any = [];
 
   if (columnsOptions) {
+    setPlainIndicesRecursive(columnsOptions);
     each(columnsOptions, (index, columnOptions) => {
-      const userStateColumnOptions = that._columnsUserState && checkUserStateColumn(columnOptions, that._columnsUserState[index]) && that._columnsUserState[index];
+      const userStateColumnOptions = that._columnsUserState
+        && checkUserStateColumn(columnOptions, that._columnsUserState[columnOptions.plainIndex])
+        && that._columnsUserState[columnOptions.plainIndex];
       const column: any = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
       if (column) {
@@ -93,6 +96,26 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   }
 
   return result;
+};
+
+const setPlainIndicesRecursive = (columnsOptions, index?): number => {
+  if (!columnsOptions) {
+    return -1;
+  }
+  let currentIndex: number = index ?? 0;
+
+  columnsOptions.forEach((option) => {
+    if (option.plainIndex !== undefined) {
+      return option;
+    }
+
+    option.plainIndex = currentIndex;
+    currentIndex += 1;
+    if (option.columns) {
+      currentIndex = setPlainIndicesRecursive(option.columns, currentIndex);
+    }
+  });
+  return currentIndex;
 };
 
 export const getParentBandColumns = function (columnIndex, columnParentByIndex) {
