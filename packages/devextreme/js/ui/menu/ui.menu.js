@@ -524,6 +524,12 @@ class Menu extends MenuBase {
         return isObject(optionValue) ? optionValue.name : optionValue;
     }
 
+    _focusOutHandler(e) {
+        this._hideSubmenu(this._visibleSubmenu);
+
+        super._focusOutHandler(e);
+    }
+
     _moveMainMenuFocus(direction) {
         const $items = this._getAvailableItems();
         const itemCount = $items.length;
