@@ -165,6 +165,9 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._remoteOperations;
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
   public refresh(options, operationTypes) {
     const that = this;
     const dataSource = that._dataSource;
@@ -332,7 +335,7 @@ export default class DataSourceAdapter extends modules.Controller {
   }
 
   /**
-   * @extended: TreeLists's data_source_adapter, DataGrid's m_grouping
+   * @extended: virtual_scrolling, TreeLists's data_source_adapter, DataGrid's m_grouping
    */
   protected _customizeRemoteOperations(options, operationTypes) {
     let cachedStoreData = this._cachedStoreData;
@@ -699,20 +702,16 @@ export default class DataSourceAdapter extends modules.Controller {
   }
 
   /**
-   * @extended: TreeLists's data_source_adapter
+   * @extended: virtual_scrolling, TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _changeRowExpandCore(path?: any) {
-
-  }
+  protected _changeRowExpandCore(path?: any) {}
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected changeRowExpand(path?: any): any {
-
-  }
+  protected changeRowExpand(path?: any): any {}
 
   private totalCount() {
     // eslint-disable-next-line radix
@@ -723,9 +722,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._totalCountCorrection;
   }
 
-  items(): any {
-
-  }
+  /**
+   * @extended: virtual_scrolling
+   * @protected
+   */
+  protected items(): any {}
 
   /**
    * @extended: virtual_scrolling
@@ -789,6 +790,9 @@ export default class DataSourceAdapter extends modules.Controller {
     return !!this._isCustomLoading;
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
   protected load(options?) {
     const that = this;
     const dataSource = that._dataSource;
@@ -856,12 +860,13 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._cachedStoreData;
   }
 
-  isLoaded(): any {
-
-  }
+  /**
+   * @exended: virtual_scrolling
+   */
+  protected isLoaded(): any {}
 
   /**
-   * @extended: virtual-scrolling
+   * @extended: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected pageIndex(pageIndex?) {}

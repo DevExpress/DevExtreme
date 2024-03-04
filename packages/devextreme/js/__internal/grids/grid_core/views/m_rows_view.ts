@@ -21,6 +21,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
@@ -101,6 +102,8 @@ export class RowsView extends ColumnsView {
 
   protected _validatingController!: ValidatingController;
 
+  protected _errorHandlingController!: ErrorHandlingController;
+
   _columnHeadersView!: ColumnHeadersView;
 
   _hasHeight: boolean | undefined;
@@ -132,6 +135,7 @@ export class RowsView extends ColumnsView {
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._validatingController = this.getController('validating');
+    this._errorHandlingController = this.getController('errorHandling');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
@@ -361,7 +365,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, virtual_column
+   * @extended: column_fixing, virtual_column, virtual_scrolling
    */
   protected _handleScroll(e) {
     const that = this;
@@ -410,7 +414,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing_form_based
+   * @extended: editing_form_based, virtual_scrolling
    */
   protected _updateContent(newTableElement, change, isFixedTableRendering?) {
     this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
@@ -578,7 +582,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: columns_resizing_reordering
+   * @extended: columns_resizing_reordering, virtual_scrolling
    */
   protected _needUpdateRowHeight(itemsCount): boolean | undefined {
     return itemsCount > 0 && !this._rowHeight;
@@ -592,7 +596,10 @@ export class RowsView extends ColumnsView {
     return $rowElements.toArray().reduce((sum, row) => sum + getBoundingRect(row).height, 0);
   }
 
-  _updateRowHeight() {
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected _updateRowHeight() {
     const that = this;
     const $tableElement = that.getTableElement();
     const itemsCount = that._dataController.items().length;
@@ -618,6 +625,9 @@ export class RowsView extends ColumnsView {
     }
   }
 
+  /**
+   * @extended virtual_scrolling
+   */
   public _getRowElements(tableElement?) {
     const $rows = super._getRowElements(tableElement);
 
@@ -843,7 +853,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection, virtual_column
+   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection, virtual_column, virtual_scrolling
    */
   protected _renderCore(change) {
     const $element = this.element();
@@ -969,7 +979,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: validating
+   * @extended: validating, virtual_scrolling
    */
   public updateFreeSpaceRowHeight($table?) {
     const dataController = this._dataController;
@@ -1150,7 +1160,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, filter_row, row_dragging, vitrual_columns
+   * @extended: column_fixing, filter_row, row_dragging, vitrual_columns, virtual_scrolling
    */
   protected _resizeCore() {
     const that = this;
@@ -1199,7 +1209,10 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  setLoading(isLoading, messageText?) {
+  /**
+   * @extended: virtual_scrolling
+   */
+  public setLoading(isLoading, messageText?) {
     const that = this;
     let loadPanel = that._loadPanel;
     const dataController = that._dataController;
@@ -1392,7 +1405,7 @@ export class RowsView extends ColumnsView {
   public setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
 
   /**
-   * @extended: validating
+   * @extended: validating, virtual_scrolling
    */
   // eslint-disable-next-line
   protected _restoreErrorRow(contentTable?) { }

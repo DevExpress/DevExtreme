@@ -276,6 +276,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     ];
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
   public reset() {
     this._columnsController.reset();
     this._items = [];
@@ -676,7 +679,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: selection
+   * @extended: selection, virtual_scrolling
    */
   protected _loadDataSource() {
     const that = this;
@@ -723,7 +726,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: adaptivity, master_detail
+   * @extended: adaptivity, master_detail, virtual_scrolling
    */
   protected _processItems(items, change) {
     const that = this;
@@ -1275,7 +1278,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: filter_sync
+   * @extended: filter_sync, virtual_scrolling
    */
   protected _applyFilter(): Promise<void> {
     const dataSource = this._dataSource;
@@ -1454,6 +1457,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public items(byLoaded?) {
     return this._items;
@@ -1587,6 +1593,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return result;
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
   public pageIndex(value?) {
     return changePaging(this, 'pageIndex', value);
   }
@@ -1704,7 +1713,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: editing
+   * @extended: editing, virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public reload(reload?, changesOnly?): any {

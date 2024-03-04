@@ -631,7 +631,10 @@ export class ResizingController extends modules.ViewController {
     );
   }
 
-  resize() {
+  /**
+   * @extended: virtual_scrolling
+   */
+  public resize() {
     if (this.component._requireResize) {
       return;
     }

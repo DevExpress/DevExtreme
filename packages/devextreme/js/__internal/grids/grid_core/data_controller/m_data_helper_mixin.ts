@@ -39,7 +39,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
   }
 
   /**
-   * @extended: state_storing
+   * @extended: state_storing, virtual_scrolling
    */
   protected _refreshDataSource() {
     this._initDataSource();

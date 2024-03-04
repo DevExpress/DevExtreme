@@ -522,7 +522,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: keyboard_navigation
+   * @extended: keyboard_navigation, virtual_scrolling
    */
   public renderDelayedTemplates(change?) {
     const delayedTemplates = this._delayedTemplates;
