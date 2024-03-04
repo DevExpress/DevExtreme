@@ -101,12 +101,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     const that = this;
     const rowsView = that.component.getView('rowsView');
 
+    // @ts-expect-error
     const $checkbox = rowsView._renderSelectCheckBox($container, {
       value: model.row.isSelected,
       row: model.row,
       column: model.column,
     });
 
+    // @ts-expect-error
     rowsView._attachCheckBoxClickEvent($checkbox);
   }
 

@@ -86,3 +86,21 @@ const fileSystem = [
     size: 2048,
   },
 ];
+
+const fileExtensions = {
+  'Text Document': '.txt',
+  'RTF Document': '.rtf',
+  Spreadsheet: '.xls',
+};
+
+const categories = ['Work', 'Important', 'Home', 'None'];
+
+function getItemInfo(name) {
+  const extension = fileExtensions[name];
+  const category = extension || categories.find((cat) => cat === name);
+
+  return {
+    extension,
+    category,
+  };
+}

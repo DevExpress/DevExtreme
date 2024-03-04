@@ -253,7 +253,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
     const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
-    this.setAria('role', 'row', $element);
+
+    if (tagName === 'tr') {
+      this.setAria('role', 'row', $element);
+    }
     return $element;
   }
 
@@ -856,7 +859,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  getCellIndex($cell) {
+  getCellIndex($cell, rowIndex?) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;

@@ -1,15 +1,9 @@
 <dx-diagram #diagram id="diagram">
-  <dxo-nodes
-    [dataSource]="flowNodesDataSource"
-    keyExpr="id"
-    textExpr="text"
-    typeExpr="type"
-  >
+  <dxo-nodes [dataSource]="flowNodesDataSource" textExpr="text" typeExpr="type">
     <dxo-auto-layout type="layered"></dxo-auto-layout>
   </dxo-nodes>
   <dxo-edges
     [dataSource]="flowEdgesDataSource"
-    keyExpr="id"
     fromExpr="fromId"
     toExpr="toId"
     textExpr="text"
