@@ -231,7 +231,7 @@ export class ViewController extends Controller {
 }
 
 export class View extends ModuleItem {
-  _requireReady: any;
+  protected _requireReady: any;
 
   _requireRender: any;
 
@@ -285,7 +285,7 @@ export class View extends ModuleItem {
     return this._$parent;
   }
 
-  element() {
+  public element() {
     return this._$element;
   }
 
@@ -309,7 +309,7 @@ export class View extends ModuleItem {
     return this.component._getTemplate(name);
   }
 
-  getView(name) {
+  public getView(name) {
     return this.component._views[name];
   }
 

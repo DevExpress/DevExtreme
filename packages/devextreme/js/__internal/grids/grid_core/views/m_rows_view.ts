@@ -124,9 +124,8 @@ export class RowsView extends ColumnsView {
   _hideLoadingTimeoutID: any;
 
   public init(): void {
-    const dataController = this.getController('data');
-
     super.init();
+
     this._editingController = this.getController('editing');
     this._resizingController = this.getController('resizing');
     this._columnsResizerController = this.getController('columnsResizer');
@@ -140,11 +139,11 @@ export class RowsView extends ColumnsView {
     this._scrollRight = 0;
     this._hasHeight = undefined;
     this._contentChanges = [];
-    dataController.loadingChanged.add((isLoading, messageText) => {
+    this._dataController.loadingChanged.add((isLoading, messageText) => {
       this.setLoading(isLoading, messageText);
     });
 
-    dataController.dataSourceChanged.add(() => {
+    this._dataController.dataSourceChanged.add(() => {
       if (this._scrollLeft >= 0 && !this._dataController.isLoading()) {
         this._handleScroll({
           component: this.getScrollable(),
@@ -258,7 +257,7 @@ export class RowsView extends ColumnsView {
     return $row;
   }
 
-  _rowPrepared($row, rowOptions, row) {
+  protected _rowPrepared($row, rowOptions, row) {
     if (rowOptions.rowType === 'data') {
       if (this.option('rowAlternationEnabled')) {
         this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
@@ -362,7 +361,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, virtual_column
    */
   protected _handleScroll(e) {
     const that = this;
@@ -619,7 +618,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _getRowElements(tableElement?) {
+  public _getRowElements(tableElement?) {
     const $rows = super._getRowElements(tableElement);
 
     return $rows && $rows.not(`.${FREE_SPACE_CLASS}`);
@@ -680,7 +679,7 @@ export class RowsView extends ColumnsView {
     };
   }
 
-  _needWrapRow() {
+  protected _needWrapRow() {
     return super._needWrapRow.apply(this, arguments as any) || !!this.option('dataRowTemplate');
   }
 
@@ -1169,7 +1168,7 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  scrollTo(location) {
+  public scrollTo(location) {
     const $element = this.element();
     const dxScrollable = $element && Scrollable.getInstance($element);
 
@@ -1267,8 +1266,7 @@ export class RowsView extends ColumnsView {
     let viewportBoundary = that._scrollTop;
     const $contentElement = that._findContentElement();
     const contentElementOffsetTop = $contentElement && $contentElement.offset().top;
-    const dataController = this.getController('data');
-    const items = dataController.items();
+    const items = this._dataController.items();
     const tableElement = that.getTableElement();
 
     if (items.length && tableElement) {

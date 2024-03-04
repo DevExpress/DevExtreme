@@ -14,14 +14,14 @@ import { createColumnsInfo } from './m_virtual_columns_core';
 const DEFAULT_COLUMN_WIDTH = 50;
 
 const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExtender extends Base {
-  _resizeCore() {
+  protected _resizeCore() {
     // @ts-expect-error
     super._resizeCore.apply(this, arguments);
     // @ts-expect-error
     this._columnsController.resize();
   }
 
-  _handleScroll(e) {
+  protected _handleScroll(e) {
     const that = this;
     const scrollable = this.getScrollable();
     let { left } = e.scrollOffset;
@@ -37,7 +37,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
     that._columnsController.setScrollPosition(left);
   }
 
-  _renderCore(e) {
+  protected _renderCore(e) {
     if (e?.virtualColumnsScrolling) {
       const $contentElement = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
@@ -63,7 +63,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
 };
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class VirtualColumnsColumnHeaderViewExtender extends Base {
-  _renderCore() {
+  protected _renderCore() {
     // @ts-expect-error
     const deferred = super._renderCore.apply(this, arguments);
 
@@ -92,7 +92,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private _changedTimeout: any;
 
-  init() {
+  public init() {
     const that = this;
     // @ts-expect-error
     super.init.apply(this, arguments);

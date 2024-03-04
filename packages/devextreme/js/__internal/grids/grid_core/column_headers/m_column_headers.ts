@@ -286,7 +286,7 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   /**
-   * @extended: filter_row
+   * @extended: filter_row, virtual_column
    */
   protected _renderCore() {
     const that = this;

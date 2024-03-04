@@ -159,27 +159,27 @@ export const normalizeWidth = (width: string | number | undefined): string | und
 };
 
 export class ColumnsView extends ColumnStateMixin(modules.View) {
-  _tableElement: any;
+  protected _tableElement: any;
 
-  _scrollLeft: any;
+  protected _scrollLeft: any;
 
-  _delayedTemplates: any;
+  private _delayedTemplates: any;
 
-  _templateDeferreds: any;
+  private _templateDeferreds: any;
 
-  _templateTimeouts: any;
+  private _templateTimeouts: any;
 
-  _templatesCache: any;
+  private _templatesCache: any;
 
-  _requireReady: any;
+  protected _requireReady: any;
 
-  scrollChanged: any;
+  public scrollChanged: any;
 
-  _columnsController!: ColumnsController;
+  protected _columnsController!: ColumnsController;
 
-  _dataController!: DataController;
+  protected _dataController!: DataController;
 
-  _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected _adaptiveColumnsController!: AdaptiveColumnsController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -250,7 +250,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _createScrollableOptions() {
+  protected _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
     let useNativeScrolling = that.option('scrolling.useNative');
@@ -341,7 +341,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $element;
   }
 
-  _isAltRow(row) {
+  protected _isAltRow(row) {
     return row && row.dataIndex % 2 === 1;
   }
 
@@ -492,7 +492,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _rowDblClick() {}
 
-  _createColGroup(columns) {
+  protected _createColGroup(columns) {
     const colgroupElement = $('<colgroup>');
 
     for (let i = 0; i < columns.length; i++) {
@@ -535,7 +535,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._renderDelayedTemplatesCoreAsync(asyncTemplates);
   }
 
-  _renderDelayedTemplatesCoreAsync(templates) {
+  private _renderDelayedTemplatesCoreAsync(templates) {
     if (templates.length) {
       const templateTimeout = getWindow().setTimeout(() => {
         this._templateTimeouts.delete(templateTimeout);
@@ -546,7 +546,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _renderDelayedTemplatesCore(templates, isAsync, change?) {
+  private _renderDelayedTemplatesCore(templates, isAsync, change?) {
     const date = new Date();
 
     while (templates.length) {
@@ -615,7 +615,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return renderingTemplate;
   }
 
-  renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
+  public renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
     const isDataRow = options.rowType === 'data';
@@ -662,17 +662,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  _getBodies(tableElement) {
+  protected _getBodies(tableElement) {
     return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
   }
 
-  _needWrapRow($tableElement) {
+  protected _needWrapRow($tableElement) {
     const hasRowTemplate = !!this.option().rowTemplate;
 
     return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${ROW_CLASS}`).length;
   }
 
-  _wrapRowIfNeed($table, $row, isRefreshing?) {
+  protected _wrapRowIfNeed($table, $row, isRefreshing?) {
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
@@ -687,13 +687,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $row;
   }
 
-  _appendRow($table, $row, appendTemplate?) {
+  private _appendRow($table, $row, appendTemplate?) {
     appendTemplate = appendTemplate || appendElementTemplate;
     appendTemplate.render({ content: $row, container: $table });
   }
 
   /**
-   * @extended: column_fixing, filter_row, row_dragging
+   * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
   protected _resizeCore() {
     const scrollLeft = this._scrollLeft;
@@ -705,7 +705,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing, header_panel
+   * @extended: column_fixing, header_panel, virtual_column
    */
   protected _renderCore(e?) {
     const $root = this.element().parent();
@@ -762,7 +762,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
-  _needRenderCell(columnIndex, columnIndices) {
+  protected _needRenderCell(columnIndex, columnIndices) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
   }
 
@@ -787,7 +787,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _updateCells($rowElement, $newRowElement, columnIndices) {
+  protected _updateCells($rowElement, $newRowElement, columnIndices) {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
@@ -875,7 +875,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return cellOptions;
   }
 
-  _addWatchMethod(options, source?) {
+  public _addWatchMethod(options, source?) {
     if (!this.option('repaintChangesOnly')) return;
 
     const watchers: any[] = [];
@@ -944,7 +944,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this.executeAction('onCellPrepared', options);
   }
 
-  _rowPrepared($row, options, row?) {
+  protected _rowPrepared($row, options, row?) {
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);
@@ -1006,11 +1006,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected _handleDataChanged(e) {
   }
 
-  callbackNames() {
+  public callbackNames() {
     return ['scrollChanged'];
   }
 
-  _updateScrollLeftPosition() {
+  protected _updateScrollLeftPosition() {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
@@ -1019,7 +1019,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  scrollTo(pos) {
+  public scrollTo(pos) {
     const $element = this.element();
     const $scrollContainer = $element && $element.children(`.${this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)}`).not(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
 
@@ -1036,7 +1036,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._tableElement?.parent();
   }
 
-  _removeContent(isFixedTableRendering) {
+  private _removeContent(isFixedTableRendering) {
     const $scrollContainer = this._getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
@@ -1073,12 +1073,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $scrollContainer;
   }
 
-  needWaitAsyncTemplates() {
+  private needWaitAsyncTemplates() {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
-  waitAsyncTemplates(forceWaiting = false) {
+  public waitAsyncTemplates(forceWaiting = false) {
     // @ts-expect-error
     const result = new Deferred();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
@@ -1265,7 +1265,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell.length > 0 ? $cell : undefined;
   }
 
-  _getRowElement(rowIndex) {
+  private _getRowElement(rowIndex) {
     const that = this;
     // @ts-expect-error
     let $rowElement = $();
@@ -1291,7 +1291,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  getRowElement(rowIndex) {
+  public getRowElement(rowIndex) {
     const $rows = this._getRowElement(rowIndex);
     let elements: any = [];
 
@@ -1342,7 +1342,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  getRowsCount() {
+  private getRowsCount() {
     const tableElement = this.getTableElement();
 
     if (tableElement && tableElement.length === 1) {
@@ -1351,7 +1351,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return 0;
   }
 
-  _getRowElementsCore(tableElement) {
+  protected _getRowElementsCore(tableElement) {
     tableElement = tableElement || this.getTableElement();
 
     if (tableElement) {
@@ -1366,7 +1366,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $();
   }
 
-  _getRowElements(tableElement?) {
+  public _getRowElements(tableElement?) {
     return this._getRowElementsCore(tableElement);
   }
 
@@ -1395,7 +1395,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  isScrollbarVisible(isHorizontal) {
+  protected isScrollbarVisible(isHorizontal) {
     const $element = this.element();
     const $tableElement = this._tableElement;
 
@@ -1406,7 +1406,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return false;
   }
 
-  isDisposed() {
+  public isDisposed() {
     return this.component?._disposed;
   }
 }
