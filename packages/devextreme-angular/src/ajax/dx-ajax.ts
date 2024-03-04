@@ -1,5 +1,5 @@
 import { Deferred } from 'devextreme/core/utils/deferred';
-import { HttpClient, HttpEventType, HttpParams } from '@angular/common/http';
+import { HttpEventType, HttpParams } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { getWindow } from 'devextreme/core/utils/window';
@@ -108,13 +108,13 @@ function isNeedScriptEvaluation(options) {
   return options.dataType === 'jsonp' || options.dataType === 'script';
 }
 
-export const sendRequestFactory = (httpClient: HttpClient) => {
+export const sendRequestFactory = (httpClient) => {
   const URLENCODED = 'application/x-www-form-urlencoded';
 
   let nonce = Date.now();
 
   return (options: Record<string, any>) => {
-    const destroy$ = new Subject<undefined>();
+    const destroy$ = new Subject<any>();
     const d = Deferred();
     const method = (options.method || 'get').toLowerCase();
     const isGet = method === 'get';
