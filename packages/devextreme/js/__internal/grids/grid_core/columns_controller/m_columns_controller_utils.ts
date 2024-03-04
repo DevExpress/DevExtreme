@@ -98,24 +98,41 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   return result;
 };
 
-const setPlainIndicesRecursive = (columnsOptions, index?): number => {
+const setPlainIndicesRecursive = (columnsOptions, index?) => {
   if (!columnsOptions) {
-    return -1;
+    return {
+      columnsOptions: {},
+      currentIndex: -1,
+    };
   }
   let currentIndex: number = index ?? 0;
 
-  columnsOptions.forEach((option) => {
+  columnsOptions = columnsOptions.map((option) => {
     if (option.plainIndex !== undefined) {
       return option;
     }
+    if (typeof option === 'string') {
+      option = {
+        dataField: option,
+        plainIndex: currentIndex,
+      };
+    } else {
+      option.plainIndex = currentIndex;
+    }
 
-    option.plainIndex = currentIndex;
     currentIndex += 1;
     if (option.columns) {
-      currentIndex = setPlainIndicesRecursive(option.columns, currentIndex);
+      const nestResult = setPlainIndicesRecursive(option.columns, currentIndex);
+      option.columns = nestResult.columnsOptions;
+      currentIndex = nestResult.currentIndex;
     }
+
+    return option;
   });
-  return currentIndex;
+  return {
+    columnsOptions,
+    currentIndex,
+  };
 };
 
 export const getParentBandColumns = function (columnIndex, columnParentByIndex) {
