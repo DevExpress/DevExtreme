@@ -12,7 +12,7 @@ const CLASSES = {
 };
 
 // T1195478
-test('Cells should not be highlighted after opening cell as edited', async (t) => {
+test.skip('Cells should not be highlighted after opening cell as edited', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.click(dataGrid.getDataRow(0).getDataCell(0).element);

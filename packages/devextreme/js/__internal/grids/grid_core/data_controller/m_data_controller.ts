@@ -1528,10 +1528,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
       this.updateItems({
-        changeType: 'update',
-        rowIndices: rowIndexes,
-        isFullUpdate: !changesOnly,
-        isLiveUpdate: changesOnly,
+        changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly, isLiveUpdate: changesOnly,
       });
     }
   }
