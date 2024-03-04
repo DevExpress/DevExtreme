@@ -843,7 +843,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection
+   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection, virtual_column
    */
   protected _renderCore(change) {
     const $element = this.element();
@@ -1150,7 +1150,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, filter_row, row_dragging
+   * @extended: column_fixing, filter_row, row_dragging, vitrual_columns
    */
   protected _resizeCore() {
     const that = this;

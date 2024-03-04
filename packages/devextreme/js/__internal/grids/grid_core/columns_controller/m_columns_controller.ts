@@ -453,6 +453,9 @@ export class ColumnsController extends modules.Controller {
     return true;
   }
 
+  /**
+   * @extended: virtual_column
+   */
   protected _compileVisibleColumns(rowIndex?) {
     this._visibleColumns = this._visibleColumns || this._compileVisibleColumnsCore();
     rowIndex = isDefined(rowIndex) ? rowIndex : this._visibleColumns.length - 1;
@@ -470,6 +473,9 @@ export class ColumnsController extends modules.Controller {
     return this._compileVisibleColumns.apply(this, arguments);
   }
 
+  /**
+   * @extended: virtual_column
+   */
   public getFixedColumns(rowIndex?) {
     this._fixedColumns = this._fixedColumns || this._getFixedColumnsCore();
     rowIndex = isDefined(rowIndex) ? rowIndex : this._fixedColumns.length - 1;
@@ -488,6 +494,9 @@ export class ColumnsController extends modules.Controller {
     });
   }
 
+  /**
+   * @extended: virtual_column
+   */
   public getColumnIndexOffset() {
     return 0;
   }
