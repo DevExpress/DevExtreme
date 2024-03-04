@@ -8,11 +8,11 @@ import dataQuery from '@js/data/query';
 import messageLocalization from '@js/localization/message';
 
 import type { Column } from '../columns_controller/m_columns_controller';
-import { DataController, Filter } from '../data_controller/m_data_controller';
+import type { DataController, Filter } from '../data_controller/m_data_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
-import { ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
-import { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/m_rows_view';
 
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';
@@ -35,9 +35,6 @@ function parseValue(column: Column, text: string): unknown {
   }
 
   return column.parseValue(text);
-}
-export interface SearchDataControllerExtension {
-  searchByText(text: string): void;
 }
 
 const dataController = (
@@ -144,6 +141,7 @@ const headerPanel = (
             value: that.option('searchPanel.text'),
             updateValueTimeout: FILTERING_TIMEOUT,
             setValue(value) {
+              // @ts-expect-error
               dataController.searchByText(value);
             },
             editorOptions: {

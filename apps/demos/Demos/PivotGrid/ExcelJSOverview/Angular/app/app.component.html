@@ -1,0 +1,10 @@
+<dx-pivot-grid
+  rowHeaderLayout="tree"
+  [height]="440"
+  [showBorders]="true"
+  [dataSource]="dataSource"
+  (onExporting)="onExporting($event)"
+>
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+  <dxo-export [enabled]="true"></dxo-export>
+</dx-pivot-grid>

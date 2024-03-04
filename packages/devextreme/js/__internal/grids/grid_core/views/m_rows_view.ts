@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -17,6 +18,8 @@ import { removeEvent } from '@js/events/remove';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
+import type { EditingController } from '../editing/m_editing';
+import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
 import { ColumnsView } from './m_columns_view';
 
@@ -78,7 +81,9 @@ const getScrollableBottomPadding = function (that) {
 export class RowsView extends ColumnsView {
   _loadPanel: any;
 
-  _editorFactoryController!: any;
+  _editingController!: EditingController;
+
+  _editorFactoryController!: EditorFactory;
 
   _hasHeight: boolean | undefined;
 
@@ -494,7 +499,7 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  _needUpdateRowHeight(itemsCount) {
+  _needUpdateRowHeight(itemsCount): boolean | undefined {
     return itemsCount > 0 && !this._rowHeight;
   }
 
@@ -933,6 +938,7 @@ export class RowsView extends ColumnsView {
     const dataController = that.getController('data');
 
     super.init();
+    this._editingController = this.getController('editing');
     that._editorFactoryController = that.getController('editorFactory');
     that._rowHeight = 0;
     that._scrollTop = 0;
@@ -1012,7 +1018,7 @@ export class RowsView extends ColumnsView {
   }
 
   _updateLastRowBorder(isFreeSpaceRowVisible) {
-    if (this.option('showBorders') && this.option('showRowLines') && !isFreeSpaceRowVisible) {
+    if (this.option('showBorders') && !isFreeSpaceRowVisible) {
       this.element().addClass(LAST_ROW_BORDER);
     } else {
       this.element().removeClass(LAST_ROW_BORDER);
@@ -1076,7 +1082,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  height(height) {
+  height(height?) {
     const that = this;
     const $element = this.element();
 
@@ -1090,7 +1096,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  hasHeight(hasHeight) {
+  hasHeight(hasHeight?) {
     if (arguments.length === 0) { return !!this._hasHeight; }
 
     this._hasHeight = hasHeight;
@@ -1098,7 +1104,7 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  setLoading(isLoading, messageText) {
+  setLoading(isLoading, messageText?) {
     const that = this;
     let loadPanel = that._loadPanel;
     const dataController = that._dataController;
@@ -1219,7 +1225,7 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  _scrollToElement($element, offset) {
+  _scrollToElement($element, offset?) {
     const scrollable = this.getScrollable();
     scrollable && scrollable.scrollToElement($element, offset);
   }
@@ -1277,9 +1283,10 @@ export class RowsView extends ColumnsView {
     this._scrollable && this._scrollable.dispose();
   }
 
-  setScrollerSpacing() { }
+  setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
 
-  _restoreErrorRow() { }
+  // eslint-disable-next-line
+  _restoreErrorRow(contentTable?) { }
 }
 
 export const rowsModule = {

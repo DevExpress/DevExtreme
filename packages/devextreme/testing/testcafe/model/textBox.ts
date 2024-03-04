@@ -1,6 +1,6 @@
 import Widget from './internal/widget';
 import ActionButton from './internal/actionButton';
-import { WidgetName } from '../helpers/createWidget';
+import type { WidgetName } from '../helpers/widgetTypings';
 
 const CLASS = {
   input: 'dx-texteditor-input',

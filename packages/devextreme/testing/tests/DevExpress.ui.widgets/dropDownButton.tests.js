@@ -1,7 +1,8 @@
 import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
-import typeUtils from 'core/utils/type';
+import typeUtils, { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ArrayStore from 'data/array_store';
@@ -19,6 +20,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const BUTTON = 'dx-button';
 const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
 const BUTTON_TEXT = 'dx-button-text';
+const BUTTON_CONTENT_CLASS = 'dx-button-content';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -29,7 +31,6 @@ const FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
-const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
 
 QUnit.testStart(() => {
@@ -1439,7 +1440,7 @@ QUnit.module('common use cases', {
             selectedItemKey: 1
         });
 
-        assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
+        assert.strictEqual(this.dropDownButton._dataController.key(), 'key', '_keyGetter was updated');
     });
 
     QUnit.test('keyGetter should be updated after dataSource option change', function(assert) {
@@ -1459,7 +1460,7 @@ QUnit.module('common use cases', {
             selectedItemKey: 1
         });
 
-        assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
+        assert.strictEqual(this.dropDownButton._dataController.key(), 'key', '_keyGetter was updated');
     });
 
     QUnit.test('list keyExpr should be updated after keyExpr option change', function(assert) {
@@ -1565,7 +1566,6 @@ QUnit.module('common use cases', {
             useSelectMode: true,
             selectedItemKey: 1
         });
-
         const items = [{ id: 3, name: 'test' }];
         this.dropDownButton.option('items', items);
 
@@ -1576,6 +1576,7 @@ QUnit.module('common use cases', {
             const list = getList(this.dropDownButton);
             assert.deepEqual(list.option('selectedItemKeys'), [], 'list selectedItemKey is kept');
             assert.strictEqual(list.option('selectedItem'), undefined, 'list selectedItem is correct');
+
             done();
         });
     });
@@ -2640,6 +2641,91 @@ QUnit.module('custom content template', {}, () => {
 
         const $listItems = getList(dropDownButton).itemElements();
         assert.strictEqual($listItems.eq(0).text(), '1: A', 'itemTemlate has changed item text');
+    });
+});
+
+QUnit.module('Button template', {}, () => {
+    QUnit.test('Button template should be rendered correctly if string is passed', function(assert) {
+        const customText = 'Custom text';
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            template: customText,
+        });
+        const $buttonContent = $dropDownButton.find(`.${BUTTON_CONTENT_CLASS}`);
+
+        assert.strictEqual($buttonContent.text(), customText, 'text is correct');
+    });
+
+    QUnit.test('Button template should be rendered correctly if template function is passed', function(assert) {
+        const customClass = 'CustomClass';
+        const customText = 'Custom text';
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            template: () => $(`<div class=${customClass}>${customText}</div>`)
+        });
+        const $buttonContent = $dropDownButton.find(`.${BUTTON_CONTENT_CLASS}`);
+        const $template = $dropDownButton.find(`.${customClass}`);
+
+        assert.ok($template.parent().is($buttonContent), 'template is placed in button content');
+        assert.strictEqual($template.text(), customText, 'text is correct');
+    });
+
+    QUnit.test('Button template should have icon and text as first argument', function(assert) {
+        const templateStub = sinon.stub();
+        const text = 'Custom caption';
+        const icon = '';
+        $('#dropDownButton').dxDropDownButton({
+            text,
+            icon,
+            template: templateStub
+        });
+
+        const data = templateStub.getCall(0).args[0];
+
+        assert.strictEqual(data.text, text, 'text is passed as first argument field');
+        assert.strictEqual(data.icon, icon, 'icon is passed as first argument field');
+    });
+
+    QUnit.test('Button template should have button content element as second argument', function(assert) {
+        const templateStub = sinon.stub();
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            template: templateStub
+        });
+
+        const $element = $(templateStub.getCall(0).args[1]);
+        const $buttonContent = $dropDownButton.find(`.${BUTTON_CONTENT_CLASS}`);
+
+        assert.ok($element.is($buttonContent));
+    });
+
+    QUnit.test('Button template should have correct container argument', function(assert) {
+        $('#dropDownButton').dxDropDownButton({
+            template: (_, container) => {
+                assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
+            }
+        });
+    });
+
+    QUnit.test('Action button should have template passed from DropDownButton', function(assert) {
+        const templateStub = sinon.stub();
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            template: templateStub
+        }).dxDropDownButton('instance');
+
+        const actionButton = getActionButton(dropDownButton).dxButton('instance');
+
+        assert.strictEqual(dropDownButton.option('template'), actionButton.option('template'));
+    });
+
+    QUnit.test('Button template should be rerendered correctly on runtime change', function(assert) {
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            template: 'Old text',
+        });
+        const dropDownButton = $dropDownButton.dxDropDownButton('instance');
+
+        dropDownButton.option('template', 'New text');
+
+        const $buttonContent = $dropDownButton.find(`.${BUTTON_CONTENT_CLASS}`);
+
+        assert.strictEqual($buttonContent.text(), 'New text', 'template is updated');
     });
 });
 

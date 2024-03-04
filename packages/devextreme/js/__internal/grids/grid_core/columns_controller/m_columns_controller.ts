@@ -23,7 +23,7 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 
 import modules from '../m_modules';
-import { Module } from '../m_types';
+import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
   COLUMN_CHOOSER_LOCATION,
@@ -437,7 +437,7 @@ export class ColumnsController extends modules.Controller {
     return true;
   }
 
-  _compileVisibleColumns(rowIndex) {
+  _compileVisibleColumns(rowIndex?) {
     this._visibleColumns = this._visibleColumns || this._compileVisibleColumnsCore();
     rowIndex = isDefined(rowIndex) ? rowIndex : this._visibleColumns.length - 1;
 
@@ -454,7 +454,7 @@ export class ColumnsController extends modules.Controller {
     return this._compileVisibleColumns.apply(this, arguments);
   }
 
-  getFixedColumns(rowIndex) {
+  getFixedColumns(rowIndex?) {
     this._fixedColumns = this._fixedColumns || this._getFixedColumnsCore();
     rowIndex = isDefined(rowIndex) ? rowIndex : this._fixedColumns.length - 1;
 
@@ -1029,14 +1029,15 @@ export class ColumnsController extends modules.Controller {
   }
 
   _updateColumnOptions(column, columnIndex) {
-    column.selector = column.selector || function (data) { return column.calculateCellValue(data); };
-    if (this._reinitAfterLookupChanges && this._previousColumns) {
-      column.selector.columnIndex = columnIndex;
-      column.selector.originalCallback = this._previousColumns[columnIndex].selector.originalCallback;
-    } else {
-      column.selector.columnIndex = columnIndex;
-      column.selector.originalCallback = column.selector;
-    }
+    const defaultSelector = (data) => column.calculateCellValue(data);
+    const shouldTakeOriginalCallbackFromPrevious = this._reinitAfterLookupChanges
+      && this._previousColumns?.[columnIndex];
+
+    column.selector = column.selector ?? defaultSelector;
+    column.selector.columnIndex = columnIndex;
+    column.selector.originalCallback = shouldTakeOriginalCallbackFromPrevious
+      ? this._previousColumns[columnIndex].selector?.originalCallback ?? column.selector
+      : column.selector;
 
     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], (_, calculateCallbackName) => {
       const calculateCallback = column[calculateCallbackName];
@@ -1713,7 +1714,7 @@ export class ColumnsController extends modules.Controller {
     return this._rowCount;
   }
 
-  getRowIndex(columnIndex, alwaysGetRowIndex) {
+  getRowIndex(columnIndex, alwaysGetRowIndex?) {
     const column = this._columns[columnIndex];
     const bandColumnsCache = this.getBandColumnsCache();
 

@@ -528,20 +528,25 @@ const TextEditorMask = TextEditorBase.inherit({
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
+        this._refreshValueChangeEvent();
     },
 
     _processEmptyMask: function(mask) {
         if(mask) return;
 
         const value = this.option('value');
+
         this.option({
             text: value,
-            isValid: true
+            isValid: true,
+            validationError: null,
         });
+
         this.validationRequest.fire({
             value: value,
-            editor: this
+            editor: this,
         });
+
         this._renderValue();
     },
 

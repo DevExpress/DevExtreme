@@ -1,5 +1,7 @@
+/* eslint-disable max-classes-per-file */
 import { move } from '@js/animation/translator';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -12,8 +14,16 @@ import { name as wheelEventName } from '@js/events/core/wheel';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type {
+  ColumnsResizerViewController,
+  DraggingHeaderViewController,
+} from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { normalizeWidth } from '../views/m_columns_view';
+import type { ResizingController } from '../views/m_grid_view';
+import type { RowsView } from '../views/m_rows_view';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -61,16 +71,17 @@ const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWid
   return widths;
 };
 
-const baseFixedColumns = {
+// View
+const baseFixedColumns = (Base: ModuleType<any>) => class BaseFixedColumnsExtender extends Base {
   init() {
-    this.callBase();
+    super.init();
     this._isFixedTableRendering = false;
     this._isFixedColumns = false;
-  },
+  }
 
   _createCol(column) {
-    return this.callBase(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== COMMAND_TRANSPARENT)));
-  },
+    return super._createCol(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== COMMAND_TRANSPARENT)));
+  }
 
   _correctColumnIndicesForFixedColumns(fixedColumns, change) {
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
@@ -91,7 +102,7 @@ const baseFixedColumns = {
         }
       });
     }
-  },
+  }
 
   _partialUpdateFixedTable(fixedColumns) {
     const fixedTableElement = this._fixedTableElement;
@@ -103,7 +114,7 @@ const baseFixedColumns = {
     for (let i = 0; i < $rows.length; i++) {
       this._partialUpdateFixedRow($($rows[i]), fixedColumns);
     }
-  },
+  }
 
   _partialUpdateFixedRow($row, fixedColumns) {
     const cellElements = $row.get(0).childNodes;
@@ -141,14 +152,14 @@ const baseFixedColumns = {
         colIndex++;
       }
     }
-  },
+  }
 
   _renderTable(options) {
     let $fixedTable;
     const fixedColumns = this.getFixedColumns();
 
     this._isFixedColumns = !!fixedColumns.length;
-    const $table = this.callBase(options);
+    const $table = super._renderTable(options);
 
     if (this._isFixedColumns) {
       const change = options?.change;
@@ -181,13 +192,13 @@ const baseFixedColumns = {
     }
 
     return $table;
-  },
+  }
 
   _renderRow($table, options) {
     let fixedCorrection;
     let { cells } = options.row;
 
-    this.callBase.apply(this, arguments);
+    super._renderRow.apply(this, arguments);
 
     if (this._isFixedTableRendering && cells && cells.length) {
       fixedCorrection = 0;
@@ -203,14 +214,14 @@ const baseFixedColumns = {
         cells[i + fixedCorrection] = fixedCells[i];
       }
     }
-  },
+  }
 
   _createCell(options) {
     const that = this;
     const { column } = options;
     const columnCommand = column && column.command;
     const { rowType } = options;
-    const $cell = that.callBase.apply(that, arguments);
+    const $cell = super._createCell.apply(that, arguments as any);
     let fixedColumns;
     let prevFixedColumn;
     let transparentColumnIndex;
@@ -244,21 +255,21 @@ const baseFixedColumns = {
     }
 
     return $cell;
-  },
+  }
 
   _getContent(isFixedTableRendering) {
-    return isFixedTableRendering ? this._fixedTableElement?.parent() : this.callBase.apply(this, arguments);
-  },
+    return isFixedTableRendering ? this._fixedTableElement?.parent() : super._getContent.apply(this, arguments);
+  }
 
   _wrapTableInScrollContainer($table, isFixedTableRendering) {
-    const $scrollContainer = this.callBase.apply(this, arguments);
+    const $scrollContainer = super._wrapTableInScrollContainer.apply(this, arguments);
 
     if (this._isFixedTableRendering || isFixedTableRendering) {
       $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS));
     }
 
     return $scrollContainer;
-  },
+  }
 
   _renderCellContent($cell, options) {
     let isEmptyCell;
@@ -303,12 +314,12 @@ const baseFixedColumns = {
     }
 
     if (column.command !== COMMAND_TRANSPARENT) {
-      this.callBase.apply(this, arguments);
+      super._renderCellContent.apply(this, arguments);
     }
-  },
+  }
 
   _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
-    const cellElements = this.callBase.apply(this, arguments);
+    const cellElements = super._getCellElementsCore.apply(this, arguments);
 
     const isGroupRow = cellElements?.parent().hasClass(GROUP_ROW_CLASS);
     const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
@@ -340,33 +351,33 @@ const baseFixedColumns = {
     }
 
     return cellElements;
-  },
+  }
 
-  getColumnWidths() {
-    const that = this;
-    const result = that.callBase();
-    const fixedColumns = that.getFixedColumns();
-    const fixedWidths = that._fixedTableElement && result.length
-      ? that.callBase(that._fixedTableElement)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getColumnWidths(fixedTableElement?: any) {
+    const result = super.getColumnWidths();
+    const fixedColumns = this.getFixedColumns();
+    const fixedWidths = this._fixedTableElement && result.length
+      ? super.getColumnWidths(this._fixedTableElement)
       : undefined;
 
     return normalizeColumnWidths(fixedColumns, result, fixedWidths);
-  },
+  }
 
-  getTableElement(isFixedTableRendering) {
+  getTableElement(isFixedTableRendering?) {
     isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
-    const tableElement = isFixedTableRendering ? this._fixedTableElement : this.callBase();
+    const tableElement = isFixedTableRendering ? this._fixedTableElement : super.getTableElement();
 
     return tableElement;
-  },
+  }
 
   setTableElement(tableElement, isFixedTableRendering) {
     if (this._isFixedTableRendering || isFixedTableRendering) {
       this._fixedTableElement = tableElement.addClass(POINTER_EVENTS_NONE_CLASS);
     } else {
-      this.callBase(tableElement);
+      super.setTableElement(tableElement);
     }
-  },
+  }
 
   getColumns(rowIndex) {
     const $tableElement = this.getTableElement();
@@ -375,8 +386,8 @@ const baseFixedColumns = {
       return this.getFixedColumns(rowIndex);
     }
 
-    return this.callBase(rowIndex, $tableElement);
-  },
+    return super.getColumns(rowIndex, $tableElement);
+  }
 
   getRowIndex($row) {
     const $fixedTable = this._fixedTableElement;
@@ -385,22 +396,22 @@ const baseFixedColumns = {
       return this._getRowElements($fixedTable).index($row);
     }
 
-    return this.callBase($row);
-  },
+    return super.getRowIndex($row);
+  }
 
   getTableElements() {
-    let result = this.callBase.apply(this, arguments);
+    let result = super.getTableElements.apply(this, arguments);
 
     if (this._fixedTableElement) {
       result = $([result.get(0), this._fixedTableElement.get(0)] as any);
     }
 
     return result;
-  },
+  }
 
-  getFixedColumns(rowIndex) {
+  getFixedColumns(rowIndex?) {
     return this._columnsController.getFixedColumns(rowIndex);
-  },
+  }
 
   getFixedColumnsOffset() {
     let offset = { left: 0, right: 0 };
@@ -417,24 +428,24 @@ const baseFixedColumns = {
     }
 
     return offset;
-  },
+  }
 
   getTransparentColumnElement() {
     return this._fixedTableElement && this._fixedTableElement.find(`.${POINTER_EVENTS_NONE_CLASS}`).first();
-  },
+  }
 
   getFixedTableElement() {
     return this._fixedTableElement;
-  },
+  }
 
   isFixedColumns() {
     return this._isFixedColumns;
-  },
+  }
 
   _resizeCore() {
-    this.callBase();
+    super._resizeCore();
     this.synchronizeRows();
-  },
+  }
 
   setColumnWidths(options): void {
     const { widths } = options;
@@ -443,7 +454,7 @@ const baseFixedColumns = {
     const isColumnWidthsSynced = widths?.length && visibleColumns.some((column) => isDefined(column.visibleWidth));
     const isColumnWidthChanged = options.optionNames?.width;
 
-    this.callBase(options);
+    super.setColumnWidths(options);
 
     if (this._fixedTableElement) {
       const hasAutoWidth = widths?.some((width) => width === 'auto' || !isDefined(width));
@@ -460,7 +471,7 @@ const baseFixedColumns = {
     if (needSynchronizeRows) {
       this.synchronizeRows();
     }
-  },
+  }
 
   setFixedTableColumnWidths(columns, widths): void {
     if (!this._fixedTableElement || !widths) {
@@ -486,13 +497,13 @@ const baseFixedColumns = {
 
       columnIndex += 1;
     });
-  },
+  }
 
   _getClientHeight(element) {
     const boundingClientRectElement = element.getBoundingClientRect && getBoundingRect(element);
 
     return boundingClientRectElement && boundingClientRectElement.height ? boundingClientRectElement.height : element.clientHeight;
-  },
+  }
 
   synchronizeRows() {
     const rowHeights: any[] = [];
@@ -533,31 +544,32 @@ const baseFixedColumns = {
         }
       }
     });
-  },
+  }
 
-  setScrollerSpacing(width) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setScrollerSpacing(width, hWidth?) {
     const rtlEnabled = this.option('rtlEnabled');
 
-    this.callBase(width);
+    super.setScrollerSpacing(width);
     this.element().children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`).css({
       paddingLeft: rtlEnabled ? width : '',
       paddingRight: !rtlEnabled ? width : '',
     });
-  },
+  }
 };
 
-const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
+const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
   _getRowVisibleColumns(rowIndex) {
     if (this._isFixedTableRendering) {
       return this.getFixedColumns(rowIndex);
     }
-    return this.callBase(rowIndex);
-  },
+    return super._getRowVisibleColumns(rowIndex);
+  }
 
   getContextMenuItems(options) {
     const { column } = options;
     const columnFixingOptions = this.option('columnFixing');
-    let items = this.callBase(options);
+    let items = super.getContextMenuItems(options);
 
     if (options.row && options.row.rowType === 'header') {
       if (columnFixingOptions.enabled === true && column && column.allowFixing) {
@@ -602,9 +614,9 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       }
     }
     return items;
-  },
+  }
 
-  getFixedColumnElements(rowIndex) {
+  getFixedColumnElements(rowIndex?) {
     const that = this;
 
     if (isDefined(rowIndex)) {
@@ -619,12 +631,12 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     }
 
     return columnElements;
-  },
+  }
 
   getColumnWidths() {
     const that = this;
     let fixedWidths;
-    const result = that.callBase();
+    const result = super.getColumnWidths();
     const $fixedColumnElements = that.getFixedColumnElements();
     const fixedColumns = that.getFixedColumns();
 
@@ -632,22 +644,22 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       if ($fixedColumnElements && $fixedColumnElements.length) {
         fixedWidths = that._getWidths($fixedColumnElements);
       } else {
-        fixedWidths = that.callBase(that._fixedTableElement);
+        fixedWidths = super.getColumnWidths(that._fixedTableElement);
       }
     }
 
     return normalizeColumnWidths(fixedColumns, result, fixedWidths);
-  },
-});
+  }
+};
 
-const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
+const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
   _detachHoverEvents() {
     const element = this.element();
 
     if (this._fixedTableElement && this._tableElement) {
       eventsEngine.off(element, 'mouseover mouseout', '.dx-data-row');
     }
-  },
+  }
 
   _attachHoverEvents() {
     if (this._fixedTableElement && this._tableElement) {
@@ -662,7 +674,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
       }));
     }
-  },
+  }
 
   _getScrollDelay() {
     const hasResizeTimeout = this.getController('resizing')?.hasResizeTimeout();
@@ -672,7 +684,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     }
 
     return browser.mozilla ? 60 : 0;
-  },
+  }
 
   _findContentElement(isFixedTableRendering) {
     let $content;
@@ -735,11 +747,11 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       return $content;
     }
 
-    return this.callBase();
-  },
+    return super._findContentElement();
+  }
 
   _updateScrollable() {
-    this.callBase();
+    super._updateScrollable();
 
     const scrollable = this.getScrollable();
 
@@ -750,7 +762,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     const scrollTop = scrollable && scrollable.scrollOffset().top;
 
     this._updateFixedTablePosition(scrollTop);
-  },
+  }
 
   _renderContent(contentElement, tableElement, isFixedTableRendering) {
     if (this._isFixedTableRendering || isFixedTableRendering) {
@@ -760,31 +772,31 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         .append(tableElement);
     }
 
-    return this.callBase(contentElement, tableElement);
-  },
+    return super._renderContent(contentElement, tableElement);
+  }
 
   _getGroupCellOptions(options) {
     if (this._isFixedTableRendering) {
-      return this.callBase(extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+      return super._getGroupCellOptions(extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
     }
 
-    return this.callBase(options);
-  },
+    return super._getGroupCellOptions(options);
+  }
 
   _renderGroupedCells($row, options) {
-    return this.callBase($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
-  },
+    return super._renderGroupedCells($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+  }
 
   _renderGroupSummaryCells($row, options) {
     if (this._isFixedTableRendering) {
-      this.callBase($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+      super._renderGroupSummaryCells($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
     } else {
-      this.callBase($row, options);
+      super._renderGroupSummaryCells($row, options);
     }
-  },
+  }
 
   _hasAlignByColumnSummaryItems(columnIndex, options) {
-    const result = this.callBase.apply(this, arguments);
+    const result = super._hasAlignByColumnSummaryItems.apply(this, arguments);
     const column = options.columns[columnIndex];
 
     if (options.isFixed) {
@@ -792,7 +804,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     }
 
     return result && (!this._isFixedColumns || !column.fixed);
-  },
+  }
 
   _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
     let alignByFixedColumnCellCount;
@@ -815,8 +827,8 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       alignByColumnCellCount = alignByFixedColumnCellCount;
     }
 
-    this.callBase($groupCell, options, groupCellColSpan, alignByColumnCellCount);
-  },
+    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+  }
 
   _getSummaryCellIndex(columnIndex, columns) {
     if (this._isFixedTableRendering) {
@@ -829,13 +841,13 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       return columnIndex;
     }
 
-    return this.callBase.apply(this, arguments);
-  },
+    return super._getSummaryCellIndex.apply(this, arguments);
+  }
 
   _renderCore(change) {
     this._detachHoverEvents();
 
-    const deferred = this.callBase(change);
+    const deferred = super._renderCore(change);
 
     const isFixedColumns = this._isFixedColumns;
 
@@ -846,7 +858,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     }
 
     return deferred;
-  },
+  }
 
   setAriaOwns(headerTableId, footerTableId, isFixed) {
     if (isFixed) {
@@ -858,26 +870,26 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
       }
     } else {
-      this.callBase.apply(this, arguments);
+      super.setAriaOwns.apply(this, arguments);
     }
-  },
+  }
 
   setRowsOpacity(columnIndex, value) {
-    this.callBase(columnIndex, value);
+    super.setRowsOpacity(columnIndex, value);
 
     const $rows = this._getRowElements(this._fixedTableElement);
     this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
-  },
+  }
 
   optionChanged(args) {
     const that = this;
 
-    that.callBase(args);
+    super.optionChanged(args);
 
     if (args.name === 'hoverStateEnabled' && that._isFixedColumns) {
       args.value ? this._attachHoverEvents() : this._detachHoverEvents();
     }
-  },
+  }
 
   getCellIndex($cell) {
     const $fixedTable = this._fixedTableElement;
@@ -903,10 +915,10 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       return cellIndex;
     }
 
-    return this.callBase.apply(this, arguments);
-  },
+    return super.getCellIndex.apply(this, arguments);
+  }
 
-  _updateFixedTablePosition(scrollTop, needFocus) {
+  _updateFixedTablePosition(scrollTop, needFocus?) {
     if (this._fixedTableElement && this._tableElement) {
       let $focusedElement;
       const editorFactory = this.getController('editorFactory');
@@ -918,7 +930,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         $focusedElement && editorFactory.focus($focusedElement);
       }
     }
-  },
+  }
 
   setScrollerSpacing(vWidth, hWidth) {
     const that = this;
@@ -935,7 +947,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
       const useNativeScrolling = that._scrollable && that._scrollable.option('useNative');
       (useNativeScrolling ? $fixedContent : that._fixedTableElement).css(styles);
     }
-  },
+  }
 
   _getElasticScrollTop(e) {
     let elasticScrollTop = 0;
@@ -951,7 +963,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     }
 
     return Math.floor(elasticScrollTop);
-  },
+  }
 
   _applyElasticScrolling(e) {
     if (this._fixedTableElement) {
@@ -963,36 +975,151 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this._fixedTableElement.css('transform', '');
       }
     }
-  },
+  }
 
   _handleScroll(e) {
     this._updateFixedTablePosition(e.scrollOffset.top, true);
     this._applyElasticScrolling(e);
-    this.callBase(e);
-  },
+    super._handleScroll(e);
+  }
 
   _updateContentPosition(isRender) {
-    this.callBase.apply(this, arguments);
+    super._updateContentPosition.apply(this, arguments);
     if (!isRender) {
       this._updateFixedTablePosition(this._scrollTop);
     }
-  },
+  }
+
   _afterRowPrepared(e) {
     if (this._isFixedTableRendering) return;
-    this.callBase(e);
-  },
+    super._afterRowPrepared(e);
+  }
 
   _scrollToElement($element) {
-    this.callBase($element, this.getFixedColumnsOffset());
-  },
+    super._scrollToElement($element, this.getFixedColumnsOffset());
+  }
 
   dispose() {
-    this.callBase.apply(this, arguments);
+    super.dispose.apply(this, arguments);
     clearTimeout(this._fixedScrollTimeout);
-  },
-});
+  }
+};
 
-const FooterViewFixedColumnsExtender = baseFixedColumns;
+const footerView = (Base: ModuleType<any>) => class FooterViewFixedColumnsExtender extends baseFixedColumns(Base) {};
+
+const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsByColumns) {
+  const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
+  const correctIndex = columns.length - fixedColumns.length;
+
+  each(pointsByColumns, (_, point) => {
+    if (point.index > transparentColumnIndex) {
+      point.columnIndex += correctIndex;
+      point.index += correctIndex;
+    }
+  });
+
+  return pointsByColumns;
+};
+
+const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderColumnFixingExtender extends Base {
+  _generatePointsByColumns(options) {
+    const visibleColumns = options.columns;
+    const { targetDraggingPanel } = options;
+
+    if (targetDraggingPanel && targetDraggingPanel.getName() === 'headers' && targetDraggingPanel.isFixedColumns()) {
+      if (options.sourceColumn.fixed) {
+        if (!options.rowIndex) {
+          options.columnElements = targetDraggingPanel.getFixedColumnElements(0);
+        }
+        options.columns = targetDraggingPanel.getFixedColumns(options.rowIndex);
+
+        const pointsByColumns = super._generatePointsByColumns(options);
+        normalizeColumnIndicesByPoints(visibleColumns, options.columns, pointsByColumns);
+        return pointsByColumns;
+      }
+    }
+
+    return super._generatePointsByColumns(options);
+  }
+
+  _pointCreated(point, columns, location, sourceColumn) {
+    const result = super._pointCreated.apply(this, arguments as any);
+    const targetColumn = columns[point.columnIndex];
+    // @ts-expect-error
+    const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
+
+    if (!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
+      const boundingRect = getBoundingRect($transparentColumn.get(0));
+
+      if (sourceColumn && sourceColumn.fixed) {
+        return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
+      }
+      if (targetColumn && targetColumn.fixed && targetColumn.fixedPosition !== 'right') {
+        return true;
+      }
+
+      return point.x < boundingRect.left || point.x > boundingRect.right;
+    }
+
+    return result;
+  }
+};
+
+const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerColumnFixingExtender extends Base {
+  _pointsByFixedColumns: any;
+
+  _generatePointsByColumns() {
+    const that = this;
+    const columnsController = that._columnsController;
+    const columns = columnsController && that._columnsController.getVisibleColumns();
+    const fixedColumns = columnsController && that._columnsController.getFixedColumns();
+    const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
+    const correctIndex = columns.length - fixedColumns.length;
+    // @ts-expect-error
+    const cells = that._columnHeadersView.getFixedColumnElements();
+
+    super._generatePointsByColumns();
+
+    if (cells && cells.length > 0) {
+      that._pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, (point) => {
+        if (point.index > transparentColumnIndex) {
+          point.columnIndex += correctIndex;
+          point.index += correctIndex;
+        }
+
+        return that._pointCreated(point, columns.length, columns);
+      });
+    }
+  }
+
+  _getTargetPoint(pointsByColumns, currentX, deltaX) {
+    // @ts-expect-error
+    const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
+
+    if ($transparentColumn && $transparentColumn.length) {
+      const boundingRect = getBoundingRect($transparentColumn.get(0));
+
+      if (currentX <= boundingRect.left || currentX >= boundingRect.right) {
+        return super._getTargetPoint(this._pointsByFixedColumns, currentX, deltaX);
+      }
+    }
+
+    return super._getTargetPoint(pointsByColumns, currentX, deltaX);
+  }
+};
+
+const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnFixingExtender extends Base {
+  _setAriaOwns() {
+    super._setAriaOwns.apply(this, arguments as any);
+
+    // @ts-expect-error
+    const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
+    // @ts-expect-error
+    const footerFixedTable = this._footerView?.getFixedTableElement();
+    // @ts-expect-error
+    this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
+  }
+};
 
 export const columnFixingModule = {
   defaultOptions() {
@@ -1010,118 +1137,14 @@ export const columnFixingModule = {
   },
   extenders: {
     views: {
-      columnHeadersView: ColumnHeadersViewFixedColumnsExtender,
-      rowsView: RowsViewFixedColumnsExtender,
-      footerView: FooterViewFixedColumnsExtender,
+      columnHeadersView,
+      rowsView,
+      footerView,
     },
-    controllers: (function () {
-      const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsByColumns) {
-        const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
-        const correctIndex = columns.length - fixedColumns.length;
-
-        each(pointsByColumns, (_, point) => {
-          if (point.index > transparentColumnIndex) {
-            point.columnIndex += correctIndex;
-            point.index += correctIndex;
-          }
-        });
-
-        return pointsByColumns;
-      };
-
-      return {
-        draggingHeader: {
-          _generatePointsByColumns(options) {
-            const visibleColumns = options.columns;
-            const { targetDraggingPanel } = options;
-
-            if (targetDraggingPanel && targetDraggingPanel.getName() === 'headers' && targetDraggingPanel.isFixedColumns()) {
-              if (options.sourceColumn.fixed) {
-                if (!options.rowIndex) {
-                  options.columnElements = targetDraggingPanel.getFixedColumnElements(0);
-                }
-                options.columns = targetDraggingPanel.getFixedColumns(options.rowIndex);
-
-                const pointsByColumns = this.callBase(options);
-                normalizeColumnIndicesByPoints(visibleColumns, options.columns, pointsByColumns);
-                return pointsByColumns;
-              }
-            }
-
-            return this.callBase(options);
-          },
-
-          _pointCreated(point, columns, location, sourceColumn) {
-            const result = this.callBase.apply(this, arguments);
-            const targetColumn = columns[point.columnIndex];
-            const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
-
-            if (!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
-              const boundingRect = getBoundingRect($transparentColumn.get(0));
-
-              if (sourceColumn && sourceColumn.fixed) {
-                return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
-              }
-              if (targetColumn && targetColumn.fixed && targetColumn.fixedPosition !== 'right') {
-                return true;
-              }
-
-              return point.x < boundingRect.left || point.x > boundingRect.right;
-            }
-
-            return result;
-          },
-        },
-
-        columnsResizer: {
-          _generatePointsByColumns() {
-            const that = this;
-            const columnsController = that._columnsController;
-            const columns = columnsController && that._columnsController.getVisibleColumns();
-            const fixedColumns = columnsController && that._columnsController.getFixedColumns();
-            const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
-            const correctIndex = columns.length - fixedColumns.length;
-            const cells = that._columnHeadersView.getFixedColumnElements();
-
-            that.callBase();
-
-            if (cells && cells.length > 0) {
-              that._pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, (point) => {
-                if (point.index > transparentColumnIndex) {
-                  point.columnIndex += correctIndex;
-                  point.index += correctIndex;
-                }
-
-                return that._pointCreated(point, columns.length, columns);
-              });
-            }
-          },
-
-          _getTargetPoint(pointsByColumns, currentX, deltaX) {
-            const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
-
-            if ($transparentColumn && $transparentColumn.length) {
-              const boundingRect = getBoundingRect($transparentColumn.get(0));
-
-              if (currentX <= boundingRect.left || currentX >= boundingRect.right) {
-                return this.callBase(this._pointsByFixedColumns, currentX, deltaX);
-              }
-            }
-
-            return this.callBase(pointsByColumns, currentX, deltaX);
-          },
-        },
-
-        resizing: {
-          _setAriaOwns() {
-            this.callBase.apply(this, arguments);
-
-            const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
-            const footerFixedTable = this._footerView?.getFixedTableElement();
-            this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
-          },
-        },
-      };
-    }()),
+    controllers: {
+      draggingHeader,
+      columnsResizer,
+      resizing,
+    },
   },
 };

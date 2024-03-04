@@ -1,0 +1,34 @@
+::ng-deep .label {
+  font-size: 12px;
+}
+
+::ng-deep .demo-container {
+  height: 450px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+}
+
+::ng-deep .button-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+}
+
+::ng-deep .dx-popup-content {
+  font-size: 12px;
+}
+
+::ng-deep .caption {
+  padding-bottom: 8px;
+  font-weight: 500;
+}
+
+::ng-deep .content {
+  display: flex;
+  justify-content: space-between;
+}

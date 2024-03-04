@@ -2062,11 +2062,8 @@ class Scheduler extends Widget<any> {
       }
     }
 
-    const timeZoneOffset = timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate);
-    result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
-
     result.startDate = dateUtilsTs.addOffsets(result.startDate, [viewOffset]);
-    result.endDate = dateUtilsTs.addOffsets(result.endDate, [viewOffset]);
+    result.endDate = dateUtilsTs.addOffsets(resultedEndDate, [viewOffset]);
     const rawResult = result.source();
 
     setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);

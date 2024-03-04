@@ -1,7 +1,8 @@
 import errors from '@js/ui/widget/ui.errors';
 
-import { GlobalErrorHandler, OptionsValidatorErrorHandler } from './core/index';
-import { SchedulerValidatorNames } from './types';
+import type { GlobalErrorHandler } from './core/index';
+import { OptionsValidatorErrorHandler } from './core/index';
+import type { SchedulerValidatorNames } from './types';
 
 const GLOBAL_ERROR_HANDLER: GlobalErrorHandler = {
   logError: (errorCode: string) => { errors.log(errorCode); },

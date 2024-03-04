@@ -8,7 +8,7 @@ import { ModelChangesListener } from './ui.gantt.model_changes_listener';
 import DataOption from './ui.gantt.data.option';
 import LoadPanel from '../load_panel';
 import registerComponent from '../../core/component_registrator';
-import SplitterControl from '../splitter';
+import SplitterControl from '../splitter_control';
 import Widget from '../widget/ui.widget';
 import { GanttActionsManager } from './ui.gantt.actions';
 import { GanttCustomFieldsManager } from './ui.gantt.custom_fields';

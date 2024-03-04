@@ -7,10 +7,8 @@ type AccessibleOptions = Pick<Properties,
   "closeOnOutsideClick" |
   "container" |
   "contentTemplate" |
-  "copyRootClassesToWrapper" |
   "deferRendering" |
   "disabled" |
-  "elementAttr" |
   "height" |
   "hideEvent" |
   "hideOnOutsideClick" |
@@ -49,10 +47,8 @@ const DxTooltip = createComponent({
     closeOnOutsideClick: [Boolean, Function],
     container: {},
     contentTemplate: {},
-    copyRootClassesToWrapper: Boolean,
     deferRendering: Boolean,
     disabled: Boolean,
-    elementAttr: {},
     height: [Function, Number, String],
     hideEvent: [Object, String],
     hideOnOutsideClick: [Boolean, Function],
@@ -88,10 +84,8 @@ const DxTooltip = createComponent({
     "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
-    "update:copyRootClassesToWrapper": null,
     "update:deferRendering": null,
     "update:disabled": null,
-    "update:elementAttr": null,
     "update:height": null,
     "update:hideEvent": null,
     "update:hideOnOutsideClick": null,

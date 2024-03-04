@@ -1,0 +1,182 @@
+{
+    "page": {
+        "width": 11906,
+        "height": 8391,
+        "pageColor": "white",
+        "pageWidth": 8391,
+        "pageHeight": 11906,
+        "pageLandscape": true,
+        "units": 0
+    },
+    "connectors": [],
+    "shapes": [
+        {
+            "key": "0",
+            "locked": false,
+            "zIndex": 0,
+            "type": "verticalContainer",
+            "text": "Development",
+            "x": 720,
+            "y": 720,
+            "width": 10440.000000000002,
+            "height": 7020,
+            "childKeys": [ "1", "2", "4", "3" ]
+        },
+        {
+            "key": "1",
+            "locked": false,
+            "zIndex": 0,
+            "type": "verticalContainer",
+            "text": "ASP.NET Team",
+            "x": 1080,
+            "y": 1440,
+            "width": 2160,
+            "height": 5760,
+            "childKeys": [ "5", "6" ]
+        },
+        {
+            "key": "2",
+            "locked": false,
+            "zIndex": 0,
+            "type": "verticalContainer",
+            "text": "Javascript Team",
+            "x": 3600,
+            "y": 1440,
+            "width": 2160,
+            "height": 5760,
+            "childKeys": [ "7", "8" ]
+        },
+        {
+            "key": "3",
+            "locked": false,
+            "zIndex": 0,
+            "type": "verticalContainer",
+            "text": "WPF Team",
+            "x": 6120,
+            "y": 1440,
+            "width": 2160,
+            "height": 5760,
+            "childKeys": [ "9", "10", "11" ]
+        },
+        {
+            "key": "4",
+            "locked": false,
+            "zIndex": 0,
+            "type": "verticalContainer",
+            "text": "WinForms Team",
+            "x": 8640,
+            "y": 1440,
+            "width": 2160,
+            "height": 5760,
+            "childKeys": [ "12", "13" ]
+        },
+        {
+            "key": "5",
+            "dataKey": "119",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Laurence\nLebihan",
+            "x": 1440,
+            "y": 2160,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "6",
+            "dataKey": "120",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Elizabeth\nLincoln",
+            "x": 1440,
+            "y": 3600,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "7",
+            "dataKey": "122",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Patricio\nSimpson",
+            "x": 3960,
+            "y": 2160,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "8",
+            "dataKey": "123",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Francisco\nChang",
+            "x": 3960,
+            "y": 3600,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "9",
+            "dataKey": "115",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Christina\nBerglund",
+            "x": 6480,
+            "y": 2160,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "10",
+            "dataKey": "116",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Hanna\nMoos",
+            "x": 6480,
+            "y": 3600,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "11",
+            "dataKey": "117",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Frederique\nCiteaux",
+            "x": 6480,
+            "y": 5040,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "12",
+            "dataKey": "112",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Ana\nTrujillo",
+            "x": 9000,
+            "y": 2160,
+            "width": 1440,
+            "height": 1080
+        },
+        {
+            "key": "13",
+            "dataKey": "113",
+            "locked": false,
+            "zIndex": 0,
+            "type": "rectangle",
+            "text": "Antonio\nMoreno",
+            "x": 9000,
+            "y": 3600,
+            "width": 1440,
+            "height": 1080
+        }
+    ]
+}

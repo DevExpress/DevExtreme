@@ -1,0 +1,67 @@
+.form > h4 {
+  margin-bottom: 20px;
+}
+
+.form > div,
+#treeview {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#selected-employees {
+  margin-top: 20px;
+}
+
+.selected-container .dx-list-item-content {
+  padding-left: 0;
+}
+
+.selected-container {
+  padding: 20px;
+  margin-left: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  font-size: 115%;
+  font-weight: bold;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  width: 24%;
+  margin-top: 10px;
+  margin-right: 9px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.options-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.editor-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.editor-container > * {
+  width: 100%;
+}
+
+.option:last-of-type {
+  margin-right: 0;
+}

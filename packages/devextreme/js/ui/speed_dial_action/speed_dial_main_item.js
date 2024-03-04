@@ -61,7 +61,6 @@ const modifyActionOptions = (action) => {
         position,
         visible,
         zIndex,
-        _ignoreElementAttrDeprecation: true,
     }, {
         onInitialized: null,
         onDisposing: null
@@ -193,7 +192,6 @@ class SpeedDialMainItem extends SpeedDialItem {
 
         const defaultOptions = this._getDefaultOptions();
 
-        delete defaultOptions.elementAttr;
         delete defaultOptions.closeOnOutsideClick;
 
         return visibleActions.length === 1 ?

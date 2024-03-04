@@ -92,7 +92,6 @@ class Popover extends BaseComponent<React.PropsWithChildren<IPopoverOptions>> {
     PropTypes.bool,
     PropTypes.func
   ]),
-  copyRootClassesToWrapper: PropTypes.bool,
   deferRendering: PropTypes.bool,
   disabled: PropTypes.bool,
   enableBodyScroll: PropTypes.bool,

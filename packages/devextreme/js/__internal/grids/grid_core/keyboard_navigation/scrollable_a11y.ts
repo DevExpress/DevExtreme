@@ -10,10 +10,11 @@ This fix makes first cell in not fixed table to always have tabIndex, so checker
 And to make navigation via Tab key working properly some focus event handlers are added.
 */
 
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
 
@@ -86,7 +87,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
-  protected _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
+  _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
     super._focus($cell, disableFocus, skipFocusEvent);
 
     this.makeScrollableFocusableIfNeed();
@@ -113,11 +114,12 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
 
     return columnIndex === -1
       ? undefined
-      : this._rowsView._getCellElement(0, columnIndex) as dxElementWrapper | undefined;
+      : this._rowsView._getCellElement(0, columnIndex);
   }
 
   private isScrollableNeedFocusable(): boolean {
     const hasScrollable = !!this._rowsView.getScrollable();
+    // @ts-expect-error _fixedTableElement is declared in rowsView extender
     const hasFixedTable = !!this._rowsView._fixedTableElement?.length;
     const isCellsRendered = !!this._rowsView.getCellElements(0)?.length;
 

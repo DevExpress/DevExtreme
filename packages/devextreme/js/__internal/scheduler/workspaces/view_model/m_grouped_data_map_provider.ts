@@ -2,6 +2,8 @@ import dateUtils from '@js/core/utils/date';
 import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import timezoneUtils from '../../m_utils_time_zone';
+
 export class GroupedDataMapProvider {
   groupedDataMap: any;
 
@@ -141,15 +143,46 @@ export class GroupedDataMapProvider {
   ): boolean {
     const { viewType } = this._viewOptions;
 
+    const cellDatesSummerToWinterDiffMs = timezoneUtils
+      .getSummerToWinterTimeDSTDiffMs(cellStartDate, cellEndDate);
+    const summerToWinterDiffMs = timezoneUtils
+      .getSummerToWinterTimeDSTDiffMs(cellStartDate, startDate);
+    const isSummerToWinterDSTChangeEdgeCase = cellDatesSummerToWinterDiffMs === 0
+      && summerToWinterDiffMs > 0;
+
     switch (true) {
       case !isDateAndTimeView(viewType):
       case inAllDayRow && cellAllDay:
         return dateUtils.sameDate(startDate, cellStartDate);
-      case !inAllDayRow:
+      case !inAllDayRow && !isSummerToWinterDSTChangeEdgeCase:
         return startDate >= cellStartDate && startDate < cellEndDate;
+      case !inAllDayRow && isSummerToWinterDSTChangeEdgeCase:
+        return this.handleSummerToWinterDSTEdgeCase(
+          startDate,
+          summerToWinterDiffMs,
+          cellStartDate,
+          cellEndDate,
+        );
       default:
         return false;
     }
+  }
+
+  private handleSummerToWinterDSTEdgeCase(
+    startDate: Date,
+    summerTimeDSTDiffMs: number,
+    cellStartDate: Date,
+    cellEndDate: Date,
+  ): boolean {
+    const nextTimezoneCellStartDate = dateUtilsTs.addOffsets(cellStartDate, [summerTimeDSTDiffMs]);
+    const nextTimezoneCellEndDate = dateUtilsTs.addOffsets(cellEndDate, [summerTimeDSTDiffMs]);
+
+    const isInPreviousTimezoneCell = startDate >= cellStartDate
+      && startDate < cellEndDate;
+    const isInNextTimezoneCell = startDate >= nextTimezoneCellStartDate
+      && startDate < nextTimezoneCellEndDate;
+
+    return isInPreviousTimezoneCell || isInNextTimezoneCell;
   }
 
   _isSameGroupIndexAndIndex(cellData, groupIndex, index) {

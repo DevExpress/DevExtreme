@@ -28,7 +28,6 @@ $switch-on-bg: color.change($base-accent, $alpha: 0.5) !default;
 */
 $switch-handle-on-bg: $base-accent !default;
 $switch-handle-border-radius: 50% !default;
-$switch-hover-bg: transparent !default;
 $switch-handle-disabled-bg: null !default;
 $switch-invalid-handle-bg: $base-invalid-color !default;
 $switch-invalid-container-bg: color.change($base-invalid-color, $alpha: 0.5) !default;

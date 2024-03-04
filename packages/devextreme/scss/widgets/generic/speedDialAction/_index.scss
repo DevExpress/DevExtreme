@@ -12,7 +12,6 @@
 $generic-fa-button-size: 30px;
 $generic-fa-button-label-padding: 5px 10px;
 $generic-fa-button-label-offset: 10px;
-$generic-fa-button-label-shadow: $speed-dial-action-label-shadow;
 
 @include dx-fa-button-mixin(
   $generic-main-fa-button-size,

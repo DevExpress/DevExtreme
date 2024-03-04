@@ -1136,13 +1136,11 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
   contentTemplate?: ((contentElement: any) => string | any) | template;
-  copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
@@ -1827,13 +1825,11 @@ type IPopupProps = React.PropsWithChildren<{
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
   contentTemplate?: ((contentElement: any) => string | any) | template;
-  copyRootClassesToWrapper?: boolean;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
-  elementAttr?: any;
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
@@ -1951,9 +1947,9 @@ class Position extends NestedOption<IPositionProps> {
 // Column
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
-  max?: Date | number;
+  max?: Date | number | string;
   message?: string;
-  min?: Date | number;
+  min?: Date | number | string;
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
@@ -2402,8 +2398,8 @@ type IValidationRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   ignoreEmptyValue?: boolean;
-  max?: Date | number;
-  min?: Date | number;
+  max?: Date | number | string;
+  min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);

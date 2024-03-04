@@ -88,6 +88,7 @@ const Overlay = Widget.inherit({
 
             shadingColor: '',
 
+
             wrapperAttr: {},
 
             position: extend({}, OVERLAY_POSITION_ALIASES.center),
@@ -128,12 +129,6 @@ const Overlay = Widget.inherit({
 
             closeOnOutsideClick: false,
             hideOnOutsideClick: false,
-
-            copyRootClassesToWrapper: false,
-
-            _ignoreCopyRootClassesToWrapperDeprecation: false,
-
-            _ignoreElementAttrDeprecation: false,
 
             _ignorePreventScrollEventsDeprecation: false,
 
@@ -210,20 +205,7 @@ const Overlay = Widget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
 
-        function createWrapperAttrDeprecationInfo() {
-            return {
-                since: '21.2',
-                message: 'Use the "wrapperAttr" option instead'
-            };
-        }
-
         if(options) {
-            if(options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
-                this._logDeprecatedOptionWarning('copyRootClassesToWrapper', createWrapperAttrDeprecationInfo());
-            }
-            if(options.elementAttr && !options._ignoreElementAttrDeprecation) {
-                this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
-            }
             if('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
                 this._logDeprecatedPreventScrollEventsInfo();
             }
@@ -249,9 +231,6 @@ const Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        if(this.option('copyRootClassesToWrapper')) {
-            this._$wrapper.addClass($element.attr('class'));
-        }
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');

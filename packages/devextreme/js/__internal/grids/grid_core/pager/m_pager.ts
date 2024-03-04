@@ -13,7 +13,11 @@ const getPageIndex = function (dataController) {
   return 1 + (parseInt(dataController.pageIndex()) || 0);
 };
 
-const PagerView = modules.View.inherit({
+export class PagerView extends modules.View {
+  private _pager: any;
+
+  private _pageSizes: any;
+
   init() {
     const dataController = this.getController('data');
 
@@ -36,12 +40,12 @@ const PagerView = modules.View.inherit({
         this.render();
       }
     });
-  },
+  }
 
   _renderCore() {
     const that = this;
     const $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS));
-    const pagerOptions = that.option('pager') || {};
+    const pagerOptions = that.option('pager') ?? {};
     const dataController = that.getController('data');
     const keyboardController = that.getController('keyboardNavigation');
     const options: any = {
@@ -87,11 +91,11 @@ const PagerView = modules.View.inherit({
         .addClass('dx-pager')
         .html('<div class="dx-pages"><div class="dx-page"></div></div>');
     }
-  },
+  }
 
   getPager() {
     return this._pager;
-  },
+  }
 
   getPageSizes() {
     const that = this;
@@ -111,7 +115,7 @@ const PagerView = modules.View.inherit({
       }
     }
     return that._pageSizes;
-  },
+  }
 
   isVisible() {
     const dataController = this.getController('data');
@@ -120,18 +124,19 @@ const PagerView = modules.View.inherit({
     const scrolling = this.option('scrolling');
 
     if (pagerVisible === 'auto') {
+      // @ts-expect-error
       if (scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
         pagerVisible = false;
       } else {
         pagerVisible = dataController.pageCount() > 1 || (dataController.isLoaded() && !dataController.hasKnownLastPage());
       }
     }
-    return pagerVisible;
-  },
+    return !!pagerVisible;
+  }
 
   getHeight() {
     return this.getElementHeight();
-  },
+  }
 
   optionChanged(args) {
     const { name } = args;
@@ -156,16 +161,17 @@ const PagerView = modules.View.inherit({
         this._pager = null;
         this._invalidate();
         if (hasWindow() && isPager && this.component) {
+          // @ts-expect-error
           this.component.resize();
         }
       }
     }
-  },
+  }
 
   dispose() {
     this._pager = null;
-  },
-});
+  }
+}
 
 export const pagerModule = {
   defaultOptions() {

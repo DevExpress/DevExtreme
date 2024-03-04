@@ -1,0 +1,73 @@
+<div class="dx-fieldset">
+  <div class="dx-field">
+    <div class="dx-field-label">Image as the icon</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Simple Product' }"
+      >
+        <div *dxTemplate="let data of 'dropDownButton'">
+          <img
+            alt="Custom icon"
+            src="../../../../images/icons/custom-dropbutton-icon.svg"
+            class="custom-icon"
+          />
+        </div>
+      </dx-select-box>
+    </div>
+  </div>
+
+  <div class="dx-field">
+    <div class="dx-field-label">Load indicator as the icon</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="deferredProducts"
+        [inputAttr]="{ 'aria-label': 'Deferred Product' }"
+      >
+        <div *dxTemplate="let data of 'dropDownButton'">
+          <dx-load-indicator [visible]="!isLoaded"></dx-load-indicator>
+          <span [hidden]="!isLoaded">
+            <img
+              alt="Custom icon"
+              src="../../../../images/icons/custom-dropbutton-icon.svg"
+              class="custom-icon"
+            />
+          </span>
+        </div>
+      </dx-select-box>
+    </div>
+  </div>
+
+  <div class="dx-field">
+    <div class="dx-field-label">Value-dependent icon</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="products"
+        [inputAttr]="{ 'aria-label': 'Templated Product' }"
+        [(selectedItem)]="selectedItem"
+        [value]="1"
+        showClearButton="true"
+        displayExpr="Name"
+        valueExpr="ID"
+      >
+        <div *dxTemplate="let data of 'dropDownButton'">
+          <img
+            *ngIf="selectedItem"
+            alt="Custom icon"
+            src="../../../../images/icons/{{ selectedItem.IconSrc }}"
+            class="custom-icon"
+          />
+          <div *ngIf="!selectedItem" class="dx-dropdowneditor-icon"></div>
+        </div>
+
+        <div *dxTemplate="let data of 'item'" class="custom-item">
+          <img
+            alt="{{ data.Name }}"
+            src="../../../../images/icons/{{ data.IconSrc }}"
+          />
+          <div class="product-name">{{ data.Name }}</div>
+        </div>
+      </dx-select-box>
+    </div>
+  </div>
+</div>

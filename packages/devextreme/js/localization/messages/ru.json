@@ -310,6 +310,7 @@
         "dxTagBox-selected": "{0} выбрано",
         "dxTagBox-allSelected": "Выбрано все ({0})",
         "dxTagBox-moreSelected": "и еще {0}",
+        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "Печать",
         "vizExport-titleMenuText": "Экспорт/Печать",

@@ -3,7 +3,8 @@ import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import Guid from '@js/core/guid';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -26,12 +27,11 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
-import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { DataController } from '../data_controller/m_data_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
-import { ModuleType, View } from '../m_types';
 import gridCoreUtils from '../m_utils';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
@@ -154,9 +154,7 @@ export const normalizeWidth = (width: string | number | undefined): string | und
   return width;
 };
 
-const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
-
-export class ColumnsView extends viewWithColumnStateMixin {
+export class ColumnsView extends ColumnStateMixin(modules.View) {
   _tableElement: any;
 
   _scrollLeft: any;
@@ -398,7 +396,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $table;
   }
 
-  _rowPointerDown() {
+  _rowPointerDown(e?: any) {
 
   }
 
@@ -527,7 +525,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return renderingTemplate;
   }
 
-  renderTemplate(container, template, options, allowRenderToDetachedContainer, change?) {
+  renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
     const isDataRow = options.rowType === 'data';
@@ -753,7 +751,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
   }
 
   _getRows(change?) {
-    return [];
+    return [] as any[];
   }
 
   _getCellOptions(options): any {
@@ -858,7 +856,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  getCellIndex($cell) {
+  getCellIndex($cell, rowIndex?) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;
@@ -886,8 +884,13 @@ export class ColumnsView extends viewWithColumnStateMixin {
       case 'onCellPrepared':
       case 'onRowPrepared':
       case 'onCellHoverChanged':
-      case 'keyboardNavigation':
         this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'keyboardNavigation':
+        if (args.fullName === 'keyboardNavigation.enabled') {
+          this._invalidate(true, true);
+        }
         args.handled = true;
         break;
     }
@@ -923,7 +926,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   }
 
-  _handleDataChanged() {
+  _handleDataChanged(e) {
   }
 
   callbackNames() {
@@ -1017,7 +1020,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return result.promise();
   }
 
-  _updateContent($newTableElement, change, isFixedTableRendering) {
+  _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
       this.setTableElement($newTableElement, isFixedTableRendering);

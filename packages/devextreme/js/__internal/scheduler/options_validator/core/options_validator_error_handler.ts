@@ -1,4 +1,4 @@
-import { GlobalErrorHandler, OptionsValidatorResult } from './types';
+import type { GlobalErrorHandler, OptionsValidatorResult } from './types';
 
 export abstract class OptionsValidatorErrorHandler<TValidators extends string> {
   protected constructor(

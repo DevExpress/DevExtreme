@@ -1,10 +1,16 @@
+/* eslint-disable max-classes-per-file */
 // @ts-expect-error
 import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 
-import stateStoringCore from './m_state_storing_core';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
+import type { ModuleType } from '../m_types';
+import type { SelectionController } from '../selection/m_selection';
+import type { RowsView } from '../views/m_rows_view';
+import { StateStoringController } from './m_state_storing_core';
 
 const getDataState = (that) => {
   const pagerView = that.getView('pagerView');
@@ -80,6 +86,205 @@ const getFilterValue = (that, state) => {
   return DEFAULT_FILTER_VALUE;
 };
 
+const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
+  init() {
+    const that = this;
+    const dataController = that.getController('data');
+
+    super.init();
+
+    // @ts-expect-error
+    dataController.stateLoaded.add(() => {
+      if (dataController.isLoaded() && !dataController.getDataSource()) {
+        that.setLoading(false);
+        that.renderNoDataText();
+        const columnHeadersView = that.component.getView('columnHeadersView');
+        columnHeadersView && columnHeadersView.render();
+        that.component._fireContentReadyAction();
+      }
+    });
+  }
+};
+
+const stateStoring = (Base: ModuleType<StateStoringController>) => class StateStoringExtender extends Base {
+  private readonly _initialPageSize: any;
+
+  init() {
+    // @ts-expect-error
+    super.init.apply(this, arguments);
+    processLoadState(this);
+
+    return this;
+  }
+
+  isLoading() {
+    // @ts-expect-error
+    return super.isLoading() || this.getController('data').isStateLoading();
+  }
+
+  state(state?) {
+    // @ts-expect-error
+    const result = super.state.apply(this, arguments);
+
+    if (state !== undefined) {
+      this.applyState(extend(true, {}, state));
+    }
+
+    return result;
+  }
+
+  updateState(state) {
+    if (this.isEnabled()) {
+      const oldState = this.state();
+      const newState = extend({}, oldState, state);
+      const oldStateHash = getKeyHash(oldState);
+      const newStateHash = getKeyHash(newState);
+
+      if (!equalByValue(oldStateHash, newStateHash)) {
+        state = extend(true, {}, state);
+        extend(this._state, state);
+
+        this.save();
+      }
+    } else {
+      extend(this._state, state);
+    }
+  }
+
+  applyState(state) {
+    const { allowedPageSizes } = state;
+    const { searchText } = state;
+    const { selectedRowKeys } = state;
+    const { selectionFilter } = state;
+    const exportController = this.getController('export');
+    const columnsController = this.getController('columns');
+    const dataController = this.getController('data');
+    const scrollingMode = this.option('scrolling.mode');
+    const isVirtualScrollingMode = scrollingMode === 'virtual' || scrollingMode === 'infinite';
+    const showPageSizeSelector = this.option('pager.visible') === true && this.option('pager.showPageSizeSelector');
+    const hasHeight = this.getView('rowsView')?.hasHeight();
+
+    this.component.beginUpdate();
+
+    if (columnsController) {
+      columnsController.setUserState(state.columns);
+    }
+
+    if (exportController) {
+      exportController.selectionOnly(state.exportSelectionOnly);
+    }
+
+    if (!this.option('selection.deferred')) {
+      this.option('selectedRowKeys', selectedRowKeys || []);
+    }
+
+    // @ts-expect-error
+    this.option('selectionFilter', selectionFilter);
+
+    if (allowedPageSizes && this.option('pager.allowedPageSizes') === 'auto') {
+      this.option('pager')!.allowedPageSizes = allowedPageSizes;
+    }
+
+    if (this.option('focusedRowEnabled')) {
+      this.option('focusedRowIndex', -1);
+      this.option('focusedRowKey', state.focusedRowKey || null);
+    }
+
+    this.component.endUpdate();
+
+    this.option('searchPanel.text', searchText || '');
+
+    this.option('filterValue', getFilterValue(this, state));
+
+    this.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
+
+    this.option('paging.pageIndex', (!isVirtualScrollingMode || hasHeight) && state.pageIndex || 0);
+    this.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : this._initialPageSize);
+
+    dataController && dataController.reset();
+  }
+};
+
+const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColumnsExtender extends Base {
+  _shouldReturnVisibleColumns() {
+    // @ts-expect-error
+    const result = super._shouldReturnVisibleColumns.apply(this, arguments);
+    const stateStoringController = this.getController('stateStoring');
+
+    return result && (!stateStoringController.isEnabled() || stateStoringController.isLoaded());
+  }
+};
+
+const data = (Base: ModuleType<DataController>) => class StateStoringDataExtender extends Base {
+  private _restoreStateTimeoutID: any;
+
+  callbackNames() {
+    return super.callbackNames().concat(['stateLoaded']);
+  }
+
+  _refreshDataSource() {
+    const stateStoringController = this.getController('stateStoring');
+
+    if (stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
+      clearTimeout(this._restoreStateTimeoutID);
+
+      // @ts-expect-error
+      const deferred = new Deferred();
+      this._restoreStateTimeoutID = setTimeout(() => {
+        stateStoringController.load().always(() => {
+          this._restoreStateTimeoutID = null;
+        }).done(() => {
+          super._refreshDataSource();
+          // @ts-expect-error
+          this.stateLoaded.fire();
+          deferred.resolve();
+        }).fail((error) => {
+          // @ts-expect-error
+          this.stateLoaded.fire();
+          this._handleLoadError(error || 'Unknown error');
+          deferred.reject();
+        });
+      });
+      return deferred.promise();
+    } if (!this.isStateLoading()) {
+      super._refreshDataSource();
+    }
+  }
+
+  isLoading() {
+    const that = this;
+    const stateStoringController = that.getController('stateStoring');
+
+    return super.isLoading() || stateStoringController.isLoading();
+  }
+
+  isStateLoading() {
+    return isDefined(this._restoreStateTimeoutID);
+  }
+
+  isLoaded() {
+    return super.isLoaded() && !this.isStateLoading();
+  }
+
+  dispose() {
+    clearTimeout(this._restoreStateTimeoutID);
+    super.dispose();
+  }
+};
+
+const selection = (Base: ModuleType<SelectionController>) => class StateStoringSelectionExtender extends Base {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _fireSelectionChanged(options) {
+    const stateStoringController = this.getController('stateStoring');
+    const isDeferredSelection = this.option('selection.deferred');
+    if (stateStoringController.isLoading() && isDeferredSelection) {
+      return;
+    }
+    // @ts-expect-error
+    super._fireSelectionChanged.apply(this, arguments);
+  }
+};
+
 export const stateStoringModule = {
   defaultOptions() {
     return {
@@ -94,187 +299,17 @@ export const stateStoringModule = {
     };
   },
   controllers: {
-    stateStoring: stateStoringCore.StateStoringController,
+    stateStoring: StateStoringController,
   },
   extenders: {
     views: {
-      rowsView: {
-        init() {
-          const that = this;
-          const dataController = that.getController('data');
-
-          that.callBase();
-
-          dataController.stateLoaded.add(() => {
-            if (dataController.isLoaded() && !dataController.getDataSource()) {
-              that.setLoading(false);
-              that.renderNoDataText();
-              const columnHeadersView = that.component.getView('columnHeadersView');
-              columnHeadersView && columnHeadersView.render();
-              that.component._fireContentReadyAction();
-            }
-          });
-        },
-      },
+      rowsView,
     },
     controllers: {
-      stateStoring: {
-        init() {
-          this.callBase.apply(this, arguments);
-          processLoadState(this);
-        },
-        isLoading() {
-          return this.callBase() || this.getController('data').isStateLoading();
-        },
-        state(state) {
-          const result = this.callBase.apply(this, arguments);
-
-          if (state !== undefined) {
-            this.applyState(extend(true, {}, state));
-          }
-
-          return result;
-        },
-        updateState(state) {
-          if (this.isEnabled()) {
-            const oldState = this.state();
-            const newState = extend({}, oldState, state);
-            const oldStateHash = getKeyHash(oldState);
-            const newStateHash = getKeyHash(newState);
-
-            if (!equalByValue(oldStateHash, newStateHash)) {
-              state = extend(true, {}, state);
-              extend(this._state, state);
-
-              this.save();
-            }
-          } else {
-            extend(this._state, state);
-          }
-        },
-        applyState(state) {
-          const { allowedPageSizes } = state;
-          const { searchText } = state;
-          const { selectedRowKeys } = state;
-          const { selectionFilter } = state;
-          const exportController = this.getController('export');
-          const columnsController = this.getController('columns');
-          const dataController = this.getController('data');
-          const scrollingMode = this.option('scrolling.mode');
-          const isVirtualScrollingMode = scrollingMode === 'virtual' || scrollingMode === 'infinite';
-          const showPageSizeSelector = this.option('pager.visible') === true && this.option('pager.showPageSizeSelector');
-          const hasHeight = this.getView('rowsView')?.hasHeight();
-
-          this.component.beginUpdate();
-
-          if (columnsController) {
-            columnsController.setUserState(state.columns);
-          }
-
-          if (exportController) {
-            exportController.selectionOnly(state.exportSelectionOnly);
-          }
-
-          if (!this.option('selection.deferred')) {
-            this.option('selectedRowKeys', selectedRowKeys || []);
-          }
-
-          this.option('selectionFilter', selectionFilter);
-
-          if (allowedPageSizes && this.option('pager.allowedPageSizes') === 'auto') {
-            this.option('pager').allowedPageSizes = allowedPageSizes;
-          }
-
-          if (this.option('focusedRowEnabled')) {
-            this.option('focusedRowIndex', -1);
-            this.option('focusedRowKey', state.focusedRowKey || null);
-          }
-
-          this.component.endUpdate();
-
-          this.option('searchPanel.text', searchText || '');
-
-          this.option('filterValue', getFilterValue(this, state));
-
-          this.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
-
-          this.option('paging.pageIndex', (!isVirtualScrollingMode || hasHeight) && state.pageIndex || 0);
-          this.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : this._initialPageSize);
-
-          dataController && dataController.reset();
-        },
-      },
-      columns: {
-        _shouldReturnVisibleColumns() {
-          const result = this.callBase.apply(this, arguments);
-          const stateStoringController = this.getController('stateStoring');
-
-          return result && (!stateStoringController.isEnabled() || stateStoringController.isLoaded());
-        },
-      },
-      data: {
-        callbackNames() {
-          return this.callBase().concat(['stateLoaded']);
-        },
-        _refreshDataSource() {
-          const { callBase } = this;
-          const stateStoringController = this.getController('stateStoring');
-
-          if (stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
-            clearTimeout(this._restoreStateTimeoutID);
-
-            // @ts-expect-error
-            const deferred = new Deferred();
-            this._restoreStateTimeoutID = setTimeout(() => {
-              stateStoringController.load().always(() => {
-                this._restoreStateTimeoutID = null;
-              }).done(() => {
-                callBase.call(this);
-                this.stateLoaded.fire();
-                deferred.resolve();
-              }).fail((error) => {
-                this.stateLoaded.fire();
-                this._handleLoadError(error || 'Unknown error');
-                deferred.reject();
-              });
-            });
-            return deferred.promise();
-          } if (!this.isStateLoading()) {
-            callBase.call(this);
-          }
-        },
-
-        isLoading() {
-          const that = this;
-          const stateStoringController = that.getController('stateStoring');
-
-          return this.callBase() || stateStoringController.isLoading();
-        },
-
-        isStateLoading() {
-          return isDefined(this._restoreStateTimeoutID);
-        },
-
-        isLoaded() {
-          return this.callBase() && !this.isStateLoading();
-        },
-
-        dispose() {
-          clearTimeout(this._restoreStateTimeoutID);
-          this.callBase();
-        },
-      },
-      selection: {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        _fireSelectionChanged(options) {
-          const stateStoringController = this.getController('stateStoring');
-          const isDeferredSelection = this.option('selection.deferred');
-          if (stateStoringController.isLoading() && isDeferredSelection) {
-            return;
-          }
-          this.callBase.apply(this, arguments);
-        },
-      },
+      stateStoring,
+      columns,
+      data,
+      selection,
     },
   },
 };

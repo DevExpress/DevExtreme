@@ -112,16 +112,20 @@ export default class Selection {
         const items = this.options.plainItems();
         const item = items[itemIndex];
         let deferred;
+        const isVirtualPaging = this.options.isVirtualPaging;
         const allowLoadByRange = this.options.allowLoadByRange?.();
+        const alwaysSelectByShift = this.options.alwaysSelectByShift;
         let indexOffset;
         let focusedItemNotInLoadedRange = false;
         let shiftFocusedItemNotInLoadedRange = false;
 
         const itemIsNotInLoadedRange = (index) => index >= 0 && !items.filter(it => it.loadIndex === index).length;
 
-        if(allowLoadByRange && isDefined(item)) {
-            indexOffset = item.loadIndex - itemIndex;
-            itemIndex = item.loadIndex;
+        if(isVirtualPaging && isDefined(item)) {
+            if(allowLoadByRange) {
+                indexOffset = item.loadIndex - itemIndex;
+                itemIndex = item.loadIndex;
+            }
             focusedItemNotInLoadedRange = itemIsNotInLoadedRange(this._focusedItemIndex);
             if(isDefined(this._shiftFocusedItemIndex)) {
                 shiftFocusedItemNotInLoadedRange = itemIsNotInLoadedRange(this._shiftFocusedItemIndex);
@@ -136,9 +140,14 @@ export default class Selection {
         const itemKey = this.options.keyOf(itemData);
 
         keys = keys || {};
+        let allowSelectByShift = keys.shift;
 
-        if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
-            if(focusedItemNotInLoadedRange || shiftFocusedItemNotInLoadedRange) {
+        if(alwaysSelectByShift === false && allowSelectByShift) {
+            allowSelectByShift = (allowLoadByRange !== false || (!focusedItemNotInLoadedRange && !shiftFocusedItemNotInLoadedRange));
+        }
+
+        if(allowSelectByShift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
+            if(allowLoadByRange && (focusedItemNotInLoadedRange || shiftFocusedItemNotInLoadedRange)) {
                 isSelectedItemsChanged = itemIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
 
                 if(isSelectedItemsChanged) {

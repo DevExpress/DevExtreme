@@ -1,4 +1,5 @@
-import { createValidatorRule, ValidatorRule } from '../core/index';
+import type { ValidatorRule } from '../core/index';
+import { createValidatorRule } from '../core/index';
 import {
   divisibleBy,
   greaterThan,

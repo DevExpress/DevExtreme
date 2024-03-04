@@ -1,0 +1,7 @@
+::ng-deep #tree-list-demo {
+  min-height: 700px;
+}
+
+::ng-deep #tasks {
+  max-height: 700px;
+}

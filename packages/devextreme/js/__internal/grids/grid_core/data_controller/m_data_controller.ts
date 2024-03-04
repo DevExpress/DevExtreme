@@ -8,17 +8,15 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import ArrayStore from '@js/data/array_store';
 import CustomStore from '@js/data/custom_store';
-import DataHelperMixin from '@js/data_helper';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { AdaptivityDataControllerExtension } from '../adaptivity/m_adaptivity';
 import modules from '../m_modules';
 import type {
-  Controller as ControllerType,
-  Controllers, Module, ModuleType,
+  Controllers, Module,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
-import type { SearchDataControllerExtension } from '../search/m_search';
+import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
+import { DataHelperMixin } from './m_data_helper_mixin';
 
 const changePaging = function (that, optionName, value) {
   const dataSource = that._dataSource;
@@ -77,22 +75,7 @@ interface Item {
 
 export type Filter = any;
 
-interface DataHelperMixinType {
-  postCtor: () => void;
-  readyWatcher: any;
-  _refreshDataSource(): any;
-  _initDataSource(): any;
-}
-
-type DataControllerBaseType = ModuleType<ControllerType
-& DataHelperMixinType
-& SearchDataControllerExtension
-& AdaptivityDataControllerExtension
->;
-
-const ControllerWithDataMixin: DataControllerBaseType = modules.Controller.inherit(DataHelperMixin);
-
-export class DataController extends ControllerWithDataMixin {
+export class DataController extends DataHelperMixin(modules.Controller) {
   _items!: Item[];
 
   _cachedProcessedItems!: Item[] | null;
@@ -133,8 +116,6 @@ export class DataController extends ControllerWithDataMixin {
 
   _loadingText: string | undefined;
 
-  _isSharedDataSource: boolean | undefined;
-
   dataErrorOccurred: any;
 
   pageChanged: any;
@@ -155,7 +136,7 @@ export class DataController extends ControllerWithDataMixin {
 
   _editingController!: Controllers['editing'];
 
-  _rowsScrollController: any;
+  _rowsScrollController?: VirtualScrollController | null;
 
   _columnsChangedHandler!: (e: any) => any;
 
@@ -1215,7 +1196,7 @@ export class DataController extends ControllerWithDataMixin {
     this._applyFilter();
   }
 
-  clearFilter(filterName) {
+  clearFilter(filterName?) {
     const that = this;
     const columnsController = that._columnsController;
     const clearColumnOption = function (optionName) {
@@ -1234,6 +1215,7 @@ export class DataController extends ControllerWithDataMixin {
           that.filter(null);
           break;
         case 'search':
+          // @ts-expect-error
           that.searchByText('');
           break;
         case 'header':
@@ -1247,6 +1229,7 @@ export class DataController extends ControllerWithDataMixin {
       }
     } else {
       that.filter(null);
+      // @ts-expect-error
       that.searchByText('');
       clearColumnOption('filterValue');
       clearColumnOption('bufferedFilterValue');
@@ -1557,7 +1540,7 @@ export class DataController extends ControllerWithDataMixin {
     return this._skipProcessingPagingChange && (fullName === 'paging.pageIndex' || fullName === 'paging.pageSize');
   }
 
-  getUserState() {
+  getUserState(): any {
     return {
       searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
@@ -1606,6 +1589,12 @@ export class DataController extends ControllerWithDataMixin {
 
   totalCount() {
     return this._dataSource ? this._dataSource?.totalCount() : 0;
+  }
+
+  hasLoadOperation(): boolean {
+    const operationTypes = this._dataSource?.operationTypes() ?? {};
+
+    return Object.keys(operationTypes).some((type) => operationTypes[type]);
   }
 }
 export const dataControllerModule: Module = {

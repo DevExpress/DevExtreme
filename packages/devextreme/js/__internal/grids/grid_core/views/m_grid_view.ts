@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -14,8 +15,14 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 
+import type { FooterView } from '../../data_grid/summary/m_summary';
+import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import type { RowsView } from './m_rows_view';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
@@ -51,7 +58,39 @@ const restoreFocus = function (focusedElement, selectionRange) {
   gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
-const resizingControllerMembers = {
+export class ResizingController extends modules.ViewController {
+  private _refreshSizesHandler: any;
+
+  _dataController!: DataController;
+
+  _rowsView!: RowsView;
+
+  _columnHeadersView!: ColumnHeadersView;
+
+  _columnsController!: ColumnsController;
+
+  _footerView!: FooterView;
+
+  private _prevContentMinHeight: any;
+
+  private _maxWidth: any;
+
+  private _hasWidth: any;
+
+  private _hasHeight: any;
+
+  private _resizeDeferred: any;
+
+  public _lastWidth: any;
+
+  private _devicePixelRatio: any;
+
+  private _lastHeight: any;
+
+  _adaptiveColumnsController!: AdaptiveColumnsController;
+
+  _updateScrollableTimeoutID: any;
+
   _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
       this._refreshSizesHandler = (e) => {
@@ -83,7 +122,7 @@ const resizingControllerMembers = {
         this._dataController.changed.add(this._refreshSizesHandler);
       });
     }
-  },
+  }
 
   _refreshSizes(e) {
     // @ts-expect-error
@@ -118,15 +157,15 @@ const resizingControllerMembers = {
     }
 
     return resizeDeferred;
-  },
+  }
 
   fireContentReadyAction() {
     this.component._fireContentReadyAction();
-  },
+  }
 
   _getWidgetAriaLabel() {
     return 'dxDataGrid-ariaDataGrid';
-  },
+  }
 
   _setAriaLabel() {
     const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
@@ -135,8 +174,9 @@ const resizingControllerMembers = {
       // @ts-expect-error
       totalItemsCount,
       this.component.columnCount(),
+      // @ts-expect-error
     ), this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
-  },
+  }
 
   _getBestFitWidths() {
     const rowsView = this._rowsView;
@@ -151,7 +191,7 @@ const resizingControllerMembers = {
     }
 
     return widths;
-  },
+  }
 
   _setVisibleWidths(visibleColumns, widths) {
     const columnsController = this._columnsController;
@@ -161,7 +201,7 @@ const resizingControllerMembers = {
       columnsController.columnOption(columnId, 'visibleWidth', widths[index]);
     });
     columnsController.endUpdate();
-  },
+  }
 
   _toggleBestFitModeForView(view, className, isBestFit) {
     if (!view || !view.isVisible()) return;
@@ -184,7 +224,7 @@ const resizingControllerMembers = {
         $tableBody.toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
       }
     });
-  },
+  }
 
   _toggleBestFitMode(isBestFit) {
     const $rowsTable = this._rowsView.getTableElement();
@@ -206,9 +246,10 @@ const resizingControllerMembers = {
     this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
     if (this._needStretch()) {
+      // @ts-expect-error
       $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
     }
-  },
+  }
 
   _toggleContentMinHeight(value) {
     const scrollable = this._rowsView.getScrollable();
@@ -223,7 +264,7 @@ const resizingControllerMembers = {
         $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : this._prevContentMinHeight });
       }
     }
-  },
+  }
 
   _synchronizeColumns() {
     const columnsController = this._columnsController;
@@ -235,7 +276,7 @@ const resizingControllerMembers = {
     let hasMinWidth = false;
     let resetBestFitMode;
     let isColumnWidthsCorrected = false;
-    let resultWidths = [];
+    let resultWidths: any[] = [];
     let focusedElement;
     let selectionRange;
 
@@ -276,6 +317,7 @@ const resizingControllerMembers = {
     const $element = this.component.$element();
 
     if (needBestFit) {
+      // @ts-expect-error
       focusedElement = domAdapter.getActiveElement($element.get(0));
       selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
       this._toggleBestFitMode(true);
@@ -284,6 +326,7 @@ const resizingControllerMembers = {
 
     this._toggleContentMinHeight(wordWrapEnabled); // T1047239
 
+    // @ts-expect-error
     if ($element && $element.get(0) && this._maxWidth) {
       delete this._maxWidth;
       $element[0].style.maxWidth = '';
@@ -344,22 +387,22 @@ const resizingControllerMembers = {
         }
       });
     });
-  },
+  }
 
   _needBestFit() {
     return this.option('columnAutoWidth');
-  },
+  }
 
   _needStretch() {
     return this._columnsController.getVisibleColumns().some((c) => c.width === 'auto' && !c.command);
-  },
+  }
 
   _getAverageColumnsWidth(resultWidths) {
     const freeWidth = calculateFreeWidth(this, resultWidths);
     const columnCountWithoutWidth = resultWidths.filter((width) => width === undefined).length;
 
     return freeWidth / columnCountWithoutWidth;
-  },
+  }
 
   _correctColumnWidths(resultWidths, visibleColumns) {
     const that = this;
@@ -423,13 +466,14 @@ const resizingControllerMembers = {
               : 0;
 
             that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
+            // @ts-expect-error
             $element.css('maxWidth', that._maxWidth);
           }
         }
       }
     }
     return isColumnWidthsCorrected;
-  },
+  }
 
   _processStretch(resultSizes, visibleColumns) {
     const groupSize = this._rowsView.contentWidth();
@@ -465,9 +509,9 @@ const resizingControllerMembers = {
         }
       }
     }
-  },
+  }
 
-  _getRealColumnWidth(columnIndex, columnWidths, groupWidth) {
+  _getRealColumnWidth(columnIndex, columnWidths, groupWidth?) {
     let ratio = 1;
     const width = columnWidths[columnIndex];
 
@@ -501,7 +545,7 @@ const resizingControllerMembers = {
     }
 
     return parseFloat(width) * groupWidth * ratio / 100;
-  },
+  }
 
   _getTotalWidth(widths, groupWidth) {
     let result = 0;
@@ -514,11 +558,12 @@ const resizingControllerMembers = {
     }
 
     return Math.ceil(result);
-  },
+  }
 
   _getGroupElement() {
+    // @ts-expect-error
     return this.component.$element().children().get(0);
-  },
+  }
 
   updateSize(rootElement) {
     const that = this;
@@ -543,11 +588,11 @@ const resizingControllerMembers = {
         $groupElement.appendTo($rootElement);
       }
     }
-  },
+  }
 
   publicMethods() {
     return ['resize', 'updateDimensions'];
-  },
+  }
 
   _waitAsyncTemplates() {
     return when(
@@ -555,7 +600,7 @@ const resizingControllerMembers = {
       this._rowsView?.waitAsyncTemplates(true),
       this._footerView?.waitAsyncTemplates(true),
     );
-  },
+  }
 
   resize() {
     if (this.component._requireResize) {
@@ -572,9 +617,9 @@ const resizingControllerMembers = {
     }).fail(d.reject);
 
     return d.promise();
-  },
+  }
 
-  updateDimensions(checkSize) {
+  updateDimensions(checkSize?) {
     const that = this;
 
     that._initPostRenderHandlers();
@@ -608,7 +653,8 @@ const resizingControllerMembers = {
     });
 
     return result.promise();
-  },
+  }
+
   _resetGroupElementHeight() {
     const groupElement = this._getGroupElement();
     const scrollable = this._rowsView.getScrollable();
@@ -616,16 +662,19 @@ const resizingControllerMembers = {
     if (groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
       groupElement.style.height = '';
     }
-  },
-  _checkSize(checkSize) {
+  }
+
+  _checkSize(checkSize?) {
     const $rootElement = this.component.$element();
+    // @ts-expect-error
     const isWidgetVisible = $rootElement.is(':visible');
     const isGridSizeChanged = this._lastWidth !== getWidth($rootElement)
           || this._lastHeight !== getHeight($rootElement)
           || this._devicePixelRatio !== getWindow().devicePixelRatio;
 
     return isWidgetVisible && (!checkSize || isGridSizeChanged);
-  },
+  }
+
   _setScrollerSpacingCore() {
     const that = this;
     const vScrollbarWidth = that._rowsView.getScrollbarWidth();
@@ -636,7 +685,8 @@ const resizingControllerMembers = {
       that._footerView && that._footerView.setScrollerSpacing(vScrollbarWidth);
       that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
     });
-  },
+  }
+
   _setScrollerSpacing() {
     const scrollable = this._rowsView.getScrollable();
     // T722415, T758955
@@ -649,14 +699,15 @@ const resizingControllerMembers = {
         });
       });
     } else { this._setScrollerSpacingCore(); }
-  },
+  }
 
   _setAriaOwns() {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 
+    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
-  },
+  }
 
   _updateDimensionsCore() {
     const that = this;
@@ -669,9 +720,11 @@ const resizingControllerMembers = {
     const groupElement = this._getGroupElement();
 
     const rootElementHeight = getHeight($rootElement);
-    const height = that.option('height') || $rootElement.get(0).style.height;
+    // @ts-expect-error
+    const height = that.option('height') ?? $rootElement.get(0).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 
+    // @ts-expect-error
     // eslint-disable-next-line radix
     const maxHeight = parseInt($rootElement.css('maxHeight'));
     const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
@@ -699,6 +752,7 @@ const resizingControllerMembers = {
         that._setScrollerSpacing();
 
         each(VIEW_NAMES, (index, viewName) => {
+          // @ts-expect-error
           const view = that.getView(viewName);
           if (view) {
             view.resize();
@@ -708,13 +762,13 @@ const resizingControllerMembers = {
         editorFactory && editorFactory.resize();
       });
     });
-  },
+  }
 
   _updateLastSizes($rootElement) {
     this._lastWidth = getWidth($rootElement);
     this._lastHeight = getHeight($rootElement);
     this._devicePixelRatio = getWindow().devicePixelRatio;
-  },
+  }
 
   optionChanged(args) {
     switch (args.name) {
@@ -727,9 +781,9 @@ const resizingControllerMembers = {
         args.handled = true;
         return;
       default:
-        this.callBase(args);
+        super.optionChanged(args);
     }
-  },
+  }
 
   init() {
     this._prevContentMinHeight = null;
@@ -738,19 +792,17 @@ const resizingControllerMembers = {
     this._columnHeadersView = this.getView('columnHeadersView');
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
-  },
-};
+  }
+}
 
-const ResizingController = modules.ViewController.inherit(resizingControllerMembers);
-
-const SynchronizeScrollingController = modules.ViewController.inherit({
+export class SynchronizeScrollingController extends modules.ViewController {
   _scrollChangedHandler(views, pos, viewName) {
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
         views[j].scrollTo({ left: pos.left, top: pos.top });
       }
     }
-  },
+  }
 
   init() {
     const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
@@ -761,30 +813,38 @@ const SynchronizeScrollingController = modules.ViewController.inherit({
         view.scrollChanged.add(this._scrollChangedHandler.bind(this, views));
       }
     }
-  },
-});
+  }
+}
 
-const GridView = modules.View.inherit({
+export class GridView extends modules.View {
+  private _resizingController!: ResizingController;
+
+  private _dataController!: DataController;
+
+  private _groupElement: any;
+
+  private _rootElement: any;
+
   _endUpdateCore() {
     if (this.component._requireResize) {
       this.component._requireResize = false;
       this._resizingController.resize();
     }
-  },
+  }
 
   init() {
     const that = this;
     that._resizingController = that.getController('resizing');
     that._dataController = that.getController('data');
-  },
+  }
 
   getView(name) {
     return this.component._views[name];
-  },
+  }
 
   element() {
     return this._groupElement;
-  },
+  }
 
   optionChanged(args) {
     const that = this;
@@ -793,9 +853,9 @@ const GridView = modules.View.inherit({
       that._groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!args.value);
       args.handled = true;
     } else {
-      that.callBase(args);
+      super.optionChanged(args);
     }
-  },
+  }
 
   _renderViews($groupElement) {
     const that = this;
@@ -806,11 +866,11 @@ const GridView = modules.View.inherit({
         view.render($groupElement);
       }
     });
-  },
+  }
 
   _getTableRoleName() {
     return 'group';
-  },
+  }
 
   render($rootElement) {
     const isFirstRender = !this._groupElement;
@@ -832,7 +892,7 @@ const GridView = modules.View.inherit({
     }
 
     this._renderViews($groupElement);
-  },
+  }
 
   update() {
     const that = this;
@@ -846,8 +906,8 @@ const GridView = modules.View.inherit({
         that._resizingController.fireContentReadyAction();
       }
     }
-  },
-});
+  }
+}
 
 export const gridViewModule = {
   defaultOptions() {

@@ -275,6 +275,10 @@ const Editor = Widget.inherit({
 
         this._toggleBackspaceHandler(readOnly);
         this.$element().toggleClass(READONLY_STATE_CLASS, !!readOnly);
+        this._setAriaReadonly(readOnly);
+    },
+
+    _setAriaReadonly(readOnly) {
         this.setAria('readonly', readOnly || undefined);
     },
 

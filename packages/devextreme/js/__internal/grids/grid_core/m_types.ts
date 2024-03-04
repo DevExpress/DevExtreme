@@ -1,11 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { GridBase, GridBaseOptions } from '@js/common/grids';
-import { Component } from '@js/core/component';
-import { PropertyType } from '@js/core/index';
-import { dxElementWrapper } from '@js/core/renderer';
-import { Properties as DataGridOptions } from '@js/ui/data_grid';
-import Widget from '@js/ui/widget/ui.widget';
+import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
+import type { Component } from '@js/core/component';
+import type { PropertyType } from '@js/core/index';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { Properties as DataGridOptions } from '@js/ui/data_grid';
+import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
+import type Widget from '@js/ui/widget/ui.widget';
 
 type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
 
@@ -30,6 +31,10 @@ type OptionsMethod<TOptions> =
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
 export interface InternalGrid extends GridBaseType {
+  _views: View[];
+
+  _controllers: Controller[];
+
   option: OptionsMethod<InternalGridOptions>;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
@@ -57,7 +62,7 @@ export interface InternalGrid extends GridBaseType {
   _createComponent: <TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options: TComponent extends Component<infer TOptions> ? TOptions : never
+    options?: TComponent extends Component<infer TOptions> ? TOptions : never
   ) => TComponent;
 }
 
@@ -77,7 +82,15 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 'toolbar'
 >;
 
-export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid {
+type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
+'onNodesInitialized' |
+'expandedRowKeys'
+>;
+interface InternalSelection extends SelectionBase {
+  alwaysSelectByShift?: boolean;
+}
+
+export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid, TemporarlyOptionsTakenFromTreeList {
   dataRowTemplate?: any;
 
   loadingTimeout?: number;
@@ -89,6 +102,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   forceApplyBindings?: any;
 
   loadItemsOnExportingSelectedItems?: boolean | undefined;
+
+  selection?: InternalSelection;
 }
 
 // todo: move to upper .d.ts files
@@ -140,20 +155,29 @@ export type OptionChanged = {
 }[OptionNames];
 
 export interface Controllers {
-  data: import('./data_controller/m_data_controller').DataController;
+  adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsController;
+  applyFilter: import('./filter/m_filter_row').ApplyFilterViewController;
+  columnChooser: import('./column_chooser/m_column_chooser').ColumnChooserController;
   columns: import('./columns_controller/m_columns_controller').ColumnsController;
-  resizing: any;
-  adaptiveColumns: any;
-  columnChooser: any;
-  editorFactory: any; // import('./editor_factory/module').EditorFactory;
-  editing: any; // import('./editing/m_editing').EditingController;
+  columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
+  contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
+  data: import('./data_controller/m_data_controller').DataController;
+  draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
+  // todo: export is dataGrid-only controller
+  editing: import('./editing/m_editing').EditingController;
+  editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
+  errorHandling: import('./error_handling/m_error_handling').ErrorHandlingController;
+  export: import('../data_grid/export/m_export').ExportController;
+  filterSync: import('./filter/m_filter_sync').FilterSyncController;
+  focus: import('./focus/m_focus').FocusController;
+  headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
-  focus: any;
-  columnsResizer: any;
-  validating: any;
-  export: any;
-  draggingHeader: any;
+  resizing: import('./views/m_grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
+  validating: import('./validating/m_validating').ValidatingController;
+  stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
+  synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
+  tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
 }
 
 type ControllerTypes = {
@@ -161,9 +185,21 @@ type ControllerTypes = {
 };
 
 export interface Views {
-  headerPanel: any;
-  rowsView: any;
-  columnChooserView: any;
+  columnChooserView: import('./column_chooser/m_column_chooser').ColumnChooserView;
+  columnHeadersView: import('./column_headers/m_column_headers').ColumnHeadersView;
+  headerPanel: import('./header_panel/m_header_panel').HeaderPanel;
+  headerFilterView: import('./header_filter/m_header_filter_core').HeaderFilterView;
+  rowsView: import('./views/m_rows_view').RowsView;
+  pagerView: import('./pager/m_pager').PagerView;
+  columnsSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsSeparatorView;
+  blockSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').BlockSeparatorView;
+  draggingHeaderView: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderView;
+  trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
+  contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
+  footerView: import('../data_grid/summary/m_summary').FooterView;
+  gridView: import('./views/m_grid_view').GridView;
+  filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
+  filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
 }
 type ViewTypes = {
   [ P in keyof Views ]: new(component: any) => Views[P];
@@ -254,6 +290,10 @@ export declare class ViewController extends Controller {
 }
 
 export declare class View extends ModuleItem {
+  renderCompleted: any;
+
+  resizeCompleted: any;
+
   _endUpdateCore(): void;
 
   _invalidate(requireResize?: any, requireReady?: any): void;
@@ -297,11 +337,3 @@ export interface Module {
   };
   defaultOptions?: () => InternalGridOptions;
 }
-
-declare const exportVar: {
-  Controller;
-  View;
-  ViewController;
-};
-
-export default exportVar;

@@ -1,7 +1,7 @@
 import type Scrollable from './internal/scrollable';
 import type { PlatformType } from '../../helpers/multi-platform-test/platform-type';
 import { ScrollableFactory } from './internal/scrollable';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 
 const getScrollView = (
   platform: PlatformType,

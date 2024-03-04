@@ -25,4 +25,4 @@ jobs:
 
       - name: Publish Packages (${{ matrix.branch }})
         run: |
-          gh workflow run packages_publishing.yml --ref ${{ matrix.branch }}          
+          gh workflow run packages_publishing.yml -f tag=daily --ref ${{ matrix.branch }}          

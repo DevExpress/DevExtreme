@@ -4,6 +4,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
 import 'ui/text_box/ui.text_editor';
+import 'ui/validator';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const CLEAR_BUTTON_CLASS = '.dx-clear-button-area';
@@ -2334,6 +2335,50 @@ QUnit.module('validation', {}, () => {
         textEditor.option('value', 'f');
         assert.notOk(textEditor.option('isValid'), 'mask with an invalid value should be invalid');
     });
+
+    QUnit.test('The invalid mask error should be restores after removing the mask (T1214604)', function(assert) {
+        const maskInvalidMessage = 'mask error';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000000/0009',
+            maskInvalidMessage,
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        textEditor.option({ value: '123' });
+
+        assert.strictEqual(textEditor.option('validationError').message, maskInvalidMessage, 'validation message was added');
+
+        textEditor.option({ mask: '' });
+
+        assert.strictEqual(textEditor.option('validationError'), null);
+    });
+
+    QUnit.test('A custom validation error is kept after mask restoring', function(assert) {
+        const customErrorMessage = 'custom error';
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000000/0009',
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                message: customErrorMessage,
+                validationCallback: () => false,
+            }],
+        });
+
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const validator = $textEditor.dxValidator('instance');
+
+        textEditor.option({ value: '123' });
+
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
+
+        textEditor.option({ mask: '' });
+
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
+    });
 });
 
 QUnit.module('T9', moduleConfig, () => {
@@ -2578,6 +2623,36 @@ QUnit.module('Hidden input', {}, () => {
 
         const $hiddenInput = $textEditor.find('input[type=hidden]');
         assert.equal($hiddenInput.attr('name'), 'Editor with mask', 'name of hidden input');
+    });
+
+    QUnit.test('Value change should work as usual after mask option is updated programmatically (T1214019)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            valueChangeEvent: 'input',
+            mask: '000',
+        });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const instance = $textEditor.dxTextEditor('instance');
+
+        keyboardMock($input, true)
+            .caret(0)
+            .type('1')
+            .change();
+
+        $textEditor.blur();
+        instance.option('mask', '0000');
+        keyboardMock($input, true)
+            .caret(1)
+            .type('2')
+            .change();
+
+        $textEditor.blur();
+        instance.option('mask', '000');
+
+        const $hiddenInput = $textEditor.find('input[type=hidden]');
+
+        assert.strictEqual($input.val(), '12_', 'Value is saved');
+        assert.strictEqual($hiddenInput.val(), '12', 'Hidden value is saved');
+        assert.strictEqual(instance.option('value'), '12', 'Value option is correct');
     });
 
     [

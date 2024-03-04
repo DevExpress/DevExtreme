@@ -131,6 +131,13 @@ export type GroupItemTemplateData = {
 };
 
 /** @public */
+export type GroupCaptionTemplateData = {
+    readonly caption?: string;
+    readonly component: dxForm;
+    readonly name?: string;
+};
+
+/** @public */
 export type SimpleItemTemplateData = {
     readonly component: dxForm;
     readonly dataField?: string;
@@ -543,6 +550,12 @@ export interface dxFormGroupItem {
      * @public
      */
     caption?: string;
+    /**
+     * @docid
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    captionTemplate?: template | ((data: GroupCaptionTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 1

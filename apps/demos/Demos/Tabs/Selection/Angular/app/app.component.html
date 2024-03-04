@@ -1,0 +1,54 @@
+<div id="center-content">
+  <div id="demo-items-container">
+    <div class="content dx-fieldset">
+      <div class="dx-field">
+        <dx-tabs #tabs [dataSource]="employees" [selectedItem]="employees[0]">
+        </dx-tabs>
+      </div>
+
+      <div class="dx-field select-box-container">
+        <div class="dx-field-label">Selected user:</div>
+
+        <div class="dx-field-value">
+          <dx-select-box
+            id="selectbox"
+            displayExpr="text"
+            [dataSource]="employees"
+            [inputAttr]="{ 'aria-label': 'Select Employee' }"
+            [(value)]="tabs.selectedItem"
+          ></dx-select-box>
+        </div>
+      </div>
+
+      <div class="dx-field multiview-container">
+        <dx-multi-view
+          [height]="112"
+          [dataSource]="employees"
+          [(selectedItem)]="tabs.selectedItem"
+          [loop]="false"
+          [animationEnabled]="true"
+        >
+          <div *dxTemplate="let data of 'item'">
+            <div class="employee-info">
+              <img
+                [alt]="data.text"
+                class="employee-photo dx-theme-border-color"
+                [src]="data.picture"
+              />
+              <p class="employee-notes">
+                <b>Position: {{ data.position }}</b
+                ><br />
+                {{ data.notes }}
+              </p>
+            </div>
+          </div>
+        </dx-multi-view>
+      </div>
+
+      <div class="icon-container">
+        <span class="dx-icon dx-icon-info"></span>
+        <span class="demo-info">You can use swipe gestures in this area.</span>
+      </div>
+    </div>
+  </div>
+</div>

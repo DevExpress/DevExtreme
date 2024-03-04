@@ -13,6 +13,12 @@ import List from '@js/ui/list_light';
 import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
 
+import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
+import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
+import type { EditingController } from '../../grid_core/editing/m_editing';
+import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
+import type { ModuleType } from '../../grid_core/m_types';
+import type { RowsView } from '../../grid_core/views/m_rows_view';
 import dataGridCore from '../m_core';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
@@ -324,11 +330,11 @@ export class DataProvider {
 }
 
 export class ExportController extends dataGridCore.ViewController {
-  public _columnsController: any;
+  public _columnsController!: ColumnsController;
 
-  private _headersView: any;
+  private _headersView!: ColumnHeadersView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   public _selectionOnly: any;
 
@@ -620,7 +626,7 @@ export class ExportController extends dataGridCore.ViewController {
     this.throwWarningIfNoOnExportingEvent();
     this._columnsController = this.getController('columns');
     this._rowsView = this.getView('rowsView');
-    this._headersView = this.getView('columnHeadersView' as any);
+    this._headersView = this.getView('columnHeadersView');
 
     this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
   }
@@ -684,6 +690,198 @@ export class ExportController extends dataGridCore.ViewController {
   }
 }
 
+const editing = (Base: ModuleType<EditingController>) => class ExportEditingControllerExtender extends Base {
+  // @ts-expect-error
+  callbackNames() {
+    const callbackList = super.callbackNames();
+
+    return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
+  }
+
+  _updateEditButtons() {
+    super._updateEditButtons();
+
+    // @ts-expect-error
+    this.editingButtonsUpdated.fire();
+  }
+};
+
+const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelExtender extends Base {
+  private _exportController!: ExportController;
+
+  private _editingController!: EditingController;
+
+  _getToolbarItems() {
+    const items = super._getToolbarItems();
+
+    const exportButton = this._getExportToolbarButton();
+
+    if (exportButton) {
+      items.push(exportButton);
+      this._correctItemsPosition(items);
+    }
+
+    return items;
+  }
+
+  _getExportToolbarButton() {
+    const items = this._getExportToolbarItems();
+
+    if (items.length === 0) {
+      return null;
+    }
+
+    const disabled = this._needDisableExportButton();
+
+    const toolbarButtonOptions: any = {
+      name: DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME,
+      location: 'after',
+      locateInMenu: 'auto',
+      sortIndex: 30,
+      options: { items },
+      disabled,
+    };
+
+    if (items.length === 1) {
+      const widgetOptions = {
+        ...items[0],
+        hint: items[0].text,
+        elementAttr: {
+          class: DATAGRID_EXPORT_BUTTON_CLASS,
+        },
+      };
+
+      toolbarButtonOptions.widget = 'dxButton';
+      toolbarButtonOptions.showText = 'inMenu';
+      toolbarButtonOptions.options = widgetOptions;
+    } else {
+      const widgetOptions = {
+        icon: DATAGRID_EXPORT_ICON,
+        displayExpr: 'text',
+        items,
+        hint: this.option('export.texts.exportTo'),
+        elementAttr: {
+          class: DATAGRID_EXPORT_BUTTON_CLASS,
+        },
+        dropDownOptions: {
+          width: 'auto',
+          _wrapperClassExternal: DATAGRID_EXPORT_MENU_CLASS,
+        },
+      };
+
+      toolbarButtonOptions.options = widgetOptions;
+      toolbarButtonOptions.widget = 'dxDropDownButton';
+
+      toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
+        this._createComponent($(container), List, { items });
+      };
+    }
+
+    return toolbarButtonOptions;
+  }
+
+  _getExportToolbarItems() {
+    const exportOptions: any = this.option('export');
+    const texts: any = this.option('export.texts');
+    const formats: any[] = this.option('export.formats') ?? [];
+
+    if (!exportOptions.enabled) {
+      return [];
+    }
+
+    const items: any[] = [];
+
+    formats.forEach((formatType) => {
+      let formatName = formatType.toUpperCase();
+      let exportAllIcon = DATAGRID_EXPORT_ICON;
+      const exportSelectedIcon = DATAGRID_EXPORT_SELECTED_ICON;
+
+      if (formatType === 'xlsx') {
+        formatName = 'Excel';
+        exportAllIcon = DATAGRID_EXPORT_EXCEL_ICON;
+      }
+
+      if (formatType === 'pdf') {
+        exportAllIcon = DATAGRID_PDF_EXPORT_ICON;
+      }
+
+      items.push({
+        text: format(texts.exportAll, formatName),
+        icon: exportAllIcon,
+        onClick: () => {
+          this._exportController.exportTo(false, formatType);
+        },
+      });
+
+      if (exportOptions.allowExportSelectedData) {
+        items.push({
+          text: format(texts.exportSelectedRows, formatName),
+          icon: exportSelectedIcon,
+          onClick: () => {
+            this._exportController.exportTo(true, formatType);
+          },
+        });
+      }
+    });
+
+    return items;
+  }
+
+  _correctItemsPosition(items) {
+    items.sort((itemA, itemB) => itemA.sortIndex - itemB.sortIndex);
+  }
+
+  _isExportButtonVisible() {
+    return this.option('export.enabled');
+  }
+
+  optionChanged(args) {
+    super.optionChanged(args);
+    if (args.name === 'export') {
+      args.handled = true;
+      this._invalidate();
+    }
+  }
+
+  _needDisableExportButton(): boolean {
+    const isDataColumnsInvisible = !this._columnsController.hasVisibleDataColumns();
+    const hasUnsavedChanges = this._editingController.hasChanges();
+
+    return isDataColumnsInvisible || hasUnsavedChanges;
+  }
+
+  _columnOptionChanged(e?) {
+    // @ts-expect-error
+    super._columnOptionChanged(e);
+
+    const isColumnLocationChanged = dataGridCore.checkChanges(e.optionNames, ['groupIndex', 'visible', 'all']);
+
+    if (isColumnLocationChanged) {
+      const disabled = this._needDisableExportButton();
+
+      this.setToolbarItemDisabled('exportButton', disabled);
+    }
+  }
+
+  init() {
+    super.init();
+
+    this._exportController = this.getController('export');
+    this._editingController = this.getController('editing');
+
+    // @ts-expect-error
+    this._editingController.editingButtonsUpdated.add(() => {
+      const disabled = this._needDisableExportButton();
+
+      this.setToolbarItemDisabled('exportButton', disabled);
+    });
+  }
+
+  isVisible() {
+    return super.isVisible() || this._isExportButtonVisible();
+  }
+};
+
 dataGridCore.registerModule('export', {
   defaultOptions() {
     return {
@@ -705,190 +903,10 @@ dataGridCore.registerModule('export', {
   },
   extenders: {
     controllers: {
-      editing: {
-        callbackNames() {
-          const callbackList = this.callBase();
-
-          return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
-        },
-
-        _updateEditButtons() {
-          this.callBase();
-
-          this.editingButtonsUpdated.fire();
-        },
-      },
+      editing,
     },
     views: {
-      headerPanel: {
-        _getToolbarItems() {
-          const items = this.callBase();
-
-          const exportButton = this._getExportToolbarButton();
-
-          if (exportButton) {
-            items.push(exportButton);
-            this._correctItemsPosition(items);
-          }
-
-          return items;
-        },
-
-        _getExportToolbarButton() {
-          const items = this._getExportToolbarItems();
-
-          if (items.length === 0) {
-            return null;
-          }
-
-          const disabled = this._needDisableExportButton();
-
-          const toolbarButtonOptions: any = {
-            name: DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME,
-            location: 'after',
-            locateInMenu: 'auto',
-            sortIndex: 30,
-            options: { items },
-            disabled,
-          };
-
-          if (items.length === 1) {
-            const widgetOptions = {
-              ...items[0],
-              hint: items[0].text,
-              elementAttr: {
-                class: DATAGRID_EXPORT_BUTTON_CLASS,
-              },
-            };
-
-            toolbarButtonOptions.widget = 'dxButton';
-            toolbarButtonOptions.showText = 'inMenu';
-            toolbarButtonOptions.options = widgetOptions;
-          } else {
-            const widgetOptions = {
-              icon: DATAGRID_EXPORT_ICON,
-              displayExpr: 'text',
-              items,
-              hint: this.option('export.texts.exportTo'),
-              elementAttr: {
-                class: DATAGRID_EXPORT_BUTTON_CLASS,
-              },
-              dropDownOptions: {
-                width: 'auto',
-                _wrapperClassExternal: DATAGRID_EXPORT_MENU_CLASS,
-              },
-            };
-
-            toolbarButtonOptions.options = widgetOptions;
-            toolbarButtonOptions.widget = 'dxDropDownButton';
-
-            toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
-              this._createComponent($(container), List, { items });
-            };
-          }
-
-          return toolbarButtonOptions;
-        },
-
-        _getExportToolbarItems() {
-          const exportOptions = this.option('export');
-          const texts = this.option('export.texts');
-          const formats = this.option('export.formats') ?? [];
-
-          if (!exportOptions.enabled) {
-            return [];
-          }
-
-          const items: any[] = [];
-
-          formats.forEach((formatType) => {
-            let formatName = formatType.toUpperCase();
-            let exportAllIcon = DATAGRID_EXPORT_ICON;
-            const exportSelectedIcon = DATAGRID_EXPORT_SELECTED_ICON;
-
-            if (formatType === 'xlsx') {
-              formatName = 'Excel';
-              exportAllIcon = DATAGRID_EXPORT_EXCEL_ICON;
-            }
-
-            if (formatType === 'pdf') {
-              exportAllIcon = DATAGRID_PDF_EXPORT_ICON;
-            }
-
-            items.push({
-              text: format(texts.exportAll, formatName),
-              icon: exportAllIcon,
-              onClick: () => {
-                this._exportController.exportTo(false, formatType);
-              },
-            });
-
-            if (exportOptions.allowExportSelectedData) {
-              items.push({
-                text: format(texts.exportSelectedRows, formatName),
-                icon: exportSelectedIcon,
-                onClick: () => {
-                  this._exportController.exportTo(true, formatType);
-                },
-              });
-            }
-          });
-
-          return items;
-        },
-
-        _correctItemsPosition(items) {
-          items.sort((itemA, itemB) => itemA.sortIndex - itemB.sortIndex);
-        },
-
-        _isExportButtonVisible() {
-          return this.option('export.enabled');
-        },
-
-        optionChanged(args) {
-          this.callBase(args);
-          if (args.name === 'export') {
-            args.handled = true;
-            this._invalidate();
-          }
-        },
-
-        _needDisableExportButton(): boolean {
-          const isDataColumnsInvisible = !this._columnsController.hasVisibleDataColumns();
-          const hasUnsavedChanges = this._editingController.hasChanges();
-
-          return isDataColumnsInvisible || hasUnsavedChanges;
-        },
-
-        _columnOptionChanged(e) {
-          this.callBase(e);
-
-          const isColumnLocationChanged = dataGridCore.checkChanges(e.optionNames, ['groupIndex', 'visible', 'all']);
-
-          if (isColumnLocationChanged) {
-            const disabled = this._needDisableExportButton();
-
-            this.setToolbarItemDisabled('exportButton', disabled);
-          }
-        },
-
-        init() {
-          this.callBase();
-
-          this._exportController = this.getController('export');
-          this._editingController = this.getController('editing');
-
-          this._editingController.editingButtonsUpdated.add(() => {
-            const disabled = this._needDisableExportButton();
-
-            this.setToolbarItemDisabled('exportButton', disabled);
-          });
-        },
-
-        isVisible() {
-          return this.callBase() || this._isExportButtonVisible();
-        },
-      },
+      headerPanel,
     },
   },
 });

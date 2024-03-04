@@ -245,25 +245,6 @@ gulp.task('transpile', (done) => {
     });
 });
 
-const replaceTask = (sourcePath) => {
-    const task = () => gulp
-        .src(path.join(sourcePath, 'core/version.js'), { base: './' })
-        .pipe(replace('%VERSION%', ctx.version.script))
-        .pipe(gulp.dest('./'));
-    task.displayName = `replace-version:${sourcePath}`;
-    return task;
-};
-
-const replaceVersion = () => gulp.parallel([
-    replaceTask(ctx.TRANSPILED_PATH),
-    replaceTask(ctx.TRANSPILED_RENOVATION_PATH),
-    replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH),
-    ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './esm')))(),
-    ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './cjs')))(),
-]);
-
-gulp.task('version-replace', replaceVersion());
-
 gulp.task('renovated-components-watch', () => {
     return gulp
         .watch(

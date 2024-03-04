@@ -1,0 +1,30 @@
+<template>
+  <div class="custom-item">
+    <img
+      :alt="itemData.FirstName"
+      :src="itemData.Picture"
+    ><div>{{ itemData.Prefix }}
+      {{ itemData.FirstName }} {{ itemData.LastName }}</div>
+  </div>
+</template>
+<script setup lang="ts">
+withDefaults(defineProps<{
+  itemData?: Record<string, any>
+}>(), {
+  itemData: () => ({}),
+});
+</script>
+<style scoped>
+  .custom-item > img {
+    height: 48px;
+    width: 38px;
+    margin-right: 10px;
+  }
+
+  .custom-item > div {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 48px;
+    font-size: 15px;
+  }
+</style>

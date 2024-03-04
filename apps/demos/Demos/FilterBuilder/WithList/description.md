@@ -1,0 +1,1 @@
+This demo shows how to&nbsp;filter data in&nbsp;the List using the FilterBuilder component. Note that the **DataSource** does not support the *"between"* operation. Call the [getFilterExpression()](/Documentation/ApiReference/UI_Components/dxFilterBuilder/Methods/#getFilterExpression) method to&nbsp;convert it&nbsp;into **DataSource**-compatible operations.
