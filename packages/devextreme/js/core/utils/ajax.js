@@ -15,7 +15,7 @@ import {
     evalScript,
     appendToHead,
     getMethod,
-} from './ajax.utils';
+} from './ajax_utils';
 
 const SUCCESS = 'success';
 const ERROR = 'error';

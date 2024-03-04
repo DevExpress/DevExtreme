@@ -1,5 +1,5 @@
 import { Deferred } from 'devextreme/core/utils/deferred';
-import { HttpEventType, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpParams } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { getWindow } from 'devextreme/core/utils/window';
@@ -11,7 +11,7 @@ import {
   getRequestHeaders,
   getAcceptHeader,
   evalScript,
-} from 'devextreme/core/utils/ajax.utils';
+} from 'devextreme/core/utils/ajax_utils';
 
 type Result = Promise<any> & { abort: () => void };
 
@@ -108,13 +108,23 @@ function isNeedScriptEvaluation(options) {
   return options.dataType === 'jsonp' || options.dataType === 'script';
 }
 
-export const sendRequestFactory = (httpClient) => {
+function getCleanHeaders(headers) {
+  return Object.keys(headers).reduce((acc, key) => {
+    if (isDefined(headers[key])) {
+      acc[key] = headers[key];
+    }
+    return acc;
+  }, {});
+}
+
+export const sendRequestFactory = (httpClient: HttpClient) => {
   const URLENCODED = 'application/x-www-form-urlencoded';
 
-  let nonce = Date.now();
+  const nonce = Date.now();
 
-  return (options: Record<string, any>) => {
-    const destroy$ = new Subject<any>();
+  return (sendOptions: Record<string, any>) => {
+    const options = { ...sendOptions };
+    const destroy$ = new Subject<void>();
     const d = Deferred();
     const method = (options.method || 'get').toLowerCase();
     const isGet = method === 'get';
@@ -123,6 +133,7 @@ export const sendRequestFactory = (httpClient) => {
     if (options.cache === undefined) {
       options.cache = !needScriptEvaluation;
     }
+
     options.crossDomain = isCrossDomain(options.url);
 
     const jsonpCallBackName = getJsonpCallbackName(options);
@@ -136,7 +147,7 @@ export const sendRequestFactory = (httpClient) => {
     const { xhrFields } = options;
     const result: Result = d.promise() as Result;
 
-    result.abort = function (): void { // TODO need test
+    result.abort = (): void => {
       destroy$.next();
       destroy$.complete();
       upload?.onabort?.(xhrSurrogate);
@@ -146,7 +157,7 @@ export const sendRequestFactory = (httpClient) => {
 
     const xhrSurrogate = {
       type: 'XMLHttpRequestSurrogate',
-      abort() { result.abort(); },
+      abort(): void { result.abort(); },
     };
 
     if (jsonpCallBackName) {
@@ -156,7 +167,7 @@ export const sendRequestFactory = (httpClient) => {
     }
 
     if (options.cache === false && isGet && data) {
-      data._ = nonce++;
+      data._ = nonce + 1;
     }
 
     if (!headers.Accept) {
@@ -167,24 +178,23 @@ export const sendRequestFactory = (httpClient) => {
       headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
     }
 
-    Object.keys(headers).forEach((key) => {
-      if (!isDefined(headers[key])) {
-        delete headers[key];
+    const requestHeaders = getCleanHeaders(headers);
+
+    const params = isGet ? data : undefined;
+
+    const body = (() => {
+      if (isGet) {
+        return undefined;
       }
-    });
 
-    let params;
-    let body;
+      if (!upload && typeof data === 'object' && requestHeaders[CONTENT_TYPE].indexOf(URLENCODED) === 0) {
+        const httpParams = new HttpParams();
+        Object.keys(data).forEach((key) => httpParams.set(key, data[key]));
+        return httpParams.toString();
+      }
 
-    if (isGet) {
-      params = data;
-    } else if (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0) {
-      body = new HttpParams();
-      Object.keys(data).forEach((key) => body.set(key, data[key]));
-      body = body.toString();
-    } else {
-      body = data;
-    }
+      return data;
+    })();
 
     if (beforeSend) {
       beforeSend(xhrSurrogate);
@@ -198,16 +208,16 @@ export const sendRequestFactory = (httpClient) => {
         {
           params,
           body,
-          headers,
+          headers: requestHeaders,
           reportProgress: true,
           withCredentials: xhrFields?.withCredentials,
           observe: upload ? 'events' : 'response',
           responseType: options.responseType || (['jsonp', 'script'].includes(options.dataType) ? 'text' : options.dataType),
         },
-      ).pipe(takeUntil(destroy$));
+      ).pipe(takeUntil(destroy$) as any);
 
     const requestWithTimeout = options.timeout
-      ? request.pipe(timeoutWith(options.timeout, throwError(() => ({ timeout: TIMEOUT }))))
+      ? request.pipe(timeoutWith(options.timeout, throwError(() => ({ timeout: TIMEOUT }))) as any)
       : request;
 
     if (upload) {
