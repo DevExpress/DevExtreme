@@ -718,7 +718,7 @@ export default function() {
         });
     });
 
-    testModule('CSP checks', {}, () => {
+    testModule('CSP. inline styles parsing', {}, () => {
         testModule('Mocked quill methods', {
             beforeEach() {
                 this.replaceStyleAttributeCallCount = 0;
@@ -773,6 +773,38 @@ export default function() {
                 testName: 'style inside tag attribute should be rendered coccectly',
                 inputMarkup: '<p>style="text-align: right;"</p>',
                 expectedMarkup: '<p>style="text-align: right;"</p>',
+            }, {
+                testName: 'style attributes in sibling tags should be rendered coccectly',
+                inputMarkup: '<p style="text-align: left;">content</p><p style="text-align: right;">content</p>',
+                expectedMarkup: '<p style="text-align: left;">content</p><p style="text-align: right;">content</p>',
+            }, {
+                testName: 'style attributes in parent and child elements should be rendered coccectly',
+                inputMarkup: '<div style="text-align: right;">content<div style="color: red;">content</div></div>',
+                expectedMarkup: '<div style="text-align: right;">content<div style="color: red;">content</div></div>',
+            }, {
+                testName: 'value should be rendered coccectly when input markup do not have open bracket for open tag',
+                inputMarkup: 'p style="text-align: right;">content</p>',
+                expectedMarkup: 'p style="text-align: right;">content</p>',
+            }, {
+                testName: 'value should be rendered coccectly when input markup do not have closed bracket for open tag',
+                inputMarkup: '<p style="text-align: right;" content</p>',
+                expectedMarkup: '<p style="text-align: right;" content</p>',
+            }, {
+                testName: 'value should be rendered coccectly when input markup do not have open bracket for closed tag',
+                inputMarkup: '<p style="text-align: right;">content /p>',
+                expectedMarkup: '<p style="text-align: right;">content /p>',
+            }, {
+                testName: 'value should be rendered coccectly when input markup do not have closed bracket for closed tag',
+                inputMarkup: '<p style="text-align: right;">content</p',
+                expectedMarkup: '<p style="text-align: right;">content</p',
+            }, {
+                testName: 'value should be rendered coccectly when input markup do not have closed tag',
+                inputMarkup: '<p style="text-align: right;">content',
+                expectedMarkup: '<p style="text-align: right;">content',
+            }, {
+                testName: 'should be no errors when value is equals empty string',
+                inputMarkup: '',
+                expectedMarkup: '',
             }];
 
             testCases.forEach(testCase => {
