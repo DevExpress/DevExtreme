@@ -322,7 +322,7 @@ export class View extends ModuleItem {
     };
   }
 
-  render($parent?, options?) {
+  public render($parent?, options?) {
     let $element = this._$element;
     const isVisible = this.isVisible();
 

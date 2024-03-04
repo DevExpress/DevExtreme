@@ -688,7 +688,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, header_panel
    */
   protected _renderCore(e?) {
     const $root = this.element().parent();
@@ -983,6 +983,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _afterRowPrepared(e?) {}
 
+  /**
+   * @extended: header_panel
+   */
   protected _handleDataChanged(e) {
   }
 

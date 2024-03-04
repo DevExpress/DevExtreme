@@ -734,7 +734,10 @@ export class ResizingController extends modules.ViewController {
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
   }
 
-  _updateDimensionsCore() {
+  /**
+   * @extended: header_panel
+   */
+  protected _updateDimensionsCore() {
     const that = this;
 
     const dataController = that._dataController;

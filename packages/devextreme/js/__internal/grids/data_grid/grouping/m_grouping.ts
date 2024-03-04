@@ -521,13 +521,13 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     }
   }
 
-  allowDragging(column?): boolean {
+  protected allowDragging(column?): boolean {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column);
   }
 
-  getColumnElements() {
+  public getColumnElements() {
     const $element = this.element();
     return $element && $element.find(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
   }

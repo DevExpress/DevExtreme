@@ -43,17 +43,17 @@ export class HeaderPanel extends ColumnsView {
     return [];
   }
 
-  _getButtonContainer() {
+  private _getButtonContainer() {
     return $('<div>').addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
   }
 
-  _getToolbarButtonClass(specificClass) {
+  protected _getToolbarButtonClass(specificClass) {
     const secondClass = specificClass ? ` ${specificClass}` : '';
 
     return this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS) + secondClass;
   }
 
-  _getToolbarOptions() {
+  private _getToolbarOptions() {
     const userToolbarOptions: any = this.option('toolbar');
 
     const options = {
@@ -84,7 +84,7 @@ export class HeaderPanel extends ColumnsView {
     return options.toolbarOptions;
   }
 
-  _normalizeToolbarItems(defaultItems, userItems) {
+  private _normalizeToolbarItems(defaultItems, userItems) {
     defaultItems.forEach((button) => {
       if (!DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
         throw new Error(`Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`);
@@ -129,7 +129,7 @@ export class HeaderPanel extends ColumnsView {
     return isArray ? normalizedItems : normalizedItems[0];
   }
 
-  _renderCore() {
+  protected _renderCore() {
     if (!this._toolbar) {
       const $headerPanel = this.element();
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
@@ -145,25 +145,25 @@ export class HeaderPanel extends ColumnsView {
 
   }
 
-  _handleDataChanged() {
+  protected _handleDataChanged() {
     if (this._requireReady) {
       this.render();
     }
   }
 
-  _isDisabledDefinedByUser(name: string): boolean {
+  private _isDisabledDefinedByUser(name: string): boolean {
     const userItems = (this.option('toolbar') as any)?.items;
     const userItem = userItems?.find((item) => item?.name === name);
 
     return isDefined(userItem?.disabled);
   }
 
-  render() {
+  public render() {
     this._toolbarOptions = this._getToolbarOptions();
     super.render.apply(this, arguments as any);
   }
 
-  setToolbarItemDisabled(name, disabled: boolean): void {
+  public setToolbarItemDisabled(name, disabled: boolean): void {
     const toolbar = this._toolbar;
     const isDefinedByUser = this._isDisabledDefinedByUser(name);
 
@@ -187,15 +187,15 @@ export class HeaderPanel extends ColumnsView {
     }
   }
 
-  updateToolbarDimensions() {
+  public updateToolbarDimensions() {
     (this._toolbar as any)?.updateDimensions();
   }
 
-  getHeaderPanel() {
+  private getHeaderPanel() {
     return this.element();
   }
 
-  getHeight() {
+  private getHeight() {
     return this.getElementHeight();
   }
 
@@ -243,17 +243,17 @@ export class HeaderPanel extends ColumnsView {
     return !!(this._toolbarOptions && this._toolbarOptions.visible);
   }
 
-  allowDragging() {
-
+  /**
+   * @extended: DataGrid's grouping
+   */
+  protected allowDragging() {
   }
 
-  hasGroupedColumns(): any {
-
-  }
+  public hasGroupedColumns(): any {}
 }
 
 const resizing = (Base: ModuleType<ResizingController>) => class HeaderPanelResizingExtender extends Base {
-  _updateDimensionsCore() {
+  protected _updateDimensionsCore() {
     // @ts-expect-error
     super._updateDimensionsCore.apply(this, arguments);
 
