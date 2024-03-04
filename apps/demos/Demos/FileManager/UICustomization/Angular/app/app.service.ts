@@ -81,9 +81,27 @@ const fileItems: FileItem[] = [{
   size: 2048,
 }];
 
+const fileExtensions = {
+  'Text Document': '.txt',
+  'RTF Document': '.rtf',
+  Spreadsheet: '.xls',
+};
+
+const categories = ['Work', 'Important', 'Home', 'None'];
+
 @Injectable()
 export class Service {
   getFileItems(): FileItem[] {
     return fileItems;
+  }
+
+  getItemInfo(name: string) {
+    const extension = fileExtensions[name];
+    const category = extension ?? categories.find((cat) => cat === name);
+
+    return {
+      extension,
+      category,
+    };
   }
 }
