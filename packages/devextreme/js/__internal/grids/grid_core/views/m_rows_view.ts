@@ -90,8 +90,6 @@ export class RowsView extends ColumnsView {
 
   _editingController!: EditingController;
 
-  _editorFactoryController!: EditorFactory;
-
   _resizingController!: ResizingController;
 
   protected _columnsResizerController!: ColumnsResizerViewController;
@@ -127,7 +125,6 @@ export class RowsView extends ColumnsView {
 
     super.init();
     this._editingController = this.getController('editing');
-    this._editorFactoryController = this.getController('editorFactory');
     this._resizingController = this.getController('resizing');
     this._columnsResizerController = this.getController('columnsResizer');
     this._focusController = this.getController('focus');
@@ -201,7 +198,7 @@ export class RowsView extends ColumnsView {
   protected _update(change?) { }
 
   /**
-   * @extended: editing_form_based
+   * @extended: editing_form_based, search
    */
   public _updateCell($cell, options) {
     if (isGroupRow(options)) {
@@ -843,7 +840,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, editing, keyboard_navigation, row_dragging
+   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search
    */
   protected _renderCore(change) {
     const $element = this.element();

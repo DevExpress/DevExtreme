@@ -1246,7 +1246,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: filter_row, filter_sync, header_filter
+   * @extended: filter_row, filter_sync, header_filter, search
    */
   protected _calculateAdditionalFilter(): Filter {
     return null;

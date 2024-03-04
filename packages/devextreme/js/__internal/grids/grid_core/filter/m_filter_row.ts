@@ -13,7 +13,6 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
@@ -184,12 +183,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private _applyFilterViewController!: ApplyFilterViewController;
 
-  private _editorFactoryController!: EditorFactory;
-
   public init() {
     super.init();
     this._applyFilterViewController = this.getController('applyFilter');
-    this._editorFactoryController = this.getController('editorFactory');
   }
 
   public optionChanged(args) {

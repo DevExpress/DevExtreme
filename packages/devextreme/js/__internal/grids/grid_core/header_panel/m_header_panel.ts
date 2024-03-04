@@ -37,7 +37,7 @@ export class HeaderPanel extends ColumnsView {
   }
 
   /**
-   * @extended: column_chooser, editing, filter_row
+   * @extended: column_chooser, editing, filter_row, search
    */
   protected _getToolbarItems(): any[] {
     return [];
