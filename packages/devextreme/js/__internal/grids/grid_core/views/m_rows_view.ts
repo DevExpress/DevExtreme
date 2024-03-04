@@ -401,7 +401,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing
+   * @extended: column_fixing, row_dragging
    */
   protected _renderContent(contentElement, tableElement, isFixedTableRendering?) {
     contentElement.empty().append(tableElement);
@@ -843,7 +843,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, editing, keyboard_navigation
+   * @extended: column_fixing, editing, keyboard_navigation, row_dragging
    */
   protected _renderCore(change) {
     const $element = this.element();
@@ -1146,6 +1146,9 @@ export class RowsView extends ColumnsView {
     }
   }
 
+  /**
+   * @extended: column_fixing, filter_row, row_dragging
+   */
   protected _resizeCore() {
     const that = this;
 

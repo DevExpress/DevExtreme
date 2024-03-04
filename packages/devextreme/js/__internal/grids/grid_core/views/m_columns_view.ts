@@ -679,7 +679,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing, filter_row
+   * @extended: column_fixing, filter_row, row_dragging
    */
   protected _resizeCore() {
     const scrollLeft = this._scrollLeft;
