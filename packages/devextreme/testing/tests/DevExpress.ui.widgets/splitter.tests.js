@@ -171,6 +171,7 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         QUnit.test('resizing behavior with multiple items in dataSource', function(assert) {
             this.reinit({
+                orientation,
                 dataSource: [{ }, { }, { }],
             });
 
@@ -184,8 +185,8 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         QUnit.test('third handle remains in the same place during resize with 1 dragEnd', function(assert) {
             this.reinit({
-                width: 208,
-                height: 200,
+                width: 208, height: 208,
+                orientation,
                 dataSource: [{}, {}, {}, {}, {}],
             });
 
@@ -200,8 +201,7 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         QUnit.test('percentage resizing during drag right and left', function(assert) {
             this.reinit({
-                width: 208,
-                height: 200,
+                width: 208, height: 208,
                 dataSource: [{}, {}, {}, {}, {}],
             });
 
@@ -212,6 +212,40 @@ QUnit.module('Resizing', moduleConfig, () => {
             pointer.start().dragStart().drag(50, 0).drag(-70, 0).dragEnd();
 
             assertLayout(items, ['8.63736', '31.3626', '20', '20', '20'], assert);
+        });
+    });
+
+    [
+        { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: -100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 75, expectedSize: ['12.5', '87.5'], orientation: 'horizontal', rtl: true },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal', rtl: false },
+        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical', rtl: false },
+        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical', rtl: false },
+        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical', rtl: false },
+        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical', rtl: false },
+    ].forEach(({ resizeDistance, expectedSize, orientation, rtl }) => {
+        QUnit.test(`percentage resizing during drag right and left with ${orientation} orientation, rtl ${rtl}`, function(assert) {
+            this.reinit({
+                width: 208, height: 208,
+                dataSource: [{}, {}],
+                rtlEnabled: rtl,
+            });
+
+            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+            const handles = this.getResizeHandles();
+
+            const pointer = pointerMock(handles.eq(0));
+            pointer.start().dragStart().drag(resizeDistance, 0).dragEnd();
+
+            assertLayout(items, expectedSize, assert);
         });
     });
 
