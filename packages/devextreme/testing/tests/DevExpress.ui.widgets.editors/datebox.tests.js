@@ -5761,23 +5761,23 @@ QUnit.module('datebox validation', {}, () => {
 });
 
 [
-    { input: 'p', expectedValue: 'PM' },
-    { input: 'a', expectedValue: 'AM' },
-    { input: 'x', expectedValue: null },
-    { input: 'y', expectedValue: null },
-    { input: 'z', expectedValue: null },
-    { input: 'b', expectedValue: null },
-    { input: 'c', expectedValue: null },
-    { input: 'd', expectedValue: null },
-    { input: 'i', expectedValue: null },
-    { input: 'j', expectedValue: null },
-].forEach(({ input, expectedValue }) => {
+    { type: 'time', input: 'p', expectedValue: 'PM' },
+    { type: 'time', input: 'a', expectedValue: 'AM' },
+    { type: 'time', input: 'x', expectedValue: null },
+    { type: 'time', input: 'y', expectedValue: null },
+    { type: 'time', input: 'z', expectedValue: null },
+    { type: 'datetime', input: 'p', expectedValue: 'PM' },
+    { type: 'datetime', input: 'a', expectedValue: 'AM' },
+    { type: 'datetime', input: 'x', expectedValue: null },
+    { type: 'datetime', input: 'y', expectedValue: null },
+    { type: 'datetime', input: 'z', expectedValue: null },
+].forEach(({ type, input, expectedValue }) => {
     QUnit.module('DateBox AM/PM Handling - time datebox type - HH:mmm a display format', {
         beforeEach: function() {
             this.$element = $('#dateBox').dxDateBox({
                 value: new Date('10/10/2012 13:07'),
                 useMaskBehavior: true,
-                type: 'time',
+                type: type,
                 mode: 'text',
                 displayFormat: 'HH:mm a',
                 pickerType: 'calendar'
@@ -5791,7 +5791,7 @@ QUnit.module('datebox validation', {}, () => {
             fx.off = false;
         }
     }, () => {
-        QUnit.test(`_handleAmPmSearch should toggle to ${expectedValue} when "${input}" is pressed for time datebox type - with a HH:mm a display format`, function(assert) {
+        QUnit.test(`_handleAmPmSearch should toggle to ${expectedValue} when "${input}" is pressed for "${type}" datebox type - with a HH:mm a display format`, function(assert) {
             this.instance.option('displayFormat', 'a');
 
             this.keyboard.type(input);
