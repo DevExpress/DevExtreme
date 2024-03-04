@@ -160,22 +160,9 @@ class ContextMenu extends MenuBase {
     _focusInHandler() {}
 
     _focusOutHandler(e) {
-        // debugger;
-        // let { visible } = this.option();
-
-        // debugger;
-
         this.hide();
 
-        // const { visible } = this.option();
-
-        // debugger;
-
         super._focusOutHandler(e);
-
-        // visible = this.option('visible');
-
-        // debugger;
     }
 
     _itemContainer() {
