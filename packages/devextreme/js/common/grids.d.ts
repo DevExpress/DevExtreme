@@ -498,7 +498,7 @@ export type ColumnChooser = {
    * @docid GridBaseOptions.columnChooser.height
    * @default 260
    */
-  height?: number;
+  height?: number | string;
   /**
    * @docid GridBaseOptions.columnChooser.mode
    * @default "dragAndDrop"
@@ -532,7 +532,7 @@ export type ColumnChooser = {
    * @docid GridBaseOptions.columnChooser.width
    * @default 250
    */
-  width?: number;
+  width?: number | string;
   /**
    * @docid GridBaseOptions.columnChooser.sortOrder
    * @default undefined
@@ -681,7 +681,7 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.height
    * @default undefined
    */
-  height?: number;
+  height?: number | string;
   /**
    * @docid GridBaseColumn.headerFilter.search
    */
@@ -696,7 +696,7 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.width
    * @default undefined
    */
-  width?: number;
+  width?: number | string;
 };
 
 /**
@@ -1232,7 +1232,7 @@ export type HeaderFilter = {
    * @default 315 &for(Fluent)
    * @default 325
    */
-  height?: number;
+  height?: number | string;
   /**
    * @docid GridBaseOptions.headerFilter.search
    */
@@ -1257,7 +1257,7 @@ export type HeaderFilter = {
    * @docid GridBaseOptions.headerFilter.width
    * @default 252
    */
-  width?: number;
+  width?: number | string;
 };
 
 /**
@@ -2381,7 +2381,7 @@ export type LoadPanel = {
    * @docid GridBaseOptions.loadPanel.height
    * @default 90
    */
-  height?: number;
+  height?: number | string;
   /**
    * @docid GridBaseOptions.loadPanel.indicatorSrc
    * @default ""
@@ -2416,7 +2416,7 @@ export type LoadPanel = {
    * @docid GridBaseOptions.loadPanel.width
    * @default 200
    */
-  width?: number;
+  width?: number | string;
 };
 
 /**
