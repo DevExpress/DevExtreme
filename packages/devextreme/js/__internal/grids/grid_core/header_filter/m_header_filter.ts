@@ -347,7 +347,7 @@ export class HeaderFilterController extends Modules.ViewController {
       extend(options, column, {
         type: groupInterval && groupInterval.length > 1 ? 'tree' : 'list',
         remoteFiltering,
-        onShowing(e) {
+        onShowing: (e) => {
           const dxResizableInstance = e.component.$overlayContent().dxResizable('instance');
 
           dxResizableInstance && dxResizableInstance.option('onResizeEnd', (e) => {
