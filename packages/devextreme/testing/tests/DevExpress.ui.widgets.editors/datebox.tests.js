@@ -5772,7 +5772,7 @@ QUnit.module('datebox validation', {}, () => {
     { type: 'datetime', input: 'y', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
     { type: 'datetime', input: 'z', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
 ].forEach(({ type, input, displayFormat, expectedValue }) => {
-    QUnit.module('DateBox AM/PM Handling - time datebox type - HH:mmm a display format', {
+    QUnit.module(`DateBox AM/PM Handling - ${type} datebox type - ${displayFormat} a display format`, {
         beforeEach: function() {
             this.$element = $('#dateBox').dxDateBox({
                 value: new Date('10/10/2012 13:07'),
@@ -5791,7 +5791,7 @@ QUnit.module('datebox validation', {}, () => {
             fx.off = false;
         }
     }, () => {
-        QUnit.test(`_handleAmPmSearch should toggle to ${expectedValue} when "${input}" is pressed for "${type}" datebox type - with a "${displayFormat}" a display format`, function(assert) {
+        QUnit.test(`when "${input}" is pressed it AM/PM should ${expectedValue ? `toggle to ${expectedValue}` : 'not toggle'} `, function(assert) {
             this.instance.option('displayFormat', 'a');
 
             this.keyboard.type(input);
