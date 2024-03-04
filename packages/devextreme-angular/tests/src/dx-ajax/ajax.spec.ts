@@ -122,6 +122,5 @@ describe('Ajax request using DxAjaxModule', () => {
       expect(resultText).toEqual('Uploaded');
       done();
     }, 500);
-    done();
   });
 });
