@@ -762,6 +762,7 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Close submenu when element lose focus', function(assert) {
         const options = {
+            focusStateEnabled: true,
             showFirstSubmenuMode: 'onClick',
             items: [
                 { text: 'item 1', items: [{ text: 'item 11' }] },
