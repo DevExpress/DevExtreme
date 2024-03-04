@@ -102,7 +102,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _editorFactoryController!: Controllers['editorFactory'];
 
-  private _focusController!: Controllers['focus'];
+  protected _focusController!: Controllers['focus'];
 
   protected _columnsResizerController!: Controllers['columnsResizer'];
 
@@ -1457,6 +1457,9 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
+  /**
+   * @extended: focus
+   */
   protected _deleteRowCore(rowIndex) {
     const dataController = this._dataController;
     const item = dataController.items()[rowIndex];

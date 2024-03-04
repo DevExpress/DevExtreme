@@ -22,6 +22,7 @@ import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 
 import modules from '../m_modules';
 import type { Module } from '../m_types';
@@ -124,10 +125,13 @@ export class ColumnsController extends modules.Controller {
 
   public _columnChanges: any;
 
-  private _dataController!: DataController;
+  protected _dataController!: DataController;
+
+  protected _focusController!: FocusController;
 
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
+    this._focusController = this.getController('focus');
     const columns = this.option('columns');
 
     this._commandColumns = this._commandColumns || [];

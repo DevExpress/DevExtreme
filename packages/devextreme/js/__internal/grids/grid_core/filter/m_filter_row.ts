@@ -583,6 +583,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       isCellWasFocused && that._focusEditor($editorContainer);
     };
 
+    const editorFactoryController = this._editorFactoryController;
+
     that._createComponent($menu, Menu, {
       // @ts-expect-error
       integrationOptions: {},
@@ -645,7 +647,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
       onSubmenuShowing() {
         isCellWasFocused = that._isEditorFocused($editorContainer);
-        this._editorFactoryController.loseFocus();
+        editorFactoryController.loseFocus();
       },
       onSubmenuHiding() {
         // @ts-expect-error

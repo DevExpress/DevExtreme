@@ -17,6 +17,7 @@ import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { EditingController } from '../editing/m_editing';
@@ -72,6 +73,8 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   protected _columnsResizerController!: ColumnsResizerViewController;
 
+  protected _keyboardNavigationController!: KeyboardNavigationController;
+
   private _subscribedContainerRoot!: Node;
 
   public init() {
@@ -80,6 +83,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
     this._columnsResizerController = this.getController('columnsResizer');
     this._editingController = this.getController('editing');
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._rowsView = this.getView('rowsView');
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
@@ -236,6 +240,9 @@ export class EditorFactory extends ViewControllerWithMixin {
     this.focus($focus);
   }
 
+  /**
+   * @extended: focus
+   */
   protected renderFocusOverlay($element, isHideBorder) {
     const that = this;
 

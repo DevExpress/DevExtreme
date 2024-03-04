@@ -21,6 +21,8 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { EditingController } from '../editing/m_editing';
@@ -94,6 +96,10 @@ export class RowsView extends ColumnsView {
 
   protected _columnsResizerController!: ColumnsResizerViewController;
 
+  protected _focusController!: FocusController;
+
+  protected _keyboardNavigationController!: KeyboardNavigationController;
+
   _columnHeadersView!: ColumnHeadersView;
 
   _hasHeight: boolean | undefined;
@@ -124,6 +130,8 @@ export class RowsView extends ColumnsView {
     this._editorFactoryController = this.getController('editorFactory');
     this._resizingController = this.getController('resizing');
     this._columnsResizerController = this.getController('columnsResizer');
+    this._focusController = this.getController('focus');
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
@@ -188,7 +196,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing_row_based
+   * @extended: editing_row_based, focus
    */
   protected _update(change?) { }
 
@@ -222,7 +230,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: adaptivity, editing, editing_row_based
+   * @extended: adaptivity, editing, editing_row_based, focus
    */
   protected _createRow(row?, tag?) {
     const $row = super._createRow.apply(this, arguments as any);
@@ -552,7 +560,10 @@ export class RowsView extends ColumnsView {
     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
   }
 
-  _checkRowKeys(options) {
+  /**
+   * @extended: focues
+   */
+  protected _checkRowKeys(options) {
     const that = this;
     const rows = that._getRows(options);
     const keyExpr = that._dataController.store() && that._dataController.store().key();

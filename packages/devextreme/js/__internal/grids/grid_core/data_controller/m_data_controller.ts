@@ -13,7 +13,9 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { ApplyFilterViewController } from '@ts/grids/grid_core/filter/m_filter_row';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
+import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 
 import modules from '../m_modules';
 import type {
@@ -155,6 +157,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _applyFilterController!: ApplyFilterViewController;
 
+  protected _keyboardNavigationController!: KeyboardNavigationController;
+
+  protected _focusController!: FocusController;
+
   private _columnsChangedHandler!: (e: any) => any;
 
   private _loadingChangedHandler!: (e: any) => any;
@@ -179,6 +185,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._filterSyncController = this.getController('filterSync');
     this._headerFilterController = this.getController('headerFilter');
     this._applyFilterController = this.getController('applyFilter');
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this._focusController = this.getController('focus');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -766,7 +774,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extende: virtual_scrolling
+   * @extende: virtual_scrolling, focus
    */
   protected _applyChange(change) {
     const that = this;
@@ -1210,7 +1218,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: virtual_scrolling
+   * @extended: virtual_scrolling, focus
    */
   protected _fireChanged(change) {
     if (this._currentOperationTypes) {

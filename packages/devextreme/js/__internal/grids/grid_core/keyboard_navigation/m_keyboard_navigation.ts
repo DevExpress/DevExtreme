@@ -1065,7 +1065,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _escapeKeyHandler(eventArgs, isEditing): boolean {
+  /**
+   * @extended
+   */
+  protected _escapeKeyHandler(eventArgs, isEditing): boolean {
     const $cell = this._getCellElementFromTarget(
       eventArgs.originalEvent.target,
     );
@@ -1521,7 +1524,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _updateFocusedCellPosition($cell, direction?) {
+  /**
+   * @extended: focus
+   */
+  protected _updateFocusedCellPosition($cell, direction?) {
     const position = this._getCellPosition($cell, direction);
     if (position) {
       if (
@@ -1695,14 +1701,20 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.setFocusedColumnIndex(columnIndex);
   }
 
-  setFocusedRowIndex(rowIndex) {
+  /**
+   * @extended: focus
+   */
+  public setFocusedRowIndex(rowIndex) {
     if (!this._focusedCellPosition) {
       this._focusedCellPosition = {};
     }
     this._focusedCellPosition.rowIndex = rowIndex;
   }
 
-  setFocusedColumnIndex(columnIndex) {
+  /**
+   * @extended: focus
+   */
+  protected setFocusedColumnIndex(columnIndex) {
     if (!this._focusedCellPosition) {
       this._focusedCellPosition = {};
     }
