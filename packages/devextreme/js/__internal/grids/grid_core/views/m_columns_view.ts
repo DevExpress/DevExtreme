@@ -31,6 +31,7 @@ import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -184,6 +185,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _editorFactoryController!: EditorFactory;
 
+  protected _selectionController!: SelectionController;
+
   protected _columnChooserView!: ColumnChooserView;
 
   public init() {
@@ -193,6 +196,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnChooserController = this.getController('columnChooser');
     this._editorFactoryController = this.getController('editorFactory');
+    this._selectionController = this.getController('selection');
     this._columnChooserView = this.getView('columnChooserView');
     this._delayedTemplates = [];
     this._templateDeferreds = new Set();
@@ -324,6 +328,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell;
   }
 
+  /**
+   * @extended: selection
+   */
   protected _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
     const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
@@ -338,6 +345,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return row && row.dataIndex % 2 === 1;
   }
 
+  /**
+   * @extended: selection
+   */
   protected _createTable(columns, isAppend?) {
     const $table = $('<table>')
       .addClass(this.addWidgetPrefix(TABLE_CLASS))

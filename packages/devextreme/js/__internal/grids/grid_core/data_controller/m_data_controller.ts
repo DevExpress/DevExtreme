@@ -17,6 +17,7 @@ import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_s
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
 import modules from '../m_modules';
 import type {
@@ -164,6 +165,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _focusController!: FocusController;
 
+  protected _selectionController!: SelectionController;
+
   private _columnsChangedHandler!: (e: any) => any;
 
   private _loadingChangedHandler!: (e: any) => any;
@@ -191,6 +194,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
     this._headerFilterController = this.getController('headerFilter');
+    this._selectionController = this.getController('selection');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -412,6 +416,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return when();
   }
 
+  /**
+   * @extended: selection
+   * @protected
+   */
   protected _endUpdateCore() {
     const changes = this._changes;
 
@@ -659,6 +667,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
+  /**
+   * @extended: selection
+   */
   protected _loadDataSource() {
     const that = this;
     const dataSource = that._dataSource;
@@ -778,7 +789,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extende: virtual_scrolling, focus
+   * @extende: virtual_scrolling, focus, selection
    */
   protected _applyChange(change) {
     const that = this;
@@ -1586,7 +1597,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: virtual_scrolling
+   * @extended: virtual_scrolling, selection
    */
   public refresh(options) {
     if (options === true) {

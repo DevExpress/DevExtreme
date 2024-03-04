@@ -193,7 +193,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing_row_based, focus
+   * @extended: editing_row_based, focus, selection
    */
   protected _update(change?) { }
 
@@ -632,7 +632,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing, keyboard_navigation
+   * @extended: editing, keyboard_navigation, selection
    */
   protected _rowClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
@@ -840,7 +840,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search
+   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection
    */
   protected _renderCore(change) {
     const $element = this.element();

@@ -197,7 +197,7 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   /**
-   * @extended: filter_row
+   * @extended: filter_row, selection
    */
   protected _handleDataChanged(e) {
     if (e.changeType !== 'refresh') return;
