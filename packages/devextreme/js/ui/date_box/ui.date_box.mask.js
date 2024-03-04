@@ -312,7 +312,7 @@ const DateBoxMask = DateBoxBase.inherit({
         const startString = this._searchValue + char.toLowerCase();
         const endLimit = limits.max - limits.min;
 
-        if (this._getActivePartProp('text') === 'AM' || this._getActivePartProp('text') === 'PM') {
+        if(this._getActivePartProp('text') === 'AM' || this._getActivePartProp('text') === 'PM') {
             this._handleAmPmSearch(char);
             return;
         }
