@@ -370,11 +370,12 @@ export class RowsView extends ColumnsView {
                   case 'update':
                     if (item) {
                       const columnIndices = change.columnIndices?.[index];
+                      const columnDataIndices = change.columnDataIndices?.[index];
 
                       if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
                         $rowElement.toggle(item.visible);
                       } else if (columnIndices) {
-                        this._updateCells($rowElement, $newRowElement, columnIndices);
+                        this._updateCells($rowElement, $newRowElement, columnIndices, columnDataIndices);
                       } else {
                         $rowElement.replaceWith($newRowElement);
                       }

@@ -761,6 +761,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     change.items = [];
     change.rowIndices = [];
     change.columnIndices = [];
+    change.columnDataIndices = [];
     change.changeTypes = [];
 
     const equalItems = function (item1, item2, strict?) {
@@ -773,6 +774,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     each(rowIndices, (index, rowIndex) => {
       let columnIndices;
+      let columnDataIndices;
 
       rowIndex += rowIndexCorrection + rowIndexDelta;
 
@@ -797,6 +799,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         if (oldItem.visible !== newItem.visible) {
           change.items.splice(-1, 1, { visible: newItem.visible });
         } else if (repaintChangesOnly && !change.isFullUpdate) {
+          columnDataIndices = that.getDataChangedColumnIndices(oldItem, newItem, rowIndex - rowIndexDelta);
           columnIndices = that._partialUpdateRow(oldItem, newItem, rowIndex - rowIndexDelta);
         }
       } else if (newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
@@ -818,11 +821,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       change.rowIndices.push(rowIndex - rowIndexDelta);
       change.changeTypes.push(changeType);
       change.columnIndices.push(columnIndices);
+      change.columnDataIndices.push(columnDataIndices);
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
+  private isDataInCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate?) {
     if (JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex])) {
       return true;
     }
@@ -836,6 +840,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     return false;
+  }
+
+  _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
+    return this.isDataInCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate);
+  }
+
+  private getDataChangedColumnIndices(oldItem, newItem, visibleRowIndex) {
+    if (newItem.rowType !== 'data') {
+      return [];
+    }
+
+    const indices: number[] = [];
+
+    oldItem.values.forEach((item, i) => {
+      if (this.isDataInCellChanged(oldItem, newItem, visibleRowIndex, i)) {
+        indices.push(i);
+      }
+    });
+
+    return indices;
   }
 
   _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
@@ -920,6 +944,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   _applyChangesOnly(change) {
     const rowIndices: any[] = [];
     const columnIndices: any[] = [];
+    const columnDataIndices: any[] = [];
     const changeTypes: string[] = [];
     const items: any[] = [];
     const newIndexByKey = {};
@@ -973,12 +998,14 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           const newItem = change.data;
           const { oldItem } = change;
           const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, isLiveUpdate);
+          const dataChangedColumnIndices = this.getDataChangedColumnIndices(oldItem, newItem, index);
 
           rowIndices.push(index);
           changeTypes.push('update');
           items.push(newItem);
           currentItems[index] = newItem;
           columnIndices.push(changedColumnIndices);
+          columnDataIndices.push(dataChangedColumnIndices);
           break;
         }
         case 'insert':
@@ -1004,6 +1031,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     change.changeType = 'update';
     change.rowIndices = rowIndices;
     change.columnIndices = columnIndices;
+    change.columnDataIndices = columnDataIndices;
     change.changeTypes = changeTypes;
     change.items = items;
     if (oldItems.length) {
