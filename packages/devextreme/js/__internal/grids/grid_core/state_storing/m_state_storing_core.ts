@@ -7,6 +7,9 @@ import { isDefined, isEmptyObject, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import errors from '@js/ui/widget/ui.errors';
+import type { ExportController } from '@ts/grids/data_grid/export/m_export';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 
 import modules from '../m_modules';
 
@@ -51,100 +54,30 @@ export class StateStoringController extends modules.ViewController {
 
   private _savingTimeoutID: any;
 
-  _loadState() {
-    const options = this.option('stateStoring')!;
+  protected _dataController!: DataController;
 
-    if (options.type === 'custom') {
-      return options.customLoad && options.customLoad();
-    }
-    try {
-      // @ts-expect-error
-      return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
-    } catch (e: any) {
-      errors.log('W1022', 'State storing', e.message);
-    }
-  }
+  protected _exportController!: ExportController;
 
-  _saveState(state) {
-    const options = this.option('stateStoring')!;
+  protected _columnsController!: ColumnsController;
 
-    if (options.type === 'custom') {
-      options.customSave && options.customSave(state);
-      return;
-    }
-    try {
-      getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
-    } catch (e: any) {
-      errors.log(e.message);
-    }
-  }
+  public init() {
+    this._state = {};
+    this._isLoaded = false;
+    this._isLoading = false;
 
-  publicMethods() {
-    return ['state'];
-  }
+    this._dataController = this.getController('data');
+    this._exportController = this.getController('export');
+    this._columnsController = this.getController('columns');
 
-  isEnabled() {
-    return this.option('stateStoring.enabled');
-  }
-
-  init() {
-    const that = this;
-
-    that._state = {};
-    that._isLoaded = false;
-    that._isLoading = false;
-
-    that._windowUnloadHandler = function () {
-      if (that._savingTimeoutID !== undefined) {
-        that._saveState(that.state());
+    this._windowUnloadHandler = function () {
+      if (this._savingTimeoutID !== undefined) {
+        this._saveState(this.state());
       }
     };
 
-    eventsEngine.on(getWindow(), 'unload', that._windowUnloadHandler);
+    eventsEngine.on(getWindow(), 'unload', this._windowUnloadHandler);
 
     return this; // needed by pivotGrid mocks
-  }
-
-  isLoaded() {
-    return this._isLoaded;
-  }
-
-  isLoading() {
-    return this._isLoading;
-  }
-
-  load() {
-    this._isLoading = true;
-    const loadResult = fromPromise(this._loadState());
-    loadResult.always(() => {
-      this._isLoaded = true;
-      this._isLoading = false;
-    }).done((state) => {
-      if (state !== null && !isEmptyObject(state)) {
-        this.state(state);
-      }
-    });
-    return loadResult;
-  }
-
-  state(state?) {
-    const that = this;
-
-    if (!arguments.length) {
-      return extend(true, {}, that._state);
-    }
-    that._state = extend({}, state);
-    parseDates(that._state);
-  }
-
-  save() {
-    const that = this;
-
-    clearTimeout(that._savingTimeoutID);
-    that._savingTimeoutID = setTimeout(() => {
-      that._saveState(that.state());
-      that._savingTimeoutID = undefined;
-    }, that.option('stateStoring.savingTimeout'));
   }
 
   public optionChanged(args) {
@@ -163,9 +96,87 @@ export class StateStoringController extends modules.ViewController {
     }
   }
 
-  dispose() {
+  public dispose() {
     clearTimeout(this._savingTimeoutID);
     eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
+  }
+
+  private _loadState() {
+    const options = this.option('stateStoring')!;
+
+    if (options.type === 'custom') {
+      return options.customLoad && options.customLoad();
+    }
+    try {
+      // @ts-expect-error
+      return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
+    } catch (e: any) {
+      errors.log('W1022', 'State storing', e.message);
+    }
+  }
+
+  private _saveState(state) {
+    const options = this.option('stateStoring')!;
+
+    if (options.type === 'custom') {
+      options.customSave && options.customSave(state);
+      return;
+    }
+    try {
+      getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
+    } catch (e: any) {
+      errors.log(e.message);
+    }
+  }
+
+  public publicMethods() {
+    return ['state'];
+  }
+
+  public isEnabled() {
+    return this.option('stateStoring.enabled');
+  }
+
+  public isLoaded() {
+    return this._isLoaded;
+  }
+
+  public isLoading() {
+    return this._isLoading;
+  }
+
+  public load() {
+    this._isLoading = true;
+    const loadResult = fromPromise(this._loadState());
+    loadResult.always(() => {
+      this._isLoaded = true;
+      this._isLoading = false;
+    }).done((state) => {
+      if (state !== null && !isEmptyObject(state)) {
+        this.state(state);
+      }
+    });
+    return loadResult;
+  }
+
+  protected state(state?) {
+    const that = this;
+
+    if (!arguments.length) {
+      return extend(true, {}, that._state);
+    }
+    that._state = extend({}, state);
+    parseDates(that._state);
+  }
+
+  protected save() {
+    const that = this;
+
+    clearTimeout(that._savingTimeoutID);
+    that._savingTimeoutID = setTimeout(() => {
+      that._saveState(that.state());
+      that._savingTimeoutID = undefined;
+    }, that.option('stateStoring.savingTimeout'));
   }
 }
 

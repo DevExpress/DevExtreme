@@ -18,6 +18,7 @@ import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 
 import modules from '../m_modules';
 import type {
@@ -167,6 +168,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _selectionController!: SelectionController;
 
+  protected _stateStoringController!: StateStoringController;
+
   private _columnsChangedHandler!: (e: any) => any;
 
   private _loadingChangedHandler!: (e: any) => any;
@@ -195,6 +198,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._focusController = this.getController('focus');
     this._headerFilterController = this.getController('headerFilter');
     this._selectionController = this.getController('selection');
+    this._stateStoringController = this.getController('stateStoring');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -1248,6 +1252,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     });
   }
 
+  /**
+   * @extended: state_storing
+   */
   public isLoading() {
     return this._isLoading || this._isCustomLoading;
   }
@@ -1664,7 +1671,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this._skipProcessingPagingChange && (fullName === 'paging.pageIndex' || fullName === 'paging.pageSize');
   }
 
-  getUserState(): any {
+  /**
+   * @extended: TreeList's state_storing
+   */
+  public getUserState(): any {
     return {
       searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
@@ -1713,6 +1723,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this._dataSource ? this._dataSource?.hasKnownLastPage() : true;
   }
 
+  /**
+   * @extended: state_storing
+   */
   public isLoaded() {
     return this._dataSource ? this._dataSource?.isLoaded() : true;
   }

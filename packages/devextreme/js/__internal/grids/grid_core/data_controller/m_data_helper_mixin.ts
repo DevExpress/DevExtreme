@@ -38,7 +38,10 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     });
   }
 
-  _refreshDataSource() {
+  /**
+   * @extended: state_storing
+   */
+  protected _refreshDataSource() {
     this._initDataSource();
     this._loadDataSource();
   }

@@ -23,6 +23,7 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 
 import modules from '../m_modules';
 import type { Module } from '../m_types';
@@ -129,9 +130,12 @@ export class ColumnsController extends modules.Controller {
 
   protected _focusController!: FocusController;
 
+  protected _stateStoringController!: StateStoringController;
+
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
     this._focusController = this.getController('focus');
+    this._stateStoringController = this.getController('stateStoring');
     const columns = this.option('columns');
 
     this._commandColumns = this._commandColumns || [];
@@ -442,6 +446,9 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
+  /**
+   * @extended: state_storing
+   */
   protected _shouldReturnVisibleColumns() {
     return true;
   }

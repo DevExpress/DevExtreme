@@ -18,6 +18,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { DataController } from '../data_controller/m_data_controller';
@@ -115,6 +116,8 @@ export class SelectionController extends modules.Controller {
 
   private _columnsController!: ColumnsController;
 
+  protected _stateStoringController!: StateStoringController;
+
   private _selectionMode?: string;
 
   private _isSelectionWithCheckboxes?: boolean;
@@ -136,6 +139,7 @@ export class SelectionController extends modules.Controller {
 
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
+    this._stateStoringController = this.getController('stateStoring');
     this._selectionMode = mode;
     this._isSelectionWithCheckboxes = false;
 
@@ -296,7 +300,7 @@ export class SelectionController extends modules.Controller {
   }
 
   /**
-   * @extended: TreeList's selection
+   * @extended: state_storing, TreeList's selection
    */
   protected _fireSelectionChanged(options?) {
     const argument = this.option('selection.deferred')
