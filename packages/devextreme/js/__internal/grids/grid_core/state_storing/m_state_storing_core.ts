@@ -54,20 +54,25 @@ export class StateStoringController extends modules.ViewController {
 
   private _savingTimeoutID: any;
 
-  protected _dataController!: DataController;
+  // TODO getController
+  // NOTE: sometimes fields empty in the runtime
+  // getter here is a temporary solution
+  protected get _dataController(): DataController {
+    return this.getController('data');
+  }
 
-  protected _exportController!: ExportController;
+  protected get _exportController(): ExportController {
+    return this.getController('export');
+  }
 
-  protected _columnsController!: ColumnsController;
+  protected get _columnsController(): ColumnsController {
+    return this.getController('columns');
+  }
 
   public init() {
     this._state = {};
     this._isLoaded = false;
     this._isLoading = false;
-
-    this._dataController = this.getController('data');
-    this._exportController = this.getController('export');
-    this._columnsController = this.getController('columns');
 
     this._windowUnloadHandler = function () {
       if (this._savingTimeoutID !== undefined) {

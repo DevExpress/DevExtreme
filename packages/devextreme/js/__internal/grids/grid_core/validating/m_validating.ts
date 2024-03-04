@@ -1405,7 +1405,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
     const rowOptions = $focus && $focus.closest('.dx-row').data('options');
     // @ts-expect-error
-    const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
+    const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     let validationResult;
 
     if (validator) {
@@ -1532,9 +1532,9 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
       const rowOptions = $(item).data('options');
       if (rowOptions) {
         // @ts-expect-error
-        const change = editingController.getChangeByKey(rowOptions.key);
+        const change = this._editingController.getChangeByKey(rowOptions.key);
         // @ts-expect-error
-        change && editingController._showErrorRow(change);
+        change && this._editingController._showErrorRow(change);
       }
     });
   }

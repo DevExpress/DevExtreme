@@ -95,7 +95,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExten
     super.init();
 
     // @ts-expect-error
-    dataController.stateLoaded.add(() => {
+    this._dataController.stateLoaded.add(() => {
       if (this._dataController.isLoaded() && !this._dataController.getDataSource()) {
         this.setLoading(false);
         this.renderNoDataText();
@@ -121,7 +121,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
   public isLoading() {
     // @ts-expect-error
-    return super.isLoading() || this._d.isStateLoading();
+    return super.isLoading() || this._dataController.isStateLoading();
   }
 
   protected state(state?) {
