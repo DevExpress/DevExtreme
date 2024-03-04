@@ -170,7 +170,6 @@ QUnit.module('Resizing', moduleConfig, () => {
         });
     });
 
-
     [
         { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
         { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
