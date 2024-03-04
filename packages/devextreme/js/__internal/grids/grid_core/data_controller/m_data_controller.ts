@@ -1527,9 +1527,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
     if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
-      this.updateItems({
-        changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly, isLiveUpdate: changesOnly,
-      });
+      this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
     }
   }
 
