@@ -211,7 +211,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: adaptivity, editing
+   * @extended: adaptivity, editing, master_detail
    */
   protected _getCellTemplate(options) {
     const that = this;
@@ -230,7 +230,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: adaptivity, editing, editing_row_based, focus
+   * @extended: adaptivity, editing, editing_row_based, focus, master_detail
    */
   protected _createRow(row?, tag?) {
     const $row = super._createRow.apply(this, arguments as any);
@@ -684,7 +684,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, master_details
    */
   protected _renderCells($row, options) {
     if (options.row.rowType === 'group') {

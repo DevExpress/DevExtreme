@@ -704,7 +704,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, master_detail
    */
   protected _processItems(items, change) {
     const that = this;
@@ -751,7 +751,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: selection, editing
+   * @extended: selection, editing, master_detail, TreeList's master_detail
    */
   protected _processDataItem(dataItem, options) {
     dataItem.values = this.generateDataValues(dataItem.data, options.visibleColumns);

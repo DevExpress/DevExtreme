@@ -169,7 +169,10 @@ export class ResizingController extends modules.ViewController {
     return resizeDeferred;
   }
 
-  fireContentReadyAction() {
+  /**
+   * @extended: master_detail
+   */
+  public fireContentReadyAction() {
     this.component._fireContentReadyAction();
   }
 
@@ -237,7 +240,7 @@ export class ResizingController extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity
+   * @extended: adaptivity, master_detail
    */
   protected _toggleBestFitMode(isBestFit) {
     const $rowsTable = this._rowsView.getTableElement();

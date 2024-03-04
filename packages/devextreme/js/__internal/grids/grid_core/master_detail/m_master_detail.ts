@@ -39,18 +39,18 @@ const initMasterDetail = function (that) {
 };
 
 export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) => class DataMasterDetailExtender extends Base {
-  _isExpandAll: any;
+  private _isExpandAll: any;
 
-  _expandedItems: any;
+  private _expandedItems: any;
 
-  init() {
+  public init() {
     const that = this;
 
     initMasterDetail(that);
     super.init();
   }
 
-  expandAll(groupIndex) {
+  private expandAll(groupIndex) {
     const that = this;
 
     if (groupIndex < 0) {
@@ -63,7 +63,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     }
   }
 
-  collapseAll(groupIndex) {
+  private collapseAll(groupIndex) {
     const that = this;
 
     if (groupIndex < 0) {
@@ -76,12 +76,12 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     }
   }
 
-  isRowExpandedHack() {
+  protected isRowExpandedHack() {
     // @ts-expect-error
     return super.isRowExpanded.apply(this, arguments);
   }
 
-  isRowExpanded(key) {
+  protected isRowExpanded(key) {
     const that = this;
     const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
 
@@ -92,13 +92,13 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return !!(that._isExpandAll ^ (expandIndex >= 0 && that._expandedItems[expandIndex].visible));
   }
 
-  _getRowIndicesForExpand(key) {
+  private _getRowIndicesForExpand(key) {
     const rowIndex = this.getRowIndexByKey(key);
 
     return [rowIndex, rowIndex + 1];
   }
 
-  _changeRowExpandCore(key) {
+  private _changeRowExpandCore(key) {
     const that = this;
 
     let result;
@@ -127,11 +127,11 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return result;
   }
 
-  _processDataItemHack() {
+  private _processDataItemHack() {
     return super._processDataItem.apply(this, arguments as any);
   }
 
-  _processDataItem(data, options) {
+  protected _processDataItem(data, options) {
     const that = this;
     const dataItem = super._processDataItem.apply(that, arguments as any);
 
@@ -154,11 +154,11 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return dataItem;
   }
 
-  _processItemsHack() {
+  protected _processItemsHack() {
     return super._processItems.apply(this, arguments as any);
   }
 
-  _processItems(items, change) {
+  protected _processItems(items, change) {
     const that = this;
     const { changeType } = change;
     const result: any[] = [];
@@ -191,7 +191,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return result;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
     let isEnabledChanged;
     let isAutoExpandAllChanged;
@@ -229,13 +229,13 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
 };
 
 const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterDetailExtender extends Base {
-  fireContentReadyAction() {
+  public fireContentReadyAction() {
     super.fireContentReadyAction.apply(this, arguments as any);
 
     this._updateParentDataGrids(this.component.$element());
   }
 
-  _updateParentDataGrids($element) {
+  private _updateParentDataGrids($element) {
     const $masterDetailRow = $element.closest(`.${MASTER_DETAIL_ROW_CLASS}`);
 
     if ($masterDetailRow.length) {
@@ -246,7 +246,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateMasterDataGrid($masterDetailRow, $detailElement) {
+  private _updateMasterDataGrid($masterDetailRow, $detailElement) {
     const masterRowOptions = $($masterDetailRow).data('options');
     const masterDataGrid = $($masterDetailRow).closest(`.${this.getWidgetContainerClass()}`).parent().data('dxDataGrid');
 
@@ -257,7 +257,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     return undefined;
   }
 
-  _updateMasterDataGridCore(masterDataGrid, masterRowOptions) {
+  private _updateMasterDataGridCore(masterDataGrid, masterRowOptions) {
     const d = Deferred();
 
     if (masterDataGrid.getView('rowsView').isFixedColumns()) {
@@ -282,7 +282,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     return d.promise();
   }
 
-  _updateFixedMasterDetailGrids(masterDataGrid, masterRowIndex, $detailElement) {
+  private _updateFixedMasterDetailGrids(masterDataGrid, masterRowIndex, $detailElement) {
     const d = Deferred();
     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
     const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
@@ -308,7 +308,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     return Deferred().resolve();
   }
 
-  _toggleBestFitMode(isBestFit) {
+  protected _toggleBestFitMode(isBestFit) {
     super._toggleBestFitMode.apply(this, arguments as any);
     if (this.option('masterDetail.template')) {
       const $rowsTable = this._rowsView.getTableElement();
@@ -322,10 +322,10 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExtender extends Base {
-  _getCellTemplate(options) {
+  protected _getCellTemplate(options) {
     const that = this;
     const { column } = options;
-    const editingController = that.getController('editing');
+    const editingController = this._editingController;
     const isEditRow = editingController && editingController.isEditRow(options.rowIndex);
     let template;
 
@@ -338,11 +338,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     return template;
   }
 
-  _isDetailRow(row) {
+  private _isDetailRow(row) {
     return row && row.rowType && row.rowType.indexOf('detail') === 0;
   }
 
-  _createRow(row) {
+  protected _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
 
     if (row && this._isDetailRow(row)) {
@@ -356,7 +356,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     return $row;
   }
 
-  _renderCells($row, options) {
+  protected _renderCells($row, options) {
     const { row } = options;
     let $detailCell;
     const visibleColumns = this._columnsController.getVisibleColumns();
