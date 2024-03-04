@@ -73,7 +73,7 @@ export class ColumnHeadersView extends ColumnsView {
 
   private _hasRowElements: any;
 
-  private _headerFilterController!: HeaderFilterController;
+  protected _headerFilterController!: HeaderFilterController;
 
   private _headerPanelView!: HeaderPanel;
 
@@ -366,7 +366,7 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   /**
-   * @extended: filter_row
+   * @extended: filter_row, header_filter
    */
   protected _columnOptionChanged(e) {
     const { changeTypes } = e;

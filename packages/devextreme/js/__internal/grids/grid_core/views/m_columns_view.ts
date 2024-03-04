@@ -827,7 +827,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: column_fixing, editing_form_based, filter_row
+   * @extended: column_fixing, editing_form_based, filter_row, header_filter
    */
   protected _renderCellContent($cell, options, renderOptions) {
     const template = this._getCellTemplate(options);

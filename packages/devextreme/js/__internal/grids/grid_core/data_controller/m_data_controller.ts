@@ -183,10 +183,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._editingController = this.getController('editing');
     this._errorHandlingController = this.getController('errorHandling');
     this._filterSyncController = this.getController('filterSync');
-    this._headerFilterController = this.getController('headerFilter');
     this._applyFilterController = this.getController('applyFilter');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
+    this._headerFilterController = this.getController('headerFilter');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -1239,7 +1239,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: filter_row, filter_sync
+   * @extended: filter_row, filter_sync, header_filter
    */
   protected _calculateAdditionalFilter(): Filter {
     return null;

@@ -7,6 +7,7 @@ import messageLocalization from '@js/localization/message';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
@@ -26,9 +27,12 @@ export class HeaderPanel extends ColumnsView {
 
   protected _editingController!: EditingController;
 
+  protected _headerFilterController!: HeaderFilterController;
+
   public init() {
     super.init();
     this._editingController = this.getController('editing');
+    this._headerFilterController = this.getController('headerFilter');
     this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
   }
 

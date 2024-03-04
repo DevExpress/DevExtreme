@@ -17,7 +17,10 @@ export interface ColumnStateMixinRequirements {
 }
 
 export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMixinRequirements>(Base: T) => class extends Base {
-  private _applyColumnState(options) {
+  /**
+   * @extended header_filter_core
+   */
+  protected _applyColumnState(options) {
     const that = this;
     const rtlEnabled = this.option('rtlEnabled');
     const columnAlignment = that._getColumnAlignment(options.column.alignment, rtlEnabled);
@@ -38,9 +41,12 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     return $span;
   }
 
+  /**
+   * @extended header_filter_core
+   */
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _getIndicatorClassName(name: string): string {}
+  protected _getIndicatorClassName(name: string): string {}
 
   private _getColumnAlignment(alignment, rtlEnabled) {
     rtlEnabled = rtlEnabled || this.option('rtlEnabled');
@@ -71,7 +77,10 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     return $indicatorContainer && $indicatorContainer.children();
   }
 
-  private _renderIndicator(options) {
+  /**
+   * @extended header_filter_core
+   */
+  protected _renderIndicator(options) {
     const $container = options.container;
     const $indicator = options.indicator;
 
@@ -100,7 +109,7 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     }
   }
 
-  protected _updateIndicator($cell, column, indicatorName) {
+  protected _updateIndicator($cell, column, indicatorName): any {
     if (!column.command) {
       return this._applyColumnState({
         name: indicatorName,
