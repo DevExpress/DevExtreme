@@ -10,8 +10,8 @@ const FIELD_CHOOSER_CONTENT = 'dx-popup-normal';
 
 fixture('PivotGrid.IntegratedFieldChooser')
   .page('http://localhost:8080/')
-  .before(async (t) => {
-    t.ctx.initialWindowSize = [900, 800];
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 800];
   });
 
 runManualTest('PivotGrid', 'IntegratedFieldChooser', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

@@ -8,8 +8,8 @@ const SELECTBOX_CLASS = 'dx-selectbox';
 
 fixture('TreeView.ItemSelectionAndCustomization')
   .page('http://localhost:8080/')
-  .before(async (t) => {
-    t.ctx.initialWindowSize = [900, 1200];
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 1200];
   });
 
 runManualTest('TreeView', 'ItemSelectionAndCustomization', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

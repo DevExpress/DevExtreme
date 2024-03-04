@@ -367,7 +367,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   }
 
   test.before(async (t) => {
-    const [width, height] = t.ctx.initialWindowSize;
+    const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
 

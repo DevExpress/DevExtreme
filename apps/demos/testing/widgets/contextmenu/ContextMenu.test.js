@@ -4,8 +4,8 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 
 fixture('ContextMenu.Templates')
   .page('http://localhost:8080/')
-  .before(async (t) => {
-    t.ctx.initialWindowSize = [900, 800];
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 800];
   });
 
 const IMAGE_ID = 'image';

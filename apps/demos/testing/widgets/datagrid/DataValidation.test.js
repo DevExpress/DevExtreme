@@ -5,8 +5,8 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 
 fixture('DataGrid.DataValidation')
   .page('http://localhost:8080/')
-  .before(async (t) => {
-    t.ctx.initialWindowSize = [900, 600];
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('DataGrid', 'DataValidation', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

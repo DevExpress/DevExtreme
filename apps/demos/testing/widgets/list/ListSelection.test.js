@@ -10,8 +10,8 @@ const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 
 fixture('List.ListSelection')
   .page('http://localhost:8080/')
-  .before(async (t) => {
-    t.ctx.initialWindowSize = [900, 800];
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 800];
   });
 
 runManualTest('List', 'ListSelection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

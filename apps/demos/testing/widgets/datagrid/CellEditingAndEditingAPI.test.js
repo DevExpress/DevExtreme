@@ -5,8 +5,8 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 
 fixture('DataGrid.CellEditingAndEditingAPI')
   .page('http://localhost:8080/')
-  .before(async (t) => {
-    t.ctx.initialWindowSize = [900, 600];
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('DataGrid', 'CellEditingAndEditingAPI', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
