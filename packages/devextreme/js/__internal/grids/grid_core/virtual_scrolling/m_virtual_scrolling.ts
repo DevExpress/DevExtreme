@@ -1369,8 +1369,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       this.scrollToPage(pageIndex ?? this._dataController.pageIndex());
 
       if (this.option(LEGACY_SCROLLING_MODE) === false && this._scrollTop === scrollTop) {
-        // @ts-expect-error
-        dataController.updateViewport();
+        this._dataController
+          // @ts-expect-error
+          .updateViewport();
       }
     });
 
@@ -1378,10 +1379,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       !this._scrollTop && this._scrollToCurrentPageOnResize();
     });
 
-    // @ts-expect-error
-    dataController.stateLoaded?.add(() => {
-      this._scrollToCurrentPageOnResize();
-    });
+    this._dataController
+      // @ts-expect-error
+      .stateLoaded?.add(() => {
+        this._scrollToCurrentPageOnResize();
+      });
 
     this._scrollToCurrentPageOnResize();
   }
@@ -1402,16 +1404,16 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private scrollToPage(pageIndex) {
-    const that = this;
-    const dataController = that._dataController;
-    const pageSize = dataController ? dataController.pageSize() : 0;
+    const pageSize = this._dataController ? this._dataController.pageSize() : 0;
     let scrollPosition;
 
-    if (isVirtualMode(that) || isAppendMode(that)) {
-      // @ts-expect-error
-      const itemSize = dataController.getItemSize();
-      // @ts-expect-error
-      const itemSizes = dataController.getItemSizes();
+    if (isVirtualMode(this) || isAppendMode(this)) {
+      const itemSize = this._dataController
+        // @ts-expect-error
+        .getItemSize();
+      const itemSizes = this._dataController
+        // @ts-expect-error
+        .getItemSizes();
       const itemIndex = pageIndex * pageSize;
 
       scrollPosition = itemIndex * itemSize;
@@ -1427,7 +1429,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       scrollPosition = 0;
     }
 
-    that.scrollTo({ y: scrollPosition, x: that._scrollLeft });
+    this.scrollTo({ y: scrollPosition, x: this._scrollLeft });
   }
 
   public renderDelayedTemplates() {
@@ -1446,8 +1448,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     if (dataSource && e) {
       const itemCount = e.items ? e.items.length : 20;
-      // @ts-expect-error
-      const viewportSize = this._dataController.viewportSize() || 20;
+      const viewportSize = this._dataController
+        // @ts-expect-error
+        .viewportSize() || 20;
 
       if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
         dataSource._renderTime = ((new Date()) as any - startRenderTime) * viewportSize / itemCount;
@@ -1538,8 +1541,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const rowHeights = this._getRowHeights();
     const correctedRowHeights = this._correctRowHeights(rowHeights);
 
-    // @ts-expect-error
-    this._dataController.setContentItemSizes(correctedRowHeights);
+    this._dataController
+      // @ts-expect-error
+      .setContentItemSizes(correctedRowHeights);
   }
 
   private _updateViewportSize(viewportHeight, scrollTop?) {
@@ -1547,13 +1551,15 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
     }
 
-    // @ts-expect-error
-    this._dataController.viewportHeight(viewportHeight, scrollTop);
+    this._dataController
+      // @ts-expect-error
+      .viewportHeight(viewportHeight, scrollTop);
   }
 
   private _getRowHeights() {
-    // @ts-expect-error
-    const isPopupEditMode = this._editingController?.isPopupEditMode?.();
+    const isPopupEditMode = this._editingController
+      // @ts-expect-error
+      ?.isPopupEditMode?.();
 
     let rowElements = this._getRowElements(this._tableElement).toArray();
 
@@ -1601,21 +1607,24 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private _updateContentPosition(isRender?) {
-    const dataController = this._dataController;
     const rowHeight = this._rowHeight || 20;
 
-    // @ts-expect-error
-    dataController.viewportItemSize(rowHeight);
+    this._dataController
+      // @ts-expect-error
+      .viewportItemSize(rowHeight);
 
     if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
       if (!isRender) {
         this._updateContentItemSizes();
       }
 
-      // @ts-expect-error
-      const top = dataController.getContentOffset('begin');
-      // @ts-expect-error
-      const bottom = dataController.getContentOffset('end');
+      const top = this._dataController
+        // @ts-expect-error
+        .getContentOffset('begin');
+
+      const bottom = this._dataController
+        // @ts-expect-error
+        .getContentOffset('end');
       const $tables = this.getTableElements();
       const $virtualRows = $tables.children('tbody').children(`.${VIRTUAL_ROW_CLASS}`);
 
@@ -1709,8 +1718,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         this._updateViewportSize(null, this._scrollTop);
       }
 
-      // @ts-expect-error
-      this._dataController.setViewportPosition(e.scrollOffset.top);
+      this._dataController
+        // @ts-expect-error
+        .setViewportPosition(e.scrollOffset.top);
     }
     super._handleScroll.apply(this, arguments as any);
   }
@@ -1728,23 +1738,24 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       this._updateContentPosition();
 
       const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
-      const dataController = this._dataController;
 
       if (this.option(LEGACY_SCROLLING_MODE) === false) {
         this._updateViewportSize(viewportHeight);
-        // @ts-expect-error
-        dataController.updateViewport();
+
+        this._dataController
+          // @ts-expect-error
+          .updateViewport();
       } else {
-        // @ts-expect-error
-        dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
+        this._dataController
+          // @ts-expect-error
+          .viewportSize(Math.ceil(viewportHeight / this._rowHeight));
       }
     }
   }
 
   public updateFreeSpaceRowHeight() {
-    const result = super.updateFreeSpaceRowHeight.apply(this, arguments as any);
+    const result: any = super.updateFreeSpaceRowHeight.apply(this, arguments as any);
 
-    // @ts-expect-error
     if (result) {
       this._updateContentPosition();
     }
@@ -1793,8 +1804,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     if (that.component.$element() && !that._windowScroll && isElementInDom($element)) {
       that._windowScroll = subscribeToExternalScrollers($element, (scrollPos) => {
         if (!that._hasHeight && that._rowHeight) {
-          // @ts-expect-error
-          that._dataController.setViewportPosition(scrollPos);
+          that._dataController
+            // @ts-expect-error
+            .setViewportPosition(scrollPos);
         }
       }, that.component.$element());
 
@@ -1809,9 +1821,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private loadIfNeed() {
-    const dataController = this._dataController;
-    // @ts-expect-error
-    dataController?.loadIfNeed?.();
+    this._dataController
+      // @ts-expect-error
+      ?.loadIfNeed?.();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

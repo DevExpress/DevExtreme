@@ -74,7 +74,7 @@ export class StateStoringController extends modules.ViewController {
     this._isLoaded = false;
     this._isLoading = false;
 
-    this._windowUnloadHandler = function () {
+    this._windowUnloadHandler = () => {
       if (this._savingTimeoutID !== undefined) {
         this._saveState(this.state());
       }

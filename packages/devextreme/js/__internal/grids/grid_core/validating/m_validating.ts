@@ -723,7 +723,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
   public processItems(items, changeType) {
     const changes = this.getChanges();
-    const getIndexByChange = function (change, items: any[]) {
+    const getIndexByChange = (change, items: any[]) => {
       let index = -1;
       const isInsert = change.type === EDIT_DATA_INSERT_TYPE;
       const { key } = change;
