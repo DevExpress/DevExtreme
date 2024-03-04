@@ -1421,17 +1421,23 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.notOk(instance.option('visible'), 'menu was hidden');
     });
 
-    QUnit.test('Context menu should hide on focusout', function(assert) {
+    QUnit.testInActiveWindow('Context menu should hide on focusout', function(assert) {
+        assert.expect(1);
+
         const instance = new ContextMenu(this.$element, {
-            items: [{ text: 'item 1' }]
+            items: [
+                { text: 'item 1' },
+            ],
+            focusStateEnabled: true,
+            onFocusOut({ component }) {
+                assert.strictEqual(component.option('visible'), false, 'menu was hidden');
+            },
         });
 
         instance.show();
 
         keyboardMock(instance.itemsContainer())
             .keyDown('tab');
-
-        assert.strictEqual(instance.option('visible'), false, 'menu was hidden');
     });
 
     QUnit.test('context menu should not hide after outsideclick when event is canceled', function(assert) {
