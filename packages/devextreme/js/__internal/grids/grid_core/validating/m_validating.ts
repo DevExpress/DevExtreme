@@ -1454,7 +1454,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 };
 
-export const validatingDataControllerExtender = (Base: ModuleType<typeof DataController>) => class ValidatingDataControllerExtender extends Base {
+export const validatingDataControllerExtender = (Base: ModuleType<DataController>) => class ValidatingDataControllerExtender extends Base {
   _getValidationStatus(validationResult) {
     const validationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
 
