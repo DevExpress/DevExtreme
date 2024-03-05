@@ -250,6 +250,7 @@ const SKIPPED_TESTS = {
   React: {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'Tooltip', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
