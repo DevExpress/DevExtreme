@@ -1,5 +1,7 @@
 import { Deferred } from 'devextreme/core/utils/deferred';
-import { HttpClient, HttpEventType, HttpParams } from '@angular/common/http';
+import {
+  HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse
+} from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { getWindow } from 'devextreme/core/utils/window';
@@ -26,9 +28,7 @@ const CONTENT_TYPE = 'Content-Type';
 const URLENCODED = 'application/x-www-form-urlencoded';
 
 function assignResponseProps(xhrSurrogate, response) {
-  function getResponseHeader(name: string) {
-    return response.headers.get(name);
-  }
+  const getResponseHeader = (name: string) => response.headers.get(name);
 
   function makeResponseText() {
     const body = 'error' in response ? response.error : response.body;
@@ -78,6 +78,17 @@ function isGetMethod(options) {
   return (options.method || 'get').toLowerCase() === 'get';
 }
 
+function patchOptions(options) {
+  const patchedOptions = { ...options };
+
+  if (options.cache === undefined) {
+    patchedOptions.cache = !isNeedScriptEvaluation(options);
+  }
+
+  patchedOptions.crossDomain = isCrossDomain(options.url);
+  return patchedOptions;
+}
+
 function rejectIfAborted(deferred, xhrSurrogate) {
   if (xhrSurrogate.aborted) {
     deferred.reject({ status: STATUS_ABORT });
@@ -86,7 +97,7 @@ function rejectIfAborted(deferred, xhrSurrogate) {
 
 function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogate) {
   return {
-    next(response) {
+    next(response: HttpResponse<any>) {
       if (isNeedScriptEvaluation(options)) {
         evalScript(response.body);
       }
@@ -97,10 +108,10 @@ function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogat
         assignResponseProps(xhrSurrogate, response),
       );
     },
-    error(error) {
+    error(error: HttpErrorResponse) {
       const errorStatus = options.dataType === 'json' && error.message.includes('parsing')
         ? PARSER_ERROR
-        : error?.timeout || 'error';
+        : error?.message || 'error';
 
       return deferred.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
     },
@@ -115,7 +126,7 @@ function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate
   let isUploadStarted = false;
 
   return {
-    next: (event: Record<string, any>) => {
+    next: (event: HttpEvent<Object>) => {
       if (event.type === HttpEventType.Sent) {
         if (!isUploadStarted) {
           options.upload.onloadstart?.(event);
@@ -133,7 +144,7 @@ function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate
       }
       return null;
     },
-    error(error) {
+    error(error: HttpErrorResponse) {
       return deferred.reject(assignResponseProps(xhrSurrogate, error), error.status, error);
     },
     complete() {
@@ -143,19 +154,12 @@ function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate
 }
 
 export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Record<string, any>) => {
-  const options = { ...sendOptions };
   const destroy$ = new Subject<void>();
   const deferred = Deferred();
-  const method = (options.method || 'get').toLowerCase();
-  const isGet = isGetMethod(options);
-  const needScriptEvaluation = isNeedScriptEvaluation(options);
-
-  if (options.cache === undefined) {
-    options.cache = !needScriptEvaluation;
-  }
-
-  options.crossDomain = isCrossDomain(options.url);
-
+  const method = (sendOptions.method || 'get').toLowerCase();
+  const isGet = isGetMethod(sendOptions);
+  const needScriptEvaluation = isNeedScriptEvaluation(sendOptions);
+  const options = patchOptions(sendOptions);
   const jsonpCallBackName = getJsonpCallbackName(options);
   const headers = getRequestHeaders(options);
   const { url, parameters: data } = getRequestOptions(options, headers);
@@ -220,7 +224,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   request.pipe.apply(request, [
     takeUntil(destroy$) as any,
     ...options.timeout
-      ? [timeoutWith(options.timeout, throwError(() => ({ timeout: TIMEOUT }))) as any]
+      ? [timeoutWith(options.timeout, throwError(() => ({ message: TIMEOUT }))) as any]
       : [],
   ]).subscribe(
     subscriptionCallbacks(options, deferred, xhrSurrogate),
