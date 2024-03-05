@@ -71,14 +71,15 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
 
 export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?) {
   let result: any = [];
+  const normalizedOptions = getNormalizedOptions(that, columnsOptions);
 
-  if (columnsOptions) {
-    const { plainIndexedColumnOptions } = getPlainIndexedColumnOptionsRecursive(columnsOptions);
+  if (normalizedOptions) {
+    const { plainIndexedColumnOptions } = getPlainIndexedColumnOptionsRecursive(normalizedOptions, 0, !!bandColumn);
     each(plainIndexedColumnOptions, (index, columnOptions) => {
       const userStateColumnOptions = that._columnsUserState
-        && checkUserStateColumn(columnOptions, that._columnsUserState[columnOptions.plainIndex])
+        && checkUserStateColumn(columnOptions.originOptions, that._columnsUserState[columnOptions.plainIndex])
         && that._columnsUserState[columnOptions.plainIndex];
-      const column: any = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
+      const column: any = createColumn(that, columnOptions.originOptions, userStateColumnOptions, bandColumn);
 
       if (column) {
         if (bandColumn) {
@@ -87,7 +88,7 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
-          result = result.concat(createColumnsFromOptions(that, column.columns, column));
+          result = result.concat(createColumnsFromOptions(that, columnOptions.nestedColumns, column));
           delete column.columns;
           column.hasColumns = true;
         }
@@ -98,26 +99,33 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   return result;
 };
 
-const getPlainIndexedColumnOptionsRecursive = (columnsOptions, index?) => {
-  let currentIndex: number = index ?? 0;
+const getNormalizedOptions = (that: ColumnsController, columnsOptions) => {
+  if (!columnsOptions) {
+    return null;
+  }
+  return columnsOptions.filter((o) => !!o);
+};
 
-  const columnsOptionsDeepCopy = extend(true, [], columnsOptions);
-  const plainIndexedColumnOptions = columnsOptionsDeepCopy.map((option) => {
-    let optionCopy;
-    if (typeof option === 'string') {
-      optionCopy = {
-        dataField: option,
-        name: option,
-        plainIndex: currentIndex,
-      };
-    } else {
-      optionCopy = extend(true, { plainIndex: currentIndex }, option);
-    }
+const getPlainIndexedColumnOptionsRecursive = (columnsOptions, index?, hasBandColumn?) => {
+  if (hasBandColumn) {
+    return {
+      plainIndexedColumnOptions: columnsOptions,
+      currentIndex: index,
+    };
+  }
+
+  let currentIndex: number = index ?? 0;
+  const plainIndexedColumnOptions = columnsOptions.map((option) => {
+    const optionCopy = {
+      plainIndex: currentIndex,
+      originOptions: option,
+      nestedColumns: null,
+    };
 
     currentIndex += 1;
     if (option.columns) {
       const nestedColumnOptions = getPlainIndexedColumnOptionsRecursive(option.columns, currentIndex);
-      optionCopy.columns = nestedColumnOptions.plainIndexedColumnOptions;
+      optionCopy.nestedColumns = nestedColumnOptions.plainIndexedColumnOptions;
       currentIndex = nestedColumnOptions.currentIndex;
     }
 
