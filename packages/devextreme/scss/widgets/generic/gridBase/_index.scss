@@ -171,6 +171,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
       .dx-command-edit {
         .dx-link:not(.dx-link-icon) {
           margin: 0 $generic-command-edit-text-margin;
+          min-width: 20px;
         }
       }
       

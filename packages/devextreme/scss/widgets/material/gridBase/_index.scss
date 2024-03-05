@@ -271,6 +271,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
           .dx-link:not(.dx-link-icon) {
             margin: 0 $material-command-edit-text-margin;
+            min-width: 20px;
           }
 
           &.dx-command-edit-with-icons {

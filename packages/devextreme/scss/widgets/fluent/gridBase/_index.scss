@@ -293,6 +293,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
           .dx-link:not(.dx-link-icon) {
             margin: 0 $fluent-command-edit-text-margin;
+            min-width: 20px;
           }
 
           &.dx-command-edit-with-icons {
