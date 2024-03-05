@@ -16,7 +16,7 @@
           :key="statuses[listIndex]"
           class="list"
         >
-          <div class="list-title dx-theme-text-color">{{ statuses[listIndex] }}</div>
+          <div class="list-title">{{ statuses[listIndex] }}</div>
           <DxScrollView
             class="scrollable-list"
             show-scrollbar="always"
@@ -32,7 +32,7 @@
               <div
                 v-for="task in list"
                 :key="task.Task_ID"
-                class="card dx-card dx-theme-text-color dx-theme-background-color"
+                class="card dx-card"
               >
                 <div :class="['card-priority', getPriorityClass(task)]"/>
                 <div class="card-subject">{{ task.Task_Subject }}</div>
@@ -93,6 +93,7 @@ function getPriorityClass(task) {
 }
 
 .list-title {
+  color: var(--dx-color-text);
   font-size: 16px;
   padding: 10px;
   padding-left: 30px;
@@ -111,8 +112,9 @@ function getPriorityClass(task) {
 }
 
 .card {
+  color: var(--dx-color-text);
   position: relative;
-  background-color: white;
+  background-color: var(--dx-component-color-bg);
   box-sizing: border-box;
   width: 230px;
   padding: 10px 20px;
