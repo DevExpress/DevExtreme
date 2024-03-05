@@ -17,15 +17,15 @@
       >
         <span>Chunk size:</span>
         <span
-          class="segment-size dx-theme-accent-as-text-color"
+          class="segment-size"
         >{{ getValueInKb(chunk.segmentSize) }}</span>
         <span>, Uploaded:'</span>
         <span
-          class="loaded-size dx-theme-accent-as-text-color"
+          class="loaded-size"
         >{{ getValueInKb(chunk.bytesLoaded) }}</span>
         <span>/</span>
         <span
-          class="total-size dx-theme-accent-as-text-color"
+          class="total-size"
         >{{ getValueInKb(chunk.bytesTotal) }}</span>
       </div>
     </div>
@@ -60,6 +60,11 @@ function onUploadProgress(e) {
 .segment-size,
 .loaded-size {
   margin-left: 3px;
+  color: var(--dx-color-primary);
+}
+
+.total-size {
+  color: var(--dx-color-primary);
 }
 
 .note {

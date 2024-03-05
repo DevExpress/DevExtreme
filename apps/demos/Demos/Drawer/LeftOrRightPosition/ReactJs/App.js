@@ -55,7 +55,6 @@ const App = () => {
       <Toolbar
         items={toolbarItems}
         id="toolbar"
-        className="dx-theme-background-color"
       />
       <Drawer
         opened={opened}
@@ -66,12 +65,7 @@ const App = () => {
         closeOnOutsideClick={onOutsideClick}
         height={400}
       >
-        <div
-          id="content"
-          className="dx-theme-background-color"
-        >
-          {HTMLReactParser(text)}
-        </div>
+        <div id="content">{HTMLReactParser(text)}</div>
       </Drawer>
       <div className="options">
         <div className="caption">Options</div>
