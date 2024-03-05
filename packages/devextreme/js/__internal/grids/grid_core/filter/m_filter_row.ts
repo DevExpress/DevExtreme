@@ -550,6 +550,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       .attr('tabindex', this.option('tabIndex')!);
 
     eventsEngine.on($filterRangeContent, 'focusin', () => {
+      // debugger;
       that._showFilterRange($cell, column);
     });
 

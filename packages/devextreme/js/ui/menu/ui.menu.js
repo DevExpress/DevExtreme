@@ -835,7 +835,9 @@ class Menu extends MenuBase {
     }
 
     _hideSubmenu(submenu) {
-        submenu && submenu.hide();
+        if(submenu) {
+            submenu.hide();
+        }
 
         if(this._visibleSubmenu === submenu) {
             this._visibleSubmenu = null;
