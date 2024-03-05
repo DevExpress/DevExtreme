@@ -1,0 +1,8 @@
+{
+  "name": "my-project",
+  "targets": {
+    "build": {
+      "command": "echo MY PROJECT"
+    }
+  }
+}
