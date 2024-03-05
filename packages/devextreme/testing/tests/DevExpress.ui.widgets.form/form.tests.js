@@ -92,7 +92,7 @@ if(device.current().deviceType === 'desktop') {
     });
 }
 
-QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(assert) {
+QUnit.testInActiveWindow('Form\'s inputs saves value on refresh (T404958)', function(assert) {
     let screen = 'md';
     const $formContainer = $('#form').dxForm({
         screenByWidth: function() {
