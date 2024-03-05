@@ -8,16 +8,15 @@ import 'ui/number_box';
 import 'ui/validator';
 import 'ui/text_box/ui.text_editor';
 
+const TEXTEDITOR_INPUT_CLASS = '.dx-texteditor-input';
+
 QUnit.testStart(function() {
     const markup =
         '<div id="qunit-fixture">\
             <div id="numberbox"></div>\
-            <div id="widget"></div>\
-            <div id="widthRootStyle"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
-    $('#widthRootStyle').css('width', '300px');
 });
 
 const moduleConfig = {
@@ -27,15 +26,9 @@ const moduleConfig = {
             value: '',
             useMaskBehavior: true
         });
-        this.clock = sinon.useFakeTimers();
-        this.input = this.$element.find('.dx-texteditor-input');
-        this.inputElement = this.input.get(0);
+        this.input = this.$element.find(TEXTEDITOR_INPUT_CLASS);
         this.instance = this.$element.dxNumberBox('instance');
         this.keyboard = keyboardMock(this.input, true);
-    },
-
-    afterEach: function() {
-        this.clock.restore();
     }
 };
 
@@ -54,7 +47,7 @@ QUnit.module('localization: separator keys', moduleConfig, () => {
     });
 
     QUnit.test('pressing the "." key on the numpad should clear the selected text regardless of the char produced (T1199553)', function(assert) {
-        const curLocale = localization.locale();
+        const currentLocale = localization.locale();
         const NUMPAD_DOT_KEY_CODE = 110;
 
         try {
@@ -70,7 +63,7 @@ QUnit.module('localization: separator keys', moduleConfig, () => {
 
             assert.strictEqual(this.input.val(), '0,00', 'mask value is cleared');
         } finally {
-            localization.locale(curLocale);
+            localization.locale(currentLocale);
         }
     });
 });
