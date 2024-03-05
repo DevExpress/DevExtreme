@@ -1,6 +1,6 @@
 import { Deferred } from 'devextreme/core/utils/deferred';
 import {
-  HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse
+  HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse,
 } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
@@ -109,9 +109,11 @@ function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogat
       );
     },
     error(error: HttpErrorResponse) {
-      const errorStatus = options.dataType === 'json' && error.message.includes('parsing')
+      let errorStatus = error?.message === TIMEOUT ? TIMEOUT : 'error';
+
+      errorStatus = options.dataType === 'json' && error.message.includes('parsing')
         ? PARSER_ERROR
-        : error?.message || 'error';
+        : errorStatus;
 
       return deferred.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
     },
