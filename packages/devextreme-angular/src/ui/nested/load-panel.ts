@@ -38,10 +38,10 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get height(): number {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: number) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -94,10 +94,10 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get width(): number {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: number) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 

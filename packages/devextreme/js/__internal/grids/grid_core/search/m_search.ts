@@ -36,9 +36,6 @@ function parseValue(column: Column, text: string): unknown {
 
   return column.parseValue(text);
 }
-export interface SearchDataControllerExtension {
-  searchByText(text: string): void;
-}
 
 const dataController = (
   base: ModuleType<DataController>,
@@ -144,6 +141,7 @@ const headerPanel = (
             value: that.option('searchPanel.text'),
             updateValueTimeout: FILTERING_TIMEOUT,
             setValue(value) {
+              // @ts-expect-error
               dataController.searchByText(value);
             },
             editorOptions: {

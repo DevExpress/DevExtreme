@@ -97,13 +97,13 @@ function focusCellHandler(e) {
 }
 
 export class AdaptiveColumnsController extends modules.ViewController {
-  private _columnsController: any;
+  private _columnsController!: ColumnsController;
 
-  private _dataController: any;
+  private _dataController!: DataController;
 
-  private _editingController: any;
+  private _editingController!: EditingController;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   private _hiddenColumns: any;
 
@@ -374,15 +374,19 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
     if (this._isRowEditMode()) {
       const editRowKey = this.option('editing.editRowKey');
+      // @ts-expect-error
       if (equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
         return true;
       }
     } else {
+      // @ts-expect-error
       const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
       const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
 
       return this._editingController.isEditCell(rowIndex, columnIndex);
     }
+
+    return undefined;
   }
 
   _getFormItemsByHiddenColumns(hiddenColumns) {
@@ -627,6 +631,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   toggleExpandAdaptiveDetailRow(key?, alwaysExpanded?) {
     if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
+      // @ts-expect-error
       this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   }
@@ -664,6 +669,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   }
 
   hasAdaptiveDetailRowExpanded() {
+    // @ts-expect-error
     return isDefined(this._dataController.adaptiveExpandedKey());
   }
 
@@ -767,6 +773,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   isAdaptiveDetailRowExpanded(key) {
     const dataController = this._dataController;
+    // @ts-expect-error
     return dataController.adaptiveExpandedKey() && equalByValue(dataController.adaptiveExpandedKey(), key);
   }
 
@@ -862,6 +869,7 @@ const rowsView = (
   _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
 
+    // @ts-expect-error
     if (row && row.rowType === ADAPTIVE_ROW_TYPE && row.key === this._dataController.adaptiveExpandedKey()) {
       $row.addClass(ADAPTIVE_DETAIL_ROW_CLASS);
     }
@@ -924,7 +932,7 @@ const rowsView = (
 
   getContextMenuItems(options) {
     if (options.row && options.row.rowType === 'detailAdaptive') {
-      const view = this.component.getView('columnHeadersView' as any);
+      const view = this.component.getView('columnHeadersView');
       // @ts-expect-error
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
       // @ts-expect-error
@@ -1000,7 +1008,7 @@ const draggingHeader = (
 const editing = (
   Base: ModuleType<EditingController>,
 ) => class AdaptivityEditingExtender extends Base {
-  private _adaptiveController: any;
+  private _adaptiveController!: AdaptiveColumnsController;
 
   private _isForceRowAdaptiveExpand?: boolean;
 
@@ -1019,6 +1027,7 @@ const editing = (
 
   _closeEditItem($targetElement) {
     const $itemContents = $targetElement.closest(`.${FORM_ITEM_CONTENT_CLASS}`);
+    // @ts-expect-error
     const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
     const formItem = $itemContents.length ? $itemContents.first().data('dx-form-item') : null;
     const columnIndex = formItem && formItem.column && this._columnsController.getVisibleIndex(formItem.column.index);
@@ -1032,6 +1041,7 @@ const editing = (
     if (!this._adaptiveController.isFormOrPopupEditMode() && this._adaptiveController.hasHiddenColumns()) {
       const items = this._dataController.items();
       const item = items[rowIndex];
+      // @ts-expect-error
       const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
 
       this._isForceRowAdaptiveExpand = !this._adaptiveController.hasAdaptiveDetailRowExpanded();
@@ -1041,6 +1051,7 @@ const editing = (
       }
 
       rowIndices.push(rowIndex + 1);
+      // @ts-expect-error
       this._dataController.adaptiveExpandedKey(item.key);
     }
   }
@@ -1101,6 +1112,7 @@ const editing = (
   }
 
   _beforeCloseEditCellInBatchMode(rowIndices) {
+    // @ts-expect-error
     const expandedKey = this._dataController._adaptiveExpandedKey;
 
     if (expandedKey) {
@@ -1135,15 +1147,9 @@ const editing = (
   }
 };
 
-export interface AdaptivityDataControllerExtension {
-  _adaptiveExpandedKey: any;
-  adaptiveExpandedKey(value?: any): any;
-  toggleExpandAdaptiveDetailRow(key, alwaysExpanded): any;
-}
-
 const data = (
   Base: ModuleType<DataController>,
-) => class AdaptivityDataControllerExtender extends Base implements AdaptivityDataControllerExtension {
+) => class AdaptivityDataControllerExtender extends Base {
   _adaptiveExpandedKey: any;
 
   _processItems(items, change) {
