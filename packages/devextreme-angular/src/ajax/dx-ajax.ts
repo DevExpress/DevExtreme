@@ -1,6 +1,6 @@
 import { Deferred } from 'devextreme/core/utils/deferred';
 import { HttpClient, HttpEventType, HttpParams } from '@angular/common/http';
-import { throwError, Subject, Observable } from 'rxjs';
+import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { getWindow } from 'devextreme/core/utils/window';
 import { isDefined } from 'devextreme/core/utils/type';
@@ -8,7 +8,7 @@ import {
   isCrossDomain,
   getJsonpCallbackName,
   getRequestOptions,
-  getRequestHeaders,
+  getRequestHeaders as getAjaxRequestHeaders,
   getAcceptHeader,
   evalScript,
 } from 'devextreme/core/utils/ajax_utils';
@@ -50,12 +50,38 @@ function assignResponseProps(xhrSurrogate, response) {
   return xhrSurrogate;
 }
 
-function subscribeRequest(request: Observable<any>, options: Record<string, any>, d, xhrSurrogate) {
-  const needScriptEvaluation = isNeedScriptEvaluation(options);
+function isNeedScriptEvaluation(options) {
+  return options.dataType === 'jsonp' || options.dataType === 'script';
+}
 
-  request.subscribe(
-    (response) => {
-      if (needScriptEvaluation) {
+function getRequestHeaders(options) {
+  const headers = getAjaxRequestHeaders(options);
+  const { upload } = options;
+
+  if (!headers.Accept) {
+    headers.Accept = getAcceptHeader(options);
+  }
+
+  if (!upload && !isGetMethod(options) && !headers[CONTENT_TYPE]) {
+    headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
+  }
+
+  return Object.keys(headers).reduce((acc, key) => {
+    if (isDefined(headers[key])) {
+      acc[key] = headers[key];
+    }
+    return acc;
+  }, {});
+}
+
+function isGetMethod(options) {
+  return (options.method || 'get').toLowerCase() === 'get';
+}
+
+function getRequestCallbacks(options: Record<string, any>, d, xhrSurrogate) {
+  return {
+    next: (response) => {
+      if (isNeedScriptEvaluation(options)) {
         evalScript(response.body);
       }
 
@@ -65,21 +91,22 @@ function subscribeRequest(request: Observable<any>, options: Record<string, any>
         assignResponseProps(xhrSurrogate, response),
       );
     },
-    (error) => {
+    error: (error) => {
       const errorStatus = options.dataType === 'json' && error.message.includes('parsing')
         ? PARSER_ERROR
         : error?.timeout || 'error';
 
       return d.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
     },
-  );
+  };
 }
-function subscribeUpload(request: Observable<any>, options: Record<string, any>, d, xhrSurrogate) {
+
+function getUploadCallbacks(options: Record<string, any>, d, xhrSurrogate) {
   let total = 0;
   let isUploadStarted = false;
 
-  request.subscribe(
-    (event: Record<string, any>) => {
+  return {
+    next: (event: Record<string, any>) => {
       if (event.type === HttpEventType.Sent) {
         if (!isUploadStarted) {
           options.upload.onloadstart?.(event);
@@ -97,40 +124,11 @@ function subscribeUpload(request: Observable<any>, options: Record<string, any>,
       }
       return null;
     },
-    (error) => {
+    error: (error) => {
       options.upload.onerror?.(assignResponseProps(xhrSurrogate, error));
       return d.reject(assignResponseProps(xhrSurrogate, error), error.status, error);
     },
-    () => {},
-  );
-}
-
-function isNeedScriptEvaluation(options) {
-  return options.dataType === 'jsonp' || options.dataType === 'script';
-}
-
-function getCleanedRequestHeaders(options) {
-  const headers = getRequestHeaders(options);
-  const { upload } = options;
-
-  if (!headers.Accept) {
-    headers.Accept = getAcceptHeader(options);
-  }
-
-  if (!upload && !isGetRequest(options) && !headers[CONTENT_TYPE]) {
-    headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
-  }
-
-  return Object.keys(headers).reduce((acc, key) => {
-    if (isDefined(headers[key])) {
-      acc[key] = headers[key];
-    }
-    return acc;
-  }, {});
-}
-
-function isGetRequest(options) {
-  return (options.method || 'get').toLowerCase() === 'get';
+  };
 }
 
 export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Record<string, any>) => {
@@ -138,7 +136,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   const destroy$ = new Subject<void>();
   const d = Deferred();
   const method = (options.method || 'get').toLowerCase();
-  const isGet = isGetRequest(options);
+  const isGet = isGetMethod(options);
   const needScriptEvaluation = isNeedScriptEvaluation(options);
 
   if (options.cache === undefined) {
@@ -148,14 +146,10 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   options.crossDomain = isCrossDomain(options.url);
 
   const jsonpCallBackName = getJsonpCallbackName(options);
-  const headers = getCleanedRequestHeaders(options);
-  const requestOptions = getRequestOptions(options, headers);
-  const { url } = requestOptions;
-  const { parameters } = requestOptions;
-  const data = parameters;
-  const { upload } = options;
-  const { beforeSend } = options;
-  const { xhrFields } = options;
+  const headers = getRequestHeaders(options);
+  const { url, parameters: data } = getRequestOptions(options, headers);
+  const { upload, beforeSend, xhrFields } = options;
+
   const result: Result = d.promise() as Result;
 
   result.abort = (): void => {
@@ -181,25 +175,21 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
     data._ = Date.now() + 1;
   }
 
-  const params = isGet ? data : undefined;
-
-  const body = (() => {
-    if (isGet) {
-      return undefined;
-    }
-
+  const makeBody = () => {
     if (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0) {
       const httpParams = new HttpParams();
       Object.keys(data).forEach((key) => httpParams.set(key, data[key]));
+
       return httpParams.toString();
     }
 
     return data;
-  })();
+  };
 
-  if (beforeSend) {
-    beforeSend(xhrSurrogate);
-  }
+  const body = isGet ? undefined : makeBody();
+  const params = isGet ? data : undefined;
+
+  beforeSend?.(xhrSurrogate);
 
   const request = options.crossDomain && needScriptEvaluation
     ? httpClient.jsonp(url, jsonpCallBackName)
@@ -217,16 +207,16 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
       },
     );
 
-  const requestWithTimeout = request.pipe(
+  const subscriptionCallbacks = upload
+    ? getUploadCallbacks
+    : getRequestCallbacks;
+
+  request.pipe(
     takeUntil(destroy$) as any,
     timeoutWith(options.timeout || 0, throwError(() => ({ timeout: TIMEOUT }))) as any,
-  ) as unknown as Observable<any>;
-
-  if (upload) {
-    subscribeUpload(requestWithTimeout, options, d, xhrSurrogate);
-  } else {
-    subscribeRequest(requestWithTimeout, options, d, xhrSurrogate);
-  }
+  ).subscribe(
+    subscriptionCallbacks(options, d, xhrSurrogate),
+  );
 
   return result;
 };
