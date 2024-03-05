@@ -184,6 +184,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
+    Charts: [
+      { demo: 'Tooltip', themes: [THEME.material] },
+    ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
@@ -208,6 +211,11 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
+    Charts: [
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+    ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
@@ -216,20 +224,33 @@ const SKIPPED_TESTS = {
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'FilteringAPI', themes: [THEME.material] },
       'StatePersistence',
+    ],
+    Drawer: [
+      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ItemDragging', themes: [THEME.fluent] },
-      { demo: 'Selection', themes: [THEME.material] },
+      { demo: 'ListSelection', themes: [THEME.material] },
     ],
     Tabs: [
-      { demo: 'Selection', themes: [THEME.fluent] },
+      { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
+    ],
+    TabPanel: [
+      { demo: 'Overview', themes: [THEME.material] },
     ],
     Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent] },
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
+    ],
+    TreeView: [
+      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
     ],
   },
   React: {
+    Charts: [
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
@@ -240,6 +261,7 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
     ],
     Scheduler: [
+      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
