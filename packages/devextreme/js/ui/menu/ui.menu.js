@@ -952,6 +952,8 @@ class Menu extends MenuBase {
                 }
                 super._optionChanged(args);
                 break;
+            case '_hideSubmenuOnFocusOut':
+                break;
             default:
                 if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
                     // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
