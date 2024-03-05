@@ -103,9 +103,6 @@ const getPlainIndexedColumnOptionsRecursive = (columnsOptions, index?) => {
 
   const columnsOptionsDeepCopy = extend(true, [], columnsOptions);
   const plainIndexedColumnOptions = columnsOptionsDeepCopy.map((option) => {
-    if (option.plainIndex !== undefined) {
-      return option;
-    }
     let optionCopy;
     if (typeof option === 'string') {
       optionCopy = {
@@ -119,9 +116,9 @@ const getPlainIndexedColumnOptionsRecursive = (columnsOptions, index?) => {
 
     currentIndex += 1;
     if (option.columns) {
-      const nestedResult = getPlainIndexedColumnOptionsRecursive(option.columns, currentIndex);
-      optionCopy.columns = nestedResult.plainIndexedColumnOptions;
-      currentIndex = nestedResult.currentIndex;
+      const nestedColumnOptions = getPlainIndexedColumnOptionsRecursive(option.columns, currentIndex);
+      optionCopy.columns = nestedColumnOptions.plainIndexedColumnOptions;
+      currentIndex = nestedColumnOptions.currentIndex;
     }
 
     return optionCopy;
