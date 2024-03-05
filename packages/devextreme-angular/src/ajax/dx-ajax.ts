@@ -78,30 +78,39 @@ function isGetMethod(options) {
   return (options.method || 'get').toLowerCase() === 'get';
 }
 
-function getRequestCallbacks(options: Record<string, any>, d, xhrSurrogate) {
+function rejectIfAborted(deferred, xhrSurrogate) {
+  if (xhrSurrogate.aborted) {
+    deferred.reject({ status: STATUS_ABORT });
+  }
+}
+
+function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogate) {
   return {
-    next: (response) => {
+    next(response) {
       if (isNeedScriptEvaluation(options)) {
         evalScript(response.body);
       }
 
-      return d.resolve(
+      return deferred.resolve(
         response.body,
         response.body ? 'success' : NO_CONTENT,
         assignResponseProps(xhrSurrogate, response),
       );
     },
-    error: (error) => {
+    error(error) {
       const errorStatus = options.dataType === 'json' && error.message.includes('parsing')
         ? PARSER_ERROR
         : error?.timeout || 'error';
 
-      return d.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
+      return deferred.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
+    },
+    complete() {
+      rejectIfAborted(deferred, xhrSurrogate);
     },
   };
 }
 
-function getUploadCallbacks(options: Record<string, any>, d, xhrSurrogate) {
+function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate) {
   let total = 0;
   let isUploadStarted = false;
 
@@ -120,13 +129,15 @@ function getUploadCallbacks(options: Record<string, any>, d, xhrSurrogate) {
         }
         options.upload.onprogress?.({ ...event, total });
       } else if (event.type === HttpEventType.Response) {
-        return d.resolve(xhrSurrogate, SUCCESS);
+        return deferred.resolve(xhrSurrogate, SUCCESS);
       }
       return null;
     },
-    error: (error) => {
-      options.upload.onerror?.(assignResponseProps(xhrSurrogate, error));
-      return d.reject(assignResponseProps(xhrSurrogate, error), error.status, error);
+    error(error) {
+      return deferred.reject(assignResponseProps(xhrSurrogate, error), error.status, error);
+    },
+    complete() {
+      rejectIfAborted(deferred, xhrSurrogate);
     },
   };
 }
@@ -134,7 +145,7 @@ function getUploadCallbacks(options: Record<string, any>, d, xhrSurrogate) {
 export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Record<string, any>) => {
   const options = { ...sendOptions };
   const destroy$ = new Subject<void>();
-  const d = Deferred();
+  const deferred = Deferred();
   const method = (options.method || 'get').toLowerCase();
   const isGet = isGetMethod(options);
   const needScriptEvaluation = isNeedScriptEvaluation(options);
@@ -150,41 +161,36 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   const { url, parameters: data } = getRequestOptions(options, headers);
   const { upload, beforeSend, xhrFields } = options;
 
-  const result: Result = d.promise() as Result;
+  const result = deferred.promise() as Result;
 
-  result.abort = (): void => {
+  result.abort = () => {
+    xhrSurrogate.aborted = true;
     destroy$.next();
-    destroy$.complete();
     upload?.onabort?.(xhrSurrogate);
-    // eslint-disable-next-line no-void
-    void d.reject({ status: STATUS_ABORT }, 'error');
   };
 
   const xhrSurrogate = {
-    type: 'XMLHttpRequestSurrogate',
-    abort(): void { result.abort(); },
+    type: 'XMLHttpRequestSurrogate', // needs only for testing
+    aborted: false,
+    abort() { result.abort(); },
   };
 
   if (jsonpCallBackName) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    window[jsonpCallBackName] = (callback_data: unknown) => d.resolve(callback_data, SUCCESS, xhrSurrogate);
+    window[jsonpCallBackName] = (callback_data: unknown) => deferred.resolve(callback_data, SUCCESS, xhrSurrogate);
   }
 
   if (options.cache === false && isGet && data) {
     data._ = Date.now() + 1;
   }
 
-  const makeBody = () => {
-    if (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0) {
-      const httpParams = new HttpParams();
-      Object.keys(data).forEach((key) => httpParams.set(key, data[key]));
-
-      return httpParams.toString();
-    }
-
-    return data;
-  };
+  const makeBody = () => (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0
+    ? Object.keys(data).reduce(
+      (httpParams, key) => httpParams.set(key, data[key]),
+      new HttpParams(),
+    ).toString()
+    : data);
 
   const body = isGet ? undefined : makeBody();
   const params = isGet ? data : undefined;
@@ -211,11 +217,13 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
     ? getUploadCallbacks
     : getRequestCallbacks;
 
-  request.pipe(
+  request.pipe.apply(request, [
     takeUntil(destroy$) as any,
-    timeoutWith(options.timeout || 0, throwError(() => ({ timeout: TIMEOUT }))) as any,
-  ).subscribe(
-    subscriptionCallbacks(options, d, xhrSurrogate),
+    ...options.timeout
+      ? [timeoutWith(options.timeout, throwError(() => ({ timeout: TIMEOUT }))) as any]
+      : [],
+  ]).subscribe(
+    subscriptionCallbacks(options, deferred, xhrSurrogate),
   );
 
   return result;
