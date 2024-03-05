@@ -187,48 +187,15 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-      // 'EditStateManagement',
-      // 'FilteringAPI',
-      // 'StatePersistence',
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
       { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
-    // Charts: ['ZoomingAndScrollingAPI'],
-    // Common: ['EditorAppearanceVariants'],
-    // DataGrid: [
-    //   'AdvancedMasterDetailView',
-    //   'AjaxRequest',
-    //   'Appearance',
-    //   'BatchEditing',
-    //   'CellEditingAndEditingAPI',
-    //   'ColumnCustomization',
-    //   'CustomNewRecordPosition',
-    //   'DataValidation',
-    //   'EditStateManagement',
-    //   'Filtering',
-    //   'FilteringAPI',
-    //   'GroupSummaries',
-    //   'InfiniteScrolling',
-    //   'MasterDetailAPI',
-    //   'MasterDetailView',
-    //   'MultipleRecordSelectionAPI',
-    //   'MultipleSorting',
-    //   'OdataService',
-    //   'RecordGrouping',
-    //   'RecordPaging',
-    //   'RemoteGrouping',
-    //   'RowEditingAndEditingEvents',
-    //   'RowSelection',
-    //   'SimpleArray',
-    //   'StatePersistence',
-    // ],
-    // Drawer: ['TopOrBottomPosition'],
-    // DropDownBox: ['MultipleSelection'],
     Form: [
       'CustomizeItem',
       { demo: 'Validation', themes: [THEME.material] },
@@ -236,26 +203,9 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
     ],
-    // Gauges: ['VariableNumberOfBars'],
-    // List: [
-    //   'ItemDragging',
-    //   'ListSelection',
-    // ],
-    // PivotGrid: ['IntegratedFieldChooser'],
-    // Popup: ['Scrolling'],
-    // Scheduler: [
-    //   'CustomDragAndDrop',
-    //   'Resources',
-    // ],
-    // Sortable: ['Kanban'],
-    // TabPanel: ['Overview'],
-    // Tabs: [
-    //   'Overview',
-    //   'Selection',
-    // ],
-    // Toolbar: ['Adaptability'],
-    // TreeView: ['ItemSelectionAndCustomization'],
-    // VectorMap: ['TooltipHTMLSupport'],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
+    ],
   },
   Vue: {
     DataGrid: [
@@ -270,6 +220,7 @@ const SKIPPED_TESTS = {
     ],
     List: [
       { demo: 'ItemDragging', themes: [THEME.fluent] },
+      { demo: 'Selection', themes: [THEME.material] },
     ],
     Tabs: [
       { demo: 'Selection', themes: [THEME.fluent] },
@@ -282,16 +233,20 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
     ],
     Scheduler: [
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
       { demo: 'ItemDragging', themes: [THEME.fluent] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
   },
 };
