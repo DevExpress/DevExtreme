@@ -307,7 +307,7 @@ export class View extends ModuleItem {
     return this.component._getTemplate(name);
   }
 
-  render($parent, options?) {
+  render($parent?, options?) {
     let $element = this._$element;
     const isVisible = this.isVisible();
 
