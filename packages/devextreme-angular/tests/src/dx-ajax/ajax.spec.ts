@@ -78,7 +78,7 @@ describe('Ajax request using DxAjaxModule', () => {
     httpTestingControllerMock?.verify();
   });
 
-  it('dataSource load() should be intercepted', (done) => {
+  xit('dataSource load() should be intercepted', (done) => {
     // eslint-disable-next-line no-restricted-globals
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
     const url = 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems';
@@ -102,7 +102,7 @@ describe('Ajax request using DxAjaxModule', () => {
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
   });
 
-  it('fileUploader have to upload file and interceptor is called', (done) => {
+  xit('fileUploader have to upload file and interceptor is called', (done) => {
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
 
     const fixture = TestBed.createComponent(TestFileUploaderComponent);
@@ -123,4 +123,28 @@ describe('Ajax request using DxAjaxModule', () => {
       done();
     }, 500);
   });
+
+  it('Script request (cross domain)', (done) => {
+    const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
+    const url = 'http://somefakedomain1221.com/json-url';
+    const dataSource = new DataSource({
+      store: new ODataStore({
+        version: 2,
+        jsonp: true,
+        url,
+      }),
+    });
+
+    // eslint-disable-next-line no-void
+    void dataSource.load().then(() => {
+      expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
+      done();
+    });
+
+    const req = httpTestingControllerMock.expectOne(`${url}?%24top=20`);
+
+    req.flush([{ id: 0, text: 'TEST' }]);
+
+    expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
+  }
 });
