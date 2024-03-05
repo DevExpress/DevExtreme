@@ -170,6 +170,9 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: {
+    Charts: [
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
@@ -185,7 +188,9 @@ const SKIPPED_TESTS = {
   },
   Angular: {
     Charts: [
-      { demo: 'Tooltip', themes: [THEME.material] },
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
@@ -212,9 +217,13 @@ const SKIPPED_TESTS = {
   },
   Vue: {
     Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
@@ -250,7 +259,6 @@ const SKIPPED_TESTS = {
   React: {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'Tooltip', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
