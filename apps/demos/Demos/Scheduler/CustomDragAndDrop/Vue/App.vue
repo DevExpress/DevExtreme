@@ -15,7 +15,7 @@
           :data="task"
           :on-drag-start="onItemDragStart"
           :on-drag-end="onItemDragEnd"
-          class="item dx-card dx-theme-text-color dx-theme-background-color"
+          class="item dx-card"
         >
           {{ task.text }}
         </DxDraggable>
@@ -94,6 +94,8 @@ function onItemDragEnd(e: DxDraggableTypes.DragEndEvent) {
 }
 
 .item {
+  color: var(--dx-color-text);
+  background-color: var(--dx-component-color-bg);
   box-sizing: border-box;
   padding: 10px 20px;
   margin-bottom: 10px;

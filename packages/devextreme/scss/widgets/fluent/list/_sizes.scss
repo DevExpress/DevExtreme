@@ -28,3 +28,8 @@ $fluent-list-next-button-horizontal-padding: null !default;
   $fluent-list-group-header-vertical-padding: 8px !default;
   $fluent-list-next-button-horizontal-padding: 24px !default;
 }
+
+:root {
+  --dx-list-item-padding-inline: #{$fluent-list-item-horizontal-padding}; 
+  --dx-list-item-padding-block: #{$fluent-list-item-vertical-padding}; 
+} 

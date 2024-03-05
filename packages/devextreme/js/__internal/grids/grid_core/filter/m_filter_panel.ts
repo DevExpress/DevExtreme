@@ -12,6 +12,7 @@ import {
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/m_utils';
 
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';
@@ -26,8 +27,8 @@ const FILTER_PANEL_LEFT_CONTAINER = `${FILTER_PANEL_CLASS}-left`;
 
 const FILTER_PANEL_TARGET = 'filterPanel';
 
-class FilterPanelView extends modules.View {
-  private _columnsController: any;
+export class FilterPanelView extends modules.View {
+  private _columnsController!: ColumnsController;
 
   private readonly _filterValueBuffer: any;
 
@@ -119,7 +120,6 @@ class FilterPanelView extends modules.View {
     let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
-      // @ts-expect-error
       when(that.getFilterText(filterValue, that.getController('filterSync').getCustomFilterOperations())).done((filterText) => {
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {

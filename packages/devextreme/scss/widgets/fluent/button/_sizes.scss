@@ -27,3 +27,7 @@ $fluent-button-box-shadow-size: 0 1px 3px !default;
   $fluent-button-icon-padding: 4px !default;
   $fluent-button-icon-text-padding: $fluent-button-horizontal-padding !default;
 }
+
+:root { 
+  --dx-button-padding-inline: #{$fluent-button-horizontal-padding}; 
+} 

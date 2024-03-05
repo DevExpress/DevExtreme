@@ -114,11 +114,12 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
 
     return columnIndex === -1
       ? undefined
-      : this._rowsView._getCellElement(0, columnIndex) as dxElementWrapper | undefined;
+      : this._rowsView._getCellElement(0, columnIndex);
   }
 
   private isScrollableNeedFocusable(): boolean {
     const hasScrollable = !!this._rowsView.getScrollable();
+    // @ts-expect-error _fixedTableElement is declared in rowsView extender
     const hasFixedTable = !!this._rowsView._fixedTableElement?.length;
     const isCellsRendered = !!this._rowsView.getCellElements(0)?.length;
 

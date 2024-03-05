@@ -180,7 +180,7 @@ const updateFilterValue = function (that, options) {
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFilterRowExtender extends Base {
   private _filterRangeOverlayInstance: any;
 
-  private _applyFilterViewController: any;
+  private _applyFilterViewController!: ApplyFilterViewController;
 
   _updateEditorValue(column, $editorContainer) {
     const that = this;
@@ -262,7 +262,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   init() {
     super.init();
-    // @ts-expect-error
     this._applyFilterViewController = this.getController('applyFilter');
   }
 
@@ -501,7 +500,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $element = $('<div>').appendTo($editorContainer);
     const editorController = this.getController('editorFactory');
     const dataSource = this.getController('data').dataSource();
-    // @ts-expect-error
     const filterRowController = this.getController('applyFilter');
 
     if (options.lookup && this.option('syncLookupFilterValues')) {
@@ -781,7 +779,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
 
     const filters = [super._calculateAdditionalFilter()];
     const columns = this._columnsController.getVisibleColumns(null, true);
-    // @ts-expect-error
     const filterRowController = this.getController('applyFilter');
 
     each(columns, function () {
@@ -796,7 +793,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
   }
 };
 
-class ApplyFilterViewController extends modules.ViewController {
+export class ApplyFilterViewController extends modules.ViewController {
   private _headerPanel: any;
 
   private _currentColumn: any;
@@ -839,7 +836,6 @@ class ApplyFilterViewController extends modules.ViewController {
 
   removeHighLights() {
     if (isOnClickApplyFilterMode(this)) {
-      // @ts-expect-error
       const columnHeadersViewElement = this.getView('columnHeadersView').element();
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
@@ -864,6 +860,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     super._startResizing.apply(that, arguments);
 
     if (that.isResizing()) {
+      // @ts-expect-error
       const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
       if (overlayInstance) {
@@ -881,10 +878,12 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     let $cell;
 
     if (that.isResizing()) {
+      // @ts-expect-error
       const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
       if (overlayInstance) {
         $cell = overlayInstance.$element().closest('td');
+        // @ts-expect-error
         that._columnHeadersView._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
         overlayInstance.$content().show();
       }
@@ -926,7 +925,7 @@ const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingC
 };
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPanel extends Base {
-  private _applyFilterViewController: any;
+  private _applyFilterViewController!: ApplyFilterViewController;
 
   _getToolbarItems() {
     const items = super._getToolbarItems();
@@ -980,7 +979,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
   init() {
     super.init();
     this._dataController = this.getController('data');
-    // @ts-expect-error
     this._applyFilterViewController = this.getController('applyFilter');
   }
 

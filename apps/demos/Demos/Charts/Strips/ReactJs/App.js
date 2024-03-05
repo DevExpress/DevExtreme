@@ -46,7 +46,7 @@ function App() {
   return (
     <Chart
       id="chart"
-      title="Temperature in September"
+      title="Temperature (high) in September, &#176;F"
       dataSource={temperaturesData}
       customizePoint={customizePoint}
       customizeLabel={customizeLabel}
@@ -63,7 +63,7 @@ function App() {
           startValue={highAverage}
           color="rgba(255,155,85,0.15)"
         >
-          <Label text="Above average">
+          <Label text="Above average high">
             <Font color={highAverageColor} />
           </Label>
         </Strip>
@@ -71,7 +71,7 @@ function App() {
           endValue={lowAverage}
           color="rgba(97,153,230,0.10)"
         >
-          <Label text="Below average">
+          <Label text="Below average low">
             <Font color={lowAverageColor} />
           </Label>
         </Strip>

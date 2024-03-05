@@ -1395,6 +1395,26 @@ QUnit.module('files rendering', moduleConfig, () => {
         assert.equal($selectButton.find('.' + FILEUPLOADER_INPUT_CLASS).length, 1, 'input is rendered in select button');
     });
 
+    [false, true].forEach((useNativeInputClick) => {
+        QUnit.test(`Input click should ${useNativeInputClick ? 'not' : ''} be prevented on runtime useNativeInputClick set to ${useNativeInputClick}`, function(assert) {
+            const $fileUploader = $('#fileuploader').dxFileUploader({
+                useNativeInputClick: !useNativeInputClick
+            });
+            const fileUploader = $fileUploader.dxFileUploader('instance');
+
+            fileUploader.option('useNativeInputClick', useNativeInputClick);
+
+            const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+            const clickSpy = sinon.spy();
+
+            $input
+                .on('click', clickSpy)
+                .click();
+
+            assert.strictEqual(clickSpy.args[0][0].isDefaultPrevented(), !useNativeInputClick);
+        });
+    });
+
     QUnit.test('files count in list is correct if the \'extendSelection\' option is false', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             extendSelection: false,

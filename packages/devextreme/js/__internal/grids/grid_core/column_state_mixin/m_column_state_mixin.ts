@@ -2,7 +2,8 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
 
-import type { InternalGrid, View } from '../m_types';
+import type { View } from '../m_modules';
+import type { InternalGrid } from '../m_types';
 
 const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';

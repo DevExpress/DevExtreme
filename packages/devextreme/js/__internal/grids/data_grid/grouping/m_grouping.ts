@@ -428,7 +428,6 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
         },
         name: 'groupPanel',
         onItemRendered: () => {
-          // @ts-expect-error
           isRendered && this.renderCompleted.fire();
           isRendered = true;
         },
@@ -452,7 +451,6 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     const columnIndex = column && column.index;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      // @ts-expect-error
       this.getController('headerFilter').showHeaderFilterMenu(columnIndex, true);
     } else {
       // @ts-expect-error
@@ -499,7 +497,6 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
       if ($groupPanel && $groupPanel.length) {
         this._updateGroupPanelContent($groupPanel);
         this.updateToolbarDimensions();
-        // @ts-expect-error
         this.renderCompleted.fire();
       }
     }

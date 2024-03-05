@@ -43,10 +43,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('groupInterval', value);
     }
 
-    get height(): number | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -64,10 +64,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('searchMode', value);
     }
 
-    get width(): number | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
