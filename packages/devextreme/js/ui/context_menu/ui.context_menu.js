@@ -19,6 +19,8 @@ import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
 import { name as contextMenuEventName } from '../../events/contextmenu';
 import holdEvent from '../../events/hold';
+import ScrollView from '../scroll_view/ui.scroll_view';
+import { getOuterHeight } from '../../core/utils/size';
 
 // STYLE contextMenu
 
@@ -603,6 +605,28 @@ class ContextMenu extends MenuBase {
         }
     }
 
+    _initScrollView(container) {
+        container.css('position', 'fixed');
+        container.css('height', Math.min(this._getMaxHeight(), container.height()));
+        this._createComponent(container, ScrollView, {
+            onInitialized: (e) => {
+                this._createActionByOption('onScrollViewInitialized')({
+                    element: container,
+                    component: e.component
+                });
+            },
+        });
+    }
+
+    _getMaxHeight() {
+        const $element = this.$element();
+        const offsetTop = $element.offset().top;
+        const windowHeight = getOuterHeight(window);
+        const maxHeight = Math.max(offsetTop, windowHeight - offsetTop - getOuterHeight($element));
+
+        return Math.min(windowHeight, maxHeight);
+    }
+
     _showSubmenu($item) {
         const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
 
@@ -622,6 +646,8 @@ class ContextMenu extends MenuBase {
         if(!this._isSubmenuVisible($submenu)) {
             this._drawSubmenu($item);
         }
+
+        this._initScrollView(isSubmenuRendered ? $submenu : $item.children(`.${DX_SUBMENU_CLASS}`));
     }
 
     _hideSubmenusOnSameLevel($item) {
@@ -860,7 +886,8 @@ class ContextMenu extends MenuBase {
 
             this._setOptionWithoutOptionChange('visible', true);
             this._overlay.option('position', position);
-            promise = this._overlay.show();
+            promise = this._overlay.show()
+                .then(() => this._initScrollView(this._overlay.content().children('.dx-submenu')));
             event && event.stopPropagation();
 
             this._setAriaAttributes();
