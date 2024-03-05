@@ -119,9 +119,9 @@ const getPlainIndexedColumnOptionsRecursive = (columnsOptions, index?) => {
 
     currentIndex += 1;
     if (option.columns) {
-      const nestResult = getPlainIndexedColumnOptionsRecursive(option.columns, currentIndex);
-      optionCopy.columns = nestResult.plainIndexedColumnOptions;
-      currentIndex = nestResult.currentIndex;
+      const nestedResult = getPlainIndexedColumnOptionsRecursive(option.columns, currentIndex);
+      optionCopy.columns = nestedResult.plainIndexedColumnOptions;
+      currentIndex = nestedResult.currentIndex;
     }
 
     return optionCopy;
