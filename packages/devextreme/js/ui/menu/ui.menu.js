@@ -81,7 +81,9 @@ class Menu extends MenuBase {
 
             onSubmenuHidden: null,
 
-            adaptivityEnabled: false
+            adaptivityEnabled: false,
+
+            _hideSubmenuOnFocusOut: true,
 
             /**
             * @name dxMenuOptions.selectedItems
@@ -525,7 +527,11 @@ class Menu extends MenuBase {
     }
 
     _focusOutHandler(e) {
-        this._hideSubmenu(this._visibleSubmenu);
+        const hideSubmenuOnFocusOut = this.option('_hideSubmenuOnFocusOut');
+
+        if(hideSubmenuOnFocusOut) {
+            this._hideVisibleSubmenu();
+        }
 
         super._focusOutHandler(e);
     }
