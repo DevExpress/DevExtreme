@@ -73,9 +73,8 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   let result: any = [];
 
   if (columnsOptions) {
-    const columnOptionsDeepCopy = extend(true, columnsOptions);
-    setPlainIndicesRecursive(columnOptionsDeepCopy);
-    each(columnOptionsDeepCopy, (index, columnOptions) => {
+    const { plainIndexedColumnOptions } = getPlainIndexedColumnOptionsRecursive(columnsOptions);
+    each(plainIndexedColumnOptions, (index, columnOptions) => {
       const userStateColumnOptions = that._columnsUserState
         && checkUserStateColumn(columnOptions, that._columnsUserState[columnOptions.plainIndex])
         && that._columnsUserState[columnOptions.plainIndex];
@@ -99,40 +98,36 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   return result;
 };
 
-const setPlainIndicesRecursive = (columnsOptions, index?) => {
-  if (!columnsOptions) {
-    return {
-      columnsOptions: {},
-      currentIndex: -1,
-    };
-  }
+const getPlainIndexedColumnOptionsRecursive = (columnsOptions, index?) => {
   let currentIndex: number = index ?? 0;
 
-  columnsOptions = columnsOptions.map((option) => {
+  const columnsOptionsDeepCopy = extend(true, [], columnsOptions);
+  const plainIndexedColumnOptions = columnsOptionsDeepCopy.map((option) => {
     if (option.plainIndex !== undefined) {
       return option;
     }
+    let optionCopy;
     if (typeof option === 'string') {
-      option = {
+      optionCopy = {
         dataField: option,
         name: option,
         plainIndex: currentIndex,
       };
     } else {
-      option.plainIndex = currentIndex;
+      optionCopy = extend(true, { plainIndex: currentIndex }, option);
     }
 
     currentIndex += 1;
     if (option.columns) {
-      const nestResult = setPlainIndicesRecursive(option.columns, currentIndex);
-      option.columns = nestResult.columnsOptions;
+      const nestResult = getPlainIndexedColumnOptionsRecursive(option.columns, currentIndex);
+      optionCopy.columns = nestResult.plainIndexedColumnOptions;
       currentIndex = nestResult.currentIndex;
     }
 
-    return option;
+    return optionCopy;
   });
   return {
-    columnsOptions,
+    plainIndexedColumnOptions,
     currentIndex,
   };
 };
