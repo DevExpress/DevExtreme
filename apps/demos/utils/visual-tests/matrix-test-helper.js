@@ -233,6 +233,9 @@ const SKIPPED_TESTS = {
       'CustomizeItem',
       { demo: 'Validation', themes: [THEME.material] },
     ],
+    Scheduler: [
+      'CustomDragAndDrop',
+    ],
     // Gauges: ['VariableNumberOfBars'],
     // List: [
     //   'ItemDragging',
@@ -263,9 +266,7 @@ const SKIPPED_TESTS = {
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-      // 'EditStateManagement',
-      // 'FilteringAPI',
-      // 'StatePersistence',
+      'StatePersistence',
     ],
     List: [
       { demo: 'ItemDragging', themes: [THEME.fluent] },
