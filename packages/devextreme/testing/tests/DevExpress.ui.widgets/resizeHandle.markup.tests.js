@@ -16,8 +16,8 @@ const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
-const RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-prev-pane-button';
-const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-next-pane-button';
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const ICON_CLASS = 'dx-icon';
 
@@ -78,7 +78,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             const $collapsePrevButton = $(this.$element.children()[0]);
             const expectedIconClass = `dx-icon-spin${direction === 'horizontal' ? 'left' : 'up'}`;
 
-            assert.ok($collapsePrevButton.hasClass(RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS), 'has collapse-prev-button class');
+            assert.ok($collapsePrevButton.hasClass(RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS), 'has collapse-prev-button class');
             assert.ok($collapsePrevButton.hasClass(ICON_CLASS), 'has dx-icon class');
             assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for cerresponding icon');
         });
@@ -88,7 +88,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             const $collapseNextButton = $(this.$element.children()[2]);
             const expectedIconClass = `dx-icon-spin${direction === 'horizontal' ? 'right' : 'down'}`;
 
-            assert.ok($collapseNextButton.hasClass(RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS), 'has collapse-next-button class');
+            assert.ok($collapseNextButton.hasClass(RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS), 'has collapse-next-button class');
             assert.ok($collapseNextButton.hasClass(ICON_CLASS), 'has dx-icon class');
             assert.ok($collapseNextButton.hasClass(expectedIconClass), 'has class for cerresponding icon');
         });
@@ -103,7 +103,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
     QUnit.test('collapse prev button should have state invisible class when showCollapsePrev=false', function(assert) {
         this.reinit({ showCollapsePrev: false });
 
-        const $collapsePrevButton = $(this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS}`));
+        const $collapsePrevButton = $(this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`));
 
         assert.ok($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS));
     });
@@ -111,7 +111,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
     QUnit.test('collapse next button should have state invisible class when showCollapseNext=false', function(assert) {
         this.reinit({ showCollapseNext: false });
 
-        const $collapseNextButton = $(this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS}`));
+        const $collapseNextButton = $(this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
 
         assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS));
     });

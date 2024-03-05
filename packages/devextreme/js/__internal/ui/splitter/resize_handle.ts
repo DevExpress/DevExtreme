@@ -16,8 +16,8 @@ export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
-const RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-prev-pane-button';
-const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-next-pane-button';
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const ICON_CLASS = 'dx-icon';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
@@ -74,9 +74,9 @@ class ResizeHandle extends (Widget as any) {
   _getIconClass(iconType: string): string {
     switch (iconType) {
       case 'prev':
-        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
       case 'next':
-        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
       case 'icon':
       default:
         return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} dx-icon-overflow`;
@@ -193,6 +193,10 @@ class ResizeHandle extends (Widget as any) {
         this._toggleDirectionClass();
         this._detachEventHandlers();
         this._attachEventHandlers();
+        break;
+      case 'showResizableIcon':
+      case 'showCollapsePrev':
+      case 'showCollapseNext':
         break;
       case 'onResize':
       case 'onResizeStart':

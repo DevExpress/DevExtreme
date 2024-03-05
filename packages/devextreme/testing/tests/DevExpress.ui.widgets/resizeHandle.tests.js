@@ -11,8 +11,8 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-prev-pane-button';
-const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-next-pane-button';
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -71,8 +71,8 @@ QUnit.module('Cursor', moduleConfig, () => {
     });
 
     QUnit.test('collapse buttons should have "cursor: pointer"', function(assert) {
-        const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS}`);
-        const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS}`);
+        const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+        const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
 
         assert.strictEqual($collapsePrevButton.css('cursor'), 'pointer');
         assert.strictEqual($collapseNextButton.css('cursor'), 'pointer');
