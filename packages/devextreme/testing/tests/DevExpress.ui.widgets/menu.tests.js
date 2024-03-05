@@ -760,28 +760,31 @@ QUnit.module('Menu tests', {
         assert.notOk(submenu.option('visible'), 'submenu was closed');
     });
 
-    QUnit.test('Close submenu when element lose focus', function(assert) {
-        const options = {
-            focusStateEnabled: true,
-            showFirstSubmenuMode: 'onClick',
-            items: [
-                { text: 'item 1', items: [{ text: 'item 11' }] },
-                { text: 'item 2', items: [{ text: 'item 21' }] },
-            ],
-        };
-        const menu = createMenu(options);
-        const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
-        const $subMenu = $menuItem.eq(1);
+    [true, false].forEach(hideSubmenuOnFocusOut => {
+        QUnit.test(`Close submenu when element lose focus and _hideSubmenuOnFocusOut=${hideSubmenuOnFocusOut}`, function(assert) {
+            const options = {
+                _hideSubmenuOnFocusOut: hideSubmenuOnFocusOut,
+                focusStateEnabled: true,
+                showFirstSubmenuMode: 'onClick',
+                items: [
+                    { text: 'item 1', items: [{ text: 'item 11' }] },
+                    { text: 'item 2', items: [{ text: 'item 21' }] },
+                ],
+            };
+            const menu = createMenu(options);
+            const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
+            const $subMenu = $menuItem.eq(1);
 
-        $($subMenu).trigger('dxclick');
+            $($subMenu).trigger('dxclick');
 
-        const submenu = getSubMenuInstance($subMenu);
+            const submenu = getSubMenuInstance($subMenu);
 
-        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+            assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
 
-        $(menu.element).trigger('focusout');
+            $(menu.element).trigger('focusout');
 
-        assert.strictEqual(submenu.option('visible'), false, 'submenu closed');
+            assert.strictEqual(submenu.option('visible'), !hideSubmenuOnFocusOut, `submenu ${hideSubmenuOnFocusOut ? 'closed' : 'opened'}`);
+        });
     });
 
     QUnit.test('Don\'t hide submenu when cancel is true', function(assert) {
