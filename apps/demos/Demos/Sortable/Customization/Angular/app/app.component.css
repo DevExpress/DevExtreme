@@ -28,11 +28,12 @@
 }
 
 .item {
+  color: var(--dx-color-text);
+  background-color: var(--dx-component-color-bg);
   box-sizing: border-box;
   position: relative;
   padding: 10px 20px;
   margin-bottom: 10px;
-  background: white;
   cursor: pointer;
 }
 

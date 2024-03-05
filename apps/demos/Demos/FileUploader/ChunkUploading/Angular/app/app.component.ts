@@ -41,7 +41,7 @@ export class AppComponent {
 
   createSpan(text, className = null) {
     const result = document.createElement('SPAN');
-    if (className) { result.className = `${className} dx-theme-accent-as-text-color`; }
+    if (className) { result.className = className; }
     result.innerText = text;
     return result;
   }

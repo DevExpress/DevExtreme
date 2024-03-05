@@ -306,10 +306,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('headerCellTemplate', value);
     }
 
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
         this._setOption('headerFilter', value);
     }
 

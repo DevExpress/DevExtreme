@@ -51,9 +51,7 @@
               <i
                 v-for="(itemColor, i) in data"
                 :key="i"
-                :class="itemColor ?
-                  'color dx-icon dx-icon-square' :
-                  'color dx-icon dx-icon-square dx-theme-text-color'"
+                class="dx-icon dx-icon-square"
                 :style="{ color: itemColor }"
                 @click="onColorClick(itemColor)"
               />

@@ -4,7 +4,7 @@ $(() => {
   const createItemElement = function (data) {
     $('<div>')
       .text(data.text)
-      .addClass('item dx-card dx-theme-background-color dx-theme-text-color')
+      .addClass('item dx-card')
       .appendTo('#list')
       .dxDraggable({
         group: draggingGroupName,

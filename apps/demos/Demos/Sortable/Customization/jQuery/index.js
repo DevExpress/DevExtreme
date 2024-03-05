@@ -2,7 +2,7 @@ $(() => {
   for (let i = 0; i < tasks.length; i += 1) {
     $('<div>')
       .text(tasks[i].Task_Subject)
-      .addClass('item dx-card dx-theme-background-color dx-theme-text-color')
+      .addClass('item dx-card')
       .appendTo('#list');
   }
 
@@ -80,7 +80,7 @@ $(() => {
 
   const dragTemplate = function (options) {
     return $('<div>')
-      .addClass('item dx-card dx-theme-background-color dx-theme-text-color')
+      .addClass('item dx-card')
       .css({
         width: 200,
         padding: 10,

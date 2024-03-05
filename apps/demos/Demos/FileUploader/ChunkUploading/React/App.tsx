@@ -38,11 +38,11 @@ export default function App() {
           chunks.map((c, i) => (
             <div key={i}>
               <span>Chunk size:</span>
-              <span className="segment-size dx-theme-accent-as-text-color">{getValueInKb(c.segmentSize)}</span>
+              <span className="segment-size">{getValueInKb(c.segmentSize)}</span>
               <span>, Uploaded:</span>
-              <span className="loaded-size dx-theme-accent-as-text-color">{getValueInKb(c.bytesLoaded)}</span>
+              <span className="loaded-size">{getValueInKb(c.bytesLoaded)}</span>
               <span>/</span>
-              <span className="total-size dx-theme-accent-as-text-color">{getValueInKb(c.bytesTotal)}</span>
+              <span className="total-size">{getValueInKb(c.bytesTotal)}</span>
             </div>
           ))
         }
