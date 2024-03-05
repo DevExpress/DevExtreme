@@ -59,6 +59,8 @@ if (devextremeVersion !== devextremeNpmVersion) {
     sh.exec(`npm run all:update-version -- ${devextremeNpmVersion}`);
 }
 
+sh.exec('npm run all:pack-and-copy');
+
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);
 sh.popd();

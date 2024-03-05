@@ -19,7 +19,10 @@
       ],
       "devextreme-vue/*": [
         "devextreme-vue/src/*"
-      ]
+      ],
+      "devextreme-monorepo-tools": [
+        "devextreme-monorepo-tools/src"
+      ],
     },
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
