@@ -73,8 +73,9 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   let result: any = [];
 
   if (columnsOptions) {
-    setPlainIndicesRecursive(columnsOptions);
-    each(columnsOptions, (index, columnOptions) => {
+    const columnOptionsDeepCopy = extend(true, columnsOptions);
+    setPlainIndicesRecursive(columnOptionsDeepCopy);
+    each(columnOptionsDeepCopy, (index, columnOptions) => {
       const userStateColumnOptions = that._columnsUserState
         && checkUserStateColumn(columnOptions, that._columnsUserState[columnOptions.plainIndex])
         && that._columnsUserState[columnOptions.plainIndex];
@@ -114,6 +115,7 @@ const setPlainIndicesRecursive = (columnsOptions, index?) => {
     if (typeof option === 'string') {
       option = {
         dataField: option,
+        name: option,
         plainIndex: currentIndex,
       };
     } else {
