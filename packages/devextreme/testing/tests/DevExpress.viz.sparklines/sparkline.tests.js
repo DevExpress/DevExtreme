@@ -1433,6 +1433,26 @@ QUnit.begin(function() {
         ]);
     });
 
+    QUnit.test('Change winloss lossColor property', function(assert) {
+        const sparkline = this.createSparkline({
+            type: 'winloss',
+            winColor: 'yellow',
+            lossColor: 'blue',
+            firstLastColor: 'pink',
+            winlossThreshold: 4,
+            dataSource: [0, 3, 6, -8]
+        });
+
+        sparkline.option({ lossColor: 'green' });
+
+        this.checkCustomizePoint(assert, [
+            { color: 'pink' },
+            { color: 'green' },
+            { color: 'yellow' },
+            { color: 'pink' }
+        ]);
+    });
+
     QUnit.test('Several min/max in dataSource', function(assert) {
         this.createSparkline({
             dataSource: [1, 5, 5, -1, -1],
