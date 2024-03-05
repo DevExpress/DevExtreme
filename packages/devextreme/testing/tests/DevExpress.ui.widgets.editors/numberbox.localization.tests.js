@@ -55,6 +55,7 @@ QUnit.module('localization: separator keys', moduleConfig, () => {
 
     QUnit.test('pressing the "." key on the numpad should clear the selected text regardless of the char produced (T1199553)', function(assert) {
         const curLocale = localization.locale();
+        const NUMPAD_DOT_KEY_CODE = 110;
 
         try {
             localization.locale('fr-ca');
@@ -65,7 +66,7 @@ QUnit.module('localization: separator keys', moduleConfig, () => {
 
             this.keyboard
                 .caret({ start: 0, end: 6 })
-                .type('.', { which: 110 });
+                .type('.', { which: NUMPAD_DOT_KEY_CODE });
 
             assert.strictEqual(this.input.val(), '0,00', 'mask value is cleared');
         } finally {
