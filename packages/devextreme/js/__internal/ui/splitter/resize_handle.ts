@@ -16,10 +16,10 @@ export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
-const RESIZE_HANDLE_COLLAPSE_PREV_BUTTON_CLASS = 'dx-resize-handle-collapse-prev-button';
-const RESIZE_HANDLE_COLLAPSE_NEXT_BUTTON_CLASS = 'dx-resize-handle-collapse-next-button';
-const RESIZE_HANDLE_HIDDEN_BUTTON = 'dx-resize-handle-hidden-button';
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-prev-pane-button';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS = 'dx-resize-handle-collapse-next-pane-button';
 const ICON_CLASS = 'dx-icon';
+const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
@@ -64,31 +64,41 @@ class ResizeHandle extends (Widget as any) {
     this.$element().addClass(RESIZE_HANDLE_CLASS);
     this._toggleDirectionClass();
 
-    this._$collapsePrevButton = $('<div>').addClass(this._getCollapseIconClass(false)).appendTo(this.$element());
-    this._$resizeHandle = $('<div>').addClass(RESIZE_HANDLE_ICON_CLASS).appendTo(this.$element());
-    this._$collapseNextButton = $('<div>').addClass(this._getCollapseIconClass(true)).appendTo(this.$element());
+    this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
+    this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
+    this._$collapseNextButton = $('<div>').addClass(this._getIconClass('next')).appendTo(this.$element());
 
     this._setResizeHandleContentVisibility();
   }
 
+  _getIconClass(iconType: string): string {
+    switch (iconType) {
+      case 'prev':
+        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_BUTTON_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
+      case 'next':
+        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_BUTTON_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
+      case 'icon':
+      default:
+        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} dx-icon-overflow`;
+    }
+  }
+
   _getCollapseIconClass(isNextButton: boolean): string {
     const isHorizontal = this._isHorizontalDirection();
-    let classList = `${isNextButton ? RESIZE_HANDLE_COLLAPSE_NEXT_BUTTON_CLASS : RESIZE_HANDLE_COLLAPSE_PREV_BUTTON_CLASS} ${ICON_CLASS}`;
+
     if (isNextButton) {
-      classList += ` dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
-    } else {
-      classList += ` dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
+      return `dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
     }
 
-    return classList;
+    return `dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
   }
 
   _setResizeHandleContentVisibility(): void {
-    const { showCollapsePrev, showCollapseNext, resizable } = this.option();
+    const { showCollapsePrev, showCollapseNext, showResizableIcon } = this.option();
 
-    this._$collapsePrevButton.toggleClass(RESIZE_HANDLE_HIDDEN_BUTTON, !showCollapsePrev);
-    this._$resizeHandle.toggleClass(RESIZE_HANDLE_HIDDEN_BUTTON, !resizable);
-    this._$collapseNextButton.toggleClass(RESIZE_HANDLE_HIDDEN_BUTTON, !showCollapseNext);
+    this._$collapsePrevButton.toggleClass(STATE_INVISIBLE_CLASS, !showCollapsePrev);
+    this._$resizeHandle.toggleClass(STATE_INVISIBLE_CLASS, !showResizableIcon);
+    this._$collapseNextButton.toggleClass(STATE_INVISIBLE_CLASS, !showCollapseNext);
   }
 
   _setAriaAttributes(): void {

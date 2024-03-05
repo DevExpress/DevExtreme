@@ -19,29 +19,15 @@
   align-items: center;
   gap: 8px;
 
-  .dx-resize-handle-icon {
-    background-color: #424242;
-    border-radius: 1px;
-  }
-
-  .dx-resize-handle-collapse-prev-button,
-  .dx-resize-handle-collapse-next-button {
+  .dx-resize-handle-collapse-prev-pane-button,
+  .dx-resize-handle-collapse-next-pane-button {
     cursor: pointer;
-  }
-
-  .dx-resize-handle-hidden-button {
-    visibility: collapse;
   }
 
   &.dx-resize-handle-horizontal {
     width: 8px;
     flex-direction: column;
     cursor: col-resize;
-
-    .dx-resize-handle-icon {
-      height: 18px;
-      width: 2px;
-    }
   }
 
   &.dx-resize-handle-vertical {
@@ -50,8 +36,7 @@
     cursor: row-resize;
 
     .dx-resize-handle-icon {
-      height: 2px;
-      width: 18px;
+      transform: rotate(90deg);
     }
   }
 }
