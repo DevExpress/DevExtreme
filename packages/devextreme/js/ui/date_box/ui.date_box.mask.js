@@ -306,7 +306,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _searchString(char) {
         const activePartText = this._getActivePartProp('text');
 
-        if(!isNaN(parseInt(activePartText))) {
+        if(!isNaN(parseInt(this._getActivePartProp('text')))) {
             return;
         }
 
