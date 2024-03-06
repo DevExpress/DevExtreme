@@ -194,9 +194,7 @@ const HtmlEditor = Editor.inherit({
 
         // NOTE: Operations with style attribute is required
         // to prevent a 'unsafe-inline' CSP error in DOMParser.
-        const valueWithoutStyles = quill.replaceStyleAttribute
-            ? quill.replaceStyleAttribute(value)
-            : value;
+        const valueWithoutStyles = quill.replaceStyleAttribute(value);
 
         frameDocumentBody.innerHTML = valueWithoutStyles;
 

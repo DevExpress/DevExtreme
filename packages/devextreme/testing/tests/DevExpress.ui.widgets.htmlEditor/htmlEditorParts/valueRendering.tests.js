@@ -37,8 +37,6 @@ function getSelector(className) {
 
 const { test, module: testModule } = QUnit;
 
-const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -85,7 +83,7 @@ export default function() {
             assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
         });
 
-        testWithoutCsp('render table with header without paragraph', function(assert) {
+        test('render table with header without paragraph', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: TABLE_WITH_HEADER_MARKUP
             }).dxHtmlEditor('instance');
@@ -110,7 +108,7 @@ export default function() {
             assert.strictEqual(markup, expectedValue);
         });
 
-        testWithoutCsp('render table with header and multiple paragraphs', function(assert) {
+        test('render table with header and multiple paragraphs', function(assert) {
             const value = `
             <table>
                 <thead>
@@ -241,7 +239,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        testWithoutCsp('value with table after change valueType', function(assert) {
+        test('value with table after change valueType', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -259,7 +257,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        testWithoutCsp('render markup with a font-size style', function(assert) {
+        test('render markup with a font-size style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-size: 20px">Test</span>'
             }).dxHtmlEditor('instance');
@@ -269,7 +267,7 @@ export default function() {
             assert.equal(markup, '<p><span style="font-size: 20px;">Test</span></p>');
         });
 
-        testWithoutCsp('render markup with a font-family style', function(assert) {
+        test('render markup with a font-family style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-family: Terminal;">Test</span>'
             }).dxHtmlEditor('instance');
