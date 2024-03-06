@@ -1057,14 +1057,14 @@ module('Search', setupModule, () => {
     });
 
     [
-        { letter: 'x', initialValue: 'AM', expectedValue: 'AM' },
-        { letter: 'y', initialValue: 'AM', expectedValue: 'AM' },
-        { letter: 'x', initialValue: 'PM', expectedValue: 'PM' },
-        { letter: 'y', initialValue: 'PM', expectedValue: 'PM' },
-    ].forEach(({ letter, initialValue, expectedValue }) => {
+        { letter: 'x', expectedValue: 'AM' },
+        { letter: 'y', expectedValue: 'AM' },
+        { letter: 'x', expectedValue: 'PM' },
+        { letter: 'y', expectedValue: 'PM' },
+    ].forEach(({ letter, expectedValue }) => {
         QUnit.test('when other character is pressed it should not toggle PM to AM', function(assert) {
             this.instance.option({
-                value: new Date(`10/10/2012 09:00 ${initialValue}`),
+                value: new Date(`10/10/2012 09:00 ${expectedValue}`),
                 useMaskBehavior: true,
                 displayFormat: 'a'
             });
