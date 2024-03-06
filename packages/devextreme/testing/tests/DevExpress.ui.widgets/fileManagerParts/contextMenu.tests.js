@@ -1028,6 +1028,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated for visible menu after action button click', function(assert) {
+        // debugger
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -1035,12 +1036,28 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
 
         this.fileManager.option('contextMenu.items', [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]);
 
+        // const rowInDetailsView = this.wrapper.getRowInDetailsView(1);
+
+        // debugger;
+
         this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
+
+        // const rowActionButtonInDetailsView = this.wrapper.getRowActionButtonInDetailsView(1);
+
+        // debugger;
+
         this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
         this.clock.tick(400);
 
         this.fileManager.option('contextMenu.items[1].disabled', true);
         this.clock.tick(400);
+
+        const item = this.wrapper.getContextMenuItems().eq(1);
+        const isDisabled = this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`);
+
+        debugger;
+
+        // console.log(isDisabled);
 
         assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
     });

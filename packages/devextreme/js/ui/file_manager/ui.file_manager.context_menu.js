@@ -211,6 +211,7 @@ class FileManagerContextMenu extends Widget {
 
     _onContextMenuShown() {
         this._isVisible = true;
+        // this.option('items[0].disabled', true);
     }
 
     _onContextMenuHidden(preserveContext) {
