@@ -612,6 +612,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     _optionChanged(args) {
         switch(args.name) {
             case 'showSubmenuMode':
+            case 'onScrollViewInitialized':
                 break;
             case 'selectedItem': {
                 const node = this._dataAdapter.getNodeByItem(args.value);

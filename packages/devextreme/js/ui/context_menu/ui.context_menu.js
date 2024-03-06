@@ -606,8 +606,16 @@ class ContextMenu extends MenuBase {
     }
 
     _initScrollView(container) {
+        const maxHeight = this._getMaxHeight();
+        const containerHeight = getOuterHeight(container);
+
+        if(!this._hasScrollView && containerHeight < maxHeight) {
+            return;
+        }
+
+        this._hasScrollView = true;
         container.css('position', 'fixed');
-        container.css('height', Math.min(this._getMaxHeight(), container.height()));
+        container.css('height', Math.min(containerHeight, maxHeight));
         this._createComponent(container, ScrollView, {
             onInitialized: (e) => {
                 this._createActionByOption('onScrollViewInitialized')({
@@ -887,7 +895,12 @@ class ContextMenu extends MenuBase {
             this._setOptionWithoutOptionChange('visible', true);
             this._overlay.option('position', position);
             promise = this._overlay.show()
-                .then(() => this._initScrollView(this._overlay.content().children('.dx-submenu')));
+                .then(() => {
+                    const $subMenu = $(this._overlay.content()).children('.dx-submenu');
+                    if($subMenu.length) {
+                        this._initScrollView($subMenu);
+                    }
+                });
             event && event.stopPropagation();
 
             this._setAriaAttributes();
