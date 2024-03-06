@@ -160,9 +160,7 @@ class ContextMenu extends MenuBase {
     _focusInHandler() {}
 
     _focusOutHandler(e) {
-        // debugger;
-
-        // this.hide();
+        this.hide();
 
         super._focusOutHandler(e);
     }
