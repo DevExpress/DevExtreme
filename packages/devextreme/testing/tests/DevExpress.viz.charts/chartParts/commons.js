@@ -136,7 +136,23 @@ function setupMocks($container) {
     insertMockFactory();
 }
 
-const NON_OVERRIDING_PROPERTIES = ['valueAxis'];
+/*
+    The behavior of withArgs(...).returnsArg() and withArgs(...).returns() has changed
+    after updating sinon from 2.4.1 to 17.0.1 (https://github.com/DevExpress/DevExtreme/pull/26744):
+
+    In 2.4.1:
+    stub.withArgs('test').returnsArg(1);
+    stub.withArgs('test').returns('overrided value');
+
+    stub('test', '123'); // return '123'
+    --------------------------------------------------
+    In 17.0.1:
+    stub.withArgs('test').returnsArg(1);
+    stub.withArgs('test').returns('overrided value');
+
+    stub('test', '123'); // return 'overrided value'
+*/
+const NON_OVERRIDING_PROPERTIES = ['valueAxis', 'series'];
 
 exports.environment = {
     beforeEach: function() {
@@ -192,13 +208,10 @@ exports.environment = {
         that.createChart = function(options) {
             $.each(options || {}, function(k, v) {
                 if(k === 'commonPaneSettings') {
-                    that.themeManager.getOptions.withArgs(k).reset();
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
                 } else if(k === 'crosshair') {
-                    that.themeManager.getOptions.withArgs(k).reset();
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
-                } else if(k !== 'series' && NON_OVERRIDING_PROPERTIES.indexOf(k) === -1) {
-                    that.themeManager.getOptions.withArgs(k).reset();
+                } else if(NON_OVERRIDING_PROPERTIES.indexOf(k) === -1) {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }
             });
