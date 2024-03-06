@@ -1433,7 +1433,7 @@ QUnit.begin(function() {
         ]);
     });
 
-    QUnit.test('Change winloss lossColor property', function(assert) {
+    QUnit.test('winloss sparkline lossColor property should be able to change at runtime', function(assert) {
         const sparkline = this.createSparkline({
             type: 'winloss',
             winColor: 'yellow',
