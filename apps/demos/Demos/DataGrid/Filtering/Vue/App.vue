@@ -1,0 +1,213 @@
+<template>
+  <div>
+    <DxDataGrid
+      id="gridContainer"
+      ref="dataGridRef"
+      :data-source="orders"
+      :show-borders="true"
+      key-expr="ID"
+    >
+      <DxFilterRow
+        :visible="showFilterRow"
+        :apply-filter="currentFilter"
+      />
+      <DxHeaderFilter
+        :visible="showHeaderFilter"
+      />
+      <DxSearchPanel
+        :visible="true"
+        :width="240"
+        placeholder="Search..."
+      />
+      <DxColumn
+        :width="140"
+        data-field="OrderNumber"
+        caption="Invoice Number"
+      >
+        <DxHeaderFilter :group-interval="10000"/>
+      </DxColumn>
+      <DxColumn
+        :width="120"
+        :calculate-filter-expression="calculateFilterExpression"
+        data-field="OrderDate"
+        alignment="right"
+        data-type="date"
+      >
+        <DxHeaderFilter :data-source="orderDateHeaderFilter"/>
+      </DxColumn>
+      <DxColumn
+        :width="180"
+        data-field="DeliveryDate"
+        alignment="right"
+        data-type="datetime"
+        format="M/d/yyyy, HH:mm"
+      />
+      <DxColumn
+        :editor-options="saleAmountEditorOptions"
+        data-field="SaleAmount"
+        alignment="right"
+        format="currency"
+      >
+        <DxHeaderFilter :data-source="saleAmountHeaderFilter"/>
+      </DxColumn>
+      <DxColumn data-field="Employee"/>
+      <DxColumn
+        data-field="CustomerStoreCity"
+        caption="City"
+      >
+        <DxHeaderFilter>
+          <DxSearch :enabled="true"/>
+        </DxHeaderFilter>
+      </DxColumn>
+    </DxDataGrid>
+    <div class="options">
+      <div class="caption">Options</div>
+      <div class="option">
+        <span>Apply Filter </span>
+        <DxSelectBox
+          id="useFilterApplyButton"
+          :items="applyFilterTypes"
+          :input-attr="{ 'aria-label': 'Filter' }"
+          v-model:value="currentFilter"
+          :disabled="!showFilterRow"
+          value-expr="key"
+          display-expr="name"
+        />
+      </div>
+      <div class="option">
+        <DxCheckBox
+          v-model:value="showFilterRow"
+          text="Filter Row"
+          @valueChanged="clearFilter()"
+        />
+      </div>
+      <div class="option">
+        <DxCheckBox
+          v-model:value="showHeaderFilter"
+          text="Header Filter"
+          @valueChanged="clearFilter()"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue';
+import {
+  DxDataGrid,
+  DxColumn,
+  DxHeaderFilter,
+  DxSearch,
+  DxSearchPanel,
+  DxFilterRow,
+  DxDataGridTypes,
+} from 'devextreme-vue/data-grid';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { orders, Order } from './data.ts';
+
+const applyFilterTypes = [
+  {
+    key: 'auto',
+    name: 'Immediately',
+  },
+  {
+    key: 'onClick',
+    name: 'On Button Click',
+  },
+];
+
+const showFilterRow = ref(true);
+const showHeaderFilter = ref(true);
+const currentFilter = ref(applyFilterTypes[0].key);
+
+const dataGridRef = ref<DxDataGrid | null>(null);
+
+const saleAmountEditorOptions = { format: 'currency', showClearButton: true };
+const saleAmountHeaderFilter = [
+  {
+    text: 'Less than $3000',
+    value: ['SaleAmount', '<', 3000],
+  }, {
+    text: '$3000 - $5000',
+    value: [
+      ['SaleAmount', '>=', 3000],
+      ['SaleAmount', '<', 5000],
+    ],
+  }, {
+    text: '$5000 - $10000',
+    value: [
+      ['SaleAmount', '>=', 5000],
+      ['SaleAmount', '<', 10000],
+    ],
+  }, {
+    text: '$10000 - $20000',
+    value: [
+      ['SaleAmount', '>=', 10000],
+      ['SaleAmount', '<', 20000],
+    ],
+  }, {
+    text: 'Greater than $20000',
+    value: ['SaleAmount', '>=', 20000],
+  },
+];
+
+const clearFilter = () => dataGridRef.value?.instance?.clearFilter();
+
+const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
+
+function calculateFilterExpression(
+  this: DxDataGridTypes.Column, value: any, selectedFilterOperations: string | null, target: string,
+) {
+  const column = this;
+
+  if (target === 'headerFilter' && value === 'weekends') {
+    return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
+  }
+
+  return column.defaultCalculateFilterExpression!(value, selectedFilterOperations, target);
+}
+
+const orderDateHeaderFilter = (options: { dataSource: DataSourceOptions }) => {
+  const { dataSource } = options;
+
+  dataSource.postProcess = (results) => {
+    results.push({
+      text: 'Weekends',
+      value: 'weekends',
+    });
+
+    return results;
+  };
+};
+</script>
+<style scoped>
+#gridContainer {
+  height: 440px;
+}
+
+.options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+}
+
+.option > span {
+  margin-right: 10px;
+}
+
+.option > .dx-selectbox {
+  display: inline-block;
+  vertical-align: middle;
+}
+</style>

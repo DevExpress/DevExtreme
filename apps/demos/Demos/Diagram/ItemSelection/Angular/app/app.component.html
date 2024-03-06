@@ -1,0 +1,27 @@
+<dx-diagram
+  #diagram
+  id="diagram"
+  (onContentReady)="contentReadyHandler($event)"
+  (onSelectionChanged)="selectionChangedHandler($event)"
+>
+  <dxo-nodes
+    [dataSource]="dataSource"
+    keyExpr="ID"
+    [textExpr]="textExpression"
+    parentKeyExpr="Head_ID"
+  >
+    <dxo-auto-layout type="tree"></dxo-auto-layout>
+  </dxo-nodes>
+  <dxo-toolbox visibility="disabled"></dxo-toolbox>
+  <dxo-properties-panel visibility="disabled"></dxo-properties-panel>
+</dx-diagram>
+<div class="selected-data">
+  <span class="caption">Selected Items:</span>
+  <span>
+    {{
+      selectedItems && selectedItems.length
+        ? (selectedItems | stringifyItems : textExpression)
+        : "Nobody has been selected"
+    }}
+  </span>
+</div>

@@ -1,0 +1,5716 @@
+[
+  {
+    "Name": "Data Grid",
+    "Equivalents": "dxDataGrid, dx-data-grid",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "DataGrid",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Simple Array",
+            "Name": "SimpleArray",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/customers.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "JSON Data",
+            "Name": "AjaxRequest",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Content/SampleData/Customers.json"
+            ],
+            "DemoType": "Web",
+            "Equivalents": "ajax request"
+          },
+          {
+            "Title": "OData Service",
+            "Name": "OdataService",
+            "Widget": "DataGrid",
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding#odata",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/401022/devextreme-based-controls/concepts/bind-controls-to-data/odata",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Custom Data Source",
+            "Name": "CustomDataSource",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "Equivalents": "webapi",
+            "Widget": "DataGrid",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridWebApiController.cs",
+              "/Models/Northwind/InMemoryNorthwindContext.cs"
+            ],
+            "BackendFiles": [
+              "DataGridWebApiController.cs",
+              "InMemoryNorthwindContext.cs"
+            ],
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "SignalR Service",
+            "Name": "SignalRService",
+            "Widget": "DataGrid",
+            "Equivalents": "signalr, real time, live update",
+            "Modules": "signalr",
+            "MvcAdditionalFiles": [
+              "/Hubs/LiveUpdateSignalRHub.cs",
+              "/Models/SignalR/StockTicker.cs",
+              "/Models/SignalR/Stock.cs"
+            ],
+            "BackendFiles": [
+              "LiveUpdateSignalRHub.cs",
+              "Stock.cs",
+              "StockTicker.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Real-Time Updates",
+            "Name": "RealTimeUpdates",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/realTimeData.js"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Paging and Scrolling",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Record Paging",
+            "Name": "RecordPaging",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridScrollingController.cs",
+              "/Models/User.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Local Virtual Scrolling",
+            "Name": "VirtualScrolling",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridScrollingController.cs",
+              "/Models/User.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Remote Virtual Scrolling",
+            "Name": "RemoteVirtualScrolling",
+            "Widget": "DataGrid",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Models/DataService/Sale.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Horizontal Virtual Scrolling",
+            "Name": "HorizontalVirtualScrolling",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridHorizontalScrollingController.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Infinite Scrolling",
+            "Name": "InfiniteScrolling",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridScrollingController.cs",
+              "/Models/User.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Editing",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Row Editing and Editing Events",
+            "Name": "RowEditingAndEditingEvents",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/State.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/SampleData/States.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Editing and Editing API",
+            "Name": "CellEditingAndEditingAPI",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/State.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/SampleData/States.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Batch Editing",
+            "Name": "BatchEditing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/State.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/SampleData/States.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Form Editing",
+            "Name": "FormEditing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Popup Editing",
+            "Name": "PopupEditing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Custom Editors",
+            "Name": "CustomEditors",
+            "Widget": "DataGrid",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridCustomEditorsController.cs",
+              "/Models/DataGrid/InMemoryTasksDataContext.cs",
+              "/Models/SampleData/CustomEditorsTasks.cs",
+              "/Scripts/data/statuses.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Data Validation",
+            "Name": "DataValidation",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridEmployeesValidationController.cs",
+              "/Models/DataGrid/InMemoryEmployeesValidationDataContext.cs",
+              "/Models/DataGrid/EmployeeValidation.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Controllers/RemoteValidationController.cs"
+            ],
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400705/concepts/client-side-data-validation#overview",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400576/concepts/devextreme-based-controls/client-side-data-validation#overview",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery"
+          },
+          {
+            "Title": "Cascading Lookups",
+            "Name": "CascadingLookups",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesWithCitiesController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesByStateController.cs",
+              "/Controllers/ApiControllers/DataGridCitiesByStateController.cs",
+              "/Models/DataGrid/InMemoryEmployeesByStateDataContext.cs",
+              "/Models/DataGrid/EmployeeByState.cs",
+              "/Models/State.cs",
+              "/Models/CityByState.cs",
+              "/Models/SampleData/DataGridEmployeesByState.cs",
+              "/Models/SampleData/StatesWithCities.cs",
+              "/Models/SampleData/CitiesByState.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "DocUrl": "Guide/Data_Layer/Data_Layer/#Data_Modification/Integration_with_Push_Services",
+            "Title": "Collaborative Editing",
+            "Name": "CollaborativeEditing",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Equivalents": "signalr, real time, live update",
+            "Modules": "devextreme-aspnet-data-nojquery,signalr",
+            "MvcAdditionalFiles": [
+              "/Views/DataGrid/CollaborativeEditingPartial.cshtml",
+              "/Controllers/ApiControllers/DataGridCollaborativeEditingController.cs",
+              "/Hubs/DataGridCollaborativeEditingHub.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "BackendFiles": [
+              "DataGridCollaborativeEditingController.cs",
+              "DataGridCollaborativeEditingHub.cs"
+            ]
+          },
+          {
+            "Title": "CRUD Operations",
+            "Name": "CRUDOperations",
+            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Equivalents": "refresh mode",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridWebApiController.cs",
+              "/Models/Northwind/InMemoryNorthwindContext.cs"
+            ],
+            "BackendFiles": [
+              "DataGridWebApiController.cs",
+              "InMemoryNorthwindContext.cs"
+            ]
+          },
+          {
+            "Title": "Customize Keyboard Navigation",
+            "Name": "CustomizeKeyboardNavigation",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Equivalents": "excel, keyboard navigation",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/State.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/SampleData/States.cs"
+            ]
+          },
+          {
+            "Title": "Batch Update Request",
+            "Name": "BatchUpdateRequest",
+            "DocUrl": "",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Equivalents": "",
+            "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridBatchUpdateWebApiController.cs",
+              "/Models/Northwind/InMemoryNorthwindContext.cs",
+              "/Models/DataGrid/DataChange.cs"
+            ],
+            "BackendFiles": [
+              "DataGridBatchUpdateWebApiController.cs",
+              "InMemoryNorthwindContext.cs"
+            ]
+          },
+          {
+            "Title": "Edit State Management",
+            "Name": "EditStateManagement",
+            "DocUrl": "",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Equivalents": "",
+            "Modules": "whatwg-fetch,vuex",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridWebApiController.cs",
+              "/Models/Northwind/InMemoryNorthwindContext.cs"
+            ]
+          },
+          {
+            "Title": "Custom New Record Position",
+            "Name": "CustomNewRecordPosition",
+            "DocUrl": "",
+            "Widget": "DataGrid",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Grouping",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Record Grouping",
+            "Name": "RecordGrouping",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridCustomersController.cs",
+              "/Models/Customer.cs",
+              "/Models/SampleData/Customers.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Remote Grouping",
+            "Name": "RemoteGrouping",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery"
+          }
+        ]
+      },
+      {
+        "Name": "Filtering and Sorting",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Multiple Sorting",
+            "Name": "MultipleSorting",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridMultipleSortingController.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Filtering",
+            "Name": "Filtering",
+            "DocUrl": "Guide/UI_Components/DataGrid/Filtering_and_Searching/",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridFilteringController.cs",
+              "/Models/OrderWithDelivery.cs",
+              "/Models/SampleData/OrdersWithDelivery.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Filtering API",
+            "Name": "FilteringAPI",
+            "Widget": "DataGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Filter Panel",
+            "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
+            "Name": "FilterPanel",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/OrdersWithCustomerInfo.cs",
+              "/Models/OrderWithCustomerInfo.cs",
+              "/Models/CustomerInfo.cs",
+              "/Models/ApplyFilterType.cs"
+            ]
+          },
+          {
+            "Title": "Column Header Filter",
+            "Name": "ColumnHeaderFilter",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Focused Row",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Focused Row",
+            "Name": "FocusedRow",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery"
+          }
+        ]
+      },
+      {
+        "Name": "Row Drag & Drop",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Local Reordering",
+            "Name": "LocalReordering",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/localReordering.js",
+              "/Models/RowReorderingTask.cs"
+            ]
+          },
+          {
+            "Title": "Remote Reordering",
+            "Name": "RemoteReordering",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridRowReorderingController.cs",
+              "/Models/RowReorderingTask.cs",
+              "/Models/SampleData/RowReorderingTasks.cs",
+              "/Models/DataGrid/InMemoryRowReorderingTasksDataContext.cs"
+            ],
+            "BackendFiles": [
+              "DataGridRowReorderingController.cs",
+              "InMemoryRowReorderingTasksDataContext.cs"
+            ]
+          },
+          {
+            "Title": "Drag & Drop Between Two Grids",
+            "Name": "DnDBetweenGrids",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "Equivalents": "Drag and Drop Between Two Grids",
+            "MvcAdditionalFiles": [
+              "/Views/DataGrid/DnDBetweenGridsPartial.cshtml",
+              "/Controllers/ApiControllers/DnDBetweenGridsController.cs",
+              "/Models/RowReorderingTask.cs",
+              "/Models/SampleData/RowReorderingTasks.cs",
+              "/Models/DataGrid/InMemoryRowReorderingTasksDataContext.cs",
+              "/Scripts/data/priorities.js"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Selection",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Row Selection",
+            "Name": "RowSelection",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Multiple Record Selection",
+            "Name": "MultipleRecordSelectionModes",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridSalesController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Multiple Record Selection API",
+            "Name": "MultipleRecordSelectionAPI",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Deferred Selection",
+            "Name": "DeferredSelection",
+            "Widget": "DataGrid",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Columns",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Column Customization",
+            "Name": "ColumnCustomization",
+            "Equivalents": "column chooser, fixed column, frozen column, pinned column, column fixing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Columns based on a Data Source",
+            "Name": "ColumnsBasedOnADataSource",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridColumnsController.cs",
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Multi-Level Headers (Bands)",
+            "Name": "MultiRowHeadersBands",
+            "Credits": "www.wikipedia.org",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CountriesPopulationAndGDP.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Resizing",
+            "Name": "ColumnResizing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/customers.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Command Column Customization",
+            "Name": "CommandColumnCustomization",
+            "Widget": "DataGrid",
+            "Equivalents": "button column",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeeData.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Chooser",
+            "Name": "ColumnChooser",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "State Persistence",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "State Persistence",
+            "Name": "StatePersistence",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Appearance",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Appearance",
+            "Name": "Appearance",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Right-To-Left Support",
+            "Equivalents": "RTL",
+            "Name": "RightToLeftSupport",
+            "DocUrl": "ApiReference/UI_Components/dxDataGrid/Configuration/#rtlEnabled",
+            "Credits": "www.wikipedia.org",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/EuropeanCountry.cs",
+              "/Models/SampleData/EuropeanCountries.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Templates",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Column Template",
+            "Name": "ColumnTemplate",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Row Template",
+            "Name": "RowTemplate",
+            "Widget": "DataGrid",
+            "Modules": "globalize--vue&react",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column 3rd Party Engine Template",
+            "Name": "Column3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "DataGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Row 3rd Party Engine Template",
+            "Name": "Row3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "DataGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Customization",
+            "Name": "CellCustomization",
+            "DocUrl": "Guide/UI_Components/DataGrid/Columns/Customize_Cells/#Customize_the_Appearance",
+            "Widget": "DataGrid",
+            "Modules": "globalize--vue&react",
+            "MvcAdditionalFiles": [
+              "/Models/Intraday.cs",
+              "/Models/SampleData/IntradayData.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Data Summaries",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Total Summaries",
+            "Name": "GridSummaries",
+            "Widget": "DataGrid",
+            "Modules": "globalize--vue&react",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridSummariesController.cs",
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Group Summaries",
+            "Name": "GroupSummaries",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridSummariesController.cs",
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Custom Summaries",
+            "Name": "CustomSummaries",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridCustomSummariesController.cs",
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Recalculate While Editing",
+            "Name": "RecalculateWhileEditing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Master-Detail",
+        "Equivalents": "preview row",
+        "Demos": [
+          {
+            "Title": "Master-Detail View",
+            "Name": "MasterDetailView",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridMasterDetailViewController.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/EmployeeTask.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Master-Detail API",
+            "Name": "MasterDetailAPI",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridMasterDetailAPIController.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Advanced Master-Detail View",
+            "Name": "AdvancedMasterDetailView",
+            "Widget": "DataGrid",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridAdvancedMasterDetailViewController.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Export to PDF",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "PDFOverview",
+            "Widget": "DataGrid",
+            "Modules": "jspdf",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Customization",
+            "Name": "PDFCellCustomization",
+            "Widget": "DataGrid",
+            "Modules": "jspdf",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/companies.js",
+              "/Models/Company.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Header and Footer",
+            "Name": "PDFHeaderAndFooter",
+            "Widget": "DataGrid",
+            "Modules": "jspdf",
+            "Credits": "www.wikipedia.org",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CountriesPopulationAndGDP.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Export Multiple Grids",
+            "Name": "PDFExportMultipleGrids",
+            "Widget": "DataGrid",
+            "Modules": "jspdf",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Export Images",
+            "Name": "PDFExportImages",
+            "Widget": "DataGrid",
+            "Modules": "jspdf",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeesEI.js"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Export to Excel",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "ExcelJSOverview",
+            "Widget": "DataGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Customization",
+            "Name": "ExcelJSCellCustomization",
+            "Widget": "DataGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/companies.js",
+              "/Models/Company.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Header and Footer",
+            "Name": "ExcelJSHeaderAndFooter",
+            "Widget": "DataGrid",
+            "Modules": "exceljs&file-saver",
+            "Credits": "www.wikipedia.org",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CountriesPopulationAndGDP.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Export Multiple Grids",
+            "Name": "ExcelJSExportMultipleGrids",
+            "Widget": "DataGrid",
+            "Modules": "exceljs&file-saver",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Export Images",
+            "Name": "ExcelJSExportImages",
+            "Widget": "DataGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeesEI.js"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Adaptability",
+        "Equivalents": "adaptive",
+        "Demos": [
+          {
+            "Title": "Grid Adaptability Overview",
+            "Name": "GridAdaptabilityOverview",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Adaptivity"
+          },
+          {
+            "Title": "Grid Columns Hiding Priority",
+            "Name": "GridColumnsHidingPriority",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Adaptivity"
+          }
+        ]
+      },
+      {
+        "Name": "Keyboard Navigation",
+        "Equivalents": "Accessibility, WCAG, Section 508",
+        "Demos": [
+          {
+            "Title": "Keyboard Navigation",
+            "Name": "KeyboardNavigation",
+            "DocUrl": "Guide/UI_Components/DataGrid/Keyboard_Support/",
+            "Widget": "DataGrid",
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Pivot Grid",
+    "Equivalents": "dxPivotGrid, dx-pivot-grid",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Simple Array",
+            "Name": "SimpleArray",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/sales.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "OLAP Data Source",
+            "Name": "OLAPDataSource",
+            "Widget": "PivotGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "Widget": "PivotGrid",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery"
+          }
+        ]
+      },
+      {
+        "Name": "Field Chooser",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Integrated Field Chooser",
+            "Name": "IntegratedFieldChooser",
+            "Widget": "PivotGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Standalone Field Chooser",
+            "Name": "StandaloneFieldChooser",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs",
+              "/Models/Layout.cs",
+              "/Models/SampleData/Layouts.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Features",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Field Panel",
+            "Name": "FieldPanel",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Header Filter",
+            "Name": "HeaderFilter",
+            "Widget": "PivotGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Running Totals",
+            "Name": "RunningTotals",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Summary Display Modes",
+            "Name": "SummaryDisplayModes",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Drill Down",
+            "Name": "DrillDown",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Virtual Scrolling",
+            "Name": "VirtualScrolling",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/SalesDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/SalesData.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Remote Virtual Scrolling",
+            "Name": "RemoteVirtualScrolling",
+            "Widget": "PivotGrid",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "State Persistence",
+            "Name": "StatePersistence",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Chart Integration",
+            "Name": "ChartIntegration",
+            "Widget": "PivotGrid",
+            "Modules": "globalize--vue&react",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Layout Customization",
+            "Name": "LayoutCustomization",
+            "Widget": "PivotGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Export to Excel",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "ExcelJSOverview",
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Customization",
+            "Name": "ExcelJSCellCustomization",
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Header and Footer",
+            "Name": "ExcelJsHeaderAndFooter",
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver",
+            "Credits": "www.wikipedia.org",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Tree List",
+    "Equivalents": "dxTreeList, dx-tree-list",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Simple Array: Plain Structure",
+            "Name": "SimpleArrayPlainStructure",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeesPS.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Simple Array: Hierarchical Structure",
+            "Name": "SimpleArrayHierarchicalStructure",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeesHS.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Load Data on Demand",
+            "Name": "LoadDataOnDemand",
+            "DocUrl": "",
+            "Widget": "TreeList",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListDataController.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "Equivalents": "webapi",
+            "Widget": "TreeList",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "BackendFiles": [
+              "TreeListTasksController.cs",
+              "InMemoryTasksDataContext.cs",
+              "EmployeeTask.cs"
+            ],
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Sorting",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Multiple Sorting",
+            "Name": "MultipleSorting",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Paging",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Paging",
+            "Name": "Paging",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Editing",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Row Editing",
+            "Name": "RowEditing",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/InMemoryEmployeesDataContext.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Editing",
+            "Name": "CellEditing",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Batch Editing",
+            "Name": "BatchEditing",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Form Editing",
+            "Name": "FormEditing",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/InMemoryEmployeesDataContext.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Popup Editing",
+            "Name": "PopupEditing",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/InMemoryEmployeesDataContext.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Customize Keyboard Navigation",
+            "Name": "CustomizeKeyboardNavigation",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/InMemoryEmployeesDataContext.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Node Drag & Drop",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Node Drag & Drop",
+            "Name": "LocalReordering",
+            "Widget": "TreeList",
+            "Equivalents": "Node Drag and Drop",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employees.js"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Focused Row",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Focused Row",
+            "Name": "FocusedRow",
+            "Widget": "TreeList",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery"
+          }
+        ]
+      },
+      {
+        "Name": "Selection",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Single Row Selection",
+            "Name": "SingleRowSelection",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Multiple Row Selection",
+            "Name": "MultipleRowSelection",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Filtering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Using Search Panel",
+            "Name": "UsingSearchPanel",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListTasksController.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/SampleData/EmployeeTasks.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Using Filter Row",
+            "Name": "UsingFilterRow",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Header Filter",
+            "Name": "ColumnHeaderFilter",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Filter Panel",
+            "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
+            "Name": "FilterPanel",
+            "Widget": "TreeList",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/OrdersWithCustomerInfo.cs",
+              "/Models/OrderWithCustomerInfo.cs",
+              "/Models/CustomerInfo.cs"
+            ]
+          },
+          {
+            "Title": "Filter Modes",
+            "Name": "FilterModes",
+            "Widget": "TreeList",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Column Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Column Chooser",
+            "Name": "ColumnChooser",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Reordering",
+            "Name": "Reordering",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Resizing",
+            "Name": "Resizing",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Fixing",
+            "Name": "ColumnFixing",
+            "Equivalents": "fixed column, frozen column, pinned column",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "State Persistence",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "State Persistence",
+            "Name": "StatePersistence",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Adaptability",
+        "Equivalents": "adaptive",
+        "Demos": [
+          {
+            "Title": "Adaptability",
+            "Name": "Adaptability",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Adaptivity"
+          }
+        ]
+      },
+      {
+        "Name": "Keyboard Navigation",
+        "Equivalents": "Accessibility, WCAG, Section 508",
+        "Demos": [
+          {
+            "Title": "Keyboard Navigation",
+            "Name": "KeyboardNavigation",
+            "DocUrl": "Guide/UI_Components/TreeList/Keyboard_Support/",
+            "Widget": "TreeList",
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Scheduler",
+    "Equivalents": "dxScheduler, dx-scheduler",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/Workout.cs",
+              "/Models/SampleData/Workouts.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Simple Array",
+            "Name": "SimpleArray",
+            "Widget": "Scheduler",
+            "DemoType": "Web"
+          },
+          {
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "Equivalents": "webapi",
+            "Widget": "Scheduler",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/Appointments.cs",
+              "/Models/InMemoryAppointmentsDataContext.cs",
+              "/Controllers/ApiControllers/SchedulerDataController.cs"
+            ],
+            "BackendFiles": [
+              "SchedulerDataController.cs",
+              "InMemoryAppointmentsDataContext"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "SignalR Service",
+            "Name": "SignalRService",
+            "Widget": "Scheduler",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery,signalr",
+            "Equivalents": "signalr, real time, live update, collaborative editing",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/SchedulerSignalRController.cs",
+              "/Hubs/SchedulerSignalRHub.cs",
+              "/Models/Appointment.cs",
+              "/Models/SampleData/Appointments.cs"
+            ],
+            "BackendFiles": [
+              "SchedulerSignalRController.cs",
+              "SchedulerSignalRHub.cs"
+            ]
+          },
+          {
+            "Title": "Google Calendar Integration",
+            "Name": "GoogleCalendarIntegration",
+            "Widget": "Scheduler",
+            "DemoType": "Web",
+            "Modules": "whatwg-fetch"
+          }
+        ]
+      },
+      {
+        "Name": "Views",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Basic Views",
+            "Name": "BasicViews",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/Appointments.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Timelines",
+            "Name": "Timelines",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/EmployeeTask.cs",
+              "/Models/SampleData/TimelineTasks.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Agenda",
+            "Name": "Agenda",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/AgendaTasks.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Features",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Current Time Indicator",
+            "Name": "CurrentTimeIndicator",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/DynamicAppointment.cs",
+              "/Models/DynamicAppointmentsResource.cs",
+              "/Models/SampleData/DynamicAppointments.cs",
+              "/Models/SampleData/DynamicAppointmentsResources.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Time Zone Support",
+            "Name": "TimeZonesSupport",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/Event.cs",
+              "/Models/SampleData/Events.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Recurring Appointments",
+            "Name": "RecurringAppointments",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/RecurringAppointment.cs",
+              "/Models/RecurringAppointmentsResource.cs",
+              "/Models/SampleData/RecurringAppointments.cs",
+              "/Models/SampleData/RecurringAppointmentsResources.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Editing",
+            "Name": "Editing",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/Appointments.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Custom Drag & Drop",
+            "Name": "CustomDragAndDrop",
+            "Widget": "Scheduler",
+            "Equivalents": "Custom Drag and Drop",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/Appointments.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Resources",
+            "Name": "Resources",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/AppointmentWithResources.cs",
+              "/Models/AssigneeResource.cs",
+              "/Models/RoomResource.cs",
+              "/Models/PriorityResource.cs",
+              "/Models/SampleData/AppointmentsWithResources.cs",
+              "/Models/SampleData/AssigneeResources.cs",
+              "/Models/SampleData/RoomResources.cs",
+              "/Models/SampleData/PriorityResources.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "All Day Panel Mode",
+            "Name": "AllDayPanelMode",
+            "Widget": "Scheduler",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Work Shifts",
+            "Name": "WorkShifts",
+            "DocUrl": "",
+            "Widget": "Scheduler",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Virtual Scrolling",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Virtual Scrolling",
+            "Name": "VirtualScrolling",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Grouping",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Group Orientation",
+            "Name": "GroupOrientation",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/EmployeeTask.cs",
+              "/Models/SampleData/Tasks.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Grouping By Date",
+            "Name": "GroupByDate",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/EmployeeTask.cs",
+              "/Models/SampleData/GroupByDateTasks.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Custom Templates",
+            "Name": "CustomTemplates",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Scheduler",
+            "Modules": "globalize--vue&react",
+            "MvcAdditionalFiles": [
+              "/Views/Scheduler/_AppointmentTooltipTemplate.cshtml",
+              "/Models/Movie.cs",
+              "/Models/Theatre.cs",
+              "/Models/CinemaDataItem.cs",
+              "/Models/SampleData/Movies.cs",
+              "/Models/SampleData/Theatres.cs",
+              "/Models/SampleData/CinemaData.cs",
+              "/ViewModels/SchedulerViewModel.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Disabled Date/Time Ranges",
+            "Name": "CellTemplates",
+            "Widget": "Scheduler",
+            "Equivalents": "customization, disable dates, work hours",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/AppointmentsWorkHours.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Customize Individual Views",
+            "Name": "CustomizeIndividualViews",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Views/Scheduler/_DateCellTemplate.cshtml",
+              "/Models/Job.cs",
+              "/Models/SampleData/Jobs.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Increased View Duration",
+            "Name": "IncreaseViewDuration",
+            "DocUrl": "ApiReference/UI_Components/dxScheduler/Configuration/views/#intervalCount",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/EmployeeTask.cs",
+              "/Models/SampleData/TimelineTasks.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Limit the Appointment Count per Cell",
+            "Name": "LimitAppointmentCountPerCell",
+            "Widget": "Scheduler",
+            "Modules": "globalize--vue&react",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/LimitAppointmentCountPerCellAppointments.cs",
+              "/Models/SampleData/AdaptiveAppointmentsResources.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Context Menu Integration",
+            "Name": "ContextMenuIntegration",
+            "DocUrl": "ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentContextMenu",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/RecurringAppointment.cs",
+              "/Models/RecurringAppointmentsResource.cs",
+              "/Models/ContextMenuItem.cs",
+              "/Models/SampleData/RecurringAppointments.cs",
+              "/Models/SampleData/RecurringAppointmentsResources.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Adaptability",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Adaptability",
+            "Name": "Adaptability",
+            "Widget": "Scheduler",
+            "DemoType": "Mobile",
+            "MvcAdditionalFiles": [
+              "/Models/AdaptabilityAppointment.cs",
+              "/Models/AdaptabilityAppointmentsResource.cs",
+              "/Models/PriorityResource.cs",
+              "/Models/SampleData/AdaptabilityAppointments.cs",
+              "/Models/SampleData/PriorityResources.cs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Html Editor",
+    "Equivalents": "dxHtmlEditor, dx-htmleditor",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/HtmlEditor/Overview/",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Output Formats",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Output Formats",
+            "Name": "OutputFormats",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Modules": "showdown&turndown"
+          }
+        ]
+      },
+      {
+        "Name": "Toolbar Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Mentions",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Mentions",
+            "Name": "Mentions",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/EmployeeMention.cs",
+              "/Models/SampleData/EmployeeMentions.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Tables",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Tables",
+            "Name": "Tables",
+            "Widget": "HtmlEditor",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Diagram",
+    "Equivalents": "dxDiagram, dx-diagram, graph, flow, process, orgchart",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Node and Edge Arrays",
+            "Name": "NodesAndEdgesArrays",
+            "DocUrl": "Guide/UI_Components/Diagram/Data_Binding/#Node_and_Edge_Arrays",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Node List: Linear Array",
+            "Name": "NodesArrayPlainStructure",
+            "DocUrl": "Guide/UI_Components/Diagram/Data_Binding/#Linear_Array",
+            "Widget": "Diagram",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employees.js"
+            ],
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Node List: Hierarchical Array",
+            "Name": "NodesArrayHierarchicalStructure",
+            "DocUrl": "Guide/UI_Components/Diagram/Data_Binding/#Hierarchical_Array",
+            "Widget": "Diagram",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employees.js"
+            ],
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Advanced Data Binding",
+            "Name": "AdvancedDataBinding",
+            "DocUrl": "Guide/UI_Components/Diagram/Data_Binding/#Data_Binding_Options",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "Equivalents": "webapi",
+            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
+            "MvcAdditionalFiles": [
+              "/Models/Diagram/Employee.cs",
+              "/Models/Diagram/InMemoryEmployeesDataContext.cs",
+              "/Controllers/ApiControllers/DiagramEmployeesController.cs"
+            ],
+            "BackendFiles": [
+              "DiagramEmployeesController.cs",
+              "InMemoryEmployeesDataContext.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Featured Shapes",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Containers",
+            "Name": "Containers",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "OrgChart Shapes",
+            "Name": "ImagesInShapes",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      },
+      {
+        "Name": "Custom Shapes",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Background Images",
+            "Name": "CustomShapesWithIcons",
+            "DocUrl": "Guide/UI_Components/Diagram/Custom_Shapes/#Shapes_with_Custom_Background_Images​​​​​​​",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Shapes with Base Type",
+            "Name": "CustomShapesWithTexts",
+            "DocUrl": "Guide/UI_Components/Diagram/Custom_Shapes/#Shapes_with_Base_Type​​​​​​​",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Templates",
+            "Name": "CustomShapesWithTemplates",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Templates with Editing",
+            "Name": "CustomShapesWithTemplatesWithEditing",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      },
+      {
+        "Name": "Document Capabilities",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Read Only Mode",
+            "Name": "ReadOnly",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Simple View",
+            "Name": "SimpleView",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      },
+      {
+        "Name": "User Interaction",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Item Selection",
+            "Name": "ItemSelection",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Editing Restrictions",
+            "Name": "OperationRestrictions",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      },
+      {
+        "Name": "UI Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "UI Customization",
+            "Name": "UICustomization",
+            "DocUrl": "Guide/UI_Components/Diagram/Diagram_Tools/",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          }
+        ]
+      },
+      {
+        "Name": "Adaptability",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Adaptability",
+            "Name": "Adaptability",
+            "Widget": "Diagram",
+            "DemoType": "Adaptivity",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Charts",
+    "Equivalents": "dxChart, dx-chart, graph",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ParetoChartData.cs",
+              "/Models/ParetoChartData.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Simple Array",
+            "Name": "SimpleArray",
+            "Credits": "www.datahub.io",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/populationData.js"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "JSON Data",
+            "Name": "AjaxRequest",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "ajax request"
+          },
+          {
+            "Title": "Client-Side Data Processing",
+            "Name": "ClientSideDataProcessing",
+            "Credits": "www.kaggle.com",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/palette.js",
+              "/Models/Weather.cs",
+              "/Models/SampleData/MonthWeather.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Server-Side Data Processing",
+            "Name": "ServerSideDataProcessing",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/MonthNames.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Dynamic Series from the DataSource",
+            "Name": "SeriesTemplates",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/OilProduction.cs",
+              "/Models/SampleData/OilProductionData.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "seriesTemplate, customizeSeries"
+          },
+          {
+            "Title": "SignalR Service",
+            "Name": "SignalRService",
+            "Widget": "Charts",
+            "Equivalents": "signalr, real time, live update, aggregation, calculate, multiple panes, pane size, tooltip template",
+            "Modules": "signalr",
+            "MvcAdditionalFiles": [
+              "/Hubs/StockTickDataHub.cs",
+              "/Models/SignalRTickData/TickDataService.cs",
+              "/Models/SignalRTickData/TickItem.cs"
+            ],
+            "BackendFiles": [
+              "TickDataService.cs",
+              "StockTickDataHub.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Load Data On Demand",
+            "Name": "LoadDataOnDemand",
+            "Credits": "www.kaggle.com",
+            "Widget": "Charts",
+            "Equivalents": "endless uploading, partial data uploading, adding data on demand, visualRange",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Models/TemperatureItem.cs",
+              "/Models/SampleData/ServiceRepository.cs",
+              "/Controllers/ApiControllers/TemperatureDataController.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Area Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Area",
+            "Name": "Area",
+            "Credits": "wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "stackedarea, fullstackedarea"
+          },
+          {
+            "Title": "Spline Area",
+            "Name": "SplineArea",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "stackedsplinearea, fullstackedsplinearea"
+          },
+          {
+            "Title": "Step Area",
+            "Name": "StepArea",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/AustralianOlympicMedals.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Step Area with Gaps",
+            "Name": "NullPointSupport",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Bar Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Standard Bar",
+            "Name": "StandardBar",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Side-by-Side Bar",
+            "Name": "SideBySideBar",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Stacked Bar",
+            "Name": "StackedBar",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Full Stacked Bar",
+            "Name": "FullStackedBar",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Side-by-Side Stacked Bar",
+            "Name": "SideBySideStackedBar",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Drill-Down Chart",
+            "Name": "ChartsDrillDown",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/WorldPopulationDataController.cs",
+              "/Models/SampleData/WorldPopulationData.cs"
+            ]
+          },
+          {
+            "Title": "Side-by-Side Full-Stacked Bar",
+            "Name": "SideBySideFullStackedBar",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "fullStackedBar"
+          },
+          {
+            "Title": "Auto-Calculated Bar Width",
+            "Name": "AutoCalculatedBarWidth",
+            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#ignoreEmptyPoints",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "ignoreEmptyPoints"
+          },
+          {
+            "Title": "Custom Bar Width",
+            "Name": "CustomBarWidth",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "barPadding"
+          },
+          {
+            "Title": "Color Each Bar Differently",
+            "Name": "ColorEachBar",
+            "DocUrl": "Guide/UI_Components/Chart/Data_Binding/Bind_Series_to_Data/#Using_a_Series_Template",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "seriesTemplate, ignoreEmptyPoints"
+          },
+          {
+            "Title": "Customize Points and Labels",
+            "Name": "CustomizePointsAndLabels",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "customizePoint, customizeLabel, customizeText, constantLines"
+          },
+          {
+            "Title": "Scale Breaks",
+            "Name": "ScaleBreaks",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Bi-Directional Bar Chart",
+            "Name": "BiDirectionalBarChart",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "stackedbar"
+          },
+          {
+            "Title": "Custom Annotations",
+            "Name": "CustomAnnotations",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "",
+            "Credits": "en.wikipedia.org"
+          }
+        ]
+      },
+      {
+        "Name": "Bullet Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Bullets",
+            "Name": "SimpleBullets",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "scaleValue"
+          }
+        ]
+      },
+      {
+        "Name": "Doughnut Charts",
+        "HasCustomImage": true,
+        "Equivalents": "Donut, dxPieChart, dx-pie-chart",
+        "Demos": [
+          {
+            "Title": "Doughnut",
+            "Name": "Doughnut",
+            "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "formatNumber, connector"
+          },
+          {
+            "Title": "Doughnut Selection",
+            "Name": "DoughnutSelection",
+            "DocUrl": "Guide/UI_Components/PieChart/Series/Selection/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "hoverStyle"
+          },
+          {
+            "Title": "Doughnut with Top N Series",
+            "Name": "DoughnutWithTopNSeries",
+            "DocUrl": "Guide/UI_Components/PieChart/Series/Group_Smaller_Points/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "grouping, connector"
+          },
+          {
+            "Title": "Doughnut with Multiple Series",
+            "Name": "PieWithMultipleSeries",
+            "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "innerRadius"
+          },
+          {
+            "Title": "Custom Label in the Center",
+            "Name": "DoughnutWithCustomLabelInCenter",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/DoughnutWithCustomLabelInCenterData.cs"
+            ],
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "Hole, custom label, total in center, title in center"
+          }
+        ]
+      },
+      {
+        "Name": "Financial Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Stock",
+            "Name": "Stock",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/FinancialData.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "workdaysOnly, tickInterval, stock price, reduction"
+          },
+          {
+            "Title": "Candlestick",
+            "Name": "Candlestick",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/FinancialData.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "tickInterval, stock price, reduction"
+          },
+          {
+            "Title": "Points Aggregation",
+            "Name": "PointsAggregationFinancialChart",
+            "Credits": "www.kaggle.com",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/StockPrice.cs",
+              "/Models/SampleData/StockPrices.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "candleStick, RangeSelector, dxRangeSelector, minorTickInterval, aggregationInterval, snapToTicks, zoomArgument"
+          },
+          {
+            "Title": "Chart with Annotations",
+            "Name": "Annotation",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/AnnotationData.cs"
+            ],
+            "Credits": "https://www.wikipedia.org/"
+          }
+        ]
+      },
+      {
+        "Name": "Line Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Line",
+            "Name": "Line",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "stackedline, fullstackedline"
+          },
+          {
+            "Title": "Spline",
+            "Name": "Spline",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "stackedspline, fullstackedspline, allowDecimals"
+          },
+          {
+            "Title": "Resolved Axis Label Overlapping",
+            "Name": "AxisLabelsOverlapping",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "overlappingBehavior"
+          },
+          {
+            "Title": "Hover Mode",
+            "Name": "HoverMode",
+            "DocUrl": "Guide/UI_Components/Chart/Series_Points/Hover/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Step Line",
+            "Name": "StepLine",
+            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Line_Series/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/AustralianOlympicMedals.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "stepline"
+          },
+          {
+            "Title": "Crosshair",
+            "Name": "Crosshair",
+            "DocUrl": "Guide/UI_Components/Chart/Crosshair/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Point Image",
+            "Name": "PointImage",
+            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/point/image/",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "customizePoint, allowDecimals"
+          },
+          {
+            "Title": "Logarithmic vs Linear Axes",
+            "Name": "LogarithmicVsLinearAxes",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Pie Charts",
+        "HasCustomImage": true,
+        "Equivalents": "dxPieChart, dx-pie-chart",
+        "Demos": [
+          {
+            "Title": "Pie",
+            "Name": "Pie",
+            "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pies with Equal Sizes",
+            "Name": "PiesWithEqualSize",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "sizeGroup"
+          },
+          {
+            "Title": "Pie with Custom Labels",
+            "Name": "PieWithCustomLabels",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pie with Small Values Grouped",
+            "Name": "PieWithSmallValuesGrouped",
+            "DocUrl": "Guide/UI_Components/PieChart/Series/Group_Smaller_Points/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/LanguagesPercentage.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "grouping"
+          },
+          {
+            "Title": "Pie with Resolved Label Overlapping",
+            "Name": "PieWithResolvedLabelOverlapping",
+            "DocUrl": "Guide/UI_Components/PieChart/Point_Labels/Resolve_Overlapping/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "resolveLabelOverlapping"
+          },
+          {
+            "Title": "Palette",
+            "Name": "Palette",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pie with Annotations",
+            "Name": "PieWithAnnotations",
+            "DocUrl": "",
+            "Widget": "Charts",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [
+              "/Models/MedalistData.cs",
+              "/Models/MedalAnnotationInfo.cs",
+              "/Models/SampleData/IceHockeyGoldMedalistsData.cs",
+              "/Models/SampleData/MedalAnnotations.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pie with Custom Fill Styles",
+            "Name": "PieWithCustomStyles",
+            "DocUrl": "",
+            "Widget": "Charts",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Point Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Scatter",
+            "Name": "Scatter",
+            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Scatter_Series/",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ScatterData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Bubble",
+            "Name": "Bubble",
+            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bubble_Series/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Scatter Logarithmic Axis",
+            "Name": "LogarithmicAxis",
+            "DocUrl": "Guide/UI_Components/Chart/Axes/Overview/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Axis Position",
+            "Name": "AxisCustomPosition",
+            "DocUrl": "",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CustomPositionData.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Polar and Radar Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Continuous Data",
+            "Name": "ContinuousData",
+            "DocUrl": "Guide/UI_Components/PolarChart/Series_Types/#Line",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Discrete Data",
+            "Name": "DiscreteData",
+            "DocUrl": "Guide/UI_Components/PolarChart/Series_Types/#Scatter",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Spider Web",
+            "Name": "SpiderWeb",
+            "DocUrl": "ApiReference/UI_Components/dxPolarChart/Configuration/#useSpiderWeb",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Wind Rose",
+            "Name": "WindRose",
+            "DocUrl": "ApiReference/UI_Components/dxPolarChart/Configuration/argumentAxis/#discreteAxisDivisionMode",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/WindRoseItem.cs",
+              "/Models/SampleData/WindRoseData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Periodic Data",
+            "Name": "PeriodicData",
+            "DocUrl": "ApiReference/UI_Components/dxPolarChart/Configuration/argumentAxis/#period",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Inverted Chart",
+            "Name": "InvertedChart",
+            "DocUrl": "ApiReference/UI_Components/dxPolarChart/Configuration/valueAxis/#inverted",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "angle"
+          },
+          {
+            "Title": "Polar Chart with Annotations",
+            "Name": "PolarChartAnnotations",
+            "DocUrl": "",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/DiscreteScaleTemperature.cs",
+              "/Models/SampleData/DiscreteScaleTemperatures.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Range Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Range Bar",
+            "Name": "RangeBar",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "rangeBar"
+          },
+          {
+            "Title": "Timeline Chart",
+            "Name": "Timeline",
+            "Credits": "https://en.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Range Area",
+            "Name": "RangeArea",
+            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Range_Series/",
+            "Credits": "www.kaggle.com",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "rangeArea"
+          }
+        ]
+      },
+      {
+        "Name": "Sparkline Charts",
+        "HasCustomImage": true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Sparklines",
+            "Name": "SimpleSparklines",
+            "DocUrl": "Guide/UI_Components/Sparkline/Series_Types/",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/MonthlyPrice.cs",
+              "/Models/SampleData/MonthlyPrices.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Area Sparklines",
+            "Name": "AreaSparklines",
+            "DocUrl": "Guide/UI_Components/Sparkline/Series_Types/#Area",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/MonthlyPrice.cs",
+              "/Models/SampleData/MonthlyPrices.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Bar Sparklines",
+            "Name": "BarSparklines",
+            "DocUrl": "Guide/UI_Components/Sparkline/Series_Types/#Bar",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/MonthlyPrice.cs",
+              "/Models/SampleData/MonthlyPrices.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Winloss Sparklines",
+            "Name": "WinlossSparklines",
+            "DocUrl": "Guide/UI_Components/Sparkline/Series_Types/#Win-Loss",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/MonthlyPrice.cs",
+              "/Models/SampleData/MonthlyPrices.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Tree Map",
+        "HasCustomImage": true,
+        "Equivalents": "dxTreeMap, dx-tree-map",
+        "Demos": [
+          {
+            "Title": "Hierarchical Data Structure",
+            "Name": "HierarchicalDataStructure",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Plain Data Structure",
+            "Name": "FlatDataStructure",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Tiling Algorithms",
+            "Name": "TilingAlgorithms",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "layoutAlgorithm"
+          },
+          {
+            "Title": "Colorization",
+            "Name": "Colorization",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "colorizeGroups, colorCode"
+          },
+          {
+            "Title": "Drill Down",
+            "Name": "DrillDown",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/CityPopulation.cs",
+              "/Models/CountryPopulation.cs",
+              "/Models/ContinentPopulation.cs",
+              "/Models/SampleData/ContinentsPopulation.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "interactWithGroup"
+          }
+        ]
+      },
+      {
+        "Name": "Funnel and Pyramid Charts",
+        "HasCustomImage": true,
+        "Equivalents": "dxFunnel, dx-funnel",
+        "Demos": [
+          {
+            "Title": "Funnel Chart",
+            "Name": "FunnelChart",
+            "DocUrl": "Guide/UI_Components/Funnel/Overview/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pyramid Chart",
+            "Name": "PyramidChart",
+            "DocUrl": "Guide/UI_Components/Funnel/Pyramid_Chart/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Sankey Chart",
+        "HasCustomImage": true,
+        "Equivalents": "dxSankey, dx-sankey",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "SankeyChart",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Combinations",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Multiple Axes",
+            "Name": "MultipleAxes",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Multiple Panes",
+            "Name": "MultiplePanes",
+            "DocUrl": "Guide/UI_Components/Chart/Panes/Multi-Pane_Chart/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Points Aggregation",
+            "Name": "PointsAggregation",
+            "DocUrl": "Guide/UI_Components/Chart/Data_Aggregation/",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/WeatherIndicator.cs",
+              "/Models/SampleData/WeatherIndicators.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "aggregationInterval"
+          },
+          {
+            "Title": "Error Bars",
+            "Name": "ErrorBars",
+            "DocUrl": "Guide/UI_Components/Chart/Error_Bars/",
+            "Credits": "www.wikipedia.org",
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": "valueErrorBar"
+          },
+          {
+            "Title": "Pareto Chart",
+            "Name": "ParetoChart",
+            "Widget": "Charts",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ParetoChartData.cs",
+              "/Models/ParetoChartData.cs"
+            ],
+            "DemoType": "Viz",
+            "Equivalents": "showZero, constantLines"
+          },
+          {
+            "Title": "Custom Legend Markers",
+            "Name": "CustomLegendMarkers",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CustomLegendMarkersSampleData.cs"
+            ],
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": ""
+          },
+          {
+            "Title": "Discrete Aggregation",
+            "Name": "DiscreteAggregation",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Axis Label Templates",
+            "Name": "AxisLabelsTemplates",
+            "Widget": "Charts",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Strips",
+            "Name": "Strips",
+            "DocUrl": "Guide/UI_Components/Chart/Strips/",
+            "Widget": "Charts",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "More Features",
+        "Equivalents": "",
+        "Groups": [
+          {
+            "Name": "Export",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Export and Printing API",
+                "Name": "ExportAndPrintingAPI",
+                "Credits": "en.wikipedia.org",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Export Several Charts",
+                "Name": "ExportSeveralCharts",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Export Custom Markup",
+                "Name": "ExportCustomMarkup",
+                "Widget": "Charts",
+                "DemoType": "Viz",
+                "Modules": "canvg"
+              }
+            ]
+          },
+          {
+            "Name": "Selection",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Selection",
+                "Name": "Selection",
+                "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Multiple Series Selection",
+                "Name": "MultipleSeriesSelection",
+                "DocUrl": "Guide/UI_Components/Chart/Series/Selection/",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Multiple Point Selection",
+                "Name": "MultiplePointSelection",
+                "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
+                "Credits": "www.wikipedia.org",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "API - Select a Point",
+                "Name": "APISelectAPoint",
+                "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
+                "Widget": "Charts",
+                "DemoType": "Viz",
+                "Equivalents": "hatching, rotated"
+              }
+            ]
+          },
+          {
+            "Name": "Tooltips",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "API - Display a Tooltip",
+                "Name": "APIDisplayATooltip",
+                "DocUrl": "Guide/UI_Components/Chart/Tooltips/Show_and_Hide_a_Tooltip/",
+                "Credits": "www.wikipedia.org",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Tooltips: HTML Markup Support",
+                "Name": "TooltipHTMLSupport",
+                "Credits": "en.wikipedia.org",
+                "Widget": "Charts",
+                "DemoType": "Viz",
+                "Equivalents": "tooltip template"
+              }
+            ]
+          },
+          {
+            "Name": "Zooming",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Zooming on Area Selection",
+                "Name": "ZoomingOnAreaSelection",
+                "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
+                "Widget": "Charts",
+                "DemoType": "Viz",
+                "Equivalents": "zoomAndPan, seriesTemplate, resetVisualRange",
+                "MvcAdditionalFiles": [
+                  "/Content/SampleData/Birthlife.json"
+                ]
+              },
+              {
+                "Title": "Zooming and Panning",
+                "Name": "ZoomingAndScrolling",
+                "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
+                "Widget": "Charts",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/PointsData.cs"
+                ],
+                "DemoType": "Viz",
+                "Equivalents": "visualRange, zoomAndPan, scrolling"
+              },
+              {
+                "Title": "Zooming and Panning API",
+                "Name": "ZoomingAndScrollingAPI",
+                "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
+                "Widget": "Charts",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/PointsData.cs"
+                ],
+                "DemoType": "Viz",
+                "Equivalents": "visualRange, rangeSelector, scrolling"
+              },
+              {
+                "Title": "Discrete Axis Zooming and Panning",
+                "Name": "DiscreteAxisZoomingAndScrolling",
+                "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
+                "Widget": "Charts",
+                "DemoType": "Viz",
+                "Equivalents": "orientation, rangeSelector, visualRange, legend, scrolling"
+              },
+              {
+                "Title": "Polar Chart Zooming and Panning API",
+                "Name": "PolarChartZoomingAndScrollingAPI",
+                "Widget": "Charts",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/StochasticData.cs"
+                ],
+                "DemoType": "Viz",
+                "Equivalents": "visualRange, rangeSelector, scrolling"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Gantt",
+    "Equivalents": "dxGantt, dx-gantt",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/Gantt/Getting_Started_with_Gantt/",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Data",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Data Binding and Editing",
+            "Name": "DataBinding",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Validation",
+            "Name": "Validation",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "UI Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Chart Appearance",
+            "Name": "ChartAppearance",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Task Template",
+            "Name": "TaskTemplate",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Toolbar",
+            "Name": "Toolbar",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Context Menu",
+            "Name": "ContextMenu",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Strip Lines",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Strip Lines",
+            "Name": "StripLines",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Export to PDF",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Export To PDF",
+            "Name": "ExportToPDF",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "Modules": "jspdf&jspdf-autotable",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Sorting",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Sorting",
+            "Name": "Sorting",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Filtering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Filter Row",
+            "Name": "FilterRow",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Header Filter",
+            "Name": "HeaderFilter",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Gauges",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "dxLinearGauge, dx-linear-gauge, dxBarGauge, dx-bar-gauge",
+        "Demos": [
+          {
+            "Title": "Update Circular Gauge Data at Runtime",
+            "Name": "UpdateCircularGaugeDataAtRuntime",
+            "DocUrl": "ApiReference/UI_Components/dxCircularGauge/",
+            "Widget": "Gauges",
+            "MvcAdditionalFiles": [
+              "/Models/Season.cs",
+              "/Models/SampleData/GaugeSeasonsData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Update Linear Gauge Data at Runtime",
+            "Name": "UpdateLinearGaugeDataAtRuntime",
+            "DocUrl": "ApiReference/UI_Components/dxLinearGauge/",
+            "Widget": "Gauges",
+            "MvcAdditionalFiles": [
+              "/Models/City.cs",
+              "/Models/ClimateData.cs",
+              "/Models/SampleData/GaugeCitiesData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Update Bar Gauge Data at Runtime",
+            "Name": "UpdateBarGaugeDataAtRuntime",
+            "DocUrl": "ApiReference/UI_Components/dxBarGauge/",
+            "Widget": "Gauges",
+            "MvcAdditionalFiles": [
+              "/Models/Color.cs",
+              "/Models/SampleData/Colors.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Bar Gauge",
+        "HasCustomImage": true,
+        "Equivalents": "dxBarGauge, dx-bar-gauge",
+        "Demos": [
+          {
+            "Title": "Labels Customization",
+            "Name": "LabelsCustomization",
+            "DocUrl": "Guide/UI_Components/BarGauge/Visual_Elements/#Labels",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Palette",
+            "Name": "Palette",
+            "DocUrl": "Guide/UI_Components/LinearGauge/Visual_Elements/#Range_Container",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Tooltip and Legend",
+            "Name": "Tooltip",
+            "DocUrl": "Guide/UI_Components/BarGauge/Visual_Elements/#Tooltips",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Variable Number of Bars",
+            "Name": "VariableNumberOfBars",
+            "DocUrl": "ApiReference/UI_Components/dxBarGauge/Methods/#valuesnewValues",
+            "Widget": "Gauges",
+            "MvcAdditionalFiles": [
+              "/Models/GaugeProduct.cs",
+              "/Models/SampleData/GaugeProducts.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Circular Gauge",
+        "HasCustomImage": true,
+        "Equivalents": "dxCircularGauge, dx-circular-gauge",
+        "Demos": [
+          {
+            "Title": "Palette for Ranges",
+            "Name": "PaletteForRanges",
+            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Range_Container",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Scale Minor Ticks",
+            "Name": "ScaleMinorTicks",
+            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Scale_Ticks",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Scale Label Formatting",
+            "Name": "ScaleLabelFormatting",
+            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Scale_Labels",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Different Value Indicator Types",
+            "Name": "DifferentValueIndicatorTypes",
+            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Value_Indicator",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Different Subvalue Indicator Types",
+            "Name": "DifferentSubvalueIndicatorTypes",
+            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Subvalue_Indicators",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Subvalue Indicator Text Formatting",
+            "Name": "SubvalueIndicatorTextFormatting",
+            "DocUrl": "ApiReference/UI_Components/dxCircularGauge/Indicator_Types/TextCloud/text/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Layout",
+            "Name": "CustomLayout",
+            "DocUrl": "ApiReference/UI_Components/dxCircularGauge/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Angles Customization",
+            "Name": "AnglesCustomization",
+            "DocUrl": "ApiReference/UI_Components/dxCircularGauge/Configuration/geometry/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Title and Center Label Customization",
+            "Name": "GaugeTitleCustomized",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Gauge Tooltip",
+            "Name": "GaugeTooltip",
+            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Tooltips",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Value Indicators API",
+            "Name": "ValueIndicatorsAPI",
+            "DocUrl": "ApiReference/UI_Components/dxCircularGauge/Methods/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Linear Gauge",
+        "HasCustomImage": true,
+        "Equivalents": "dxLinearGauge, dx-linear-gauge",
+        "Demos": [
+          {
+            "Title": "Scale Custom Tick Interval",
+            "Name": "ScaleCustomTickInterval",
+            "DocUrl": "Guide/UI_Components/LinearGauge/Visual_Elements/#Scale_Ticks",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Scale Custom Tick Values",
+            "Name": "ScaleCustomTickValues",
+            "DocUrl": "Guide/UI_Components/LinearGauge/Visual_Elements/#Scale_Ticks",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Different Value Indicator Types",
+            "Name": "DifferentValueIndicatorTypesLinearGauge",
+            "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Indicator_Types/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Different Subvalue Indicator Types",
+            "Name": "DifferentSubvalueIndicatorTypesLinearGauge",
+            "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Indicator_Types/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Base Value for Range Bar",
+            "Name": "BaseValueForRangeBar",
+            "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Indicator_Types/RangeBar/#baseValue",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Layout",
+            "Name": "CustomLayoutLinearGauge",
+            "DocUrl": "ApiReference/UI_Components/dxLinearGauge/",
+            "Widget": "Gauges",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Variable Number of Subvalue Indicators",
+            "Name": "VariableNumberOfSubvalueIndicators",
+            "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Methods/",
+            "Widget": "Gauges",
+            "MvcAdditionalFiles": [
+              "/Models/SubvalueIndicator.cs",
+              "/Models/SampleData/SubvalueIndicators.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Navigation",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "NavigationOverview",
+            "DocUrl": "",
+            "Widget": "Common",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ContinentsInfo.cs",
+              "/Models/ContinentInfo.cs",
+              "/Models/CityInfo.cs",
+              "/Models/CountryInfo.cs",
+              "/Models/Details.cs"
+            ],
+            "Credits": "www.wikipedia.org",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Accordion",
+        "Breadcrumb": true,
+        "Equivalents": "dxAccordion, dx-accordion",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Accordion",
+            "MvcAdditionalFiles": [
+              "/Models/Company.cs",
+              "/Models/SampleData/Companies.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Menu",
+        "Breadcrumb": true,
+        "Equivalents": "dxMenu, dx-menu",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Menu",
+            "MvcAdditionalFiles": [
+              "/Models/MenuItem.cs",
+              "/Models/SampleData/MenuData.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Multi View",
+        "Breadcrumb": true,
+        "Equivalents": "MultiView, dxMultiView, dx-multi-view",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "MultiView",
+            "MvcAdditionalFiles": [
+              "/Models/Store.cs",
+              "/Models/SampleData/Stores.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Drawer",
+        "Breadcrumb": true,
+        "Equivalents": "Drawer, dxDrawer, dx-drawer",
+        "Demos": [
+          {
+            "Title": "Left or Right Position",
+            "Name": "LeftOrRightPosition",
+            "Widget": "Drawer",
+            "Modules": "html-react-parser",
+            "MvcAdditionalFiles": [
+              "/Models/NavigationItemWithIcon.cs",
+              "/Models/SampleData/NavigationItemsWithIcon.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Top or Bottom Position",
+            "Name": "TopOrBottomPosition",
+            "Widget": "Drawer",
+            "Modules": "html-react-parser",
+            "MvcAdditionalFiles": [
+              "/Models/NavigationItem.cs",
+              "/Models/SampleData/NavigationItems.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Tab Panel",
+        "Breadcrumb": true,
+        "Equivalents": "TabPanel, dxTabPanel, dx-tab-panel",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "TabPanel",
+            "MvcAdditionalFiles": [
+              "/Models/TabPanelItem.cs",
+              "/Models/TaskItem.cs",
+              "/Models/SampleData/TabPanelData.cs"
+            ]
+          },
+          {
+            "Title": "Tab Drag & Drop",
+            "Name": "SortableClosableTabs",
+            "Widget": "TabPanel",
+            "Equivalents": "Tab Drag and Drop",
+            "MvcAdditionalFiles": [
+              "/Views/TabPanel/_SortableTabPanel.cshtml",
+              "/Controllers/ApiControllers/DataGridMasterDetailViewController.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/EmployeeTask.cs"
+            ]
+          },
+          {
+            "Title": "Templates",
+            "Name": "Templates",
+            "Widget": "TabPanel",
+            "MvcAdditionalFiles": [
+              "/Models/Company.cs",
+              "/Models/SampleData/TabPanelData.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Tabs",
+        "Breadcrumb": true,
+        "Equivalents": "TabBar, Segmented Control, dxTabs, dx-tabs",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Tabs"
+          },
+          {
+            "Title": "Selection",
+            "Name": "Selection",
+            "DocUrl": "",
+            "Widget": "Tabs",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Toolbar",
+        "Breadcrumb": true,
+        "Equivalents": "ActionBar, AppBar, dx-toolbar, dxToolbar",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Toolbar",
+            "MvcAdditionalFiles": [
+              "/Models/Product.cs",
+              "/Models/SampleData/Products.cs"
+            ]
+          },
+          {
+            "Title": "Adaptability",
+            "Name": "Adaptability",
+            "Widget": "Toolbar",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SimpleData.cs",
+              "/Models/SampleData/ToolbarData.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Tree View",
+        "Breadcrumb": true,
+        "Equivalents": "TreeView, TreeList, dxTreeView, dx-tree-view",
+        "Groups": [
+          {
+            "Name": "Hierarchical Data Structure",
+            "Demos": [
+              {
+                "Title": "Hierarchical Data Structure",
+                "Name": "HierarchicalDataStructure",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/Product.cs",
+                  "/Models/SampleData/TreeViewHierarchicalData.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Plain Data Structure",
+            "Demos": [
+              {
+                "Title": "Plain Data Structure",
+                "Name": "FlatDataStructure",
+                "DocUrl": "Guide/UI_Components/TreeView/Use_Plain_Data/",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/Product.cs",
+                  "/Models/SampleData/TreeViewPlainData.cs",
+                  "/Controllers/ApiControllers/TreeViewPlainDataController.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Node Selection and Customization",
+            "Demos": [
+              {
+                "Title": "Node Selection and Customization",
+                "Name": "ItemSelectionAndCustomization",
+                "DocUrl": "Guide/UI_Components/TreeView/Select_Nodes/",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/TreeView/Employee.cs",
+                  "/Models/SampleData/TreeViewHierarchicalDataForSelection.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Virtual Mode",
+            "Demos": [
+              {
+                "Title": "Virtual Mode",
+                "Name": "VirtualMode",
+                "Widget": "TreeView",
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Load Data on Demand",
+            "Demos": [
+              {
+                "Title": "Load Data on Demand",
+                "Name": "LoadDataOnDemand",
+                "Widget": "TreeView",
+                "Modules": "whatwg-fetch",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/TreeViewDataController.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "TreeView with Search Bar",
+            "Demos": [
+              {
+                "Title": "TreeView with Search Bar",
+                "Name": "TreeViewWithSearchBar",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/Product.cs",
+                  "/Models/SampleData/TreeViewHierarchicalDataForSearch.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "ContextMenu Integration",
+            "Demos": [
+              {
+                "Title": "ContextMenu Integration",
+                "Name": "ContextMenuIntegration",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/Product.cs",
+                  "/Models/SampleData/TreeViewHierarchicalDataForContextMenu.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Drag & Drop and Reordering",
+            "Demos": [
+              {
+                "Title": "Drag & Drop for Plain Data Structure",
+                "Name": "DragAndDropPlainDataStructure",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/TreeView/FileSystemItem.cs",
+                  "/Models/SampleData/TreeViewPlainDataForDragAndDrop.cs"
+                ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Drag & Drop for Hierarchical Data Structure",
+                "Name": "DragAndDropHierarchicalDataStructure",
+                "Widget": "TreeView",
+                "MvcAdditionalFiles": [
+                  "/Models/TreeView/FileSystemItem.cs",
+                  "/Models/SampleData/TreeViewHierarchicalDataForDragAndDrop.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Right-to-Left Support",
+        "HasCustomImage": true,
+        "Equivalents": "RTL",
+        "Demos": [
+          {
+            "Title": "Right-to-Left Support",
+            "Name": "NavigationRightToLeftSupport",
+            "DocUrl": "",
+            "Widget": "Common",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/Continents.cs",
+              "/Models/SampleData/EuropeanCountries.cs",
+              "/ViewModels/RtlViewModel.cs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Editors",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "EditorsOverview",
+            "DocUrl": "",
+            "Widget": "Common",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/Countries.cs",
+              "/Models/SampleData/Cities.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Autocomplete",
+        "Breadcrumb": true,
+        "Equivalents": "SuggestBox, AutoSuggestBox, dxAutocomplete, dx-autocomplete",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Autocomplete",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/Names.cs",
+              "/Models/SampleData/Surnames.cs",
+              "/Models/SampleData/Cities.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Calendar",
+        "Breadcrumb": true,
+        "Equivalents": "dxCalendar, dx-calendar",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Calendar"
+          },
+          {
+            "Title": "Multiple Selection",
+            "Name": "MultipleSelection",
+            "Widget": "Calendar"
+          }
+        ]
+      },
+      {
+        "Name": "Check Box",
+        "Breadcrumb": true,
+        "Equivalents": "Switch, CheckBox, dxCheckBox, dx-check-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "CheckBox",
+            "MvcAdditionalFiles": [
+              "/Controllers/CheckBoxController.cs",
+              "/Views/CheckBox/Overview.cshtml"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Color Box",
+        "Breadcrumb": true,
+        "Equivalents": "ColorBox, ColorPicker, dxColorBox, dx-color-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "ColorBox",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Date Box",
+        "Breadcrumb": true,
+        "Equivalents": "DateBox, DatePicker, CalendarPicker, dxDateBox, dx-date-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "DateBox"
+          },
+          {
+            "Title": "Formatting",
+            "Name": "Formatting",
+            "Equivalents": "mask",
+            "Widget": "DateBox"
+          }
+        ]
+      },
+      {
+        "Name": "Date Range Box",
+        "Equivalents": "DateRangeBox, dxDateRangeBox, dx-date-range-box",
+        "Breadcrumb": true,
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "DateRangeBox"
+          },
+          {
+            "Title": "Formatting",
+            "Name": "Formatting",
+            "Widget": "DateRangeBox"
+          }
+        ]
+      },
+      {
+        "Name": "Drop Down Box",
+        "Breadcrumb": true,
+        "Equivalents": "DropDown, DropDownEditor, dxDropDownBox, dx-dropdown-box",
+        "Demos": [
+          {
+            "Title": "Single Selection",
+            "Name": "SingleSelection",
+            "Widget": "DropDownBox",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeViewPlainDataController.cs",
+              "/Controllers/ApiControllers/DataGridCustomersController.cs",
+              "/Models/Product.cs",
+              "/Models/Customer.cs",
+              "/Models/SampleData/TreeViewPlainData.cs",
+              "/Models/SampleData/Customers.cs"
+            ]
+          },
+          {
+            "Title": "Multiple Selection",
+            "Name": "MultipleSelection",
+            "Widget": "DropDownBox",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeViewPlainDataController.cs",
+              "/Controllers/ApiControllers/DataGridCustomersController.cs",
+              "/Models/Product.cs",
+              "/Models/Customer.cs",
+              "/Models/SampleData/TreeViewPlainData.cs",
+              "/Models/SampleData/Customers.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Number Box",
+        "Breadcrumb": true,
+        "Equivalents": "NumberBox, TextBox, dxNumberBox, dx-number-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "NumberBox"
+          },
+          {
+            "Title": "Formatting",
+            "Name": "Formatting",
+            "Equivalents": "mask",
+            "Widget": "NumberBox"
+          }
+        ]
+      },
+      {
+        "Name": "Select Box",
+        "Breadcrumb": true,
+        "Equivalents": "SelectBox, ComboBox, Spinner, dxSelectBox, dx-select-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "SelectBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/SampleData/Electronics.cs",
+              "/ViewModels/SelectBoxViewModel.cs"
+            ]
+          },
+          {
+            "Title": "Search and Editing",
+            "Name": "SearchAndEditing",
+            "Widget": "SelectBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/SampleData/Electronics.cs",
+              "/Models/ElectronicsSimpleItem.cs",
+              "/Models/SampleData/ElectronicsSimple.cs",
+              "/ViewModels/SelectBoxViewModel.cs",
+              "/Controllers/ApiControllers/SelectBoxEditingController.cs"
+            ]
+          },
+          {
+            "Title": "Customize Drop-Down Button",
+            "Name": "CustomizeDropDownButton",
+            "Widget": "SelectBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/SampleData/Electronics.cs"
+            ]
+          },
+          {
+            "Title": "Grouped Items",
+            "Name": "GroupedItems",
+            "Widget": "SelectBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/ElectronicsCategory.cs",
+              "/Models/ElectronicsGroupedItem.cs",
+              "/Models/SampleData/Electronics.cs",
+              "/Models/SampleData/ElectronicsGrouped.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Switch",
+        "Breadcrumb": true,
+        "Equivalents": "Switch, CheckBox, dxSwitch, dx-switch",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Switch"
+          }
+        ]
+      },
+      {
+        "Name": "Tag Box",
+        "Breadcrumb": true,
+        "Equivalents": "TagBox, SelectBox, ComboBox, MultiSelect, TagSelector, TokenBox, dxTagBox, dx-tag-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "TagBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/SampleData/Electronics.cs",
+              "/ViewModels/TagBoxViewModel.cs"
+            ]
+          },
+          {
+            "Title": "Grouped Items",
+            "Name": "GroupedItems",
+            "Widget": "TagBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/SampleData/Electronics.cs"
+            ]
+          },
+          {
+            "Title": "Tag Count Limitation",
+            "Name": "TagCountLimitation",
+            "DocUrl": "Guide/UI_Components/TagBox/Limit_the_Tag_Count/#Displayed_Tags",
+            "Widget": "TagBox",
+            "MvcAdditionalFiles": [
+              "/Models/ElectronicsItem.cs",
+              "/Models/SampleData/Electronics.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Text Area",
+        "Breadcrumb": true,
+        "Equivalents": "TextArea, TextField, dxTextArea, dx-text-area, memoedit",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "TextArea"
+          }
+        ]
+      },
+      {
+        "Name": "Text Box",
+        "Breadcrumb": true,
+        "Equivalents": "TextBox, dxTextBox, dx-text-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "TextBox"
+          }
+        ]
+      },
+      {
+        "Name": "Validation",
+        "Breadcrumb": true,
+        "Equivalents": "dxValidator, dx-validator",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Validation",
+            "MvcAdditionalFiles": [
+              "/Views/Validation/SuccessValidation.cshtml",
+              "/ViewModels/EditorsViewModel.cs",
+              "/ViewModels/VerifyAgeAttribute.cs",
+              "/Controllers/ApiControllers/GeoNamesController.cs",
+              "/Controllers/RemoteValidationController.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Custom Text Editor Buttons",
+        "Equivalents": "TextBox, dxTextBox, dx-text-box, NumberBox, dxNumberBox, dx-number-box, DateBox, dxDateBox, dx-date-box, DatePicker, CalendarPicker",
+        "HasCustomImage": true,
+        "Demos": [
+          {
+            "Title": "Custom Text Editor Buttons",
+            "Name": "CustomTextEditorButtons",
+            "Widget": "Common",
+            "DemoType": "Web",
+            "Credits": "The USD/EUR rate is taken from www.wikipedia.org and is relevant on 14 April 2021"
+          }
+        ]
+      },
+      {
+        "Name": "Right-to-Left Support",
+        "HasCustomImage": true,
+        "Equivalents": "RTL",
+        "Demos": [
+          {
+            "Title": "Right-to-Left Support",
+            "Name": "EditorsRightToLeftSupport",
+            "DocUrl": "",
+            "Widget": "Common",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/EuCountry.cs",
+              "/Models/SampleData/EuropeanUnion.cs",
+              "/ViewModels/RtlViewModel.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Editor Appearance Variants",
+        "Equivalents": "editor, label, labelMode, floating, static, hidden, stylingMode, filled, outlined, underlined",
+        "Demos": [
+          {
+            "Title": "Editor Appearance Variants",
+            "Name": "EditorAppearanceVariants",
+            "DocUrl": "",
+            "Widget": "Common",
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Forms and Multi-Purpose",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "dxForm, dx-form",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "FormsAndMultiPurposeOverview",
+            "DocUrl": "",
+            "Widget": "Common",
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Box",
+        "Equivalents": "Layout Control, Stack Panel, dxBox, dx-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Box",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Button Group",
+        "Breadcrumb": true,
+        "Equivalents": "dxButtonGroup, dx-buttongroup",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "ButtonGroup",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Field Set",
+        "Equivalents": "FieldSet, dx-fieldset",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "FieldSet"
+          }
+        ]
+      },
+      {
+        "Name": "Filter Builder",
+        "Breadcrumb": true,
+        "Equivalents": "dxFilterBuilder, QueryBuilder",
+        "Demos": [
+          {
+            "Title": "With Data Grid",
+            "Name": "WithDataGrid",
+            "DocUrl": "Guide/UI_Components/FilterBuilder/Integrate_with_a_Widget/",
+            "Widget": "FilterBuilder",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "With List",
+            "Name": "WithList",
+            "DocUrl": "Guide/UI_Components/FilterBuilder/Integrate_with_a_Widget/",
+            "Widget": "FilterBuilder",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/ListProduct.cs",
+              "/Models/SampleData/ListProducts.cs"
+            ]
+          },
+          {
+            "Title": "Customization",
+            "Name": "Customization",
+            "DocUrl": "Guide/UI_Components/FilterBuilder/Implement_a_Custom_Operation/",
+            "Widget": "FilterBuilder",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Form",
+        "Breadcrumb": true,
+        "Equivalents": "dxForm, dx-form",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Form",
+            "MvcAdditionalFiles": [
+              "/Models/ActiveCompany.cs",
+              "/Models/SampleData/ActiveCompanies.cs"
+            ]
+          },
+          {
+            "Title": "Customize Item",
+            "Name": "CustomizeItem",
+            "Widget": "Form"
+          },
+          {
+            "Title": "Grouped Fields",
+            "Name": "GroupedFields",
+            "Widget": "Form"
+          },
+          {
+            "Title": "Columns Adaptability",
+            "Equivalents": "adaptive",
+            "Name": "ColumnsAdaptability",
+            "Widget": "Form",
+            "DemoType": "Adaptivity"
+          },
+          {
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400705/concepts/client-side-data-validation#overview",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400576/concepts/devextreme-based-controls/client-side-data-validation#overview",
+            "Title": "Validation",
+            "Equivalents": "Submit",
+            "Name": "Validation",
+            "Widget": "Form",
+            "MvcAdditionalFiles": [
+              "/Views/Form/SuccessValidation.cshtml",
+              "/ViewModels/EditorsViewModel.cs",
+              "/ViewModels/VerifyAgeAttribute.cs",
+              "/Controllers/ApiControllers/GeoNamesController.cs",
+              "/Controllers/RemoteValidationController.cs"
+            ]
+          },
+          {
+            "Title": "Customize Fields at Runtime",
+            "Name": "UpdateItemsDynamically",
+            "Equivalents": "add item, remove item, show item, hide item",
+            "DocUrl": "",
+            "Widget": "Form"
+          }
+        ]
+      },
+      {
+        "Name": "Radio Group",
+        "Breadcrumb": true,
+        "Equivalents": "RadioGroup, RadioButton, dxRadioGroup, dx-radio-group",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "RadioGroup"
+          }
+        ]
+      },
+      {
+        "Name": "Range Selector",
+        "Breadcrumb": true,
+        "Equivalents": "dxRangeSelector, dx-range-selector",
+        "Demos": [
+          {
+            "Title": "Numeric Scale (Lightweight)",
+            "Name": "NumericScaleLightweight",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Sliders",
+            "Widget": "RangeSelector",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Numeric Scale",
+            "Name": "NumericScale",
+            "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/scale/#valueType",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/NumericScaleProduct.cs",
+              "/Models/SampleData/NumericScaleProducts.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Date-Time Scale (Lightweight)",
+            "Name": "DateTimeScaleLightweight",
+            "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/scale/",
+            "Widget": "RangeSelector",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Date-Time Scale",
+            "Name": "DateTimeScale",
+            "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/scale/#valueType",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/DateTimeScaleTemperature.cs",
+              "/Models/SampleData/DateTimeScaleTemperatures.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Logarithmic Scale",
+            "Name": "LogarithmicScale",
+            "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/scale/#type",
+            "Widget": "RangeSelector",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Discrete scale",
+            "Name": "DiscreteScale",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CopperProductionData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Formatting",
+            "Name": "CustomFormatting",
+            "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/sliderMarker/#format",
+            "Widget": "RangeSelector",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Use Range Selection for Calculation",
+            "Name": "UseRangeSelectionForCalculation",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Range_Changing/#Handle_the_Range_Changing_Event",
+            "Widget": "RangeSelector",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Use Range Selection for Filtering",
+            "Name": "UseRangeSelectionForFiltering",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Range_Changing/#Handle_the_Range_Changing_Event",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/SelectedEmployee.cs",
+              "/Models/SampleData/SelectedEmployees.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Image on Background",
+            "Name": "ImageOnBackground",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_an_Image",
+            "Widget": "RangeSelector",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Chart on Background",
+            "Name": "ChartOnBackground",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/CostAndRevenue.cs",
+              "/Models/SampleData/CostsAndRevenues.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Customized Chart on Background",
+            "Name": "CustomizedChartOnBackground",
+            "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CpuPoints.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Chart on Background with Series Template",
+            "Name": "ChartOnBackgroundWithSeriesTemplate",
+            "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/chart/",
+            "Widget": "RangeSelector",
+            "MvcAdditionalFiles": [
+              "/Models/OilProduction.cs",
+              "/Models/SampleData/OilProductionData.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Range Slider",
+        "Breadcrumb": true,
+        "Equivalents": "RangeSlider, TrackBar, SeekBar, dxRangeSlider, dx-range-slider",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "RangeSlider"
+          }
+        ]
+      },
+      {
+        "Name": "Responsive Box",
+        "Breadcrumb": true,
+        "Equivalents": "ResponsiveBox, Layout Control, Stack Panel, dxResponsiveBox, dx-responsive-box, adaptive",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/ResponsiveBox/Overview/",
+            "Widget": "ResponsiveBox",
+            "DemoType": "Adaptivity"
+          }
+        ]
+      },
+      {
+        "Name": "Scroll View",
+        "Breadcrumb": true,
+        "Equivalents": "dxScrollView, dx-scroll-view",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/ScrollView/Overview/",
+            "Widget": "ScrollView"
+          }
+        ]
+      },
+      {
+        "Name": "Slider",
+        "Breadcrumb": true,
+        "Equivalents": "SeekBar, TrackBar, dxSlider, dx-slider",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Slider"
+          }
+        ]
+      },
+      {
+        "Name": "Sortable",
+        "Breadcrumb": true,
+        "Equivalents": "dxSortable, dx-sortable, sortable, reorder, kanban",
+        "Demos": [
+          {
+            "Title": "Kanban",
+            "Name": "Kanban",
+            "Widget": "Sortable",
+            "MvcAdditionalFiles": [
+              "/Views/Sortable/_Kanban.cshtml",
+              "/ViewModels/KanbanViewModel.cs",
+              "/ViewModels/KanbanListViewModel.cs",
+              "/Models/SampleData/EmployeeTasks.cs",
+              "/Models/TreeList/Employee.cs",
+              "/Models/TreeList/EmployeeTask.cs",
+              "/Models/TreeList/InMemoryEmployeesDataContext.cs",
+              "/Models/TreeList/InMemoryTasksDataContext.cs",
+              "/Models/InMemoryDataContext.cs"
+            ]
+          },
+          {
+            "Title": "Customization",
+            "Name": "Customization",
+            "Widget": "Sortable"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "File Management",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "File Manager",
+        "Equivalents": "dxFileManager, dx-file-manager",
+        "Groups": [
+          {
+            "Name": "Overview",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Overview",
+                "Name": "Overview",
+                "DocUrl": "Guide/UI_Components/FileManager/Getting_Started_with_File_Manager/",
+                "Widget": "FileManager",
+                "WideDemo": true,
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/FileManagerImagesApiController.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerImagesApiController.cs"
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "File System Types",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Physical File System",
+                "Name": "BindingToFileSystem",
+                "DocUrl": "ApiReference/UI_Components/dxFileManager/File_System_Providers/Remote/",
+                "Widget": "FileManager",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/FileManagerScriptsApiController.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerScriptsApiController.cs"
+                ]
+              },
+              {
+                "Title": "Entity Framework ORM",
+                "Name": "BindingToEF",
+                "DocUrl": "",
+                "Widget": "FileManager",
+                "WideDemo": true,
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/FileManagerDbProviderApiController.cs",
+                  "/Models/FileManagement/DbFileProvider.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerDbProviderApiController.cs",
+                  "DbFileProvider.cs"
+                ]
+              },
+              {
+                "Title": "Hierarchical JS Structure",
+                "Name": "BindingToHierarchicalStructure",
+                "DocUrl": "ApiReference/UI_Components/dxFileManager/File_System_Providers/Object/",
+                "Widget": "FileManager",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/fileSystem.js"
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "Customization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Custom Thumbnails",
+                "Name": "CustomThumbnails",
+                "DocUrl": "ApiReference/UI_Components/dxFileManager/Configuration/#customizeThumbnail",
+                "Widget": "FileManager",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/fileSystem.js"
+                ]
+              },
+              {
+                "Title": "Toolbar and Context Menu",
+                "Name": "UICustomization",
+                "Widget": "FileManager",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/fileSystem.js"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "File Uploader",
+        "Breadcrumb": true,
+        "Equivalents": "dxFileUploader, dx-file-uploader",
+        "Demos": [
+          {
+            "Title": "Form Upload",
+            "Name": "FileSelection",
+            "Widget": "FileUploader",
+            "MvcAdditionalFiles": [
+              "/Views/FileUploader/SubmissionResult.cshtml"
+            ],
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
+          },
+          {
+            "Title": "Async Upload",
+            "Name": "FileUploading",
+            "DocUrl": "Guide/UI_Components/FileUploader/Upload_Files/Client-Side_Settings/",
+            "Widget": "FileUploader",
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
+          },
+          {
+            "Title": "Validation",
+            "Name": "Validation",
+            "DocUrl": "",
+            "Widget": "FileUploader",
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
+          },
+          {
+            "Title": "Chunk Uploading",
+            "Name": "ChunkUploading",
+            "DocUrl": "",
+            "Widget": "FileUploader",
+            "MvcAdditionalFiles": [
+              "/Models/FileUploader/ChunkMetadata.cs"
+            ],
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
+          },
+          {
+            "Title": "Custom Drop Zone",
+            "Name": "CustomDropzone",
+            "DocUrl": "",
+            "Widget": "FileUploader"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Actions and Lists",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "ActionAndListsOverview",
+            "DocUrl": "",
+            "Widget": "Common",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/Hotels.cs",
+              "/Controllers/ApiControllers/ActionsOverviewController.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Action Sheet",
+        "Breadcrumb": true,
+        "Equivalents": "dxActionSheet, dx-action-sheet",
+        "Demos": [
+          {
+            "Title": "Basics",
+            "Name": "Basics",
+            "Widget": "ActionSheet",
+            "DemoType": "Mobile"
+          },
+          {
+            "Title": "Popover Mode",
+            "Name": "PopoverMode",
+            "Widget": "ActionSheet",
+            "DemoType": "Mobile"
+          }
+        ]
+      },
+      {
+        "Name": "Button",
+        "Breadcrumb": true,
+        "Equivalents": "dxButton, dx-button",
+        "Demos": [
+          {
+            "Title": "Predefined Types",
+            "Name": "PredefinedTypes",
+            "Widget": "Button"
+          },
+          {
+            "Title": "Icons",
+            "Name": "Icons",
+            "Widget": "Button"
+          }
+        ]
+      },
+      {
+        "Name": "Floating Action Button",
+        "Breadcrumb": true,
+        "Equivalents": "dxSpeedDialAction, dx-speed-dial-action, Floating Action Button, FloatingActionButton",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "FloatingActionButton",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/State.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/SampleData/States.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Drop Down Button",
+        "Breadcrumb": true,
+        "Equivalents": "dxDropDownButton, dx-drop-down-button, Drop Down, Multi-action button",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "DropDownButton",
+            "DemoType": "Web",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/ViewModels/DropDownButtonViewModel.cs",
+              "/Models/SimpleData.cs",
+              "/Models/ExtendedListItemData.cs",
+              "/Models/SampleData/DropDownButtonData.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Context Menu",
+        "Breadcrumb": true,
+        "Equivalents": "dxContextMenu, dx-context-menu",
+        "Demos": [
+          {
+            "Title": "Basics",
+            "Name": "Basics",
+            "DocUrl": "Guide/UI_Components/ContextMenu/Overview/",
+            "Widget": "ContextMenu",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Templates",
+            "Name": "Templates",
+            "DocUrl": "Guide/UI_Components/ContextMenu/Customize_Item_Appearance/",
+            "Widget": "ContextMenu",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Gallery",
+        "Breadcrumb": true,
+        "Equivalents": "dxGallery, dx-gallery",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/Gallery/Overview/",
+            "Widget": "Gallery",
+            "MvcAdditionalFiles": [
+              "/ViewModels/GalleryViewModel.cs"
+            ]
+          },
+          {
+            "Title": "Item Template",
+            "Name": "ItemTemplate",
+            "DocUrl": "Guide/UI_Components/Gallery/Customize_Item_Appearance/",
+            "Widget": "Gallery",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GalleryItems.cs",
+              "/Models/GalleryItem.cs"
+            ]
+          },
+          {
+            "Title": "Item 3rd Party Engine Template",
+            "Name": "Item3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "Gallery"
+          }
+        ]
+      },
+      {
+        "Name": "List",
+        "Breadcrumb": true,
+        "Equivalents": "ListView, TableView, ListBox, dxList, dx-list",
+        "Demos": [
+          {
+            "Title": "Item Deletion UI",
+            "Name": "ListEditingAndAPI",
+            "Widget": "List",
+            "MvcAdditionalFiles": [
+              "/Models/InMemoryListDataContext.cs",
+              "/Models/ListItem.cs",
+              "/Models/SampleData/ListPlainData.cs",
+              "/Controllers/ApiControllers/ListEditingController.cs"
+            ]
+          },
+          {
+            "Title": "Grouped List",
+            "Name": "GroupedList",
+            "Widget": "List",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ListGroupedData.cs"
+            ]
+          },
+          {
+            "Title": "Item Template",
+            "Name": "ItemTemplate",
+            "Widget": "List",
+            "MvcAdditionalFiles": [
+              "/Models/ListProduct.cs",
+              "/Models/SampleData/ListProducts.cs"
+            ]
+          },
+          {
+            "Title": "Item 3rd Party Engine Template",
+            "Name": "Item3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "List"
+          },
+          {
+            "Title": "List with Search Bar",
+            "Name": "ListWithSearchBar",
+            "Widget": "List",
+            "MvcAdditionalFiles": [
+              "/Models/ListProduct.cs",
+              "/Models/SampleData/ListProducts.cs"
+            ]
+          },
+          {
+            "Title": "List Selection",
+            "Name": "ListSelection",
+            "Widget": "List",
+            "MvcAdditionalFiles": [
+              "/Models/ListItem.cs",
+              "/Models/SampleData/ListPlainData.cs"
+            ]
+          },
+          {
+            "Title": "Item Drag & Drop",
+            "Name": "ItemDragging",
+            "DocUrl": "",
+            "Widget": "List",
+            "MvcAdditionalFiles": [
+              "/Views/List/_ItemDragging.cshtml",
+              "/Controllers/ApiControllers/ListItemDraggingEditingController.cs",
+              "/Models/InMemoryListPlannedDataContext.cs",
+              "/Models/InMemoryListDoingDataContext.cs",
+              "/Models/InMemoryListTasksDataContext.cs",
+              "/Models/ListTaskItem.cs",
+              "/Models/SampleData/ListTasksData.cs"
+            ]
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPI",
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "Equivalents": "webapi",
+            "Widget": "List",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/ListDataController.cs"
+            ],
+            "BackendFiles": [
+              "ListDataController.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Lookup",
+        "Breadcrumb": true,
+        "Equivalents": "dxLookup, dx-lookup",
+        "Demos": [
+          {
+            "Title": "Basics",
+            "Name": "Basics",
+            "Widget": "Lookup",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/EmployeesTasksController.cs",
+              "/Models/EmployeeTask.cs",
+              "/Models/SampleData/EmployeesTasks.cs",
+              "/Models/SampleData/EmployeesList.cs"
+            ]
+          },
+          {
+            "Title": "Templates",
+            "Name": "Templates",
+            "Widget": "Lookup",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ]
+          },
+          {
+            "Title": "Handle Value Change",
+            "Name": "EventHandling",
+            "Widget": "Lookup",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Tile View",
+        "Breadcrumb": true,
+        "Equivalents": "dxTileView, dx-tile-view",
+        "Demos": [
+          {
+            "Title": "Basics",
+            "Name": "Basics",
+            "DocUrl": "Guide/UI_Components/TileView/Overview/",
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
+          },
+          {
+            "Title": "Directions",
+            "Name": "Directions",
+            "DocUrl": "ApiReference/UI_Components/dxTileView/Configuration/#direction",
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
+          },
+          {
+            "Title": "Item Template",
+            "Name": "ItemTemplate",
+            "DocUrl": "Guide/UI_Components/TileView/Customize_Tile_Appearance/",
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
+          },
+          {
+            "Title": "Item 3rd Party Engine Template",
+            "Name": "Item3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "TileView"
+          }
+        ]
+      },
+      {
+        "Name": "Resizable",
+        "Breadcrumb": false,
+        "Equivalents": "dxResizable, dx-resizable",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Resizable",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Maps",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "VectorMap, dxVectorMap, dx-vector-map",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Credits": "www.wikipedia.org",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/countriesGDP.js"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
+        "Name": "Map",
+        "Breadcrumb": true,
+        "Equivalents": "dxMap, dx-map",
+        "Demos": [
+          {
+            "Title": "Providers and Types",
+            "Name": "ProvidersAndTypes",
+            "Widget": "Map"
+          },
+          {
+            "Title": "Markers",
+            "Name": "Markers",
+            "DocUrl": "Guide/UI_Components/Map/Configure_Markers/",
+            "Widget": "Map"
+          },
+          {
+            "Title": "Routes",
+            "Name": "Routes",
+            "DocUrl": "Guide/UI_Components/Map/Configure_Routes/",
+            "Widget": "Map"
+          }
+        ]
+      },
+      {
+        "Name": "Vector Map",
+        "Breadcrumb": true,
+        "Equivalents": "VectorMap, dxVectorMap, dx-vector-map",
+        "Demos": [
+          {
+            "Title": "Colors Customization",
+            "Name": "ColorsCustomization",
+            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Areas",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/countries.js"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Zooming and Centering",
+            "Name": "ZoomingAndCentering",
+            "DocUrl": "Guide/UI_Components/VectorMap/End-User_Interaction/#Zooming",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/VectorMapMarker.cs",
+              "/Models/MarkerAttribute.cs",
+              "/Models/SampleData/VectorMapMarkerData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Palette",
+            "Name": "Palette",
+            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/layers/#palette",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/populations.js"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Image Markers",
+            "Name": "ImageMarkers",
+            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/WeatherData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Bubble Markers",
+            "Name": "BubbleMarkers",
+            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/BubbleMarkers.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pie Markers",
+            "Name": "PieMarkers",
+            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/names.js",
+              "/Models/SampleData/PieMarkersData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Dynamic Viewport",
+            "Name": "DynamicViewport",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ViewportCoordinateData.cs",
+              "/Models/ViewportCoordinate.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Area with Labels and Two Legends",
+            "Name": "AreaWithLabelsAndTwoLegends",
+            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Legend",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/AreaLabelsData.cs",
+              "/Scripts/data/areaPopulations.js"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Tooltips: HTML Markup Support",
+            "Name": "TooltipHTMLSupport",
+            "Credits": "www.wikipedia.org",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/countriesGDP.js"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Projection",
+            "Name": "CustomProjection",
+            "Credits": "www.wikipedia.org",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/customProjection.js",
+              "/Models/CoordLines.cs",
+              "/Models/SampleData/CoordLinesData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Floor Plan",
+            "Name": "FloorPlan",
+            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/#projection",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/floorPlanProjection.js",
+              "/Models/SampleData/BuildingData.cs",
+              "/Models/SampleData/RoomData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Multiple Layers",
+            "Name": "MultipleLayers",
+            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/layers/",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/StreamsData.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Map Data",
+            "Name": "CustomMapData",
+            "DocUrl": "Guide/UI_Components/VectorMap/Providing_Data/#Data_for_Areas",
+            "Credits": "www.wikipedia.org",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/customMapData.js",
+              "/Models/SampleData/PangaeaBorders.cs",
+              "/Models/SampleData/PangaeaContinents.cs"
+            ],
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Annotations",
+            "Name": "CustomAnnotations",
+            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/annotations",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "MvcAdditionalFiles": [
+              "/Models/StateData.cs",
+              "/Models/SampleData/StatesData.cs"
+            ],
+            "DemoType": "Viz"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Dialogs and Notifications",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "DialogsAndNotificationsOverview",
+            "DocUrl": "",
+            "Widget": "Common",
+            "MvcAdditionalFiles": [
+              "/Models/GalleryItem.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/GalleryItems.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Load Indicator",
+        "Breadcrumb": true,
+        "Equivalents": "dxLoadIndicator, dx-load-indicator",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "LoadIndicator"
+          }
+        ]
+      },
+      {
+        "Name": "Load Panel",
+        "Breadcrumb": true,
+        "Equivalents": "LoadPanel, LoadingPanel, dxLoadPanel, dx-load-panel",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "LoadPanel",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employee.js"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Popover",
+        "Breadcrumb": true,
+        "Equivalents": "dxPopover, dx-popover",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Popover"
+          }
+        ]
+      },
+      {
+        "Name": "Popup",
+        "Breadcrumb": true,
+        "Equivalents": "dxPopup, dx-popup",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Popup",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ]
+          },
+          {
+            "Title": "Scrolling",
+            "Name": "Scrolling",
+            "Widget": "Popup"
+          }
+        ]
+      },
+      {
+        "Name": "Progress Bar",
+        "Breadcrumb": true,
+        "Equivalents": "ProgressBar, dxProgressBar, dx-progress-bar",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/ProgressBar/Overview/",
+            "Widget": "ProgressBar"
+          }
+        ]
+      },
+      {
+        "Name": "Toast",
+        "Breadcrumb": true,
+        "Equivalents": "dxToast, dx-toast",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Toast",
+            "MvcAdditionalFiles": [
+              "/Models/ListProduct.cs",
+              "/Models/SampleData/ListProducts.cs"
+            ]
+          },
+          {
+            "Title": "Stack",
+            "Name": "Stack",
+            "DocUrl": "Guide/UI_Components/Toast/Getting_Started_with_Toast/#Display_a_Toast_notification/Use_the_notify_Method/",
+            "Widget": "Toast"
+          }
+        ]
+      },
+      {
+        "Name": "Tooltip",
+        "Breadcrumb": true,
+        "Equivalents": "dxTooltip, dx-tooltip",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Tooltip"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Localization",
+    "HasCustomImage": true,
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Using Intl",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Using Intl",
+            "Name": "UsingIntl",
+            "DocUrl": "Guide/Common/Localization/",
+            "Widget": "Localization",
+            "Modules": "devextreme-intl",
+            "MvcAdditionalFiles": [
+              "/Models/Payment.cs",
+              "/Models/SampleData/Payments.cs"
+            ],
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400706/concepts/localization#intl",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400577/concepts/devextreme-based-controls/localization#intl",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Using Globalize",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Using Globalize",
+            "Name": "UsingGlobalize",
+            "DocUrl": "Guide/Common/Localization/",
+            "Widget": "Localization",
+            "Modules": "globalize",
+            "MvcAdditionalFiles": [
+              "/Models/Payment.cs",
+              "/Models/SampleData/Payments.cs"
+            ],
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400706/concepts/localization#globalize",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400577/concepts/devextreme-based-controls/localization#globalize",
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  }
+]

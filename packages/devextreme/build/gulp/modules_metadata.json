@@ -611,6 +611,12 @@
     }
   },
   {
+    "name": "ui/splitter",
+    "exports": {
+      "default": { "path": "ui.dxSplitter", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/sortable",
     "exports": {
       "default": { "path": "ui.dxSortable", "isWidget": true }

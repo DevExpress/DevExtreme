@@ -1,0 +1,216 @@
+<template>
+  <div id="demo-container">
+    <div class="widget-container">
+      <DxScrollView
+        id="scroll"
+        :class="{'horizontal': itemOrientation === 'horizontal'}"
+        :direction="itemOrientation"
+        show-scrollbar="always"
+      >
+        <DxSortable
+          id="list"
+          :drop-feedback-mode="dropFeedbackMode"
+          :item-orientation="itemOrientation"
+          :drag-direction="dragDirection"
+          :scroll-speed="scrollSpeed"
+          :scroll-sensitivity="scrollSensitivity"
+          :handle="handle"
+          :drag-template="dragTemplate"
+          :cursor-offset="cursorOffset"
+          @drag-start="onDragStart"
+          @reorder="onReorder"
+        >
+          <template #drag="{ data }">
+            <div
+              class="item dx-card"
+              style="font-weight: bold; width: 200px; padding: 10px;"
+            >
+              {{ data.itemData.Task_Subject }}
+            </div>
+          </template>
+          <template #content>
+            <div>
+              <div
+                v-for="item in items"
+                :key="item.Task_ID"
+                :class="{ 'item-with-handle': handle }"
+                class="item dx-card"
+              >
+                <i
+                  v-if="handle"
+                  class="handle dx-icon dx-icon-dragvertical"
+                />
+                {{ item.Task_Subject }}
+              </div>
+            </div>
+          </template>
+        </DxSortable>
+      </DxScrollView>
+    </div>
+    <div class="options">
+      <div class="caption">Options</div>
+      <div class="option">
+        <span>Drop Feedback Mode:</span>
+        <DxSelectBox
+          :items="['push', 'indicate']"
+          :input-attr="{ 'aria-label': 'Drop Feedback Mode' }"
+          v-model:value="dropFeedbackMode"
+        />
+      </div>
+      <div class="option">
+        <span>Item Orientation:</span>
+        <DxSelectBox
+          :items="['vertical', 'horizontal']"
+          v-model:value="itemOrientation"
+          :input-attr="{ 'aria-label': 'Orientation' }"
+          @value-changed="onItemOrientationChanged"
+        />
+      </div>
+      <div class="option">
+        <span>Drag Direction:</span>
+        <DxSelectBox
+          :items="dragDirections"
+          :input-attr="{ 'aria-label': 'Drag Direction' }"
+          v-model:value="dragDirection"
+        />
+      </div>
+      <div class="option">
+        <span>Scroll Speed:</span>
+        <DxNumberBox
+          v-model:value="scrollSpeed"
+          :input-attr="{ 'aria-label': 'Scroll Speed' }"
+        />
+      </div>
+      <div class="option">
+        <span>Scroll Sensitivity:</span>
+        <DxNumberBox
+          v-model:value="scrollSensitivity"
+          :input-attr="{ 'aria-label': 'Scroll Sensitivity' }"
+        />
+      </div>
+      <div class="option">
+        <DxCheckBox
+          text="Use Handle"
+          @value-changed="onHandleChanged"
+        />
+      </div>
+      <div class="option">
+        <DxCheckBox
+          text="Use Drag Template"
+          @value-changed="onDragTemplateChanged"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import DxScrollView from 'devextreme-vue/scroll-view';
+import DxSortable from 'devextreme-vue/sortable';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxNumberBox from 'devextreme-vue/number-box';
+import { tasks } from './data.ts';
+
+const items = ref(tasks);
+const dropFeedbackMode = ref('push');
+const itemOrientation = ref('vertical');
+const dragDirection = ref('both');
+const scrollSpeed = ref(30);
+const scrollSensitivity = ref(60);
+const handle = ref('');
+const dragTemplate = ref('');
+
+const dragDirections = computed(() => (itemOrientation.value === 'vertical' ? ['both', 'vertical'] : ['both', 'horizontal']));
+const cursorOffset = computed(() => (dragTemplate.value ? { x: 10, y: 20 } : null));
+
+function onDragStart(e) {
+  e.itemData = items.value[e.fromIndex];
+}
+function onReorder(e) {
+  items.value.splice(e.fromIndex, 1);
+  items.value.splice(e.toIndex, 0, e.itemData);
+}
+function onItemOrientationChanged() {
+  dragDirection.value = 'both';
+}
+function onHandleChanged(e) {
+  handle.value = e.value ? '.handle' : '';
+}
+function onDragTemplateChanged(e) {
+  dragTemplate.value = e.value ? 'drag' : '';
+}
+</script>
+<style scoped>
+.widget-container {
+  margin-right: 320px;
+}
+
+#scroll {
+  height: 500px;
+}
+
+#scroll.horizontal {
+  margin-top: 170px;
+  display: block;
+  width: auto;
+  height: auto;
+  white-space: nowrap;
+}
+
+.handle {
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  font-size: 18px;
+  line-height: 19px;
+  cursor: move;
+}
+
+.horizontal .handle {
+  margin-right: 10px;
+}
+
+.item {
+  color: var(--dx-color-text);
+  background-color: var(--dx-component-color-bg);
+  box-sizing: border-box;
+  position: relative;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.item-with-handle {
+  padding-left: 30px;
+  cursor: default;
+}
+
+.horizontal .item {
+  display: inline-block;
+  width: 200px;
+  height: 100px;
+  margin-bottom: 0;
+  margin-right: 10px;
+  white-space: normal;
+}
+
+.options {
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 260px;
+  top: 0;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+}
+</style>

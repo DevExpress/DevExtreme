@@ -13,9 +13,12 @@ import List from '@js/ui/list_light';
 import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
 
+import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
+import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { ModuleType } from '../../grid_core/m_types';
+import type { RowsView } from '../../grid_core/views/m_rows_view';
 import dataGridCore from '../m_core';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
@@ -327,11 +330,11 @@ export class DataProvider {
 }
 
 export class ExportController extends dataGridCore.ViewController {
-  public _columnsController: any;
+  public _columnsController!: ColumnsController;
 
-  private _headersView: any;
+  private _headersView!: ColumnHeadersView;
 
-  private _rowsView: any;
+  private _rowsView!: RowsView;
 
   public _selectionOnly: any;
 
@@ -347,7 +350,10 @@ export class ExportController extends dataGridCore.ViewController {
     };
   }
 
-  _updateColumnWidth(column, width): void {
+  /**
+   * @extended: adaptivity
+   */
+  protected _updateColumnWidth(column, width): void {
     column.width = width;
   }
 
@@ -623,12 +629,12 @@ export class ExportController extends dataGridCore.ViewController {
     this.throwWarningIfNoOnExportingEvent();
     this._columnsController = this.getController('columns');
     this._rowsView = this.getView('rowsView');
-    this._headersView = this.getView('columnHeadersView' as any);
+    this._headersView = this.getView('columnHeadersView');
 
     this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  callbackNames() {
+  protected callbackNames() {
     return ['selectionOnlyChanged'];
   }
 
@@ -695,7 +701,7 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
     return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
   }
 
-  _updateEditButtons() {
+  protected _updateEditButtons() {
     super._updateEditButtons();
 
     // @ts-expect-error
@@ -704,9 +710,7 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
 };
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelExtender extends Base {
-  private _exportController: any;
-
-  private _editingController: any;
+  private _exportController!: ExportController;
 
   _getToolbarItems() {
     const items = super._getToolbarItems();
@@ -866,6 +870,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     this._exportController = this.getController('export');
     this._editingController = this.getController('editing');
 
+    // @ts-expect-error
     this._editingController.editingButtonsUpdated.add(() => {
       const disabled = this._needDisableExportButton();
 

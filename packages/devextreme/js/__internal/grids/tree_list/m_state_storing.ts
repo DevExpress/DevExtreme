@@ -9,9 +9,8 @@ import treeListCore from './m_core';
 const stateStoring = (
   Base: ModuleType<StateStoringController>,
 ) => class TreeListStateStoringExtender extends stateStoringModule.extenders.controllers.stateStoring(Base) {
-  applyState(state) {
+  protected applyState(state) {
     super.applyState(state);
-    // @ts-expect-error
     this.option('expandedRowKeys', state.expandedRowKeys ? state.expandedRowKeys.slice() : []);
   }
 };
@@ -19,7 +18,7 @@ const stateStoring = (
 const data = (
   Base: ModuleType<DataController>,
 ) => class TreeListStateStoringDataExtender extends stateStoringModule.extenders.controllers.data(Base) {
-  getUserState() {
+  public getUserState() {
     const state = super.getUserState();
 
     if (!this.option('autoExpandAll')) {

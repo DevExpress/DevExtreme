@@ -64,19 +64,19 @@ export function updateHeaderFilterItemSelectionState(item, filterValuesMatch, is
 }
 
 export class HeaderFilterView extends Modules.View {
-  _popupContainer: any;
+  private _popupContainer: any;
 
-  _listComponent: any;
+  private _listComponent: any;
 
-  getPopupContainer() {
+  private getPopupContainer() {
     return this._popupContainer;
   }
 
-  getListComponent() {
+  private getListComponent() {
     return this._listComponent;
   }
 
-  applyHeaderFilter(options) {
+  private applyHeaderFilter(options) {
     const that = this;
     const list = that.getListComponent();
     const searchValue = list.option('searchValue');
@@ -131,7 +131,7 @@ export class HeaderFilterView extends Modules.View {
     that.hideHeaderFilterMenu();
   }
 
-  showHeaderFilterMenu($columnElement, options) {
+  public showHeaderFilterMenu($columnElement, options) {
     const that = this;
 
     if (options) {
@@ -146,13 +146,13 @@ export class HeaderFilterView extends Modules.View {
     }
   }
 
-  hideHeaderFilterMenu() {
+  public hideHeaderFilterMenu() {
     const headerFilterMenu = this.getPopupContainer();
 
     headerFilterMenu && headerFilterMenu.hide();
   }
 
-  updatePopup($element, options) {
+  private updatePopup($element, options) {
     const that = this;
     const showColumnLines = this.option('showColumnLines');
     const alignment = ((options.alignment === 'right') as any) ^ (!showColumnLines as any) ? 'left' : 'right';
@@ -173,7 +173,7 @@ export class HeaderFilterView extends Modules.View {
     }
   }
 
-  _getSearchExpr(options, headerFilterOptions) {
+  protected _getSearchExpr(options, headerFilterOptions) {
     const { lookup } = options;
     const { useDefaultSearchExpr } = options;
 
@@ -204,11 +204,11 @@ export class HeaderFilterView extends Modules.View {
     return options.dataField || options.selector;
   }
 
-  _cleanPopupContent() {
+  private _cleanPopupContent() {
     this._popupContainer && this._popupContainer.$content().empty();
   }
 
-  _initializePopupContainer(options) {
+  private _initializePopupContainer(options) {
     const that = this;
     const $element = that.element();
 
@@ -275,7 +275,7 @@ export class HeaderFilterView extends Modules.View {
     }
   }
 
-  _initializeListContainer(options, headerFilterOptions) {
+  private _initializeListContainer(options, headerFilterOptions) {
     const that = this;
     const $content = that._popupContainer.$content();
     const needShowSelectAllCheckbox = !options.isFilterBuilder && headerFilterOptions.allowSelectAll;
@@ -286,7 +286,6 @@ export class HeaderFilterView extends Modules.View {
       searchMode: headerFilterOptions.search.mode || '',
       dataSource: options.dataSource,
       onContentReady() {
-        // @ts-expect-error
         that.renderCompleted.fire();
       },
       itemTemplate(data, _, element) {
@@ -389,7 +388,7 @@ export class HeaderFilterView extends Modules.View {
     }
   }
 
-  _normalizeHeaderFilterOptions(options) {
+  private _normalizeHeaderFilterOptions(options) {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const generalHeaderFilter = this.option('headerFilter') || {};
     const specificHeaderFilter = options.headerFilter || {};
@@ -412,7 +411,7 @@ export class HeaderFilterView extends Modules.View {
     return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
   }
 
-  _renderCore() {
+  protected _renderCore() {
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }
@@ -421,8 +420,19 @@ export const allowHeaderFiltering = function (column) {
   return isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
 };
 
-export const headerFilterMixin = (Base: ModuleType<any>) => class HeaderFilterMixin extends Base {
-  _applyColumnState(options) {
+// TODO Fix types of this mixin
+export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class HeaderFilterMixin extends Base {
+  public optionChanged(args) {
+    if (args.name === 'headerFilter') {
+      const requireReady = this.name === 'columnHeadersView';
+      this._invalidate(requireReady, requireReady);
+      args.handled = true;
+    } else {
+      super.optionChanged(args);
+    }
+  }
+
+  protected _applyColumnState(options) {
     let $headerFilterIndicator;
     const { rootElement } = options;
     const { column } = options;
@@ -449,18 +459,18 @@ export const headerFilterMixin = (Base: ModuleType<any>) => class HeaderFilterMi
     return super._applyColumnState(options);
   }
 
-  _isHeaderFilterEmpty(column) {
+  private _isHeaderFilterEmpty(column) {
     return !column.filterValues || !column.filterValues.length;
   }
 
-  _getIndicatorClassName(name) {
+  protected _getIndicatorClassName(name) {
     if (name === 'headerFilter') {
       return HEADER_FILTER_CLASS;
     }
     return super._getIndicatorClassName(name);
   }
 
-  _renderIndicator(options) {
+  protected _renderIndicator(options) {
     const $container = options.container;
     const $indicator = options.indicator;
 
@@ -473,15 +483,5 @@ export const headerFilterMixin = (Base: ModuleType<any>) => class HeaderFilterMi
     }
 
     super._renderIndicator(options);
-  }
-
-  optionChanged(args) {
-    if (args.name === 'headerFilter') {
-      const requireReady = this.name === 'columnHeadersView';
-      this._invalidate(requireReady, requireReady);
-      args.handled = true;
-    } else {
-      super.optionChanged(args);
-    }
   }
 };

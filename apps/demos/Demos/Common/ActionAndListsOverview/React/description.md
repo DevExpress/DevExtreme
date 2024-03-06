@@ -1,0 +1,1 @@
+DevExtreme supplies several React components used to represent data collections and allow a user to perform actions on the view. These components are showcased in this section. [Learn more about DevExtreme React components](/Documentation/Guide/React_Components/DevExtreme_React_Components/).

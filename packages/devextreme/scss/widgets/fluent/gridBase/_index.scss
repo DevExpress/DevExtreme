@@ -128,7 +128,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     .dx-sort-up,
     .dx-sort-down,
     .dx-header-filter {
-      @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+      @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
     }
 
     .dx-header-filter:not(.dx-header-filter-empty) {
@@ -195,7 +195,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       > div {
-        @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+        @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
       }
 
       > span {
@@ -290,6 +290,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         &.dx-command-edit {
           width: $fluent-grid-base-command-edit-column-width;
           min-width: $fluent-grid-base-command-edit-column-width;
+
+          .dx-link:not(.dx-link-icon) {
+            margin: 0 $fluent-command-edit-text-margin;
+            min-width: 20px;
+          }
 
           &.dx-command-edit-with-icons {
             width: $fluent-grid-base-command-edit-column-with-icons-width;

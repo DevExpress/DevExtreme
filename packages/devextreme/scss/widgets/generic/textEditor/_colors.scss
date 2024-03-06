@@ -52,6 +52,8 @@ $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !defaul
 $texteditor-filled-invalid-background: null !default;
 $texteditor-border-radius: $base-border-radius !default;
 $texteditor-input-border-radius: $base-border-radius !default;
+$texteditor-disabled-border-color: color.change($texteditor-color, $alpha: 0.5) !default;
+$texteditor-readonly-border-color: $base-border-color !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
@@ -130,3 +132,8 @@ $texteditor-label-transition:
 }
 
 $texteditor-label-color: $texteditor-placeholder-color;
+
+:root {
+  --dx-texteditor-color-text: #{$texteditor-color}; 
+  --dx-texteditor-color-label: #{$texteditor-label-color};
+}

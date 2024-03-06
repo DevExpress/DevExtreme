@@ -1,0 +1,13 @@
+::ng-deep .widget-container {
+  display: flex;
+}
+
+::ng-deep .widget-container > * {
+  height: 400px;
+  width: 50%;
+  padding: 10px;
+}
+
+::ng-deep .dx-scrollview-content {
+  min-height: 380px;
+}

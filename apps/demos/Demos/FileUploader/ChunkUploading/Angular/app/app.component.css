@@ -1,0 +1,29 @@
+::ng-deep .chunk-panel {
+  width: 505px;
+  height: 165px;
+  overflow-y: auto;
+  padding: 18px;
+  margin-top: 40px;
+  background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .segment-size,
+::ng-deep .loaded-size {
+  margin-left: 3px;
+  color: var(--dx-color-primary);
+}
+
+::ng-deep .total-size {
+  color: var(--dx-color-primary);
+}
+
+::ng-deep .note {
+  display: block;
+  font-size: 10pt;
+  color: #484848;
+  margin-left: 9px;
+}
+
+::ng-deep .note > span {
+  font-weight: 700;
+}

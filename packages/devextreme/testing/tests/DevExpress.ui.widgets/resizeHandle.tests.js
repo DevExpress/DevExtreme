@@ -3,11 +3,16 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 
+import 'generic_light.css!';
+
 QUnit.testStart(() => {
     const markup = '<div id="resizeHandle"></div>';
 
     $('#qunit-fixture').html(markup);
 });
+
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -50,6 +55,27 @@ QUnit.module('Initialization', moduleConfig, () => {
         assert.notStrictEqual(firstInstanceResizeStartEventName, secondInstanceResizeStartEventName);
         assert.notStrictEqual(firstInstanceResizeEventName, secondInstanceResizeEventName);
         assert.notStrictEqual(firstInstanceResizeEndEventName, secondInstanceResizeEndEventName);
+    });
+});
+
+QUnit.module('Cursor', moduleConfig, () => {
+    [
+        { direction: 'horizontal', expectedCursor: 'col-resize' },
+        { direction: 'vertical', expectedCursor: 'row-resize' }
+    ].forEach(({ direction, expectedCursor }) => {
+        QUnit.test(`resize handle should have "cursor: ${expectedCursor}" with ${direction} orientation`, function(assert) {
+            this.reinit({ direction });
+
+            assert.strictEqual(this.$element.css('cursor'), expectedCursor);
+        });
+    });
+
+    QUnit.test('collapse buttons should have "cursor: pointer"', function(assert) {
+        const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+        const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+
+        assert.strictEqual($collapsePrevButton.css('cursor'), 'pointer');
+        assert.strictEqual($collapseNextButton.css('cursor'), 'pointer');
     });
 });
 

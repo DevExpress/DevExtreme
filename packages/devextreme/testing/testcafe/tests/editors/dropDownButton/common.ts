@@ -4,7 +4,7 @@ import { ClientFunction } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo,
   insertStylesheetRulesToPage,
@@ -118,4 +118,20 @@ test('Item collection should be updated after direct option changing (T817436)',
       }
     });
   });
+});
+
+[false, true].forEach((splitButton) => {
+  test('Button template', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Button template, splitButton=${splitButton}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDropDownButton', {
+    splitButton,
+    width: 200,
+    template: () => $('<div>Custom text<i class="dx-icon-user"></i></div>'),
+  }));
 });

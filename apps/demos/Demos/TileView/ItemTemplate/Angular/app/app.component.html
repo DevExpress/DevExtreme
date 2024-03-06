@@ -1,0 +1,21 @@
+<dx-tile-view
+  #tileView
+  [items]="homes"
+  [height]="390"
+  [baseItemHeight]="120"
+  [baseItemWidth]="185"
+  width="100%"
+  [itemMargin]="10"
+  direction="horizontal"
+  itemTemplate="list-item"
+>
+  <div *dxTemplate="let data of 'list-item'; let index = index">
+    <div
+      class="image"
+      [style.background-image]="'url(' + data.ImageSrc + ')'"
+    ></div>
+    <div class="price">{{
+      data.Price | currency : "USD" : "symbol" : "1.0-0"
+    }}</div>
+  </div>
+</dx-tile-view>

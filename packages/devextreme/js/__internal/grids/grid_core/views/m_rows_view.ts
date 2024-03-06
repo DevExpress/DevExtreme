@@ -17,7 +17,18 @@ import eventsEngine from '@js/events/core/events_engine';
 import { removeEvent } from '@js/events/remove';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type {
+  ColumnsResizerViewController,
+} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
+import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
+import type { EditingController } from '../editing/m_editing';
+import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
 import { ColumnsView } from './m_columns_view';
 
@@ -79,9 +90,21 @@ const getScrollableBottomPadding = function (that) {
 export class RowsView extends ColumnsView {
   _loadPanel: any;
 
-  _editingController: any;
+  _editingController!: EditingController;
 
-  _editorFactoryController!: any;
+  _resizingController!: ResizingController;
+
+  protected _columnsResizerController!: ColumnsResizerViewController;
+
+  protected _focusController!: FocusController;
+
+  protected _keyboardNavigationController!: KeyboardNavigationController;
+
+  protected _validatingController!: ValidatingController;
+
+  protected _errorHandlingController!: ErrorHandlingController;
+
+  _columnHeadersView!: ColumnHeadersView;
 
   _hasHeight: boolean | undefined;
 
@@ -102,6 +125,38 @@ export class RowsView extends ColumnsView {
   _lastColumnWidths: any;
 
   _hideLoadingTimeoutID: any;
+
+  public init(): void {
+    super.init();
+
+    this._editingController = this.getController('editing');
+    this._resizingController = this.getController('resizing');
+    this._columnsResizerController = this.getController('columnsResizer');
+    this._focusController = this.getController('focus');
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this._validatingController = this.getController('validating');
+    this._errorHandlingController = this.getController('errorHandling');
+    this._columnHeadersView = this.getView('columnHeadersView');
+    this._rowHeight = 0;
+    this._scrollTop = 0;
+    this._scrollLeft = -1;
+    this._scrollRight = 0;
+    this._hasHeight = undefined;
+    this._contentChanges = [];
+    this._dataController.loadingChanged.add((isLoading, messageText) => {
+      this.setLoading(isLoading, messageText);
+    });
+
+    this._dataController.dataSourceChanged.add(() => {
+      if (this._scrollLeft >= 0 && !this._dataController.isLoading()) {
+        this._handleScroll({
+          component: this.getScrollable(),
+          forceUpdateScrollPosition: true,
+          scrollOffset: { top: this._scrollTop, left: this._scrollLeft },
+        });
+      }
+    });
+  }
 
   _getDefaultTemplate(column) {
     switch (column.command) {
@@ -144,16 +199,25 @@ export class RowsView extends ColumnsView {
     };
   }
 
-  _update(change?) { }
+  /**
+   * @extended: editing_row_based, focus, selection
+   */
+  protected _update(change?) { }
 
-  _updateCell($cell, options) {
+  /**
+   * @extended: editing_form_based, search
+   */
+  public _updateCell($cell, options) {
     if (isGroupRow(options)) {
       $cell.addClass(GROUP_CELL_CLASS);
     }
     super._updateCell.apply(this, arguments as any);
   }
 
-  _getCellTemplate(options) {
+  /**
+   * @extended: adaptivity, editing, master_detail
+   */
+  protected _getCellTemplate(options) {
     const that = this;
     const { column } = options;
     let template;
@@ -169,7 +233,10 @@ export class RowsView extends ColumnsView {
     return template;
   }
 
-  _createRow(row?, tag?) {
+  /**
+   * @extended: adaptivity, editing, editing_row_based, focus, master_detail
+   */
+  protected _createRow(row?, tag?) {
     const $row = super._createRow.apply(this, arguments as any);
 
     if (row) {
@@ -187,8 +254,6 @@ export class RowsView extends ColumnsView {
 
       if (isGroup) {
         $row.addClass(GROUP_ROW_CLASS);
-        this.setAria('role', 'row', $row);
-
         this.setAriaExpandedAttribute($row, row);
       }
     }
@@ -196,7 +261,7 @@ export class RowsView extends ColumnsView {
     return $row;
   }
 
-  _rowPrepared($row, rowOptions, row) {
+  protected _rowPrepared($row, rowOptions, row) {
     if (rowOptions.rowType === 'data') {
       if (this.option('rowAlternationEnabled')) {
         this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
@@ -225,6 +290,10 @@ export class RowsView extends ColumnsView {
   }
 
   _setAriaRowIndex(row, $row) {
+    if (!$row.is('tr')) {
+      return;
+    }
+
     const { component } = this;
     const isPagerMode = component.option('scrolling.mode') === 'standard' && !gridCoreUtils.isVirtualRowRendering(component);
     let rowIndex = row.rowIndex + 1;
@@ -242,7 +311,10 @@ export class RowsView extends ColumnsView {
     this.setAria('roledescription', description, $row);
   }
 
-  _afterRowPrepared(e) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _afterRowPrepared(e) {
     const arg = e.args[0];
     const dataController = this._dataController;
     const row = dataController.getVisibleRows()[arg.rowIndex];
@@ -292,7 +364,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _handleScroll(e) {
+  /**
+   * @extended: column_fixing, virtual_column, virtual_scrolling
+   */
+  protected _handleScroll(e) {
     const that = this;
     const rtlEnabled = that.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
@@ -329,13 +404,19 @@ export class RowsView extends ColumnsView {
     return gridCoreUtils.renderLoadPanel.apply(this, arguments as any);
   }
 
-  _renderContent(contentElement, tableElement, isFixedTableRendering?) {
+  /**
+   * @extended: column_fixing, row_dragging
+   */
+  protected _renderContent(contentElement, tableElement, isFixedTableRendering?) {
     contentElement.empty().append(tableElement);
 
     return this._findContentElement();
   }
 
-  _updateContent(newTableElement, change, isFixedTableRendering?) {
+  /**
+   * @extended: editing_form_based, virtual_scrolling
+   */
+  protected _updateContent(newTableElement, change, isFixedTableRendering?) {
     this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -483,7 +564,10 @@ export class RowsView extends ColumnsView {
     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
   }
 
-  _checkRowKeys(options) {
+  /**
+   * @extended: focues
+   */
+  protected _checkRowKeys(options) {
     const that = this;
     const rows = that._getRows(options);
     const keyExpr = that._dataController.store() && that._dataController.store().key();
@@ -497,7 +581,10 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  _needUpdateRowHeight(itemsCount) {
+  /**
+   * @extended: columns_resizing_reordering, virtual_scrolling
+   */
+  protected _needUpdateRowHeight(itemsCount): boolean | undefined {
     return itemsCount > 0 && !this._rowHeight;
   }
 
@@ -509,7 +596,10 @@ export class RowsView extends ColumnsView {
     return $rowElements.toArray().reduce((sum, row) => sum + getBoundingRect(row).height, 0);
   }
 
-  _updateRowHeight() {
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected _updateRowHeight() {
     const that = this;
     const $tableElement = that.getTableElement();
     const itemsCount = that._dataController.items().length;
@@ -520,7 +610,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _findContentElement(isFixedTableRendering?) {
+  /**
+   * @extended: column_fixing
+   */
+  public _findContentElement(isFixedTableRendering?): any {
     let $content = this.element();
     const scrollable = this.getScrollable();
 
@@ -532,7 +625,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _getRowElements(tableElement?) {
+  /**
+   * @extended virtual_scrolling
+   */
+  public _getRowElements(tableElement?) {
     const $rows = super._getRowElements(tableElement);
 
     return $rows && $rows.not(`.${FREE_SPACE_CLASS}`);
@@ -548,7 +644,10 @@ export class RowsView extends ColumnsView {
     return this.option('noDataText');
   }
 
-  _rowClick(e?) {
+  /**
+   * @extended: editing, keyboard_navigation, selection
+   */
+  protected _rowClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
     this.executeAction('onRowClick', extend({
       evaluate(expr) {
@@ -559,7 +658,10 @@ export class RowsView extends ColumnsView {
     }, e, item));
   }
 
-  _rowDblClick(e?) {
+  /**
+   * @extended: editing
+   */
+  protected _rowDblClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
     this.executeAction('onRowDblClick', extend({}, e, item));
   }
@@ -574,7 +676,10 @@ export class RowsView extends ColumnsView {
     return 0;
   }
 
-  _getGroupCellOptions(options) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _getGroupCellOptions(options) {
     const columnsCountBeforeGroups = this._getColumnsCountBeforeGroups(options.columns);
     const columnIndex = (options.row.groupIndex || 0) + columnsCountBeforeGroups;
 
@@ -584,11 +689,14 @@ export class RowsView extends ColumnsView {
     };
   }
 
-  _needWrapRow() {
+  protected _needWrapRow() {
     return super._needWrapRow.apply(this, arguments as any) || !!this.option('dataRowTemplate');
   }
 
-  _renderCells($row, options) {
+  /**
+   * @extended: adaptivity, master_details
+   */
+  protected _renderCells($row, options) {
     if (options.row.rowType === 'group') {
       this._renderGroupedCells($row, options);
     } else if (options.row.values) {
@@ -596,7 +704,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _renderGroupedCells($row, options) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _renderGroupedCells($row, options) {
     const { row } = options;
     let expandColumn;
     const { columns } = options;
@@ -686,7 +797,10 @@ export class RowsView extends ColumnsView {
     this._rowPrepared($tbody, rowOptions, options.row);
   }
 
-  _renderRow($table, options) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _renderRow($table, options) {
     const { row } = options;
     const { rowTemplate } = this.option();
     const dataRowTemplate = this.option('dataRowTemplate');
@@ -700,7 +814,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _renderTable(options) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _renderTable(options) {
     const that = this;
     const $table = super._renderTable(options);
     const resizeCompletedHandler = function () {
@@ -722,7 +839,10 @@ export class RowsView extends ColumnsView {
     return $table;
   }
 
-  _createTable() {
+  /**
+   * @extended: editing_cell_based
+   */
+  protected _createTable() {
     const $table = super._createTable.apply(this, arguments as any);
 
     if (this.option().rowTemplate || this.option().dataRowTemplate) {
@@ -732,7 +852,10 @@ export class RowsView extends ColumnsView {
     return $table;
   }
 
-  _renderCore(change) {
+  /**
+   * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection, virtual_column, virtual_scrolling
+   */
+  protected _renderCore(change) {
     const $element = this.element();
 
     $element.addClass(this.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
@@ -753,7 +876,10 @@ export class RowsView extends ColumnsView {
     return change && change.items || this._dataController.items();
   }
 
-  _getCellOptions(options) {
+  /**
+   * @extended: editing
+   */
+  protected _getCellOptions(options) {
     const that = this;
     const { column } = options;
     const { row } = options;
@@ -852,7 +978,10 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  updateFreeSpaceRowHeight($table?) {
+  /**
+   * @extended: validating, virtual_scrolling
+   */
+  public updateFreeSpaceRowHeight($table?) {
     const dataController = this._dataController;
     const itemCount = dataController.items(true).length;
     const contentElement = this._findContentElement();
@@ -916,7 +1045,7 @@ export class RowsView extends ColumnsView {
     return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
   }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { optionNames } = e;
 
     if (e.changeTypes.grouping) return;
@@ -929,34 +1058,6 @@ export class RowsView extends ColumnsView {
 
   getScrollable() {
     return this._scrollable;
-  }
-
-  init() {
-    const that = this;
-    const dataController = that.getController('data');
-
-    super.init();
-    this._editingController = this.getController('editing');
-    that._editorFactoryController = that.getController('editorFactory');
-    that._rowHeight = 0;
-    that._scrollTop = 0;
-    that._scrollLeft = -1;
-    that._scrollRight = 0;
-    that._hasHeight = undefined;
-    that._contentChanges = [];
-    dataController.loadingChanged.add((isLoading, messageText) => {
-      that.setLoading(isLoading, messageText);
-    });
-
-    dataController.dataSourceChanged.add(() => {
-      if (this._scrollLeft >= 0 && !this._dataController.isLoading()) {
-        this._handleScroll({
-          component: this.getScrollable(),
-          forceUpdateScrollPosition: true,
-          scrollOffset: { top: this._scrollTop, left: this._scrollLeft },
-        });
-      }
-    });
   }
 
   _handleDataChanged(change?) {
@@ -1023,7 +1124,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _updateScrollable() {
+  /**
+   * @extended: column_fixing
+   */
+  protected _updateScrollable() {
     const scrollable = Scrollable.getInstance(this.element());
 
     if (scrollable) {
@@ -1055,7 +1159,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  _resizeCore() {
+  /**
+   * @extended: column_fixing, filter_row, row_dragging, vitrual_columns, virtual_scrolling
+   */
+  protected _resizeCore() {
     const that = this;
 
     that._fireColumnResizedCallbacks();
@@ -1071,7 +1178,7 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  scrollTo(location) {
+  public scrollTo(location) {
     const $element = this.element();
     const dxScrollable = $element && Scrollable.getInstance($element);
 
@@ -1080,7 +1187,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  height(height) {
+  height(height?) {
     const that = this;
     const $element = this.element();
 
@@ -1094,7 +1201,7 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  hasHeight(hasHeight) {
+  hasHeight(hasHeight?) {
     if (arguments.length === 0) { return !!this._hasHeight; }
 
     this._hasHeight = hasHeight;
@@ -1102,7 +1209,10 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  setLoading(isLoading, messageText?) {
+  /**
+   * @extended: virtual_scrolling
+   */
+  public setLoading(isLoading, messageText?) {
     const that = this;
     let loadPanel = that._loadPanel;
     const dataController = that._dataController;
@@ -1138,7 +1248,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  setRowsOpacity(columnIndex, value) {
+  /**
+   * @extended: column_fixing
+   */
+  public setRowsOpacity(columnIndex, value) {
     const $rows = this._getRowElements().not(`.${GROUP_ROW_CLASS}`) || [];
     this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
   }
@@ -1166,8 +1279,7 @@ export class RowsView extends ColumnsView {
     let viewportBoundary = that._scrollTop;
     const $contentElement = that._findContentElement();
     const contentElementOffsetTop = $contentElement && $contentElement.offset().top;
-    const dataController = this.getController('data');
-    const items = dataController.items();
+    const items = this._dataController.items();
     const tableElement = that.getTableElement();
 
     if (items.length && tableElement) {
@@ -1223,12 +1335,15 @@ export class RowsView extends ColumnsView {
     return undefined;
   }
 
-  _scrollToElement($element, offset) {
+  /**
+   * @extended: column_fixing
+   */
+  public _scrollToElement($element, offset?) {
     const scrollable = this.getScrollable();
     scrollable && scrollable.scrollToElement($element, offset);
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
 
     super.optionChanged(args);
@@ -1266,7 +1381,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  setAriaOwns(headerTableId: string, footerTableId: string): void {
+  /**
+   * @extended: column_fixing
+   */
+  protected setAriaOwns(headerTableId: string, footerTableId: string, isFixed?: boolean): void {
     const $contentElement = this._findContentElement();
     const $tableElement = this.getTableElement();
 
@@ -1281,9 +1399,16 @@ export class RowsView extends ColumnsView {
     this._scrollable && this._scrollable.dispose();
   }
 
-  setScrollerSpacing() { }
+  /**
+   * @extended: column_fixing
+   */
+  public setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
 
-  _restoreErrorRow() { }
+  /**
+   * @extended: validating, virtual_scrolling
+   */
+  // eslint-disable-next-line
+  protected _restoreErrorRow(contentTable?) { }
 }
 
 export const rowsModule = {

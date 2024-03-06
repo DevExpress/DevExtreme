@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { appendElementTo } from '../../../helpers/domUtils';
 

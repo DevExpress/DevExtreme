@@ -1,0 +1,22 @@
+<dx-data-grid
+  [dataSource]="customers"
+  keyExpr="ID"
+  [allowColumnReordering]="true"
+  [showBorders]="true"
+  (onExporting)="onExporting($event)"
+>
+  <dxi-column dataField="CompanyName"></dxi-column>
+  <dxi-column dataField="Phone"></dxi-column>
+  <dxi-column dataField="Fax"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
+
+  <dxo-selection mode="multiple"></dxo-selection>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+  <dxo-export
+    [enabled]="true"
+    [formats]="['pdf']"
+    [allowExportSelectedData]="true"
+  ></dxo-export>
+</dx-data-grid>

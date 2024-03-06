@@ -4,7 +4,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from '../../model/dataGrid';
 import CheckBox from '../../model/checkBox';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../container.html'));

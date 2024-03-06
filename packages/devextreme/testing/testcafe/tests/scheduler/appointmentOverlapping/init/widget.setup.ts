@@ -1,5 +1,5 @@
 import { extend } from '../../../../../../js/core/utils/extend';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 
 export default async (options = {}): Promise<void> => createWidget('dxScheduler', extend({
   dataSource: [],

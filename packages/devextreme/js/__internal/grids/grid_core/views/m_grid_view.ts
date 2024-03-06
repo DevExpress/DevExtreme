@@ -14,9 +14,16 @@ import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 
+import type { FooterView } from '../../data_grid/summary/m_summary';
+import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import type { RowsView } from './m_rows_view';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
@@ -55,15 +62,15 @@ const restoreFocus = function (focusedElement, selectionRange) {
 export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
 
-  private _dataController: any;
+  _dataController!: DataController;
 
-  _rowsView: any;
+  _rowsView!: RowsView;
 
-  _columnHeadersView: any;
+  _columnHeadersView!: ColumnHeadersView;
 
-  _columnsController: any;
+  _columnsController!: ColumnsController;
 
-  _footerView: any;
+  _footerView!: FooterView;
 
   private _prevContentMinHeight: any;
 
@@ -75,15 +82,28 @@ export class ResizingController extends modules.ViewController {
 
   private _resizeDeferred: any;
 
-  private _lastWidth: any;
+  public _lastWidth: any;
 
   private _devicePixelRatio: any;
 
   private _lastHeight: any;
 
-  _adaptiveColumnsController: any;
+  protected _adaptiveColumnsController!: AdaptiveColumnsController;
 
-  _updateScrollableTimeoutID: any;
+  private _editorFactoryController!: EditorFactory;
+
+  protected _updateScrollableTimeoutID: any;
+
+  public init() {
+    this._prevContentMinHeight = null;
+    this._dataController = this.getController('data');
+    this._columnsController = this.getController('columns');
+    this._columnHeadersView = this.getView('columnHeadersView');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this._editorFactoryController = this.getController('editorFactory');
+    this._footerView = this.getView('footerView');
+    this._rowsView = this.getView('rowsView');
+  }
 
   _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
@@ -153,7 +173,10 @@ export class ResizingController extends modules.ViewController {
     return resizeDeferred;
   }
 
-  fireContentReadyAction() {
+  /**
+   * @extended: master_detail
+   */
+  public fireContentReadyAction() {
     this.component._fireContentReadyAction();
   }
 
@@ -220,7 +243,10 @@ export class ResizingController extends modules.ViewController {
     });
   }
 
-  _toggleBestFitMode(isBestFit) {
+  /**
+   * @extended: adaptivity, master_detail
+   */
+  protected _toggleBestFitMode(isBestFit) {
     const $rowsTable = this._rowsView.getTableElement();
     const $rowsFixedTable = this._rowsView.getTableElements().eq(1);
 
@@ -240,6 +266,7 @@ export class ResizingController extends modules.ViewController {
     this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
     if (this._needStretch()) {
+      // @ts-expect-error
       $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
     }
   }
@@ -269,7 +296,7 @@ export class ResizingController extends modules.ViewController {
     let hasMinWidth = false;
     let resetBestFitMode;
     let isColumnWidthsCorrected = false;
-    let resultWidths = [];
+    let resultWidths: any[] = [];
     let focusedElement;
     let selectionRange;
 
@@ -382,11 +409,17 @@ export class ResizingController extends modules.ViewController {
     });
   }
 
-  _needBestFit() {
+  /**
+   * @extended: adaptivity
+   */
+  protected _needBestFit() {
     return this.option('columnAutoWidth');
   }
 
-  _needStretch() {
+  /**
+   * @extended: adaptivity
+   */
+  protected _needStretch() {
     return this._columnsController.getVisibleColumns().some((c) => c.width === 'auto' && !c.command);
   }
 
@@ -397,7 +430,10 @@ export class ResizingController extends modules.ViewController {
     return freeWidth / columnCountWithoutWidth;
   }
 
-  _correctColumnWidths(resultWidths, visibleColumns) {
+  /**
+   * @extended: adaptivity
+   */
+  protected _correctColumnWidths(resultWidths, visibleColumns) {
     const that = this;
     let i;
     let hasPercentWidth = false;
@@ -595,7 +631,10 @@ export class ResizingController extends modules.ViewController {
     );
   }
 
-  resize() {
+  /**
+   * @extended: virtual_scrolling
+   */
+  public resize() {
     if (this.component._requireResize) {
       return;
     }
@@ -694,18 +733,24 @@ export class ResizingController extends modules.ViewController {
     } else { this._setScrollerSpacingCore(); }
   }
 
-  _setAriaOwns() {
+  /**
+   * @extended: column_fixing
+   */
+  protected _setAriaOwns() {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 
+    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
   }
 
-  _updateDimensionsCore() {
+  /**
+   * @extended: header_panel
+   */
+  protected _updateDimensionsCore() {
     const that = this;
 
     const dataController = that._dataController;
-    const editorFactory = that.getController('editorFactory');
     const rowsView = that._rowsView;
 
     const $rootElement = that.component.$element();
@@ -744,6 +789,7 @@ export class ResizingController extends modules.ViewController {
         that._setScrollerSpacing();
 
         each(VIEW_NAMES, (index, viewName) => {
+          // TODO getView
           // @ts-expect-error
           const view = that.getView(viewName);
           if (view) {
@@ -751,7 +797,7 @@ export class ResizingController extends modules.ViewController {
           }
         });
 
-        editorFactory && editorFactory.resize();
+        this._editorFactoryController && this._editorFactoryController.resize();
       });
     });
   }
@@ -762,7 +808,7 @@ export class ResizingController extends modules.ViewController {
     this._devicePixelRatio = getWindow().devicePixelRatio;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'width':
       case 'height':
@@ -776,20 +822,9 @@ export class ResizingController extends modules.ViewController {
         super.optionChanged(args);
     }
   }
-
-  init() {
-    this._prevContentMinHeight = null;
-    this._dataController = this.getController('data');
-    this._columnsController = this.getController('columns');
-    // @ts-expect-error
-    this._columnHeadersView = this.getView('columnHeadersView');
-    // @ts-expect-error
-    this._footerView = this.getView('footerView');
-    this._rowsView = this.getView('rowsView');
-  }
 }
 
-class SynchronizeScrollingController extends modules.ViewController {
+export class SynchronizeScrollingController extends modules.ViewController {
   _scrollChangedHandler(views, pos, viewName) {
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
@@ -799,7 +834,6 @@ class SynchronizeScrollingController extends modules.ViewController {
   }
 
   init() {
-    // @ts-expect-error
     const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
 
     for (let i = 0; i < views.length; i++) {
@@ -811,37 +845,37 @@ class SynchronizeScrollingController extends modules.ViewController {
   }
 }
 
-class GridView extends modules.View {
-  private _resizingController: any;
+export class GridView extends modules.View {
+  private _resizingController!: ResizingController;
 
-  private _dataController: any;
+  private _dataController!: DataController;
 
   private _groupElement: any;
 
   private _rootElement: any;
 
-  _endUpdateCore() {
+  protected _endUpdateCore() {
     if (this.component._requireResize) {
       this.component._requireResize = false;
       this._resizingController.resize();
     }
   }
 
-  init() {
+  public init() {
     const that = this;
     that._resizingController = that.getController('resizing');
     that._dataController = that.getController('data');
   }
 
-  getView(name) {
+  public getView(name) {
     return this.component._views[name];
   }
 
-  element() {
+  public element() {
     return this._groupElement;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const that = this;
 
     if (isDefined(that._groupElement) && args.name === 'showBorders') {
@@ -852,10 +886,11 @@ class GridView extends modules.View {
     }
   }
 
-  _renderViews($groupElement) {
+  private _renderViews($groupElement) {
     const that = this;
 
     each(VIEW_NAMES, (index, viewName) => {
+      // TODO getView
       const view = that.getView(viewName);
       if (view) {
         view.render($groupElement);
@@ -863,11 +898,11 @@ class GridView extends modules.View {
     });
   }
 
-  _getTableRoleName() {
+  private _getTableRoleName() {
     return 'group';
   }
 
-  render($rootElement) {
+  public render($rootElement) {
     const isFirstRender = !this._groupElement;
     const $groupElement = this._groupElement || $('<div>').addClass(this.getWidgetContainerClass());
 
@@ -882,21 +917,20 @@ class GridView extends modules.View {
 
     if (isFirstRender) {
       this._groupElement = $groupElement;
-      hasWindow() && this.getController('resizing').updateSize($rootElement);
+      hasWindow() && this._resizingController.updateSize($rootElement);
       $groupElement.appendTo($rootElement);
     }
 
     this._renderViews($groupElement);
   }
 
-  update() {
+  public update() {
     const that = this;
     const $rootElement = that._rootElement;
     const $groupElement = that._groupElement;
-    const resizingController = that.getController('resizing');
 
     if ($rootElement && $groupElement) {
-      resizingController.resize();
+      this._resizingController.resize();
       if (that._dataController.isLoaded()) {
         that._resizingController.fireContentReadyAction();
       }

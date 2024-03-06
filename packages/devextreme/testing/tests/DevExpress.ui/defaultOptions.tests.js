@@ -827,6 +827,10 @@ testComponentDefaults(ResizeHandle,
     {},
     {
         direction: 'horizontal',
+        focusStateEnabled: false,
+        onResize: null,
+        onResizeStart: null,
+        onResizeEnd: null,
     }
 );
 
@@ -1449,6 +1453,7 @@ testComponentDefaults(Splitter,
         onResize: null,
         onResizeStart: null,
         onResizeEnd: null,
+        allowKeyboardNavigation: true,
     }
 );
 

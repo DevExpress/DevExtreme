@@ -12,7 +12,7 @@ import DataCell from './data/cell';
 import Headers from './headers';
 import ContextMenu from '../contextMenu';
 
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
@@ -49,6 +49,7 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
+  loadPanelWrapper: 'dx-loadpanel-wrapper',
   revertTooltip: 'revert-tooltip',
   invalidMessage: 'invalid-message',
 
@@ -195,6 +196,10 @@ export default class DataGrid extends Widget {
 
   getOverlay(): Overlay {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
+  }
+
+  getLoadPanel(): Overlay {
+    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -545,6 +550,16 @@ export default class DataGrid extends Widget {
           getInstance,
         },
       },
+    )();
+  }
+
+  apiBeginCustomLoading(messageText: string): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
+      },
+      { dependencies: { getInstance, messageText } },
     )();
   }
 

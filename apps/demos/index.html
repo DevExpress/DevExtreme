@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../node_modules/devextreme-dist/css/dx.dark.css" />
+    <script src="../../node_modules/devextreme-dist/js/dx.all.js"></script>
+    <style>
+      body,
+      html {
+        margin: 0;
+        height: 100%;
+      }
+    </style>
+  </head>
+
+  <body class="dx-viewport">
+    <div id="toolbar"></div>
+    <div id="drawer" style="height: calc(100% - 56px)">
+      <div id="content" style="height: 100%">
+        <iframe id="frame" style="width: 100%; height: calc(100% - 56px); resize: both" src="Demos/DataGrid/Overview/jQuery/"></iframe>
+        <br />
+        <div>
+          <a id="demolink" target="_blank" href="">open in separate tab</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      const ui = DevExpress.ui;
+      const themeCookieName = "dx-demo-theme";
+
+      const languages = {
+        typescript: "TypeScript",
+        javascript: "JavaScript",
+      };
+
+      const platformsByApproach = {
+        jQuery: "jQuery",
+        Angular: "Angular",
+        Vue: "Vue",
+        React: "React",
+        ReactJs: "React",
+      };
+
+      const platforms = {
+        jQuery: {
+          [languages.javascript]: "jQuery",
+          [languages.typescript]: "jQuery",
+        },
+        Angular: {
+          [languages.javascript]: "Angular",
+          [languages.typescript]: "Angular",
+        },
+        Vue: {
+          [languages.javascript]: "Vue",
+          [languages.typescript]: "Vue",
+        },
+        React: {
+          [languages.javascript]: "ReactJs",
+          [languages.typescript]: "React",
+        },
+      };
+
+      let platform = null;
+      let language = null;
+      let approach = null;
+
+      let theme = null;
+      let widget = null;
+      let name = null;
+      let treeList = null;
+
+      const isLanguageSwitchingSupported = (platform) => platform && platforms[platform][languages.typescript] !== platforms[platform][languages.javascript];
+
+      const processLink = () => {
+        if (window.location.hash === "") {
+          window.location.hash = "#Demos/DataGrid/Overview/jQuery/dx.light.css";
+        }
+
+        const pathParts = window.location.hash
+          .substring(1)
+          .split("/")
+          .filter((s) => s !== "");
+
+        const selectedData = treeList?.getSelectedRowsData("leavesOnly");
+        if (selectedData?.length) {
+          pathParts[1] = selectedData[0].Widget;
+          pathParts[2] = selectedData[0].Name;
+        }
+
+        approach = approach ?? pathParts[3];
+        platform = platform ?? platformsByApproach[approach];
+        language = language ?? languages.typescript;
+
+        isLanguageSwitcherVisible = isLanguageSwitchingSupported(platform);
+
+        theme = theme ?? pathParts[4];
+        widget = pathParts[1];
+        name = pathParts[2];
+
+        pathParts[3] = approach;
+        pathParts[4] = theme;
+
+        const link = pathParts.slice(0, -1).join("/");
+
+        window.location.hash = `#${link}/${theme}`;
+
+        return link + "/";
+      };
+
+      const setThemeCookie = () => {
+        const now = new Date();
+        // expires in a month
+        now.setTime(now.getTime() + 1000 * 60 * 60 * 24 * 30);
+        document.cookie = `dx-demo-theme=${theme};path=/;expires=${now.toUTCString()}`;
+      };
+
+      const updateDemo = () => {
+        setThemeCookie();
+
+        document.getElementById("frame").src = document.getElementById("demolink").href = processLink();
+      };
+
+      const processDataSourceItem = (item) => {
+        if (!item.Widget) {
+          item.Title = item.Name;
+        }
+
+        if (item.Demos && item.Demos.length && !item.Groups) {
+          item.Groups = item.Demos;
+        }
+
+        if (item.Groups && item.Groups.length) {
+          item.Groups.forEach(processDataSourceItem);
+        }
+
+        item.key = (!item.Widget ? Math.random() : item.Widget) + item.Name;
+
+        return item;
+      };
+
+      const drawerTemplate = () => {
+        const treeListElement = document.createElement("div");
+
+        treeList = new ui.dxTreeList(treeListElement, {
+          dataStructure: "tree",
+          itemsExpr: "Groups",
+          keyExpr: "key",
+          width: 250,
+          height: "100%",
+          selection: {
+            mode: "single",
+          },
+          onSelectionChanged: updateDemo,
+          columns: [
+            {
+              dataField: "Title",
+              dataType: "string",
+              filterOperations: ["contains"],
+            },
+          ],
+          showColumnHeaders: false,
+          filterMode: "fullBranch",
+          filterRow: {
+            visible: true,
+          },
+        });
+
+        DevExpress.utils.ajax
+          .sendRequest({
+            url: "menuMeta.json",
+            dataType: "json",
+          })
+          .then((data) => {
+            treeList.option("dataSource", data.map(processDataSourceItem));
+            treeList.selectRows([widget + name]);
+            treeList.option("focusedRowKey", widget + name);
+          });
+
+        return treeListElement;
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDemo();
+        const drawerElement = document.getElementById("drawer");
+        const toolbarElement = document.getElementById("toolbar");
+
+        const drawer = new ui.dxDrawer(drawerElement, {
+          opened: true,
+          closeOnOutsideClick: false,
+          template: drawerTemplate,
+        });
+        const languageSwitcherVisibilityOption = "items[2].visible";
+        const toolbar = new ui.dxToolbar(toolbarElement, {
+          items: [
+            {
+              location: "before",
+              widget: "dxButton",
+              options: {
+                icon: "menu",
+                onClick: () => drawer.toggle(),
+              },
+            },
+            {
+              location: "after",
+              widget: "dxSelectBox",
+              options: {
+                items: ["jQuery", "Angular", "Vue", "React"],
+                value: platform,
+                width: 100,
+                onValueChanged: (e) => {
+                  platform = e.value;
+                  if (isLanguageSwitchingSupported(platform) && !language) {
+                    language = languages.typescript;
+                  }
+                  approach = platforms[platform][language ?? languages.typescript];
+                  toolbar.option(languageSwitcherVisibilityOption, isLanguageSwitchingSupported(platform));
+                  updateDemo();
+                },
+              },
+            },
+            {
+              location: "after",
+              widget: "dxSelectBox",
+              visible: isLanguageSwitcherVisible,
+              options: {
+                items: ["TypeScript", "JavaScript"],
+                value: language,
+                width: 100,
+                onValueChanged: (e) => {
+                  language = e.value;
+                  if (platforms[platform][language] !== approach) {
+                    approach = platforms[platform][language];
+                    updateDemo();
+                  }
+                },
+              },
+            },
+            {
+              location: "after",
+              widget: "dxSelectBox",
+              options: {
+                dataSource: "/themes",
+                value: theme,
+                width: 250,
+                searchEnabled: true,
+                onValueChanged: (e) => {
+                  theme = e.value;
+                  updateDemo();
+                },
+              },
+            },
+            {
+              location: "after",
+              widget: "dxButton",
+              options: {
+                icon: "refresh",
+                onClick: () => updateDemo(),
+              },
+            },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>

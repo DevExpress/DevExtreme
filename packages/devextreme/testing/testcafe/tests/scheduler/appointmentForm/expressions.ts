@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
@@ -10,11 +10,6 @@ fixture.disablePageReloads`Appointment form: expressions`
 const SCHEDULER_SELECTOR = '#container';
 const TEST_TITLE = 'Test';
 const TEST_DESCRIPTION = 'Test description...';
-
-// TODO Vinogradov: Create a separate "disposeWidget" helper function.
-const disposeScheduler = async () => ClientFunction(() => {
-  ($(SCHEDULER_SELECTOR) as any).dxScheduler('dispose');
-}, { dependencies: { SCHEDULER_SELECTOR } })();
 
 const getDataSourceValues = ClientFunction(() => ($(SCHEDULER_SELECTOR) as any)
   .dxScheduler('instance')
@@ -514,7 +509,7 @@ const RECURRENCE_RULE_TEST_CASES = {
         cellDuration: 240,
         ...options,
       });
-    }).after(async () => disposeScheduler());
+    }).after(async () => disposeWidget('dxScheduler'));
   });
 });
 
@@ -555,7 +550,7 @@ const RECURRENCE_RULE_TEST_CASES = {
         cellDuration: 240,
         ...options,
       });
-    }).after(async () => disposeScheduler());
+    }).after(async () => disposeWidget('dxScheduler'));
   });
 });
 
@@ -598,4 +593,4 @@ test(
     recurrenceEditMode: 'series',
     recurrenceRuleExpr: 'nestedA.nestedB.nestedC.recurrenceRuleCustom',
   });
-}).after(async () => disposeScheduler());
+}).after(async () => disposeWidget('dxScheduler'));

@@ -1,0 +1,49 @@
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [height]="730"
+  [dataSource]="dataSource"
+  dateCellTemplate="dateCellTemplate"
+  [showAllDayPanel]="false"
+  currentView="workWeek"
+  [currentDate]="currentDate"
+  [startDayHour]="7"
+  [endDayHour]="23"
+>
+  <dxi-view type="day"></dxi-view>
+  <dxi-view
+    type="week"
+    [groups]="['typeId']"
+    dateCellTemplate="dateCellTemplate"
+  ></dxi-view>
+  <dxi-view
+    type="workWeek"
+    [startDayHour]="9"
+    [endDayHour]="18"
+    [groups]="['priorityId']"
+    dateCellTemplate="dateCellTemplate"
+  ></dxi-view>
+  <dxi-view type="month"></dxi-view>
+
+  <dxi-resource
+    fieldExpr="priorityId"
+    [allowMultiple]="false"
+    [dataSource]="priorityData"
+    label="Priority"
+  >
+  </dxi-resource>
+
+  <dxi-resource
+    fieldExpr="typeId"
+    [allowMultiple]="false"
+    [dataSource]="typeData"
+    label="Type"
+  >
+  </dxi-resource>
+
+  <div *dxTemplate="let data of 'dateCellTemplate'">
+    <div class="name">{{
+      ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][data.date.getDay()]
+    }}</div>
+    <div class="number">{{ data.date.getDate() }}</div>
+  </div>
+</dx-scheduler>

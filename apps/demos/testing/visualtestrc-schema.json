@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "IComparerOptions",
+  "type": "object",
+  "required": [],
+  "properties": {
+      "$schema": {
+          "type": "string"
+      },
+      "ignore": {
+          "type": "boolean"
+        },
+      "comparison-options": {
+          "$ref": "../node_modules/devextreme-screenshot-comparer/src/options.json"
+      },
+      "jquery": {
+          "$ref": "#/$defs/frameworkOptions"
+      },
+      "angular": {
+          "$ref": "#/$defs/frameworkOptions"
+      },
+      "react": {
+          "$ref": "#/$defs/frameworkOptions"
+      },
+      "vue": {
+          "$ref": "#/$defs/frameworkOptions"
+      }
+  },
+  "additionalProperties": false,
+  "$defs": {
+      "frameworkOptions":{
+          "type": "object",
+          "properties": {
+              "ignore": {
+                  "type": "boolean"
+              },
+              "comparison-options": {
+                  "$ref": "../node_modules/devextreme-screenshot-comparer/src/options-schema.json"
+              }
+          }
+      }
+  }
+}

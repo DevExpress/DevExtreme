@@ -2,7 +2,7 @@
 
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
 
@@ -108,5 +108,31 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
     selection: {
       allowSelectAll: true,
     },
+  },
+}));
+
+test('Column chooser should support string height and width', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getColumnChooserButton());
+
+  const columnChooserContent = dataGrid.getColumnChooser().content;
+
+  await t
+    .expect(columnChooserContent.getStyleProperty('height'))
+    .eql('400px')
+    .expect(columnChooserContent.getStyleProperty('width'))
+    .eql('330px');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  columns: [
+    'field1', 'field2', 'field3',
+  ],
+  width: 700,
+  columnChooser: {
+    enabled: true,
+    height: '400px',
+    width: '330px',
   },
 }));

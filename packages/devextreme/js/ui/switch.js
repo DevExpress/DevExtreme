@@ -94,7 +94,7 @@ const Switch = Editor.inherit({
 
         this._renderClick();
 
-        this.setAria('role', 'button');
+        this.setAria('role', 'switch');
 
         this._renderSwipeable();
 
@@ -316,17 +316,17 @@ const Switch = Editor.inherit({
         });
     },
 
-    _renderValue: function() {
+    _renderValue() {
         this._validateValue();
 
-        const val = this.option('value');
-        this._renderPosition(val, 0);
+        const value = this.option('value');
+        this._renderPosition(value, 0);
 
-        this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, val);
-        this._getSubmitElement().val(val);
+        this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, value);
+        this._getSubmitElement().val(value);
         this.setAria({
-            'pressed': val,
-            'label': val ? this.option('switchedOnText') : this.option('switchedOffText')
+            'checked': value,
+            'label': value ? this.option('switchedOnText') : this.option('switchedOffText')
         });
     },
 
