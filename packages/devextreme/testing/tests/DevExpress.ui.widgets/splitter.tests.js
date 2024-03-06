@@ -49,6 +49,40 @@ QUnit.module('Resizing', moduleConfig, () => {
         });
     }
 
+    QUnit.module('Pane sizing', moduleConfig, () => {
+        ['horizontal', 'vertical'].forEach(orientation => {
+            [
+                { dataSource: [{ size: '30%' }, { size: '60%' }, { size: '10%' }], expectedSize: ['30', '60', '10'], orientation },
+                { dataSource: [{ }, { }, { }, { } ], expectedSize: ['25', '25', '25', '25'], orientation },
+                { dataSource: [{ }, { size: '10%' }, { }, { } ], expectedSize: ['30', '10', '30', '30'], orientation },
+                { dataSource: [{ size: '30%' }, { }, { size: '50%' }, { } ], expectedSize: ['30', '10', '50', '10'], orientation },
+                { dataSource: [{ size: '30%' }, { }, { size: '30%' } ], expectedSize: ['30', '40', '30'], orientation },
+                { dataSource: [{ }, { visible: false }, { size: '50%' }, { } ], expectedSize: ['25', '50', '25'], orientation },
+                { dataSource: [{ visible: false }, { visible: false }, { size: '50%' }, { } ], expectedSize: ['50', '50'], orientation },
+                { dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false } ], expectedSize: ['40', '60'], orientation },
+                { dataSource: [{ size: '30%' }, { size: '200%' } ], expectedSize: ['30', '70'], orientation },
+                { dataSource: [{ size: '320%' }, { size: '200%' } ], expectedSize: ['100', '0'], orientation },
+                { dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ], expectedSize: ['30', '20', '100', '0', '0'], orientation: 'horizontal' },
+                { dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' } ], expectedSize: ['30', '25', '45'], orientation },
+                { dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' } ], expectedSize: [ '25', '75'], orientation },
+                { dataSource: [{ size: '0%' }, { size: '1%' } ], expectedSize: ['0', '100'], orientation },
+                { dataSource: [{ }, { size: '1%' } ], expectedSize: ['99', '1'], orientation },
+            ].forEach(({ dataSource, expectedSize, orientation }) => {
+                QUnit.test(`pane should respect size option in percentages, ${orientation} orientation`, function(assert) {
+                    this.reinit({
+                        width: 424, height: 424,
+                        dataSource,
+                        orientation,
+                    });
+
+                    const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+                    assertLayout(items, expectedSize, assert);
+                });
+            });
+        });
+    });
+
     ['horizontal', 'vertical'].forEach(orientation => {
         QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
             this.reinit({

@@ -3,7 +3,8 @@ import $ from '@js/core/renderer';
 import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
-import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
+import { isString } from '@js/core/utils/type';
+import type { dxSplitterItem as Item } from 'devextreme/ui/splitter';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
 
@@ -123,14 +124,49 @@ export function updateItemsSize(items, sizeDistribution): void {
   });
 }
 
-export function getInitialLayout(items: Item[]): number[] {
+// eslint-disable-next-line class-methods-use-this
+function isPercentWidth(size: string | number): boolean {
+  return isString(size) && size.endsWith('%');
+}
+
+export function getInitialLayout(panes: Item[]): number[] {
   const layout: number[] = [];
+  let totalSize = 0;
+  let sizeOverflow = false;
 
-  const visibleItemsCount = items.filter((item) => item.visible !== false).length;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const pane of panes) {
+    if (pane.visible === false || sizeOverflow) {
+      layout.push(0);
+    } else if (pane.size && isPercentWidth(pane.size)) {
+      let percentSize = parseFloat(pane.size as string);
+      percentSize = Math.min(100, percentSize);
+      totalSize += percentSize;
+      layout.push(percentSize);
 
-  items.forEach((item) => {
-    layout.push(item.visible === false ? 0 : 100 / visibleItemsCount);
-  });
+      if (totalSize >= 100) {
+        sizeOverflow = true;
+      }
+    } else {
+      layout.push(-1);
+    }
+  }
+
+  const noSizePanes = panes.filter((p) => p.visible !== false && !p.size);
+
+  if (noSizePanes.length) {
+    const remainingSpace = Math.max(100 - totalSize, 0);
+
+    layout.forEach((pane, index) => {
+      if (layout[index] === -1) {
+        layout[index] = remainingSpace / noSizePanes.length;
+      }
+    });
+  } else if (totalSize < 100) {
+    layout[layout.length - 1] += 100 - totalSize;
+  } else if (totalSize > 100) {
+    layout[layout.length - 1] = 100 - (totalSize - layout[layout.length - 1]);
+  }
 
   return layout;
 }
