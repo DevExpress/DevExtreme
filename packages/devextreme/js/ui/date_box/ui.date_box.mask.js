@@ -307,7 +307,7 @@ const DateBoxMask = DateBoxBase.inherit({
         if(!isNaN(parseInt(this._getActivePartProp('text')))) {
             return;
         } else {
-            this._handleAmPmSearch(char.toLowerCase(), this._getActivePartProp('text'));
+            this._toggleAmPmOnChar(char.toLowerCase(), this._getActivePartProp('text'));
         }
 
         const limits = this._getActivePartProp('limits')(this._maskValue);
@@ -333,7 +333,7 @@ const DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _handleAmPmSearch(char, activePartText) {
+    _toggleAmPmOnChar(char, activePartText) {
         if((char === 'p' && activePartText === 'AM') || (char === 'a' && activePartText === 'PM')) {
             this._toggleAmPm();
         }
