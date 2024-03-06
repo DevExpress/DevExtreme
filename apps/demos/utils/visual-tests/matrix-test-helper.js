@@ -78,18 +78,18 @@ export function globalReadFrom(basePath, relativePath, mapCallback) {
   return null;
 }
 
-export function changeTheme(dirName, relativePath, demoPath, theme) {
+export function changeTheme(dirName, demoPath, theme) {
   if (!theme || theme === THEME.generic) {
     return;
   }
 
-  const indexFilePath = join(dirName, `${relativePath}${demoPath}/index.html`);
-
-  const updatedContent = globalReadFrom(dirName, `${relativePath}${demoPath}/index.html`, (data) => {
+  const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
     const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
     return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
   });
+
+  const indexFilePath = join(dirName, demoPath);
 
   if (existsSync(indexFilePath)) {
     writeFileSync(indexFilePath, updatedContent, 'utf8');
@@ -190,6 +190,9 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ],
+    VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
@@ -335,7 +338,7 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  changeTheme(__dirname, '../../', `/Demos/${product}/${demo}/${framework}/`, process.env.THEME);
+  changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;

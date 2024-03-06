@@ -175,7 +175,7 @@ const SKIPPED_TESTS = {
       }
     }
 
-    changeTheme(__dirname, '../', demoPath, process.env.THEME);
+    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
 
     runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`)
       .clientScripts(clientScriptSource)(testName, async (t) => {
