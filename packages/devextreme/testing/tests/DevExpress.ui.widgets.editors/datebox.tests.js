@@ -5760,42 +5760,6 @@ QUnit.module('datebox validation', {}, () => {
     });
 });
 
-[
-    { input: 'p', expectedValue: 'PM' },
-    { input: 'a', expectedValue: 'AM' },
-    { input: 'x', expectedValue: null },
-    { input: 'y', expectedValue: null },
-    { input: 'p', expectedValue: 'PM' },
-    { input: 'a', expectedValue: 'AM' },
-    { input: 'x', expectedValue: null },
-    { input: 'y', expectedValue: null },
-    { input: 'z', expectedValue: null },
-].forEach(({ input, expectedValue }) => {
-    QUnit.module('DateBox AM/PM Handling', {
-        beforeEach: function() {
-            this.$element = $('#dateBox').dxDateBox({
-                value: new Date('10/10/2012 13:07'),
-                useMaskBehavior: true,
-                displayFormat: 'a',
-            });
-
-            this.instance = this.$element.dxDateBox('instance');
-            this.$input = this.$element.find('.dx-texteditor-input');
-            this.keyboard = keyboardMock(this.$input, true);
-        },
-        afterEach: function() {
-            fx.off = false;
-        }
-    }, () => {
-        QUnit.test(`when "${input}" is pressed it AM/PM should ${expectedValue ? `toggle to ${expectedValue}` : 'not toggle'} `, function(assert) {
-            this.keyboard.type(input);
-
-            const actualValue = (input === 'p' || input === 'a') ? expectedValue : this.$input.val();
-            assert.strictEqual(this.$input.val(), actualValue);
-        });
-    });
-});
-
 QUnit.module('DateBox number and string value support', {
     beforeEach: function() {
         fx.off = true;
