@@ -337,10 +337,6 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _handleAmPmSearch(char) {
-        const startString = this._searchValue + char.toLowerCase();
-
-        this._searchValue = startString;
-
         if(char.toLowerCase() === 'p' && this._getActivePartProp('text') === 'AM') {
             this._toggleAmPm();
         } else if(char.toLowerCase() === 'a' && this._getActivePartProp('text') === 'PM') {
