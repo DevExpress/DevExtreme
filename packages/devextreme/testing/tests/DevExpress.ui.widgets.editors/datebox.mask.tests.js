@@ -1036,7 +1036,7 @@ module('Search', setupModule, () => {
 
     test('when A is pressed it should toggle PM to AM', function(assert) {
         this.instance.option({
-            value: new Date('10/10/2012 09:00 PM'),
+            value: new Date('10/10/2012 22:00'),
             useMaskBehavior: true,
             displayFormat: 'a'
         });
@@ -1047,7 +1047,7 @@ module('Search', setupModule, () => {
 
     test('when P is pressed it should toggle AM to PM', function(assert) {
         this.instance.option({
-            value: new Date('10/10/2012 09:00 AM'),
+            value: new Date('10/10/2012 10:00'),
             useMaskBehavior: true,
             displayFormat: 'a'
         });
@@ -1064,8 +1064,7 @@ module('Search', setupModule, () => {
     ].forEach(({ letter, expectedValue }) => {
         QUnit.test('AM/PM part should not change when keys other than \'a\' or \'p\' are pressed', function(assert) {
             this.instance.option({
-                value: new Date(`10/10/2012 09:00 ${expectedValue}`),
-                useMaskBehavior: true,
+                value: new Date(`10/10/2012 10:00 ${expectedValue}`),
                 displayFormat: 'a'
             });
 
