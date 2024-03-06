@@ -1437,11 +1437,17 @@ QUnit.begin(function() {
         const sparkline = this.createSparkline({
             type: 'winloss',
             lossColor: 'blue',
+            winlossThreshold: 4,
+            dataSource: [0, 3, 6]
         });
 
         sparkline.option({ lossColor: 'green' });
 
-        assert.strictEqual(sparkline.option('lossColor'), 'green', 'lossColor should be green after runtime change');
+        this.checkCustomizePoint(assert, [
+            { color: '#666666' },
+            { color: 'green' },
+            { color: '#666666' }
+        ]);
     });
 
     QUnit.test('Several min/max in dataSource', function(assert) {
