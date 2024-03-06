@@ -26,6 +26,28 @@ const evalScript = function(code) {
     removeScript(script);
 };
 
+const evalCrossDomainScript = function(url) {
+    const script = createScript({ src: url });
+
+    return new Promise(function(resolve, reject) {
+        const events = {
+            'load': resolve,
+            'error': reject
+        };
+
+        const loadHandler = function(e) {
+            events[e.type]();
+            removeScript(script);
+        };
+
+        for(const event in events) {
+            domAdapter.listen(script, event, loadHandler);
+        }
+
+        appendToHead(script);
+    });
+};
+
 function getMethod(options) {
     return (options.method || 'GET').toUpperCase();
 }
@@ -174,8 +196,7 @@ export {
     getRequestOptions,
     getAcceptHeader,
     evalScript,
-    removeScript,
-    createScript,
+    evalCrossDomainScript,
     appendToHead,
     getMethod,
 };

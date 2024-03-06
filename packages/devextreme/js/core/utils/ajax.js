@@ -1,5 +1,4 @@
 import { Deferred } from './deferred';
-import domAdapter from '../../core/dom_adapter';
 import httpRequest from '../../core/http_request';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -10,10 +9,8 @@ import {
     getJsonpCallbackName as getJsonpOptions,
     getRequestHeaders,
     getRequestOptions,
-    createScript,
-    removeScript,
     evalScript,
-    appendToHead,
+    evalCrossDomainScript,
     getMethod,
 } from './ajax_utils';
 
@@ -29,28 +26,6 @@ const isStatusSuccess = function(status) {
 
 const hasContent = function(status) {
     return status !== 204;
-};
-
-const evalCrossDomainScript = function(url) {
-    const script = createScript({ src: url });
-
-    return new Promise(function(resolve, reject) {
-        const events = {
-            'load': resolve,
-            'error': reject
-        };
-
-        const loadHandler = function(e) {
-            events[e.type]();
-            removeScript(script);
-        };
-
-        for(const event in events) {
-            domAdapter.listen(script, event, loadHandler);
-        }
-
-        appendToHead(script);
-    });
 };
 
 const getDataFromResponse = function(xhr) {

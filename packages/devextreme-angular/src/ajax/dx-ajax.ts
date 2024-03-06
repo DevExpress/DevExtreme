@@ -7,6 +7,7 @@ import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { isDefined } from 'devextreme/core/utils/type';
 import {
   isCrossDomain,
+  evalCrossDomainScript,
   getRequestOptions,
   getRequestHeaders as getAjaxRequestHeaders,
   getAcceptHeader,
@@ -14,9 +15,15 @@ import {
 } from 'devextreme/core/utils/ajax_utils';
 
 type Result = Promise<any> & { abort: () => void };
+interface XHRSurrogate {
+  type?: string; // needs only for testing
+  aborted: boolean;
+  abort: () => void;
+}
 
 const PARSER_ERROR = 'parsererror';
 const SUCCESS = 'success';
+const ERROR = 'error';
 const NO_CONTENT = 'nocontent';
 const TIMEOUT = 'timeout';
 const STATUS_ABORT = 0;
@@ -90,13 +97,26 @@ function patchOptions(options) {
   return patchedOptions;
 }
 
-function rejectIfAborted(deferred, xhrSurrogate) {
+function rejectIfAborted(deferred, xhrSurrogate: XHRSurrogate) {
   if (xhrSurrogate.aborted) {
     deferred.reject({ status: STATUS_ABORT });
   }
 }
+function sendRequestByScript(url: string, deferred, xhrSurrogate: XHRSurrogate, result: Result) {
+  const reject = function () {
+    // eslint-disable-next-line no-void
+    void deferred.reject(xhrSurrogate, ERROR);
+  };
+  const resolve = function () {
+    // eslint-disable-next-line no-void
+    void deferred.resolve(null, SUCCESS, xhrSurrogate);
+  };
 
-function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogate) {
+  evalCrossDomainScript(url).then(resolve, reject);
+  return result;
+}
+
+function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogate: XHRSurrogate) {
   return {
     next(response: HttpResponse<any>) {
       if (isNeedScriptEvaluation(options)) {
@@ -125,7 +145,7 @@ function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogat
   };
 }
 
-function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate) {
+function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate: XHRSurrogate) {
   let total = 0;
   let isUploadStarted = false;
 
@@ -163,6 +183,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   const method = (sendOptions.method || 'get').toLowerCase();
   const isGet = isGetMethod(sendOptions);
   const isJSONP = isUsedJSONP(sendOptions);
+  const needScriptEvaluation = isNeedScriptEvaluation(sendOptions);
   const options = patchOptions(sendOptions);
   const headers = getRequestHeaders(options);
   const { url, parameters: data } = getRequestOptions(options, headers);
@@ -176,11 +197,15 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
     upload?.onabort?.(xhrSurrogate);
   };
 
-  const xhrSurrogate = {
+  const xhrSurrogate: XHRSurrogate = {
     type: 'XMLHttpRequestSurrogate', // needs only for testing
     aborted: false,
     abort() { result.abort(); },
   };
+
+  if (options.crossDomain && needScriptEvaluation) {
+    return sendRequestByScript(url, deferred, xhrSurrogate, result);
+  }
 
   if (options.cache === false && isGet && data) {
     data._ = Date.now() + 1;
@@ -197,6 +222,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   const params = isGet ? data : undefined;
 
   beforeSend?.(xhrSurrogate);
+
   const request = options.crossDomain && isJSONP
     ? httpClient.jsonp(url, options.jsonp || 'callback')
     : httpClient.request(
