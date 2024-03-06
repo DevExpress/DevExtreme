@@ -41,7 +41,7 @@ export class ErrorHandlingController extends modules.ViewController {
 
     if ($tableElements) {
       $errorRow = $('<tr>').addClass(ERROR_ROW_CLASS);
-      $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
+      $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(this.addWidgetPrefix(ACTION_CLASS));
 
       eventsEngine.on($closeButton, clickEventName, this.createAction((args) => {
         const e = args.event;
@@ -60,7 +60,7 @@ export class ErrorHandlingController extends modules.ViewController {
       $('<td>')
         // @ts-expect-errors
         .attr({
-          colSpan: that.getController('columns').getVisibleColumns().length,
+          colSpan: this.getController('columns').getVisibleColumns().length,
           role: 'presentation',
         })
         .prepend($closeButton)

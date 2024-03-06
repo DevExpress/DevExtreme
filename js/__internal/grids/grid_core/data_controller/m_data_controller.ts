@@ -235,7 +235,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     this.dataErrorOccurred.add((error) => this.executeAction('onDataErrorOccurred', { error }));
 
-    that._refreshDataSource();
+    this._refreshDataSource();
   }
 
   /**

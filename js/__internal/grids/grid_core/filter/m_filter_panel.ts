@@ -10,7 +10,7 @@ import CheckBox from '@js/ui/check_box';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
-} from '@ts/filter_builder/m_utils';
+} from '@js/ui/filter_builder/utils';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';

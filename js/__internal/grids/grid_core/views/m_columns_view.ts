@@ -250,10 +250,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _createScrollableOptions() {
   protected setTableRole($tableElement: dxElementWrapper): void {}
 
-  _createScrollableOptions() {
+  protected _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
     let useNativeScrolling = that.option('scrolling.useNative');

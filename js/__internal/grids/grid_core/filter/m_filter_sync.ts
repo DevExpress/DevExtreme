@@ -1,13 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import filterUtils from '@js/ui/shared/filtering';
-import errors from '@js/ui/widget/ui.errors';
 import {
   addItem, filterHasField,
   getDefaultOperation, getFilterExpression, getMatchedConditions, getNormalizedFilter,
   removeFieldConditionsFromFilter, syncFilters,
-} from '@ts/filter_builder/m_utils';
+} from '@js/ui/filter_builder/utils';
+import filterUtils from '@js/ui/shared/filtering';
+import errors from '@js/ui/widget/ui.errors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';

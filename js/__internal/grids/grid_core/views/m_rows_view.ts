@@ -28,7 +28,6 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { EditingController } from '../editing/m_editing';
-import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
 import { ColumnsView } from './m_columns_view';
 

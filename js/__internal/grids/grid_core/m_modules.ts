@@ -18,8 +18,6 @@ import type {
   OptionChanged,
   Views,
 } from './m_types';
-import type { ViewsWithBorder } from './views/utils/update_views_borders';
-import { updateViewsBorders } from './views/utils/update_views_borders';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
@@ -313,15 +311,6 @@ export class View extends ModuleItem {
     return this.component._views[name];
   }
 
-  public _getBorderedViews(): ViewsWithBorder {
-    return {
-      columnHeadersView: this.component._views.columnHeadersView,
-      rowsView: this.component._views.rowsView,
-      filterPanelView: this.component._views.filterPanelView,
-      footerView: this.component._views.footerView,
-    };
-  }
-
   public render($parent?, options?) {
     let $element = this._$element;
     const isVisible = this.isVisible();
@@ -336,10 +325,6 @@ export class View extends ModuleItem {
     }
 
     $element.toggleClass('dx-hidden', !isVisible);
-
-    if (this.component._views) {
-      updateViewsBorders(this.name, this._getBorderedViews());
-    }
 
     if (isVisible) {
       this.component._optionCache = {};
