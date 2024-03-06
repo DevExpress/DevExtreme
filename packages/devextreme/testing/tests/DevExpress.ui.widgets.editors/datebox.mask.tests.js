@@ -1062,7 +1062,7 @@ module('Search', setupModule, () => {
         { letter: 'x', expectedValue: 'PM' },
         { letter: 'y', expectedValue: 'PM' },
     ].forEach(({ letter, expectedValue }) => {
-        QUnit.test('when other character is pressed it should not toggle PM to AM', function(assert) {
+        QUnit.test('AM/PM part should not change when keys other than \'a\' or \'p\' are pressed', function(assert) {
             this.instance.option({
                 value: new Date(`10/10/2012 09:00 ${expectedValue}`),
                 useMaskBehavior: true,
