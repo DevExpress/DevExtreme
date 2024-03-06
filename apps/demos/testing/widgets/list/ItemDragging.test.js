@@ -5,8 +5,8 @@ const WINDOW_WIDTH = 600;
 
 fixture('List.ItemDragging')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t.resizeWindow(900, WINDOW_WIDTH);
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, WINDOW_WIDTH];
   });
 
 runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {

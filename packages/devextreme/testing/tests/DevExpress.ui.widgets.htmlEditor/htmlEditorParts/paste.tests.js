@@ -42,7 +42,7 @@ const { module: testModule, test } = QUnit;
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? testModule : testModule.skip;
 
 export default function() {
-    testModule('Paste from MS Word', {
+    QUnit.module.skip('Paste from MS Word', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
         },

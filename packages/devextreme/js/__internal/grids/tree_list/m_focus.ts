@@ -97,7 +97,7 @@ const data = (
     return d.promise();
   }
 
-  getPageIndexByKey(key) {
+  protected getPageIndexByKey(key) {
     const that = this;
     const dataSource = that._dataSource;
     // @ts-expect-error

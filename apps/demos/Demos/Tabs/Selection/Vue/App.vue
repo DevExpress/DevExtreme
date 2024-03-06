@@ -33,7 +33,7 @@
             <template #item="{ data }">
               <div class="employee-info">
                 <img
-                  class="employee-photo dx-theme-border-color"
+                  class="employee-photo"
                   :alt="data.text"
                   :src="data.picture"
                 >
@@ -89,6 +89,7 @@ const selectedItemId = ref(employees[0].id);
     flex-shrink: 0;
     object-fit: contain;
     margin-right: 24px;
+    border-color: var(--dx-color-border);
   }
 
   .employee-info {
