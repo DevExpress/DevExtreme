@@ -5761,26 +5761,23 @@ QUnit.module('datebox validation', {}, () => {
 });
 
 [
-    { type: 'time', input: 'p', displayFormat: 'HH:mm a', expectedValue: 'PM' },
-    { type: 'time', input: 'a', displayFormat: 'HH:mm a', expectedValue: 'AM' },
-    { type: 'time', input: 'x', displayFormat: 'HH:mm a', expectedValue: null },
-    { type: 'time', input: 'y', displayFormat: 'HH:mm a', expectedValue: null },
-    { type: 'time', input: 'z', displayFormat: 'HH:mm a', expectedValue: null },
-    { type: 'datetime', input: 'p', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: 'PM' },
-    { type: 'datetime', input: 'a', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: 'AM' },
-    { type: 'datetime', input: 'x', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
-    { type: 'datetime', input: 'y', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
-    { type: 'datetime', input: 'z', displayFormat: 'dd/MM/yyyy HH:mm a', expectedValue: null },
-].forEach(({ type, input, displayFormat, expectedValue }) => {
-    QUnit.module(`DateBox AM/PM Handling - ${type} datebox type - ${displayFormat} a display format`, {
+    { type: 'time', input: 'p', expectedValue: 'PM' },
+    { type: 'time', input: 'a', expectedValue: 'AM' },
+    { type: 'time', input: 'x', expectedValue: null },
+    { type: 'time', input: 'y', expectedValue: null },
+    { type: 'time', input: 'z', expectedValue: null },
+    { type: 'datetime', input: 'p', expectedValue: 'PM' },
+    { type: 'datetime', input: 'a', expectedValue: 'AM' },
+    { type: 'datetime', input: 'x', expectedValue: null },
+    { type: 'datetime', input: 'y', expectedValue: null },
+    { type: 'datetime', input: 'z', expectedValue: null },
+].forEach(({ type, input, expectedValue }) => {
+    QUnit.module(`DateBox AM/PM Handling - ${type} datebox type`, {
         beforeEach: function() {
             this.$element = $('#dateBox').dxDateBox({
                 value: new Date('10/10/2012 13:07'),
                 useMaskBehavior: true,
                 type: type,
-                mode: 'text',
-                displayFormat: displayFormat,
-                pickerType: 'calendar'
             });
 
             this.instance = this.$element.dxDateBox('instance');
