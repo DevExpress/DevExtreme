@@ -4,11 +4,9 @@ import {
 } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
-import { getWindow } from 'devextreme/core/utils/window';
 import { isDefined } from 'devextreme/core/utils/type';
 import {
   isCrossDomain,
-  getJsonpCallbackName,
   getRequestOptions,
   getRequestHeaders as getAjaxRequestHeaders,
   getAcceptHeader,
@@ -16,8 +14,6 @@ import {
 } from 'devextreme/core/utils/ajax_utils';
 
 type Result = Promise<any> & { abort: () => void };
-
-const window = getWindow();
 
 const PARSER_ERROR = 'parsererror';
 const SUCCESS = 'success';
@@ -51,7 +47,11 @@ function assignResponseProps(xhrSurrogate, response) {
 }
 
 function isNeedScriptEvaluation(options) {
-  return options.dataType === 'jsonp' || options.dataType === 'script';
+  return options.dataType === 'script';
+}
+
+function isUsedJSONP(options) {
+  return options.dataType === 'jsonp';
 }
 
 function getRequestHeaders(options) {
@@ -86,6 +86,7 @@ function patchOptions(options) {
   }
 
   patchedOptions.crossDomain = isCrossDomain(options.url);
+
   return patchedOptions;
 }
 
@@ -102,9 +103,10 @@ function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogat
         evalScript(response.body);
       }
 
+      const isJSONP = isUsedJSONP(options);
       return deferred.resolve(
-        response.body,
-        response.body ? 'success' : NO_CONTENT,
+        isJSONP ? response : response.body,
+        isJSONP || response.body ? 'success' : NO_CONTENT,
         assignResponseProps(xhrSurrogate, response),
       );
     },
@@ -160,9 +162,8 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   const deferred = Deferred();
   const method = (sendOptions.method || 'get').toLowerCase();
   const isGet = isGetMethod(sendOptions);
-  const needScriptEvaluation = isNeedScriptEvaluation(sendOptions);
+  const isJSONP = isUsedJSONP(sendOptions);
   const options = patchOptions(sendOptions);
-  const jsonpCallBackName = getJsonpCallbackName(options);
   const headers = getRequestHeaders(options);
   const { url, parameters: data } = getRequestOptions(options, headers);
   const { upload, beforeSend, xhrFields } = options;
@@ -181,12 +182,6 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
     abort() { result.abort(); },
   };
 
-  if (jsonpCallBackName) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    window[jsonpCallBackName] = (callback_data: unknown) => deferred.resolve(callback_data, SUCCESS, xhrSurrogate);
-  }
-
   if (options.cache === false && isGet && data) {
     data._ = Date.now() + 1;
   }
@@ -202,9 +197,8 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Reco
   const params = isGet ? data : undefined;
 
   beforeSend?.(xhrSurrogate);
-
-  const request = options.crossDomain && needScriptEvaluation
-    ? httpClient.jsonp(url, jsonpCallBackName)
+  const request = options.crossDomain && isJSONP
+    ? httpClient.jsonp(url, options.jsonp || 'callback')
     : httpClient.request(
       method,
       url,

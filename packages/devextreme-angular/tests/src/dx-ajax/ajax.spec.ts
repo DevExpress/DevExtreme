@@ -124,7 +124,7 @@ describe('Ajax request using DxAjaxModule', () => {
     }, 500);
   });
 
-  xit('Script request (cross domain)', (done) => {
+  it('Script request (cross domain)', (done) => {
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
     const url = 'http://somefakedomain1221.com/json-url';
     const dataSource = new DataSource({
@@ -141,10 +141,14 @@ describe('Ajax request using DxAjaxModule', () => {
       done();
     });
 
-    const req = httpTestingControllerMock.expectOne(`${url}?%24top=20`);
+    const reqs = httpTestingControllerMock.match(() => true);
 
-    req.flush([{ id: 0, text: 'TEST' }]);
+    const callbackName = /callback=([^&]+)/.exec(reqs[0].request.urlWithParams)?.[1];
 
+    reqs[0].flush([{ id: 0, text: 'TEST' }]);
+
+    expect(reqs[0].request.method).toBe('JSONP');
+    expect(callbackName).toBe('JSONP_CALLBACK');
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
-  }
+  });
 });
