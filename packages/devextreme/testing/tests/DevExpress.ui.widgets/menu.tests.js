@@ -761,7 +761,7 @@ QUnit.module('Menu tests', {
     });
 
     [true, false].forEach(hideSubmenuOnFocusOut => {
-        QUnit.test(`Close submenu when element lose focus and _hideSubmenuOnFocusOut=${hideSubmenuOnFocusOut}`, function(assert) {
+        QUnit.test(`Submenu should be ${hideSubmenuOnFocusOut ? 'closed' : 'opened'} when element lose focus and _hideSubmenuOnFocusOut=${hideSubmenuOnFocusOut}`, function(assert) {
             const options = {
                 _hideSubmenuOnFocusOut: hideSubmenuOnFocusOut,
                 focusStateEnabled: true,
