@@ -98,12 +98,12 @@ class TreeListRowsView extends RowsView {
     return resultTemplate;
   }
 
-  _updateCell($cell, options) {
+  public _updateCell($cell, options) {
     $cell = $cell.hasClass(TREELIST_TEXT_CONTENT) ? $cell.parent() : $cell;
     super._updateCell($cell, options);
   }
 
-  _rowClick(e) {
+  protected _rowClick(e) {
     const dataController = this._dataController;
     const $targetElement = $(e.event.target);
     const isExpandIcon = this.isExpandIcon($targetElement);

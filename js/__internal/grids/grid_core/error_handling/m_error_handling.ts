@@ -3,6 +3,9 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
+import messageLocalization from '@js/localization/message';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -16,19 +19,22 @@ const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const ACTION_CLASS = 'action';
 
 export class ErrorHandlingController extends modules.ViewController {
+  private _resizingController!: ResizingController;
+
+  private _columnsController!: ColumnsController;
+
   private _columnHeadersView!: ColumnHeadersView;
 
   private _rowsView!: RowsView;
 
-  init() {
-    const that = this;
-
-    that._columnHeadersView = that.getView('columnHeadersView');
-    that._rowsView = that.getView('rowsView');
+  public init() {
+    this._resizingController = this.getController('resizing');
+    this._columnsController = this.getController('columns');
+    this._columnHeadersView = this.getView('columnHeadersView');
+    this._rowsView = this.getView('rowsView');
   }
 
-  _createErrorRow(error, $tableElements?) {
-    const that = this;
+  private _createErrorRow(error, $tableElements?) {
     let $errorRow;
     let $closeButton;
     const $errorMessage = this._renderErrorMessage(error);
@@ -37,7 +43,7 @@ export class ErrorHandlingController extends modules.ViewController {
       $errorRow = $('<tr>').addClass(ERROR_ROW_CLASS);
       $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
-      eventsEngine.on($closeButton, clickEventName, that.createAction((args) => {
+      eventsEngine.on($closeButton, clickEventName, this.createAction((args) => {
         const e = args.event;
         let $errorRow;
         const errorRowIndex = $(e.currentTarget).closest(`.${ERROR_ROW_CLASS}`).index();
@@ -45,10 +51,10 @@ export class ErrorHandlingController extends modules.ViewController {
         e.stopPropagation();
         each($tableElements, (_, tableElement) => {
           $errorRow = $(tableElement).children('tbody').children('tr').eq(errorRowIndex);
-          that.removeErrorRow($errorRow);
+          this.removeErrorRow($errorRow);
         });
 
-        that.getController('resizing') && that.getController('resizing').fireContentReadyAction();
+        this._resizingController?.fireContentReadyAction?.();
       }));
 
       $('<td>')
@@ -67,7 +73,7 @@ export class ErrorHandlingController extends modules.ViewController {
     return $errorMessage;
   }
 
-  _renderErrorMessage(error) {
+  private _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
     const $message = $('<div>').addClass(ERROR_MESSAGE_CLASS).text(message);
 
@@ -78,7 +84,7 @@ export class ErrorHandlingController extends modules.ViewController {
     return $message;
   }
 
-  renderErrorRow(error, rowIndex, $popupContent) {
+  public renderErrorRow(error, rowIndex, $popupContent) {
     const that = this;
     let $errorMessageElement;
     let $firstErrorRow;
@@ -114,13 +120,12 @@ export class ErrorHandlingController extends modules.ViewController {
       }
     });
 
-    const resizingController = that.getController('resizing');
-    resizingController && resizingController.fireContentReadyAction();
+    this._resizingController?.fireContentReadyAction?.();
 
     return $firstErrorRow;
   }
 
-  removeErrorRow($row?) {
+  public removeErrorRow($row?) {
     if (!$row) {
       const $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
       $row = $columnHeaders && $columnHeaders.find(`.${ERROR_ROW_CLASS}`);
@@ -132,7 +137,7 @@ export class ErrorHandlingController extends modules.ViewController {
     $row && $row.hasClass(ERROR_ROW_CLASS) && $row.remove();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'errorRowEnabled':
         args.handled = true;
@@ -144,26 +149,22 @@ export class ErrorHandlingController extends modules.ViewController {
 }
 
 const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
-  init() {
-    const that = this;
-    const errorHandlingController = that.getController('errorHandling');
-
+  public init() {
     super.init();
 
-    that.dataErrorOccurred.add((error, $popupContent) => {
-      if (that.option('errorRowEnabled')) {
-        errorHandlingController.renderErrorRow(error, undefined, $popupContent);
+    this.dataErrorOccurred.add((error, $popupContent) => {
+      if (this.option('errorRowEnabled')) {
+        this._errorHandlingController.renderErrorRow(error, undefined, $popupContent);
       }
     });
-    that.changed.add((e) => {
+
+    this.changed.add((e) => {
       if (e && e.changeType === 'loadError') {
         return;
       }
-      const errorHandlingController = that.getController('errorHandling');
-      const editingController = that.getController('editing');
 
-      if (editingController && !editingController.hasChanges()) {
-        errorHandlingController && errorHandlingController.removeErrorRow();
+      if (this._editingController && !this._editingController.hasChanges()) {
+        this._errorHandlingController?.removeErrorRow?.();
       }
     });
   }

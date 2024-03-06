@@ -14,8 +14,9 @@ const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 
+// TODO Get rid of this mixin
 export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class DataHelperMixin extends Base {
-  protected _dataSource: any;
+  public _dataSource: any;
 
   protected _dataController: any;
 
@@ -37,12 +38,15 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     });
   }
 
-  _refreshDataSource() {
+  /**
+   * @extended: state_storing, virtual_scrolling
+   */
+  protected _refreshDataSource() {
     this._initDataSource();
     this._loadDataSource();
   }
 
-  _initDataSource() {
+  protected _initDataSource() {
     let dataSourceOptions = SPECIFIC_DATA_SOURCE_OPTION in this ? this[SPECIFIC_DATA_SOURCE_OPTION]() : this.option('dataSource');
     let widgetDataSourceOptions;
     let dataSourceType;
@@ -126,7 +130,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     this._dataSource.on('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
   }
 
-  _loadDataSource() {
+  protected _loadDataSource() {
     const dataSource = this._dataSource;
     if (dataSource) {
       if (dataSource.isLoaded()) {
@@ -150,7 +154,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     return this._dataSource && this._dataSource.isLoading();
   }
 
-  _disposeDataSource() {
+  protected _disposeDataSource() {
     if (this._dataSource) {
       if (this._isSharedDataSource) {
         delete this._isSharedDataSource;

@@ -40,22 +40,7 @@ function parseValue(column: Column, text: string): unknown {
 const dataController = (
   base: ModuleType<DataController>,
 ) => class SearchDataControllerExtender extends base {
-  publicMethods(): string[] {
-    return super.publicMethods().concat(['searchByText']);
-  }
-
-  _calculateAdditionalFilter(): Filter {
-    const filter = super._calculateAdditionalFilter();
-    const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'));
-
-    return gridCoreUtils.combineFilters([filter, searchFilter]);
-  }
-
-  searchByText(text): void {
-    this.option('searchPanel.text', text);
-  }
-
-  optionChanged(args): void {
+  public optionChanged(args): void {
     switch (args.fullName) {
       case 'searchPanel.text':
       case 'searchPanel':
@@ -65,6 +50,21 @@ const dataController = (
       default:
         super.optionChanged(args);
     }
+  }
+
+  public publicMethods(): string[] {
+    return super.publicMethods().concat(['searchByText']);
+  }
+
+  protected _calculateAdditionalFilter(): Filter {
+    const filter = super._calculateAdditionalFilter();
+    const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'));
+
+    return gridCoreUtils.combineFilters([filter, searchFilter]);
+  }
+
+  private searchByText(text): void {
+    this.option('searchPanel.text', text);
   }
 
   private calculateSearchFilter(text: string | undefined): Filter {
@@ -116,15 +116,32 @@ const dataController = (
 const headerPanel = (
   Base: ModuleType<HeaderPanel>,
 ) => class SearchHeaderPanelExtender extends Base {
-  _getToolbarItems() {
+  public optionChanged(args) {
+    if (args.name === 'searchPanel') {
+      if (args.fullName === 'searchPanel.text') {
+        const editor = this.getSearchTextEditor();
+        if (editor) {
+          editor.option('value', args.value);
+        }
+      } else {
+        this._invalidate();
+      }
+
+      args.handled = true;
+    } else {
+      super.optionChanged(args);
+    }
+  }
+
+  protected _getToolbarItems() {
     const items = super._getToolbarItems();
 
     return this._prepareSearchItem(items);
   }
 
-  _prepareSearchItem(items) {
+  private _prepareSearchItem(items) {
     const that = this;
-    const dataController = that.getController('data');
+    const dataController = this._dataController;
     const searchPanelOptions = this.option('searchPanel');
 
     if (searchPanelOptions && searchPanelOptions.visible) {
@@ -134,7 +151,7 @@ const headerPanel = (
             .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
             .appendTo(container);
 
-          that.getController('editorFactory').createEditor($search, {
+          that._editorFactoryController.createEditor($search, {
             width: searchPanelOptions.width,
             placeholder: searchPanelOptions.placeholder,
             parentType: 'searchPanel',
@@ -165,7 +182,7 @@ const headerPanel = (
     return items;
   }
 
-  getSearchTextEditor() {
+  private getSearchTextEditor() {
     const that = this;
     const $element = that.element();
     const $searchPanel = $element.find(`.${that.addWidgetPrefix(SEARCH_PANEL_CLASS)}`).filter(function () {
@@ -178,26 +195,9 @@ const headerPanel = (
     return null;
   }
 
-  isVisible() {
+  public isVisible() {
     const searchPanelOptions = this.option('searchPanel');
     return super.isVisible() || !!searchPanelOptions?.visible;
-  }
-
-  optionChanged(args) {
-    if (args.name === 'searchPanel') {
-      if (args.fullName === 'searchPanel.text') {
-        const editor = this.getSearchTextEditor();
-        if (editor) {
-          editor.option('value', args.value);
-        }
-      } else {
-        this._invalidate();
-      }
-
-      args.handled = true;
-    } else {
-      super.optionChanged(args);
-    }
   }
 };
 
@@ -208,19 +208,24 @@ const rowsView = (
 
   private _highlightTimer: any;
 
-  init() {
+  public init() {
     super.init.apply(this, arguments as any);
     this._searchParams = [];
     this._dataController = this.getController('data');
   }
 
-  _getFormattedSearchText(column, searchText) {
+  public dispose() {
+    clearTimeout(this._highlightTimer);
+    super.dispose();
+  }
+
+  private _getFormattedSearchText(column, searchText) {
     const value = parseValue(column, searchText);
     const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'search');
     return gridCoreUtils.formatValue(value, formatOptions);
   }
 
-  _getStringNormalizer() {
+  private _getStringNormalizer() {
     const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
     const dataSource = this._dataController?.getDataSource?.();
     const langParams = dataSource?.loadOptions?.()?.langParams;
@@ -228,7 +233,7 @@ const rowsView = (
     return (str: string): string => toComparable(str, isCaseSensitive, langParams);
   }
 
-  _findHighlightingTextNodes(column, cellElement, searchText) {
+  private _findHighlightingTextNodes(column, cellElement, searchText) {
     const that = this;
     let $parent = cellElement.parent();
     let $items;
@@ -264,7 +269,7 @@ const rowsView = (
     return resultTextNodes;
   }
 
-  _highlightSearchTextCore($textNode, searchText) {
+  private _highlightSearchTextCore($textNode, searchText) {
     const that = this;
     const $searchTextSpan = $('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS));
     const text = $textNode.text();
@@ -287,7 +292,7 @@ const rowsView = (
     }
   }
 
-  _highlightSearchText(cellElement, isEquals?, column?) {
+  private _highlightSearchText(cellElement, isEquals?, column?) {
     const that = this;
     const stringNormalizer = this._getStringNormalizer();
     let searchText = that.option('searchPanel.text');
@@ -310,7 +315,7 @@ const rowsView = (
     }
   }
 
-  _renderCore() {
+  protected _renderCore() {
     const deferred = super._renderCore.apply(this, arguments as any);
 
     // T103538
@@ -328,7 +333,7 @@ const rowsView = (
     return deferred;
   }
 
-  _updateCell($cell, parameters) {
+  public _updateCell($cell, parameters) {
     const { column } = parameters;
     const dataType = column.lookup && column.lookup.dataType || column.dataType;
     const isEquals = dataType !== 'string';
@@ -353,11 +358,6 @@ const rowsView = (
     }
 
     super._updateCell($cell, parameters);
-  }
-
-  dispose() {
-    clearTimeout(this._highlightTimer);
-    super.dispose();
   }
 };
 

@@ -7,7 +7,7 @@ import core from './m_core';
 
 const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class TreeListKeyboardNavigationControllerExtender extends Base {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _leftRightKeysHandler(eventArgs, _isEditing?) {
+  protected _leftRightKeysHandler(eventArgs, _isEditing?) {
     const rowIndex = this.getVisibleRowIndex();
     const dataController = this._dataController;
 

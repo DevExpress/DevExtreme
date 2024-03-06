@@ -24,7 +24,7 @@ type OptionsMethod<TOptions> =
       optionName: TPropertyName
     ) => GridPropertyType<TOptions, TPropertyName>
   ) & (
-    <TPropertyName extends string>(
+  <TPropertyName extends string>(
       optionName: TPropertyName,
       optionValue: GridPropertyType<TOptions, TPropertyName>
     ) => void
@@ -135,16 +135,16 @@ type IsObject<T> =
 
 // todo: move to upper .d.ts files
 type DotNestedKeys<T, RLIMIT extends number = 10> =
-(
-  IsObject<T> extends true ?
-    (
-      RLIMIT extends 1 ? keyof T :
-        {
-          [K in Exclude<keyof T, symbol>]: `${K}${DotPrefix<DotNestedKeys<T[K], DecrementalCounter[RLIMIT]>>}` | K
-        }[Exclude<keyof T, symbol>]
-    ) :
-    ''
-) extends infer D ? Extract<D, string> : never;
+  (
+    IsObject<T> extends true ?
+      (
+        RLIMIT extends 1 ? keyof T :
+          {
+            [K in Exclude<keyof T, symbol>]: `${K}${DotPrefix<DotNestedKeys<T[K], DecrementalCounter[RLIMIT]>>}` | K
+          }[Exclude<keyof T, symbol>]
+      ) :
+      ''
+  ) extends infer D ? Extract<D, string> : never;
 
 // todo: move to upper .d.ts files
 interface OptionChangedArgs<T extends string = string> {
