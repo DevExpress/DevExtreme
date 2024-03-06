@@ -151,6 +151,9 @@ function setupMocks($container) {
     stub.withArgs('test').returns('overrided value');
 
     stub('test', '123'); // return 'overrided value'
+    --------------------------------------------------
+
+    Therefore, in this case we do not override stubs with the same arguments.
 */
 const NON_OVERRIDING_PROPERTIES = ['valueAxis', 'series'];
 
