@@ -688,7 +688,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  _updateCells($rowElement, $newRowElement, columnIndices) {
+  _updateCells($rowElement, $newRowElement, columnIndices, columnDataIndices?) {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
@@ -700,7 +700,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       $cell.replaceWith($newCell);
 
-      if (highlightChanges && !$newCell.hasClass('dx-command-expand')) {
+      if (highlightChanges && columnDataIndices?.includes(columnIndex)) {
         $newCell.addClass(cellUpdatedClass);
       }
     });
