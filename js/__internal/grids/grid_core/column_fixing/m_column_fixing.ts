@@ -25,7 +25,6 @@ import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
-import type { ResizingController } from '../views/m_grid_view';
 import type { RowsView } from '../views/m_rows_view';
 
 const CONTENT_CLASS = 'content';
