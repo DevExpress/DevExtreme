@@ -1034,6 +1034,56 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'PM', 'revert incorrect changes');
     });
 
+    test('when A is pressed it should toggle PM to AM', function(assert) {
+        this.instance.option({
+            value: new Date('10/10/2012 09:00 PM'),
+            useMaskBehavior: true,
+            displayFormat: 'a'
+        });
+
+        this.keyboard.press('a');
+        assert.strictEqual(this.$input.val(), 'AM');
+    });
+
+    test('when P is pressed it should toggle AM to PM', function(assert) {
+        this.instance.option({
+            value: new Date('10/10/2012 09:00 AM'),
+            useMaskBehavior: true,
+            displayFormat: 'a'
+        });
+
+        this.keyboard.press('p');
+        assert.strictEqual(this.$input.val(), 'PM');
+    });
+
+    test('when other character is pressed it should not toggle AM to PM', function(assert) {
+        this.instance.option({
+            value: new Date('10/10/2012 09:00 PM'),
+            useMaskBehavior: true,
+            displayFormat: 'a'
+        });
+
+        this.keyboard.press('x');
+        assert.strictEqual(this.$input.val(), 'PM');
+
+        this.keyboard.press('y');
+        assert.strictEqual(this.$input.val(), 'PM');
+    });
+
+    test('when other character is pressed it should not toggle PM to AM', function(assert) {
+        this.instance.option({
+            value: new Date('10/10/2012 09:00 AM'),
+            useMaskBehavior: true,
+            displayFormat: 'a'
+        });
+
+        this.keyboard.press('x');
+        assert.strictEqual(this.$input.val(), 'AM');
+
+        this.keyboard.press('y');
+        assert.strictEqual(this.$input.val(), 'AM');
+    });
+
     test('Hour', function(assert) {
         this.instance.option('displayFormat', 'hh');
 
