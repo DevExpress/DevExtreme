@@ -304,10 +304,15 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchString(char) {
-        if(!isNaN(parseInt(this._getActivePartProp('text')))) {
+        const activePartText = this._getActivePartProp('text');
+
+        if(!isNaN(parseInt(activePartText))) {
             return;
-        } else {
-            this._toggleAmPmOnChar(char.toLowerCase(), this._getActivePartProp('text'));
+        }
+
+        if((char.toLowerCase() === 'p' && activePartText === 'AM') || (char.toLowerCase() === 'a' && activePartText === 'PM')) {
+            this._toggleAmPm();
+            return;
         }
 
         const limits = this._getActivePartProp('limits')(this._maskValue);
@@ -330,12 +335,6 @@ const DateBoxMask = DateBoxBase.inherit({
         if(this._searchValue) {
             this._clearSearchValue();
             this._searchString(char);
-        }
-    },
-
-    _toggleAmPmOnChar(char, activePartText) {
-        if((char === 'p' && activePartText === 'AM') || (char === 'a' && activePartText === 'PM')) {
-            this._toggleAmPm();
         }
     },
 
