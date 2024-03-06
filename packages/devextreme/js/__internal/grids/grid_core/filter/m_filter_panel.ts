@@ -11,6 +11,7 @@ import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/m_utils';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -30,19 +31,25 @@ const FILTER_PANEL_TARGET = 'filterPanel';
 export class FilterPanelView extends modules.View {
   private _columnsController!: ColumnsController;
 
+  private _dataController!: DataController;
+
+  private _filterSyncController!: FilterSyncController;
+
   private readonly _filterValueBuffer: any;
 
-  isVisible() {
-    return this.option('filterPanel.visible') && this.getController('data').dataSource();
-  }
-
-  init() {
-    this.getController('data').dataSourceChanged.add(() => this.render());
-
+  public init() {
+    this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
+    this._filterSyncController = this.getController('filterSync');
+
+    this._dataController.dataSourceChanged.add(() => this.render());
   }
 
-  _renderCore() {
+  public isVisible() {
+    return this.option('filterPanel.visible') && this._dataController.dataSource();
+  }
+
+  protected _renderCore() {
     const $element = this.element();
 
     $element.empty();
@@ -86,7 +93,7 @@ export class FilterPanelView extends modules.View {
       .append($textElement);
   }
 
-  _getCheckElement() {
+  private _getCheckElement() {
     const that = this;
     const $element = $('<div>')
       .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
@@ -101,7 +108,7 @@ export class FilterPanelView extends modules.View {
     return $element;
   }
 
-  _getFilterElement() {
+  private _getFilterElement() {
     const that = this;
     const $element = $('<div>').addClass('dx-icon-filter');
 
@@ -114,13 +121,13 @@ export class FilterPanelView extends modules.View {
     return $element;
   }
 
-  _getTextElement() {
+  private _getTextElement() {
     const that = this;
     const $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS));
     let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
-      when(that.getFilterText(filterValue, that.getController('filterSync').getCustomFilterOperations())).done((filterText) => {
+      when(that.getFilterText(filterValue, this._filterSyncController.getCustomFilterOperations())).done((filterText) => {
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {
           const customText = customizeText({
@@ -148,11 +155,11 @@ export class FilterPanelView extends modules.View {
     return $textElement;
   }
 
-  _showFilterBuilder() {
+  private _showFilterBuilder() {
     this.option('filterBuilderPopup.visible', true);
   }
 
-  _getRemoveButtonElement() {
+  private _getRemoveButtonElement() {
     const that = this;
     // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
@@ -169,14 +176,14 @@ export class FilterPanelView extends modules.View {
     return $element;
   }
 
-  _addTabIndexToElement($element) {
+  private _addTabIndexToElement($element) {
     if (!this.option('useLegacyKeyboardNavigation')) {
       const tabindex = this.option('tabindex') || 0;
       $element.attr('tabindex', tabindex);
     }
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'filterValue':
         this._invalidate();
@@ -192,7 +199,7 @@ export class FilterPanelView extends modules.View {
     }
   }
 
-  _getConditionText(fieldText, operationText, valueText) {
+  private _getConditionText(fieldText, operationText, valueText) {
     let result = `[${fieldText}] ${operationText}`;
     if (isDefined(valueText)) {
       result += valueText;
@@ -200,11 +207,11 @@ export class FilterPanelView extends modules.View {
     return result;
   }
 
-  _getValueMaskedText(value) {
+  private _getValueMaskedText(value) {
     return Array.isArray(value) ? `('${value.join('\', \'')}')` : ` '${value}'`;
   }
 
-  _getValueText(field, customOperation, value) {
+  private _getValueText(field, customOperation, value) {
     // @ts-expect-error
     const deferred = new Deferred();
     const hasCustomOperation = customOperation && customOperation.customizeText;
@@ -225,7 +232,7 @@ export class FilterPanelView extends modules.View {
     return deferred.promise();
   }
 
-  getConditionText(filterValue, options) {
+  private getConditionText(filterValue, options) {
     const that = this;
     const operation = filterValue[1];
     // @ts-expect-error
@@ -249,7 +256,7 @@ export class FilterPanelView extends modules.View {
     return deferred;
   }
 
-  getGroupText(filterValue, options, isInnerGroup?) {
+  private getGroupText(filterValue, options, isInnerGroup?) {
     const that = this;
     // @ts-expect-error
     const result = new Deferred();
@@ -280,20 +287,19 @@ export class FilterPanelView extends modules.View {
     return result;
   }
 
-  getFilterText(filterValue, customOperations) {
-    const that = this;
+  private getFilterText(filterValue, customOperations) {
     const options = {
       customOperations,
-      columns: that.getController('columns').getFilteringColumns(),
-      filterOperationDescriptions: that.option('filterBuilder.filterOperationDescriptions'),
-      groupOperationDescriptions: that.option('filterBuilder.groupOperationDescriptions'),
+      columns: this._columnsController.getFilteringColumns(),
+      filterOperationDescriptions: this.option('filterBuilder.filterOperationDescriptions'),
+      groupOperationDescriptions: this.option('filterBuilder.groupOperationDescriptions'),
     };
-    return isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);
+    return isCondition(filterValue) ? this.getConditionText(filterValue, options) : this.getGroupText(filterValue, options);
   }
 }
 
 const data = (Base: ModuleType<DataController>) => class FilterPanelDataControllerExtender extends Base {
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'filterPanel':
         this._applyFilter();
