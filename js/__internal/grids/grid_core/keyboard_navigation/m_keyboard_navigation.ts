@@ -102,7 +102,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _isNeedScroll: any;
 
-  _focusedView: any;
+  _focusedView?: RowsView | null;
 
   _isNeedFocus: any;
 
@@ -179,7 +179,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       if (
         $element.is(':visible')
         && this._focusedView
-        && this._focusedView.getScrollable
+        && this._focusedView.getScrollable()
       ) {
         this._focusedView._scrollToElement($element);
         this._isNeedScroll = false;
@@ -203,7 +203,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       let $focusedCell = this._getFocusedCell();
 
       $focusedCell = !isElementDefined($focusedCell)
-        ? this._rowsView.getCellElements(0).filter('[tabindex]').eq(0)
+        ? this._rowsView.getCellElements(0)!.filter('[tabindex]').eq(0)
         : $focusedCell;
 
       if (!$element.closest($focusedCell).length) {
@@ -1085,6 +1085,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _ctrlFKeyHandler(eventArgs) {
     if (this.option('searchPanel.visible')) {
+      // @ts-expect-error
       const searchTextEditor = this._headerPanel.getSearchTextEditor();
       if (searchTextEditor) {
         searchTextEditor.focus();
@@ -1190,8 +1191,8 @@ export class KeyboardNavigationController extends modules.ViewController {
 
       if ($parent.hasClass(FREESPACE_ROW_CLASS)) {
         this._updateFocusedCellPosition($target);
-        this._applyTabIndexToElement(this._focusedView.element());
-        this._focusedView.focus(true);
+        this._applyTabIndexToElement(this._focusedView!.element());
+        this._focusedView!.focus(true);
       } else if (!this._isMasterDetailCell($target)) {
         this._clickTargetCellHandler(event, $target);
       } else {
@@ -1589,6 +1590,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
     clearTimeout(this._updateFocusTimeout);
+    // @ts-expect-error
     this._focusedView?.renderFocusState({ preventScroll });
   }
 
@@ -2514,7 +2516,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 }
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender extends Base {
-  _keyboardController: any;
+  _keyboardController!: KeyboardNavigationController;
 
   init() {
     super.init();
@@ -2690,7 +2692,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
 };
 
 const editing = (Base: ModuleType<EditingController>) => class EditingControllerKeyboardExtender extends Base {
-  _keyboardNavigationController: any;
+  _keyboardNavigationController!: KeyboardNavigationController;
 
   init() {
     super.init();

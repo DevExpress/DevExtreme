@@ -1030,6 +1030,7 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
   _pointCreated(point, columns, location, sourceColumn) {
     const result = super._pointCreated.apply(this, arguments as any);
     const targetColumn = columns[point.columnIndex];
+    // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if (!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
@@ -1059,6 +1060,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     const fixedColumns = columnsController && that._columnsController.getFixedColumns();
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const correctIndex = columns.length - fixedColumns.length;
+    // @ts-expect-error
     const cells = that._columnHeadersView.getFixedColumnElements();
 
     super._generatePointsByColumns();
@@ -1076,6 +1078,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 
   _getTargetPoint(pointsByColumns, currentX, deltaX) {
+    // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if ($transparentColumn && $transparentColumn.length) {

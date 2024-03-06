@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import Class from '../../core/class';
 import eventsEngine from '../../events/core/events_engine';
 import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
@@ -71,7 +70,7 @@ const OPERATORS = {
     notOr: '!or'
 };
 
-const EditorFactory = Class.inherit(EditorFactoryMixin);
+const EditorFactory = EditorFactoryMixin(class {});
 
 const FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {

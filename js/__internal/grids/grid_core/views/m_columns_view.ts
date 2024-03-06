@@ -853,7 +853,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  getCellIndex($cell) {
+  getCellIndex($cell, rowIndex?) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;
@@ -1228,7 +1228,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
-  getCell(cellPosition, rows, cells) {
+  getCell(cellPosition, rows?, cells?) {
     const $rows = rows || this._getRowElements();
     let $cells;
 

@@ -62,7 +62,7 @@ const processItems = function (that: ColumnChooserView, chooserColumns) {
   return items;
 };
 
-class ColumnChooserController extends modules.ViewController {
+export class ColumnChooserController extends modules.ViewController {
   renderShowColumnChooserButton($element) {
     const that = this;
     const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
@@ -108,7 +108,7 @@ class ColumnChooserController extends modules.ViewController {
   }
 }
 
-class ColumnChooserView extends ColumnsView {
+export class ColumnChooserView extends ColumnsView {
   private _popupContainer: any;
 
   private _columnChooserList: any;
@@ -171,7 +171,6 @@ class ColumnChooserView extends ColumnsView {
 
       that._popupContainer.on('optionChanged', (args) => {
         if (args.name === 'visible') {
-          // @ts-expect-error
           that.renderCompleted.fire();
         }
       });
@@ -268,7 +267,6 @@ class ColumnChooserView extends ColumnsView {
           const scrollable = e.component.getScrollable();
           scrollable.scrollTo({ y: scrollTop });
 
-          // @ts-expect-error
           that.renderCompleted.fire();
         });
       });
