@@ -1056,32 +1056,22 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'PM');
     });
 
-    test('when other character is pressed it should not toggle AM to PM', function(assert) {
-        this.instance.option({
-            value: new Date('10/10/2012 09:00 PM'),
-            useMaskBehavior: true,
-            displayFormat: 'a'
+    [
+        { letter: 'x', initialValue: 'AM', expectedValue: 'AM' },
+        { letter: 'y', initialValue: 'AM', expectedValue: 'AM' },
+        { letter: 'x', initialValue: 'PM', expectedValue: 'PM' },
+        { letter: 'y', initialValue: 'PM', expectedValue: 'PM' },
+    ].forEach(({ letter, initialValue, expectedValue }) => {
+        QUnit.test('when other character is pressed it should not toggle PM to AM', function(assert) {
+            this.instance.option({
+                value: new Date(`10/10/2012 09:00 ${initialValue}`),
+                useMaskBehavior: true,
+                displayFormat: 'a'
+            });
+
+            this.keyboard.press(letter);
+            assert.strictEqual(this.$input.val(), expectedValue);
         });
-
-        this.keyboard.press('x');
-        assert.strictEqual(this.$input.val(), 'PM');
-
-        this.keyboard.press('y');
-        assert.strictEqual(this.$input.val(), 'PM');
-    });
-
-    test('when other character is pressed it should not toggle PM to AM', function(assert) {
-        this.instance.option({
-            value: new Date('10/10/2012 09:00 AM'),
-            useMaskBehavior: true,
-            displayFormat: 'a'
-        });
-
-        this.keyboard.press('x');
-        assert.strictEqual(this.$input.val(), 'AM');
-
-        this.keyboard.press('y');
-        assert.strictEqual(this.$input.val(), 'AM');
     });
 
     test('Hour', function(assert) {
