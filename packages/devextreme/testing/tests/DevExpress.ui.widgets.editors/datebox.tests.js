@@ -5761,23 +5761,22 @@ QUnit.module('datebox validation', {}, () => {
 });
 
 [
-    { type: 'time', input: 'p', expectedValue: 'PM' },
-    { type: 'time', input: 'a', expectedValue: 'AM' },
-    { type: 'time', input: 'x', expectedValue: null },
-    { type: 'time', input: 'y', expectedValue: null },
-    { type: 'time', input: 'z', expectedValue: null },
-    { type: 'datetime', input: 'p', expectedValue: 'PM' },
-    { type: 'datetime', input: 'a', expectedValue: 'AM' },
-    { type: 'datetime', input: 'x', expectedValue: null },
-    { type: 'datetime', input: 'y', expectedValue: null },
-    { type: 'datetime', input: 'z', expectedValue: null },
-].forEach(({ type, input, expectedValue }) => {
-    QUnit.module(`DateBox AM/PM Handling - ${type} datebox type`, {
+    { input: 'p', expectedValue: 'PM' },
+    { input: 'a', expectedValue: 'AM' },
+    { input: 'x', expectedValue: null },
+    { input: 'y', expectedValue: null },
+    { input: 'p', expectedValue: 'PM' },
+    { input: 'a', expectedValue: 'AM' },
+    { input: 'x', expectedValue: null },
+    { input: 'y', expectedValue: null },
+    { input: 'z', expectedValue: null },
+].forEach(({ input, expectedValue }) => {
+    QUnit.module('DateBox AM/PM Handling', {
         beforeEach: function() {
             this.$element = $('#dateBox').dxDateBox({
                 value: new Date('10/10/2012 13:07'),
                 useMaskBehavior: true,
-                type: type,
+                displayFormat: 'a',
             });
 
             this.instance = this.$element.dxDateBox('instance');
@@ -5789,8 +5788,6 @@ QUnit.module('datebox validation', {}, () => {
         }
     }, () => {
         QUnit.test(`when "${input}" is pressed it AM/PM should ${expectedValue ? `toggle to ${expectedValue}` : 'not toggle'} `, function(assert) {
-            this.instance.option('displayFormat', 'a');
-
             this.keyboard.type(input);
 
             const actualValue = (input === 'p' || input === 'a') ? expectedValue : this.$input.val();
