@@ -11,8 +11,11 @@ const SORT_INDEX_CLASS = 'dx-sort-index';
 const SORT_INDEX_ICON_CLASS = 'dx-sort-index-icon';
 const HEADERS_ACTION_CLASS = 'action';
 
+// TODO improve types of this mixin
+//  Now all members - protected by default (it may be wrong)
+// TODO getController
 const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base {
-  _applyColumnState(options) {
+  protected _applyColumnState(options) {
     const that = this;
     let ariaSortState;
     let $sortIndicator;
@@ -58,7 +61,7 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     return super._applyColumnState(options);
   }
 
-  _setAriaSortAttribute(column, ariaSortState, $rootElement, hasSeveralSortIndexes) {
+  protected _setAriaSortAttribute(column, ariaSortState, $rootElement, hasSeveralSortIndexes) {
     $rootElement.removeAttr('aria-roledescription');
 
     if (column.isGrouped) {
@@ -87,7 +90,7 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     }
   }
 
-  _getIndicatorClassName(name) {
+  protected _getIndicatorClassName(name) {
     if (name === 'sort') {
       return SORT_CLASS;
     } if (name === 'sortIndex') {
@@ -96,7 +99,7 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     return super._getIndicatorClassName(name);
   }
 
-  _renderIndicator(options) {
+  protected _renderIndicator(options) {
     const { column } = options;
     const $container = options.container;
     const $indicator = options.indicator;
@@ -117,7 +120,7 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     super._renderIndicator(options);
   }
 
-  _updateIndicator($cell, column, indicatorName) {
+  protected _updateIndicator($cell, column, indicatorName) {
     if (indicatorName === 'sort' && isDefined(column.groupIndex)) {
       return;
     }
@@ -125,7 +128,7 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     return super._updateIndicator.apply(this, arguments as any);
   }
 
-  _getIndicatorElements($cell, returnAll) {
+  protected _getIndicatorElements($cell, returnAll) {
     const $indicatorElements = super._getIndicatorElements($cell);
 
     return returnAll ? $indicatorElements : $indicatorElements && $indicatorElements.not(`.${SORT_NONE_CLASS}`);
