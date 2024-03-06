@@ -78,7 +78,7 @@ describe('Ajax request using DxAjaxModule', () => {
     httpTestingControllerMock?.verify();
   });
 
-  xit('dataSource load() should be intercepted', (done) => {
+  it('dataSource load() should be intercepted', (done) => {
     // eslint-disable-next-line no-restricted-globals
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
     const url = 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems';
@@ -102,7 +102,7 @@ describe('Ajax request using DxAjaxModule', () => {
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
   });
 
-  xit('fileUploader have to upload file and interceptor is called', (done) => {
+  it('fileUploader have to upload file and interceptor is called', (done) => {
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
 
     const fixture = TestBed.createComponent(TestFileUploaderComponent);
@@ -124,7 +124,7 @@ describe('Ajax request using DxAjaxModule', () => {
     }, 500);
   });
 
-  it('Script request (cross domain)', (done) => {
+  xit('Script request (cross domain)', (done) => {
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
     const url = 'http://somefakedomain1221.com/json-url';
     const dataSource = new DataSource({
