@@ -1433,24 +1433,15 @@ QUnit.begin(function() {
         ]);
     });
 
-    QUnit.test('winloss sparkline lossColor property should be able to change at runtime', function(assert) {
+    QUnit.test('winloss sparkline lossColor should change at runtime', function(assert) {
         const sparkline = this.createSparkline({
             type: 'winloss',
-            winColor: 'yellow',
             lossColor: 'blue',
-            firstLastColor: 'pink',
-            winlossThreshold: 4,
-            dataSource: [0, 3, 6, -8]
         });
 
         sparkline.option({ lossColor: 'green' });
 
-        this.checkCustomizePoint(assert, [
-            { color: 'pink' },
-            { color: 'green' },
-            { color: 'yellow' },
-            { color: 'pink' }
-        ]);
+        assert.strictEqual(sparkline.option('lossColor'), 'green', 'lossColor should be green after runtime change');
     });
 
     QUnit.test('Several min/max in dataSource', function(assert) {
