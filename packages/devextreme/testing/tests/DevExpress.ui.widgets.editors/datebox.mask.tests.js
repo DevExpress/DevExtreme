@@ -1036,23 +1036,23 @@ module('Search', setupModule, () => {
 
     test('when A is pressed it should toggle PM to AM', function(assert) {
         this.instance.option({
-            value: new Date('10/10/2012 22:00'),
+            value: new Date('10/10/2012 10:00 PM'),
             useMaskBehavior: true,
             displayFormat: 'a'
         });
 
-        this.keyboard.press('a');
+        this.keyboard.type('a');
         assert.strictEqual(this.$input.val(), 'AM');
     });
 
     test('when P is pressed it should toggle AM to PM', function(assert) {
         this.instance.option({
-            value: new Date('10/10/2012 10:00'),
+            value: new Date('10/10/2012 10:00 AM'),
             useMaskBehavior: true,
             displayFormat: 'a'
         });
 
-        this.keyboard.press('p');
+        this.keyboard.type('p');
         assert.strictEqual(this.$input.val(), 'PM');
     });
 
@@ -1065,10 +1065,11 @@ module('Search', setupModule, () => {
         QUnit.test('AM/PM part should not change when keys other than \'a\' or \'p\' are pressed', function(assert) {
             this.instance.option({
                 value: new Date(`10/10/2012 10:00 ${expectedValue}`),
-                displayFormat: 'a'
+                useMaskBehavior: true,
+                displayFormat: 'a',
             });
 
-            this.keyboard.press(letter);
+            this.keyboard.type(letter);
             assert.strictEqual(this.$input.val(), expectedValue);
         });
     });
