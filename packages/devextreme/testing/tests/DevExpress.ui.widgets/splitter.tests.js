@@ -62,7 +62,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 { dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false } ], expectedSize: ['40', '60'], orientation },
                 { dataSource: [{ size: '30%' }, { size: '200%' } ], expectedSize: ['30', '70'], orientation },
                 { dataSource: [{ size: '320%' }, { size: '200%' } ], expectedSize: ['100', '0'], orientation },
-                { dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ], expectedSize: ['30', '20', '100', '0', '0'], orientation: 'horizontal' },
+                { dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ], expectedSize: ['30', '20', '50', '0', '0'], orientation: 'horizontal' },
                 { dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' } ], expectedSize: ['30', '25', '45'], orientation },
                 { dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' } ], expectedSize: [ '25', '75'], orientation },
                 { dataSource: [{ size: '0%' }, { size: '1%' } ], expectedSize: ['0', '100'], orientation },

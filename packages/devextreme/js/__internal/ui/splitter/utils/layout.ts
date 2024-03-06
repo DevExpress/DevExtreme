@@ -140,7 +140,7 @@ export function getInitialLayout(panes: Item[]): number[] {
       layout.push(0);
     } else if (pane.size && isPercentWidth(pane.size)) {
       let percentSize = parseFloat(pane.size as string);
-      percentSize = Math.min(100, percentSize);
+      percentSize = Math.min(100 - totalSize, percentSize);
       totalSize += percentSize;
       layout.push(percentSize);
 
