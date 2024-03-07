@@ -549,7 +549,7 @@ QUnit.module('summary display type calculation', {
         assert.ok(setFieldProperty.calledOnce);
         assert.deepEqual(setFieldProperty.lastCall.args, [this.descriptions.values[0], 'format', 'percent']);
 
-        setFieldProperty.reset();
+        setFieldProperty.resetHistory();
     });
 
     QUnit.test('Second calculation leads to same results', function(assert) {

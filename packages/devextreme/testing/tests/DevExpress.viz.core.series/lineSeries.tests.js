@@ -48,7 +48,7 @@ const createSeries = function(options, renderSettings) {
         incidentOccurred: noop
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 
@@ -60,8 +60,8 @@ const environment = {
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
         this.points = [[1, 10], [2, 20], [3, 30], [4, 40]];
         this.areaPoints = this.points.concat([[4, 0], [3, 0], [2, 0], [1, 0]]);
-        this.renderer.stub('g').reset();
-        this.renderer.stub('path').reset();
+        this.renderer.stub('g').resetHistory();
+        this.renderer.stub('path').resetHistory();
     },
     afterEach: restoreMockFactory
 };
@@ -908,7 +908,7 @@ function setDiscreteType(series) {
     QUnit.module('LineSeries. Trackers', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            this.renderer.stub('g').reset();
+            this.renderer.stub('g').resetHistory();
         },
         afterEach: environment.afterEach,
         createSeries: function(options) {
@@ -2150,7 +2150,7 @@ function setDiscreteType(series) {
             environment.beforeEach.call(this);
             this.data = [{ arg: 0, val: 10 }, { arg: 3, val: 20 }, { arg: 6, val: 10 }, { arg: 9, val: 20 }, { arg: 12, val: 10 }];
             this.points = [[0, 10], [0, 10], [1.5, 20], [3, 20], [4.5, 20], [4.5, 10], [6, 10], [7.5, 10], [7.5, 20], [9, 20], [10.5, 20], [12, 10], [12, 10]];
-            this.renderer.stub('g').reset();
+            this.renderer.stub('g').resetHistory();
         },
         afterEach: environment.afterEach,
         createSeries: function(options) {

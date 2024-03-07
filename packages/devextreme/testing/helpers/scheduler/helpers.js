@@ -76,7 +76,7 @@ export const supportedViews = ['day', 'week', 'workWeek', 'month', 'timelineDay'
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
-export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
+export const createWrapper = (option, clock) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'), clock);
 
 export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
 const isMACEnvironment = () => devices.real().mac;
@@ -206,8 +206,9 @@ class AppointmentMarker extends ElementWrapper {
 }
 
 class Appointment extends ClickElementWrapper {
-    constructor(parent, index) {
+    constructor(parent, index, clock) {
         super(CLASSES.appointment, parent, index);
+        this.clock = clock;
     }
 
     get rectangle() {
@@ -270,10 +271,8 @@ class Appointment extends ClickElementWrapper {
     }
 
     click() {
-        const clock = sinon.useFakeTimers();
         this.getElement().trigger('dxclick');
-        clock.tick(300);
-        clock.restore();
+        this.clock && this.clock.tick(300);
     }
 
     dbClick() {
@@ -405,9 +404,10 @@ class HeaderWrapper extends ElementWrapper {
 }
 
 export class SchedulerTestWrapper extends ElementWrapper {
-    constructor(instance) {
+    constructor(instance, clock) {
         super(`#${SCHEDULER_ID}`);
         this.instance = instance;
+        this.clock = clock;
 
         this.timePanel = {
             getElement: () => {
@@ -500,12 +500,9 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 if(isAsync) {
                     click();
                 } else {
-                    const clock = sinon.useFakeTimers();
-
                     click();
 
-                    clock.tick(300);
-                    clock.restore();
+                    this.clock && this.clock.tick(300);
                 }
             },
 
@@ -722,7 +719,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
         const length = this.getElement().find(CLASSES.appointment).length;
 
         for(let i = 0; i < length; i++) {
-            result.push(new Appointment(this.getElement(), i));
+            result.push(new Appointment(this.getElement(), i, this.clock));
         }
 
         return result;

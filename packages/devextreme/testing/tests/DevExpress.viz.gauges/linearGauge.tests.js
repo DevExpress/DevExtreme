@@ -103,7 +103,7 @@ const TestPointerElement = TestElement.inherit({
 (function linearGauge() {
     rendererModule.Renderer = sinon.stub();
 
-    sinon.stub(axisModule, 'Axis', function(parameters) {
+    sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
         const axis = new vizMocks.Axis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,
@@ -128,8 +128,8 @@ const TestPointerElement = TestElement.inherit({
         },
         afterEach: function() {
             this.container.remove();
-            axisModule.Axis.reset();
-            rendererModule.Renderer.reset();
+            axisModule.Axis.resetHistory();
+            rendererModule.Renderer.resetHistory();
             this.renderer = null;
             delete this.container;
         }
