@@ -304,7 +304,14 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchString(char) {
-        if(!isNaN(parseInt(this._getActivePartProp('text')))) {
+        const activePartText = this._getActivePartProp('text');
+
+        if(!isNaN(parseInt(activePartText))) {
+            return;
+        }
+
+        if((char.toLowerCase() === 'p' && activePartText === 'AM') || (char.toLowerCase() === 'a' && activePartText === 'PM')) {
+            this._toggleAmPm();
             return;
         }
 
