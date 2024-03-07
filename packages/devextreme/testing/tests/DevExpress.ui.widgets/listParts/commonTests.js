@@ -4118,41 +4118,6 @@ QUnit.module('Search', () => {
     });
 });
 
-QUnit.test('SelectAll checkbox should have aria-label="Select All" attribute', function(assert) {
-    $('#list').dxList({
-        selectionMode: 'all',
-        showSelectionControls: true
-    });
-
-    const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
-
-    assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'Select All');
-});
-
-QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
-    $('#list').dxList({
-        items: ['text 1', 'text 2'],
-        selectionMode: 'multiple',
-        showSelectionControls: true
-    });
-
-    const $checkboxes = $(`.${LIST_SELECT_CHECKBOX_CLASS}`);
-
-    assert.strictEqual($checkboxes.attr('aria-label'), 'Check State');
-});
-
-QUnit.test('radio buttons should have aria-label="Check State" attribute', function(assert) {
-    $('#list').dxList({
-        items: ['text 1', 'text 2'],
-        selectionMode: 'single',
-        showSelectionControls: true
-    });
-
-    const $radioButtons = $(`.${LIST_SELECT_RADIOBUTTON_CLASS}`);
-
-    assert.strictEqual($radioButtons.attr('aria-label'), 'Check State');
-});
-
 let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
@@ -4289,3 +4254,52 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
     });
 }
 
+QUnit.module('Accessibility', () => {
+    QUnit.test('SelectAll checkbox should have aria-label="Select All" attribute', function(assert) {
+        $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true
+        });
+
+        const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'Select All');
+    });
+
+    QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
+        $('#list').dxList({
+            items: ['text 1', 'text 2'],
+            selectionMode: 'multiple',
+            showSelectionControls: true
+        });
+
+        const $checkboxes = $(`.${LIST_SELECT_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($checkboxes.attr('aria-label'), 'Check State');
+    });
+
+    QUnit.test('radio buttons should have aria-label="Check State" attribute', function(assert) {
+        $('#list').dxList({
+            items: ['text 1', 'text 2'],
+            selectionMode: 'single',
+            showSelectionControls: true
+        });
+
+        const $radioButtons = $(`.${LIST_SELECT_RADIOBUTTON_CLASS}`);
+
+        assert.strictEqual($radioButtons.attr('aria-label'), 'Check State');
+    });
+
+    [true, false].forEach(allowItemDeleting => {
+        QUnit.test(`List items element should have a correct aria-label when allowItemDeleting=${allowItemDeleting}`, function(assert) {
+            $('#list').dxList({
+                allowItemDeleting,
+                items: ['text 1'],
+            });
+
+            const $listItems = $(`.${LIST_ITEMS_CLASS}`);
+
+            assert.strictEqual($listItems.attr('aria-label'), allowItemDeleting ? 'Deletable items' : 'Items');
+        });
+    });
+});
