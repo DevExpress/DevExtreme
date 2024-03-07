@@ -26,8 +26,6 @@ const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
     'color-contrast': { enabled: false },
-    // NOTE: nested-interactive issues
-    'nested-interactive': { enabled: false },
   },
 };
 
