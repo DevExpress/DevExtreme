@@ -28,7 +28,7 @@ const createInstanceBase = (options, clock) => {
     const scheduler = createWrapper({
         height: 600,
         ...options,
-    });
+    }, clock);
 
     clock.tick(300);
     scheduler.instance.focus();

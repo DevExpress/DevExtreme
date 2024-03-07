@@ -562,7 +562,7 @@ QUnit.module('Keyboard support', moduleConfig, () => {
 
         assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(0).get(0), 'event target is correct');
         assert.strictEqual(registerKeyHandlerSpy.callCount, 1);
-        registerKeyHandlerSpy.reset();
+        registerKeyHandlerSpy.resetHistory();
 
         this.getResizeHandles().eq(1).trigger(createEvent('keydown', { key: 'Enter' }));
         assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(1).get(0), 'event target is correct');

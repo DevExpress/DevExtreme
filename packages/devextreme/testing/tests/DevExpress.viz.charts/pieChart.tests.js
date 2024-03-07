@@ -152,7 +152,7 @@ const environment = {
         this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
             return { arg: data || [] };
         });
     },
@@ -1830,7 +1830,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
         seriesMockData.series.push(new MockSeries({}));
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
-        this.validateData.reset();
+        this.validateData.resetHistory();
         // act
         chart.refresh();
         // assert

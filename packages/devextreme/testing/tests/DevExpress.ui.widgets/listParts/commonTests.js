@@ -1504,7 +1504,6 @@ QUnit.module('options changed', moduleSetup, () => {
     });
 
     QUnit.test('useInkRipple can be changed to false', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: true
@@ -1515,17 +1514,15 @@ QUnit.module('options changed', moduleSetup, () => {
         const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
         const pointer = pointerMock($item);
         pointer.start('touch').down();
-        clock.tick(100);
+        this.clock.tick(100);
         const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
         assert.strictEqual(inkRippleShowingWave.length, 0, 'inkripple feedback does not work');
 
         pointer.start('touch').up();
-        clock.restore();
     });
 
     QUnit.test('useInkRipple can be changed to true', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: false
@@ -1536,17 +1533,15 @@ QUnit.module('options changed', moduleSetup, () => {
         const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
         const pointer = pointerMock($item);
         pointer.start('touch').down();
-        clock.tick(100);
+        this.clock.tick(100);
         const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
         assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
 
         pointer.start('touch').up();
-        clock.restore();
     });
 
     QUnit.test('useInkRipple can be changed to false and then back to true at runtime', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: true
@@ -1558,13 +1553,12 @@ QUnit.module('options changed', moduleSetup, () => {
         const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
         const pointer = pointerMock($item);
         pointer.start('touch').down();
-        clock.tick(100);
+        this.clock.tick(100);
         const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
         assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
 
         pointer.start('touch').up();
-        clock.restore();
     });
 
     QUnit.test('groupTemplate', function(assert) {
@@ -1715,7 +1709,6 @@ QUnit.module('options changed', moduleSetup, () => {
 
 QUnit.module('selection', moduleSetup, () => {
     QUnit.test('should select item from invisible page', function(assert) {
-        const clock = sinon.useFakeTimers();
         const done = assert.async();
 
         $('#list').dxList({
@@ -1740,7 +1733,7 @@ QUnit.module('selection', moduleSetup, () => {
             }
         });
 
-        clock.tick(10);
+        this.clock.tick(10);
     });
 
     QUnit.test('selection should not be removed after second click if selectionMode is single', function(assert) {

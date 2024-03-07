@@ -16,7 +16,7 @@ const environment = {
             bottom: 80
         };
         this.crosshairGroup = this.renderer.g();
-        this.renderer.g.reset();
+        this.renderer.g.resetHistory();
         this.panes = [{
             coords: {
                 width: 800,
