@@ -21,10 +21,14 @@ fixture.disablePageReloads`Scheduler render during DST`
 
 const SCHEDULER_SELECTOR = '#container';
 const APPOINTMENT_TEXT = 'Appointment';
-// TODO remove first selector after fix of the currentTimeIndicator option
+// TODO remove first two selectors after fix of the currentTimeIndicator option
 const CUSTOM_CSS = `
 #container .dx-scheduler-header-panel-cell {
   color: rgba(0,0,0,.54);
+}
+
+#container .dx-scheduler-header-panel-cell::before {
+  display: none;
 }
 
 .dx-scheduler-cell-sizes-vertical {
