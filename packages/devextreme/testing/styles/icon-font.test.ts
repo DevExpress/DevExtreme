@@ -43,11 +43,9 @@ describe('Equals svg to font', () => {
   });
 
   test('check svg elements', () => {
-    const isOnlyMaterialIcons = ['optionsgear.svg', 'send.svg'];
-
     const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
-    const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`).filter((svg) => !isOnlyMaterialIcons.includes(svg));
-    const fluentIcons = readdirSync(`${BASE_PATH}/images/icons/fluent`).filter((svg) => !isOnlyMaterialIcons.includes(svg));
+    const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`);
+    const fluentIcons = readdirSync(`${BASE_PATH}/images/icons/fluent`);
 
     const differenceFluent = fluentIcons.filter((svg) => !genericIcons.includes(svg));
     const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));
