@@ -1255,7 +1255,6 @@ QUnit.module('CloseOnOutsideClick', {
     }
 }, () => {
     QUnit.test('drawer should be hidden after click on content', function(assert) {
-        const clock = sinon.useFakeTimers();
         const drawer = $('#drawer').dxDrawer({
             closeOnOutsideClick: false,
             opened: true,
@@ -1271,7 +1270,7 @@ QUnit.module('CloseOnOutsideClick', {
         const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
 
         $($content).trigger('dxclick');
-        clock.tick(10);
+        this.clock.tick(10);
 
         assert.equal(drawer.option('opened'), false, 'drawer is hidden');
         assert.ok($shader.is(':hidden'), 'shader is hidden');

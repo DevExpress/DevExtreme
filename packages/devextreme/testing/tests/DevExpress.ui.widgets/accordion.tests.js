@@ -569,7 +569,6 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('closed items should have correct height if async template is used (T1166943)', function(assert) {
         const $element = $('#html-template-accordion');
-        const clock = sinon.useFakeTimers();
         const items = [
             { ID: 1 },
             { ID: 2 },
@@ -594,7 +593,7 @@ QUnit.module('widget options', moduleSetup, () => {
             }
         });
 
-        clock.tick(50);
+        this.clock.tick(50);
 
         const closedItems = $element.find(`.${ACCORDION_ITEM_CLOSED_CLASS}`);
 
@@ -603,13 +602,10 @@ QUnit.module('widget options', moduleSetup, () => {
         for(let i = 0; i < closedItems.length; i++) {
             assert.roughEqual(closedItems.eq(i).outerHeight(), 42.4219, 1);
         }
-
-        clock.restore();
     });
 
     QUnit.test('should not be errors if dispose widget was called and async template is used', function(assert) {
         const $element = $('#html-template-accordion');
-        const clock = sinon.useFakeTimers();
         const items = [
             { ID: 1 },
             { ID: 2 },
@@ -637,13 +633,12 @@ QUnit.module('widget options', moduleSetup, () => {
 
             instance.dispose();
 
-            clock.tick(50);
+            this.clock.tick(50);
 
             assert.ok(true);
         } catch(e) {
             assert.ok(false, `error is raised: ${e.message}`);
         }
-        clock.restore();
     });
 });
 

@@ -199,7 +199,7 @@ QUnit.test('Hover off', function(assert) {
         onHoverChanged: spy
     });
     this.trigger(pointerEvents.move, 2);
-    spy.reset();
+    spy.resetHistory();
 
     this.trigger(pointerEvents.move, 1);
 
@@ -231,7 +231,7 @@ QUnit.test('Hovering same element several times does not cause hover changes', f
         onHoverChanged: spy
     });
     this.trigger(pointerEvents.move, 2);
-    spy.reset();
+    spy.resetHistory();
 
     this.trigger(pointerEvents.move, 2);
     this.trigger(pointerEvents.move, 2);
@@ -247,7 +247,7 @@ QUnit.test('Hovering unknown element turns current hover off', function(assert) 
         onHoverChanged: spy
     });
     this.trigger(pointerEvents.move, 2);
-    spy.reset();
+    spy.resetHistory();
 
     this.trigger(pointerEvents.move, 'test');
 
@@ -346,7 +346,7 @@ QUnit.test('Hovering same element several times does not cause several tooltip s
         }
     }).getRootNode();
     root.getChild(1).showTooltip();
-    this.tooltip.show.reset();
+    this.tooltip.show.resetHistory();
 
     this.trigger(pointerEvents.move, 2, { pageX: 200, pageY: 100 });
     this.trigger(pointerEvents.move, 2, { pageX: 210, pageY: 120 });

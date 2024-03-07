@@ -25,7 +25,7 @@ QUnit.test('Hover selected tile', function(assert) {
     const node = this.create().getRootNode().getChild(0);
     const tile = this.tile(0);
     node.select(true);
-    tile.attr.reset();
+    tile.attr.resetHistory();
 
     node.setHover();
 
@@ -37,7 +37,7 @@ QUnit.test('Selected hovered tile', function(assert) {
     const node = this.create().getRootNode().getChild(0);
     const tile = this.tile(0);
     node.setHover();
-    tile.attr.reset();
+    tile.attr.resetHistory();
 
     node.select(true);
 
@@ -51,7 +51,7 @@ QUnit.test('Unhover selected tile', function(assert) {
     const tile = this.tile(0);
     node.setHover();
     node.select(true);
-    tile.attr.reset();
+    tile.attr.resetHistory();
 
     widget.clearHover();
 
@@ -64,7 +64,7 @@ QUnit.test('Deselect hovered tile', function(assert) {
     const tile = this.tile(0);
     node.setHover();
     node.select(true);
-    tile.attr.reset();
+    tile.attr.resetHistory();
 
     node.select(false);
 
