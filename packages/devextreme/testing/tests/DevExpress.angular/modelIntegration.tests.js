@@ -258,7 +258,7 @@ QUnit.test('optionChanged should fire twice when value is a plain object and use
 
     angular.bootstrap(this.$container, ['app']);
 
-    spy.reset();
+    spy.resetHistory();
 
     const instance = $markup.dxEditor('instance');
 

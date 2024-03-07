@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DataGrid.EditStateManagement')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 600);
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
@@ -15,19 +15,19 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
 
     // edit row
     await t.click($('a').withText('Edit').nth(0));
-    await takeScreenshot('datagrid_edit_state_management_update_row_1_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_update_row_1_desktop.png');
 
     await t
       .typeText($('.dx-datagrid-rowsview').find('.dx-texteditor-input').nth(1), 'Russia', {
         replace: true,
       })
       .pressKey('tab');
-    await takeScreenshot('datagrid_edit_state_management_update_row_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_update_row_2_desktop.png');
 
     // cancel change
     await t
       .click($('a').withText('Cancel').nth(0));
-    await takeScreenshot('datagrid_edit_state_management_update_row_3_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_update_row_3_desktop.png');
 
     // edit row
     await t
@@ -36,10 +36,10 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
         replace: true,
       })
       .pressKey('tab');
-    await takeScreenshot('datagrid_edit_state_management_update_row_4_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_update_row_4_desktop.png');
 
     await t.click($('a').withText('Save').nth(0));
-    await takeScreenshot('datagrid_edit_state_management_update_row_5_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_update_row_5_desktop.png');
 
     await t
       .expect(compareResults.isValid())
@@ -54,7 +54,7 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
     await t
       .click($('.dx-icon-edit-button-addrow'));
 
-    await takeScreenshot('datagrid_edit_state_management_insert_row_1_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_insert_row_1_desktop.png');
 
     await t
       .typeText($('.dx-datagrid-rowsview').find('.dx-texteditor-input').nth(4), '11/2/2020', {
@@ -62,13 +62,13 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
       })
       .pressKey('tab');
 
-    await takeScreenshot('datagrid_edit_state_management_insert_row_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_insert_row_2_desktop.png');
 
     // cancel change
     await t
       .click($('a').withText('Cancel').nth(0));
 
-    await takeScreenshot('datagrid_edit_state_management_insert_row_3_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_insert_row_3_desktop.png');
 
     // add and edit row
     await t
@@ -78,19 +78,19 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
       })
       .pressKey('tab');
 
-    await takeScreenshot('datagrid_edit_state_management_insert_row_4_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_insert_row_4_desktop.png');
 
     await t
       .click($('a').withText('Save').nth(0));
 
-    await takeScreenshot('datagrid_edit_state_management_insert_row_5_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_insert_row_5_desktop.png');
 
     // go to the last page to check the inserted row
     await t
       .click($('.dx-datagrid-pager').find('.dx-page').nth(-1))
       .drag($('.dx-scrollbar-vertical').find('.dx-scrollable-scroll'), 0, 100);
 
-    await takeScreenshot('datagrid_edit_state_management_insert_row_6_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_insert_row_6_desktop.png');
 
     await t
       .expect(compareResults.isValid())
@@ -105,10 +105,10 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
     // remove row
     const editLink = $('a', { timeout: 60000 }).withText('Delete').nth(0);
     await t.click(editLink);
-    await takeScreenshot('datagrid_edit_state_management_remove_row_1_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_remove_row_1_desktop.png');
 
     await t.click($('.dx-dialog-button').withText('Yes').nth(0));
-    await takeScreenshot('datagrid_edit_state_management_remove_row_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_remove_row_2_desktop.png');
 
     await t
       .expect(compareResults.isValid())

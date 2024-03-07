@@ -1402,7 +1402,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         this.clock.tick(10);
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
-        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
     });
 
     QUnit.test('Column auto width should be calculated after cell is rendered in react', function(assert) {
@@ -3417,7 +3417,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [],
             columns: ['id', 'name']
         });
-        onColumnsChanging.reset();
+        onColumnsChanging.resetHistory();
 
         // act
         dataGrid.columnOption('name', 'visible', false);
@@ -5066,7 +5066,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         try {
             // arrange
-            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate', function(selector) {
+            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate').callsFake(function(selector) {
                 return {
                     render: function(options) {
                         setTimeout(() => {

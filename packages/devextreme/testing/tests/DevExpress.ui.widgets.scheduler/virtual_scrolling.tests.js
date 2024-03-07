@@ -435,8 +435,8 @@ module('Virtual Scrolling', {
             assert.ok(spyHorizontalReinit.calledOnce, 'Horizintal scrolling reinitState called once');
             assert.ok(spyVerticalReinit.notCalled, 'Vertical scrolling reinitState not called');
 
-            spyHorizontalReinit.reset();
-            spyVerticalReinit.reset();
+            spyHorizontalReinit.resetHistory();
+            spyVerticalReinit.resetHistory();
 
             this.virtualScrollingDispatcher.getCellHeight = () => 500;
 

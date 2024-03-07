@@ -262,7 +262,7 @@ QUnit.test('Resize', function(assert) {
         algorithm: 'stub',
         dataSource: [{ value: 1 }],
     });
-    this.itemsGroup().clear.reset();
+    this.itemsGroup().clear.resetHistory();
 
     funnel.option('size', { width: 900, height: 600 });
 
@@ -635,7 +635,7 @@ QUnit.test('Funnel does not fire drawn event on hover', function(assert) {
         onDrawn: drawn
     });
 
-    drawn.reset();
+    drawn.resetHistory();
 
     funnel.getAllItems()[0].hover(true);
 
@@ -745,7 +745,7 @@ QUnit.test('hover changed event after hover second item', function(assert) {
     const item = funnel.getAllItems()[0];
 
     item.hover(true);
-    hoverChanged.reset();
+    hoverChanged.resetHistory();
 
     funnel.getAllItems()[1].hover(true);
 
@@ -964,7 +964,7 @@ QUnit.test('selection changed event in single mode fire only for selected elemen
     const item = funnel.getAllItems()[0];
 
     item.select(true);
-    spy.reset();
+    spy.resetHistory();
     funnel.getAllItems()[1].select(true);
 
     assert.equal(spy.callCount, 2);

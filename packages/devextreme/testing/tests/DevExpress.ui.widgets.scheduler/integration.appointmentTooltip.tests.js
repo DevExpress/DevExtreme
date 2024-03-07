@@ -37,7 +37,7 @@ const moduleConfig = {
 };
 
 module('Integration: Appointment tooltip', moduleConfig, () => {
-    const createScheduler = options => createWrapper($.extend(options, { height: 600 }));
+    const createScheduler = (options, clock) => createWrapper($.extend(options, { height: 600 }), clock);
     const getDeltaTz = (schedulerTz, date) => schedulerTz * 3600000 + date.getTimezoneOffset() * 60000;
     const getSampleData = () => [
         {
@@ -115,7 +115,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                     label: 'Priority'
                 }
             ]
-        });
+        }, this.clock);
 
         views.forEach(view => {
             scheduler.option('currentView', view);
@@ -172,7 +172,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                     label: 'Priority'
                 }
             ]
-        });
+        }, this.clock);
 
         defaultViews.forEach(view => {
             scheduler.option('currentView', view);
@@ -232,7 +232,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data }, this.clock);
         const stub = sinon.stub(scheduler.instance, 'showAppointmentTooltip');
 
         scheduler.appointments.click(1);
@@ -286,7 +286,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true }, this.clock);
         this.clock.tick(10);
 
         scheduler.appointments.click(1);
@@ -302,7 +302,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const scheduler = createScheduler({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
-        });
+        }, this.clock);
 
         const stub = sinon.stub(scheduler.instance._appointmentPopup, 'show');
 
@@ -328,7 +328,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -351,7 +351,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 assert.deepEqual(model.appointmentData, tasks[1], 'data is right');
                 return $('<div>').addClass('new-scheduler-tooltip-template');
             }
-        });
+        }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -365,7 +365,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'day' });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'day' }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -377,7 +377,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'day' });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'day' }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -400,7 +400,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             views: ['day'],
             currentView: 'day',
             cellDuration: 60
-        });
+        }, this.clock);
 
         scheduler.appointments.click();
 
@@ -419,7 +419,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         });
 
         const deltaTz = getDeltaTz(5, startDate);
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 5 });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 5 }, this.clock);
 
         scheduler.appointments.click();
 
@@ -442,7 +442,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: [appointment]
         });
         const deltaTz = getDeltaTz(5, startDate);
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 'Asia/Ashkhabad' });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 'Asia/Ashkhabad' }, this.clock);
 
         scheduler.appointments.click();
 
@@ -465,7 +465,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9),
             dataSource: [appointment],
             currentView: 'week'
-        });
+        }, this.clock);
         const expectedDate = scheduler.appointments.getDateText(0);
 
         scheduler.appointments.click(0);
@@ -487,7 +487,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             currentView: 'week',
             startDateTimezoneExpr: 'Timezone',
             timeZone: 'Asia/Qyzylorda'
-        });
+        }, this.clock);
 
         const expectedDate = scheduler.appointments.getDateText(0);
 
@@ -501,7 +501,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'month' });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'month' }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -513,7 +513,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             store: getSampleData()
         });
 
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data }, this.clock);
         const stub = sinon.stub(scheduler.instance, 'processDeleteAppointment');
 
         scheduler.appointments.click(1);
@@ -546,7 +546,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 SC_RecurrenceException: '20170626T100000Z'
             }
             ]
-        });
+        }, this.clock);
         const stub = sinon.stub(scheduler.instance, '_updateAppointment');
 
         scheduler.appointments.click(1);
@@ -629,7 +629,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 startDate: startDate,
                 endDate: endDate
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click();
 
@@ -649,7 +649,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 startDate: startDate,
                 endDate: endDate
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click();
 
@@ -668,7 +668,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 startDate: startDate,
                 endDate: endDate
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click(0);
 
@@ -690,7 +690,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 startDate: startDate,
                 endDate: endDate
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click(0);
 
@@ -712,7 +712,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 startDate: startDate,
                 endDate: endDate
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -735,7 +735,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 endDate: endDate,
                 recurrenceRule: 'FREQ=DAILY;INTERVAL=5'
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click(2);
 
@@ -756,7 +756,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 endDate: endDate,
                 recurrenceRule: 'FREQ=DAILY'
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click(1);
 
@@ -773,7 +773,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 startDate: new Date(2016, 1, 11, 10),
                 endDate: new Date(2016, 1, 11, 15)
             }]
-        });
+        }, this.clock);
 
         scheduler.appointments.click();
 
@@ -818,7 +818,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }],
             currentView: 'timelineDay',
             currentDate: new Date(2018, 8, 24)
-        });
+        }, this.clock);
 
         scheduler.appointments.click(0);
 
@@ -853,7 +853,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                     displayStartDate: new Date(2015, 4, 25, 9),
                 });
             }
-        });
+        }, this.clock);
 
         scheduler.appointments.click(1);
     });
@@ -878,7 +878,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                     displayEndDate: new Date(2015, 4, 24, 11),
                 });
             }
-        });
+        }, this.clock);
 
         scheduler.appointments.click(0);
     });
@@ -886,7 +886,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
 
 module('Appointment tooltip template', moduleConfig, () => {
-    const checkAppointmentDataInTooltipTemplate = (assert, dataSource, currentDate) => {
+    const checkAppointmentDataInTooltipTemplate = (assert, dataSource, currentDate, clock) => {
         const scheduler = createWrapper({
             dataSource: dataSource,
             height: 600,
@@ -896,7 +896,7 @@ module('Appointment tooltip template', moduleConfig, () => {
             appointmentTooltipTemplate: model => {
                 assert.equal(dataSource.indexOf(model.appointmentData), 0, 'appointment data contains in the data source');
             }
-        });
+        }, clock);
 
         scheduler.appointments.click(0);
     };
@@ -914,7 +914,7 @@ module('Appointment tooltip template', moduleConfig, () => {
                 endDate: new Date(2015, 1, 9, 12, 0)
             }
         ];
-        checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 1, 9));
+        checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 1, 9), this.clock);
     });
 
     test('The appointmentData argument of the appointment tooltip template is should be instance of the data source for recurrence rule', function(assert) {
@@ -932,7 +932,7 @@ module('Appointment tooltip template', moduleConfig, () => {
             text: 'Task 2'
         }];
 
-        checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
+        checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24), this.clock);
     });
 
     module('isButtonClicked argument in appointmentTooltipTemplate', () => {
@@ -966,7 +966,7 @@ module('Appointment tooltip template', moduleConfig, () => {
                 currentDate: new Date(2021, 3, 27),
                 height: 600,
                 appointmentTooltipTemplate: (model) => assert.notOk(model.isButtonClicked)
-            });
+            }, this.clock);
 
             scheduler.appointments.click(0);
             assert.expect(1);
@@ -980,7 +980,7 @@ module('Appointment tooltip template', moduleConfig, () => {
                 currentDate: new Date(2021, 3, 27),
                 height: 600,
                 appointmentTooltipTemplate: (model) => assert.ok(model.isButtonClicked)
-            });
+            }, this.clock);
 
             scheduler.appointments.compact.click(0);
             assert.expect(2);
@@ -989,7 +989,7 @@ module('Appointment tooltip template', moduleConfig, () => {
 });
 
 module('New common tooltip for compact and cell appointments', moduleConfig, () => {
-    const createScheduler = (options, data) => {
+    const createScheduler = (options, data, clock) => {
         const defaultOption = {
             dataSource: data || getSimpleDataArray(),
             views: ['agenda', 'day', 'week', 'workWeek', 'month'],
@@ -998,11 +998,11 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             startDayHour: 9,
             height: 600,
         };
-        return createWrapper($.extend(defaultOption, options));
+        return createWrapper($.extend(defaultOption, options), clock);
     };
 
     test('Title in tooltip should equals title of cell appointments in month view', function(assert) {
-        const scheduler = createScheduler();
+        const scheduler = createScheduler(undefined, undefined, this.clock);
         assert.notOk(scheduler.tooltip.isVisible(), 'On page load tooltip should be invisible');
 
         for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
@@ -1031,7 +1031,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
     });
 
     test('Title in tooltip should equals title of cell appointments in other views', function(assert) {
-        const scheduler = createScheduler();
+        const scheduler = createScheduler(undefined, undefined, this.clock);
         assert.notOk(scheduler.tooltip.isVisible(), 'On page load tooltip should be invisible');
 
         const views = ['week', 'day', 'workWeek', 'agenda'];
@@ -1051,7 +1051,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
     test('Delete button in tooltip shouldn\'t render if editing = false', function(assert) {
         const scheduler = createScheduler({
             editing: false
-        });
+        }, undefined, this.clock);
 
         for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
             scheduler.appointments.click(i);
@@ -1099,7 +1099,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
     });
 
     test('Tooltip should hide after perform action', function(assert) {
-        const scheduler = createScheduler();
+        const scheduler = createScheduler(undefined, undefined, this.clock);
 
         scheduler.appointments.click();
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should visible');
@@ -1164,7 +1164,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
                 templateCallCount++;
                 return $('<div />').text(`template item index - ${index}`);
             }
-        });
+        }, undefined, this.clock);
 
         scheduler.appointments.click();
         assert.ok(scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
@@ -1183,7 +1183,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             const ITEM_FOCUSED_STATE_CLASS_NAME = 'dx-state-focused';
 
             test('List should be navigate by keyboard', function(assert) {
-                const scheduler = createScheduler();
+                const scheduler = createScheduler(undefined, undefined, this.clock);
 
                 const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
 
@@ -1209,7 +1209,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             });
 
             test('focusStateEnabled property should disable or enable navigate in list', function(assert) {
-                const scheduler = createScheduler();
+                const scheduler = createScheduler(undefined, undefined, this.clock);
 
                 scheduler.appointments.click();
 
@@ -1239,7 +1239,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             onAppointmentClick: () => {}
         };
         const stub = sinon.stub(options, 'onAppointmentClick');
-        const scheduler = createScheduler(options);
+        const scheduler = createScheduler(options, undefined, this.clock);
 
         scheduler.appointments.click();
         stub.reset();
@@ -1358,7 +1358,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             },
             startDayHour: 9,
             height: 600
-        });
+        }, undefined, this.clock);
 
         scheduler.appointments.click();
         assert.equal(findButton(0).option('text'), getExpectedText(0), 'dxButton component should placed in item of tooltip');
@@ -1432,7 +1432,7 @@ module('onAppointmentTooltipShowing event', moduleConfig, () => {
             currentDate: new Date(2021, 3, 27),
             height: 600,
             onAppointmentTooltipShowing: (e) => e.cancel = true
-        });
+        }, this.clock);
 
         scheduler.appointments.click(0);
 
@@ -1456,7 +1456,7 @@ module('onAppointmentTooltipShowing event', moduleConfig, () => {
                     displayEndDate: new Date(appointment.appointmentData.endDate),
                 }, appointment.currentAppointmentData);
             }
-        });
+        }, this.clock);
 
         scheduler.appointments.click(0);
         assert.expect(2);

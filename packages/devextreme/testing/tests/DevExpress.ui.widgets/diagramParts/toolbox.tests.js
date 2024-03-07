@@ -99,14 +99,12 @@ QUnit.module('Toolbox', {
         assert.equal($accordion.width(), 300);
     });
     test('call .update() after accordion item collapsing/expanding', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $scrollView = $('#qunit-fixture').find(Consts.TOOLBOX_SCROLLVIEW_SELECTOR);
         const scrollView = $scrollView.dxScrollView('instance');
         const updateSpy = sinon.spy(scrollView, 'update');
         const $accordion = $('#qunit-fixture').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
         $accordion.find('.dx-accordion-item-title').first().trigger('dxclick');
-        clock.tick(2000);
+        this.clock.tick(2000);
         assert.equal(updateSpy.callCount, 1, 'scrollView.update() called once');
-        clock.restore();
     });
 });

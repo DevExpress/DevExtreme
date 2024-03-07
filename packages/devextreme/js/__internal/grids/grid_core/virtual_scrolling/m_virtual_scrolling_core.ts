@@ -111,7 +111,7 @@ function subscribeToExternalScrollers($element, scrollChangedHandler, $targetEle
 class VirtualScrollController {
   private readonly _dataOptions: any;
 
-  component: any;
+  private readonly component: any;
 
   private _viewportSize: number;
 
@@ -131,7 +131,7 @@ class VirtualScrollController {
 
   private _sizeRatio: number;
 
-  positionChanged: any;
+  public positionChanged: any;
 
   private readonly _dataLoader: VirtualDataLoader;
 
@@ -155,20 +155,20 @@ class VirtualScrollController {
     this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
   }
 
-  getItemSizes() {
+  private getItemSizes() {
     return this._itemSizes;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  option(name, value?) {
+  private option(name, value?) {
     return this.component.option.apply(this.component, arguments);
   }
 
-  isVirtual() {
+  private isVirtual() {
     return this._isVirtual;
   }
 
-  virtualItemsCount() {
+  private virtualItemsCount() {
     if (isVirtualMode(this)) {
       const dataOptions = this._dataOptions;
       const totalItemsCount = dataOptions.totalItemsCount();
@@ -194,7 +194,7 @@ class VirtualScrollController {
     return undefined;
   }
 
-  getScrollingTimeout() {
+  private getScrollingTimeout() {
     const renderAsync = this.option('scrolling.renderAsync');
     let scrollingTimeout = 0;
 
@@ -211,7 +211,7 @@ class VirtualScrollController {
     return scrollingTimeout;
   }
 
-  setViewportPosition(position) {
+  private setViewportPosition(position) {
     // @ts-expect-error
     const result = new Deferred();
     const scrollingTimeout = this.getScrollingTimeout();
@@ -229,11 +229,11 @@ class VirtualScrollController {
     return result.promise();
   }
 
-  getViewportPosition() {
+  private getViewportPosition() {
     return this._position;
   }
 
-  getItemIndexByPosition(position?, viewportItemIndex?, height?) {
+  private getItemIndexByPosition(position?, viewportItemIndex?, height?) {
     position = position ?? this._position;
     const defaultItemSize = this.getItemSize();
     let offset = 0;
@@ -263,11 +263,11 @@ class VirtualScrollController {
     return Math.round(itemOffset * 50) / 50;
   }
 
-  isScrollingBack() {
+  public isScrollingBack() {
     return this._isScrollingBack;
   }
 
-  _setViewportPositionCore(position) {
+  private _setViewportPositionCore(position) {
     const prevPosition = this._position || 0;
     this._position = position;
 
@@ -281,7 +281,7 @@ class VirtualScrollController {
     return result;
   }
 
-  setContentItemSizes(sizes) {
+  public setContentItemSizes(sizes) {
     const virtualItemsCount = this.virtualItemsCount();
 
     this._contentSize = sizes.reduce((a, b) => a + b, 0);
@@ -301,11 +301,11 @@ class VirtualScrollController {
     }
   }
 
-  getItemSize() {
+  private getItemSize() {
     return this._viewportItemSize * this._sizeRatio;
   }
 
-  getItemOffset(itemIndex, isEnd?) {
+  public getItemOffset(itemIndex, isEnd?) {
     const virtualItemsCount = this.virtualItemsCount();
     let itemCount = itemIndex;
 
@@ -325,7 +325,7 @@ class VirtualScrollController {
     return Math.floor(offset + itemCount * this._viewportItemSize * this._sizeRatio);
   }
 
-  getContentOffset(type) {
+  private getContentOffset(type) {
     const isEnd = type === 'end';
     const virtualItemsCount = this.virtualItemsCount();
 
@@ -334,17 +334,17 @@ class VirtualScrollController {
     return this.getItemOffset(isEnd ? virtualItemsCount.end : virtualItemsCount.begin, isEnd);
   }
 
-  getVirtualContentSize() {
+  private getVirtualContentSize() {
     const virtualItemsCount = this.virtualItemsCount();
 
     return virtualItemsCount ? this.getContentOffset('begin') + this.getContentOffset('end') + this._contentSize : 0;
   }
 
-  getViewportItemIndex() {
+  public getViewportItemIndex() {
     return this._viewportItemIndex;
   }
 
-  setViewportItemIndex(itemIndex) {
+  private setViewportItemIndex(itemIndex) {
     this._viewportItemIndex = itemIndex;
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       return;
@@ -354,21 +354,21 @@ class VirtualScrollController {
     return this._dataLoader.viewportItemIndexChanged.apply(this._dataLoader, arguments);
   }
 
-  viewportItemSize(size?) {
+  private viewportItemSize(size?) {
     if (size !== undefined) {
       this._viewportItemSize = size;
     }
     return this._viewportItemSize;
   }
 
-  viewportSize(size) {
+  private viewportSize(size) {
     if (size !== undefined) {
       this._viewportSize = size;
     }
     return this._viewportSize;
   }
 
-  viewportHeight(height, scrollTop) {
+  public viewportHeight(height, scrollTop) {
     const position = scrollTop ?? this._position;
     const begin = this.getItemIndexByPosition(position);
     const end = this.getItemIndexByPosition(position + height, begin, height);
@@ -380,14 +380,14 @@ class VirtualScrollController {
     }
   }
 
-  reset(isRefresh?) {
+  public reset(isRefresh?) {
     this._dataLoader.reset();
     if (!isRefresh) {
       this._itemSizes = {};
     }
   }
 
-  subscribeToWindowScrollEvents($element) {
+  private subscribeToWindowScrollEvents($element) {
     this._windowScroll = this._windowScroll || subscribeToExternalScrollers($element, (scrollTop) => {
       if (this.viewportItemSize()) {
         this.setViewportPosition(scrollTop);
@@ -395,26 +395,26 @@ class VirtualScrollController {
     });
   }
 
-  dispose() {
+  public dispose() {
     clearTimeout(this._scrollTimeoutID);
     this._windowScroll && this._windowScroll.dispose();
     this._windowScroll = null;
   }
 
-  scrollTo(pos) {
+  private scrollTo(pos) {
     this._windowScroll && this._windowScroll.scrollTo(pos);
   }
 
-  isVirtualMode() {
+  private isVirtualMode() {
     return isVirtualMode(this);
   }
 
-  isAppendMode() {
+  private isAppendMode() {
     return isAppendMode(this);
   }
 
   // new mode
-  getViewportParams() {
+  public getViewportParams() {
     const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
     const totalItemsCount = this._dataOptions.totalItemsCount();
     const hasKnownLastPage = this._dataOptions.hasKnownLastPage();
@@ -439,7 +439,7 @@ class VirtualScrollController {
     };
   }
 
-  itemsCount() {
+  public itemsCount() {
     let result = 0;
 
     if (this.option(LEGACY_SCROLLING_MODE)) {
@@ -452,41 +452,41 @@ class VirtualScrollController {
     return result;
   }
 
-  pageIndex(...args) {
+  public pageIndex(...args) {
     return this._dataLoader.pageIndex(...args);
   }
 
-  beginPageIndex(...args) {
+  public beginPageIndex(...args) {
     // @ts-expect-error
     return this._dataLoader.beginPageIndex(...args);
   }
 
-  endPageIndex(...args) {
+  private endPageIndex(...args) {
     // @ts-expect-error
     return this._dataLoader.endPageIndex(...args);
   }
 
-  pageSize(...args) {
+  public pageSize(...args) {
     // @ts-expect-error
     return this._dataLoader.pageSize(...args);
   }
 
-  load(...args) {
+  public load(...args) {
     // @ts-expect-error
     return this._dataLoader.load(...args);
   }
 
-  loadIfNeed(...args) {
+  public loadIfNeed(...args) {
     // @ts-expect-error
     return this._dataLoader.loadIfNeed(...args);
   }
 
-  handleDataChanged(...args) {
+  public handleDataChanged(...args) {
     // @ts-expect-error
     return this._dataLoader.handleDataChanged(...args);
   }
 
-  getDelayDeferred() {
+  public getDelayDeferred() {
     return this._dataLoader.getDelayDeferred();
   }
 }
