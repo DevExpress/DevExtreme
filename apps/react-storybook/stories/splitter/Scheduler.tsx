@@ -7,7 +7,7 @@ import { appointments } from './data';
 const currentDate = new Date(2021, 3, 29);
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 
-const App = () => (
+const Render = () => (
     <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={appointments}
@@ -19,4 +19,4 @@ const App = () => (
     />
 );
 
-export default App
+export default Render

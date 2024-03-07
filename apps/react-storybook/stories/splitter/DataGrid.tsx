@@ -4,7 +4,7 @@ import { customers } from './data';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 
-const App = () => (
+const Render = () => (
     <DataGrid
         dataSource={customers}
         defaultColumns={columns}
@@ -12,4 +12,4 @@ const App = () => (
     />
 );
 
-export default App;
+export default Render;

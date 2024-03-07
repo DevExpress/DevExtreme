@@ -16,7 +16,7 @@ function customizeTooltip(arg: { valueText: string; percent: number; }) {
     };
 }
 
-function App() {
+function Render() {
     return (
         <PieChart
             id="pie"
@@ -39,4 +39,4 @@ function App() {
     );
 }
 
-export default App;
+export default Render;
