@@ -396,26 +396,26 @@ let focused;
                 return this;
             },
 
-            type: function(string) {
+            type: function(string, options) {
                 this.focus();
 
                 for(let i = 0; i < string.length; i++) {
                     const char = string.charAt(i);
-                    this.keyDown(char);
+                    this.keyDown(char, options);
 
                     if(!this.event.isDefaultPrevented()) {
-                        this.keyPress(char);
+                        this.keyPress(char, options);
                     }
 
                     if(!this.event.isDefaultPrevented()) {
                         this.beforeInput(char);
                         if(!this.event.isDefaultPrevented()) {
                             typeChar(char);
-                            this.input(char);
+                            this.input(char, options);
                         }
                     }
 
-                    this.keyUp(char);
+                    this.keyUp(char, options);
                 }
 
                 return this;

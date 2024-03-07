@@ -15,7 +15,7 @@
 
 ::ng-deep .message {
   height: 85px;
-  background-color: inherit;
+  background-color: var(--dx-component-color-bg);
   display: inline-block;
   max-width: 60%;
   border-radius: 5px;

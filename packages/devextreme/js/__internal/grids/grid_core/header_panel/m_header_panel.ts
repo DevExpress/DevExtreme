@@ -6,6 +6,8 @@ import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
@@ -23,21 +25,35 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
-  _getToolbarItems(): any[] {
+  protected _editingController!: EditingController;
+
+  protected _headerFilterController!: HeaderFilterController;
+
+  public init() {
+    super.init();
+    this._editingController = this.getController('editing');
+    this._headerFilterController = this.getController('headerFilter');
+    this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
+  }
+
+  /**
+   * @extended: column_chooser, editing, filter_row, search
+   */
+  protected _getToolbarItems(): any[] {
     return [];
   }
 
-  _getButtonContainer() {
+  private _getButtonContainer() {
     return $('<div>').addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
   }
 
-  _getToolbarButtonClass(specificClass) {
+  protected _getToolbarButtonClass(specificClass) {
     const secondClass = specificClass ? ` ${specificClass}` : '';
 
     return this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS) + secondClass;
   }
 
-  _getToolbarOptions() {
+  private _getToolbarOptions() {
     const userToolbarOptions: any = this.option('toolbar');
 
     const options = {
@@ -68,7 +84,7 @@ export class HeaderPanel extends ColumnsView {
     return options.toolbarOptions;
   }
 
-  _normalizeToolbarItems(defaultItems, userItems) {
+  private _normalizeToolbarItems(defaultItems, userItems) {
     defaultItems.forEach((button) => {
       if (!DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
         throw new Error(`Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`);
@@ -113,7 +129,7 @@ export class HeaderPanel extends ColumnsView {
     return isArray ? normalizedItems : normalizedItems[0];
   }
 
-  _renderCore() {
+  protected _renderCore() {
     if (!this._toolbar) {
       const $headerPanel = this.element();
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
@@ -125,34 +141,29 @@ export class HeaderPanel extends ColumnsView {
     }
   }
 
-  _columnOptionChanged() {
+  protected _columnOptionChanged() {
 
   }
 
-  _handleDataChanged() {
+  protected _handleDataChanged() {
     if (this._requireReady) {
       this.render();
     }
   }
 
-  _isDisabledDefinedByUser(name: string): boolean {
+  private _isDisabledDefinedByUser(name: string): boolean {
     const userItems = (this.option('toolbar') as any)?.items;
     const userItem = userItems?.find((item) => item?.name === name);
 
     return isDefined(userItem?.disabled);
   }
 
-  init() {
-    super.init();
-    this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
-  }
-
-  render() {
+  public render() {
     this._toolbarOptions = this._getToolbarOptions();
     super.render.apply(this, arguments as any);
   }
 
-  setToolbarItemDisabled(name, disabled: boolean): void {
+  public setToolbarItemDisabled(name, disabled: boolean): void {
     const toolbar = this._toolbar;
     const isDefinedByUser = this._isDisabledDefinedByUser(name);
 
@@ -176,19 +187,19 @@ export class HeaderPanel extends ColumnsView {
     }
   }
 
-  updateToolbarDimensions() {
+  public updateToolbarDimensions() {
     (this._toolbar as any)?.updateDimensions();
   }
 
-  getHeaderPanel() {
+  private getHeaderPanel() {
     return this.element();
   }
 
-  getHeight() {
+  private getHeight() {
     return this.getElementHeight();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'onToolbarPreparing') {
       this._invalidate();
       args.handled = true;
@@ -225,21 +236,24 @@ export class HeaderPanel extends ColumnsView {
     super.optionChanged(args);
   }
 
-  isVisible() {
+  /**
+   * @extended: column_chooser, editing
+   */
+  public isVisible() {
     return !!(this._toolbarOptions && this._toolbarOptions.visible);
   }
 
-  allowDragging() {
-
+  /**
+   * @extended: DataGrid's grouping
+   */
+  protected allowDragging() {
   }
 
-  hasGroupedColumns(): any {
-
-  }
+  public hasGroupedColumns(): any {}
 }
 
 const resizing = (Base: ModuleType<ResizingController>) => class HeaderPanelResizingExtender extends Base {
-  _updateDimensionsCore() {
+  protected _updateDimensionsCore() {
     // @ts-expect-error
     super._updateDimensionsCore.apply(this, arguments);
 

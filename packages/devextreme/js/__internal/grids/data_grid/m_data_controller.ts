@@ -6,11 +6,11 @@ import dataSourceAdapterProvider from './m_data_source_adapter';
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 class DataGridDataController extends DataController {
-  _getDataSourceAdapter() {
+  protected _getDataSourceAdapter() {
     return dataSourceAdapterProvider;
   }
 
-  _getSpecificDataSourceOption() {
+  protected _getSpecificDataSourceOption() {
     const dataSource = this.option('dataSource');
 
     if (dataSource && !Array.isArray(dataSource) && this.option('keyExpr')) {

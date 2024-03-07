@@ -350,7 +350,10 @@ export class ExportController extends dataGridCore.ViewController {
     };
   }
 
-  _updateColumnWidth(column, width): void {
+  /**
+   * @extended: adaptivity
+   */
+  protected _updateColumnWidth(column, width): void {
     column.width = width;
   }
 
@@ -631,7 +634,7 @@ export class ExportController extends dataGridCore.ViewController {
     this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  callbackNames() {
+  protected callbackNames() {
     return ['selectionOnlyChanged'];
   }
 
@@ -698,7 +701,7 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
     return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
   }
 
-  _updateEditButtons() {
+  protected _updateEditButtons() {
     super._updateEditButtons();
 
     // @ts-expect-error
@@ -708,8 +711,6 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelExtender extends Base {
   private _exportController!: ExportController;
-
-  private _editingController!: EditingController;
 
   _getToolbarItems() {
     const items = super._getToolbarItems();

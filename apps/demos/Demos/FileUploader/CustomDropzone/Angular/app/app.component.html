@@ -3,11 +3,7 @@
   <div
     id="dropzone-external"
     class="flex-box"
-    [ngClass]="
-      isDropZoneActive
-        ? ['dx-theme-accent-as-border-color', 'dropzone-active']
-        : ['dx-theme-border-color']
-    "
+    [ngClass]="isDropZoneActive ? 'dropzone-active' : null"
   >
     <img id="dropzone-image" [src]="imageSource" *ngIf="imageSource" alt="" />
     <div id="dropzone-text" class="flex-box" *ngIf="textVisible">

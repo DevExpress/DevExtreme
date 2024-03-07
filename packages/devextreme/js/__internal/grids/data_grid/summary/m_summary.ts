@@ -741,7 +741,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return sortByGroups;
   }
 
-  _createDataSourceAdapterCore(dataSource, remoteOperations) {
+  protected _createDataSourceAdapterCore(dataSource, remoteOperations) {
     const that = this;
     const dataSourceAdapter = super._createDataSourceAdapterCore(dataSource, remoteOperations);
 
@@ -825,7 +825,7 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
     return result;
   }
 
-  _removeChange() {
+  protected _removeChange() {
     // @ts-expect-error
     const result = super._removeChange.apply(this, arguments);
 
@@ -834,7 +834,7 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
     return result;
   }
 
-  cancelEditData() {
+  public cancelEditData() {
     // @ts-expect-error
     const result = super.cancelEditData.apply(this, arguments);
 
