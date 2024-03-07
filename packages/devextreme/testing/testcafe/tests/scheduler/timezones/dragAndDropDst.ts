@@ -163,6 +163,7 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
       currentView: 'week',
       currentDate,
       offset,
+      showCurrentTimeIndicator: false,
       showAllDayPanel: false,
       firstDayOfWeek: 4,
       cellDuration: 60,

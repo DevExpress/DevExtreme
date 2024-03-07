@@ -74,6 +74,7 @@ generateOptionMatrix({
       currentView,
       currentDate,
       offset,
+      showCurrentTimeIndicator: false,
       firstDayOfWeek: 4,
       cellDuration: 60,
       height: 800,
