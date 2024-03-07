@@ -428,7 +428,7 @@ const FilterBuilder = Widget.inherit({
                         } else {
                             $valueButton.remove();
                         }
-                        $operationButton.html(currentOperation.text);
+                        $operationButton.text(currentOperation.text);
                         this._updateFilter();
                     }
                 },
@@ -478,7 +478,7 @@ const FilterBuilder = Widget.inherit({
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
                         const caption = getFullCaption(item, e.component.option('items'));
-                        $fieldButton.html(caption);
+                        $fieldButton.text(caption);
                         this._updateFilter();
                     }
                 },
