@@ -46,7 +46,7 @@ const createSeries = function(options, renderSettings) {
         argumentAxis: new MockAxis({ renderer: renderer })
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 

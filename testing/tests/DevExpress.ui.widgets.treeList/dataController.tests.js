@@ -1183,7 +1183,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
 
     // T819031
     QUnit.test('All nested children should be loaded when expanding nodes with expandRow method', function(assert) {
-    // arrange
+        // arrange
         const clock = sinon.useFakeTimers();
 
         const loadSpy = sinon.spy((loadOptions) => {
@@ -1215,7 +1215,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
             }
         });
         clock.tick(30);
-        loadSpy.reset();
+        loadSpy.resetHistory();
 
         // act
         this.expandRow(1);

@@ -3357,7 +3357,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick(10);
 
         // act
-        loadSpy.reset();
+        loadSpy.resetHistory();
         this.getController('columns').changeSortOrder(2, 'asc');
         this.clock.tick(10);
 

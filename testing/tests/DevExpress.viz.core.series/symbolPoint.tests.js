@@ -1872,7 +1872,7 @@ QUnit.test('Update markers style when top marker is image', function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
     point._updateMarker(undefined, style);
 
     assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], {
@@ -2031,7 +2031,7 @@ QUnit.test('Clear visibility', function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.clearVisibility();
 
@@ -2064,7 +2064,7 @@ QUnit.test('Hide marker when marker is visible', function(assert) {
     point.draw(this.renderer, this.groups);
 
     const labelSpy = sinon.spy(point._label, 'draw');
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.setInvisibility();
 
@@ -2081,7 +2081,7 @@ QUnit.test('Hide marker when marker has no visibility setting', function(assert)
     point.draw(this.renderer, this.groups);
 
     const labelSpy = sinon.spy(point._label, 'draw');
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.setInvisibility();
 
@@ -2099,7 +2099,7 @@ QUnit.test('Hide marker when marker is hidden', function(assert) {
     point.draw(this.renderer, this.groups);
 
     const labelSpy = sinon.spy(point._label, 'draw');
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.setInvisibility();
 
@@ -2115,7 +2115,7 @@ QUnit.test('Apply style for visible point (in visible area)', function(assert) {
     point.translate();
 
     point.draw(this.renderer, this.groups);
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.fullState = 0;
     point.applyView();
@@ -2132,7 +2132,7 @@ QUnit.test('Apply style for invisible point (out of visible area)', function(ass
     point.inVisibleArea = false;
 
     point.draw(this.renderer, this.groups);
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.fullState = 0;
     point.applyView();
@@ -2149,7 +2149,7 @@ QUnit.test('Apply style for visible image point (in visible area)', function(ass
     point.translate();
 
     point.draw(this.renderer, this.groups);
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.fullState = 0;
     point.applyView();
@@ -2167,7 +2167,7 @@ QUnit.test('Apply style for invisible image point (out of visible area)', functi
     point.inVisibleArea = false;
 
     point.draw(this.renderer, this.groups);
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.fullState = 0;
     point.applyView();
