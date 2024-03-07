@@ -12,6 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
+import createSpy = jasmine.createSpy;
 
 const interceptors: Record<string, () => void> = {};
 
@@ -85,6 +86,27 @@ describe('Ajax request using DxAjaxModule', () => {
       done();
     });
 
+    httpTestingControllerMock.expectOne(url);
+  });
+
+  it('should be aborted with correct status', (done) => {
+    const url = '/heavy-url';
+    const failCallback = createSpy();
+
+    const request = ajax.sendRequest({
+      url,
+      method: 'GET',
+    });
+
+    request.fail((error) => {
+      failCallback(error);
+      expect(error?.statusText).toEqual('aborted');
+      done();
+    });
+
+    request.abort();
+
+    expect(failCallback).toHaveBeenCalledTimes(1);
     httpTestingControllerMock.expectOne(url);
   });
 

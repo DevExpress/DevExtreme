@@ -104,7 +104,7 @@ function patchOptions(options: Options) {
 
 function rejectIfAborted(deferred, xhrSurrogate: XHRSurrogate) {
   if (xhrSurrogate.aborted) {
-    deferred.reject({ status: STATUS_ABORT });
+    deferred.reject({ status: STATUS_ABORT, statusText: 'aborted', ok: false });
   }
 }
 function sendRequestByScript(url: string, deferred, xhrSurrogate: XHRSurrogate, result: Result) {
@@ -153,7 +153,7 @@ function getRequestCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrog
   };
 }
 
-function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate: XHRSurrogate) {
+function getUploadCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrogate) {
   let total = 0;
   let isUploadStarted = false;
 
