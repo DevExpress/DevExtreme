@@ -22,7 +22,7 @@
         >
           <template #drag="{ data }">
             <div
-              class="item dx-card dx-theme-text-color dx-theme-background-color"
+              class="item dx-card"
               style="font-weight: bold; width: 200px; padding: 10px;"
             >
               {{ data.itemData.Task_Subject }}
@@ -34,7 +34,7 @@
                 v-for="item in items"
                 :key="item.Task_ID"
                 :class="{ 'item-with-handle': handle }"
-                class="item dx-card dx-theme-text-color dx-theme-background-color"
+                class="item dx-card"
               >
                 <i
                   v-if="handle"
@@ -172,11 +172,12 @@ function onDragTemplateChanged(e) {
 }
 
 .item {
+  color: var(--dx-color-text);
+  background-color: var(--dx-component-color-bg);
   box-sizing: border-box;
   position: relative;
   padding: 10px 20px;
   margin-bottom: 10px;
-  background: white;
   cursor: pointer;
 }
 

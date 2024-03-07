@@ -285,9 +285,10 @@ jobs:
       fail-fast: false
       matrix:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
+        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
 
     runs-on: ubuntu-latest
-    name: testcafe-${{ matrix.CONSTEL }}
+    name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
     timeout-minutes: 60
 
     steps:
@@ -370,6 +371,7 @@ jobs:
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
@@ -385,6 +387,6 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: screenshots-${{ steps.screenshotname.outputs.value }}
-        path: apps/demos/testing/artifacts/compared-screenshots/*
+        name: screenshots-${{ steps.screenshotname.outputs.value }}-${{ matrix.THEME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore

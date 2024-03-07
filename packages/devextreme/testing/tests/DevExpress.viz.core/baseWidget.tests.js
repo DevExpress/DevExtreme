@@ -437,9 +437,9 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
     reset: function() {
         const test = this;
         $.each(test.spies, function(_, name) {
-            test[name].reset();
+            test[name].resetHistory();
         });
-        this.renderer.stub('resize').reset();
+        this.renderer.resetStub('resize');
     },
     checkResized: function(assert) {
         this.checkOrder(assert, [
@@ -865,7 +865,7 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
 
     createWidget: function() {
         const result = environment.createWidget.apply(this, arguments);
-        this.onApplySize.reset();
+        this.onApplySize.resetHistory();
         return result;
     },
 
@@ -952,7 +952,7 @@ QUnit.module('ResizeObserver', Object.assign({}, environment, {
         sinon.stub(resizeObserverSingleton, 'unobserve');
     },
     afterEach() {
-        this.onApplySize.reset();
+        this.onApplySize.resetHistory();
         environment.afterEach.apply(this, arguments);
         resizeObserverSingleton.observe.restore();
         resizeObserverSingleton.unobserve.restore();
@@ -1004,7 +1004,7 @@ QUnit.test('Unobserve arguments', function(assert) {
 QUnit.test('Rerender chart from observer callback', function(assert) {
     this.createWidget();
 
-    this.onApplySize.reset();
+    this.onApplySize.resetHistory();
     this.$container.width(255);
 
     resizeObserverSingleton.observe.lastCall.args[1]();

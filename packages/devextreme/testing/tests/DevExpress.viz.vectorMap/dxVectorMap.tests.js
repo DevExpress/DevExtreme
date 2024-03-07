@@ -1038,7 +1038,7 @@ QUnit.test('call drawn after layer collection ready', function(assert) {
     this.createMap({
         onDrawn: onDrawn
     });
-    onDrawn.reset();
+    onDrawn.resetHistory();
     const notifyDirty = spy.lastCall.args[0].notifyDirty;
     const notifyReady = spy.lastCall.args[0].notifyReady;
 

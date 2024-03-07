@@ -9,7 +9,7 @@ interface ItemProps {
 }
 
 export default function Item({ text, handle, style }: ItemProps) {
-  let className = 'item dx-card dx-theme-text-color dx-theme-background-color';
+  let className = 'item dx-card';
   if (handle) {
     className += ' item-with-handle';
   }

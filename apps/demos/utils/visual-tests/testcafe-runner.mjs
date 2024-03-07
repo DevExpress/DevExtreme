@@ -208,7 +208,7 @@ async function main() {
   const runner = tester.createRunner();
   const concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
 
-  const reporters = [reporter]
+  const reporters = [reporter];
 
   if (process.env.STRATEGY === 'accessibility') {
     reporters.push(accessibilityTestCafeReporter);
@@ -218,8 +218,9 @@ async function main() {
     .reporter(reporters)
     .browsers(process.env.BROWSERS || 'chrome --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
-    .run({ quarantineMode: !!process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false });
-    // .run({ quarantineMode: !!process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 1 } : false });
+    .run({
+      quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,
+    });
 
   await tester.close();
   process.exit(failedCount);

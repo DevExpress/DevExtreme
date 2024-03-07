@@ -13,12 +13,13 @@ const getPageIndex = function (dataController) {
   return 1 + (parseInt(dataController.pageIndex()) || 0);
 };
 
-class PagerView extends modules.View {
+// TODO getController
+export class PagerView extends modules.View {
   private _pager: any;
 
   private _pageSizes: any;
 
-  init() {
+  public init() {
     const dataController = this.getController('data');
 
     dataController.changed.add((e) => {
@@ -42,7 +43,41 @@ class PagerView extends modules.View {
     });
   }
 
-  _renderCore() {
+  public dispose() {
+    this._pager = null;
+  }
+
+  public optionChanged(args) {
+    const { name } = args;
+    const isPager = name === 'pager';
+    const isPaging = name === 'paging';
+    const isDataSource = name === 'dataSource';
+    const isScrolling = name === 'scrolling';
+    const dataController = this.getController('data');
+
+    if (isPager || isPaging || isScrolling || isDataSource) {
+      args.handled = true;
+
+      if (dataController.skipProcessingPagingChange(args.fullName)) {
+        return;
+      }
+
+      if (isPager || isPaging) {
+        this._pageSizes = null;
+      }
+
+      if (!isDataSource) {
+        this._pager = null;
+        this._invalidate();
+        if (hasWindow() && isPager && this.component) {
+          // @ts-expect-error
+          this.component.resize();
+        }
+      }
+    }
+  }
+
+  protected _renderCore() {
     const that = this;
     const $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS));
     const pagerOptions = that.option('pager') ?? {};
@@ -93,11 +128,11 @@ class PagerView extends modules.View {
     }
   }
 
-  getPager() {
+  private getPager() {
     return this._pager;
   }
 
-  getPageSizes() {
+  private getPageSizes() {
     const that = this;
     const dataController = that.getController('data');
     const pagerOptions = that.option('pager');
@@ -117,7 +152,7 @@ class PagerView extends modules.View {
     return that._pageSizes;
   }
 
-  isVisible() {
+  public isVisible() {
     const dataController = this.getController('data');
     const pagerOptions = this.option('pager');
     let pagerVisible = pagerOptions && pagerOptions.visible;
@@ -134,42 +169,8 @@ class PagerView extends modules.View {
     return !!pagerVisible;
   }
 
-  getHeight() {
+  private getHeight() {
     return this.getElementHeight();
-  }
-
-  optionChanged(args) {
-    const { name } = args;
-    const isPager = name === 'pager';
-    const isPaging = name === 'paging';
-    const isDataSource = name === 'dataSource';
-    const isScrolling = name === 'scrolling';
-    const dataController = this.getController('data');
-
-    if (isPager || isPaging || isScrolling || isDataSource) {
-      args.handled = true;
-
-      if (dataController.skipProcessingPagingChange(args.fullName)) {
-        return;
-      }
-
-      if (isPager || isPaging) {
-        this._pageSizes = null;
-      }
-
-      if (!isDataSource) {
-        this._pager = null;
-        this._invalidate();
-        if (hasWindow() && isPager && this.component) {
-          // @ts-expect-error
-          this.component.resize();
-        }
-      }
-    }
-  }
-
-  dispose() {
-    this._pager = null;
   }
 }
 

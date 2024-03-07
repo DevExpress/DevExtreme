@@ -6,17 +6,17 @@ import { dataMasterDetailExtenderMixin, masterDetailModule } from '@ts/grids/gri
 import treeListCore from './m_core';
 
 const data = (Base: ModuleType<DataController>) => class DataMasterDetailTreeListExtender extends dataMasterDetailExtenderMixin(Base) {
-  isRowExpanded() {
+  protected isRowExpanded() {
     // @ts-expect-error
     return this.isRowExpandedHack.apply(this, arguments);
   }
 
-  _processItems() {
+  protected _processItems() {
     // @ts-expect-error
     return this._processItemsHack.apply(this, arguments);
   }
 
-  _processDataItem() {
+  protected _processDataItem() {
     // @ts-expect-error
     return this._processDataItemHack.apply(this, arguments);
   }
