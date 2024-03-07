@@ -3384,7 +3384,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [],
             columns: ['id', 'name']
         });
-        onColumnsChanging.reset();
+        onColumnsChanging.resetHistory();
 
         // act
         dataGrid.columnOption('name', 'visible', false);
@@ -5033,7 +5033,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         try {
             // arrange
-            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate', function(selector) {
+            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate').callsFake(function(selector) {
                 return {
                     render: function(options) {
                         setTimeout(() => {

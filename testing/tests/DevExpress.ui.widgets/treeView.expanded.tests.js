@@ -550,7 +550,7 @@ module('Expanded items', {
         }).dxTreeView('instance');
 
         treeView.on('contentReady', () => {
-            itemCollapsedSpy.reset();
+            itemCollapsedSpy.resetHistory();
             treeView
                 .collapseItem(11)
                 .done(()=> {

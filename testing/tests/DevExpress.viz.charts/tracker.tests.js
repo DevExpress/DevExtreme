@@ -2079,8 +2079,8 @@ QUnit.test('clearHover', function(assert) {
 
 QUnit.test('Can be disposed', function(assert) {
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, pointers: [], target: this.seriesGroup.element }));
-    this.renderer.root.off.reset();
-    this.seriesGroup.off.reset();
+    this.renderer.root.off.resetHistory();
+    this.seriesGroup.off.resetHistory();
 
     // Act
     this.tracker.dispose();
