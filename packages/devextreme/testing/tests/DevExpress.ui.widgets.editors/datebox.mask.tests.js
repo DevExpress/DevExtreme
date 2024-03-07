@@ -1034,7 +1034,7 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'PM', 'revert incorrect changes');
     });
 
-    test('when A is pressed it should toggle PM to AM', function(assert) {
+    test('when A is pressed it should toggle PM to AM (T1216937)', function(assert) {
         this.instance.option({
             value: new Date('10/10/2012 10:00 PM'),
             useMaskBehavior: true,
@@ -1045,7 +1045,7 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'AM');
     });
 
-    test('when P is pressed it should toggle AM to PM', function(assert) {
+    test('when P is pressed it should toggle AM to PM (T1216937)', function(assert) {
         this.instance.option({
             value: new Date('10/10/2012 10:00 AM'),
             useMaskBehavior: true,
@@ -1062,7 +1062,7 @@ module('Search', setupModule, () => {
         { letter: 'x', expectedValue: 'PM' },
         { letter: 'y', expectedValue: 'PM' },
     ].forEach(({ letter, expectedValue }) => {
-        QUnit.test('AM/PM part should not change when keys other than \'a\' or \'p\' are pressed', function(assert) {
+        QUnit.test('AM/PM part should not change when keys other than \'a\' or \'p\' are pressed (T1216937)', function(assert) {
             this.instance.option({
                 value: new Date(`10/10/2012 10:00 ${expectedValue}`),
                 useMaskBehavior: true,
