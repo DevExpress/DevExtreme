@@ -28,6 +28,12 @@ registerDecorator(
             $container
                 .addClass(STATIC_DELETE_BUTTON_CONTAINER_CLASS)
                 .append($button);
+
+            $button.attr({
+                role: null,
+                tabindex: null,
+                'aria-label': null,
+            });
         },
 
         _deleteItem: function($itemElement) {

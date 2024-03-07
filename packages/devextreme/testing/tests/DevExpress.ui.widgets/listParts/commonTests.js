@@ -39,6 +39,7 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -4301,5 +4302,19 @@ QUnit.module('Accessibility', () => {
 
             assert.strictEqual($listItems.attr('aria-label'), allowItemDeleting ? 'Deletable items' : 'Items');
         });
+    });
+
+    QUnit.test('List item delete button shoul not have role, aria-label, tabindex attributes if itemDeleteMode is static', function(assert) {
+        $('#list').dxList({
+            items: ['text 1'],
+            itemDeleteMode: 'static',
+            allowItemDeleting: true,
+        });
+
+        const $deleteButton = $(`.${STATIC_DELETE_BUTTON_CLASS}`);
+
+        assert.strictEqual($deleteButton.attr('role'), undefined, 'role is not set');
+        assert.strictEqual($deleteButton.attr('aria-label'), undefined, 'aria-label is not set');
+        assert.strictEqual($deleteButton.attr('tabindex'), undefined, 'tabindex is not set');
     });
 });
