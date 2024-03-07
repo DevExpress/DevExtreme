@@ -139,7 +139,7 @@ function getRequestCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrog
       );
     },
     error(error: HttpErrorResponse) {
-      let errorStatus = error?.statusText || 'error';
+      let errorStatus = error?.statusText === TIMEOUT ? TIMEOUT : 'error';
 
       errorStatus = options.dataType === 'json' && error.message.includes('parsing')
         ? PARSER_ERROR
@@ -159,17 +159,14 @@ function getUploadCallbacks(options: Options, deferred, xhrSurrogate: XHRSurroga
 
   return {
     next: (event: HttpEvent<Object>) => {
-      if (event.type === HttpEventType.Sent) {
-        if (!isUploadStarted) {
-          options.upload.onloadstart?.(event);
-          isUploadStarted = true;
-        }
-      } else if (event.type === HttpEventType.UploadProgress) {
+      if (!isUploadStarted
+          && [HttpEventType.UploadProgress, HttpEventType.Sent].includes(event.type)) {
+        options.upload.onloadstart?.(event);
+        isUploadStarted = true;
+      }
+
+      if (event.type === HttpEventType.UploadProgress) {
         total += event.loaded;
-        if (!isUploadStarted) {
-          options.upload.onloadstart?.(event);
-          isUploadStarted = true;
-        }
         options.upload.onprogress?.({ ...event, total });
       } else if (event.type === HttpEventType.Response) {
         return deferred.resolve(xhrSurrogate, SUCCESS);
