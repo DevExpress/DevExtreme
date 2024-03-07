@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import devextremeAjax from 'devextreme/core/utils/ajax';
 // eslint-disable-next-line import/named
-import { sendRequestFactory } from './dx-ajax';
+import { sendRequestFactory } from './ajax';
 
 @NgModule({
   exports: [],
