@@ -230,8 +230,9 @@ describe('Ajax request using DxAjaxModule', () => {
     });
   });
 
-  it('should request jsonp (same domain) create callback and call it', (done) => {
+  it('should request jsonp (same domain) create callback, interceptor is called and call it', (done) => {
     const url = '/same-domain';
+    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
 
     ajax.sendRequest({
       url,
@@ -239,6 +240,7 @@ describe('Ajax request using DxAjaxModule', () => {
       jsonp: 'callback1',
       jsonpCallback: 'callbackName',
     }).done((data) => {
+      expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
       expect(data.ok).toEqual(1);
       done();
     });
