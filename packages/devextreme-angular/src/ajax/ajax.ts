@@ -5,10 +5,12 @@ import {
 import { throwError, Subject } from 'rxjs';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { isDefined } from 'devextreme/core/utils/type';
+import { getWindow } from 'devextreme/core/utils/window';
 import {
   isCrossDomain,
   evalCrossDomainScript,
   getRequestOptions,
+  getJsonpCallbackName as getCallbackNameAndModifyOptions,
   getRequestHeaders as getAjaxRequestHeaders,
   getAcceptHeader,
   evalScript,
@@ -58,7 +60,7 @@ function assignResponseProps(xhrSurrogate: XHRSurrogate, response: HttpResponse<
   return xhrSurrogate;
 }
 
-function isNeedScriptEvaluation(options: Options) {
+function isUsedScript(options: Options) {
   return options.dataType === 'script';
 }
 
@@ -94,7 +96,7 @@ function patchOptions(options: Options) {
   const patchedOptions = { ...options };
 
   if (options.cache === undefined) {
-    patchedOptions.cache = !isNeedScriptEvaluation(options);
+    patchedOptions.cache = !(isUsedScript(options) || isUsedJSONP(options));
   }
 
   patchedOptions.crossDomain = isCrossDomain(options.url);
@@ -107,6 +109,17 @@ function rejectIfAborted(deferred, xhrSurrogate: XHRSurrogate) {
     deferred.reject({ status: STATUS_ABORT, statusText: 'aborted', ok: false });
   }
 }
+
+function addJsonpCallbackAndReturnData(options: Options, deferred, xhrSurrogate: XHRSurrogate) {
+  const patchedOptions = { ...options };
+  const callbackName = getCallbackNameAndModifyOptions(patchedOptions);
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  getWindow()[callbackName] = (data) => deferred.resolve(data, SUCCESS, xhrSurrogate);
+  return patchedOptions.data;
+}
+
 function sendRequestByScript(url: string, deferred, xhrSurrogate: XHRSurrogate, result: Result) {
   const reject = function () {
     // eslint-disable-next-line no-void
@@ -125,10 +138,12 @@ function getRequestCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrog
   return {
     next(response: HttpResponse<any>) {
       if (isUsedJSONP(options)) {
-        return deferred.resolve(response, 'success', assignResponseProps(xhrSurrogate, response));
+        return options.crossDomain
+          ? deferred.resolve(response, 'success', assignResponseProps(xhrSurrogate, response))
+          : evalScript(response.body);
       }
 
-      if (isNeedScriptEvaluation(options)) {
+      if (isUsedScript(options)) {
         evalScript(response.body);
       }
 
@@ -183,32 +198,37 @@ function getUploadCallbacks(options: Options, deferred, xhrSurrogate: XHRSurroga
 }
 
 export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Options) => {
-  const destroy$ = new Subject<void>();
+  const abort$ = new Subject<void>();
   const deferred = Deferred();
+  const result = deferred.promise() as Result;
   const method = (sendOptions.method || 'get').toLowerCase();
   const isGet = isGetMethod(sendOptions);
   const isJSONP = isUsedJSONP(sendOptions);
-  const needScriptEvaluation = isNeedScriptEvaluation(sendOptions);
+  const isScript = isUsedScript(sendOptions);
   const options = patchOptions(sendOptions);
   const headers = getRequestHeaders(options);
-  const { url, parameters: data } = getRequestOptions(options, headers);
-  const { upload, beforeSend, xhrFields } = options;
-
-  const result = deferred.promise() as Result;
-
-  result.abort = () => {
-    xhrSurrogate.aborted = true;
-    destroy$.next();
-    upload?.onabort?.(xhrSurrogate);
-  };
-
   const xhrSurrogate: XHRSurrogate = {
     type: 'XMLHttpRequestSurrogate', // needs only for testing
     aborted: false,
     abort() { result.abort(); },
   };
 
-  if (options.crossDomain && needScriptEvaluation) {
+  if (!options.crossDomain && isJSONP) {
+    const data = addJsonpCallbackAndReturnData(options, deferred, xhrSurrogate);
+
+    options.data = { ...options.data, ...data };
+  }
+
+  const { url, parameters: data } = getRequestOptions(options, headers);
+  const { upload, beforeSend, xhrFields } = options;
+
+  result.abort = () => {
+    xhrSurrogate.aborted = true;
+    abort$.next();
+    upload?.onabort?.(xhrSurrogate);
+  };
+
+  if (options.crossDomain && isScript) {
     return sendRequestByScript(url, deferred, xhrSurrogate, result);
   }
 
@@ -249,7 +269,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Opti
     : getRequestCallbacks;
 
   request.pipe.apply(request, [
-    takeUntil(destroy$) as any,
+    takeUntil(abort$) as any,
     ...options.timeout
       ? [timeoutWith(options.timeout, throwError({ statusText: TIMEOUT, status: 0, ok: false })) as any]
       : [],

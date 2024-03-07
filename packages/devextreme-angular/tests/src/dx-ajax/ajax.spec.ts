@@ -193,12 +193,13 @@ describe('Ajax request using DxAjaxModule', () => {
     });
 
     const reqs = httpTestingControllerMock.match(() => true);
+    const { request } = reqs[0];
 
-    const callbackName = /callback=([^&]+)/.exec(reqs[0].request.urlWithParams)?.[1];
+    const callbackName = /callback=([^&]+)/.exec(request.urlWithParams)?.[1];
 
     reqs[0].flush([{ id: 0, text: 'TEST' }]);
 
-    expect(reqs[0].request.method).toBe('JSONP');
+    expect(request.method).toBe('JSONP');
     expect(callbackName).toBe('JSONP_CALLBACK');
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
   });
@@ -227,5 +228,25 @@ describe('Ajax request using DxAjaxModule', () => {
       expect(scriptEl?.src).toContain(url);
       done();
     });
+  });
+
+  it('should request jsonp (same domain) create callback and call it', (done) => {
+    const url = '/same-domain';
+
+    ajax.sendRequest({
+      url,
+      dataType: 'jsonp',
+      jsonp: 'callback1',
+      jsonpCallback: 'callbackName',
+    }).done((data) => {
+      expect(data.ok).toEqual(1);
+      done();
+    });
+
+    const [req] = httpTestingControllerMock.match(() => true);
+
+    expect(req.request.urlWithParams).toContain(`${url}?callback1=callbackName&`);
+
+    req.flush('callbackName({ok: 1})');
   });
 });
