@@ -14,7 +14,12 @@ fixture.disablePageReloads`Scheduler render during DST`
   .page(url(__dirname, '../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-const REDUCE_CELLS_CSS = `
+// TODO remove first selector after fix of the currentTimeIndicator option
+const CUSTOM_CSS = `
+#container .dx-scheduler-header-panel-cell {
+  color: rgba(0,0,0,.54);
+}
+
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
@@ -67,7 +72,7 @@ generateOptionMatrix({
         .ok(compareResults.errorMessages());
     },
   ).before(async () => {
-    await insertStylesheetRulesToPage(REDUCE_CELLS_CSS);
+    await insertStylesheetRulesToPage(CUSTOM_CSS);
     await createWidget('dxScheduler', {
       timeZone: timezone,
       dataSource,
