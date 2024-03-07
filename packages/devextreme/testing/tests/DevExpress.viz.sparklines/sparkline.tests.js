@@ -1433,7 +1433,7 @@ QUnit.begin(function() {
         ]);
     });
 
-    QUnit.test('winloss sparkline lossColor should be updated after runtime change', function(assert) {
+    QUnit.test('winloss sparkline lossColor should be updated after runtime change (T1218338)', function(assert) {
         const sparkline = this.createSparkline({
             type: 'winloss',
             lossColor: 'blue',
